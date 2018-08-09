@@ -1,0 +1,61 @@
+{
+  "description": "This is Netconf Get Running Configuration Component API",
+  "version": "1.0.0",
+  "capabilities": {
+    "component-node": {
+      "type": "tosca.capabilities.Node"
+    }
+  },
+  "interfaces": {
+    "org-openecomp-sdnc-netconf-adaptor-service-SimpleNetconfGetConfigNode": {
+      "operations": {
+        "process": {
+          "inputs": {
+            "template-name": {
+              "description": "Template name used by the Components during processing",
+              "required": false,
+              "type": "string"
+            },
+            "rpc-message": {
+              "description": "It should be true, If the message is Neconf RPC message, It should be false If it is plain Config message.",
+              "required": false,
+              "type": "boolean",
+              "default": false
+            },
+            "wait": {
+              "required": false,
+              "type": "integer",
+              "default": 0
+            },
+            "lock": {
+              "required": false,
+              "type": "boolean",
+              "default": false
+            },
+            "content": {
+              "description": "Static messgae content, If this is not set, need to have Requirement relationship to Artifact contents.",
+              "required": false,
+              "type": "string"
+            },
+            "message-time-out": {
+              "required": false,
+              "type": "integer",
+              "default": 30
+            }
+          },
+          "outputs": {
+            "config-message": {
+              "type": "string"
+            },
+            "status": {
+              "description": "Status of the Component Execution ( success or failure )",
+              "required": true,
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "derived_from": "tosca.nodes.Component"
+}

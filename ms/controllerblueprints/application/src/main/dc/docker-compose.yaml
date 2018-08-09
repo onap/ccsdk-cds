@@ -1,0 +1,36 @@
+version: '3.3'
+
+services:
+   db:
+     image: mysql:5.7.22
+     container_name: cb-mysql
+     ports:
+       - "3307:3306"
+     volumes:
+       - ~/vm_mysql:/var/lib/mysql
+     restart: always
+     environment:
+       MYSQL_ROOT_PASSWORD: sdnctl
+       MYSQL_DATABASE: sdnctl
+       MYSQL_USER: sdnctl
+       MYSQL_PASSWORD: sdnctl
+   controller-blueprints:
+     depends_on:
+       - db
+     image: onap/controllerblueprints:1.0.0
+     container_name: cb-rest
+     ports:
+       - "8080:8080"
+     restart: always
+     volumes:
+       - ~/share/vm_ms/controllerblueprints/config:/opt/app/onap/config
+       - ~/share/vm_ms/controllerblueprints/logs:/logs
+     environment:
+       DB_URL: jdbc:mysql://db:3306/sdnctl
+       DB_USER: sdnctl
+       DB_PASSWORD: sdnctl
+       INIT_DATA_LOAD: "true"
+       APP_CONFIG_HOME: /opt/app/onap/config
+       BUNDLEVERSION: 1.0.0
+       STICKYSELECTORKEY:
+       ENVCONTEXT: DEV

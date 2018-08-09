@@ -1,0 +1,261 @@
+{
+	"type": "object",
+	"properties": {
+		"resource-path": {
+			"type": "string",
+			"required": true
+		},
+		"description": {
+			"type": "string"
+		},
+		"updated-by": {
+			"type": "string"
+		},
+		"data-type": {
+			"type": "string",
+			"required": true
+		},
+		"source": {
+			"type": "object",
+			"required": true,
+			"properties": {
+				"input": {
+					"type": "object",
+					"properties": {
+						"key": {
+							"type": "string"
+						}
+					}
+				},
+				"component": {
+					"type": "object",
+					"properties": {
+						"name": {
+							"type": "string",
+							"required": true
+						},
+						"input-key-mapping": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "string"
+							}
+						},
+						"output-key-mapping": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"default": {
+					"type": "any"
+				},
+				"aai": {
+					"type": "any"
+				},
+				"mdsal": {
+					"type": "object",
+					"properties": {
+						"path": {
+							"type": "string",
+							"required": true
+						},
+						"url-path": {
+							"type": "string",
+							"required": true
+						},
+						"input-key-mapping": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "string"
+							}
+						},
+						"type": {
+							"type": "string",
+							"required": true
+						},
+						"output-key-mapping": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "string"
+							}
+						},
+						"base": {
+							"type": "string",
+							"required": true
+						}
+					}
+				},
+				"network-resource-discovery": {
+					"type": "object",
+					"properties": {
+						"input-key-mapping": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "string"
+							}
+						},
+						"output-key-mapping": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"db": {
+					"type": "object",
+					"properties": {
+						"query": {
+							"type": "string",
+							"required": true
+						},
+						"input-key-mapping": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "string"
+							}
+						},
+						"type": {
+							"type": "string",
+							"required": true
+						},
+						"output-key-mapping": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "string"
+							}
+						},
+						"base": {
+							"type": "string",
+							"required": true
+						}
+					}
+				},
+				"policy": {
+					"type": "object",
+					"properties": {
+						"input-key-mapping": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "string"
+							}
+						},
+						"output-key-mapping": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		},
+		"candidate-dependency": {
+			"type": "object",
+			"properties": {
+				"input": {
+					"type": "object",
+					"properties": {
+						"names": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"component": {
+					"type": "object",
+					"properties": {
+						"names": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"aai": {
+					"type": "object",
+					"properties": {
+						"names": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"mdsal": {
+					"type": "object",
+					"properties": {
+						"names": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"network-resource-discovery": {
+					"type": "object",
+					"properties": {
+						"names": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"db": {
+					"type": "object",
+					"properties": {
+						"names": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"policy": {
+					"type": "object",
+					"properties": {
+						"names": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		},
+		"tags": {
+			"type": "string"
+		},
+		"default": {
+			"type": "any"
+		},
+		"name": {
+			"type": "string",
+			"required": true
+		},
+		"valid-values": {
+			"type": "string"
+		},
+		"resource-type": {
+			"type": "string",
+			"required": true
+		},
+		"sample-value": {
+			"type": "string"
+		},
+		"entry-schema": {
+			"type": "string"
+		}
+	}
+}

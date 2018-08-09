@@ -1,0 +1,37 @@
+{
+	"description": "This is Configuration Velocity Template",
+	"version": "1.0.0",
+	"properties": {
+		"action-names": {
+			"required": true,
+			"type": "list",
+			"entry_schema": {
+				"type": "string"
+			}
+		}
+	},
+	"capabilities": {
+		"content": {
+			"type": "tosca.capability.Content",
+			"properties": {
+				"content": {
+					"required": true,
+					"type": "string"
+				}
+			}
+		},
+		"mapping": {
+			"type": "tosca.capability.Mapping",
+			"properties": {
+				"mapping": {
+					"required": false,
+					"type": "list",
+					"entry_schema": {
+						"type": "datatype-resource-assignment"
+					}
+				}
+			}
+		}
+	},
+	"derived_from": "tosca.nodes.Artifact"
+}

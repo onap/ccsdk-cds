@@ -1,0 +1,19 @@
+{
+	"name": "v4-aggregat-list",
+	"description": "This collection v4-aggregate list",
+	"valid-values": null,
+	"sample-value": null,
+	"updated-by": "Brinda Santh (bs2796)",
+	"resource-type": "ONAP",
+	"resource-path": "/v4-aggregat-list",
+	"data-type": "list",
+	"entry-schema": "dt-v4-aggregate",
+	"tags": null,
+	"default": null,
+	"source": {
+		"input": {
+			
+		}
+	},
+	"candidate-dependency": null
+}

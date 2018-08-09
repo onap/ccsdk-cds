@@ -1,0 +1,5 @@
+{
+  "request-id" : "12345",
+  "hostname" : "localhost",
+  "action-name" : "sample-action"
+}

@@ -1,0 +1,1957 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "version" : "0.3.0-SNAPSHOT",
+    "title" : "Controller Blueprint Service"
+  },
+  "basePath" : "/api/controller-blueprints/v1",
+  "schemes" : [ "http", "https" ],
+  "paths" : {
+    "/service/configmodel" : {
+      "post" : {
+        "summary" : "Provides Rest service to get Model Type by Tags",
+        "description" : "",
+        "operationId" : "saveConfigModel",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/ConfigModel"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ServiceTemplate"
+            }
+          },
+          "404" : {
+            "description" : "Service not available"
+          },
+          "500" : {
+            "description" : "Unexpected Runtime error"
+          }
+        }
+      }
+    },
+    "/service/configmodel/{id}" : {
+      "get" : {
+        "summary" : "Provides Rest service to Search Service Template",
+        "description" : "",
+        "operationId" : "getConfigModel",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ConfigModel"
+            }
+          },
+          "404" : {
+            "description" : "Service not available"
+          },
+          "500" : {
+            "description" : "Unexpected Runtime error"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Provides Rest service to delete ConfigModel.",
+        "description" : "",
+        "operationId" : "deleteConfigModel",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "Service not available"
+          },
+          "500" : {
+            "description" : "Unexpected Runtime error"
+          }
+        }
+      }
+    },
+    "/service/configmodelbyname/{name}/version/{version}" : {
+      "get" : {
+        "summary" : "Provides Rest service to Search Service Template",
+        "description" : "",
+        "operationId" : "getConfigModelByNameAndVersion",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "version",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ConfigModel"
+            }
+          },
+          "404" : {
+            "description" : "Service not available"
+          },
+          "500" : {
+            "description" : "Unexpected Runtime error"
+          }
+        }
+      }
+    },
+    "/service/configmodelclone/{id}" : {
+      "get" : {
+        "summary" : "Provides Rest service to create default Service Template",
+        "description" : "",
+        "operationId" : "getCloneConfigModel",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ConfigModel"
+            }
+          },
+          "404" : {
+            "description" : "Service not available"
+          },
+          "500" : {
+            "description" : "Unexpected Runtime error"
+          }
+        }
+      }
+    },
+    "/service/configmodelinitial/{name}" : {
+      "get" : {
+        "summary" : "Provides Rest service to create default Service Template",
+        "description" : "",
+        "operationId" : "getInitialConfigModel",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ConfigModel"
+            }
+          },
+          "404" : {
+            "description" : "Service not available"
+          },
+          "500" : {
+            "description" : "Unexpected Runtime error"
+          }
+        }
+      }
+    },
+    "/service/configmodelpublish/{id}" : {
+      "get" : {
+        "summary" : "Provides Rest service to get Model Type by Tags",
+        "description" : "",
+        "operationId" : "publishConfigModel",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ConfigModel"
+            }
+          },
+          "404" : {
+            "description" : "Service not available"
+          },
+          "500" : {
+            "description" : "Unexpected Runtime error"
+          }
+        }
+      }
+    },
+    "/service/configmodelsearch/{tags}" : {
+      "get" : {
+        "summary" : "Provides Rest service to Search Service Template",
+        "description" : "",
+        "operationId" : "searchConfigModels",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "tags",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ConfigModel"
+            }
+          },
+          "404" : {
+            "description" : "Service not available"
+          },
+          "500" : {
+            "description" : "Unexpected Runtime error"
+          }
+        }
+      }
+    },
+    "/service/dictionary" : {
+      "post" : {
+        "summary" : "Provides Rest service to Save Resource dictionary Type",
+        "description" : "",
+        "operationId" : "saveResourceDictionary",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/ResourceDictionary"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ResourceDictionary"
+            }
+          },
+          "404" : {
+            "description" : "Service not available"
+          },
+          "500" : {
+            "description" : "Unexpected Runtime error"
+          }
+        }
+      }
+    },
+    "/service/dictionary/{name}" : {
+      "get" : {
+        "summary" : "Provides Rest service to get Resource dictionary",
+        "description" : "",
+        "operationId" : "getResourceDictionaryByName",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ResourceDictionary"
+            }
+          },
+          "404" : {
+            "description" : "Service not available"
+          },
+          "500" : {
+            "description" : "Unexpected Runtime error"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Provides Rest service to delete ResourceDictionary Type",
+        "description" : "",
+        "operationId" : "deleteResourceDictionaryByName",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "Service not available"
+          },
+          "500" : {
+            "description" : "Unexpected Runtime error"
+          }
+        }
+      }
+    },
+    "/service/dictionarybynames" : {
+      "post" : {
+        "summary" : "Provides Rest service to get ResourceDictionary Type by names",
+        "description" : "",
+        "operationId" : "searchResourceDictionaryByNames",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : true,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ResourceDictionary"
+              }
+            }
+          },
+          "404" : {
+            "description" : "Service not available"
+          },
+          "500" : {
+            "description" : "Unexpected Runtime error"
+          }
+        }
+      }
+    },
+    "/service/dictionarysearch/{tags}" : {
+      "get" : {
+        "summary" : "Provides Rest service to search Resource dictionary by tags",
+        "description" : "",
+        "operationId" : "searchResourceDictionaryByTags",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "tags",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ResourceDictionary"
+              }
+            }
+          },
+          "404" : {
+            "description" : "Service not available"
+          },
+          "500" : {
+            "description" : "Unexpected Runtime error"
+          }
+        }
+      }
+    },
+    "/service/modeltype" : {
+      "post" : {
+        "summary" : "Provides Rest service to Save Model Type",
+        "description" : "",
+        "operationId" : "saveModelType",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/ModelType"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ModelType"
+            }
+          },
+          "404" : {
+            "description" : "Service not available"
+          },
+          "500" : {
+            "description" : "Unexpected Runtime error"
+          }
+        }
+      }
+    },
+    "/service/modeltype/{name}" : {
+      "get" : {
+        "summary" : "Provides Rest service to get Model Type by id",
+        "description" : "",
+        "operationId" : "getModelTypeByName",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ModelType"
+            }
+          },
+          "404" : {
+            "description" : "Service not available"
+          },
+          "500" : {
+            "description" : "Unexpected Runtime error"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Provides Rest service to delete Model Type",
+        "description" : "",
+        "operationId" : "deleteModelTypeByName",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "Service not available"
+          },
+          "500" : {
+            "description" : "Unexpected Runtime error"
+          }
+        }
+      }
+    },
+    "/service/modeltypebydefinition/{definitionType}" : {
+      "get" : {
+        "summary" : "Provides Rest service to get Model Type by tags",
+        "description" : "",
+        "operationId" : "getModelTypeByDefinitionType",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "definitionType",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ModelType"
+              }
+            }
+          },
+          "404" : {
+            "description" : "Service not available"
+          },
+          "500" : {
+            "description" : "Unexpected Runtime error"
+          }
+        }
+      }
+    },
+    "/service/modeltypesearch/{tags}" : {
+      "get" : {
+        "summary" : "Provides Rest service to get Model Type by tags",
+        "description" : "",
+        "operationId" : "searchModelTypes",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "tags",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ModelType"
+              }
+            }
+          },
+          "404" : {
+            "description" : "Service not available"
+          },
+          "500" : {
+            "description" : "Unexpected Runtime error"
+          }
+        }
+      }
+    },
+    "/service/resourceassignment/automap" : {
+      "post" : {
+        "summary" : "Provides Rest service to auto map for the Resource assignments",
+        "description" : "",
+        "operationId" : "autoMap",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : true,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/definitions/ResourceAssignment"
+            }
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/AutoMapResponse"
+            }
+          },
+          "404" : {
+            "description" : "Service not available"
+          },
+          "500" : {
+            "description" : "Unexpected Runtime error"
+          }
+        }
+      }
+    },
+    "/service/resourceassignment/generate" : {
+      "post" : {
+        "summary" : "Provides Rest service to auto map for the Resource Mapping",
+        "description" : "",
+        "operationId" : "generateResourceAssignments",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/ConfigModelContent"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ResourceAssignment"
+              }
+            }
+          },
+          "404" : {
+            "description" : "Service not available"
+          },
+          "500" : {
+            "description" : "Unexpected Runtime error"
+          }
+        }
+      }
+    },
+    "/service/resourceassignment/validate" : {
+      "post" : {
+        "summary" : "Provides Rest service to validate Resource assignments",
+        "description" : "",
+        "operationId" : "validateResourceAssignments",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : true,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/definitions/ResourceAssignment"
+            }
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ResourceAssignment"
+              }
+            }
+          },
+          "404" : {
+            "description" : "Service not available"
+          },
+          "500" : {
+            "description" : "Unexpected Runtime error"
+          }
+        }
+      }
+    },
+    "/service/servicetemplate/enrich" : {
+      "post" : {
+        "summary" : "Provides Rest service to enrich service template",
+        "description" : "",
+        "operationId" : "enrichServiceTemplate",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/ServiceTemplate"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ServiceTemplate"
+            }
+          },
+          "404" : {
+            "description" : "Service not available"
+          },
+          "500" : {
+            "description" : "Unexpected Runtime error"
+          }
+        }
+      }
+    },
+    "/service/servicetemplate/validate" : {
+      "post" : {
+        "summary" : "Provides Rest service to validate service template",
+        "description" : "",
+        "operationId" : "validateServiceTemplate",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/ServiceTemplate"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ServiceTemplate"
+            }
+          },
+          "404" : {
+            "description" : "Service not available"
+          },
+          "500" : {
+            "description" : "Unexpected Runtime error"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Activity" : {
+      "type" : "object",
+      "properties" : {
+        "delegate" : {
+          "type" : "string"
+        },
+        "inlines" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "set_state" : {
+          "type" : "string"
+        },
+        "call_operation" : {
+          "type" : "string"
+        }
+      }
+    },
+    "ArtifactDefinition" : {
+      "type" : "object",
+      "properties" : {
+        "type" : {
+          "type" : "string"
+        },
+        "file" : {
+          "type" : "string"
+        },
+        "repository" : {
+          "type" : "string"
+        },
+        "description" : {
+          "type" : "string"
+        },
+        "properties" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/JsonNode"
+          }
+        },
+        "content" : {
+          "type" : "string"
+        },
+        "mappingContent" : {
+          "type" : "string"
+        },
+        "deploy_Path" : {
+          "type" : "string"
+        }
+      }
+    },
+    "ArtifactType" : {
+      "type" : "object",
+      "properties" : {
+        "description" : {
+          "type" : "string"
+        },
+        "version" : {
+          "type" : "string"
+        },
+        "metadata" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        },
+        "attributes" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/AttributeDefinition"
+          }
+        },
+        "properties" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/PropertyDefinition"
+          }
+        },
+        "derived_from" : {
+          "type" : "string"
+        },
+        "mime_type" : {
+          "type" : "string"
+        },
+        "file_ext" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "AttributeDefinition" : {
+      "type" : "object",
+      "properties" : {
+        "description" : {
+          "type" : "string"
+        },
+        "type" : {
+          "type" : "string"
+        },
+        "status" : {
+          "type" : "string"
+        },
+        "get_default" : {
+          "type" : "object"
+        },
+        "entry_schema" : {
+          "type" : "string"
+        }
+      }
+    },
+    "AutoMapResponse" : {
+      "type" : "object",
+      "properties" : {
+        "resourceAssignments" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/ResourceAssignment"
+          }
+        },
+        "dataDictionaries" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/ResourceDictionary"
+          }
+        }
+      }
+    },
+    "CapabilityAssignment" : {
+      "type" : "object",
+      "properties" : {
+        "attributes" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/JsonNode"
+          }
+        },
+        "properties" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/JsonNode"
+          }
+        }
+      }
+    },
+    "CapabilityDefinition" : {
+      "type" : "object",
+      "properties" : {
+        "type" : {
+          "type" : "string"
+        },
+        "description" : {
+          "type" : "string"
+        },
+        "properties" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/PropertyDefinition"
+          }
+        },
+        "occurrences" : {
+          "type" : "array",
+          "items" : {
+            "type" : "object"
+          }
+        },
+        "valid_source_types" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "ConditionClause" : {
+      "type" : "object",
+      "properties" : {
+        "and" : {
+          "type" : "array",
+          "items" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object"
+            }
+          }
+        },
+        "or" : {
+          "type" : "array",
+          "items" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object"
+            }
+          }
+        },
+        "assert" : {
+          "type" : "array",
+          "items" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object"
+            }
+          }
+        }
+      }
+    },
+    "ConfigModel" : {
+      "type" : "object",
+      "required" : [ "artifactName", "artifactVersion", "published", "tags", "updatedBy" ],
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "serviceUUID" : {
+          "type" : "string"
+        },
+        "distributionId" : {
+          "type" : "string"
+        },
+        "serviceName" : {
+          "type" : "string"
+        },
+        "serviceDescription" : {
+          "type" : "string"
+        },
+        "resourceUUID" : {
+          "type" : "string"
+        },
+        "resourceInstanceName" : {
+          "type" : "string"
+        },
+        "resourceName" : {
+          "type" : "string"
+        },
+        "resourceVersion" : {
+          "type" : "string"
+        },
+        "resourceType" : {
+          "type" : "string"
+        },
+        "artifactUUId" : {
+          "type" : "string"
+        },
+        "artifactType" : {
+          "type" : "string"
+        },
+        "artifactVersion" : {
+          "type" : "string"
+        },
+        "artifactDescription" : {
+          "type" : "string"
+        },
+        "internalVersion" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "createdDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "artifactName" : {
+          "type" : "string"
+        },
+        "published" : {
+          "type" : "string"
+        },
+        "updatedBy" : {
+          "type" : "string"
+        },
+        "tags" : {
+          "type" : "string"
+        },
+        "configModelContents" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/ConfigModelContent"
+          }
+        }
+      }
+    },
+    "ConfigModelContent" : {
+      "type" : "object",
+      "required" : [ "content", "contentType", "name" ],
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "name" : {
+          "type" : "string"
+        },
+        "contentType" : {
+          "type" : "string"
+        },
+        "configModel" : {
+          "$ref" : "#/definitions/ConfigModel"
+        },
+        "description" : {
+          "type" : "string"
+        },
+        "content" : {
+          "type" : "string"
+        },
+        "creationDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        }
+      }
+    },
+    "ConstraintClause" : {
+      "type" : "object",
+      "properties" : {
+        "equal" : {
+          "type" : "object"
+        },
+        "greater_than" : {
+          "type" : "object"
+        },
+        "greater_or_equal" : {
+          "type" : "object"
+        },
+        "less_than" : {
+          "type" : "object"
+        },
+        "less_or_equal" : {
+          "type" : "object"
+        },
+        "in_range" : {
+          "type" : "object"
+        },
+        "valid_values" : {
+          "type" : "array",
+          "items" : {
+            "type" : "object"
+          }
+        },
+        "length" : {
+          "type" : "object"
+        },
+        "min_length" : {
+          "type" : "object"
+        },
+        "max_length" : {
+          "type" : "object"
+        },
+        "pattern" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Credential" : {
+      "type" : "object",
+      "properties" : {
+        "protocol" : {
+          "type" : "string"
+        },
+        "token" : {
+          "type" : "string"
+        },
+        "keys" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        },
+        "user" : {
+          "type" : "string"
+        },
+        "token_type" : {
+          "type" : "string"
+        }
+      }
+    },
+    "DataType" : {
+      "type" : "object",
+      "properties" : {
+        "description" : {
+          "type" : "string"
+        },
+        "version" : {
+          "type" : "string"
+        },
+        "metadata" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        },
+        "attributes" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/AttributeDefinition"
+          }
+        },
+        "properties" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/PropertyDefinition"
+          }
+        },
+        "constraints" : {
+          "type" : "array",
+          "items" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object"
+            }
+          }
+        },
+        "derived_from" : {
+          "type" : "string"
+        }
+      }
+    },
+    "EntrySchema" : {
+      "type" : "object",
+      "properties" : {
+        "type" : {
+          "type" : "string"
+        },
+        "constraints" : {
+          "type" : "array",
+          "items" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object"
+            }
+          }
+        }
+      }
+    },
+    "Implementation" : {
+      "type" : "object",
+      "properties" : {
+        "primary" : {
+          "type" : "string"
+        },
+        "dependencies" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "ImportDefinition" : {
+      "type" : "object",
+      "properties" : {
+        "file" : {
+          "type" : "string"
+        },
+        "repository" : {
+          "type" : "string"
+        },
+        "namespace_uri" : {
+          "type" : "string"
+        },
+        "namespace_prefix" : {
+          "type" : "string"
+        }
+      }
+    },
+    "InterfaceAssignment" : {
+      "type" : "object",
+      "properties" : {
+        "operations" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/OperationAssignment"
+          }
+        },
+        "inputs" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/JsonNode"
+          }
+        }
+      }
+    },
+    "InterfaceDefinition" : {
+      "type" : "object",
+      "properties" : {
+        "type" : {
+          "type" : "string"
+        },
+        "operations" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/OperationDefinition"
+          }
+        },
+        "inputs" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/PropertyDefinition"
+          }
+        }
+      }
+    },
+    "JsonNode" : {
+      "type" : "object",
+      "properties" : {
+        "array" : {
+          "type" : "boolean"
+        },
+        "null" : {
+          "type" : "boolean"
+        },
+        "float" : {
+          "type" : "boolean"
+        },
+        "nodeType" : {
+          "type" : "string",
+          "enum" : [ "ARRAY", "BINARY", "BOOLEAN", "MISSING", "NULL", "NUMBER", "OBJECT", "POJO", "STRING" ]
+        },
+        "number" : {
+          "type" : "boolean"
+        },
+        "valueNode" : {
+          "type" : "boolean"
+        },
+        "containerNode" : {
+          "type" : "boolean"
+        },
+        "missingNode" : {
+          "type" : "boolean"
+        },
+        "object" : {
+          "type" : "boolean"
+        },
+        "pojo" : {
+          "type" : "boolean"
+        },
+        "integralNumber" : {
+          "type" : "boolean"
+        },
+        "short" : {
+          "type" : "boolean"
+        },
+        "int" : {
+          "type" : "boolean"
+        },
+        "long" : {
+          "type" : "boolean"
+        },
+        "double" : {
+          "type" : "boolean"
+        },
+        "bigDecimal" : {
+          "type" : "boolean"
+        },
+        "bigInteger" : {
+          "type" : "boolean"
+        },
+        "textual" : {
+          "type" : "boolean"
+        },
+        "boolean" : {
+          "type" : "boolean"
+        },
+        "binary" : {
+          "type" : "boolean"
+        },
+        "floatingPointNumber" : {
+          "type" : "boolean"
+        }
+      }
+    },
+    "ModelType" : {
+      "type" : "object",
+      "required" : [ "definition", "definitionType", "derivedFrom", "description", "modelName", "tags", "updatedBy", "version" ],
+      "properties" : {
+        "modelName" : {
+          "type" : "string"
+        },
+        "derivedFrom" : {
+          "type" : "string"
+        },
+        "definitionType" : {
+          "type" : "string"
+        },
+        "definition" : {
+          "type" : "string"
+        },
+        "description" : {
+          "type" : "string"
+        },
+        "version" : {
+          "type" : "string"
+        },
+        "tags" : {
+          "type" : "string"
+        },
+        "creationDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "updatedBy" : {
+          "type" : "string"
+        }
+      }
+    },
+    "NodeFilterDefinition" : {
+      "type" : "object",
+      "properties" : {
+        "properties" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/PropertyDefinition"
+          }
+        },
+        "capabilities" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "NodeTemplate" : {
+      "type" : "object",
+      "properties" : {
+        "description" : {
+          "type" : "string"
+        },
+        "type" : {
+          "type" : "string"
+        },
+        "metadata" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        },
+        "directives" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "properties" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/JsonNode"
+          }
+        },
+        "attributes" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/JsonNode"
+          }
+        },
+        "capabilities" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CapabilityAssignment"
+          }
+        },
+        "requirements" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/RequirementAssignment"
+          }
+        },
+        "interfaces" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/InterfaceAssignment"
+          }
+        },
+        "artifacts" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/ArtifactDefinition"
+          }
+        },
+        "copy" : {
+          "type" : "string"
+        },
+        "node_filter" : {
+          "$ref" : "#/definitions/NodeFilterDefinition"
+        }
+      }
+    },
+    "NodeType" : {
+      "type" : "object",
+      "properties" : {
+        "description" : {
+          "type" : "string"
+        },
+        "version" : {
+          "type" : "string"
+        },
+        "metadata" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        },
+        "attributes" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/AttributeDefinition"
+          }
+        },
+        "properties" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/PropertyDefinition"
+          }
+        },
+        "capabilities" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CapabilityDefinition"
+          }
+        },
+        "requirements" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/RequirementDefinition"
+          }
+        },
+        "interfaces" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/InterfaceDefinition"
+          }
+        },
+        "artifacts" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/ArtifactDefinition"
+          }
+        },
+        "derived_from" : {
+          "type" : "string"
+        }
+      }
+    },
+    "OperationAssignment" : {
+      "type" : "object",
+      "properties" : {
+        "description" : {
+          "type" : "string"
+        },
+        "implementation" : {
+          "$ref" : "#/definitions/Implementation"
+        },
+        "inputs" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/JsonNode"
+          }
+        },
+        "outputs" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/JsonNode"
+          }
+        }
+      }
+    },
+    "OperationDefinition" : {
+      "type" : "object",
+      "properties" : {
+        "description" : {
+          "type" : "string"
+        },
+        "implementation" : {
+          "$ref" : "#/definitions/Implementation"
+        },
+        "inputs" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/PropertyDefinition"
+          }
+        },
+        "outputs" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/PropertyDefinition"
+          }
+        }
+      }
+    },
+    "PolicyDefinition" : {
+      "type" : "object",
+      "properties" : {
+        "type" : {
+          "type" : "string"
+        },
+        "description" : {
+          "type" : "string"
+        },
+        "metadata" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        },
+        "properties" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/JsonNode"
+          }
+        },
+        "targets" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "PolicyType" : {
+      "type" : "object",
+      "properties" : {
+        "description" : {
+          "type" : "string"
+        },
+        "version" : {
+          "type" : "string"
+        },
+        "metadata" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        },
+        "attributes" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/AttributeDefinition"
+          }
+        },
+        "properties" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/PropertyDefinition"
+          }
+        },
+        "targets" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "derived_from" : {
+          "type" : "string"
+        }
+      }
+    },
+    "PreConditionDefinition" : {
+      "type" : "object",
+      "properties" : {
+        "target" : {
+          "type" : "string"
+        },
+        "condition" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/ConditionClause"
+          }
+        },
+        "target_relationship" : {
+          "type" : "string"
+        }
+      }
+    },
+    "PropertyDefinition" : {
+      "type" : "object",
+      "properties" : {
+        "description" : {
+          "type" : "string"
+        },
+        "required" : {
+          "type" : "boolean"
+        },
+        "type" : {
+          "type" : "string"
+        },
+        "status" : {
+          "type" : "string"
+        },
+        "constraints" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/ConstraintClause"
+          }
+        },
+        "value" : {
+          "type" : "object"
+        },
+        "default" : {
+          "type" : "object"
+        },
+        "entry_schema" : {
+          "$ref" : "#/definitions/EntrySchema"
+        }
+      }
+    },
+    "RelationshipTemplate" : {
+      "type" : "object",
+      "properties" : {
+        "type" : {
+          "type" : "string"
+        },
+        "description" : {
+          "type" : "string"
+        },
+        "metadata" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        },
+        "properties" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/PropertyDefinition"
+          }
+        },
+        "attributes" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/JsonNode"
+          }
+        },
+        "interfaces" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/InterfaceDefinition"
+          }
+        },
+        "copy" : {
+          "type" : "string"
+        }
+      }
+    },
+    "RepositoryDefinition" : {
+      "type" : "object",
+      "properties" : {
+        "description" : {
+          "type" : "string"
+        },
+        "url" : {
+          "type" : "string"
+        },
+        "credential" : {
+          "$ref" : "#/definitions/Credential"
+        }
+      }
+    },
+    "RequirementAssignment" : {
+      "type" : "object",
+      "properties" : {
+        "capability" : {
+          "type" : "string"
+        },
+        "node" : {
+          "type" : "string"
+        },
+        "relationship" : {
+          "type" : "string"
+        }
+      }
+    },
+    "RequirementDefinition" : {
+      "type" : "object",
+      "properties" : {
+        "description" : {
+          "type" : "string"
+        },
+        "capability" : {
+          "type" : "string"
+        },
+        "node" : {
+          "type" : "string"
+        },
+        "relationship" : {
+          "type" : "string"
+        },
+        "occurrences" : {
+          "type" : "array",
+          "items" : {
+            "type" : "object"
+          }
+        }
+      }
+    },
+    "ResourceAssignment" : {
+      "type" : "object",
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        },
+        "property" : {
+          "$ref" : "#/definitions/PropertyDefinition"
+        },
+        "input-param" : {
+          "type" : "boolean"
+        },
+        "dictionary-name" : {
+          "type" : "string"
+        },
+        "dictionary-source" : {
+          "type" : "string"
+        },
+        "dependencies" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "version" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "status" : {
+          "type" : "string"
+        },
+        "message" : {
+          "type" : "string"
+        },
+        "updated-date" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "updated-by" : {
+          "type" : "string"
+        }
+      }
+    },
+    "ResourceDictionary" : {
+      "type" : "object",
+      "required" : [ "dataType", "definition", "description", "name", "resourcePath", "resourceType", "tags", "updatedBy" ],
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        },
+        "resourcePath" : {
+          "type" : "string"
+        },
+        "resourceType" : {
+          "type" : "string"
+        },
+        "dataType" : {
+          "type" : "string"
+        },
+        "entrySchema" : {
+          "type" : "string"
+        },
+        "validValues" : {
+          "type" : "string"
+        },
+        "sampleValue" : {
+          "type" : "string"
+        },
+        "definition" : {
+          "type" : "string"
+        },
+        "description" : {
+          "type" : "string"
+        },
+        "tags" : {
+          "type" : "string"
+        },
+        "creationDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "updatedBy" : {
+          "type" : "string"
+        }
+      }
+    },
+    "ServiceTemplate" : {
+      "type" : "object",
+      "properties" : {
+        "metadata" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        },
+        "description" : {
+          "type" : "string"
+        },
+        "repositories" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/RepositoryDefinition"
+          }
+        },
+        "imports" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/ImportDefinition"
+          }
+        },
+        "tosca_definitions_version" : {
+          "type" : "string"
+        },
+        "dsl_definitions" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "object"
+          }
+        },
+        "artifact_types" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/ArtifactType"
+          }
+        },
+        "data_types" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/DataType"
+          }
+        },
+        "node_types" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/NodeType"
+          }
+        },
+        "policy_types" : {
+          "$ref" : "#/definitions/PolicyType"
+        },
+        "topology_template" : {
+          "$ref" : "#/definitions/TopologyTemplate"
+        }
+      }
+    },
+    "Step" : {
+      "type" : "object",
+      "properties" : {
+        "description" : {
+          "type" : "string"
+        },
+        "target" : {
+          "type" : "string"
+        },
+        "activities" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/Activity"
+          }
+        },
+        "target_relationship" : {
+          "type" : "string"
+        },
+        "operation_host" : {
+          "type" : "string"
+        },
+        "on_success" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "on_failure" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "TopologyTemplate" : {
+      "type" : "object",
+      "properties" : {
+        "description" : {
+          "type" : "string"
+        },
+        "inputs" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/PropertyDefinition"
+          }
+        },
+        "policies" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/PolicyDefinition"
+          }
+        },
+        "outputs" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/PropertyDefinition"
+          }
+        },
+        "workflows" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/Workflow"
+          }
+        },
+        "node_templates" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/NodeTemplate"
+          }
+        },
+        "relationship_templates" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/RelationshipTemplate"
+          }
+        },
+        "substitution_mappings" : {
+          "type" : "object"
+        }
+      }
+    },
+    "Workflow" : {
+      "type" : "object",
+      "properties" : {
+        "description" : {
+          "type" : "string"
+        },
+        "steps" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/Step"
+          }
+        },
+        "preconditions" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/PreConditionDefinition"
+          }
+        },
+        "inputs" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/PropertyDefinition"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+TOSCA-Meta-File-Version: 1.0.0
+CSAR-Version: 1.0
+Created-By: Brinda Santh M
+Entry-Definitions: Definitions/vrr-test.json
+Template-Tags: vrr-test, Brinda Santh

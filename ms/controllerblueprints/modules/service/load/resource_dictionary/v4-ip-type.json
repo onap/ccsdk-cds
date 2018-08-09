@@ -1,0 +1,14 @@
+{
+	"tags": "v4-ip-type, tosca.datatypes.Root, data_type, ym9479@onap.com",
+	"name": "v4-ip-type",
+	"description": "To be provided",
+	"updated-by": "ym9479@onap.com",
+	"resource-type": "ONAP",
+	"resource-path": "vnf/v4-ip-type",
+	"data-type": "string",
+	"source": {
+		"input": {
+			
+		}
+	}
+}

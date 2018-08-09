@@ -1,0 +1,742 @@
+{
+  "metadata": {
+    "template_author": "Brinda Santh ( bs2796@onap.com )",
+    "template_name": "vrr-test",
+    "template_version": "1.0.0",
+    "release": "201802",
+    "service-type": "AVPN",
+    "vnf-type": "VRR"
+  },
+  "topology_template": {
+    "inputs": {
+      "request-id": {
+        "required": true,
+        "type": "string"
+      },
+      "service-instance-id": {
+        "required": true,
+        "type": "string"
+      },
+      "action-name": {
+        "required": true,
+        "type": "string"
+      },
+      "scope-type": {
+        "required": true,
+        "type": "string"
+      },
+      "hostname": {
+        "required": true,
+        "type": "string"
+      },
+      "resource-assignment-request": {
+        "description": "This is Dynamic Data type for the receipe resource-assignment-action.",
+        "required": false,
+        "type": "dt-resource-assignment-request"
+      }
+    },
+    "node_templates": {
+      "base-config-template": {
+        "type": "artifact-config-template",
+        "properties": {
+          "action-names": [
+            "resource-assignment-action"
+          ]
+        },
+        "capabilities": {
+          "content": {
+            "properties": {
+              "content": "db://base-config-template"
+            }
+          },
+          "mapping": {
+            "properties": {
+              "mapping": [
+                {
+                  "name": "vnf-id",
+                  "input-param": true,
+                  "property": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "dictionary-name": "vnf-id",
+                  "dictionary-source": "input"
+                },
+                {
+                  "name": "group-name",
+                  "input-param": true,
+                  "property": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "dictionary-name": "group-name",
+                  "dictionary-source": "input"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "activate-action": {
+        "type": "dg-activate-netconf",
+        "interfaces": {
+          "CONFIG": {
+            "operations": {
+              "ActivateNetconf": {}
+            }
+          }
+        },
+        "capabilities": {
+          "dg-node": {}
+        },
+        "requirements": {
+          "component-dependency": {
+            "capability": "component-node",
+            "node": "transaction-netconf-baseconfig",
+            "relationship": "tosca.relationships.DependsOn"
+          }
+        }
+      },
+      "resource-assignment-action": {
+        "type": "dg-resource-assignment",
+        "interfaces": {
+          "CONFIG": {
+            "operations": {
+              "ResourceAssignment": {}
+            }
+          }
+        },
+        "capabilities": {
+          "dg-node": {}
+        },
+        "requirements": {
+          "component-dependency": {
+            "capability": "component-node",
+            "node": "resource-assignment",
+            "relationship": "tosca.relationships.DependsOn"
+          }
+        }
+      },
+      "licence-template": {
+        "type": "artifact-config-template",
+        "properties": {
+          "action-names": [
+            "resource-assignment-action"
+          ]
+        },
+        "capabilities": {
+          "content": {
+            "properties": {
+              "content": "db://licence-template"
+            }
+          },
+          "mapping": {
+            "properties": {
+              "mapping": [
+                {
+                  "name": "licence-key",
+                  "input-param": true,
+                  "property": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "dictionary-name": "licence-key",
+                  "dictionary-source": "input"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "runningconfig-template": {
+        "type": "artifact-config-template",
+        "properties": {
+          "action-names": [
+            "resource-assignment-action"
+          ]
+        },
+        "capabilities": {
+          "content": {
+            "properties": {
+              "content": "db://runningconfig-template"
+            }
+          },
+          "mapping": {
+            "properties": {
+              "mapping": []
+            }
+          }
+        }
+      },
+      "resource-assignment": {
+        "type": "component-resource-assignment",
+        "interfaces": {
+          "org-openecomp-sdnc-config-assignment-service-ConfigAssignmentNode": {
+            "operations": {
+              "process": {
+                "inputs": {
+                  "service-template-name": "{ \"get_attribute\" : \"template_name\" }",
+                  "service-template-version": "{ \"get_attribute\" : \"service-template-version\" }",
+                  "action-name": "{ \"get_input\" : \"action-name\" }",
+                  "resource-type": "vnf-type",
+                  "template-names": [
+                    "base-config-template",
+                    "licence-template"
+                  ],
+                  "request-id": "{ \"get_input\" : \"request-id\" }",
+                  "resource-id": "{ \"get_input\" : \"vnf-id\" }"
+                },
+                "outputs": {
+                  "resource-assignment-params": "",
+                  "status": ""
+                }
+              }
+            }
+          }
+        },
+        "capabilities": {
+          "component-node": {}
+        }
+      },
+      "vrr-netconf-device": {
+        "type": "vnf-netconf-device",
+        "capabilities": {
+          "netconf": {
+            "properties": {
+              "profile-name": "sample",
+              "oam-ipv4-address": "{ \"get_attribute\" : \"hostname\" }",
+              "port-number": "{ \"get_attribute\" : \"host-port\" }",
+              "connection-time-out": 30
+            }
+          }
+        }
+      },
+      "transaction-netconf-baseconfig": {
+        "type": "component-netconf-executor",
+        "interfaces": {
+          "org-openecomp-sdnc-netconf-adaptor-service-NetconfExecutorNode": {
+            "operations": {
+              "process": {
+                "implementation" : {
+                  "primary" : "file://netconf-adaptor/DefaultGetConfig.py"
+                },
+                "inputs": {
+                  "action-name": "{ \"get_input\" : \"action-name\" }",
+                  "resource-type": "vnf-type",
+                  "request-id": "{ \"get_attribute\" : \"request-id\" }",
+                  "resource-id": "{ \"get_input\" : \"vnf-id\" }",
+                  "execution-script": "execution-script"
+                },
+                "outputs": {
+                  "response-data": "{ \"get_attribute\" : \"netconf-executor-baseconfig.response-data\" }",
+                  "status": "{ \"get_attribute\" : \"netconf-executor-baseconfig.status\" }"
+                }
+              }
+            }
+          }
+        },
+        "capabilities": {
+          "component-node": {
+          }
+        },
+        "requirements": {
+          "netconf-connection": {
+            "capability": "netconf",
+            "node": "vrr-netconf-device",
+            "relationship": "tosca.relationships.ConnectsTo"
+          }
+        }
+      }
+    }
+  },
+  "node_types": {
+    "dg-resource-assignment": {
+      "description": "This is Resource Assignment Directed Graph",
+      "version": "1.0.0",
+      "properties": {
+        "mode": {
+          "required": false,
+          "type": "string",
+          "default": "sync"
+        },
+        "version": {
+          "required": false,
+          "type": "string",
+          "default": "LATEST"
+        },
+        "is-start-flow": {
+          "required": false,
+          "type": "boolean",
+          "default": "false"
+        }
+      },
+      "capabilities": {
+        "dg-node": {
+          "type": "tosca.capabilities.Node"
+        },
+        "content": {
+          "type": "tosca.capability.Content",
+          "properties": {
+            "type": {
+              "required": false,
+              "type": "string",
+              "default": "json"
+            },
+            "content": {
+              "required": false,
+              "type": "string"
+            }
+          }
+        }
+      },
+      "requirements": {
+        "component-dependency": {
+          "capability": "component-node",
+          "node": "component-resource-assignment",
+          "relationship": "tosca.relationships.DependsOn"
+        }
+      },
+      "interfaces": {
+        "CONFIG": {
+          "operations": {
+            "ResourceAssignment": {
+              "inputs": {
+                "params": {
+                  "required": false,
+                  "type": "list",
+                  "entry_schema": {
+                    "type": "datatype-property"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.DG"
+    },
+    "component-resource-assignment": {
+      "description": "This is Resource Assignment Component API",
+      "version": "1.0.0",
+      "capabilities": {
+        "component-node": {
+          "type": "tosca.capabilities.Node"
+        }
+      },
+      "interfaces": {
+        "org-openecomp-sdnc-config-assignment-service-ConfigAssignmentNode": {
+          "operations": {
+            "process": {
+              "inputs": {
+                "action-name": {
+                  "description": "Action Name of the process",
+                  "required": true,
+                  "type": "string"
+                },
+                "service-template-name": {
+                  "description": "Service Template Name.",
+                  "required": true,
+                  "type": "string"
+                },
+                "service-template-version": {
+                  "description": "Service Template Version.",
+                  "required": true,
+                  "type": "string"
+                },
+                "resource-type": {
+                  "description": "Request type.",
+                  "required": true,
+                  "type": "string"
+                },
+                "template-names": {
+                  "description": "Name of the artifact Node Templates, to get the template Content.",
+                  "required": true,
+                  "type": "list",
+                  "entry_schema": {
+                    "type": "string"
+                  }
+                },
+                "request-id": {
+                  "description": "Request Id, Unique Id for the request.",
+                  "required": true,
+                  "type": "string"
+                },
+                "resource-id": {
+                  "description": "Resource Id.",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "outputs": {
+                "resource-assignment-params": {
+                  "required": true,
+                  "type": "string"
+                },
+                "status": {
+                  "required": true,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.Component"
+    },
+    "artifact-config-template": {
+      "description": "This is Configuration Velocity Template",
+      "version": "1.0.0",
+      "properties": {
+        "action-names": {
+          "required": true,
+          "type": "list",
+          "entry_schema": {
+            "type": "string"
+          }
+        }
+      },
+      "capabilities": {
+        "content": {
+          "type": "tosca.capability.Content",
+          "properties": {
+            "content": {
+              "required": true,
+              "type": "string"
+            }
+          }
+        },
+        "mapping": {
+          "type": "tosca.capability.Mapping",
+          "properties": {
+            "mapping": {
+              "required": false,
+              "type": "list",
+              "entry_schema": {
+                "type": "datatype-resource-assignment"
+              }
+            }
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.Artifact"
+    },
+    "vnf-netconf-device": {
+      "description": "This is VNF Device with Netconf and SSH Capability",
+      "version": "1.0.0",
+      "capabilities": {
+        "netconf": {
+          "type": "tosca.capability.Netconf",
+          "properties": {
+            "profile-name": {
+              "required": true,
+              "type": "string"
+            },
+            "oam-ipv4-address": {
+              "required": true,
+              "type": "string"
+            },
+            "port-number": {
+              "required": true,
+              "type": "integer",
+              "default": 830
+            },
+            "connection-time-out": {
+              "required": false,
+              "type": "integer",
+              "default": 30
+            }
+          }
+        },
+        "ssh": {
+          "type": "tosca.capability.Ssh",
+          "properties": {
+            "profile-name": {
+              "required": true,
+              "type": "string"
+            },
+            "oam-ipv4-address": {
+              "required": true,
+              "type": "string"
+            },
+            "port-number": {
+              "required": true,
+              "type": "integer",
+              "default": 22
+            },
+            "message-time-out": {
+              "required": false,
+              "type": "integer",
+              "default": 3000
+            },
+            "connection-time-out": {
+              "required": false,
+              "type": "integer",
+              "default": 3000
+            }
+          }
+        },
+        "sftp": {
+          "type": "tosca.capability.Sftp",
+          "properties": {
+            "profile-name": {
+              "required": true,
+              "type": "string"
+            },
+            "oam-ipv4-address": {
+              "required": true,
+              "type": "string"
+            },
+            "port-number": {
+              "required": true,
+              "type": "integer",
+              "default": 22
+            },
+            "message-time-out": {
+              "required": false,
+              "type": "integer",
+              "default": 3000
+            },
+            "connection-time-out": {
+              "required": false,
+              "type": "integer",
+              "default": 3000
+            }
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.Vnf"
+    },
+    "dg-activate-netconf": {
+      "description": "This is Download Netconf Directed Graph",
+      "version": "1.0.0",
+      "properties": {
+        "mode": {
+          "required": false,
+          "type": "string",
+          "default": "sync"
+        },
+        "version": {
+          "required": false,
+          "type": "string",
+          "default": "LATEST"
+        },
+        "is-start-flow": {
+          "required": false,
+          "type": "boolean",
+          "default": "false"
+        }
+      },
+      "capabilities": {
+        "dg-node": {
+          "type": "tosca.capabilities.Node"
+        },
+        "content": {
+          "type": "tosca.capability.Content",
+          "properties": {
+            "type": {
+              "required": false,
+              "type": "string",
+              "default": "json"
+            },
+            "content": {
+              "required": true,
+              "type": "string"
+            }
+          }
+        }
+      },
+      "requirements": {
+        "component-dependency": {
+          "capability": "component-node",
+          "node": "component-netconf-executor",
+          "relationship": "tosca.relationships.DependsOn"
+        }
+      },
+      "interfaces": {
+        "CONFIG": {
+          "operations": {
+            "ActivateNetconf": {
+              "inputs": {
+                "params": {
+                  "required": false,
+                  "type": "list",
+                  "entry_schema": {
+                    "type": "datatype-property"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.DG"
+    },
+    "component-netconf-executor": {
+      "description": "This is Netconf Transaction Configuration Component API",
+      "version": "1.0.0",
+      "capabilities": {
+        "component-node": {
+          "type": "tosca.capabilities.Node"
+        }
+      },
+      "requirements": {
+        "netconf-connection": {
+          "capability": "netconf",
+          "node": "vnf-netconf-device",
+          "relationship": "tosca.relationships.ConnectsTo"
+        }
+      },
+      "interfaces": {
+        "org-openecomp-sdnc-netconf-adaptor-service-NetconfExecutorNode": {
+          "operations": {
+            "process": {
+              "inputs": {
+                "request-id": {
+                  "description": "Request Id used to store the generated configuration, in the database along with the template-name",
+                  "required": true,
+                  "type": "string"
+                },
+                "service-template-name": {
+                  "description": "Service Template Name",
+                  "required": true,
+                  "type": "string"
+                },
+                "service-template-version": {
+                  "description": "Service Template Version",
+                  "required": true,
+                  "type": "string"
+                },
+                "action-name": {
+                  "description": "Action Name to get from Database, Either (message & mask-info ) or ( resource-id & resource-type & action-name & template-name ) should be present. Message will be given higest priority",
+                  "required": false,
+                  "type": "string"
+                },
+                "resource-type": {
+                  "description": "Resource Type to get from Database, Either (message & mask-info ) or( resource-id & resource-type & action-name & template-name ) should be present. Message will be given higest priority",
+                  "required": false,
+                  "type": "string"
+                },
+                "resource-id": {
+                  "description": "Resource Id to get from Database, Either (message & mask-info ) or ( resource-id & resource-type & action-name & template-name ) should be present. Message will be given higest priority",
+                  "required": false,
+                  "type": "string"
+                },
+                "execution-script": {
+                  "description": "Python Script to Execute for this Component action, It should refer any one of Prython Artifact Definition for this Node Template.",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "outputs": {
+                "response-data": {
+                  "description": "Execution Response Data in JSON format.",
+                  "type": "string"
+                },
+                "status": {
+                  "description": "Status of the Component Execution ( success or failure )",
+                  "required": true,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.Component"
+    }
+  },
+  "data_types": {
+    "datatype-resource-assignment": {
+      "version": "1.0.0",
+      "description": "This is Resource Assignment Data Type",
+      "properties": {
+        "property": {
+          "required": true,
+          "type": "datatype-property"
+        },
+        "input-param": {
+          "required": true,
+          "type": "boolean"
+        },
+        "dictionary-name": {
+          "required": false,
+          "type": "string"
+        },
+        "dictionary-source": {
+          "required": false,
+          "type": "string"
+        },
+        "dependencies": {
+          "required": true,
+          "type": "list",
+          "entry_schema": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "required": false,
+          "type": "string"
+        },
+        "message": {
+          "required": false,
+          "type": "string"
+        },
+        "updated-date": {
+          "required": false,
+          "type": "string"
+        },
+        "updated-by": {
+          "required": false,
+          "type": "string"
+        }
+      },
+      "derived_from": "tosca.datatypes.Root"
+    },
+    "datatype-property": {
+      "version": "1.0.0",
+      "description": "This is Entry point Input Data Type, which is dynamic datatype, The parameter names will be populated during the Design time for each inputs",
+      "properties": {
+        "type": {
+          "required": true,
+          "type": "string"
+        },
+        "description": {
+          "required": false,
+          "type": "string"
+        },
+        "required": {
+          "required": false,
+          "type": "boolean"
+        },
+        "default": {
+          "required": false,
+          "type": "string"
+        },
+        "entry_schema": {
+          "required": false,
+          "type": "string"
+        }
+      },
+      "derived_from": "tosca.datatypes.Root"
+    },
+    "dt-resource-assignment-request": {
+      "version": "1.0.0",
+      "description": "This is Dynamic Data type definition generated from resource mapping for the config template name base-config-template.",
+      "properties": {
+        "vnf-id": {
+          "required": true,
+          "type": "string"
+        },
+        "group-name": {
+          "required": true,
+          "type": "string"
+        },
+        "licence-key": {
+          "required": true,
+          "type": "string"
+        }
+      },
+      "derived_from": "tosca.datatypes.Dynamic"
+    }
+  }
+}

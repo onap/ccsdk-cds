@@ -1,0 +1,32 @@
+{
+  "name": "bundle-id",
+  "description": "name of the ",
+  "resource-type": "ONAP",
+  "resource-path": "vnf/bundle-id",
+  "updated-by": "ym9479@onap.com",
+  "data-type": "String",
+  "tags": "bundle-id, ym9479@onap.com",
+  "source": {
+    "db": {
+      "path": "$key-value",
+      "input-key-mapping": {
+        "key-value": "$resource-group-key"
+      },
+      "output-key-mapping": {
+        "bundle-id": "bundle-id"
+      }
+    },
+    "input": {
+    }
+  },
+  "decryption-rules": [
+    {
+      "sources": [
+        "input"
+      ],
+      "path": "/.",
+      "rule": "LOCAL-Decrypt",
+      "decrypt-type": "AES128"
+    }
+  ]
+}
