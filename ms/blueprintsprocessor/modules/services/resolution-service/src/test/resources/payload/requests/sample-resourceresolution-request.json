@@ -1,0 +1,22 @@
+{
+  "actionIdentifiers": {
+    "actionName": "sample-action",
+    "blueprintName": "sample-blurprint",
+    "blueprintVersion": "1.0.0",
+    "mode": "sync"
+  },
+  "commonHeader": {
+    "flags": {
+      "force": true,
+      "ttl": 3600
+    },
+    "originatorId": "sdnc",
+    "requestId": "123456-1000",
+    "subRequestId": "sub-123456-1000",
+    "timestamp": "2012-04-23T18:25:43.511Z"
+  },
+  "payload": {
+  },
+  "resourceAssignments": [
+  ]
+}

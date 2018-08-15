@@ -1,0 +1,28 @@
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+.classpath
+.settings/
+
+# Target dirs in all projects
+**/target-ide/*
+**/target/*
+**/logs/*
+**/tokens/*
+
+# Added for Intellij IDEA IDE
+**/debug-logs/*
+**/.idea/*
+**/*.iml
+**/*.project
+**/.springBeans
+
+**/*versionsBackup
+**/blackDuckHub*
+**/*.jsonld

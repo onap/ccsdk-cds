@@ -1,0 +1,27 @@
+{
+	"location": {
+		"name": "location",
+		"data-type": "dt-location",
+		"source": {
+			"db": {
+				"query": "SELECT db-country, db-state FROM DEVICE_PROFILE WHERE profile_name = :profile_name",
+				"input-key-mapping": {
+					"profile_name": "profile_name"
+				},
+				"output-key-mapping": {
+					"db-country": "country",
+					"db-state": "state"
+				}
+			}
+		}
+	},
+	"profile_name": {
+		"name": "profile_name",
+		"data-type": "string",
+		"source": {
+			"input": {
+				
+			}
+		}
+	}
+}
