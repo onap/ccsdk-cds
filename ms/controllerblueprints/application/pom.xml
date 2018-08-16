@@ -153,40 +153,6 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>com.github.kongchen</groupId>
-                <artifactId>swagger-maven-plugin</artifactId>
-                <version>3.1.7</version>
-                <configuration>
-                    <!-- <skipSwaggerGeneration>${skip.swagger.generation}</skipSwaggerGeneration>-->
-                    <apiSources>
-                        <apiSource>
-                            <schemes>
-                                <scheme>http</scheme>
-                                <scheme>https</scheme>
-                            </schemes>
-                            <locations>
-                                <location>org.onap.ccsdk.apps.controllerblueprints</location>
-                            </locations>
-                            <basePath>/api/controller-blueprints/v1</basePath>
-                            <info>
-                                <title>Controller Blueprint Service</title>
-                                <version>${project.version}</version>
-                            </info>
-                            <swaggerDirectory>${swagger.directory}</swaggerDirectory>
-                        </apiSource>
-                    </apiSources>
-                </configuration>
-                <executions>
-                    <execution>
-                        <!-- <phase>compile</phase> -->
-                        <phase>package</phase>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
