@@ -16,164 +16,112 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.rs;
 
-import io.swagger.annotations.*;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
-import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate;
+import org.onap.ccsdk.apps.controllerblueprints.service.ConfigModelService;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModel;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 /**
- * ConfigModelRest.java Purpose: Rest service controller for ConfigModelRest Management
- *
- * @author Brinda Santh
- * @version 1.0
+ * {@inheritDoc}
  */
-@Api
-@Path("/service")
-@Produces({MediaType.APPLICATION_JSON})
-public interface ConfigModelRest {
+@RestController
+@RequestMapping("/api/v1/config-model")
+public class ConfigModelRest {
+
+    private ConfigModelService configModelService;
 
     /**
-     * This is a getConfigModel rest service
-     * 
-     * @param id
-     * @return ConfigModel
-     * @throws BluePrintException
+     * This is a ConfigModelRest constructor.
+     *
+     * @param configModelService Config Model Service
      */
-    @GET
-    @Path("/configmodel/{id}")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Provides Rest service to Search Service Template", response = ConfigModel.class)
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "Service not available"),
-            @ApiResponse(code = 500, message = "Unexpected Runtime error")})
-    @RequestMapping(value = "/configmodel/{id}", method = RequestMethod.GET)
-    @ResponseBody ConfigModel getConfigModel(@ApiParam(required = true) @PathParam("id") Long id)
-            throws BluePrintException;
-    
+    public ConfigModelRest(ConfigModelService configModelService) {
+        this.configModelService = configModelService;
 
-    /**
-     * This is a saveConfigModel rest service
-     * 
-     * @param configModel
-     * @return ConfigModel
-     * @throws BluePrintException
-     */
-    @POST
-    @Path("/configmodel")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Provides Rest service to get Model Type by Tags", response = ServiceTemplate.class)
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "Service not available"),
-            @ApiResponse(code = 500, message = "Unexpected Runtime error")})
-    ConfigModel saveConfigModel(@ApiParam(required = true) ConfigModel configModel)
-            throws BluePrintException;
+    }
 
-    /**
-     * This is a deleteConfigModel rest service
-     * 
-     * @param id
-     * @throws BluePrintException
-     */
-    @DELETE
-    @Path("/configmodel/{id}")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Provides Rest service to delete ConfigModel.")
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "Service not available"),
-            @ApiResponse(code = 500, message = "Unexpected Runtime error")})
-    void deleteConfigModel(@ApiParam(required = true) @PathParam("id") Long id) throws BluePrintException;
+    @GetMapping(path = "/initial/{name}")
+    public @ResponseBody
+    ConfigModel getInitialConfigModel(@PathVariable(value = "name") String name) throws BluePrintException {
+        try {
+            return this.configModelService.getInitialConfigModel(name);
+        } catch (Exception e) {
+            throw new BluePrintException(2000, e.getMessage(), e);
+        }
+    }
 
-    /**
-     * This is a getInitialConfigModel rest service
-     * 
-     * @param name
-     * @return ConfigModel
-     * @throws BluePrintException
-     */
-    @GET
-    @Path("/configmodelinitial/{name}")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Provides Rest service to create default Service Template", response = ConfigModel.class)
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "Service not available"),
-            @ApiResponse(code = 500, message = "Unexpected Runtime error")})
-    ConfigModel getInitialConfigModel(@ApiParam(required = true) @PathParam("name") String name)
-            throws BluePrintException;
+    @PostMapping(path = "/")
+    public @ResponseBody
+    ConfigModel saveConfigModel(@RequestBody ConfigModel configModel) throws BluePrintException {
+        try {
+            return this.configModelService.saveConfigModel(configModel);
+        } catch (Exception e) {
+            throw new BluePrintException(2200, e.getMessage(), e);
+        }
+    }
 
-    /**
-     * This is a getCloneConfigModel rest service
-     * 
-     * @param id
-     * @return ConfigModel
-     * @throws BluePrintException
-     */
-    @GET
-    @Path("/configmodelclone/{id}")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Provides Rest service to create default Service Template", response = ConfigModel.class)
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "Service not available"),
-            @ApiResponse(code = 500, message = "Unexpected Runtime error")})
-    ConfigModel getCloneConfigModel(@ApiParam(required = true) @PathParam("id") Long id)
-            throws BluePrintException;
+    @DeleteMapping(path = "/{id}")
+    public void deleteConfigModel(@PathVariable(value = "id") Long id) throws BluePrintException {
+        try {
+            this.configModelService.deleteConfigModel(id);
+        } catch (Exception e) {
+            throw new BluePrintException(4000, e.getMessage(), e);
+        }
+    }
 
-    /**
-     * This is a publishConfigModel rest service
-     * 
-     * @param id
-     * @return ServiceTemplate
-     * @throws BluePrintException
-     */
-    @GET
-    @Path("/configmodelpublish/{id}")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Provides Rest service to get Model Type by Tags", response = ConfigModel.class)
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "Service not available"),
-            @ApiResponse(code = 500, message = "Unexpected Runtime error")})
-    ConfigModel publishConfigModel(@ApiParam(required = true) @PathParam("id") Long id)
-            throws BluePrintException;
+    @GetMapping(path = "/publish/{id}")
+    public @ResponseBody
+    ConfigModel publishConfigModel(@PathVariable(value = "id") Long id) throws BluePrintException {
+        try {
+            return this.configModelService.publishConfigModel(id);
+        } catch (Exception e) {
+            throw new BluePrintException(2500, e.getMessage(), e);
+        }
+    }
 
-    /**
-     * This is a getConfigModelByNameAndVersion rest service
-     * 
-     * @param name
-     * @param version
-     * @return ConfigModel
-     * @throws BluePrintException
-     */
-    @GET
-    @Path("/configmodelbyname/{name}/version/{version}")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Provides Rest service to Search Service Template", response = ConfigModel.class)
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "Service not available"),
-            @ApiResponse(code = 500, message = "Unexpected Runtime error")})
-    ConfigModel getConfigModelByNameAndVersion(@ApiParam(required = true) @PathParam("name") String name,
-                                               @ApiParam(required = true) @PathParam("version") String version) throws BluePrintException;
+    @GetMapping(path = "/{id}")
+    public @ResponseBody
+    ConfigModel getConfigModel(@PathVariable(value = "id") Long id) throws BluePrintException {
+        try {
+            return this.configModelService.getConfigModel(id);
+        } catch (Exception e) {
+            throw new BluePrintException(2001, e.getMessage(), e);
+        }
+    }
 
-    /**
-     * This is a searchServiceModels rest service
-     * 
-     * @param tags
-     * @return List<ConfigModel>
-     * @throws BluePrintException
-     */
-    @GET
-    @Path("/configmodelsearch/{tags}")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Provides Rest service to Search Service Template", response = ConfigModel.class)
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "Service not available"),
-            @ApiResponse(code = 500, message = "Unexpected Runtime error")})
-    List<ConfigModel> searchConfigModels(@ApiParam(required = true) @PathParam("tags") String tags)
-            throws BluePrintException;
+    @GetMapping(path = "/by-name/{name}/version/{version}")
+    public @ResponseBody
+    ConfigModel getConfigModelByNameAndVersion(@PathVariable(value = "name") String name,
+                                               @PathVariable(value = "version") String version) throws BluePrintException {
+        try {
+            return this.configModelService.getConfigModelByNameAndVersion(name, version);
+        } catch (Exception e) {
+            throw new BluePrintException(2002, e.getMessage(), e);
+        }
+    }
+
+    @GetMapping(path = "/search/{tags}")
+    public @ResponseBody
+    List<ConfigModel> searchConfigModels(@PathVariable(value = "tags") String tags) throws BluePrintException {
+        try {
+            return this.configModelService.searchConfigModels(tags);
+        } catch (Exception e) {
+            throw new BluePrintException(2003, e.getMessage(), e);
+        }
+    }
+
+    @GetMapping(path = "/clone/{id}")
+    public @ResponseBody
+    ConfigModel getCloneConfigModel(@PathVariable(value = "id") Long id) throws BluePrintException {
+        try {
+            return this.configModelService.getCloneConfigModel(id);
+        } catch (Exception e) {
+            throw new BluePrintException(2004, e.getMessage(), e);
+        }
+    }
 
 }

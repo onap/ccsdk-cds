@@ -16,119 +16,87 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.rs;
 
-import io.swagger.annotations.*;
+
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment;
+import org.onap.ccsdk.apps.controllerblueprints.service.ServiceTemplateService;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModelContent;
 import org.onap.ccsdk.apps.controllerblueprints.service.model.AutoMapResponse;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-
 /**
- * ServiceTemplateRest.java Purpose: ServiceTemplateRest interface
- *
- * @author Brinda Santh
- * @version 1.0
+ * {@inheritDoc}
  */
+@RestController
+@RequestMapping(value = "/api/v1/service-template")
+public class ServiceTemplateRest {
 
-@Api
-@Path("/service")
-@Produces({MediaType.APPLICATION_JSON})
-public interface ServiceTemplateRest {
-
-    /**
-     * This is a enrichServiceTemplate rest service
-     * 
-     * @param serviceTemplate
-     * @return ServiceTemplate
-     * @throws BluePrintException
-     */
-    @POST
-    @Path("/servicetemplate/enrich")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Provides Rest service to enrich service template", response = ServiceTemplate.class)
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "Service not available"),
-            @ApiResponse(code = 500, message = "Unexpected Runtime error")})
-    ServiceTemplate enrichServiceTemplate(@ApiParam(required = true) ServiceTemplate serviceTemplate)
-            throws BluePrintException;
+    private ServiceTemplateService serviceTemplateService;
 
     /**
-     * This is a validateServiceTemplate rest service
-     * 
-     * @param serviceTemplate
-     * @return ServiceTemplate
-     * @throws BluePrintException
+     * This is a ServiceTemplateRest constructor
+     *
+     * @param serviceTemplateService Service Template Service
      */
-    @POST
-    @Path("/servicetemplate/validate")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Provides Rest service to validate service template", response = ServiceTemplate.class)
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "Service not available"),
-            @ApiResponse(code = 500, message = "Unexpected Runtime error")})
-    ServiceTemplate validateServiceTemplate(@ApiParam(required = true) ServiceTemplate serviceTemplate)
-            throws BluePrintException;
+    public ServiceTemplateRest(ServiceTemplateService serviceTemplateService) {
+        this.serviceTemplateService = serviceTemplateService;
+    }
 
-    /**
-     * This is a generateResourceAssignments rest service
-     * 
-     * @param templateContent
-     * @return List<ResourceAssignment>
-     * @throws BluePrintException
-     */
-    @POST
-    @Path("/resourceassignment/generate")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Provides Rest service to auto map for the Resource Mapping",
-            response = ResourceAssignment.class, responseContainer = "List")
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "Service not available"),
-            @ApiResponse(code = 500, message = "Unexpected Runtime error")})
-    List<ResourceAssignment> generateResourceAssignments(
-            @ApiParam(required = true) ConfigModelContent templateContent) throws BluePrintException;
+    @PostMapping(path = "/enrich")
+    public @ResponseBody
+    ServiceTemplate enrichServiceTemplate(@RequestBody ServiceTemplate serviceTemplate) throws BluePrintException {
+        try {
+            return serviceTemplateService.enrichServiceTemplate(serviceTemplate);
+        } catch (Exception e) {
+            throw new BluePrintException(3500, e.getMessage(), e);
+        }
+    }
 
-    /**
-     * This is a autoMap rest service
-     * 
-     * @param resourceAssignments
-     * @return AutoMapResponse
-     * @throws BluePrintException
-     */
-    @POST
-    @Path("/resourceassignment/automap")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Provides Rest service to auto map for the Resource assignments",
-            response = AutoMapResponse.class)
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "Service not available"),
-            @ApiResponse(code = 500, message = "Unexpected Runtime error")})
-    AutoMapResponse autoMap(@ApiParam(required = true) List<ResourceAssignment> resourceAssignments)
-            throws BluePrintException;
+    @PostMapping(path = "/validate")
+    public @ResponseBody
+    ServiceTemplate validateServiceTemplate(@RequestBody ServiceTemplate serviceTemplate) throws BluePrintException {
+        try {
+            return serviceTemplateService.validateServiceTemplate(serviceTemplate);
+        } catch (Exception e) {
+            throw new BluePrintException(3501, e.getMessage(), e);
+        }
+    }
 
-    /**
-     * This is a validateResourceAssignments rest service
-     * 
-     * @param resourceAssignments
-     * @return List<ResourceAssignment>
-     * @throws BluePrintException
-     */
-    @POST
-    @Path("/resourceassignment/validate")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Provides Rest service to validate Resource assignments", response = ResourceAssignment.class,
-            responseContainer = "List")
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "Service not available"),
-            @ApiResponse(code = 500, message = "Unexpected Runtime error")})
-    List<ResourceAssignment> validateResourceAssignments(
-            @ApiParam(required = true) List<ResourceAssignment> resourceAssignments) throws BluePrintException;
+    @PostMapping(path = "/resource-assignment/auto-map")
+    public @ResponseBody
+    AutoMapResponse autoMap(@RequestBody List<ResourceAssignment> resourceAssignments) throws BluePrintException {
+        try {
+            return serviceTemplateService.autoMap(resourceAssignments);
+        } catch (Exception e) {
+            throw new BluePrintException(3502, e.getMessage(), e);
+        }
+    }
+
+    @PostMapping(path = "/resource-assignment/validate")
+    public @ResponseBody
+    List<ResourceAssignment> validateResourceAssignments(@RequestBody List<ResourceAssignment> resourceAssignments)
+            throws BluePrintException {
+        try {
+            return serviceTemplateService.validateResourceAssignments(resourceAssignments);
+        } catch (Exception e) {
+            throw new BluePrintException(3503, e.getMessage(), e);
+        }
+    }
+
+    @PostMapping(path = "/resource-assignment/generate")
+    public @ResponseBody
+    List<ResourceAssignment> generateResourceAssignments(@RequestBody ConfigModelContent templateContent)
+            throws BluePrintException {
+        try {
+            return serviceTemplateService.generateResourceAssignments(templateContent);
+        } catch (Exception e) {
+            throw new BluePrintException(3504, e.getMessage(), e);
+        }
+    }
 
 }

@@ -46,9 +46,8 @@ public class ControllerBluprintsApplicationTest {
 
     @Test
     public void testConfigModel() {
-
         ResponseEntity<String> entity = this.restTemplate
-                .getForEntity("/api/controller-blueprints/v1/service/configmodel/1", String.class);
+                .getForEntity("/api/v1/config-model/1", String.class);
         assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 }

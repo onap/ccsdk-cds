@@ -27,14 +27,6 @@
         <dependencySet>
             <outputDirectory>/opt/app/onap/lib</outputDirectory>
             <excludes>
-                <exclude>org.slf4j:slf4j-log4j12</exclude>
-                <exclude>javax.servlet:servlet-api</exclude>
-                <exclude>javax.servlet:javax.servlet-api</exclude>
-                <exclude>j2ee:j2ee</exclude>
-                <exclude>log4j:log4j</exclude>
-                <exclude>com.sun:j2ee</exclude>
-                <exclude>log4j:apache-log4j-extras</exclude>
-                <exclude>org.slf4j:slf4j-simple</exclude>
             </excludes>
         </dependencySet>
     </dependencySets>

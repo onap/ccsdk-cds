@@ -20,7 +20,6 @@ import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.onap.ccsdk.apps.controllerblueprints.TestApplication;
-import org.onap.ccsdk.apps.controllerblueprints.TestConfiguration;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModel;
 import org.onap.ccsdk.apps.controllerblueprints.service.utils.ConfigModelUtils;
 import org.slf4j.Logger;
@@ -35,7 +34,7 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes = {TestApplication.class, TestConfiguration.class})
+@ContextConfiguration(classes = {TestApplication.class})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ConfigModelRestTest {
 
@@ -68,7 +67,6 @@ public class ConfigModelRestTest {
         ConfigModel configModel = configModelRest.getInitialConfigModel(name);
         Assert.assertNotNull("Failed to get Initial Config Model , Return object is Null", configModel);
         Assert.assertNotNull("Failed to get Service Template Content ", configModel.getConfigModelContents());
-
     }
 
 

@@ -16,110 +16,77 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.rs;
 
-import io.swagger.annotations.*;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
+import org.onap.ccsdk.apps.controllerblueprints.service.ModelTypeService;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ModelType;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 /**
- * ModelTypeRest.java Purpose: Rest service controller for Artifact Handling
- *
- * @author Brinda Santh
- * @version 1.0
+ * {@inheritDoc}
  */
-@Api
-@Path("/service")
-@Produces({MediaType.APPLICATION_JSON})
-public interface ModelTypeRest {
+@RestController
+@RequestMapping("/api/v1/model-type")
+public class ModelTypeRest {
+
+    private ModelTypeService modelTypeService;
 
     /**
-     * This is a getModelTypeByName rest service
-     * 
-     * @param name
-     * @return ModelType
-     * @throws BluePrintException
+     * This is a ModelTypeResourceImpl, used to save and get the model types stored in database
+     *
+     * @param modelTypeService Model Type Service
      */
-    @GET
-    @Path("/modeltype/{name}")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Provides Rest service to get Model Type by id", response = ModelType.class)
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "Service not available"),
-            @ApiResponse(code = 500, message = "Unexpected Runtime error")})
-    ModelType getModelTypeByName(@ApiParam(required = true) @PathParam("name") String name)
-            throws BluePrintException;
+    public ModelTypeRest(ModelTypeService modelTypeService) {
+        this.modelTypeService = modelTypeService;
+    }
 
-    /**
-     * This is a saveModelType rest service
-     * 
-     * @param modelType
-     * @return ModelType
-     * @throws BluePrintException
-     */
+    @GetMapping(path = "/{name}")
+    public ModelType getModelTypeByName(@PathVariable(value = "name") String name) throws BluePrintException {
+        try {
+            return modelTypeService.getModelTypeByName(name);
+        } catch (Exception e) {
+            throw new BluePrintException(1000, e.getMessage(), e);
+        }
+    }
 
-    @POST
-    @Path("/modeltype")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Provides Rest service to Save Model Type", response = ModelType.class)
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "Service not available"),
-            @ApiResponse(code = 500, message = "Unexpected Runtime error")})
-    ModelType saveModelType(@ApiParam(required = true) ModelType modelType) throws BluePrintException;
+    @GetMapping(path = "/search/{tags}")
+    public List<ModelType> searchModelTypes(@PathVariable(value = "tags") String tags) throws BluePrintException {
+        try {
+            return modelTypeService.searchModelTypes(tags);
+        } catch (Exception e) {
+            throw new BluePrintException(1001, e.getMessage(), e);
+        }
+    }
 
-    /**
-     * This is a deleteModelType rest service
-     * 
-     * @param name
-     * @throws BluePrintException
-     */
-    @DELETE
-    @Path("/modeltype/{name}")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Provides Rest service to delete Model Type")
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "Service not available"),
-            @ApiResponse(code = 500, message = "Unexpected Runtime error")})
-    void deleteModelTypeByName(@ApiParam(required = true) @PathParam("name") String name)
-            throws BluePrintException;
+    @GetMapping(path = "/by-definition/{definitionType}")
+    public @ResponseBody
+    List<ModelType> getModelTypeByDefinitionType(@PathVariable(value = "definitionType") String definitionType) throws BluePrintException {
+        try {
+            return modelTypeService.getModelTypeByDefinitionType(definitionType);
+        } catch (Exception e) {
+            throw new BluePrintException(1002, e.getMessage(), e);
+        }
+    }
 
-    /**
-     * This is a searchModelType rest service
-     * 
-     * @param tags
-     * @return List<ModelType>
-     * @throws BluePrintException
-     */
-    @GET
-    @Path("/modeltypesearch/{tags}")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Provides Rest service to get Model Type by tags", response = ModelType.class,
-            responseContainer = "List")
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "Service not available"),
-            @ApiResponse(code = 500, message = "Unexpected Runtime error")})
-    List<ModelType> searchModelTypes(@ApiParam(required = true) @PathParam("tags") String tags)
-            throws BluePrintException;
+    @PostMapping(path = "/")
+    public @ResponseBody
+    ModelType saveModelType(@RequestBody ModelType modelType) throws BluePrintException {
+        try {
+            return modelTypeService.saveModel(modelType);
+        } catch (Exception e) {
+            throw new BluePrintException(1100, e.getMessage(), e);
+        }
+    }
 
-    /**
-     * This is a getModelTypeByDefinitionType rest service
-     * 
-     * @param definitionType
-     * @return List<ModelType>
-     * @throws BluePrintException
-     */
-    @GET
-    @Path("/modeltypebydefinition/{definitionType}")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Provides Rest service to get Model Type by tags", response = ModelType.class,
-            responseContainer = "List")
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "Service not available"),
-            @ApiResponse(code = 500, message = "Unexpected Runtime error")})
-    List<ModelType> getModelTypeByDefinitionType(
-            @ApiParam(required = true) @PathParam("definitionType") String definitionType)
-            throws BluePrintException;
-
+    @DeleteMapping(path = "/{name}")
+    public void deleteModelTypeByName(@PathVariable(value = "name") String name) throws BluePrintException {
+        try {
+            modelTypeService.deleteByModelName(name);
+        } catch (Exception e) {
+            throw new BluePrintException(1400, e.getMessage(), e);
+        }
+    }
 }

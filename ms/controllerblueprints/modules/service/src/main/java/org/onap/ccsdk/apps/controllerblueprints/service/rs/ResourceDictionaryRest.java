@@ -16,111 +16,83 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.rs;
 
-import io.swagger.annotations.*;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
+import org.onap.ccsdk.apps.controllerblueprints.service.ResourceDictionaryService;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionary;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 /**
- * ResourceDictionaryRest.java Purpose: Rest service controller for Artifact Handling
- *
- * @author Brinda Santh
- * @version 1.0
+ * {@inheritDoc}
  */
-@Api
-@Path("/service")
-@Produces({MediaType.APPLICATION_JSON})
+@RestController
+@RequestMapping(value = "/api/v1/dictionary")
+public class ResourceDictionaryRest {
 
-public interface ResourceDictionaryRest {
 
-    /**
-     * This is a getDataDictionaryByPath rest service
-     * 
-     * @param name
-     * @return ResourceDictionary
-     * @throws BluePrintException
-     */
-    @GET
-    @Path("/dictionary/{name}")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Provides Rest service to get Resource dictionary", response = ResourceDictionary.class)
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "Service not available"),
-            @ApiResponse(code = 500, message = "Unexpected Runtime error")})
-    ResourceDictionary getResourceDictionaryByName(@ApiParam(required = true) @PathParam("name") String name)
-            throws BluePrintException;
+    private ResourceDictionaryService resourceDictionaryService;
 
     /**
-     * This is a saveDataDictionary rest service
-     * 
-     * @param resourceMapping
-     * @return ResourceDictionary
-     * @throws BluePrintException
+     * This is a DataDictionaryRestImpl, used to save and get the Resource Mapping stored in database
+     *
+     * @param dataDictionaryService Data Dictionary Service
      */
+    public ResourceDictionaryRest(ResourceDictionaryService dataDictionaryService) {
+        this.resourceDictionaryService = dataDictionaryService;
+    }
 
-    @POST
-    @Path("/dictionary")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Provides Rest service to Save Resource dictionary Type", response = ResourceDictionary.class)
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "Service not available"),
-            @ApiResponse(code = 500, message = "Unexpected Runtime error")})
-    ResourceDictionary saveResourceDictionary(@ApiParam(required = true) ResourceDictionary resourceMapping)
-            throws BluePrintException;
+    @PostMapping(path = "/")
+    public @ResponseBody
+    ResourceDictionary saveResourceDictionary(@RequestBody ResourceDictionary dataDictionary)
+            throws BluePrintException {
+        try {
+            return resourceDictionaryService.saveResourceDictionary(dataDictionary);
+        } catch (Exception e) {
+            throw new BluePrintException(4100, e.getMessage(), e);
+        }
+    }
 
-    /**
-     * This is a deleteDataDictionaryByName rest service
-     * 
-     * @param name
-     * @throws BluePrintException
-     */
-    @DELETE
-    @Path("/dictionary/{name}")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Provides Rest service to delete ResourceDictionary Type")
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "Service not available"),
-            @ApiResponse(code = 500, message = "Unexpected Runtime error")})
-    void deleteResourceDictionaryByName(@ApiParam(required = true) @PathParam("name") String name)
-            throws BluePrintException;
+    @DeleteMapping(path = "/{name}")
+    public void deleteResourceDictionaryByName(@PathVariable(value = "name") String name) throws BluePrintException {
+        try {
+            resourceDictionaryService.deleteResourceDictionary(name);
+        } catch (Exception e) {
+            throw new BluePrintException(4400, e.getMessage(), e);
+        }
+    }
 
-    /**
-     * This is a searchResourceDictionaryByTags rest service
-     * 
-     * @param tags
-     * @return ResourceDictionary
-     * @throws BluePrintException
-     */
-    @GET
-    @Path("/dictionarysearch/{tags}")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Provides Rest service to search Resource dictionary by tags",
-            response = ResourceDictionary.class, responseContainer = "List")
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "Service not available"),
-            @ApiResponse(code = 500, message = "Unexpected Runtime error")})
-    List<ResourceDictionary> searchResourceDictionaryByTags(
-            @ApiParam(required = true) @PathParam("tags") String tags) throws BluePrintException;
+    @GetMapping(path = "/{name}")
+    public @ResponseBody
+    ResourceDictionary getResourceDictionaryByName(@PathVariable(value = "name") String name) throws BluePrintException {
+        try {
+            return resourceDictionaryService.getResourceDictionaryByName(name);
+        } catch (Exception e) {
+            throw new BluePrintException(4001, e.getMessage(), e);
+        }
+    }
 
-    /**
-     * This is a searchResourceDictionaryByNames rest service
-     * 
-     * @param names
-     * @return List<ResourceDictionary>
-     * @throws BluePrintException
-     */
-    @POST
-    @Path("/dictionarybynames")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "Provides Rest service to get ResourceDictionary Type by names",
-            response = ResourceDictionary.class, responseContainer = "List")
-    @ApiResponses(value = {@ApiResponse(code = 404, message = "Service not available"),
-            @ApiResponse(code = 500, message = "Unexpected Runtime error")})
-    List<ResourceDictionary> searchResourceDictionaryByNames(@ApiParam(required = true) List<String> names)
-            throws BluePrintException;
+    @PostMapping(path = "/by-names")
+    public @ResponseBody
+    List<ResourceDictionary> searchResourceDictionaryByNames(@RequestBody List<String> names)
+            throws BluePrintException {
+        try {
+            return resourceDictionaryService.searchResourceDictionaryByNames(names);
+        } catch (Exception e) {
+            throw new BluePrintException(4002, e.getMessage(), e);
+        }
+    }
+
+    @GetMapping(path = "/search/{tags}")
+    public @ResponseBody
+    List<ResourceDictionary> searchResourceDictionaryByTags(@PathVariable(value = "tags") String tags) throws BluePrintException {
+        try {
+            return resourceDictionaryService.searchResourceDictionaryByTags(tags);
+        } catch (Exception e) {
+            throw new BluePrintException(4003, e.getMessage(), e);
+        }
+    }
 
 }

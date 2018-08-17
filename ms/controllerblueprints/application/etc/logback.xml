@@ -25,9 +25,9 @@
 
 
     <logger name="org.springframework" level="info"/>
-    <logger name="org.springframework.web" level="debug"/>
+    <logger name="org.springframework.web" level="info"/>
     <logger name="org.hibernate" level="error"/>
-    <logger name="org.onap.ccsdk.apps.controllerblueprints" level="info"/>
+    <logger name="org.onap.ccsdk.apps" level="info"/>
 
     <root level="warn">
         <appender-ref ref="STDOUT"/>

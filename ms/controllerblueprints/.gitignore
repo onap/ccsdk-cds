@@ -7,6 +7,7 @@
 **/target-ide/*
 **/target/*
 **/logs/*
+**/debug-logs/*
 **/tokens/*
 
 # Added for Intellij IDEA IDE

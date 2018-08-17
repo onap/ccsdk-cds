@@ -16,22 +16,26 @@
 
 package org.onap.ccsdk.apps.controllerblueprints;
 
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.web.reactive.config.EnableWebFlux;
 
 /**
- *
- *
  * @author Brinda Santh
  */
 @SpringBootApplication
+@EnableWebFlux
 @ComponentScan(basePackages = {"org.onap.ccsdk.apps.controllerblueprints"})
 @EnableAutoConfiguration
 public class ControllerBluprintsApplication {
+    private static EELFLogger log = EELFManager.getInstance().getLogger(ControllerBluprintsApplication.class);
 
     public static void main(String[] args) {
+        log.info("****** Starting Controller Bluprints Application **************");
         SpringApplication.run(ControllerBluprintsApplication.class, args);
     }
 
