@@ -23,8 +23,7 @@ import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.apps.controllerblueprints.service.ServiceTemplateService;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModelContent;
 import org.onap.ccsdk.apps.controllerblueprints.service.model.AutoMapResponse;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,7 +46,7 @@ public class ServiceTemplateRest {
         this.serviceTemplateService = serviceTemplateService;
     }
 
-    @PostMapping(path = "/enrich")
+    @PostMapping(path = "/enrich", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ServiceTemplate enrichServiceTemplate(@RequestBody ServiceTemplate serviceTemplate) throws BluePrintException {
         try {
@@ -57,7 +56,7 @@ public class ServiceTemplateRest {
         }
     }
 
-    @PostMapping(path = "/validate")
+    @PostMapping(path = "/validate", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ServiceTemplate validateServiceTemplate(@RequestBody ServiceTemplate serviceTemplate) throws BluePrintException {
         try {
@@ -67,7 +66,7 @@ public class ServiceTemplateRest {
         }
     }
 
-    @PostMapping(path = "/resource-assignment/auto-map")
+    @PostMapping(path = "/resource-assignment/auto-map", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     AutoMapResponse autoMap(@RequestBody List<ResourceAssignment> resourceAssignments) throws BluePrintException {
         try {
@@ -77,7 +76,7 @@ public class ServiceTemplateRest {
         }
     }
 
-    @PostMapping(path = "/resource-assignment/validate")
+    @PostMapping(path = "/resource-assignment/validate", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     List<ResourceAssignment> validateResourceAssignments(@RequestBody List<ResourceAssignment> resourceAssignments)
             throws BluePrintException {
@@ -88,7 +87,7 @@ public class ServiceTemplateRest {
         }
     }
 
-    @PostMapping(path = "/resource-assignment/generate")
+    @PostMapping(path = "/resource-assignment/generate", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     List<ResourceAssignment> generateResourceAssignments(@RequestBody ConfigModelContent templateContent)
             throws BluePrintException {

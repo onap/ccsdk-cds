@@ -3,20 +3,19 @@
   "description": "name of the ",
   "resource-type": "ONAP",
   "resource-path": "vnf/bundle-id",
-  "updated-by": "ym9479@onap.com",
+  "updated-by": "brindasanth@onap.com",
   "data-type": "String",
-  "tags": "bundle-id, ym9479@onap.com",
+  "tags": "bundle-id, brindasanth@onap.com",
   "source": {
     "db": {
-      "path": "$key-value",
+      "query": "SELECT bundle-id FROM DEVICE_PROFILE WHERE profile_name = :profile_name",
       "input-key-mapping": {
-        "key-value": "$resource-group-key"
+        "profile_name": "profile_name"
       },
       "output-key-mapping": {
-        "bundle-id": "bundle-id"
+        "db-country": "country",
+        "db-state": "state"
       }
-    },
-    "input": {
     }
   },
   "decryption-rules": [

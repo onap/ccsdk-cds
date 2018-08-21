@@ -42,11 +42,6 @@ object ConfigModelConstant {
 
     const val CAPABILITY_PROPERTY_MAPPING = "mapping"
 
-    const val SOURCE_INPUT = "input"
-    const val SOURCE_DEFAULT = "default"
-    const val SOURCE_MDSAL = "mdsal"
-    const val SOURCE_DB = "db"
-
     const val PROPERTY_RECIPE_NAMES = "action-names"
 
 }

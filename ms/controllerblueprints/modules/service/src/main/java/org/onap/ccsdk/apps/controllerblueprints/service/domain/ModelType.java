@@ -16,6 +16,8 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -40,36 +42,43 @@ public class ModelType implements Serializable {
     @Id
     @NotNull
     @Column(name = "model_name", nullable = false)
+    @ApiModelProperty(required=true)
     private String modelName;
 
     @NotNull
     @Column(name = "derived_from")
+    @ApiModelProperty(required=true)
     private String derivedFrom;
 
     @NotNull
     @Column(name = "definition_type")
+    @ApiModelProperty(required=true)
     private String definitionType;
 
     @NotNull
     @Lob
     @Column(name = "definition")
+    @ApiModelProperty(required=true)
     private String definition;
 
     @NotNull
     @Lob
     @Column(name = "description")
+    @ApiModelProperty(required=true)
     private String description;
 
     @NotNull
     @Column(name = "version")
+    @ApiModelProperty(required=true)
     private String version;
 
     @NotNull
     @Lob
     @Column(name = "tags")
+    @ApiModelProperty(required=true)
     private String tags;
 
-    // @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy KK:mm:ss a Z")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "creation_date")
@@ -77,6 +86,7 @@ public class ModelType implements Serializable {
 
     @NotNull
     @Column(name = "updated_by")
+    @ApiModelProperty(required=true)
     private String updatedBy;
 
     @Override

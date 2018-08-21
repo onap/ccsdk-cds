@@ -19,6 +19,7 @@ package org.onap.ccsdk.apps.controllerblueprints.service.rs;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.service.ModelTypeService;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ModelType;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ import java.util.List;
  * {@inheritDoc}
  */
 @RestController
-@RequestMapping("/api/v1/model-type")
+@RequestMapping(value = "/api/v1/model-type")
 public class ModelTypeRest {
 
     private ModelTypeService modelTypeService;
@@ -43,7 +44,7 @@ public class ModelTypeRest {
         this.modelTypeService = modelTypeService;
     }
 
-    @GetMapping(path = "/{name}")
+    @GetMapping(path = "/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ModelType getModelTypeByName(@PathVariable(value = "name") String name) throws BluePrintException {
         try {
             return modelTypeService.getModelTypeByName(name);
@@ -52,7 +53,7 @@ public class ModelTypeRest {
         }
     }
 
-    @GetMapping(path = "/search/{tags}")
+    @GetMapping(path = "/search/{tags}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ModelType> searchModelTypes(@PathVariable(value = "tags") String tags) throws BluePrintException {
         try {
             return modelTypeService.searchModelTypes(tags);
@@ -61,7 +62,7 @@ public class ModelTypeRest {
         }
     }
 
-    @GetMapping(path = "/by-definition/{definitionType}")
+    @GetMapping(path = "/by-definition/{definitionType}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     List<ModelType> getModelTypeByDefinitionType(@PathVariable(value = "definitionType") String definitionType) throws BluePrintException {
         try {
@@ -71,7 +72,7 @@ public class ModelTypeRest {
         }
     }
 
-    @PostMapping(path = "/")
+    @PostMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ModelType saveModelType(@RequestBody ModelType modelType) throws BluePrintException {
         try {

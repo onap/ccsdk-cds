@@ -16,24 +16,25 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.common;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @JsonInclude(Include.NON_NULL)
 public class ErrorMessage implements Serializable {
-    private Integer httpStatus;
     private String message;
     private Integer code;
-    private String developerMessage;
+    private String debugMessage;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    private Date timestamp = new Date();
 
-    public Integer getHttpStatus() {
-        return httpStatus;
-    }
-
-    public void setHttpStatus(Integer httpStatus) {
-        this.httpStatus = httpStatus;
+    public ErrorMessage(String message, Integer code, String debugMessage){
+        this.message = message;
+        this.code = code;
+        this.debugMessage = debugMessage;
     }
 
     public String getMessage() {
@@ -52,12 +53,19 @@ public class ErrorMessage implements Serializable {
         this.code = code;
     }
 
-    public String getDeveloperMessage() {
-        return developerMessage;
+    public String getDebugMessage() {
+        return debugMessage;
     }
 
-    public void setDeveloperMessage(String developerMessage) {
-        this.developerMessage = developerMessage;
+    public void setDebugMessage(String developerMessage) {
+        this.debugMessage = developerMessage;
     }
 
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
 }

@@ -17,7 +17,7 @@
 package org.onap.ccsdk.apps.controllerblueprints.resource.dict.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.util.List;
 import java.util.Map;
@@ -29,6 +29,7 @@ import java.util.Map;
 public class DictionaryDefinition {
     @JsonProperty(value = "name", required = true)
     private String name;
+
     @JsonProperty(value = "description")
     private String description;
 
@@ -39,6 +40,7 @@ public class DictionaryDefinition {
     private String sampleValue;
 
     private String tags;
+
     @JsonProperty(value = "updated-by")
     private String updatedBy;
 
@@ -58,7 +60,8 @@ public class DictionaryDefinition {
     private Object defaultValue;
 
     @JsonProperty(value = "source", required = true)
-    private Map<String, JsonNode> source;
+    @JsonDeserialize(using = SourceDeserializer.class, keyAs = String.class, contentAs = ResourceSource.class)
+    private Map<String, ResourceSource> source;
 
     @JsonProperty("candidate-dependency")
     private Map<String, DictionaryDependency> dependency;
@@ -154,11 +157,11 @@ public class DictionaryDefinition {
         this.defaultValue = defaultValue;
     }
 
-    public Map<String, JsonNode> getSource() {
+    public Map<String, ResourceSource> getSource() {
         return source;
     }
 
-    public void setSource(Map<String, JsonNode> source) {
+    public void setSource(Map<String, ResourceSource> source) {
         this.source = source;
     }
 

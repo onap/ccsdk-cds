@@ -24,7 +24,7 @@ import java.util.Map;
  * SourceDb
  * @author Brinda Santh
  */
-public class SourceDb {
+public class SourceDb  implements ResourceSource{
     @JsonProperty(value = "base", required = true)
     private String base;
     @JsonProperty(value = "type", required = true)

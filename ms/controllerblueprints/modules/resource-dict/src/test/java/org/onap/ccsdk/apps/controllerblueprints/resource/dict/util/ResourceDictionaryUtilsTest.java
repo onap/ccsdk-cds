@@ -17,13 +17,11 @@
 package org.onap.ccsdk.apps.controllerblueprints.resource.dict.util;
 
 
-import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.Assert;
 import org.junit.Test;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants;
-import org.onap.ccsdk.apps.controllerblueprints.core.ConfigModelConstant;
-import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDictionaryConstants;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.data.*;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.utils.ResourceDictionaryUtils;
 import org.slf4j.Logger;
@@ -45,9 +43,9 @@ public class ResourceDictionaryUtilsTest {
             DictionaryDefinition dictionaryDefinition = new DictionaryDefinition();
             dictionaryDefinition.setDataType(BluePrintConstants.DATA_TYPE_STRING);
 
-            Map<String, JsonNode> source = new HashMap<>();
+            Map<String, ResourceSource> source = new HashMap<>();
             SourceInput sourceInput = new SourceInput();
-            source.put(ConfigModelConstant.SOURCE_INPUT, JacksonUtils.jsonNodeFromObject(sourceInput));
+            source.put(ResourceDictionaryConstants.SOURCE_INPUT, sourceInput);
             dictionaryDefinition.setSource(source);
 
             ResourceDictionaryUtils.populateSourceMapping(resourceAssignment, dictionaryDefinition);
@@ -72,15 +70,16 @@ public class ResourceDictionaryUtilsTest {
             DictionaryDefinition dictionaryDefinition = new DictionaryDefinition();
             dictionaryDefinition.setDataType(BluePrintConstants.DATA_TYPE_STRING);
 
-            Map<String, JsonNode> source = new HashMap<>();
+            Map<String, ResourceSource> source = new HashMap<>();
             SourceDb sourceDb = new SourceDb();
-            source.put(ConfigModelConstant.SOURCE_DB, JacksonUtils.jsonNodeFromObject(sourceDb));
+            sourceDb.setBase("sdnc_connection");
+            source.put(ResourceDictionaryConstants.SOURCE_DB, sourceDb);
             dictionaryDefinition.setSource(source);
 
             Map<String, DictionaryDependency> dependency = new HashMap<>();
             DictionaryDependency dependencyDb = new DictionaryDependency();
             dependencyDb.setNames(Arrays.asList("vnf-id", "vnf-name"));
-            dependency.put(ConfigModelConstant.SOURCE_DB, dependencyDb);
+            dependency.put(ResourceDictionaryConstants.SOURCE_DB, dependencyDb);
             dictionaryDefinition.setDependency(dependency);
 
             DecryptionRule decryptionRule = new DecryptionRule();
@@ -115,15 +114,15 @@ public class ResourceDictionaryUtilsTest {
         DictionaryDefinition dictionaryDefinition = new DictionaryDefinition();
         dictionaryDefinition.setDataType(BluePrintConstants.DATA_TYPE_STRING);
 
-        Map<String, JsonNode> source = new HashMap<>();
+        Map<String, ResourceSource> source = new HashMap<>();
         SourceDefault sourceDefault = new SourceDefault();
-        source.put(ConfigModelConstant.SOURCE_DEFAULT, JacksonUtils.jsonNodeFromObject(sourceDefault));
+        source.put(ResourceDictionaryConstants.SOURCE_DEFAULT, sourceDefault);
         dictionaryDefinition.setSource(source);
 
         Map<String, DictionaryDependency> dependency = new HashMap<>();
         DictionaryDependency dependencyDefault = new DictionaryDependency();
         dependencyDefault.setNames(Arrays.asList(new String[]{"vnf-id", "vnf-name"}));
-        dependency.put(ConfigModelConstant.SOURCE_DEFAULT, dependencyDefault);
+        dependency.put(ResourceDictionaryConstants.SOURCE_DEFAULT, dependencyDefault);
         dictionaryDefinition.setDependency(dependency);
 
         ResourceDictionaryUtils.populateSourceMapping(resourceAssignment, dictionaryDefinition);
@@ -143,15 +142,15 @@ public class ResourceDictionaryUtilsTest {
         DictionaryDefinition dictionaryDefinition = new DictionaryDefinition();
         dictionaryDefinition.setDataType(BluePrintConstants.DATA_TYPE_STRING);
 
-        Map<String, JsonNode> source = new HashMap<>();
+        Map<String, ResourceSource> source = new HashMap<>();
         SourceMdsal sourceMdsal = new SourceMdsal();
-        source.put(ConfigModelConstant.SOURCE_MDSAL, JacksonUtils.jsonNodeFromObject(sourceMdsal));
+        source.put(ResourceDictionaryConstants.SOURCE_MDSAL,sourceMdsal);
         dictionaryDefinition.setSource(source);
 
         Map<String, DictionaryDependency> dependency = new HashMap<>();
         DictionaryDependency dependencyMdsal = new DictionaryDependency();
         dependencyMdsal.setNames(Arrays.asList(new String[]{"vnf-id", "vnf-name"}));
-        dependency.put(ConfigModelConstant.SOURCE_MDSAL, dependencyMdsal);
+        dependency.put(ResourceDictionaryConstants.SOURCE_MDSAL, dependencyMdsal);
         dictionaryDefinition.setDependency(dependency);
 
         ResourceDictionaryUtils.populateSourceMapping(resourceAssignment, dictionaryDefinition);

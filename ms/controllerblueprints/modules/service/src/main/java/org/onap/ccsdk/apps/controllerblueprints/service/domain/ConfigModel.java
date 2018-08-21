@@ -18,6 +18,7 @@ package org.onap.ccsdk.apps.controllerblueprints.service.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.Proxy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -82,6 +83,7 @@ public class ConfigModel implements Serializable {
 
     @NotNull
     @Column(name = "artifact_version")
+    @ApiModelProperty(required=true)
     private String artifactVersion;
 
     @Lob
@@ -91,7 +93,7 @@ public class ConfigModel implements Serializable {
     @Column(name = "internal_version")
     private Integer internalVersion;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy KK:mm:ss a Z")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "creation_date")
@@ -99,19 +101,23 @@ public class ConfigModel implements Serializable {
 
     @NotNull
     @Column(name = "artifact_name")
+    @ApiModelProperty(required=true)
     private String artifactName;
 
     @NotNull
     @Column(name = "published")
+    @ApiModelProperty(required=true)
     private String published;
 
     @NotNull
     @Column(name = "updated_by")
+    @ApiModelProperty(required=true)
     private String updatedBy;
 
     @NotNull
     @Lob
     @Column(name = "tags")
+    @ApiModelProperty(required=true)
     private String tags;
 
 

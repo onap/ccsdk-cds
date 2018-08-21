@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.onap.ccsdk.apps.controllerblueprints.TestApplication;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.data.*;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +52,10 @@ public class ResourceDictionaryRestTest {
 
     @Before
     public void setUp() {
-
+        SourceDeserializer.registerSource("db", SourceDb.class);
+        SourceDeserializer.registerSource("input", SourceInput.class);
+        SourceDeserializer.registerSource("mdsal", SourceMdsal.class);
+        SourceDeserializer.registerSource("default", SourceDefault.class);
     }
 
     @Test

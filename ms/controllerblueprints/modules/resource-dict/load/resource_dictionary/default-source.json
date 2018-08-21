@@ -7,7 +7,7 @@
 	"resource-path": "vnf/v4-ip-type",
 	"data-type": "string",
 	"source": {
-		"input": {
+		"default": {
 			
 		}
 	}

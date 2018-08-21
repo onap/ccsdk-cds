@@ -19,8 +19,7 @@ package org.onap.ccsdk.apps.controllerblueprints.service.rs;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.service.ConfigModelService;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModel;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,7 +28,7 @@ import java.util.List;
  * {@inheritDoc}
  */
 @RestController
-@RequestMapping("/api/v1/config-model")
+@RequestMapping(value = "/api/v1/config-model")
 public class ConfigModelRest {
 
     private ConfigModelService configModelService;
@@ -44,7 +43,7 @@ public class ConfigModelRest {
 
     }
 
-    @GetMapping(path = "/initial/{name}")
+    @GetMapping(path = "/initial/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ConfigModel getInitialConfigModel(@PathVariable(value = "name") String name) throws BluePrintException {
         try {
@@ -54,7 +53,7 @@ public class ConfigModelRest {
         }
     }
 
-    @PostMapping(path = "/")
+    @PostMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ConfigModel saveConfigModel(@RequestBody ConfigModel configModel) throws BluePrintException {
         try {
@@ -69,11 +68,11 @@ public class ConfigModelRest {
         try {
             this.configModelService.deleteConfigModel(id);
         } catch (Exception e) {
-            throw new BluePrintException(4000, e.getMessage(), e);
+            throw new BluePrintException(2400, e.getMessage(), e);
         }
     }
 
-    @GetMapping(path = "/publish/{id}")
+    @GetMapping(path = "/publish/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ConfigModel publishConfigModel(@PathVariable(value = "id") Long id) throws BluePrintException {
         try {
@@ -83,7 +82,7 @@ public class ConfigModelRest {
         }
     }
 
-    @GetMapping(path = "/{id}")
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ConfigModel getConfigModel(@PathVariable(value = "id") Long id) throws BluePrintException {
         try {
@@ -93,7 +92,7 @@ public class ConfigModelRest {
         }
     }
 
-    @GetMapping(path = "/by-name/{name}/version/{version}")
+    @GetMapping(path = "/by-name/{name}/version/{version}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ConfigModel getConfigModelByNameAndVersion(@PathVariable(value = "name") String name,
                                                @PathVariable(value = "version") String version) throws BluePrintException {
@@ -104,7 +103,7 @@ public class ConfigModelRest {
         }
     }
 
-    @GetMapping(path = "/search/{tags}")
+    @GetMapping(path = "/search/{tags}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     List<ConfigModel> searchConfigModels(@PathVariable(value = "tags") String tags) throws BluePrintException {
         try {
@@ -114,7 +113,7 @@ public class ConfigModelRest {
         }
     }
 
-    @GetMapping(path = "/clone/{id}")
+    @GetMapping(path = "/clone/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ConfigModel getCloneConfigModel(@PathVariable(value = "id") Long id) throws BluePrintException {
         try {

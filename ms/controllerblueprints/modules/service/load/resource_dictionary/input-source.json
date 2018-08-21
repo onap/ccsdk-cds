@@ -1,0 +1,17 @@
+{
+	"name": "action-name",
+	"resource-path": "action-name",
+	"resource-type": "ONAP",
+	"description": "To be provided",
+	"valid-values": null,
+	"sample-value": null,
+	"updated-by": "brindasanth@onap.com",
+	"tags": null,
+	"default": null,
+	"data-type": "string",
+	"source": {
+		"input": {
+			"key": "action-name"
+		}
+	}
+}

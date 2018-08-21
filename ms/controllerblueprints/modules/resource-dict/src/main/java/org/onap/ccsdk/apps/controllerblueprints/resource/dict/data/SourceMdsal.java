@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Map;
 
-public class SourceMdsal {
+public class SourceMdsal implements ResourceSource {
 
     @JsonProperty(value = "base", required = true)
     private String base;
@@ -91,7 +91,6 @@ public class SourceMdsal {
     public void setOutputKeyMapping(Map<String, String> outputKeyMapping) {
         this.outputKeyMapping = outputKeyMapping;
     }
-
 
 
 }

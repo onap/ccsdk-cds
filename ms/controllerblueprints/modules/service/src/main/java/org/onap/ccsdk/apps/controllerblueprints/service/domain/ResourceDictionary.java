@@ -16,6 +16,8 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -39,18 +41,22 @@ public class ResourceDictionary implements Serializable {
     @Id
     @NotNull
     @Column(name = "name")
+    @ApiModelProperty(required=true)
     private String name;
 
     @NotNull
     @Column(name = "resource_path")
+    @ApiModelProperty(required=true)
     private String resourcePath;
 
     @NotNull
     @Column(name = "resource_type")
+    @ApiModelProperty(required=true)
     private String resourceType;
 
     @NotNull
     @Column(name = "data_type")
+    @ApiModelProperty(required=true)
     private String dataType;
 
     @Column(name = "entry_schema")
@@ -67,18 +73,22 @@ public class ResourceDictionary implements Serializable {
     @NotNull
     @Lob
     @Column(name = "definition")
+    @ApiModelProperty(required=true)
     private String definition;
 
     @NotNull
     @Lob
     @Column(name = "description")
+    @ApiModelProperty(required=true)
     private String description;
 
     @NotNull
     @Lob
     @Column(name = "tags")
+    @ApiModelProperty(required=true)
     private String tags;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "creation_date")
@@ -86,6 +96,7 @@ public class ResourceDictionary implements Serializable {
 
     @NotNull
     @Column(name = "updated_by")
+    @ApiModelProperty(required=true)
     private String updatedBy;
 
     @Override

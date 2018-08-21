@@ -1,0 +1,31 @@
+{
+  "name": "bundle-id",
+  "description": "name of the ",
+  "resource-type": "ONAP",
+  "resource-path": "vnf/bundle-id",
+  "updated-by": "brindasanth@onap.com",
+  "data-type": "String",
+  "tags": "bundle-id, brindasanth@onap.com",
+  "source": {
+    "db": {
+      "query": "SELECT db-country, db-state FROM DEVICE_PROFILE WHERE profile_name = :profile_name",
+      "input-key-mapping": {
+        "profile_name": "profile_name"
+      },
+      "output-key-mapping": {
+        "db-country": "country",
+        "db-state": "state"
+      }
+    }
+  },
+  "decryption-rules": [
+    {
+      "sources": [
+        "input"
+      ],
+      "path": "/.",
+      "rule": "LOCAL-Decrypt",
+      "decrypt-type": "AES128"
+    }
+  ]
+}

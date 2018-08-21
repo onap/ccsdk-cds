@@ -16,17 +16,18 @@
 
 package org.onap.ccsdk.apps.controllerblueprints;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,8 +47,21 @@ public class ControllerBluprintsApplicationTest {
 
     @Test
     public void testConfigModel() {
-        ResponseEntity<String> entity = this.restTemplate
-                .getForEntity("/api/v1/config-model/1", String.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+        ResponseEntity<ConfigModel> entity = this.restTemplate
+                .exchange("/api/v1/config-model/1", HttpMethod.GET, new HttpEntity<>(headers),ConfigModel.class);
         assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        Assert.assertNotNull("failed to get response Config model",entity.getBody());
+    }
+
+    @Test
+    public void testConfigModelFailure() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+        ResponseEntity<ConfigModel> entity = this.restTemplate
+                .exchange("/api/v1/config-model-not-found/1", HttpMethod.GET, new HttpEntity<>(headers),ConfigModel.class);
+        assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        Assert.assertNotNull("failed to get response Config model",entity.getBody());
     }
 }

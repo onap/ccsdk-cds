@@ -20,7 +20,7 @@ package org.onap.ccsdk.apps.controllerblueprints.resource.dict.data;
  * SourceDefault
  * @author Brinda Santh
  */
-public class SourceDefault {
+public class SourceDefault implements ResourceSource {
 
     private String key;
 

@@ -19,8 +19,7 @@ package org.onap.ccsdk.apps.controllerblueprints.service.rs;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.service.ResourceDictionaryService;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionary;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,7 +43,7 @@ public class ResourceDictionaryRest {
         this.resourceDictionaryService = dataDictionaryService;
     }
 
-    @PostMapping(path = "/")
+    @PostMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ResourceDictionary saveResourceDictionary(@RequestBody ResourceDictionary dataDictionary)
             throws BluePrintException {
@@ -64,7 +63,7 @@ public class ResourceDictionaryRest {
         }
     }
 
-    @GetMapping(path = "/{name}")
+    @GetMapping(path = "/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ResourceDictionary getResourceDictionaryByName(@PathVariable(value = "name") String name) throws BluePrintException {
         try {
@@ -74,7 +73,7 @@ public class ResourceDictionaryRest {
         }
     }
 
-    @PostMapping(path = "/by-names")
+    @PostMapping(path = "/by-names", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     List<ResourceDictionary> searchResourceDictionaryByNames(@RequestBody List<String> names)
             throws BluePrintException {
@@ -85,7 +84,7 @@ public class ResourceDictionaryRest {
         }
     }
 
-    @GetMapping(path = "/search/{tags}")
+    @GetMapping(path = "/search/{tags}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     List<ResourceDictionary> searchResourceDictionaryByTags(@PathVariable(value = "tags") String tags) throws BluePrintException {
         try {

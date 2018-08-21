@@ -16,15 +16,15 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.resource.dict.utils;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.onap.ccsdk.apps.controllerblueprints.core.ConfigModelConstant;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.EntrySchema;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDictionaryConstants;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.data.DictionaryDefinition;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.data.DictionaryDependency;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.data.ResourceSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,7 +63,7 @@ public class ResourceDictionaryUtils {
             // Overwrite the Property Definitions from Dictionary
             setProperty(resourceAssignment, dictionaryDefinition);
 
-            Map<String, JsonNode> dictionarySource = dictionaryDefinition.getSource();
+            Map<String, ResourceSource> dictionarySource = dictionaryDefinition.getSource();
             Map<String, DictionaryDependency> dictionaryDependencyMap = dictionaryDefinition.getDependency();
 
             if (MapUtils.isNotEmpty(dictionarySource)) {
@@ -82,7 +82,7 @@ public class ResourceDictionaryUtils {
                         }
                     }
                 } else {
-                    resourceAssignment.setDictionarySource(ConfigModelConstant.SOURCE_INPUT);
+                    resourceAssignment.setDictionarySource(ResourceDictionaryConstants.SOURCE_INPUT);
                 }
                 log.info("auto map resourceAssignment : {}", resourceAssignment);
             }
@@ -98,7 +98,7 @@ public class ResourceDictionaryUtils {
         }
     }
 
-    private static String findFirstSource(Map<String, JsonNode> dictionarySource) {
+    private static String findFirstSource(Map<String, ResourceSource> dictionarySource) {
         String source = null;
         if (MapUtils.isNotEmpty(dictionarySource)) {
             source = dictionarySource.keySet().stream().findFirst().get();

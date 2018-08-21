@@ -20,7 +20,7 @@ package org.onap.ccsdk.apps.controllerblueprints.resource.dict.data;
  * SourceInput
  * @author Brinda Santh
  */
-public class SourceInput {
+public class SourceInput implements ResourceSource {
 
     private String key;
 
@@ -31,7 +31,6 @@ public class SourceInput {
     public void setKey(String key) {
         this.key = key;
     }
-
 
 
 }

@@ -18,6 +18,7 @@ package org.onap.ccsdk.apps.controllerblueprints.service.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -46,10 +47,12 @@ public class ConfigModelContent {
 
     @NotNull
     @Column(name = "name")
+    @ApiModelProperty(required=true)
     private String name;
 
     @NotNull
     @Column(name = "content_type")
+    @ApiModelProperty(required=true)
     private String contentType;
 
 
@@ -65,10 +68,11 @@ public class ConfigModelContent {
     @NotNull
     @Lob
     @Column(name = "content")
+    @ApiModelProperty(required=true)
     private String content;
 
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy KK:mm:ss a Z")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_date")

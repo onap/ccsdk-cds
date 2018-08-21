@@ -30,10 +30,10 @@ import java.util.List;
  * @version 1.0
  */
 public class ResourceAssignment {
-
+    @JsonProperty(value = "name", required = true)
     private String name;
 
-    @JsonProperty("property")
+    @JsonProperty(value = "property", required = true)
     private PropertyDefinition property;
 
     @JsonProperty("input-param")
@@ -58,7 +58,7 @@ public class ResourceAssignment {
     private String message;
 
     @JsonProperty("updated-date")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private Date updatedDate;
 
     @JsonProperty("updated-by")

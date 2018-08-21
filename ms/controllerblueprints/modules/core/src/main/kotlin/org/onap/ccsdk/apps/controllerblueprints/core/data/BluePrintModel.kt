@@ -155,7 +155,7 @@ class PropertyDefinition {
     var id: String? = null
     var description: String? = null
     var required: Boolean? = null
-    var type: String? = null
+    lateinit var type: String
     @get:JsonProperty("default")
     var defaultValue: Any? = null
     var status: String? = null
@@ -202,7 +202,7 @@ class OperationDefinition {
 }
 
 class Implementation {
-    var primary: String? = null
+    lateinit var primary: String
     var dependencies: MutableList<String>? = null
 }
 
@@ -240,6 +240,11 @@ class TriggerDefinition {
     var description: String? = null
     @get:JsonProperty("event_type")
     lateinit var eventType: String
+    @get:JsonProperty("target_filter")
+    var targetFilter: EventFilterDefinition? = null
+    var condition: ConditionClause? = null
+    var constraint: ConditionClause? = null
+    var method: String? = null
     lateinit var action: String
 }
 
