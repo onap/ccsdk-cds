@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
 		<artifactId>commons</artifactId>
-		<version>0.0.3-SNAPSHOT</version>
+		<version>0.3.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>core</artifactId>
@@ -38,8 +38,8 @@
 			<artifactId>rest-lib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.onap.ccsdk.apps</groupId>
-			<artifactId>controllerblueprints-resource-dict</artifactId>
+			<groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+			<artifactId>resource-dict</artifactId>
 		</dependency>
 	</dependencies>
 </project>

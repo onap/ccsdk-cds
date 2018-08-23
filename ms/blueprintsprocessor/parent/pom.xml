@@ -16,27 +16,61 @@
   -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
-    <version>0.0.3-SNAPSHOT</version>
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.onap.ccsdk.apps</groupId>
+        <artifactId>blueprintsprocessor</artifactId>
+        <version>0.3.0-SNAPSHOT</version>
+    </parent>
+    <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
     <artifactId>parent</artifactId>
     <packaging>pom</packaging>
     <name>Blueprints Processor Parent</name>
     <description>Blueprints Processor Parent</description>
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <java.version>1.8</java.version>
         <controllerblueprints.version>0.3.0-SNAPSHOT</controllerblueprints.version>
         <spring.boot.version>2.0.4.RELEASE</spring.boot.version>
+        <spring.version>5.0.8.RELEASE</spring.version>
         <kotlin.version>1.2.60</kotlin.version>
+        <eelf.version>1.0.0</eelf.version>
         <springfox.swagger2.version>2.9.2</springfox.swagger2.version>
         <h2database.version>1.4.197</h2database.version>
     </properties>
     <dependencyManagement>
         <dependencies>
+            <!-- Spring Boot -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-parent</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Logging Dependencies -->
+            <dependency>
+                <groupId>com.att.eelf</groupId>
+                <artifactId>eelf-core</artifactId>
+                <version>${eelf.version}</version>
+            </dependency>
+
+            <!-- Kotlin Dependencies -->
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-stdlib</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-stdlib-jdk8</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-reflect</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+
             <!-- Application Module Dependencies -->
             <dependency>
                 <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
@@ -81,8 +115,8 @@
 
             <!-- Application Component Dependency -->
             <dependency>
-                <groupId>org.onap.ccsdk.apps</groupId>
-                <artifactId>controllerblueprints-resource-dict</artifactId>
+                <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+                <artifactId>resource-dict</artifactId>
                 <version>${controllerblueprints.version}</version>
             </dependency>
 
@@ -98,25 +132,33 @@
                 <version>${springfox.swagger2.version}</version>
             </dependency>
 
-            <!-- Spring Boot -->
+            <!-- Common Libs -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.2.1</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>3.2.2</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.6</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.velocity</groupId>
+                <artifactId>velocity</artifactId>
+                <version>1.7</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>25.1-jre</version>
+            </dependency>
 
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-parent</artifactId>
-                <version>${spring.boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-stdlib-jdk8</artifactId>
-                <version>${kotlin.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-reflect</artifactId>
-                <version>${kotlin.version}</version>
-            </dependency>
             <!-- Database -->
             <dependency>
                 <groupId>com.h2database</groupId>
@@ -136,22 +178,18 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.2.1</version>
         </dependency>
         <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
-            <version>3.2.2</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.6</version>
         </dependency>
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>
-            <version>1.7</version>
         </dependency>
 
         <dependency>
