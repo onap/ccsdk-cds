@@ -1,5 +1,8 @@
 FROM anapsix/alpine-java:8_jdk
 
+ENV HTTP_PROXY  ${HTTP_PROXY}
+ENV HTTPS_PROXY ${HTTPS_PROXY}
+
 RUN apk add --no-cache curl
 
 COPY startService.sh /startService.sh

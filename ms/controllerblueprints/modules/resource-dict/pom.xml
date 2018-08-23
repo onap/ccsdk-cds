@@ -21,17 +21,17 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.onap.ccsdk.apps</groupId>
-        <artifactId>controllerblueprints-modules</artifactId>
+        <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+        <artifactId>modules</artifactId>
         <version>0.3.0-SNAPSHOT</version>
     </parent>
-    <artifactId>controllerblueprints-resource-dict</artifactId>
+    <artifactId>resource-dict</artifactId>
     <name>Controller Blueprints Resource Dictionary</name>
 
     <dependencies>
         <dependency>
-            <groupId>org.onap.ccsdk.apps</groupId>
-            <artifactId>controllerblueprints-core</artifactId>
+            <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+            <artifactId>core</artifactId>
         </dependency>
     </dependencies>
 

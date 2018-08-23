@@ -21,24 +21,18 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.onap.ccsdk.apps</groupId>
-        <artifactId>controllerblueprints-parent</artifactId>
+        <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+        <artifactId>parent</artifactId>
         <version>0.3.0-SNAPSHOT</version>
         <relativePath>../parent</relativePath>
     </parent>
-    <artifactId>controllerblueprints-application</artifactId>
+    <artifactId>application</artifactId>
     <name>Controller Blueprints Application</name>
     <properties>
         <swagger.directory>${basedir}/src/main/resources/swagger-ui/dist</swagger.directory>
         <java.version>1.8</java.version>
-        <docker.registry>xxxxxxxxx:5100</docker.registry>
-        <assembly.id>distribution</assembly.id>
-        <build.number>local</build.number>
         <name.space>org.onap.ccsdk.apps</name.space>     <!-- <name.space>${namespace}</name.space> -->
-        <grm.namespace>org.onap.ccsdk.apps</grm.namespace>
-        <archetypeVersion>200.0.49</archetypeVersion>
         <serviceArtifactName>controllerblueprints</serviceArtifactName>
-
         <!-- Sonar -->
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
@@ -50,15 +44,12 @@
         <sonar.jacoco.itReportPath>${basedir}/target/jacoco-it.exec</sonar.jacoco.itReportPath>
         <sonar.language>java</sonar.language>
         <ilib.version>2.0.7</ilib.version>
-        <!--<skip.assembly>false</skip.assembly>-->
-        <!--<skip.swagger.generation>false</skip.swagger.generation>-->
     </properties>
 
     <dependencies>
-
         <dependency>
-            <groupId>org.onap.ccsdk.apps</groupId>
-            <artifactId>controllerblueprints-service</artifactId>
+            <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+            <artifactId>service</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -102,16 +93,34 @@
                 </includes>
                 <filtering>true</filtering>
             </resource>
-            <resource>
-                <directory>src/main/docker</directory>
-                <targetPath>${basedir}/target</targetPath>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-                <filtering>true</filtering>
-            </resource>
         </resources>
         <plugins>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-dockerfile</id>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals><!-- here the phase you need -->
+                        <phase>validate</phase>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/docker-stage</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/docker</directory>
+                                    <includes>
+                                        <include>*</include>
+                                    </includes>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -162,28 +171,6 @@
                         </configuration>
                         <goals>
                             <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <!--build the final artifact for docker deployment -->
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.0.0</version>
-                <configuration>
-                    <!-- <skipAssembly>${skip.assembly}</skipAssembly>-->
-                    <outputDirectory>target</outputDirectory>
-                    <descriptors>
-                        <descriptor>src/assembly/distribution.xml</descriptor>
-                    </descriptors>
-                    <tarLongFileMode>posix</tarLongFileMode>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>${assembly.id}</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
                         </goals>
                     </execution>
                 </executions>

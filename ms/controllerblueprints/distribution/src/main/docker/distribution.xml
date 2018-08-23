@@ -32,11 +32,11 @@
     </dependencySets>
     <fileSets>
         <fileSet>
-            <directory>${project.basedir}/src/main/resources</directory>
+            <directory>${project.basedir}/../application/src/main/resources</directory>
             <includes>
                 <include>application.properties</include>
             </includes>
-            <outputDirectory>/</outputDirectory>
+            <outputDirectory>./</outputDirectory>
             <useDefaultExcludes>true</useDefaultExcludes>
         </fileSet>
         <fileSet>
@@ -45,26 +45,26 @@
                 <include>Dockerfile</include>
                 <include>startService.sh</include>
             </includes>
-            <outputDirectory>/</outputDirectory>
+            <outputDirectory>./</outputDirectory>
             <useDefaultExcludes>true</useDefaultExcludes>
         </fileSet>
         <fileSet>
-            <directory>${project.basedir}/src/main/groovy</directory>
+            <directory>${project.basedir}/../application/src/main/groovy</directory>
             <outputDirectory>src/main/groovy</outputDirectory>
             <useDefaultExcludes>true</useDefaultExcludes>
         </fileSet>
         <fileSet>
-            <directory>${project.basedir}/src/main/resources</directory>
+            <directory>${project.basedir}/../application/src/main/resources</directory>
             <outputDirectory>src/main/resources</outputDirectory>
             <useDefaultExcludes>true</useDefaultExcludes>
         </fileSet>
         <fileSet>
-            <directory>${project.basedir}/etc</directory>
-            <outputDirectory>/etc</outputDirectory>
+            <directory>${project.basedir}/../application/etc</directory>
+            <outputDirectory>./etc</outputDirectory>
             <useDefaultExcludes>true</useDefaultExcludes>
         </fileSet>
         <fileSet>
-            <directory>${project.basedir}/load</directory>
+            <directory>${project.basedir}/../application/load</directory>
             <outputDirectory>load</outputDirectory>
             <useDefaultExcludes>true</useDefaultExcludes>
         </fileSet>

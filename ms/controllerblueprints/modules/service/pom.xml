@@ -21,11 +21,11 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.onap.ccsdk.apps</groupId>
-        <artifactId>controllerblueprints-modules</artifactId>
+        <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+        <artifactId>modules</artifactId>
         <version>0.3.0-SNAPSHOT</version>
     </parent>
-    <artifactId>controllerblueprints-service</artifactId>
+    <artifactId>service</artifactId>
     <name>Controller Blueprints Service</name>
 
     <properties>
@@ -33,8 +33,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.onap.ccsdk.apps</groupId>
-            <artifactId>controllerblueprints-resource-dict</artifactId>
+            <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+            <artifactId>resource-dict</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.velocity</groupId>

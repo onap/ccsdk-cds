@@ -20,18 +20,18 @@
         xmlns="http://maven.apache.org/POM/4.0.0"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.onap.ccsdk.apps</groupId>
-    <artifactId>controllerblueprints-parent</artifactId>
+    <parent>
+        <groupId>org.onap.ccsdk.apps</groupId>
+        <artifactId>controllerblueprints</artifactId>
+        <version>0.3.0-SNAPSHOT</version>
+    </parent>
+    <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+    <artifactId>parent</artifactId>
     <name>Controller Blueprints Parent</name>
-    <version>0.3.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <java.version>1.8</java.version>
         <spring.boot.version>2.0.4.RELEASE</spring.boot.version>
+        <spring.version>5.0.8.RELEASE</spring.version>
         <kotlin.version>1.2.60</kotlin.version>
         <eelf.version>1.0.0</eelf.version>
         <springfox.swagger2.version>2.9.2</springfox.swagger2.version>
@@ -122,19 +122,26 @@
                 <version>${kotlin.version}</version>
                 <scope>test</scope>
             </dependency>
+
+            <!-- Application Components -->
             <dependency>
-                <groupId>org.onap.ccsdk.apps</groupId>
-                <artifactId>controllerblueprints-core</artifactId>
+                <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+                <artifactId>core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.apps</groupId>
-                <artifactId>controllerblueprints-service</artifactId>
+                <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+                <artifactId>service</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.apps</groupId>
-                <artifactId>controllerblueprints-resource-dict</artifactId>
+                <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+                <artifactId>application</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+                <artifactId>resource-dict</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
@@ -148,17 +155,14 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.2.1</version>
-        </dependency>
+         </dependency>
         <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
-            <version>3.2.2</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.6</version>
         </dependency>
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
