@@ -77,7 +77,7 @@ public class ServiceTemplateValidator extends BluePrintValidatorDefaultService {
     /**
      * This is a getMetaData to get the key information during the
      *
-     * @return Map<String                                                                                                                                                                                                                                                               ,
+     * @return Map<String                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ,
                        *       String>
      */
     public Map<String, String> getMetaData() {
@@ -88,18 +88,9 @@ public class ServiceTemplateValidator extends BluePrintValidatorDefaultService {
     public void validateMetadata(@NotNull Map<String, String> metaDataMap) throws BluePrintException {
 
         Preconditions.checkNotNull(serviceTemplate.getMetadata(), "Service Template Metadata Information is missing.");
+        super.validateMetadata(metaDataMap);
 
         this.metaData.putAll(serviceTemplate.getMetadata());
-
-        String author = serviceTemplate.getMetadata().get(BluePrintConstants.METADATA_TEMPLATE_AUTHOR);
-        String serviceTemplateName =
-                serviceTemplate.getMetadata().get(BluePrintConstants.METADATA_TEMPLATE_NAME);
-        String serviceTemplateVersion =
-                serviceTemplate.getMetadata().get(BluePrintConstants.METADATA_TEMPLATE_VERSION);
-
-        Preconditions.checkArgument(StringUtils.isNotBlank(author), "Template Metadata (author) Information is missing.");
-        Preconditions.checkArgument(StringUtils.isNotBlank(serviceTemplateName), "Template Metadata (service-template-name) Information is missing.");
-        Preconditions.checkArgument(StringUtils.isNotBlank(serviceTemplateVersion), "Template Metadata (service-template-version) Information is missing.");
     }
 
 

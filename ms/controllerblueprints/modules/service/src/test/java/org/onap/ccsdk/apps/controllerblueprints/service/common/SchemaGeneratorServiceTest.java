@@ -32,7 +32,7 @@ import java.nio.charset.Charset;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SchemaGeneratorServiceTest {
 
-    private static Logger log = LoggerFactory.getLogger(ServiceTemplateValidationTest.class);
+    private static Logger log = LoggerFactory.getLogger(SchemaGeneratorServiceTest.class);
 
     @Test
     public void test01GenerateSwaggerData() throws Exception {

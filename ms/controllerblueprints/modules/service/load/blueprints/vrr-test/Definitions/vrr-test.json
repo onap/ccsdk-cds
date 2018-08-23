@@ -3,6 +3,7 @@
     "template_author": "Brinda Santh ( bs2796@onap.com )",
     "template_name": "vrr-test",
     "template_version": "1.0.0",
+    "template_tags" : "brinda, VRR",
     "release": "201802",
     "service-type": "AVPN",
     "vnf-type": "VRR"

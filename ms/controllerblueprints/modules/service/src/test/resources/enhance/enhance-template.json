@@ -3,6 +3,7 @@
     "template_author": "Brinda Santh",
     "template_name": "enhance-template",
     "template_version": "1.0.0",
+    "template_tags": "brinda, VPE",
     "service-type": "Sample Service",
     "release": "1806",
     "vnf-type": "VPE"
