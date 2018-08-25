@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +21,7 @@ package org.onap.ccsdk.apps.controllerblueprints.resource.dict.util;
 import org.junit.Assert;
 import org.junit.Test;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants;
+import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDictionaryConstants;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.data.*;
@@ -37,9 +39,11 @@ public class ResourceDictionaryUtilsTest {
     @Test
     public void validateSingleInputSource() {
         try {
-            log.info(" **************** Validating validateSingleSource *****************");
             ResourceAssignment resourceAssignment = new ResourceAssignment();
             resourceAssignment.setName("test-input-key");
+            PropertyDefinition propertyDefinition = new PropertyDefinition();
+            propertyDefinition.setType("string");
+            resourceAssignment.setProperty(propertyDefinition);
             DictionaryDefinition dictionaryDefinition = new DictionaryDefinition();
             dictionaryDefinition.setDataType(BluePrintConstants.DATA_TYPE_STRING);
 
@@ -64,9 +68,12 @@ public class ResourceDictionaryUtilsTest {
     @Test
     public void validateSingleDbSource() {
         try {
-            log.info(" **************** Validating validateSingleSource *****************");
             ResourceAssignment resourceAssignment = new ResourceAssignment();
             resourceAssignment.setName("test-db-key");
+            PropertyDefinition propertyDefinition = new PropertyDefinition();
+            propertyDefinition.setType("string");
+            resourceAssignment.setProperty(propertyDefinition);
+
             DictionaryDefinition dictionaryDefinition = new DictionaryDefinition();
             dictionaryDefinition.setDataType(BluePrintConstants.DATA_TYPE_STRING);
 
@@ -110,6 +117,9 @@ public class ResourceDictionaryUtilsTest {
     public void testSourceDefault() {
         ResourceAssignment resourceAssignment = new ResourceAssignment();
         resourceAssignment.setName("test-input-key");
+        PropertyDefinition propertyDefinition = new PropertyDefinition();
+        propertyDefinition.setType("string");
+        resourceAssignment.setProperty(propertyDefinition);
 
         DictionaryDefinition dictionaryDefinition = new DictionaryDefinition();
         dictionaryDefinition.setDataType(BluePrintConstants.DATA_TYPE_STRING);
@@ -139,6 +149,10 @@ public class ResourceDictionaryUtilsTest {
     public void testSourceMdsal() {
         ResourceAssignment resourceAssignment = new ResourceAssignment();
         resourceAssignment.setName("test-input-key");
+        PropertyDefinition propertyDefinition = new PropertyDefinition();
+        propertyDefinition.setType("string");
+        resourceAssignment.setProperty(propertyDefinition);
+
         DictionaryDefinition dictionaryDefinition = new DictionaryDefinition();
         dictionaryDefinition.setDataType(BluePrintConstants.DATA_TYPE_STRING);
 

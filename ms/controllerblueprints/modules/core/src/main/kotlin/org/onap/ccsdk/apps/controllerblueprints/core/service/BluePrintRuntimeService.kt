@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +21,7 @@ package org.onap.ccsdk.apps.controllerblueprints.core.service
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.NullNode
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.apps.controllerblueprints.core.OrchestratorException
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ArtifactDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition
@@ -154,7 +155,7 @@ class BluePrintRuntimeService(var bluePrintContext: BluePrintContext, var contex
         val nodeTemplate = bluePrintContext.nodeTemplateByName(nodeTemplateName)
 
         val artifactDefinition: ArtifactDefinition = nodeTemplate.artifacts?.get(artifactName)
-                ?: throw OrchestratorException(String.format("failed to get artifat definition {} from the node template"
+                ?: throw BluePrintProcessorException(String.format("failed to get artifat definition {} from the node template"
                         , artifactName))
         val propertyAssignmentExpression = PropertyAssignmentService( context, this)
         return propertyAssignmentExpression.artifactContent(artifactDefinition)

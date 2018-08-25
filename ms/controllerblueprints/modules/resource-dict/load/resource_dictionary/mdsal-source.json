@@ -1,36 +1,36 @@
 {
-  "tags": "oam-local-ipv4-address, tosca.datatypes.Root, data_type, st1848@att.com",
+  "tags": "oam-local-ipv4-address",
   "name": "oam-local-ipv4-address",
-  "description": "based on service-instance-id,network-role,v4-ip-type and vm-type get the ipv4-gateway-prefix from the SDN-GC mdsal",
-  "updated-by": "st1848@att.com",
+  "property" :{
+    "description": "based on service-instance-id,network-role,v4-ip-type and vm-type get the ipv4-gateway-prefix from the SDN-GC mdsal",
+    "type": "string"
+  },
+  "updated-by": "brindasanth@onap.com",
   "resource-type": "ATT",
   "resource-path": "vnf/oam-local-ipv4-address",
-  "data-type": "string",
-  "source": {
+  "sources": {
     "mdsal": {
-      "base": "sdnc-gc",
-      "type": "JSON",
-      "url-path": "config/L3VNF-API:services/service-list/$service-instance-id/service-data/vnf-topology-information/vnf-assignments/vnf-vms/$vm-type/vm-networks/$network-role/v4-assigned-ip-list/$v4-ip-type",
-      "path": "/v4-assigned-ip-list/0/v4-ip-prefix",
-      "input-key-mapping": {
-        "service-instance-id": "service-instance-id",
-        "network-role": "network-role",
-        "v4-ip-type": "v4-ip-type",
-        "vm-type": "vm-type"
-      },
-      "output-key-mapping": {
-        "oam-local-ipv4-address": "v4-ip-prefix"
+      "type": "source-rest",
+      "properties": {
+        "type": "JSON",
+        "url-path": "config/L3VNF-API:services/service-list/$service-instance-id/service-data/vnf-topology-information/vnf-assignments/vnf-vms/$vm-type/vm-networks/$network-role/v4-assigned-ip-list/$v4-ip-type",
+        "path": "/v4-assigned-ip-list/0/v4-ip-prefix",
+        "input-key-mapping": {
+          "service-instance-id": "service-instance-id",
+          "network-role": "network-role",
+          "v4-ip-type": "v4-ip-type",
+          "vm-type": "vm-type"
+        },
+        "output-key-mapping": {
+          "oam-local-ipv4-address": "v4-ip-prefix"
+        },
+        "key-dependency": [
+          "service-instance-id",
+          "network-role",
+          "v4-ip-type",
+          "vm-type"
+        ]
       }
-    }
-  },
-  "candidate-dependency": {
-    "mdsal": {
-      "names": [
-        "service-instance-id",
-        "network-role",
-        "v4-ip-type",
-        "vm-type"
-      ]
     }
   }
 }
