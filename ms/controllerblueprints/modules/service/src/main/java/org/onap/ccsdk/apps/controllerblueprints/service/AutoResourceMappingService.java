@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +23,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment;
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.data.DictionaryDefinition;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.utils.ResourceDictionaryUtils;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionary;
 import org.onap.ccsdk.apps.controllerblueprints.service.model.AutoMapResponse;
@@ -102,7 +103,7 @@ public class AutoResourceMappingService {
         ResourceDictionary dbDataDictionary = dictionaryMap.get(resourceAssignment.getName());
         if (dbDataDictionary != null && StringUtils.isNotBlank(dbDataDictionary.getDefinition())) {
 
-            DictionaryDefinition dictionaryDefinition = JacksonUtils.readValue(dbDataDictionary.getDefinition(), DictionaryDefinition.class);
+            ResourceDefinition dictionaryDefinition = JacksonUtils.readValue(dbDataDictionary.getDefinition(), ResourceDefinition.class);
 
             if (dictionaryDefinition != null && StringUtils.isNotBlank(dictionaryDefinition.getName())
                     && StringUtils.isBlank(resourceAssignment.getDictionaryName())) {
@@ -186,7 +187,7 @@ public class AutoResourceMappingService {
         }
         if (dictionaries != null) {
             for (ResourceDictionary resourcedictionary : dictionaries) {
-                DictionaryDefinition dictionaryDefinition = JacksonUtils.readValue(resourcedictionary.getDefinition(), DictionaryDefinition.class);
+                ResourceDefinition dictionaryDefinition = JacksonUtils.readValue(resourcedictionary.getDefinition(), ResourceDefinition.class);
                 PropertyDefinition property = new PropertyDefinition();
 				property.setRequired(true);
 				ResourceAssignment resourceAssignment = new ResourceAssignment();

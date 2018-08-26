@@ -44,7 +44,7 @@ open class ResourceDefinition{
     lateinit var resourcePath: String
 
     @JsonProperty(value = "sources", required = true)
-    var sources: MutableMap<String, NodeTemplate>? = null
+    lateinit var sources: MutableMap<String, NodeTemplate>
 
     @JsonProperty("decryption-rules")
     var decryptionRules: MutableList<DecryptionRule>? = null

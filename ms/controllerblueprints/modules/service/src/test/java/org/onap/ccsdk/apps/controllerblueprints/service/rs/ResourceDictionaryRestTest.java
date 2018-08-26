@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,14 +50,6 @@ public class ResourceDictionaryRestTest {
 
     @Autowired
     protected ResourceDictionaryRest resourceDictionaryRest;
-
-    @Before
-    public void setUp() {
-        SourceDeserializer.registerSource("db", SourceDb.class);
-        SourceDeserializer.registerSource("input", SourceInput.class);
-        SourceDeserializer.registerSource("mdsal", SourceMdsal.class);
-        SourceDeserializer.registerSource("default", SourceDefault.class);
-    }
 
     @Test
     public void test01SaveDataDictionary() throws Exception {

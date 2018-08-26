@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +19,10 @@ package org.onap.ccsdk.apps.controllerblueprints.service;
 
 import org.apache.commons.lang3.StringUtils;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
+import org.onap.ccsdk.apps.controllerblueprints.core.data.EntrySchema;
+import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.data.DictionaryDefinition;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionary;
 import org.onap.ccsdk.apps.controllerblueprints.service.repository.ResourceDictionaryRepository;
 import org.onap.ccsdk.apps.controllerblueprints.service.validator.ResourceDictionaryValidator;
@@ -108,24 +111,32 @@ public class ResourceDictionaryService {
         if (resourceDictionary != null) {
             ResourceDictionaryValidator.validateResourceDictionary(resourceDictionary);
 
-            DictionaryDefinition dictionaryDefinition =
-                    JacksonUtils.readValue(resourceDictionary.getDefinition(), DictionaryDefinition.class);
+            ResourceDefinition resourceDefinition =
+                    JacksonUtils.readValue(resourceDictionary.getDefinition(), ResourceDefinition.class);
 
-            if (dictionaryDefinition == null) {
+            if (resourceDefinition == null) {
                 throw new BluePrintException(
                         "Resource dictionary definition is not valid content " + resourceDictionary.getDefinition());
             }
 
-            dictionaryDefinition.setName(resourceDictionary.getName());
-            dictionaryDefinition.setResourcePath(resourceDictionary.getResourcePath());
-            dictionaryDefinition.setResourceType(resourceDictionary.getResourceType());
-            dictionaryDefinition.setDataType(resourceDictionary.getDataType());
-            dictionaryDefinition.setEntrySchema(resourceDictionary.getEntrySchema());
-            dictionaryDefinition.setTags(resourceDictionary.getTags());
-            dictionaryDefinition.setDescription(resourceDictionary.getDescription());
-            dictionaryDefinition.setUpdatedBy(resourceDictionary.getUpdatedBy());
+            resourceDefinition.setName(resourceDictionary.getName());
+            resourceDefinition.setResourcePath(resourceDictionary.getResourcePath());
+            resourceDefinition.setResourceType(resourceDictionary.getResourceType());
 
-            String definitionContent = JacksonUtils.getJson(dictionaryDefinition, true);
+            PropertyDefinition propertyDefinition = new PropertyDefinition();
+            propertyDefinition.setType(resourceDictionary.getDataType());
+            propertyDefinition.setDescription(resourceDictionary.getDescription());
+            if(StringUtils.isNotBlank(resourceDictionary.getEntrySchema())){
+                EntrySchema entrySchema = new EntrySchema();
+                entrySchema.setType(resourceDictionary.getEntrySchema());
+                propertyDefinition.setEntrySchema(entrySchema);
+            }else{
+                propertyDefinition.setEntrySchema(null);
+            }
+            resourceDefinition.setTags(resourceDictionary.getTags());
+            resourceDefinition.setUpdatedBy(resourceDictionary.getUpdatedBy());
+
+            String definitionContent = JacksonUtils.getJson(resourceDefinition, true);
             resourceDictionary.setDefinition(definitionContent);
 
             Optional<ResourceDictionary> dbResourceDictionaryData =

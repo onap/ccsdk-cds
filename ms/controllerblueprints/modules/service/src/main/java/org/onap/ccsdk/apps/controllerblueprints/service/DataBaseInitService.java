@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +17,7 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service;
 
+import com.google.common.base.Preconditions;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -26,7 +28,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.ArtifactType;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.DataType;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeType;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.data.DictionaryDefinition;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModel;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ModelType;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionary;
@@ -160,26 +162,21 @@ public class DataBaseInitService {
                         fileName = file.getFilename();
                         log.trace("Loading : {}", fileName);
                         String definitionContent = getResourceContent(file);
-                        DictionaryDefinition dictionaryDefinition =
-                                JacksonUtils.readValue(definitionContent, DictionaryDefinition.class);
+                        ResourceDefinition dictionaryDefinition =
+                                JacksonUtils.readValue(definitionContent, ResourceDefinition.class);
                         if (dictionaryDefinition != null) {
+                            Preconditions.checkNotNull(dictionaryDefinition.getProperty(), "Failed to get Property Definition");
                             ResourceDictionary resourceDictionary = new ResourceDictionary();
                             resourceDictionary.setResourcePath(dictionaryDefinition.getResourcePath());
                             resourceDictionary.setName(dictionaryDefinition.getName());
                             resourceDictionary.setDefinition(definitionContent);
 
-                            if (dictionaryDefinition.getValidValues() != null)
-                                resourceDictionary
-                                        .setValidValues(String.valueOf(dictionaryDefinition.getValidValues()));
-
-                            if (dictionaryDefinition.getSampleValue() != null)
-                                resourceDictionary
-                                        .setValidValues(String.valueOf(dictionaryDefinition.getSampleValue()));
-
                             resourceDictionary.setResourceType(dictionaryDefinition.getResourceType());
-                            resourceDictionary.setDataType(dictionaryDefinition.getDataType());
-                            resourceDictionary.setEntrySchema(dictionaryDefinition.getEntrySchema());
-                            resourceDictionary.setDescription(dictionaryDefinition.getDescription());
+                            resourceDictionary.setDescription(dictionaryDefinition.getProperty().getDescription());
+                            resourceDictionary.setDataType(dictionaryDefinition.getProperty().getType());
+                            if(dictionaryDefinition.getProperty().getEntrySchema() != null){
+                                resourceDictionary.setEntrySchema(dictionaryDefinition.getProperty().getEntrySchema().getType());
+                            }
                             resourceDictionary.setUpdatedBy(dictionaryDefinition.getUpdatedBy());
                             if (StringUtils.isBlank(dictionaryDefinition.getTags())) {
                                 resourceDictionary.setTags(

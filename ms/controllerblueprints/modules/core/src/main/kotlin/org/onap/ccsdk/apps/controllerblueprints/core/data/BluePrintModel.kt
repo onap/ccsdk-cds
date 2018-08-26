@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +20,7 @@ package org.onap.ccsdk.apps.controllerblueprints.core.data
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.JsonNode
+import io.swagger.annotations.ApiModelProperty
 
 /**
  *
@@ -59,7 +61,7 @@ A constraint clause defines an operation along with one or more compatible value
  */
 class ConstraintClause {
     @get:JsonProperty("equal")
-    var equal: Any? = null
+    var equal: JsonNode? = null
     @get:JsonProperty("greater_than")
     var greaterThan: Any? = null
     @get:JsonProperty("greater_or_equal")
@@ -71,15 +73,15 @@ class ConstraintClause {
     @get:JsonProperty("in_range")
     var inRange: Any? = null
     @get:JsonProperty("valid_values")
-    var validValues: MutableList<Any>? = null
+    var validValues: MutableList<JsonNode>? = null
     @get:JsonProperty("length")
     var length: Any? = null
     @get:JsonProperty("min_length")
     var minLength: Any? = null
     @get:JsonProperty("max_length")
     var maxLength: Any? = null
-    @get:JsonProperty("pattern")
     var pattern: String? = null
+    var schema: String? = null
 }
 
 /*
@@ -157,12 +159,13 @@ class PropertyDefinition {
     var required: Boolean? = null
     lateinit var type: String
     @get:JsonProperty("default")
-    var defaultValue: Any? = null
+    var defaultValue: JsonNode? = null
     var status: String? = null
     var constraints: MutableList<ConstraintClause>? = null
     @get:JsonProperty("entry_schema")
     var entrySchema: EntrySchema? = null
-    var value: Any? = null
+    @get:ApiModelProperty(notes = "Property Value, It may be raw JSON or primitive data type values")
+    var value: JsonNode? = null
 }
 
 
@@ -182,7 +185,7 @@ class AttributeDefinition {
     var description: String? = null
     lateinit var type: String
     @JsonProperty("default")
-    var _default: Any? = null
+    var _default: JsonNode? = null
     var status: String? = null
     @JsonProperty("entry_schema")
     var entry_schema: String? = null
@@ -346,7 +349,7 @@ A Data Type definition defines the schema for new named datatypes in TOSCA.
  */
 
 class DataType : EntityType(){
-    var constraints: MutableList<MutableMap<String, Any>>? = null
+    var constraints: MutableList<ConstraintClause>? = null
 }
 
 /*
@@ -481,7 +484,7 @@ class SubstitutionMapping {
 
 class EntrySchema {
     lateinit var type: String
-    var constraints: MutableList<MutableMap<String, Any>>? = null
+    var constraints: MutableList<ConstraintClause>? = null
 }
 
 class InterfaceAssignment {
