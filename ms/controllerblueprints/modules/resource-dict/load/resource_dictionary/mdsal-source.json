@@ -24,7 +24,7 @@
         "output-key-mapping": {
           "oam-local-ipv4-address": "v4-ip-prefix"
         },
-        "key-dependency": [
+        "key-dependencies": [
           "service-instance-id",
           "network-role",
           "v4-ip-type",

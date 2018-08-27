@@ -15,12 +15,11 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.apps.controllerblueprints.resource.dict.util;
+package org.onap.ccsdk.apps.controllerblueprints.resource.dict;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -25,18 +25,32 @@ import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
 public class ResourceDictionaryValidationServiceTest {
     private String basePath = "load/model_type";
     String dictionaryPath = "load/resource_dictionary";
+    BluePrintRepoFileService bluePrintRepoFileService = new BluePrintRepoFileService(basePath);
 
     @Test
-    public void testValidate() throws Exception {
-        BluePrintRepoFileService bluePrintRepoFileService = new BluePrintRepoFileService(basePath);
+    public void testValidateSource() throws Exception {
 
-        String fileName = dictionaryPath + "/db-source.json";
+        String inputFileName = dictionaryPath + "/db-source.json";
+        testValidate(inputFileName);
+
+        String dbFileName = dictionaryPath + "/db-source.json";
+        testValidate(dbFileName);
+
+        String defaultFileName = dictionaryPath + "/default-source.json";
+        testValidate(defaultFileName);
+
+        String restFileName = dictionaryPath + "/mdsal-source.json";
+        testValidate(restFileName);
+    }
+
+    private void testValidate(String fileName) throws Exception {
+
         ResourceDefinition resourceDefinition = JacksonUtils.readValueFromFile(fileName, ResourceDefinition.class);
-        Assert.assertNotNull("Failed to populate dictionaryDefinition for db type", resourceDefinition);
+        Assert.assertNotNull("Failed to populate dictionaryDefinition for  type", resourceDefinition);
 
         ResourceDictionaryValidationService resourceDictionaryValidationService =
                 new ResourceDictionaryDefaultValidationService(bluePrintRepoFileService);
         resourceDictionaryValidationService.validate(resourceDefinition);
-
+        Assert.assertNotNull(String.format("Failed to populate dictionaryDefinition for : %s", fileName), resourceDefinition);
     }
 }
