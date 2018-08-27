@@ -7,7 +7,7 @@
   "resource-path": "vnf/v4-ip-type",
   "resource-type": "ONAP",
   "updated-by": "brindasanth@onap.com",
-  "tags": null,
+  "tags": "v4-ip-type, source-input, brindasanth",
   "sources": {
     "input": {
       "type": "source-input",

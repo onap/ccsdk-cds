@@ -17,6 +17,7 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service;
 
+import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.EntrySchema;
@@ -112,60 +113,51 @@ public class ResourceDictionaryService {
      */
     public ResourceDictionary saveResourceDictionary(ResourceDictionary resourceDictionary)
             throws BluePrintException {
-        if (resourceDictionary != null) {
-            ResourceDictionaryValidator.validateResourceDictionary(resourceDictionary);
+        Preconditions.checkNotNull(resourceDictionary, "Resource Dictionary information is missing");
+        Preconditions.checkArgument(StringUtils.isNotBlank(resourceDictionary.getDefinition()),
+                "Resource Dictionary definition information is missing");
 
-            ResourceDefinition resourceDefinition =
-                    JacksonUtils.readValue(resourceDictionary.getDefinition(), ResourceDefinition.class);
-            // Check the Source already Present
-            resourceDictionaryValidationService.validate(resourceDefinition);
+        ResourceDefinition resourceDefinition =
+                JacksonUtils.readValue(resourceDictionary.getDefinition(), ResourceDefinition.class);
+        // Validate the Resource Definitions
+        resourceDictionaryValidationService.validate(resourceDefinition);
 
-            if (resourceDefinition == null) {
-                throw new BluePrintException(
-                        "Resource dictionary definition is not valid content " + resourceDictionary.getDefinition());
-            }
-
-            resourceDefinition.setName(resourceDictionary.getName());
-            resourceDefinition.setResourcePath(resourceDictionary.getResourcePath());
-            resourceDefinition.setResourceType(resourceDictionary.getResourceType());
-
-            PropertyDefinition propertyDefinition = new PropertyDefinition();
-            propertyDefinition.setType(resourceDictionary.getDataType());
-            propertyDefinition.setDescription(resourceDictionary.getDescription());
-            if (StringUtils.isNotBlank(resourceDictionary.getEntrySchema())) {
-                EntrySchema entrySchema = new EntrySchema();
-                entrySchema.setType(resourceDictionary.getEntrySchema());
-                propertyDefinition.setEntrySchema(entrySchema);
-            } else {
-                propertyDefinition.setEntrySchema(null);
-            }
-            resourceDefinition.setTags(resourceDictionary.getTags());
-            resourceDefinition.setUpdatedBy(resourceDictionary.getUpdatedBy());
-
-            String definitionContent = JacksonUtils.getJson(resourceDefinition, true);
-            resourceDictionary.setDefinition(definitionContent);
-
-            Optional<ResourceDictionary> dbResourceDictionaryData =
-                    resourceDictionaryRepository.findByName(resourceDictionary.getName());
-            if (dbResourceDictionaryData.isPresent()) {
-                ResourceDictionary dbResourceDictionary = dbResourceDictionaryData.get();
-
-                dbResourceDictionary.setName(resourceDictionary.getName());
-                dbResourceDictionary.setDefinition(resourceDictionary.getDefinition());
-                dbResourceDictionary.setDescription(resourceDictionary.getDescription());
-                dbResourceDictionary.setResourceType(resourceDictionary.getResourceType());
-                dbResourceDictionary.setResourcePath(resourceDictionary.getResourcePath());
-                dbResourceDictionary.setDataType(resourceDictionary.getDataType());
-                dbResourceDictionary.setEntrySchema(resourceDictionary.getEntrySchema());
-                dbResourceDictionary.setTags(resourceDictionary.getTags());
-                dbResourceDictionary.setValidValues(resourceDictionary.getValidValues());
-                resourceDictionary = resourceDictionaryRepository.save(dbResourceDictionary);
-            } else {
-                resourceDictionary = resourceDictionaryRepository.save(resourceDictionary);
-            }
-        } else {
-            throw new BluePrintException("Resource Dictionary information is missing");
+        resourceDictionary.setResourceType(resourceDefinition.getResourceType());
+        resourceDictionary.setResourcePath(resourceDefinition.getResourcePath());
+        resourceDictionary.setTags(resourceDefinition.getTags());
+        resourceDefinition.setUpdatedBy(resourceDictionary.getUpdatedBy());
+        // Set the Property Definitions
+        PropertyDefinition propertyDefinition = resourceDefinition.getProperty();
+        resourceDictionary.setDescription(propertyDefinition.getDescription());
+        resourceDictionary.setDataType(propertyDefinition.getType());
+        if(propertyDefinition.getEntrySchema() != null){
+            resourceDictionary.setEntrySchema(propertyDefinition.getEntrySchema().getType());
         }
+
+        String definitionContent = JacksonUtils.getJson(resourceDefinition, true);
+        resourceDictionary.setDefinition(definitionContent);
+
+        ResourceDictionaryValidator.validateResourceDictionary(resourceDictionary);
+
+        Optional<ResourceDictionary> dbResourceDictionaryData =
+                resourceDictionaryRepository.findByName(resourceDictionary.getName());
+        if (dbResourceDictionaryData.isPresent()) {
+            ResourceDictionary dbResourceDictionary = dbResourceDictionaryData.get();
+
+            dbResourceDictionary.setName(resourceDictionary.getName());
+            dbResourceDictionary.setDefinition(resourceDictionary.getDefinition());
+            dbResourceDictionary.setDescription(resourceDictionary.getDescription());
+            dbResourceDictionary.setResourceType(resourceDictionary.getResourceType());
+            dbResourceDictionary.setResourcePath(resourceDictionary.getResourcePath());
+            dbResourceDictionary.setTags(resourceDictionary.getTags());
+            dbResourceDictionary.setUpdatedBy(resourceDictionary.getUpdatedBy());
+            dbResourceDictionary.setDataType(resourceDictionary.getDataType());
+            dbResourceDictionary.setEntrySchema(resourceDictionary.getEntrySchema());
+            resourceDictionary = resourceDictionaryRepository.save(dbResourceDictionary);
+        } else {
+            resourceDictionary = resourceDictionaryRepository.save(resourceDictionary);
+        }
+
         return resourceDictionary;
     }
 

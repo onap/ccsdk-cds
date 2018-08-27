@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2018 IBM.
+ *  Modifications Copyright © 2017-2018 AT&T Intellectual Property.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -46,7 +47,7 @@ open class ResourceDictionaryDefaultValidationService(val bluePrintRepoService: 
         resourceDefinition.sources.forEach { (name, nodeTemplate) ->
             val sourceType = nodeTemplate.type
 
-            val sourceNodeType = bluePrintRepoService.getNodeType(sourceType)
+            val sourceNodeType = bluePrintRepoService.getNodeType(sourceType)?.block()
                     ?: throw BluePrintException(format("Failed to get node type definition for source({})", sourceType))
 
             // Validate Property Name, expression, values and Data Type

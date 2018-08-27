@@ -17,11 +17,16 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core.service
 
+import com.google.common.base.Preconditions
 import org.apache.commons.io.FileUtils
+import org.apache.commons.lang3.StringUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import reactor.core.publisher.Mono
 import java.io.File
 import java.io.Serializable
 import java.nio.charset.Charset
@@ -35,24 +40,26 @@ import java.nio.charset.Charset
 interface BluePrintRepoService : Serializable {
 
     @Throws(BluePrintException::class)
-    fun getNodeType(nodeTypeName: String): NodeType?
+    fun getNodeType(nodeTypeName: String): Mono<NodeType>?
 
     @Throws(BluePrintException::class)
-    fun getDataType(dataTypeName: String): DataType?
+    fun getDataType(dataTypeName: String): Mono<DataType>?
 
     @Throws(BluePrintException::class)
-    fun getArtifactType(artifactTypeName: String): ArtifactType?
+    fun getArtifactType(artifactTypeName: String): Mono<ArtifactType>?
 
     @Throws(BluePrintException::class)
-    fun getRelationshipType(relationshipTypeName: String): RelationshipType?
+    fun getRelationshipType(relationshipTypeName: String): Mono<RelationshipType>?
 
     @Throws(BluePrintException::class)
-    fun getCapabilityDefinition(capabilityDefinitionName: String): CapabilityDefinition?
+    fun getCapabilityDefinition(capabilityDefinitionName: String): Mono<CapabilityDefinition>?
 
 }
 
 
 class BluePrintRepoFileService(val basePath: String) : BluePrintRepoService {
+
+    private val log: Logger = LoggerFactory.getLogger(BluePrintRepoFileService::class.java)
 
     val dataTypePath = basePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)
     val nodeTypePath = basePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TYPE)
@@ -61,33 +68,47 @@ class BluePrintRepoFileService(val basePath: String) : BluePrintRepoService {
     val relationshipTypePath = basePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TYPE)
     val extension = ".json"
 
-    override fun getDataType(dataTypeName: String): DataType? {
-        val content = FileUtils.readFileToString(File(dataTypePath.plus(BluePrintConstants.PATH_DIVIDER)
-                .plus(dataTypeName).plus(extension)), Charset.defaultCharset())
-        return JacksonUtils.readValue(content)
+    override fun getDataType(dataTypeName: String): Mono<DataType>? {
+        val fileName = dataTypePath.plus(BluePrintConstants.PATH_DIVIDER)
+                .plus(dataTypeName).plus(extension)
+        return getModelType(fileName, DataType::class.java)
     }
 
-    override fun getNodeType(nodeTypeName: String): NodeType? {
-        val content = FileUtils.readFileToString(File(nodeTypePath.plus(BluePrintConstants.PATH_DIVIDER)
-                .plus(nodeTypeName).plus(extension)), Charset.defaultCharset())
-        return JacksonUtils.readValue(content)
+    override fun getNodeType(nodeTypeName: String): Mono<NodeType>? {
+        val fileName = nodeTypePath.plus(BluePrintConstants.PATH_DIVIDER).plus(nodeTypeName).plus(extension)
+        return getModelType(fileName, NodeType::class.java)
     }
 
-    override fun getArtifactType(artifactTypeName: String): ArtifactType? {
-        val content = FileUtils.readFileToString(File(artifactTypePath.plus(BluePrintConstants.PATH_DIVIDER)
-                .plus(artifactTypeName).plus(extension)), Charset.defaultCharset())
-        return JacksonUtils.readValue(content)
+    override fun getArtifactType(artifactTypeName: String): Mono<ArtifactType>? {
+        val fileName = artifactTypePath.plus(BluePrintConstants.PATH_DIVIDER)
+                .plus(artifactTypeName).plus(extension)
+        return getModelType(fileName, ArtifactType::class.java)
     }
 
-    override fun getRelationshipType(relationshipTypeName: String): RelationshipType? {
-        val content = FileUtils.readFileToString(File(relationshipTypePath.plus(BluePrintConstants.PATH_DIVIDER)
-                .plus(relationshipTypeName).plus(extension)), Charset.defaultCharset())
-        return JacksonUtils.readValue(content)
+    override fun getRelationshipType(relationshipTypeName: String): Mono<RelationshipType>? {
+        val fileName = relationshipTypePath.plus(BluePrintConstants.PATH_DIVIDER)
+                .plus(relationshipTypeName).plus(extension)
+        return getModelType(fileName, RelationshipType::class.java)
     }
 
-    override fun getCapabilityDefinition(capabilityDefinitionName: String): CapabilityDefinition? {
-        val content = FileUtils.readFileToString(File(capabilityTypePath.plus(BluePrintConstants.PATH_DIVIDER)
-                .plus(capabilityDefinitionName).plus(extension)), Charset.defaultCharset())
-        return JacksonUtils.readValue(content)
+    override fun getCapabilityDefinition(capabilityDefinitionName: String): Mono<CapabilityDefinition>? {
+        val fileName = capabilityTypePath.plus(BluePrintConstants.PATH_DIVIDER)
+                .plus(capabilityDefinitionName).plus(extension)
+        return getModelType(fileName, CapabilityDefinition::class.java)
+    }
+
+    private fun <T> getModelType(fileName: String, valueType: Class<T>): Mono<T> {
+        return getFileContent(fileName).map { content ->
+            Preconditions.checkArgument(StringUtils.isNotBlank(content),
+                    String.format("Failed to get model content for file (%s)", fileName))
+
+            JacksonUtils.readValue(content, valueType)
+                    ?: throw BluePrintException(String.format("Failed to get model file from content for file (%s)", fileName))
+
+        }
+    }
+
+    private fun getFileContent(fileName: String): Mono<String> {
+        return Mono.just(FileUtils.readFileToString(File(fileName), Charset.defaultCharset()))
     }
 }

@@ -16,6 +16,8 @@
 
 package org.onap.ccsdk.apps.controllerblueprints;
 
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFManager;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.service.common.ErrorMessage;
 import org.springframework.http.HttpStatus;
@@ -28,14 +30,17 @@ import org.springframework.web.context.request.WebRequest;
 @ControllerAdvice
 @RestController
 public class ApplicationExceptionHandler {
+    private static EELFLogger log = EELFManager.getInstance().getLogger(ApplicationExceptionHandler.class);
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<ErrorMessage> handleAllExceptions(Exception ex, WebRequest request) {
+        log.error("Application Exception", ex);
         ErrorMessage exceptionResponse = new ErrorMessage( ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getLocalizedMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(BluePrintException.class)
     public final ResponseEntity<ErrorMessage> handleBlueprintException(BluePrintException ex, WebRequest request) {
+        log.error("Application Blueprint Exception", ex);
         ErrorMessage exceptionResponse = new ErrorMessage( ex.getMessage(), ex.getCode(), ex.getLocalizedMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }

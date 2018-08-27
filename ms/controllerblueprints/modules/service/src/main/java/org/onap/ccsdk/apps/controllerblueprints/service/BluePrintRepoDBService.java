@@ -26,6 +26,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ModelType;
 import org.onap.ccsdk.apps.controllerblueprints.service.repository.ModelTypeRepository;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 
@@ -43,59 +44,51 @@ public class BluePrintRepoDBService implements BluePrintRepoService {
         this.modelTypeRepository = modelTypeRepository;
     }
 
-   
     @Override
-    public NodeType getNodeType(String nodeTypeName) throws BluePrintException {
-        Preconditions.checkArgument(StringUtils.isNotBlank(nodeTypeName), "NodeType name is missing");
-        String content = getModelDefinitions(nodeTypeName);
-        Preconditions.checkArgument(StringUtils.isNotBlank(content), "NodeType content is missing");
-        return JacksonUtils.readValue(content, NodeType.class);
+    public Mono<NodeType> getNodeType(String nodeTypeName) throws BluePrintException {
+        return getModelType(nodeTypeName, NodeType.class);
     }
 
-   
     @Override
-    public DataType getDataType(String dataTypeName) throws BluePrintException {
-        Preconditions.checkArgument(StringUtils.isNotBlank(dataTypeName), "DataType name is missing");
-        String content = getModelDefinitions(dataTypeName);
-        Preconditions.checkArgument(StringUtils.isNotBlank(content), "DataType content is missing");
-        return JacksonUtils.readValue(content, DataType.class);
+    public Mono<DataType> getDataType(String dataTypeName) throws BluePrintException {
+        return getModelType(dataTypeName, DataType.class);
     }
 
-   
     @Override
-    public ArtifactType getArtifactType(String artifactTypeName) throws BluePrintException {
-        Preconditions.checkArgument(StringUtils.isNotBlank(artifactTypeName), "ArtifactType name is missing");
-        String content = getModelDefinitions(artifactTypeName);
-        Preconditions.checkArgument(StringUtils.isNotBlank(content), "ArtifactType content is missing");
-        return JacksonUtils.readValue(content, ArtifactType.class);
+    public Mono<ArtifactType> getArtifactType(String artifactTypeName) throws BluePrintException {
+        return getModelType(artifactTypeName, ArtifactType.class);
     }
 
-   
     @Override
-    public RelationshipType getRelationshipType(String relationshipTypeName) throws BluePrintException {
-        Preconditions.checkArgument(StringUtils.isNotBlank(relationshipTypeName), "RelationshipType name is missing");
-        String content = getModelDefinitions(relationshipTypeName);
-        Preconditions.checkArgument(StringUtils.isNotBlank(content), "RelationshipType content is missing");
-        return JacksonUtils.readValue(content, RelationshipType.class);
+    public Mono<RelationshipType> getRelationshipType(String relationshipTypeName) throws BluePrintException {
+        return getModelType(relationshipTypeName, RelationshipType.class);
     }
 
-   
     @Override
-    public CapabilityDefinition getCapabilityDefinition(String capabilityDefinitionName) throws BluePrintException {
-        Preconditions.checkArgument(StringUtils.isNotBlank(capabilityDefinitionName), "CapabilityDefinition name is missing");
-        String content = getModelDefinitions(capabilityDefinitionName);
-        Preconditions.checkArgument(StringUtils.isNotBlank(content), "CapabilityDefinition content is missing");
-        return JacksonUtils.readValue(content, CapabilityDefinition.class);
+    public Mono<CapabilityDefinition> getCapabilityDefinition(String capabilityDefinitionName) throws BluePrintException {
+        return getModelType(capabilityDefinitionName, CapabilityDefinition.class);
     }
 
-    private String getModelDefinitions(String modelName) throws BluePrintException {
+    private <T> Mono<T> getModelType(String modelName, Class<T> valueClass) throws BluePrintException {
+        Preconditions.checkArgument(StringUtils.isNotBlank(modelName),
+                "Failed to get model from repo, model name is missing");
+
+        return getModelDefinitions(modelName).map(content -> {
+            Preconditions.checkArgument(StringUtils.isNotBlank(content),
+                    String.format("Failed to get model content for model name (%s)", modelName));
+                    return JacksonUtils.readValue(content, valueClass);
+                }
+        );
+    }
+
+    private Mono<String> getModelDefinitions(String modelName) throws BluePrintException {
         String modelDefinition = null;
-        Optional<ModelType> modelTypedb = modelTypeRepository.findByModelName(modelName);
-        if (modelTypedb.isPresent()) {
-            modelDefinition = modelTypedb.get().getDefinition();
+        Optional<ModelType> modelTypeDb = modelTypeRepository.findByModelName(modelName);
+        if (modelTypeDb.isPresent()) {
+            modelDefinition = modelTypeDb.get().getDefinition();
         } else {
             throw new BluePrintException(String.format("failed to get model definition (%s) from repo", modelName));
         }
-        return modelDefinition;
+        return Mono.just(modelDefinition);
     }
 }

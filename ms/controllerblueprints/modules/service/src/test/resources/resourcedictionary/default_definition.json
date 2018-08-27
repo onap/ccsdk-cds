@@ -1,5 +1,5 @@
 {
-  "name": "v4-aggregat-list",
+  "name": "ipaddress",
   "property": {
     "description": "name of the ",
     "type": "list",
@@ -10,7 +10,7 @@
   "updated-by": "Brinda Santh (bs2796)",
   "resource-type": "ONAP",
   "resource-path": "/v4-aggregat-list",
-  "tags": null,
+  "tags": "ipaddress",
   "sources": {
     "input": {
       "type": "source-input"

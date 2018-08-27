@@ -217,21 +217,21 @@ open class BluePrintEnhancerDefaultService(val bluePrintRepoService: BluePrintRe
     }
 
     open fun populateNodeType(nodeTypeName: String): NodeType {
-        val nodeType = bluePrintRepoService.getNodeType(nodeTypeName)
+        val nodeType = bluePrintRepoService.getNodeType(nodeTypeName)?.block()
                 ?: throw BluePrintException(format("Couldn't get NodeType({}) from repo.", nodeTypeName))
         serviceTemplate.nodeTypes?.put(nodeTypeName, nodeType)
         return nodeType
     }
 
     open fun populateArtifactType(artifactTypeName: String): ArtifactType {
-        val artifactType = bluePrintRepoService.getArtifactType(artifactTypeName)
+        val artifactType = bluePrintRepoService.getArtifactType(artifactTypeName)?.block()
                 ?: throw BluePrintException(format("Couldn't get ArtifactType({}) from repo.", artifactTypeName))
         serviceTemplate.artifactTypes?.put(artifactTypeName, artifactType)
         return artifactType
     }
 
     open fun populateDataTypes(dataTypeName: String): DataType {
-        val dataType = bluePrintRepoService.getDataType(dataTypeName)
+        val dataType = bluePrintRepoService.getDataType(dataTypeName)?.block()
                 ?: throw BluePrintException(format("Couldn't get DataType({}) from repo.", dataTypeName))
         serviceTemplate.dataTypes?.put(dataTypeName, dataType)
         return dataType

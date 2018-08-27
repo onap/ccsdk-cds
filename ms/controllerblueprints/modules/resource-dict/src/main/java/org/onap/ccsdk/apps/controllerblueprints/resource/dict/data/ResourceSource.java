@@ -17,6 +17,6 @@
 package org.onap.ccsdk.apps.controllerblueprints.resource.dict.data;
 
 import java.io.Serializable;
-
+@Deprecated
 public interface ResourceSource extends Serializable {
 }
