@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +19,6 @@ package org.onap.ccsdk.apps.controllerblueprints.service.validator;
 
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
-import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.data.DictionaryDefinition;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionary;
 
 /**
@@ -33,28 +31,6 @@ import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionar
 public class ResourceDictionaryValidator {
 
     private ResourceDictionaryValidator() {}
-
-    /**
-     * This is a validateResourceDictionaryDefinition
-     * 
-     * @param definitionContent
-     * @return boolean
-     * @throws BluePrintException
-     */
-    public static boolean validateResourceDictionaryDefinition(String definitionContent)
-            throws BluePrintException {
-        boolean valid = true;
-        if (StringUtils.isNotBlank(definitionContent)) {
-            DictionaryDefinition dictionaryDefinition =
-                    JacksonUtils.readValue(definitionContent, DictionaryDefinition.class);
-            if (dictionaryDefinition == null) {
-                throw new BluePrintException(
-                        "Resource dictionary definition is not valid content " + definitionContent);
-            }
-
-        }
-        return valid;
-    }
 
     /**
      * This is a validateResourceDictionary method
