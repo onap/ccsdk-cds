@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,12 +27,8 @@ object ConfigModelConstant {
     const val MODEL_CONTENT_TYPE_TOSCA_JSON = "TOSCA_JSON"
     const val MODEL_CONTENT_TYPE_TEMPLATE = "TEMPLATE"
 
-    const val MODEL_TYPE_DATA_TYPE = "tosca.datatypes.Root"
     const val MODEL_TYPE_DATA_TYPE_DYNAMIC = "tosca.datatypes.Dynamic"
 
-    const val MODEL_TYPE_NODE_DG = "tosca.nodes.DG"
-    const val MODEL_TYPE_NODE_COMPONENT = "tosca.nodes.Component"
-    const val MODEL_TYPE_NODE_VNF = "tosca.nodes.Vnf"
     const val MODEL_TYPE_NODE_ARTIFACT = "tosca.nodes.Artifact"
 
     const val MODEL_TYPE_CAPABILITY_NETCONF = "tosca.capability.Netconf"

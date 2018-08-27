@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,31 +21,31 @@ import org.junit.Test
 import kotlin.test.assertNotNull
 
 /**
- * BluePrintEnhancerRepoFileServiceTest
+ * BluePrintRepoFileServiceTest
  * @author Brinda Santh
  *
  */
-class BluePrintEnhancerRepoFileServiceTest {
+class BluePrintRepoFileServiceTest {
 
     val basePath = "load/model_type"
 
     @Test
     fun testGetDataType() {
-        val bluePrintEnhancerRepoFileService = BluePrintEnhancerRepoFileService(basePath)
+        val bluePrintEnhancerRepoFileService = BluePrintRepoFileService(basePath)
         val dataType = bluePrintEnhancerRepoFileService.getDataType("dt-v4-aggregate")
         assertNotNull(dataType, "Failed to get DataType from repo")
     }
 
     @Test
     fun testGetNodeType() {
-        val bluePrintEnhancerRepoFileService = BluePrintEnhancerRepoFileService(basePath)
+        val bluePrintEnhancerRepoFileService = BluePrintRepoFileService(basePath)
         val nodeType = bluePrintEnhancerRepoFileService.getNodeType("component-resource-assignment")
         assertNotNull(nodeType, "Failed to get NodeType from repo")
     }
 
     @Test
     fun testGetArtifactType() {
-        val bluePrintEnhancerRepoFileService = BluePrintEnhancerRepoFileService(basePath)
+        val bluePrintEnhancerRepoFileService = BluePrintRepoFileService(basePath)
         val nodeType = bluePrintEnhancerRepoFileService.getArtifactType("artifact-template-velocity")
         assertNotNull(nodeType, "Failed to get ArtifactType from repo")
     }

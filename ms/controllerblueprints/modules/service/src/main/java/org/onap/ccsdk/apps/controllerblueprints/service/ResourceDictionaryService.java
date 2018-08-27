@@ -43,19 +43,23 @@ public class ResourceDictionaryService {
 
     private ResourceDictionaryRepository resourceDictionaryRepository;
 
+    private ResourceDictionaryValidationService resourceDictionaryValidationService;
+
     /**
      * This is a DataDictionaryService, used to save and get the Resource Mapping stored in database
-     * 
+     *
      * @param dataDictionaryRepository
-     * 
+     * @param resourceDictionaryValidationService
      */
-    public ResourceDictionaryService(ResourceDictionaryRepository dataDictionaryRepository) {
+    public ResourceDictionaryService(ResourceDictionaryRepository dataDictionaryRepository,
+                                     ResourceDictionaryValidationService resourceDictionaryValidationService) {
         this.resourceDictionaryRepository = dataDictionaryRepository;
+        this.resourceDictionaryValidationService = resourceDictionaryValidationService;
     }
 
     /**
      * This is a getDataDictionaryByName service
-     * 
+     *
      * @param name
      * @return DataDictionary
      * @throws BluePrintException
@@ -70,7 +74,7 @@ public class ResourceDictionaryService {
 
     /**
      * This is a searchResourceDictionaryByNames service
-     * 
+     *
      * @param names
      * @return List<ResourceDictionary>
      * @throws BluePrintException
@@ -86,7 +90,7 @@ public class ResourceDictionaryService {
 
     /**
      * This is a searchResourceDictionaryByTags service
-     * 
+     *
      * @param tags
      * @return List<ResourceDictionary>
      * @throws BluePrintException
@@ -101,7 +105,7 @@ public class ResourceDictionaryService {
 
     /**
      * This is a saveDataDictionary service
-     * 
+     *
      * @param resourceDictionary
      * @return DataDictionary
      * @throws BluePrintException
@@ -113,6 +117,8 @@ public class ResourceDictionaryService {
 
             ResourceDefinition resourceDefinition =
                     JacksonUtils.readValue(resourceDictionary.getDefinition(), ResourceDefinition.class);
+            // Check the Source already Present
+            resourceDictionaryValidationService.validate(resourceDefinition);
 
             if (resourceDefinition == null) {
                 throw new BluePrintException(
@@ -126,11 +132,11 @@ public class ResourceDictionaryService {
             PropertyDefinition propertyDefinition = new PropertyDefinition();
             propertyDefinition.setType(resourceDictionary.getDataType());
             propertyDefinition.setDescription(resourceDictionary.getDescription());
-            if(StringUtils.isNotBlank(resourceDictionary.getEntrySchema())){
+            if (StringUtils.isNotBlank(resourceDictionary.getEntrySchema())) {
                 EntrySchema entrySchema = new EntrySchema();
                 entrySchema.setType(resourceDictionary.getEntrySchema());
                 propertyDefinition.setEntrySchema(entrySchema);
-            }else{
+            } else {
                 propertyDefinition.setEntrySchema(null);
             }
             resourceDefinition.setTags(resourceDictionary.getTags());
@@ -165,7 +171,7 @@ public class ResourceDictionaryService {
 
     /**
      * This is a deleteResourceDictionary service
-     * 
+     *
      * @param name
      * @throws BluePrintException
      */

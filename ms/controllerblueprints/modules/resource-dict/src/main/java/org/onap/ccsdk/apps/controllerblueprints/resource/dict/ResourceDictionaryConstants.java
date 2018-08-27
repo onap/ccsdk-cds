@@ -23,6 +23,7 @@ public class ResourceDictionaryConstants {
     public static final String SOURCE_DB = "db";
     public static final String SOURCE_MDSAL = "mdsal";
 
+    public static final String PROPERTY_TYPE = "type";
     public static final String PROPERTY_INPUT_KEY_MAPPING = "input-key-mapping";
     public static final String PROPERTY_OUTPUT_KEY_MAPPING = "output-key-mapping";
     public static final String PROPERTY_KEY_DEPENDENCY = "key-dependency";

@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +21,7 @@ import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*;
-import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintEnhancerRepoService;
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRepoService;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ModelType;
 import org.onap.ccsdk.apps.controllerblueprints.service.repository.ModelTypeRepository;
@@ -29,16 +30,16 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 /**
- * BluePrintEnhancerRepoDBService
+ * BluePrintRepoDBService
  *
  * @author Brinda Santh
  */
 @Service
-public class BluePrintEnhancerRepoDBService implements BluePrintEnhancerRepoService {
+public class BluePrintRepoDBService implements BluePrintRepoService {
 
     private ModelTypeRepository modelTypeRepository;
 
-    public BluePrintEnhancerRepoDBService(ModelTypeRepository modelTypeRepository) {
+    public BluePrintRepoDBService(ModelTypeRepository modelTypeRepository) {
         this.modelTypeRepository = modelTypeRepository;
     }
 

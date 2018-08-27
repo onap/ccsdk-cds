@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +25,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.core.ConfigModelConstant;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*;
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintEnhancerDefaultService;
-import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintEnhancerRepoService;
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRepoService;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment;
 import org.slf4j.Logger;
@@ -48,7 +49,7 @@ public class BluePrintEnhancerService extends BluePrintEnhancerDefaultService {
 
     private HashMap<String, DataType> recipeDataTypes = new HashMap<>();
 
-    public BluePrintEnhancerService(BluePrintEnhancerRepoService bluePrintEnhancerRepoDBService) {
+    public BluePrintEnhancerService(BluePrintRepoService bluePrintEnhancerRepoDBService) {
         super(bluePrintEnhancerRepoDBService);
     }
 

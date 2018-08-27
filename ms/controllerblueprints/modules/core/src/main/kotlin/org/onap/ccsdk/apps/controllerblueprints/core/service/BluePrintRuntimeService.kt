@@ -65,8 +65,8 @@ class BluePrintRuntimeService(var bluePrintContext: BluePrintContext, var contex
                 resolvedValue = propertyAssignmentExpression.resolveAssignmentExpression(nodeTemplateName, nodeTypePropertyName, propertyAssignment)
             } else {
                 // Assign default value to the Operation
-                nodeTypeProperty.defaultValue?.let {
-                    resolvedValue = JacksonUtils.jsonNodeFromObject(nodeTypeProperty.defaultValue!!)
+                nodeTypeProperty.defaultValue?.let { defaultValue ->
+                    resolvedValue = defaultValue
                 }
             }
             // Set for Return of method

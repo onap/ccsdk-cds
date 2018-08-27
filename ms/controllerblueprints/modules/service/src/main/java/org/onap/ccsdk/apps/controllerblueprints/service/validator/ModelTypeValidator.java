@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +20,6 @@ package org.onap.ccsdk.apps.controllerblueprints.service.validator;
 import org.apache.commons.lang3.StringUtils;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
-import org.onap.ccsdk.apps.controllerblueprints.core.ConfigModelConstant;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ArtifactType;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.CapabilityDefinition;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.DataType;
@@ -51,54 +51,6 @@ public class ModelTypeValidator {
         validTypes.add(BluePrintConstants.MODEL_DEFINITION_TYPE_CAPABILITY_TYPE);
         validTypes.add(BluePrintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TYPE);
         return validTypes;
-    }
-
-    @Deprecated
-    private static List<String> getValidModelDerivedFrom(String definitionType) {
-        List<String> validTypes = new ArrayList<>();
-        if (StringUtils.isNotBlank(definitionType)) {
-            if (BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TYPE.equalsIgnoreCase(definitionType)) {
-                validTypes.add(ConfigModelConstant.MODEL_TYPE_NODE_DG);
-                validTypes.add(ConfigModelConstant.MODEL_TYPE_NODE_COMPONENT);
-                validTypes.add(ConfigModelConstant.MODEL_TYPE_NODE_VNF);
-                validTypes.add(ConfigModelConstant.MODEL_TYPE_NODE_ARTIFACT);
-            } else if (BluePrintConstants.MODEL_DEFINITION_TYPE_CAPABILITY_TYPE.equalsIgnoreCase(definitionType)) {
-                validTypes.add(ConfigModelConstant.MODEL_TYPE_CAPABILITY_NETCONF);
-                validTypes.add(ConfigModelConstant.MODEL_TYPE_CAPABILITY_SSH);
-                validTypes.add(ConfigModelConstant.MODEL_TYPE_CAPABILITY_SFTP);
-                validTypes.add(ConfigModelConstant.MODEL_TYPE_CAPABILITY_CHEF);
-                validTypes.add(ConfigModelConstant.MODEL_TYPE_CAPABILITY_ANSIBLEF);
-            } else if (BluePrintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TYPE.equalsIgnoreCase(definitionType)) {
-                validTypes.add(BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_DEPENDS_ON);
-                validTypes.add(BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_HOSTED_ON);
-                validTypes.add(BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO);
-                validTypes.add(BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_ATTACH_TO);
-                validTypes.add(BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_ROUTES_TO);
-            }
-
-        }
-        return validTypes;
-    }
-
-    /**
-     * This is a validateNodeType
-     * 
-     * @param definitionType
-     * @param derivedFrom
-     * @return boolean
-     * @throws BluePrintException
-     */
-    public static boolean validateNodeType(String definitionType, String derivedFrom) throws BluePrintException {
-        boolean valid = true;
-        if (!BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE.equalsIgnoreCase(definitionType)
-                && !BluePrintConstants.MODEL_DEFINITION_TYPE_ARTIFACT_TYPE.equalsIgnoreCase(definitionType)) {
-            List<String> validTypes = getValidModelDerivedFrom(definitionType);
-            if (!validTypes.contains(derivedFrom)) {
-                throw new BluePrintException(
-                        "Not Valid Model Type (" + derivedFrom + "), It sould be " + validTypes);
-            }
-        }
-        return valid;
     }
 
     /**
@@ -186,8 +138,6 @@ public class ModelTypeValidator {
             }
 
             validateModelTypeDefinition(modelType.getDefinitionType(), modelType.getDefinition());
-
-            validateNodeType(modelType.getDefinitionType(), modelType.getDerivedFrom());
 
         } else {
             throw new BluePrintException("Model Type Information is missing.");

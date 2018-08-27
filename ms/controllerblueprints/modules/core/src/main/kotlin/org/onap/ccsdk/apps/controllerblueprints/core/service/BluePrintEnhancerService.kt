@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +45,7 @@ interface BluePrintEnhancerService : Serializable {
     fun enhance(fileName: String, basePath: String): ServiceTemplate
 }
 
-open class BluePrintEnhancerDefaultService(val bluePrintEnhancerRepoService: BluePrintEnhancerRepoService) : BluePrintEnhancerService {
+open class BluePrintEnhancerDefaultService(val bluePrintRepoService: BluePrintRepoService) : BluePrintEnhancerService {
 
     private val log: Logger = LoggerFactory.getLogger(BluePrintEnhancerDefaultService::class.java)
 
@@ -216,21 +217,21 @@ open class BluePrintEnhancerDefaultService(val bluePrintEnhancerRepoService: Blu
     }
 
     open fun populateNodeType(nodeTypeName: String): NodeType {
-        val nodeType = bluePrintEnhancerRepoService.getNodeType(nodeTypeName)
+        val nodeType = bluePrintRepoService.getNodeType(nodeTypeName)
                 ?: throw BluePrintException(format("Couldn't get NodeType({}) from repo.", nodeTypeName))
         serviceTemplate.nodeTypes?.put(nodeTypeName, nodeType)
         return nodeType
     }
 
     open fun populateArtifactType(artifactTypeName: String): ArtifactType {
-        val artifactType = bluePrintEnhancerRepoService.getArtifactType(artifactTypeName)
+        val artifactType = bluePrintRepoService.getArtifactType(artifactTypeName)
                 ?: throw BluePrintException(format("Couldn't get ArtifactType({}) from repo.", artifactTypeName))
         serviceTemplate.artifactTypes?.put(artifactTypeName, artifactType)
         return artifactType
     }
 
     open fun populateDataTypes(dataTypeName: String): DataType {
-        val dataType = bluePrintEnhancerRepoService.getDataType(dataTypeName)
+        val dataType = bluePrintRepoService.getDataType(dataTypeName)
                 ?: throw BluePrintException(format("Couldn't get DataType({}) from repo.", dataTypeName))
         serviceTemplate.dataTypes?.put(dataTypeName, dataType)
         return dataType

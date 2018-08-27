@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,12 +27,12 @@ import java.io.Serializable
 import java.nio.charset.Charset
 
 /**
- * BluePrintEnhancerRepoFileService
+ * BluePrintRepoFileService
  * @author Brinda Santh
  *
  */
 
-interface BluePrintEnhancerRepoService : Serializable {
+interface BluePrintRepoService : Serializable {
 
     @Throws(BluePrintException::class)
     fun getNodeType(nodeTypeName: String): NodeType?
@@ -51,7 +52,7 @@ interface BluePrintEnhancerRepoService : Serializable {
 }
 
 
-class BluePrintEnhancerRepoFileService(val basePath: String) : BluePrintEnhancerRepoService {
+class BluePrintRepoFileService(val basePath: String) : BluePrintRepoService {
 
     val dataTypePath = basePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)
     val nodeTypePath = basePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TYPE)

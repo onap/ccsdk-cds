@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,11 +74,20 @@ object BluePrintConstants {
     const val MODEL_TYPE_RELATIONSHIPS_ATTACH_TO = "tosca.relationships.AttachesTo"
     const val MODEL_TYPE_RELATIONSHIPS_ROUTES_TO = "tosca.relationships.RoutesTo"
 
+    const val MODEL_TYPE_NODE_DG = "tosca.nodes.DG"
+    const val MODEL_TYPE_NODE_COMPONENT = "tosca.nodes.Component"
+    const val MODEL_TYPE_NODE_VNF = "tosca.nodes.Vnf"
+    @Deprecated("Artifacts will be attached to Node Template")
+    const val MODEL_TYPE_NODE_ARTIFACT = "tosca.nodes.Artifact"
+    const val MODEL_TYPE_NODE_RESOURCE_SOURCE = "tosca.nodes.ResourceSource"
+
     const val MODEL_TYPE_NODES_COMPONENT_JAVA: String = "tosca.nodes.component.Java"
     const val MODEL_TYPE_NODES_COMPONENT_BUNDLE: String = "tosca.nodes.component.Bundle"
     const val MODEL_TYPE_NODES_COMPONENT_SCRIPT: String = "tosca.nodes.component.Script"
     const val MODEL_TYPE_NODES_COMPONENT_PYTHON: String = "tosca.nodes.component.Python"
     const val MODEL_TYPE_NODES_COMPONENT_JAVA_SCRIPT: String = "tosca.nodes.component.JavaScript"
+
+    const val MODEL_TYPE_DATA_TYPE_DYNAMIC = "tosca.datatypes.Dynamic"
 
     const val EXPRESSION_GET_INPUT: String = "get_input"
     const val EXPRESSION_GET_ATTRIBUTE: String = "get_attribute"
