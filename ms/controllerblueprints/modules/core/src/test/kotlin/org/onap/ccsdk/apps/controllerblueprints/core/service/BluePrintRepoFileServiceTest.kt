@@ -29,31 +29,28 @@ import kotlin.test.assertNotNull
 class BluePrintRepoFileServiceTest {
 
     val basePath = "load/model_type"
+    private val bluePrintEnhancerRepoFileService = BluePrintRepoFileService(basePath)
 
     @Test
     fun testGetDataType() {
-        val bluePrintEnhancerRepoFileService = BluePrintRepoFileService(basePath)
         val dataType = bluePrintEnhancerRepoFileService.getDataType("dt-v4-aggregate")
         assertNotNull(dataType, "Failed to get DataType from repo")
     }
 
     @Test
     fun testGetNodeType() {
-        val bluePrintEnhancerRepoFileService = BluePrintRepoFileService(basePath)
         val nodeType = bluePrintEnhancerRepoFileService.getNodeType("component-resource-assignment")
         assertNotNull(nodeType, "Failed to get NodeType from repo")
     }
 
     @Test
     fun testGetArtifactType() {
-        val bluePrintEnhancerRepoFileService = BluePrintRepoFileService(basePath)
         val nodeType = bluePrintEnhancerRepoFileService.getArtifactType("artifact-template-velocity")
         assertNotNull(nodeType, "Failed to get ArtifactType from repo")
     }
 
     @Test(expected = FileNotFoundException::class)
     fun testModelNotFound() {
-        val bluePrintEnhancerRepoFileService = BluePrintRepoFileService(basePath)
         val dataType = bluePrintEnhancerRepoFileService.getDataType("dt-not-found")
         assertNotNull(dataType, "Failed to get DataType from repo")
     }

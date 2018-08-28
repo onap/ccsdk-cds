@@ -19,6 +19,7 @@ package org.onap.ccsdk.apps.controllerblueprints.service;
 
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*;
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRepoService;
@@ -36,36 +37,37 @@ import java.util.Optional;
  * @author Brinda Santh
  */
 @Service
+@SuppressWarnings("unused")
 public class BluePrintRepoDBService implements BluePrintRepoService {
 
     private ModelTypeRepository modelTypeRepository;
-
+    @SuppressWarnings("unused")
     public BluePrintRepoDBService(ModelTypeRepository modelTypeRepository) {
         this.modelTypeRepository = modelTypeRepository;
     }
 
     @Override
-    public Mono<NodeType> getNodeType(String nodeTypeName) throws BluePrintException {
+    public Mono<NodeType> getNodeType(@NotNull String nodeTypeName) throws BluePrintException {
         return getModelType(nodeTypeName, NodeType.class);
     }
 
     @Override
-    public Mono<DataType> getDataType(String dataTypeName) throws BluePrintException {
+    public Mono<DataType> getDataType(@NotNull String dataTypeName) throws BluePrintException {
         return getModelType(dataTypeName, DataType.class);
     }
 
     @Override
-    public Mono<ArtifactType> getArtifactType(String artifactTypeName) throws BluePrintException {
+    public Mono<ArtifactType> getArtifactType(@NotNull String artifactTypeName) throws BluePrintException {
         return getModelType(artifactTypeName, ArtifactType.class);
     }
 
     @Override
-    public Mono<RelationshipType> getRelationshipType(String relationshipTypeName) throws BluePrintException {
+    public Mono<RelationshipType> getRelationshipType(@NotNull String relationshipTypeName) throws BluePrintException {
         return getModelType(relationshipTypeName, RelationshipType.class);
     }
 
     @Override
-    public Mono<CapabilityDefinition> getCapabilityDefinition(String capabilityDefinitionName) throws BluePrintException {
+    public Mono<CapabilityDefinition> getCapabilityDefinition(@NotNull String capabilityDefinitionName) throws BluePrintException {
         return getModelType(capabilityDefinitionName, CapabilityDefinition.class);
     }
 
@@ -73,15 +75,15 @@ public class BluePrintRepoDBService implements BluePrintRepoService {
         Preconditions.checkArgument(StringUtils.isNotBlank(modelName),
                 "Failed to get model from repo, model name is missing");
 
-        return getModelDefinitions(modelName).map(content -> {
-            Preconditions.checkArgument(StringUtils.isNotBlank(content),
-                    String.format("Failed to get model content for model name (%s)", modelName));
+        return getModelDefinition(modelName).map(content -> {
+                    Preconditions.checkArgument(StringUtils.isNotBlank(content),
+                            String.format("Failed to get model content for model name (%s)", modelName));
                     return JacksonUtils.readValue(content, valueClass);
                 }
         );
     }
 
-    private Mono<String> getModelDefinitions(String modelName) throws BluePrintException {
+    private Mono<String> getModelDefinition(String modelName) throws BluePrintException {
         String modelDefinition;
         Optional<ModelType> modelTypeDb = modelTypeRepository.findByModelName(modelName);
         if (modelTypeDb.isPresent()) {

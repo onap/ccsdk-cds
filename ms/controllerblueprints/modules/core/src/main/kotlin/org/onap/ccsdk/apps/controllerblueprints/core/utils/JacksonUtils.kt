@@ -103,6 +103,20 @@ object JacksonUtils {
     }
 
     @JvmStatic
+    fun <T> getListFromFile(fileName: String, valueType: Class<T>): List<T>? {
+        val content: String = FileUtils.readFileToString(File(fileName), Charset.defaultCharset())
+                ?: throw BluePrintException(format("Failed to read json file : {}", fileName))
+        return getListFromJson(content, valueType)
+    }
+
+    @JvmStatic
+    fun <T> getListFromClassPathFile(fileName: String, valueType: Class<T>): List<T>? {
+        val content: String = IOUtils.toString(JacksonUtils::class.java.classLoader.getResourceAsStream(fileName), Charset.defaultCharset())
+                ?: throw BluePrintException(String.format("Failed to read json file : %s", fileName))
+        return getListFromJson(content, valueType)
+    }
+
+    @JvmStatic
     fun <T> getMapFromJson(content: String, valueType: Class<T>): MutableMap<String, T>? {
         val objectMapper = jacksonObjectMapper()
         val typeRef = object : TypeReference<MutableMap<String, T>>() {}
@@ -110,13 +124,13 @@ object JacksonUtils {
     }
 
     @JvmStatic
-    fun checkJsonNodeValueOfType(type: String, jsonNode: JsonNode) : Boolean {
+    fun checkJsonNodeValueOfType(type: String, jsonNode: JsonNode): Boolean {
         if (BluePrintTypes.validPrimitiveTypes().contains(type)) {
             return checkJsonNodeValueOfPrimitiveType(type, jsonNode)
         } else if (BluePrintTypes.validCollectionTypes().contains(type)) {
             return checkJsonNodeValueOfCollectionType(type, jsonNode)
         }
-        return false;
+        return false
     }
 
     @JvmStatic

@@ -37,15 +37,23 @@ public interface ModelTypeRepository extends JpaRepository<ModelType, String> {
     /**
      * This is a findByModelName method
      * 
-     * @param modelName
+     * @param modelName Model Name
      * @return Optional<ModelType>
      */
     Optional<ModelType> findByModelName(String modelName);
 
     /**
+     * This is a findByModelNameIn method
+     *
+     * @param modelNames Model Names
+     * @return List<ModelType>
+     */
+    List<ModelType> findByModelNameIn(List<String> modelNames);
+
+    /**
      * This is a findByDerivedFrom method
      * 
-     * @param derivedFrom
+     * @param derivedFrom Derived From
      * @return List<ModelType>
      */
     List<ModelType> findByDerivedFrom(String derivedFrom);
@@ -54,15 +62,16 @@ public interface ModelTypeRepository extends JpaRepository<ModelType, String> {
     /**
      * This is a findByDerivedFromIn method
      * 
-     * @param derivedFroms
+     * @param derivedFroms Derived Froms
      * @return List<ModelType>
      */
+    @SuppressWarnings("unused")
     List<ModelType> findByDerivedFromIn(List<String> derivedFroms);
 
     /**
      * This is a findByDefinitionType method
      * 
-     * @param definitionType
+     * @param definitionType Definition Type
      * @return List<ModelType>
      */
     List<ModelType> findByDefinitionType(String definitionType);
@@ -70,16 +79,17 @@ public interface ModelTypeRepository extends JpaRepository<ModelType, String> {
     /**
      * This is a findByDefinitionTypeIn method
      * 
-     * @param definitionTypes
+     * @param definitionTypes Definition Types
      * @return List<ModelType>
      */
+    @SuppressWarnings("unused")
     List<ModelType> findByDefinitionTypeIn(List<String> definitionTypes);
 
 
     /**
      * This is a findByTagsContainingIgnoreCase method
      * 
-     * @param tags
+     * @param tags Tags
      * @return Optional<ModelType>
      */
     List<ModelType> findByTagsContainingIgnoreCase(String tags);
@@ -88,8 +98,7 @@ public interface ModelTypeRepository extends JpaRepository<ModelType, String> {
     /**
      * This is a deleteByModelName method
      * 
-     * @param modelName
-     * @return Optional<ModelType>
+     * @param modelName ModelName
      */
     void deleteByModelName(String modelName);
 
