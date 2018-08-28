@@ -19,13 +19,11 @@ package org.onap.ccsdk.apps.controllerblueprints.service.rs;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.onap.ccsdk.apps.controllerblueprints.TestApplication;
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.data.*;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

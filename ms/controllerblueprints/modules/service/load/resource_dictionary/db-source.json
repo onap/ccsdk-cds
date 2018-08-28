@@ -22,15 +22,5 @@
         }
       }
     }
-  },
-  "decryption-rules": [
-    {
-      "sources": [
-        "input"
-      ],
-      "path": "/.",
-      "rule": "LOCAL-Decrypt",
-      "decrypt-type": "AES128"
-    }
-  ]
+  }
 }
