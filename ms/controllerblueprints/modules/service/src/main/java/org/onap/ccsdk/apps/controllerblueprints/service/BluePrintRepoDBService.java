@@ -82,7 +82,7 @@ public class BluePrintRepoDBService implements BluePrintRepoService {
     }
 
     private Mono<String> getModelDefinitions(String modelName) throws BluePrintException {
-        String modelDefinition = null;
+        String modelDefinition;
         Optional<ModelType> modelTypeDb = modelTypeRepository.findByModelName(modelName);
         if (modelTypeDb.isPresent()) {
             modelDefinition = modelTypeDb.get().getDefinition();

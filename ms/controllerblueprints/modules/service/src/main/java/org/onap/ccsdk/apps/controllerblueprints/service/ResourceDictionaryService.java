@@ -20,7 +20,6 @@ package org.onap.ccsdk.apps.controllerblueprints.service;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
-import org.onap.ccsdk.apps.controllerblueprints.core.data.EntrySchema;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition;
@@ -119,6 +118,7 @@ public class ResourceDictionaryService {
 
         ResourceDefinition resourceDefinition =
                 JacksonUtils.readValue(resourceDictionary.getDefinition(), ResourceDefinition.class);
+        Preconditions.checkNotNull(resourceDefinition, "failed to get resource definition from content");
         // Validate the Resource Definitions
         resourceDictionaryValidationService.validate(resourceDefinition);
 

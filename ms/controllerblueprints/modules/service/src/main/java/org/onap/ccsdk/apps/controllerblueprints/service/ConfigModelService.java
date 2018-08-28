@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -144,7 +145,7 @@ public class ConfigModelService {
      */
     public ConfigModel getConfigModelByNameAndVersion(String name, String version) {
         ConfigModel configModel = null;
-        Optional<ConfigModel> dbConfigModel = null;
+        Optional<ConfigModel> dbConfigModel;
         if (StringUtils.isNotBlank(version)) {
             dbConfigModel = configModelRepository.findByArtifactNameAndArtifactVersion(name, version);
         } else {
@@ -182,7 +183,7 @@ public class ConfigModelService {
 
     public ConfigModel getCloneConfigModel(Long id) {
 
-        ConfigModel configModel = null;
+        ConfigModel configModel;
         ConfigModel cloneConfigModel = null;
         if (id != null) {
             Optional<ConfigModel> dbConfigModel = configModelRepository.findById(id);
