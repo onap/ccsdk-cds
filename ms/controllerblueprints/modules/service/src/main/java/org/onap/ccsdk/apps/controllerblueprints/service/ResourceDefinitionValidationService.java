@@ -17,15 +17,13 @@
 package org.onap.ccsdk.apps.controllerblueprints.service;
 
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRepoService;
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceDictionaryDefaultValidationService;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceDefinitionDefaultValidationService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ResourceDictionaryValidationService extends ResourceDictionaryDefaultValidationService {
+public class ResourceDefinitionValidationService extends ResourceDefinitionDefaultValidationService {
 
-    private BluePrintRepoService bluePrintRepoService;
-
-    public ResourceDictionaryValidationService(BluePrintRepoService bluePrintRepoService) {
+    public ResourceDefinitionValidationService(BluePrintRepoService bluePrintRepoService) {
         super(bluePrintRepoService);
     }
 }

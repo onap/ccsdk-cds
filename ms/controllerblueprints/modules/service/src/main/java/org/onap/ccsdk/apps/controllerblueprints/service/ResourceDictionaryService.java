@@ -18,6 +18,7 @@
 package org.onap.ccsdk.apps.controllerblueprints.service;
 
 import com.google.common.base.Preconditions;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition;
@@ -43,16 +44,16 @@ public class ResourceDictionaryService {
 
     private ResourceDictionaryRepository resourceDictionaryRepository;
 
-    private ResourceDictionaryValidationService resourceDictionaryValidationService;
+    private ResourceDefinitionValidationService resourceDictionaryValidationService;
 
     /**
      * This is a DataDictionaryService, used to save and get the Resource Mapping stored in database
      *
-     * @param dataDictionaryRepository
-     * @param resourceDictionaryValidationService
+     * @param dataDictionaryRepository            dataDictionaryRepository
+     * @param resourceDictionaryValidationService resourceDictionaryValidationService
      */
     public ResourceDictionaryService(ResourceDictionaryRepository dataDictionaryRepository,
-                                     ResourceDictionaryValidationService resourceDictionaryValidationService) {
+                                     ResourceDefinitionValidationService resourceDictionaryValidationService) {
         this.resourceDictionaryRepository = dataDictionaryRepository;
         this.resourceDictionaryValidationService = resourceDictionaryValidationService;
     }
@@ -60,58 +61,49 @@ public class ResourceDictionaryService {
     /**
      * This is a getDataDictionaryByName service
      *
-     * @param name
+     * @param name name
      * @return DataDictionary
-     * @throws BluePrintException
+     * @throws BluePrintException BluePrintException
      */
     public ResourceDictionary getResourceDictionaryByName(String name) throws BluePrintException {
-        if (StringUtils.isNotBlank(name)) {
-            return resourceDictionaryRepository.findByName(name).get();
+        Preconditions.checkArgument(StringUtils.isNotBlank(name), "Resource dictionary Name Information is missing.");
+        Optional<ResourceDictionary> resourceDictionaryDb = resourceDictionaryRepository.findByName(name);
+        if (resourceDictionaryDb.isPresent()) {
+            return resourceDictionaryDb.get();
         } else {
-            throw new BluePrintException("Resource Mapping Name Information is missing.");
+            throw new BluePrintException(String.format("couldn't get resource dictionary for name (%s)", name));
         }
     }
 
     /**
      * This is a searchResourceDictionaryByNames service
      *
-     * @param names
+     * @param names names
      * @return List<ResourceDictionary>
-     * @throws BluePrintException
      */
-    public List<ResourceDictionary> searchResourceDictionaryByNames(List<String> names)
-            throws BluePrintException {
-        if (names != null && !names.isEmpty()) {
-            return resourceDictionaryRepository.findByNameIn(names);
-        } else {
-            throw new BluePrintException("No Search Information provide");
-        }
+    public List<ResourceDictionary> searchResourceDictionaryByNames(List<String> names) {
+        Preconditions.checkArgument(CollectionUtils.isNotEmpty(names), "No Search Information provide");
+        return resourceDictionaryRepository.findByNameIn(names);
     }
 
     /**
      * This is a searchResourceDictionaryByTags service
      *
-     * @param tags
+     * @param tags tags
      * @return List<ResourceDictionary>
-     * @throws BluePrintException
      */
-    public List<ResourceDictionary> searchResourceDictionaryByTags(String tags) throws BluePrintException {
-        if (StringUtils.isNotBlank(tags)) {
-            return resourceDictionaryRepository.findByTagsContainingIgnoreCase(tags);
-        } else {
-            throw new BluePrintException("No Search Information provide");
-        }
+    public List<ResourceDictionary> searchResourceDictionaryByTags(String tags) {
+        Preconditions.checkArgument(StringUtils.isNotBlank(tags), "No search tag information provide");
+        return resourceDictionaryRepository.findByTagsContainingIgnoreCase(tags);
     }
 
     /**
      * This is a saveDataDictionary service
      *
-     * @param resourceDictionary
+     * @param resourceDictionary resourceDictionary
      * @return DataDictionary
-     * @throws BluePrintException
      */
-    public ResourceDictionary saveResourceDictionary(ResourceDictionary resourceDictionary)
-            throws BluePrintException {
+    public ResourceDictionary saveResourceDictionary(ResourceDictionary resourceDictionary) {
         Preconditions.checkNotNull(resourceDictionary, "Resource Dictionary information is missing");
         Preconditions.checkArgument(StringUtils.isNotBlank(resourceDictionary.getDefinition()),
                 "Resource Dictionary definition information is missing");
@@ -130,7 +122,7 @@ public class ResourceDictionaryService {
         PropertyDefinition propertyDefinition = resourceDefinition.getProperty();
         resourceDictionary.setDescription(propertyDefinition.getDescription());
         resourceDictionary.setDataType(propertyDefinition.getType());
-        if(propertyDefinition.getEntrySchema() != null){
+        if (propertyDefinition.getEntrySchema() != null) {
             resourceDictionary.setEntrySchema(propertyDefinition.getEntrySchema().getType());
         }
 
@@ -164,15 +156,10 @@ public class ResourceDictionaryService {
     /**
      * This is a deleteResourceDictionary service
      *
-     * @param name
-     * @throws BluePrintException
+     * @param name name
      */
-    public void deleteResourceDictionary(String name) throws BluePrintException {
-        if (name != null) {
-            resourceDictionaryRepository.deleteByName(name);
-        } else {
-            throw new BluePrintException("Resource Mapping Id Information is missing.");
-        }
-
+    public void deleteResourceDictionary(String name) {
+        Preconditions.checkArgument(StringUtils.isNotBlank(name), "Resource dictionary Name Information is missing.");
+        resourceDictionaryRepository.deleteByName(name);
     }
 }
