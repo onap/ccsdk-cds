@@ -24,7 +24,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -81,8 +80,7 @@ public class ConfigModel implements Serializable {
     @Column(name = "artifact_type")
     private String artifactType;
 
-    @NotNull
-    @Column(name = "artifact_version")
+    @Column(name = "artifact_version", nullable = false)
     @ApiModelProperty(required=true)
     private String artifactVersion;
 
@@ -99,30 +97,25 @@ public class ConfigModel implements Serializable {
     @Column(name = "creation_date")
     private Date createdDate = new Date();
 
-    @NotNull
-    @Column(name = "artifact_name")
+    @Column(name = "artifact_name", nullable = false)
     @ApiModelProperty(required=true)
     private String artifactName;
 
-    @NotNull
-    @Column(name = "published")
+    @Column(name = "published", nullable = false)
     @ApiModelProperty(required=true)
     private String published;
 
-    @NotNull
-    @Column(name = "updated_by")
+    @Column(name = "updated_by", nullable = false)
     @ApiModelProperty(required=true)
     private String updatedBy;
 
-    @NotNull
     @Lob
-    @Column(name = "tags")
+    @Column(name = "tags", nullable = false)
     @ApiModelProperty(required=true)
     private String tags;
 
 
     @OneToMany(mappedBy = "configModel", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
-    @Column(nullable = true)
     @JsonManagedReference
     private List<ConfigModelContent> configModelContents = new ArrayList<>();
 

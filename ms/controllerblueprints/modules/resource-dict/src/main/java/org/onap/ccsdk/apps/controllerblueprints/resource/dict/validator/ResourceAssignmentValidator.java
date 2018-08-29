@@ -29,15 +29,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+
 /**
- *
  * ResourceAssignmentValidator.java Purpose:
+ *
  * @author Brinda Santh
  */
 public class ResourceAssignmentValidator {
     private static final Logger log = LoggerFactory.getLogger(ResourceAssignmentValidator.class);
     private List<ResourceAssignment> assignments;
-    private Map<String, ResourceAssignment> resourceAssignmentMap = new HashMap();
+    private Map<String, ResourceAssignment> resourceAssignmentMap = new HashMap<>();
     private StrBuilder validationMessage = new StrBuilder();
 
     public ResourceAssignmentValidator(List<ResourceAssignment> assignments) {
@@ -72,7 +73,7 @@ public class ResourceAssignmentValidator {
      * This is a validateResourceAssignment to validate the Topology Template
      *
      * @return boolean
-     * @throws BluePrintException
+     * @throws BluePrintException BluePrintException
      */
     public boolean validateResourceAssignment() throws BluePrintException {
         if (assignments != null && !assignments.isEmpty()) {
@@ -142,16 +143,14 @@ public class ResourceAssignmentValidator {
             neighbors.forEach((v, vs) -> {
                 if (v == null) {
                     s.append("\n    * -> [");
-                    List<ResourceAssignment> links = vs;
-                    for (ResourceAssignment resourceAssignment : links) {
+                    for (ResourceAssignment resourceAssignment : vs) {
                         s.append("(" + resourceAssignment.getDictionaryName() + ":" + resourceAssignment.getName()
                                 + "),");
                     }
                     s.append("]");
                 } else {
                     s.append("\n    (" + v.getDictionaryName() + ":" + v.getName() + ") -> [");
-                    List<ResourceAssignment> links = vs;
-                    for (ResourceAssignment resourceAssignment : links) {
+                    for (ResourceAssignment resourceAssignment : vs) {
                         s.append("(" + resourceAssignment.getDictionaryName() + ":" + resourceAssignment.getName()
                                 + "),");
                     }

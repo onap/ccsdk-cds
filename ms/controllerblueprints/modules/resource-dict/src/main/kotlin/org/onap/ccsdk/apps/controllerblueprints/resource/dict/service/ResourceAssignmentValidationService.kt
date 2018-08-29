@@ -16,15 +16,16 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.resource.dict.service
 
+import org.apache.commons.collections.CollectionUtils
+import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.text.StrBuilder
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.TopologicalSortingUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.validator.ResourceAssignmentValidator
 import org.slf4j.LoggerFactory
-import org.apache.commons.collections.CollectionUtils
-import org.apache.commons.lang3.StringUtils
 import java.io.Serializable
+
 /**
  * ResourceAssignmentValidationService.
  *

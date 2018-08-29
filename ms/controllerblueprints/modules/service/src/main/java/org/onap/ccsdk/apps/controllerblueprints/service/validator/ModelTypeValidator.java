@@ -63,7 +63,6 @@ public class ModelTypeValidator {
      */
     public static boolean validateModelTypeDefinition(String definitionType, String definitionContent)
             throws BluePrintException {
-        boolean valid = true;
         if (StringUtils.isNotBlank(definitionContent)) {
             if (BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE.equalsIgnoreCase(definitionType)) {
                 DataType dataType = JacksonUtils.readValue(definitionContent, DataType.class);
@@ -93,7 +92,7 @@ public class ModelTypeValidator {
             }
 
         }
-        return valid;
+        return true;
     }
 
     /**

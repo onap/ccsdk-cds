@@ -27,13 +27,13 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.apps.controllerblueprints.core.format
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.nio.charset.Charset
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 
 /**
  *

@@ -20,6 +20,7 @@ import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,16 +35,17 @@ public interface ConfigModelRepository extends JpaRepository<ConfigModel, Long> 
     /**
      * This is a findById method
      * 
-     * @param id
+     * @param id id
      * @return Optional<AsdcArtifacts>
      */
-    Optional<ConfigModel> findById(Long id);
+    @NotNull
+    Optional<ConfigModel> findById(@NotNull Long id);
 
     /**
      * This is a findByArtifactNameAndArtifactVersion method
      * 
-     * @param artifactName
-     * @param artifactVersion
+     * @param artifactName artifactName
+     * @param artifactVersion artifactVersion
      * @return Optional<AsdcArtifacts>
      */
     Optional<ConfigModel> findByArtifactNameAndArtifactVersion(String artifactName, String artifactVersion);
@@ -51,7 +53,7 @@ public interface ConfigModelRepository extends JpaRepository<ConfigModel, Long> 
     /**
      * This is a findTopByArtifactNameOrderByArtifactIdDesc method
      * 
-     * @param artifactName
+     * @param artifactName artifactName
      * @return Optional<AsdcArtifacts>
      */
     Optional<ConfigModel> findTopByArtifactNameOrderByArtifactVersionDesc(String artifactName);
@@ -59,15 +61,16 @@ public interface ConfigModelRepository extends JpaRepository<ConfigModel, Long> 
     /**
      * This is a findTopByArtifactName method
      * 
-     * @param artifactName
+     * @param artifactName artifactName
      * @return Optional<AsdcArtifacts>
      */
+    @SuppressWarnings("unused")
     List<ConfigModel> findTopByArtifactName(String artifactName);
 
     /**
      * This is a findByTagsContainingIgnoreCase method
      * 
-     * @param tags
+     * @param tags tags
      * @return Optional<ModelType>
      */
     List<ConfigModel> findByTagsContainingIgnoreCase(String tags);
@@ -75,16 +78,18 @@ public interface ConfigModelRepository extends JpaRepository<ConfigModel, Long> 
     /**
      * This is a deleteByArtifactNameAndArtifactVersion method
      * 
-     * @param artifactName
-     * @param artifactVersion
+     * @param artifactName artifactName
+     * @param artifactVersion artifactVersion
      */
+    @SuppressWarnings("unused")
     void deleteByArtifactNameAndArtifactVersion(String artifactName, String artifactVersion);
 
     /**
      * This is a deleteById method
      * 
-     * @param id
+     * @param id id
      */
-    void deleteById(Long id);
+    @SuppressWarnings("unused")
+    void deleteById(@NotNull Long id);
 
 }

@@ -17,6 +17,7 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service;
 
+import com.google.common.base.Preconditions;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
@@ -45,6 +46,7 @@ import java.util.Map;
  */
 
 @Service
+@SuppressWarnings("unused")
 public class AutoResourceMappingService {
 
     private static Logger log = LoggerFactory.getLogger(AutoResourceMappingService.class);
@@ -53,9 +55,8 @@ public class AutoResourceMappingService {
 
     /**
      * This is a AutoResourceMappingService constructor
-     * 
-     * @param dataDictionaryRepository
-     * 
+     *
+     * @param dataDictionaryRepository dataDictionaryRepository
      */
     public AutoResourceMappingService(ResourceDictionaryRepository dataDictionaryRepository) {
         this.dataDictionaryRepository = dataDictionaryRepository;
@@ -63,8 +64,8 @@ public class AutoResourceMappingService {
 
     /**
      * This is a autoMap service to map the template keys automatically to Dictionary fields.
-     * 
-     * @param resourceAssignments
+     *
+     * @param resourceAssignments resourceAssignments
      * @return AutoMapResponse
      */
     public AutoMapResponse autoMap(List<ResourceAssignment> resourceAssignments) throws BluePrintException {
@@ -83,8 +84,6 @@ public class AutoResourceMappingService {
 
                         log.info("Mapped Resource : {}", resourceAssignment);
 
-                    } else {
-                        // Do nothins
                     }
                 }
             }
@@ -125,7 +124,7 @@ public class AutoResourceMappingService {
         if (CollectionUtils.isNotEmpty(names)) {
 
             List<ResourceDictionary> dictionaries = dataDictionaryRepository.findByNameIn(names);
-            if (CollectionUtils.isNotEmpty( dictionaries)) {
+            if (CollectionUtils.isNotEmpty(dictionaries)) {
                 for (ResourceDictionary dataDictionary : dictionaries) {
                     if (dataDictionary != null && StringUtils.isNotBlank(dataDictionary.getName())) {
                         dictionaryMap.put(dataDictionary.getName(), dataDictionary);
@@ -167,14 +166,13 @@ public class AutoResourceMappingService {
     private List<ResourceAssignment> getAllAutomapResourceAssignments(List<ResourceAssignment> resourceAssignments) {
         List<ResourceDictionary> dictionaries = null;
         List<String> names = new ArrayList<>();
-        List<ResourceAssignment> resourceAssignmentsWithDepencies = resourceAssignments;
         for (ResourceAssignment resourceAssignment : resourceAssignments) {
             if (resourceAssignment != null && StringUtils.isNotBlank(resourceAssignment.getDictionaryName())) {
                 if (resourceAssignment.getDependencies() != null && !resourceAssignment.getDependencies().isEmpty()) {
                     List<String> dependencieNames = resourceAssignment.getDependencies();
                     for (String dependencieName : dependencieNames) {
                         if (StringUtils.isNotBlank(dependencieName) && !names.contains(dependencieName)
-                                && !checkAssignmentsExists(resourceAssignmentsWithDepencies, dependencieName)) {
+                                && !checkAssignmentsExists(resourceAssignments, dependencieName)) {
                             names.add(dependencieName);
                         }
                     }
@@ -188,24 +186,25 @@ public class AutoResourceMappingService {
         if (dictionaries != null) {
             for (ResourceDictionary resourcedictionary : dictionaries) {
                 ResourceDefinition dictionaryDefinition = JacksonUtils.readValue(resourcedictionary.getDefinition(), ResourceDefinition.class);
+                Preconditions.checkNotNull(dictionaryDefinition, "failed to get Resource Definition from dictionary definition");
                 PropertyDefinition property = new PropertyDefinition();
-				property.setRequired(true);
-				ResourceAssignment resourceAssignment = new ResourceAssignment();
-				resourceAssignment.setName(resourcedictionary.getName());
-				resourceAssignment.setDictionaryName(resourcedictionary
-						.getName());
-				resourceAssignment.setVersion(0);
-				resourceAssignment.setProperty(property);
+                property.setRequired(true);
+                ResourceAssignment resourceAssignment = new ResourceAssignment();
+                resourceAssignment.setName(resourcedictionary.getName());
+                resourceAssignment.setDictionaryName(resourcedictionary
+                        .getName());
+                resourceAssignment.setVersion(0);
+                resourceAssignment.setProperty(property);
                 ResourceDictionaryUtils.populateSourceMapping(resourceAssignment, dictionaryDefinition);
-                    resourceAssignmentsWithDepencies.add(resourceAssignment);
+                resourceAssignments.add(resourceAssignment);
             }
         }
-        return resourceAssignmentsWithDepencies;
+        return resourceAssignments;
 
     }
 
 
-    public boolean checkAssignmentsExists(List<ResourceAssignment> resourceAssignmentsWithDepencies, String resourceName) {
+    private boolean checkAssignmentsExists(List<ResourceAssignment> resourceAssignmentsWithDepencies, String resourceName) {
         return resourceAssignmentsWithDepencies.stream().anyMatch(names -> names.getName().equalsIgnoreCase(resourceName));
     }
 

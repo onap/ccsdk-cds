@@ -22,7 +22,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -40,41 +39,34 @@ public class ModelType implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @NotNull
     @Column(name = "model_name", nullable = false)
     @ApiModelProperty(required=true)
     private String modelName;
 
-    @NotNull
-    @Column(name = "derived_from")
+    @Column(name = "derived_from", nullable = false)
     @ApiModelProperty(required=true)
     private String derivedFrom;
 
-    @NotNull
-    @Column(name = "definition_type")
+    @Column(name = "definition_type", nullable = false)
     @ApiModelProperty(required=true)
     private String definitionType;
 
-    @NotNull
     @Lob
-    @Column(name = "definition")
+    @Column(name = "definition", nullable = false)
     @ApiModelProperty(required=true)
     private String definition;
 
-    @NotNull
     @Lob
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
     @ApiModelProperty(required=true)
     private String description;
 
-    @NotNull
-    @Column(name = "version")
+    @Column(name = "version", nullable = false)
     @ApiModelProperty(required=true)
     private String version;
 
-    @NotNull
     @Lob
-    @Column(name = "tags")
+    @Column(name = "tags", nullable = false)
     @ApiModelProperty(required=true)
     private String tags;
 
@@ -84,8 +76,7 @@ public class ModelType implements Serializable {
     @Column(name = "creation_date")
     private Date creationDate;
 
-    @NotNull
-    @Column(name = "updated_by")
+    @Column(name = "updated_by", nullable = false)
     @ApiModelProperty(required=true)
     private String updatedBy;
 

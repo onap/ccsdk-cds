@@ -49,9 +49,9 @@ public class ServiceTemplateService {
     /**
      * This is a SchemaGeneratorService constructor
      *
-     * @param dataDictionaryRepository
-     * @param configModelCreateService
-     * @param bluePrintEnhancerService
+     * @param dataDictionaryRepository dataDictionaryRepository
+     * @param configModelCreateService configModelCreateService
+     * @param bluePrintEnhancerService bluePrintEnhancerService
      */
     public ServiceTemplateService(ResourceDictionaryRepository dataDictionaryRepository,
                                   ConfigModelCreateService configModelCreateService,
@@ -65,9 +65,9 @@ public class ServiceTemplateService {
     /**
      * This is a validateServiceTemplate method
      *
-     * @param serviceTemplate
+     * @param serviceTemplate serviceTemplate
      * @return ServiceTemplate
-     * @throws BluePrintException
+     * @throws BluePrintException BluePrintException
      */
     public ServiceTemplate validateServiceTemplate(ServiceTemplate serviceTemplate) throws BluePrintException {
         return this.configModelCreateService.validateServiceTemplate(serviceTemplate);
@@ -76,11 +76,10 @@ public class ServiceTemplateService {
     /**
      * This is a enrichServiceTemplate method
      *
-     * @param serviceTemplate
+     * @param serviceTemplate serviceTemplate
      * @return ServiceTemplate
-     * @throws BluePrintException
      */
-    public ServiceTemplate enrichServiceTemplate(ServiceTemplate serviceTemplate) throws BluePrintException {
+    public ServiceTemplate enrichServiceTemplate(ServiceTemplate serviceTemplate) {
         this.bluePrintEnhancerService.enhance(serviceTemplate);
         return serviceTemplate;
     }
@@ -88,22 +87,21 @@ public class ServiceTemplateService {
     /**
      * This is a autoMap method to map the template keys
      *
-     * @param resourceAssignments
+     * @param resourceAssignments resourceAssignments
      * @return AutoMapResponse
-     * @throws BluePrintException
+     * @throws BluePrintException BluePrintException
      */
     public AutoMapResponse autoMap(List<ResourceAssignment> resourceAssignments) throws BluePrintException {
         AutoResourceMappingService autoMappingService = new AutoResourceMappingService(dataDictionaryRepository);
-        AutoMapResponse autoMapResponse = autoMappingService.autoMap(resourceAssignments);
-        return autoMapResponse;
+        return autoMappingService.autoMap(resourceAssignments);
     }
 
     /**
      * This is a validateResourceAssignments method
      *
-     * @param resourceAssignments
+     * @param resourceAssignments resourceAssignments
      * @return List<ResourceAssignment>
-     * @throws BluePrintException
+     * @throws BluePrintException BluePrintException
      */
     public List<ResourceAssignment> validateResourceAssignments(List<ResourceAssignment> resourceAssignments)
             throws BluePrintException {
@@ -120,7 +118,7 @@ public class ServiceTemplateService {
     /**
      * This is a generateResourceAssignments method
      *
-     * @param templateContent
+     * @param templateContent templateContent
      * @return List<ResourceAssignment>
      */
     public List<ResourceAssignment> generateResourceAssignments(ConfigModelContent templateContent) {

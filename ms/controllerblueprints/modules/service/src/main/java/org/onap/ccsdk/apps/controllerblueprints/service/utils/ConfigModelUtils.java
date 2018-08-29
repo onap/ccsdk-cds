@@ -39,9 +39,10 @@ import java.util.List;
 
 public class ConfigModelUtils {
 
-    private ConfigModelUtils(){
+    private ConfigModelUtils() {
 
     }
+
     private static Logger log = LoggerFactory.getLogger(ConfigModelUtils.class);
 
     public static ConfigModel getConfigModel(String blueprintPath) throws Exception {
@@ -119,6 +120,8 @@ public class ConfigModelUtils {
     public static List<String> getBlueprintNames(String pathName) {
         File blueprintDir = new File(pathName);
         Preconditions.checkNotNull(blueprintDir, "failed to find the blueprint pathName file");
-        return  Arrays.asList(blueprintDir.list(DirectoryFileFilter.INSTANCE));
+        String[] dirs = blueprintDir.list(DirectoryFileFilter.INSTANCE);
+        Preconditions.checkNotNull(dirs, "failed to find the blueprint directories");
+        return Arrays.asList(dirs);
     }
 }

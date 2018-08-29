@@ -29,6 +29,7 @@ import org.springframework.web.context.request.WebRequest;
 
 @ControllerAdvice
 @RestController
+@SuppressWarnings("unused")
 public class ApplicationExceptionHandler {
     private static EELFLogger log = EELFManager.getInstance().getLogger(ApplicationExceptionHandler.class);
     @ExceptionHandler(Exception.class)

@@ -18,7 +18,6 @@ package org.onap.ccsdk.apps.controllerblueprints.service.validator;
 
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.onap.ccsdk.apps.controllerblueprints.service.utils.ConfigModelUtils;

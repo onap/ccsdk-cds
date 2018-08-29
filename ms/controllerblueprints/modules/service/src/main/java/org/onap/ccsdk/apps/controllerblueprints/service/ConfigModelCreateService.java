@@ -197,7 +197,7 @@ public class ConfigModelCreateService {
     private void deleteConfigModelContent(Long dbConfigModelId) {
         if (dbConfigModelId != null) {
             ConfigModel dbConfigModel = configModelRepository.getOne(dbConfigModelId);
-            if (dbConfigModel != null && CollectionUtils.isNotEmpty(dbConfigModel.getConfigModelContents())) {
+            if (CollectionUtils.isNotEmpty(dbConfigModel.getConfigModelContents())) {
                 dbConfigModel.getConfigModelContents().clear();
                 log.debug("Configuration Model content deleting : {}", dbConfigModel.getConfigModelContents());
                 configModelRepository.saveAndFlush(dbConfigModel);
@@ -210,18 +210,15 @@ public class ConfigModelCreateService {
         if (dbConfigModelId != null && configModel != null
                 && CollectionUtils.isNotEmpty(configModel.getConfigModelContents())) {
             ConfigModel dbConfigModel = configModelRepository.getOne(dbConfigModelId);
-            if (dbConfigModel != null) {
-                for (ConfigModelContent configModelContent : configModel.getConfigModelContents()) {
-                    if (configModelContent != null) {
-                        configModelContent.setId(null);
-                        configModelContent.setConfigModel(dbConfigModel);
-                        dbConfigModel.getConfigModelContents().add(configModelContent);
-                        log.debug("Configuration Model content adding : {}", configModelContent);
-                    }
+            for (ConfigModelContent configModelContent : configModel.getConfigModelContents()) {
+                if (configModelContent != null) {
+                    configModelContent.setId(null);
+                    configModelContent.setConfigModel(dbConfigModel);
+                    dbConfigModel.getConfigModelContents().add(configModelContent);
+                    log.debug("Configuration Model content adding : {}", configModelContent);
                 }
-                configModelRepository.saveAndFlush(dbConfigModel);
             }
-
+            configModelRepository.saveAndFlush(dbConfigModel);
         }
     }
 
@@ -229,22 +226,19 @@ public class ConfigModelCreateService {
                                           String author) throws BluePrintException {
 
         ConfigModel dbConfigModel = configModelRepository.getOne(dbConfigModelId);
-        if (dbConfigModel != null) {
-            // Populate tags from metadata
-            String tags = getConfigModelTags(dbConfigModel);
-            if (StringUtils.isBlank(tags)) {
-                throw new BluePrintException("Failed to populate tags for the config model name " + artifactName);
-            }
-            dbConfigModel.setArtifactType(ApplicationConstants.ASDC_ARTIFACT_TYPE_SDNC_MODEL);
-            dbConfigModel.setArtifactName(artifactName);
-            dbConfigModel.setArtifactVersion(artifactVersion);
-            dbConfigModel.setUpdatedBy(author);
-            dbConfigModel.setPublished(ApplicationConstants.ACTIVE_N);
-            dbConfigModel.setTags(tags);
-            configModelRepository.saveAndFlush(dbConfigModel);
-
-            log.info("Config model ({}) saved successfully.", dbConfigModel.getId());
+        // Populate tags from metadata
+        String tags = getConfigModelTags(dbConfigModel);
+        if (StringUtils.isBlank(tags)) {
+            throw new BluePrintException("Failed to populate tags for the config model name " + artifactName);
         }
+        dbConfigModel.setArtifactType(ApplicationConstants.ASDC_ARTIFACT_TYPE_SDNC_MODEL);
+        dbConfigModel.setArtifactName(artifactName);
+        dbConfigModel.setArtifactVersion(artifactVersion);
+        dbConfigModel.setUpdatedBy(author);
+        dbConfigModel.setPublished(ApplicationConstants.ACTIVE_N);
+        dbConfigModel.setTags(tags);
+        configModelRepository.saveAndFlush(dbConfigModel);
+        log.info("Config model ({}) saved successfully.", dbConfigModel.getId());
         return dbConfigModel;
     }
 
@@ -282,8 +276,6 @@ public class ConfigModelCreateService {
                                     configModel.getArtifactName());
                         }
                         tags = String.valueOf(serviceTemplate.getMetadata());
-                    } else {
-                        // Do Nothing
                     }
                 }
             }

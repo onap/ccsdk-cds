@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 
 @Component
+@SuppressWarnings("unused")
 public class ApplicationRegistrationService {
 
     @PostConstruct
