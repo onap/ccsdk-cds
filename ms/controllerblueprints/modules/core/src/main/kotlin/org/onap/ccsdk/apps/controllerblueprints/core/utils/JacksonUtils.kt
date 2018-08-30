@@ -59,6 +59,13 @@ object JacksonUtils {
     }
 
     @JvmStatic
+    fun <T> readValueFromClassPathFile(fileName: String, valueType: Class<T>): T? {
+        val content: String = IOUtils.toString(JacksonUtils::class.java.classLoader.getResourceAsStream(fileName), Charset.defaultCharset())
+                ?: throw BluePrintException(String.format("Failed to read json file : %s", fileName))
+        return readValue(content, valueType)
+    }
+
+    @JvmStatic
     fun jsonNodeFromObject(from: kotlin.Any): JsonNode = jacksonObjectMapper().convertValue(from, JsonNode::class.java)
 
     @JvmStatic

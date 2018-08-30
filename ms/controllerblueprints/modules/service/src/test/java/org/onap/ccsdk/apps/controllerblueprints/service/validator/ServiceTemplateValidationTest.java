@@ -20,6 +20,8 @@ package org.onap.ccsdk.apps.controllerblueprints.service.validator;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate;
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.service.utils.ConfigModelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,9 +42,22 @@ public class ServiceTemplateValidationTest {
 
     @Test
     public void validateServiceTemplate() throws Exception {
-        String file = "load/blueprints/baseconfiguration/Definitions/activation-blueprint.json";
+        validateServiceTemplate("load/blueprints/baseconfiguration/Definitions/activation-blueprint.json");
+        validateServiceTemplate("load/blueprints/vrr-test/Definitions/vrr-test.json");
+    }
+
+    //@Test
+    public void validateEnhancedServiceTemplate() throws Exception {
+        ServiceTemplate serviceTemplate = JacksonUtils
+                .readValueFromClassPathFile("enhance/enhanced-template.json", ServiceTemplate.class);
+        ServiceTemplateValidator serviceTemplateValidator = new ServiceTemplateValidator();
+        Boolean valid = serviceTemplateValidator.validateServiceTemplate(serviceTemplate);
+        Assert.assertTrue("Failed to validate blueprints", valid);
+    }
+
+    private void validateServiceTemplate(String fileName) throws Exception {
         String serviceTemplateContent =
-                FileUtils.readFileToString(new File(file), Charset.defaultCharset());
+                FileUtils.readFileToString(new File(fileName), Charset.defaultCharset());
         ServiceTemplateValidator serviceTemplateValidator = new ServiceTemplateValidator();
         serviceTemplateValidator.validateServiceTemplate(serviceTemplateContent);
         Assert.assertNotNull("Failed to validate blueprints", serviceTemplateValidator);

@@ -21,6 +21,7 @@ import com.google.common.base.Preconditions;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.core.ConfigModelConstant;
@@ -290,31 +291,29 @@ public class ConfigModelCreateService {
      * @return ConfigModel
      * @throws BluePrintException BluePrintException
      */
-    public ConfigModel publishConfigModel(Long id) throws BluePrintException {
+    public ConfigModel publishConfigModel(@NotNull Long id) throws BluePrintException {
         ConfigModel dbConfigModel = null;
-        if (id != null) {
-            Optional<ConfigModel> dbConfigModelOptional = configModelRepository.findById(id);
-            if (dbConfigModelOptional.isPresent()) {
-                dbConfigModel = dbConfigModelOptional.get();
-                List<ConfigModelContent> configModelContents = dbConfigModel.getConfigModelContents();
-                if (configModelContents != null && !configModelContents.isEmpty()) {
-                    for (ConfigModelContent configModelContent : configModelContents) {
-                        if (configModelContent.getContentType()
-                                .equals(ConfigModelConstant.MODEL_CONTENT_TYPE_TOSCA_JSON)) {
-                            ServiceTemplate serviceTemplate = JacksonUtils
-                                    .readValue(configModelContent.getContent(), ServiceTemplate.class);
-                            if (serviceTemplate != null) {
-                                validateServiceTemplate(serviceTemplate);
-                            }
+        Optional<ConfigModel> dbConfigModelOptional = configModelRepository.findById(id);
+        if (dbConfigModelOptional.isPresent()) {
+            dbConfigModel = dbConfigModelOptional.get();
+            List<ConfigModelContent> configModelContents = dbConfigModel.getConfigModelContents();
+            if (configModelContents != null && !configModelContents.isEmpty()) {
+                for (ConfigModelContent configModelContent : configModelContents) {
+                    if (configModelContent.getContentType()
+                            .equals(ConfigModelConstant.MODEL_CONTENT_TYPE_TOSCA_JSON)) {
+                        ServiceTemplate serviceTemplate = JacksonUtils
+                                .readValue(configModelContent.getContent(), ServiceTemplate.class);
+                        if (serviceTemplate != null) {
+                            validateServiceTemplate(serviceTemplate);
                         }
                     }
                 }
-                dbConfigModel.setPublished(ApplicationConstants.ACTIVE_Y);
-                configModelRepository.save(dbConfigModel);
-                log.info("Config model ({}) published successfully.", id);
-
             }
-
+            dbConfigModel.setPublished(ApplicationConstants.ACTIVE_Y);
+            configModelRepository.save(dbConfigModel);
+            log.info("Config model ({}) published successfully.", id);
+        } else {
+            throw new BluePrintException(String.format("Couldn't get Config model for id :(%s)", id));
         }
         return dbConfigModel;
     }

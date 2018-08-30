@@ -232,10 +232,7 @@
                   "dictionary-name": "wan-aggregate-ipv4-addresses",
                   "dictionary-source": "mdsal",
                   "dependencies": [
-                    "service-instance-id",
-                    "oam-network-role",
-                    "oam-v4-ip-type ",
-                    "oam-vm-type"
+                    "service-instance-id"
                   ],
                   "version": 0
                 },
