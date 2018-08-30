@@ -17,8 +17,8 @@
 package org.onap.ccsdk.apps.controllerblueprints.core.factory
 
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintEnhancerService
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 
 
 /**
@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory
  */
 
 object BluePrintEnhancerFactory {
-    private val logger: Logger = LoggerFactory.getLogger(this::class.toString())
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
 
     var bluePrintEnhancerServices: MutableMap<String, BluePrintEnhancerService> = HashMap()
 

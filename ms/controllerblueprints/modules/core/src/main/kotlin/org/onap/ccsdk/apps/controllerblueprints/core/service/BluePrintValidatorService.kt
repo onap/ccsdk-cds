@@ -21,8 +21,8 @@ import com.google.common.base.Preconditions
 import org.apache.commons.lang3.StringUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.*
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 import java.io.Serializable
 
 /**
@@ -41,7 +41,7 @@ interface BluePrintValidatorService : Serializable {
 
 open class BluePrintValidatorDefaultService : BluePrintValidatorService {
 
-    val logger: Logger = LoggerFactory.getLogger(BluePrintValidatorDefaultService::class.toString())
+    val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintValidatorDefaultService::class.toString())
 
     lateinit var bluePrintContext: BluePrintContext
     lateinit var serviceTemplate: ServiceTemplate
@@ -68,8 +68,8 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
             serviceTemplate.nodeTypes?.let { validateNodeTypes(serviceTemplate.nodeTypes!!) }
             serviceTemplate.topologyTemplate?.let { validateTopologyTemplate(serviceTemplate.topologyTemplate!!) }
         } catch (e: Exception) {
-            logger.error("validation failed in the path : {}", paths.joinToString(separator), e)
-            logger.error("validation trace message :{} ", message)
+            log.error("validation failed in the path : {}", paths.joinToString(separator), e)
+            log.error("validation trace message :{} ", message)
             throw BluePrintException(e,
                     format("failed to validate blueprint on path ({}) with message {}"
                             , paths.joinToString(separator), e.message))
@@ -215,15 +215,17 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
         paths.add("properties")
         properties.forEach { propertyName, propertyDefinition ->
             paths.add(propertyName)
-            val dataType: String = propertyDefinition.type!!
-            if (BluePrintTypes.validPrimitiveTypes().contains(dataType)) {
-                // Do Nothing
-            } else if (BluePrintTypes.validCollectionTypes().contains(dataType)) {
-                val entrySchemaType: String = propertyDefinition.entrySchema?.type
-                        ?: throw BluePrintException(format("Entry schema for data type ({}) for the property ({}) not found", dataType, propertyName))
-                checkPrimitiveOrComplex(entrySchemaType, propertyName)
-            } else {
-                checkPropertyDataType(dataType, propertyName)
+            val dataType: String = propertyDefinition.type
+            when {
+                BluePrintTypes.validPrimitiveTypes().contains(dataType) -> {
+                    // Do Nothing
+                }
+                BluePrintTypes.validCollectionTypes().contains(dataType) -> {
+                    val entrySchemaType: String = propertyDefinition.entrySchema?.type
+                            ?: throw BluePrintException(format("Entry schema for data type ({}) for the property ({}) not found", dataType, propertyName))
+                    checkPrimitiveOrComplex(entrySchemaType, propertyName)
+                }
+                else -> checkPropertyDataType(dataType, propertyName)
             }
             message.appendln("property " + paths.joinToString(separator) + " of type " + dataType)
             paths.removeAt(paths.lastIndex)
@@ -328,7 +330,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
     }
 
     private fun checkPropertyValue(propertyDefinition: PropertyDefinition, jsonNode: JsonNode) {
-        //logger.info("validating path ({}), Property {}, value ({})", paths, propertyDefinition, jsonNode)
+        //log.info("validating path ({}), Property {}, value ({})", paths, propertyDefinition, jsonNode)
     }
 
     private fun checkPropertyDataType(dataType: String, propertyName: String): Boolean {

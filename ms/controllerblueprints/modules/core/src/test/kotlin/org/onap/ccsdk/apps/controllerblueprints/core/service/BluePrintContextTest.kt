@@ -23,8 +23,8 @@ import org.junit.Test
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.factory.BluePrintParserFactory
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 import java.io.File
 import java.nio.charset.Charset
 import kotlin.test.assertNotNull
@@ -35,7 +35,7 @@ import kotlin.test.assertNotNull
  */
 class BluePrintContextTest {
 
-    private val logger: Logger = LoggerFactory.getLogger(this::class.toString())
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
 
     lateinit var bluePrintContext: BluePrintContext
 
@@ -63,7 +63,7 @@ class BluePrintContextTest {
     fun testChainedProperty() {
         val nodeType = bluePrintContext.nodeTypeChained("component-resource-assignment")
         assertNotNull(nodeType, "Failed to get chained node type")
-        logger.trace("Properties {}", JacksonUtils.getJson(nodeType, true))
+        log.trace("Properties {}", JacksonUtils.getJson(nodeType, true))
     }
 
 

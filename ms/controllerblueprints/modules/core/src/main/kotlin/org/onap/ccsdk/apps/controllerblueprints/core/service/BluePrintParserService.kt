@@ -18,8 +18,8 @@ package org.onap.ccsdk.apps.controllerblueprints.core.service
 
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.ServiceTemplateUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 import java.io.File
 import java.io.Serializable
 
@@ -39,7 +39,7 @@ interface BluePrintParserService : Serializable {
 
 class BluePrintParserDefaultService : BluePrintParserService {
 
-    private val logger: Logger = LoggerFactory.getLogger(this::class.toString())
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
 
     var basePath : String = javaClass.classLoader.getResource(".").path
 

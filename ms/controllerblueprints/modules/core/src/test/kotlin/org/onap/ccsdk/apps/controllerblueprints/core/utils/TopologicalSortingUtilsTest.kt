@@ -22,7 +22,7 @@ class TopologicalSortingUtilsTest {
     
     @Test
     fun testSorting(): Unit {
-        val graph: TopologicalSortingUtils<String> = TopologicalSortingUtils<String>()
+        val graph: TopologicalSortingUtils<String> = TopologicalSortingUtils()
         graph.add("bundle-id", "bundle-mac")
         graph.add("bundle-id", "bundle-ip")
         graph.add("bundle-mac", "bundle-ip")

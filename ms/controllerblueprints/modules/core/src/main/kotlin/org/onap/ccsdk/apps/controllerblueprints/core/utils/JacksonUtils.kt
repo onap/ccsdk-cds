@@ -17,6 +17,8 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core.utils
 
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode
@@ -31,7 +33,6 @@ import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.apps.controllerblueprints.core.format
-import org.slf4j.LoggerFactory
 import java.io.File
 import java.nio.charset.Charset
 
@@ -41,7 +42,7 @@ import java.nio.charset.Charset
  * @author Brinda Santh
  */
 object JacksonUtils {
-    private val log = LoggerFactory.getLogger(JacksonUtils::class.java)
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
 
     inline fun <reified T : Any> readValue(content: String): T =
             jacksonObjectMapper().readValue(content, T::class.java)

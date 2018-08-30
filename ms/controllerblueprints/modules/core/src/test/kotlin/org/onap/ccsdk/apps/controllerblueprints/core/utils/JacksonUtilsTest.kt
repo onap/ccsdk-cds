@@ -20,8 +20,8 @@ package org.onap.ccsdk.apps.controllerblueprints.core.utils
 import org.junit.Test
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
@@ -33,7 +33,7 @@ import kotlin.test.assertTrue
  */
 class JacksonUtilsTest {
 
-    private val log: Logger = LoggerFactory.getLogger(this::class.toString())
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
 
     val basePath = "load/blueprints"
 
@@ -71,7 +71,7 @@ class JacksonUtilsTest {
     @Test
     fun testJsonValue() {
         val filePath = "data/alltype-data.json"
-        val rootJson = JacksonUtils.jsonNodeFromClassPathFile(filePath);
+        val rootJson = JacksonUtils.jsonNodeFromClassPathFile(filePath)
         assertNotNull(rootJson, "Failed to get all type data json node")
         val intValue = rootJson.get("intValue")
         assertTrue(JacksonUtils.checkJsonNodeValueOfType(BluePrintConstants.DATA_TYPE_INTEGER, intValue), "Failed to get as int value")
