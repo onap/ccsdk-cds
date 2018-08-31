@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.onap.ccsdk.config</groupId>
+		<artifactId>sdnc-config-adaptors</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>config-data-adaptor-provider</artifactId>
+	<packaging>bundle</packaging>
+	<name>Config Data Adaptor - Provider</name>
+	<url>http://maven.apache.org</url>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.onap.ccsdk.sli.core</groupId>
+			<artifactId>sli-provider</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mariadb.jdbc</groupId>
+			<artifactId>mariadb-java-client</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- <dependency> <groupId>org.hamcrest</groupId> <artifactId>hamcrest-core</artifactId> 
+			<scope>runtime</scope> </dependency> -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.att.eelf</groupId>
+			<artifactId>eelf-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>${maven.bundle.version}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>org.onap.ccsdk.config.data.adaptor</Bundle-SymbolicName>
+						<Export-Package>org.onap.ccsdk.config.data.adaptor,
+							org.onap.ccsdk.config.data.adaptor.dao,
+							org.onap.ccsdk.config.data.adaptor.db,
+							org.onap.ccsdk.config.data.adaptor.domain,
+							org.onap.ccsdk.config.data.adaptor.service
+						</Export-Package>
+						<Import-Package>!*spring*,!joptsimple,!net.*,!bsh,
+							!org.apache.commons.pool*,!org.apache.commons.fileupload*,!org.apache.http.*,!org.apache.logger*,
+							!org.apache.lucene*,!org.apache.t*,!org.apache.derby*,!org.codehaus.groovy*,!org.custommonkey.xmlunit*,
+							!org.hibernate*,!org.jruby*,!org.aspectj*,!org.mockito*,!org.openqa*,!org.skyscreamer*,!org.testng*,
+							!com.caucho*,!com.gargoylesoftware*,!com.jamonapi*,!com.rometools*,!com.squareup*,!com.sun*,!groovy*,
+							!javax.ejb*,!javax.enterprise*,!javax.faces*,!javax.in*,!javax.money*,!javax.portlet*,!javax.resource*,
+							org.*,javax.*,com.google.gson*,com.google.common.*,*jackson*</Import-Package>
+						<Embed-Dependency>*;groupId=!*eelf*|*opendaylight*|*ccsdk*|*osgi*|*jackson*|*json*|*powermock*|*junit*</Embed-Dependency>
+						<Embed-Transitive>true</Embed-Transitive>
+					</instructions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

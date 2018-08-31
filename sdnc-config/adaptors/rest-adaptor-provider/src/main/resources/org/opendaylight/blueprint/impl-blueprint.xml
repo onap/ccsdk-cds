@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:odl="http://opendaylight.org/xmlns/blueprint/v1.0.0"
+	odl:use-default-for-reference-types="true">
+
+	<!-- Expose the Common Component Bean -->
+
+	<bean id="configRestAdaptorService"
+		class="org.onap.ccsdk.config.rest.adaptor.service.ConfigRestAdaptorServiceImpl">
+		<argument value="/opt/sdnc/data/properties" />
+	</bean>
+
+	<service ref="configRestAdaptorService"
+		interface="org.onap.ccsdk.config.rest.adaptor.service.ConfigRestAdaptorService" />
+
+</blueprint>

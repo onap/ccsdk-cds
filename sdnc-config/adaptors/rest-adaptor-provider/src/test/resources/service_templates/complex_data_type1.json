@@ -1,0 +1,258 @@
+{
+	"topology_template": {
+		"inputs": {
+			"start-flow": {
+				"required": true,
+				"type": "string",
+				"default": "common-config"
+			},
+			"service-type": {
+				"required": true,
+				"type": "string",
+				"default": "VDBE"
+			},
+			"vnf-type": {
+				"required": true,
+				"type": "string",
+				"default": "VDBE"
+			},
+			"action": {
+				"required": true,
+				"type": "string",
+				"default": "Configure"
+			},
+			"service-instance": {
+				"required": true,
+				"type": "string",
+				"default": "VDBE"
+			},
+			"loopback-default": {
+				"required": true,
+				"type": "string",
+				"default": "loopback-default-XXXX"
+			},
+			"vnf-id": {
+				"required": true,
+				"type": "string"
+			},
+			"host-ip-address": {
+				"required": true,
+				"type": "string"
+			},
+			"host-port": {
+				"required": true,
+				"type": "string"
+			},
+			"host-user-id": {
+				"required": true,
+				"type": "string"
+			},
+			"host-password": {
+				"required": true,
+				"type": "string"
+			}
+		},
+		"node_templates": {
+			"get-resource-assignment": {
+				"type": "sdnc-component-getResourceAssignment",
+				"interfaces": {
+					"org.onap.ccsdk.config.instar.ResourceAssignmentService": {
+						"operations": {
+							"getResourceAssignment": {
+								"inputs": {
+									"loopback0": {
+										"default": "{ \"get_input\" : \"loopback-default\" }",
+										"domain": "ethernet",
+										"criteria": [
+											{
+												"value": "attga301me1",
+												"type": "complex",
+												"nodeString": "layer3-service-list[].service-data.l3sdn-vnf-fields.vnf-name"
+											},
+											{
+												"value": "attga301me1",
+												"type": "simple",
+												"nodeString": "layer3-service-list[].service-data.l3sdn-vnf-fields.vnf-name"
+											}
+										]
+									},
+									"prifix": "get-resource-assignment"
+								},
+								"outputs": {
+									"resource-assignment-status": "success",
+									"resource-assignment-params": "{ \"set_value\" : \"loopback-default\" }"
+								}
+							}
+						}
+					}
+				}
+			},
+			"common-config": {
+				"type": "sdnc-dg-commonConfig",
+				"interfaces": {
+					"CONFIG": {
+						"operations": {
+							"CommonConfig": {
+								
+							}
+						}
+					}
+				}
+			},
+			"generate-config": {
+				"type": "sdnc-component-mergeComplexJson",
+				"interfaces": {
+					"org.onap.ccsdk.config.generator.merge.MergeNode": {
+						"operations": {
+							"mergeComplexJsonDataOnTemplate": {
+								"inputs": {
+									"jsonData": "{ \"get_attribute\" : \"enriched-inputs\" }",
+									"prifix": "generate-config",
+									"templateData": "{ \"get_input\" : \"artifacts.defaultTemplate.content\" }"
+								},
+								"outputs": {
+									"mergedData": "{ \"set_value\" : \"generated-config\" }",
+									"status": "{ \"set_value\" : \"generated-config-status\" }"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"artifacts": {
+			"defaultTemplate": {
+				"type": "tosca.artifacts.Template",
+				"content": "This is sample Template Content"
+			}
+		}
+	},
+	"node_types": {
+		"sdnc-component-getResourceAssignment": {
+			"derived_from": "tosca.nodes.Component",
+			"interfaces": {
+				"org.onap.ccsdk.config.instar.ResourceAssignmentService": {
+					"operations": {
+						"getResourceAssignment": {
+							"inputs": {
+								"default": {
+									"required": false,
+									"type": "string"
+								},
+								"loopback0": {
+									"required": true,
+									"type": "sdnc-datatype-resourceassignment"
+								},
+								"prifix": {
+									"required": true,
+									"type": "string"
+								}
+							},
+							"outputs": {
+								"resource-assignment-status": {
+									"required": true,
+									"type": "string"
+								},
+								"resource-assignment-params": {
+									"required": true,
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"sdnc-component-mergeComplexJson": {
+			"derived_from": "tosca.nodes.Component",
+			"interfaces": {
+				"org.onap.ccsdk.config.generator.merge.MergeNode": {
+					"operations": {
+						"mergeComplexJsonDataOnTemplate": {
+							"inputs": {
+								"templateType": {
+									"required": false,
+									"type": "string"
+								},
+								"jsonData": {
+									"required": true,
+									"type": "string"
+								},
+								"prifix": {
+									"required": true,
+									"type": "string",
+									"default": "mergeComplexJson"
+								},
+								"templateData": {
+									"required": false,
+									"type": "string"
+								},
+								"templateFile": {
+									"required": false,
+									"type": "string"
+								}
+							},
+							"outputs": {
+								"mergedData": {
+									"required": true,
+									"type": "string"
+								},
+								"status": {
+									"required": true,
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"sdnc-dg-commonConfig": {
+			"derived_from": "tosca.nodes.DG",
+			"interfaces": {
+				"CONFIG": {
+					"operations": {
+						"CommonConfig": {
+							
+						}
+					}
+				}
+			}
+		}
+	},
+	"data_types": {
+		"sdnc-datatype-resourceassignment": {
+			"derived_from": "tosca.datatypes.Root",
+			"properties": {
+				"criteria": {
+					"required": true,
+					"type": "list",
+					"entry_schema": {
+						"type": "sdnc-datatype-rs-search"
+					}
+				},
+				"domain": {
+					"required": true,
+					"type": "string"
+				}
+			}
+		},
+		"sdnc-datatype-rs-search": {
+			"derived_from": "tosca.datatypes.Root",
+			"properties": {
+				"type": {
+					"required": true,
+					"type": "string"
+				},
+				"nodeString": {
+					"required": true,
+					"type": "string"
+				},
+				"value": {
+					"required": false,
+					"type": "string"
+				}
+			}
+		}
+	}
+}

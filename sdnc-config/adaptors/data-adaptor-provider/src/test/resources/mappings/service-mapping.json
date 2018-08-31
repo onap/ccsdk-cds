@@ -1,0 +1,11 @@
+{
+	"resource": {
+		"name": "bundle-mac",
+		"searchCriteriaDefintion": {
+			"sourceSystemResourceResolution": {
+				"searchCriteriaValue": "$ptnni_equip_name",
+				"searchCriteriaType": "equipment"
+			}
+		}
+	}
+}         

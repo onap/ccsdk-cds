@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:odl="http://opendaylight.org/xmlns/blueprint/v1.0.0"
+	odl:use-default-for-reference-types="true">
+
+	<!-- Dependencies -->
+
+	<reference id="dataSource" interface="javax.sql.DataSource" />
+
+	<!-- Expose the Common Component Bean -->
+
+	<bean id="configResourceService"
+		class="org.onap.ccsdk.config.data.adaptor.service.ConfigResourceServiceImpl">
+		<argument ref="transactionLogDao" />
+		<argument ref="configResourceDao" />
+		<argument ref="queryExecutorDao" />
+		<argument ref="namedQueryExecutorDao" />
+		<argument ref="configPropertyMapDao" />
+	</bean>
+
+	<service ref="configResourceService"
+		interface="org.onap.ccsdk.config.data.adaptor.service.ConfigResourceService" />
+
+	<!-- Data SourceInitialisation -->
+
+	<bean id="config.dataSource"
+		class="org.onap.ccsdk.config.data.adaptor.db.DataSourceWrap">
+		<argument ref="dataSource" />
+	</bean>
+
+	<bean id="jdbcTemplate"
+		class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="config.dataSource" />
+	</bean>
+
+	<bean id="namedParameterJdbcTemplate"
+		class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+		<argument ref="config.dataSource" />
+	</bean>
+
+	<!-- DAO Initialisation -->
+	<bean id="transactionLogDao"
+		class="org.onap.ccsdk.config.data.adaptor.dao.TransactionLogDaoImpl">
+		<argument ref="jdbcTemplate" />
+	</bean>
+
+	<bean id="configResourceDao"
+		class="org.onap.ccsdk.config.data.adaptor.dao.ConfigResourceDaoImpl">
+		<argument ref="jdbcTemplate" />
+	</bean>
+
+	<bean id="queryExecutorDao"
+		class="org.onap.ccsdk.config.data.adaptor.dao.QueryExecutorDaoImpl">
+		<argument ref="jdbcTemplate" />
+	</bean>
+
+	<bean id="namedQueryExecutorDao"
+		class="org.onap.ccsdk.config.data.adaptor.dao.NamedQueryExecutorDaoImpl">
+		<argument ref="namedParameterJdbcTemplate" />
+	</bean>
+
+	<bean id="configPropertyMapDao"
+		class="org.onap.ccsdk.config.data.adaptor.dao.ConfigPropertyMapDaoImpl">
+		<argument ref="jdbcTemplate" />
+	</bean>
+
+</blueprint>

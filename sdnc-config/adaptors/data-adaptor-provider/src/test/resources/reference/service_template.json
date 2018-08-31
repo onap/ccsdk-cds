@@ -1,0 +1,188 @@
+{
+	"version": "1.0V",
+	"topology_template": {
+		"inputs": {
+			"action": {
+				"required": true,
+				"type": "string",
+				"default": "Configure"
+			},
+			"start-flow": {
+				"required": true,
+				"type": "string",
+				"default": "common-config"
+			},
+			"vnf-type": {
+				"required": true,
+				"type": "string",
+				"default": "VDBE"
+			}
+		},
+		"node_templates": {
+			"getIpAddressInfo": {
+				"type": "capability_get_ip_address",
+				"interfaces": {
+					"org.onap.ccsdk.config.outbound.instar.GetAddressInfo": {
+						"operations": {
+							"getAddressInfo": {
+								"inputs": {
+									"vnf-id": {
+										"value": "get_input(device-id)"
+									}
+								},
+								"outputs": {
+									"host-id": {
+										"value": "set_value(device-host-name)"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"common-config": {
+				"type": "dg_common_config",
+				"interfaces": {
+					"CONFIG": {
+						"operations": {
+							"CommonConfig": {
+								
+							}
+						}
+					}
+				}
+			},
+			"vdbe_device": {
+				"type": "netconf_vnf",
+				"artifacts": {
+					"defaultTemplate": {
+						"type": "Template",
+						"content": "This is Sample Content"
+					}
+				},
+				"capabilities": {
+					"netconf": {
+						"properties": {
+							"password": {
+								"value": "root123"
+							},
+							"user-id": {
+								"value": "root"
+							},
+							"host-ip-address": {
+								"value": "127.0.0.1"
+							},
+							"port-number": {
+								"value": 830
+							}
+						}
+					}
+				}
+			},
+			"DownloadNetconf": {
+				"type": "dg_download_netconf",
+				"interfaces": {
+					"CONFIG": {
+						"operations": {
+							"DownloadConfig": {
+								"inputs": {
+									"vnf-id": {
+										"value": "get_input(device-id)"
+									}
+								},
+								"outputs": {
+									"host-id": {
+										"value": "set_value(device-host-name)"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"node_types": {
+		"netconf_vnf": {
+			"derived_from": "tosca.nodes.Vnf",
+			"capabilities": {
+				"netconf": {
+					"properties": {
+						"password": {
+							"required": false,
+							"type": "string"
+						},
+						"user-id": {
+							"required": true,
+							"type": "string"
+						},
+						"host-ip-address": {
+							"required": true,
+							"type": "string"
+						},
+						"port-number": {
+							"required": true,
+							"type": "number",
+							"default": 830
+						}
+					}
+				}
+			}
+		},
+		"dg_download_netconf": {
+			"derived_from": "tosca.nodes.DG",
+			"interfaces": {
+				"CONFIG": {
+					"operations": {
+						"DownloadConfig": {
+							"inputs": {
+								"vnf-id": {
+									"type": "string"
+								}
+							},
+							"outputs": {
+								"host-ip-address": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"dg_common_config": {
+			"derived_from": "tosca.nodes.DG",
+			"interfaces": {
+				"CONFIG": {
+					"operations": {
+						"CommonConfig": {
+							
+						}
+					}
+				}
+			}
+		},
+		"capability_get_ip_address": {
+			"derived_from": "tosca.nodes.Component",
+			"interfaces": {
+				"org.onap.ccsdk.config.outbound.instar.GetAddressInfo": {
+					"operations": {
+						"getAddressInfo": {
+							"inputs": {
+								"vnf-id": {
+									"required": true,
+									"type": "string"
+								}
+							},
+							"outputs": {
+								"host-ip-address": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
