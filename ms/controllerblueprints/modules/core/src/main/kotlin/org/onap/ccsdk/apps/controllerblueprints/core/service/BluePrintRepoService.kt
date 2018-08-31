@@ -17,15 +17,12 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core.service
 
-import com.google.common.base.Preconditions
-import org.apache.commons.io.FileUtils
-import org.apache.commons.lang3.StringUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*
-import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonReactorUtils
 import reactor.core.publisher.Mono
 import java.io.File
 import java.io.Serializable
@@ -57,15 +54,15 @@ interface BluePrintRepoService : Serializable {
 }
 
 
-class BluePrintRepoFileService(val basePath: String) : BluePrintRepoService {
+open class BluePrintRepoFileService(modelTypePath: String) : BluePrintRepoService {
 
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintRepoFileService::class.toString())
 
-    private val dataTypePath = basePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)
-    private val nodeTypePath = basePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TYPE)
-    private val artifactTypePath = basePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_ARTIFACT_TYPE)
-    private val capabilityTypePath = basePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_CAPABILITY_TYPE)
-    private val relationshipTypePath = basePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TYPE)
+    private val dataTypePath = modelTypePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)
+    private val nodeTypePath = modelTypePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TYPE)
+    private val artifactTypePath = modelTypePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_ARTIFACT_TYPE)
+    private val capabilityTypePath = modelTypePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_CAPABILITY_TYPE)
+    private val relationshipTypePath = modelTypePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TYPE)
     private val extension = ".json"
 
     override fun getDataType(dataTypeName: String): Mono<DataType>? {
@@ -98,17 +95,6 @@ class BluePrintRepoFileService(val basePath: String) : BluePrintRepoService {
     }
 
     private fun <T> getModelType(fileName: String, valueType: Class<T>): Mono<T> {
-        return getFileContent(fileName).map { content ->
-            Preconditions.checkArgument(StringUtils.isNotBlank(content),
-                    String.format("Failed to get model content for file (%s)", fileName))
-
-            JacksonUtils.readValue(content, valueType)
-                    ?: throw BluePrintException(String.format("Failed to get model file from content for file (%s)", fileName))
-
-        }
-    }
-
-    private fun getFileContent(fileName: String): Mono<String> {
-        return Mono.just(FileUtils.readFileToString(File(fileName), Charset.defaultCharset()))
+        return JacksonReactorUtils.readValueFromFile(fileName, valueType)
     }
 }

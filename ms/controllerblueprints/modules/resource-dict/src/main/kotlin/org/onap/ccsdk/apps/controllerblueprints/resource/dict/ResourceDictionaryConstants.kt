@@ -25,6 +25,8 @@ object ResourceDictionaryConstants {
     const val SOURCE_DEFAULT = "default"
     const val SOURCE_DB = "db"
 
+    const val MODEL_DIR_RESOURCE_DEFINITION: String = "resource_dictionary"
+
     const val PROPERTY_TYPE = "type"
     const val PROPERTY_INPUT_KEY_MAPPING = "input-key-mapping"
     const val PROPERTY_OUTPUT_KEY_MAPPING = "output-key-mapping"

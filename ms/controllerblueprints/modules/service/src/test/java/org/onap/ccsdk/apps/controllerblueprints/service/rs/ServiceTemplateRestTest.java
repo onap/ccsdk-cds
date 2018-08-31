@@ -30,8 +30,8 @@ import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModelContent;
 import org.onap.ccsdk.apps.controllerblueprints.service.model.AutoMapResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -49,7 +49,7 @@ import java.util.List;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ServiceTemplateRestTest {
 
-    private static Logger log = LoggerFactory.getLogger(ServiceTemplateRestTest.class);
+    private static EELFLogger log = EELFManager.getInstance().getLogger(ServiceTemplateRestTest.class);
     @Autowired
     ModelTypeRest modelTypeRest;
 

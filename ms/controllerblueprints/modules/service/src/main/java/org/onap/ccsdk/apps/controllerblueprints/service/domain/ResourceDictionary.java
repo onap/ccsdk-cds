@@ -92,20 +92,19 @@ public class ResourceDictionary implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder buffer = new StringBuilder("[");
-        buffer.append(", name = " + name);
-        buffer.append(", resourcePath = " + resourcePath);
-        buffer.append(", resourceType = " + resourceType);
-        buffer.append(", dataType = " + dataType);
-        buffer.append(", entrySchema = " + entrySchema);
-        buffer.append(", validValues = " + validValues);
-        buffer.append(", definition =" + definition);
-        buffer.append(", description = " + description);
-        buffer.append(", updatedBy = " + updatedBy);
-        buffer.append(", tags = " + tags);
-        buffer.append(", creationDate = " + creationDate);
-        buffer.append("]");
-        return buffer.toString();
+        String buffer = "[" + ", name = " + name +
+                ", resourcePath = " + resourcePath +
+                ", resourceType = " + resourceType +
+                ", dataType = " + dataType +
+                ", entrySchema = " + entrySchema +
+                ", validValues = " + validValues +
+                ", definition =" + definition +
+                ", description = " + description +
+                ", updatedBy = " + updatedBy +
+                ", tags = " + tags +
+                ", creationDate = " + creationDate +
+                "]";
+        return buffer;
     }
 
     public String getResourcePath() {

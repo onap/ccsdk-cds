@@ -23,6 +23,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.*
 import org.onap.ccsdk.apps.controllerblueprints.core.format
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonReactorUtils
 import java.io.Serializable
 
 /**
@@ -35,14 +36,23 @@ interface BluePrintEnhancerService : Serializable {
     @Throws(BluePrintException::class)
     fun enhance(content: String): ServiceTemplate
 
-    @Throws(BluePrintException::class)
-    fun enhance(serviceTemplate: ServiceTemplate): ServiceTemplate
-
     /**
      * Read Blueprint from CSAR structure Directory
      */
     @Throws(BluePrintException::class)
     fun enhance(fileName: String, basePath: String): ServiceTemplate
+
+    @Throws(BluePrintException::class)
+    fun enhance(serviceTemplate: ServiceTemplate): ServiceTemplate
+
+    @Throws(BluePrintException::class)
+    fun enrichNodeTemplate(nodeTemplateName: String, nodeTemplate: NodeTemplate)
+
+    @Throws(BluePrintException::class)
+    fun enrichNodeType(nodeTypeName: String, nodeType: NodeType)
+
+    @Throws(BluePrintException::class)
+    fun enrichPropertyDefinition(propertyName: String, propertyDefinition: PropertyDefinition)
 }
 
 open class BluePrintEnhancerDefaultService(val bluePrintRepoService: BluePrintRepoService) : BluePrintEnhancerService {
@@ -51,20 +61,25 @@ open class BluePrintEnhancerDefaultService(val bluePrintRepoService: BluePrintRe
 
     lateinit var serviceTemplate: ServiceTemplate
 
+    @Throws(BluePrintException::class)
     override fun enhance(content: String): ServiceTemplate {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return JacksonReactorUtils.readValueFromFile(content, ServiceTemplate::class.java).map { serviceTemplate ->
+            enhance(serviceTemplate!!)
+        }.block()!!
     }
 
+    @Throws(BluePrintException::class)
     override fun enhance(fileName: String, basePath: String): ServiceTemplate {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    @Throws(BluePrintException::class)
     override fun enhance(serviceTemplate: ServiceTemplate): ServiceTemplate {
         this.serviceTemplate = serviceTemplate
         initialCleanUp()
         enrichTopologyTemplate(serviceTemplate)
 
-       // log.info("Enriched Blueprint :\n {}", JacksonUtils.getJson(serviceTemplate, true))
+        // log.info("Enriched Blueprint :\n {}", JacksonUtils.getJson(serviceTemplate, true))
         return this.serviceTemplate
     }
 
@@ -79,6 +94,7 @@ open class BluePrintEnhancerDefaultService(val bluePrintRepoService: BluePrintRe
 
     }
 
+    @Throws(BluePrintException::class)
     open fun enrichTopologyTemplate(serviceTemplate: ServiceTemplate) {
         serviceTemplate.topologyTemplate?.let { topologyTemplate ->
             enrichTopologyTemplateInputs(topologyTemplate)
@@ -86,6 +102,7 @@ open class BluePrintEnhancerDefaultService(val bluePrintRepoService: BluePrintRe
         }
     }
 
+    @Throws(BluePrintException::class)
     open fun enrichTopologyTemplateInputs(topologyTemplate: TopologyTemplate) {
         topologyTemplate.inputs?.let { inputs ->
             enrichPropertyDefinitions(inputs)
@@ -99,7 +116,7 @@ open class BluePrintEnhancerDefaultService(val bluePrintRepoService: BluePrintRe
     }
 
     @Throws(BluePrintException::class)
-    open fun enrichNodeTemplate(nodeTemplateName: String, nodeTemplate: NodeTemplate) {
+    override fun enrichNodeTemplate(nodeTemplateName: String, nodeTemplate: NodeTemplate) {
         val nodeTypeName = nodeTemplate.type
         // Get NodeType from Repo and Update Service Template
         val nodeType = populateNodeType(nodeTypeName)
@@ -111,7 +128,8 @@ open class BluePrintEnhancerDefaultService(val bluePrintRepoService: BluePrintRe
         enrichNodeTemplateArtifactDefinition(nodeTemplateName, nodeTemplate)
     }
 
-    open fun enrichNodeType(nodeTypeName: String, nodeType: NodeType) {
+    @Throws(BluePrintException::class)
+    override fun enrichNodeType(nodeTypeName: String, nodeType: NodeType) {
 
         // NodeType Property Definitions
         enrichNodeTypeProperties(nodeTypeName, nodeType)
@@ -132,7 +150,7 @@ open class BluePrintEnhancerDefaultService(val bluePrintRepoService: BluePrintRe
 
     open fun enrichNodeTypeRequirements(nodeTypeName: String, nodeType: NodeType) {
 
-        nodeType.requirements?.forEach { requirementDefinitionName, requirementDefinition ->
+        nodeType.requirements?.forEach { _, requirementDefinition ->
             // Populate Requirement Node
             requirementDefinition.node?.let { requirementNodeTypeName ->
                 // Get Requirement NodeType from Repo and Update Service Template
@@ -187,7 +205,8 @@ open class BluePrintEnhancerDefaultService(val bluePrintRepoService: BluePrintRe
         }
     }
 
-    open fun enrichPropertyDefinition(propertyName: String, propertyDefinition: PropertyDefinition) {
+    @Throws(BluePrintException::class)
+    override fun enrichPropertyDefinition(propertyName: String, propertyDefinition: PropertyDefinition) {
         val propertyType = propertyDefinition.type
         if (BluePrintTypes.validPrimitiveTypes().contains(propertyType)) {
 

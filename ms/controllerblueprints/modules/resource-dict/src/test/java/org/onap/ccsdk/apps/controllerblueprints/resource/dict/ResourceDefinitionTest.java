@@ -20,12 +20,12 @@ package org.onap.ccsdk.apps.controllerblueprints.resource.dict;
 import org.junit.Assert;
 import org.junit.Test;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFManager;
 
 public class ResourceDefinitionTest {
-    private Logger log = LoggerFactory.getLogger(ResourceDefinitionTest.class);
-    String basePath = "load/resource_dictionary";
+    private EELFLogger log = EELFManager.getInstance().getLogger(ResourceDefinitionTest.class);
+    private String basePath = "load/resource_dictionary";
 
     @Test
     public void testDictionaryDefinitionInputSource(){

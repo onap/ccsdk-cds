@@ -17,6 +17,7 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.resource.dict.service
 
+import com.att.eelf.configuration.EELFLogger
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.common.base.Preconditions
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
@@ -29,7 +30,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintExpression
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRepoService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
-import org.slf4j.LoggerFactory
+import com.att.eelf.configuration.EELFManager
 import java.io.Serializable
 /**
  * ResourceDefinitionValidationService.
@@ -49,7 +50,7 @@ interface ResourceDefinitionValidationService : Serializable {
  */
 open class ResourceDefinitionDefaultValidationService(private val bluePrintRepoService: BluePrintRepoService) : ResourceDefinitionValidationService {
 
-    private val log = LoggerFactory.getLogger(ResourceDefinitionValidationService::class.java)
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(ResourceDefinitionValidationService::class.java)
 
     override fun validate(resourceDefinition: ResourceDefinition) {
         Preconditions.checkNotNull(resourceDefinition, "Failed to get Resource Definition")

@@ -16,6 +16,7 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.resource.dict.utils
 
+import com.att.eelf.configuration.EELFLogger
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.NullNode
 import org.apache.commons.collections.MapUtils
@@ -25,11 +26,11 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDictionaryConstants
-import org.slf4j.LoggerFactory
+import com.att.eelf.configuration.EELFManager
 
 
 object ResourceDictionaryUtils {
-    private val log = LoggerFactory.getLogger(ResourceDictionaryUtils::class.java)
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(ResourceDictionaryUtils::class.java)
 
     @JvmStatic
     fun populateSourceMapping(resourceAssignment: ResourceAssignment,

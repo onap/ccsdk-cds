@@ -23,8 +23,8 @@ import org.junit.runners.MethodSorters;
 import org.onap.ccsdk.apps.controllerblueprints.TestApplication;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ModelType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -40,7 +40,7 @@ import java.util.List;
 @ContextConfiguration(classes = {TestApplication.class})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ModelTypeRestTest {
-    private static Logger log = LoggerFactory.getLogger(ModelTypeRestTest.class);
+    private static EELFLogger log = EELFManager.getInstance().getLogger(ModelTypeRestTest.class);
     @Autowired
     ModelTypeRest modelTypeRest;
 

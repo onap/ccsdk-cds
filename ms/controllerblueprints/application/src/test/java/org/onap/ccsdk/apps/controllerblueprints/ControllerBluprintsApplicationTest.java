@@ -21,8 +21,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -35,7 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ControllerBluprintsApplicationTest {
-    private static Logger log = LoggerFactory.getLogger(ControllerBluprintsApplicationTest.class);
+    private static EELFLogger log = EELFManager.getInstance().getLogger(ControllerBluprintsApplicationTest.class);
 
     @Autowired
     private TestRestTemplate restTemplate;

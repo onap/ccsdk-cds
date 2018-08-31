@@ -76,12 +76,11 @@ public class ConfigModelContent {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder("[");
-        builder.append("id = " + id);
-        builder.append(", name = " + name);
-        builder.append(", contentType = " + contentType);
-        builder.append("]");
-        return builder.toString();
+        String builder = "[" + "id = " + id +
+                ", name = " + name +
+                ", contentType = " + contentType +
+                "]";
+        return builder;
     }
 
     @Override

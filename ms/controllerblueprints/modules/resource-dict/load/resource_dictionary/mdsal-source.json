@@ -1,6 +1,6 @@
 {
   "tags": "oam-local-ipv4-address",
-  "name": "oam-local-ipv4-address",
+  "name": "mdsal-source",
   "property" :{
     "description": "based on service-instance-id,network-role,v4-ip-type and vm-type get the ipv4-gateway-prefix from the SDN-GC mdsal",
     "type": "string"

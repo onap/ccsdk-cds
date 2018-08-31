@@ -82,17 +82,16 @@ public class ModelType implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder buffer = new StringBuilder("[");
-        buffer.append(", modelName = " + modelName);
-        buffer.append(", derivedFrom = " + derivedFrom);
-        buffer.append(", definitionType = " + definitionType);
-        buffer.append(", description = " + description);
-        buffer.append(", creationDate = " + creationDate);
-        buffer.append(", version = " + version);
-        buffer.append(", updatedBy = " + updatedBy);
-        buffer.append(", tags = " + tags);
-        buffer.append("]");
-        return buffer.toString();
+        String buffer = "[" + ", modelName = " + modelName +
+                ", derivedFrom = " + derivedFrom +
+                ", definitionType = " + definitionType +
+                ", description = " + description +
+                ", creationDate = " + creationDate +
+                ", version = " + version +
+                ", updatedBy = " + updatedBy +
+                ", tags = " + tags +
+                "]";
+        return buffer;
     }
 
     public String getModelName() {

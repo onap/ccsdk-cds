@@ -27,8 +27,8 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.ToscaMetaData;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModel;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModelContent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,7 +43,7 @@ public class ConfigModelUtils {
 
     }
 
-    private static Logger log = LoggerFactory.getLogger(ConfigModelUtils.class);
+    private static EELFLogger log = EELFManager.getInstance().getLogger(ConfigModelUtils.class);
 
     public static ConfigModel getConfigModel(String blueprintPath) throws Exception {
         Preconditions.checkArgument(StringUtils.isNotBlank(blueprintPath), "Blueprint Path is missing");

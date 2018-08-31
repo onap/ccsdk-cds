@@ -22,8 +22,8 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.onap.ccsdk.apps.controllerblueprints.service.SchemaGeneratorService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFManager;
 
 import java.io.File;
 import java.nio.charset.Charset;
@@ -32,7 +32,7 @@ import java.nio.charset.Charset;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SchemaGeneratorServiceTest {
 
-    private static Logger log = LoggerFactory.getLogger(SchemaGeneratorServiceTest.class);
+    private static EELFLogger log = EELFManager.getInstance().getLogger(SchemaGeneratorServiceTest.class);
 
     @Test
     public void test01GenerateSwaggerData() throws Exception {

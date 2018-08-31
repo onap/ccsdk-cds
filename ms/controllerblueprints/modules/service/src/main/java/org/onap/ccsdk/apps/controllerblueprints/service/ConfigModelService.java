@@ -29,8 +29,8 @@ import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModel;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModelContent;
 import org.onap.ccsdk.apps.controllerblueprints.service.repository.ConfigModelContentRepository;
 import org.onap.ccsdk.apps.controllerblueprints.service.repository.ConfigModelRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,7 +49,7 @@ import java.util.Optional;
 @Service
 public class ConfigModelService {
 
-    private static Logger log = LoggerFactory.getLogger(ConfigModelService.class);
+    private static EELFLogger log = EELFManager.getInstance().getLogger(ConfigModelService.class);
 
     private ConfigModelRepository configModelRepository;
     private ConfigModelContentRepository configModelContentRepository;
@@ -57,14 +57,14 @@ public class ConfigModelService {
 
     /**
      * This is a ConfigModelService constructor.
-     * 
-     * @param configModelRepository
-     * @param configModelContentRepository
-     * @param configModelCreateService
+     *
+     * @param configModelRepository        configModelRepository
+     * @param configModelContentRepository configModelContentRepository
+     * @param configModelCreateService     configModelCreateService
      */
     public ConfigModelService(ConfigModelRepository configModelRepository,
-            ConfigModelContentRepository configModelContentRepository,
-            ConfigModelCreateService configModelCreateService) {
+                              ConfigModelContentRepository configModelContentRepository,
+                              ConfigModelCreateService configModelCreateService) {
         this.configModelRepository = configModelRepository;
         this.configModelContentRepository = configModelContentRepository;
         this.configModelCreateService = configModelCreateService;
@@ -72,10 +72,10 @@ public class ConfigModelService {
 
     /**
      * This is a getInitialConfigModel method
-     * 
-     * @param templateName
+     *
+     * @param templateName templateName
      * @return ConfigModel
-     * @throws BluePrintException
+     * @throws BluePrintException BluePrintException
      */
     public ConfigModel getInitialConfigModel(String templateName) throws BluePrintException {
         ConfigModel configModel = null;
@@ -100,10 +100,10 @@ public class ConfigModelService {
 
     /**
      * This is a saveConfigModel method
-     * 
-     * @param configModel
+     *
+     * @param configModel configModel
      * @return ConfigModel
-     * @throws BluePrintException
+     * @throws BluePrintException BluePrintException
      */
     public ConfigModel saveConfigModel(ConfigModel configModel) throws BluePrintException {
         return this.configModelCreateService.saveConfigModel(configModel);
@@ -111,10 +111,10 @@ public class ConfigModelService {
 
     /**
      * This is a publishConfigModel method
-     * 
-     * @param id
+     *
+     * @param id id
      * @return ConfigModel
-     * @throws BluePrintException
+     * @throws BluePrintException BluePrintException
      */
     public ConfigModel publishConfigModel(Long id) throws BluePrintException {
         return this.configModelCreateService.publishConfigModel(id);
@@ -122,8 +122,8 @@ public class ConfigModelService {
 
     /**
      * This is a searchConfigModels method
-     * 
-     * @param tags
+     *
+     * @param tags tags
      * @return ConfigModel
      */
     public List<ConfigModel> searchConfigModels(String tags) {
@@ -138,9 +138,9 @@ public class ConfigModelService {
 
     /**
      * This is a getConfigModelByNameAndVersion method
-     * 
-     * @param name
-     * @param version
+     *
+     * @param name    name
+     * @param version version
      * @return ConfigModel
      */
     public ConfigModel getConfigModelByNameAndVersion(String name, String version) {
@@ -159,8 +159,8 @@ public class ConfigModelService {
 
     /**
      * This is a getConfigModel method
-     * 
-     * @param id
+     *
+     * @param id id
      * @return ConfigModel
      */
     public ConfigModel getConfigModel(Long id) {
@@ -176,9 +176,9 @@ public class ConfigModelService {
 
     /**
      * This method returns clone of the given model id, by masking the other unrelated fields
-     * 
-     * @param id
-     * @return
+     *
+     * @param id id
+     * @return ConfigModel
      */
 
     public ConfigModel getCloneConfigModel(Long id) {
@@ -232,8 +232,8 @@ public class ConfigModelService {
 
     /**
      * This is a deleteConfigModel method
-     * 
-     * @param id
+     *
+     * @param id id
      */
 
     @Transactional

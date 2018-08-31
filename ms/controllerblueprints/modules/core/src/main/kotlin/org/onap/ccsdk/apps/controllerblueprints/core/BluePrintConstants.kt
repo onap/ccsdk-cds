@@ -54,6 +54,8 @@ object BluePrintConstants {
     const val PATH_ATTRIBUTES: String = "attributes"
     const val PATH_ARTIFACTS: String = "artifacts"
 
+    const val MODEL_DIR_MODEL_TYPE: String = "model_type"
+
     const val MODEL_DEFINITION_TYPE_NODE_TYPE: String = "node_type"
     const val MODEL_DEFINITION_TYPE_ARTIFACT_TYPE: String = "artifact_type"
     const val MODEL_DEFINITION_TYPE_CAPABILITY_TYPE: String = "capability_type"

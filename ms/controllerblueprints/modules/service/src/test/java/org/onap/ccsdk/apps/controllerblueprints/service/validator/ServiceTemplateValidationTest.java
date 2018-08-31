@@ -23,15 +23,15 @@ import org.junit.Test;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.service.utils.ConfigModelUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFManager;
 
 import java.io.File;
 import java.nio.charset.Charset;
 import java.util.List;
 
 public class ServiceTemplateValidationTest {
-    private static Logger log = LoggerFactory.getLogger(ServiceTemplateValidationTest.class);
+    private static EELFLogger log = EELFManager.getInstance().getLogger(ServiceTemplateValidationTest.class);
 
     @Test
     public void testBluePrintDirs() {

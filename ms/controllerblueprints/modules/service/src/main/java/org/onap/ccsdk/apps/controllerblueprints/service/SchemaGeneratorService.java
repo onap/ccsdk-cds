@@ -24,8 +24,8 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.DataType;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.service.common.SwaggerGenerator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +39,7 @@ import java.util.Map;
  */
 
 public class SchemaGeneratorService {
-    private static Logger log = LoggerFactory.getLogger(SchemaGeneratorService.class);
+    private static EELFLogger log = EELFManager.getInstance().getLogger(SchemaGeneratorService.class);
 
     private Map<String, DataType> dataTypes;
 

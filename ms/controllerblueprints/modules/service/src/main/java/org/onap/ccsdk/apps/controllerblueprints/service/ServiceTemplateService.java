@@ -81,7 +81,7 @@ public class ServiceTemplateService {
      * @param serviceTemplate serviceTemplate
      * @return ServiceTemplate
      */
-    public ServiceTemplate enrichServiceTemplate(ServiceTemplate serviceTemplate) {
+    public ServiceTemplate enrichServiceTemplate(ServiceTemplate serviceTemplate) throws BluePrintException {
         this.bluePrintEnhancerService.enhance(serviceTemplate);
         return serviceTemplate;
     }
