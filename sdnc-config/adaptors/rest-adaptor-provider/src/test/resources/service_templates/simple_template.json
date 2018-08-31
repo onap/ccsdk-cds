@@ -1,0 +1,423 @@
+{
+	"metadata": {
+		"author": "bs2796",
+		"vendor": "Juniper",
+		"os": "XXX",
+		"service-type": "AVPN",
+		"vnf-type": "VRR",
+		"action": "Base Configuration",
+		"sub-action": "Generate Configuration",
+		"service-template-name": "VRR-baseconfiguration",
+		"service-template-version": "1.0.0"
+	},
+	"topology_template": {
+		"inputs": {
+			"service-instance-id": {
+				"required": true,
+				"type": "string"
+			},
+			"vnf-id": {
+				"required": true,
+				"type": "string"
+			},
+			"service": {
+				"required": true,
+				"type": "string"
+			},
+			"region": {
+				"required": true,
+				"type": "string"
+			},
+			"bundle-id": {
+				"required": true,
+				"type": "string"
+			},
+			"bundle-mac": {
+				"required": true,
+				"type": "string"
+			}
+		},
+		"node_templates": {
+			"base-config-template": {
+				"type": "sdnc-artifact-template",
+				"capabilities": {
+					"content": {
+						"properties": {
+							"content": "This is sample Base Configuration for ${bundle-id} for ${bundle-mac}"
+						}
+					},
+					"mapping": {
+						"properties": {
+							"assignment-mappings": [
+								{
+									"name": "bundle-id",
+									"mapping-field": "service/bundle-id",
+									"mapping-category": "MDSAL",
+									"required": true
+								},
+								{
+									"name": "bundle-mac",
+									"mapping-field": "service/bundle-mac",
+									"mapping-category": "SDN",
+									"required": true
+								}
+							]
+						}
+					}
+				}
+			},
+			"get-resource-assignment": {
+				"type": "sdnc-component-getResourceAssignment",
+				"interfaces": {
+					"org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode": {
+						"operations": {
+							"getResourceAssignment": {
+								"inputs": {
+									"pre-data": "{ \"get_attribute\" : \"get-resource-assignment.config-params\" }",
+									"prifix": "get-resource-assignment"
+								},
+								"outputs": {
+									"resource-assignment-status": "success",
+									"resource-assignment-params": "{ \"set_value\" : \"get-resource-assignment.config-params\" }"
+								}
+							}
+						}
+					}
+				},
+				"requirements": {
+					"mapping": {
+						"capability": "mapping",
+						"node": "base-config-template",
+						"relationship": "tosca.relationships.DependsOn"
+					}
+				}
+			},
+			"licence-template": {
+				"type": "sdnc-artifact-template",
+				"capabilities": {
+					"content": {
+						"properties": {
+							"content": "This is sample Licence Configuration for ${bundle-id} for ${bundle-mac}"
+						}
+					},
+					"mapping": {
+						"properties": {
+							"assignment-mappings": [
+								{
+									"name": "bundle-id",
+									"mapping-field": "service/bundle-id",
+									"mapping-category": "SDN",
+									"required": true
+								},
+								{
+									"name": "bundle-mac",
+									"mapping-field": "service/bundle-mac",
+									"mapping-category": "SDN",
+									"required": true
+								}
+							]
+						}
+					}
+				}
+			},
+			"generate-configuration": {
+				"type": "sdnc-component-generateConfig",
+				"interfaces": {
+					"org-onap-ccsdk-config-generator-merge-MergeNode": {
+						"operations": {
+							"mergeComplexJsonDataOnTemplate": {
+								"inputs": {
+									"entity-type": "vnf-type",
+									"prifix": "generate-config",
+									"request-id": "{ \"get_attribute\" : \"request-id\" }",
+									"entity-id": "{ \"get_attribute\" : \"vnf-id\" }"
+								},
+								"outputs": {
+									"generated-config": "{ \"set_value\" : \"generated-config\" }",
+									"status": "{ \"set_value\" : \"generated-config-status\" }"
+								}
+							}
+						}
+					}
+				},
+				"requirements": {
+					"content": {
+						"capability": "content",
+						"node": "base-config-template",
+						"relationship": "tosca.relationships.DependsOn"
+					}
+				}
+			},
+			"common-config-dg": {
+				"type": "sdnc-dg-commonConfig",
+				"interfaces": {
+					"CONFIG": {
+						"operations": {
+							"CommonConfiguration": {
+								
+							}
+						}
+					}
+				}
+			},
+			"resource-assignment-dg": {
+				"type": "sdnc-dg-resourceAssignment",
+				"interfaces": {
+					"CONFIG": {
+						"operations": {
+							"ResourceAssignment": {
+								
+							}
+						}
+					}
+				}
+			},
+			"generate-config-dg": {
+				"type": "sdnc-dg-generateConfig",
+				"interfaces": {
+					"CONFIG": {
+						"operations": {
+							"GenerateConfig": {
+								
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"node_types": {
+		"sdnc-component-getResourceAssignment": {
+			"version": "1.0.0",
+			"requirements": {
+				"mapping": {
+					"capability": "mapping",
+					"node": "sdnc-artifact-template",
+					"relationship": "tosca.relationships.DependsOn"
+				}
+			},
+			"interfaces": {
+				"org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode": {
+					"operations": {
+						"getResourceAssignment": {
+							"inputs": {
+								"prifix": {
+									"required": true,
+									"type": "string"
+								},
+								"pre-data": {
+									"required": false,
+									"type": "string"
+								}
+							},
+							"outputs": {
+								"resource-assignment-status": {
+									"required": true,
+									"type": "string"
+								},
+								"resource-assignment-params": {
+									"required": true,
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.Component"
+		},
+		"sdnc-artifact-template": {
+			"version": "1.0.0",
+			"capabilities": {
+				"content": {
+					"type": "tosca.capability.Content",
+					"properties": {
+						"content": {
+							"required": true,
+							"type": "string"
+						}
+					}
+				},
+				"mapping": {
+					"type": "tosca.capability.Mapping",
+					"properties": {
+						"assignment-mappings": {
+							"required": false,
+							"type": "list",
+							"entry_schema": {
+								"type": "sdnc-datatype-resourceassignment"
+							}
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.Artifact"
+		},
+		"sdnc-component-generateConfig": {
+			"version": "1.0.0",
+			"requirements": {
+				"content": {
+					"capability": "content",
+					"node": "sdnc-artifact-template",
+					"relationship": "tosca.relationships.DependsOn"
+				}
+			},
+			"interfaces": {
+				"org-onap-ccsdk-config-generator-merge-MergeNode": {
+					"operations": {
+						"mergeComplexJsonDataOnTemplate": {
+							"inputs": {
+								"entity-type": {
+									"required": false,
+									"type": "string"
+								},
+								"prifix": {
+									"required": true,
+									"type": "string"
+								},
+								"request-id": {
+									"required": true,
+									"type": "string"
+								},
+								"entity-id": {
+									"required": true,
+									"type": "string"
+								}
+							},
+							"outputs": {
+								"generated-config": {
+									"required": true,
+									"type": "string"
+								},
+								"status": {
+									"required": true,
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.Component"
+		},
+		"sdnc-dg-commonConfig": {
+			"version": "1.0.0",
+			"properties": {
+				"mode": {
+					"required": false,
+					"type": "string",
+					"default": "sync"
+				},
+				"version": {
+					"required": false,
+					"type": "string",
+					"default": "LATEST"
+				},
+				"definition": {
+					"required": false,
+					"type": "string"
+				}
+			},
+			"interfaces": {
+				"CONFIG": {
+					"operations": {
+						"CommonConfiguration": {
+							
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.DG"
+		},
+		"sdnc-dg-generateConfig": {
+			"version": "1.0.0",
+			"properties": {
+				"mode": {
+					"required": false,
+					"type": "string",
+					"default": "sync"
+				},
+				"version": {
+					"required": false,
+					"type": "string",
+					"default": "LATEST"
+				},
+				"definition": {
+					"required": false,
+					"type": "string"
+				}
+			},
+			"interfaces": {
+				"CONFIG": {
+					"operations": {
+						"GenerateConfig": {
+							
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.DG"
+		},
+		"sdnc-dg-resourceAssignment": {
+			"version": "1.0.0",
+			"properties": {
+				"mode": {
+					"required": false,
+					"type": "string",
+					"default": "sync"
+				},
+				"version": {
+					"required": false,
+					"type": "string",
+					"default": "LATEST"
+				},
+				"definition": {
+					"required": false,
+					"type": "string"
+				}
+			},
+			"interfaces": {
+				"CONFIG": {
+					"operations": {
+						"ResourceAssignment": {
+							
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.DG"
+		}
+	},
+	"data_types": {
+		"sdnc-datatype-resourceassignment": {
+			"version": "1.0.0",
+			"properties": {
+				"name": {
+					"required": true,
+					"type": "string"
+				},
+				"mapping-field": {
+					"required": true,
+					"type": "string"
+				},
+				"mapping-category": {
+					"required": true,
+					"type": "string"
+				},
+				"mapping-source": {
+					"required": true,
+					"type": "string"
+				},
+				"mapping-content": {
+					"required": false,
+					"type": "string"
+				},
+				"required": {
+					"required": false,
+					"type": "boolean"
+				}
+			},
+			"derived_from": "tosca.datatypes.Root"
+		}
+	}
+}

@@ -1,0 +1,699 @@
+{
+	"version": "1.0.0",
+	"metadata": {
+		"author": "bs2796",
+		"vendor": "Juniper",
+		"os": "XXX",
+		"service-type": "AVPN",
+		"vnf-type": "VRR",
+		"action": "Base Configuration",
+		"sub-action": "Generate Configuration",
+		"service-template-name": "VRR-baseconfiguration",
+		"service-template-version": "1.0.0"
+	},
+	"topology_template": {
+		"inputs": {
+			"service-instance-id": {
+				"required": true,
+				"type": "string"
+			},
+			"vnf-id": {
+				"required": true,
+				"type": "string"
+			},
+			"service": {
+				"required": true,
+				"type": "string"
+			},
+			"region": {
+				"required": true,
+				"type": "string"
+			},
+			"bundle-id": {
+				"required": true,
+				"type": "string"
+			},
+			"bundle-mac": {
+				"required": true,
+				"type": "string"
+			}
+		},
+		"node_templates": {
+			"base-config-template": {
+				"type": "sdnc-artifact-template",
+				"capabilities": {
+					"content": {
+						"properties": {
+							"content": "This is sample Base Configuration for ${bundle-id} for ${bundle-mac}"
+						}
+					},
+					"mapping": {
+						"properties": {
+							"assignment-mappings": [
+								{
+									"name": "bundle-id",
+									"mapping-field": "service/bundle-id",
+									"mapping-category": "MDSAL",
+									"required": true
+								},
+								{
+									"name": "bundle-mac",
+									"mapping-field": "service/bundle-mac",
+									"mapping-category": "SDN",
+									"required": true
+								}
+							]
+						}
+					}
+				}
+			},
+			"licence-template": {
+				"type": "sdnc-artifact-template",
+				"capabilities": {
+					"content": {
+						"properties": {
+							"content": "This is sample Licence Configuration for ${bundle-id} for ${bundle-mac}"
+						}
+					},
+					"mapping": {
+						"properties": {
+							"assignment-mappings": [
+								{
+									"name": "bundle-id",
+									"mapping-field": "service/bundle-id",
+									"mapping-category": "SDN",
+									"required": true
+								},
+								{
+									"name": "bundle-mac",
+									"mapping-field": "service/bundle-mac",
+									"mapping-category": "SDN",
+									"required": true
+								}
+							]
+						}
+					}
+				}
+			},
+			"vdbe-device": {
+				"type": "sdnc-vnf-netconfDevice",
+				"capabilities": {
+					"netconf": {
+						"properties": {
+							"password": "{ \"get_input\" : \"host-password\" }",
+							"user-id": "{ \"get_input\" : \"host-user-id\" }",
+							"host-ip-address": "{ \"get_input\" : \"host-ip-address\" }",
+							"port-number": "{ \"get_input\" : \"host-port\" }",
+							"message-time-out": 3000,
+							"connection-time-out": 3000
+						}
+					}
+				}
+			},
+			"common-config-dg": {
+				"type": "sdnc-dg-commonConfig",
+				"interfaces": {
+					"CONFIG": {
+						"operations": {
+							"CommonConfiguration": {
+								
+							}
+						}
+					}
+				}
+			},
+			"resource-assignment-dg": {
+				"type": "sdnc-dg-resourceAssignment",
+				"interfaces": {
+					"CONFIG": {
+						"operations": {
+							"ResourceAssignment": {
+								
+							}
+						}
+					}
+				}
+			},
+			"generate-config-dg": {
+				"type": "sdnc-dg-generateConfig",
+				"interfaces": {
+					"CONFIG": {
+						"operations": {
+							"GenerateConfig": {
+								
+							}
+						}
+					}
+				}
+			},
+			"get-resource-assignment": {
+				"type": "sdnc-component-getResourceAssignment",
+				"interfaces": {
+					"org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode": {
+						"operations": {
+							"getResourceAssignment": {
+								"inputs": {
+									"pre-data": "{ \"get_attribute\" : \"get-resource-assignment.config-params\" }",
+									"prifix": "get-resource-assignment"
+								},
+								"outputs": {
+									"resource-assignment-status": "success",
+									"resource-assignment-params": "{ \"set_value\" : \"get-resource-assignment.config-params\" }"
+								}
+							}
+						}
+					}
+				},
+				"requirements": {
+					"mapping": {
+						"capability": "mapping",
+						"node": "base-config-template",
+						"relationship": "tosca.relationships.DependsOn"
+					}
+				}
+			},
+			"generate-configuration": {
+				"type": "sdnc-component-generateConfig",
+				"interfaces": {
+					"org-onap-ccsdk-config-generator-merge-MergeNode": {
+						"operations": {
+							"mergeComplexJsonDataOnTemplate": {
+								"inputs": {
+									"entity-type": "vnf-type",
+									"prifix": "generate-config",
+									"request-id": "{ \"get_attribute\" : \"request-id\" }",
+									"entity-id": "{ \"get_attribute\" : \"vnf-id\" }"
+								},
+								"outputs": {
+									"generated-config": "{ \"set_value\" : \"generated-config\" }",
+									"status": "{ \"set_value\" : \"generated-config-status\" }"
+								}
+							}
+						}
+					}
+				},
+				"requirements": {
+					"content": {
+						"capability": "content",
+						"node": "base-config-template",
+						"relationship": "tosca.relationships.DependsOn"
+					}
+				}
+			},
+			"get-running-config": {
+				"type": "sdnc-component-netconf-get",
+				"interfaces": {
+					"org-onap-ccsdk-config-adoptor-netconf-NetconfService": {
+						"operations": {
+							"getConfig": {
+								"inputs": {
+									"prifix": "get-running-config",
+									"message": "{ \"get_input\" : \"artifacts.get-running-config.content\" }"
+								},
+								"outputs": {
+									"config-message": "{ \"set_value\" : \"running-config\" }"
+								}
+							}
+						}
+					}
+				},
+				"requirements": {
+					"netconf_connection": {
+						"capability": "netconf",
+						"node": "vdbe-device",
+						"relationship": "tosca.relationships.ConnectsTo"
+					}
+				}
+			}
+		}
+	},
+	"node_types": {
+		"sdnc-vnf-netconfDevice": {
+			"version": "1.0.0",
+			"capabilities": {
+				"netconf": {
+					"type": "tosca.capability.Netconf",
+					"properties": {
+						"password": {
+							"required": false,
+							"type": "string"
+						},
+						"user-id": {
+							"required": true,
+							"type": "string"
+						},
+						"host-ip-address": {
+							"required": true,
+							"type": "string"
+						},
+						"port-number": {
+							"required": true,
+							"type": "integer",
+							"default": 830
+						},
+						"message-time-out": {
+							"required": false,
+							"type": "integer",
+							"default": 3000
+						},
+						"connection-time-out": {
+							"required": false,
+							"type": "integer",
+							"default": 3000
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.Vnf"
+		},
+		"sdnc-vnf-netconfDevice-ssh": {
+			"version": "1.0.0",
+			"capabilities": {
+				"netconf": {
+					"type": "tosca.capability.Netconf",
+					"properties": {
+						"password": {
+							"required": false,
+							"type": "string"
+						},
+						"user-id": {
+							"required": true,
+							"type": "string"
+						},
+						"host-ip-address": {
+							"required": true,
+							"type": "string"
+						},
+						"port-number": {
+							"required": true,
+							"type": "integer",
+							"default": 830
+						},
+						"message-time-out": {
+							"required": false,
+							"type": "integer",
+							"default": 3000
+						},
+						"connection-time-out": {
+							"required": false,
+							"type": "integer",
+							"default": 3000
+						}
+					}
+				},
+				"ssh": {
+					"type": "tosca.capability.Ssh",
+					"properties": {
+						"password": {
+							"required": false,
+							"type": "string"
+						},
+						"user-id": {
+							"required": true,
+							"type": "string"
+						},
+						"host-ip-address": {
+							"required": true,
+							"type": "string"
+						},
+						"port-number": {
+							"required": true,
+							"type": "integer",
+							"default": 22
+						},
+						"message-time-out": {
+							"required": false,
+							"type": "integer",
+							"default": 3000
+						},
+						"connection-time-out": {
+							"required": false,
+							"type": "integer",
+							"default": 3000
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.Vnf"
+		},
+		"sdnc-dg-commonConfig": {
+			"version": "1.0.0",
+			"properties": {
+				"mode": {
+					"required": false,
+					"type": "string",
+					"default": "sync"
+				},
+				"version": {
+					"required": false,
+					"type": "string",
+					"default": "LATEST"
+				},
+				"definition": {
+					"required": false,
+					"type": "string"
+				}
+			},
+			"interfaces": {
+				"CONFIG": {
+					"operations": {
+						"CommonConfiguration": {
+							
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.DG"
+		},
+		"sdnc-dg-resourceAssignment": {
+			"version": "1.0.0",
+			"properties": {
+				"mode": {
+					"required": false,
+					"type": "string",
+					"default": "sync"
+				},
+				"version": {
+					"required": false,
+					"type": "string",
+					"default": "LATEST"
+				},
+				"definition": {
+					"required": false,
+					"type": "string"
+				}
+			},
+			"interfaces": {
+				"CONFIG": {
+					"operations": {
+						"ResourceAssignment": {
+							
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.DG"
+		},
+		"sdnc-dg-generateConfig": {
+			"version": "1.0.0",
+			"properties": {
+				"mode": {
+					"required": false,
+					"type": "string",
+					"default": "sync"
+				},
+				"version": {
+					"required": false,
+					"type": "string",
+					"default": "LATEST"
+				},
+				"definition": {
+					"required": false,
+					"type": "string"
+				}
+			},
+			"interfaces": {
+				"CONFIG": {
+					"operations": {
+						"GenerateConfig": {
+							
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.DG"
+		},
+		"sdnc-dg-downloadNetconf": {
+			"version": "1.0.0",
+			"properties": {
+				"mode": {
+					"required": false,
+					"type": "string",
+					"default": "sync"
+				},
+				"version": {
+					"required": false,
+					"type": "string",
+					"default": "LATEST"
+				},
+				"definition": {
+					"required": false,
+					"type": "string"
+				}
+			},
+			"interfaces": {
+				"CONFIG": {
+					"operations": {
+						"DownloadConfig": {
+							
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.DG"
+		},
+		"sdnc-artifact-template": {
+			"version": "1.0.0",
+			"capabilities": {
+				"content": {
+					"type": "tosca.capability.Content",
+					"properties": {
+						"content": {
+							"required": true,
+							"type": "string"
+						}
+					}
+				},
+				"mapping": {
+					"type": "tosca.capability.Mapping",
+					"properties": {
+						"assignment-mappings": {
+							"required": false,
+							"type": "list",
+							"entry_schema": {
+								"type": "sdnc-datatype-resourceassignment"
+							}
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.Artifact"
+		},
+		"sdnc-component-getResourceAssignment": {
+			"version": "1.0.0",
+			"requirements": {
+				"mapping": {
+					"capability": "mapping",
+					"node": "sdnc-artifact-template",
+					"relationship": "tosca.relationships.DependsOn"
+				}
+			},
+			"interfaces": {
+				"org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode": {
+					"operations": {
+						"getResourceAssignment": {
+							"inputs": {
+								"prifix": {
+									"required": true,
+									"type": "string"
+								},
+								"pre-data": {
+									"required": false,
+									"type": "string"
+								}
+							},
+							"outputs": {
+								"resource-assignment-status": {
+									"required": true,
+									"type": "string"
+								},
+								"resource-assignment-params": {
+									"required": true,
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.Component"
+		},
+		"sdnc-component-generateConfig": {
+			"version": "1.0.0",
+			"requirements": {
+				"content": {
+					"capability": "content",
+					"node": "sdnc-artifact-template",
+					"relationship": "tosca.relationships.DependsOn"
+				}
+			},
+			"interfaces": {
+				"org-onap-ccsdk-config-generator-merge-MergeNode": {
+					"operations": {
+						"mergeComplexJsonDataOnTemplate": {
+							"inputs": {
+								"entity-type": {
+									"required": false,
+									"type": "string"
+								},
+								"prifix": {
+									"required": true,
+									"type": "string"
+								},
+								"request-id": {
+									"required": true,
+									"type": "string"
+								},
+								"entity-id": {
+									"required": true,
+									"type": "string"
+								}
+							},
+							"outputs": {
+								"generated-config": {
+									"required": true,
+									"type": "string"
+								},
+								"status": {
+									"required": true,
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.Component"
+		},
+		"sdnc-component-netconf-get": {
+			"version": "1.0.0",
+			"requirements": {
+				"netconf_connection": {
+					"capability": "netconf",
+					"node": "sdnc-vnf-netconfDevice",
+					"relationship": "tosca.relationships.ConnectsTo"
+				}
+			},
+			"interfaces": {
+				"org-onap-ccsdk-config-adoptor-netconf-NetconfService": {
+					"operations": {
+						"getConfig": {
+							"inputs": {
+								"prifix": {
+									"required": true,
+									"type": "string"
+								},
+								"message": {
+									"required": true,
+									"type": "string"
+								}
+							},
+							"outputs": {
+								"config-message": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.Component"
+		},
+		"sdnc-component-netconf-edit": {
+			"version": "1.0.0",
+			"requirements": {
+				"netconf_connection": {
+					"capability": "netconf",
+					"node": "sdnc-vnf-netconfDevice",
+					"relationship": "tosca.relationships.ConnectsTo"
+				}
+			},
+			"interfaces": {
+				"org-onap-ccsdk-config-adoptor-netconf-NetconfService": {
+					"operations": {
+						"editConfig": {
+							"inputs": {
+								"doLock": {
+									"required": false,
+									"type": "boolean"
+								},
+								"prifix": {
+									"required": true,
+									"type": "string"
+								},
+								"message": {
+									"required": true,
+									"type": "string"
+								},
+								"doCommit": {
+									"required": false,
+									"type": "boolean"
+								}
+							},
+							"outputs": {
+								"config-message": {
+									"type": "string"
+								},
+								"status": {
+									"required": true,
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.Component"
+		}
+	},
+	"data_types": {
+		"sdnc-datatype-resourceassignment": {
+			"version": "1.0.0",
+			"properties": {
+				"name": {
+					"required": true,
+					"type": "string"
+				},
+				"mapping-field": {
+					"required": true,
+					"type": "string"
+				},
+				"mapping-category": {
+					"required": true,
+					"type": "string"
+				},
+				"mapping-source": {
+					"required": true,
+					"type": "string"
+				},
+				"mapping-content": {
+					"required": false,
+					"type": "string"
+				},
+				"required": {
+					"required": false,
+					"type": "boolean"
+				}
+			},
+			"derived_from": "tosca.datatypes.Root"
+		},
+		"sdnc-datatype-input": {
+			"version": "1.0.0",
+			"properties": {
+				"name": {
+					"required": true,
+					"type": "string"
+				},
+				"value": {
+					"required": true,
+					"type": "string"
+				},
+				"required": {
+					"required": false,
+					"type": "boolean"
+				}
+			},
+			"derived_from": "tosca.datatypes.Root"
+		}
+	}
+}
