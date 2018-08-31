@@ -1,0 +1,28 @@
+# Target dirs in all projects
+**/target/*
+
+# Target dirs in all projects
+**/target-ide/*
+
+# Added for Intellij IDEA IDE
+**/.idea/*
+
+# Generated models and features
+**/bin/*
+
+# MANIFEST.MF is updated on every clean install
+**/src/main/resources/META-INF/
+**/src/main/yang-gen-sal
+**/src/main/yang-gen-config
+
+
+**/pom.xml.versionsBackup
+**/.flattened-pom.xml
+**/.pydevproject
+**/.settings
+**/.classpath
+**/.project
+
+**/*.class
+**/*.prefs
+**/*.iml
