@@ -1,0 +1,24 @@
+{
+	"location": {
+		"name": "location",
+		"property": {
+			"type": "dt-location"
+		},
+		"sources": {
+			"default": {
+				"type": "source-input"
+			}
+		}
+	},
+	"profile_name": {
+		"name": "profile_name",
+		"property": {
+			"type": "string"
+		},
+		"sources": {
+			"default": {
+				"type": "source-input"
+			}
+		}
+	}
+}

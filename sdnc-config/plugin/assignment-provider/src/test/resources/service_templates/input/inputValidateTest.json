@@ -1,0 +1,18 @@
+{
+	"api-ver": "2.00",
+	"originator-id": "MSO",
+	"request-id": "123456",
+	"service-instance-id": "ibcx0001vm001",
+	"service-type": "AVPN",
+	"vnf-type": "vUSP - vDBE-IPX HUB",
+	"vnf-id": "",
+	"service-template-name": "VRR-baseconfiguration",
+	"service-template-version": "1.0.0",
+	"action-name": "resource-assignment-action",
+	"group-name": "sample group name",
+	"bundle-id": "sample bundle id",
+	"bundle-mac": [
+		"Sample bundle mac",
+		"Sample bundle mac"
+	]
+}

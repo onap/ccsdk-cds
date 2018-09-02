@@ -1,0 +1,12 @@
+[
+	{
+		"name": "v4-ip-prefix",
+		"input-param": true,
+		"property": {
+			"type": "string"
+		},
+		"dictionary-name": "v4-ip-prefix",
+		"dictionary-source": "mdsal",
+		"dependencies": []
+	}
+]

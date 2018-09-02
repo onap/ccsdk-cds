@@ -1,0 +1,15 @@
+[
+	{
+		"name": "locations",
+		"input-param": true,
+		"property": {
+			"type": "list",
+			"entry_schema": {
+				"type": "dt-location"
+			}
+		},
+		"dictionary-name": "locations",
+		"dictionary-source": "db",
+		"dependencies": []
+	}
+]

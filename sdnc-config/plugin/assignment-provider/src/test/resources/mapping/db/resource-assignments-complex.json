@@ -1,0 +1,12 @@
+[
+	{
+		"name": "location",
+		"input-param": true,
+		"property": {
+			"type": "dt-location"
+		},
+		"dictionary-name": "location",
+		"dictionary-source": "db",
+		"dependencies": []
+	}
+]

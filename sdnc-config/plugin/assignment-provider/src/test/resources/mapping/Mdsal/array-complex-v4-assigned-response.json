@@ -1,0 +1,13 @@
+{
+	"v4-assigned-ip-list": [
+		{
+			"v4-ip-type": "NMLAN",
+			"ipv4-gateway-prefix": "10.66.1.129",
+			"v4-ip-prefix": "10.66.1.152",
+			"v4-ip-prefix-length": 32,
+			"ip-count": 1,
+			"v4-ip-source": "EIPAM",
+			"client-key": "ADIG_19_vnf_name061rej01"
+		}
+	]
+}

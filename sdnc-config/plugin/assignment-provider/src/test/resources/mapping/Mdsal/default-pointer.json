@@ -1,0 +1,166 @@
+{
+	"vnf-topology-information": {
+		"vnf-assignments": {
+			"availability-zones": [
+				{
+					"availability-zone": "frkde-esx-az01"
+				}
+			],
+			"vnf-vms": [
+				{
+					"vm-type": "vre",
+					"vm-count": 1,
+					"vm-networks": [
+						{
+							"network-role": "ADIGOam.OAM",
+							"network-name": "ADIGOAM.OAM",
+							"v4-assigned-ip-list": [
+								{
+									"v4-ip-type": "NMLAN",
+									"ipv4-gateway-prefix": "10.66.1.129",
+									"v4-ip-prefix": "10.66.1.152",
+									"v4-ip-prefix-length": 32,
+									"ip-count": 1,
+									"v4-ip-source": "EIPAM",
+									"client-key": "ADIG_19_vnf_name061rej01"
+								}
+							],
+							"network-id": "VPEADIG1d77c-1086-41ec-b7f3-94bb30936807"
+						},
+						{
+							"network-role": "Internal-Network",
+							"network-name": "VMX-INTTERNAL056",
+							"v4-assigned-ip-list": [
+								{
+									"v4-ip-type": "INTERNAL",
+									"v4-ip-prefix": "128.0.0.1",
+									"ipv4-prefix-block": "128.0.0.0",
+									"v4-ip-prefix-length": 24,
+									"v4-ip-source": "OTHER"
+								}
+							],
+							"network-forwarding": "l2",
+							"network-id": "VMX-INT1"
+						}
+					],
+					"vm-names": [
+						{
+							"vm-name": "ADIG_19_vnf_name061rej",
+							"vm-uuid": "50d2032d-fe15-4e82-94f3-8b73c566a345"
+						}
+					]
+				},
+				{
+					"vm-type": "vpfe",
+					"vm-count": 1,
+					"vm-networks": [
+						{
+							"network-role": "ADIG_SRIOV_3",
+							"network-name": "ADIG_SRIOV_3",
+							"multicast-allow": true,
+							"broadcast-allow": true,
+							"network-id": "VPEADIG1d77c-1086-41ec-b7f3-94bb30936810",
+							"vlan-filter": "[4013,4014]",
+							"network-macs": [
+								{
+									"mac-address": "dc:38:e1:69:bf:5f"
+								}
+							],
+							"vlan-strip": false,
+							"unicast-allow": true
+						},
+						{
+							"network-role": "ADIG_SRIOV_4",
+							"network-name": "ADIG_SRIOV_4",
+							"multicast-allow": true,
+							"broadcast-allow": true,
+							"network-id": "VPEADIG1d77c-1086-41ec-b7f3-94bb30936811",
+							"vlan-filter": "[4013,4014]",
+							"network-macs": [
+								{
+									"mac-address": "dc:38:e1:69:bf:5f"
+								}
+							],
+							"vlan-strip": false,
+							"unicast-allow": true
+						},
+						{
+							"network-role": "ADIG_SRIOV_1",
+							"network-name": "ADIG_SRIOV_1",
+							"multicast-allow": true,
+							"broadcast-allow": true,
+							"network-id": "VPEADIG1d77c-1086-41ec-b7f3-94bb30936808",
+							"vlan-filter": "[4013,4014]",
+							"network-macs": [
+								{
+									"mac-address": "dc:38:e1:69:bf:5f"
+								}
+							],
+							"vlan-strip": false,
+							"unicast-allow": true
+						},
+						{
+							"network-role": "ADIG_SRIOV_2",
+							"network-name": "ADIG_SRIOV_2",
+							"multicast-allow": true,
+							"broadcast-allow": true,
+							"network-id": "VPEADIG1d77c-1086-41ec-b7f3-94bb30936809",
+							"vlan-filter": "[4013,4014]",
+							"network-macs": [
+								{
+									"mac-address": "dc:38:e1:69:bf:5f"
+								}
+							],
+							"vlan-strip": false,
+							"unicast-allow": true
+						},
+						{
+							"network-role": "Internal-Network",
+							"network-name": "VMX-INTTERNAL056",
+							"v4-assigned-ip-list": [
+								{
+									"v4-ip-type": "INTERNAL",
+									"v4-ip-prefix": "128.0.0.16",
+									"ipv4-prefix-block": "128.0.0.0",
+									"v4-ip-prefix-length": 24,
+									"v4-ip-source": "OTHER"
+								}
+							],
+							"network-forwarding": "l2",
+							"network-id": "VMX-INT1"
+						}
+					],
+					"vm-names": [
+						{
+							"vm-name": "ADIG_19_vnf_name056fej",
+							"vm-uuid": "d2ce6023-a3ab-412e-bc63-360307aac165"
+						}
+					]
+				}
+			],
+			"vnf-status": "Deactivated",
+			"vnf-networks": [
+				{
+					"network-role": "ADIGOam.OAM",
+					"network-id": "VPEADIG1d77c-1086-41ec-b7f3-94bb30936807"
+				},
+				{
+					"network-role": "ADIG_SRIOV_3",
+					"network-id": "VPEADIG1d77c-1086-41ec-b7f3-94bb30936810"
+				},
+				{
+					"network-role": "ADIG_SRIOV_2",
+					"network-id": "VPEADIG1d77c-1086-41ec-b7f3-94bb30936809"
+				},
+				{
+					"network-role": "ADIG_SRIOV_4",
+					"network-id": "VPEADIG1d77c-1086-41ec-b7f3-94bb30936811"
+				},
+				{
+					"network-role": "ADIG_SRIOV_1",
+					"network-id": "VPEADIG1d77c-1086-41ec-b7f3-94bb30936808"
+				}
+			]
+		}
+	}
+}

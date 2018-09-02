@@ -1,0 +1,12 @@
+[
+	{
+		"name": "country",
+		"input-param": true,
+		"property": {
+			"type": "string"
+		},
+		"dictionary-name": "country",
+		"dictionary-source": "mdsal",
+		"dependencies": []
+	}
+]

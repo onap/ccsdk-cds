@@ -1,0 +1,172 @@
+[
+	{
+		"name": "adiod-unicast-route-reflectors",
+		"resourcePath": "vnf/protocol/adiod-unicast-route-reflectors",
+		"resourceType": "ATT",
+		"dataType": "list",
+		"entrySchema": "dt-adiod-unicast-route-reflectors",
+		"definition": "{\r\n  \"tags\" : \"ADIOD3\",\r\n  \"name\" : \"adiod-unicast-route-reflectors\",\r\n  \"description\" : \"dd\",\r\n  \"updated-by\" : \"ks220y@att.com\",\r\n  \"resource-type\" : \"ATT\",\r\n  \"resource-path\" : \"vnf/protocol/adiod-unicast-route-reflectors\",\r\n  \"data-type\" : \"list\",\r\n  \"entry-schema\" : \"dt-adiod-unicast-route-reflectors\",\r\n  \"source\" : {\r\n    \"input\" : { },\r\n    \"network-resource-discovery\" : {\r\n      \"input-key-mapping\" : {\r\n        \"complex-code-char8\" : \"complex-code-char8\"\r\n      },\r\n      \"output-key-mapping\" : {\r\n        \"adiod-unicast-route-reflectors\" : \"adiod-unicast-route-reflectors\"\r\n      }\r\n    }\r\n  },\r\n  \"candidate-dependency\" : {\r\n    \"network-resource-discovery\" : {\r\n      \"names\" : [ \"complex-code-char8\" ]\r\n    }\r\n  }\r\n}",
+		"description": "dd",
+		"tags": "ADIOD3",
+		"creationDate": "2017-11-16T17:31:38.000+0000",
+		"updatedBy": "ks220y@att.com"
+	},
+	{
+		"name": "adiod-vpnv4-route-reflectors",
+		"resourcePath": "vnf/servers/adiod-vpnv4-route-reflectors",
+		"resourceType": "ATT",
+		"dataType": "list",
+		"entrySchema": "dt-adiod-vpnv4-route-reflectors",
+		"definition": "{\r\n  \"tags\" : \"ADIOD3\",\r\n  \"name\" : \"adiod-vpnv4-route-reflectors\",\r\n  \"description\" : \"To be provided\",\r\n  \"updated-by\" : \"ks220y@att.com\",\r\n  \"resource-type\" : \"ATT\",\r\n  \"resource-path\" : \"vnf/servers/adiod-vpnv4-route-reflectors\",\r\n  \"data-type\" : \"list\",\r\n  \"entry-schema\" : \"dt-adiod-vpnv4-route-reflectors\",\r\n  \"source\" : {\r\n    \"input\" : { }\r\n  }\r\n}",
+		"description": "To be provided",
+		"tags": "ADIOD3",
+		"creationDate": "2017-11-16T17:31:38.000+0000",
+		"updatedBy": "ks220y@att.com"
+	},
+	{
+		"name": "asn-region",
+		"resourcePath": "vnf/protocols/asn-region",
+		"resourceType": "ATT",
+		"dataType": "string",
+		"definition": "{\r\n  \"tags\" : \"ADIOD3\",\r\n  \"name\" : \"asn-region\",\r\n  \"description\" : \"To be provided\",\r\n  \"updated-by\" : \"ks220y@att.com\",\r\n  \"resource-type\" : \"ATT\",\r\n  \"resource-path\" : \"vnf/protocols/asn-region\",\r\n  \"data-type\" : \"string\",\r\n  \"source\" : {\r\n    \"input\" : { },\r\n    \"network-resource-discovery\" : {\r\n      \"input-key-mapping\" : {\r\n        \"hostname\" : \"hostname\"\r\n      },\r\n      \"output-key-mapping\" : {\r\n        \"asn-region\" : \"asn-region\"\r\n      }\r\n    }\r\n  },\r\n  \"candidate-dependency\" : {\r\n    \"network-resource-discovery\" : {\r\n      \"names\" : [ \"hostname\" ]\r\n    }\r\n  }\r\n}",
+		"description": "To be provided",
+		"tags": "ADIOD3",
+		"creationDate": "2017-11-17T11:31:29.000+0000",
+		"updatedBy": "ks220y@att.com"
+	},
+	{
+		"name": "bundle-id",
+		"resourcePath": "vnf/interface/bundle-id",
+		"resourceType": "ATT",
+		"dataType": "string",
+		"definition": "{\r\n  \"tags\" : \"ADIOD3\",\r\n  \"name\" : \"bundle-id\",\r\n  \"description\" : \"To be provided\",\r\n  \"updated-by\" : \"ks220y@att.com\",\r\n  \"resource-type\" : \"ATT\",\r\n  \"resource-path\" : \"vnf/interface/bundle-id\",\r\n  \"data-type\" : \"string\",\r\n  \"source\" : {\r\n    \"input\" : { },\r\n    \"network-resource-discovery\" : {\r\n      \"input-key-mapping\" : {\r\n        \"hostname\" : \"hostname\"\r\n      },\r\n      \"output-key-mapping\" : {\r\n        \"bundle-id\" : \"bundle-id\"\r\n      }\r\n    }\r\n  },\r\n  \"candidate-dependency\" : {\r\n    \"network-resource-discovery\" : {\r\n      \"names\" : [ \"hostname\" ]\r\n    }\r\n  }\r\n}",
+		"description": "To be provided",
+		"tags": "ADIOD3",
+		"creationDate": "2017-11-16T17:31:39.000+0000",
+		"updatedBy": "ks220y@att.com"
+	},
+	{
+		"name": "lo0-local-ipv4-address",
+		"resourcePath": "vnf/interface/lo0-local-ipv4",
+		"resourceType": "ATT",
+		"dataType": "ipv4-address",
+		"definition": "{\r\n  \"tags\" : \"ADIOD3\",\r\n  \"name\" : \"lo0-local-ipv4-address\",\r\n  \"description\" : \"To be provided\",\r\n  \"updated-by\" : \"ks220y@att.com\",\r\n  \"resource-type\" : \"ATT\",\r\n  \"resource-path\" : \"vnf/interface/lo0-local-ipv4\",\r\n  \"data-type\" : \"string\",\r\n  \"source\" : {\r\n    \"input\" : { },\r\n    \"network-resource-discovery\" : {\r\n      \"input-key-mapping\" : {\r\n        \"hostname\" : \"hostname\"\r\n      },\r\n      \"output-key-mapping\" : {\r\n        \"lo0-local-ipv4\" : \"lo0-local-ipv4\"\r\n      }\r\n    }\r\n  },\r\n  \"candidate-dependency\" : {\r\n    \"network-resource-discovery\" : {\r\n      \"names\" : [ \"hostname\" ]\r\n    }\r\n  }\r\n}",
+		"description": "To be provided",
+		"tags": "ADIOD3",
+		"creationDate": "2017-11-16T17:31:40.000+0000",
+		"updatedBy": "ks220y@att.com"
+	},
+	{
+		"name": "lo10-local-ipv4-address",
+		"resourcePath": "vnf/interface/lo10-local-ipv4",
+		"resourceType": "ATT",
+		"dataType": "ipv4-address",
+		"definition": "{\r\n  \"tags\" : \"ADIOD3\",\r\n  \"name\" : \"lo10-local-ipv4-address\",\r\n  \"description\" : \"To be provided\",\r\n  \"updated-by\" : \"ks220y@att.com\",\r\n  \"resource-type\" : \"ATT\",\r\n  \"resource-path\" : \"vnf/interface/lo10-local-ipv4\",\r\n  \"data-type\" : \"string\",\r\n  \"source\" : {\r\n    \"input\" : { },\r\n    \"network-resource-discovery\" : {\r\n      \"input-key-mapping\" : {\r\n        \"hostname\" : \"hostname\"\r\n      },\r\n      \"output-key-mapping\" : {\r\n        \"lo10-local-ipv4\" : \"lo10-local-ipv4\"\r\n      }\r\n    }\r\n  },\r\n  \"candidate-dependency\" : {\r\n    \"network-resource-discovery\" : {\r\n      \"names\" : [ \"hostname\" ]\r\n    }\r\n  }\r\n}",
+		"description": "To be provided",
+		"tags": "ADIOD3",
+		"creationDate": "2017-11-16T17:31:41.000+0000",
+		"updatedBy": "ks220y@att.com"
+	},
+	{
+		"name": "oam-remote-ipv4-address",
+		"resourcePath": "vnf/oam-remote-ipv4-address",
+		"resourceType": "ATT",
+		"dataType": "string",
+		"definition": "{\r\n  \"tags\" : \"ADIOD3\",\r\n  \"name\" : \"oam-remote-ipv4-address\",\r\n  \"description\" : \"To be provided\",\r\n  \"updated-by\" : \"ks220y@att.com\",\r\n  \"resource-type\" : \"ATT\",\r\n  \"resource-path\" : \"vnf/oam-remote-ipv4-address\",\r\n  \"data-type\" : \"string\",\r\n  \"source\" : {\r\n    \"input\" : {\r\n      \"key\" : \"oam-remote-ipv4-address\"\r\n    },\r\n    \"mdsal\" : {\r\n      \"base\" : \"sdnc-gc\",\r\n      \"type\" : \"JSON\",\r\n      \"url-path\" : \"/restconf/config/L3VNF-API\",\r\n      \"path\" : \"/${services/service-list/$service-instance-id/service-data/vnf-topology-information/vnf-assignments/vnf-vms/$oam-ipv4-ip-type/vm-networks/$oam-network-role/v4-assigned-ip-list/$oam-vm-type\",\r\n      \"input-key-mapping\" : {\r\n        \"service-instance-id\" : \"service-instance-id\",\r\n        \"oam-network-role\" : \"oam-network-role\",\r\n        \"oam-ipv4-ip-type\" : \"oam-ipv4-ip-type\",\r\n        \"oam-vm-type\" : \"oam-vm-type\"\r\n      },\r\n      \"output-key-mapping\" : {\r\n        \"oam-remote-ipv4-address\" : \"ipv4-gateway-prefix\"\r\n      }\r\n    }\r\n  },\r\n  \"candidate-dependency\" : {\r\n    \"mdsal\" : {\r\n      \"names\" : [ \"service-instance-id\", \"oam-network-role\", \"oam-v4-ip-type \", \"oam-vm-type\" ]\r\n    }\r\n  }\r\n}",
+		"description": "To be provided",
+		"tags": "ADIOD3",
+		"creationDate": "2017-11-16T10:52:24.000+0000",
+		"updatedBy": "ks220y@att.com"
+	},
+	{
+		"name": "ospf-area",
+		"resourcePath": "/ospf-area",
+		"resourceType": "ATT",
+		"dataType": "string",
+		"definition": "{\r\n  \"tags\" : \"ADIOD3\",\r\n  \"name\" : \"ospf-area\",\r\n  \"description\" : \"ospf-area\",\r\n  \"updated-by\" : \"ks220y@att.com\",\r\n  \"resource-type\" : \"ATT\",\r\n  \"resource-path\" : \"/ospf-area\",\r\n  \"data-type\" : \"string\",\r\n  \"source\" : {\r\n    \"input\" : {\r\n      \"key\" : \"ospf-area\"\r\n    },\r\n    \"network-resource-discovery\" : {\r\n      \"input-key-mapping\" : {\r\n        \"hostname\" : \"mainResource\"\r\n      },\r\n      \"output-key-mapping\" : {\r\n        \"ospf-area\" : \"ospf-area\"\r\n      }\r\n    }\r\n  }\r\n}",
+		"description": "ospf-area",
+		"tags": "ADIOD3",
+		"creationDate": "2017-11-16T10:52:24.000+0000",
+		"updatedBy": "ks220y@att.com"
+	},
+	{
+		"name": "ospf-cost",
+		"resourcePath": "/ospf-cost",
+		"resourceType": "ATT",
+		"dataType": "string",
+		"definition": "{\r\n  \"tags\" : \"ADIOD3\",\r\n  \"name\" : \"ospf-cost\",\r\n  \"description\" : \"ospf-cost\",\r\n  \"updated-by\" : \"ks220y@att.com\",\r\n  \"resource-type\" : \"ATT\",\r\n  \"resource-path\" : \"/ospf-cost\",\r\n  \"data-type\" : \"string\",\r\n  \"source\" : {\r\n    \"input\" : {\r\n      \"key\" : \"ospf-cost\"\r\n    },\r\n    \"network-resource-discovery\" : {\r\n      \"input-key-mapping\" : {\r\n        \"hostname\" : \"mainResource\"\r\n      },\r\n      \"output-key-mapping\" : {\r\n        \"ospf-cost\" : \"ospf-cost\"\r\n      }\r\n    }\r\n  }\r\n}",
+		"description": "ospf-cost",
+		"tags": "ADIOD3",
+		"creationDate": "2017-11-16T10:52:25.000+0000",
+		"updatedBy": "ks220y@att.com"
+	},
+	{
+		"name": "si-local-ipv4-address",
+		"resourcePath": "vnf/interface/si-local-ipv4",
+		"resourceType": "ATT",
+		"dataType": "string",
+		"definition": "{\r\n  \"tags\" : \"ADIOD3\",\r\n  \"name\" : \"si-local-ipv4-address\",\r\n  \"description\" : \"To be provided\",\r\n  \"updated-by\" : \"ks220y@att.com\",\r\n  \"resource-type\" : \"ATT\",\r\n  \"resource-path\" : \"vnf/interface/si-local-ipv4\",\r\n  \"data-type\" : \"string\",\r\n  \"source\" : {\r\n    \"input\" : { },\r\n    \"network-resource-discovery\" : {\r\n      \"input-key-mapping\" : {\r\n        \"hostname\" : \"hostname\"\r\n      },\r\n      \"output-key-mapping\" : {\r\n        \"si-local-ipv4\" : \"si-local-ipv4\"\r\n      }\r\n    }\r\n  },\r\n  \"candidate-dependency\" : {\r\n    \"network-resource-discovery\" : {\r\n      \"names\" : [ \"hostname\" ]\r\n    }\r\n  }\r\n}",
+		"description": "To be provided",
+		"tags": "ADIOD3",
+		"creationDate": "2017-11-16T10:52:25.000+0000",
+		"updatedBy": "ks220y@att.com"
+	},
+	{
+		"name": "tacacs-server-ipv4-addresses",
+		"resourcePath": "vnf/servers/tacacs-server-ipv4-addresses",
+		"resourceType": "ATT",
+		"dataType": "list",
+		"entrySchema": "dt-tacacs-server-ipv4-addresses",
+		"definition": "{\r\n  \"tags\" : \"ADIOD3\",\r\n  \"name\" : \"tacacs-server-ipv4-addresses\",\r\n  \"description\" : \"to be provided\",\r\n  \"updated-by\" : \"ks220y@att.com\",\r\n  \"resource-type\" : \"ATT\",\r\n  \"resource-path\" : \"vnf/servers/tacacs-server-ipv4-addresses\",\r\n  \"data-type\" : \"list\",\r\n  \"entry-schema\" : \"dt-tacacs-server-ipv4-addresses\",\r\n  \"source\" : {\r\n    \"input\" : { },\r\n    \"network-resource-discovery\" : {\r\n      \"input-key-mapping\" : {\r\n        \"region\" : \"region\",\r\n        \"complex-code-char8\" : \"complex-code-char8\",\r\n        \"tacacs-domain-name\" : \"tacacs-domain-name\"\r\n      },\r\n      \"output-key-mapping\" : {\r\n        \"tacacs-server-ipv4-addresses\" : \"tacacs-server-ipv4-addresses\"\r\n      }\r\n    }\r\n  },\r\n  \"candidate-dependency\" : {\r\n    \"network-resource-discovery\" : {\r\n      \"names\" : [ \"region\", \"complex-code-char8\", \"tacacs-domain-name\" ]\r\n    }\r\n  }\r\n}",
+		"description": "to be provided",
+		"tags": "ADIOD3",
+		"creationDate": "2017-11-16T17:31:43.000+0000",
+		"updatedBy": "ks220y@att.com"
+	},
+	{
+		"name": "uplink-1-unit",
+		"resourcePath": "vnf/interface/uplink-1-unit",
+		"resourceType": "ATT",
+		"dataType": "string",
+		"definition": "{\r\n  \"tags\" : \"ADIOD3\",\r\n  \"name\" : \"uplink-1-unit\",\r\n  \"description\" : \"To be provided\",\r\n  \"updated-by\" : \"ks220y@att.com\",\r\n  \"resource-type\" : \"ATT\",\r\n  \"resource-path\" : \"vnf/interface/uplink-1-unit\",\r\n  \"data-type\" : \"string\",\r\n  \"source\" : {\r\n    \"input\" : { },\r\n    \"network-resource-discovery\" : {\r\n      \"input-key-mapping\" : {\r\n        \"hostname\" : \"hostname\"\r\n      },\r\n      \"output-key-mapping\" : {\r\n        \"uplink-1-unit\" : \"uplink-1-unit\"\r\n      }\r\n    }\r\n  },\r\n  \"candidate-dependency\" : {\r\n    \"network-resource-discovery\" : {\r\n      \"names\" : [ \"hostname\" ]\r\n    }\r\n  }\r\n}",
+		"description": "To be provided",
+		"tags": "ADIOD3",
+		"creationDate": "2017-11-16T17:31:44.000+0000",
+		"updatedBy": "ks220y@att.com"
+	},
+	{
+		"name": "uplink-2-unit",
+		"resourcePath": "vnf/interface/uplink-2-unit",
+		"resourceType": "ATT",
+		"dataType": "string",
+		"definition": "{\r\n  \"tags\" : \"ADIOD3\",\r\n  \"name\" : \"uplink-2-unit\",\r\n  \"description\" : \"To be provided\",\r\n  \"updated-by\" : \"ks220y@att.com\",\r\n  \"resource-type\" : \"ATT\",\r\n  \"resource-path\" : \"vnf/interface/uplink-2-unit\",\r\n  \"data-type\" : \"string\",\r\n  \"source\" : {\r\n    \"input\" : { },\r\n    \"network-resource-discovery\" : {\r\n      \"input-key-mapping\" : {\r\n        \"hostname\" : \"hostname\"\r\n      },\r\n      \"output-key-mapping\" : {\r\n        \"uplink-2-unit\" : \"uplink-2-unit\"\r\n      }\r\n    }\r\n  },\r\n  \"candidate-dependency\" : {\r\n    \"network-resource-discovery\" : {\r\n      \"names\" : [ \"hostname\" ]\r\n    }\r\n  }\r\n}",
+		"description": "To be provided",
+		"tags": "ADIOD3",
+		"creationDate": "2017-11-16T17:31:45.000+0000",
+		"updatedBy": "ks220y@att.com"
+	},
+	{
+		"name": "wan-aggregate-ipv4-addresses",
+		"resourcePath": "vnf/wan-aggregate-ipv4-addresses",
+		"resourceType": "ATT",
+		"dataType": "list",
+		"entrySchema": "dt-v4-aggregate",
+		"definition": "{\r\n  \"tags\" : \"wan-aggregate-ipv4-addresses, tosca.datatypes.Root, data_type, ks220y@att.com\",\r\n  \"name\" : \"wan-aggregate-ipv4-addresses\",\r\n  \"description\" : \"To be provided\",\r\n  \"updated-by\" : \"ks220y@att.com\",\r\n  \"resource-type\" : \"ATT\",\r\n  \"resource-path\" : \"vnf/wan-aggregate-ipv4-addresses\",\r\n  \"data-type\" : \"list\",\r\n  \"entry-schema\" : \"dt-v4-aggregate\",\r\n  \"source\" : {\r\n    \"input\" : { },\r\n    \"mdsal\" : {\r\n      \"base\" : \"sdnc-gc\",\r\n      \"type\" : \"JSON\",\r\n      \"url-path\" : \"/restconf/config/L3VNF-API\",\r\n      \"path\" : \"/${services/service-list/$service-instance-id/service-data/vnf-topology-information/vnf-assignments/vnf-vms/$oam-ipv4-ip-type/vm-networks/$oam-network-role/v4-assigned-ip-list/$oam-vm-type\",\r\n      \"input-key-mapping\" : {\r\n        \"service-instance-id\" : \"service-instance-id\",\r\n        \"oam-network-role\" : \"oam-network-role\",\r\n        \"oam-ipv4-ip-type\" : \"oam-ipv4-ip-type\",\r\n        \"oam-vm-type\" : \"oam-vm-type\"\r\n      },\r\n      \"output-key-mapping\" : {\r\n        \"wan-aggregate-ipv4-addresses\" : \"v4-ip-prefix-length\"\r\n      }\r\n    }\r\n  },\r\n  \"candidate-dependency\" : {\r\n    \"mdsal\" : {\r\n      \"names\" : [ \"service-instance-id\", \"oam-network-role\", \"oam-v4-ip-type \", \"oam-vm-type\" ]\r\n    }\r\n  }\r\n}",
+		"description": "To be provided",
+		"tags": "wan-aggregate-ipv4-addresses, tosca.datatypes.Root, data_type, ks220y@att.com",
+		"creationDate": "2017-11-16T17:31:45.000+0000",
+		"updatedBy": "ks220y@att.com"
+	},
+	{
+		"name": "wan-aggregate-ipv6-addresses",
+		"resourcePath": "vnf/wan-aggregate-ipv6-addresses",
+		"resourceType": "ATT",
+		"dataType": "list",
+		"entrySchema": "dt-v6-aggregate",
+		"definition": "{\r\n  \"tags\" : \"ADIOD3\",\r\n  \"name\" : \"wan-aggregate-ipv6-addresses\",\r\n  \"description\" : \"To be provided\",\r\n  \"updated-by\" : \"ks220y@att.com\",\r\n  \"resource-type\" : \"ATT\",\r\n  \"resource-path\" : \"vnf/wan-aggregate-ipv6-addresses\",\r\n  \"data-type\" : \"list\",\r\n  \"entry-schema\" : \"dt-v6-aggregate\",\r\n  \"source\" : {\r\n    \"input\" : { },\r\n    \"mdsal\" : {\r\n      \"base\" : \"sdnc-gc\",\r\n      \"type\" : \"JSON\",\r\n      \"url-path\" : \"/restconf/config/L3VNF-API\",\r\n      \"path\" : \"/${services/service-list/$service-instance-id/service-data/vnf-topology-information/vnf-assignments/vnf-vms/VCO\",\r\n      \"input-key-mapping\" : {\r\n        \"service-instance-id\" : \"service-instance-id\",\r\n        \"oam-network-role\" : \"oam-network-role\",\r\n        \"oam-ipv4-ip-type\" : \"oam-ipv4-ip-type\",\r\n        \"oam-vm-type\" : \"oam-vm-type\"\r\n      },\r\n      \"output-key-mapping\" : {\r\n        \"wan-aggregate-ipv6.addresses\" : \"v4-ip-prefix-length\"\r\n      }\r\n    }\r\n  },\r\n  \"candidate-dependency\" : {\r\n    \"mdsal\" : {\r\n      \"names\" : [ \"service-instance-id\", \"oam-network-role\", \"oam-v4-ip-type \", \"oam-vm-type\" ]\r\n    }\r\n  }\r\n}",
+		"description": "To be provided",
+		"tags": "ADIOD3",
+		"creationDate": "2017-11-16T17:31:46.000+0000",
+		"updatedBy": "ks220y@att.com"
+	}
+]

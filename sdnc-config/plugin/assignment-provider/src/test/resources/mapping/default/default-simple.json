@@ -1,0 +1,35 @@
+{
+	"country": {
+		"name": "country",
+		"property": {
+			"type": "string"
+		},
+		"sources": {
+			"default": {
+				"type": "source-default"
+			}
+		}
+	},
+	"port": {
+		"name": "port",
+		"property": {
+			"type": "integer"
+		},
+		"sources": {
+			"default": {
+				"type": "source-default"
+			}
+		}
+	},
+	"voip-enabled": {
+		"name": "voip-enabled",
+		"property": {
+			"type": "boolean"
+		},
+		"sources": {
+			"default": {
+				"type": "source-default"
+			}
+		}
+	}
+}
