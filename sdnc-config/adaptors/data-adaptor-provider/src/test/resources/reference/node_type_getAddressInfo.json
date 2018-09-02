@@ -1,0 +1,22 @@
+{
+	"derived_from": "tosca.nodes.Component",
+	"interfaces": {
+		"org.onap.ccsdk.config.outbound.instar.GetAddressInfo": {
+			"operations": {
+				"getAddressInfo": {
+					"inputs": {
+						"vnf-id": {
+							"required": true,
+							"type": "string"
+						}
+					},
+					"outputs": {
+						"host-ip-address": {
+							"type": "string"
+						}
+					}
+				}
+			}
+		}
+	}
+}
