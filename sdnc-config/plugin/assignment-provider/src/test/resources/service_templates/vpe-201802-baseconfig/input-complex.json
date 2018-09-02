@@ -1,0 +1,49 @@
+{
+	"request-id": "1234",
+	"service-instance-id": "adsfdsf",
+	"action-name": "resource-assignment-action",
+	"scope-type": "vnf-type",
+	"hostname": "sample-host",
+	"resource-assignment-request": {
+		"uplink-2-unit": "sample-uplink-2-unit",
+		"bundle-mac": "sample-bundle-mac",
+		"wan-aggregate-ipv6-addresses": [
+			{
+				"v6-address": "sample-v6-address",
+				"v6-plen": "sample-v6-plen"
+			}
+		],
+		"ospf-area": "sample-ospf-area",
+		"ospf-cost": 10.0,
+		"bundle-id": "bundle-id",
+		"adiod-unicast-route-reflectors": [
+			{
+				"v4-address": "sample-v4-address",
+				"name": "sample-name"
+			}
+		],
+		"oam-remote-ipv4-address": "",
+		"adiod-vpnv4-route-reflectors": [
+			{
+				"v4-address": "sample-v4-address",
+				"name": "sample-name"
+			}
+		],
+		"lo10-local-ipv4-address": "sample-lo10-local-ipv4-address",
+		"wan-aggregate-ipv4-addresses": [
+			{
+				"v4-address": "sample-v4-address",
+				"v4-plen": 0
+			}
+		],
+		"lo0-local-ipv4-address": "sample-lo0-local-ipv4-address",
+		"uplink-1-unit": "sample-uplink-1-unit",
+		"tacacs-server-ipv4-addresses": [
+			{
+				"tacacs-server-ipv4-address": "sample-tacacs-server-ipv4-address"
+			}
+		],
+		"asn-region": "sample-asn-region",
+		"si-local-ipv4-address": "sample-si-local-ipv4-address"
+	}
+}

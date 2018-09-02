@@ -1,0 +1,40 @@
+{
+	"locations": {
+		"name": "locations",
+		"property": {
+			"type": "list",
+			"entry_schema": {
+				"type": "dt-location"
+			}
+		},
+		"sources": {
+			"db": {
+				"type": "source-sdnctl-db",
+				"properties": {
+					"query": "SELECT db-country, db-state FROM DEVICE_PROFILE WHERE profile_name = :profile_name",
+					"input-key-mapping": {
+						"profile_name": "profile_name"
+					},
+					"output-key-mapping": {
+						"db-country": "country",
+						"db-state": "state"
+					},
+					"key-dependencies": [
+						"profile_name"
+					]
+				}
+			}
+		}
+	},
+	"profile_name": {
+		"name": "profile_name",
+		"property": {
+			"type": "string"
+		},
+		"sources": {
+			"input": {
+				"type": "source-input"
+			}
+		}
+	}
+}

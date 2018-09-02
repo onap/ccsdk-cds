@@ -1,0 +1,37 @@
+{
+	"country": {
+		"name": "country",
+		"property": {
+			"type": "string"
+		},
+		"sources": {
+			"mdsal": {
+				"type": "source-mdsal",
+				"properties": {
+					"url-path": "/restconf/config/L3VNF-API/services/service-list/$profile_name/12345",
+					"path": "/locations",
+					"input-key-mapping": {
+						"profile_name": "profile_name"
+					},
+					"output-key-mapping": {
+						"country": "country"
+					},
+					"key-dependencies": [
+						"profile_name"
+					]
+				}
+			}
+		}
+	},
+	"profile_name": {
+		"name": "profile_name",
+		"property": {
+			"type": "string"
+		},
+		"sources": {
+			"input": {
+				"type": "source-input"
+			}
+		}
+	}
+}

@@ -1,0 +1,417 @@
+{
+	"metadata": {
+		"author": "ks220y@att.com",
+		"service-template-name": "VRR-baseconfiguration",
+		"service-template-version": "1.0.0",
+		"release": "1802",
+		"service-type": "AVPN",
+		"vnf-type": "VRR"
+	},
+	"topology_template": {
+		"inputs": {
+			"request-id": {
+				"required": true,
+				"type": "string"
+			},
+			"service-instance-id": {
+				"required": true,
+				"type": "string"
+			},
+			"action-name": {
+				"required": true,
+				"type": "string"
+			},
+			"scope-type": {
+				"required": true,
+				"type": "string"
+			},
+			"hostname": {
+				"required": true,
+				"type": "string"
+			}
+		},
+		"node_templates": {
+			"base-config-template": {
+				"type": "artifact-config-template",
+				"properties": {
+					"action-names": [
+						"resource-assignment-action"
+					]
+				},
+				"capabilities": {
+					"content": {
+						"properties": {
+							"content": "db://base-config-template"
+						}
+					},
+					"mapping": {
+						"properties": {
+							"mapping": [
+								{
+									"name": "vnf-id",
+									"input-param": true,
+									"property": {
+										"type": "string",
+										"required": true
+									},
+									"dictionary-name": "vnf-id",
+									"dictionary-source": "input"
+								},
+								{
+									"name": "group-name",
+									"input-param": true,
+									"property": {
+										"type": "string",
+										"required": true
+									},
+									"dictionary-name": "group-name",
+									"dictionary-source": "input"
+								}
+							]
+						}
+					}
+				}
+			},
+			"resource-assignment-action": {
+				"type": "dg-resource-assignment",
+				"interfaces": {
+					"CONFIG": {
+						"operations": {
+							"ResourceAssignment": {
+								
+							}
+						}
+					}
+				},
+				"capabilities": {
+					"dg-node": {
+						
+					}
+				},
+				"requirements": {
+					"component-dependency": {
+						"capability": "component-node",
+						"node": "resource-assignment",
+						"relationship": "tosca.relationships.DependsOn"
+					}
+				}
+			},
+			"licence-template": {
+				"type": "artifact-config-template",
+				"properties": {
+					"action-names": [
+						"resource-assignment-action"
+					]
+				},
+				"capabilities": {
+					"content": {
+						"properties": {
+							"content": "db://licence-template"
+						}
+					},
+					"mapping": {
+						"properties": {
+							"mapping": [
+								{
+									"name": "bundle-id",
+									"input-param": true,
+									"property": {
+										"type": "string"
+									},
+									"dictionary-name": "bundle-id",
+									"dictionary-source": "input"
+								},
+								{
+									"name": "bundle-mac",
+									"input-param": true,
+									"property": {
+										"type": "string",
+										"required": true
+									},
+									"dictionary-name": "bundle-mac",
+									"dictionary-source": "input"
+								}
+							]
+						}
+					}
+				}
+			},
+			"resource-assignment": {
+				"type": "component-resource-assignment",
+				"interfaces": {
+					"org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode": {
+						"operations": {
+							"process": {
+								"inputs": {
+									"service-template-name": "VRR-baseconfiguration",
+									"service-template-version": "1.0.0",
+									"action-name": "{ \"get_input\" : \"action-name\" }",
+									"resource-type": "vnf-type",
+									"template-names": [
+										"base-config-template",
+										"licence-template"
+									],
+									"request-id": "{ \"get_input\" : \"request-id\" }",
+									"resource-id": "{ \"get_input\" : \"vnf-id\" }"
+								},
+								"outputs": {
+									"resource-assignment-params": "",
+									"status": ""
+								}
+							}
+						}
+					}
+				},
+				"capabilities": {
+					"component-node": {
+						
+					}
+				}
+			}
+		}
+	},
+	"node_types": {
+		"dg-resource-assignment": {
+			"description": "This is Resource Assignment Directed Graph",
+			"version": "1.0.0",
+			"properties": {
+				"mode": {
+					"required": false,
+					"type": "string",
+					"default": "sync"
+				},
+				"version": {
+					"required": false,
+					"type": "string",
+					"default": "LATEST"
+				},
+				"is-start-flow": {
+					"required": false,
+					"type": "boolean",
+					"default": "false"
+				}
+			},
+			"capabilities": {
+				"dg-node": {
+					"type": "tosca.capabilities.Node"
+				},
+				"content": {
+					"type": "tosca.capability.Content",
+					"properties": {
+						"type": {
+							"required": false,
+							"type": "string",
+							"default": "json"
+						},
+						"content": {
+							"required": true,
+							"type": "string"
+						}
+					}
+				}
+			},
+			"requirements": {
+				"component-dependency": {
+					"capability": "component-node",
+					"node": "component-resource-assignment",
+					"relationship": "tosca.relationships.DependsOn"
+				}
+			},
+			"interfaces": {
+				"CONFIG": {
+					"operations": {
+						"ResourceAssignment": {
+							"inputs": {
+								"params": {
+									"required": false,
+									"type": "list",
+									"entry_schema": {
+										"type": "datatype-property"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.DG"
+		},
+		"component-resource-assignment": {
+			"description": "This is Resource Assignment Component API",
+			"version": "1.0.0",
+			"capabilities": {
+				"component-node": {
+					"type": "tosca.capabilities.Node"
+				}
+			},
+			"interfaces": {
+				"org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode": {
+					"operations": {
+						"process": {
+							"inputs": {
+								"action-name": {
+									"description": "Action Name to get from Database, Either (message & mask-info ) or ( resource-id & resource-type & action-name & template-name ) should be present. Message will be given higest priority",
+									"required": false,
+									"type": "string"
+								},
+								"handler-name": {
+									"description": "Name of the Artifact Node Template, to get the template Content. If template-content is present, then content wont be reterived from the Artifact Node Template.",
+									"required": true,
+									"type": "string"
+								},
+								"resource-type": {
+									"required": false,
+									"type": "string"
+								},
+								"service-template-name": {
+									"required": true,
+									"type": "string"
+								},
+								"service-template-version": {
+									"required": true,
+									"type": "string"
+								},
+								"template-names": {
+									"description": "Name of the Artifact Node Templates, to get the template Content.",
+									"required": true,
+									"type": "list",
+									"entry_schema": {
+										"type": "string"
+									}
+								},
+								"request-id": {
+									"description": "Request Id used to store the generated configuration, in the database along with the template-name",
+									"required": true,
+									"type": "string"
+								},
+								"resource-id": {
+									"description": "Id used to pull the data content from the data base. Either template-data or resource-id should be present",
+									"required": true,
+									"type": "string"
+								}
+							},
+							"outputs": {
+								"resource-assignment-params": {
+									"required": true,
+									"type": "string"
+								},
+								"status": {
+									"required": true,
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.Component"
+		},
+		"artifact-config-template": {
+			"description": "This is Configuration Velocity Template",
+			"version": "1.0.0",
+			"properties": {
+				"action-names": {
+					"required": true,
+					"type": "list",
+					"entry_schema": {
+						"type": "string"
+					}
+				},
+				"content": {
+					"required": false,
+					"type": "string"
+				},
+				"mapping": {
+					"required": false,
+					"type": "list",
+					"entry_schema": {
+						"type": "datatype-resource-assignment"
+					}
+				}
+			},
+			"capabilities": {
+				"content": {
+					"type": "tosca.capability.Content",
+					"properties": {
+						"content": {
+							"required": true,
+							"type": "string"
+						}
+					}
+				},
+				"mapping": {
+					"type": "tosca.capability.Mapping",
+					"properties": {
+						"mapping": {
+							"required": false,
+							"type": "list",
+							"entry_schema": {
+								"type": "datatype-resource-assignment"
+							}
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.Artifact"
+		}
+	},
+	"data_types": {
+		"datatype-resource-assignment": {
+			"version": "1.0.0",
+			"description": "This is Resource Assignment Data Type",
+			"properties": {
+				"property": {
+					"required": true,
+					"type": "datatype-property"
+				},
+				"input-param": {
+					"required": true,
+					"type": "boolean"
+				},
+				"dictionary-name": {
+					"required": false,
+					"type": "string"
+				},
+				"dictionary-source": {
+					"required": false,
+					"type": "string"
+				},
+				"dependencies": {
+					"required": true,
+					"type": "list",
+					"entry_schema": {
+						"type": "string"
+					}
+				}
+			},
+			"derived_from": "tosca.datatypes.Root"
+		},
+		"datatype-property": {
+			"version": "1.0.0",
+			"description": "This is Entry point Input Data Type, which is dynamic datatype, The parameter names will be populated during the Design time for each inputs",
+			"properties": {
+				"type": {
+					"required": true,
+					"type": "string"
+				},
+				"description": {
+					"required": false,
+					"type": "string"
+				},
+				"required": {
+					"required": false,
+					"type": "boolean"
+				},
+				"default": {
+					"required": false,
+					"type": "string"
+				},
+				"entry_schema": {
+					"required": false,
+					"type": "string"
+				}
+			},
+			"derived_from": "tosca.datatypes.Root"
+		}
+	}
+}

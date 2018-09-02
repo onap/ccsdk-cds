@@ -1,0 +1,40 @@
+ <config>
+	        <configuration>
+	        	<groups>
+				<name>${group-name}</name>
+				<routing-instances>
+					<instance>
+						<name>&lt;*&gt;</name>
+						<protocols>
+							<pim>
+								<dense-groups>
+									<dynamic-reject />
+									<pim-dense-group-type>
+										<name>224.0.1.40/32</name>
+									</pim-dense-group-type>
+									<pim-dense-group-type>
+										<name>224.0.1.39/32</name>
+									</pim-dense-group-type>
+									<pim-dense-group-type>
+										<name>224.0.0.0/4</name>
+										<reject />
+									</pim-dense-group-type>
+								</dense-groups>
+								<rp>
+									<auto-rp>
+										<discovery />
+									</auto-rp>
+								</rp>
+								<interface>
+									<name>&lt;*&gt;</name>
+									<disable />
+									<priority>1000</priority>
+								</interface>
+								<reset-tracking-bit />
+							</pim>
+						</protocols>
+					</instance>
+				</routing-instances>
+			</groups>
+		</configuration>
+	</config>

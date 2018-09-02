@@ -1,0 +1,76 @@
+{
+	"v4-ip-prefix": {
+		"name": "v4-ip-prefix",
+		"property": {
+			"type": "string"
+		},
+		"sources": {
+			"mdsal": {
+				"type": "source-mdsal",
+				"properties": {
+					"url-path": "/restconf/config/L3VNF-API:services/service-list/$service-instance-id/service-data/vnf-topology-information/vnf-assignments/vnf-vms/$oam-ipv4-ip-type/vm-networks/$oam-network-role/v4-assigned-ip-list/$oam-vm-type",
+					"path": "/v4-assigned-ip-list/0/v4-ip-prefix",
+					"input-key-mapping": {
+						"service-instance-id": "service-instance-id",
+						"oam-network-role": "oam-network-role",
+						"oam-ipv4-ip-type": "oam-ipv4-ip-type",
+						"oam-vm-type": "oam-vm-type"
+					},
+					"output-key-mapping": {
+						"v4-ip-prefix": "v4-ip-prefix"
+					},
+					"key-dependencies": [
+						"service-instance-id",
+						"oam-network-role",
+						"oam-ipv4-ip-type",
+						"oam-vm-type"
+					]
+				}
+			}
+		}
+	},
+	"service-instance-id": {
+		"name": "service-instance-id",
+		"property": {
+			"type": "string"
+		},
+		"sources": {
+			"default": {
+				"type": "source-input"
+			}
+		}
+	},
+	"oam-network-role": {
+		"name": "oam-network-role",
+		"property": {
+			"type": "string"
+		},
+		"sources": {
+			"default": {
+				"type": "source-input"
+			}
+		}
+	},
+	"oam-ipv4-ip-type": {
+		"name": "oam-ipv4-ip-type",
+		"property": {
+			"type": "string"
+		},
+		"sources": {
+			"default": {
+				"type": "source-input"
+			}
+		}
+	},
+	"oam-vm-type": {
+		"name": "oam-vm-type",
+		"property": {
+			"type": "string"
+		},
+		"sources": {
+			"default": {
+				"type": "source-input"
+			}
+		}
+	}
+}

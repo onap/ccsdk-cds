@@ -1,0 +1,12 @@
+{
+	"locations": [
+		{
+			"mdsal-country": "US",
+			"mdsal-state": "NJ"
+		},
+		{
+			"mdsal-country": "INDIA",
+			"mdsal-state": "TN"
+		}
+	]
+}

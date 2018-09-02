@@ -1,0 +1,110 @@
+[
+	{
+		"name": "vnf-id-string",
+		"property": {
+			"required": true,
+			"type": "string",
+			"value": "123456"
+		},
+		"input-param": true,
+		"dictionary-name": "vnf-id-string",
+		"dictionary-source": "input",
+		"version": 0,
+		"status": "success",
+		"updated-by": "System"
+	},
+	{
+		"name": "vnf-id-integer",
+		"property": {
+			"required": true,
+			"type": "integer",
+			"value": 123456
+		},
+		"input-param": true,
+		"dictionary-name": "vnf-id-integer",
+		"dictionary-source": "input",
+		"version": 0,
+		"status": "success",
+		"updated-by": "System"
+	},
+	{
+		"name": "vnf-boolean",
+		"property": {
+			"required": true,
+			"type": "boolean",
+			"value": true
+		},
+		"input-param": true,
+		"dictionary-name": "vnf-boolean",
+		"dictionary-source": "input",
+		"version": 0,
+		"status": "success",
+		"updated-by": "System"
+	},
+	{
+		"name": "vnf-complex",
+		"property": {
+			"required": true,
+			"type": "dt-complex",
+			"value": {
+				"name": "Brinda",
+				"location": "Madurai",
+				"count": 2
+			}
+		},
+		"input-param": true,
+		"dictionary-name": "vnf-complex",
+		"dictionary-source": "input",
+		"version": 0,
+		"status": "success",
+		"updated-by": "System"
+	},
+	{
+		"name": "vnf-id-array",
+		"property": {
+			"required": true,
+			"type": "list",
+			"entry_schema": {
+				"type": "string"
+			},
+			"value": [
+				"A",
+				"B",
+				"C"
+			]
+		},
+		"input-param": true,
+		"dictionary-name": "vnf-id-array",
+		"dictionary-source": "input",
+		"version": 0,
+		"status": "success",
+		"updated-by": "System"
+	},
+	{
+		"name": "vnf-array-complex",
+		"property": {
+			"required": true,
+			"type": "list",
+			"entry_schema": {
+				"type": "dt-complex"
+			},
+			"value": [
+				{
+					"name": "A"
+				},
+				{
+					"name": "B"
+				},
+				{
+					"name": "C"
+				}
+			]
+		},
+		"input-param": true,
+		"dictionary-name": "vnf-array-complex",
+		"dictionary-source": "input",
+		"version": 0,
+		"status": "success",
+		"updated-by": "System"
+	}
+]

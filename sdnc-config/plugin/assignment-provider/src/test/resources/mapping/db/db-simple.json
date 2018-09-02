@@ -1,0 +1,36 @@
+{
+	"country": {
+		"name": "country",
+		"property": {
+			"type": "string"
+		},
+		"sources": {
+			"db": {
+				"type": "source-sdnctl-db",
+				"properties": {
+					"query": "SELECT country FROM DEVICE_PROFILE WHERE profile_name = :profile_name",
+					"input-key-mapping": {
+						"profile_name": "profile_name"
+					},
+					"output-key-mapping": {
+						"country": "country"
+					},
+					"key-dependencies": [
+						"profile_name"
+					]
+				}
+			}
+		}
+	},
+	"profile_name": {
+		"name": "profile_name",
+		"property": {
+			"type": "string"
+		},
+		"sources": {
+			"input": {
+				"type": "source-input"
+			}
+		}
+	}
+}

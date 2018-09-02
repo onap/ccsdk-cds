@@ -1,0 +1,27 @@
+{
+	"version": "1.0.0",
+	"description": "This is dt-v4-assigned-ip-list Data Type",
+	"properties": {
+		"v4-ip-type": {
+			"required": true,
+			"type": "string"
+		},
+		"ipv4-gateway-prefix": {
+			"required": true,
+			"type": "string"
+		},
+		"v4-ip-prefix": {
+			"required": true,
+			"type": "string"
+		},
+		"v4-ip-prefix-length": {
+			"required": true,
+			"type": "string"
+		},
+		"v4-ip-source": {
+			"required": true,
+			"type": "string"
+		}
+	},
+	"derived_from": "tosca.datatypes.Root"
+}

@@ -1,0 +1,32 @@
+[
+	{
+		"name": "country",
+		"input-param": true,
+		"property": {
+			"type": "string",
+			"default": "US"
+		},
+		"dictionary-source": "input",
+		"dependencies": []
+	},
+	{
+		"name": "port",
+		"input-param": true,
+		"property": {
+			"type": "integer",
+			"default": 830
+		},
+		"dictionary-source": "input",
+		"dependencies": []
+	},
+	{
+		"name": "voip-enabled",
+		"input-param": true,
+		"property": {
+			"type": "boolean",
+			"default": true
+		},
+		"dictionary-source": "input",
+		"dependencies": []
+	}
+]

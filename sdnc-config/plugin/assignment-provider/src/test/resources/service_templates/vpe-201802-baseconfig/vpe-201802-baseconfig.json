@@ -1,0 +1,639 @@
+{
+	"metadata": {
+		"author": "ks220y@att.com",
+		"service-template-name": "vpe-201802-baseconfig",
+		"service-template-version": "1.0.0",
+		"release": "1802",
+		"service-type": "ADIOD",
+		"vnf-type": "VPE"
+	},
+	"topology_template": {
+		"inputs": {
+			"request-id": {
+				"required": true,
+				"type": "string"
+			},
+			"service-instance-id": {
+				"required": true,
+				"type": "string"
+			},
+			"action-name": {
+				"required": true,
+				"type": "string"
+			},
+			"scope-type": {
+				"required": true,
+				"type": "string"
+			},
+			"hostname": {
+				"required": true,
+				"type": "string"
+			},
+			"resource-assignment-request": {
+				"description": "This is Dynamic Data type for the receipe resource-assignment-action.",
+				"required": false,
+				"type": "dt-resource-assignment-request"
+			}
+		},
+		"node_templates": {
+			"base-config-template": {
+				"type": "artifact-config-template",
+				"properties": {
+					"action-names": [
+						"resource-assignment-action"
+					]
+				},
+				"capabilities": {
+					"content": {
+						"properties": {
+							"content": "db://base-config-template"
+						}
+					},
+					"mapping": {
+						"properties": {
+							"mapping": [
+								{
+									"name": "wan-aggregate-ipv6-addresses",
+									"input-param": true,
+									"property": {
+										"type": "list",
+										"entry_schema": {
+											"type": "dt-v6-aggregate"
+										}
+									},
+									"dictionary-name": "wan-aggregate-ipv6-addresses",
+									"dictionary-source": "input"
+								},
+								{
+									"name": "wan-aggregate-ipv4-addresses",
+									"input-param": true,
+									"property": {
+										"type": "list",
+										"entry_schema": {
+											"type": "dt-v4-aggregate"
+										}
+									},
+									"dictionary-name": "wan-aggregate-ipv4-addresses",
+									"dictionary-source": "input"
+								},
+								{
+									"name": "tacacs-server-ipv4-addresses",
+									"input-param": true,
+									"property": {
+										"type": "list",
+										"entry_schema": {
+											"type": "dt-tacacs-server-ipv4"
+										}
+									},
+									"dictionary-name": "tacacs-server-ipv4-addresses",
+									"dictionary-source": "input"
+								},
+								{
+									"name": "oam-remote-ipv4-address",
+									"property": {
+										"type": "string"
+									},
+									"dictionary-name": "oam-remote-ipv4-address",
+									"dictionary-source": "input"
+								},
+								{
+									"name": "si-local-ipv4-address",
+									"property": {
+										"type": "string"
+									},
+									"dictionary-name": "si-local-ipv4-address",
+									"dictionary-source": "input"
+								},
+								{
+									"name": "lo0-local-ipv4-address",
+									"property": {
+										"type": "string"
+									},
+									"dictionary-name": "lo0-local-ipv4-address",
+									"dictionary-source": "input"
+								},
+								{
+									"name": "asn-region",
+									"property": {
+										"type": "string"
+									},
+									"dictionary-name": "asn-region",
+									"dictionary-source": "input"
+								},
+								{
+									"name": "adiod-unicast-route-reflectors",
+									"input-param": true,
+									"property": {
+										"type": "list",
+										"entry_schema": {
+											"type": "dt-adiod-unicast-route-reflector"
+										}
+									},
+									"dictionary-name": "adiod-unicast-route-reflectors",
+									"dictionary-source": "input"
+								},
+								{
+									"name": "adiod-vpnv4-route-reflectors",
+									"input-param": true,
+									"property": {
+										"type": "list",
+										"entry_schema": {
+											"type": "dt-adiod-vpnv4-route-reflector"
+										}
+									},
+									"dictionary-name": "adiod-vpnv4-route-reflectors",
+									"dictionary-source": "input"
+								},
+								{
+									"name": "bundle-id",
+									"property": {
+										"type": "string"
+									},
+									"dictionary-name": "bundle-id",
+									"dictionary-source": "input"
+								},
+								{
+									"name": "uplink-1-unit",
+									"property": {
+										"type": "string"
+									},
+									"dictionary-name": "uplink-1-unit",
+									"dictionary-source": "input"
+								},
+								{
+									"name": "uplink-2-unit",
+									"property": {
+										"type": "string"
+									},
+									"dictionary-name": "uplink-2-unit",
+									"dictionary-source": "input"
+								},
+								{
+									"name": "ospf-area",
+									"property": {
+										"type": "string"
+									},
+									"dictionary-name": "ospf-area",
+									"dictionary-source": "input"
+								},
+								{
+									"name": "ospf-cost",
+									"property": {
+										"type": "string"
+									},
+									"dictionary-name": "ospf-cost",
+									"dictionary-source": "input"
+								},
+								{
+									"name": "lo10-local-ipv4-address",
+									"property": {
+										"type": "string"
+									},
+									"dictionary-name": "lo10-local-ipv4-address",
+									"dictionary-source": "input"
+								}
+							]
+						}
+					}
+				}
+			},
+			"resource-assignment-action": {
+				"type": "dg-resource-assignment",
+				"interfaces": {
+					"CONFIG": {
+						"operations": {
+							"ResourceAssignment": {
+								
+							}
+						}
+					}
+				},
+				"capabilities": {
+					"dg-node": {
+						
+					}
+				},
+				"requirements": {
+					"component-dependency": {
+						"capability": "component-node",
+						"node": "resource-assignment",
+						"relationship": "tosca.relationships.DependsOn"
+					}
+				}
+			},
+			"resource-assignment": {
+				"type": "component-resource-assignment",
+				"interfaces": {
+					"org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode": {
+						"operations": {
+							"process": {
+								"inputs": {
+									"action-name": "{ \"get_input\" : \"action-name\" }",
+									"resource-type": "vnf-type",
+									"template-names": [
+										"base-config-template",
+										"licence-template"
+									],
+									"request-id": "{ \"get_input\" : \"request-id\" }",
+									"resource-id": "{ \"get_input\" : \"hostname\" }"
+								},
+								"outputs": {
+									"resource-assignment-params": "",
+									"status": ""
+								}
+							}
+						}
+					}
+				},
+				"capabilities": {
+					"component-node": {
+						
+					}
+				}
+			}
+		}
+	},
+	"node_types": {
+		"dg-resource-assignment": {
+			"description": "This is Resource Assignment Directed Graph",
+			"version": "1.0.0",
+			"properties": {
+				"mode": {
+					"required": false,
+					"type": "string",
+					"default": "sync"
+				},
+				"version": {
+					"required": false,
+					"type": "string",
+					"default": "LATEST"
+				},
+				"is-start-flow": {
+					"required": false,
+					"type": "boolean",
+					"default": "false"
+				}
+			},
+			"capabilities": {
+				"dg-node": {
+					"type": "tosca.capabilities.Node"
+				},
+				"content": {
+					"type": "tosca.capability.Content",
+					"properties": {
+						"type": {
+							"required": false,
+							"type": "string",
+							"default": "json"
+						},
+						"content": {
+							"required": true,
+							"type": "string"
+						}
+					}
+				}
+			},
+			"requirements": {
+				"component-dependency": {
+					"capability": "component-node",
+					"node": "component-resource-assignment",
+					"relationship": "tosca.relationships.DependsOn"
+				}
+			},
+			"interfaces": {
+				"CONFIG": {
+					"operations": {
+						"ResourceAssignment": {
+							"inputs": {
+								"params": {
+									"required": false,
+									"type": "list",
+									"entry_schema": {
+										"type": "datatype-property"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.DG"
+		},
+		"component-resource-assignment": {
+			"description": "This is Resource Assignment Component API",
+			"version": "1.0.0",
+			"capabilities": {
+				"component-node": {
+					"type": "tosca.capabilities.Node"
+				}
+			},
+			"interfaces": {
+				"org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode": {
+					"operations": {
+						"process": {
+							"inputs": {
+								"action-name": {
+									"description": "Action Name to get from Database, Either (message & mask-info ) or ( resource-id & resource-type & action-name & template-name ) should be present. Message will be given higest priority",
+									"required": false,
+									"type": "string"
+								},
+								"handler-name": {
+									"description": "Name of the Artifact Node Template, to get the template Content. If template-content is present, then content wont be reterived from the Artifact Node Template.",
+									"required": true,
+									"type": "string"
+								},
+								"resource-type": {
+									"required": false,
+									"type": "string"
+								},
+								"template-names": {
+									"description": "Name of the Artifact Node Templates, to get the template Content.",
+									"required": true,
+									"type": "list",
+									"entry_schema": {
+										"type": "string"
+									}
+								},
+								"request-id": {
+									"description": "Request Id used to store the generated configuration, in the database along with the template-name",
+									"required": true,
+									"type": "string"
+								},
+								"resource-id": {
+									"description": "Id used to pull the data content from the data base. Either template-data or resource-id should be present",
+									"required": true,
+									"type": "string"
+								}
+							},
+							"outputs": {
+								"resource-assignment-params": {
+									"required": true,
+									"type": "string"
+								},
+								"status": {
+									"required": true,
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.Component"
+		},
+		"artifact-config-template": {
+			"description": "This is Configuration Velocity Template",
+			"version": "1.0.0",
+			"properties": {
+				"action-names": {
+					"required": true,
+					"type": "list",
+					"entry_schema": {
+						"type": "string"
+					}
+				}
+			},
+			"capabilities": {
+				"content": {
+					"type": "tosca.capability.Content",
+					"properties": {
+						"content": {
+							"required": true,
+							"type": "string"
+						}
+					}
+				},
+				"mapping": {
+					"type": "tosca.capability.Mapping",
+					"properties": {
+						"mapping": {
+							"required": false,
+							"type": "list",
+							"entry_schema": {
+								"type": "datatype-resource-assignment"
+							}
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.Artifact"
+		}
+	},
+	"data_types": {
+		"dt-v4-aggregate": {
+			"version": "1.0.0",
+			"description": "This is dt-v4-aggregate Data Type",
+			"properties": {
+				"v4-address": {
+					"required": true,
+					"type": "string"
+				},
+				"v4-plen": {
+					"required": false,
+					"type": "integer"
+				}
+			},
+			"derived_from": "tosca.datatypes.Root"
+		},
+		"dt-tacacs-server-ipv4": {
+			"version": "1.0.0",
+			"description": "This is dt-tacacs-server-ipv4 Data Type",
+			"properties": {
+				"tacacs-server-ipv4-address": {
+					"required": true,
+					"type": "string"
+				}
+			},
+			"derived_from": "tosca.datatypes.Root"
+		},
+		"dt-adiod-vpnv4-route-reflector": {
+			"version": "1.0.0",
+			"description": "This is dt-adiod-unicast-route-reflector Data Type",
+			"properties": {
+				"v4-address": {
+					"required": true,
+					"type": "string"
+				},
+				"name": {
+					"required": false,
+					"type": "string"
+				}
+			},
+			"derived_from": "tosca.datatypes.Root"
+		},
+		"datatype-resource-assignment": {
+			"version": "1.0.0",
+			"description": "This is Resource Assignment Data Type",
+			"properties": {
+				"property": {
+					"required": true,
+					"type": "datatype-property"
+				},
+				"input-param": {
+					"required": true,
+					"type": "boolean"
+				},
+				"dictionary-name": {
+					"required": false,
+					"type": "string"
+				},
+				"dictionary-source": {
+					"required": false,
+					"type": "string"
+				},
+				"dependencies": {
+					"required": true,
+					"type": "list",
+					"entry_schema": {
+						"type": "string"
+					}
+				},
+				"status": {
+					"required": false,
+					"type": "string"
+				},
+				"message": {
+					"required": false,
+					"type": "string"
+				},
+				"updated-date": {
+					"required": false,
+					"type": "string"
+				},
+				"updated-by": {
+					"required": false,
+					"type": "string"
+				}
+			},
+			"derived_from": "tosca.datatypes.Root"
+		},
+		"dt-adiod-unicast-route-reflector": {
+			"version": "1.0.0",
+			"description": "This is dt-adiod-unicast-route-reflector Data Type",
+			"properties": {
+				"v4-address": {
+					"required": true,
+					"type": "string"
+				},
+				"name": {
+					"required": false,
+					"type": "string"
+				}
+			},
+			"derived_from": "tosca.datatypes.Root"
+		},
+		"datatype-property": {
+			"version": "1.0.0",
+			"description": "This is Entry point Input Data Type, which is dynamic datatype, The parameter names will be populated during the Design time for each inputs",
+			"properties": {
+				"type": {
+					"required": true,
+					"type": "string"
+				},
+				"description": {
+					"required": false,
+					"type": "string"
+				},
+				"required": {
+					"required": false,
+					"type": "boolean"
+				},
+				"default": {
+					"required": false,
+					"type": "string"
+				},
+				"entry_schema": {
+					"required": false,
+					"type": "string"
+				}
+			},
+			"derived_from": "tosca.datatypes.Root"
+		},
+		"dt-v6-aggregate": {
+			"version": "1.0.0",
+			"description": "This is dt-v6-aggregate Data Type",
+			"properties": {
+				"v6-address": {
+					"required": true,
+					"type": "string"
+				},
+				"v6-plen": {
+					"required": false,
+					"type": "string"
+				}
+			},
+			"derived_from": "tosca.datatypes.Root"
+		},
+		"dt-resource-assignment-request": {
+			"version": "1.0.0",
+			"description": "This is Dynamic Data type definition generated from resource mapping for the config template name base-config-template.",
+			"properties": {
+				"uplink-2-unit": {
+					"type": "string"
+				},
+				"bundle-mac": {
+					"required": true,
+					"type": "string"
+				},
+				"wan-aggregate-ipv6-addresses": {
+					"type": "list",
+					"entry_schema": {
+						"type": "dt-v6-aggregate"
+					}
+				},
+				"ospf-area": {
+					"type": "string"
+				},
+				"ospf-cost": {
+					"type": "string"
+				},
+				"bundle-id": {
+					"type": "string"
+				},
+				"adiod-unicast-route-reflectors": {
+					"type": "list",
+					"entry_schema": {
+						"type": "dt-adiod-unicast-route-reflector"
+					}
+				},
+				"oam-remote-ipv4-address": {
+					"type": "string"
+				},
+				"adiod-vpnv4-route-reflectors": {
+					"type": "list",
+					"entry_schema": {
+						"type": "dt-adiod-vpnv4-route-reflector"
+					}
+				},
+				"lo10-local-ipv4-address": {
+					"type": "string"
+				},
+				"wan-aggregate-ipv4-addresses": {
+					"type": "list",
+					"entry_schema": {
+						"type": "dt-v4-aggregate"
+					}
+				},
+				"lo0-local-ipv4-address": {
+					"type": "string"
+				},
+				"uplink-1-unit": {
+					"type": "string"
+				},
+				"tacacs-server-ipv4-addresses": {
+					"type": "list",
+					"entry_schema": {
+						"type": "dt-tacacs-server-ipv4"
+					}
+				},
+				"asn-region": {
+					"type": "string"
+				},
+				"si-local-ipv4-address": {
+					"type": "string"
+				}
+			},
+			"derived_from": "tosca.datatypes.Dynamic"
+		}
+	}
+}
