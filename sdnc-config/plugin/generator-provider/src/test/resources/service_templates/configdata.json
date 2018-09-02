@@ -1,0 +1,36 @@
+{
+	"node0_hostname": "appc-host",
+	"node0_backup_router_address": "2001:2001:2001:2001:2001:2001:2001:2001",
+	"servers": [
+		"Server1",
+		"Server2",
+		"Server3"
+	],
+	"tacplus-servers": [
+		{
+			"tacplus-server-name": "tacplus-server-name1",
+			"tacplus-server-source-address": "enc-dsdsasa1"
+		},
+		{
+			"tacplus-server-name": "tacplus-server-name2",
+			"tacplus-server-source-address": "enc-dsdsasa2"
+		}
+	],
+	"classes": [
+		{
+			"name": "superuser-class",
+			"idle-timeout": 5,
+			"permissions": "all"
+		},
+		{
+			"name": "tacacs-adv-class",
+			"idle-timeout": 5
+		},
+		{
+			"name": "tacacs-base-class",
+			"idle-timeout": 5
+		}
+	],
+	"system-password": "teamops-system-password",
+	"root-password": "teamops-root-password"
+}
