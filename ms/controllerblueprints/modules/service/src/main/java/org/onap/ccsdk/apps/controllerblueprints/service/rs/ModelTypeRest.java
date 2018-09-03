@@ -70,7 +70,7 @@ public class ModelTypeRest {
         }
     }
 
-    @PostMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ModelType saveModelType(@RequestBody ModelType modelType) throws BluePrintException {
         try {

@@ -19,6 +19,7 @@ package org.onap.ccsdk.apps.controllerblueprints.service;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.core.ConfigModelConstant;
@@ -68,6 +69,7 @@ public class ConfigModelService {
         this.configModelRepository = configModelRepository;
         this.configModelContentRepository = configModelContentRepository;
         this.configModelCreateService = configModelCreateService;
+        log.info("Config Model Service Initiated...");
     }
 
     /**
@@ -143,8 +145,8 @@ public class ConfigModelService {
      * @param version version
      * @return ConfigModel
      */
-    public ConfigModel getConfigModelByNameAndVersion(String name, String version) {
-        ConfigModel configModel = null;
+    public ConfigModel getConfigModelByNameAndVersion(@NotNull String name, String version) throws BluePrintException {
+        ConfigModel configModel;
         Optional<ConfigModel> dbConfigModel;
         if (StringUtils.isNotBlank(version)) {
             dbConfigModel = configModelRepository.findByArtifactNameAndArtifactVersion(name, version);
@@ -153,6 +155,8 @@ public class ConfigModelService {
         }
         if (dbConfigModel.isPresent()) {
             configModel = dbConfigModel.get();
+        } else {
+            throw new BluePrintException(String.format("failed to get config model name(%s), version(%s) from repo", name, version));
         }
         return configModel;
     }
@@ -162,15 +166,17 @@ public class ConfigModelService {
      *
      * @param id id
      * @return ConfigModel
+     * @throws BluePrintException BluePrintException
      */
-    public ConfigModel getConfigModel(Long id) {
-        ConfigModel configModel = null;
-        if (id != null) {
-            Optional<ConfigModel> dbConfigModel = configModelRepository.findById(id);
-            if (dbConfigModel.isPresent()) {
-                configModel = dbConfigModel.get();
-            }
+    public ConfigModel getConfigModel(@NotNull Long id) throws BluePrintException {
+        ConfigModel configModel;
+        Optional<ConfigModel> dbConfigModel = configModelRepository.findById(id);
+        if (dbConfigModel.isPresent()) {
+            configModel = dbConfigModel.get();
+        } else {
+            throw new BluePrintException(String.format("failed to get config model id(%d) from repo", id));
         }
+
         return configModel;
     }
 
@@ -179,54 +185,56 @@ public class ConfigModelService {
      *
      * @param id id
      * @return ConfigModel
+     * @throws BluePrintException BluePrintException
      */
 
-    public ConfigModel getCloneConfigModel(Long id) {
+    public ConfigModel getCloneConfigModel(@NotNull Long id) throws BluePrintException {
 
         ConfigModel configModel;
-        ConfigModel cloneConfigModel = null;
-        if (id != null) {
-            Optional<ConfigModel> dbConfigModel = configModelRepository.findById(id);
-            if (dbConfigModel.isPresent()) {
-                configModel = dbConfigModel.get();
-                cloneConfigModel = configModel;
-                cloneConfigModel.setUpdatedBy("xxxxx@xxx.com");
-                cloneConfigModel.setArtifactName("XXXX");
-                cloneConfigModel.setPublished("XXXX");
-                cloneConfigModel.setPublished("XXXX");
-                cloneConfigModel.setUpdatedBy("XXXX");
-                cloneConfigModel.setId(null);
-                cloneConfigModel.setTags(null);
-                cloneConfigModel.setCreatedDate(new Date());
-                List<ConfigModelContent> configModelContents = cloneConfigModel.getConfigModelContents();
+        ConfigModel cloneConfigModel;
+        Optional<ConfigModel> dbConfigModel = configModelRepository.findById(id);
+        if (dbConfigModel.isPresent()) {
+            configModel = dbConfigModel.get();
+            cloneConfigModel = configModel;
+            cloneConfigModel.setUpdatedBy("xxxxx@xxx.com");
+            cloneConfigModel.setArtifactName("XXXX");
+            cloneConfigModel.setPublished("XXXX");
+            cloneConfigModel.setPublished("XXXX");
+            cloneConfigModel.setUpdatedBy("XXXX");
+            cloneConfigModel.setId(null);
+            cloneConfigModel.setTags(null);
+            cloneConfigModel.setCreatedDate(new Date());
+            List<ConfigModelContent> configModelContents = cloneConfigModel.getConfigModelContents();
 
-                if (CollectionUtils.isNotEmpty(configModelContents)) {
-                    for (ConfigModelContent configModelContent : configModelContents) {
-                        if (configModelContent != null && StringUtils.isNotBlank(configModelContent.getContentType())) {
-                            configModelContent.setId(null);
-                            configModelContent.setCreationDate(new Date());
+            if (CollectionUtils.isNotEmpty(configModelContents)) {
+                for (ConfigModelContent configModelContent : configModelContents) {
+                    if (configModelContent != null && StringUtils.isNotBlank(configModelContent.getContentType())) {
+                        configModelContent.setId(null);
+                        configModelContent.setCreationDate(new Date());
 
-                            if (ConfigModelConstant.MODEL_CONTENT_TYPE_TOSCA_JSON
-                                    .equalsIgnoreCase(configModelContent.getContentType())) {
-                                ServiceTemplate serviceTemplate = JacksonUtils
-                                        .readValue(configModelContent.getContent(), ServiceTemplate.class);
-                                if (serviceTemplate != null && serviceTemplate.getMetadata() != null) {
-                                    serviceTemplate.getMetadata()
-                                            .put(BluePrintConstants.METADATA_TEMPLATE_AUTHOR, "XXXX");
-                                    serviceTemplate.getMetadata()
-                                            .put(BluePrintConstants.METADATA_TEMPLATE_VERSION, "1.0.0");
-                                    serviceTemplate.getMetadata()
-                                            .put(BluePrintConstants.METADATA_TEMPLATE_NAME, "XXXXXX");
+                        if (ConfigModelConstant.MODEL_CONTENT_TYPE_TOSCA_JSON
+                                .equalsIgnoreCase(configModelContent.getContentType())) {
+                            ServiceTemplate serviceTemplate = JacksonUtils
+                                    .readValue(configModelContent.getContent(), ServiceTemplate.class);
+                            if (serviceTemplate != null && serviceTemplate.getMetadata() != null) {
+                                serviceTemplate.getMetadata()
+                                        .put(BluePrintConstants.METADATA_TEMPLATE_AUTHOR, "XXXX");
+                                serviceTemplate.getMetadata()
+                                        .put(BluePrintConstants.METADATA_TEMPLATE_VERSION, "1.0.0");
+                                serviceTemplate.getMetadata()
+                                        .put(BluePrintConstants.METADATA_TEMPLATE_NAME, "XXXXXX");
 
-                                    configModelContent.setContent(JacksonUtils.getJson(serviceTemplate));
-                                }
+                                configModelContent.setContent(JacksonUtils.getJson(serviceTemplate));
                             }
                         }
-
                     }
+
                 }
             }
+        } else {
+            throw new BluePrintException(String.format("failed to get config model id(%d) from repo", id));
         }
+
         return cloneConfigModel;
     }
 
@@ -234,14 +242,17 @@ public class ConfigModelService {
      * This is a deleteConfigModel method
      *
      * @param id id
+     * @throws BluePrintException BluePrintException
      */
 
     @Transactional
-    public void deleteConfigModel(Long id) {
+    public void deleteConfigModel(@NotNull Long id) throws BluePrintException {
         Optional<ConfigModel> dbConfigModel = configModelRepository.findById(id);
         if (dbConfigModel.isPresent()) {
             configModelContentRepository.deleteByConfigModel(dbConfigModel.get());
             configModelRepository.delete(dbConfigModel.get());
+        } else {
+            throw new BluePrintException(String.format("failed to get config model id(%d) from repo", id));
         }
     }
 

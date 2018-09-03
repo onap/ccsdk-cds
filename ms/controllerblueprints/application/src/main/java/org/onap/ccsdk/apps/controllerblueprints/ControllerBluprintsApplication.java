@@ -35,7 +35,7 @@ public class ControllerBluprintsApplication {
     private static EELFLogger log = EELFManager.getInstance().getLogger(ControllerBluprintsApplication.class);
 
     public static void main(String[] args) {
-        log.info("****** Starting Controller Bluprints Application **************");
+        log.info("****** Starting Controlled Blueprints Application ******");
         SpringApplication.run(ControllerBluprintsApplication.class, args);
     }
 

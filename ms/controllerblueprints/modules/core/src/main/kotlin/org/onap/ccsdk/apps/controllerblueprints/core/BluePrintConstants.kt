@@ -17,11 +17,16 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core
 /**
- *
+ * BluePrintConstants
  *
  * @author Brinda Santh
  */
 object BluePrintConstants {
+
+    const val RESPONSE_HEADER_TRANSACTION_ID: String = "X-ONAP-RequestID"
+    const val RESPONSE_HEADER_MINOR_VERSION: String = "X-MinorVersion"
+    const val RESPONSE_HEADER_PATCH_VERSION: String = "X-PatchVersion"
+    const val RESPONSE_HEADER_LATEST_VERSION: String = "X-LatestVersion"
 
     const val TYPE_DEFAULT: String = "default"
 
