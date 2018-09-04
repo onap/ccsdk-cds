@@ -22,7 +22,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -39,23 +38,19 @@ public class ResourceDictionary implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @NotNull
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     @ApiModelProperty(required=true)
     private String name;
 
-    @NotNull
-    @Column(name = "resource_path")
+    @Column(name = "resource_path", nullable = false)
     @ApiModelProperty(required=true)
     private String resourcePath;
 
-    @NotNull
-    @Column(name = "resource_type")
+    @Column(name = "resource_type", nullable = false)
     @ApiModelProperty(required=true)
     private String resourceType;
 
-    @NotNull
-    @Column(name = "data_type")
+    @Column(name = "data_type", nullable = false)
     @ApiModelProperty(required=true)
     private String dataType;
 
@@ -70,21 +65,18 @@ public class ResourceDictionary implements Serializable {
     @Column(name = "sample_value")
     private String sampleValue;
 
-    @NotNull
     @Lob
-    @Column(name = "definition")
+    @Column(name = "definition", nullable = false)
     @ApiModelProperty(required=true)
     private String definition;
 
-    @NotNull
     @Lob
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
     @ApiModelProperty(required=true)
     private String description;
 
-    @NotNull
     @Lob
-    @Column(name = "tags")
+    @Column(name = "tags", nullable = false)
     @ApiModelProperty(required=true)
     private String tags;
 
@@ -94,8 +86,7 @@ public class ResourceDictionary implements Serializable {
     @Column(name = "creation_date")
     private Date creationDate;
 
-    @NotNull
-    @Column(name = "updated_by")
+    @Column(name = "updated_by", nullable = false)
     @ApiModelProperty(required=true)
     private String updatedBy;
 

@@ -19,7 +19,6 @@ package org.onap.ccsdk.apps.controllerblueprints.service.validator;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeTemplate;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate;
@@ -40,14 +39,14 @@ import java.util.Map;
 public class ServiceTemplateValidator extends BluePrintValidatorDefaultService {
 
     StringBuilder message = new StringBuilder();
-    private Map<String, String> metaData = new HashMap();
+    private Map<String, String> metaData = new HashMap<>();
 
     /**
      * This is a validateServiceTemplate
      *
-     * @param serviceTemplateContent
+     * @param serviceTemplateContent serviceTemplateContent
      * @return boolean
-     * @throws BluePrintException
+     * @throws BluePrintException BluePrintException
      */
     public boolean validateServiceTemplate(String serviceTemplateContent) throws BluePrintException {
         if (StringUtils.isNotBlank(serviceTemplateContent)) {
@@ -65,7 +64,7 @@ public class ServiceTemplateValidator extends BluePrintValidatorDefaultService {
      *
      * @param serviceTemplate
      * @return boolean
-     * @throws BluePrintException
+     * @throws BluePrintException BluePrintException
      */
     @SuppressWarnings("squid:S00112")
     public boolean validateServiceTemplate(ServiceTemplate serviceTemplate) throws BluePrintException {
@@ -77,8 +76,7 @@ public class ServiceTemplateValidator extends BluePrintValidatorDefaultService {
     /**
      * This is a getMetaData to get the key information during the
      *
-     * @return Map<String                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ,
-                       *       String>
+     * @return Map<String, String>
      */
     public Map<String, String> getMetaData() {
         return metaData;

@@ -21,6 +21,7 @@ import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModelConten
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,60 +37,65 @@ public interface ConfigModelContentRepository extends JpaRepository<ConfigModelC
     /**
      * This is a findById method
      * 
-     * @param id
+     * @param id id
      * @return Optional<AsdcArtifacts>
      */
-    Optional<ConfigModelContent> findById(Long id);
+    @NotNull
+    Optional<ConfigModelContent> findById(@NotNull Long id);
 
     /**
      * This is a findTopByConfigModelAndContentType method
      * 
-     * @param configModel
-     * @param contentType
+     * @param configModel  configModel
+     * @param contentType contentType
      * @return Optional<ConfigModelContent>
      */
+    @SuppressWarnings("unused")
     Optional<ConfigModelContent> findTopByConfigModelAndContentType(ConfigModel configModel, String contentType);
 
     /**
      * This is a findByConfigModelAndContentType method
      * 
-     * @param configModel
-     * @param contentType
+     * @param configModel configModel
+     * @param contentType contentType
      * @return Optional<ConfigModelContent>
      */
+    @SuppressWarnings("unused")
     List<ConfigModelContent> findByConfigModelAndContentType(ConfigModel configModel, String contentType);
 
     /**
      * This is a findByConfigModel method
      * 
-     * @param configModel
+     * @param configModel configModel
      * @return Optional<ConfigModelContent>
      */
+    @SuppressWarnings("unused")
     List<ConfigModelContent> findByConfigModel(ConfigModel configModel);
 
     /**
      * This is a findByConfigModelAndContentTypeAndName method
      * 
-     * @param configModel
-     * @param contentType
-     * @param name
+     * @param configModel configModel
+     * @param contentType contentType
+     * @param name name
      * @return Optional<ConfigModelContent>
      */
+    @SuppressWarnings("unused")
     Optional<ConfigModelContent> findByConfigModelAndContentTypeAndName(ConfigModel configModel,
                                                                         String contentType, String name);
 
     /**
      * This is a deleteByMdeleteByConfigModelodelName method
      * 
-     * @param configModel
+     * @param configModel configModel
      */
     void deleteByConfigModel(ConfigModel configModel);
 
     /**
      * This is a deleteById method
      * 
-     * @param id
+     * @param  id id
      */
-    void deleteById(Long id);
+    void deleteById(@NotNull Long id);
 
 }

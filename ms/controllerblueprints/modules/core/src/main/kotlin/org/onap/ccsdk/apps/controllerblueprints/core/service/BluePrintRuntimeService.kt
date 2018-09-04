@@ -20,13 +20,13 @@ package org.onap.ccsdk.apps.controllerblueprints.core.service
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.NullNode
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ArtifactDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 /**

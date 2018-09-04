@@ -20,8 +20,6 @@ import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.service.ModelTypeService;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ModelType;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

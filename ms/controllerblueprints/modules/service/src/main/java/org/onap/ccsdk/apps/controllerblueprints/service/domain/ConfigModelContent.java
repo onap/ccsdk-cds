@@ -23,7 +23,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Objects;
 
@@ -45,13 +44,11 @@ public class ConfigModelContent {
     @Column(name = "config_model_content_id")
     private Long id;
 
-    @NotNull
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     @ApiModelProperty(required=true)
     private String name;
 
-    @NotNull
-    @Column(name = "content_type")
+    @Column(name = "content_type", nullable = false)
     @ApiModelProperty(required=true)
     private String contentType;
 
@@ -65,9 +62,8 @@ public class ConfigModelContent {
     @Column(name = "description")
     private String description;
 
-    @NotNull
     @Lob
-    @Column(name = "content")
+    @Column(name = "content", nullable = false)
     @ApiModelProperty(required=true)
     private String content;
 

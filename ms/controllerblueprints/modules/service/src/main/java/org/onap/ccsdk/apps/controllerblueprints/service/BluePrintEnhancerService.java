@@ -19,6 +19,7 @@ package org.onap.ccsdk.apps.controllerblueprints.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.base.Preconditions;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
@@ -47,7 +48,7 @@ public class BluePrintEnhancerService extends BluePrintEnhancerDefaultService {
 
     private static Logger log = LoggerFactory.getLogger(BluePrintEnhancerService.class);
 
-    private HashMap<String, DataType> recipeDataTypes = new HashMap<>();
+    private Map<String, DataType> recipeDataTypes = new HashMap<>();
 
     public BluePrintEnhancerService(BluePrintRepoService bluePrintEnhancerRepoDBService) {
         super(bluePrintEnhancerRepoDBService);
@@ -119,7 +120,7 @@ public class BluePrintEnhancerService extends BluePrintEnhancerDefaultService {
         if (StringUtils.isNotBlank(recipeName)) {
             DataType recipeDataType = this.recipeDataTypes.get(recipeName);
             if (recipeDataType == null) {
-                log.info("DataType not present for the recipe({})" , recipeName);
+                log.info("DataType not present for the recipe({})", recipeName);
                 recipeDataType = new DataType();
                 recipeDataType.setVersion("1.0.0");
                 recipeDataType.setDescription(
@@ -129,7 +130,7 @@ public class BluePrintEnhancerService extends BluePrintEnhancerDefaultService {
                 Map<String, PropertyDefinition> dataTypeProperties = new HashMap<>();
                 recipeDataType.setProperties(dataTypeProperties);
             } else {
-                log.info("DataType Already present for the recipe({})" , recipeName);
+                log.info("DataType Already present for the recipe({})", recipeName);
             }
 
             // Merge all the Recipe Properties
@@ -145,7 +146,7 @@ public class BluePrintEnhancerService extends BluePrintEnhancerDefaultService {
                                                                            NodeTemplate nodeTemplate) {
 
         Map<String, PropertyDefinition> dataTypeProperties = null;
-        if (nodeTemplate != null) {
+        if (nodeTemplate != null && MapUtils.isNotEmpty(nodeTemplate.getCapabilities())) {
             CapabilityAssignment capability =
                     nodeTemplate.getCapabilities().get(ConfigModelConstant.CAPABILITY_PROPERTY_MAPPING);
 
@@ -182,17 +183,18 @@ public class BluePrintEnhancerService extends BluePrintEnhancerDefaultService {
     private void mergeDataTypeProperties(DataType dataType, Map<String, PropertyDefinition> mergeProperties) {
         if (dataType != null && dataType.getProperties() != null && mergeProperties != null) {
             // Add the Other Template Properties
-            mergeProperties.forEach((mappingKey, propertyDefinition) -> {
-                dataType.getProperties().put(mappingKey, propertyDefinition);
-            });
+            mergeProperties.forEach((mappingKey, propertyDefinition) -> dataType.getProperties().put(mappingKey, propertyDefinition));
         }
     }
 
     private void populateRecipeInputs(ServiceTemplate serviceTemplate) {
-        if (this.recipeDataTypes != null && !this.recipeDataTypes.isEmpty()) {
+        if (serviceTemplate.getTopologyTemplate() != null
+                && MapUtils.isNotEmpty(serviceTemplate.getTopologyTemplate().getInputs())
+                && MapUtils.isNotEmpty(this.recipeDataTypes)
+                && MapUtils.isNotEmpty(serviceTemplate.getDataTypes())) {
             this.recipeDataTypes.forEach((recipeName, recipeDataType) -> {
-                String dataTypePrifix = recipeName.replace("-action", "") + "-request";
-                String dataTypeName = "dt-" + dataTypePrifix;
+                String dataTypePrefix = recipeName.replace("-action", "") + "-request";
+                String dataTypeName = "dt-" + dataTypePrefix;
 
                 serviceTemplate.getDataTypes().put(dataTypeName, recipeDataType);
 
@@ -200,7 +202,7 @@ public class BluePrintEnhancerService extends BluePrintEnhancerDefaultService {
                 customInputProperty.setDescription("This is Dynamic Data type for the receipe " + recipeName + ".");
                 customInputProperty.setRequired(Boolean.FALSE);
                 customInputProperty.setType(dataTypeName);
-                serviceTemplate.getTopologyTemplate().getInputs().put(dataTypePrifix, customInputProperty);
+                serviceTemplate.getTopologyTemplate().getInputs().put(dataTypePrefix, customInputProperty);
 
             });
         }

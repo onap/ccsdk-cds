@@ -18,10 +18,11 @@ package org.onap.ccsdk.apps.controllerblueprints.core.service
 
 import org.junit.Before
 import org.junit.Test
-import org.onap.ccsdk.apps.controllerblueprints.core.factory.BluePrintParserFactory
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.apps.controllerblueprints.core.factory.BluePrintParserFactory
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
 /**
  *
  *

@@ -95,7 +95,7 @@ public class ModelTypeRestTest {
 
         List<ModelType> dbModelTypes = modelTypeRest.searchModelTypes(tags);
         Assert.assertNotNull("Failed to search ResourceMapping by tags", dbModelTypes);
-        Assert.assertEquals("Failed to search ResourceMapping by tags count", true, dbModelTypes.size() > 0);
+        Assert.assertTrue("Failed to search ResourceMapping by tags count", dbModelTypes.size() > 0);
 
     }
 
@@ -109,8 +109,7 @@ public class ModelTypeRestTest {
         List<ModelType> dbDatatypeModelTypes =
                 modelTypeRest.getModelTypeByDefinitionType(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE);
         Assert.assertNotNull("Failed to find getModelTypeByDefinitionType by tags", dbDatatypeModelTypes);
-        Assert.assertEquals("Failed to find getModelTypeByDefinitionType by count", true,
-                dbDatatypeModelTypes.size() > 0);
+        Assert.assertTrue("Failed to find getModelTypeByDefinitionType by count", dbDatatypeModelTypes.size() > 0);
     }
 
     @Test

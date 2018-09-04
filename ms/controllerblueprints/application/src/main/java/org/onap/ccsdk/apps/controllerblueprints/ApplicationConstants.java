@@ -22,6 +22,7 @@ package org.onap.ccsdk.apps.controllerblueprints;
  * @author Brinda Santh
  * @version 1.0
  */
+@SuppressWarnings("unused")
 public final class ApplicationConstants {
 
 }

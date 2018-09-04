@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -40,8 +39,7 @@ public class ConfigModelSearch implements Serializable {
     @Column(name = "artifact_type")
     private String artifactType;
 
-    @NotNull
-    @Column(name = "artifact_version")
+    @Column(name = "artifact_version", nullable = false)
     private String artifactVersion;
 
     @Lob
@@ -57,21 +55,17 @@ public class ConfigModelSearch implements Serializable {
     @Column(name = "creation_date")
     private Date createdDate = new Date();
 
-    @NotNull
-    @Column(name = "artifact_name")
+    @Column(name = "artifact_name", nullable = false)
     private String artifactName;
 
-    @NotNull
-    @Column(name = "published")
+    @Column(name = "published", nullable = false)
     private String published;
 
-    @NotNull
-    @Column(name = "updated_by")
+    @Column(name = "updated_by", nullable = false)
     private String updatedBy;
 
-    @NotNull
     @Lob
-    @Column(name = "tags")
+    @Column(name = "tags", nullable = false)
     private String tags;
 
     public Long getId() {

@@ -55,7 +55,7 @@ import java.util.List;
  */
 
 @Component
-@ConditionalOnProperty(name = "blueprints.load.initial-data", havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(name = "blueprints.load.initial-data", havingValue = "true")
 public class DataBaseInitService {
 
     private static Logger log = LoggerFactory.getLogger(DataBaseInitService.class);
@@ -77,9 +77,9 @@ public class DataBaseInitService {
     /**
      * This is a DataBaseInitService, used to load the initial data
      *
-     * @param modelTypeService
-     * @param resourceDictionaryService
-     * @param configModelService
+     * @param modelTypeService modelTypeService
+     * @param resourceDictionaryService resourceDictionaryService
+     * @param configModelService configModelService
      */
     public DataBaseInitService(ModelTypeService modelTypeService, ResourceDictionaryService resourceDictionaryService,
                                ConfigModelService configModelService) {
