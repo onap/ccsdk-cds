@@ -31,8 +31,8 @@ import org.onap.ccsdk.apps.controllerblueprints.service.common.ApplicationConsta
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModel;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModelContent;
 import org.onap.ccsdk.apps.controllerblueprints.service.repository.ConfigModelRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFManager;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -52,7 +52,7 @@ import java.util.Optional;
 @Service
 public class ConfigModelCreateService {
 
-    private static Logger log = LoggerFactory.getLogger(ConfigModelCreateService.class);
+    private static EELFLogger log = EELFManager.getInstance().getLogger(ConfigModelCreateService.class);
 
     private ConfigModelRepository configModelRepository;
     private ConfigModelValidatorService configModelValidatorService;

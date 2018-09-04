@@ -16,19 +16,20 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.resource.dict.service
 
+import com.att.eelf.configuration.EELFLogger
 import org.junit.Assert
 import org.junit.Test
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
-import org.slf4j.LoggerFactory
+import com.att.eelf.configuration.EELFManager
 /**
  * ResourceAssignmentValidationServiceTest.
  *
  * @author Brinda Santh
  */
 class ResourceAssignmentValidationServiceTest {
-    private val log = LoggerFactory.getLogger(ResourceAssignmentValidationServiceTest::class.java)
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(ResourceAssignmentValidationServiceTest::class.java)
     @Test
     fun testValidateSuccess() {
         log.info("**************** testValidateSuccess *****************")

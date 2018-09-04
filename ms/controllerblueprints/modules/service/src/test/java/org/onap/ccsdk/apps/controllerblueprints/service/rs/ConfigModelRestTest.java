@@ -22,8 +22,8 @@ import org.junit.runners.MethodSorters;
 import org.onap.ccsdk.apps.controllerblueprints.TestApplication;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModel;
 import org.onap.ccsdk.apps.controllerblueprints.service.utils.ConfigModelUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -38,7 +38,7 @@ import java.util.List;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ConfigModelRestTest {
 
-    private static Logger log = LoggerFactory.getLogger(ConfigModelRestTest.class);
+    private static EELFLogger log = EELFManager.getInstance().getLogger(ConfigModelRestTest.class);
 
     @Autowired
     ConfigModelRest configModelRest;

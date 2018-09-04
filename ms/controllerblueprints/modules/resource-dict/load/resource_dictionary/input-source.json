@@ -1,5 +1,5 @@
 {
-	"name": "action-name",
+	"name": "input-source",
 	"property" :{
 		"description": "name of the ",
 		"type": "string"

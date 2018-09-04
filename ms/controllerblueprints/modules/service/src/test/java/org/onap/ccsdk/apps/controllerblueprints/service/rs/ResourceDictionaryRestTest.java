@@ -25,8 +25,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.onap.ccsdk.apps.controllerblueprints.TestApplication;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionary;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -44,7 +44,7 @@ import java.util.List;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ResourceDictionaryRestTest {
 
-    private static Logger log = LoggerFactory.getLogger(ResourceDictionaryRestTest.class);
+    private static EELFLogger log = EELFManager.getInstance().getLogger(ResourceDictionaryRestTest.class);
 
     @Autowired
     protected ResourceDictionaryRest resourceDictionaryRest;

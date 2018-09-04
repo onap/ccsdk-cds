@@ -23,9 +23,6 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.databind.node.ArrayNode
-import com.fasterxml.jackson.databind.node.NullNode
-import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
@@ -53,6 +50,17 @@ object JacksonUtils {
     }
 
     @JvmStatic
+    fun getContent(fileName: String): String {
+        return File(fileName).readText(Charsets.UTF_8)
+    }
+
+    @JvmStatic
+    fun getClassPathFileContent(fileName: String): String {
+        return IOUtils.toString(JacksonUtils::class.java.classLoader
+                .getResourceAsStream(fileName), Charset.defaultCharset())
+    }
+
+    @JvmStatic
     fun <T> readValueFromFile(fileName: String, valueType: Class<T>): T? {
         val content: String = FileUtils.readFileToString(File(fileName), Charset.defaultCharset())
                 ?: throw BluePrintException(format("Failed to read json file : {}", fileName))
@@ -61,8 +69,7 @@ object JacksonUtils {
 
     @JvmStatic
     fun <T> readValueFromClassPathFile(fileName: String, valueType: Class<T>): T? {
-        val content: String = IOUtils.toString(JacksonUtils::class.java.classLoader.getResourceAsStream(fileName), Charset.defaultCharset())
-                ?: throw BluePrintException(String.format("Failed to read json file : %s", fileName))
+        val content: String = getClassPathFileContent(fileName)
         return readValue(content, valueType)
     }
 
@@ -71,8 +78,7 @@ object JacksonUtils {
 
     @JvmStatic
     fun jsonNodeFromClassPathFile(fileName: String): JsonNode {
-        val content: String = IOUtils.toString(JacksonUtils::class.java.classLoader.getResourceAsStream(fileName), Charset.defaultCharset())
-                ?: throw BluePrintException(String.format("Failed to read json file : %s", fileName))
+        val content: String = getClassPathFileContent(fileName)
         return jsonNode(content)
     }
 
@@ -119,8 +125,7 @@ object JacksonUtils {
 
     @JvmStatic
     fun <T> getListFromClassPathFile(fileName: String, valueType: Class<T>): List<T>? {
-        val content: String = IOUtils.toString(JacksonUtils::class.java.classLoader.getResourceAsStream(fileName), Charset.defaultCharset())
-                ?: throw BluePrintException(String.format("Failed to read json file : %s", fileName))
+        val content: String = getClassPathFileContent(fileName)
         return getListFromJson(content, valueType)
     }
 
@@ -144,39 +149,25 @@ object JacksonUtils {
     @JvmStatic
     fun checkJsonNodeValueOfPrimitiveType(primitiveType: String, jsonNode: JsonNode): Boolean {
         when (primitiveType) {
-            BluePrintConstants.DATA_TYPE_STRING -> {
-                return jsonNode.isTextual
-            }
-            BluePrintConstants.DATA_TYPE_BOOLEAN -> {
-                return jsonNode.isBoolean
-            }
-            BluePrintConstants.DATA_TYPE_INTEGER -> {
-                return jsonNode.isInt
-            }
-            BluePrintConstants.DATA_TYPE_FLOAT -> {
-                return jsonNode.isDouble
-            }
-            BluePrintConstants.DATA_TYPE_TIMESTAMP -> {
-                return jsonNode.isTextual
-            }
-            else ->
-                return false
+            BluePrintConstants.DATA_TYPE_STRING -> return jsonNode.isTextual
+            BluePrintConstants.DATA_TYPE_BOOLEAN -> return jsonNode.isBoolean
+            BluePrintConstants.DATA_TYPE_INTEGER -> return jsonNode.isInt
+            BluePrintConstants.DATA_TYPE_FLOAT -> return jsonNode.isDouble
+            BluePrintConstants.DATA_TYPE_TIMESTAMP -> return jsonNode.isTextual
+            else -> return false
         }
     }
 
     @JvmStatic
     fun checkJsonNodeValueOfCollectionType(type: String, jsonNode: JsonNode): Boolean {
         when (type) {
-            BluePrintConstants.DATA_TYPE_LIST ->
-                return jsonNode.isArray
-            BluePrintConstants.DATA_TYPE_MAP ->
-                return jsonNode.isContainerNode
-            else ->
-                return false
+            BluePrintConstants.DATA_TYPE_LIST -> return jsonNode.isArray
+            BluePrintConstants.DATA_TYPE_MAP -> return jsonNode.isContainerNode
+            else -> return false
         }
 
     }
-
+/*
     @JvmStatic
     fun populatePrimitiveValues(key: String, value: Any, primitiveType: String, objectNode: ObjectNode) {
         if (BluePrintConstants.DATA_TYPE_BOOLEAN == primitiveType) {
@@ -253,4 +244,5 @@ object JacksonUtils {
             objectNode.set(key, nodeValue)
         }
     }
+    */
 }

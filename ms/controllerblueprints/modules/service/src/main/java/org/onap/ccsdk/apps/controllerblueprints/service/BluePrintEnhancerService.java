@@ -29,8 +29,8 @@ import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintEnhancerDe
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRepoService;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFManager;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -46,7 +46,7 @@ import java.util.Map;
 @Service
 public class BluePrintEnhancerService extends BluePrintEnhancerDefaultService {
 
-    private static Logger log = LoggerFactory.getLogger(BluePrintEnhancerService.class);
+    private static EELFLogger log = EELFManager.getInstance().getLogger(BluePrintEnhancerService.class);
 
     private Map<String, DataType> recipeDataTypes = new HashMap<>();
 
@@ -55,7 +55,7 @@ public class BluePrintEnhancerService extends BluePrintEnhancerDefaultService {
     }
 
     @Override
-    public void enrichTopologyTemplate(@NotNull ServiceTemplate serviceTemplate) {
+    public void enrichTopologyTemplate(@NotNull ServiceTemplate serviceTemplate) throws BluePrintException{
         super.enrichTopologyTemplate(serviceTemplate);
 
         // Update the Recipe Inputs and DataTypes
@@ -143,7 +143,7 @@ public class BluePrintEnhancerService extends BluePrintEnhancerDefaultService {
     }
 
     private Map<String, PropertyDefinition> getCapabilityMappingProperties(String nodeTemplateName,
-                                                                           NodeTemplate nodeTemplate) {
+                                                                           NodeTemplate nodeTemplate) throws BluePrintException {
 
         Map<String, PropertyDefinition> dataTypeProperties = null;
         if (nodeTemplate != null && MapUtils.isNotEmpty(nodeTemplate.getCapabilities())) {

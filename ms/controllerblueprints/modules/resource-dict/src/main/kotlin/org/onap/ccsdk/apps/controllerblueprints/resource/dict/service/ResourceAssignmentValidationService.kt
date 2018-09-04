@@ -16,13 +16,14 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.resource.dict.service
 
+import com.att.eelf.configuration.EELFLogger
 import org.apache.commons.collections.CollectionUtils
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.text.StrBuilder
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.TopologicalSortingUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
-import org.slf4j.LoggerFactory
+import com.att.eelf.configuration.EELFManager
 import java.io.Serializable
 
 /**
@@ -42,7 +43,7 @@ interface ResourceAssignmentValidationService : Serializable {
  * @author Brinda Santh
  */
 open class ResourceAssignmentValidationDefaultService : ResourceAssignmentValidationService {
-    private val log = LoggerFactory.getLogger(ResourceAssignmentValidationDefaultService::class.java)
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(ResourceAssignmentValidationDefaultService::class.java)
 
     open var resourceAssignmentMap: Map<String, ResourceAssignment> = hashMapOf()
     open val validationMessage = StrBuilder()

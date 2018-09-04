@@ -22,6 +22,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.StrBuilder;
+import org.jetbrains.annotations.NotNull;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ArtifactType;
@@ -33,8 +34,8 @@ import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModel;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ModelType;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionary;
 import org.onap.ccsdk.apps.controllerblueprints.service.utils.ConfigModelUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -58,7 +59,7 @@ import java.util.List;
 @ConditionalOnProperty(name = "blueprints.load.initial-data", havingValue = "true")
 public class DataBaseInitService {
 
-    private static Logger log = LoggerFactory.getLogger(DataBaseInitService.class);
+    private static EELFLogger log = EELFManager.getInstance().getLogger(DataBaseInitService.class);
     @Value("${blueprints.load.path}")
     private String modelLoadPath;
     private ModelTypeService modelTypeService;
@@ -91,6 +92,7 @@ public class DataBaseInitService {
     }
 
     @PostConstruct
+    @SuppressWarnings("unused")
     private void initDatabase() {
         log.info("loading Blueprints from DIR : {}", modelLoadPath);
         dataTypePath = modelLoadPath + "/model_type/data_type";
@@ -263,7 +265,7 @@ public class DataBaseInitService {
         }
     }
 
-    private void loadDataType(Resource file, StrBuilder errorBuilder) {
+    private void loadDataType(@NotNull Resource file, StrBuilder errorBuilder) {
         try {
             log.trace("Loading Data Type: {}", file.getFilename());
             String dataKey = file.getFilename().replace(".json", "");

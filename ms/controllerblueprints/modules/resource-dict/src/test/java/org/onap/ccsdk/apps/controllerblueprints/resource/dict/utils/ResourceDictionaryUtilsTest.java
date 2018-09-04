@@ -27,8 +27,8 @@ import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDictionaryConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,12 +38,13 @@ import java.util.Map;
  * @author Brinda Santh
  */
 public class ResourceDictionaryUtilsTest {
-    private static final Logger log = LoggerFactory.getLogger(ResourceDictionaryUtilsTest.class);
+    private static final EELFLogger log = EELFManager.getInstance().getLogger(ResourceDictionaryUtilsTest.class);
 
     @Test
     public void testPopulateSourceMapping() {
 
         ResourceAssignment resourceAssignment = new ResourceAssignment();
+        resourceAssignment.setName("sample-assignment");
         ResourceDefinition resourceDefinition = new ResourceDefinition();
         Map<String, NodeTemplate> sources = new HashMap<>();
         resourceDefinition.setSources(sources);
