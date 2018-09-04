@@ -1,0 +1,34 @@
+{
+  "description": "This is Resource Assignment Component API",
+  "version": "1.0.0",
+  "properties": {
+    "type": {
+      "description": "Request Id used to store the generated configuration, in the database along with the template-name",
+      "required": false,
+      "type": "string"
+    }
+  },
+  "interfaces": {
+    "DefaultOperation": {
+      "operations": {
+        "validate": {
+          "inputs": {
+            "action-name": {
+              "description": "validate for action",
+              "required": false,
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "artifacts" :{
+    "component-jar": {
+      "description": "Component Jar",
+      "type": "artifact-component-jar",
+      "file": "Component/basecomponent.jar"
+    }
+  },
+  "derived_from": "tosca.nodes.Root"
+}

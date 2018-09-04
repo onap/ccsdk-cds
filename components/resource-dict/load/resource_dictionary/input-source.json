@@ -1,0 +1,19 @@
+{
+	"name": "input-source",
+	"property" :{
+		"description": "name of the ",
+		"type": "string"
+	},
+	"resource-path": "action-name",
+	"resource-type": "ONAP",
+	"updated-by": "brindasanth@onap.com",
+	"tags": null,
+	"sources": {
+		"input": {
+			"type": "source-input",
+			"properties": {
+				"key": "action-name"
+			}
+		}
+	}
+}

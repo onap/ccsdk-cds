@@ -1,0 +1,100 @@
+{
+	"metadata": {
+		"template_author": "bs2796",
+		"vendor": "Juniper",
+		"os": "XXX",
+		"service-type": "AVPN",
+		"vnf-type": "VRR",
+		"action": "Base Configuration",
+		"sub-action": "Generate Configuration",
+		"template_name": "VRR-baseconfiguration",
+		"template_version": "1.0.0"
+	},
+	"topology_template": {
+		"inputs": {
+			"service-instance-id": {
+				"required": true,
+				"type": "string"
+			},
+			"vnf-id": {
+				"required": true,
+				"type": "string"
+			},
+			"service": {
+				"required": true,
+				"type": "string"
+			},
+			"region": {
+				"required": true,
+				"type": "string"
+			},
+			"bundle-id": {
+				"required": true,
+				"type": "string"
+			},
+			"bundle-mac": {
+				"required": true,
+				"type": "string"
+			}
+		},
+		"node_templates": {
+			"generate-configuration": {
+				"type": "mock-component-generateConfig",
+				"interfaces": {
+					"org-openecomp-sdnc-config-params-service-MockComponentNode": {
+						"operations": {
+							"process": {
+								"inputs": {
+									"entity-type": "vnf-type",
+									"template-content": "sample-template",
+									"entity-id": "{ \"get_input\" : \"vnf-id\" }"
+								},
+								"outputs": {
+									"mergedData": "merged Data",
+									"status": "status"
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"node_types": {
+		"mock-component-generateConfig": {
+			"interfaces": {
+				"org-openecomp-sdnc-config-params-service-MockComponentNode": {
+					"operations": {
+						"process": {
+							"inputs": {
+								"entity-type": {
+									"required": false,
+									"type": "string"
+								},
+								"template-content": {
+									"required": false,
+									"type": "string"
+								},
+								"entity-id": {
+									"required": true,
+									"type": "string"
+								}
+							},
+							"outputs": {
+								"generated-config": {
+									"required": true,
+									"type": "string"
+								},
+								"status": {
+									"required": true,
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.Component"
+		}
+	}
+}
