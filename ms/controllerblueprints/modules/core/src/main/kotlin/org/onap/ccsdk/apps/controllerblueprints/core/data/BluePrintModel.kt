@@ -185,10 +185,10 @@ class AttributeDefinition {
     var description: String? = null
     lateinit var type: String
     @JsonProperty("default")
-    var _default: JsonNode? = null
+    var defaultValue: JsonNode? = null
     var status: String? = null
     @JsonProperty("entry_schema")
-    var entry_schema: String? = null
+    var entrySchema: String? = null
 }
 
 /*

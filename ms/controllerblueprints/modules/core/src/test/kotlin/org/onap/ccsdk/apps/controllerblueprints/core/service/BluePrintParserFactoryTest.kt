@@ -18,8 +18,8 @@ package org.onap.ccsdk.apps.controllerblueprints.core.service
 
 import org.junit.Test
 import org.onap.ccsdk.apps.controllerblueprints.core.factory.BluePrintParserFactory
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 import kotlin.test.assertNotNull
 
 /**
@@ -28,7 +28,7 @@ import kotlin.test.assertNotNull
  * @author Brinda Santh
  */
 class BluePrintParserFactoryTest {
-    private val logger: Logger = LoggerFactory.getLogger(this::class.toString())
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
 
     @Test
     fun testBluePrintJson() {
@@ -37,6 +37,6 @@ class BluePrintParserFactoryTest {
         val bluePrintContext: BluePrintContext = BluePrintParserFactory.instance(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.TYPE_DEFAULT)!!
                 .readBlueprintFile("baseconfiguration/Definitions/activation-blueprint.json", basepath)
         assertNotNull(bluePrintContext, "Failed to populate Blueprint context")
-        logger.trace("Blue Print {}",bluePrintContext.blueprintJson(true))
+        log.trace("Blue Print {}",bluePrintContext.blueprintJson(true))
     }
 }

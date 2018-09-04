@@ -21,8 +21,8 @@ import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*
 import org.onap.ccsdk.apps.controllerblueprints.core.format
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 import java.io.Serializable
 
 /**
@@ -47,7 +47,7 @@ interface BluePrintEnhancerService : Serializable {
 
 open class BluePrintEnhancerDefaultService(val bluePrintRepoService: BluePrintRepoService) : BluePrintEnhancerService {
 
-    private val log: Logger = LoggerFactory.getLogger(BluePrintEnhancerDefaultService::class.java)
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintEnhancerDefaultService::class.toString())
 
     lateinit var serviceTemplate: ServiceTemplate
 
@@ -189,7 +189,6 @@ open class BluePrintEnhancerDefaultService(val bluePrintRepoService: BluePrintRe
 
     open fun enrichPropertyDefinition(propertyName: String, propertyDefinition: PropertyDefinition) {
         val propertyType = propertyDefinition.type
-                ?: throw BluePrintException(format("Property type is missing for property : {}", propertyName))
         if (BluePrintTypes.validPrimitiveTypes().contains(propertyType)) {
 
         } else if (BluePrintTypes.validCollectionTypes().contains(propertyType)) {

@@ -25,8 +25,8 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.*
 import org.onap.ccsdk.apps.controllerblueprints.core.format
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.ResourceResolverUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 /**
  *
  *
@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory
  */
 class PropertyAssignmentService(var context: MutableMap<String, Any>,
                                 var bluePrintRuntimeService: BluePrintRuntimeService) {
-    private val logger: Logger = LoggerFactory.getLogger(this::class.toString())
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
 
     private var bluePrintContext: BluePrintContext = bluePrintRuntimeService.bluePrintContext
 
@@ -48,7 +48,7 @@ If Property Assignment is Expression.
     fun resolveAssignmentExpression(nodeTemplateName: String, assignmentName: String,
                                             assignment: Any): JsonNode {
         val valueNode: JsonNode
-        logger.trace("Assignment ({})", assignment)
+        log.trace("Assignment ({})", assignment)
         val expressionData = BluePrintExpressionService.getExpressionData(assignment)
 
         if (expressionData.isExpression) {
@@ -113,7 +113,7 @@ If Property Assignment is Expression.
 
         var propertyDefinition: AttributeDefinition = bluePrintContext.nodeTemplateNodeType(attributeNodeTemplateName).attributes?.get(attributeName)!!
 
-        logger.info("node template name ({}), property Name ({}) resolved value ({})", attributeNodeTemplateName, attributeName, nodeTemplateAttributeExpression)
+        log.info("node template name ({}), property Name ({}) resolved value ({})", attributeNodeTemplateName, attributeName, nodeTemplateAttributeExpression)
 
         // Check it it is a nested expression
         valueNode = resolveAssignmentExpression(attributeNodeTemplateName, attributeName, nodeTemplateAttributeExpression)
@@ -144,7 +144,7 @@ If Property Assignment is Expression.
 
         var propertyDefinition: PropertyDefinition = bluePrintContext.nodeTemplateNodeType(propertyNodeTemplateName).properties?.get(propertyName)!!
 
-        logger.info("node template name ({}), property Name ({}) resolved value ({})", propertyNodeTemplateName, propertyName, nodeTemplatePropertyExpression)
+        log.info("node template name ({}), property Name ({}) resolved value ({})", propertyNodeTemplateName, propertyName, nodeTemplatePropertyExpression)
 
         // Check it it is a nested expression
         valueNode = resolveAssignmentExpression(propertyNodeTemplateName, propertyName, nodeTemplatePropertyExpression)

@@ -20,8 +20,8 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.NullNode
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 
 /**
  *
@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory
  * @author Brinda Santh
  */
 object BluePrintRuntimeUtils {
-    private val logger: Logger = LoggerFactory.getLogger(this::class.toString())
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
 
     fun assignInputsFromFile(bluePrintContext: BluePrintContext, fileName: String, context: MutableMap<String, Any>) {
         val jsonNode: JsonNode = JacksonUtils.jsonNodeFromFile(fileName)
@@ -42,12 +42,12 @@ object BluePrintRuntimeUtils {
     }
 
     fun assignInputs(bluePrintContext: BluePrintContext, jsonNode: JsonNode, context: MutableMap<String, Any>) {
-        logger.info("assignInputs from input JSON ({})", jsonNode.toString())
+        log.info("assignInputs from input JSON ({})", jsonNode.toString())
         bluePrintContext.inputs?.forEach { propertyName, property ->
             val valueNode: JsonNode = jsonNode.at("/".plus(propertyName)) ?: NullNode.getInstance()
 
             val path = BluePrintConstants.PATH_INPUTS.plus(BluePrintConstants.PATH_DIVIDER).plus(propertyName)
-            logger.trace("setting input path ({}), values ({})", path, valueNode)
+            log.trace("setting input path ({}), values ({})", path, valueNode)
             context[path] = valueNode
         }
     }

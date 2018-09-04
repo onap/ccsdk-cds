@@ -27,8 +27,8 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.ArtifactDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 /**
  *
  *
@@ -36,13 +36,13 @@ import org.slf4j.LoggerFactory
  */
 open class BluePrintRuntimeService(var bluePrintContext: BluePrintContext, var context: MutableMap<String, Any> = hashMapOf()) {
 
-    private val logger: Logger = LoggerFactory.getLogger(this::class.toString())
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintRuntimeService::class.toString())
 
     /*
         Get the Node Type Definition for the Node Template, Then iterate Node Type Properties and resolve the expressing
      */
     open fun resolveNodeTemplateProperties(nodeTemplateName: String): MutableMap<String, Any?> {
-        logger.info("resolveNodeTemplatePropertyValues for node template ({})", nodeTemplateName)
+        log.info("resolveNodeTemplatePropertyValues for node template ({})", nodeTemplateName)
         val propertyAssignmentValue: MutableMap<String, Any?> = hashMapOf()
 
         val nodeTemplate: NodeTemplate = bluePrintContext.nodeTemplateByName(nodeTemplateName)
@@ -73,13 +73,13 @@ open class BluePrintRuntimeService(var bluePrintContext: BluePrintContext, var c
             // Set for Return of method
             propertyAssignmentValue[nodeTypePropertyName] = resolvedValue
         }
-        logger.info("resolved property definition for node template ({}), values ({})", nodeTemplateName, propertyAssignmentValue)
+        log.info("resolved property definition for node template ({}), values ({})", nodeTemplateName, propertyAssignmentValue)
         return propertyAssignmentValue
     }
 
     open fun resolveNodeTemplateInterfaceOperationInputs(nodeTemplateName: String,
                                                     interfaceName: String, operationName: String): MutableMap<String, Any?> {
-        logger.info("nodeTemplateInterfaceOperationInputsResolvedExpression for node template ({}),interface name ({}), " +
+        log.info("nodeTemplateInterfaceOperationInputsResolvedExpression for node template ({}),interface name ({}), " +
                 "operationName({})", nodeTemplateName, interfaceName, operationName)
 
         val propertyAssignmentValue: MutableMap<String, Any?> = hashMapOf()
@@ -96,7 +96,7 @@ open class BluePrintRuntimeService(var bluePrintContext: BluePrintContext, var c
                         ?: throw BluePrintException(String.format("failed to get input definitions for node type (%s), " +
                                 "interface name (%s), operationName(%s)", nodeTypeName, interfaceName, operationName))
 
-        logger.info("input definition for node template ({}), values ({})", nodeTemplateName, propertyAssignments)
+        log.info("input definition for node template ({}), values ({})", nodeTemplateName, propertyAssignments)
 
         // Iterate Node Type Properties
         nodeTypeInterfaceOperationInputs.forEach { nodeTypePropertyName, nodeTypeProperty ->
@@ -117,7 +117,7 @@ open class BluePrintRuntimeService(var bluePrintContext: BluePrintContext, var c
             // Set for Return of method
             propertyAssignmentValue[nodeTypePropertyName] = resolvedValue
         }
-        logger.info("resolved input assignments for node template ({}), values ({})", nodeTemplateName, propertyAssignmentValue)
+        log.info("resolved input assignments for node template ({}), values ({})", nodeTemplateName, propertyAssignmentValue)
 
         return propertyAssignmentValue
     }
@@ -125,7 +125,7 @@ open class BluePrintRuntimeService(var bluePrintContext: BluePrintContext, var c
 
     open fun resolveNodeTemplateInterfaceOperationOutputs(nodeTemplateName: String,
                                                      interfaceName: String, operationName: String, componentContext: MutableMap<String, Any?>) {
-        logger.info("nodeTemplateInterfaceOperationInputsResolvedExpression for node template ({}),interface name ({}), " +
+        log.info("nodeTemplateInterfaceOperationInputsResolvedExpression for node template ({}),interface name ({}), " +
                 "operationName({})", nodeTemplateName, interfaceName, operationName)
 
         val nodeTypeName = bluePrintContext.nodeTemplateByName(nodeTemplateName).type
@@ -147,7 +147,7 @@ open class BluePrintRuntimeService(var bluePrintContext: BluePrintContext, var c
                     ?: NullNode.getInstance()
             // Store  operation output values into context
             setNodeTemplateOperationPropertyValue(nodeTemplateName, interfaceName, operationName, nodeTypePropertyName, resolvedValue)
-            logger.debug("resolved output assignments for node template ({}), property name ({}), value ({})", nodeTemplateName, nodeTypePropertyName, resolvedValue)
+            log.debug("resolved output assignments for node template ({}), property name ({}), value ({})", nodeTemplateName, nodeTypePropertyName, resolvedValue)
         }
     }
 
@@ -166,7 +166,7 @@ open class BluePrintRuntimeService(var bluePrintContext: BluePrintContext, var c
     open fun setInputValue(propertyName: String, propertyDefinition: PropertyDefinition, value: JsonNode) {
         val path = StringBuilder(BluePrintConstants.PATH_INPUTS)
                 .append(BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
-        logger.trace("setting input path ({}), values ({})", path, value)
+        log.trace("setting input path ({}), values ({})", path, value)
         context[path] = value
     }
 
@@ -193,7 +193,7 @@ open class BluePrintRuntimeService(var bluePrintContext: BluePrintContext, var c
                 .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_OPERATIONS).append(BluePrintConstants.PATH_DIVIDER).append(operationName)
                 .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_PROPERTIES)
                 .append(BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
-        logger.trace("setting operation property path ({}), values ({})", path, value)
+        log.trace("setting operation property path ({}), values ({})", path, value)
         context[path] = value
     }
 
@@ -259,7 +259,7 @@ open class BluePrintRuntimeService(var bluePrintContext: BluePrintContext, var c
     }
 
     open fun assignInputs(jsonNode: JsonNode) {
-        logger.info("assignInputs from input JSON ({})", jsonNode.toString())
+        log.info("assignInputs from input JSON ({})", jsonNode.toString())
         bluePrintContext.inputs?.forEach { propertyName, property ->
             val valueNode: JsonNode = jsonNode.at(BluePrintConstants.PATH_DIVIDER + propertyName)
                     ?: NullNode.getInstance()
@@ -268,7 +268,7 @@ open class BluePrintRuntimeService(var bluePrintContext: BluePrintContext, var c
     }
 
     open fun assignWorkflowInputs(workflowName: String, jsonNode: JsonNode) {
-        logger.info("assign workflow {} input value ({})", workflowName, jsonNode.toString())
+        log.info("assign workflow {} input value ({})", workflowName, jsonNode.toString())
         bluePrintContext.workflowByName(workflowName)?.inputs?.forEach { propertyName, property ->
             val valueNode: JsonNode = jsonNode.at(BluePrintConstants.PATH_DIVIDER + propertyName)
                     ?: NullNode.getInstance()

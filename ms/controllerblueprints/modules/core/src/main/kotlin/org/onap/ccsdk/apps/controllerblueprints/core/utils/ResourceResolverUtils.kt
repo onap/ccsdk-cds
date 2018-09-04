@@ -19,8 +19,8 @@ package org.onap.ccsdk.apps.controllerblueprints.core.utils
 import org.apache.commons.io.FileUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.checkNotEmpty
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 import java.io.File
 import java.net.URL
 import java.nio.charset.Charset
@@ -30,18 +30,18 @@ import java.nio.charset.Charset
  * @author Brinda Santh
  */
 object ResourceResolverUtils {
-    private val logger: Logger = LoggerFactory.getLogger(this::class.toString())
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
 
     @JvmStatic
     fun getFileContent(filename : String, basePath : String?): String {
-        logger.trace("file ({}), basePath ({}) ", filename, basePath)
+        log.trace("file ({}), basePath ({}) ", filename, basePath)
         try{
             var resolvedFileName : String = filename
             if(filename.startsWith("http", true)
                     || filename.startsWith("https", true)){
                 val givenUrl : String = URL(filename).toString()
                 val systemUrl : String = File(".").toURI().toURL().toString()
-                logger.trace("givenUrl ({}), systemUrl ({}) ", givenUrl, systemUrl)
+                log.trace("givenUrl ({}), systemUrl ({}) ", givenUrl, systemUrl)
                 if(givenUrl.startsWith(systemUrl)){
 
                 }

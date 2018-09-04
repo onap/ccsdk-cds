@@ -24,8 +24,8 @@ import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 import reactor.core.publisher.Mono
 import java.io.File
 import java.io.Serializable
@@ -59,7 +59,7 @@ interface BluePrintRepoService : Serializable {
 
 class BluePrintRepoFileService(val basePath: String) : BluePrintRepoService {
 
-    private val log: Logger = LoggerFactory.getLogger(BluePrintRepoFileService::class.java)
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
 
     private val dataTypePath = basePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)
     private val nodeTypePath = basePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TYPE)

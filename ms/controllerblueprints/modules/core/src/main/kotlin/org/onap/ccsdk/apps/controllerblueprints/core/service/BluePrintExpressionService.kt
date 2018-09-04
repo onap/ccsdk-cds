@@ -23,15 +23,15 @@ import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 /**
  *
  *
  * @author Brinda Santh
  */
 object BluePrintExpressionService {
-    val logger: Logger = LoggerFactory.getLogger(this::class.toString())
+    val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
 
     @JvmStatic
     fun getExpressionData(propertyAssignment: Any): ExpressionData {
@@ -41,7 +41,7 @@ object BluePrintExpressionService {
 
     @JvmStatic
     fun getExpressionData(propertyAssignmentNode: JsonNode): ExpressionData {
-        logger.trace("Assignment Data/Expression : {}", propertyAssignmentNode)
+        log.trace("Assignment Data/Expression : {}", propertyAssignmentNode)
         val expressionData = ExpressionData(valueNode = propertyAssignmentNode)
         if (propertyAssignmentNode is ObjectNode) {
 
@@ -89,18 +89,20 @@ object BluePrintExpressionService {
         var reqOrCapEntityName: String? = null
         var propertyName = ""
         var subProperty: String? = null
-        if (arrayNode.size() == 2) {
-            propertyName = arrayNode[1].textValue()
-        } else if (arrayNode.size() == 3) {
-            reqOrCapEntityName = arrayNode[1].textValue()
-            propertyName = arrayNode[2].textValue()
-        } else if (arrayNode.size() > 3) {
-            reqOrCapEntityName = arrayNode[1].textValue()
-            propertyName = arrayNode[2].textValue()
-            val propertyPaths: List<String> = arrayNode.filterIndexed { index, obj ->
-                index >= 3
-            }.map { it.textValue() }
-            subProperty = propertyPaths.joinToString("/")
+        when {
+            arrayNode.size() == 2 -> propertyName = arrayNode[1].textValue()
+            arrayNode.size() == 3 -> {
+                reqOrCapEntityName = arrayNode[1].textValue()
+                propertyName = arrayNode[2].textValue()
+            }
+            arrayNode.size() > 3 -> {
+                reqOrCapEntityName = arrayNode[1].textValue()
+                propertyName = arrayNode[2].textValue()
+                val propertyPaths: List<String> = arrayNode.filterIndexed { index, obj ->
+                    index >= 3
+                }.map { it.textValue() }
+                subProperty = propertyPaths.joinToString("/")
+            }
         }
 
         return PropertyExpression(modelableEntityName = arrayNode[0].asText(),
@@ -120,7 +122,7 @@ object BluePrintExpressionService {
         }
 
         var reqOrCapEntityName: String? = null
-        var propertyName: String = ""
+        var propertyName = ""
         var subProperty: String? = null
         if (arrayNode.size() == 2) {
             propertyName = arrayNode[1].textValue()

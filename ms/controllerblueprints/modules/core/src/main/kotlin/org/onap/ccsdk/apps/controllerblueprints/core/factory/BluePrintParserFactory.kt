@@ -18,8 +18,8 @@ package org.onap.ccsdk.apps.controllerblueprints.core.factory
 
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintParserDefaultService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintParserService
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 
 /**
  *
@@ -28,12 +28,12 @@ import org.slf4j.LoggerFactory
  */
 
 object BluePrintParserFactory {
-    private val logger: Logger = LoggerFactory.getLogger(this::class.toString())
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
 
     var bluePrintParserServices: MutableMap<String, BluePrintParserService> = HashMap()
 
     init {
-        logger.info("Initialised default BluePrintParser Service ")
+        log.info("Initialised default BluePrintParser Service ")
         bluePrintParserServices.put(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.TYPE_DEFAULT, BluePrintParserDefaultService())
     }
 

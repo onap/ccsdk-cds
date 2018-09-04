@@ -20,8 +20,8 @@ import org.junit.Before
 import org.junit.Test
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.factory.BluePrintParserFactory
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 
 /**
  *
@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory
  * @author Brinda Santh
  */
 class BluePrintValidatorDefaultServiceTest {
-    private val logger: Logger = LoggerFactory.getLogger(this::class.toString())
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
     val basepath = "load/blueprints"
 
     @Before
@@ -44,6 +44,6 @@ class BluePrintValidatorDefaultServiceTest {
         val properties : MutableMap<String, Any> = hashMapOf()
         val validatorService = BluePrintValidatorDefaultService()
         validatorService.validateBlueprint(bluePrintContext.serviceTemplate,properties)
-        logger.info("Validation Message {}", properties)
+        log.info("Validation Message {}", properties)
     }
 }

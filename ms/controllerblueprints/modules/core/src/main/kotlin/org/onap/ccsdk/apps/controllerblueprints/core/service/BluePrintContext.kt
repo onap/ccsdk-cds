@@ -16,12 +16,12 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core.service
 
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 /**
  *
  *
@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory
  */
 class BluePrintContext(serviceTemplate: ServiceTemplate) {
 
-    private val logger: Logger = LoggerFactory.getLogger(this::class.toString())
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
 
     val serviceTemplate: ServiceTemplate = serviceTemplate
 

@@ -20,13 +20,13 @@ package org.onap.ccsdk.apps.controllerblueprints.core.utils
 import org.apache.commons.io.FileUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ToscaMetaData
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 import java.io.File
 import java.nio.charset.Charset
 
 object BluePrintMetadataUtils {
-    private val logger: Logger = LoggerFactory.getLogger(this::class.toString())
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
 
     @JvmStatic
     fun toscaMetaData(basePath: String): ToscaMetaData {
@@ -65,7 +65,7 @@ object BluePrintMetadataUtils {
 
         val toscaMetaData: ToscaMetaData = BluePrintMetadataUtils.toscaMetaData(metaDataFile)
 
-        logger.info("Processing blueprint base path ({}) and entry definition file ({})", blueprintBasePath, toscaMetaData.entityDefinitions)
+        log.info("Processing blueprint base path ({}) and entry definition file ({})", blueprintBasePath, toscaMetaData.entityDefinitions)
 
         return BluePrintParserFactory.instance(BluePrintConstants.TYPE_DEFAULT)!!
                 .readBlueprintFile(toscaMetaData.entityDefinitions!!, blueprintBasePath)
@@ -78,7 +78,7 @@ object BluePrintMetadataUtils {
 
         val toscaMetaData: ToscaMetaData = BluePrintMetadataUtils.toscaMetaData(metaDataFile)
 
-        logger.info("Processing blueprint base path ({}) and entry definition file ({})", blueprintBasePath, toscaMetaData.entityDefinitions)
+        log.info("Processing blueprint base path ({}) and entry definition file ({})", blueprintBasePath, toscaMetaData.entityDefinitions)
 
         val bluePrintContext: BluePrintContext = BluePrintParserFactory.instance(BluePrintConstants.TYPE_DEFAULT)!!
                 .readBlueprintFile(toscaMetaData.entityDefinitions!!, blueprintBasePath)

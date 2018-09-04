@@ -25,8 +25,8 @@ import org.onap.ccsdk.apps.controllerblueprints.core.factory.BluePrintParserFact
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintRuntimeUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils.jsonNodeFromFile
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils.jsonNodeFromObject
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
@@ -36,7 +36,7 @@ import kotlin.test.assertNotNull
  * @author Brinda Santh
  */
 class BluePrintRuntimeServiceTest {
-    private val logger: Logger = LoggerFactory.getLogger(this::class.toString())
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
     val basepath = "load/blueprints"
 
 
@@ -47,7 +47,7 @@ class BluePrintRuntimeServiceTest {
 
     @Test
     fun testResolveNodeTemplateProperties() {
-        logger.info("************************ testResolveNodeTemplateProperties **********************")
+        log.info("************************ testResolveNodeTemplateProperties **********************")
         val bluePrintContext: BluePrintContext = BluePrintParserFactory.instance(BluePrintConstants.TYPE_DEFAULT)!!
                 .readBlueprintFile("baseconfiguration/Definitions/activation-blueprint.json", basepath)
 
@@ -61,7 +61,7 @@ class BluePrintRuntimeServiceTest {
         bluePrintRuntimeService.assignInputs(inputNode)
 
         val propContext: MutableMap<String, Any?> = bluePrintRuntimeService.resolveNodeTemplateProperties("activate-process")
-        logger.info("Context {}" ,bluePrintRuntimeService.context)
+        log.info("Context {}" ,bluePrintRuntimeService.context)
 
         assertNotNull(propContext, "Failed to populate interface property values")
         assertEquals(propContext.get("process-name"), jsonNodeFromObject("sample-action"), "Failed to populate parameter process-name")
@@ -70,7 +70,7 @@ class BluePrintRuntimeServiceTest {
 
     @Test
     fun testResolveNodeTemplateInterfaceOperationInputs() {
-        logger.info("************************ testResolveNodeTemplateInterfaceOperationInputs **********************")
+        log.info("************************ testResolveNodeTemplateInterfaceOperationInputs **********************")
         val bluePrintContext: BluePrintContext = BluePrintParserFactory.instance(BluePrintConstants.TYPE_DEFAULT)!!
                 .readBlueprintFile("baseconfiguration/Definitions/activation-blueprint.json", basepath)
         assertNotNull(bluePrintContext, "Failed to populate Blueprint context")
@@ -84,12 +84,12 @@ class BluePrintRuntimeServiceTest {
 
         val bluePrintRuntimeService = BluePrintRuntimeService(bluePrintContext, context)
 
-        logger.info("Prepared Context {}" ,context)
+        log.info("Prepared Context {}" ,context)
 
         val inContext: MutableMap<String, Any?> = bluePrintRuntimeService.resolveNodeTemplateInterfaceOperationInputs("resource-assignment",
                 "DefaultComponentNode", "process")
 
-        logger.trace("In Context {}" ,inContext)
+        log.trace("In Context {}" ,inContext)
 
         assertNotNull(inContext, "Failed to populate interface input property values")
         assertEquals(inContext.get("action-name"), jsonNodeFromObject("sample-action"), "Failed to populate parameter action-name")
@@ -100,7 +100,7 @@ class BluePrintRuntimeServiceTest {
 
     @Test
     fun testResolveNodeTemplateInterfaceOperationOutputs() {
-        logger.info("************************ testResolveNodeTemplateInterfaceOperationOutputs **********************")
+        log.info("************************ testResolveNodeTemplateInterfaceOperationOutputs **********************")
         val bluePrintContext: BluePrintContext = BluePrintParserFactory.instance(BluePrintConstants.TYPE_DEFAULT)!!
                 .readBlueprintFile("baseconfiguration/Definitions/activation-blueprint.json", basepath)
         assertNotNull(bluePrintContext, "Failed to populate Blueprint context")

@@ -37,7 +37,7 @@ object ServiceTemplateUtils {
 
     @JvmStatic
     fun getServiceTemplateFromContent(content: String): ServiceTemplate {
-        return JacksonUtils.readValue<ServiceTemplate>(content)
+        return JacksonUtils.readValue(content)
     }
 
 
