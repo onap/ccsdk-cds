@@ -20,7 +20,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment;
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.validator.ResourceAssignmentValidator;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModelContent;
 import org.onap.ccsdk.apps.controllerblueprints.service.model.AutoMapResponse;
 import org.onap.ccsdk.apps.controllerblueprints.service.repository.ResourceDictionaryRepository;
@@ -45,21 +44,24 @@ public class ServiceTemplateService {
 
     private ConfigModelCreateService configModelCreateService;
     private BluePrintEnhancerService bluePrintEnhancerService;
+    private ResourceAssignmentValidationService resourceAssignmentValidationService;
 
     /**
      * This is a SchemaGeneratorService constructor
      *
-     * @param dataDictionaryRepository dataDictionaryRepository
-     * @param configModelCreateService configModelCreateService
-     * @param bluePrintEnhancerService bluePrintEnhancerService
+     * @param dataDictionaryRepository            dataDictionaryRepository
+     * @param configModelCreateService            configModelCreateService
+     * @param bluePrintEnhancerService            bluePrintEnhancerService
+     * @param resourceAssignmentValidationService resourceAssignmentValidationService
      */
     public ServiceTemplateService(ResourceDictionaryRepository dataDictionaryRepository,
                                   ConfigModelCreateService configModelCreateService,
-                                  BluePrintEnhancerService bluePrintEnhancerService) {
+                                  BluePrintEnhancerService bluePrintEnhancerService,
+                                  ResourceAssignmentValidationService resourceAssignmentValidationService) {
         this.dataDictionaryRepository = dataDictionaryRepository;
         this.configModelCreateService = configModelCreateService;
         this.bluePrintEnhancerService = bluePrintEnhancerService;
-
+        this.resourceAssignmentValidationService = resourceAssignmentValidationService;
     }
 
     /**
@@ -105,13 +107,7 @@ public class ServiceTemplateService {
      */
     public List<ResourceAssignment> validateResourceAssignments(List<ResourceAssignment> resourceAssignments)
             throws BluePrintException {
-        try {
-            ResourceAssignmentValidator resourceAssignmentValidator =
-                    new ResourceAssignmentValidator(resourceAssignments);
-            resourceAssignmentValidator.validateResourceAssignment();
-        } catch (BluePrintException e) {
-            throw new BluePrintException(e.getMessage(), e);
-        }
+        resourceAssignmentValidationService.validate(resourceAssignments);
         return resourceAssignments;
     }
 

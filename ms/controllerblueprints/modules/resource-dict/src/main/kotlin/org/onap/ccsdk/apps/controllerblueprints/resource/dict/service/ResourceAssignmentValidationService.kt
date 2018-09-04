@@ -22,7 +22,6 @@ import org.apache.commons.lang3.text.StrBuilder
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.TopologicalSortingUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.validator.ResourceAssignmentValidator
 import org.slf4j.LoggerFactory
 import java.io.Serializable
 
@@ -43,18 +42,21 @@ interface ResourceAssignmentValidationService : Serializable {
  * @author Brinda Santh
  */
 open class ResourceAssignmentValidationDefaultService : ResourceAssignmentValidationService {
-    private val log = LoggerFactory.getLogger(ResourceAssignmentValidator::class.java)
-    open var resourceAssignments: List<ResourceAssignment> = arrayListOf()
-    open var resourceAssignmentMap: MutableMap<String, ResourceAssignment> = hashMapOf()
+    private val log = LoggerFactory.getLogger(ResourceAssignmentValidationDefaultService::class.java)
+
+    open var resourceAssignmentMap: Map<String, ResourceAssignment> = hashMapOf()
     open val validationMessage = StrBuilder()
 
     override fun validate(resourceAssignments: List<ResourceAssignment>): Boolean {
-        this.resourceAssignments = resourceAssignments
-        validateSources(resourceAssignments)
-        validateDuplicateDictionaryKeys()
-        validateCyclicDependency()
-        if (StringUtils.isNotBlank(validationMessage)) {
-            throw BluePrintException("Resource Assignment Validation :" + validationMessage.toString())
+        try {
+            validateSources(resourceAssignments)
+            validateTemplateNDictionaryKeys(resourceAssignments)
+            validateCyclicDependency(resourceAssignments)
+            if (StringUtils.isNotBlank(validationMessage)) {
+                throw BluePrintException("Resource Assignment Validation Failure")
+            }
+        } catch (e: Exception) {
+            throw BluePrintException("Resource Assignment Validation :" + validationMessage.toString(), e)
         }
         return true
     }
@@ -63,40 +65,54 @@ open class ResourceAssignmentValidationDefaultService : ResourceAssignmentValida
         log.info("validating resource assignment sources")
     }
 
-    open fun validateDuplicateDictionaryKeys() {
-        val uniqueDictionaryKeys = hashSetOf<String>()
+    open fun validateTemplateNDictionaryKeys(resourceAssignments: List<ResourceAssignment>) {
 
-        this.resourceAssignments.forEach { resourceAssignment ->
-            // Check Duplicate Names
-            if (!resourceAssignmentMap.containsKey(resourceAssignment.name)) {
-                resourceAssignmentMap[resourceAssignment.name] = resourceAssignment
-            } else {
-                validationMessage.appendln(String.format("Duplicate Assignment Template Key (%s) is Present",
-                        resourceAssignment.name))
-            }
-            // Check duplicate Dictionary Keys
-            if (!uniqueDictionaryKeys.contains(resourceAssignment.dictionaryName!!)) {
-                uniqueDictionaryKeys.add(resourceAssignment.dictionaryName!!)
-            } else {
-                validationMessage.appendln(
-                        String.format("Duplicate Assignment Dictionary Key (%s) present with Template Key (%s)",
-                                resourceAssignment.dictionaryName, resourceAssignment.name))
-            }
+        resourceAssignmentMap = resourceAssignments.map { it.name to it }.toMap()
+
+        val duplicateKeyNames = resourceAssignments.groupBy { it.name }
+                .filter { it.value.size > 1 }
+                .map { it.key }
+
+        if (duplicateKeyNames.isNotEmpty()) {
+            validationMessage.appendln(String.format("Duplicate Assignment Template Keys (%s) is Present", duplicateKeyNames))
+        }
+
+        val duplicateDictionaryKeyNames = resourceAssignments.groupBy { it.dictionaryName }
+                .filter { it.value.size > 1 }
+                .map { it.key }
+        if (duplicateDictionaryKeyNames.isNotEmpty()) {
+            validationMessage.appendln(String.format("Duplicate Assignment Dictionary Keys (%s) is Present", duplicateDictionaryKeyNames))
+        }
+
+        val dependenciesNames = resourceAssignments.mapNotNull { it.dependencies }.flatten()
+
+        log.info("Resource assignment definitions : {}", resourceAssignmentMap.keys)
+        log.info("Resource assignment Dictionary dependencies : {}", dependenciesNames)
+
+        val notPresentDictionaries = dependenciesNames.filter { !resourceAssignmentMap.containsKey(it) }.distinct()
+        if (notPresentDictionaries.isNotEmpty()) {
+            validationMessage.appendln(String.format("No assignments for Dictionary Keys (%s)", notPresentDictionaries))
+        }
+
+        if (StringUtils.isNotBlank(validationMessage)) {
+            throw BluePrintException("Resource Assignment Validation Failure")
         }
     }
 
-    open fun validateCyclicDependency() {
+    open fun validateCyclicDependency(resourceAssignments: List<ResourceAssignment>) {
         val startResourceAssignment = ResourceAssignment()
         startResourceAssignment.name = "*"
 
         val topologySorting = TopologicalSortingUtils<ResourceAssignment>()
-        this.resourceAssignmentMap.forEach { assignmentKey, assignment ->
-            if (CollectionUtils.isNotEmpty(assignment.dependencies)) {
-                for (dependency in assignment.dependencies!!) {
-                    topologySorting.add(resourceAssignmentMap[dependency]!!, assignment)
+
+        resourceAssignmentMap.map { it.value }.map { resourceAssignment ->
+            if (CollectionUtils.isNotEmpty(resourceAssignment.dependencies)) {
+                resourceAssignment.dependencies!!.map {
+                    log.info("Topological Graph link from {} to {}", it, resourceAssignment.name)
+                    topologySorting.add(resourceAssignmentMap[it]!!, resourceAssignment)
                 }
             } else {
-                topologySorting.add(startResourceAssignment, assignment)
+                topologySorting.add(startResourceAssignment, resourceAssignment)
             }
         }
 

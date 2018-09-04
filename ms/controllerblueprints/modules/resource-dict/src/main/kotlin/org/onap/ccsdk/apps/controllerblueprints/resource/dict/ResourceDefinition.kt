@@ -18,18 +18,19 @@ package org.onap.ccsdk.apps.controllerblueprints.resource.dict
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
+import org.apache.commons.lang3.builder.ToStringBuilder
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition
 import java.io.Serializable
 import java.util.*
 
-open class ResourceDefinition{
+open class ResourceDefinition {
 
     @JsonProperty(value = "name", required = true)
     lateinit var name: String
 
     @JsonProperty(value = "property", required = true)
-    lateinit var property : PropertyDefinition
+    lateinit var property: PropertyDefinition
 
     var tags: String? = null
 
@@ -81,6 +82,16 @@ open class ResourceAssignment {
 
     @JsonProperty("updated-by")
     var updatedBy: String? = null
+
+    override fun toString(): String {
+        return StringBuilder()
+                .append("[")
+                .append("name=", name)
+                .append(", dictionaryName=", dictionaryName)
+                .append(", dictionarySource=", dictionarySource)
+                .append("]")
+                .toString()
+    }
 }
 
 /**

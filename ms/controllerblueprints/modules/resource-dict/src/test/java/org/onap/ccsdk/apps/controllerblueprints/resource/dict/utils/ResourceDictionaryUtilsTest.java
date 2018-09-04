@@ -32,7 +32,11 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * ResourceDictionaryUtilsTest.
+ *
+ * @author Brinda Santh
+ */
 public class ResourceDictionaryUtilsTest {
     private static final Logger log = LoggerFactory.getLogger(ResourceDictionaryUtilsTest.class);
 

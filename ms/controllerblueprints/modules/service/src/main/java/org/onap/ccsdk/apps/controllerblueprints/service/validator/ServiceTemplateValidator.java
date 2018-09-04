@@ -17,16 +17,23 @@
 package org.onap.ccsdk.apps.controllerblueprints.service.validator;
 
 import com.google.common.base.Preconditions;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
+import org.onap.ccsdk.apps.controllerblueprints.core.ConfigModelConstant;
+import org.onap.ccsdk.apps.controllerblueprints.core.data.CapabilityAssignment;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeTemplate;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate;
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintValidatorDefaultService;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.validator.ResourceAssignmentValidator;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceAssignmentValidationDefaultService;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceAssignmentValidationService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -62,7 +69,7 @@ public class ServiceTemplateValidator extends BluePrintValidatorDefaultService {
     /**
      * This is a validateServiceTemplate
      *
-     * @param serviceTemplate
+     * @param serviceTemplate serviceTemplate
      * @return boolean
      * @throws BluePrintException BluePrintException
      */
@@ -76,7 +83,7 @@ public class ServiceTemplateValidator extends BluePrintValidatorDefaultService {
     /**
      * This is a getMetaData to get the key information during the
      *
-     * @return Map<String, String>
+     * @return Map<String                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               String>
      */
     public Map<String, String> getMetaData() {
         return metaData;
@@ -104,9 +111,37 @@ public class ServiceTemplateValidator extends BluePrintValidatorDefaultService {
     private void validateNodeTemplateCustom(@NotNull String nodeTemplateName, @NotNull NodeTemplate nodeTemplate)
             throws BluePrintException {
         String derivedFrom = getBluePrintContext().nodeTemplateNodeType(nodeTemplateName).getDerivedFrom();
-        if ("tosca.nodes.Artifact".equals(derivedFrom)) {
-            ResourceAssignmentValidator resourceAssignmentValidator = new ResourceAssignmentValidator(nodeTemplate);
-            resourceAssignmentValidator.validateResourceAssignment();
+
+        if (BluePrintConstants.MODEL_TYPE_NODE_ARTIFACT.equals(derivedFrom)) {
+            List<ResourceAssignment> resourceAssignment = getResourceAssignments(nodeTemplate);
+            ResourceAssignmentValidationService resourceAssignmentValidationService = new ResourceAssignmentValidationDefaultService();
+            resourceAssignmentValidationService.validate(resourceAssignment);
         }
+    }
+
+    private List<ResourceAssignment> getResourceAssignments(@NotNull NodeTemplate nodeTemplate) {
+
+        List<ResourceAssignment> resourceAssignment = null;
+
+        if (MapUtils.isNotEmpty(nodeTemplate.getCapabilities())) {
+
+            CapabilityAssignment capabilityAssignment =
+                    nodeTemplate.getCapabilities().get(ConfigModelConstant.CAPABILITY_PROPERTY_MAPPING);
+            if (capabilityAssignment != null && capabilityAssignment.getProperties() != null) {
+                Object mappingObject =
+                        capabilityAssignment.getProperties().get(ConfigModelConstant.CAPABILITY_PROPERTY_MAPPING);
+                if (mappingObject != null) {
+                    String mappingContent = JacksonUtils.getJson(mappingObject);
+                    Preconditions.checkArgument(StringUtils.isNotBlank(mappingContent),
+                            String.format("Failed to get capability mapping property (%s) ", ConfigModelConstant.CAPABILITY_PROPERTY_MAPPING));
+
+                    resourceAssignment = JacksonUtils.getListFromJson(mappingContent, ResourceAssignment.class);
+
+                    Preconditions.checkNotNull(resourceAssignment,
+                            String.format("Failed to get resource assignment info from the content (%s) ", mappingContent));
+                }
+            }
+        }
+        return resourceAssignment;
     }
 }
