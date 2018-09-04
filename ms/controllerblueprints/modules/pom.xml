@@ -31,8 +31,6 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>core</module>
-        <module>resource-dict</module>
         <module>service</module>
     </modules>
 
