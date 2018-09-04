@@ -18,9 +18,12 @@
 package org.onap.ccsdk.apps.controllerblueprints.resource.dict.utils;
 
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.Assert;
 import org.junit.Test;
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeTemplate;
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDictionaryConstants;
@@ -75,5 +78,17 @@ public class ResourceDictionaryUtilsTest {
         Assert.assertEquals("Expected source Input, but.", ResourceDictionaryConstants.SOURCE_INPUT, multipleFirstSource);
 
     }
+
+    @Test
+    public void testAssignInputs() {
+        JsonNode data = JacksonUtils.jsonNodeFromClassPathFile("data/resource-assignment-input.json");
+        Map<String, Object> context = new HashMap<>();
+        ResourceDictionaryUtils.assignInputs(data, context);
+        String path = BluePrintConstants.PATH_INPUTS.concat(BluePrintConstants.PATH_DIVIDER).concat("mapValue");
+        log.info("populated context {}", context);
+        Assert.assertTrue(String.format("failed to get variable : %s",path),context.containsKey(path));
+
+    }
+
 
 }

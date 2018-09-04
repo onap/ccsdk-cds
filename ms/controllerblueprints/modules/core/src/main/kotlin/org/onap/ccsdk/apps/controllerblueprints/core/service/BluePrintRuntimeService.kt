@@ -26,6 +26,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.ArtifactDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 /**
@@ -33,14 +34,14 @@ import org.slf4j.LoggerFactory
  *
  * @author Brinda Santh
  */
-class BluePrintRuntimeService(var bluePrintContext: BluePrintContext, var context: MutableMap<String, Any> = hashMapOf()) {
+open class BluePrintRuntimeService(var bluePrintContext: BluePrintContext, var context: MutableMap<String, Any> = hashMapOf()) {
 
     private val logger: Logger = LoggerFactory.getLogger(this::class.toString())
 
     /*
         Get the Node Type Definition for the Node Template, Then iterate Node Type Properties and resolve the expressing
      */
-    fun resolveNodeTemplateProperties(nodeTemplateName: String): MutableMap<String, Any?> {
+    open fun resolveNodeTemplateProperties(nodeTemplateName: String): MutableMap<String, Any?> {
         logger.info("resolveNodeTemplatePropertyValues for node template ({})", nodeTemplateName)
         val propertyAssignmentValue: MutableMap<String, Any?> = hashMapOf()
 
@@ -76,7 +77,7 @@ class BluePrintRuntimeService(var bluePrintContext: BluePrintContext, var contex
         return propertyAssignmentValue
     }
 
-    fun resolveNodeTemplateInterfaceOperationInputs(nodeTemplateName: String,
+    open fun resolveNodeTemplateInterfaceOperationInputs(nodeTemplateName: String,
                                                     interfaceName: String, operationName: String): MutableMap<String, Any?> {
         logger.info("nodeTemplateInterfaceOperationInputsResolvedExpression for node template ({}),interface name ({}), " +
                 "operationName({})", nodeTemplateName, interfaceName, operationName)
@@ -105,7 +106,7 @@ class BluePrintRuntimeService(var bluePrintContext: BluePrintContext, var contex
             var resolvedValue: JsonNode = NullNode.getInstance()
             if (propertyAssignment != null) {
                 // Resolve the Expressing
-                val propertyAssignmentExpression = PropertyAssignmentService( context, this)
+                val propertyAssignmentExpression = PropertyAssignmentService(context, this)
                 resolvedValue = propertyAssignmentExpression.resolveAssignmentExpression(nodeTemplateName, nodeTypePropertyName, propertyAssignment)
             } else {
                 // Assign default value to the Operation
@@ -122,8 +123,8 @@ class BluePrintRuntimeService(var bluePrintContext: BluePrintContext, var contex
     }
 
 
-    fun resolveNodeTemplateInterfaceOperationOutputs(nodeTemplateName: String,
-                                                     interfaceName: String, operationName: String, componentContext: MutableMap<String, Any?>): Unit {
+    open fun resolveNodeTemplateInterfaceOperationOutputs(nodeTemplateName: String,
+                                                     interfaceName: String, operationName: String, componentContext: MutableMap<String, Any?>) {
         logger.info("nodeTemplateInterfaceOperationInputsResolvedExpression for node template ({}),interface name ({}), " +
                 "operationName({})", nodeTemplateName, interfaceName, operationName)
 
@@ -150,125 +151,127 @@ class BluePrintRuntimeService(var bluePrintContext: BluePrintContext, var contex
         }
     }
 
-    fun resolveNodeTemplateArtifact(nodeTemplateName: String,
+    open fun resolveNodeTemplateArtifact(nodeTemplateName: String,
                                     artifactName: String): String {
         val nodeTemplate = bluePrintContext.nodeTemplateByName(nodeTemplateName)
 
         val artifactDefinition: ArtifactDefinition = nodeTemplate.artifacts?.get(artifactName)
                 ?: throw BluePrintProcessorException(String.format("failed to get artifat definition {} from the node template"
                         , artifactName))
-        val propertyAssignmentExpression = PropertyAssignmentService( context, this)
+        val propertyAssignmentExpression = PropertyAssignmentService(context, this)
         return propertyAssignmentExpression.artifactContent(artifactDefinition)
     }
 
 
-    fun setInputValue(propertyName: String, propertyDefinition: PropertyDefinition, value: JsonNode): Unit {
-        val path = StringBuilder(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_INPUTS)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
+    open fun setInputValue(propertyName: String, propertyDefinition: PropertyDefinition, value: JsonNode) {
+        val path = StringBuilder(BluePrintConstants.PATH_INPUTS)
+                .append(BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
         logger.trace("setting input path ({}), values ({})", path, value)
         context[path] = value
     }
 
-    fun setWorkflowInputValue(workflowName: String, propertyName: String, value: JsonNode): Unit {
-        val path: String = StringBuilder(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_NODE_WORKFLOWS).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(workflowName)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_INPUTS)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_PROPERTIES)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
+    open fun setWorkflowInputValue(workflowName: String, propertyName: String, value: JsonNode) {
+        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_WORKFLOWS).append(BluePrintConstants.PATH_DIVIDER).append(workflowName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_INPUTS)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_PROPERTIES)
+                .append(BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
         context[path] = value
     }
 
-    fun setNodeTemplatePropertyValue(nodeTemplateName: String, propertyName: String, value: JsonNode): Unit {
+    open fun setNodeTemplatePropertyValue(nodeTemplateName: String, propertyName: String, value: JsonNode) {
 
-        val path: String = StringBuilder(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_NODE_TEMPLATES).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_PROPERTIES)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
+        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES).append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_PROPERTIES)
+                .append(BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
         context[path] = value
     }
 
-    fun setNodeTemplateOperationPropertyValue(nodeTemplateName: String, interfaceName: String, operationName: String, propertyName: String,
-                                              value: JsonNode): Unit {
-        val path: String = StringBuilder(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_NODE_TEMPLATES).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_INTERFACES).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(interfaceName)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_OPERATIONS).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(operationName)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_PROPERTIES)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
+    open fun setNodeTemplateOperationPropertyValue(nodeTemplateName: String, interfaceName: String, operationName: String, propertyName: String,
+                                              value: JsonNode) {
+        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES).append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_INTERFACES).append(BluePrintConstants.PATH_DIVIDER).append(interfaceName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_OPERATIONS).append(BluePrintConstants.PATH_DIVIDER).append(operationName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_PROPERTIES)
+                .append(BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
         logger.trace("setting operation property path ({}), values ({})", path, value)
         context[path] = value
     }
 
-    fun setNodeTemplateOperationInputValue(nodeTemplateName: String, interfaceName: String, operationName: String, propertyName: String,
-                                           value: JsonNode): Unit {
-        val path: String = StringBuilder(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_NODE_TEMPLATES).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_INTERFACES).append(interfaceName)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_OPERATIONS).append(operationName)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_INPUTS)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_PROPERTIES)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
+    open fun setNodeTemplateOperationInputValue(nodeTemplateName: String, interfaceName: String, operationName: String, propertyName: String,
+                                           value: JsonNode) {
+        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES).append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_INTERFACES).append(interfaceName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_OPERATIONS).append(operationName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_INPUTS)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_PROPERTIES)
+                .append(BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
         context[path] = value
     }
 
-    fun setNodeTemplateOperationOutputValue(nodeTemplateName: String, interfaceName: String, operationName: String, propertyName: String,
-                                            value: JsonNode): Unit {
-        val path: String = StringBuilder(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_NODE_TEMPLATES).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_INTERFACES).append(interfaceName)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_OPERATIONS).append(operationName)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_OUTPUTS)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_PROPERTIES)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
+    open fun setNodeTemplateOperationOutputValue(nodeTemplateName: String, interfaceName: String, operationName: String, propertyName: String,
+                                            value: JsonNode) {
+        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES).append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_INTERFACES).append(interfaceName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_OPERATIONS).append(operationName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_OUTPUTS)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_PROPERTIES)
+                .append(BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
         context[path] = value
     }
 
 
-    fun getInputValue(propertyName: String): JsonNode {
-        val path = StringBuilder(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_INPUTS)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
+    open fun getInputValue(propertyName: String): JsonNode {
+        val path = StringBuilder(BluePrintConstants.PATH_INPUTS)
+                .append(BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
         return context[path] as? JsonNode ?: NullNode.instance
     }
 
-    fun getNodeTemplateOperationOutputValue(nodeTemplateName: String, interfaceName: String, operationName: String, propertyName: String): JsonNode {
-        val path: String = StringBuilder(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_NODE_TEMPLATES).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_INTERFACES).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(interfaceName)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_OPERATIONS).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(operationName)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_PROPERTIES)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
+    open fun getNodeTemplateOperationOutputValue(nodeTemplateName: String, interfaceName: String, operationName: String, propertyName: String): JsonNode {
+        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES).append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_INTERFACES).append(BluePrintConstants.PATH_DIVIDER).append(interfaceName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_OPERATIONS).append(BluePrintConstants.PATH_DIVIDER).append(operationName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_PROPERTIES)
+                .append(BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
         return context[path] as JsonNode
     }
 
-    fun getPropertyValue(nodeTemplateName: String, propertyName: String): JsonNode? {
-        val path: String = StringBuilder(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_NODE_TEMPLATES).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_PROPERTIES)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
+    open fun getPropertyValue(nodeTemplateName: String, propertyName: String): JsonNode? {
+        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES).append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_PROPERTIES)
+                .append(BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
         return context[path] as JsonNode
     }
 
-    fun getRequirementPropertyValue(nodeTemplateName: String, requirementName: String, propertyName: String): JsonNode? {
-        val path: String = StringBuilder(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_NODE_TEMPLATES).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_REQUIREMENTS).append(requirementName)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_PROPERTIES)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
+    open fun getRequirementPropertyValue(nodeTemplateName: String, requirementName: String, propertyName: String): JsonNode? {
+        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES).append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_REQUIREMENTS).append(requirementName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_PROPERTIES)
+                .append(BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
         return context[path] as JsonNode
     }
 
-    fun getCapabilityPropertyValue(nodeTemplateName: String, capabilityName: String, propertyName: String): JsonNode? {
-        val path: String = StringBuilder(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_NODE_TEMPLATES).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_CAPABILITIES).append(capabilityName)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_PROPERTIES)
-                .append(org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
+    open fun getCapabilityPropertyValue(nodeTemplateName: String, capabilityName: String, propertyName: String): JsonNode? {
+        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES).append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_CAPABILITIES).append(capabilityName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_PROPERTIES)
+                .append(BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
         return context[path] as JsonNode
     }
 
-    fun assignInputs(jsonNode: JsonNode): Unit {
+    open fun assignInputs(jsonNode: JsonNode) {
         logger.info("assignInputs from input JSON ({})", jsonNode.toString())
         bluePrintContext.inputs?.forEach { propertyName, property ->
-            val valueNode: JsonNode = jsonNode.at("/" + propertyName) ?: NullNode.getInstance()
+            val valueNode: JsonNode = jsonNode.at(BluePrintConstants.PATH_DIVIDER + propertyName)
+                    ?: NullNode.getInstance()
             setInputValue(propertyName, property, valueNode)
         }
     }
 
-    fun assignWorkflowInputs(workflowName: String, jsonNode: JsonNode): Unit {
+    open fun assignWorkflowInputs(workflowName: String, jsonNode: JsonNode) {
         logger.info("assign workflow {} input value ({})", workflowName, jsonNode.toString())
         bluePrintContext.workflowByName(workflowName)?.inputs?.forEach { propertyName, property ->
-            val valueNode: JsonNode = jsonNode.at("/" + propertyName) ?: NullNode.getInstance()
+            val valueNode: JsonNode = jsonNode.at(BluePrintConstants.PATH_DIVIDER + propertyName)
+                    ?: NullNode.getInstance()
             setWorkflowInputValue(workflowName, propertyName, valueNode)
         }
     }

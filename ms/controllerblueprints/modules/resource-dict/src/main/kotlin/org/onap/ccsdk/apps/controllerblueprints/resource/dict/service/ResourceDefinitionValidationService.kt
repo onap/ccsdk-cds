@@ -32,24 +32,24 @@ import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
 import org.slf4j.LoggerFactory
 import java.io.Serializable
 /**
- * ResourceDictionaryValidationService.
+ * ResourceDefinitionValidationService.
  *
  * @author Brinda Santh
  */
-interface ResourceDictionaryValidationService : Serializable {
+interface ResourceDefinitionValidationService : Serializable {
 
     @Throws(BluePrintException::class)
     fun validate(resourceDefinition: ResourceDefinition)
 
 }
 /**
- * ResourceDictionaryDefaultValidationService.
+ * ResourceDefinitionValidationService.
  *
  * @author Brinda Santh
  */
-open class ResourceDictionaryDefaultValidationService(private val bluePrintRepoService: BluePrintRepoService) : ResourceDictionaryValidationService {
+open class ResourceDefinitionDefaultValidationService(private val bluePrintRepoService: BluePrintRepoService) : ResourceDefinitionValidationService {
 
-    private val log = LoggerFactory.getLogger(ResourceDictionaryDefaultValidationService::class.java)
+    private val log = LoggerFactory.getLogger(ResourceDefinitionValidationService::class.java)
 
     override fun validate(resourceDefinition: ResourceDefinition) {
         Preconditions.checkNotNull(resourceDefinition, "Failed to get Resource Definition")
@@ -90,7 +90,7 @@ open class ResourceDictionaryDefaultValidationService(private val bluePrintRepoS
 
     open fun checkPropertyValue(propertyDefinition: PropertyDefinition, propertyName: String, propertyAssignment: JsonNode) {
         val propertyType = propertyDefinition.type
-        var isValid = false
+        val isValid : Boolean
 
         if (BluePrintTypes.validPrimitiveTypes().contains(propertyType)) {
             isValid = JacksonUtils.checkJsonNodeValueOfPrimitiveType(propertyType, propertyAssignment)
@@ -102,8 +102,7 @@ open class ResourceDictionaryDefaultValidationService(private val bluePrintRepoS
             bluePrintRepoService.getDataType(propertyType)
                     ?: throw BluePrintException(format("property({}) defined of data type({}) is not in repository",
                             propertyName, propertyType))
-
-            isValid = true;
+            isValid = true
         }
 
         check(isValid) {

@@ -22,10 +22,10 @@ import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRepoFileSe
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition;
 
-public class ResourceDictionaryValidationServiceTest {
+public class ResourceDefinitionValidationServiceTest {
     private String basePath = "load/model_type";
-    String dictionaryPath = "load/resource_dictionary";
-    BluePrintRepoFileService bluePrintRepoFileService = new BluePrintRepoFileService(basePath);
+    private String dictionaryPath = "load/resource_dictionary";
+    private BluePrintRepoFileService bluePrintRepoFileService = new BluePrintRepoFileService(basePath);
 
     @Test
     public void testValidateSource() throws Exception {
@@ -48,8 +48,8 @@ public class ResourceDictionaryValidationServiceTest {
         ResourceDefinition resourceDefinition = JacksonUtils.readValueFromFile(fileName, ResourceDefinition.class);
         Assert.assertNotNull("Failed to populate dictionaryDefinition for  type", resourceDefinition);
 
-        ResourceDictionaryValidationService resourceDictionaryValidationService =
-                new ResourceDictionaryDefaultValidationService(bluePrintRepoFileService);
+        ResourceDefinitionValidationService resourceDictionaryValidationService =
+                new ResourceDefinitionDefaultValidationService(bluePrintRepoFileService);
         resourceDictionaryValidationService.validate(resourceDefinition);
         Assert.assertNotNull(String.format("Failed to populate dictionaryDefinition for : %s", fileName), resourceDefinition);
     }

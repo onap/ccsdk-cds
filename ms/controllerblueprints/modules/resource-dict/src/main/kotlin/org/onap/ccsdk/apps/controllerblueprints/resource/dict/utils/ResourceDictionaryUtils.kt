@@ -16,8 +16,11 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.resource.dict.utils
 
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.NullNode
 import org.apache.commons.collections.MapUtils
 import org.apache.commons.lang3.StringUtils
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
@@ -58,5 +61,17 @@ object ResourceDictionaryUtils {
             source = sources.keys.stream().findFirst().get()
         }
         return source
+    }
+
+    @JvmStatic
+    fun assignInputs(data: JsonNode, context: MutableMap<String, Any>) {
+        log.trace("assignInputs from input JSON ({})", data.toString())
+        data.fields().forEach { field ->
+            val valueNode: JsonNode = data.at("/".plus(field.key)) ?: NullNode.getInstance()
+
+            val path = BluePrintConstants.PATH_INPUTS.plus(BluePrintConstants.PATH_DIVIDER).plus(field.key)
+            log.trace("setting path ({}), values ({})", path, valueNode)
+            context[path] = valueNode
+        }
     }
 }
