@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +33,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.format
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.nio.charset.Charset
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 
 /**
  *
@@ -108,14 +110,60 @@ object JacksonUtils {
     }
 
     @JvmStatic
+    fun checkJsonNodeValueOfType(type: String, jsonNode: JsonNode) : Boolean {
+        if (BluePrintTypes.validPrimitiveTypes().contains(type)) {
+            return checkJsonNodeValueOfPrimitiveType(type, jsonNode)
+        } else if (BluePrintTypes.validCollectionTypes().contains(type)) {
+            return checkJsonNodeValueOfCollectionType(type, jsonNode)
+        }
+        return false;
+    }
+
+    @JvmStatic
+    fun checkJsonNodeValueOfPrimitiveType(primitiveType: String, jsonNode: JsonNode): Boolean {
+        when (primitiveType) {
+            BluePrintConstants.DATA_TYPE_STRING -> {
+                return jsonNode.isTextual
+            }
+            BluePrintConstants.DATA_TYPE_BOOLEAN -> {
+                return jsonNode.isBoolean
+            }
+            BluePrintConstants.DATA_TYPE_INTEGER -> {
+                return jsonNode.isInt
+            }
+            BluePrintConstants.DATA_TYPE_FLOAT -> {
+                return jsonNode.isDouble
+            }
+            BluePrintConstants.DATA_TYPE_TIMESTAMP -> {
+                return jsonNode.isTextual
+            }
+            else ->
+                return false
+        }
+    }
+
+    @JvmStatic
+    fun checkJsonNodeValueOfCollectionType(type: String, jsonNode: JsonNode): Boolean {
+        when (type) {
+            BluePrintConstants.DATA_TYPE_LIST ->
+                return jsonNode.isArray
+            BluePrintConstants.DATA_TYPE_MAP ->
+                return jsonNode.isContainerNode
+            else ->
+                return false
+        }
+
+    }
+
+    @JvmStatic
     fun populatePrimitiveValues(key: String, value: Any, primitiveType: String, objectNode: ObjectNode) {
-        if (org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.DATA_TYPE_BOOLEAN == primitiveType) {
+        if (BluePrintConstants.DATA_TYPE_BOOLEAN == primitiveType) {
             objectNode.put(key, value as Boolean)
-        } else if (org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.DATA_TYPE_INTEGER == primitiveType) {
+        } else if (BluePrintConstants.DATA_TYPE_INTEGER == primitiveType) {
             objectNode.put(key, value as Int)
-        } else if (org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.DATA_TYPE_FLOAT == primitiveType) {
+        } else if (BluePrintConstants.DATA_TYPE_FLOAT == primitiveType) {
             objectNode.put(key, value as Float)
-        } else if (org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.DATA_TYPE_TIMESTAMP == primitiveType) {
+        } else if (BluePrintConstants.DATA_TYPE_TIMESTAMP == primitiveType) {
             objectNode.put(key, value as String)
         } else {
             objectNode.put(key, value as String)
@@ -124,13 +172,13 @@ object JacksonUtils {
 
     @JvmStatic
     fun populatePrimitiveValues(value: Any, primitiveType: String, objectNode: ArrayNode) {
-        if (org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.DATA_TYPE_BOOLEAN == primitiveType) {
+        if (BluePrintConstants.DATA_TYPE_BOOLEAN == primitiveType) {
             objectNode.add(value as Boolean)
-        } else if (org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.DATA_TYPE_INTEGER == primitiveType) {
+        } else if (BluePrintConstants.DATA_TYPE_INTEGER == primitiveType) {
             objectNode.add(value as Int)
-        } else if (org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.DATA_TYPE_FLOAT == primitiveType) {
+        } else if (BluePrintConstants.DATA_TYPE_FLOAT == primitiveType) {
             objectNode.add(value as Float)
-        } else if (org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.DATA_TYPE_TIMESTAMP == primitiveType) {
+        } else if (BluePrintConstants.DATA_TYPE_TIMESTAMP == primitiveType) {
             objectNode.add(value as String)
         } else {
             objectNode.add(value as String)
@@ -139,11 +187,11 @@ object JacksonUtils {
 
     @JvmStatic
     fun populatePrimitiveDefaultValues(key: String, primitiveType: String, objectNode: ObjectNode) {
-        if (org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.DATA_TYPE_BOOLEAN == primitiveType) {
+        if (BluePrintConstants.DATA_TYPE_BOOLEAN == primitiveType) {
             objectNode.put(key, false)
-        } else if (org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.DATA_TYPE_INTEGER == primitiveType) {
+        } else if (BluePrintConstants.DATA_TYPE_INTEGER == primitiveType) {
             objectNode.put(key, 0)
-        } else if (org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.DATA_TYPE_FLOAT == primitiveType) {
+        } else if (BluePrintConstants.DATA_TYPE_FLOAT == primitiveType) {
             objectNode.put(key, 0.0)
         } else {
             objectNode.put(key, "")
@@ -152,11 +200,11 @@ object JacksonUtils {
 
     @JvmStatic
     fun populatePrimitiveDefaultValuesForArrayNode(primitiveType: String, arrayNode: ArrayNode) {
-        if (org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.DATA_TYPE_BOOLEAN == primitiveType) {
+        if (BluePrintConstants.DATA_TYPE_BOOLEAN == primitiveType) {
             arrayNode.add(false)
-        } else if (org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.DATA_TYPE_INTEGER == primitiveType) {
+        } else if (BluePrintConstants.DATA_TYPE_INTEGER == primitiveType) {
             arrayNode.add(0)
-        } else if (org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.DATA_TYPE_FLOAT == primitiveType) {
+        } else if (BluePrintConstants.DATA_TYPE_FLOAT == primitiveType) {
             arrayNode.add(0.0)
         } else {
             arrayNode.add("")
@@ -168,13 +216,13 @@ object JacksonUtils {
         if (nodeValue == null || nodeValue is NullNode) {
             objectNode.set(key, nodeValue)
         } else if (BluePrintTypes.validPrimitiveTypes().contains(type)) {
-            if (org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.DATA_TYPE_BOOLEAN == type) {
+            if (BluePrintConstants.DATA_TYPE_BOOLEAN == type) {
                 objectNode.put(key, nodeValue.asBoolean())
-            } else if (org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.DATA_TYPE_INTEGER == type) {
+            } else if (BluePrintConstants.DATA_TYPE_INTEGER == type) {
                 objectNode.put(key, nodeValue.asInt())
-            } else if (org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.DATA_TYPE_FLOAT == type) {
+            } else if (BluePrintConstants.DATA_TYPE_FLOAT == type) {
                 objectNode.put(key, nodeValue.floatValue())
-            } else if (org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.DATA_TYPE_TIMESTAMP == type) {
+            } else if (BluePrintConstants.DATA_TYPE_TIMESTAMP == type) {
                 objectNode.put(key, nodeValue.asText())
             } else {
                 objectNode.put(key, nodeValue.asText())

@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +22,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.NullNode
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*
+import org.onap.ccsdk.apps.controllerblueprints.core.format
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.ResourceResolverUtils
 import org.slf4j.Logger
@@ -45,7 +47,7 @@ If Property Assignment is Expression.
 
     fun resolveAssignmentExpression(nodeTemplateName: String, assignmentName: String,
                                             assignment: Any): JsonNode {
-        var valueNode: JsonNode = NullNode.getInstance()
+        val valueNode: JsonNode
         logger.trace("Assignment ({})", assignment)
         val expressionData = BluePrintExpressionService.getExpressionData(assignment)
 
@@ -96,7 +98,7 @@ If Property Assignment is Expression.
     <nested_property_name_or_index_1>, ..., <nested_property_name_or_index_n> ]
  */
     fun resolveAttributeExpression(nodeTemplateName: String, attributeExpression: AttributeExpression): JsonNode {
-        var valueNode: JsonNode = NullNode.getInstance()
+        val valueNode: JsonNode
 
         val attributeName = attributeExpression.attributeName
         val subAttributeName: String? = attributeExpression.subAttributeName
@@ -106,15 +108,15 @@ If Property Assignment is Expression.
             attributeNodeTemplateName = attributeExpression.modelableEntityName
         }
 
-        val attributeExpression = bluePrintContext.nodeTemplateByName(attributeNodeTemplateName).attributes?.get(attributeName)
+        val nodeTemplateAttributeExpression = bluePrintContext.nodeTemplateByName(attributeNodeTemplateName).attributes?.get(attributeName)
                 ?: throw BluePrintException(String.format("failed to get property definitions for node template ({})'s property name ({}) ", nodeTemplateName, attributeName))
 
         var propertyDefinition: AttributeDefinition = bluePrintContext.nodeTemplateNodeType(attributeNodeTemplateName).attributes?.get(attributeName)!!
 
-        logger.info("template name ({}), property Name ({}) resolved value ({})", attributeNodeTemplateName, attributeName, attributeExpression)
+        logger.info("node template name ({}), property Name ({}) resolved value ({})", attributeNodeTemplateName, attributeName, nodeTemplateAttributeExpression)
 
         // Check it it is a nested expression
-        valueNode = resolveAssignmentExpression(attributeNodeTemplateName, attributeName, attributeExpression)
+        valueNode = resolveAssignmentExpression(attributeNodeTemplateName, attributeName, nodeTemplateAttributeExpression)
 
 //        subPropertyName?.let {
 //            valueNode = valueNode.at(JsonPointer.valueOf(subPropertyName))
@@ -127,7 +129,7 @@ If Property Assignment is Expression.
         <nested_property_name_or_index_1>, ..., <nested_property_name_or_index_n> ]
      */
     fun resolvePropertyExpression(nodeTemplateName: String, propertyExpression: PropertyExpression): JsonNode {
-        var valueNode: JsonNode = NullNode.getInstance()
+        val valueNode: JsonNode
 
         val propertyName = propertyExpression.propertyName
         val subPropertyName: String? = propertyExpression.subPropertyName
@@ -137,15 +139,15 @@ If Property Assignment is Expression.
             propertyNodeTemplateName = propertyExpression.modelableEntityName
         }
 
-        val propertyExpression = bluePrintContext.nodeTemplateByName(propertyNodeTemplateName).properties?.get(propertyName)
-                ?: throw BluePrintException(String.format("failed to get property definitions for node template ({})'s property name ({}) ", nodeTemplateName, propertyName))
+        val nodeTemplatePropertyExpression = bluePrintContext.nodeTemplateByName(propertyNodeTemplateName).properties?.get(propertyName)
+                ?: throw BluePrintException(format("failed to get property definitions for node template ({})'s property name ({}) ", nodeTemplateName, propertyName))
 
         var propertyDefinition: PropertyDefinition = bluePrintContext.nodeTemplateNodeType(propertyNodeTemplateName).properties?.get(propertyName)!!
 
-        logger.info("template name ({}), property Name ({}) resolved value ({})", propertyNodeTemplateName, propertyName, propertyExpression)
+        logger.info("node template name ({}), property Name ({}) resolved value ({})", propertyNodeTemplateName, propertyName, nodeTemplatePropertyExpression)
 
         // Check it it is a nested expression
-        valueNode = resolveAssignmentExpression(propertyNodeTemplateName, propertyName, propertyExpression)
+        valueNode = resolveAssignmentExpression(propertyNodeTemplateName, propertyName, nodeTemplatePropertyExpression)
 
 //        subPropertyName?.let {
 //            valueNode = valueNode.at(JsonPointer.valueOf(subPropertyName))

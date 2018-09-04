@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -138,7 +139,7 @@ public class ConfigModelCreateService {
             if (StringUtils.isBlank(artifactVersion)) {
                 throw new BluePrintException("Artifact Version is missing in the Service Template");
             }
-            ConfigModel updateConfigModel = null;
+            ConfigModel updateConfigModel;
 
             Optional<ConfigModel> dbConfigModelOptional = Optional.empty();
 

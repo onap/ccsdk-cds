@@ -115,31 +115,28 @@ public class DataBaseInitService {
         try {
             Resource[] dataTypefiles = getPathResources(dataTypePath, ".json");
             StrBuilder errorBuilder = new StrBuilder();
-            if (dataTypefiles != null) {
                 for (Resource file : dataTypefiles) {
                     if (file != null) {
                         loadDataType(file, errorBuilder);
                     }
                 }
-            }
 
             Resource[] nodeTypefiles = getPathResources(nodeTypePath, ".json");
-            if (nodeTypefiles != null) {
-                for (Resource file : nodeTypefiles) {
+                       for (Resource file : nodeTypefiles) {
                     if (file != null) {
                         loadNodeType(file, errorBuilder);
                     }
                 }
-            }
+
 
             Resource[] artifactTypefiles = getPathResources(artifactTypePath, ".json");
-            if (artifactTypefiles != null) {
+
                 for (Resource file : artifactTypefiles) {
                     if (file != null) {
                         loadArtifactType(file, errorBuilder);
                     }
                 }
-            }
+
 
             if (!errorBuilder.isEmpty()) {
                 log.error(errorBuilder.toString());
@@ -154,9 +151,9 @@ public class DataBaseInitService {
                 " *************************** loadResourceDictionary **********************");
         try {
             Resource[] dataTypefiles = getPathResources(resourceDictionaryPath, ".json");
-            if (dataTypefiles != null) {
+
                 StrBuilder errorBuilder = new StrBuilder();
-                String fileName = null;
+                String fileName;
                 for (Resource file : dataTypefiles) {
                     try {
                         fileName = file.getFilename();
@@ -201,7 +198,7 @@ public class DataBaseInitService {
                     log.error(errorBuilder.toString());
                 }
 
-            }
+
         } catch (Exception e) {
             log.error(
                     "Failed in Resource dictionary loading", e);
@@ -248,6 +245,7 @@ public class DataBaseInitService {
             String nodeKey = file.getFilename().replace(".json", "");
             String definitionContent = getResourceContent(file);
             NodeType nodeType = JacksonUtils.readValue(definitionContent, NodeType.class);
+            Preconditions.checkNotNull(nodeType, String.format("failed to get node type from file : %s", file.getFilename()));
             ModelType modelType = new ModelType();
             modelType.setDefinitionType(BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TYPE);
             modelType.setDerivedFrom(nodeType.getDerivedFrom());
@@ -271,6 +269,7 @@ public class DataBaseInitService {
             String dataKey = file.getFilename().replace(".json", "");
             String definitionContent = getResourceContent(file);
             DataType dataType = JacksonUtils.readValue(definitionContent, DataType.class);
+            Preconditions.checkNotNull(dataType, String.format("failed to get data type from file : %s", file.getFilename()));
             ModelType modelType = new ModelType();
             modelType.setDefinitionType(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE);
             modelType.setDerivedFrom(dataType.getDerivedFrom());
@@ -294,6 +293,7 @@ public class DataBaseInitService {
             String dataKey = file.getFilename().replace(".json", "");
             String definitionContent = getResourceContent(file);
             ArtifactType artifactType = JacksonUtils.readValue(definitionContent, ArtifactType.class);
+            Preconditions.checkNotNull(artifactType, String.format("failed to get artifact type from file : %s", file.getFilename()));
             ModelType modelType = new ModelType();
             modelType.setDefinitionType(BluePrintConstants.MODEL_DEFINITION_TYPE_ARTIFACT_TYPE);
             modelType.setDerivedFrom(artifactType.getDerivedFrom());
