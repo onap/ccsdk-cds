@@ -16,23 +16,21 @@
 
 package org.onap.ccsdk.apps.controllerblueprints;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.reactive.config.ResourceHandlerRegistry;
-import org.springframework.web.reactive.config.WebFluxConfigurationSupport;
-
+import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
+import org.junit.Test;
 /**
- * WebConfig
+ * VersionSplitTest
  *
- * @author Brinda Santh 8/13/2018
+ * @author Brinda Santh
  */
-@Configuration
-@SuppressWarnings("unused")
-public class WebConfig extends WebFluxConfigurationSupport {
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("swagger-ui.html")
-                .addResourceLocations("classpath:/META-INF/resources/");
+public class VersionSplitTest {
 
-        registry.addResourceHandler("/webjars/**")
-                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    @Test
+    public void testVersionSplit() {
+        String version = "1.03.04";
+        String[] tokens = StringUtils.split(version, '.');
+        Assert.assertNotNull("failed to tokenize", tokens);
+        Assert.assertEquals("failed to three token ", 3, tokens.length );
     }
 }

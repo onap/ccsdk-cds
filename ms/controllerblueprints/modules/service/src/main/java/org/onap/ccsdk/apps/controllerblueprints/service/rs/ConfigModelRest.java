@@ -46,81 +46,49 @@ public class ConfigModelRest {
     @GetMapping(path = "/initial/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ConfigModel getInitialConfigModel(@PathVariable(value = "name") String name) throws BluePrintException {
-        try {
-            return this.configModelService.getInitialConfigModel(name);
-        } catch (Exception e) {
-            throw new BluePrintException(2000, e.getMessage(), e);
-        }
+        return this.configModelService.getInitialConfigModel(name);
     }
 
-    @PostMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ConfigModel saveConfigModel(@RequestBody ConfigModel configModel) throws BluePrintException {
-        try {
-            return this.configModelService.saveConfigModel(configModel);
-        } catch (Exception e) {
-            throw new BluePrintException(2200, e.getMessage(), e);
-        }
+        return this.configModelService.saveConfigModel(configModel);
     }
 
     @DeleteMapping(path = "/{id}")
     public void deleteConfigModel(@PathVariable(value = "id") Long id) throws BluePrintException {
-        try {
-            this.configModelService.deleteConfigModel(id);
-        } catch (Exception e) {
-            throw new BluePrintException(2400, e.getMessage(), e);
-        }
+        this.configModelService.deleteConfigModel(id);
     }
 
     @GetMapping(path = "/publish/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ConfigModel publishConfigModel(@PathVariable(value = "id") Long id) throws BluePrintException {
-        try {
-            return this.configModelService.publishConfigModel(id);
-        } catch (Exception e) {
-            throw new BluePrintException(2500, e.getMessage(), e);
-        }
+        return this.configModelService.publishConfigModel(id);
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ConfigModel getConfigModel(@PathVariable(value = "id") Long id) throws BluePrintException {
-        try {
-            return this.configModelService.getConfigModel(id);
-        } catch (Exception e) {
-            throw new BluePrintException(2001, e.getMessage(), e);
-        }
+        return this.configModelService.getConfigModel(id);
     }
 
     @GetMapping(path = "/by-name/{name}/version/{version}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ConfigModel getConfigModelByNameAndVersion(@PathVariable(value = "name") String name,
                                                @PathVariable(value = "version") String version) throws BluePrintException {
-        try {
-            return this.configModelService.getConfigModelByNameAndVersion(name, version);
-        } catch (Exception e) {
-            throw new BluePrintException(2002, e.getMessage(), e);
-        }
+        return this.configModelService.getConfigModelByNameAndVersion(name, version);
     }
 
     @GetMapping(path = "/search/{tags}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     List<ConfigModel> searchConfigModels(@PathVariable(value = "tags") String tags) throws BluePrintException {
-        try {
-            return this.configModelService.searchConfigModels(tags);
-        } catch (Exception e) {
-            throw new BluePrintException(2003, e.getMessage(), e);
-        }
+        return this.configModelService.searchConfigModels(tags);
     }
 
     @GetMapping(path = "/clone/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ConfigModel getCloneConfigModel(@PathVariable(value = "id") Long id) throws BluePrintException {
-        try {
-            return this.configModelService.getCloneConfigModel(id);
-        } catch (Exception e) {
-            throw new BluePrintException(2004, e.getMessage(), e);
-        }
+        return this.configModelService.getCloneConfigModel(id);
     }
 
 }
