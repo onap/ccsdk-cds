@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.data.DecryptionRule
 import java.io.Serializable
 import java.util.*
 
@@ -45,10 +44,6 @@ open class ResourceDefinition{
 
     @JsonProperty(value = "sources", required = true)
     lateinit var sources: MutableMap<String, NodeTemplate>
-
-    @JsonProperty("decryption-rules")
-    var decryptionRules: MutableList<DecryptionRule>? = null
-
 }
 
 open class ResourceAssignment {
