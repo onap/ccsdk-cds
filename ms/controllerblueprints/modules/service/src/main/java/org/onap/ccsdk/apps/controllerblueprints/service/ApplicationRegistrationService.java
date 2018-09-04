@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2017-2018 AT&T Intellectual Property.
+ *  Modifications Copyright © 2018 IBM.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,8 +17,6 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service;
 
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDictionaryConstants;
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.data.*;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -31,9 +30,6 @@ public class ApplicationRegistrationService {
     }
 
     public void registerDictionarySources(){
-        SourceDeserializer.registerSource(ResourceDictionaryConstants.SOURCE_DB, SourceDb.class);
-        SourceDeserializer.registerSource(ResourceDictionaryConstants.SOURCE_INPUT, SourceInput.class);
-        SourceDeserializer.registerSource(ResourceDictionaryConstants.SOURCE_MDSAL, SourceMdsal.class);
-        SourceDeserializer.registerSource(ResourceDictionaryConstants.SOURCE_DEFAULT,SourceDefault.class);
+
     }
 }
