@@ -31,15 +31,23 @@ import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
 import org.slf4j.LoggerFactory
 import java.io.Serializable
-
+/**
+ * ResourceDictionaryValidationService.
+ *
+ * @author Brinda Santh
+ */
 interface ResourceDictionaryValidationService : Serializable {
 
     @Throws(BluePrintException::class)
     fun validate(resourceDefinition: ResourceDefinition)
 
 }
-
-open class ResourceDictionaryDefaultValidationService(val bluePrintRepoService: BluePrintRepoService) : ResourceDictionaryValidationService {
+/**
+ * ResourceDictionaryDefaultValidationService.
+ *
+ * @author Brinda Santh
+ */
+open class ResourceDictionaryDefaultValidationService(private val bluePrintRepoService: BluePrintRepoService) : ResourceDictionaryValidationService {
 
     private val log = LoggerFactory.getLogger(ResourceDictionaryDefaultValidationService::class.java)
 
