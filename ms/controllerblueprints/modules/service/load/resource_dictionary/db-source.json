@@ -1,5 +1,5 @@
 {
-  "name": "bundle-id",
+  "name": "db-source",
   "property" :{
     "description": "name of the ",
     "type": "string"
@@ -7,7 +7,7 @@
   "resource-type": "ONAP",
   "resource-path": "vnf/bundle-id",
   "updated-by": "brindasanth@onap.com",
-  "tags": "bundle-id, brindasanth@onap.com",
+  "tags": "db-source, brindasanth@onap.com",
   "sources": {
     "db": {
       "type": "source-db",
