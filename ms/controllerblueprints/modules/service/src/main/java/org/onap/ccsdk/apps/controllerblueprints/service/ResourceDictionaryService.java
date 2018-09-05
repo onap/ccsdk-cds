@@ -105,11 +105,9 @@ public class ResourceDictionaryService {
      */
     public ResourceDictionary saveResourceDictionary(ResourceDictionary resourceDictionary) {
         Preconditions.checkNotNull(resourceDictionary, "Resource Dictionary information is missing");
-        Preconditions.checkArgument(StringUtils.isNotBlank(resourceDictionary.getDefinition()),
-                "Resource Dictionary definition information is missing");
+        Preconditions.checkNotNull(resourceDictionary.getDefinition(),"Resource Dictionary definition information is missing");
 
-        ResourceDefinition resourceDefinition =
-                JacksonUtils.readValue(resourceDictionary.getDefinition(), ResourceDefinition.class);
+        ResourceDefinition resourceDefinition = resourceDictionary.getDefinition();
         Preconditions.checkNotNull(resourceDefinition, "failed to get resource definition from content");
         // Validate the Resource Definitions
         resourceDictionaryValidationService.validate(resourceDefinition);
@@ -125,9 +123,6 @@ public class ResourceDictionaryService {
         if (propertyDefinition.getEntrySchema() != null) {
             resourceDictionary.setEntrySchema(propertyDefinition.getEntrySchema().getType());
         }
-
-        String definitionContent = JacksonUtils.getJson(resourceDefinition, true);
-        resourceDictionary.setDefinition(definitionContent);
 
         ResourceDictionaryValidator.validateResourceDictionary(resourceDictionary);
 

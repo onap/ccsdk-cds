@@ -24,6 +24,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.onap.ccsdk.apps.controllerblueprints.TestApplication;
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionary;
 import com.att.eelf.configuration.EELFLogger;
 import com.att.eelf.configuration.EELFManager;
@@ -58,7 +60,7 @@ public class ResourceDictionaryRestTest {
         ResourceDictionary dataDictionary = new ResourceDictionary();
         dataDictionary.setResourcePath("test/vnf/ipaddress");
         dataDictionary.setName("test-name");
-        dataDictionary.setDefinition(definition);
+        dataDictionary.setDefinition(JacksonUtils.readValue(definition, ResourceDefinition.class));
         dataDictionary.setValidValues("127.0.0.1");
         dataDictionary.setResourceType("ONAP");
         dataDictionary.setDataType("string");

@@ -168,7 +168,7 @@ public class DataBaseInitService {
                             ResourceDictionary resourceDictionary = new ResourceDictionary();
                             resourceDictionary.setResourcePath(dictionaryDefinition.getResourcePath());
                             resourceDictionary.setName(dictionaryDefinition.getName());
-                            resourceDictionary.setDefinition(definitionContent);
+                            resourceDictionary.setDefinition(dictionaryDefinition);
 
                             resourceDictionary.setResourceType(dictionaryDefinition.getResourceType());
                             resourceDictionary.setDescription(dictionaryDefinition.getProperty().getDescription());
@@ -252,7 +252,7 @@ public class DataBaseInitService {
             modelType.setDefinitionType(BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TYPE);
             modelType.setDerivedFrom(nodeType.getDerivedFrom());
             modelType.setDescription(nodeType.getDescription());
-            modelType.setDefinition(definitionContent);
+            modelType.setDefinition(JacksonUtils.jsonNode(definitionContent));
             modelType.setModelName(nodeKey);
             modelType.setVersion(nodeType.getVersion());
             modelType.setUpdatedBy("System");
@@ -276,7 +276,7 @@ public class DataBaseInitService {
             modelType.setDefinitionType(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE);
             modelType.setDerivedFrom(dataType.getDerivedFrom());
             modelType.setDescription(dataType.getDescription());
-            modelType.setDefinition(definitionContent);
+            modelType.setDefinition(JacksonUtils.jsonNode(definitionContent));
             modelType.setModelName(dataKey);
             modelType.setVersion(dataType.getVersion());
             modelType.setUpdatedBy("System");
@@ -300,7 +300,7 @@ public class DataBaseInitService {
             modelType.setDefinitionType(BluePrintConstants.MODEL_DEFINITION_TYPE_ARTIFACT_TYPE);
             modelType.setDerivedFrom(artifactType.getDerivedFrom());
             modelType.setDescription(artifactType.getDescription());
-            modelType.setDefinition(definitionContent);
+            modelType.setDefinition(JacksonUtils.jsonNode(definitionContent));
             modelType.setModelName(dataKey);
             modelType.setVersion(artifactType.getVersion());
             modelType.setUpdatedBy("System");

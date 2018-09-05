@@ -17,6 +17,7 @@
 package org.onap.ccsdk.apps.controllerblueprints.service.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.JsonNode;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -52,9 +53,10 @@ public class ModelType implements Serializable {
     private String definitionType;
 
     @Lob
+    @Convert(converter  = JpaJsonNodeConverter.class)
     @Column(name = "definition", nullable = false)
     @ApiModelProperty(required=true)
-    private String definition;
+    private JsonNode definition;
 
     @Lob
     @Column(name = "description", nullable = false)
@@ -118,11 +120,11 @@ public class ModelType implements Serializable {
         this.definitionType = definitionType;
     }
 
-    public String getDefinition() {
+    public JsonNode getDefinition() {
         return definition;
     }
 
-    public void setDefinition(String definition) {
+    public void setDefinition(JsonNode definition) {
         this.definition = definition;
     }
 

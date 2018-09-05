@@ -17,6 +17,7 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -75,16 +76,16 @@ public class BluePrintRepoDBService implements BluePrintRepoService {
         Preconditions.checkArgument(StringUtils.isNotBlank(modelName),
                 "Failed to get model from repo, model name is missing");
 
-        return getModelDefinition(modelName).map(content -> {
-                    Preconditions.checkArgument(StringUtils.isNotBlank(content),
+        return getModelDefinition(modelName).map(modelDefinition -> {
+                    Preconditions.checkNotNull(modelDefinition,
                             String.format("Failed to get model content for model name (%s)", modelName));
-                    return JacksonUtils.readValue(content, valueClass);
+                    return JacksonUtils.readValue(modelDefinition, valueClass);
                 }
         );
     }
 
-    private Mono<String> getModelDefinition(String modelName) throws BluePrintException {
-        String modelDefinition;
+    private Mono<JsonNode> getModelDefinition(String modelName) throws BluePrintException {
+        JsonNode modelDefinition;
         Optional<ModelType> modelTypeDb = modelTypeRepository.findByModelName(modelName);
         if (modelTypeDb.isPresent()) {
             modelDefinition = modelTypeDb.get().getDefinition();

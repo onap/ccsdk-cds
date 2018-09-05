@@ -17,6 +17,7 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.validator;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.lang3.StringUtils;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
@@ -56,14 +57,14 @@ public class ModelTypeValidator {
     /**
      * This is a validateModelTypeDefinition
      * 
-     * @param definitionType
-     * @param definitionContent
+     * @param definitionType definitionType
+     * @param definitionContent definitionContent
      * @return boolean
-     * @throws BluePrintException
+     * @throws BluePrintException BluePrintException
      */
-    public static boolean validateModelTypeDefinition(String definitionType, String definitionContent)
+    public static boolean validateModelTypeDefinition(String definitionType, JsonNode definitionContent)
             throws BluePrintException {
-        if (StringUtils.isNotBlank(definitionContent)) {
+        if (definitionContent != null) {
             if (BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE.equalsIgnoreCase(definitionType)) {
                 DataType dataType = JacksonUtils.readValue(definitionContent, DataType.class);
                 if (dataType == null) {
@@ -98,8 +99,9 @@ public class ModelTypeValidator {
     /**
      * This is a validateModelType method
      * 
-     * @param modelType
+     * @param modelType modelType
      * @return boolean
+     * @throws BluePrintException BluePrintException
      */
     public static boolean validateModelType(ModelType modelType) throws BluePrintException {
         if (modelType != null) {
@@ -115,7 +117,7 @@ public class ModelTypeValidator {
                 throw new BluePrintException("Model Type Information is missing.");
             }
 
-            if (StringUtils.isBlank(modelType.getDefinition())) {
+            if (modelType.getDefinition() == null) {
                 throw new BluePrintException("Model Definition Information is missing.");
             }
             if (StringUtils.isBlank(modelType.getDescription())) {
@@ -133,7 +135,7 @@ public class ModelTypeValidator {
             List<String> validRootTypes = getValidModelDefinitionType();
             if (!validRootTypes.contains(modelType.getDefinitionType())) {
                 throw new BluePrintException("Not Valid Model Root Type(" + modelType.getDefinitionType()
-                        + "), It sould be " + validRootTypes);
+                        + "), It should be " + validRootTypes);
             }
 
             validateModelTypeDefinition(modelType.getDefinitionType(), modelType.getDefinition());

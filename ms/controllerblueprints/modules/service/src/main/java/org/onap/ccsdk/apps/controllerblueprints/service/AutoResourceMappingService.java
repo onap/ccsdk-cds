@@ -22,7 +22,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition;
-import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.utils.ResourceDictionaryUtils;
@@ -100,9 +99,9 @@ public class AutoResourceMappingService {
 
     private void populateDictionaryMapping(Map<String, ResourceDictionary> dictionaryMap, ResourceAssignment resourceAssignment) {
         ResourceDictionary dbDataDictionary = dictionaryMap.get(resourceAssignment.getName());
-        if (dbDataDictionary != null && StringUtils.isNotBlank(dbDataDictionary.getDefinition())) {
+        if (dbDataDictionary != null && dbDataDictionary.getDefinition() != null) {
 
-            ResourceDefinition dictionaryDefinition = JacksonUtils.readValue(dbDataDictionary.getDefinition(), ResourceDefinition.class);
+            ResourceDefinition dictionaryDefinition = dbDataDictionary.getDefinition();
 
             if (dictionaryDefinition != null && StringUtils.isNotBlank(dictionaryDefinition.getName())
                     && StringUtils.isBlank(resourceAssignment.getDictionaryName())) {
@@ -185,7 +184,7 @@ public class AutoResourceMappingService {
         }
         if (dictionaries != null) {
             for (ResourceDictionary resourcedictionary : dictionaries) {
-                ResourceDefinition dictionaryDefinition = JacksonUtils.readValue(resourcedictionary.getDefinition(), ResourceDefinition.class);
+                ResourceDefinition dictionaryDefinition = resourcedictionary.getDefinition();
                 Preconditions.checkNotNull(dictionaryDefinition, "failed to get Resource Definition from dictionary definition");
                 PropertyDefinition property = new PropertyDefinition();
                 property.setRequired(true);

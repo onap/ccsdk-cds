@@ -18,6 +18,7 @@ package org.onap.ccsdk.apps.controllerblueprints.service.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -66,9 +67,10 @@ public class ResourceDictionary implements Serializable {
     private String sampleValue;
 
     @Lob
+    @Convert(converter  = JpaResourceDefinitionConverter.class)
     @Column(name = "definition", nullable = false)
     @ApiModelProperty(required=true)
-    private String definition;
+    private ResourceDefinition definition;
 
     @Lob
     @Column(name = "description", nullable = false)
@@ -163,11 +165,11 @@ public class ResourceDictionary implements Serializable {
         this.sampleValue = sampleValue;
     }
 
-    public String getDefinition() {
+    public ResourceDefinition getDefinition() {
         return definition;
     }
 
-    public void setDefinition(String definition) {
+    public void setDefinition(ResourceDefinition definition) {
         this.definition = definition;
     }
 

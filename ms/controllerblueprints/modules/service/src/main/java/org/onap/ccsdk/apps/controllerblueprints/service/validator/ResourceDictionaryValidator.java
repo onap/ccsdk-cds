@@ -49,7 +49,7 @@ public class ResourceDictionaryValidator {
                 "DataDictionary Resource Name Information is missing.");
         Preconditions.checkArgument( StringUtils.isNotBlank(resourceDictionary.getResourceType()),
                 "DataDictionary Resource Type Information is missing.");
-        Preconditions.checkArgument( StringUtils.isNotBlank(resourceDictionary.getDefinition()),
+        Preconditions.checkNotNull( resourceDictionary.getDefinition(),
                 "DataDictionary Definition Information is missing.");
         Preconditions.checkArgument( StringUtils.isNotBlank(resourceDictionary.getDescription()),
                 "DataDictionary Description Information is missing.");

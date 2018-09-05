@@ -22,6 +22,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.onap.ccsdk.apps.controllerblueprints.TestApplication;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants;
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ModelType;
 import com.att.eelf.configuration.EELFLogger;
 import com.att.eelf.configuration.EELFManager;
@@ -64,7 +65,7 @@ public class ModelTypeRestTest {
         modelType.setDefinitionType(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE);
         modelType.setDerivedFrom(BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT);
         modelType.setDescription("Definition for Sample Datatype ");
-        modelType.setDefinition(content);
+        modelType.setDefinition(JacksonUtils.jsonNode(content));
         modelType.setModelName(modelName);
         modelType.setVersion("1.0.0");
         modelType.setTags("test-datatype ," + BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT + ","
