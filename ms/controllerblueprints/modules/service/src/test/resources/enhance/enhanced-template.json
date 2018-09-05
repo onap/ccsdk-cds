@@ -115,25 +115,16 @@
       "version" : "1.0.0",
       "properties" : {
         "bundle-mac" : {
-          "description" : "",
           "required" : true,
-          "type" : "string",
-          "status" : "",
-          "constraints" : [ { } ],
-          "entry_schema" : {
-            "type" : ""
-          }
+          "type" : "string"
         },
         "hostname" : {
           "required" : true,
           "type" : "string"
         },
         "licenses" : {
-          "description" : "",
           "required" : true,
           "type" : "list",
-          "status" : "",
-          "constraints" : [ { } ],
           "entry_schema" : {
             "type" : "dt-license-key"
           }
@@ -142,8 +133,6 @@
           "description" : "",
           "required" : true,
           "type" : "list",
-          "status" : "",
-          "constraints" : [ { } ],
           "entry_schema" : {
             "type" : "dt-v4-aggregate"
           }
@@ -178,7 +167,7 @@
         "is-start-flow" : {
           "required" : false,
           "type" : "boolean",
-          "default" : "false"
+          "default" : false
         }
       },
       "capabilities" : {
@@ -468,7 +457,7 @@
         "is-start-flow" : {
           "required" : false,
           "type" : "boolean",
-          "default" : "false"
+          "default" : false
         }
       },
       "capabilities" : {
@@ -630,7 +619,7 @@
         "properties" : {
           "mode" : "sync",
           "version" : "LATEST",
-          "is-start-flow" : "false"
+          "is-start-flow" : false
         },
         "capabilities" : {
           "dg-node" : { },
@@ -664,7 +653,7 @@
         "properties" : {
           "mode" : "sync",
           "version" : "LATEST",
-          "is-start-flow" : "false"
+          "is-start-flow" : false
         },
         "capabilities" : {
           "dg-node" : { },
@@ -709,14 +698,8 @@
               "mapping" : [ {
                 "name" : "bundle-mac",
                 "property" : {
-                  "description" : "",
                   "required" : true,
-                  "type" : "string",
-                  "status" : "",
-                  "constraints" : [ { } ],
-                  "entry_schema" : {
-                    "type" : ""
-                  }
+                  "type" : "string"
                 },
                 "input-param" : false,
                 "dictionary-name" : "bundle-mac",
@@ -729,8 +712,6 @@
                   "description" : "",
                   "required" : true,
                   "type" : "list",
-                  "status" : "",
-                  "constraints" : [ { } ],
                   "entry_schema" : {
                     "type" : "dt-v4-aggregate"
                   }
@@ -791,11 +772,8 @@
               "mapping" : [ {
                 "name" : "licenses",
                 "property" : {
-                  "description" : "",
                   "required" : true,
                   "type" : "list",
-                  "status" : "",
-                  "constraints" : [ { } ],
                   "entry_schema" : {
                     "type" : "dt-license-key"
                   }

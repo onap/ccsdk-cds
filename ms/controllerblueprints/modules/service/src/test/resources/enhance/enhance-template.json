@@ -118,7 +118,7 @@
         "properties": {
           "mode": "sync",
           "version": "LATEST",
-          "is-start-flow": "false"
+          "is-start-flow": false
         },
         "requirements": {
           "component-dependency": {
@@ -152,7 +152,7 @@
         "properties": {
           "mode": "sync",
           "version": "LATEST",
-          "is-start-flow": "false"
+          "is-start-flow": false
         },
         "requirements": {
           "component-dependency": {
@@ -195,16 +195,8 @@
                 {
                   "name": "bundle-mac",
                   "property": {
-                    "description": "",
                     "required": true,
-                    "type": "string",
-                    "status": "",
-                    "constraints": [
-                      {}
-                    ],
-                    "entry_schema": {
-                      "type": ""
-                    }
+                    "type": "string"
                   },
                   "input-param": false,
                   "dictionary-name": "bundle-mac",
@@ -220,10 +212,6 @@
                     "description": "",
                     "required": true,
                     "type": "list",
-                    "status": "",
-                    "constraints": [
-                      {}
-                    ],
                     "entry_schema": {
                       "type": "dt-v4-aggregate"
                     }
@@ -293,13 +281,8 @@
                 {
                   "name": "licenses",
                   "property": {
-                    "description": "",
                     "required": true,
                     "type": "list",
-                    "status": "",
-                    "constraints": [
-                      {}
-                    ],
                     "entry_schema": {
                       "type": "dt-license-key"
                     }

@@ -268,7 +268,7 @@
         "is-start-flow": {
           "required": false,
           "type": "boolean",
-          "default": "false"
+          "default": false
         }
       },
       "capabilities": {
@@ -524,7 +524,7 @@
         "is-start-flow": {
           "required": false,
           "type": "boolean",
-          "default": "false"
+          "default": false
         }
       },
       "capabilities": {
