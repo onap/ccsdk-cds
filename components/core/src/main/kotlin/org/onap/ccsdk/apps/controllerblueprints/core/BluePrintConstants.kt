@@ -94,6 +94,8 @@ object BluePrintConstants {
     const val MODEL_TYPE_NODES_COMPONENT_PYTHON: String = "tosca.nodes.component.Python"
     const val MODEL_TYPE_NODES_COMPONENT_JAVA_SCRIPT: String = "tosca.nodes.component.JavaScript"
 
+    const val MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION ="tosca.artifacts.Implementation"
+
     const val MODEL_TYPE_DATA_TYPE_DYNAMIC = "tosca.datatypes.Dynamic"
 
     const val EXPRESSION_GET_INPUT: String = "get_input"

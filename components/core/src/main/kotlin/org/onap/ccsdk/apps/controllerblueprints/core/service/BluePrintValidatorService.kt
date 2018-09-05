@@ -23,6 +23,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.*
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import java.io.Serializable
 
 /**
@@ -52,7 +53,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
 
     @Throws(BluePrintException::class)
     override fun validateBlueprint(bluePrintContext: BluePrintContext, properties: MutableMap<String, Any>) {
-        validateBlueprint(bluePrintContext.serviceTemplate,properties)
+        validateBlueprint(bluePrintContext.serviceTemplate, properties)
     }
 
     @Throws(BluePrintException::class)
@@ -121,7 +122,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
         paths.add("nodeTypes")
         nodeTypes.forEach { nodeTypeName, nodeType ->
             // Validate Single Node Type
-            validateNodeType(nodeTypeName,nodeType)
+            validateNodeType(nodeTypeName, nodeType)
         }
         paths.removeAt(paths.lastIndex)
     }
@@ -132,11 +133,18 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
         message.appendln("--> Node Type :" + paths.joinToString(separator))
         val derivedFrom: String = nodeType.derivedFrom
         //Check Derived From
-        checkValidNodeTypesDerivedFrom(derivedFrom)
+        checkValidNodeTypesDerivedFrom(nodeTypeName, derivedFrom)
 
         nodeType.properties?.let { validatePropertyDefinitions(nodeType.properties!!) }
         nodeType.interfaces?.let { validateInterfaceDefinitions(nodeType.interfaces!!) }
         paths.removeAt(paths.lastIndex)
+    }
+
+    @Throws(BluePrintException::class)
+    open fun checkValidNodeTypesDerivedFrom(nodeTypeName: String, derivedFrom: String) {
+        check(BluePrintTypes.validNodeTypeDerivedFroms.contains(derivedFrom)) {
+            throw BluePrintException(format("Failed to get node type ({})'s  derived from({}) definition ", nodeTypeName, derivedFrom))
+        }
     }
 
     @Throws(BluePrintException::class)
@@ -167,7 +175,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
     }
 
     @Throws(BluePrintException::class)
-    open fun validateNodeTemplate(nodeTemplateName : String, nodeTemplate: NodeTemplate) {
+    open fun validateNodeTemplate(nodeTemplateName: String, nodeTemplate: NodeTemplate) {
         paths.add(nodeTemplateName)
         message.appendln("---> Node Template :" + paths.joinToString(separator))
         val type: String = nodeTemplate.type
@@ -184,6 +192,25 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
     }
 
     @Throws(BluePrintException::class)
+    open fun validateArtifactDefinitions(artifacts: MutableMap<String, ArtifactDefinition>) {
+        paths.add("artifacts")
+        artifacts.forEach { artifactDefinitionName, artifactDefinition ->
+            paths.add(artifactDefinitionName)
+            message.appendln("Validating artifact " + paths.joinToString(separator))
+            val type: String = artifactDefinition.type
+                    ?: throw BluePrintException("type is missing for artifact definition :" + artifactDefinitionName)
+            // Check Artifact Type
+            checkValidArtifactType(artifactDefinitionName, type)
+
+            val file: String = artifactDefinition.file
+                    ?: throw BluePrintException(format("file is missing for artifact definition : {}", artifactDefinitionName))
+
+            paths.removeAt(paths.lastIndex)
+        }
+        paths.removeAt(paths.lastIndex)
+    }
+
+    @Throws(BluePrintException::class)
     open fun validateWorkFlows(workflows: MutableMap<String, Workflow>) {
         paths.add("workflows")
         workflows.forEach { workflowName, workflow ->
@@ -195,7 +222,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
     }
 
     @Throws(BluePrintException::class)
-    open fun validateWorkFlow(workflowName:String, workflow: Workflow) {
+    open fun validateWorkFlow(workflowName: String, workflow: Workflow) {
         paths.add(workflowName)
         message.appendln("---> Workflow :" + paths.joinToString(separator))
         // Step Validation Start
@@ -239,31 +266,20 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
         properties.forEach { propertyName, propertyAssignment ->
             val propertyDefinition: PropertyDefinition = nodeTypeProperties[propertyName]
                     ?: throw BluePrintException(format("failed to get definition for the property ({})", propertyName))
-            // Check and Validate if Expression Node
-            val expressionData = BluePrintExpressionService.getExpressionData(propertyAssignment)
-            if (!expressionData.isExpression) {
-                checkPropertyValue(propertyDefinition, propertyAssignment)
-            }
+
+            validatePropertyAssignment(propertyName, propertyDefinition, propertyAssignment)
+
         }
     }
 
     @Throws(BluePrintException::class)
-    open fun validateArtifactDefinitions(artifacts: MutableMap<String, ArtifactDefinition>) {
-        paths.add("artifacts")
-        artifacts.forEach { artifactName, artifactDefinition ->
-            paths.add(artifactName)
-            message.appendln("Validating artifact " + paths.joinToString(separator))
-            val type: String = artifactDefinition.type
-                    ?: throw BluePrintException("type is missing for artifact definition :" + artifactName)
-            // Check Artifact Type
-            checkValidArtifactType(type)
-
-            val file: String = artifactDefinition.file
-                    ?: throw BluePrintException(format("file is missing for artifact definition : {}", artifactName))
-
-            paths.removeAt(paths.lastIndex)
+    open fun validatePropertyAssignment(propertyName: String, propertyDefinition: PropertyDefinition,
+                                        propertyAssignment: JsonNode) {
+        // Check and Validate if Expression Node
+        val expressionData = BluePrintExpressionService.getExpressionData(propertyAssignment)
+        if (!expressionData.isExpression) {
+            checkPropertyValue(propertyName, propertyDefinition, propertyAssignment)
         }
-        paths.removeAt(paths.lastIndex)
     }
 
     @Throws(BluePrintException::class)
@@ -313,32 +329,63 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
     }
 
     @Throws(BluePrintException::class)
-    open fun checkValidNodeType(nodeType : String) {
+    open fun checkValidArtifactType(artifactDefinitionName: String, artifactTypeName: String) {
 
+        val artifactType = serviceTemplate.artifactTypes?.get(artifactTypeName)
+                ?: throw BluePrintException(format("Failed to artifact type for artifact definition : {}", artifactDefinitionName))
+
+        checkValidArtifactTypeDerivedFrom(artifactTypeName, artifactType.derivedFrom)
     }
 
     @Throws(BluePrintException::class)
-    open fun checkValidArtifactType(artifactType: String) {
-
-        serviceTemplate.artifactTypes?.containsKey(artifactType)
-                ?: throw BluePrintException(format("Failed to node type definition for artifact definition : {}", artifactType))
-    }
-
-    @Throws(BluePrintException::class)
-    open fun checkValidNodeTypesDerivedFrom(derivedFrom: String) {
-
-    }
-
-    private fun checkPropertyValue(propertyDefinition: PropertyDefinition, jsonNode: JsonNode) {
-        //log.info("validating path ({}), Property {}, value ({})", paths, propertyDefinition, jsonNode)
-    }
-
-    private fun checkPropertyDataType(dataType: String, propertyName: String): Boolean {
-        if (checkDataType(dataType)) {
-            return true
-        } else {
-            throw BluePrintException(format("Data type ({}) for the property ({}) not found", dataType, propertyName))
+    open fun checkValidArtifactTypeDerivedFrom(artifactTypeName: String, derivedFrom: String) {
+        check(BluePrintTypes.validArtifactTypeDerivedFroms.contains(derivedFrom)) {
+            throw BluePrintException(format("Failed to get artifact type ({})'s  derived from({}) definition ", artifactTypeName, derivedFrom))
         }
+    }
+
+    @Throws(BluePrintException::class)
+    open fun checkValidDataTypeDerivedFrom(dataTypeName: String, derivedFrom: String) {
+        check(BluePrintTypes.validDataTypeDerivedFroms.contains(derivedFrom)) {
+            throw BluePrintException(format("Failed to get data type ({})'s  derived from({}) definition ", dataTypeName, derivedFrom))
+        }
+    }
+
+    open fun checkPropertyValue(propertyName: String, propertyDefinition: PropertyDefinition, propertyAssignment: JsonNode) {
+        val propertyType = propertyDefinition.type
+        val isValid: Boolean
+
+        if (BluePrintTypes.validPrimitiveTypes().contains(propertyType)) {
+            isValid = JacksonUtils.checkJsonNodeValueOfPrimitiveType(propertyType, propertyAssignment)
+
+        } else if (BluePrintTypes.validCollectionTypes().contains(propertyType)) {
+
+            isValid = JacksonUtils.checkJsonNodeValueOfCollectionType(propertyType, propertyAssignment)
+            val entrySchemaType = propertyDefinition.entrySchema?.type
+                    ?: throw BluePrintException(format("Failed to get Entry Schema type for the collection property ({})", propertyName))
+
+            if (!BluePrintTypes.validPropertyTypes().contains(entrySchemaType)) {
+                checkPropertyDataType(entrySchemaType, propertyName)
+            }
+
+        } else {
+            checkPropertyDataType(propertyType, propertyName)
+            isValid = true
+        }
+
+        check(isValid) {
+            throw BluePrintException(format("property({}) defined of type({}) is not compatable with the value ({})",
+                    propertyName, propertyType, propertyAssignment))
+        }
+    }
+
+    private fun checkPropertyDataType(dataType: String, propertyName: String) {
+
+        val dataType = serviceTemplate.dataTypes?.get(dataType)
+                ?: throw BluePrintException(format("Data type ({}) for the property ({}) not found", dataType, propertyName))
+
+        checkValidDataTypeDerivedFrom(propertyName, dataType.derivedFrom)
+
     }
 
     private fun checkPrimitiveOrComplex(dataType: String, propertyName: String): Boolean {
@@ -351,10 +398,6 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
 
     private fun checkDataType(key: String): Boolean {
         return serviceTemplate.dataTypes?.containsKey(key) ?: false
-    }
-
-    private fun checkNodeType(key: String): Boolean {
-        return serviceTemplate.nodeTypes?.containsKey(key) ?: false
     }
 
 }

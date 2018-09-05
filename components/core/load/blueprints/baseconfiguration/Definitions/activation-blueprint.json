@@ -44,7 +44,7 @@
       "resource-assignment": {
         "type": "component-resource-assignment",
         "properties":{
-          "request-id": ["1234", "1234"]
+          "request-id": "1234"
         },
         "interfaces": {
           "DefaultComponentNode": {
@@ -80,7 +80,7 @@
       "resource-assignment-py": {
         "type": "component-resource-assignment",
         "properties":{
-          "request-id": ["1234", "1234"]
+          "request-id": "1234"
         },
         "interfaces": {
           "DefaultComponentNode": {
@@ -256,35 +256,6 @@
     "tosca.nodes.component.Python": {
       "description": "This is Resource Assignment Python Component API",
       "version": "1.0.0",
-      "properties": {
-        "type": {
-          "description": "Request Id used to store the generated configuration, in the database along with the template-name",
-          "required": false,
-          "type": "string"
-        }
-      },
-      "interfaces": {
-        "DefaultOperation": {
-          "operations": {
-            "validate": {
-              "inputs": {
-                "action-name": {
-                  "description": "validate for action",
-                  "required": false,
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      },
-      "artifacts" :{
-        "component-jar": {
-          "description": "Component Jar",
-          "type": "artifact-component-jar",
-          "file": "Component/basecomponent.jar"
-        }
-      },
       "derived_from": "tosca.nodes.Root"
     },
     "component-resource-assignment": {

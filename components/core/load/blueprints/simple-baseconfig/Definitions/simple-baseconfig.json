@@ -117,7 +117,7 @@
         "properties": {
           "mode": "sync",
           "version": "LATEST",
-          "is-start-flow": "false"
+          "is-start-flow": false
         },
         "requirements": {
           "component-dependency": {
@@ -151,7 +151,7 @@
         "properties": {
           "mode": "sync",
           "version": "LATEST",
-          "is-start-flow": "false"
+          "is-start-flow": false
         },
         "requirements": {
           "component-dependency": {

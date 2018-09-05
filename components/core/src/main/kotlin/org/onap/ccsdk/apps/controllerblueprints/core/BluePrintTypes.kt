@@ -24,6 +24,33 @@ package org.onap.ccsdk.apps.controllerblueprints.core
 object BluePrintTypes {
 
     @JvmStatic
+    val validNodeTypeDerivedFroms: MutableList<String> = arrayListOf(
+            BluePrintConstants.MODEL_TYPE_NODES_ROOT,
+            BluePrintConstants.MODEL_TYPE_NODE_DG,
+            BluePrintConstants.MODEL_TYPE_NODE_COMPONENT,
+            BluePrintConstants.MODEL_TYPE_NODE_VNF,
+            BluePrintConstants.MODEL_TYPE_NODE_ARTIFACT,
+            BluePrintConstants.MODEL_TYPE_NODE_RESOURCE_SOURCE,
+            BluePrintConstants.MODEL_TYPE_NODES_COMPONENT_JAVA,
+            BluePrintConstants.MODEL_TYPE_NODES_COMPONENT_BUNDLE,
+            BluePrintConstants.MODEL_TYPE_NODES_COMPONENT_SCRIPT,
+            BluePrintConstants.MODEL_TYPE_NODES_COMPONENT_PYTHON,
+            BluePrintConstants.MODEL_TYPE_NODES_COMPONENT_JAVA_SCRIPT
+    )
+
+    @JvmStatic
+    val validArtifactTypeDerivedFroms: MutableList<String> = arrayListOf(
+            BluePrintConstants.MODEL_TYPE_ARTIFACTS_ROOT,
+            BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION
+    )
+
+    @JvmStatic
+    val validDataTypeDerivedFroms: MutableList<String> = arrayListOf(
+            BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT,
+            BluePrintConstants.MODEL_TYPE_DATA_TYPE_DYNAMIC
+    )
+
+    @JvmStatic
     fun validModelTypes(): List<String> {
         val validTypes: MutableList<String> = arrayListOf()
         validTypes.add(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)
