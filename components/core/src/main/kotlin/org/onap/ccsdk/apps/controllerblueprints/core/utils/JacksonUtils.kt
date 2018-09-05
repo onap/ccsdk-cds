@@ -50,6 +50,11 @@ object JacksonUtils {
     }
 
     @JvmStatic
+    fun <T> readValue(node: JsonNode, valueType: Class<T>): T? {
+        return jacksonObjectMapper().treeToValue(node, valueType)
+    }
+
+    @JvmStatic
     fun getContent(fileName: String): String {
         return File(fileName).readText(Charsets.UTF_8)
     }
