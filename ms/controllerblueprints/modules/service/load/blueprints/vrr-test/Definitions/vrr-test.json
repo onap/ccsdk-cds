@@ -644,6 +644,26 @@
         }
       },
       "derived_from": "tosca.nodes.Component"
+    },
+    "tosca.nodes.DG" : {
+      "description" : "This is Directed Graph Node Type",
+      "version" : "1.0.0",
+      "derived_from" : "tosca.nodes.Root"
+    },
+    "tosca.nodes.Vnf" : {
+      "description" : "This is VNF Node Type",
+      "version" : "1.0.0",
+      "derived_from" : "tosca.nodes.Root"
+    },
+    "tosca.nodes.Artifact" : {
+      "description" : "This is Deprecated Artifact Node Type.",
+      "version" : "1.0.0",
+      "derived_from" : "tosca.nodes.Root"
+    },
+    "tosca.nodes.Component" : {
+      "description" : "This is default Component Node",
+      "version" : "1.0.0",
+      "derived_from" : "tosca.nodes.Root"
     }
   },
   "data_types": {

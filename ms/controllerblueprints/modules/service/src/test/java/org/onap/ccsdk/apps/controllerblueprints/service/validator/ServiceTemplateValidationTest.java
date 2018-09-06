@@ -37,16 +37,15 @@ public class ServiceTemplateValidationTest {
     public void testBluePrintDirs() {
         List<String> dirs = ConfigModelUtils.getBlueprintNames("load/blueprints");
         Assert.assertNotNull("Failed to get blueprint directories", dirs);
-        Assert.assertEquals("Failed to get actual directories", 2, dirs.size());
+        Assert.assertEquals("Failed to get actual directories", 1, dirs.size());
     }
 
     @Test
     public void validateServiceTemplate() throws Exception {
-        validateServiceTemplate("load/blueprints/baseconfiguration/Definitions/activation-blueprint.json");
         validateServiceTemplate("load/blueprints/vrr-test/Definitions/vrr-test.json");
     }
 
-    //@Test
+    @Test
     public void validateEnhancedServiceTemplate() throws Exception {
         ServiceTemplate serviceTemplate = JacksonUtils
                 .readValueFromClassPathFile("enhance/enhanced-template.json", ServiceTemplate.class);

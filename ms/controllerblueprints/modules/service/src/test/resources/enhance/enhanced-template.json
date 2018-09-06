@@ -215,6 +215,11 @@
       },
       "derived_from" : "tosca.nodes.DG"
     },
+    "tosca.nodes.Component" : {
+      "description" : "This is default Component Node",
+      "version" : "1.0.0",
+      "derived_from" : "tosca.nodes.Root"
+    },
     "component-resource-assignment" : {
       "description" : "This is Resource Assignment Component API",
       "version" : "1.0.0",
@@ -282,6 +287,11 @@
         }
       },
       "derived_from" : "tosca.nodes.Component"
+    },
+    "tosca.nodes.DG" : {
+      "description" : "This is Directed Graph Node Type",
+      "version" : "1.0.0",
+      "derived_from" : "tosca.nodes.Root"
     },
     "artifact-config-template" : {
       "description" : "This is Configuration Velocity Template",
@@ -361,6 +371,11 @@
       },
       "derived_from" : "tosca.nodes.Vnf"
     },
+    "tosca.nodes.Vnf" : {
+      "description" : "This is VNF Node Type",
+      "version" : "1.0.0",
+      "derived_from" : "tosca.nodes.Root"
+    },
     "component-netconf-executor" : {
       "description" : "This is Netconf Transaction Configuration Component API",
       "version" : "1.0.0",
@@ -386,12 +401,12 @@
                   "required" : true,
                   "type" : "string"
                 },
-                "service-template-name" : {
+                "template-name" : {
                   "description" : "Service Template Name",
                   "required" : true,
                   "type" : "string"
                 },
-                "service-template-version" : {
+                "template-version" : {
                   "description" : "Service Template Version",
                   "required" : true,
                   "type" : "string"
@@ -439,6 +454,11 @@
         }
       },
       "derived_from" : "tosca.nodes.Component"
+    },
+    "tosca.nodes.Artifact" : {
+      "description" : "This is Deprecated Artifact Node Type.",
+      "version" : "1.0.0",
+      "derived_from" : "tosca.nodes.Root"
     },
     "dg-activate-netconf" : {
       "description" : "This is Download Netconf Directed Graph",
@@ -571,8 +591,8 @@
                 },
                 "inputs" : {
                   "action-name" : "{ \"get_input\" : \"action-name\" }",
-                  "template_name" : "{ \"get_attribute\" : \"template_name\" }",
-                  "service-template-version" : "{ \"get_attribute\" : \"service-template-version\" }",
+                  "template-name" : "{ \"get_attribute\" : \"template_name\" }",
+                  "template-version" : "{ \"get_attribute\" : \"template_version\" }",
                   "resource-type" : "vnf-type",
                   "request-id" : "{ \"get_input\" : \"request-id\" }",
                   "resource-id" : "{ \"get_input\" : \"hostname\" }",

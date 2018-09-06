@@ -217,7 +217,7 @@
           "default" : "LATEST"
         }
       },
-      "derived_from": "tosca.nodes.Component"
+      "derived_from": "tosca.nodes.DG"
     },
     "tosca.nodes.Component": {
       "description": "This is Resource Assignment Component API",
@@ -252,6 +252,11 @@
         }
       },
       "derived_from": "tosca.nodes.Root"
+    },
+    "tosca.nodes.DG" : {
+      "description" : "This is Directed Graph Node Type",
+      "version" : "1.0.0",
+      "derived_from" : "tosca.nodes.Root"
     },
     "tosca.nodes.component.Python": {
       "description": "This is Resource Assignment Python Component API",
