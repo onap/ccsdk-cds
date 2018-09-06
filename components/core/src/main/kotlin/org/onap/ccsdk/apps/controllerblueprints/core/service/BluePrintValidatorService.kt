@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -187,7 +188,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
         nodeTemplate.properties?.let { validatePropertyAssignments(nodeType.properties!!, nodeTemplate.properties!!) }
         nodeTemplate.capabilities?.let { validateCapabilityAssignments(nodeTemplate.capabilities!!) }
         nodeTemplate.requirements?.let { validateRequirementAssignments(nodeTemplate.requirements!!) }
-        nodeTemplate.interfaces?.let { validateInterfaceAssignments(nodeTemplate.interfaces!!) }
+        nodeTemplate.interfaces?.let { validateInterfaceAssignments(nodeType, nodeTemplateName, nodeTemplate) }
         paths.removeAt(paths.lastIndex)
     }
 
@@ -293,9 +294,70 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
     }
 
     @Throws(BluePrintException::class)
-    open fun validateInterfaceAssignments(interfaces: MutableMap<String, InterfaceAssignment>) {
+    open fun validateInterfaceAssignments(nodeType: NodeType, nodeTemplateName: String, nodeTemplate: NodeTemplate) {
+
+        val interfaces = nodeTemplate.interfaces
+        paths.add("interfaces")
+        interfaces?.forEach { interfaceAssignmentName, interfaceAssignment ->
+            paths.add(interfaceAssignmentName)
+            val interfaceDefinition = nodeType.interfaces?.get(interfaceAssignmentName)
+                    ?: throw BluePrintException(format("Failed to get nodeTemplate({}) interface definition ({}) from" +
+                            " node type ({}) ", nodeTemplateName, interfaceAssignmentName, nodeTemplate.type))
+
+            validateInterfaceAssignment(nodeTemplateName, interfaceAssignmentName, interfaceDefinition,
+                    interfaceAssignment)
+            paths.removeAt(paths.lastIndex)
+        }
+        paths.removeAt(paths.lastIndex)
+
 
     }
+
+    @Throws(BluePrintException::class)
+    open fun validateInterfaceAssignment(nodeTemplateName: String, interfaceAssignmentName: String,
+                                         interfaceDefinition: InterfaceDefinition,
+                                         interfaceAssignment: InterfaceAssignment) {
+
+        val operations = interfaceAssignment.operations
+        operations?.let {
+            validateInterfaceOperationsAssignment(nodeTemplateName, interfaceAssignmentName, interfaceDefinition,
+                    interfaceAssignment)
+        }
+
+    }
+
+    @Throws(BluePrintException::class)
+    open fun validateInterfaceOperationsAssignment(nodeTemplateName: String, interfaceAssignmentName: String,
+                                                   interfaceDefinition: InterfaceDefinition,
+                                                   interfaceAssignment: InterfaceAssignment) {
+
+        val operations = interfaceAssignment.operations
+        operations?.let {
+            it.forEach { operationAssignmentName, operationAssignments ->
+
+                val operationDefinition = interfaceDefinition.operations?.get(operationAssignmentName)
+                        ?: throw BluePrintException(format("Failed to get nodeTemplate({}) operation definition ({}) ",
+                                nodeTemplateName, operationAssignmentName))
+
+                log.info("Validation Node Template({}) Interface({}) Operation ({})", nodeTemplateName,
+                        interfaceAssignmentName, operationAssignmentName)
+
+                val inputs = operationAssignments.inputs
+                val outputs = operationAssignments.outputs
+
+                inputs?.forEach { propertyName, propertyAssignment ->
+                    val propertyDefinition = operationDefinition.inputs?.get(propertyName)
+                            ?: throw BluePrintException(format("Failed to get nodeTemplate({}) operation definition ({}) " +
+                                    "property definition({})", nodeTemplateName, operationAssignmentName, propertyName))
+                    // Check the property values with property definition
+                    validatePropertyAssignment(propertyName, propertyDefinition, propertyAssignment)
+                }
+
+            }
+        }
+
+    }
+
 
     @Throws(BluePrintException::class)
     open fun validateInterfaceDefinitions(interfaces: MutableMap<String, InterfaceDefinition>) {
@@ -360,14 +422,13 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
 
         } else if (BluePrintTypes.validCollectionTypes().contains(propertyType)) {
 
-            isValid = JacksonUtils.checkJsonNodeValueOfCollectionType(propertyType, propertyAssignment)
             val entrySchemaType = propertyDefinition.entrySchema?.type
                     ?: throw BluePrintException(format("Failed to get Entry Schema type for the collection property ({})", propertyName))
 
             if (!BluePrintTypes.validPropertyTypes().contains(entrySchemaType)) {
                 checkPropertyDataType(entrySchemaType, propertyName)
             }
-
+            isValid = JacksonUtils.checkJsonNodeValueOfCollectionType(propertyType, propertyAssignment)
         } else {
             checkPropertyDataType(propertyType, propertyName)
             isValid = true
