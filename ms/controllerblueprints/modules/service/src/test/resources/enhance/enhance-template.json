@@ -64,8 +64,8 @@
               "process": {
                 "inputs": {
                   "action-name": "{ \"get_input\" : \"action-name\" }",
-                  "template_name": "{ \"get_attribute\" : \"template_name\" }",
-                  "service-template-version": "{ \"get_attribute\" : \"service-template-version\" }",
+                  "template-name": "{ \"get_attribute\" : \"template_name\" }",
+                  "template-version": "{ \"get_attribute\" : \"template_version\" }",
                   "resource-type": "vnf-type",
                   "request-id": "{ \"get_input\" : \"request-id\" }",
                   "resource-id": "{ \"get_input\" : \"hostname\" }",
