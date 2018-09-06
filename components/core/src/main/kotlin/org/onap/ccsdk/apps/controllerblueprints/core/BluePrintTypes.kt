@@ -51,6 +51,16 @@ object BluePrintTypes {
     )
 
     @JvmStatic
+    val validRelationShipDerivedFroms: MutableList<String> = arrayListOf(
+            BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_ROOT,
+            BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_DEPENDS_ON,
+            BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_HOSTED_ON,
+            BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO,
+            BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_ATTACH_TO,
+            BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_ROUTES_TO
+    )
+
+    @JvmStatic
     fun validModelTypes(): List<String> {
         val validTypes: MutableList<String> = arrayListOf()
         validTypes.add(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)

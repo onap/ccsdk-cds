@@ -1,5 +1,7 @@
 {
   "request-id" : "12345",
   "hostname" : "localhost",
+  "template_name": "baseconfiguration",
+  "template_version": "1.0.0",
   "action-name" : "sample-action"
 }
