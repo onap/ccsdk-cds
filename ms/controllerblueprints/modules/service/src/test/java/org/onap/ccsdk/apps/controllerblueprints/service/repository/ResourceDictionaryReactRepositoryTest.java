@@ -17,11 +17,14 @@
 package org.onap.ccsdk.apps.controllerblueprints.service.repository;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.onap.ccsdk.apps.controllerblueprints.TestApplication;
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -30,6 +33,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 import java.util.List;
+
 /**
  * ResourceDictionaryReactRepositoryTest.
  *
@@ -44,6 +48,16 @@ public class ResourceDictionaryReactRepositoryTest {
 
     @Autowired
     protected ResourceDictionaryReactRepository resourceDictionaryReactRepository;
+
+    @Before
+    public void init() {
+        ResourceDefinition resourceDefinition = JacksonUtils.readValueFromFile("load/resource_dictionary/db-source" +
+                ".json", ResourceDefinition.class);
+
+        ResourceDictionary resourceDictionary = transformResourceDictionary(resourceDefinition);
+        ResourceDictionary dbResourceDictionary = resourceDictionaryReactRepository.save(resourceDictionary).block();
+        Assert.assertNotNull("Failed to query React Resource Dictionary by Name", dbResourceDictionary);
+    }
 
     @Test
     public void test01FindByNameReact() throws Exception {
@@ -63,5 +77,18 @@ public class ResourceDictionaryReactRepositoryTest {
         List<ResourceDictionary> dbTagsResourceDictionaries =
                 resourceDictionaryReactRepository.findByTagsContainingIgnoreCase("db-source").collectList().block();
         Assert.assertNotNull("Failed to query React Resource Dictionary by Tags", dbTagsResourceDictionaries);
+    }
+
+    private ResourceDictionary transformResourceDictionary(ResourceDefinition resourceDefinition) {
+        ResourceDictionary resourceDictionary = new ResourceDictionary();
+        resourceDictionary.setName(resourceDefinition.getName());
+        resourceDictionary.setDataType(resourceDefinition.getProperty().getType());
+        resourceDictionary.setDescription(resourceDefinition.getProperty().getDescription());
+        resourceDictionary.setResourcePath(resourceDefinition.getResourcePath());
+        resourceDictionary.setResourceType(resourceDefinition.getResourceType());
+        resourceDictionary.setTags(resourceDefinition.getTags());
+        resourceDictionary.setUpdatedBy(resourceDefinition.getUpdatedBy());
+        resourceDictionary.setDefinition(resourceDefinition);
+        return resourceDictionary;
     }
 }

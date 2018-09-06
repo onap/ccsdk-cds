@@ -60,16 +60,19 @@ import java.util.List;
 public class DataBaseInitService {
 
     private static EELFLogger log = EELFManager.getInstance().getLogger(DataBaseInitService.class);
-    @Value("${blueprints.load.path}")
-    private String modelLoadPath;
     private ModelTypeService modelTypeService;
     private ResourceDictionaryService resourceDictionaryService;
     private ConfigModelService configModelService;
 
+    @Value("${load.dataTypePath}")
     private String dataTypePath;
+    @Value("${load.nodeTypePath}")
     private String nodeTypePath;
+    @Value("${load.artifactTypePath}")
     private String artifactTypePath;
+    @Value("${load.resourceDictionaryPath}")
     private String resourceDictionaryPath;
+    @Value("${load.blueprintsPath}")
     private String bluePrintsPath;
 
     @Autowired
@@ -94,13 +97,6 @@ public class DataBaseInitService {
     @PostConstruct
     @SuppressWarnings("unused")
     private void initDatabase() {
-        log.info("loading Blueprints from DIR : {}", modelLoadPath);
-        dataTypePath = modelLoadPath + "/model_type/data_type";
-        nodeTypePath = modelLoadPath + "/model_type/node_type";
-        artifactTypePath = modelLoadPath + "/model_type/artifact_type";
-        resourceDictionaryPath = modelLoadPath + "/resource_dictionary";
-        bluePrintsPath = modelLoadPath + "/blueprints";
-
         log.info("loading dataTypePath from DIR : {}", dataTypePath);
         log.info("loading nodeTypePath from DIR : {}", nodeTypePath);
         log.info("loading artifactTypePath from DIR : {}", artifactTypePath);

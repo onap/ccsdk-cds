@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.core.scheduler.Schedulers
+
 /**
  * ResourceDictionaryReactRepository.
  *
@@ -29,6 +30,10 @@ import reactor.core.scheduler.Schedulers
  */
 @Service
 open class ResourceDictionaryReactRepository(private val resourceDictionaryRepository: ResourceDictionaryRepository) {
+
+    fun save(resourceDictionary: ResourceDictionary): Mono<ResourceDictionary> {
+        return Mono.justOrEmpty(resourceDictionaryRepository.save(resourceDictionary))
+    }
 
     fun findByName(name: String): Mono<ResourceDictionary> {
         return Mono.justOrEmpty(resourceDictionaryRepository.findByName(name))

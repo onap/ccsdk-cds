@@ -1,8 +1,0 @@
-{
-  "description": " Velocity Template Resource Mapping File used along with Configuration template",
-  "version": "1.0.0",
-  "file_ext": [
-    "json"
-  ],
-  "derived_from": "tosca.artifacts.Implementation"
-}

@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,13 +55,14 @@ public class ModelTypeRestTest {
 
 
     @After
-    public void tearDown() {}
+    public void tearDown() {
+    }
 
     @Test
     public void test01SaveModelType() throws Exception {
-        log.info( "**************** test01SaveModelType  ********************");
+        log.info("**************** test01SaveModelType  ********************");
 
-        String content = FileUtils.readFileToString(new File("load/model_type/data_type/datatype-property.json"), Charset.defaultCharset());
+        String content = JacksonUtils.getClassPathFileContent("model_type/data_type/datatype-property.json");
         ModelType modelType = new ModelType();
         modelType.setDefinitionType(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE);
         modelType.setDerivedFrom(BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT);
@@ -72,7 +74,7 @@ public class ModelTypeRestTest {
                 + BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE);
         modelType.setUpdatedBy("xxxxxx@xxx.com");
         modelType = modelTypeRest.saveModelType(modelType);
-        log.info( "Saved Mode {}", modelType.toString());
+        log.info("Saved Mode {}", modelType.toString());
         Assert.assertNotNull("Failed to get Saved ModelType", modelType);
         Assert.assertNotNull("Failed to get Saved ModelType, Id", modelType.getModelName());
 
@@ -90,7 +92,7 @@ public class ModelTypeRestTest {
 
     @Test
     public void test02SearchModelTypes() throws Exception {
-        log.info( "*********************** test02SearchModelTypes  ***************************");
+        log.info("*********************** test02SearchModelTypes  ***************************");
 
         String tags = "test-datatype";
 
@@ -102,7 +104,7 @@ public class ModelTypeRestTest {
 
     @Test
     public void test03GetModelType() throws Exception {
-        log.info( "************************* test03GetModelType  *********************************");
+        log.info("************************* test03GetModelType  *********************************");
         ModelType dbModelType = modelTypeRest.getModelTypeByName(modelName);
         Assert.assertNotNull("Failed to get response for api call getModelByName ", dbModelType);
         Assert.assertNotNull("Failed to get Id for api call  getModelByName ", dbModelType.getModelName());
@@ -123,7 +125,6 @@ public class ModelTypeRestTest {
 
         modelTypeRest.deleteModelTypeByName(dbResourceMapping.getModelName());
     }
-
 
 
 }

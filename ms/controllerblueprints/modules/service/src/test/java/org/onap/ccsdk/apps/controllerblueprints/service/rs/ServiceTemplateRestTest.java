@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -127,10 +128,10 @@ public class ServiceTemplateRestTest {
     public void test05AutoMap() throws Exception {
         log.info("*********** test05AutoMap  *******************************************");
 
-        String resourceassignmentContent = FileUtils.readFileToString(
+        String resourceAssignmentContent = FileUtils.readFileToString(
                 new File("src/test/resources/resourcedictionary/automap.json"), Charset.defaultCharset());
         List<ResourceAssignment> batchResourceAssignment =
-                JacksonUtils.getListFromJson(resourceassignmentContent, ResourceAssignment.class);
+                JacksonUtils.getListFromJson(resourceAssignmentContent, ResourceAssignment.class);
         AutoMapResponse autoMapResponse = serviceTemplateRest.autoMap(batchResourceAssignment);
 
         Assert.assertNotNull("Failed to get ResourceAssignments, Return object is Null",

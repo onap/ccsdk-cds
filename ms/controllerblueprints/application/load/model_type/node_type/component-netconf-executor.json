@@ -23,12 +23,12 @@
               "required": true,
               "type": "string"
             },
-            "service-template-name": {
+            "template-name": {
               "description": "Service Template Name",
               "required": true,
               "type": "string"
             },
-            "service-template-version": {
+            "template-version": {
               "description": "Service Template Version",
               "required": true,
               "type": "string"
