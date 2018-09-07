@@ -3,7 +3,7 @@
     "template_author": "Brinda Santh ( bs2796@onap.com )",
     "template_name": "vrr-test",
     "template_version": "1.0.0",
-    "template_tags" : "brinda, VRR",
+    "template_tags": "brinda, VRR",
     "release": "201802",
     "service-type": "AVPN",
     "vnf-type": "VRR"
@@ -172,20 +172,30 @@
       "resource-assignment": {
         "type": "component-resource-assignment",
         "interfaces": {
-          "org-openecomp-sdnc-config-assignment-service-ConfigAssignmentNode": {
+          "org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode": {
             "operations": {
               "process": {
                 "inputs": {
-                  "service-template-name": "{ \"get_attribute\" : \"template_name\" }",
-                  "service-template-version": "{ \"get_attribute\" : \"service-template-version\" }",
-                  "action-name": "{ \"get_input\" : \"action-name\" }",
+                  "template-name": {
+                    "get_input": "template_name"
+                  },
+                  "template-version": {
+                    "get_input": "template_version"
+                  },
+                  "action-name": {
+                    "get_input": "action-name"
+                  },
                   "resource-type": "vnf-type",
                   "template-names": [
                     "base-config-template",
                     "licence-template"
                   ],
-                  "request-id": "{ \"get_input\" : \"request-id\" }",
-                  "resource-id": "{ \"get_input\" : \"vnf-id\" }"
+                  "request-id": {
+                    "get_input": "request-id"
+                  },
+                  "resource-id": {
+                    "get_input": "vnf-id"
+                  }
                 },
                 "outputs": {
                   "resource-assignment-params": "",
@@ -205,8 +215,12 @@
           "netconf": {
             "properties": {
               "profile-name": "sample",
-              "oam-ipv4-address": "{ \"get_attribute\" : \"hostname\" }",
-              "port-number": { "get_input" : "host-port" },
+              "oam-ipv4-address": {
+                "get_input": "hostname"
+              },
+              "port-number": {
+                "get_input": "host-port"
+              },
               "connection-time-out": 30
             }
           }
@@ -218,19 +232,29 @@
           "org-openecomp-sdnc-netconf-adaptor-service-NetconfExecutorNode": {
             "operations": {
               "process": {
-                "implementation" : {
-                  "primary" : "file://netconf-adaptor/DefaultGetConfig.py"
+                "implementation": {
+                  "primary": "file://netconf-adaptor/DefaultGetConfig.py"
                 },
                 "inputs": {
-                  "action-name": "{ \"get_input\" : \"action-name\" }",
+                  "action-name": {
+                    "get_input": "action-name"
+                  },
                   "resource-type": "vnf-type",
-                  "request-id": "{ \"get_attribute\" : \"request-id\" }",
-                  "resource-id": "{ \"get_input\" : \"vnf-id\" }",
+                  "request-id": {
+                    "get_input": "request-id"
+                  },
+                  "resource-id": {
+                    "get_input": "vnf-id"
+                  },
                   "execution-script": "execution-script"
                 },
                 "outputs": {
-                  "response-data": "{ \"get_attribute\" : \"netconf-executor-baseconfig.response-data\" }",
-                  "status": "{ \"get_attribute\" : \"netconf-executor-baseconfig.status\" }"
+                  "response-data": {
+                    "get_attribute": ["SELF",  "netconf-executor-baseconfig.response-data"]
+                  },
+                  "status": {
+                    "get_attribute": ["SELF", "netconf-executor-baseconfig.status"]
+                  }
                 }
               }
             }
@@ -311,7 +335,7 @@
         }
       },
       "interfaces": {
-        "org-openecomp-sdnc-config-assignment-service-ConfigAssignmentNode": {
+        "org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode": {
           "operations": {
             "process": {
               "inputs": {
@@ -320,12 +344,12 @@
                   "required": true,
                   "type": "string"
                 },
-                "service-template-name": {
+                "template-name": {
                   "description": "Service Template Name.",
                   "required": true,
                   "type": "string"
                 },
-                "service-template-version": {
+                "template-version": {
                   "description": "Service Template Version.",
                   "required": true,
                   "type": "string"
@@ -569,12 +593,12 @@
                   "required": true,
                   "type": "string"
                 },
-                "service-template-name": {
+                "template-name": {
                   "description": "Service Template Name",
                   "required": true,
                   "type": "string"
                 },
-                "service-template-version": {
+                "template-version": {
                   "description": "Service Template Version",
                   "required": true,
                   "type": "string"
@@ -617,25 +641,25 @@
       },
       "derived_from": "tosca.nodes.Component"
     },
-    "tosca.nodes.DG" : {
-      "description" : "This is Directed Graph Node Type",
-      "version" : "1.0.0",
-      "derived_from" : "tosca.nodes.Root"
+    "tosca.nodes.DG": {
+      "description": "This is Directed Graph Node Type",
+      "version": "1.0.0",
+      "derived_from": "tosca.nodes.Root"
     },
-    "tosca.nodes.Vnf" : {
-      "description" : "This is VNF Node Type",
-      "version" : "1.0.0",
-      "derived_from" : "tosca.nodes.Root"
+    "tosca.nodes.Vnf": {
+      "description": "This is VNF Node Type",
+      "version": "1.0.0",
+      "derived_from": "tosca.nodes.Root"
     },
-    "tosca.nodes.Artifact" : {
-      "description" : "This is Deprecated Artifact Node Type.",
-      "version" : "1.0.0",
-      "derived_from" : "tosca.nodes.Root"
+    "tosca.nodes.Artifact": {
+      "description": "This is Deprecated Artifact Node Type.",
+      "version": "1.0.0",
+      "derived_from": "tosca.nodes.Root"
     },
-    "tosca.nodes.Component" : {
-      "description" : "This is default Component Node",
-      "version" : "1.0.0",
-      "derived_from" : "tosca.nodes.Root"
+    "tosca.nodes.Component": {
+      "description": "This is default Component Node",
+      "version": "1.0.0",
+      "derived_from": "tosca.nodes.Root"
     }
   },
   "data_types": {

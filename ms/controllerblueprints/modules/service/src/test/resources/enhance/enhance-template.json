@@ -39,7 +39,12 @@
               "login-key": "sdnc",
               "login-account": "sndc-local",
               "source": "local",
-              "target-ip-address": "{\"get_attribute\":\"lo0-local-ipv4-address\"}",
+              "target-ip-address": {
+                "get_attribute": [
+                  "SELF",
+                  "lo0-local-ipv4-address"
+                ]
+              },
               "port-number": 22,
               "connection-time-out": 30
             }
@@ -63,20 +68,40 @@
             "operations": {
               "process": {
                 "inputs": {
-                  "action-name": "{ \"get_input\" : \"action-name\" }",
-                  "template-name": "{ \"get_attribute\" : \"template_name\" }",
-                  "template-version": "{ \"get_attribute\" : \"template_version\" }",
+                  "action-name": {
+                    "get_input": "action-name"
+                  },
+                  "template-name": {
+                    "get_input": "template_name"
+                  },
+                  "template-version": {
+                    "get_input": "template_version"
+                  },
                   "resource-type": "vnf-type",
-                  "request-id": "{ \"get_input\" : \"request-id\" }",
-                  "resource-id": "{ \"get_input\" : \"hostname\" }",
+                  "request-id": {
+                    "get_input": "request-id"
+                  },
+                  "resource-id": {
+                    "get_input": "hostname"
+                  },
                   "execution-script": "execution-script"
                 },
                 "outputs": {
-                  "response-data": "{ \"get_attribute\" : \"netconf-executor-baseconfig.response-data\" }",
-                  "status": "{ \"get_attribute\" : \"netconf-executor-baseconfig.status\" }"
+                  "response-data": {
+                    "get_attribute": [
+                      "SELF",
+                      "netconf-executor-baseconfig.response-data"
+                    ]
+                  },
+                  "status": {
+                    "get_attribute": [
+                      "SELF",
+                      "netconf-executor-baseconfig.status"
+                    ]
+                  }
                 },
-                "implementation" : {
-                  "primary" : "file://netconf_adaptor/DefaultBaseLicenceConfig.py"
+                "implementation": {
+                  "primary": "file://netconf_adaptor/DefaultBaseLicenceConfig.py"
                 }
               }
             }
@@ -89,7 +114,7 @@
           "component-node": {}
         },
         "interfaces": {
-          "org-openecomp-sdnc-config-assignment-service-ConfigAssignmentNode": {
+          "org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode": {
             "operations": {
               "process": {
                 "inputs": {
@@ -97,12 +122,22 @@
                     "base-config-template",
                     "licence-template"
                   ],
-                  "action-name": "{ \"get_input\" : \"action-name\" }",
-                  "service-template-name": "{ \"get_attribute\" : \"template_name\" }",
-                  "service-template-version": "{ \"get_attribute\" : \"service-template-version\" }",
+                  "action-name": {
+                    "get_input": "action-name"
+                  },
+                  "template-name": {
+                    "get_input": "template_name"
+                  },
+                  "template-version": {
+                    "get_input": "template-version"
+                  },
                   "resource-type": "vnf-type",
-                  "request-id": "{ \"get_input\" : \"request-id\" }",
-                  "resource-id": "{ \"get_input\" : \"hostname\" }"
+                  "request-id": {
+                    "get_input": "request-id"
+                  },
+                  "resource-id": {
+                    "get_input": "hostname"
+                  }
                 },
                 "outputs": {
                   "resource-assignment-params": "success",

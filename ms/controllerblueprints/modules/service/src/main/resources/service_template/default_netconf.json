@@ -13,11 +13,11 @@
 				"required": true,
 				"type": "string"
 			},
-			"service-template-name": {
+			"template-name": {
 				"required": true,
 				"type": "string"
 			},
-			"service-template-version": {
+			"template-version": {
 				"required": true,
 				"type": "string"
 			},
@@ -146,7 +146,7 @@
 			"resource-assignment": {
 				"type": "component-resource-assignment",
 				"interfaces": {
-					"org-openecomp-sdnc-config-assignment-service-ConfigAssignmentNode": {
+					"org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode": {
 						"operations": {
 							"process": {
 								"inputs": {
@@ -155,8 +155,8 @@
 										"base-config-template",
 										"licence-template"
 									],
-									"request-id": "{ \"get_attribute\" : \"request-id\" }",
-									"resource-id": "{ \"get_input\" : \"vnf-id\" }"
+									"request-id": { "get_input" : "request-id" },
+									"resource-id": { "get_input" : "vnf-id" }
 								},
 								"outputs": {
 									"resource-assignment-params": "",
@@ -220,10 +220,10 @@
 									],
 									"resource-type": "vnf-type",
 									"initialise-sftp": false,
-									"request-id": "{ \"get_input\" : \"request-id\" }",
+									"request-id": {"get_input" : "request-id"},
 									"initialise-ssh": false,
-									"resource-id": "{ \"get_input\" : \"vnf-id\" }",
-									"action-name": "{ \"get_input\" : \"action-name\" }"
+									"resource-id": { "get_input" : "vnf-id" },
+									"action-name": {"get_input" : "action-name"}
 								},
 								"outputs": {
 									"rpc-response-message": "",
@@ -400,20 +400,6 @@
 			"capabilities": {
 				"dg-node": {
 					"type": "tosca.capabilities.Node"
-				},
-				"content": {
-					"type": "tosca.capabilities.Content",
-					"properties": {
-						"type": {
-							"required": false,
-							"type": "string",
-							"default": "json"
-						},
-						"content": {
-							"required": true,
-							"type": "string"
-						}
-					}
 				}
 			},
 			"requirements": {
@@ -465,20 +451,6 @@
 			"capabilities": {
 				"dg-node": {
 					"type": "tosca.capabilities.Node"
-				},
-				"content": {
-					"type": "tosca.capabilities.Content",
-					"properties": {
-						"type": {
-							"required": false,
-							"type": "string",
-							"default": "json"
-						},
-						"content": {
-							"required": true,
-							"type": "string"
-						}
-					}
 				}
 			},
 			"requirements": {
@@ -553,7 +525,7 @@
 				}
 			},
 			"interfaces": {
-				"org-openecomp-sdnc-config-assignment-service-ConfigAssignmentNode": {
+				"org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode": {
 					"operations": {
 						"process": {
 							"inputs": {

@@ -7,16 +7,16 @@
     }
   },
   "interfaces": {
-    "org-openecomp-sdnc-config-assignment-service-ConfigAssignmentNode": {
+    "org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode": {
       "operations": {
         "process": {
           "inputs": {
-            "service-template-name": {
+           "template-name": {
               "description": "Service Template Name.",
               "required": true,
               "type": "string"
             },
-            "service-template-version": {
+           "template-version": {
               "description": "Service Template Version.",
               "required": true,
               "type": "string"
