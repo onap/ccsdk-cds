@@ -58,11 +58,8 @@ public class ResourceDictionaryRestTest {
                 Charset.defaultCharset());
 
         ResourceDictionary dataDictionary = new ResourceDictionary();
-        dataDictionary.setResourcePath("test/vnf/ipaddress");
         dataDictionary.setName("test-name");
         dataDictionary.setDefinition(JacksonUtils.readValue(definition, ResourceDefinition.class));
-        dataDictionary.setValidValues("127.0.0.1");
-        dataDictionary.setResourceType("ONAP");
         dataDictionary.setDataType("string");
         dataDictionary.setDescription("Sample Resource Mapping");
         dataDictionary.setTags("test, ipaddress");

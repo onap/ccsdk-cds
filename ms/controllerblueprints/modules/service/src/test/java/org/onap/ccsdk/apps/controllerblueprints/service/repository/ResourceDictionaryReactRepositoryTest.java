@@ -51,7 +51,7 @@ public class ResourceDictionaryReactRepositoryTest {
 
     @Before
     public void init() {
-        ResourceDefinition resourceDefinition = JacksonUtils.readValueFromFile("load/resource_dictionary/db-source" +
+        ResourceDefinition resourceDefinition = JacksonUtils.readValueFromFile("./../../application/load/resource_dictionary/db-source" +
                 ".json", ResourceDefinition.class);
 
         ResourceDictionary resourceDictionary = transformResourceDictionary(resourceDefinition);
@@ -84,8 +84,6 @@ public class ResourceDictionaryReactRepositoryTest {
         resourceDictionary.setName(resourceDefinition.getName());
         resourceDictionary.setDataType(resourceDefinition.getProperty().getType());
         resourceDictionary.setDescription(resourceDefinition.getProperty().getDescription());
-        resourceDictionary.setResourcePath(resourceDefinition.getResourcePath());
-        resourceDictionary.setResourceType(resourceDefinition.getResourceType());
         resourceDictionary.setTags(resourceDefinition.getTags());
         resourceDictionary.setUpdatedBy(resourceDefinition.getUpdatedBy());
         resourceDictionary.setDefinition(resourceDefinition);

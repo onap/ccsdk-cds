@@ -112,8 +112,6 @@ public class ResourceDictionaryService {
         // Validate the Resource Definitions
         resourceDictionaryValidationService.validate(resourceDefinition);
 
-        resourceDictionary.setResourceType(resourceDefinition.getResourceType());
-        resourceDictionary.setResourcePath(resourceDefinition.getResourcePath());
         resourceDictionary.setTags(resourceDefinition.getTags());
         resourceDefinition.setUpdatedBy(resourceDictionary.getUpdatedBy());
         // Set the Property Definitions
@@ -134,8 +132,6 @@ public class ResourceDictionaryService {
             dbResourceDictionary.setName(resourceDictionary.getName());
             dbResourceDictionary.setDefinition(resourceDictionary.getDefinition());
             dbResourceDictionary.setDescription(resourceDictionary.getDescription());
-            dbResourceDictionary.setResourceType(resourceDictionary.getResourceType());
-            dbResourceDictionary.setResourcePath(resourceDictionary.getResourcePath());
             dbResourceDictionary.setTags(resourceDictionary.getTags());
             dbResourceDictionary.setUpdatedBy(resourceDictionary.getUpdatedBy());
             dbResourceDictionary.setDataType(resourceDictionary.getDataType());

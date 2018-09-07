@@ -43,28 +43,12 @@ public class ResourceDictionary implements Serializable {
     @ApiModelProperty(required=true)
     private String name;
 
-    @Column(name = "resource_path", nullable = false)
-    @ApiModelProperty(required=true)
-    private String resourcePath;
-
-    @Column(name = "resource_type", nullable = false)
-    @ApiModelProperty(required=true)
-    private String resourceType;
-
     @Column(name = "data_type", nullable = false)
     @ApiModelProperty(required=true)
     private String dataType;
 
     @Column(name = "entry_schema")
     private String entrySchema;
-
-    @Lob
-    @Column(name = "valid_values")
-    private String validValues;
-
-    @Lob
-    @Column(name = "sample_value")
-    private String sampleValue;
 
     @Lob
     @Convert(converter  = JpaResourceDefinitionConverter.class)
@@ -95,11 +79,8 @@ public class ResourceDictionary implements Serializable {
     @Override
     public String toString() {
         String buffer = "[" + ", name = " + name +
-                ", resourcePath = " + resourcePath +
-                ", resourceType = " + resourceType +
                 ", dataType = " + dataType +
                 ", entrySchema = " + entrySchema +
-                ", validValues = " + validValues +
                 ", definition =" + definition +
                 ", description = " + description +
                 ", updatedBy = " + updatedBy +
@@ -109,28 +90,12 @@ public class ResourceDictionary implements Serializable {
         return buffer;
     }
 
-    public String getResourcePath() {
-        return resourcePath;
-    }
-
-    public void setResourcePath(String resourcePath) {
-        this.resourcePath = resourcePath;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getResourceType() {
-        return resourceType;
-    }
-
-    public void setResourceType(String resourceType) {
-        this.resourceType = resourceType;
     }
 
     public String getDataType() {
@@ -147,22 +112,6 @@ public class ResourceDictionary implements Serializable {
 
     public void setEntrySchema(String entrySchema) {
         this.entrySchema = entrySchema;
-    }
-
-    public String getValidValues() {
-        return validValues;
-    }
-
-    public void setValidValues(String validValues) {
-        this.validValues = validValues;
-    }
-
-    public String getSampleValue() {
-        return sampleValue;
-    }
-
-    public void setSampleValue(String sampleValue) {
-        this.sampleValue = sampleValue;
     }
 
     public ResourceDefinition getDefinition() {

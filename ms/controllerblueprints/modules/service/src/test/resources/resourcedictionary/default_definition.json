@@ -8,8 +8,6 @@
     }
   },
   "updated-by": "Brinda Santh (bs2796)",
-  "resource-type": "ONAP",
-  "resource-path": "/v4-aggregat-list",
   "tags": "ipaddress",
   "sources": {
     "input": {

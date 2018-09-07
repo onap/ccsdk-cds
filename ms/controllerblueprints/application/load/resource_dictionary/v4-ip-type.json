@@ -4,8 +4,6 @@
     "description": "name of the ",
     "type": "string"
   },
-  "resource-path": "vnf/v4-ip-type",
-  "resource-type": "ONAP",
   "updated-by": "brindasanth@onap.com",
   "tags": "v4-ip-type, source-input, brindasanth",
   "sources": {

@@ -4,8 +4,6 @@
     "description": "name of the ",
     "type": "string"
   },
-  "resource-type": "ONAP",
-  "resource-path": "vnf/bundle-id",
   "updated-by": "brindasanth@onap.com",
   "tags": "db-source, brindasanth@onap.com",
   "sources": {

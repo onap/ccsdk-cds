@@ -71,12 +71,8 @@ CREATE TABLE IF NOT EXISTS sdnctl.MODEL_TYPE (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS sdnctl.RESOURCE_DICTIONARY (
   name 			VARCHAR(100) NOT NULL,
-  resource_path 	VARCHAR(500) NOT NULL,  
-  resource_type 	VARCHAR(100) NOT NULL,
   data_type 		VARCHAR(100) NOT NULL,
   entry_schema 		VARCHAR(100) NULL DEFAULT NULL,
-  valid_values 		LONGTEXT NULL DEFAULT NULL,
-  sample_value 		LONGTEXT NULL DEFAULT NULL,
   definition 		LONGTEXT NOT NULL,
   description 		LONGTEXT NOT NULL,
   tags 			LONGTEXT NOT NULL,  

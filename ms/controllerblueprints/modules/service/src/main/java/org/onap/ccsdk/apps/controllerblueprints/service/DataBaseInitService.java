@@ -157,30 +157,28 @@ public class DataBaseInitService {
                         fileName = file.getFilename();
                         log.trace("Loading : {}", fileName);
                         String definitionContent = getResourceContent(file);
-                        ResourceDefinition dictionaryDefinition =
+                        ResourceDefinition resourceDefinition =
                                 JacksonUtils.readValue(definitionContent, ResourceDefinition.class);
-                        if (dictionaryDefinition != null) {
-                            Preconditions.checkNotNull(dictionaryDefinition.getProperty(), "Failed to get Property Definition");
+                        if (resourceDefinition != null) {
+                            Preconditions.checkNotNull(resourceDefinition.getProperty(), "Failed to get Property Definition");
                             ResourceDictionary resourceDictionary = new ResourceDictionary();
-                            resourceDictionary.setResourcePath(dictionaryDefinition.getResourcePath());
-                            resourceDictionary.setName(dictionaryDefinition.getName());
-                            resourceDictionary.setDefinition(dictionaryDefinition);
+                            resourceDictionary.setName(resourceDefinition.getName());
+                            resourceDictionary.setDefinition(resourceDefinition);
 
-                            resourceDictionary.setResourceType(dictionaryDefinition.getResourceType());
-                            resourceDictionary.setDescription(dictionaryDefinition.getProperty().getDescription());
-                            resourceDictionary.setDataType(dictionaryDefinition.getProperty().getType());
-                            if(dictionaryDefinition.getProperty().getEntrySchema() != null){
-                                resourceDictionary.setEntrySchema(dictionaryDefinition.getProperty().getEntrySchema().getType());
+                            Preconditions.checkNotNull(resourceDefinition.getProperty(), "Property field is missing");
+                            resourceDictionary.setDescription(resourceDefinition.getProperty().getDescription());
+                            resourceDictionary.setDataType(resourceDefinition.getProperty().getType());
+                            if(resourceDefinition.getProperty().getEntrySchema() != null){
+                                resourceDictionary.setEntrySchema(resourceDefinition.getProperty().getEntrySchema().getType());
                             }
-                            resourceDictionary.setUpdatedBy(dictionaryDefinition.getUpdatedBy());
-                            if (StringUtils.isBlank(dictionaryDefinition.getTags())) {
+                            resourceDictionary.setUpdatedBy(resourceDefinition.getUpdatedBy());
+                            if (StringUtils.isBlank(resourceDefinition.getTags())) {
                                 resourceDictionary.setTags(
-                                        dictionaryDefinition.getName() + ", " + dictionaryDefinition.getUpdatedBy()
-                                                + ", " + dictionaryDefinition.getResourceType() + ", "
-                                                + dictionaryDefinition.getUpdatedBy());
+                                        resourceDefinition.getName() + ", " + resourceDefinition.getUpdatedBy()
+                                                + ", " + resourceDefinition.getUpdatedBy());
 
                             } else {
-                                resourceDictionary.setTags(dictionaryDefinition.getTags());
+                                resourceDictionary.setTags(resourceDefinition.getTags());
                             }
                             resourceDictionaryService.saveResourceDictionary(resourceDictionary);
 
