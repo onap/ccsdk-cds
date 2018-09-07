@@ -206,7 +206,7 @@
             "properties": {
               "profile-name": "sample",
               "oam-ipv4-address": "{ \"get_attribute\" : \"hostname\" }",
-              "port-number": "{ \"get_attribute\" : \"host-port\" }",
+              "port-number": { "get_input" : "host-port" },
               "connection-time-out": 30
             }
           }
