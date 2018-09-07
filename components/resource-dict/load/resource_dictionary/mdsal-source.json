@@ -6,8 +6,6 @@
     "type": "string"
   },
   "updated-by": "brindasanth@onap.com",
-  "resource-type": "ATT",
-  "resource-path": "vnf/oam-local-ipv4-address",
   "sources": {
     "mdsal": {
       "type": "source-rest",

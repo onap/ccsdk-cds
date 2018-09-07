@@ -6,8 +6,6 @@
     "type": "string"
   },
   "updated-by": "brindasanth@onap.com",
-  "resource-type": "ONAP",
-  "resource-path": "vnf/v4-ip-type",
   "sources": {
     "default": {
       "type": "source-default",

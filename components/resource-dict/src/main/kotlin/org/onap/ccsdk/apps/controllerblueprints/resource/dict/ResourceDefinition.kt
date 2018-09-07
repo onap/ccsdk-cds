@@ -36,12 +36,6 @@ open class ResourceDefinition {
     @JsonProperty(value = "updated-by")
     lateinit var updatedBy: String
 
-    @JsonProperty(value = "resource-type", required = true)
-    lateinit var resourceType: String
-
-    @JsonProperty(value = "resource-path", required = true)
-    lateinit var resourcePath: String
-
     @JsonProperty(value = "sources", required = true)
     lateinit var sources: MutableMap<String, NodeTemplate>
 }
