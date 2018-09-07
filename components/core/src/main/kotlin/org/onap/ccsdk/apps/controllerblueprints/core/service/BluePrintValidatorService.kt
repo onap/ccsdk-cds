@@ -136,7 +136,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
         //Check Derived From
         checkValidNodeTypesDerivedFrom(nodeTypeName, derivedFrom)
 
-        if(!BluePrintTypes.rootNodeTypes().contains(derivedFrom)){
+        if (!BluePrintTypes.rootNodeTypes().contains(derivedFrom)) {
             serviceTemplate.nodeTypes?.get(derivedFrom)
                     ?: throw BluePrintException(format("Failed to get derivedFrom NodeType({})'s for NodeType({}) ",
                             derivedFrom, nodeTypeName))
@@ -193,7 +193,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
 
         nodeTemplate.artifacts?.let { validateArtifactDefinitions(nodeTemplate.artifacts!!) }
         nodeTemplate.properties?.let { validatePropertyAssignments(nodeType.properties!!, nodeTemplate.properties!!) }
-        nodeTemplate.capabilities?.let { validateCapabilityAssignments(nodeTemplate.capabilities!!) }
+        nodeTemplate.capabilities?.let { validateCapabilityAssignments(nodeType, nodeTemplateName, nodeTemplate) }
         nodeTemplate.requirements?.let { validateRequirementAssignments(nodeType, nodeTemplateName, nodeTemplate) }
         nodeTemplate.interfaces?.let { validateInterfaceAssignments(nodeType, nodeTemplateName, nodeTemplate) }
         paths.removeAt(paths.lastIndex)
@@ -291,7 +291,28 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
     }
 
     @Throws(BluePrintException::class)
-    open fun validateCapabilityAssignments(capabilities: MutableMap<String, CapabilityAssignment>) {
+    open fun validateCapabilityAssignments(nodeType: NodeType, nodeTemplateName: String, nodeTemplate: NodeTemplate) {
+        val capabilities = nodeTemplate.capabilities
+        paths.add("capabilities")
+        capabilities?.forEach { capabilityName, capabilityAssignment ->
+            paths.add(capabilityName)
+
+            val capabilityDefinition = nodeType.capabilities?.get(capabilityName)
+                    ?: throw BluePrintException(format("Failed to get NodeTemplate({}) capability definition ({}) " +
+                            "from NodeType({}) ", nodeTemplateName, capabilityName, nodeTemplate.type))
+
+            validateCapabilityAssignment(nodeTemplateName, capabilityName, capabilityDefinition, capabilityAssignment)
+
+            paths.removeAt(paths.lastIndex)
+        }
+        paths.removeAt(paths.lastIndex)
+    }
+
+    @Throws(BluePrintException::class)
+    open fun validateCapabilityAssignment(nodeTemplateName: String, capabilityName: String,
+                                          capabilityDefinition: CapabilityDefinition, capabilityAssignment: CapabilityAssignment) {
+
+        capabilityAssignment.properties?.let { validatePropertyAssignments(capabilityDefinition.properties!!, capabilityAssignment.properties!!) }
 
     }
 
@@ -392,6 +413,15 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
                     val propertyDefinition = operationDefinition.inputs?.get(propertyName)
                             ?: throw BluePrintException(format("Failed to get NodeTemplate({}) operation definition ({}) " +
                                     "property definition({})", nodeTemplateName, operationAssignmentName, propertyName))
+                    // Check the property values with property definition
+                    validatePropertyAssignment(propertyName, propertyDefinition, propertyAssignment)
+                }
+
+                outputs?.forEach { propertyName, propertyAssignment ->
+                    val propertyDefinition = operationDefinition.outputs?.get(propertyName)
+                            ?: throw BluePrintException(format("Failed to get NodeTemplate({}) operation definition ({}) " +
+                                    "output property definition({})", nodeTemplateName, operationAssignmentName,
+                                    propertyName))
                     // Check the property values with property definition
                     validatePropertyAssignment(propertyName, propertyDefinition, propertyAssignment)
                 }
