@@ -50,6 +50,7 @@ object BluePrintTypes {
             BluePrintConstants.MODEL_TYPE_DATA_TYPE_DYNAMIC
     )
 
+    @Deprecated("This has to move to Relationship Types Model Drive")
     @JvmStatic
     val validRelationShipDerivedFroms: MutableList<String> = arrayListOf(
             BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_ROOT,
@@ -58,6 +59,28 @@ object BluePrintTypes {
             BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO,
             BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_ATTACH_TO,
             BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_ROUTES_TO
+    )
+
+    @Deprecated("This has to move to Capability Types Model Drive")
+    @JvmStatic
+    val validCapabilityTypes: MutableList<String> = arrayListOf(
+            BluePrintConstants.MODEL_TYPE_CAPABILITIES_ROOT,
+            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_NODE,
+            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_COMPUTE,
+            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_NETWORK,
+            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_STORAGE,
+            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT,
+            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT_PUBLIC,
+            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT_ADMIN,
+            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT_DATABASE,
+            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ATTACHMENT,
+            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_OPERATION_SYSTEM,
+            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_BINDABLE,
+            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_CONTENT,
+            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_MAPPING,
+            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_NETCONF,
+            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_SSH,
+            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_SFTP
     )
 
     @JvmStatic

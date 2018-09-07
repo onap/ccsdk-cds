@@ -16,6 +16,7 @@
  */
 
 package org.onap.ccsdk.apps.controllerblueprints.core
+
 /**
  * BluePrintConstants
  *
@@ -94,9 +95,27 @@ object BluePrintConstants {
     const val MODEL_TYPE_NODES_COMPONENT_PYTHON: String = "tosca.nodes.component.Python"
     const val MODEL_TYPE_NODES_COMPONENT_JAVA_SCRIPT: String = "tosca.nodes.component.JavaScript"
 
-    const val MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION ="tosca.artifacts.Implementation"
+    const val MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION = "tosca.artifacts.Implementation"
 
     const val MODEL_TYPE_DATA_TYPE_DYNAMIC = "tosca.datatypes.Dynamic"
+
+    const val MODEL_TYPE_CAPABILITY_TYPE_NODE = "tosca.capabilities.Node"
+    const val MODEL_TYPE_CAPABILITY_TYPE_COMPUTE = "tosca.capabilities.Compute"
+    const val MODEL_TYPE_CAPABILITY_TYPE_NETWORK = "tosca.capabilities.Network"
+    const val MODEL_TYPE_CAPABILITY_TYPE_STORAGE = "tosca.capabilities.Storage"
+    const val MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT = "tosca.capabilities.Endpoint"
+    const val MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT_PUBLIC = "tosca.capabilities.Endpoint.Public"
+    const val MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT_ADMIN = "tosca.capabilities.Endpoint.Admin"
+    const val MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT_DATABASE = "tosca.capabilities.Endpoint.Database"
+    const val MODEL_TYPE_CAPABILITY_TYPE_ATTACHMENT = "tosca.capabilities.Attachment"
+    const val MODEL_TYPE_CAPABILITY_TYPE_OPERATION_SYSTEM = "tosca.capabilities.OperatingSystem"
+    const val MODEL_TYPE_CAPABILITY_TYPE_BINDABLE = "tosca.capabilities.network.Bindable"
+    // Custom capabilities
+    const val MODEL_TYPE_CAPABILITY_TYPE_CONTENT = "tosca.capabilities.Content"
+    const val MODEL_TYPE_CAPABILITY_TYPE_MAPPING = "tosca.capabilities.Mapping"
+    const val MODEL_TYPE_CAPABILITY_TYPE_NETCONF = "tosca.capabilities.Netconf"
+    const val MODEL_TYPE_CAPABILITY_TYPE_SSH = "tosca.capabilities.Ssh"
+    const val MODEL_TYPE_CAPABILITY_TYPE_SFTP = "tosca.capabilities.Sftp"
 
     const val EXPRESSION_GET_INPUT: String = "get_input"
     const val EXPRESSION_GET_ATTRIBUTE: String = "get_attribute"

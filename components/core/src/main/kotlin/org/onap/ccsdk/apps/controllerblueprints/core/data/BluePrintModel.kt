@@ -309,7 +309,7 @@ A capability definition defines a named, typed set of data that can be associate
 class CapabilityDefinition {
     @get:JsonIgnore
     var id: String? = null
-    var type: String? = null
+    lateinit var type: String
     var description: String? = null
     var properties: MutableMap<String, PropertyDefinition>? = null
     @get:JsonProperty("valid_source_types")

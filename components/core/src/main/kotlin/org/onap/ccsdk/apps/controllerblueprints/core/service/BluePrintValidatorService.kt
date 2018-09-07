@@ -143,6 +143,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
         }
 
         nodeType.properties?.let { validatePropertyDefinitions(nodeType.properties!!) }
+        nodeType.capabilities?.let { validateCapabilityDefinitions(nodeTypeName, nodeType) }
         nodeType.requirements?.let { validateRequirementDefinitions(nodeTypeName, nodeType) }
         nodeType.interfaces?.let { validateInterfaceDefinitions(nodeType.interfaces!!) }
         paths.removeAt(paths.lastIndex)
@@ -429,6 +430,30 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
             }
         }
 
+    }
+
+    @Throws(BluePrintException::class)
+    open fun validateCapabilityDefinitions(nodeTypeName: String, nodeType: NodeType) {
+        val capabilities = nodeType.capabilities
+        paths.add("capabilities")
+        capabilities?.forEach { capabilityName, capabilityDefinition ->
+            paths.add(capabilityName)
+
+            validateCapabilityDefinition(nodeTypeName, nodeType, capabilityName, capabilityDefinition)
+
+            paths.removeAt(paths.lastIndex)
+        }
+        paths.removeAt(paths.lastIndex)
+    }
+
+    @Throws(BluePrintException::class)
+    open fun validateCapabilityDefinition(nodeTypeName: String, nodeType: NodeType, capabilityName: String,
+                                          capabilityDefinition: CapabilityDefinition) {
+        val capabilityType = capabilityDefinition.type
+        check(BluePrintTypes.validCapabilityTypes.contains(capabilityType)) {
+            throw BluePrintException(format("Failed to get CapabilityType({}) for NodeType({})",
+                    capabilityType, nodeTypeName))
+        }
     }
 
     @Throws(BluePrintException::class)

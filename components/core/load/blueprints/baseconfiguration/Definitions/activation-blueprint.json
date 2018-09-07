@@ -91,12 +91,7 @@
           }
         },
         "capabilities": {
-          "dg-node": {},
-          "content": {
-            "properties": {
-              "type": "json"
-            }
-          }
+          "dg-node": {}
         },
         "interfaces": {
           "CONFIG": {
@@ -226,20 +221,6 @@
       "capabilities": {
         "dg-node": {
           "type": "tosca.capabilities.Node"
-        },
-        "content": {
-          "type": "tosca.capability.Content",
-          "properties": {
-            "type": {
-              "required": false,
-              "type": "string",
-              "default": "json"
-            },
-            "content": {
-              "required": false,
-              "type": "string"
-            }
-          }
         }
       },
       "requirements": {
