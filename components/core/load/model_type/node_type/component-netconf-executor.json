@@ -14,7 +14,7 @@
     }
   },
   "interfaces": {
-    "org-openecomp-sdnc-netconf-adaptor-service-NetconfExecutorNode": {
+    "org-onap-ccsdk-netconf-adaptor-service-NetconfExecutorNode": {
       "operations": {
         "process": {
           "inputs": {

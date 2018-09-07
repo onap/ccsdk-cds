@@ -1,5 +1,5 @@
 {
-	"default": "{ \"get_input\" : \"loopback-default\" }",
+	"default": { "get_input" : "loopback-default" },
 	"domain": "ethernet",
 	"criteria": [
 		{
@@ -8,7 +8,7 @@
 			"nodeString": "layer3-service-list[].service-data.l3sdn-vnf-fields.vnf-name"
 		},
 		{
-			"value": "{ \"get_input\" : \"host-ip-address\" }",
+			"value": { "get_input" : "host-ip-address" },
 			"type": "simple",
 			"nodeString": "layer3-service-list[].service-data.l3sdn-vnf-fields.vnf-name"
 		}

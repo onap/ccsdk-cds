@@ -60,14 +60,22 @@ class BluePrintExpressionServiceTest {
 
     @Test
     fun testAttributeExpression() {
-        val node : JsonNode = jacksonObjectMapper().readTree("{ \"get_attribute\" : [\"SELF\", \"\",\"attribute-name\", \"resource\", \"name\"] }")
+        val node : JsonNode = jacksonObjectMapper().readTree("{ \"get_attribute\" : [\"SELF\", \"resource\"] }")
         val expressionData : ExpressionData = BluePrintExpressionService.getExpressionData(node)
         assertNotNull(expressionData, " Failed to populate expression data")
         assertEquals(expressionData.isExpression, true, "Failed to identify as expression")
         assertNotNull(expressionData.attributeExpression, " Failed to populate attribute expression data")
         assertEquals("SELF", expressionData.attributeExpression?.modelableEntityName, " Failed to get expected modelableEntityName")
-        assertEquals("attribute-name", expressionData.attributeExpression?.attributeName, " Failed to get expected attributeName")
-        assertEquals("resource/name",expressionData.attributeExpression?.subAttributeName, " Failed to populate nested subAttributeName expression data")
+        assertEquals("resource", expressionData.attributeExpression?.attributeName, " Failed to get expected attributeName")
+
+        val node1 : JsonNode = jacksonObjectMapper().readTree("{ \"get_attribute\" : [\"SELF\", \"\",\"attribute-name\", \"resource\", \"name\"] }")
+        val expressionData1 : ExpressionData = BluePrintExpressionService.getExpressionData(node1)
+        assertNotNull(expressionData1, " Failed to populate expression data")
+        assertEquals(expressionData1.isExpression, true, "Failed to identify as expression")
+        assertNotNull(expressionData1.attributeExpression, " Failed to populate attribute expression data")
+        assertEquals("SELF", expressionData1.attributeExpression?.modelableEntityName, " Failed to get expected modelableEntityName")
+        assertEquals("attribute-name", expressionData1.attributeExpression?.attributeName, " Failed to get expected attributeName")
+        assertEquals("resource/name",expressionData1.attributeExpression?.subAttributeName, " Failed to populate nested subAttributeName expression data")
     }
 
 

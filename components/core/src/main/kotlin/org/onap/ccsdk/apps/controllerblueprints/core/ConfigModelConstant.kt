@@ -31,12 +31,6 @@ object ConfigModelConstant {
 
     const val MODEL_TYPE_NODE_ARTIFACT = "tosca.nodes.Artifact"
 
-    const val MODEL_TYPE_CAPABILITY_NETCONF = "tosca.capability.Netconf"
-    const val MODEL_TYPE_CAPABILITY_SSH = "tosca.capability.Ssh"
-    const val MODEL_TYPE_CAPABILITY_SFTP = "tosca.capability.Sftp"
-    const val MODEL_TYPE_CAPABILITY_CHEF = "tosca.capability.Chef"
-    const val MODEL_TYPE_CAPABILITY_ANSIBLEF = "tosca.capability.Ansible"
-
     const val CAPABILITY_PROPERTY_MAPPING = "mapping"
 
     const val PROPERTY_RECIPE_NAMES = "action-names"

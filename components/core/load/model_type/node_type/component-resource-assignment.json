@@ -7,7 +7,7 @@
     }
   },
   "interfaces": {
-    "org-onap-sdnc-config-assignment-service-ConfigAssignmentNode": {
+    "org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode": {
       "operations": {
         "process": {
           "inputs": {

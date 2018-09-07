@@ -41,13 +41,13 @@
 			"generate-configuration": {
 				"type": "mock-component-generateConfig",
 				"interfaces": {
-					"org-openecomp-sdnc-config-params-service-MockComponentNode": {
+					"org-onap-ccsdk-config-params-service-MockComponentNode": {
 						"operations": {
 							"process": {
 								"inputs": {
 									"entity-type": "vnf-type",
 									"template-content": "sample-template",
-									"entity-id": "{ \"get_input\" : \"vnf-id\" }"
+									"entity-id": { "get_input" : "vnf-id" }
 								},
 								"outputs": {
 									"mergedData": "merged Data",
@@ -63,7 +63,7 @@
 	"node_types": {
 		"mock-component-generateConfig": {
 			"interfaces": {
-				"org-openecomp-sdnc-config-params-service-MockComponentNode": {
+				"org-onap-ccsdk-config-params-service-MockComponentNode": {
 					"operations": {
 						"process": {
 							"inputs": {

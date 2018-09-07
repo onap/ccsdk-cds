@@ -19,12 +19,12 @@
 								"required": true
 							}
 						],
-						"pre-data": "{ \"get_attribute\" : \"get-resource-assignment.config-params\" }",
+						"pre-data": { "get_input" : "get-resource-assignment.config-params" },
 						"prifix": "get-resource-assignment"
 					},
 					"outputs": {
 						"resource-assignment-status": "success",
-						"resource-assignment-params": "{ \"set_value\" : \"get-resource-assignment.config-params\" }"
+						"resource-assignment-params": "{ \"set_value\" : \"get-resource-assignment.config-params" }
 					}
 				}
 			}

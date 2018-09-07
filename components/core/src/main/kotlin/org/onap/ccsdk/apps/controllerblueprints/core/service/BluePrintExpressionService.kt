@@ -25,6 +25,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.*
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
+
 /**
  *
  *
@@ -115,32 +116,34 @@ object BluePrintExpressionService {
     @JvmStatic
     fun populateAttributeExpression(jsonNode: JsonNode): AttributeExpression {
         val arrayNode: ArrayNode = jsonNode.first() as ArrayNode
-        check(arrayNode.size() >= 3) {
+        check(arrayNode.size() >= 2) {
             throw BluePrintException(String.format("missing attribute expression, " +
                     "it should be [ <modelable_entity_name>, <optional_req_or_cap_name>, <attribute_name>," +
                     " <nested_attribute_name_or_index_1>, ..., <nested_attribute_name_or_index_n> ] , but present {}", jsonNode))
         }
 
         var reqOrCapEntityName: String? = null
-        var propertyName = ""
-        var subProperty: String? = null
-        if (arrayNode.size() == 2) {
-            propertyName = arrayNode[1].textValue()
-        } else if (arrayNode.size() == 3) {
-            reqOrCapEntityName = arrayNode[1].textValue()
-            propertyName = arrayNode[2].textValue()
-        } else if (arrayNode.size() > 3) {
-            reqOrCapEntityName = arrayNode[1].textValue()
-            propertyName = arrayNode[2].textValue()
-            val propertyPaths: List<String> = arrayNode.filterIndexed { index, obj ->
-                index >= 3
-            }.map { it.textValue() }
-            subProperty = propertyPaths.joinToString("/")
+        var attributeName = ""
+        var subAttributeName: String? = null
+        when {
+            arrayNode.size() == 2 -> attributeName = arrayNode[1].textValue()
+            arrayNode.size() == 3 -> {
+                reqOrCapEntityName = arrayNode[1].textValue()
+                attributeName = arrayNode[2].textValue()
+            }
+            arrayNode.size() > 3 -> {
+                reqOrCapEntityName = arrayNode[1].textValue()
+                attributeName = arrayNode[2].textValue()
+                val propertyPaths: List<String> = arrayNode.filterIndexed { index, _ ->
+                    index >= 3
+                }.map { it.textValue() }
+                subAttributeName = propertyPaths.joinToString("/")
+            }
         }
         return AttributeExpression(modelableEntityName = arrayNode[0].asText(),
                 reqOrCapEntityName = reqOrCapEntityName,
-                attributeName = propertyName,
-                subAttributeName = subProperty
+                attributeName = attributeName,
+                subAttributeName = subAttributeName
         )
     }
 

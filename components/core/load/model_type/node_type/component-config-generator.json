@@ -7,7 +7,7 @@
 		}
 	},
 	"interfaces": {
-		"org-openecomp-sdnc-config-generator-service-ConfigGeneratorNode": {
+		"org-onap-ccsdk-config-generator-service-ConfigGeneratorNode": {
 			"operations": {
 				"process": {
 					"inputs": {

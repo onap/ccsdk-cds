@@ -87,7 +87,7 @@ class BluePrintRuntimeServiceTest {
         log.info("Prepared Context {}", context)
 
         val inContext: MutableMap<String, Any?> = bluePrintRuntimeService.resolveNodeTemplateInterfaceOperationInputs("resource-assignment-ra-component",
-                "org-onap-sdnc-config-assignment-service-ConfigAssignmentNode", "process")
+                "org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode", "process")
 
         log.info("In Context {}", inContext)
 
@@ -110,18 +110,18 @@ class BluePrintRuntimeServiceTest {
 
         val componentContext: MutableMap<String, Any?> = hashMapOf()
         val successValue: JsonNode = jsonNodeFromObject("Success")
-        componentContext["resource-assignment-ra-component.org-onap-sdnc-config-assignment-service-ConfigAssignmentNode.process.status"] = successValue
-        componentContext["resource-assignment-ra-component.org-onap-sdnc-config-assignment-service-ConfigAssignmentNode.process.resource-assignment-params"] = null
+        componentContext["resource-assignment-ra-component.org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode.process.status"] = successValue
+        componentContext["resource-assignment-ra-component.org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode.process.resource-assignment-params"] = null
 
         bluePrintRuntimeService.resolveNodeTemplateInterfaceOperationOutputs("resource-assignment-ra-component",
-                "org-onap-sdnc-config-assignment-service-ConfigAssignmentNode", "process", componentContext)
+                "org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode", "process", componentContext)
 
         assertEquals(NullNode.instance,
-                context.get("node_templates/resource-assignment-ra-component/interfaces/org-onap-sdnc-config-assignment-service-ConfigAssignmentNode/operations/process/properties/resource-assignment-params"),
+                context.get("node_templates/resource-assignment-ra-component/interfaces/org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode/operations/process/properties/resource-assignment-params"),
                 "Failed to get operation property resource-assignment-params")
 
         assertEquals(successValue,
-                context.get("node_templates/resource-assignment-ra-component/interfaces/org-onap-sdnc-config-assignment-service-ConfigAssignmentNode/operations/process/properties/status"),
+                context.get("node_templates/resource-assignment-ra-component/interfaces/org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode/operations/process/properties/status"),
                 "Failed to get operation property status")
 
 
