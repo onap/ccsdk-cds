@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"capabilities": {
 		"netconf": {
-			"type": "tosca.capability.Netconf",
+			"type": "tosca.capabilities.Netconf",
 			"properties": {
 				"login-key": {
 					"required": true,

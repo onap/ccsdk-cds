@@ -274,20 +274,6 @@
       "capabilities": {
         "dg-node": {
           "type": "tosca.capabilities.Node"
-        },
-        "content": {
-          "type": "tosca.capability.Content",
-          "properties": {
-            "type": {
-              "required": false,
-              "type": "string",
-              "default": "json"
-            },
-            "content": {
-              "required": false,
-              "type": "string"
-            }
-          }
         }
       },
       "requirements": {
@@ -398,7 +384,7 @@
       },
       "capabilities": {
         "content": {
-          "type": "tosca.capability.Content",
+          "type": "tosca.capabilities.Content",
           "properties": {
             "content": {
               "required": true,
@@ -407,7 +393,7 @@
           }
         },
         "mapping": {
-          "type": "tosca.capability.Mapping",
+          "type": "tosca.capabilities.Mapping",
           "properties": {
             "mapping": {
               "required": false,
@@ -426,7 +412,7 @@
       "version": "1.0.0",
       "capabilities": {
         "netconf": {
-          "type": "tosca.capability.Netconf",
+          "type": "tosca.capabilities.Netconf",
           "properties": {
             "profile-name": {
               "required": true,
@@ -449,7 +435,7 @@
           }
         },
         "ssh": {
-          "type": "tosca.capability.Ssh",
+          "type": "tosca.capabilities.Ssh",
           "properties": {
             "profile-name": {
               "required": true,
@@ -477,7 +463,7 @@
           }
         },
         "sftp": {
-          "type": "tosca.capability.Sftp",
+          "type": "tosca.capabilities.Sftp",
           "properties": {
             "profile-name": {
               "required": true,
@@ -530,20 +516,6 @@
       "capabilities": {
         "dg-node": {
           "type": "tosca.capabilities.Node"
-        },
-        "content": {
-          "type": "tosca.capability.Content",
-          "properties": {
-            "type": {
-              "required": false,
-              "type": "string",
-              "default": "json"
-            },
-            "content": {
-              "required": true,
-              "type": "string"
-            }
-          }
         }
       },
       "requirements": {

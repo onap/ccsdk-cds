@@ -21,20 +21,6 @@
 	"capabilities": {
 		"dg-node": {
 			"type": "tosca.capabilities.Node"
-		},
-		"content": {
-			"type": "tosca.capability.Content",
-			"properties": {
-				"type": {
-					"required": false,
-					"type": "string",
-					"default": "json"
-				},
-				"content": {
-					"required": true,
-					"type": "string"
-				}
-			}
 		}
 	},
 	"requirements": {

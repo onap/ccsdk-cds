@@ -128,12 +128,7 @@
           }
         },
         "capabilities": {
-          "dg-node": {},
-          "content": {
-            "properties": {
-              "type": "json"
-            }
-          }
+          "dg-node": {}
         },
         "interfaces": {
           "CONFIG": {
@@ -162,12 +157,7 @@
           }
         },
         "capabilities": {
-          "dg-node": {},
-          "content": {
-            "properties": {
-              "type": "json"
-            }
-          }
+          "dg-node": {}
         },
         "interfaces": {
           "CONFIG": {
