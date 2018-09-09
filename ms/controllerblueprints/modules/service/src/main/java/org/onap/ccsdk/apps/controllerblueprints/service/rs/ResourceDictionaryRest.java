@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,51 +48,32 @@ public class ResourceDictionaryRest {
     public @ResponseBody
     ResourceDictionary saveResourceDictionary(@RequestBody ResourceDictionary dataDictionary)
             throws BluePrintException {
-        try {
-            return resourceDictionaryService.saveResourceDictionary(dataDictionary);
-        } catch (Exception e) {
-            throw new BluePrintException(4100, e.getMessage(), e);
-        }
+        return resourceDictionaryService.saveResourceDictionary(dataDictionary);
     }
 
     @DeleteMapping(path = "/{name}")
     public void deleteResourceDictionaryByName(@PathVariable(value = "name") String name) throws BluePrintException {
-        try {
-            resourceDictionaryService.deleteResourceDictionary(name);
-        } catch (Exception e) {
-            throw new BluePrintException(4400, e.getMessage(), e);
-        }
+        resourceDictionaryService.deleteResourceDictionary(name);
     }
 
     @GetMapping(path = "/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ResourceDictionary getResourceDictionaryByName(@PathVariable(value = "name") String name) throws BluePrintException {
-        try {
-            return resourceDictionaryService.getResourceDictionaryByName(name);
-        } catch (Exception e) {
-            throw new BluePrintException(4001, e.getMessage(), e);
-        }
+        return resourceDictionaryService.getResourceDictionaryByName(name);
     }
 
     @PostMapping(path = "/by-names", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     List<ResourceDictionary> searchResourceDictionaryByNames(@RequestBody List<String> names)
             throws BluePrintException {
-        try {
-            return resourceDictionaryService.searchResourceDictionaryByNames(names);
-        } catch (Exception e) {
-            throw new BluePrintException(4002, e.getMessage(), e);
-        }
+        return resourceDictionaryService.searchResourceDictionaryByNames(names);
     }
 
     @GetMapping(path = "/search/{tags}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     List<ResourceDictionary> searchResourceDictionaryByTags(@PathVariable(value = "tags") String tags) throws BluePrintException {
-        try {
-            return resourceDictionaryService.searchResourceDictionaryByTags(tags);
-        } catch (Exception e) {
-            throw new BluePrintException(4003, e.getMessage(), e);
-        }
+        return resourceDictionaryService.searchResourceDictionaryByTags(tags);
+
     }
 
 }

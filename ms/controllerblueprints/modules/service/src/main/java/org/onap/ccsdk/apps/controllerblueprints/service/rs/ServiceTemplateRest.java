@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,53 +50,33 @@ public class ServiceTemplateRest {
     @PostMapping(path = "/enrich", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ServiceTemplate enrichServiceTemplate(@RequestBody ServiceTemplate serviceTemplate) throws BluePrintException {
-        try {
-            return serviceTemplateService.enrichServiceTemplate(serviceTemplate);
-        } catch (Exception e) {
-            throw new BluePrintException(3500, e.getMessage(), e);
-        }
+        return serviceTemplateService.enrichServiceTemplate(serviceTemplate);
     }
 
     @PostMapping(path = "/validate", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ServiceTemplate validateServiceTemplate(@RequestBody ServiceTemplate serviceTemplate) throws BluePrintException {
-        try {
-            return serviceTemplateService.validateServiceTemplate(serviceTemplate);
-        } catch (Exception e) {
-            throw new BluePrintException(3501, e.getMessage(), e);
-        }
+        return serviceTemplateService.validateServiceTemplate(serviceTemplate);
     }
 
     @PostMapping(path = "/resource-assignment/auto-map", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     AutoMapResponse autoMap(@RequestBody List<ResourceAssignment> resourceAssignments) throws BluePrintException {
-        try {
-            return serviceTemplateService.autoMap(resourceAssignments);
-        } catch (Exception e) {
-            throw new BluePrintException(3502, e.getMessage(), e);
-        }
+        return serviceTemplateService.autoMap(resourceAssignments);
     }
 
     @PostMapping(path = "/resource-assignment/validate", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     List<ResourceAssignment> validateResourceAssignments(@RequestBody List<ResourceAssignment> resourceAssignments)
             throws BluePrintException {
-        try {
-            return serviceTemplateService.validateResourceAssignments(resourceAssignments);
-        } catch (Exception e) {
-            throw new BluePrintException(3503, e.getMessage(), e);
-        }
+        return serviceTemplateService.validateResourceAssignments(resourceAssignments);
     }
 
     @PostMapping(path = "/resource-assignment/generate", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     List<ResourceAssignment> generateResourceAssignments(@RequestBody ConfigModelContent templateContent)
             throws BluePrintException {
-        try {
-            return serviceTemplateService.generateResourceAssignments(templateContent);
-        } catch (Exception e) {
-            throw new BluePrintException(3504, e.getMessage(), e);
-        }
+        return serviceTemplateService.generateResourceAssignments(templateContent);
     }
 
 }

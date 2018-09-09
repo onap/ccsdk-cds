@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,48 +45,28 @@ public class ModelTypeRest {
 
     @GetMapping(path = "/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ModelType getModelTypeByName(@PathVariable(value = "name") String name) throws BluePrintException {
-        try {
-            return modelTypeService.getModelTypeByName(name);
-        } catch (Exception e) {
-            throw new BluePrintException(1000, e.getMessage(), e);
-        }
+        return modelTypeService.getModelTypeByName(name);
     }
 
     @GetMapping(path = "/search/{tags}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ModelType> searchModelTypes(@PathVariable(value = "tags") String tags) throws BluePrintException {
-        try {
-            return modelTypeService.searchModelTypes(tags);
-        } catch (Exception e) {
-            throw new BluePrintException(1001, e.getMessage(), e);
-        }
+        return modelTypeService.searchModelTypes(tags);
     }
 
     @GetMapping(path = "/by-definition/{definitionType}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     List<ModelType> getModelTypeByDefinitionType(@PathVariable(value = "definitionType") String definitionType) throws BluePrintException {
-        try {
-            return modelTypeService.getModelTypeByDefinitionType(definitionType);
-        } catch (Exception e) {
-            throw new BluePrintException(1002, e.getMessage(), e);
-        }
+        return modelTypeService.getModelTypeByDefinitionType(definitionType);
     }
 
     @PostMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ModelType saveModelType(@RequestBody ModelType modelType) throws BluePrintException {
-        try {
-            return modelTypeService.saveModel(modelType);
-        } catch (Exception e) {
-            throw new BluePrintException(1100, e.getMessage(), e);
-        }
+        return modelTypeService.saveModel(modelType);
     }
 
     @DeleteMapping(path = "/{name}")
     public void deleteModelTypeByName(@PathVariable(value = "name") String name) throws BluePrintException {
-        try {
-            modelTypeService.deleteByModelName(name);
-        } catch (Exception e) {
-            throw new BluePrintException(1400, e.getMessage(), e);
-        }
+        modelTypeService.deleteByModelName(name);
     }
 }
