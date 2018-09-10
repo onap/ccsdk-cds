@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2017-2018 AT&T Intellectual Property.
+ *  Modifications Copyright © 2018 IBM.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -86,9 +87,6 @@ open class ResourceAssignmentValidationDefaultService : ResourceAssignmentValida
         }
 
         val dependenciesNames = resourceAssignments.mapNotNull { it.dependencies }.flatten()
-
-        log.info("Resource assignment definitions : {}", resourceAssignmentMap.keys)
-        log.info("Resource assignment Dictionary dependencies : {}", dependenciesNames)
 
         val notPresentDictionaries = dependenciesNames.filter { !resourceAssignmentMap.containsKey(it) }.distinct()
         if (notPresentDictionaries.isNotEmpty()) {
