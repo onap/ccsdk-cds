@@ -37,7 +37,7 @@ public interface ResourceDictionaryRepository extends JpaRepository<ResourceDict
     /**
      * This is a findByName method
      * 
-     * @param name
+     * @param name name
      * @return Optional<ResourceMapping>
      */
     Optional<ResourceDictionary> findByName(String name);
@@ -45,7 +45,7 @@ public interface ResourceDictionaryRepository extends JpaRepository<ResourceDict
     /**
      * This is a findByNameIn method
      * 
-     * @param names
+     * @param names names
      * @return Optional<ResourceMapping>
      */
     List<ResourceDictionary> findByNameIn(List<String> names);
@@ -53,7 +53,7 @@ public interface ResourceDictionaryRepository extends JpaRepository<ResourceDict
     /**
      * This is a findByTagsContainingIgnoreCase method
      * 
-     * @param tags
+     * @param tags tags
      * @return Optional<ModelType>
      */
     List<ResourceDictionary> findByTagsContainingIgnoreCase(String tags);
@@ -61,9 +61,9 @@ public interface ResourceDictionaryRepository extends JpaRepository<ResourceDict
     /**
      * This is a deleteByName method
      * 
-     * @param name
+     * @param name name
      */
-    ResourceDictionary deleteByName(String name);
+    void deleteByName(String name);
 
 
 }

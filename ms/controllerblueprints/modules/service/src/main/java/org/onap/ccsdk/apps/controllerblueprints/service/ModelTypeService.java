@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +17,7 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service;
 
+import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ModelType;
@@ -43,7 +45,7 @@ public class ModelTypeService {
     /**
      * This is a ModelTypeService, used to save and get the model types stored in database
      *
-     * @param modelTypeRepository
+     * @param modelTypeRepository modelTypeRepository
      */
     public ModelTypeService(ModelTypeRepository modelTypeRepository) {
         this.modelTypeRepository = modelTypeRepository;
@@ -53,19 +55,15 @@ public class ModelTypeService {
     /**
      * This is a getModelTypeByName service
      *
-     * @param modelTypeName
+     * @param modelTypeName modelTypeName
      * @return ModelType
-     * @throws BluePrintException
      */
-    public ModelType getModelTypeByName(String modelTypeName) throws BluePrintException {
+    public ModelType getModelTypeByName(String modelTypeName) {
         ModelType modelType = null;
-        if (StringUtils.isNotBlank(modelTypeName)) {
-            Optional<ModelType> modelTypeOption = modelTypeRepository.findByModelName(modelTypeName);
-            if (modelTypeOption.isPresent()) {
-                modelType = modelTypeOption.get();
-            }
-        } else {
-            throw new BluePrintException("Model Name Information is missing.");
+        Preconditions.checkArgument(StringUtils.isNotBlank(modelTypeName), "Model Name Information is missing.");
+        Optional<ModelType> modelTypeOption = modelTypeRepository.findByModelName(modelTypeName);
+        if (modelTypeOption.isPresent()) {
+            modelType = modelTypeOption.get();
         }
         return modelType;
     }
@@ -74,26 +72,24 @@ public class ModelTypeService {
     /**
      * This is a searchModelTypes service
      *
-     * @param tags
+     * @param tags tags
      * @return List<ModelType>
-     * @throws BluePrintException
      */
-    public List<ModelType> searchModelTypes(String tags) throws BluePrintException {
-        if (tags != null) {
-            return modelTypeRepository.findByTagsContainingIgnoreCase(tags);
-        } else {
-            throw new BluePrintException("No Search Information provide");
-        }
+    public List<ModelType> searchModelTypes(String tags) {
+        Preconditions.checkArgument(StringUtils.isNotBlank(tags), "No Search Information provide");
+        return modelTypeRepository.findByTagsContainingIgnoreCase(tags);
     }
 
     /**
      * This is a saveModel service
      *
-     * @param modelType
+     * @param modelType modelType
      * @return ModelType
-     * @throws BluePrintException
+     * @throws BluePrintException BluePrintException
      */
     public ModelType saveModel(ModelType modelType) throws BluePrintException {
+
+        Preconditions.checkNotNull(modelType, "Model Type Information is missing.");
 
         ModelTypeValidator.validateModelType(modelType);
 
@@ -118,60 +114,34 @@ public class ModelTypeService {
     /**
      * This is a deleteByModelName service
      *
-     * @param modelName
-     * @throws BluePrintException
+     * @param modelName modelName
      */
-    public void deleteByModelName(String modelName) throws BluePrintException {
-        if (modelName != null) {
-            modelTypeRepository.deleteByModelName(modelName);
-        } else {
-            throw new BluePrintException("Model Name Information is missing.");
-        }
-    }
+    public void deleteByModelName(String modelName) {
+        Preconditions.checkArgument(StringUtils.isNotBlank(modelName), "Model Name Information is missing.");
+        modelTypeRepository.deleteByModelName(modelName);
 
-    /**
-     * This is a getModelTypeByTags service
-     *
-     * @param tags
-     * @return List<ModelType>
-     * @throws BluePrintException
-     */
-    public List<ModelType> getModelTypeByTags(String tags) throws BluePrintException {
-        if (StringUtils.isNotBlank(tags)) {
-            return modelTypeRepository.findByTagsContainingIgnoreCase(tags);
-        } else {
-            throw new BluePrintException("Model Tag Information is missing.");
-        }
     }
 
     /**
      * This is a getModelTypeByDefinitionType service
      *
-     * @param definitionType
+     * @param definitionType definitionType
      * @return List<ModelType>
-     * @throws BluePrintException
      */
-    public List<ModelType> getModelTypeByDefinitionType(String definitionType) throws BluePrintException {
-        if (StringUtils.isNotBlank(definitionType)) {
-            return modelTypeRepository.findByDefinitionType(definitionType);
-        } else {
-            throw new BluePrintException("Model definitionType Information is missing.");
-        }
+    public List<ModelType> getModelTypeByDefinitionType(String definitionType) {
+        Preconditions.checkArgument(StringUtils.isNotBlank(definitionType), "Model definitionType Information is missing.");
+        return modelTypeRepository.findByDefinitionType(definitionType);
     }
 
     /**
      * This is a getModelTypeByDerivedFrom service
      *
-     * @param derivedFrom
+     * @param derivedFrom derivedFrom
      * @return List<ModelType>
-     * @throws BluePrintException
      */
-    public List<ModelType> getModelTypeByDerivedFrom(String derivedFrom) throws BluePrintException {
-        if (StringUtils.isNotBlank(derivedFrom)) {
-            return modelTypeRepository.findByDerivedFrom(derivedFrom);
-        } else {
-            throw new BluePrintException("Model derivedFrom Information is missing.");
-        }
+    public List<ModelType> getModelTypeByDerivedFrom(String derivedFrom) {
+        Preconditions.checkArgument(StringUtils.isNotBlank(derivedFrom), "Model derivedFrom Information is missing.");
+        return modelTypeRepository.findByDerivedFrom(derivedFrom);
     }
 
 

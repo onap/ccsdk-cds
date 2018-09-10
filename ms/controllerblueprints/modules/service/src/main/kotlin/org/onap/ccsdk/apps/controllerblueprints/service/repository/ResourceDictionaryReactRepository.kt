@@ -16,7 +16,6 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.repository
 
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionary
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
@@ -49,10 +48,9 @@ open class ResourceDictionaryReactRepository(private val resourceDictionaryRepos
                 .subscribeOn(Schedulers.elastic())
     }
 
-    fun deleteByName(name: String): Mono<ResourceDictionary> {
-        return Mono.fromCallable {
-            resourceDictionaryRepository.deleteByName(name)
-        }
+    fun deleteByName(name: String): Mono<Void> {
+        resourceDictionaryRepository.deleteByName(name)
+        return Mono.empty()
     }
 
 }

@@ -28,6 +28,7 @@ import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -46,37 +47,48 @@ import java.util.List;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ResourceDictionaryReactRepositoryTest {
 
+    private String sourceName = "test-source";
+
     @Autowired
     protected ResourceDictionaryReactRepository resourceDictionaryReactRepository;
 
-    @Before
-    public void init() {
+    @Test
+    @Commit
+    public void test01Save() {
         ResourceDefinition resourceDefinition = JacksonUtils.readValueFromFile("./../../application/load/resource_dictionary/db-source" +
                 ".json", ResourceDefinition.class);
+        Assert.assertNotNull("Failed to get resourceDefinition from content", resourceDefinition);
+        resourceDefinition.setName(sourceName);
 
         ResourceDictionary resourceDictionary = transformResourceDictionary(resourceDefinition);
         ResourceDictionary dbResourceDictionary = resourceDictionaryReactRepository.save(resourceDictionary).block();
+        Assert.assertNotNull("Failed to save ResourceDictionary", dbResourceDictionary);
+    }
+
+    @Test
+    public void test02FindByNameReact() {
+        ResourceDictionary dbResourceDictionary = resourceDictionaryReactRepository.findByName(sourceName).block();
         Assert.assertNotNull("Failed to query React Resource Dictionary by Name", dbResourceDictionary);
     }
 
     @Test
-    public void test01FindByNameReact() throws Exception {
-        ResourceDictionary dbResourceDictionary = resourceDictionaryReactRepository.findByName("db-source").block();
-        Assert.assertNotNull("Failed to query React Resource Dictionary by Name", dbResourceDictionary);
-    }
-
-    @Test
-    public void test02FindByNameInReact() throws Exception {
+    public void test03FindByNameInReact() {
         List<ResourceDictionary> dbResourceDictionaries =
-                resourceDictionaryReactRepository.findByNameIn(Arrays.asList("db-source")).collectList().block();
+                resourceDictionaryReactRepository.findByNameIn(Arrays.asList(sourceName)).collectList().block();
         Assert.assertNotNull("Failed to query React Resource Dictionary by Names", dbResourceDictionaries);
     }
 
     @Test
-    public void test03FindByTagsContainingIgnoreCaseReact() throws Exception {
+    public void test04FindByTagsContainingIgnoreCaseReact() {
         List<ResourceDictionary> dbTagsResourceDictionaries =
-                resourceDictionaryReactRepository.findByTagsContainingIgnoreCase("db-source").collectList().block();
+                resourceDictionaryReactRepository.findByTagsContainingIgnoreCase(sourceName).collectList().block();
         Assert.assertNotNull("Failed to query React Resource Dictionary by Tags", dbTagsResourceDictionaries);
+    }
+
+    @Test
+    @Commit
+    public void test05Delete() {
+        resourceDictionaryReactRepository.deleteByName("db-source").block();
     }
 
     private ResourceDictionary transformResourceDictionary(ResourceDefinition resourceDefinition) {
