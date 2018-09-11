@@ -66,8 +66,8 @@
                   }
                 },
                 "outputs": {
-                  "resource-assignment-params": "success",
-                  "status": "status"
+                  "resource-assignment-params": { "get_attribute" : ["SELF", "params"] },
+                  "status": "Success"
                 }
               }
             }

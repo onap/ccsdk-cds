@@ -20,6 +20,7 @@ package org.onap.ccsdk.apps.controllerblueprints.core.service
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.NullNode
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*
 import org.onap.ccsdk.apps.controllerblueprints.core.format
@@ -27,6 +28,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.ResourceResolverUtils
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
+
 /**
  *
  *
@@ -42,11 +44,11 @@ class PropertyAssignmentService(var context: MutableMap<String, Any>,
 
 If Property Assignment is Expression.
     Get the Expression
-    Recurssely resolve the expression
+    Recursively resolve the expression
  */
 
     fun resolveAssignmentExpression(nodeTemplateName: String, assignmentName: String,
-                                            assignment: Any): JsonNode {
+                                    assignment: Any): JsonNode {
         val valueNode: JsonNode
         log.trace("Assignment ({})", assignment)
         val expressionData = BluePrintExpressionService.getExpressionData(assignment)
@@ -63,30 +65,30 @@ If Property Assignment is Expression.
 
         var valueNode: JsonNode = NullNode.getInstance()
 
-        if(expressionData.isExpression) {
+        if (expressionData.isExpression) {
             val command = expressionData.command!!
 
-            when(command){
-                org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.EXPRESSION_GET_INPUT ->{
+            when (command) {
+                BluePrintConstants.EXPRESSION_GET_INPUT -> {
                     valueNode = bluePrintRuntimeService.getInputValue(expressionData.inputExpression?.propertyName!!)
                 }
-                org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.EXPRESSION_GET_ATTRIBUTE ->{
+                BluePrintConstants.EXPRESSION_GET_ATTRIBUTE -> {
                     valueNode = resolveAttributeExpression(nodeTemplateName, expressionData.attributeExpression!!)
                 }
-                org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.EXPRESSION_GET_PROPERTY ->{
+                BluePrintConstants.EXPRESSION_GET_PROPERTY -> {
                     valueNode = resolvePropertyExpression(nodeTemplateName, expressionData.propertyExpression!!)
                 }
-                org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.EXPRESSION_GET_OPERATION_OUTPUT ->{
+                BluePrintConstants.EXPRESSION_GET_OPERATION_OUTPUT -> {
                     valueNode = resolveOperationOutputExpression(nodeTemplateName, expressionData.operationOutputExpression!!)
                 }
-                org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.EXPRESSION_GET_ARTIFACT ->{
+                BluePrintConstants.EXPRESSION_GET_ARTIFACT -> {
                     valueNode = resolveArtifactExpression(nodeTemplateName, expressionData.artifactExpression!!)
                 }
-                org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.EXPRESSION_GET_NODE_OF_TYPE ->{
+                BluePrintConstants.EXPRESSION_GET_NODE_OF_TYPE -> {
 
                 }
-                else ->{
-                    throw BluePrintException(String.format("for property ({}), command ({}) is not supported ", propName, command))
+                else -> {
+                    throw BluePrintException(format("for property ({}), command ({}) is not supported ", propName, command))
                 }
             }
         }
@@ -104,20 +106,30 @@ If Property Assignment is Expression.
         val subAttributeName: String? = attributeExpression.subAttributeName
 
         var attributeNodeTemplateName = nodeTemplateName
-        if (!attributeExpression.modelableEntityName.equals("SELF", true)) {
-            attributeNodeTemplateName = attributeExpression.modelableEntityName
+        when (attributeExpression.modelableEntityName) {
+            "ENV" -> {
+                val environmentValue = System.getProperty(attributeName)
+                valueNode = JacksonUtils.jsonNode(environmentValue)
+            }
+            else -> {
+                if (!attributeExpression.modelableEntityName.equals("SELF", true)) {
+                    attributeNodeTemplateName = attributeExpression.modelableEntityName
+                }
+                /* Enable in ONAP Dublin Release
+                val nodeTemplateAttributeExpression = bluePrintContext.nodeTemplateByName(attributeNodeTemplateName).attributes?.get(attributeName)
+                        ?: throw BluePrintException(format("failed to get attribute definitions for node template " +
+                                "({})'s property name ({}) ", nodeTemplateName, attributeName))
+
+                var attributeDefinition: AttributeDefinition = bluePrintContext.nodeTemplateNodeType(attributeNodeTemplateName).attributes?.get(attributeName)!!
+
+                log.info("node template name ({}), property Name ({}) resolved value ({})", attributeNodeTemplateName, attributeName, nodeTemplateAttributeExpression)
+                */
+
+                valueNode = bluePrintRuntimeService.getNodeTemplateAttributeValue(attributeNodeTemplateName, attributeName)
+                        ?: throw BluePrintException(format("failed to get node template ({})'s attribute ({}) ", nodeTemplateName, attributeName))
+            }
+
         }
-
-        val nodeTemplateAttributeExpression = bluePrintContext.nodeTemplateByName(attributeNodeTemplateName).attributes?.get(attributeName)
-                ?: throw BluePrintException(String.format("failed to get property definitions for node template ({})'s property name ({}) ", nodeTemplateName, attributeName))
-
-        var propertyDefinition: AttributeDefinition = bluePrintContext.nodeTemplateNodeType(attributeNodeTemplateName).attributes?.get(attributeName)!!
-
-        log.info("node template name ({}), property Name ({}) resolved value ({})", attributeNodeTemplateName, attributeName, nodeTemplateAttributeExpression)
-
-        // Check it it is a nested expression
-        valueNode = resolveAssignmentExpression(attributeNodeTemplateName, attributeName, nodeTemplateAttributeExpression)
-
 //        subPropertyName?.let {
 //            valueNode = valueNode.at(JsonPointer.valueOf(subPropertyName))
 //        }
@@ -171,7 +183,7 @@ If Property Assignment is Expression.
     /*
     get_artifact: [ <modelable_entity_name>, <artifact_name>, <location>, <remove> ]
      */
-    fun resolveArtifactExpression(nodeTemplateName: String,  artifactExpression: ArtifactExpression): JsonNode {
+    fun resolveArtifactExpression(nodeTemplateName: String, artifactExpression: ArtifactExpression): JsonNode {
 
         var artifactNodeTemplateName = nodeTemplateName
         if (!artifactExpression.modelableEntityName.equals("SELF", true)) {
@@ -179,15 +191,15 @@ If Property Assignment is Expression.
         }
         val artifactDefinition: ArtifactDefinition = bluePrintContext.nodeTemplateByName(artifactNodeTemplateName)
                 .artifacts?.get(artifactExpression.artifactName)
-                ?: throw BluePrintException(String.format("failed to get artifact definitions for node template ({})'s " +
+                ?: throw BluePrintException(format("failed to get artifact definitions for node template ({})'s " +
                         "artifact name ({}) ", nodeTemplateName, artifactExpression.artifactName))
 
         return JacksonUtils.jsonNodeFromObject(artifactContent(artifactDefinition))
     }
 
     fun artifactContent(artifactDefinition: ArtifactDefinition): String {
-        val bluePrintBasePath: String = context[org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH] as? String
-                ?: throw BluePrintException(String.format("failed to get property (%s) from context", org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH))
+        val bluePrintBasePath: String = context[BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH] as? String
+                ?: throw BluePrintException(format("failed to get property (%s) from context", BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH))
 
         if (artifactDefinition.repository != null) {
             TODO()

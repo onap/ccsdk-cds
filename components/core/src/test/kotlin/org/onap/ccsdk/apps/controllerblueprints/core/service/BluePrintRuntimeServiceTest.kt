@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +18,6 @@
 package org.onap.ccsdk.apps.controllerblueprints.core.service
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.NullNode
 import org.junit.Before
 import org.junit.Test
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
@@ -48,12 +48,8 @@ class BluePrintRuntimeServiceTest {
     @Test
     fun testResolveNodeTemplateProperties() {
         log.info("************************ testResolveNodeTemplateProperties **********************")
-        val bluePrintContext: BluePrintContext = BluePrintParserFactory.instance(BluePrintConstants.TYPE_DEFAULT)!!
-                .readBlueprintFile("baseconfiguration/Definitions/activation-blueprint.json", basepath)
 
-        val context: MutableMap<String, Any> = hashMapOf()
-        context[BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH] = basepath.plus("/simple-baseconfig")
-        val bluePrintRuntimeService = BluePrintRuntimeService(bluePrintContext, context)
+        val bluePrintRuntimeService = getBluePrintRuntimeService()
 
         val inputDataPath = "src/test/resources/data/default-context.json"
 
@@ -99,6 +95,51 @@ class BluePrintRuntimeServiceTest {
     @Test
     fun testResolveNodeTemplateInterfaceOperationOutputs() {
         log.info("************************ testResolveNodeTemplateInterfaceOperationOutputs **********************")
+
+        val bluePrintRuntimeService = getBluePrintRuntimeService()
+
+        val successValue: JsonNode = jsonNodeFromObject("Success")
+        val paramValue: JsonNode = jsonNodeFromObject("param-content")
+
+        bluePrintRuntimeService.setNodeTemplateAttributeValue("resource-assignment-ra-component", "params", paramValue)
+
+        bluePrintRuntimeService.resolveNodeTemplateInterfaceOperationOutputs("resource-assignment-ra-component",
+                "org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode", "process")
+
+        val resourceAssignmentParamsNode = bluePrintRuntimeService.getNodeTemplateOperationOutputValue("resource-assignment-ra-component",
+                "org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode", "process", "resource-assignment-params")
+
+        val statusNode = bluePrintRuntimeService.getNodeTemplateOperationOutputValue("resource-assignment-ra-component",
+                "org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode", "process", "status")
+
+        assertEquals(paramValue, resourceAssignmentParamsNode, "Failed to get operation property resource-assignment-params")
+
+        assertEquals(successValue, statusNode, "Failed to get operation property status")
+
+
+    }
+
+    @Test
+    fun testNodeTemplateContextProperty() {
+        log.info("************************ testNodeTemplateContextProperty **********************")
+        val bluePrintRuntimeService = getBluePrintRuntimeService()
+
+        bluePrintRuntimeService.setNodeTemplateAttributeValue("resource-assignment-ra-component", "context1",
+                jsonNodeFromObject("context1-value"))
+        bluePrintRuntimeService.setNodeTemplateAttributeValue("resource-assignment-ra-component", "context2",
+                jsonNodeFromObject("context2-value"))
+
+        log.info("Context {}", bluePrintRuntimeService.context)
+
+        val keys = listOf("context1", "context2")
+
+        val jsonValueNode = bluePrintRuntimeService.getJsonForNodeTemplateAttributeProperties("resource-assignment-ra-component", keys)
+        assertNotNull(jsonValueNode, "Failed to get Json for Node Template Context Properties")
+        log.info("JSON Prepared Value Context {}", jsonValueNode)
+
+    }
+
+    private fun getBluePrintRuntimeService(): BluePrintRuntimeService {
         val bluePrintContext: BluePrintContext = BluePrintParserFactory.instance(BluePrintConstants.TYPE_DEFAULT)!!
                 .readBlueprintFile("baseconfiguration/Definitions/activation-blueprint.json", basepath)
         assertNotNull(bluePrintContext, "Failed to populate Blueprint context")
@@ -106,24 +147,7 @@ class BluePrintRuntimeServiceTest {
         val context: MutableMap<String, Any> = hashMapOf()
         context[BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH] = basepath.plus("/simple-baseconfig")
 
-        val bluePrintRuntimeService = BluePrintRuntimeService(bluePrintContext, context)
-
-        val componentContext: MutableMap<String, Any?> = hashMapOf()
-        val successValue: JsonNode = jsonNodeFromObject("Success")
-        componentContext["resource-assignment-ra-component.org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode.process.status"] = successValue
-        componentContext["resource-assignment-ra-component.org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode.process.resource-assignment-params"] = null
-
-        bluePrintRuntimeService.resolveNodeTemplateInterfaceOperationOutputs("resource-assignment-ra-component",
-                "org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode", "process", componentContext)
-
-        assertEquals(NullNode.instance,
-                context.get("node_templates/resource-assignment-ra-component/interfaces/org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode/operations/process/properties/resource-assignment-params"),
-                "Failed to get operation property resource-assignment-params")
-
-        assertEquals(successValue,
-                context.get("node_templates/resource-assignment-ra-component/interfaces/org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode/operations/process/properties/status"),
-                "Failed to get operation property status")
-
-
+        return BluePrintRuntimeService(bluePrintContext, context)
     }
+
 }
