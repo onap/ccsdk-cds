@@ -26,6 +26,7 @@ import org.junit.runners.MethodSorters;
 import org.onap.ccsdk.apps.controllerblueprints.TestApplication;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceSourceMapping;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionary;
 import com.att.eelf.configuration.EELFLogger;
 import com.att.eelf.configuration.EELFManager;
@@ -101,6 +102,13 @@ public class ResourceDictionaryRestTest {
         Assert.assertTrue("Failed to search searchResourceDictionaryByNames by tags by count",
                 dbResourceDictionaries.size() > 0);
 
+    }
+
+    @Test
+    public void test03GetResourceSourceMapping() {
+        ResourceSourceMapping resourceSourceMapping = resourceDictionaryRest.getResourceSourceMapping();
+        org.springframework.util.Assert.notNull(resourceSourceMapping, "Failed to get resource source mapping");
+        org.springframework.util.Assert.notNull(resourceSourceMapping.getResourceSourceMappings(), "Failed to get resource source mappings");
     }
 
 }

@@ -18,6 +18,7 @@
 package org.onap.ccsdk.apps.controllerblueprints.service.rs;
 
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceSourceMapping;
 import org.onap.ccsdk.apps.controllerblueprints.service.ResourceDictionaryService;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionary;
 import org.springframework.http.MediaType;
@@ -74,6 +75,12 @@ public class ResourceDictionaryRest {
     List<ResourceDictionary> searchResourceDictionaryByTags(@PathVariable(value = "tags") String tags) throws BluePrintException {
         return resourceDictionaryService.searchResourceDictionaryByTags(tags);
 
+    }
+
+    @GetMapping(path = "/source-mapping", produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    ResourceSourceMapping getResourceSourceMapping() {
+        return resourceDictionaryService.getResourceSourceMapping();
     }
 
 }

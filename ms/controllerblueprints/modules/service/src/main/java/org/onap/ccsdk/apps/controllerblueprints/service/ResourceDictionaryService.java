@@ -22,8 +22,9 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition;
-import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceSourceMapping;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.factory.ResourceSourceMappingFactory;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionary;
 import org.onap.ccsdk.apps.controllerblueprints.service.repository.ResourceDictionaryRepository;
 import org.onap.ccsdk.apps.controllerblueprints.service.validator.ResourceDictionaryValidator;
@@ -105,7 +106,7 @@ public class ResourceDictionaryService {
      */
     public ResourceDictionary saveResourceDictionary(ResourceDictionary resourceDictionary) {
         Preconditions.checkNotNull(resourceDictionary, "Resource Dictionary information is missing");
-        Preconditions.checkNotNull(resourceDictionary.getDefinition(),"Resource Dictionary definition information is missing");
+        Preconditions.checkNotNull(resourceDictionary.getDefinition(), "Resource Dictionary definition information is missing");
 
         ResourceDefinition resourceDefinition = resourceDictionary.getDefinition();
         Preconditions.checkNotNull(resourceDefinition, "failed to get resource definition from content");
@@ -152,5 +153,13 @@ public class ResourceDictionaryService {
     public void deleteResourceDictionary(String name) {
         Preconditions.checkArgument(StringUtils.isNotBlank(name), "Resource dictionary Name Information is missing.");
         resourceDictionaryRepository.deleteByName(name);
+    }
+
+    /**
+     * This is a getResourceSourceMapping service
+     *
+     */
+    public ResourceSourceMapping getResourceSourceMapping() {
+        return ResourceSourceMappingFactory.INSTANCE.getRegisterSourceMapping();
     }
 }

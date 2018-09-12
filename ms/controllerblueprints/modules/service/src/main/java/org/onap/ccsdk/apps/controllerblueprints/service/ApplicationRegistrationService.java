@@ -17,20 +17,40 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service;
 
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFManager;
+import org.apache.commons.collections.CollectionUtils;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.factory.ResourceSourceMappingFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 @Component
 @SuppressWarnings("unused")
 public class ApplicationRegistrationService {
+    private static EELFLogger log = EELFManager.getInstance().getLogger(ApplicationRegistrationService.class);
+
+    @Value("#{'${resourceSourceMappings}'.split(',')}")
+    private List<String> resourceSourceMappings;
 
     @PostConstruct
-    public void register(){
+    public void register() {
         registerDictionarySources();
     }
 
-    public void registerDictionarySources(){
-
+    public void registerDictionarySources() {
+        log.info("Registering Dictionary Sources : {}", resourceSourceMappings);
+        if (CollectionUtils.isNotEmpty(resourceSourceMappings)) {
+            resourceSourceMappings.forEach(resourceSourceMapping -> {
+                String[] mappingKeyValue = resourceSourceMapping.split("=");
+                if (mappingKeyValue != null && mappingKeyValue.length == 2) {
+                    ResourceSourceMappingFactory.INSTANCE.registerSourceMapping(mappingKeyValue[0].trim(), mappingKeyValue[1].trim());
+                } else {
+                    log.warn("failed to get resource source mapping {}", resourceSourceMapping);
+                }
+            });
+        }
     }
 }
