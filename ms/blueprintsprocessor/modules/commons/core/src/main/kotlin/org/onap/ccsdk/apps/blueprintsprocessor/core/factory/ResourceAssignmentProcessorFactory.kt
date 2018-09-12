@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2017-2018 AT&T Intellectual Property.
+ *  Modifications Copyright © 2018 IBM.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,14 +19,17 @@ package org.onap.ccsdk.apps.blueprintsprocessor.core.factory
 
 import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignmentProcessor
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
 import org.springframework.stereotype.Service
 
+/**
+ * ResourceAssignmentProcessorFactory
+ *
+ * @author Brinda Santh
+ */
 @Service
-class ResourceAssignmentProcessorFactory : ApplicationContextAware {
+open class ResourceAssignmentProcessorFactory : ApplicationContextAware {
 
     private val log = EELFManager.getInstance().getLogger(ResourceAssignmentProcessorFactory::class.java)
 

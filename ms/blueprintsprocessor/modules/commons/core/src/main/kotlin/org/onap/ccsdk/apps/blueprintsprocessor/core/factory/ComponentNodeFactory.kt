@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2017-2018 AT&T Intellectual Property.
+ *  Modifications Copyright © 2018 IBM.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,12 +19,15 @@ package org.onap.ccsdk.apps.blueprintsprocessor.core.factory
 
 import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
 import org.springframework.stereotype.Service
 
+/**
+ * ComponentNode
+ *
+ * @author Brinda Santh
+ */
 interface ComponentNode {
 
     @Throws(BluePrintProcessorException::class)
@@ -39,8 +43,13 @@ interface ComponentNode {
     fun reTrigger(context: MutableMap<String, Any>, componentContext: MutableMap<String, Any?>)
 }
 
+/**
+ * ComponentNodeFactory
+ *
+ * @author Brinda Santh
+ */
 @Service
-class ComponentNodeFactory : ApplicationContextAware {
+open class ComponentNodeFactory : ApplicationContextAware {
     private val log = EELFManager.getInstance().getLogger(ComponentNodeFactory::class.java)
 
     var componentNodes: MutableMap<String, ComponentNode> = hashMapOf()

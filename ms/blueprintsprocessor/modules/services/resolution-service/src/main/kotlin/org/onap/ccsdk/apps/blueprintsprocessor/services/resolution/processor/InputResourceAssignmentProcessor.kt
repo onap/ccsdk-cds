@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2017-2018 AT&T Intellectual Property.
+ *  Modifications Copyright © 2018 IBM.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,25 +17,33 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.services.resolution.processor
 
+import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignmentProcessor
 import org.springframework.stereotype.Service
 
+/**
+ * InputResourceAssignmentProcessor
+ *
+ * @author Brinda Santh
+ */
 @Service("resource-assignment-processor-input")
 open class InputResourceAssignmentProcessor : ResourceAssignmentProcessor {
-    override fun errorHandle(resourceAssignment: ResourceAssignment, context: MutableMap<String, Any>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    private val log = EELFManager.getInstance().getLogger(InputResourceAssignmentProcessor::class.java)
+
+    override fun validate(resourceAssignment: ResourceAssignment, context: MutableMap<String, Any>) {
+        log.info("Validation Resource Assignments")
     }
 
     override fun process(resourceAssignment: ResourceAssignment, context: MutableMap<String, Any>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        log.info("Processing Resource Assignments")
+    }
+
+    override fun errorHandle(resourceAssignment: ResourceAssignment, context: MutableMap<String, Any>) {
+        log.info("ErrorHandle Resource Assignments")
     }
 
     override fun reTrigger(resourceAssignment: ResourceAssignment, context: MutableMap<String, Any>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun validate(resourceAssignment: ResourceAssignment, context: MutableMap<String, Any>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        log.info("Re Trigger Resource Assignments")
     }
 }

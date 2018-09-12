@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2017-2018 AT&T Intellectual Property.
+ *  Modifications Copyright © 2018 IBM.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,9 +17,14 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.services.resolution
 
+import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.BlueprintProcessorException
+import org.onap.ccsdk.apps.blueprintsprocessor.core.factory.ResourceAssignmentProcessorFactory
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ResourceResolutionInput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ResourceResolutionOutput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.Status
+import org.onap.ccsdk.apps.controllerblueprints.core.format
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.utils.BulkResourceSequencingUtils
 import org.springframework.stereotype.Service
 
 /**
@@ -28,7 +34,7 @@ import org.springframework.stereotype.Service
  */
 
 @Service
-class ResourceResolutionService {
+class ResourceResolutionService(private val resourceAssignmentProcessorFactory: ResourceAssignmentProcessorFactory) {
 
     fun resolveResource(resourceResolutionInput: ResourceResolutionInput): ResourceResolutionOutput {
         val resourceResolutionOutput = ResourceResolutionOutput()
@@ -36,11 +42,39 @@ class ResourceResolutionService {
         resourceResolutionOutput.commonHeader = resourceResolutionInput.commonHeader
         resourceResolutionOutput.resourceAssignments = resourceResolutionInput.resourceAssignments
 
+        val context = hashMapOf<String, Any>()
+
+        process(resourceResolutionOutput.resourceAssignments, context)
+
         val status = Status()
         status.code = 200
         status.message = "Success"
         resourceResolutionOutput.status = status
 
         return resourceResolutionOutput
+    }
+
+    fun process(resourceAssignments: MutableList<ResourceAssignment>, context: MutableMap<String, Any>): Unit {
+
+        val bulkSequenced = BulkResourceSequencingUtils.process(resourceAssignments)
+
+        bulkSequenced.map { batchResourceAssignments ->
+            batchResourceAssignments.filter { it.name != "*" && it.name != "start"}
+            .map { resourceAssignment ->
+                val dictionarySource = resourceAssignment.dictionarySource
+                val processorInstanceName = "resource-assignment-processor-".plus(dictionarySource)
+                val resourceAssignmentProcessor = resourceAssignmentProcessorFactory.getInstance(processorInstanceName)
+                        ?: throw BlueprintProcessorException(format("failed to get resource processor for instance name({}) " +
+                                "for resource assignment({})", processorInstanceName, resourceAssignment.name))
+                try {
+                    resourceAssignmentProcessor.validate(resourceAssignment, context)
+                    resourceAssignmentProcessor.process(resourceAssignment, context)
+                } catch (e: Exception) {
+                    resourceAssignmentProcessor.errorHandle(resourceAssignment, context)
+                    throw BlueprintProcessorException(e)
+                }
+
+            }
+        }
     }
 }
