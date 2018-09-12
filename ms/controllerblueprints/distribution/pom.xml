@@ -34,7 +34,10 @@
         <name.space>org.onap.ccsdk.apps</name.space>     <!-- <name.space>${namespace}</name.space> -->
         <serviceArtifactName>controllerblueprints</serviceArtifactName>
         <image.name>onap/ccsdk-controllerblueprints</image.name>
-    </properties>
+		<docker.buildArg.https_proxy>${https_proxy}</docker.buildArg.https_proxy>
+		<docker.push.phase>deploy</docker.push.phase>
+		<docker.verbose>true</docker.verbose>
+	</properties>
 
     <dependencies>
         <dependency>
@@ -141,47 +144,52 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>io.fabric8</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>0.26.1</version>
-                <inherited>false</inherited>
-                <configuration>
-                    <images>
-                        <image>
-                            <name>${image.name}</name>
-                            <build>
-                                <cleanup>try</cleanup>
-                                <dockerFileDir>${basedir}/target/docker-stage</dockerFileDir>
-                                <tags>
-                                    <tag>${project.version}</tag>
-                                    <tag>${project.version}-STAGING-${maven.build.timestamp}</tag>
-                                    <tag>${project.docker.latesttag.version}</tag>
-                                </tags>
-                            </build>
-                        </image>
-                    </images>
-                    <verbose>true</verbose>
-                </configuration>
-                <executions>
-                    <!--<execution>-->
-                        <!--<id>build-images</id>-->
-                        <!--<phase>package</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>build</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                    <execution>
-                        <id>push-images</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>build</goal>
-                            <goal>push</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+
         </plugins>
     </build>
+
+	<profiles>
+		<profile>
+			<id>docker</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>io.fabric8</groupId>
+						<artifactId>docker-maven-plugin</artifactId>
+						<version>0.26.1</version>
+						<inherited>false</inherited>
+						<configuration>
+							<images>
+								<image>
+									<name>${image.name}</name>
+									<build>
+										<cleanup>try</cleanup>
+										<dockerFileDir>${basedir}/target/docker-stage</dockerFileDir>
+										<tags>
+											<tag>${project.version}</tag>
+											<tag>${project.version}-STAGING-${maven.build.timestamp}</tag>
+											<tag>${project.docker.latesttag.version}</tag>
+										</tags>
+									</build>
+								</image>
+							</images>
+							<verbose>true</verbose>
+						</configuration>
+						<executions>
+							<execution>
+								<id>push-images</id>
+								<phase>${docker.build.phase}</phase>
+								<goals>
+									<goal>build</goal>
+									<goal>push</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+	</profiles>
 </project>
 
