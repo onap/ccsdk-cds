@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.factory.ResourceSourceMappingFactory;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.utils.ResourceDictionaryTestUtils;
 import org.onap.ccsdk.apps.controllerblueprints.service.utils.ConfigModelUtils;
 import com.att.eelf.configuration.EELFLogger;
 import com.att.eelf.configuration.EELFManager;
@@ -37,10 +38,8 @@ public class ServiceTemplateValidationTest {
 
     @Before
     public void setUp(){
-        ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("db", "source-db");
-        ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("input", "source-input");
-        ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("default", "source-default");
-        ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("mdsal", "source-rest");
+        // Setup dummy Source Instance Mapping
+        ResourceDictionaryTestUtils.setUpResourceSourceMapping();
     }
 
     @Test

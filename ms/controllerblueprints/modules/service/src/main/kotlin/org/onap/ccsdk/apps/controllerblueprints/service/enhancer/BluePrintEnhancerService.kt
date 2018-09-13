@@ -171,7 +171,7 @@ open class BluePrintEnhancerDefaultService(val bluePrintRepoService: BluePrintRe
     }
 
     open fun enrichNodeTypeCapabilityProperties(nodeTypeName: String, nodeType: NodeType) {
-        nodeType.capabilities?.forEach { capabilityDefinitionName, capabilityDefinition ->
+        nodeType.capabilities?.forEach { _, capabilityDefinition ->
             capabilityDefinition.properties?.let { properties ->
                 enrichPropertyDefinitions(properties)
             }
@@ -246,7 +246,7 @@ open class BluePrintEnhancerDefaultService(val bluePrintRepoService: BluePrintRe
     open fun populateNodeType(nodeTypeName: String): NodeType {
 
         val nodeType = serviceTemplate.nodeTypes?.get(nodeTypeName)
-                ?: bluePrintRepoService.getNodeType(nodeTypeName)?.block()
+                ?: bluePrintRepoService.getNodeType(nodeTypeName).block()
                 ?: throw BluePrintException(format("Couldn't get NodeType({}) from repo.", nodeTypeName))
         serviceTemplate.nodeTypes?.put(nodeTypeName, nodeType)
         return nodeType
@@ -254,7 +254,7 @@ open class BluePrintEnhancerDefaultService(val bluePrintRepoService: BluePrintRe
 
     open fun populateArtifactType(artifactTypeName: String): ArtifactType {
         val artifactType = serviceTemplate.artifactTypes?.get(artifactTypeName)
-                ?: bluePrintRepoService.getArtifactType(artifactTypeName)?.block()
+                ?: bluePrintRepoService.getArtifactType(artifactTypeName).block()
                 ?: throw BluePrintException(format("Couldn't get ArtifactType({}) from repo.", artifactTypeName))
         serviceTemplate.artifactTypes?.put(artifactTypeName, artifactType)
         return artifactType
@@ -262,7 +262,7 @@ open class BluePrintEnhancerDefaultService(val bluePrintRepoService: BluePrintRe
 
     open fun populateDataTypes(dataTypeName: String): DataType {
         val dataType = serviceTemplate.dataTypes?.get(dataTypeName)
-                ?: bluePrintRepoService.getDataType(dataTypeName)?.block()
+                ?: bluePrintRepoService.getDataType(dataTypeName).block()
                 ?: throw BluePrintException(format("Couldn't get DataType({}) from repo.", dataTypeName))
         serviceTemplate.dataTypes?.put(dataTypeName, dataType)
         return dataType
