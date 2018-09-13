@@ -16,6 +16,8 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core
 
+import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition
+
 /**
  *
  *
@@ -104,6 +106,7 @@ object BluePrintTypes {
         validTypes.add(BluePrintConstants.DATA_TYPE_TIMESTAMP)
         validTypes.add(BluePrintConstants.DATA_TYPE_NULL)
         validTypes.add(BluePrintConstants.DATA_TYPE_LIST)
+        validTypes.add(BluePrintConstants.DATA_TYPE_MAP)
         return validTypes
     }
 
@@ -125,6 +128,13 @@ object BluePrintTypes {
         validTypes.add(BluePrintConstants.DATA_TYPE_LIST)
         validTypes.add(BluePrintConstants.DATA_TYPE_MAP)
         return validTypes
+    }
+
+    @JvmStatic
+    fun validPrimitiveOrCollectionPrimitive(propertyDefinition: PropertyDefinition): Boolean {
+        val entrySchema = propertyDefinition.entrySchema?.type ?: BluePrintConstants.DATA_TYPE_NULL
+        return BluePrintTypes.validPropertyTypes().contains(propertyDefinition.type)
+                && BluePrintTypes.validPrimitiveTypes().contains(entrySchema)
     }
 
     @JvmStatic

@@ -18,11 +18,13 @@
 package org.onap.ccsdk.apps.controllerblueprints.resource.dict.service
 
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRepoFileService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRepoService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonReactorUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
 import reactor.core.publisher.Mono
+
 /**
  * ResourceDefinitionRepoService.
  *
@@ -30,6 +32,7 @@ import reactor.core.publisher.Mono
  */
 interface ResourceDefinitionRepoService : BluePrintRepoService {
 
+    @Throws(BluePrintException::class)
     fun getResourceDefinition(resourceDefinitionName: String): Mono<ResourceDefinition>
 }
 

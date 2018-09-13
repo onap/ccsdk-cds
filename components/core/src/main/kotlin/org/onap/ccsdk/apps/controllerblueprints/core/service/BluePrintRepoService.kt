@@ -35,19 +35,19 @@ import java.io.Serializable
 interface BluePrintRepoService : Serializable {
 
     @Throws(BluePrintException::class)
-    fun getNodeType(nodeTypeName: String): Mono<NodeType>?
+    fun getNodeType(nodeTypeName: String): Mono<NodeType>
 
     @Throws(BluePrintException::class)
-    fun getDataType(dataTypeName: String): Mono<DataType>?
+    fun getDataType(dataTypeName: String): Mono<DataType>
 
     @Throws(BluePrintException::class)
-    fun getArtifactType(artifactTypeName: String): Mono<ArtifactType>?
+    fun getArtifactType(artifactTypeName: String): Mono<ArtifactType>
 
     @Throws(BluePrintException::class)
-    fun getRelationshipType(relationshipTypeName: String): Mono<RelationshipType>?
+    fun getRelationshipType(relationshipTypeName: String): Mono<RelationshipType>
 
     @Throws(BluePrintException::class)
-    fun getCapabilityDefinition(capabilityDefinitionName: String): Mono<CapabilityDefinition>?
+    fun getCapabilityDefinition(capabilityDefinitionName: String): Mono<CapabilityDefinition>
 
 }
 
@@ -63,30 +63,30 @@ open class BluePrintRepoFileService(modelTypePath: String) : BluePrintRepoServic
     private val relationshipTypePath = modelTypePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TYPE)
     private val extension = ".json"
 
-    override fun getDataType(dataTypeName: String): Mono<DataType>? {
+    override fun getDataType(dataTypeName: String): Mono<DataType> {
         val fileName = dataTypePath.plus(BluePrintConstants.PATH_DIVIDER)
                 .plus(dataTypeName).plus(extension)
         return getModelType(fileName, DataType::class.java)
     }
 
-    override fun getNodeType(nodeTypeName: String): Mono<NodeType>? {
+    override fun getNodeType(nodeTypeName: String): Mono<NodeType> {
         val fileName = nodeTypePath.plus(BluePrintConstants.PATH_DIVIDER).plus(nodeTypeName).plus(extension)
         return getModelType(fileName, NodeType::class.java)
     }
 
-    override fun getArtifactType(artifactTypeName: String): Mono<ArtifactType>? {
+    override fun getArtifactType(artifactTypeName: String): Mono<ArtifactType> {
         val fileName = artifactTypePath.plus(BluePrintConstants.PATH_DIVIDER)
                 .plus(artifactTypeName).plus(extension)
         return getModelType(fileName, ArtifactType::class.java)
     }
 
-    override fun getRelationshipType(relationshipTypeName: String): Mono<RelationshipType>? {
+    override fun getRelationshipType(relationshipTypeName: String): Mono<RelationshipType> {
         val fileName = relationshipTypePath.plus(BluePrintConstants.PATH_DIVIDER)
                 .plus(relationshipTypeName).plus(extension)
         return getModelType(fileName, RelationshipType::class.java)
     }
 
-    override fun getCapabilityDefinition(capabilityDefinitionName: String): Mono<CapabilityDefinition>? {
+    override fun getCapabilityDefinition(capabilityDefinitionName: String): Mono<CapabilityDefinition> {
         val fileName = capabilityTypePath.plus(BluePrintConstants.PATH_DIVIDER)
                 .plus(capabilityDefinitionName).plus(extension)
         return getModelType(fileName, CapabilityDefinition::class.java)

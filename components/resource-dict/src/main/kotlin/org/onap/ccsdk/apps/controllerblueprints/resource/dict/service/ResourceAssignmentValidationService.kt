@@ -25,6 +25,8 @@ import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.TopologicalSortingUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import com.att.eelf.configuration.EELFManager
+import org.onap.ccsdk.apps.controllerblueprints.core.format
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.factory.ResourceSourceMappingFactory
 import java.io.Serializable
 
 /**
@@ -65,6 +67,13 @@ open class ResourceAssignmentValidationDefaultService : ResourceAssignmentValida
 
     open fun validateSources(resourceAssignments: List<ResourceAssignment>) {
         log.info("validating resource assignment sources")
+        resourceAssignments.forEach { resourceAssignment ->
+            try {
+                ResourceSourceMappingFactory.getRegisterSourceMapping(resourceAssignment.dictionarySource!!)
+            } catch (e: BluePrintException) {
+                validationMessage.appendln(e.message + format(" for resource assignment({})", resourceAssignment.name))
+            }
+        }
     }
 
     open fun validateTemplateNDictionaryKeys(resourceAssignments: List<ResourceAssignment>) {
