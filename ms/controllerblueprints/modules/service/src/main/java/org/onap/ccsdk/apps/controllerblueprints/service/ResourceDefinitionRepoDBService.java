@@ -23,28 +23,35 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*;
-import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRepoService;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceDefinitionRepoService;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ModelType;
+import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionary;
 import org.onap.ccsdk.apps.controllerblueprints.service.repository.ModelTypeRepository;
+import org.onap.ccsdk.apps.controllerblueprints.service.repository.ResourceDictionaryRepository;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 
 /**
- * BluePrintRepoDBService
+ * ResourceDefinitionRepoDBService
  *
  * @author Brinda Santh
  */
 @Service
 @SuppressWarnings("unused")
-public class BluePrintRepoDBService implements BluePrintRepoService {
+public class ResourceDefinitionRepoDBService implements ResourceDefinitionRepoService {
 
     private ModelTypeRepository modelTypeRepository;
+    private ResourceDictionaryRepository resourceDictionaryRepository;
+
     @SuppressWarnings("unused")
-    public BluePrintRepoDBService(ModelTypeRepository modelTypeRepository) {
+    public ResourceDefinitionRepoDBService(ModelTypeRepository modelTypeRepository,
+                                           ResourceDictionaryRepository resourceDictionaryRepository) {
         this.modelTypeRepository = modelTypeRepository;
+        this.resourceDictionaryRepository = resourceDictionaryRepository;
     }
 
     @Override
@@ -70,6 +77,17 @@ public class BluePrintRepoDBService implements BluePrintRepoService {
     @Override
     public Mono<CapabilityDefinition> getCapabilityDefinition(@NotNull String capabilityDefinitionName) throws BluePrintException {
         return getModelType(capabilityDefinitionName, CapabilityDefinition.class);
+    }
+
+    @NotNull
+    @Override
+    public Mono<ResourceDefinition> getResourceDefinition(@NotNull String resourceDefinitionName) throws BluePrintException{
+        Optional<ResourceDictionary> dbResourceDictionary = resourceDictionaryRepository.findByName(resourceDefinitionName);
+        if(dbResourceDictionary.isPresent()){
+            return Mono.just(dbResourceDictionary.get().getDefinition());
+        }else{
+            throw new BluePrintException(String.format("failed to get resource dictionary (%s) from repo", resourceDefinitionName));
+        }
     }
 
     private <T> Mono<T> getModelType(String modelName, Class<T> valueClass) throws BluePrintException {

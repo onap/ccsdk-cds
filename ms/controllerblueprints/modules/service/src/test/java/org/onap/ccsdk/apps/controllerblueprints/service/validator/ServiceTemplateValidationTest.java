@@ -19,9 +19,11 @@ package org.onap.ccsdk.apps.controllerblueprints.service.validator;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.factory.ResourceSourceMappingFactory;
 import org.onap.ccsdk.apps.controllerblueprints.service.utils.ConfigModelUtils;
 import com.att.eelf.configuration.EELFLogger;
 import com.att.eelf.configuration.EELFManager;
@@ -32,6 +34,14 @@ import java.util.List;
 
 public class ServiceTemplateValidationTest {
     private static EELFLogger log = EELFManager.getInstance().getLogger(ServiceTemplateValidationTest.class);
+
+    @Before
+    public void setUp(){
+        ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("db", "source-db");
+        ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("input", "source-input");
+        ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("default", "source-default");
+        ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("mdsal", "source-rest");
+    }
 
     @Test
     public void testBluePrintDirs() {

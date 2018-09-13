@@ -16,12 +16,17 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.enhancer;
 
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFManager;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonReactorUtils;
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.factory.ResourceSourceMappingFactory;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceDefinitionFileRepoService;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceDefinitionRepoService;
 
@@ -33,18 +38,28 @@ import java.util.List;
  * @author Brinda Santh
  */
 public class ResourceAssignmentEnhancerServiceTest {
+    private static EELFLogger log = EELFManager.getInstance().getLogger(ResourceAssignmentEnhancerServiceTest.class);
+
+    @Before
+    public void setUp(){
+        ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("db", "source-db");
+        ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("input", "source-input");
+        ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("default", "source-default");
+        ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("mdsal", "source-rest");
+    }
 
     @Test
     public void testEnhanceBluePrint() throws BluePrintException {
 
         List<ResourceAssignment> resourceAssignments = JacksonReactorUtils
-                .getListFromClassPathFile("enhance/simple-enrich.json", ResourceAssignment.class).block();
+                .getListFromClassPathFile("enhance/enhance-resource-assignment.json", ResourceAssignment.class).block();
         Assert.assertNotNull("Failed to get Resource Assignment", resourceAssignments);
         ResourceDefinitionRepoService resourceDefinitionRepoService = new ResourceDefinitionFileRepoService("./../../application/load");
         ResourceAssignmentEnhancerService resourceAssignmentEnhancerService =
                 new ResourceAssignmentEnhancerDefaultService(resourceDefinitionRepoService);
         ServiceTemplate serviceTemplate = resourceAssignmentEnhancerService.enhanceBluePrint(resourceAssignments);
         Assert.assertNotNull("Failed to get Enriched service Template", serviceTemplate);
+        log.trace("Enhanced Service Template : {}", JacksonUtils.getJson(serviceTemplate, true));
     }
 }
 

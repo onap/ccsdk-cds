@@ -114,10 +114,6 @@
       "description" : "This is Dynamic Data type definition generated from resource mapping for the config template name base-config-template.",
       "version" : "1.0.0",
       "properties" : {
-        "bundle-mac" : {
-          "required" : true,
-          "type" : "string"
-        },
         "hostname" : {
           "required" : true,
           "type" : "string"
@@ -129,13 +125,9 @@
             "type" : "dt-license-key"
           }
         },
-        "wan-aggregate-ipv4-addresses" : {
-          "description" : "",
+        "rs-db-source" : {
           "required" : true,
-          "type" : "list",
-          "entry_schema" : {
-            "type" : "dt-v4-aggregate"
-          }
+          "type" : "string"
         },
         "service" : {
           "required" : true,
@@ -144,6 +136,14 @@
         "service-instance-id" : {
           "required" : true,
           "type" : "string"
+        },
+        "mdsal-source" : {
+          "description" : "",
+          "required" : true,
+          "type" : "list",
+          "entry_schema" : {
+            "type" : "dt-v4-aggregate"
+          }
         }
       },
       "derived_from" : "tosca.datatypes.Dynamic"
@@ -203,6 +203,127 @@
     },
     "tosca.nodes.Component" : {
       "description" : "This is default Component Node",
+      "version" : "1.0.0",
+      "derived_from" : "tosca.nodes.Root"
+    },
+    "artifact-config-template" : {
+      "description" : "This is Configuration Velocity Template",
+      "version" : "1.0.0",
+      "properties" : {
+        "action-names" : {
+          "required" : true,
+          "type" : "list",
+          "entry_schema" : {
+            "type" : "string"
+          }
+        }
+      },
+      "capabilities" : {
+        "content" : {
+          "type" : "tosca.capabilities.Content",
+          "properties" : {
+            "content" : {
+              "required" : true,
+              "type" : "string"
+            }
+          }
+        },
+        "mapping" : {
+          "type" : "tosca.capabilities.Mapping",
+          "properties" : {
+            "mapping" : {
+              "required" : false,
+              "type" : "list",
+              "entry_schema" : {
+                "type" : "datatype-resource-assignment"
+              }
+            }
+          }
+        }
+      },
+      "derived_from" : "tosca.nodes.Artifact"
+    },
+    "tosca.nodes.Vnf" : {
+      "description" : "This is VNF Node Type",
+      "version" : "1.0.0",
+      "derived_from" : "tosca.nodes.Root"
+    },
+    "tosca.nodes.Artifact" : {
+      "description" : "This is Deprecated Artifact Node Type.",
+      "version" : "1.0.0",
+      "derived_from" : "tosca.nodes.Root"
+    },
+    "dg-activate-netconf" : {
+      "description" : "This is Download Netconf Directed Graph",
+      "version" : "1.0.0",
+      "properties" : {
+        "mode" : {
+          "required" : false,
+          "type" : "string",
+          "default" : "sync"
+        },
+        "version" : {
+          "required" : false,
+          "type" : "string",
+          "default" : "LATEST"
+        },
+        "is-start-flow" : {
+          "required" : false,
+          "type" : "boolean",
+          "default" : false
+        }
+      },
+      "capabilities" : {
+        "dg-node" : {
+          "type" : "tosca.capabilities.Node"
+        }
+      },
+      "requirements" : {
+        "component-dependency" : {
+          "capability" : "component-node",
+          "node" : "component-netconf-executor",
+          "relationship" : "tosca.relationships.DependsOn"
+        }
+      },
+      "interfaces" : {
+        "CONFIG" : {
+          "operations" : {
+            "ActivateNetconf" : {
+              "inputs" : {
+                "params" : {
+                  "required" : false,
+                  "type" : "list",
+                  "entry_schema" : {
+                    "type" : "datatype-property"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from" : "tosca.nodes.DG"
+    },
+    "source-input" : {
+      "description" : "This is Input Resource Source Node Type",
+      "version" : "1.0.0",
+      "properties" : {
+        "key" : {
+          "required" : false,
+          "type" : "string"
+        },
+        "key-dependencies" : {
+          "required" : true,
+          "type" : "list",
+          "entry_schema" : {
+            "type" : "string"
+          }
+        }
+      },
+      "derived_from" : "tosca.nodes.ResourceSource"
+    },
+    "tosca.nodes.ResourceSource" : {
+      "description" : "TOSCA base type for Resource Sources",
       "version" : "1.0.0",
       "derived_from" : "tosca.nodes.Root"
     },
@@ -279,11 +400,36 @@
       "version" : "1.0.0",
       "derived_from" : "tosca.nodes.Root"
     },
-    "artifact-config-template" : {
-      "description" : "This is Configuration Velocity Template",
+    "source-db" : {
+      "description" : "This is Database Resource Source Node Type",
       "version" : "1.0.0",
       "properties" : {
-        "action-names" : {
+        "type" : {
+          "required" : true,
+          "type" : "string",
+          "constraints" : [ {
+            "valid_values" : [ "SQL", "PLSQL" ]
+          } ]
+        },
+        "query" : {
+          "required" : true,
+          "type" : "string"
+        },
+        "input-key-mapping" : {
+          "required" : false,
+          "type" : "map",
+          "entry_schema" : {
+            "type" : "string"
+          }
+        },
+        "output-key-mapping" : {
+          "required" : false,
+          "type" : "map",
+          "entry_schema" : {
+            "type" : "string"
+          }
+        },
+        "key-dependencies" : {
           "required" : true,
           "type" : "list",
           "entry_schema" : {
@@ -291,30 +437,7 @@
           }
         }
       },
-      "capabilities" : {
-        "content" : {
-          "type" : "tosca.capabilities.Content",
-          "properties" : {
-            "content" : {
-              "required" : true,
-              "type" : "string"
-            }
-          }
-        },
-        "mapping" : {
-          "type" : "tosca.capabilities.Mapping",
-          "properties" : {
-            "mapping" : {
-              "required" : false,
-              "type" : "list",
-              "entry_schema" : {
-                "type" : "datatype-resource-assignment"
-              }
-            }
-          }
-        }
-      },
-      "derived_from" : "tosca.nodes.Artifact"
+      "derived_from" : "tosca.nodes.ResourceSource"
     },
     "vnf-netconf-device" : {
       "description" : "This is VNF Device with Netconf  Capability",
@@ -357,10 +480,57 @@
       },
       "derived_from" : "tosca.nodes.Vnf"
     },
-    "tosca.nodes.Vnf" : {
-      "description" : "This is VNF Node Type",
+    "source-rest" : {
+      "description" : "This is Rest Resource Source Node Type",
       "version" : "1.0.0",
-      "derived_from" : "tosca.nodes.Root"
+      "properties" : {
+        "type" : {
+          "required" : false,
+          "type" : "string",
+          "constraints" : [ {
+            "valid_values" : [ "JSON" ]
+          } ],
+          "default" : "JSON"
+        },
+        "url-path" : {
+          "required" : true,
+          "type" : "string"
+        },
+        "path" : {
+          "required" : true,
+          "type" : "string"
+        },
+        "expression-type" : {
+          "required" : false,
+          "type" : "string",
+          "constraints" : [ {
+            "valid_values" : [ "JSON_PATH", "JSON_POINTER" ]
+          } ],
+          "default" : "JSON_PATH"
+        },
+        "input-key-mapping" : {
+          "required" : false,
+          "type" : "map",
+          "entry_schema" : {
+            "type" : "string"
+          }
+        },
+        "output-key-mapping" : {
+          "required" : false,
+          "type" : "map",
+          "entry_schema" : {
+            "type" : "string"
+          }
+        },
+        "key-dependencies" : {
+          "required" : true,
+          "type" : "list",
+          "entry_schema" : {
+            "type" : "string"
+          }
+        }
+      },
+      "derived_from" : "tosca.nodes.ResourceSource"
     },
     "component-netconf-executor" : {
       "description" : "This is Netconf Transaction Configuration Component API",
@@ -440,62 +610,6 @@
         }
       },
       "derived_from" : "tosca.nodes.Component"
-    },
-    "tosca.nodes.Artifact" : {
-      "description" : "This is Deprecated Artifact Node Type.",
-      "version" : "1.0.0",
-      "derived_from" : "tosca.nodes.Root"
-    },
-    "dg-activate-netconf" : {
-      "description" : "This is Download Netconf Directed Graph",
-      "version" : "1.0.0",
-      "properties" : {
-        "mode" : {
-          "required" : false,
-          "type" : "string",
-          "default" : "sync"
-        },
-        "version" : {
-          "required" : false,
-          "type" : "string",
-          "default" : "LATEST"
-        },
-        "is-start-flow" : {
-          "required" : false,
-          "type" : "boolean",
-          "default" : false
-        }
-      },
-      "capabilities" : {
-        "dg-node" : {
-          "type" : "tosca.capabilities.Node"
-        }
-      },
-      "requirements" : {
-        "component-dependency" : {
-          "capability" : "component-node",
-          "node" : "component-netconf-executor",
-          "relationship" : "tosca.relationships.DependsOn"
-        }
-      },
-      "interfaces" : {
-        "CONFIG" : {
-          "operations" : {
-            "ActivateNetconf" : {
-              "inputs" : {
-                "params" : {
-                  "required" : false,
-                  "type" : "list",
-                  "entry_schema" : {
-                    "type" : "datatype-property"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "derived_from" : "tosca.nodes.DG"
     }
   },
   "topology_template" : {
@@ -704,18 +818,18 @@
           "mapping" : {
             "properties" : {
               "mapping" : [ {
-                "name" : "bundle-mac",
+                "name" : "rs-db-source",
                 "property" : {
                   "required" : true,
                   "type" : "string"
                 },
                 "input-param" : false,
-                "dictionary-name" : "bundle-mac",
+                "dictionary-name" : "sample-db-source",
                 "dictionary-source" : "db",
                 "dependencies" : [ "hostname" ],
                 "version" : 0
               }, {
-                "name" : "wan-aggregate-ipv4-addresses",
+                "name" : "mdsal-source",
                 "property" : {
                   "description" : "",
                   "required" : true,
@@ -725,7 +839,7 @@
                   }
                 },
                 "input-param" : false,
-                "dictionary-name" : "wan-aggregate-ipv4-addresses",
+                "dictionary-name" : "sample-mdsal-source",
                 "dictionary-source" : "mdsal",
                 "dependencies" : [ "service-instance-id" ],
                 "version" : 0
@@ -787,7 +901,7 @@
                   }
                 },
                 "input-param" : false,
-                "dictionary-name" : "licenses",
+                "dictionary-name" : "sample-licenses",
                 "dictionary-source" : "mdsal",
                 "dependencies" : [ "service-instance-id" ],
                 "version" : 0

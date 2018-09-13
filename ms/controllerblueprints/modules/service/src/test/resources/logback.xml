@@ -1,5 +1,6 @@
 <!--
   ~  Copyright © 2018 IBM.
+  ~  Modifications Copyright © 2017-2018 AT&T Intellectual Property.
   ~
   ~  Licensed under the Apache License, Version 2.0 (the "License");
   ~  you may not use this file except in compliance with the License.
@@ -27,8 +28,8 @@
     </appender>
 
 
-    <logger name="org.springframework" level="info"/>
-    <logger name="org.springframework.web" level="info"/>
+    <logger name="org.springframework" level="warn"/>
+    <logger name="org.springframework.web" level="warn"/>
     <logger name="org.hibernate" level="error"/>
     <logger name="org.onap.ccsdk.apps" level="info"/>
 

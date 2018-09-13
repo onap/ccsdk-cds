@@ -1,11 +1,14 @@
 [
 	{
-		"name": "input-source"
+		"name": "sample-input-source"
 	},
 	{
-		"name": "v4-ip-type"
+		"name": "sample-default-source"
 	},
 	{
-		"name": "db-source"
+		"name": "sample-db-source"
+	},
+	{
+		"name": "sample-mdsal-source"
 	}
 ]

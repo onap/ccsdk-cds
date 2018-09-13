@@ -1,5 +1,5 @@
 {
-  "name": "db-source",
+  "name": "sample-db-source",
   "property" :{
     "description": "name of the ",
     "type": "string"

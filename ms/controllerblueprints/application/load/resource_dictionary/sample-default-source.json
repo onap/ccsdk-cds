@@ -1,6 +1,6 @@
 {
-  "tags": "v4-ip-type, tosca.datatypes.Root, data_type, brindasanth@onap.com",
-  "name": "default-source",
+  "tags": "sample-default-source",
+  "name": "sample-default-source",
   "property" :{
     "description": "name of the ",
     "type": "string"

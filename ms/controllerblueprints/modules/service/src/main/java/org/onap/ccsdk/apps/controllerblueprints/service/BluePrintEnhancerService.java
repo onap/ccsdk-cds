@@ -25,12 +25,13 @@ import org.jetbrains.annotations.NotNull;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.core.ConfigModelConstant;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*;
-import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintEnhancerDefaultService;
-import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRepoService;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceDefinitionRepoService;
+import org.onap.ccsdk.apps.controllerblueprints.service.enhancer.BluePrintEnhancerDefaultService;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment;
 import com.att.eelf.configuration.EELFLogger;
 import com.att.eelf.configuration.EELFManager;
+import org.onap.ccsdk.apps.controllerblueprints.service.enhancer.ResourceAssignmentEnhancerService;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -48,14 +49,18 @@ public class BluePrintEnhancerService extends BluePrintEnhancerDefaultService {
 
     private static EELFLogger log = EELFManager.getInstance().getLogger(BluePrintEnhancerService.class);
 
+    private ResourceAssignmentEnhancerService resourceAssignmentEnhancerService;
+
     private Map<String, DataType> recipeDataTypes = new HashMap<>();
 
-    public BluePrintEnhancerService(BluePrintRepoService bluePrintEnhancerRepoDBService) {
-        super(bluePrintEnhancerRepoDBService);
+    public BluePrintEnhancerService(ResourceDefinitionRepoService resourceDefinitionRepoService,
+                                    ResourceAssignmentEnhancerService resourceAssignmentEnhancerService) {
+        super(resourceDefinitionRepoService);
+        this.resourceAssignmentEnhancerService = resourceAssignmentEnhancerService;
     }
 
     @Override
-    public void enrichTopologyTemplate(@NotNull ServiceTemplate serviceTemplate) throws BluePrintException{
+    public void enrichTopologyTemplate(@NotNull ServiceTemplate serviceTemplate) throws BluePrintException {
         super.enrichTopologyTemplate(serviceTemplate);
 
         // Update the Recipe Inputs and DataTypes
@@ -101,7 +106,7 @@ public class BluePrintEnhancerService extends BluePrintEnhancerDefaultService {
             // Modified for ONAP converted Object to JsonNode
             JsonNode recipeNames = nodeTemplate.getProperties().get(ConfigModelConstant.PROPERTY_RECIPE_NAMES);
 
-            log.info("Processing Receipe Names : {} ", recipeNames);
+            log.info("Processing Recipe Names : {} ", recipeNames);
 
             if (recipeNames != null && recipeNames.isArray() && recipeNames.size() > 0) {
 
@@ -159,6 +164,9 @@ public class BluePrintEnhancerService extends BluePrintEnhancerDefaultService {
                         JacksonUtils.getListFromJson(resourceAssignmentContent, ResourceAssignment.class);
 
                 Preconditions.checkNotNull(resourceAssignments, "Failed to Processing Resource Mapping " + resourceAssignmentContent);
+                // Enhance Resource Assignment
+                resourceAssignmentEnhancerService.enhanceBluePrint(this, resourceAssignments);
+
                 dataTypeProperties = new HashMap<>();
 
                 for (ResourceAssignment resourceAssignment : resourceAssignments) {
@@ -166,9 +174,6 @@ public class BluePrintEnhancerService extends BluePrintEnhancerDefaultService {
                             // && Boolean.valueOf(resourceAssignment.getInputParameter())
                             && resourceAssignment.getProperty() != null
                             && StringUtils.isNotBlank(resourceAssignment.getName())) {
-
-                        // Enrich the Property Definition
-                        super.enrichPropertyDefinition(resourceAssignment.getName(), resourceAssignment.getProperty());
 
                         dataTypeProperties.put(resourceAssignment.getName(), resourceAssignment.getProperty());
 

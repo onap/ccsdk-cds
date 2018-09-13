@@ -45,7 +45,7 @@ import java.util.List;
 
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = {"blueprints.load.initial-data=true"})
 @ContextConfiguration(classes = {TestApplication.class})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ServiceTemplateRestTest {
@@ -143,7 +143,7 @@ public class ServiceTemplateRestTest {
 
         List<ResourceAssignment> autoMappedResourceAssignment = autoMapResponse.getResourceAssignments();
         autoMappedResourceAssignment.forEach(resourceAssignment -> {
-            if ("bundle-id".equals(resourceAssignment.getName())) {
+            if ("sample-db-source".equals(resourceAssignment.getName())) {
                 Assert.assertEquals("Failed to assign default first source", "db",
                         resourceAssignment.getDictionarySource());
             }

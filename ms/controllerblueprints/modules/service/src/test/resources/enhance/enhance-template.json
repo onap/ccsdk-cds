@@ -218,13 +218,13 @@
             "properties": {
               "mapping": [
                 {
-                  "name": "bundle-mac",
+                  "name": "rs-db-source",
                   "property": {
                     "required": true,
                     "type": "string"
                   },
                   "input-param": false,
-                  "dictionary-name": "bundle-mac",
+                  "dictionary-name": "sample-db-source",
                   "dictionary-source": "db",
                   "dependencies": [
                     "hostname"
@@ -232,7 +232,7 @@
                   "version": 0
                 },
                 {
-                  "name": "wan-aggregate-ipv4-addresses",
+                  "name": "mdsal-source",
                   "property": {
                     "description": "",
                     "required": true,
@@ -242,7 +242,7 @@
                     }
                   },
                   "input-param": false,
-                  "dictionary-name": "wan-aggregate-ipv4-addresses",
+                  "dictionary-name": "sample-mdsal-source",
                   "dictionary-source": "mdsal",
                   "dependencies": [
                     "service-instance-id"
@@ -313,7 +313,7 @@
                     }
                   },
                   "input-param": false,
-                  "dictionary-name": "licenses",
+                  "dictionary-name": "sample-licenses",
                   "dictionary-source": "mdsal",
                   "dependencies": [
                     "service-instance-id"

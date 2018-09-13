@@ -42,7 +42,7 @@ import java.util.List;
 
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = {"blueprints.load.initial-data=true"})
 @ContextConfiguration(classes = {TestApplication.class})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ResourceDictionaryRestTest {

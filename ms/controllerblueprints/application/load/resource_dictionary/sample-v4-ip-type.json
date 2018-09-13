@@ -1,16 +1,16 @@
 {
-  "name": "v4-ip-type",
+  "name": "sample-v4-ip-type",
   "property": {
-    "description": "name of the ",
+    "description": "sample-v4-ip-type",
     "type": "string"
   },
   "updated-by": "brindasanth@onap.com",
-  "tags": "v4-ip-type, source-input, brindasanth",
+  "tags": "sample-v4-ip-type",
   "sources": {
     "input": {
       "type": "source-input",
       "properties": {
-        "key": "v4-ip-type"
+        "key": "sample-v4-ip-type"
       }
     }
   }

@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2018 IBM.
+ *  Modifications Copyright © 2017-2018 AT&T Intellectual Property.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,7 +18,6 @@
 package org.onap.ccsdk.apps.controllerblueprints.service.repository;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,7 +55,7 @@ public class ResourceDictionaryReactRepositoryTest {
     @Test
     @Commit
     public void test01Save() {
-        ResourceDefinition resourceDefinition = JacksonUtils.readValueFromFile("./../../application/load/resource_dictionary/db-source" +
+        ResourceDefinition resourceDefinition = JacksonUtils.readValueFromFile("./../../application/load/resource_dictionary/sample-db-source" +
                 ".json", ResourceDefinition.class);
         Assert.assertNotNull("Failed to get resourceDefinition from content", resourceDefinition);
         resourceDefinition.setName(sourceName);
@@ -88,7 +88,7 @@ public class ResourceDictionaryReactRepositoryTest {
     @Test
     @Commit
     public void test05Delete() {
-        resourceDictionaryReactRepository.deleteByName("db-source").block();
+        resourceDictionaryReactRepository.deleteByName(sourceName).block();
     }
 
     private ResourceDictionary transformResourceDictionary(ResourceDefinition resourceDefinition) {
