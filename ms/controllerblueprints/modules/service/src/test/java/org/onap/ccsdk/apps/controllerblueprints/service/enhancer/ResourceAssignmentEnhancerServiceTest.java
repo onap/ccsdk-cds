@@ -26,9 +26,9 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonReactorUtils;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment;
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.factory.ResourceSourceMappingFactory;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceDefinitionFileRepoService;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceDefinitionRepoService;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.utils.ResourceDictionaryTestUtils;
 
 import java.util.List;
 
@@ -42,10 +42,8 @@ public class ResourceAssignmentEnhancerServiceTest {
 
     @Before
     public void setUp(){
-        ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("db", "source-db");
-        ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("input", "source-input");
-        ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("default", "source-default");
-        ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("mdsal", "source-rest");
+        // Setup dummy Source Instance Mapping
+        ResourceDictionaryTestUtils.setUpResourceSourceMapping();
     }
 
     @Test
