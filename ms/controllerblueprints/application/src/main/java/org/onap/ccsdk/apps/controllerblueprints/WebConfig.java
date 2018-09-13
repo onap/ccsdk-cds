@@ -1,6 +1,6 @@
 /*
  *  Copyright © 2017-2018 AT&T Intellectual Property.
- *
+ *  Modifications Copyright © 2018 IBM.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -28,6 +28,7 @@ import org.springframework.web.reactive.config.WebFluxConfigurationSupport;
 @Configuration
 @SuppressWarnings("unused")
 public class WebConfig extends WebFluxConfigurationSupport {
+	@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("swagger-ui.html")
                 .addResourceLocations("classpath:/META-INF/resources/");
