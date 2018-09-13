@@ -99,7 +99,7 @@ object BluePrintExpressionService {
             arrayNode.size() > 3 -> {
                 reqOrCapEntityName = arrayNode[1].textValue()
                 propertyName = arrayNode[2].textValue()
-                val propertyPaths: List<String> = arrayNode.filterIndexed { index, obj ->
+                val propertyPaths: List<String> = arrayNode.filterIndexed { index, _ ->
                     index >= 3
                 }.map { it.textValue() }
                 subProperty = propertyPaths.joinToString("/")

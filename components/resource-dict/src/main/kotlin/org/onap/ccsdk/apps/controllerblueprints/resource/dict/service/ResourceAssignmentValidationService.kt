@@ -67,6 +67,7 @@ open class ResourceAssignmentValidationDefaultService : ResourceAssignmentValida
 
     open fun validateSources(resourceAssignments: List<ResourceAssignment>) {
         log.info("validating resource assignment sources")
+        // Check the Resource Assignment Source(Dynamic Instance) is valid.
         resourceAssignments.forEach { resourceAssignment ->
             try {
                 ResourceSourceMappingFactory.getRegisterSourceMapping(resourceAssignment.dictionarySource!!)
@@ -80,6 +81,7 @@ open class ResourceAssignmentValidationDefaultService : ResourceAssignmentValida
 
         resourceAssignmentMap = resourceAssignments.map { it.name to it }.toMap()
 
+        // Check the Resource Assignment has Duplicate Key Names
         val duplicateKeyNames = resourceAssignments.groupBy { it.name }
                 .filter { it.value.size > 1 }
                 .map { it.key }
@@ -88,6 +90,7 @@ open class ResourceAssignmentValidationDefaultService : ResourceAssignmentValida
             validationMessage.appendln(String.format("Duplicate Assignment Template Keys (%s) is Present", duplicateKeyNames))
         }
 
+        // Check the Resource Assignment has Duplicate Dictionary Names
         val duplicateDictionaryKeyNames = resourceAssignments.groupBy { it.dictionaryName }
                 .filter { it.value.size > 1 }
                 .map { it.key }
@@ -95,8 +98,10 @@ open class ResourceAssignmentValidationDefaultService : ResourceAssignmentValida
             validationMessage.appendln(String.format("Duplicate Assignment Dictionary Keys (%s) is Present", duplicateDictionaryKeyNames))
         }
 
+        // Collect all the dependencies as a single list
         val dependenciesNames = resourceAssignments.mapNotNull { it.dependencies }.flatten()
 
+        // Check all the dependencies keys have Resource Assignment mappings.
         val notPresentDictionaries = dependenciesNames.filter { !resourceAssignmentMap.containsKey(it) }.distinct()
         if (notPresentDictionaries.isNotEmpty()) {
             validationMessage.appendln(String.format("No assignments for Dictionary Keys (%s)", notPresentDictionaries))

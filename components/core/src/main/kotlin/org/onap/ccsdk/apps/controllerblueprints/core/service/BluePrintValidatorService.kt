@@ -236,7 +236,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
         message.appendln("---> Workflow :" + paths.joinToString(separator))
         // Step Validation Start
         paths.add("steps")
-        workflow.steps?.forEach { stepName, step ->
+        workflow.steps?.forEach { stepName, _ ->
             paths.add(stepName)
             message.appendln("----> Steps :" + paths.joinToString(separator))
             paths.removeAt(paths.lastIndex)
@@ -583,10 +583,10 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
         }
     }
 
-    private fun checkPropertyDataType(dataType: String, propertyName: String) {
+    private fun checkPropertyDataType(dataTypeName: String, propertyName: String) {
 
-        val dataType = serviceTemplate.dataTypes?.get(dataType)
-                ?: throw BluePrintException(format("DataType ({}) for the property ({}) not found", dataType, propertyName))
+        val dataType = serviceTemplate.dataTypes?.get(dataTypeName)
+                ?: throw BluePrintException(format("DataType ({}) for the property ({}) not found", dataTypeName, propertyName))
 
         checkValidDataTypeDerivedFrom(propertyName, dataType.derivedFrom)
 
@@ -596,7 +596,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
         if (BluePrintTypes.validPrimitiveTypes().contains(dataType) || checkDataType(dataType)) {
             return true
         } else {
-            throw BluePrintException(format("DataType ({}) for the property ({}) is not valid", dataType))
+            throw BluePrintException(format("DataType({}) for the property({}) is not valid", dataType, propertyName))
         }
     }
 

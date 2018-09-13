@@ -308,7 +308,7 @@ open class BluePrintRuntimeService(var bluePrintContext: BluePrintContext, var c
 
     open fun assignWorkflowInputs(workflowName: String, jsonNode: JsonNode) {
         log.info("assign workflow {} input value ({})", workflowName, jsonNode.toString())
-        bluePrintContext.workflowByName(workflowName)?.inputs?.forEach { propertyName, property ->
+        bluePrintContext.workflowByName(workflowName)?.inputs?.forEach { propertyName, _ ->
             val valueNode: JsonNode = jsonNode.at(BluePrintConstants.PATH_DIVIDER + propertyName)
                     ?: NullNode.getInstance()
             setWorkflowInputValue(workflowName, propertyName, valueNode)

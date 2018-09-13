@@ -43,7 +43,7 @@ object BluePrintRuntimeUtils {
 
     fun assignInputs(bluePrintContext: BluePrintContext, jsonNode: JsonNode, context: MutableMap<String, Any>) {
         log.info("assignInputs from input JSON ({})", jsonNode.toString())
-        bluePrintContext.inputs?.forEach { propertyName, property ->
+        bluePrintContext.inputs?.forEach { propertyName, _ ->
             val valueNode: JsonNode = jsonNode.at("/".plus(propertyName)) ?: NullNode.getInstance()
 
             val path = BluePrintConstants.PATH_INPUTS.plus(BluePrintConstants.PATH_DIVIDER).plus(propertyName)

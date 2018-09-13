@@ -23,6 +23,9 @@ import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import com.att.eelf.configuration.EELFManager
+import org.junit.Before
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.utils.ResourceDictionaryTestUtils
+
 /**
  * ResourceAssignmentValidationServiceTest.
  *
@@ -30,6 +33,12 @@ import com.att.eelf.configuration.EELFManager
  */
 class ResourceAssignmentValidationServiceTest {
     private val log: EELFLogger = EELFManager.getInstance().getLogger(ResourceAssignmentValidationServiceTest::class.java)
+    @Before
+    fun setUp() {
+        // Setup dummy Source Instance Mapping
+        ResourceDictionaryTestUtils.setUpResourceSourceMapping()
+    }
+
     @Test
     fun testValidateSuccess() {
         log.info("**************** testValidateSuccess *****************")

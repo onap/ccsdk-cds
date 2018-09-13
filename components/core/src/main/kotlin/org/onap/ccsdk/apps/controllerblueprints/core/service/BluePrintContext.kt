@@ -71,7 +71,7 @@ class BluePrintContext(serviceTemplate: ServiceTemplate) {
     }
 
     fun nodeTypeInterface(nodeTypeName: String, interfaceName: String): InterfaceDefinition? {
-        return nodeTypeByName(nodeTypeName).interfaces?.values?.first()
+        return nodeTypeByName(nodeTypeName).interfaces?.get(interfaceName)
     }
 
     fun nodeTypeInterfaceOperation(nodeTypeName: String, interfaceName: String, operationName: String): OperationDefinition? {
@@ -155,9 +155,9 @@ class BluePrintContext(serviceTemplate: ServiceTemplate) {
     }
 
     fun nodeTemplateRequirementNode(nodeTemplateName: String, requirementName: String): NodeTemplate {
-        val nodeTemplateName: String = nodeTemplateByName(nodeTemplateName).requirements?.get(requirementName)?.node
+        val requirementNodeTemplateName: String = nodeTemplateByName(nodeTemplateName).requirements?.get(requirementName)?.node
                 ?: throw BluePrintException(String.format("failed to get node name for node template's (%s) requirement's (%s) " + nodeTemplateName, requirementName))
-        return nodeTemplateByName(nodeTemplateName)
+        return nodeTemplateByName(requirementNodeTemplateName)
     }
 
     fun nodeTemplateCapabilityProperty(nodeTemplateName: String, capabilityName: String, propertyName: String): Any? {

@@ -59,7 +59,7 @@ open class ResourceDefinitionDefaultValidationService(private val bluePrintRepoS
         resourceDefinition.sources.forEach { (name, nodeTemplate) ->
             val sourceType = nodeTemplate.type
 
-            val sourceNodeType = bluePrintRepoService.getNodeType(sourceType)?.block()
+            val sourceNodeType = bluePrintRepoService.getNodeType(sourceType).block()
                     ?: throw BluePrintException(format("Failed to get source({}) node type definition({})", name, sourceType))
 
             // Validate Property Name, expression, values and Data Type
@@ -100,7 +100,7 @@ open class ResourceDefinitionDefaultValidationService(private val bluePrintRepoS
 
             isValid = JacksonUtils.checkJsonNodeValueOfCollectionType(propertyType, propertyAssignment)
         } else {
-            bluePrintRepoService.getDataType(propertyType)
+            bluePrintRepoService.getDataType(propertyType).block()
                     ?: throw BluePrintException(format("property({}) defined of data type({}) is not in repository",
                             propertyName, propertyType))
             isValid = true
