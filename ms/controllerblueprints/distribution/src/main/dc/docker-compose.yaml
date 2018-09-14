@@ -2,8 +2,8 @@ version: '3.3'
 
 services:
    db:
-     image: mysql:5.7.22
-     container_name: cb-mysql
+     image: mariadb:latest
+     container_name: cb-mariadb
      ports:
        - "3307:3306"
      volumes:
