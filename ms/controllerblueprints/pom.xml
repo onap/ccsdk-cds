@@ -19,7 +19,7 @@
          xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <parent>
         <groupId>org.onap.ccsdk.apps</groupId>
-        <artifactId>ccsdk-apps</artifactId>
+        <artifactId>ccsdk-apps-ms</artifactId>
         <version>0.3.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
