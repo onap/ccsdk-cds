@@ -28,9 +28,9 @@
     <name>App Components Parent</name>
     <packaging>pom</packaging>
     <properties>
-        <spring.boot.version>2.0.4.RELEASE</spring.boot.version>
+        <spring.boot.version>2.0.5.RELEASE</spring.boot.version>
         <spring.version>5.0.8.RELEASE</spring.version>
-        <kotlin.version>1.2.60</kotlin.version>
+        <kotlin.version>1.2.70</kotlin.version>
         <eelf.version>1.0.0</eelf.version>
         <guava.version>26.0-jre</guava.version>
         <springfox.swagger2.version>2.9.2</springfox.swagger2.version>
