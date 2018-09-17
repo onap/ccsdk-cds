@@ -48,13 +48,14 @@ public class ControllerBluprintsApplicationTest {
     private HttpHeaders headers;
     private ResponseEntity<ConfigModel> entity;
 
+
     @Before
     public void setUp(){
         headers = new HttpHeaders();
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
         entity = this.restTemplate
                 .exchange("/api/v1/config-model/1", HttpMethod.GET, new HttpEntity<>(headers),ConfigModel.class);
-        
+
     }
 
     @Test
@@ -63,9 +64,4 @@ public class ControllerBluprintsApplicationTest {
         Assert.assertNotNull("failed to get response Config model",entity.getBody());
     }
 
-    @Test
-    public void testConfigModelFailure() {
-        assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-        Assert.assertNotNull("failed to get response Config model",entity.getBody());
-    }
 }
