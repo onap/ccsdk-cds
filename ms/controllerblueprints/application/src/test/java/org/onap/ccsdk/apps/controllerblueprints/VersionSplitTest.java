@@ -16,21 +16,34 @@
 
 package org.onap.ccsdk.apps.controllerblueprints;
 
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFManager;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 /**
  * VersionSplitTest
  *
  * @author Brinda Santh
  */
 public class VersionSplitTest {
+    private static EELFLogger log = EELFManager.getInstance().getLogger(VersionSplitTest.class);
 
     @Test
     public void testVersionSplit() {
         String version = "1.03.04";
         String[] tokens = StringUtils.split(version, '.');
         Assert.assertNotNull("failed to tokenize", tokens);
-        Assert.assertEquals("failed to three token ", 3, tokens.length );
+        Assert.assertEquals("failed to three token ", 3, tokens.length);
+    }
+
+    @Test
+    public void encodeTest() {
+        String name = "ccsdkapps";
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        String encodedValue = bCryptPasswordEncoder.encode(name);
+        Assert.assertTrue("Failed to match", bCryptPasswordEncoder.matches(name, encodedValue));
     }
 }

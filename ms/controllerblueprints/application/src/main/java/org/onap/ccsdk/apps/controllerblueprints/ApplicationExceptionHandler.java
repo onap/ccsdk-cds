@@ -23,12 +23,18 @@ import org.onap.ccsdk.apps.controllerblueprints.service.common.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.web.csrf.InvalidCsrfTokenException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
+
+import javax.naming.AuthenticationException;
+import java.nio.file.AccessDeniedException;
 
 @ControllerAdvice
 @RestController
@@ -41,6 +47,14 @@ public class ApplicationExceptionHandler {
         log.error("Application Exception", ex);
         ErrorMessage exceptionResponse = new ErrorMessage(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getLocalizedMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler({InvalidCsrfTokenException.class, AuthenticationException.class, BadCredentialsException.class, AccessDeniedException.class})
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    public final ResponseEntity<ErrorMessage> handleAuthenticationRequest(Exception ex, WebRequest request) {
+        log.error("Authentication Exception", ex);
+        ErrorMessage exceptionResponse = new ErrorMessage(ex.getMessage(), HttpStatus.UNAUTHORIZED.value(), ex.getLocalizedMessage());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler({HttpMessageNotReadableException.class, MethodArgumentNotValidException.class,

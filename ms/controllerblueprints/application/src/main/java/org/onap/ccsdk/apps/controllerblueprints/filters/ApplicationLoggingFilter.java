@@ -25,6 +25,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -40,6 +42,7 @@ import java.io.IOException;
  */
 @Component
 @WebFilter(asyncSupported = true, urlPatterns = {"/*"})
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @SuppressWarnings("unused")
 public class ApplicationLoggingFilter implements Filter {
     private static Logger log = LoggerFactory.getLogger(ApplicationLoggingFilter.class);
