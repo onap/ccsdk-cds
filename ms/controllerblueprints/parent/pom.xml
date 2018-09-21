@@ -90,10 +90,10 @@
                 <artifactId>velocity</artifactId>
                 <version>1.7</version>
             </dependency>
-            <dependency>
+             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-
+                <version>26.0-jre</version>
             </dependency>
 
             <!-- Kotlin Dependencies -->
