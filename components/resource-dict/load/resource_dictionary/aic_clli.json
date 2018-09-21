@@ -1,0 +1,17 @@
+{
+  "name" : "aic_clli",
+  "tags" : "aic_clli",
+  "updated-by" : "Singal, Kapil <ks220y@att.com>",
+  "property" : {
+    "description" : "aic_clli",
+    "type" : "string"
+  },
+  "sources" : {
+    "input" : {
+      "type" : "source-input",
+      "properties" : {
+        "key" : "aic_clli"
+      }
+    }
+  }
+}
