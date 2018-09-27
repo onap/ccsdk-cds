@@ -1,0 +1,16 @@
+{
+	"name": "input-source",
+	"property" :{
+		"description": "name of the ",
+		"type": "string"
+	},
+	"updated-by": "brindasanth@onap.com",
+	"tags": "input-source",
+	"sources": {
+		"input": {
+			"type": "source-input",
+			"properties": {
+			}
+		}
+	}
+}
