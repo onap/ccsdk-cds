@@ -1,0 +1,16 @@
+{
+  "name" : "status",
+  "tags" : "status",
+  "updated-by" : "Singal, Kapil <ks220y@att.com>",
+  "property" : {
+    "description" : "status",
+    "type" : "string"
+  },
+  "sources" : {
+    "input" : {
+      "type" : "source-input",
+      "properties" : {
+      }
+    }
+  }
+}
