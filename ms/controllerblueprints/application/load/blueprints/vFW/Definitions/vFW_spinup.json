@@ -221,6 +221,53 @@
                     
                   ],
                   "version": 0
+                },{
+                  "name": "onap_private_net_id",
+                  "property": {
+                    "description": "",
+                    "required": false,
+                    "type": "string",
+                    "status": "",
+                    "constraints": [
+                      {
+                        
+                      }
+                    ],
+                    "entry_schema": {
+                      "type": ""
+                    }
+                  },
+                  "input-param": false,
+                  "dictionary-name": "onap_private_net_id",
+                  "dictionary-source": "input",
+                  "dependencies": [
+                    
+                  ],
+                  "version": 0
+                },
+                {
+                  "name": "onap_private_subnet_id",
+                  "property": {
+                    "description": "",
+                    "required": false,
+                    "type": "string",
+                    "status": "",
+                    "constraints": [
+                      {
+                        
+                      }
+                    ],
+                    "entry_schema": {
+                      "type": ""
+                    }
+                  },
+                  "input-param": false,
+                  "dictionary-name": "onap_private_subnet_id",
+                  "dictionary-source": "input",
+                  "dependencies": [
+                    
+                  ],
+                  "version": 0
                 },
                 {
                   "name": "vnf_name",
@@ -292,6 +339,150 @@
                   "dictionary-source": "db",
                   "dependencies": [
                     "vnf-model-customization-uuid"
+                  ],
+                  "version": 0
+                },
+                {
+                  "name": "vfw_private_ip_1",
+                  "property": {
+                    "description": "",
+                    "required": false,
+                    "type": "string",
+                    "status": "",
+                    "constraints": [
+                      {
+                        
+                      }
+                    ],
+                    "entry_schema": {
+                      "type": ""
+                    }
+                  },
+                  "input-param": false,
+                  "dictionary-name": "vfw_private_ip_1",
+                  "dictionary-source": "input",
+                  "dependencies": [
+                    
+                  ],
+                  "version": 0
+                },
+                {
+                  "name": "vfw_private_ip_0",
+                  "property": {
+                    "description": "",
+                    "required": false,
+                    "type": "string",
+                    "status": "",
+                    "constraints": [
+                      {
+                        
+                      }
+                    ],
+                    "entry_schema": {
+                      "type": ""
+                    }
+                  },
+                  "input-param": false,
+                  "dictionary-name": "vfw_private_ip_0",
+                  "dictionary-source": "input",
+                  "dependencies": [
+                    
+                  ],
+                  "version": 0
+                },
+                {
+                  "name": "vpg_private_ip_0",
+                  "property": {
+                    "description": "",
+                    "required": false,
+                    "type": "string",
+                    "status": "",
+                    "constraints": [
+                      {
+                        
+                      }
+                    ],
+                    "entry_schema": {
+                      "type": ""
+                    }
+                  },
+                  "input-param": false,
+                  "dictionary-name": "vpg_private_ip_0",
+                  "dictionary-source": "input",
+                  "dependencies": [
+                    
+                  ],
+                  "version": 0
+                },
+                {
+                  "name": "vsn_private_ip_0",
+                  "property": {
+                    "description": "",
+                    "required": false,
+                    "type": "string",
+                    "status": "",
+                    "constraints": [
+                      {
+                        
+                      }
+                    ],
+                    "entry_schema": {
+                      "type": ""
+                    }
+                  },
+                  "input-param": false,
+                  "dictionary-name": "vsn_private_ip_0",
+                  "dictionary-source": "input",
+                  "dependencies": [
+                    
+                  ],
+                  "version": 0
+                },
+                {
+                  "name": "protected-prefix-id",
+                  "property": {
+                    "description": "",
+                    "required": false,
+                    "type": "integer",
+                    "status": "",
+                    "constraints": [
+                      {
+                        
+                      }
+                    ],
+                    "entry_schema": {
+                      "type": ""
+                    }
+                  },
+                  "input-param": false,
+                  "dictionary-name": "protected-prefix-id",
+                  "dictionary-source": "db",
+                  "dependencies": [
+                    
+                  ],
+                  "version": 0
+                },
+                {
+                  "name": "unprotected-prefix-id",
+                  "property": {
+                    "description": "",
+                    "required": false,
+                    "type": "integer",
+                    "status": "",
+                    "constraints": [
+                      {
+                        
+                      }
+                    ],
+                    "entry_schema": {
+                      "type": ""
+                    }
+                  },
+                  "input-param": false,
+                  "dictionary-name": "unprotected-prefix-id",
+                  "dictionary-source": "db",
+                  "dependencies": [
+                    
                   ],
                   "version": 0
                 },
@@ -553,30 +744,6 @@
                   "version": 0
                 },
                 {
-                  "name": "availability_zone_0",
-                  "property": {
-                    "description": "",
-                    "required": false,
-                    "type": "string",
-                    "status": "",
-                    "constraints": [
-                      {
-                        
-                      }
-                    ],
-                    "entry_schema": {
-                      "type": ""
-                    }
-                  },
-                  "input-param": false,
-                  "dictionary-name": "availability_zone_0",
-                  "dictionary-source": "input",
-                  "dependencies": [
-                    
-                  ],
-                  "version": 0
-                },
-                {
                   "name": "vm-type",
                   "property": {
                     "description": "",
@@ -594,7 +761,7 @@
                   },
                   "input-param": false,
                   "dictionary-name": "vm-type",
-                  "dictionary-source": "input",
+                  "dictionary-source": "db",
                   "dependencies": [
                     
                   ],
@@ -693,7 +860,7 @@
                   "dictionary-name": "nfc-naming-code",
                   "dictionary-source": "db",
                   "dependencies": [
-                    "vf-module-model-customization-uuid"
+                    "vfccustomizationuuid"
                   ],
                   "version": 0
                 },
@@ -736,15 +903,14 @@
                     ],
                     "entry_schema": {
                       "type": ""
-                    },
-                    "value": "",
-                    "default": "onap_private_net_id"
+                    }
                   },
                   "input-param": false,
                   "dictionary-name": "onap_private_net_id",
-                  "dictionary-source": "default",
+                  "dictionary-source": "mdsal",
                   "dependencies": [
-                    
+                      "service-instance-id",
+                      "vnf-id"
                   ],
                   "version": 0
                 },
@@ -752,7 +918,7 @@
                   "name": "onap_private_subnet_id",
                   "property": {
                     "description": "",
-                    "required": true,
+                    "required": false,
                     "type": "string",
                     "status": "",
                     "constraints": [
@@ -762,15 +928,14 @@
                     ],
                     "entry_schema": {
                       "type": ""
-                    },
-                    "value": "Oam_Network_Puhf",
-                    "default": "Oam_Network_Puhf"
+                    }
                   },
                   "input-param": false,
                   "dictionary-name": "onap_private_subnet_id",
-                  "dictionary-source": "default",
+                  "dictionary-source": "mdsal",
                   "dependencies": [
-                    
+                      "service-instance-id",
+                      "vnf-id"
                   ],
                   "version": 0
                 },
@@ -1042,126 +1207,6 @@
                   "version": 0
                 },
                 {
-                  "name": "protected-prefix-id",
-                  "property": {
-                    "description": "",
-                    "required": false,
-                    "type": "integer",
-                    "status": "",
-                    "constraints": [
-                      {
-                        
-                      }
-                    ],
-                    "entry_schema": {
-                      "type": ""
-                    }
-                  },
-                  "input-param": false,
-                  "dictionary-name": "protected-prefix-id",
-                  "dictionary-source": "db",
-                  "dependencies": [
-                    
-                  ],
-                  "version": 0
-                },
-                {
-                  "name": "vfw_private_ip_1",
-                  "property": {
-                    "description": "",
-                    "required": false,
-                    "type": "string",
-                    "status": "",
-                    "constraints": [
-                      {
-                        
-                      }
-                    ],
-                    "entry_schema": {
-                      "type": ""
-                    }
-                  },
-                  "input-param": false,
-                  "dictionary-name": "vfw_private_ip_1",
-                  "dictionary-source": "input",
-                  "dependencies": [
-                    
-                  ],
-                  "version": 0
-                },
-                {
-                  "name": "unprotected-prefix-id",
-                  "property": {
-                    "description": "",
-                    "required": false,
-                    "type": "integer",
-                    "status": "",
-                    "constraints": [
-                      {
-                        
-                      }
-                    ],
-                    "entry_schema": {
-                      "type": ""
-                    }
-                  },
-                  "input-param": false,
-                  "dictionary-name": "unprotected-prefix-id",
-                  "dictionary-source": "db",
-                  "dependencies": [
-                    
-                  ],
-                  "version": 0
-                },
-                {
-                  "name": "vfw_private_ip_0",
-                  "property": {
-                    "description": "",
-                    "required": false,
-                    "type": "string",
-                    "status": "",
-                    "constraints": [
-                      {
-                        
-                      }
-                    ],
-                    "entry_schema": {
-                      "type": ""
-                    }
-                  },
-                  "input-param": false,
-                  "dictionary-name": "vfw_private_ip_0",
-                  "dictionary-source": "input",
-                  "dependencies": [
-                    
-                  ],
-                  "version": 0
-                },
-                {
-                  "name": "vpg_private_ip_0",
-                  "property": {
-                    "description": "",
-                    "required": false,
-                    "type": "string",
-                    "status": "",
-                    "constraints": [
-                      {
-                        
-                      }
-                    ],
-                    "entry_schema": {
-                      "type": ""
-                    }
-                  },
-                  "input-param": false,
-                  "dictionary-name": "vpg_private_ip_0",
-                  "dictionary-source": "input",
-                  "dependencies": [
-                    
-                  ],
-                  "version": 0
-                },
-                {
                   "name": "vnf_name",
                   "property": {
                     "description": "",
@@ -1419,30 +1464,6 @@
                   "version": 0
                 },
                 {
-                  "name": "availability_zone_0",
-                  "property": {
-                    "description": "",
-                    "required": false,
-                    "type": "string",
-                    "status": "",
-                    "constraints": [
-                      {
-                        
-                      }
-                    ],
-                    "entry_schema": {
-                      "type": ""
-                    }
-                  },
-                  "input-param": false,
-                  "dictionary-name": "availability_zone_0",
-                  "dictionary-source": "input",
-                  "dependencies": [
-                    
-                  ],
-                  "version": 0
-                },
-                {
                   "name": "vm-type",
                   "property": {
                     "description": "",
@@ -1460,7 +1481,7 @@
                   },
                   "input-param": false,
                   "dictionary-name": "vm-type",
-                  "dictionary-source": "input",
+                  "dictionary-source": "db",
                   "dependencies": [
                     
                   ],
@@ -1559,7 +1580,7 @@
                   "dictionary-name": "nfc-naming-code",
                   "dictionary-source": "db",
                   "dependencies": [
-                    "vf-module-model-customization-uuid"
+                    "vfccustomizationuuid"
                   ],
                   "version": 0
                 },
@@ -1602,14 +1623,14 @@
                     ],
                     "entry_schema": {
                       "type": ""
-                    },
-                    "default": "onap_private_net_id"
+                    }
                   },
                   "input-param": false,
                   "dictionary-name": "onap_private_net_id",
-                  "dictionary-source": "default",
+                  "dictionary-source": "mdsal",
                   "dependencies": [
-                    
+                      "service-instance-id",
+                      "vnf-id"
                   ],
                   "version": 0
                 },
@@ -1617,7 +1638,7 @@
                   "name": "onap_private_subnet_id",
                   "property": {
                     "description": "",
-                    "required": true,
+                    "required": false,
                     "type": "string",
                     "status": "",
                     "constraints": [
@@ -1627,14 +1648,14 @@
                     ],
                     "entry_schema": {
                       "type": ""
-                    },
-                    "default": "Oam_Network_Puhf"
+                    }
                   },
                   "input-param": false,
                   "dictionary-name": "onap_private_subnet_id",
-                  "dictionary-source": "default",
+                  "dictionary-source": "mdsal",
                   "dependencies": [
-                    
+                      "service-instance-id",
+                      "vnf-id"
                   ],
                   "version": 0
                 },
@@ -1707,8 +1728,7 @@
                   "dictionary-source": "mdsal",
                   "dependencies": [
                     "service-instance-id",
-                    "vnf-id",
-                    "vf-module-id"
+                    "vnf-id"
                   ],
                   "version": 0
                 },
@@ -1733,8 +1753,7 @@
                   "dictionary-source": "mdsal",
                   "dependencies": [
                     "service-instance-id",
-                    "vnf-id",
-                    "vf-module-id"
+                    "vnf-id"
                   ],
                   "version": 0
                 },
@@ -1809,8 +1828,7 @@
                   "dictionary-source": "mdsal",
                   "dependencies": [
                     "service-instance-id",
-                    "vnf-id",
-                    "vf-module-id"
+                    "vnf-id"
                   ],
                   "version": 0
                 },
@@ -1929,7 +1947,7 @@
                   },
                   "input-param": false,
                   "dictionary-name": "private-prefix-id",
-                  "dictionary-source": "input",
+                  "dictionary-source": "db",
                   "dependencies": [
                     
                   ],
@@ -2193,54 +2211,6 @@
                   "version": 0
                 },
                 {
-                  "name": "aic_clli",
-                  "property": {
-                    "description": "",
-                    "required": false,
-                    "type": "string",
-                    "status": "",
-                    "constraints": [
-                      {
-                        
-                      }
-                    ],
-                    "entry_schema": {
-                      "type": ""
-                    }
-                  },
-                  "input-param": false,
-                  "dictionary-name": "aic_clli",
-                  "dictionary-source": "input",
-                  "dependencies": [
-                    
-                  ],
-                  "version": 0
-                },
-                {
-                  "name": "availability_zone_0",
-                  "property": {
-                    "description": "",
-                    "required": false,
-                    "type": "string",
-                    "status": "",
-                    "constraints": [
-                      {
-                        
-                      }
-                    ],
-                    "entry_schema": {
-                      "type": ""
-                    }
-                  },
-                  "input-param": false,
-                  "dictionary-name": "availability_zone_0",
-                  "dictionary-source": "input",
-                  "dependencies": [
-                    
-                  ],
-                  "version": 0
-                },
-                {
                   "name": "vm-type",
                   "property": {
                     "description": "",
@@ -2258,7 +2228,7 @@
                   },
                   "input-param": false,
                   "dictionary-name": "vm-type",
-                  "dictionary-source": "input",
+                  "dictionary-source": "db",
                   "dependencies": [
                     
                   ],
@@ -2357,7 +2327,7 @@
                   "dictionary-name": "nfc-naming-code",
                   "dictionary-source": "db",
                   "dependencies": [
-                    "vf-module-model-customization-uuid"
+                    "vfccustomizationuuid"
                   ],
                   "version": 0
                 },
@@ -2405,9 +2375,10 @@
                   },
                   "input-param": false,
                   "dictionary-name": "onap_private_net_id",
-                  "dictionary-source": "default",
+                  "dictionary-source": "mdsal",
                   "dependencies": [
-                    
+                      "service-instance-id",
+                      "vnf-id"
                   ],
                   "version": 0
                 },
@@ -2415,7 +2386,7 @@
                   "name": "onap_private_subnet_id",
                   "property": {
                     "description": "",
-                    "required": true,
+                    "required": false,
                     "type": "string",
                     "status": "",
                     "constraints": [
@@ -2425,14 +2396,14 @@
                     ],
                     "entry_schema": {
                       "type": ""
-                    },
-                    "default": "Oam_Network_Puhf"
+                    }
                   },
                   "input-param": false,
                   "dictionary-name": "onap_private_subnet_id",
-                  "dictionary-source": "default",
+                  "dictionary-source": "mdsal",
                   "dependencies": [
-                    
+                      "service-instance-id",
+                      "vnf-id"
                   ],
                   "version": 0
                 },
@@ -2580,8 +2551,7 @@
                   "dictionary-source": "mdsal",
                   "dependencies": [
                     "service-instance-id",
-                    "vnf-id",
-                    "vf-module-id"
+                    "vnf-id"
                   ],
                   "version": 0
                 },
@@ -2700,7 +2670,7 @@
                   },
                   "input-param": false,
                   "dictionary-name": "private-prefix-id",
-                  "dictionary-source": "input",
+                  "dictionary-source": "db",
                   "dependencies": [
                     
                   ],
@@ -2753,30 +2723,6 @@
                     
                   ],
                   "version": 0
-                },
-                {
-                  "name": "vsn_private_ip_0",
-                  "property": {
-                    "description": "",
-                    "required": false,
-                    "type": "string",
-                    "status": "",
-                    "constraints": [
-                      {
-                        
-                      }
-                    ],
-                    "entry_schema": {
-                      "type": ""
-                    }
-                  },
-                  "input-param": false,
-                  "dictionary-name": "vsn_private_ip_0",
-                  "dictionary-source": "input",
-                  "dependencies": [
-                    
-                  ],
-                  "version": 0
                 }
               ]
             }
@@ -2819,6 +2765,54 @@
                   "version": 0
                 },
                 {
+                  "name": "vf-module-type",
+                  "property": {
+                    "description": "",
+                    "required": true,
+                    "type": "string",
+                    "status": "",
+                    "constraints": [
+                      {
+                        
+                      }
+                    ],
+                    "entry_schema": {
+                      "type": ""
+                    }
+                  },
+                  "input-param": false,
+                  "dictionary-name": "vf-module-type",
+                  "dictionary-source": "db",
+                  "dependencies": [
+                    "vf-module-model-customization-uuid"
+                  ],
+                  "version": 0
+                },
+                {
+                  "name": "vf-module-model-customization-uuid",
+                  "property": {
+                    "description": "",
+                    "required": true,
+                    "type": "string",
+                    "status": "",
+                    "constraints": [
+                      {
+                        
+                      }
+                    ],
+                    "entry_schema": {
+                      "type": ""
+                    }
+                  },
+                  "input-param": false,
+                  "dictionary-name": "vf-module-model-customization-uuid",
+                  "dictionary-source": "input",
+                  "dependencies": [
+                    
+                  ],
+                  "version": 0
+                },
+                {
                   "name": "vnf-id",
                   "property": {
                     "description": "",
@@ -2836,6 +2830,30 @@
                   },
                   "input-param": false,
                   "dictionary-name": "vnf-id",
+                  "dictionary-source": "input",
+                  "dependencies": [
+                    
+                  ],
+                  "version": 0
+                },
+                {
+                  "name": "vf-module-id",
+                  "property": {
+                    "description": "",
+                    "required": true,
+                    "type": "string",
+                    "status": "",
+                    "constraints": [
+                      {
+                        
+                      }
+                    ],
+                    "entry_schema": {
+                      "type": ""
+                    }
+                  },
+                  "input-param": false,
+                  "dictionary-name": "vf-module-id",
                   "dictionary-source": "input",
                   "dependencies": [
                     
