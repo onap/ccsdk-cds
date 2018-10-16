@@ -37,14 +37,6 @@
       "param-value": "${aic-cloud-region}"
     },
     {
-      "param-name": "aic_clli",
-      "param-value": "${aic_clli}"
-    },
-    {
-      "param-name": "availability_zone_0",
-      "param-value": "${availability_zone_0}"
-    },
-    {
       "param-name": "vm-type",
       "param-value": "${vm-type}"
     },
@@ -177,7 +169,7 @@
             },
             {
               "param-name": "external-key",
-              "param-value": "${vf-module-id}_vnfc_name"
+              "param-value": "${vf-module-id}_vsn_name_0"
             },
             {
               "param-name": "policy-instance-name",
@@ -219,7 +211,7 @@
             },
             {
               "param-name": "external-key",
-              "param-value": "${vf-module-id}"
+              "param-value": "${vf-module-id}_vf_module_name"
             },
             {
               "param-name": "policy-instance-name",
@@ -238,7 +230,7 @@
               "param-value": "${vnf-name}"
             },
             {
-              "param-name": "VF_MODULE_LABLE",
+              "param-name": "VF_MODULE_LABEL",
               "param-value": "${vf-module-label}"
             },
             {
@@ -281,32 +273,6 @@
             {
               "resource-name": "vsn_private_ip_1",
               "resource-value": "${vsn_private_ip_1}"
-            }
-          ]
-        },
-        {
-          "payload": [
-            {
-              "param-name": "service-instance-id",
-              "param-value": "${service-instance-id}"
-            },
-            {
-              "param-name": "prefix-id",
-              "param-value": "${protected-prefix-id}"
-            },
-            {
-              "param-name": "vf-module-id",
-              "param-value": "${vf-module-id}"
-            },
-            {
-              "param-name": "external_key",
-              "param-value": "${vf-module-id}-vsn_private_ip_0"
-            }
-          ],
-          "output-key-mapping": [
-            {
-              "resource-name": "vsn_private_ip_0",
-              "resource-value": "${vsn_private_ip_0}"
             }
           ]
         }

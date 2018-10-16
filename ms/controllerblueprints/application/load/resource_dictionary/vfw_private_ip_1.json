@@ -16,18 +16,17 @@
       "type" : "source-rest",
       "properties" : {
         "type" : "JSON",
-        "url-path" : "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vf-modules/vf-module/$vf-module-id/vf-module-data/vf-module-topology/vf-module-parameters/param/vfw_private_ip_1",
+        "url-path" : "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vfw_private_ip_1",
         "path" : "/param/0/value",
         "expression-type" : "JSON_POINTER",
         "input-key-mapping" : {
           "service-instance-id" : "service-instance-id",
-          "vnf-id" : "vnf-id",
-          "vf-module-id" : "vf-module-id"
+          "vnf-id" : "vnf-id"
         },
         "output-key-mapping" : {
           "vfw_private_ip_1" : "value"
         },
-        "key-dependencies" : [ "service-instance-id", "vnf-id", "vf-module-id" ]
+        "key-dependencies" : [ "service-instance-id", "vnf-id" ]
       }
     }
   }

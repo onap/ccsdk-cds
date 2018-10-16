@@ -37,10 +37,6 @@
       "param-value": "${aic-cloud-region}"
     },
     {
-      "param-name": "availability_zone_0",
-      "param-value": "${availability_zone_0}"
-    },
-    {
       "param-name": "vm-type",
       "param-value": "${vm-type}"
     },
@@ -130,7 +126,7 @@
     },
     {
       "param-name": "unprotected_private_subnet_id",
-      "param-value": "{vnf-name}_unprotected_sub"
+      "param-value": "${vnf-name}_unprotected_sub"
     },
     {
       "param-name": "unprotected_private_net_cidr",
@@ -227,7 +223,7 @@
             },
             {
               "param-name": "external-key",
-              "param-value": "${vf-module-id}"
+              "param-value": "${vf-module-id}_vf_module_name"
             },
             {
               "param-name": "policy-instance-name",
@@ -246,7 +242,7 @@
               "param-value": "${vnf-name}"
             },
             {
-              "param-name": "VF_MODULE_LABLE",
+              "param-name": "VF_MODULE_LABEL",
               "param-value": "${vf-module-label}"
             },
             {

@@ -15,6 +15,14 @@
     {
       "param-name": "aic-cloud-region",
       "param-value": "${aic-cloud-region}"
+    },
+    {
+      "param-name": "onap_private_net_id",
+      "param-value": "${onap_private_net_id}"
+    },
+    {
+      "param-name": "onap_private_subnet_id",
+      "param-value": "${onap_private_net_id}_sub"
     }
   ],
   "capability-data": [
@@ -33,7 +41,7 @@
             },
             {
               "param-name": "external-key",
-              "param-value": "${vnf-id}"
+              "param-value": "${vnf-id}_vnf_name"
             },
             {
               "param-name": "policy-instance-name",
@@ -56,6 +64,114 @@
             {
               "resource-name": "vnf_name",
               "resource-value": "${vnf_name}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "capability-name": "netbox-ip-assign",
+      "key-mapping": [
+        {
+          "payload": [
+            {
+              "param-name": "service-instance-id",
+              "param-value": "${service-instance-id}"
+            },
+            {
+              "param-name": "prefix-id",
+              "param-value": "${protected-prefix-id}"
+            },
+            {
+              "param-name": "vnf-id",
+              "param-value": "${vnf-id}"
+            },
+            {
+              "param-name": "external_key",
+              "param-value": "${vnf-id}-vfw_private_ip_1"
+            }
+          ],
+          "output-key-mapping": [
+            {
+              "resource-name": "vfw_private_ip_1",
+              "resource-value": "${vfw_private_ip_1}"
+            }
+          ]
+        },
+        {
+          "payload": [
+            {
+              "param-name": "service-instance-id",
+              "param-value": "${service-instance-id}"
+            },
+            {
+              "param-name": "prefix-id",
+              "param-value": "${unprotected-prefix-id}"
+            },
+            {
+              "param-name": "vnf-id",
+              "param-value": "${vnf-id}"
+            },
+            {
+              "param-name": "external_key",
+              "param-value": "${vnf-id}-vfw_private_ip_0"
+            }
+          ],
+          "output-key-mapping": [
+            {
+              "resource-name": "vfw_private_ip_0",
+              "resource-value": "${vfw_private_ip_0}"
+            }
+          ]
+        },
+        {
+          "payload": [
+            {
+              "param-name": "service-instance-id",
+              "param-value": "${service-instance-id}"
+            },
+            {
+              "param-name": "prefix-id",
+              "param-value": "${unprotected-prefix-id}"
+            },
+            {
+              "param-name": "vnf-id",
+              "param-value": "${vnf-id}"
+            },
+            {
+              "param-name": "external_key",
+              "param-value": "${vnf-id}-vpg_private_ip_0"
+            }
+          ],
+          "output-key-mapping": [
+            {
+              "resource-name": "vpg_private_ip_0",
+              "resource-value": "${vpg_private_ip_0}"
+            }
+          ]
+        },{
+          "payload": [
+            {
+              "param-name": "service-instance-id",
+              "param-value": "${service-instance-id}"
+            },
+            {
+              "param-name": "prefix-id",
+              "param-value": "${protected-prefix-id}"
+            },
+            {
+              "param-name": "vnf-id",
+              "param-value": "${vnf-id}"
+            },
+            {
+              "param-name": "external_key",
+              "param-value": "${vnf-id}-vsn_private_ip_0"
+            }
+          ],
+          "output-key-mapping": [
+            {
+              "resource-name": "vsn_private_ip_0",
+              "resource-value": "${vsn_private_ip_0}"
             }
           ]
         }
