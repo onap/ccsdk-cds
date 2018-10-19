@@ -221,7 +221,8 @@
                     
                   ],
                   "version": 0
-                },{
+                },
+                {
                   "name": "onap_private_net_id",
                   "property": {
                     "description": "",
@@ -263,6 +264,80 @@
                   },
                   "input-param": false,
                   "dictionary-name": "onap_private_subnet_id",
+                  "dictionary-source": "input",
+                  "dependencies": [
+                    
+                  ],
+                  "version": 0
+                },
+                {
+                  "name": "key_name",
+                  "property": {
+                    "description": "",
+                    "required": false,
+                    "type": "string",
+                    "status": "",
+                    "constraints": [
+                      {
+                        
+                      }
+                    ],
+                    "entry_schema": {
+                      "type": ""
+                    }
+                  },
+                  "input-param": false,
+                  "dictionary-name": "key_name",
+                  "dictionary-source": "input",
+                  "dependencies": [
+                    
+                  ],
+                  "version": 0
+                },
+                {
+                  "name": "image_name",
+                  "property": {
+                    "description": "",
+                    "required": false,
+                    "type": "string",
+                    "status": "",
+                    "constraints": [
+                      {
+                        
+                      }
+                    ],
+                    "entry_schema": {
+                      "type": ""
+                    },
+                    "default": "Ubuntu 14.04 LTS Generic"
+                  },
+                  "input-param": false,
+                  "dictionary-name": "image_name",
+                  "dictionary-source": "input",
+                  "dependencies": [
+                    
+                  ],
+                  "version": 0
+                },
+                {
+                  "name": "pub_key",
+                  "property": {
+                    "description": "",
+                    "required": false,
+                    "type": "string",
+                    "status": "",
+                    "constraints": [
+                      {
+                        
+                      }
+                    ],
+                    "entry_schema": {
+                      "type": ""
+                    },
+                    "default": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKXDgoo3+WOqcUG8/5uUbk81+yczgwC4Y8ywTmuQqbNxlY1oQ0YxdMUqUnhitSXs5S/yRuAVOYHwGg2mCs20oAINrP+mxBI544AMIb9itPjCtgqtE2EWo6MmnFGbHB4Sx3XioE7F4VPsh7japsIwzOjbrQe+Mua1TGQ5d4nfEOQaaglXLLPFfuc7WbhbJbK6Q7rHqZfRcOwAMXgDoBqlyqKeiKwnumddo2RyNT8ljYmvB6buz7KnMinzo7qB0uktVT05FH9Rg0CTWH5norlG5qXgP2aukL0gk1ph8iAt7uYLf1ktp+LJI2gaF6L0/qli9EmVCSLr1uJ38Q8CBflhkh"
+                  },
+                  "input-param": false,
+                  "dictionary-name": "pub_key",
                   "dictionary-source": "input",
                   "dependencies": [
                     
@@ -890,6 +965,81 @@
                   "version": 0
                 },
                 {
+                  "name": "image_name",
+                  "property": {
+                    "description": "",
+                    "required": false,
+                    "type": "string",
+                    "status": "",
+                    "constraints": [
+                      {
+                        
+                      }
+                    ],
+                    "entry_schema": {
+                      "type": ""
+                    }
+                  },
+                  "input-param": false,
+                  "dictionary-name": "image_name",
+                  "dictionary-source": "mdsal",
+                  "dependencies": [
+                    "service-instance-id",
+                    "vnf-id"
+                  ],
+                  "version": 0
+                },
+                {
+                  "name": "key_name",
+                  "property": {
+                    "description": "",
+                    "required": false,
+                    "type": "string",
+                    "status": "",
+                    "constraints": [
+                      {
+                        
+                      }
+                    ],
+                    "entry_schema": {
+                      "type": ""
+                    }
+                  },
+                  "input-param": false,
+                  "dictionary-name": "key_name",
+                  "dictionary-source": "mdsal",
+                  "dependencies": [
+                    "service-instance-id",
+                    "vnf-id"
+                  ],
+                  "version": 0
+                },
+                {
+                  "name": "pub_key",
+                  "property": {
+                    "description": "",
+                    "required": false,
+                    "type": "string",
+                    "status": "",
+                    "constraints": [
+                      {
+                        
+                      }
+                    ],
+                    "entry_schema": {
+                      "type": ""
+                    }
+                  },
+                  "input-param": false,
+                  "dictionary-name": "pub_key",
+                  "dictionary-source": "mdsal",
+                  "dependencies": [
+                    "service-instance-id",
+                    "vnf-id"
+                  ],
+                  "version": 0
+                },
+                {
                   "name": "onap_private_net_id",
                   "property": {
                     "description": "",
@@ -909,8 +1059,8 @@
                   "dictionary-name": "onap_private_net_id",
                   "dictionary-source": "mdsal",
                   "dependencies": [
-                      "service-instance-id",
-                      "vnf-id"
+                    "service-instance-id",
+                    "vnf-id"
                   ],
                   "version": 0
                 },
@@ -934,8 +1084,8 @@
                   "dictionary-name": "onap_private_subnet_id",
                   "dictionary-source": "mdsal",
                   "dependencies": [
-                      "service-instance-id",
-                      "vnf-id"
+                    "service-instance-id",
+                    "vnf-id"
                   ],
                   "version": 0
                 },
@@ -1610,6 +1760,81 @@
                   "version": 0
                 },
                 {
+                  "name": "image_name",
+                  "property": {
+                    "description": "",
+                    "required": false,
+                    "type": "string",
+                    "status": "",
+                    "constraints": [
+                      {
+                        
+                      }
+                    ],
+                    "entry_schema": {
+                      "type": ""
+                    }
+                  },
+                  "input-param": false,
+                  "dictionary-name": "image_name",
+                  "dictionary-source": "mdsal",
+                  "dependencies": [
+                    "service-instance-id",
+                    "vnf-id"
+                  ],
+                  "version": 0
+                },
+                {
+                  "name": "key_name",
+                  "property": {
+                    "description": "",
+                    "required": false,
+                    "type": "string",
+                    "status": "",
+                    "constraints": [
+                      {
+                        
+                      }
+                    ],
+                    "entry_schema": {
+                      "type": ""
+                    }
+                  },
+                  "input-param": false,
+                  "dictionary-name": "key_name",
+                  "dictionary-source": "mdsal",
+                  "dependencies": [
+                    "service-instance-id",
+                    "vnf-id"
+                  ],
+                  "version": 0
+                },
+                {
+                  "name": "pub_key",
+                  "property": {
+                    "description": "",
+                    "required": false,
+                    "type": "string",
+                    "status": "",
+                    "constraints": [
+                      {
+                        
+                      }
+                    ],
+                    "entry_schema": {
+                      "type": ""
+                    }
+                  },
+                  "input-param": false,
+                  "dictionary-name": "pub_key",
+                  "dictionary-source": "mdsal",
+                  "dependencies": [
+                    "service-instance-id",
+                    "vnf-id"
+                  ],
+                  "version": 0
+                },
+                {
                   "name": "onap_private_net_id",
                   "property": {
                     "description": "",
@@ -1629,8 +1854,8 @@
                   "dictionary-name": "onap_private_net_id",
                   "dictionary-source": "mdsal",
                   "dependencies": [
-                      "service-instance-id",
-                      "vnf-id"
+                    "service-instance-id",
+                    "vnf-id"
                   ],
                   "version": 0
                 },
@@ -1654,8 +1879,8 @@
                   "dictionary-name": "onap_private_subnet_id",
                   "dictionary-source": "mdsal",
                   "dependencies": [
-                      "service-instance-id",
-                      "vnf-id"
+                    "service-instance-id",
+                    "vnf-id"
                   ],
                   "version": 0
                 },
@@ -2332,6 +2557,31 @@
                   "version": 0
                 },
                 {
+                  "name": "image_name",
+                  "property": {
+                    "description": "",
+                    "required": false,
+                    "type": "string",
+                    "status": "",
+                    "constraints": [
+                      {
+                        
+                      }
+                    ],
+                    "entry_schema": {
+                      "type": ""
+                    }
+                  },
+                  "input-param": false,
+                  "dictionary-name": "image_name",
+                  "dictionary-source": "mdsal",
+                  "dependencies": [
+                    "service-instance-id",
+                    "vnf-id"
+                  ],
+                  "version": 0
+                },
+                {
                   "name": "public_net_id",
                   "property": {
                     "description": "",
@@ -2358,6 +2608,56 @@
                   "version": 0
                 },
                 {
+                  "name": "key_name",
+                  "property": {
+                    "description": "",
+                    "required": false,
+                    "type": "string",
+                    "status": "",
+                    "constraints": [
+                      {
+                        
+                      }
+                    ],
+                    "entry_schema": {
+                      "type": ""
+                    }
+                  },
+                  "input-param": false,
+                  "dictionary-name": "key_name",
+                  "dictionary-source": "mdsal",
+                  "dependencies": [
+                    "service-instance-id",
+                    "vnf-id"
+                  ],
+                  "version": 0
+                },
+                {
+                  "name": "pub_key",
+                  "property": {
+                    "description": "",
+                    "required": false,
+                    "type": "string",
+                    "status": "",
+                    "constraints": [
+                      {
+                        
+                      }
+                    ],
+                    "entry_schema": {
+                      "type": ""
+                    }
+                  },
+                  "input-param": false,
+                  "dictionary-name": "pub_key",
+                  "dictionary-source": "mdsal",
+                  "dependencies": [
+                    "service-instance-id",
+                    "vnf-id"
+                  ],
+                  "version": 0
+                },
+                {
                   "name": "onap_private_net_id",
                   "property": {
                     "description": "",
@@ -2377,8 +2677,8 @@
                   "dictionary-name": "onap_private_net_id",
                   "dictionary-source": "mdsal",
                   "dependencies": [
-                      "service-instance-id",
-                      "vnf-id"
+                    "service-instance-id",
+                    "vnf-id"
                   ],
                   "version": 0
                 },
@@ -2402,8 +2702,8 @@
                   "dictionary-name": "onap_private_subnet_id",
                   "dictionary-source": "mdsal",
                   "dependencies": [
-                      "service-instance-id",
-                      "vnf-id"
+                    "service-instance-id",
+                    "vnf-id"
                   ],
                   "version": 0
                 },
