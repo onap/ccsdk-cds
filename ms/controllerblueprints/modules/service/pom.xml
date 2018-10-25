@@ -25,7 +25,7 @@
     <parent>
         <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
         <artifactId>modules</artifactId>
-        <version>0.3.1-SNAPSHOT</version>
+        <version>0.4.0-SNAPSHOT</version>
     </parent>
     <artifactId>service</artifactId>
     <name>Controller Blueprints Service</name>
