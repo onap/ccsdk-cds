@@ -58,6 +58,7 @@ public class SwaggerConfig {
     private String contactUrl;
     @Value("${swagger.contact.email}")
     private String contactEmail;
+    private String stringModelRef = "string";
 
     @Bean
     @SuppressWarnings("unused")
@@ -142,13 +143,13 @@ public class SwaggerConfig {
     private Map<String, Header> getDefaultResponseHeaders() {
         Map<String, Header> defaultHeaders = new HashMap<>();
         defaultHeaders.put(BluePrintConstants.RESPONSE_HEADER_TRANSACTION_ID,
-                new Header(BluePrintConstants.RESPONSE_HEADER_TRANSACTION_ID, "Transaction Id", new ModelRef("string")));
+                new Header(BluePrintConstants.RESPONSE_HEADER_TRANSACTION_ID, "Transaction Id", new ModelRef(stringModelRef)));
         defaultHeaders.put(BluePrintConstants.RESPONSE_HEADER_LATEST_VERSION,
-                new Header(BluePrintConstants.RESPONSE_HEADER_LATEST_VERSION, "API Latest Version", new ModelRef("string")));
+                new Header(BluePrintConstants.RESPONSE_HEADER_LATEST_VERSION, "API Latest Version", new ModelRef(stringModelRef)));
         defaultHeaders.put(BluePrintConstants.RESPONSE_HEADER_MINOR_VERSION,
-                new Header(BluePrintConstants.RESPONSE_HEADER_MINOR_VERSION, "API Minor Version", new ModelRef("string")));
+                new Header(BluePrintConstants.RESPONSE_HEADER_MINOR_VERSION, "API Minor Version", new ModelRef(stringModelRef)));
         defaultHeaders.put(BluePrintConstants.RESPONSE_HEADER_PATCH_VERSION,
-                new Header(BluePrintConstants.RESPONSE_HEADER_PATCH_VERSION, "API Patch Version", new ModelRef("string")));
+                new Header(BluePrintConstants.RESPONSE_HEADER_PATCH_VERSION, "API Patch Version", new ModelRef(stringModelRef)));
         return defaultHeaders;
     }
 }
