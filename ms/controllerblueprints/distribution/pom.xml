@@ -176,14 +176,21 @@
 							<verbose>true</verbose>
 						</configuration>
 						<executions>
-							<execution>
-								<id>push-images</id>
-								<phase>${docker.build.phase}</phase>
-								<goals>
-									<goal>build</goal>
-									<goal>push</goal>
-								</goals>
-							</execution>
+                            <execution>
+                                <id>generate-images</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>push-images</id>
+                                <phase>${docker.push.phase}</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                    <goal>push</goal>
+                                </goals>
+                            </execution>
 						</executions>
 					</plugin>
 				</plugins>
