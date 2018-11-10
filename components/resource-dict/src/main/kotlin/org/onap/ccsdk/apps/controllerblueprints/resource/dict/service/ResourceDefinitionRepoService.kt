@@ -49,10 +49,12 @@ open class ResourceDefinitionFileRepoService : BluePrintRepoFileService,
 
     constructor(basePath: String) : this(basePath,
             basePath.plus(BluePrintConstants.PATH_DIVIDER)
-                    .plus(BluePrintConstants.MODEL_DIR_MODEL_TYPE))
+                    .plus(BluePrintConstants.MODEL_DIR_MODEL_TYPE)
+                    .plus(BluePrintConstants.PATH_DIVIDER)
+                    .plus("starter-type"))
 
     constructor(basePath: String, modelTypePath: String) : super(modelTypePath) {
-        resourceDefinitionPath = basePath.plus("/resource_dictionary")
+        resourceDefinitionPath = basePath.plus("/resource-dictionary/starter-dictionary")
     }
 
     override fun getResourceDefinition(resourceDefinitionName: String): Mono<ResourceDefinition> {

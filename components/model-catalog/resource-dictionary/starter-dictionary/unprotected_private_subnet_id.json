@@ -1,0 +1,16 @@
+{
+  "name" : "unprotected_private_subnet_id",
+  "tags" : "unprotected_private_subnet_id",
+  "updated-by" : "Singal, Kapil <ks220y@att.com>",
+  "property" : {
+    "description" : "unprotected_private_subnet_id",
+    "type" : "string"
+  },
+  "sources" : {
+    "input" : {
+      "type" : "source-input",
+      "properties" : {
+      }
+    }
+  }
+}

@@ -25,7 +25,7 @@ public class ResourceDefinitionRepoServiceTest {
 
     @Test
     public void testGetResourceDefinition() throws Exception{
-        ResourceDefinitionRepoService resourceDefinitionRepoService = new ResourceDefinitionFileRepoService("load");
+        ResourceDefinitionRepoService resourceDefinitionRepoService = new ResourceDefinitionFileRepoService("./../model-catalog");
         ResourceDefinition resourceDefinition = resourceDefinitionRepoService
                 .getResourceDefinition("db-source").block();
         Assert.assertNotNull("Failed to get Resource Definition db-source", resourceDefinition);

@@ -1,0 +1,79 @@
+{
+  "description": "This is Netconf Transaction Configuration Component API",
+  "version": "1.0.0",
+  "capabilities": {
+    "component-node": {
+      "type": "tosca.capabilities.Node"
+    }
+  },
+  "requirements": {
+    "netconf-connection": {
+      "capability": "netconf",
+      "node": "vnf-netconf-device",
+      "relationship": "tosca.relationships.ConnectsTo"
+    }
+  },
+  "interfaces": {
+    "org-openecomp-sdnc-netconf-adaptor-service-NetconfExecutorNode": {
+      "operations": {
+        "process": {
+          "inputs": {
+            "request-id": {
+              "description": "Request Id used to store the generated configuration, in the database along with the template-name",
+              "required": true,
+              "type": "string"
+            },
+            "template-name": {
+              "description": "Service Template Name",
+              "required": true,
+              "type": "string"
+            },
+            "template-version": {
+              "description": "Service Template Version",
+              "required": true,
+              "type": "string"
+            },
+            "action-name": {
+              "description": "Action Name to get from Database, Either (message & mask-info ) or ( resource-id & resource-type & action-name & template-name ) should be present. Message will be given higest priority",
+              "required": false,
+              "type": "string"
+            },
+            "resource-type": {
+              "description": "Resource Type to get from Database, Either (message & mask-info ) or( resource-id & resource-type & action-name & template-name ) should be present. Message will be given higest priority",
+              "required": false,
+              "type": "string"
+            },
+            "resource-id": {
+              "description": "Resource Id to get from Database, Either (message & mask-info ) or ( resource-id & resource-type & action-name & template-name ) should be present. Message will be given higest priority",
+              "required": false,
+              "type": "string"
+            },
+            "reservation-id": {
+				"description": "Reservation Id used to send to NPM",
+				"required": false,
+				"type": "string"
+			},
+            "execution-script": {
+              "description": "Python Script to Execute for this Component action, It should refer any one of Prython Artifact Definition for this Node Template.",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "outputs": {
+            "response-data": {
+              "description": "Execution Response Data in JSON format.",
+              "required": false,
+              "type": "string"
+            },
+            "status": {
+              "description": "Status of the Component Execution ( success or failure )",
+              "required": true,
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "derived_from": "tosca.nodes.Component"
+}
