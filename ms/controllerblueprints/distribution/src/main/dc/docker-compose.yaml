@@ -5,7 +5,7 @@ services:
      image: mariadb:latest
      container_name: cb-mariadb
      ports:
-       - "3307:3306"
+       - "3306:3306"
      volumes:
        - ~/vm_mysql:/var/lib/mysql
      restart: always

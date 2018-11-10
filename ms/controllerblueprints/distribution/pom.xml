@@ -94,7 +94,7 @@
             <plugin>
                 <!--build the final artifact for docker deployment -->
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.1.0</version>
                 <configuration>
                     <!-- <skipAssembly>${skip.assembly}</skipAssembly>-->
                     <outputDirectory>${basedir}/target/docker-stage</outputDirectory>

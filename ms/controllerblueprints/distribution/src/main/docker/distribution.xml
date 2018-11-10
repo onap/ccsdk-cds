@@ -49,11 +49,6 @@
             <useDefaultExcludes>true</useDefaultExcludes>
         </fileSet>
         <fileSet>
-            <directory>${project.basedir}/../application/src/main/groovy</directory>
-            <outputDirectory>src/main/groovy</outputDirectory>
-            <useDefaultExcludes>true</useDefaultExcludes>
-        </fileSet>
-        <fileSet>
             <directory>${project.basedir}/../application/src/main/resources</directory>
             <outputDirectory>src/main/resources</outputDirectory>
             <useDefaultExcludes>true</useDefaultExcludes>
@@ -64,8 +59,8 @@
             <useDefaultExcludes>true</useDefaultExcludes>
         </fileSet>
         <fileSet>
-            <directory>${project.basedir}/../application/load</directory>
-            <outputDirectory>load</outputDirectory>
+            <directory>${project.basedir}/../../../components/model-catalog</directory>
+            <outputDirectory>./model-catalog</outputDirectory>
             <useDefaultExcludes>true</useDefaultExcludes>
         </fileSet>
     </fileSets>

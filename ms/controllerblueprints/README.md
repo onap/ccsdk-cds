@@ -9,4 +9,5 @@ Application VM Arguments :
 -Dspring.datasource.username=sdnctl
 -Dspring.datasource.password=sdnctl
 -Dblueprints.load.initial-data=true
+-Dspring.profiles.active=dev
 
