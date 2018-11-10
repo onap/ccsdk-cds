@@ -29,13 +29,15 @@
     <name>Blueprints Processor Parent</name>
     <description>Blueprints Processor Parent</description>
     <properties>
-        <controllerblueprints.version>0.3.1-SNAPSHOT</controllerblueprints.version>
-        <spring.boot.version>2.0.4.RELEASE</spring.boot.version>
-        <spring.version>5.0.8.RELEASE</spring.version>
-        <kotlin.version>1.2.60</kotlin.version>
+        <spring.boot.version>2.0.6.RELEASE</spring.boot.version>
+        <spring.version>5.0.10.RELEASE</spring.version>
+        <kotlin.version>1.3.0</kotlin.version>
+        <kotlin.couroutines.version>1.0.1</kotlin.couroutines.version>
         <eelf.version>1.0.0</eelf.version>
+        <guava.version>26.0-jre</guava.version>
         <springfox.swagger2.version>2.9.2</springfox.swagger2.version>
         <h2database.version>1.4.197</h2database.version>
+        <powermock.version>1.7.4</powermock.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -63,14 +65,25 @@
             </dependency>
             <dependency>
                 <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-stdlib-jdk8</artifactId>
-                <version>${kotlin.version}</version>
+                <artifactId>kotlinx-couroutines-core</artifactId>
+                <version>${kotlin.couroutines.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-reflect</artifactId>
                 <version>${kotlin.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-stdlib-jdk8</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-stdlib-jdk7</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+
 
             <!-- Application Module Dependencies -->
             <dependency>
@@ -118,7 +131,7 @@
             <dependency>
                 <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
                 <artifactId>resource-dict</artifactId>
-                <version>${controllerblueprints.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <!--Swagger Dependencies -->
@@ -157,7 +170,7 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>26.0-jre</version>
+                <version>${guava.version}</version>
             </dependency>
 
             <!-- Database -->
@@ -170,12 +183,12 @@
             <dependency>
                 <groupId>org.powermock</groupId>
                 <artifactId>powermock-api-mockito2</artifactId>
-                <version>1.7.4</version>
+                <version>${powermock.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-test</artifactId>
+                <artifactId>kotlin-test-junit</artifactId>
                 <version>${kotlin.version}</version>
                 <scope>test</scope>
             </dependency>

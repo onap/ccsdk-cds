@@ -22,6 +22,7 @@
 **/*.iml
 **/*.project
 **/.springBeans
+**/.directory
 
 **/*versionsBackup
 **/blackDuckHub*

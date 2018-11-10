@@ -38,10 +38,6 @@
 		<module>inbounds</module>
 	</modules>
 
-    <properties>
-        <kotlin.version>1.2.60</kotlin.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.powermock</groupId>
@@ -55,7 +51,7 @@
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-test</artifactId>
+            <artifactId>kotlin-test-junit</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
