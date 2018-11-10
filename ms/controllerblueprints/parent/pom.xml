@@ -28,13 +28,16 @@
     <name>Controller Blueprints Parent</name>
     <packaging>pom</packaging>
     <properties>
-        <spring.boot.version>2.0.5.RELEASE</spring.boot.version>
-        <spring.version>5.0.8.RELEASE</spring.version>
-        <kotlin.version>1.2.70</kotlin.version>
+        <spring.boot.version>2.0.6.RELEASE</spring.boot.version>
+        <spring.version>5.0.10.RELEASE</spring.version>
+        <kotlin.version>1.3.0</kotlin.version>
+        <kotlin.couroutines.version>1.0.1</kotlin.couroutines.version>
         <eelf.version>1.0.0</eelf.version>
+        <guava.version>26.0-jre</guava.version>
         <springfox.swagger2.version>2.9.2</springfox.swagger2.version>
         <h2database.version>1.4.197</h2database.version>
         <onap.logger.slf4j>1.2.2</onap.logger.slf4j>
+        <powermock.version>1.7.4</powermock.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -93,7 +96,7 @@
              <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>26.0-jre</version>
+                <version>${guava.version}</version>
             </dependency>
 
             <!-- Kotlin Dependencies -->
@@ -101,6 +104,11 @@
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-stdlib</artifactId>
                 <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlinx-couroutines-core</artifactId>
+                <version>${kotlin.couroutines.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jetbrains.kotlin</groupId>
@@ -112,6 +120,12 @@
                 <artifactId>kotlin-stdlib-jdk8</artifactId>
                 <version>${kotlin.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-stdlib-jdk7</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+
 
 
             <!-- Database -->
@@ -148,12 +162,12 @@
             <dependency>
                 <groupId>org.powermock</groupId>
                 <artifactId>powermock-api-mockito2</artifactId>
-                <version>1.7.4</version>
+                <version>${powermock.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-test</artifactId>
+                <artifactId>kotlin-test-junit</artifactId>
                 <version>${kotlin.version}</version>
                 <scope>test</scope>
             </dependency>

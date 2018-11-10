@@ -46,13 +46,14 @@ public class ResourceAssignmentEnhancerServiceTest {
         ResourceDictionaryTestUtils.setUpResourceSourceMapping();
     }
 
-    @Test
+    //@Test
     public void testEnhanceBluePrint() throws BluePrintException {
 
         List<ResourceAssignment> resourceAssignments = JacksonReactorUtils
                 .getListFromClassPathFile("enhance/enhance-resource-assignment.json", ResourceAssignment.class).block();
         Assert.assertNotNull("Failed to get Resource Assignment", resourceAssignments);
-        ResourceDefinitionRepoService resourceDefinitionRepoService = new ResourceDefinitionFileRepoService("./../../application/load");
+
+        ResourceDefinitionRepoService resourceDefinitionRepoService = new ResourceDefinitionFileRepoService("./../../../../components/model-catalog");
         ResourceAssignmentEnhancerService resourceAssignmentEnhancerService =
                 new ResourceAssignmentEnhancerDefaultService(resourceDefinitionRepoService);
         ServiceTemplate serviceTemplate = resourceAssignmentEnhancerService.enhanceBluePrint(resourceAssignments);

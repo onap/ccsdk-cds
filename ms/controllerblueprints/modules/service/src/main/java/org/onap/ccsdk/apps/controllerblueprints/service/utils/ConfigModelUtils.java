@@ -121,7 +121,7 @@ public class ConfigModelUtils {
         File blueprintDir = new File(pathName);
         Preconditions.checkNotNull(blueprintDir, "failed to find the blueprint pathName file");
         String[] dirs = blueprintDir.list(DirectoryFileFilter.INSTANCE);
-        Preconditions.checkNotNull(dirs, "failed to find the blueprint directories");
+        Preconditions.checkNotNull(dirs, "failed to find the blueprint directories" + blueprintDir.getAbsolutePath());
         return Arrays.asList(dirs);
     }
 }
