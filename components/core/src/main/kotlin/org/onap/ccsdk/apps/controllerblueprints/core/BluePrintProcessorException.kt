@@ -16,12 +16,13 @@
  */
 
 package org.onap.ccsdk.apps.controllerblueprints.core
+
 /**
  *
  *
  * @author Brinda Santh
  */
-class BluePrintProcessorException : Exception {
+class BluePrintProcessorException : RuntimeException {
     var code: Int = 100
 
     constructor(message: String, cause: Throwable) : super(message, cause)

@@ -17,16 +17,16 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core.service
 
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 import com.fasterxml.jackson.databind.JsonNode
-import org.junit.Before
 import org.junit.Test
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.apps.controllerblueprints.core.factory.BluePrintParserFactory
+import org.onap.ccsdk.apps.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintRuntimeUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils.jsonNodeFromFile
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils.jsonNodeFromObject
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
@@ -37,13 +37,6 @@ import kotlin.test.assertNotNull
  */
 class BluePrintRuntimeServiceTest {
     private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
-    val basepath = "load/blueprints"
-
-
-    @Before
-    fun setUp(): Unit {
-
-    }
 
     @Test
     fun testResolveNodeTemplateProperties() {
@@ -56,40 +49,32 @@ class BluePrintRuntimeServiceTest {
         val inputNode: JsonNode = jsonNodeFromFile(inputDataPath)
         bluePrintRuntimeService.assignInputs(inputNode)
 
-        val propContext: MutableMap<String, Any?> = bluePrintRuntimeService.resolveNodeTemplateProperties("resource-assignment-action")
-        log.info("Context {}", bluePrintRuntimeService.context)
+        val propContext: MutableMap<String, JsonNode> = bluePrintRuntimeService.resolveNodeTemplateProperties("resource-assignment-action")
 
         assertNotNull(propContext, "Failed to populate interface property values")
-        assertEquals(propContext.get("mode"), jsonNodeFromObject("sync"), "Failed to populate parameter process-name")
-        assertEquals(propContext.get("version"), jsonNodeFromObject("1.0.0"), "Failed to populate parameter version")
+        assertEquals(propContext.get("mode"), "sync".asJsonPrimitive(), "Failed to populate parameter process-name")
+        assertEquals(propContext.get("version"), "1.0.0".asJsonPrimitive(), "Failed to populate parameter version")
     }
 
     @Test
     fun testResolveNodeTemplateInterfaceOperationInputs() {
         log.info("************************ testResolveNodeTemplateInterfaceOperationInputs **********************")
-        val bluePrintContext: BluePrintContext = BluePrintParserFactory.instance(BluePrintConstants.TYPE_DEFAULT)!!
-                .readBlueprintFile("baseconfiguration/Definitions/activation-blueprint.json", basepath)
-        assertNotNull(bluePrintContext, "Failed to populate Blueprint context")
 
-        val context: MutableMap<String, Any> = hashMapOf()
-        context[BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH] = basepath.plus("/simple-baseconfig")
+        val bluePrintRuntimeService = getBluePrintRuntimeService()
 
-        val inputDataPath = "src/test/resources/data/default-context.json"
-        BluePrintRuntimeUtils.assignInputsFromFile(bluePrintContext, inputDataPath, context)
+        val executionContext = bluePrintRuntimeService.getExecutionContext()
 
+        BluePrintRuntimeUtils.assignInputsFromClassPathFile(bluePrintRuntimeService.bluePrintContext(),
+                "data/default-context.json", executionContext)
 
-        val bluePrintRuntimeService = BluePrintRuntimeService(bluePrintContext, context)
-
-        log.info("Prepared Context {}", context)
-
-        val inContext: MutableMap<String, Any?> = bluePrintRuntimeService.resolveNodeTemplateInterfaceOperationInputs("resource-assignment-ra-component",
+        val inContext: MutableMap<String, JsonNode> = bluePrintRuntimeService.resolveNodeTemplateInterfaceOperationInputs("resource-assignment-ra-component",
                 "org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode", "process")
 
         log.info("In Context {}", inContext)
 
         assertNotNull(inContext, "Failed to populate interface input property values")
-        assertEquals(inContext.get("action-name"), jsonNodeFromObject("sample-action"), "Failed to populate parameter action-name")
-        assertEquals(inContext.get("request-id"), jsonNodeFromObject("12345"), "Failed to populate parameter action-name")
+        assertEquals(inContext.get("action-name"), "sample-action".asJsonPrimitive(), "Failed to populate parameter action-name")
+        assertEquals(inContext.get("request-id"), "12345".asJsonPrimitive(), "Failed to populate parameter action-name")
     }
 
     @Test
@@ -129,8 +114,6 @@ class BluePrintRuntimeServiceTest {
         bluePrintRuntimeService.setNodeTemplateAttributeValue("resource-assignment-ra-component", "context2",
                 jsonNodeFromObject("context2-value"))
 
-        log.info("Context {}", bluePrintRuntimeService.context)
-
         val keys = listOf("context1", "context2")
 
         val jsonValueNode = bluePrintRuntimeService.getJsonForNodeTemplateAttributeProperties("resource-assignment-ra-component", keys)
@@ -139,15 +122,14 @@ class BluePrintRuntimeServiceTest {
 
     }
 
-    private fun getBluePrintRuntimeService(): BluePrintRuntimeService {
-        val bluePrintContext: BluePrintContext = BluePrintParserFactory.instance(BluePrintConstants.TYPE_DEFAULT)!!
-                .readBlueprintFile("baseconfiguration/Definitions/activation-blueprint.json", basepath)
-        assertNotNull(bluePrintContext, "Failed to populate Blueprint context")
+    private fun getBluePrintRuntimeService(): BluePrintRuntimeService<MutableMap<String, JsonNode>> {
+        val blueprintBasePath: String = ("load/blueprints/baseconfiguration")
+        val blueprintRuntime = BluePrintMetadataUtils.getBluePrintRuntime("1234", blueprintBasePath)
+        val checkBasePath = blueprintRuntime.get(BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH)
 
-        val context: MutableMap<String, Any> = hashMapOf()
-        context[BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH] = basepath.plus("/simple-baseconfig")
+        assertEquals(blueprintBasePath.asJsonPrimitive(), checkBasePath, "Failed to get base path after runtime creation")
 
-        return BluePrintRuntimeService(bluePrintContext, context)
+        return blueprintRuntime
     }
 
 }

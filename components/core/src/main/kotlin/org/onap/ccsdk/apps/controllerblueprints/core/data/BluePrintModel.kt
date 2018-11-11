@@ -91,7 +91,7 @@ A node filter definition defines criteria for selection of a TOSCA Node Template
 
 class NodeFilterDefinition {
     var properties: MutableMap<String, PropertyDefinition>? = null
-    var capabilities : MutableList<String>? = null
+    var capabilities: MutableList<String>? = null
 }
 
 /*
@@ -348,7 +348,7 @@ class ArtifactType : EntityType() {
 A Data Type definition defines the schema for new named datatypes in TOSCA.
  */
 
-class DataType : EntityType(){
+class DataType : EntityType() {
     var constraints: MutableList<ConstraintClause>? = null
 }
 
@@ -410,7 +410,7 @@ class GroupType : EntityType() {
     topology at some stage of its lifecycle, but is not explicitly part of the topology itself
     (i.e., it does not prevent the application or service from being deployed or run if it did not exist).
  */
-class PolicyType : EntityType(){
+class PolicyType : EntityType() {
     lateinit var targets: MutableList<String>
 }
 
@@ -434,10 +434,10 @@ class GroupDefinition {
     var id: String? = null
     lateinit var type: String
     var description: String? = null
-    var metadata : MutableMap<String, String>? = null
-    var properties : MutableMap<String, JsonNode>? = null
+    var metadata: MutableMap<String, String>? = null
+    var properties: MutableMap<String, JsonNode>? = null
     var members = ArrayList<String>()
-    var interfaces : MutableMap<String, InterfaceDefinition>?= null
+    var interfaces: MutableMap<String, InterfaceDefinition>? = null
 }
 
 /*
@@ -597,7 +597,7 @@ class ServiceTemplate {
     @get:JsonProperty("node_types")
     var nodeTypes: MutableMap<String, NodeType>? = null
     @get:JsonProperty("policy_types")
-    var policyTypes: PolicyType? = null
+    var policyTypes: MutableMap<String, PolicyType>? = null
     @get:JsonProperty("topology_template")
     var topologyTemplate: TopologyTemplate? = null
 }

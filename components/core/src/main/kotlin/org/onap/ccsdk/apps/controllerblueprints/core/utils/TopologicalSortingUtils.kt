@@ -64,7 +64,7 @@ class TopologicalSortingUtils<V> {
     }
 
     fun outDegree(): Map<V, Int> {
-        var result: MutableMap<V, Int> = hashMapOf()
+        val result: MutableMap<V, Int> = hashMapOf()
         for (v in neighbors.keys)
             result[v] = neighbors[v]!!.size
         return result
@@ -108,7 +108,7 @@ class TopologicalSortingUtils<V> {
 
 
     fun bfsDistance(start: V): Map<*, *> {
-        var distance: MutableMap<V, Int> = hashMapOf()
+        val distance: MutableMap<V, Int> = hashMapOf()
         // Initially, all distance are infinity, except start node
         for (v in neighbors.keys)
             distance[v] = -1

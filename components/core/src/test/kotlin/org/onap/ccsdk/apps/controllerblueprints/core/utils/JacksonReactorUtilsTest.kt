@@ -35,7 +35,7 @@ class JacksonReactorUtilsTest {
         assertNotNull(serviceTemplate, "Failed to simple transform Service Template")
         assertEquals(true, serviceTemplate is ServiceTemplate, "failed to get Service Template instance")
 
-        val jsonContent = JacksonReactorUtils.getJson(serviceTemplate!!, true).block()
+        val jsonContent = JacksonReactorUtils.getJson(serviceTemplate, true).block()
         assertNotNull(jsonContent, "Failed to get json content")
 
         val jsonNode = JacksonReactorUtils.jsonNodeFromFile("load/blueprints/baseconfiguration/Definitions/activation-blueprint.json")

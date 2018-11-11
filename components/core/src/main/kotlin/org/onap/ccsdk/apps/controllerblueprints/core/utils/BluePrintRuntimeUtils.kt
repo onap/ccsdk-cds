@@ -16,12 +16,12 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core.utils
 
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.NullNode
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
 
 /**
  *
@@ -31,17 +31,23 @@ import com.att.eelf.configuration.EELFManager
 object BluePrintRuntimeUtils {
     private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
 
-    fun assignInputsFromFile(bluePrintContext: BluePrintContext, fileName: String, context: MutableMap<String, Any>) {
+    fun assignInputsFromFile(bluePrintContext: BluePrintContext, fileName: String, context: MutableMap<String, JsonNode>) {
         val jsonNode: JsonNode = JacksonUtils.jsonNodeFromFile(fileName)
         return assignInputs(bluePrintContext, jsonNode, context)
     }
 
-    fun assignInputsFromContent(bluePrintContext: BluePrintContext, content: String, context: MutableMap<String, Any>) {
+    fun assignInputsFromClassPathFile(bluePrintContext: BluePrintContext, fileName: String, context: MutableMap<String,
+            JsonNode>) {
+        val jsonNode = JacksonUtils.jsonNodeFromClassPathFile(fileName)
+        return assignInputs(bluePrintContext, jsonNode, context)
+    }
+
+    fun assignInputsFromContent(bluePrintContext: BluePrintContext, content: String, context: MutableMap<String, JsonNode>) {
         val jsonNode: JsonNode = JacksonUtils.jsonNode(content)
         return assignInputs(bluePrintContext, jsonNode, context)
     }
 
-    fun assignInputs(bluePrintContext: BluePrintContext, jsonNode: JsonNode, context: MutableMap<String, Any>) {
+    fun assignInputs(bluePrintContext: BluePrintContext, jsonNode: JsonNode, context: MutableMap<String, JsonNode>) {
         log.info("assignInputs from input JSON ({})", jsonNode.toString())
         bluePrintContext.inputs?.forEach { propertyName, _ ->
             val valueNode: JsonNode = jsonNode.at("/".plus(propertyName)) ?: NullNode.getInstance()

@@ -44,7 +44,7 @@ class JacksonUtilsTest {
         assertNotNull(serviceTemplate, "Failed to simple transform Service Template")
         assertEquals(true, serviceTemplate is ServiceTemplate, "failed to get Service Template instance")
 
-        val jsonContent = JacksonUtils.getJson(serviceTemplate!!, true)
+        val jsonContent = JacksonUtils.getJson(serviceTemplate, true)
         assertNotNull(jsonContent, "Failed to get json content")
     }
 

@@ -18,6 +18,8 @@
 package org.onap.ccsdk.apps.controllerblueprints.core.service
 
 
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.NullNode
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
@@ -26,19 +28,16 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.*
 import org.onap.ccsdk.apps.controllerblueprints.core.format
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.ResourceResolverUtils
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
 
 /**
  *
  *
  * @author Brinda Santh
  */
-class PropertyAssignmentService(var context: MutableMap<String, Any>,
-                                var bluePrintRuntimeService: BluePrintRuntimeService) {
+class PropertyAssignmentService(var bluePrintRuntimeService: BluePrintRuntimeService<MutableMap<String, JsonNode>>) {
     private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
 
-    private var bluePrintContext: BluePrintContext = bluePrintRuntimeService.bluePrintContext
+    private var bluePrintContext: BluePrintContext = bluePrintRuntimeService.bluePrintContext()
 
 /*
 
@@ -198,7 +197,7 @@ If Property Assignment is Expression.
     }
 
     fun artifactContent(artifactDefinition: ArtifactDefinition): String {
-        val bluePrintBasePath: String = context[BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH] as? String
+        val bluePrintBasePath: String = bluePrintRuntimeService.get(BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH) as? String
                 ?: throw BluePrintException(format("failed to get property (%s) from context", BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH))
 
         if (artifactDefinition.repository != null) {
