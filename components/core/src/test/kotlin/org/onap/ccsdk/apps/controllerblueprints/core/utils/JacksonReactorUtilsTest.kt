@@ -29,7 +29,7 @@ class JacksonReactorUtilsTest {
     @Test
     fun testReadValues() {
 
-        val serviceTemplate = JacksonReactorUtils.readValueFromFile("load/blueprints/baseconfiguration/Definitions/activation-blueprint.json",
+        val serviceTemplate = JacksonReactorUtils.readValueFromFile("./../model-catalog/blueprint-model/starter-blueprint/baseconfiguration/Definitions/activation-blueprint.json",
                 ServiceTemplate::class.java).block()
 
         assertNotNull(serviceTemplate, "Failed to simple transform Service Template")
@@ -38,7 +38,7 @@ class JacksonReactorUtilsTest {
         val jsonContent = JacksonReactorUtils.getJson(serviceTemplate, true).block()
         assertNotNull(jsonContent, "Failed to get json content")
 
-        val jsonNode = JacksonReactorUtils.jsonNodeFromFile("load/blueprints/baseconfiguration/Definitions/activation-blueprint.json")
+        val jsonNode = JacksonReactorUtils.jsonNodeFromFile("./../model-catalog/blueprint-model/starter-blueprint/baseconfiguration/Definitions/activation-blueprint.json")
                 .block()
         assertNotNull(jsonContent, "Failed to get json Node")
     }

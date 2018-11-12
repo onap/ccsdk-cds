@@ -17,12 +17,10 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core.utils
 
-import org.junit.Test
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
-import kotlin.test.assertEquals
+import org.junit.Test
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -35,19 +33,6 @@ class JacksonUtilsTest {
 
     private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
 
-    val basePath = "load/blueprints"
-
-    @Test
-    fun testReadValues() {
-        val content = ResourceResolverUtils.getFileContent("baseconfiguration/Definitions/activation-blueprint.json", basePath)
-        val serviceTemplate = JacksonUtils.readValue(content, ServiceTemplate::class.java)
-        assertNotNull(serviceTemplate, "Failed to simple transform Service Template")
-        assertEquals(true, serviceTemplate is ServiceTemplate, "failed to get Service Template instance")
-
-        val jsonContent = JacksonUtils.getJson(serviceTemplate, true)
-        assertNotNull(jsonContent, "Failed to get json content")
-    }
-
     @Test
     fun testJsonNodeFromClassPathFile() {
         val filePath = "data/default-context.json"
@@ -56,7 +41,7 @@ class JacksonUtilsTest {
 
     @Test
     fun testJsonNodeFromFile() {
-        val filePath = basePath + "/baseconfiguration/Definitions/activation-blueprint.json"
+        val filePath = "src/test/resources/data/default-context.json"
         JacksonUtils.jsonNodeFromFile(filePath)
     }
 

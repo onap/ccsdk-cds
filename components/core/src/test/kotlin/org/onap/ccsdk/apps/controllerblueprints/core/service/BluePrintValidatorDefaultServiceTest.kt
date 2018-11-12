@@ -16,12 +16,11 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core.service
 
-import org.junit.Before
-import org.junit.Test
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.apps.controllerblueprints.core.factory.BluePrintParserFactory
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
+import org.junit.Before
+import org.junit.Test
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
 
 /**
  *
@@ -30,7 +29,6 @@ import com.att.eelf.configuration.EELFManager
  */
 class BluePrintValidatorDefaultServiceTest {
     private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
-    val basepath = "load/blueprints"
 
     @Before
     fun setUp(): Unit {
@@ -39,11 +37,13 @@ class BluePrintValidatorDefaultServiceTest {
 
     @Test
     fun testValidateBluePrint() {
-        val bluePrintContext: BluePrintContext = BluePrintParserFactory.instance(BluePrintConstants.TYPE_DEFAULT)!!
-                .readBlueprintFile("baseconfiguration/Definitions/activation-blueprint.json",  basepath)
-        val properties : MutableMap<String, Any> = hashMapOf()
+
+        val blueprintBasePath: String = ("./../model-catalog/blueprint-model/starter-blueprint/baseconfiguration")
+        val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(blueprintBasePath)
+        val properties: MutableMap<String, Any> = hashMapOf()
+
         val validatorService = BluePrintValidatorDefaultService()
-        validatorService.validateBlueprint(bluePrintContext.serviceTemplate,properties)
+        validatorService.validateBlueprint(bluePrintContext.serviceTemplate, properties)
         log.info("Validation Message {}", properties)
     }
 }

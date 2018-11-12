@@ -87,8 +87,13 @@
                   }
                 },
                 "outputs": {
-                  "resource-assignment-params": "",
-                  "status": ""
+                  "resource-assignment-params": {
+                    "get_attribute": [
+                      "SELF",
+                      "assignment-params"
+                    ]
+                  },
+                  "status": "success"
                 }
               }
             }

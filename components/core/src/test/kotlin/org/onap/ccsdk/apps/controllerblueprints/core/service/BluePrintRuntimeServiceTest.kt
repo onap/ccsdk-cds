@@ -20,6 +20,7 @@ package org.onap.ccsdk.apps.controllerblueprints.core.service
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.NullNode
 import org.junit.Test
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.asJsonPrimitive
@@ -49,11 +50,11 @@ class BluePrintRuntimeServiceTest {
         val inputNode: JsonNode = jsonNodeFromFile(inputDataPath)
         bluePrintRuntimeService.assignInputs(inputNode)
 
-        val propContext: MutableMap<String, JsonNode> = bluePrintRuntimeService.resolveNodeTemplateProperties("resource-assignment-action")
+        val propContext: MutableMap<String, JsonNode> = bluePrintRuntimeService.resolveNodeTemplateProperties("activate-process")
 
         assertNotNull(propContext, "Failed to populate interface property values")
-        assertEquals(propContext.get("mode"), "sync".asJsonPrimitive(), "Failed to populate parameter process-name")
-        assertEquals(propContext.get("version"), "1.0.0".asJsonPrimitive(), "Failed to populate parameter version")
+        assertEquals(propContext["process-name"], jsonNodeFromObject("sample-action"), "Failed to populate parameter process-name")
+        assertEquals(propContext["version"], jsonNodeFromObject("sample-action"), "Failed to populate parameter version")
     }
 
     @Test
@@ -67,14 +68,13 @@ class BluePrintRuntimeServiceTest {
         BluePrintRuntimeUtils.assignInputsFromClassPathFile(bluePrintRuntimeService.bluePrintContext(),
                 "data/default-context.json", executionContext)
 
-        val inContext: MutableMap<String, JsonNode> = bluePrintRuntimeService.resolveNodeTemplateInterfaceOperationInputs("resource-assignment-ra-component",
-                "org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode", "process")
-
-        log.info("In Context {}", inContext)
+        val inContext: MutableMap<String, JsonNode> = bluePrintRuntimeService.resolveNodeTemplateInterfaceOperationInputs("resource-assignment",
+                "DefaultComponentNode", "process")
 
         assertNotNull(inContext, "Failed to populate interface input property values")
-        assertEquals(inContext.get("action-name"), "sample-action".asJsonPrimitive(), "Failed to populate parameter action-name")
-        assertEquals(inContext.get("request-id"), "12345".asJsonPrimitive(), "Failed to populate parameter action-name")
+        assertEquals(inContext["action-name"], jsonNodeFromObject("sample-action"), "Failed to populate parameter action-name")
+        assertEquals(inContext["request-id"], jsonNodeFromObject("12345"), "Failed to populate parameter action-name")
+        assertEquals(inContext["template-content"], jsonNodeFromObject("This is Sample Velocity Template"), "Failed to populate parameter action-name")
     }
 
     @Test
@@ -83,24 +83,18 @@ class BluePrintRuntimeServiceTest {
 
         val bluePrintRuntimeService = getBluePrintRuntimeService()
 
-        val successValue: JsonNode = jsonNodeFromObject("Success")
-        val paramValue: JsonNode = jsonNodeFromObject("param-content")
+        bluePrintRuntimeService.setNodeTemplateAttributeValue("resource-assignment", "assignment-params", NullNode.getInstance())
 
-        bluePrintRuntimeService.setNodeTemplateAttributeValue("resource-assignment-ra-component", "params", paramValue)
+        bluePrintRuntimeService.resolveNodeTemplateInterfaceOperationOutputs("resource-assignment",
+                "DefaultComponentNode", "process")
 
-        bluePrintRuntimeService.resolveNodeTemplateInterfaceOperationOutputs("resource-assignment-ra-component",
-                "org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode", "process")
+        val outputStatus = bluePrintRuntimeService.getNodeTemplateOperationOutputValue("resource-assignment",
+                "DefaultComponentNode", "process", "status")
+        assertEquals("success".asJsonPrimitive(), outputStatus, "Failed to get operation property status")
 
-        val resourceAssignmentParamsNode = bluePrintRuntimeService.getNodeTemplateOperationOutputValue("resource-assignment-ra-component",
-                "org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode", "process", "resource-assignment-params")
-
-        val statusNode = bluePrintRuntimeService.getNodeTemplateOperationOutputValue("resource-assignment-ra-component",
-                "org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode", "process", "status")
-
-        assertEquals(paramValue, resourceAssignmentParamsNode, "Failed to get operation property resource-assignment-params")
-
-        assertEquals(successValue, statusNode, "Failed to get operation property status")
-
+        val outputParams = bluePrintRuntimeService.getNodeTemplateOperationOutputValue("resource-assignment",
+                "DefaultComponentNode", "process", "resource-assignment-params")
+        assertEquals(NullNode.getInstance(), outputParams, "Failed to get operation property resource-assignment-params")
 
     }
 
@@ -123,7 +117,7 @@ class BluePrintRuntimeServiceTest {
     }
 
     private fun getBluePrintRuntimeService(): BluePrintRuntimeService<MutableMap<String, JsonNode>> {
-        val blueprintBasePath: String = ("load/blueprints/baseconfiguration")
+        val blueprintBasePath: String = ("./../model-catalog/blueprint-model/starter-blueprint/baseconfiguration")
         val blueprintRuntime = BluePrintMetadataUtils.getBluePrintRuntime("1234", blueprintBasePath)
         val checkBasePath = blueprintRuntime.get(BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH)
 
