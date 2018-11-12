@@ -1,8 +1,0 @@
-TOSCA-Meta-File-Version: 1.0.0
-CSAR-Version: 1.0
-Created-By: Brinda Santh M
-Entry-Definitions: Definitions/activation-blueprint.json
-Template-Tags: Brinda Santh, activation-blueprint
-
-Name: Plans/ActivateProcess.bpmn
-Content-Type: application/vnd.oasis.bpmn

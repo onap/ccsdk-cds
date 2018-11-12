@@ -1,5 +1,0 @@
-{
-  "description": "This is Resource Assignment Component API",
-  "version": "1.0.0",
-   "derived_from": "tosca.nodes.Root"
-}
