@@ -105,7 +105,8 @@ public class DataBaseInitService {
 
         loadModelType();
         loadResourceDictionary();
-        loadBlueprints();
+        // TODO("Enable after Multi file Service Template Repository implementation in place")
+        //loadBlueprints();
     }
 
     private void loadModelType() {
