@@ -18,6 +18,7 @@ package org.onap.ccsdk.apps.controllerblueprints.core.utils
 
 import org.apache.commons.io.FileUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate
+import org.onap.ccsdk.apps.controllerblueprints.core.data.TopologyTemplate
 import java.io.File
 import java.nio.charset.Charset
 
@@ -38,6 +39,71 @@ object ServiceTemplateUtils {
     @JvmStatic
     fun getServiceTemplateFromContent(content: String): ServiceTemplate {
         return JacksonUtils.readValue(content)
+    }
+
+    fun merge(parentServiceTemplate: ServiceTemplate, toMerge: ServiceTemplate, removeImports: Boolean? = true): ServiceTemplate {
+        if (removeImports!!) {
+            parentServiceTemplate.imports = null
+            toMerge.imports = null
+        }
+
+        toMerge.metadata?.let {
+            parentServiceTemplate.metadata = parentServiceTemplate.metadata ?: hashMapOf()
+            parentServiceTemplate.metadata?.putAll(toMerge.metadata as MutableMap)
+        }
+
+        toMerge.dslDefinitions?.let {
+            parentServiceTemplate.dslDefinitions = parentServiceTemplate.dslDefinitions ?: hashMapOf()
+            parentServiceTemplate.dslDefinitions?.putAll(toMerge.dslDefinitions as MutableMap)
+        }
+
+        toMerge.dataTypes?.let {
+            parentServiceTemplate.dataTypes = parentServiceTemplate.dataTypes ?: hashMapOf()
+            parentServiceTemplate.dataTypes?.putAll(toMerge.dataTypes as MutableMap)
+        }
+
+        toMerge.nodeTypes?.let {
+            parentServiceTemplate.nodeTypes = parentServiceTemplate.nodeTypes ?: hashMapOf()
+            parentServiceTemplate.nodeTypes?.putAll(toMerge.nodeTypes as MutableMap)
+        }
+
+        toMerge.artifactTypes?.let {
+            parentServiceTemplate.artifactTypes = parentServiceTemplate.artifactTypes ?: hashMapOf()
+            parentServiceTemplate.artifactTypes?.putAll(toMerge.artifactTypes as MutableMap)
+        }
+
+        toMerge.repositories?.let {
+            parentServiceTemplate.repositories = parentServiceTemplate.repositories ?: hashMapOf()
+            parentServiceTemplate.repositories?.putAll(toMerge.repositories as MutableMap)
+        }
+
+        parentServiceTemplate.topologyTemplate = parentServiceTemplate.topologyTemplate ?: TopologyTemplate()
+
+        toMerge.topologyTemplate?.inputs?.let {
+            parentServiceTemplate.topologyTemplate?.inputs = parentServiceTemplate.topologyTemplate?.inputs ?: hashMapOf()
+            parentServiceTemplate.topologyTemplate?.inputs?.putAll(parentServiceTemplate.topologyTemplate?.inputs as MutableMap)
+        }
+
+        toMerge.topologyTemplate?.nodeTemplates?.let {
+            parentServiceTemplate.topologyTemplate?.nodeTemplates = parentServiceTemplate.topologyTemplate?.nodeTemplates ?: hashMapOf()
+            parentServiceTemplate.topologyTemplate?.nodeTemplates?.putAll(parentServiceTemplate.topologyTemplate?.nodeTemplates as MutableMap)
+        }
+
+        toMerge.topologyTemplate?.relationshipTemplates?.let {
+            parentServiceTemplate.topologyTemplate?.relationshipTemplates = parentServiceTemplate.topologyTemplate?.relationshipTemplates ?: hashMapOf()
+            parentServiceTemplate.topologyTemplate?.relationshipTemplates?.putAll(parentServiceTemplate.topologyTemplate?.relationshipTemplates as MutableMap)
+        }
+
+        toMerge.topologyTemplate?.policies?.let {
+            parentServiceTemplate.topologyTemplate?.policies = parentServiceTemplate.topologyTemplate?.policies ?: hashMapOf()
+            parentServiceTemplate.topologyTemplate?.policies?.putAll(parentServiceTemplate.topologyTemplate?.policies as MutableMap)
+        }
+
+        toMerge.topologyTemplate?.workflows?.let {
+            parentServiceTemplate.topologyTemplate?.workflows = parentServiceTemplate.topologyTemplate?.workflows ?: hashMapOf()
+            parentServiceTemplate.topologyTemplate?.workflows?.putAll(parentServiceTemplate.topologyTemplate?.workflows as MutableMap)
+        }
+        return parentServiceTemplate
     }
 
 

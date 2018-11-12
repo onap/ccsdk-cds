@@ -25,6 +25,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ToscaMetaData
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintImportService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.DefaultBluePrintRuntimeService
 import java.io.File
@@ -99,9 +100,9 @@ object BluePrintMetadataUtils {
     fun readBlueprintFile(entityDefinitions: String, basePath: String): BluePrintContext {
         val rootFilePath: String = basePath.plus(File.separator).plus(entityDefinitions)
         val rootServiceTemplate = ServiceTemplateUtils.getServiceTemplate(rootFilePath)
-        // TODO ("Fix for Multiple Service Template file definitions")
-//        val schemaImportResolverUtils = BluePrintResolverService(rootServiceTemplate, basePath)
-//        val completeServiceTemplate = schemaImportResolverUtils.getImportResolvedServiceTemplate()
-        return BluePrintContext(rootServiceTemplate)
+        // Recursively Import Template files
+        val schemaImportResolverUtils = BluePrintImportService(rootServiceTemplate, basePath)
+        val completeServiceTemplate = schemaImportResolverUtils.getImportResolvedServiceTemplate()
+        return BluePrintContext(completeServiceTemplate)
     }
 }

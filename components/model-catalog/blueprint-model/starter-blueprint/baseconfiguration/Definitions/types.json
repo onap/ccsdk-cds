@@ -1,0 +1,210 @@
+{
+  "artifact_types": {
+    "artifact-template-velocity": {
+      "description": " Velocity Template used for Configuration",
+      "version": "1.0.0",
+      "file_ext": [
+        "vtl"
+      ],
+      "derived_from": "tosca.artifacts.Implementation"
+    },
+    "artifact-mapping-resource": {
+      "description": " Velocity Template Resource Mapping File used along with Configuration template",
+      "version": "1.0.0",
+      "file_ext": [
+        "json"
+      ],
+      "derived_from": "tosca.artifacts.Implementation"
+    },
+    "artifact-script-kotlin": {
+      "description": " Kotlin Script Template used for Configuration",
+      "version": "1.0.0",
+      "file_ext": [
+        "kt"
+      ],
+      "derived_from": "tosca.artifacts.Implementation"
+    },
+    "artifact-script-python": {
+      "description": " Kotlin Script Template used for Configuration",
+      "version": "1.0.0",
+      "file_ext": [
+        "py"
+      ],
+      "derived_from": "tosca.artifacts.Implementation"
+    },
+    "artifact-directed-graph": {
+      "description": "Directed Graph File",
+      "version": "1.0.0",
+      "file_ext": [
+        "json",
+        "xml"
+      ],
+      "derived_from": "tosca.artifacts.Implementation"
+    },
+    "artifact-component-jar": {
+      "description": "Component Jar",
+      "version": "1.0.0",
+      "file_ext": [
+        "jar"
+      ],
+      "derived_from": "tosca.artifacts.Implementation"
+    }
+  },
+  "node_types": {
+    "dg-activate": {
+      "description": "This is BPMN Activate node type",
+      "version": "1.0.0",
+      "properties": {
+        "content": {
+          "required": false,
+          "type": "string"
+        },
+        "process-name": {
+          "required": false,
+          "type": "string"
+        },
+        "version": {
+          "required": false,
+          "type": "string",
+          "default": "LATEST"
+        }
+      },
+      "derived_from": "tosca.nodes.DG"
+    },
+    "tosca.nodes.Component": {
+      "description": "This is Resource Assignment Component API",
+      "version": "1.0.0",
+      "derived_from": "tosca.nodes.Root"
+    },
+    "tosca.nodes.DG": {
+      "description": "This is Directed Graph Node Type",
+      "version": "1.0.0",
+      "derived_from": "tosca.nodes.Root"
+    },
+    "tosca.nodes.component.Python": {
+      "description": "This is Resource Assignment Python Component API",
+      "version": "1.0.0",
+      "derived_from": "tosca.nodes.Root"
+    },
+    "component-resource-assignment": {
+      "description": "This is Resource Assignment Component API",
+      "version": "1.0.0",
+      "properties": {
+        "request-id": {
+          "description": "Request Id used to store the generated configuration, in the database along with the template-name",
+          "required": true,
+          "type": "string"
+        }
+      },
+      "interfaces": {
+        "DefaultComponentNode": {
+          "operations": {
+            "process": {
+              "inputs": {
+                "action-name": {
+                  "description": "Recipe Name to get from Database, Either (message & mask-info ) or ( resource-id & resource-type & action-name & template-name ) should be present. Message will be given higest priority",
+                  "required": false,
+                  "type": "string"
+                },
+                "resource-type": {
+                  "required": false,
+                  "type": "string"
+                },
+                "request-id": {
+                  "description": "Request Id used to store the generated configuration, in the database along with the template-name",
+                  "required": true,
+                  "type": "string"
+                },
+                "resource-id": {
+                  "description": "Id used to pull the data content from the data base. Either template-data or resource-id should be present",
+                  "required": true,
+                  "type": "string"
+                },
+                "template-content": {
+                  "description": "Id used to pull the data content from the data base. Either template-data or resource-id should be present",
+                  "required": true,
+                  "type": "string"
+                },
+                "mapping-content": {
+                  "description": "Id used to pull the data content from the data base. Either template-data or resource-id should be present",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "outputs": {
+                "resource-assignment-params": {
+                  "required": true,
+                  "type": "string"
+                },
+                "status": {
+                  "required": true,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.Component"
+    },
+    "component-resource-assignment-python": {
+      "description": "This is Resource Assignment Component API",
+      "version": "1.0.0",
+      "properties": {
+        "request-id": {
+          "description": "Request Id used to store the generated configuration, in the database along with the template-name",
+          "required": true,
+          "type": "string"
+        }
+      },
+      "interfaces": {
+        "DefaultComponentNode": {
+          "operations": {
+            "process": {
+              "inputs": {
+                "action-name": {
+                  "description": "Recipe Name to get from Database, Either (message & mask-info ) or ( resource-id & resource-type & action-name & template-name ) should be present. Message will be given higest priority",
+                  "required": false,
+                  "type": "string"
+                }
+              },
+              "outputs": {
+                "resource-assignment-params": {
+                  "required": true,
+                  "type": "string"
+                },
+                "status": {
+                  "required": true,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.component.Python"
+    }
+  },
+  "data_types": {
+    "sample-property": {
+      "description": "This is sample data type",
+      "version": "1.0.0",
+      "properties": {
+        "content": {
+          "required": false,
+          "type": "string"
+        },
+        "process-name": {
+          "required": false,
+          "type": "string"
+        },
+        "version": {
+          "required": false,
+          "type": "string",
+          "default": "LATEST"
+        }
+      },
+      "derived_from": "tosca.datatypes.Root"
+    }
+  }
+}

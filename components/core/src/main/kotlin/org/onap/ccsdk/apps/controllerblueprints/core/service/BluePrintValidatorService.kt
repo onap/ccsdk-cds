@@ -17,13 +17,13 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core.service
 
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.common.base.Preconditions
 import org.apache.commons.lang3.StringUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.*
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import java.io.Serializable
 
@@ -530,7 +530,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
     open fun checkValidArtifactType(artifactDefinitionName: String, artifactTypeName: String) {
 
         val artifactType = serviceTemplate.artifactTypes?.get(artifactTypeName)
-                ?: throw BluePrintException(format("Failed to ArtifactType for ArtifactDefinition : {}", artifactDefinitionName))
+                ?: throw BluePrintException("failed to artifactType($artifactTypeName) for ArtifactDefinition($artifactDefinitionName)")
 
         checkValidArtifactTypeDerivedFrom(artifactTypeName, artifactType.derivedFrom)
     }
@@ -538,14 +538,14 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
     @Throws(BluePrintException::class)
     open fun checkValidArtifactTypeDerivedFrom(artifactTypeName: String, derivedFrom: String) {
         check(BluePrintTypes.validArtifactTypeDerivedFroms.contains(derivedFrom)) {
-            throw BluePrintException(format("Failed to get ArtifactType ({})'s  derivedFrom({}) definition ", artifactTypeName, derivedFrom))
+            throw BluePrintException("failed to get artifactType($artifactTypeName)'s derivedFrom($derivedFrom) definition")
         }
     }
 
     @Throws(BluePrintException::class)
     open fun checkValidDataTypeDerivedFrom(dataTypeName: String, derivedFrom: String) {
         check(BluePrintTypes.validDataTypeDerivedFroms.contains(derivedFrom)) {
-            throw BluePrintException(format("Failed to get DataType ({})'s  derivedFrom({}) definition ", dataTypeName, derivedFrom))
+            throw BluePrintException(format("Failed to get DataType({})'s  derivedFrom({}) definition ", dataTypeName, derivedFrom))
         }
     }
 
