@@ -143,15 +143,15 @@ object BluePrintConstants {
     const val METADATA_TEMPLATE_VERSION = "template_version"
     const val METADATA_TEMPLATE_AUTHOR = "template_author"
     const val METADATA_TEMPLATE_TAGS = "template_tags"
+    const val METADATA_WORKFLOW_NAME = "workflow_name"
 
-    const val PAYLOAD_CONTENT = "payload-content"
     const val PAYLOAD_DATA = "payload-data"
-    const val SELECTOR = "selector"
+    const val PROPERTY_CURRENT_STEP = "current-step"
+    const val PROPERTY_CURRENT_NODE_TEMPLATE = "current-node-template"
     const val PROPERTY_CURRENT_INTERFACE = "current-interface"
     const val PROPERTY_CURRENT_OPERATION = "current-operation"
     const val PROPERTY_CURRENT_IMPLEMENTATION = "current-implementation"
-
-    const val PROPERTY_ACTION_NAME = "action"
+    const val PROPERTY_EXECUTION_REQUEST = "execution-request"
 
     const val OPERATION_PROCESS = "process"
     const val OPERATION_PREPARE = "prepare"
