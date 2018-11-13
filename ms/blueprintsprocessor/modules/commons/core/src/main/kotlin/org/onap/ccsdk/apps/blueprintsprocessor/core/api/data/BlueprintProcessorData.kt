@@ -67,7 +67,7 @@ open class ExecutionServiceOutput {
     @get:ApiModelProperty(required = true)
     lateinit var actionIdentifiers: ActionIdentifiers
     @get:ApiModelProperty(required = true)
-    lateinit var status: Status
+    var status: Status = Status()
     @get:ApiModelProperty(required = true)
     lateinit var payload: ObjectNode
     var metadata: MutableMap<String, JsonNode> = hashMapOf()
@@ -110,7 +110,7 @@ open class Status {
     @get:ApiModelProperty(required = false)
     var errorMessage: String? = null
     @get:ApiModelProperty(required = true)
-    lateinit var message: String
+    var message: String = "success"
 }
 
 

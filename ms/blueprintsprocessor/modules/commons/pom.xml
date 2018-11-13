@@ -31,7 +31,6 @@
     <modules>
         <module>db-lib</module>
         <module>rest-lib</module>
-        <module>adaptors</module>
         <module>core</module>
     </modules>
     <dependencies>

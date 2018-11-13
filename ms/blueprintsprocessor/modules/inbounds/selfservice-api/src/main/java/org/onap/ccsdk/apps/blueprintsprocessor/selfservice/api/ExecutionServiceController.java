@@ -19,7 +19,6 @@ package org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api;
 import io.swagger.annotations.ApiOperation;
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput;
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceOutput;
-import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.ExecutionService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -33,11 +32,6 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/api/v1/execution-service")
 public class ExecutionServiceController {
 
-    private ExecutionService executionService;
-
-    public ExecutionServiceController(ExecutionService executionService) {
-        this.executionService = executionService;
-    }
 
     @RequestMapping(path = "/ping", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
@@ -50,6 +44,6 @@ public class ExecutionServiceController {
             notes = "Takes the blueprint information and process as per the payload")
     public @ResponseBody
     Mono<ExecutionServiceOutput> process(@RequestBody ExecutionServiceInput executionServiceInput) {
-        return Mono.just(executionService.process(executionServiceInput));
+        return Mono.just(new ExecutionServiceOutput());
     }
 }

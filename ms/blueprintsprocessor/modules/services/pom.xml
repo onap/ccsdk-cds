@@ -29,9 +29,9 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>db-service</module>
-        <module>resolution-service</module>
         <module>execution-service</module>
+        <module>resolution-service</module>
+        <module>workflow-service</module>
     </modules>
 
     <dependencies>

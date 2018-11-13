@@ -17,12 +17,11 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.services.resolution
 
-import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.BlueprintProcessorException
-import org.onap.ccsdk.apps.blueprintsprocessor.core.factory.ResourceAssignmentProcessorFactory
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ResourceResolutionInput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ResourceResolutionOutput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.Status
-import org.onap.ccsdk.apps.controllerblueprints.core.format
+import org.onap.ccsdk.apps.blueprintsprocessor.core.factory.ResourceAssignmentProcessorFactory
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.utils.BulkResourceSequencingUtils
 import org.springframework.stereotype.Service
@@ -59,22 +58,22 @@ class ResourceResolutionService(private val resourceAssignmentProcessorFactory: 
         val bulkSequenced = BulkResourceSequencingUtils.process(resourceAssignments)
 
         bulkSequenced.map { batchResourceAssignments ->
-            batchResourceAssignments.filter { it.name != "*" && it.name != "start"}
-            .map { resourceAssignment ->
-                val dictionarySource = resourceAssignment.dictionarySource
-                val processorInstanceName = "resource-assignment-processor-".plus(dictionarySource)
-                val resourceAssignmentProcessor = resourceAssignmentProcessorFactory.getInstance(processorInstanceName)
-                        ?: throw BlueprintProcessorException(format("failed to get resource processor for instance name({}) " +
-                                "for resource assignment({})", processorInstanceName, resourceAssignment.name))
-                try {
-                    resourceAssignmentProcessor.validate(resourceAssignment, context)
-                    resourceAssignmentProcessor.process(resourceAssignment, context)
-                } catch (e: Exception) {
-                    resourceAssignmentProcessor.errorHandle(resourceAssignment, context)
-                    throw BlueprintProcessorException(e)
-                }
+            batchResourceAssignments.filter { it.name != "*" && it.name != "start" }
+                    .map { resourceAssignment ->
+                        val dictionarySource = resourceAssignment.dictionarySource
+                        val processorInstanceName = "resource-assignment-processor-".plus(dictionarySource)
+                        val resourceAssignmentProcessor = resourceAssignmentProcessorFactory.getInstance(processorInstanceName)
+                                ?: throw BluePrintProcessorException("failed to get resource processor for instance name($processorInstanceName) " +
+                                        "for resource assignment(${resourceAssignment.name})")
+                        try {
+                            resourceAssignmentProcessor.validate(resourceAssignment, context)
+                            resourceAssignmentProcessor.process(resourceAssignment, context)
+                        } catch (e: Exception) {
+                            resourceAssignmentProcessor.errorHandle(resourceAssignment, context)
+                            throw BluePrintProcessorException(e)
+                        }
 
-            }
+                    }
         }
     }
 }

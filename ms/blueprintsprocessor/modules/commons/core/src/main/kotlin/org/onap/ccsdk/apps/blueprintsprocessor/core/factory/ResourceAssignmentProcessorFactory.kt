@@ -21,14 +21,14 @@ import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignmentProcessor
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
-import org.springframework.stereotype.Service
+import org.springframework.context.annotation.Configuration
 
 /**
  * ResourceAssignmentProcessorFactory
  *
  * @author Brinda Santh
  */
-@Service
+@Configuration
 open class ResourceAssignmentProcessorFactory : ApplicationContextAware {
 
     private val log = EELFManager.getInstance().getLogger(ResourceAssignmentProcessorFactory::class.java)

@@ -21,7 +21,6 @@ import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
-import org.springframework.stereotype.Service
 
 /**
  * ComponentNode
@@ -48,7 +47,6 @@ interface ComponentNode {
  *
  * @author Brinda Santh
  */
-@Service
 open class ComponentNodeFactory : ApplicationContextAware {
     private val log = EELFManager.getInstance().getLogger(ComponentNodeFactory::class.java)
 
