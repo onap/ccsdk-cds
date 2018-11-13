@@ -23,11 +23,12 @@ package org.onap.ccsdk.apps.controllerblueprints.service.common;
  * @version 1.0
  */
 public final class ApplicationConstants {
-    private ApplicationConstants() {
-
-    }
     public static final String ACTIVE_Y = "Y";
     public static final String ACTIVE_N = "N";
     public static final String ASDC_ARTIFACT_TYPE_SDNC_MODEL = "SDNC_MODEL";
+    
+    private ApplicationConstants() {
+
+    }
 
 }
