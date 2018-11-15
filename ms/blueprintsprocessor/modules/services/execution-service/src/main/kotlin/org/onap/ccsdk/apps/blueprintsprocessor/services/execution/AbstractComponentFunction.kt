@@ -34,14 +34,6 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         return executionRequest
     }
 
-    override fun process(executionRequest: ExecutionServiceInput) {
-        log.info("Processing...")
-    }
-
-    override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        log.info("Recovering...")
-    }
-
     override fun prepareResponse(): ExecutionServiceOutput {
         log.info("Preparing Response...")
         return ExecutionServiceOutput()

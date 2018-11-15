@@ -17,7 +17,6 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.services.resolution.processor
 
-import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignmentProcessor
 import org.springframework.stereotype.Service
@@ -28,22 +27,11 @@ import org.springframework.stereotype.Service
  * @author Brinda Santh
  */
 @Service("resource-assignment-processor-input")
-open class InputResourceAssignmentProcessor : ResourceAssignmentProcessor {
-    private val log = EELFManager.getInstance().getLogger(InputResourceAssignmentProcessor::class.java)
+open class InputResourceAssignmentProcessor : ResourceAssignmentProcessor() {
 
-    override fun validate(resourceAssignment: ResourceAssignment, context: MutableMap<String, Any>) {
-        log.info("Validation Resource Assignments")
+    override fun process(executionRequest: ResourceAssignment) {
     }
 
-    override fun process(resourceAssignment: ResourceAssignment, context: MutableMap<String, Any>) {
-        log.info("Processing Resource Assignments")
-    }
-
-    override fun errorHandle(resourceAssignment: ResourceAssignment, context: MutableMap<String, Any>) {
-        log.info("ErrorHandle Resource Assignments")
-    }
-
-    override fun reTrigger(resourceAssignment: ResourceAssignment, context: MutableMap<String, Any>) {
-        log.info("Re Trigger Resource Assignments")
+    override fun recover(runtimeException: RuntimeException, executionRequest: ResourceAssignment) {
     }
 }

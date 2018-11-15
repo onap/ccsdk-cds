@@ -37,10 +37,10 @@ class MockComponentFunction : AbstractComponentFunction() {
     private val log = LoggerFactory.getLogger(ComponentExecuteNodeExecutor::class.java)
 
     override fun process(executionRequest: ExecutionServiceInput) {
-        super.process(executionRequest)
+        log.info("Processing component..")
     }
 
     override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        super.recover(runtimeException, executionRequest)
+        log.info("Recovering component..")
     }
 }

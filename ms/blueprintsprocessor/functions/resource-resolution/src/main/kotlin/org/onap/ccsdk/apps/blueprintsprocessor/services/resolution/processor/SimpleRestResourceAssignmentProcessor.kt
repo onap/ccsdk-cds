@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2018 IBM.
+ *  Modifications Copyright © 2017-2018 AT&T Intellectual Property.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,33 +17,21 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.services.resolution.processor
 
-import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignmentProcessor
 import org.springframework.stereotype.Service
 
 /**
- * MDSALResourceAssignmentProcessor
+ * SimpleRestResourceAssignmentProcessor
  *
  * @author Brinda Santh
  */
 @Service("resource-assignment-processor-mdsal")
-open class MDSALResourceAssignmentProcessor : ResourceAssignmentProcessor {
-    private val log = EELFManager.getInstance().getLogger(MDSALResourceAssignmentProcessor::class.java)
+open class SimpleRestResourceAssignmentProcessor : ResourceAssignmentProcessor() {
 
-    override fun validate(resourceAssignment: ResourceAssignment, context: MutableMap<String, Any>) {
-        log.info("Validation Resource Assignments")
+    override fun process(executionRequest: ResourceAssignment) {
     }
 
-    override fun process(resourceAssignment: ResourceAssignment, context: MutableMap<String, Any>) {
-        log.info("Processing Resource Assignments")
-    }
-
-    override fun errorHandle(resourceAssignment: ResourceAssignment, context: MutableMap<String, Any>) {
-        log.info("ErrorHandle Resource Assignments")
-    }
-
-    override fun reTrigger(resourceAssignment: ResourceAssignment, context: MutableMap<String, Any>) {
-        log.info("Re Trigger Resource Assignments")
+    override fun recover(runtimeException: RuntimeException, executionRequest: ResourceAssignment) {
     }
 }

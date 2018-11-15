@@ -20,10 +20,12 @@ package org.onap.ccsdk.apps.blueprintsprocessor.services.resolution
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ResourceResolutionInput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ResourceResolutionOutput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.Status
-import org.onap.ccsdk.apps.blueprintsprocessor.core.factory.ResourceAssignmentProcessorFactory
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignmentProcessor
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.utils.BulkResourceSequencingUtils
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Service
 
 /**
@@ -33,7 +35,11 @@ import org.springframework.stereotype.Service
  */
 
 @Service
-class ResourceResolutionService(private val resourceAssignmentProcessorFactory: ResourceAssignmentProcessorFactory) {
+class ResourceResolutionService {
+
+
+    @Autowired
+    private lateinit var applicationContext: ApplicationContext
 
     fun resolveResource(resourceResolutionInput: ResourceResolutionInput): ResourceResolutionOutput {
         val resourceResolutionOutput = ResourceResolutionOutput()
@@ -43,7 +49,7 @@ class ResourceResolutionService(private val resourceAssignmentProcessorFactory: 
 
         val context = hashMapOf<String, Any>()
 
-        process(resourceResolutionOutput.resourceAssignments, context)
+        process(resourceResolutionOutput.resourceAssignments)
 
         val status = Status()
         status.code = 200
@@ -53,7 +59,13 @@ class ResourceResolutionService(private val resourceAssignmentProcessorFactory: 
         return resourceResolutionOutput
     }
 
-    fun process(resourceAssignments: MutableList<ResourceAssignment>, context: MutableMap<String, Any>): Unit {
+    fun registeredResourceSources(): List<String> {
+        return applicationContext.getBeanNamesForType(ResourceAssignmentProcessor::class.java)
+                .filter { it.startsWith(ResourceResolutionConstants.PREFIX_RESOURCE_ASSIGNMENT_PROCESSOR) }
+                .map { it.substringAfter(ResourceResolutionConstants.PREFIX_RESOURCE_ASSIGNMENT_PROCESSOR) }
+    }
+
+    fun process(resourceAssignments: MutableList<ResourceAssignment>) {
 
         val bulkSequenced = BulkResourceSequencingUtils.process(resourceAssignments)
 
@@ -61,18 +73,18 @@ class ResourceResolutionService(private val resourceAssignmentProcessorFactory: 
             batchResourceAssignments.filter { it.name != "*" && it.name != "start" }
                     .map { resourceAssignment ->
                         val dictionarySource = resourceAssignment.dictionarySource
-                        val processorInstanceName = "resource-assignment-processor-".plus(dictionarySource)
-                        val resourceAssignmentProcessor = resourceAssignmentProcessorFactory.getInstance(processorInstanceName)
+                        val processorInstanceName = ResourceResolutionConstants.PREFIX_RESOURCE_ASSIGNMENT_PROCESSOR.plus(dictionarySource)
+
+                        val resourceAssignmentProcessor = applicationContext.getBean(processorInstanceName) as? ResourceAssignmentProcessor
                                 ?: throw BluePrintProcessorException("failed to get resource processor for instance name($processorInstanceName) " +
                                         "for resource assignment(${resourceAssignment.name})")
                         try {
-                            resourceAssignmentProcessor.validate(resourceAssignment, context)
-                            resourceAssignmentProcessor.process(resourceAssignment, context)
-                        } catch (e: Exception) {
-                            resourceAssignmentProcessor.errorHandle(resourceAssignment, context)
+                            // Invoke Apply Method
+                            resourceAssignmentProcessor.apply(resourceAssignment)
+                        } catch (e: RuntimeException) {
+                            resourceAssignmentProcessor.recover(e, resourceAssignment)
                             throw BluePrintProcessorException(e)
                         }
-
                     }
         }
     }
