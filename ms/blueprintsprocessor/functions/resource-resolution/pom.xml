@@ -19,18 +19,13 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
-        <artifactId>services</artifactId>
+        <artifactId>functions</artifactId>
         <version>0.4.0-SNAPSHOT</version>
     </parent>
-    <artifactId>resolution-service</artifactId>
+    <groupId>org.onap.ccsdk.apps.blueprintsprocessor.functions</groupId>
+    <artifactId>resource-resolution</artifactId>
     <packaging>jar</packaging>
     <name>Blueprints Processor Resolution Service</name>
     <description>Blueprints Processor Resolution Service</description>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
-            <artifactId>db-service</artifactId>
-        </dependency>
-    </dependencies>
 </project>

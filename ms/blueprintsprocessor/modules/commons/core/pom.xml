@@ -17,27 +17,27 @@
   ~  limitations under the License.
   -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
-		<artifactId>commons</artifactId>
-		<version>0.4.0-SNAPSHOT</version>
-	</parent>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
+        <artifactId>commons</artifactId>
+        <version>0.4.0-SNAPSHOT</version>
+    </parent>
 
-	<artifactId>core</artifactId>
-	<packaging>jar</packaging>
-	<name>Blueprints Processor Core</name>
-	<description>Blueprints Processor Core</description>
+    <artifactId>core</artifactId>
+    <packaging>jar</packaging>
+    <name>Blueprints Processor Core</name>
+    <description>Blueprints Processor Core</description>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
-			<artifactId>db-lib</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
-			<artifactId>rest-lib</artifactId>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
+            <artifactId>db-lib</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
+            <artifactId>rest-lib</artifactId>
+        </dependency>
+    </dependencies>
 </project>

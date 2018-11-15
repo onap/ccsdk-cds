@@ -20,25 +20,25 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
-        <artifactId>services</artifactId>
+        <artifactId>parent</artifactId>
         <version>0.4.0-SNAPSHOT</version>
+        <relativePath>../parent</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
-    <artifactId>workflow-service</artifactId>
-    <name>Blueprints Processor Workflow Service</name>
-    <description>Blueprints Processor Workflow Service</description>
+    <packaging>pom</packaging>
+    <artifactId>functions</artifactId>
+    <name>Blueprints Processor Functions POM</name>
+    <description>Blueprints Processor Functions POM</description>
+    <modules>
+        <module>resource-resolution</module>
+    </modules>
 
     <dependencies>
         <dependency>
             <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
             <artifactId>execution-service</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.onap.ccsdk.sli.core</groupId>
-            <artifactId>sli-provider</artifactId>
-        </dependency>
-
+        <!-- Test Dependencies -->
         <dependency>
             <groupId>org.powermock</groupId>
             <artifactId>powermock-api-mockito2</artifactId>
@@ -60,6 +60,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-
 </project>

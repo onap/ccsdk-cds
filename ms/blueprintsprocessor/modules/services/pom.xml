@@ -30,14 +30,6 @@
 
     <modules>
         <module>execution-service</module>
-        <module>resolution-service</module>
         <module>workflow-service</module>
     </modules>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
-            <artifactId>core</artifactId>
-        </dependency>
-    </dependencies>
 </project>

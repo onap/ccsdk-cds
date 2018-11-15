@@ -19,6 +19,7 @@ package org.onap.ccsdk.apps.blueprintsprocessor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.reactive.config.EnableWebFlux;
 
@@ -28,7 +29,7 @@ import org.springframework.web.reactive.config.EnableWebFlux;
  * @author Brinda Santh 8/14/2018
  */
 @SpringBootApplication
-@EnableAutoConfiguration
+@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 @EnableWebFlux
 @ComponentScan(basePackages = {"org.onap.ccsdk.apps.controllerblueprints",
         "org.onap.ccsdk.apps.blueprintsprocessor"})
