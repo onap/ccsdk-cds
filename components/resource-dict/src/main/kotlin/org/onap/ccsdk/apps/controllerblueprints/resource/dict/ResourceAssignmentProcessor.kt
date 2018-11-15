@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2018 IBM.
+ *  Modifications Copyright © 2017-2018 AT&T Intellectual Property.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,19 +17,41 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.resource.dict
 
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BlueprintFunctionNode
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
+import org.slf4j.LoggerFactory
 
-interface ResourceAssignmentProcessor {
+abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssignment, ResourceAssignment> {
 
-    @Throws(BluePrintProcessorException::class)
-    fun validate(resourceAssignment: ResourceAssignment, context : MutableMap<String, Any>)
+    private val log = LoggerFactory.getLogger(ResourceAssignmentProcessor::class.java)
 
-    @Throws(BluePrintProcessorException::class)
-    fun process(resourceAssignment: ResourceAssignment, context : MutableMap<String, Any>)
+    private var bluePrintRuntimeService: BluePrintRuntimeService<*>? = null
 
-    @Throws(BluePrintProcessorException::class)
-    fun errorHandle(resourceAssignment: ResourceAssignment, context : MutableMap<String, Any>)
+    open fun setBlueprintRuntimeService(bluePrintRuntimeService: BluePrintRuntimeService<*>) {
+        this.bluePrintRuntimeService = bluePrintRuntimeService
+    }
 
-    @Throws(BluePrintProcessorException::class)
-    fun reTrigger(resourceAssignment: ResourceAssignment, context : MutableMap<String, Any>)
+    open fun getBlueprintRuntimeService(): BluePrintRuntimeService<*> {
+        return this.bluePrintRuntimeService!!
+    }
+
+    override fun prepareRequest(resourceAssignment: ResourceAssignment): ResourceAssignment {
+        log.info("prepareRequest...")
+        return resourceAssignment
+    }
+
+    override fun prepareResponse(): ResourceAssignment {
+        log.info("Preparing Response...")
+        return ResourceAssignment()
+    }
+
+    override fun apply(executionServiceInput: ResourceAssignment): ResourceAssignment {
+        prepareRequest(executionServiceInput)
+        process(executionServiceInput)
+        return prepareResponse()
+    }
+
+    override abstract fun process(executionRequest: ResourceAssignment)
+
+    override abstract fun recover(runtimeException: RuntimeException, executionRequest: ResourceAssignment)
 }
