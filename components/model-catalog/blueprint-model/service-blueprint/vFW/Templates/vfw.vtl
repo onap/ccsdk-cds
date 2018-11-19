@@ -18,7 +18,7 @@
     },
     {
       "param-name": "vf_module_id",
-      "param-value": "${vnf-id}"
+      "param-value": "${vf-module-id}"
     },
     {
       "param-name": "vf_module_type",
@@ -277,6 +277,29 @@
             {
               "resource-name": "vfw_private_ip_2",
               "resource-value": "${vfw_private_ip_2}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "capability-name": "aai-vf-module-put",
+      "key-mapping": [
+        {
+          "payload": [
+            {
+              "param-name": "vf-module",
+              "param-value": "vf-module"
+            },
+            {
+              "param-name": "vnfc",
+              "param-value": "vnfc"
+            }
+          ],
+          "output-key-mapping": [
+            {
+              "resource-name": "aai-vf-module-put",
+              "resource-value": "${status}"
             }
           ]
         }

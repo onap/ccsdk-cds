@@ -52,5 +52,26 @@
       "param-name": "vf_module_name",
       "param-value": "${vnf-name}_base"
     }
+  ],
+  "capability-data": [
+    {
+      "capability-name": "aai-vf-module-put",
+      "key-mapping": [
+        {
+          "payload": [
+            {
+              "param-name": "vf-module",
+              "param-value": "vf-module"
+            }
+          ],
+          "output-key-mapping": [
+            {
+              "resource-name": "aai-vf-module-put",
+              "resource-value": "${status}"
+            }
+          ]
+        }
+      ]
+    }
   ]
 }
