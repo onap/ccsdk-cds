@@ -60,6 +60,8 @@ open class ComponentExecuteNodeExecutor : ExecuteNodeExecutor() {
             log.info("executing node template($nodeTemplateName) component($componentName)")
             // Get the Component Instance
             val plugin = this.getComponentFunction(componentName)
+            // Set the Blueprint Service
+            plugin.bluePrintRuntimeService = ctx.getBluePrintService()
 
             val executionInput = ctx.getRequest() as ExecutionServiceInput
             // Get the Request from the Context and Set to the Function Input and Invoke the function

@@ -38,6 +38,7 @@
         <eelf.version>1.0.0</eelf.version>
         <sli.version>0.3.1</sli.version>
         <guava.version>26.0-jre</guava.version>
+        <jython.version>2.7.1</jython.version>
         <springfox.swagger2.version>2.9.2</springfox.swagger2.version>
         <h2database.version>1.4.197</h2database.version>
         <onap.logger.slf4j>1.2.2</onap.logger.slf4j>
@@ -227,6 +228,11 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.python</groupId>
+                <artifactId>jython-standalone</artifactId>
+                <version>${jython.version}</version>
             </dependency>
 
             <!-- Database -->

@@ -19,7 +19,10 @@ package org.onap.ccsdk.apps.blueprintsprocessor.services.execution
 
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceOutput
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.apps.controllerblueprints.core.getAsString
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BlueprintFunctionNode
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.slf4j.LoggerFactory
 
 /**
@@ -29,14 +32,39 @@ import org.slf4j.LoggerFactory
 abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServiceInput, ExecutionServiceOutput> {
     private val log = LoggerFactory.getLogger(AbstractComponentFunction::class.java)
 
-    override fun prepareRequest(executionRequest: ExecutionServiceInput): ExecutionServiceInput {
+    var executionServiceInput: ExecutionServiceInput? = null
+    val executionServiceOutput = ExecutionServiceOutput()
+    var bluePrintRuntimeService: BluePrintRuntimeService<*>? = null
+    var processId: String = ""
+    var workflowName: String = ""
+    var stepName: String = ""
+    var interfaceName: String = ""
+    var operationName: String = ""
+    var nodeTemplateName: String = ""
+
+
+    override fun prepareRequest(executionServiceInput: ExecutionServiceInput): ExecutionServiceInput {
+
+        this.executionServiceInput = this.executionServiceInput
+
+        processId = executionServiceInput.commonHeader.requestId
+        workflowName = executionServiceInput.actionIdentifiers.actionName
+
+        val metadata = executionServiceInput.metadata
+        stepName = metadata.getAsString(BluePrintConstants.PROPERTY_CURRENT_STEP)
+        nodeTemplateName = metadata.getAsString(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE)
+        interfaceName = metadata.getAsString(BluePrintConstants.PROPERTY_CURRENT_INTERFACE)
+        operationName = metadata.getAsString(BluePrintConstants.PROPERTY_CURRENT_OPERATION)
+
+        checkNotNull(bluePrintRuntimeService) { "failed to prepare blueprint runtime" }
+
         log.info("prepareRequest...")
-        return executionRequest
+        return executionServiceInput
     }
 
     override fun prepareResponse(): ExecutionServiceOutput {
         log.info("Preparing Response...")
-        return ExecutionServiceOutput()
+        return this.executionServiceOutput
     }
 
     override fun apply(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {

@@ -125,12 +125,6 @@ class DefaultBlueprintSvcLogicService : BlueprintSvcLogicService {
     override fun execute(graph: SvcLogicGraph, svcLogicContext: SvcLogicContext): SvcLogicContext {
         MDC.put("currentGraph", graph.toString())
 
-        val ctx = svcLogicContext as BlueprintSvcLogicContext
-
-        val blueprintRuntimeService = ctx.getBluePrintService()
-
-        log.info("Blueprint Runtime Service : ${blueprintRuntimeService}")
-
         var curNode: SvcLogicNode? = graph.getRootNode()
         log.info("About to execute graph {}", graph.toString())
 
@@ -138,7 +132,7 @@ class DefaultBlueprintSvcLogicService : BlueprintSvcLogicService {
             while (curNode != null) {
                 MDC.put("nodeId", curNode.nodeId.toString() + " (" + curNode.nodeType + ")")
                 log.info("About to execute node # {} ({})", curNode.nodeId, curNode.nodeType)
-                val nextNode = this.executeNode(curNode, ctx)
+                val nextNode = this.executeNode(curNode, svcLogicContext)
                 curNode = nextNode
             }
         } catch (var5: ExitNodeException) {
@@ -147,6 +141,6 @@ class DefaultBlueprintSvcLogicService : BlueprintSvcLogicService {
 
         MDC.remove("nodeId")
         MDC.remove("currentGraph")
-        return ctx
+        return svcLogicContext
     }
 }

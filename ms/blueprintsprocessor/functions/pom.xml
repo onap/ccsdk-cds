@@ -31,6 +31,7 @@
     <description>Blueprints Processor Functions POM</description>
     <modules>
         <module>resource-resolution</module>
+        <module>python-executor</module>
     </modules>
 
     <dependencies>

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.apps.blueprintsprocessor.services.workflow
+package org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor
 
 import com.fasterxml.jackson.databind.JsonNode
 import org.junit.Test
@@ -22,50 +22,29 @@ import org.junit.runner.RunWith
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ActionIdentifiers
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.CommonHeader
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
-import org.onap.ccsdk.apps.blueprintsprocessor.services.workflow.executor.ComponentExecuteNodeExecutor
-import org.onap.ccsdk.apps.blueprintsprocessor.services.workflow.utils.SvcGraphUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.putJsonElement
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [WorkflowServiceConfiguration::class, ComponentExecuteNodeExecutor::class])
-class BlueprintServiceLogicTest {
+@ContextConfiguration(classes = [PythonExecutorConfiguration::class, PythonExecutorProperty::class])
+@TestPropertySource(properties =
+["blueprints.processor.functions.python.executor.modulePaths=./../../../../components/scripts/python/ccsdk_blueprints",
+    "blueprints.processor.functions.python.executor.executionPath=./../../../../components/scripts/python/ccsdk_blueprints"])
 
-    private val log = LoggerFactory.getLogger(BlueprintServiceLogicTest::class.java)
-
-    val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-            "./../../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration")
+class ComponentPythonExecutorTest {
 
     @Autowired
-    lateinit var blueprintSvcLogicService: BlueprintSvcLogicService
+    lateinit var componentPythonExecutor: ComponentPythonExecutor
+
 
     @Test
-    fun testExecuteGraphWithSingleComponent() {
+    fun testPythonComponentInjection() {
 
-        val graph = SvcGraphUtils.getSvcGraphFromClassPathFile("service-logic/one-component.xml")
-        val svcLogicContext = BlueprintSvcLogicContext()
-        svcLogicContext.setBluePrintRuntimeService(bluePrintRuntimeService)
-        svcLogicContext.setRequest(getDefaultExecutionServiceInput())
-        blueprintSvcLogicService.execute(graph, svcLogicContext)
-
-    }
-
-    @Test
-    fun testExecuteGraphWithMultipleComponents() {
-        val graph = SvcGraphUtils.getSvcGraphFromClassPathFile("service-logic/two-component.xml")
-        val svcLogicContext = BlueprintSvcLogicContext()
-        svcLogicContext.setBluePrintRuntimeService(bluePrintRuntimeService)
-        svcLogicContext.setRequest(getDefaultExecutionServiceInput())
-        blueprintSvcLogicService.execute(graph, svcLogicContext)
-
-    }
-
-    private fun getDefaultExecutionServiceInput(): ExecutionServiceInput {
         val executionServiceInput = ExecutionServiceInput()
         val commonHeader = CommonHeader()
         commonHeader.requestId = "1234"
@@ -77,13 +56,21 @@ class BlueprintServiceLogicTest {
         actionIdentifiers.actionName = "activate"
         executionServiceInput.actionIdentifiers = actionIdentifiers
 
+
+        val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(commonHeader.requestId,
+                "./../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration")
+
+        componentPythonExecutor.bluePrintRuntimeService = bluePrintRuntimeService
+
+
         val metaData: MutableMap<String, JsonNode> = hashMapOf()
-        metaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_STEP,"resource-assignment-py")
+        metaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_STEP, "resource-assignment-py")
         metaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "resource-assignment-py")
         metaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "DefaultComponentNode")
         metaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
         executionServiceInput.metadata = metaData
 
-        return executionServiceInput
+        componentPythonExecutor.apply(executionServiceInput)
+
     }
 }

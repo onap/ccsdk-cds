@@ -15,6 +15,7 @@
 **/target/*
 **/logs/*
 **/tokens/*
+**/lib/cachedir/**
 
 # Added for Intellij IDEA IDE
 **/debug-logs/*
