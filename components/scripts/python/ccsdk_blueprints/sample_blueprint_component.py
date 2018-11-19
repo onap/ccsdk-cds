@@ -1,7 +1,7 @@
 from abstract_blueprint_function import AbstractPythonComponentFunction
 from blueprint_constants import *
 
-class SamplePythonComponentNode(AbstractPythonComponentFunction):
+class SampleBlueprintComponent(AbstractPythonComponentFunction):
 
     def process(self, execution_request):
         print "Processing calling.." + PROPERTY_BLUEPRINT_BASE_PATH

@@ -143,7 +143,7 @@
         "artifacts": {
           "component-script": {
             "type": "artifact-script-python",
-            "file": "Scripts/baseconfig-template.vtl"
+            "file": "Scripts/SamplePythonComponentNode.py"
           }
         }
       }
@@ -181,6 +181,24 @@
         }
       },
       "activate": {
+        "inputs": {
+          "request-id": {
+            "required": true,
+            "type": "string"
+          },
+          "action-name": {
+            "required": true,
+            "type": "string"
+          },
+          "scope-type": {
+            "required": true,
+            "type": "string"
+          },
+          "hostname": {
+            "required": true,
+            "type": "string"
+          }
+        },
         "steps": {
           "call-resource-assignment": {
             "description": "Netconf Activation Workflow",

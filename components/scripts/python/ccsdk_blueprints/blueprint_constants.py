@@ -1,0 +1,23 @@
+
+PROPERTY_BLUEPRINT_PROCESS_ID= "blueprint-process-id"
+PROPERTY_BLUEPRINT_BASE_PATH= "blueprint-basePath"
+PROPERTY_BLUEPRINT_RUNTIME= "blueprint-runtime"
+PROPERTY_BLUEPRINT_INPUTS_DATA= "blueprint-inputs-data"
+PROPERTY_BLUEPRINT_CONTEXT= "blueprint-context"
+PROPERTY_BLUEPRINT_NAME= "template_name"
+PROPERTY_BLUEPRINT_VERSION= "template_version"
+
+METADATA_USER_GROUPS = "user-groups"
+METADATA_TEMPLATE_NAME = "template_name"
+METADATA_TEMPLATE_VERSION = "template_version"
+METADATA_TEMPLATE_AUTHOR = "template_author"
+METADATA_TEMPLATE_TAGS = "template_tags"
+METADATA_WORKFLOW_NAME = "workflow_name"
+
+PAYLOAD_DATA = "payload-data"
+PROPERTY_CURRENT_STEP = "current-step"
+PROPERTY_CURRENT_NODE_TEMPLATE = "current-node-template"
+PROPERTY_CURRENT_INTERFACE = "current-interface"
+PROPERTY_CURRENT_OPERATION = "current-operation"
+PROPERTY_CURRENT_IMPLEMENTATION = "current-implementation"
+PROPERTY_EXECUTION_REQUEST = "execution-request"

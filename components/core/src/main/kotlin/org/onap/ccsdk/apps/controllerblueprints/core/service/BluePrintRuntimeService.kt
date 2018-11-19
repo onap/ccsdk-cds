@@ -59,6 +59,8 @@ interface BluePrintRuntimeService<T> {
 
     fun resolveNodeTemplateArtifact(nodeTemplateName: String, artifactName: String): String
 
+    fun resolveNodeTemplateArtifactDefinition(nodeTemplateName: String, artifactName: String): ArtifactDefinition
+
     fun setInputValue(propertyName: String, propertyDefinition: PropertyDefinition, value: JsonNode)
 
     fun setWorkflowInputValue(workflowName: String, propertyName: String, propertyDefinition: PropertyDefinition, value: JsonNode)
@@ -269,15 +271,19 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
         return propertyAssignmentValue
     }
 
-    override fun resolveNodeTemplateArtifact(nodeTemplateName: String,
-                                             artifactName: String): String {
-        val nodeTemplate = bluePrintContext.nodeTemplateByName(nodeTemplateName)
-
-        val artifactDefinition: ArtifactDefinition = nodeTemplate.artifacts?.get(artifactName)
-                ?: throw BluePrintProcessorException(String.format("failed to get artifat definition {} from the node template"
-                        , artifactName))
+    override fun resolveNodeTemplateArtifact(nodeTemplateName: String, artifactName: String): String {
+        val artifactDefinition: ArtifactDefinition = resolveNodeTemplateArtifactDefinition(nodeTemplateName, artifactName)
         val propertyAssignmentExpression = PropertyAssignmentService(this)
         return propertyAssignmentExpression.artifactContent(artifactDefinition)
+    }
+
+    override fun resolveNodeTemplateArtifactDefinition(nodeTemplateName: String, artifactName: String): ArtifactDefinition {
+        val nodeTemplate = bluePrintContext.nodeTemplateByName(nodeTemplateName)
+
+        return nodeTemplate.artifacts?.get(artifactName)
+                ?: throw BluePrintProcessorException(String.format("failed to get artifat definition {} from the node template"
+                        , artifactName))
+
     }
 
 
