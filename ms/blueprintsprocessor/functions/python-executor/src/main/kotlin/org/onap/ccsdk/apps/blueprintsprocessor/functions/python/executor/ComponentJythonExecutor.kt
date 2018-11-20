@@ -27,10 +27,10 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.OperationAssignment
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
-@Component("component-python-executor")
-class ComponentPythonExecutor(private val pythonExecutorProperty: PythonExecutorProperty) : AbstractComponentFunction() {
+@Component("component-jython-executor")
+class ComponentJythonExecutor(private val pythonExecutorProperty: PythonExecutorProperty) : AbstractComponentFunction() {
 
-    private val log = LoggerFactory.getLogger(ComponentPythonExecutor::class.java)
+    private val log = LoggerFactory.getLogger(ComponentJythonExecutor::class.java)
 
     private var componentFunction: AbstractComponentFunction? = null
 
@@ -69,7 +69,8 @@ class ComponentPythonExecutor(private val pythonExecutorProperty: PythonExecutor
         val properties: MutableMap<String, Any> = hashMapOf()
         properties["log"] = log
 
-        componentFunction = PythonExecutorUtils.getPythonComponent(pythonExecutorProperty.executionPath, pythonPath, content, pythonClassName, properties)
+        componentFunction = PythonExecutorUtils.getPythonComponent(pythonExecutorProperty.executionPath,
+                pythonPath, content, pythonClassName, properties)
 
         componentFunction!!.process(executionServiceInput)
 

@@ -80,7 +80,7 @@ class BlueprintServiceLogicTest {
         val metaData: MutableMap<String, JsonNode> = hashMapOf()
         metaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_STEP,"resource-assignment-py")
         metaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "resource-assignment-py")
-        metaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "DefaultComponentNode")
+        metaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "ResourceAssignmentComponent")
         metaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
         executionServiceInput.metadata = metaData
 

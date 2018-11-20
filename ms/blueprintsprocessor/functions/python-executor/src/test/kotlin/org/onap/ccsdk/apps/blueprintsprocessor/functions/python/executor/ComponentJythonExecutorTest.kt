@@ -36,10 +36,10 @@ import org.springframework.test.context.junit4.SpringRunner
 ["blueprints.processor.functions.python.executor.modulePaths=./../../../../components/scripts/python/ccsdk_blueprints",
     "blueprints.processor.functions.python.executor.executionPath=./../../../../components/scripts/python/ccsdk_blueprints"])
 
-class ComponentPythonExecutorTest {
+class ComponentJythonExecutorTest {
 
     @Autowired
-    lateinit var componentPythonExecutor: ComponentPythonExecutor
+    lateinit var componentJythonExecutor: ComponentJythonExecutor
 
 
     @Test
@@ -60,17 +60,17 @@ class ComponentPythonExecutorTest {
         val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(commonHeader.requestId,
                 "./../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration")
 
-        componentPythonExecutor.bluePrintRuntimeService = bluePrintRuntimeService
+        componentJythonExecutor.bluePrintRuntimeService = bluePrintRuntimeService
 
 
         val metaData: MutableMap<String, JsonNode> = hashMapOf()
         metaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_STEP, "resource-assignment-py")
         metaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "resource-assignment-py")
-        metaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "DefaultComponentNode")
+        metaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "ResourceAssignmentComponent")
         metaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
         executionServiceInput.metadata = metaData
 
-        componentPythonExecutor.apply(executionServiceInput)
+        componentJythonExecutor.apply(executionServiceInput)
 
     }
 }

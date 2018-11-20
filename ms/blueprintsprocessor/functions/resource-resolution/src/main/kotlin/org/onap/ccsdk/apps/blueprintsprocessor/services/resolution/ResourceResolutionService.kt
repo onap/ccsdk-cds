@@ -47,8 +47,6 @@ class ResourceResolutionService {
         resourceResolutionOutput.commonHeader = resourceResolutionInput.commonHeader
         resourceResolutionOutput.resourceAssignments = resourceResolutionInput.resourceAssignments
 
-        val context = hashMapOf<String, Any>()
-
         process(resourceResolutionOutput.resourceAssignments)
 
         val status = Status()
