@@ -48,6 +48,14 @@ interface BluePrintRuntimeService<T> {
 
     fun cleanRuntime()
 
+    fun getAsString(key: String): String?
+
+    fun getAsBoolean(key: String): Boolean?
+
+    fun getAsInt(key: String): Int?
+
+    fun getAsDouble(key: String): Double?
+
     /*
       Get the Node Type Definition for the Node Template, Then iterate Node Type Properties and resolve the expressing
    */
@@ -139,9 +147,25 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
         return get(key)
     }
 
+    override fun getAsString(key: String): String? {
+        return get(key).asText()
+    }
+
+    override fun getAsBoolean(key: String): Boolean? {
+        return get(key).asBoolean()
+    }
+
+    override fun getAsInt(key: String): Int? {
+        return get(key).asInt()
+    }
+
+    override fun getAsDouble(key: String): Double? {
+        return get(key).asDouble()
+    }
+
     /*
-        Get the Node Type Definition for the Node Template, Then iterate Node Type Properties and resolve the expressing
-     */
+            Get the Node Type Definition for the Node Template, Then iterate Node Type Properties and resolve the expressing
+         */
     override fun resolveNodeTemplateProperties(nodeTemplateName: String): MutableMap<String, JsonNode> {
         log.info("resolveNodeTemplatePropertyValues for node template ({})", nodeTemplateName)
         val propertyAssignmentValue: MutableMap<String, JsonNode> = hashMapOf()

@@ -60,7 +60,7 @@
         "artifacts": {
           "dg-activate-process": {
             "type": "artifact-directed-graph",
-            "file": "Plans/ActivateProcess.bpmn"
+            "file": "Plans/CONFIG_ActivateNetconf_1.0.0.xml"
           }
         }
       },
@@ -230,9 +230,9 @@
           }
         },
         "steps": {
-          "call-resource-assignment": {
+          "activate-process": {
             "description": "Netconf Activation Workflow",
-            "target": "resource-assignment",
+            "target": "activate-process",
             "activities": [
               {
                 "call_operation": "ResourceAssignmentComponent.process"

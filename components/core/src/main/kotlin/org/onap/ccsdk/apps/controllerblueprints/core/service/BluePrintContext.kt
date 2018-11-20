@@ -57,10 +57,15 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
                 ?: throw BluePrintException("could't get step($stepName) for workflow($workFlowName)")
     }
 
-    fun workflowStepNodeTemplate(workFlowName: String, stepName: String): NodeTemplate {
-        val nodeTemplateName = workflowStepByName(workFlowName, stepName).target
+    fun workflowStepNodeTemplate(workFlowName: String, stepName: String): String {
+        return workflowStepByName(workFlowName, stepName).target
                 ?: throw BluePrintException("could't get node template name for workflow($workFlowName)'s step($stepName)")
-        return nodeTemplateByName(nodeTemplateName)
+    }
+
+    fun workflowFirstStepNodeTemplate(workFlowName: String): String {
+        val firstStepName = workflowByName(workFlowName).steps?.keys?.first()
+                ?: throw BluePrintException("could't get first step for workflow($workFlowName)")
+        return workflowStepNodeTemplate(workFlowName, firstStepName)
     }
 
     fun workflowStepFirstCallOperation(workFlowName: String, stepName: String): String {
@@ -154,6 +159,11 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
     fun nodeTemplateArtifact(nodeTemplateName: String, artifactName: String): ArtifactDefinition {
         return nodeTemplateArtifacts(nodeTemplateName)?.get(artifactName)
                 ?: throw BluePrintException("could't get NodeTemplate($nodeTemplateName)'s ArtifactDefinition($artifactName)")
+    }
+
+    fun nodeTemplateArtifactForArtifactType(nodeTemplateName: String, artifactType: String): ArtifactDefinition {
+        return nodeTemplateArtifacts(nodeTemplateName)?.filter { it.value.type == artifactType }?.map { it.value }?.get(0)
+                ?: throw BluePrintException("could't get NodeTemplate($nodeTemplateName)'s Artifact Type($artifactType)")
     }
 
     fun nodeTemplateFirstInterface(nodeTemplateName: String): InterfaceAssignment {
