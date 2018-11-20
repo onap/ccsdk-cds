@@ -17,6 +17,7 @@
 package org.onap.ccsdk.apps.blueprintsprocessor.services.workflow.mock
 
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.apps.blueprintsprocessor.services.workflow.executor.ComponentExecuteNodeExecutor
 import org.slf4j.LoggerFactory
@@ -38,6 +39,8 @@ class MockComponentFunction : AbstractComponentFunction() {
 
     override fun process(executionRequest: ExecutionServiceInput) {
         log.info("Processing component..")
+
+        this.executionServiceOutput = ExecutionServiceOutput()
     }
 
     override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {

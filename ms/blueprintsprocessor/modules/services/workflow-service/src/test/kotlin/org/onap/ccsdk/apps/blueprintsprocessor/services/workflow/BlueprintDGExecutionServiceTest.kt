@@ -20,7 +20,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.services.workflow.executor.ComponentExecuteNodeExecutor
-import org.onap.ccsdk.apps.blueprintsprocessor.services.workflow.utils.SvcGraphUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
@@ -30,31 +29,25 @@ import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [WorkflowServiceConfiguration::class, ComponentExecuteNodeExecutor::class])
-class BlueprintServiceLogicTest {
+class BlueprintDGExecutionServiceTest {
 
     private val log = LoggerFactory.getLogger(BlueprintServiceLogicTest::class.java)
 
-    val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-            "./../../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration")
-
-    val executionServiceInput = JacksonUtils.readValueFromClassPathFile("execution-input/default-input.json", ExecutionServiceInput::class.java)!!
-
     @Autowired
-    lateinit var blueprintSvcLogicService: BlueprintSvcLogicService
+    lateinit var blueprintDGExecutionService: BlueprintDGExecutionService
+
 
     @Test
-    fun testExecuteGraphWithSingleComponent() {
+    fun testExecuteDirectedGraph() {
 
-        val graph = SvcGraphUtils.getSvcGraphFromClassPathFile("service-logic/one-component.xml")
-        blueprintSvcLogicService.execute(graph, bluePrintRuntimeService, executionServiceInput)
+        val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
+                "./../../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration")
+
+        val executionServiceInput = JacksonUtils.readValueFromClassPathFile("execution-input/default-input.json", ExecutionServiceInput::class.java)!!
+
+        blueprintDGExecutionService.executeDirectedGraph(bluePrintRuntimeService, executionServiceInput)
 
     }
 
-    @Test
-    fun testExecuteGraphWithMultipleComponents() {
-        val graph = SvcGraphUtils.getSvcGraphFromClassPathFile("service-logic/two-component.xml")
-        blueprintSvcLogicService.execute(graph, bluePrintRuntimeService, executionServiceInput)
-
-    }
 
 }
