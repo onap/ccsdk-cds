@@ -69,7 +69,7 @@ class BluePrintRuntimeServiceTest {
                 "data/default-context.json", executionContext)
 
         val inContext: MutableMap<String, JsonNode> = bluePrintRuntimeService.resolveNodeTemplateInterfaceOperationInputs("resource-assignment",
-                "DefaultComponentNode", "process")
+                "ResourceAssignmentComponent", "process")
 
         assertNotNull(inContext, "Failed to populate interface input property values")
         assertEquals(inContext["action-name"], jsonNodeFromObject("sample-action"), "Failed to populate parameter action-name")
@@ -86,14 +86,14 @@ class BluePrintRuntimeServiceTest {
         bluePrintRuntimeService.setNodeTemplateAttributeValue("resource-assignment", "assignment-params", NullNode.getInstance())
 
         bluePrintRuntimeService.resolveNodeTemplateInterfaceOperationOutputs("resource-assignment",
-                "DefaultComponentNode", "process")
+                "ResourceAssignmentComponent", "process")
 
         val outputStatus = bluePrintRuntimeService.getNodeTemplateOperationOutputValue("resource-assignment",
-                "DefaultComponentNode", "process", "status")
+                "ResourceAssignmentComponent", "process", "status")
         assertEquals("success".asJsonPrimitive(), outputStatus, "Failed to get operation property status")
 
         val outputParams = bluePrintRuntimeService.getNodeTemplateOperationOutputValue("resource-assignment",
-                "DefaultComponentNode", "process", "resource-assignment-params")
+                "ResourceAssignmentComponent", "process", "resource-assignment-params")
         assertEquals(NullNode.getInstance(), outputParams, "Failed to get operation property resource-assignment-params")
 
     }

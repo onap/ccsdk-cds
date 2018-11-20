@@ -1,0 +1,24 @@
+{
+  "data_types": {
+    "sample-property": {
+      "description": "This is sample data type",
+      "version": "1.0.0",
+      "properties": {
+        "content": {
+          "required": false,
+          "type": "string"
+        },
+        "process-name": {
+          "required": false,
+          "type": "string"
+        },
+        "version": {
+          "required": false,
+          "type": "string",
+          "default": "LATEST"
+        }
+      },
+      "derived_from": "tosca.datatypes.Root"
+    }
+  }
+}

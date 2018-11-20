@@ -14,7 +14,7 @@
     }
   },
   "interfaces": {
-    "org-openecomp-sdnc-netconf-adaptor-service-NetconfExecutorNode": {
+    "NetconfExecutorComponent": {
       "operations": {
         "process": {
           "inputs": {
@@ -75,5 +75,5 @@
       }
     }
   },
-  "derived_from": "tosca.nodes.Component"
+  "derived_from": "tosca.nodes.component.Jython"
 }

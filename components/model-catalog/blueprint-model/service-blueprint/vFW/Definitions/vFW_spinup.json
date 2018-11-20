@@ -40,7 +40,7 @@
       "resource-assignment-ra-component": {
         "type": "component-resource-assignment",
         "interfaces": {
-          "org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode": {
+          "ResourceAssignmentComponent": {
             "operations": {
               "process": {
                 "inputs": {
@@ -3337,7 +3337,7 @@
         }
       },
       "interfaces": {
-        "org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode": {
+        "ResourceAssignmentComponent": {
           "operations": {
             "process": {
               "inputs": {

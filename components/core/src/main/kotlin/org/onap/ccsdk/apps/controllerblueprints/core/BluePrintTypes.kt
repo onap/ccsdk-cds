@@ -37,6 +37,7 @@ object BluePrintTypes {
             BluePrintConstants.MODEL_TYPE_NODES_COMPONENT_BUNDLE,
             BluePrintConstants.MODEL_TYPE_NODES_COMPONENT_SCRIPT,
             BluePrintConstants.MODEL_TYPE_NODES_COMPONENT_PYTHON,
+            BluePrintConstants.MODEL_TYPE_NODES_COMPONENT_JYTHON,
             BluePrintConstants.MODEL_TYPE_NODES_COMPONENT_JAVA_SCRIPT
     )
 

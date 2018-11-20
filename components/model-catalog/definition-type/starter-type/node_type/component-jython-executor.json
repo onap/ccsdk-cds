@@ -1,0 +1,40 @@
+{
+  "description": "This is Jython Execution Component.",
+  "version": "1.0.0",
+  "capabilities": {
+    "component-node": {
+      "type": "tosca.capabilities.Node"
+    }
+  },
+  "interfaces": {
+    "JythonExecutorComponent": {
+      "operations": {
+        "process": {
+          "inputs": {
+            "instance-dependencies": {
+              "required": true,
+              "description": "Instance Names to Inject to Jython Script.",
+              "type": "list",
+              "entry_schema": {
+                "type": "string"
+              }
+            }
+          },
+          "outputs": {
+            "response-data": {
+              "description": "Execution Response Data in JSON format.",
+              "required": false,
+              "type": "string"
+            },
+            "status": {
+              "description": "Status of the Component Execution ( success or failure )",
+              "required": true,
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "derived_from": "tosca.nodes.component.Jython"
+}

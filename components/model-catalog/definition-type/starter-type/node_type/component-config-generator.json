@@ -7,7 +7,7 @@
 		}
 	},
 	"interfaces": {
-		"org-openecomp-sdnc-config-generator-service-ConfigGeneratorNode": {
+		"ConfigGeneratorComponent": {
 			"operations": {
 				"process": {
 					"inputs": {

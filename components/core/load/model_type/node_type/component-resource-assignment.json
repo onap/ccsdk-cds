@@ -7,7 +7,7 @@
     }
   },
   "interfaces": {
-    "org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode": {
+    "ResourceAssignmentComponent": {
       "operations": {
         "process": {
           "inputs": {

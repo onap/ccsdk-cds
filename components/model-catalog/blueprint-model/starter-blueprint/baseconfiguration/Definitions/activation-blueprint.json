@@ -9,7 +9,13 @@
   },
   "imports": [
     {
-      "file": "Definitions/types.json"
+      "file": "Definitions/data-types.json"
+    },
+    {
+      "file": "Definitions/node-types.json"
+    },
+    {
+      "file": "Definitions/artifact-types.json"
     }
   ],
   "topology_template": {
@@ -64,7 +70,7 @@
           "request-id": "1234"
         },
         "interfaces": {
-          "DefaultComponentNode": {
+          "ResourceAssignmentComponent": {
             "operations": {
               "process": {
                 "inputs": {
@@ -121,7 +127,7 @@
           "request-id": "1234"
         },
         "interfaces": {
-          "DefaultComponentNode": {
+          "ResourceAssignmentComponent": {
             "operations": {
               "process": {
                 "implementation": {
@@ -142,7 +148,31 @@
         },
         "artifacts": {
           "component-script": {
-            "type": "artifact-script-python",
+            "type": "artifact-script-jython",
+            "file": "Scripts/SamplePythonComponentNode.py"
+          }
+        }
+      },
+      "activate-jython": {
+        "type": "component-jython-executor",
+        "interfaces": {
+          "JythonExecutorComponent": {
+            "operations": {
+              "process": {
+                "implementation": {
+                  "primary": "component-script"
+                },
+                "outputs": {
+                  "response-data": "",
+                  "status": ""
+                }
+              }
+            }
+          }
+        },
+        "artifacts": {
+          "component-script": {
+            "type": "artifact-script-jython",
             "file": "Scripts/SamplePythonComponentNode.py"
           }
         }
@@ -174,7 +204,7 @@
             "target": "resource-assignment",
             "activities": [
               {
-                "call_operation": "ResourceAssignmentNode.process"
+                "call_operation": "ResourceAssignmentComponent.process"
               }
             ]
           }
@@ -205,7 +235,7 @@
             "target": "resource-assignment",
             "activities": [
               {
-                "call_operation": "ResourceAssignmentNode.process"
+                "call_operation": "ResourceAssignmentComponent.process"
               }
             ]
           }

@@ -1,55 +1,4 @@
 {
-  "artifact_types": {
-    "artifact-template-velocity": {
-      "description": " Velocity Template used for Configuration",
-      "version": "1.0.0",
-      "file_ext": [
-        "vtl"
-      ],
-      "derived_from": "tosca.artifacts.Implementation"
-    },
-    "artifact-mapping-resource": {
-      "description": " Velocity Template Resource Mapping File used along with Configuration template",
-      "version": "1.0.0",
-      "file_ext": [
-        "json"
-      ],
-      "derived_from": "tosca.artifacts.Implementation"
-    },
-    "artifact-script-kotlin": {
-      "description": " Kotlin Script Template used for Configuration",
-      "version": "1.0.0",
-      "file_ext": [
-        "kt"
-      ],
-      "derived_from": "tosca.artifacts.Implementation"
-    },
-    "artifact-script-python": {
-      "description": " Kotlin Script Template used for Configuration",
-      "version": "1.0.0",
-      "file_ext": [
-        "py"
-      ],
-      "derived_from": "tosca.artifacts.Implementation"
-    },
-    "artifact-directed-graph": {
-      "description": "Directed Graph File",
-      "version": "1.0.0",
-      "file_ext": [
-        "json",
-        "xml"
-      ],
-      "derived_from": "tosca.artifacts.Implementation"
-    },
-    "artifact-component-jar": {
-      "description": "Component Jar",
-      "version": "1.0.0",
-      "file_ext": [
-        "jar"
-      ],
-      "derived_from": "tosca.artifacts.Implementation"
-    }
-  },
   "node_types": {
     "dg-activate": {
       "description": "This is BPMN Activate node type",
@@ -81,8 +30,8 @@
       "version": "1.0.0",
       "derived_from": "tosca.nodes.Root"
     },
-    "tosca.nodes.component.Python": {
-      "description": "This is Resource Assignment Python Component API",
+    "tosca.nodes.component.Jython": {
+      "description": "This is Resource Assignment Jython Component API",
       "version": "1.0.0",
       "derived_from": "tosca.nodes.Root"
     },
@@ -97,7 +46,7 @@
         }
       },
       "interfaces": {
-        "DefaultComponentNode": {
+        "ResourceAssignmentComponent": {
           "operations": {
             "process": {
               "inputs": {
@@ -147,33 +96,26 @@
       },
       "derived_from": "tosca.nodes.Component"
     },
-    "component-resource-assignment-python": {
-      "description": "This is Resource Assignment Component API",
+    "component-jython-executor": {
+      "description": "This is Jython Execution Component.",
       "version": "1.0.0",
-      "properties": {
-        "request-id": {
-          "description": "Request Id used to store the generated configuration, in the database along with the template-name",
-          "required": true,
-          "type": "string"
+      "capabilities": {
+        "component-node": {
+          "type": "tosca.capabilities.Node"
         }
       },
       "interfaces": {
-        "DefaultComponentNode": {
+        "JythonExecutorComponent": {
           "operations": {
             "process": {
-              "inputs": {
-                "action-name": {
-                  "description": "Recipe Name to get from Database, Either (message & mask-info ) or ( resource-id & resource-type & action-name & template-name ) should be present. Message will be given higest priority",
-                  "required": false,
-                  "type": "string"
-                }
-              },
               "outputs": {
-                "resource-assignment-params": {
-                  "required": true,
+                "response-data": {
+                  "description": "Execution Response Data in JSON format.",
+                  "required": false,
                   "type": "string"
                 },
                 "status": {
+                  "description": "Status of the Component Execution ( success or failure )",
                   "required": true,
                   "type": "string"
                 }
@@ -182,29 +124,7 @@
           }
         }
       },
-      "derived_from": "tosca.nodes.component.Python"
-    }
-  },
-  "data_types": {
-    "sample-property": {
-      "description": "This is sample data type",
-      "version": "1.0.0",
-      "properties": {
-        "content": {
-          "required": false,
-          "type": "string"
-        },
-        "process-name": {
-          "required": false,
-          "type": "string"
-        },
-        "version": {
-          "required": false,
-          "type": "string",
-          "default": "LATEST"
-        }
-      },
-      "derived_from": "tosca.datatypes.Root"
+      "derived_from": "tosca.nodes.component.Jython"
     }
   }
 }

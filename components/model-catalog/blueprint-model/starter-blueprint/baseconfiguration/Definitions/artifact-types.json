@@ -1,0 +1,45 @@
+{
+  "artifact_types": {
+    "artifact-template-velocity": {
+      "description": "Velocity Template used for Configuration",
+      "version": "1.0.0",
+      "file_ext": [
+        "vtl"
+      ],
+      "derived_from": "tosca.artifacts.Implementation"
+    },
+    "artifact-mapping-resource": {
+      "description": "Velocity Template Resource Mapping File used along with Configuration template",
+      "version": "1.0.0",
+      "file_ext": [
+        "json"
+      ],
+      "derived_from": "tosca.artifacts.Implementation"
+    },
+    "artifact-script-jython": {
+      "description": "Jython Script File",
+      "version": "1.0.0",
+      "file_ext": [
+        "py"
+      ],
+      "derived_from": "tosca.artifacts.Implementation"
+    },
+    "artifact-directed-graph": {
+      "description": "Directed Graph File",
+      "version": "1.0.0",
+      "file_ext": [
+        "json",
+        "xml"
+      ],
+      "derived_from": "tosca.artifacts.Implementation"
+    },
+    "artifact-component-jar": {
+      "description": "Component Jar",
+      "version": "1.0.0",
+      "file_ext": [
+        "jar"
+      ],
+      "derived_from": "tosca.artifacts.Implementation"
+    }
+  }
+}

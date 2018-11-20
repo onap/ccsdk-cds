@@ -93,6 +93,7 @@ object BluePrintConstants {
     const val MODEL_TYPE_NODES_COMPONENT_BUNDLE: String = "tosca.nodes.component.Bundle"
     const val MODEL_TYPE_NODES_COMPONENT_SCRIPT: String = "tosca.nodes.component.Script"
     const val MODEL_TYPE_NODES_COMPONENT_PYTHON: String = "tosca.nodes.component.Python"
+    const val MODEL_TYPE_NODES_COMPONENT_JYTHON: String = "tosca.nodes.component.Jython"
     const val MODEL_TYPE_NODES_COMPONENT_JAVA_SCRIPT: String = "tosca.nodes.component.JavaScript"
 
     const val MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION = "tosca.artifacts.Implementation"
