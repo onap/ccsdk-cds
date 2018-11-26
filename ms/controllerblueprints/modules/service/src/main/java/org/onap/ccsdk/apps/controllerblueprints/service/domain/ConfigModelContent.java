@@ -76,11 +76,10 @@ public class ConfigModelContent {
 
     @Override
     public String toString() {
-        String builder = "[" + "id = " + id +
+        return "[" + "id = " + id +
                 ", name = " + name +
                 ", contentType = " + contentType +
                 "]";
-        return builder;
     }
 
     @Override
