@@ -1,5 +1,5 @@
 {
-  "description": "Resource Mapping File used along with Configuration template",
+  "description": "Resource Dictionary File used along with Configuration template",
   "version": "1.0.0",
   "file_ext": [
     "json"
