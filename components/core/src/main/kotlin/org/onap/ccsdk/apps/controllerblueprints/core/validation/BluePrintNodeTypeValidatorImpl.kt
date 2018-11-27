@@ -16,8 +16,13 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core.validation
 
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintValidationError
-import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeType
+import org.onap.ccsdk.apps.controllerblueprints.core.checkNotEmptyNThrow
+import org.onap.ccsdk.apps.controllerblueprints.core.data.*
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintNodeTypeValidator
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
@@ -25,7 +30,125 @@ import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 
 open class BluePrintNodeTypeValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintNodeTypeValidator {
 
-    override fun validate(bluePrintContext: BluePrintContext, error: BluePrintValidationError, name: String, type: NodeType) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintServiceTemplateValidatorImpl::class.toString())
+
+    var bluePrintContext: BluePrintContext? = null
+    var error: BluePrintValidationError? = null
+    var paths: MutableList<String> = arrayListOf()
+
+    override fun validate(bluePrintContext: BluePrintContext, error: BluePrintValidationError, nodeTypeName: String, nodeType: NodeType) {
+
+        this.bluePrintContext = bluePrintContext
+        this.error = error
+        paths.add(nodeTypeName)
+
+        val derivedFrom: String = nodeType.derivedFrom
+        //Check Derived From
+        checkValidNodeTypesDerivedFrom(nodeTypeName, derivedFrom)
+
+        if (!BluePrintTypes.rootNodeTypes().contains(derivedFrom)) {
+            bluePrintContext.serviceTemplate.nodeTypes?.get(derivedFrom)
+                    ?: throw BluePrintException("Failed to get derivedFrom NodeType($derivedFrom)'s for NodeType($nodeTypeName)")
+        }
+
+        nodeType.properties?.let { bluePrintTypeValidatorService.validatePropertyDefinitions(bluePrintContext, error, nodeType.properties!!) }
+        nodeType.capabilities?.let { validateCapabilityDefinitions(nodeTypeName, nodeType) }
+        nodeType.requirements?.let { validateRequirementDefinitions(nodeTypeName, nodeType) }
+        nodeType.interfaces?.let { validateInterfaceDefinitions(nodeType.interfaces!!) }
+
+        paths.removeAt(paths.lastIndex)
     }
+
+    fun checkValidNodeTypesDerivedFrom(nodeTypeName: String, derivedFrom: String) {
+        check(BluePrintTypes.validNodeTypeDerivedFroms.contains(derivedFrom)) {
+            throw BluePrintException("Failed to get node type ($nodeTypeName)'s  derivedFrom($derivedFrom) definition ")
+        }
+    }
+
+    open fun validateCapabilityDefinitions(nodeTypeName: String, nodeType: NodeType) {
+        val capabilities = nodeType.capabilities
+        paths.add("capabilities")
+        capabilities?.forEach { capabilityName, capabilityDefinition ->
+            paths.add(capabilityName)
+
+            validateCapabilityDefinition(nodeTypeName, nodeType, capabilityName, capabilityDefinition)
+
+            paths.removeAt(paths.lastIndex)
+        }
+        paths.removeAt(paths.lastIndex)
+    }
+
+    open fun validateCapabilityDefinition(nodeTypeName: String, nodeType: NodeType, capabilityName: String,
+                                          capabilityDefinition: CapabilityDefinition) {
+        val capabilityType = capabilityDefinition.type
+        check(BluePrintTypes.validCapabilityTypes.contains(capabilityType)) {
+            throw BluePrintException("failed to get CapabilityType($capabilityType) for NodeType($nodeTypeName)")
+        }
+    }
+
+    open fun validateRequirementDefinitions(nodeName: String, nodeType: NodeType) {
+        paths.add("requirements")
+        val requirements = nodeType.requirements
+
+        requirements?.forEach { requirementDefinitionName, requirementDefinition ->
+            paths.add(requirementDefinitionName)
+            validateRequirementDefinition(nodeName, nodeType, requirementDefinitionName, requirementDefinition)
+            paths.removeAt(paths.lastIndex)
+        }
+        paths.removeAt(paths.lastIndex)
+    }
+
+    open fun validateRequirementDefinition(nodeTypeName: String, nodeType: NodeType, requirementDefinitionName: String,
+                                           requirementDefinition: RequirementDefinition) {
+
+        log.info("validating NodeType({}) RequirementDefinition ({}) ", nodeTypeName, requirementDefinitionName)
+        val requirementNodeTypeName = requirementDefinition.node!!
+        val capabilityName = requirementDefinition.capability
+        val relationship = requirementDefinition.relationship!!
+
+        check(BluePrintTypes.validRelationShipDerivedFroms.contains(relationship)) {
+            throw BluePrintException("failed to get relationship($relationship) for NodeType($nodeTypeName)'s requirement($requirementDefinitionName)")
+        }
+
+        val relationShipNodeType = bluePrintContext!!.serviceTemplate.nodeTypes?.get(requirementNodeTypeName)
+                ?: throw BluePrintException("failed to get requirement NodeType($requirementNodeTypeName)'s for requirement($requirementDefinitionName) ")
+
+        relationShipNodeType.capabilities?.get(capabilityName)
+                ?: throw BluePrintException("failed to get requirement NodeType($requirementNodeTypeName)'s " +
+                        "capability($nodeTypeName) for NodeType ($capabilityName)'s requirement($requirementDefinitionName) ")
+
+    }
+
+    open fun validateInterfaceDefinitions(interfaces: MutableMap<String, InterfaceDefinition>) {
+        paths.add("interfaces")
+        interfaces.forEach { interfaceName, interfaceDefinition ->
+            paths.add(interfaceName)
+            interfaceDefinition.operations?.let { validateOperationDefinitions(interfaceDefinition.operations!!) }
+            paths.removeAt(paths.lastIndex)
+        }
+        paths.removeAt(paths.lastIndex)
+    }
+
+    open fun validateOperationDefinitions(operations: MutableMap<String, OperationDefinition>) {
+        paths.add("operations")
+        operations.forEach { opertaionName, operationDefinition ->
+            paths.add(opertaionName)
+            operationDefinition.implementation?.let { validateImplementation(operationDefinition.implementation!!) }
+
+            operationDefinition.inputs?.let {
+                bluePrintTypeValidatorService.validatePropertyDefinitions(bluePrintContext!!, error!!, operationDefinition.inputs!!)
+            }
+
+            operationDefinition.outputs?.let {
+                bluePrintTypeValidatorService.validatePropertyDefinitions(bluePrintContext!!, error!!, operationDefinition.outputs!!)
+            }
+            paths.removeAt(paths.lastIndex)
+        }
+        paths.removeAt(paths.lastIndex)
+    }
+
+    open fun validateImplementation(implementation: Implementation) {
+        checkNotEmptyNThrow(implementation.primary)
+    }
+
 }
