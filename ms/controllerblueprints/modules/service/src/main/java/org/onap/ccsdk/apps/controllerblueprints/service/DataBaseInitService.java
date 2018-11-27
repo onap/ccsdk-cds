@@ -63,6 +63,7 @@ public class DataBaseInitService {
     private ModelTypeService modelTypeService;
     private ResourceDictionaryService resourceDictionaryService;
     private ConfigModelService configModelService;
+    private String updateBySystem = "System";
 
     @Value("${load.dataTypePath}")
     private String dataTypePath;
@@ -105,8 +106,6 @@ public class DataBaseInitService {
 
         loadModelType();
         loadResourceDictionary();
-        // TODO("Enable after Multi file Service Template Repository implementation in place")
-        //loadBlueprints();
     }
 
     private void loadModelType() {
@@ -188,6 +187,7 @@ public class DataBaseInitService {
                             throw new BluePrintException("couldn't get dictionary from content information");
                         }
                     } catch (Exception e) {
+                        log.error("Exception", e);
                         errorBuilder.appendln("Dictionary loading Errors : " + file.getFilename() + ":" + e.getMessage());
                     }
                 }
@@ -223,6 +223,7 @@ public class DataBaseInitService {
                         log.info("Loaded service template successfully: {}", fileName);
 
                     } catch (Exception e) {
+                        log.error("Exception", e);
                         errorBuilder.appendln("load config model " + fileName + " error : " + e.getMessage());
                     }
                 }
@@ -250,12 +251,13 @@ public class DataBaseInitService {
             modelType.setDefinition(JacksonUtils.jsonNode(definitionContent));
             modelType.setModelName(nodeKey);
             modelType.setVersion(nodeType.getVersion());
-            modelType.setUpdatedBy("System");
+            modelType.setUpdatedBy(updateBySystem);
             modelType.setTags(nodeKey + "," + BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TYPE + ","
                     + nodeType.getDerivedFrom());
             modelTypeService.saveModel(modelType);
             log.trace("Loaded Node Type successfully : {}", file.getFilename());
         } catch (Exception e) {
+            log.error("Exception", e);
             errorBuilder.appendln("Node type loading error : " + file.getFilename() + ":" + e.getMessage());
         }
     }
@@ -274,12 +276,13 @@ public class DataBaseInitService {
             modelType.setDefinition(JacksonUtils.jsonNode(definitionContent));
             modelType.setModelName(dataKey);
             modelType.setVersion(dataType.getVersion());
-            modelType.setUpdatedBy("System");
+            modelType.setUpdatedBy(updateBySystem);
             modelType.setTags(dataKey + "," + dataType.getDerivedFrom() + ","
                     + BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE);
             modelTypeService.saveModel(modelType);
             log.trace(" Loaded Data Type successfully : {}", file.getFilename());
         } catch (Exception e) {
+            log.error("Exception", e);
             errorBuilder.appendln("Data type loading error : " + file.getFilename() + ":" + e.getMessage());
         }
     }
@@ -298,12 +301,13 @@ public class DataBaseInitService {
             modelType.setDefinition(JacksonUtils.jsonNode(definitionContent));
             modelType.setModelName(dataKey);
             modelType.setVersion(artifactType.getVersion());
-            modelType.setUpdatedBy("System");
+            modelType.setUpdatedBy(updateBySystem);
             modelType.setTags(dataKey + "," + artifactType.getDerivedFrom() + ","
                     + BluePrintConstants.MODEL_DEFINITION_TYPE_ARTIFACT_TYPE);
             modelTypeService.saveModel(modelType);
             log.trace("Loaded Artifact Type successfully : {}", file.getFilename());
         } catch (Exception e) {
+            log.error("Exception", e);
             errorBuilder.appendln("Artifact type loading error : " + file.getFilename() + ":" + e.getMessage());
         }
     }
