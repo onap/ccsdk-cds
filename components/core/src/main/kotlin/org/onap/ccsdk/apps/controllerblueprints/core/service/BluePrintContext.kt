@@ -32,6 +32,11 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
 
     private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
 
+    /**
+     * Blueprint CBA extracted file location
+     */
+    var rootPath = "."
+
     val imports: List<ImportDefinition>? = serviceTemplate.imports
 
     val metadata: MutableMap<String, String>? = serviceTemplate.metadata
