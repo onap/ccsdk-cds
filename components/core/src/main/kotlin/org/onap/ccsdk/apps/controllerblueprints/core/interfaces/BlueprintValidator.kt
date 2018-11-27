@@ -37,7 +37,7 @@ interface BluePrintAttributeDefinitionValidator : BluePrintValidator<AttributeDe
 interface BluePrintValidatorService {
 
     @Throws(BluePrintException::class)
-    fun validateBluePrints(bluePrintContext: BluePrintContext, properties: MutableMap<String, Any>)
+    fun validateBluePrints(bluePrintContext: BluePrintContext, properties: MutableMap<String, Any>) : Boolean
 }
 
 

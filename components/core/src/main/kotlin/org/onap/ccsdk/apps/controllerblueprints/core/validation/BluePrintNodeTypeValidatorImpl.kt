@@ -37,9 +37,10 @@ open class BluePrintNodeTypeValidatorImpl(private val bluePrintTypeValidatorServ
     var paths: MutableList<String> = arrayListOf()
 
     override fun validate(bluePrintContext: BluePrintContext, error: BluePrintValidationError, nodeTypeName: String, nodeType: NodeType) {
-
+        log.trace("Validating NodeType($nodeTypeName)")
         this.bluePrintContext = bluePrintContext
         this.error = error
+
         paths.add(nodeTypeName)
 
         val derivedFrom: String = nodeType.derivedFrom

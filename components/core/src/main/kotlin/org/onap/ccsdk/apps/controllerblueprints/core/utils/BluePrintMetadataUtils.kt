@@ -103,6 +103,8 @@ object BluePrintMetadataUtils {
         // Recursively Import Template files
         val schemaImportResolverUtils = BluePrintImportService(rootServiceTemplate, basePath)
         val completeServiceTemplate = schemaImportResolverUtils.getImportResolvedServiceTemplate()
-        return BluePrintContext(completeServiceTemplate)
+        val blueprintContext = BluePrintContext(completeServiceTemplate)
+        blueprintContext.rootPath = basePath
+        return blueprintContext
     }
 }

@@ -16,6 +16,9 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core.validation
 
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintValidationError
 import org.onap.ccsdk.apps.controllerblueprints.core.data.Workflow
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
@@ -24,7 +27,30 @@ import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 
 open class BluePrintWorkflowValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintWorkflowValidator {
 
-    override fun validate(bluePrintContext: BluePrintContext, error: BluePrintValidationError, name: String, type: Workflow) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintServiceTemplateValidatorImpl::class.toString())
+    var bluePrintContext: BluePrintContext? = null
+    var error: BluePrintValidationError? = null
+    var paths: MutableList<String> = arrayListOf()
+
+    override fun validate(bluePrintContext: BluePrintContext, error: BluePrintValidationError, workflowName: String, workflow: Workflow) {
+        log.info("Validating Workflow($workflowName)")
+
+        this.bluePrintContext = bluePrintContext
+        this.error = error
+
+        paths.add(workflowName)
+        paths.joinToString(BluePrintConstants.PATH_DIVIDER)
+
+        // Step Validation Start
+        paths.add("steps")
+        workflow.steps?.forEach { stepName, _ ->
+            paths.add(stepName)
+            paths.joinToString(BluePrintConstants.PATH_DIVIDER)
+            // TODO("Step Validation")
+            paths.removeAt(paths.lastIndex)
+        }
+        paths.removeAt(paths.lastIndex)
+        // Step Validation Ends
+        paths.removeAt(paths.lastIndex)
     }
 }

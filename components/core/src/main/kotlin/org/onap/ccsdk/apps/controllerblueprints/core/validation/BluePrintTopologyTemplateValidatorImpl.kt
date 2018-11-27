@@ -16,6 +16,8 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core.validation
 
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintValidationError
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeTemplate
@@ -28,11 +30,16 @@ import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 
 open class BluePrintTopologyTemplateValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintTopologyTemplateValidator {
 
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintServiceTemplateValidatorImpl::class.toString())
+
     var bluePrintContext: BluePrintContext? = null
     var error: BluePrintValidationError? = null
 
     override fun validate(bluePrintContext: BluePrintContext, error: BluePrintValidationError, name: String, topologyTemplate: TopologyTemplate) {
+        log.trace("Validating Topology Template..")
         this.bluePrintContext = bluePrintContext
+        this.error = error
+
         // Validate Inputs
         topologyTemplate.inputs?.let { validateInputs(topologyTemplate.inputs!!) }
         // Validate Node Templates

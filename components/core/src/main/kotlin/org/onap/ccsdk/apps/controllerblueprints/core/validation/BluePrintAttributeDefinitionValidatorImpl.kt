@@ -17,17 +17,14 @@
 package org.onap.ccsdk.apps.controllerblueprints.core.validation
 
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintValidationError
-import org.onap.ccsdk.apps.controllerblueprints.core.data.ArtifactType
-import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintArtifactTypeValidator
+import org.onap.ccsdk.apps.controllerblueprints.core.data.AttributeDefinition
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintAttributeDefinitionValidator
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 
-open class BluePrintArtifactTypeValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintArtifactTypeValidator {
+class BluePrintAttributeDefinitionValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintAttributeDefinitionValidator {
 
-    override fun validate(bluePrintContext: BluePrintContext, error: BluePrintValidationError, name: String, artifactType: ArtifactType) {
-        artifactType.properties?.let {
-            bluePrintTypeValidatorService.validatePropertyDefinitions(bluePrintContext, error, artifactType.properties!!)
-        }
-        // TODO ("Files Present ")
+    override fun validate(bluePrintContext: BluePrintContext, error: BluePrintValidationError, name: String, type: AttributeDefinition) {
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

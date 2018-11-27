@@ -40,6 +40,9 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
     var paths: MutableList<String> = arrayListOf()
 
     override fun validate(bluePrintContext: BluePrintContext, error: BluePrintValidationError, nodeTemplateName: String, nodeTemplate: NodeTemplate) {
+        log.trace("Validating NodeTemplate($nodeTemplateName)")
+        this.bluePrintContext = bluePrintContext
+        this.error = error
 
         paths.add(nodeTemplateName)
 
@@ -48,11 +51,11 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
         val nodeType: NodeType = bluePrintContext.serviceTemplate.nodeTypes?.get(type)
                 ?: throw BluePrintException("Failed to get NodeType($type) definition for NodeTemplate($nodeTemplateName)")
 
-        nodeTemplate.artifacts?.let { validateArtifactDefinitions(nodeTemplate.artifacts!!) }
         nodeTemplate.properties?.let { validatePropertyAssignments(nodeType.properties!!, nodeTemplate.properties!!) }
         nodeTemplate.capabilities?.let { validateCapabilityAssignments(nodeType, nodeTemplateName, nodeTemplate) }
         nodeTemplate.requirements?.let { validateRequirementAssignments(nodeType, nodeTemplateName, nodeTemplate) }
         nodeTemplate.interfaces?.let { validateInterfaceAssignments(nodeType, nodeTemplateName, nodeTemplate) }
+        nodeTemplate.artifacts?.let { validateArtifactDefinitions(nodeTemplate.artifacts!!) }
 
         paths.removeAt(paths.lastIndex)
     }

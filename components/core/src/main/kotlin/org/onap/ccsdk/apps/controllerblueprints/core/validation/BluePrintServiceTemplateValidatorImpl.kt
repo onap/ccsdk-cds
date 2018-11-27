@@ -21,7 +21,6 @@ import com.att.eelf.configuration.EELFManager
 import com.google.common.base.Preconditions
 import org.apache.commons.lang3.StringUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintValidationError
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintServiceTemplateValidator
@@ -34,9 +33,10 @@ open class BluePrintServiceTemplateValidatorImpl(private val bluePrintTypeValida
 
     var bluePrintContext: BluePrintContext? = null
     var error: BluePrintValidationError? = null
+    var paths: MutableList<String> = arrayListOf()
 
     override fun validate(bluePrintContext: BluePrintContext, error: BluePrintValidationError, name: String, serviceTemplate: ServiceTemplate) {
-        log.info("Validating Service Template..")
+        log.trace("Validating Service Template..")
         try {
             this.bluePrintContext = bluePrintContext
             this.error = error
@@ -47,11 +47,13 @@ open class BluePrintServiceTemplateValidatorImpl(private val bluePrintTypeValida
             serviceTemplate.nodeTypes?.let { validateNodeTypes(serviceTemplate.nodeTypes!!) }
             serviceTemplate.topologyTemplate?.let { validateTopologyTemplate(serviceTemplate.topologyTemplate!!) }
         } catch (e: Exception) {
-            throw BluePrintException(e, "failed to validate blueprint with message ${e.message}")
+            error.addError(BluePrintConstants.PATH_SERVICE_TEMPLATE, paths.joinToString(BluePrintConstants.PATH_DIVIDER), e.message!!)
         }
     }
 
     fun validateMetadata(metaDataMap: MutableMap<String, String>) {
+
+        paths.add(BluePrintConstants.PATH_METADATA)
 
         val templateName = metaDataMap[BluePrintConstants.METADATA_TEMPLATE_NAME]
         val templateVersion = metaDataMap[BluePrintConstants.METADATA_TEMPLATE_VERSION]
@@ -62,31 +64,42 @@ open class BluePrintServiceTemplateValidatorImpl(private val bluePrintTypeValida
         Preconditions.checkArgument(StringUtils.isNotBlank(templateVersion), "failed to get template version metadata")
         Preconditions.checkArgument(StringUtils.isNotBlank(templateTags), "failed to get template tags metadata")
         Preconditions.checkArgument(StringUtils.isNotBlank(templateAuthor), "failed to get template author metadata")
+
+        paths.removeAt(paths.lastIndex)
     }
 
 
     fun validateDataTypes(dataTypes: MutableMap<String, DataType>) {
+
+        paths.add(BluePrintConstants.PATH_DATA_TYPES)
         dataTypes.forEach { dataTypeName, dataType ->
             // Validate Single Data Type
             bluePrintTypeValidatorService.validateDataType(bluePrintContext!!, error!!, dataTypeName, dataType)
         }
+        paths.removeAt(paths.lastIndex)
     }
 
     fun validateArtifactTypes(artifactTypes: MutableMap<String, ArtifactType>) {
+        paths.add(BluePrintConstants.PATH_ARTIFACT_TYPES)
         artifactTypes.forEach { artifactName, artifactType ->
             // Validate Single Artifact Type
             bluePrintTypeValidatorService.validateArtifactType(bluePrintContext!!, error!!, artifactName, artifactType)
         }
+        paths.removeAt(paths.lastIndex)
     }
 
     fun validateNodeTypes(nodeTypes: MutableMap<String, NodeType>) {
+        paths.add(BluePrintConstants.PATH_NODE_TYPES)
         nodeTypes.forEach { nodeTypeName, nodeType ->
             // Validate Single Node Type
             bluePrintTypeValidatorService.validateNodeType(bluePrintContext!!, error!!, nodeTypeName, nodeType)
         }
+        paths.removeAt(paths.lastIndex)
     }
 
     fun validateTopologyTemplate(topologyTemplate: TopologyTemplate) {
+        paths.add(BluePrintConstants.PATH_TOPOLOGY_TEMPLATE)
         bluePrintTypeValidatorService.validateTopologyTemplate(bluePrintContext!!, error!!, "topologyTemplate", topologyTemplate)
+        paths.removeAt(paths.lastIndex)
     }
 }

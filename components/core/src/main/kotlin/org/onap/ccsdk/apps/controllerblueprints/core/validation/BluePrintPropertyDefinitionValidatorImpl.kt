@@ -16,6 +16,8 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core.validation
 
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintValidationError
@@ -27,12 +29,16 @@ import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 
 open class BluePrintPropertyDefinitionValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintPropertyDefinitionValidator {
 
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintServiceTemplateValidatorImpl::class.toString())
+
     var bluePrintContext: BluePrintContext? = null
     var error: BluePrintValidationError? = null
 
     override fun validate(bluePrintContext: BluePrintContext, error: BluePrintValidationError, name: String, propertyDefinition: PropertyDefinition) {
         this.bluePrintContext = bluePrintContext
         this.error = error
+
+        log.trace("Validating PropertyDefinition($name)")
 
         val dataType: String = propertyDefinition.type
 
