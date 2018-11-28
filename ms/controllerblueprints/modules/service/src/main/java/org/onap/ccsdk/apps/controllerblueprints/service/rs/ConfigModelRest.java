@@ -81,7 +81,7 @@ public class ConfigModelRest {
 
     @GetMapping(path = "/search/{tags}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    List<ConfigModel> searchConfigModels(@PathVariable(value = "tags") String tags) throws BluePrintException {
+    List<ConfigModel> searchConfigModels(@PathVariable(value = "tags") String tags) {
         return this.configModelService.searchConfigModels(tags);
     }
 
