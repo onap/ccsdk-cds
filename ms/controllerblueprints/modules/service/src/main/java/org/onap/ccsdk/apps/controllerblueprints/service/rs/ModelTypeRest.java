@@ -44,18 +44,18 @@ public class ModelTypeRest {
     }
 
     @GetMapping(path = "/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ModelType getModelTypeByName(@PathVariable(value = "name") String name) throws BluePrintException {
+    public ModelType getModelTypeByName(@PathVariable(value = "name") String name) {
         return modelTypeService.getModelTypeByName(name);
     }
 
     @GetMapping(path = "/search/{tags}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ModelType> searchModelTypes(@PathVariable(value = "tags") String tags) throws BluePrintException {
+    public List<ModelType> searchModelTypes(@PathVariable(value = "tags") String tags) {
         return modelTypeService.searchModelTypes(tags);
     }
 
     @GetMapping(path = "/by-definition/{definitionType}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    List<ModelType> getModelTypeByDefinitionType(@PathVariable(value = "definitionType") String definitionType) throws BluePrintException {
+    List<ModelType> getModelTypeByDefinitionType(@PathVariable(value = "definitionType") String definitionType) {
         return modelTypeService.getModelTypeByDefinitionType(definitionType);
     }
 
@@ -66,7 +66,7 @@ public class ModelTypeRest {
     }
 
     @DeleteMapping(path = "/{name}")
-    public void deleteModelTypeByName(@PathVariable(value = "name") String name) throws BluePrintException {
+    public void deleteModelTypeByName(@PathVariable(value = "name") String name) {
         modelTypeService.deleteByModelName(name);
     }
 }
