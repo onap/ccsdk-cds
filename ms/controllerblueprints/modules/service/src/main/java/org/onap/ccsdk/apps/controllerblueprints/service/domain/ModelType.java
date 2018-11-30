@@ -84,7 +84,7 @@ public class ModelType implements Serializable {
 
     @Override
     public String toString() {
-        String buffer = "[" + ", modelName = " + modelName +
+        return "[" + ", modelName = " + modelName +
                 ", derivedFrom = " + derivedFrom +
                 ", definitionType = " + definitionType +
                 ", description = " + description +
@@ -93,7 +93,6 @@ public class ModelType implements Serializable {
                 ", updatedBy = " + updatedBy +
                 ", tags = " + tags +
                 "]";
-        return buffer;
     }
 
     public String getModelName() {
