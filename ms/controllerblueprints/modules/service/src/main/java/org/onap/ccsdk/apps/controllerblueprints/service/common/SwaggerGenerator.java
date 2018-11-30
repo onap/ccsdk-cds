@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2017-2018 AT&T Intellectual Property.
+ *  Modifications Copyright © 2018 IBM.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -40,6 +41,7 @@ import java.util.*;
 public class SwaggerGenerator {
 
     private ServiceTemplate serviceTemplate;
+    public static final String INPUTS="inputs";
 
     /**
      * This is a SwaggerGenerator constructor
@@ -54,8 +56,7 @@ public class SwaggerGenerator {
      * @return String
      */
     public String generateSwagger() {
-        String swaggerContent = null;
-
+        
         Swagger swagger = new Swagger().info(getInfo());
 
         swagger.setPaths(getPaths());
@@ -86,7 +87,7 @@ public class SwaggerGenerator {
         List<Parameter> parameters = new ArrayList<>();
         Parameter in = new BodyParameter().schema(new RefModel("#/definitions/inputs"));
         in.setRequired(true);
-        in.setName("inputs");
+        in.setName(INPUTS);
         parameters.add(in);
         post.setParameters(parameters);
 
@@ -107,18 +108,17 @@ public class SwaggerGenerator {
         Map<String, Model> models = new HashMap<>();
 
         ModelImpl inputmodel = new ModelImpl();
-        inputmodel.setTitle("inputs");
+        inputmodel.setTitle(INPUTS);
         serviceTemplate.getTopologyTemplate().getInputs().forEach((propertyName, property) -> {
             Property defProperty = getPropery(propertyName, property);
             inputmodel.property(propertyName, defProperty);
         });
-        models.put("inputs", inputmodel);
+        models.put(INPUTS, inputmodel);
 
         if (MapUtils.isNotEmpty(serviceTemplate.getDataTypes())) {
             serviceTemplate.getDataTypes().forEach((name, dataType) -> {
                 ModelImpl model = new ModelImpl();
                 model.setDescription(dataType.getDescription());
-                // model.setType("object");
                 if (dataType != null && MapUtils.isNotEmpty(dataType.getProperties())) {
 
                     dataType.getProperties().forEach((propertyName, property) -> {
