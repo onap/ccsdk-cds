@@ -78,7 +78,7 @@ public class ResourceDictionary implements Serializable {
 
     @Override
     public String toString() {
-        String buffer = "[" + ", name = " + name +
+        return "[" + ", name = " + name +
                 ", dataType = " + dataType +
                 ", entrySchema = " + entrySchema +
                 ", definition =" + definition +
@@ -87,7 +87,6 @@ public class ResourceDictionary implements Serializable {
                 ", tags = " + tags +
                 ", creationDate = " + creationDate +
                 "]";
-        return buffer;
     }
 
     public String getName() {
