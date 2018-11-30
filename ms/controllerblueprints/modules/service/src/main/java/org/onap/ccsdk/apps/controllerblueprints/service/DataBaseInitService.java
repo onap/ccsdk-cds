@@ -64,6 +64,8 @@ public class DataBaseInitService {
     private ResourceDictionaryService resourceDictionaryService;
     private ConfigModelService configModelService;
     private String updateBySystem = "System";
+    private static final String JSON_EXTN= ".json";
+    private static final String EXCEPTION= "Exception";
 
     @Value("${load.dataTypePath}")
     private String dataTypePath;
@@ -111,7 +113,7 @@ public class DataBaseInitService {
     private void loadModelType() {
         log.info(" *************************** loadModelType **********************");
         try {
-            Resource[] dataTypefiles = getPathResources(dataTypePath, ".json");
+            Resource[] dataTypefiles = getPathResources(dataTypePath, JSON_EXTN);
             StrBuilder errorBuilder = new StrBuilder();
                 for (Resource file : dataTypefiles) {
                     if (file != null) {
@@ -119,7 +121,7 @@ public class DataBaseInitService {
                     }
                 }
 
-            Resource[] nodeTypefiles = getPathResources(nodeTypePath, ".json");
+            Resource[] nodeTypefiles = getPathResources(nodeTypePath, JSON_EXTN);
                        for (Resource file : nodeTypefiles) {
                     if (file != null) {
                         loadNodeType(file, errorBuilder);
@@ -127,7 +129,7 @@ public class DataBaseInitService {
                 }
 
 
-            Resource[] artifactTypefiles = getPathResources(artifactTypePath, ".json");
+            Resource[] artifactTypefiles = getPathResources(artifactTypePath, JSON_EXTN);
 
                 for (Resource file : artifactTypefiles) {
                     if (file != null) {
@@ -148,7 +150,7 @@ public class DataBaseInitService {
         log.info(
                 " *************************** loadResourceDictionary **********************");
         try {
-            Resource[] dataTypefiles = getPathResources(resourceDictionaryPath, ".json");
+            Resource[] dataTypefiles = getPathResources(resourceDictionaryPath, JSON_EXTN);
 
                 StrBuilder errorBuilder = new StrBuilder();
                 String fileName;
@@ -187,7 +189,7 @@ public class DataBaseInitService {
                             throw new BluePrintException("couldn't get dictionary from content information");
                         }
                     } catch (Exception e) {
-                        log.error("Exception", e);
+                        log.error(EXCEPTION, e);
                         errorBuilder.appendln("Dictionary loading Errors : " + file.getFilename() + ":" + e.getMessage());
                     }
                 }
@@ -223,7 +225,7 @@ public class DataBaseInitService {
                         log.info("Loaded service template successfully: {}", fileName);
 
                     } catch (Exception e) {
-                        log.error("Exception", e);
+                        log.error(EXCEPTION, e);
                         errorBuilder.appendln("load config model " + fileName + " error : " + e.getMessage());
                     }
                 }
@@ -240,7 +242,7 @@ public class DataBaseInitService {
     private void loadNodeType(Resource file, StrBuilder errorBuilder) {
         try {
             log.trace("Loading Node Type : {}", file.getFilename());
-            String nodeKey = file.getFilename().replace(".json", "");
+            String nodeKey = file.getFilename().replace(JSON_EXTN, "");
             String definitionContent = getResourceContent(file);
             NodeType nodeType = JacksonUtils.readValue(definitionContent, NodeType.class);
             Preconditions.checkNotNull(nodeType, String.format("failed to get node type from file : %s", file.getFilename()));
@@ -257,7 +259,7 @@ public class DataBaseInitService {
             modelTypeService.saveModel(modelType);
             log.trace("Loaded Node Type successfully : {}", file.getFilename());
         } catch (Exception e) {
-            log.error("Exception", e);
+            log.error(EXCEPTION, e);
             errorBuilder.appendln("Node type loading error : " + file.getFilename() + ":" + e.getMessage());
         }
     }
@@ -265,7 +267,7 @@ public class DataBaseInitService {
     private void loadDataType(@NotNull Resource file, StrBuilder errorBuilder) {
         try {
             log.trace("Loading Data Type: {}", file.getFilename());
-            String dataKey = file.getFilename().replace(".json", "");
+            String dataKey = file.getFilename().replace(JSON_EXTN, "");
             String definitionContent = getResourceContent(file);
             DataType dataType = JacksonUtils.readValue(definitionContent, DataType.class);
             Preconditions.checkNotNull(dataType, String.format("failed to get data type from file : %s", file.getFilename()));
@@ -282,7 +284,7 @@ public class DataBaseInitService {
             modelTypeService.saveModel(modelType);
             log.trace(" Loaded Data Type successfully : {}", file.getFilename());
         } catch (Exception e) {
-            log.error("Exception", e);
+            log.error(EXCEPTION, e);
             errorBuilder.appendln("Data type loading error : " + file.getFilename() + ":" + e.getMessage());
         }
     }
@@ -290,7 +292,7 @@ public class DataBaseInitService {
     private void loadArtifactType(Resource file, StrBuilder errorBuilder) {
         try {
             log.trace("Loading Artifact Type: {}", file.getFilename());
-            String dataKey = file.getFilename().replace(".json", "");
+            String dataKey = file.getFilename().replace(JSON_EXTN, "");
             String definitionContent = getResourceContent(file);
             ArtifactType artifactType = JacksonUtils.readValue(definitionContent, ArtifactType.class);
             Preconditions.checkNotNull(artifactType, String.format("failed to get artifact type from file : %s", file.getFilename()));
@@ -307,7 +309,7 @@ public class DataBaseInitService {
             modelTypeService.saveModel(modelType);
             log.trace("Loaded Artifact Type successfully : {}", file.getFilename());
         } catch (Exception e) {
-            log.error("Exception", e);
+            log.error(EXCEPTION, e);
             errorBuilder.appendln("Artifact type loading error : " + file.getFilename() + ":" + e.getMessage());
         }
     }
