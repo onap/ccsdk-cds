@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2017-2018 AT&T Intellectual Property.
+ *  Modifications Copyright © 2018 IBM.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,9 +20,7 @@ package org.onap.ccsdk.apps.blueprintsprocessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.bind.annotation.RequestMapping;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -44,7 +43,7 @@ import java.util.Set;
 @EnableSwagger2
 public class SwaggerConfig {
     private static final Set<String> DEFAULT_PRODUCES_AND_CONSUMES =
-            new HashSet<String>(Arrays.asList("application/json",
+            new HashSet<>(Arrays.asList("application/json",
                     "application/xml"));
     private static Logger log = LoggerFactory.getLogger(SwaggerConfig.class);
 
