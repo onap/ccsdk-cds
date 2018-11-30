@@ -36,7 +36,7 @@ interface BlueprintSvcLogicService : SvcLogicService {
 
     fun unRegisterExecutors(name: String)
 
-    fun execute(graph: SvcLogicGraph, bluePrintRuntimeService: BluePrintRuntimeService<*>): Any
+    fun execute(graph: SvcLogicGraph, bluePrintRuntimeService: BluePrintRuntimeService<*>, input: Any): Any
 
     @Deprecated("Populate Graph Dynamically from Blueprints, No need to get from Database Store ")
     override fun getStore(): SvcLogicStore {
@@ -93,10 +93,11 @@ class DefaultBlueprintSvcLogicService : BlueprintSvcLogicService {
         }
     }
 
-    override fun execute(graph: SvcLogicGraph, bluePrintRuntimeService: BluePrintRuntimeService<*>): Any {
-        //Initialise BlueprintSvcLogic Context
+    override fun execute(graph: SvcLogicGraph, bluePrintRuntimeService: BluePrintRuntimeService<*>, input: Any): Any {
+        //Initialise BlueprintSvcLogic Context with Blueprint Runtime Service and Input Request
         val blueprintSvcLogicContext = BlueprintSvcLogicContext()
         blueprintSvcLogicContext.setBluePrintRuntimeService(bluePrintRuntimeService)
+        blueprintSvcLogicContext.setRequest(input)
         // Execute the Graph
         execute(graph, blueprintSvcLogicContext)
         // Get the Response

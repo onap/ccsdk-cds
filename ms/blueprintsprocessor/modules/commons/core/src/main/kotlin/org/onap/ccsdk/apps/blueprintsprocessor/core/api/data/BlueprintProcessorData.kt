@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import io.swagger.annotations.ApiModelProperty
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
+import java.util.*
 
 /**
  * BlueprintProcessorData
@@ -87,7 +88,7 @@ open class ActionIdentifiers {
 open class CommonHeader {
     @get:ApiModelProperty(required = true, example = "2012-04-23T18:25:43.511Z")
     @get:JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    lateinit var timestamp: String
+    var timestamp: Date = Date()
     @get:ApiModelProperty(required = true)
     lateinit var originatorId: String
     @get:ApiModelProperty(required = true)

@@ -33,7 +33,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     private val log = LoggerFactory.getLogger(AbstractComponentFunction::class.java)
 
     var executionServiceInput: ExecutionServiceInput? = null
-    val executionServiceOutput = ExecutionServiceOutput()
+    var executionServiceOutput = ExecutionServiceOutput()
     var bluePrintRuntimeService: BluePrintRuntimeService<*>? = null
     var processId: String = ""
     var workflowName: String = ""
