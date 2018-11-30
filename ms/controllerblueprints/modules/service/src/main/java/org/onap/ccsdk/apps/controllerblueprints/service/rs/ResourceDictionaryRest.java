@@ -47,13 +47,12 @@ public class ResourceDictionaryRest {
 
     @PostMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResourceDictionary saveResourceDictionary(@RequestBody ResourceDictionary dataDictionary)
-            throws BluePrintException {
+    ResourceDictionary saveResourceDictionary(@RequestBody ResourceDictionary dataDictionary) {
         return resourceDictionaryService.saveResourceDictionary(dataDictionary);
     }
 
     @DeleteMapping(path = "/{name}")
-    public void deleteResourceDictionaryByName(@PathVariable(value = "name") String name) throws BluePrintException {
+    public void deleteResourceDictionaryByName(@PathVariable(value = "name") String name) {
         resourceDictionaryService.deleteResourceDictionary(name);
     }
 
@@ -65,14 +64,13 @@ public class ResourceDictionaryRest {
 
     @PostMapping(path = "/by-names", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    List<ResourceDictionary> searchResourceDictionaryByNames(@RequestBody List<String> names)
-            throws BluePrintException {
+    List<ResourceDictionary> searchResourceDictionaryByNames(@RequestBody List<String> names) {
         return resourceDictionaryService.searchResourceDictionaryByNames(names);
     }
 
     @GetMapping(path = "/search/{tags}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    List<ResourceDictionary> searchResourceDictionaryByTags(@PathVariable(value = "tags") String tags) throws BluePrintException {
+    List<ResourceDictionary> searchResourceDictionaryByTags(@PathVariable(value = "tags") String tags) {
         return resourceDictionaryService.searchResourceDictionaryByTags(tags);
 
     }
