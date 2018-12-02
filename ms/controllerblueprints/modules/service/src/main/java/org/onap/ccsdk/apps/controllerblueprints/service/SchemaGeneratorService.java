@@ -37,7 +37,7 @@ import java.util.Map;
  * @author Brinda Santh
  * @version 1.0
  */
-
+@Deprecated
 public class SchemaGeneratorService {
     private static EELFLogger log = EELFManager.getInstance().getLogger(SchemaGeneratorService.class);
 

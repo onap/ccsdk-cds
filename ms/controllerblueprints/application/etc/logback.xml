@@ -16,7 +16,7 @@
 
 <configuration>
 
-    <property name="localPattern" value="%d{HH:mm:ss.SSS} %-5level %logger{100} - %msg%n" />
+    <property name="localPattern" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{100} - %msg%n" />
 
     <property name="defaultPattern" value="%date{ISO8601,UTC}|%X{RequestID}|%X{ServiceInstanceId}|%thread|%X{VirtualServerName}|%X{ServiceName}|%X{InstanceUUID}|%.-5level|%X{AlertSeverity}|%X{ServerIPAddress}|%X{ServerFQDN}|%X{RemoteHost}|%X{ClassName}|%X{Timer}| %msg%n" />
 

@@ -32,6 +32,7 @@ import java.util.List;
 /**
  * {@inheritDoc}
  */
+@Deprecated
 @RestController
 @RequestMapping(value = "/api/v1/service-template")
 public class ServiceTemplateRest {

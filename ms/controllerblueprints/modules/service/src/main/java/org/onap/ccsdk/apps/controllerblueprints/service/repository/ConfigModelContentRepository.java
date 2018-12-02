@@ -31,6 +31,7 @@ import java.util.Optional;
  * @author Brinda Santh
  * @version 1.0
  */
+@Deprecated
 @Repository
 public interface ConfigModelContentRepository extends JpaRepository<ConfigModelContent, Long> {
 

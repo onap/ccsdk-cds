@@ -21,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.builders.PathSelectors;
@@ -34,7 +33,6 @@ import springfox.documentation.service.Header;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -46,8 +44,9 @@ import java.util.Map;
  *
  * @author Brinda Santh 8/13/2018
  */
-@Configuration
-@EnableSwagger2
+@Deprecated
+//@Configuration
+//@EnableSwagger2
 @SuppressWarnings("unused")
 public class SwaggerConfig {
     @Value("${appVersion}")

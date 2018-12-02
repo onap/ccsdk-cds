@@ -54,7 +54,7 @@ import java.util.List;
  * @author Brinda Santh
  * @version 1.0
  */
-
+@Deprecated
 @Component
 @ConditionalOnProperty(name = "blueprints.load.initial-data", havingValue = "true")
 public class DataBaseInitService {

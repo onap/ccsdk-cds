@@ -27,6 +27,7 @@ import java.util.List;
 /**
  * {@inheritDoc}
  */
+@Deprecated
 @RestController
 @RequestMapping(value = "/api/v1/config-model")
 public class ConfigModelRest {

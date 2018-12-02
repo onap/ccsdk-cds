@@ -62,6 +62,7 @@ public class ConfigModelContent {
     @Column(name = "description")
     private String description;
 
+    @Deprecated
     @Lob
     @Column(name = "content", nullable = false)
     @ApiModelProperty(required=true)

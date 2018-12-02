@@ -28,6 +28,7 @@ import java.util.List;
 /**
  * {@inheritDoc}
  */
+@Deprecated
 @RestController
 @RequestMapping(value = "/api/v1/model-type")
 public class ModelTypeRest {
