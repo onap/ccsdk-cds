@@ -42,10 +42,6 @@ import java.util.Set;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
-    private static final Set<String> DEFAULT_PRODUCES_AND_CONSUMES =
-            new HashSet<>(Arrays.asList("application/json",
-                    "application/xml"));
-    private static Logger log = LoggerFactory.getLogger(SwaggerConfig.class);
 
     @Bean
     public Docket api() {
