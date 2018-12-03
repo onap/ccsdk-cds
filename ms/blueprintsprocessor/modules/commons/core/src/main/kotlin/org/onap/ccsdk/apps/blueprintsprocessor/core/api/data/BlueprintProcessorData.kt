@@ -108,6 +108,11 @@ open class Flags {
 open class Status {
     @get:ApiModelProperty(required = true)
     var code: Int = 200
+    @get:ApiModelProperty(required = true)
+    var eventType: String = "EVENT-ACTION-RESPONSE"
+    @get:ApiModelProperty(required = true, example = "2012-04-23T18:25:43.511Z")
+    @get:JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    var timestamp: Date = Date()
     @get:ApiModelProperty(required = false)
     var errorMessage: String? = null
     @get:ApiModelProperty(required = true)

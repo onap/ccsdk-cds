@@ -36,10 +36,6 @@
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
         <!-- North Bound -->
         <dependency>
             <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
