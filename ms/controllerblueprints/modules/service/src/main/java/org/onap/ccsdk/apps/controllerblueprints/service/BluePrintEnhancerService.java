@@ -17,6 +17,8 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service;
 
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFManager;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.base.Preconditions;
 import org.apache.commons.collections.MapUtils;
@@ -25,13 +27,14 @@ import org.jetbrains.annotations.NotNull;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.core.ConfigModelConstant;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*;
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceDefinitionRepoService;
-import org.onap.ccsdk.apps.controllerblueprints.service.enhancer.BluePrintEnhancerDefaultService;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment;
-import com.att.eelf.configuration.EELFLogger;
-import com.att.eelf.configuration.EELFManager;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceDefinitionRepoService;
+import org.onap.ccsdk.apps.controllerblueprints.service.enhancer.BluePrintEnhancerDefaultService;
 import org.onap.ccsdk.apps.controllerblueprints.service.enhancer.ResourceAssignmentEnhancerService;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -45,6 +48,7 @@ import java.util.Map;
  */
 
 @Service
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class BluePrintEnhancerService extends BluePrintEnhancerDefaultService {
 
     private static EELFLogger log = EELFManager.getInstance().getLogger(BluePrintEnhancerService.class);

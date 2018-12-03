@@ -30,7 +30,7 @@ import org.springframework.stereotype.Service;
  * @author Brinda Santh
  * @version 1.0
  */
-
+@Deprecated
 @Service
 public class ConfigModelValidatorService {
 

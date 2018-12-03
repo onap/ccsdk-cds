@@ -17,14 +17,16 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.enhancer
 
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*
 import org.onap.ccsdk.apps.controllerblueprints.core.format
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRepoService
-import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonReactorUtils
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintFileUtils
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
 import java.io.Serializable
 
 /**
@@ -35,13 +37,13 @@ import java.io.Serializable
 interface BluePrintEnhancerService : Serializable {
 
     @Throws(BluePrintException::class)
-    fun enhance(content: String): ServiceTemplate
+    fun enhance(basePath: String, enrichedBasePath: String): BluePrintContext
 
     /**
-     * Read Blueprint from CSAR structure Directory
+     * Read Blueprint from CBA structure Directory
      */
     @Throws(BluePrintException::class)
-    fun enhance(fileName: String, basePath: String): ServiceTemplate
+    fun enhance(basePath: String): BluePrintContext
 
     @Throws(BluePrintException::class)
     fun enhance(serviceTemplate: ServiceTemplate): ServiceTemplate
@@ -62,16 +64,19 @@ open class BluePrintEnhancerDefaultService(val bluePrintRepoService: BluePrintRe
 
     lateinit var serviceTemplate: ServiceTemplate
 
-    @Throws(BluePrintException::class)
-    override fun enhance(content: String): ServiceTemplate {
-        return JacksonReactorUtils.readValueFromFile(content, ServiceTemplate::class.java).map { serviceTemplate ->
-            enhance(serviceTemplate!!)
-        }.block()!!
+    override fun enhance(basePath: String, enrichedBasePath: String): BluePrintContext {
+        BluePrintFileUtils.copyBluePrint(basePath, enrichedBasePath)
+        BluePrintFileUtils.deleteBluePrintTypes(enrichedBasePath)
+        val enhancedBluePrintContext = enhance(enrichedBasePath)
+        BluePrintFileUtils.writeBluePrintTypes(enhancedBluePrintContext)
+        return enhancedBluePrintContext
     }
 
     @Throws(BluePrintException::class)
-    override fun enhance(fileName: String, basePath: String): ServiceTemplate {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun enhance(basePath: String): BluePrintContext {
+        val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(basePath)
+        enhance(bluePrintContext.serviceTemplate)
+        return bluePrintContext
     }
 
     @Throws(BluePrintException::class)
@@ -88,10 +93,12 @@ open class BluePrintEnhancerDefaultService(val bluePrintRepoService: BluePrintRe
         serviceTemplate.artifactTypes?.clear()
         serviceTemplate.nodeTypes?.clear()
         serviceTemplate.dataTypes?.clear()
+        serviceTemplate.policyTypes?.clear()
 
-        serviceTemplate.artifactTypes = HashMap()
-        serviceTemplate.nodeTypes = HashMap()
-        serviceTemplate.dataTypes = HashMap()
+        serviceTemplate.artifactTypes = mutableMapOf()
+        serviceTemplate.nodeTypes = mutableMapOf()
+        serviceTemplate.dataTypes = mutableMapOf()
+        serviceTemplate.policyTypes = mutableMapOf()
 
     }
 
