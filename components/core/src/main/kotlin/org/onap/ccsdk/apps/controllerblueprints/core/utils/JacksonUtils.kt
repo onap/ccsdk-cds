@@ -105,6 +105,13 @@ object JacksonUtils {
     }
 
     @JvmStatic
+    fun getWrappedJson(wrapper: String, any: kotlin.Any, pretty: Boolean = false): String {
+        val wrapperMap = hashMapOf<String, Any>()
+        wrapperMap[wrapper] = any
+        return getJson(wrapperMap, pretty)
+    }
+
+    @JvmStatic
     fun getJson(any: kotlin.Any, pretty: Boolean = false): String {
         val objectMapper = jacksonObjectMapper()
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL)

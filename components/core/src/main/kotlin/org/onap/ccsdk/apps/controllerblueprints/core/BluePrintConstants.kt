@@ -139,7 +139,9 @@ object BluePrintConstants {
     const val PROPERTY_BLUEPRINT_NAME: String = "template_name"
     const val PROPERTY_BLUEPRINT_VERSION: String = "template_version"
 
+    const val TOSCA_METADATA_DIR: String = "TOSCA-Metadata"
     const val TOSCA_METADATA_ENTRY_DEFINITION_FILE: String = "TOSCA-Metadata/TOSCA.meta"
+    const val TOSCA_DEFINITIONS_DIR: String = "Definitions"
     const val TOSCA_PLANS_DIR: String = "Plans"
     const val TOSCA_SCRIPTS_DIR: String = "Scripts"
     const val TOSCA_MAPPINGS_DIR: String = "Mappings"

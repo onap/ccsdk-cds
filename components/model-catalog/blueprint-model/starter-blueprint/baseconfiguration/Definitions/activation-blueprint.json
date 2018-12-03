@@ -9,13 +9,13 @@
   },
   "imports": [
     {
-      "file": "Definitions/data-types.json"
+      "file": "Definitions/data_types.json"
     },
     {
-      "file": "Definitions/node-types.json"
+      "file": "Definitions/node_types.json"
     },
     {
-      "file": "Definitions/artifact-types.json"
+      "file": "Definitions/artifact_types.json"
     }
   ],
   "topology_template": {
@@ -117,7 +117,7 @@
           },
           "baseconfig-mapping": {
             "type": "artifact-mapping-resource",
-            "file": "Mappings/baseconfig-mapping.json"
+            "file": "Definitions/baseconfig-mapping.json"
           }
         }
       },
