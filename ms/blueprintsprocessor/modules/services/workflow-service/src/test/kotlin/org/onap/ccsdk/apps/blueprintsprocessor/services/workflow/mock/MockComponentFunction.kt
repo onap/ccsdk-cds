@@ -17,9 +17,8 @@
 package org.onap.ccsdk.apps.blueprintsprocessor.services.workflow.mock
 
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
-import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.AbstractComponentFunction
-import org.onap.ccsdk.apps.blueprintsprocessor.services.workflow.executor.ComponentExecuteNodeExecutor
+import org.onap.ccsdk.apps.controllerblueprints.core.asJsonPrimitive
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -27,7 +26,7 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 open class MockComponentConfiguration {
 
-    @Bean(name = ["component-resource-assignment", "component-netconf-executor"])
+    @Bean(name = ["component-resource-assignment", "component-netconf-executor", "component-jython-executor"])
     open fun createComponentFunction(): AbstractComponentFunction {
         return MockComponentFunction()
     }
@@ -35,12 +34,13 @@ open class MockComponentConfiguration {
 
 class MockComponentFunction : AbstractComponentFunction() {
 
-    private val log = LoggerFactory.getLogger(ComponentExecuteNodeExecutor::class.java)
+    private val log = LoggerFactory.getLogger(MockComponentFunction::class.java)
 
     override fun process(executionRequest: ExecutionServiceInput) {
-        log.info("Processing component..")
+        log.info("Processing component : ${operationInputs}")
 
-        this.executionServiceOutput = ExecutionServiceOutput()
+        bluePrintRuntimeService!!.setNodeTemplateAttributeValue(nodeTemplateName,
+                "assignment-params", "params".asJsonPrimitive())
     }
 
     override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {

@@ -19,7 +19,6 @@ package org.onap.ccsdk.apps.blueprintsprocessor.services.workflow
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.apps.blueprintsprocessor.services.workflow.utils.SvcGraphUtils
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -55,13 +54,16 @@ class DefaultBlueprintDGExecutionService(val blueprintSvcLogicService: Blueprint
                 WorkflowServiceConstants.ARTIFACT_TYPE_DIRECTED_GRAPH)
 
         // Populate the DG Path
-        val dgFilePath = bluePrintRuntimeService.getAsString(BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH)
-                .plus(File.separator).plus(artifactDefinition.file)
+        val dgFilePath = bluePrintContext.rootPath.plus(File.separator).plus(artifactDefinition.file)
 
         log.info("Executing directed graph ($dgFilePath)")
 
         // Create DG instance
         val graph = SvcGraphUtils.getSvcGraphFromFile(dgFilePath)
+
+        // Assign Workflow inputs
+        val input = executionServiceInput.payload.get("$workflowName-request")
+        bluePrintRuntimeService.assignWorkflowInputs(workflowName, input)
 
         // Execute the DG
         return blueprintSvcLogicService.execute(graph, bluePrintRuntimeService, executionServiceInput) as ExecutionServiceOutput

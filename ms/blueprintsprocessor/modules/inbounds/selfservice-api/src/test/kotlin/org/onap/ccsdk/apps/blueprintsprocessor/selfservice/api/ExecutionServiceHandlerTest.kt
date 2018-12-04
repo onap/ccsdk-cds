@@ -14,51 +14,37 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.apps.blueprintsprocessor.services.workflow
+package org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api
 
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
-import org.onap.ccsdk.apps.blueprintsprocessor.services.workflow.executor.ComponentExecuteNodeExecutor
+import org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api.mock.MockBluePrintCatalogService
+import org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api.mock.MockBlueprintDGExecutionService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [WorkflowServiceConfiguration::class, ComponentExecuteNodeExecutor::class])
-class BlueprintServiceLogicTest {
-
-    private val log = LoggerFactory.getLogger(BlueprintServiceLogicTest::class.java)
+@ContextConfiguration(classes = [MockBluePrintCatalogService::class,
+    MockBlueprintDGExecutionService::class, ExecutionServiceHandler::class])
+class ExecutionServiceHandlerTest {
 
     @Autowired
-    lateinit var blueprintDGExecutionService: BlueprintDGExecutionService
+    lateinit var executionServiceHandler: ExecutionServiceHandler
 
     @Test
-    fun testExecuteGraphWithSingleComponent() {
-
+    fun testProcess() {
         val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
                 "./../../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration")
 
-        val executionServiceInput = JacksonUtils.readValueFromClassPathFile("execution-input/resource-assignment-input.json", ExecutionServiceInput::class.java)!!
-
-
-        blueprintDGExecutionService.executeDirectedGraph(bluePrintRuntimeService, executionServiceInput)
-
-    }
-
-    @Test
-    fun testExecuteGraphWithMultipleComponents() {
-
-        val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                "./../../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration")
-
-        val executionServiceInput = JacksonUtils.readValueFromClassPathFile("execution-input/assign-activate-input.json", ExecutionServiceInput::class.java)!!
-
-        blueprintDGExecutionService.executeDirectedGraph(bluePrintRuntimeService, executionServiceInput)
+        val executionServiceInput = JacksonUtils.readValueFromClassPathFile("execution-input/default-input.json", ExecutionServiceInput::class.java)!!
+        executionServiceHandler.process(executionServiceInput)
 
     }
 
 }
+
+

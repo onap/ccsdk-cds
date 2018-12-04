@@ -16,9 +16,12 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.services.workflow.executor
 
+import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.apps.blueprintsprocessor.services.workflow.BlueprintSvcLogicContext
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.apps.controllerblueprints.core.putJsonElement
 import org.onap.ccsdk.sli.core.sli.SvcLogicContext
 import org.onap.ccsdk.sli.core.sli.SvcLogicException
 import org.onap.ccsdk.sli.core.sli.SvcLogicNode
@@ -57,13 +60,27 @@ open class ComponentExecuteNodeExecutor : ExecuteNodeExecutor() {
             // Get the Component Name, NodeTemplate type is mapped to Component Name
             val componentName = blueprintContext.nodeTemplateByName(nodeTemplateName).type
 
-            log.info("executing node template($nodeTemplateName) component($componentName)")
+            val interfaceName = blueprintContext.nodeTemplateFirstInterfaceName(nodeTemplateName)
+
+            val operationName = blueprintContext.nodeTemplateFirstInterfaceFirstOperationName(nodeTemplateName)
+
+            log.info("executing node template($nodeTemplateName) component($componentName) interface($interfaceName) operation($operationName)")
             // Get the Component Instance
             val plugin = this.getComponentFunction(componentName)
             // Set the Blueprint Service
             plugin.bluePrintRuntimeService = ctx.getBluePrintService()
 
             val executionInput = ctx.getRequest() as ExecutionServiceInput
+
+            val metaData = executionInput.metadata
+            metaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_STEP, nodeTemplateName)
+            // Populate Step Meta Data
+            val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
+            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, nodeTemplateName)
+            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, interfaceName)
+            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, operationName)
+
+            metaData.putJsonElement("$nodeTemplateName-step-inputs", stepMetaData)
             // Get the Request from the Context and Set to the Function Input and Invoke the function
             val executionOutput = plugin.apply(executionInput)
 

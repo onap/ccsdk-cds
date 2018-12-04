@@ -1,0 +1,23 @@
+{
+  "commonHeader": {
+    "originatorId": "System",
+    "requestId": "1234",
+    "subRequestId": "1234-12234"
+  },
+  "actionIdentifiers": {
+    "blueprintName": "baseconfiguration",
+    "blueprintVersion": "1.0.0",
+    "actionName": "assign-activate",
+    "mode": "sync"
+  },
+  "payload": {
+    "assign-activate-request": {
+      "assign-activate-properties": {
+        "request-id": "1234",
+        "action-name": "assign-activate",
+        "scope-type": "vnf-type",
+        "hostname": "localhost"
+      }
+    }
+  }
+}
