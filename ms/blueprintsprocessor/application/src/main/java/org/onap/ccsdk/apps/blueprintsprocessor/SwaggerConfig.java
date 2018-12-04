@@ -17,8 +17,7 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.context.annotation.Bean;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -27,10 +26,7 @@ import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * SwaggerConfig
