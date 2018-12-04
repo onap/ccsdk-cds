@@ -75,8 +75,7 @@ public class ServiceTemplateRest {
 
     @PostMapping(path = "/resource-assignment/generate", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    List<ResourceAssignment> generateResourceAssignments(@RequestBody ConfigModelContent templateContent)
-            throws BluePrintException {
+    List<ResourceAssignment> generateResourceAssignments(@RequestBody ConfigModelContent templateContent) {
         return serviceTemplateService.generateResourceAssignments(templateContent);
     }
 
