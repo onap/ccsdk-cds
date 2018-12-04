@@ -17,16 +17,24 @@
 <service-logic
         xmlns='http://www.onap.org/sdnc/svclogic'
         xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.onap.org/sdnc/svclogic ./svclogic.xsd' module='CONFIG' version='1.0.0'>
-    <method rpc='ActivateNetconf' mode='sync'>
+    <method rpc='ResourceAssignAndActivate' mode='sync'>
         <block atomic="true">
-            <execute plugin="activate-jython" method="process">
+            <execute plugin="resource-assignment" method="process">
                 <outcome value='failure'>
                     <return status="failure">
                     </return>
                 </outcome>
                 <outcome value='success'>
-                    <return status='success'>
-                    </return>
+                    <execute plugin="activate-jython" method="process">
+                        <outcome value='failure'>
+                            <return status="failure">
+                            </return>
+                        </outcome>
+                        <outcome value='success'>
+                            <return status='success'>
+                            </return>
+                        </outcome>
+                    </execute>
                 </outcome>
             </execute>
         </block>

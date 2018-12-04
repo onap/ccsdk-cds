@@ -197,8 +197,7 @@ If Property Assignment is Expression.
     }
 
     fun artifactContent(artifactDefinition: ArtifactDefinition): String {
-        val bluePrintBasePath: String = bluePrintRuntimeService.get(BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH)?.asText()
-                ?: throw BluePrintException("failed to get property (${BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH}) from getStore")
+        val bluePrintBasePath: String = bluePrintContext.rootPath
 
         if (artifactDefinition.repository != null) {
             TODO()

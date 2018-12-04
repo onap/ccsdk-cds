@@ -75,17 +75,17 @@ fun <T : Any> MutableMap<String, *>.castValue(key: String, valueType: KClass<T>)
 fun MutableMap<String, JsonNode>.putJsonElement(key: String, value: Any) {
     when (value) {
         is JsonNode ->
-            this.put(key, value)
+            this[key] = value
         is String ->
-            this.put(key, TextNode(value))
+            this[key] = TextNode(value)
         is Boolean ->
-            this.put(key, BooleanNode.valueOf(value))
+            this[key] = BooleanNode.valueOf(value)
         is Int ->
-            this.put(key, IntNode.valueOf(value.toInt()))
+            this[key] = IntNode.valueOf(value.toInt())
         is Double ->
-            this.put(key, DoubleNode.valueOf(value.toDouble()))
+            this[key] = DoubleNode.valueOf(value.toDouble())
         else ->
-            this.put(key, JacksonUtils.jsonNodeFromObject(value))
+            this[key] = JacksonUtils.jsonNodeFromObject(value)
     }
 }
 
@@ -95,6 +95,14 @@ fun MutableMap<String, JsonNode>.getAsString(key: String): String {
 
 fun MutableMap<String, JsonNode>.getAsBoolean(key: String): Boolean {
     return this[key]?.asBoolean() ?: throw BluePrintException("couldn't find value for key($key)")
+}
+
+fun MutableMap<String, JsonNode>.getAsInt(key: String): Int {
+    return this[key]?.asInt() ?: throw BluePrintException("couldn't find value for key($key)")
+}
+
+fun MutableMap<String, JsonNode>.getAsDouble(key: String): Double {
+    return this[key]?.asDouble() ?: throw BluePrintException("couldn't find value for key($key)")
 }
 
 // Checks

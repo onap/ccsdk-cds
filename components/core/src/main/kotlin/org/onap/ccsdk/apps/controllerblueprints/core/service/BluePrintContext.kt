@@ -57,6 +57,8 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
     fun workflowByName(workFlowName: String): Workflow = workflows?.get(workFlowName)
             ?: throw BluePrintException("could't get workflow($workFlowName)")
 
+    fun workflowInputs(workFlowName: String) = workflowByName(workFlowName).inputs
+
     fun workflowStepByName(workFlowName: String, stepName: String): Step {
         return workflowByName(workFlowName).steps?.get(stepName)
                 ?: throw BluePrintException("could't get step($stepName) for workflow($workFlowName)")

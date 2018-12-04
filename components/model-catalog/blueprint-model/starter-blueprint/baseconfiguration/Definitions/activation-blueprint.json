@@ -38,6 +38,32 @@
       }
     },
     "node_templates": {
+      "resource-assignment-process": {
+        "type": "dg-activate",
+        "properties": {
+          "process-name": {
+            "get_input": "action-name"
+          },
+          "version": {
+            "get_property": [
+              "SELF",
+              "process-name"
+            ]
+          },
+          "content": {
+            "get_artifact": [
+              "SELF",
+              "dg-resource-assignment-process"
+            ]
+          }
+        },
+        "artifacts": {
+          "dg-resource-assignment-process": {
+            "type": "artifact-directed-graph",
+            "file": "Plans/CONFIG_ResourceAssignment_1.0.0.xml"
+          }
+        }
+      },
       "activate-process": {
         "type": "dg-activate",
         "properties": {
@@ -61,6 +87,32 @@
           "dg-activate-process": {
             "type": "artifact-directed-graph",
             "file": "Plans/CONFIG_ActivateNetconf_1.0.0.xml"
+          }
+        }
+      },
+      "assign-activate-process": {
+        "type": "dg-activate",
+        "properties": {
+          "process-name": {
+            "get_input": "action-name"
+          },
+          "version": {
+            "get_property": [
+              "SELF",
+              "process-name"
+            ]
+          },
+          "content": {
+            "get_artifact": [
+              "SELF",
+              "dg-assign-activate-process"
+            ]
+          }
+        },
+        "artifacts": {
+          "dg-assign-activate-process": {
+            "type": "artifact-directed-graph",
+            "file": "Plans/CONFIG_AssignActivateNetconf_1.0.0.xml"
           }
         }
       },
@@ -181,30 +233,18 @@
     "workflows": {
       "resource-assignment": {
         "inputs": {
-          "request-id": {
+          "resource-assignment-properties": {
             "required": true,
-            "type": "string"
-          },
-          "action-name": {
-            "required": true,
-            "type": "string"
-          },
-          "scope-type": {
-            "required": true,
-            "type": "string"
-          },
-          "hostname": {
-            "required": true,
-            "type": "string"
+            "type": "resource-assignment-properties"
           }
         },
         "steps": {
           "call-resource-assignment": {
             "description": "Resource Assignment Workflow",
-            "target": "resource-assignment",
+            "target": "resource-assignment-process",
             "activities": [
               {
-                "call_operation": "ResourceAssignmentComponent.process"
+                "call_operation": "CONFIG.ResourceAssignment"
               }
             ]
           }
@@ -212,21 +252,9 @@
       },
       "activate": {
         "inputs": {
-          "request-id": {
+          "activate-properties": {
             "required": true,
-            "type": "string"
-          },
-          "action-name": {
-            "required": true,
-            "type": "string"
-          },
-          "scope-type": {
-            "required": true,
-            "type": "string"
-          },
-          "hostname": {
-            "required": true,
-            "type": "string"
+            "type": "activate-properties"
           }
         },
         "steps": {
@@ -235,7 +263,26 @@
             "target": "activate-process",
             "activities": [
               {
-                "call_operation": "ResourceAssignmentComponent.process"
+                "call_operation": "CONFIG.ActivateProcess"
+              }
+            ]
+          }
+        }
+      },
+      "assign-activate": {
+        "inputs": {
+          "assign-activate-properties": {
+            "required": true,
+            "type": "assign-activate-properties"
+          }
+        },
+        "steps": {
+          "activate-process": {
+            "description": "Resource Assign and Netconf Activation Workflow",
+            "target": "assign-activate-process",
+            "activities": [
+              {
+                "call_operation": "CONFIG.AssignActivateProcess"
               }
             ]
           }

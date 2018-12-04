@@ -1,7 +1,7 @@
 {
   "node_types": {
     "dg-activate": {
-      "description": "This is BPMN Activate node type",
+      "description": "This is Generic Directed Graph Type",
       "version": "1.0.0",
       "properties": {
         "content": {

@@ -25,7 +25,6 @@ import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ArtifactDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeTemplate
@@ -211,15 +210,13 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
 
         val propertyAssignments: MutableMap<String, Any> =
                 bluePrintContext.nodeTemplateInterfaceOperationInputs(nodeTemplateName, interfaceName, operationName) as? MutableMap<String, Any>
-                        ?: throw BluePrintException(String.format("failed to get input definitions for node template (%s), " +
-                                "interface name (%s), operationName(%s)", nodeTemplateName, interfaceName, operationName))
+                        ?: hashMapOf()
 
         val nodeTypeName = bluePrintContext.nodeTemplateByName(nodeTemplateName).type
 
         val nodeTypeInterfaceOperationInputs: MutableMap<String, PropertyDefinition> =
                 bluePrintContext.nodeTypeInterfaceOperationInputs(nodeTypeName, interfaceName, operationName)
-                        ?: throw BluePrintException(String.format("failed to get input definitions for node type (%s), " +
-                                "interface name (%s), operationName(%s)", nodeTypeName, interfaceName, operationName))
+                        ?: hashMapOf()
 
         log.info("input definition for node template ({}), values ({})", nodeTemplateName, propertyAssignments)
 
@@ -258,15 +255,13 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
 
         val propertyAssignments: MutableMap<String, Any> =
                 bluePrintContext.nodeTemplateInterfaceOperationOutputs(nodeTemplateName, interfaceName, operationName) as? MutableMap<String, Any>
-                        ?: throw BluePrintException(String.format("failed to get output definitions for node template (%s), " +
-                                "interface name (%s), operationName(%s)", nodeTemplateName, interfaceName, operationName))
+                        ?: hashMapOf()
 
         val nodeTypeName = bluePrintContext.nodeTemplateByName(nodeTemplateName).type
 
         val nodeTypeInterfaceOperationOutputs: MutableMap<String, PropertyDefinition> =
                 bluePrintContext.nodeTypeInterfaceOperationOutputs(nodeTypeName, interfaceName, operationName)
-                        ?: throw BluePrintException(String.format("failed to get input definitions for node type (%s), " +
-                                "interface name (%s), operationName(%s)", nodeTypeName, interfaceName, operationName))
+                        ?: hashMapOf()
 
         // Iterate Node Type Properties
         nodeTypeInterfaceOperationOutputs.forEach { nodeTypePropertyName, nodeTypeProperty ->
@@ -435,10 +430,25 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
     override fun assignWorkflowInputs(workflowName: String, jsonNode: JsonNode) {
         log.info("assign workflow {} input value ({})", workflowName, jsonNode.toString())
 
+        val dynamicInputPropertiesName = "$workflowName-properties"
+
         bluePrintContext.workflowByName(workflowName).inputs?.forEach { propertyName, property ->
-            val valueNode: JsonNode = jsonNode.at(BluePrintConstants.PATH_DIVIDER + propertyName)
-                    ?: NullNode.getInstance()
-            setInputValue(propertyName, property, valueNode)
+            if (propertyName != dynamicInputPropertiesName) {
+                val valueNode: JsonNode = jsonNode.at(BluePrintConstants.PATH_DIVIDER + propertyName)
+                        ?: NullNode.getInstance()
+                setInputValue(propertyName, property, valueNode)
+            }
+        }
+
+        val workflowDynamicInputs: JsonNode? = jsonNode.get(dynamicInputPropertiesName)
+
+        workflowDynamicInputs?.let {
+            bluePrintContext.dataTypeByName(dynamicInputPropertiesName)?.properties?.forEach { propertyName, property ->
+                val valueNode: JsonNode = workflowDynamicInputs.at(BluePrintConstants.PATH_DIVIDER + propertyName)
+                        ?: NullNode.getInstance()
+                setInputValue(propertyName, property, valueNode)
+
+            }
         }
     }
 

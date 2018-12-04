@@ -29,6 +29,9 @@ object BluePrintConstants {
     const val RESPONSE_HEADER_PATCH_VERSION: String = "X-PatchVersion"
     const val RESPONSE_HEADER_LATEST_VERSION: String = "X-LatestVersion"
 
+    const val STATUS_SUCCESS: String = "success"
+    const val STATUS_FAILURE: String = "failure"
+
     const val TYPE_DEFAULT: String = "default"
 
     const val DATA_TYPE_STRING: String = "string"
