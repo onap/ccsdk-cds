@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.apps.blueprintsprocessor.services.resolution
+package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution
 
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ResourceResolutionInput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ResourceResolutionOutput

@@ -15,19 +15,19 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.apps.blueprintsprocessor.services.resolution.processor
+package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolutionprocessor
 
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignmentProcessor
 import org.springframework.stereotype.Service
 
 /**
- * InputResourceAssignmentProcessor
+ * DefaultResourceAssignmentProcessor
  *
  * @author Brinda Santh
  */
-@Service("resource-assignment-processor-input")
-open class InputResourceAssignmentProcessor : ResourceAssignmentProcessor() {
+@Service("resource-assignment-processor-default")
+open class DefaultResourceAssignmentProcessor : ResourceAssignmentProcessor() {
 
     override fun process(executionRequest: ResourceAssignment) {
     }

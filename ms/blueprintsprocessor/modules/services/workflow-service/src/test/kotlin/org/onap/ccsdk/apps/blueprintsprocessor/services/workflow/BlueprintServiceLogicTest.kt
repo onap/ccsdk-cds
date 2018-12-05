@@ -20,18 +20,25 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.services.workflow.executor.ComponentExecuteNodeExecutor
+import org.onap.ccsdk.apps.blueprintsprocessor.services.workflow.mock.PrototypeComponentFunction
+import org.onap.ccsdk.apps.blueprintsprocessor.services.workflow.mock.SingletonComponentFunction
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationContext
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
+import kotlin.test.assertEquals
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [WorkflowServiceConfiguration::class, ComponentExecuteNodeExecutor::class])
 class BlueprintServiceLogicTest {
 
     private val log = LoggerFactory.getLogger(BlueprintServiceLogicTest::class.java)
+
+    @Autowired
+    lateinit var applicationContext: ApplicationContext
 
     @Autowired
     lateinit var blueprintDGExecutionService: BlueprintDGExecutionService
@@ -59,6 +66,28 @@ class BlueprintServiceLogicTest {
 
         blueprintDGExecutionService.executeDirectedGraph(bluePrintRuntimeService, executionServiceInput)
 
+    }
+
+    @Test
+    fun testSingleton() {
+        val singleton1 = applicationContext.getBean(SingletonComponentFunction::class.java)
+        singleton1.stepName = "step1"
+        val singleton2 = applicationContext.getBean(SingletonComponentFunction::class.java)
+        assertEquals(singleton1.stepName, singleton2.stepName, " failed to get singleton data")
+    }
+
+    @Test
+    fun testProtoTypeFunction() {
+        val stepName1 = "step1"
+        val stepName2 = "step2"
+        val proto1 = applicationContext.getBean(PrototypeComponentFunction::class.java)
+        proto1.stepName = stepName1
+
+        val proto2 = applicationContext.getBean(PrototypeComponentFunction::class.java)
+        proto2.stepName = stepName2
+
+        assertEquals(stepName1, proto1.stepName, " Failed to match the step1 name")
+        assertEquals(stepName2, proto2.stepName, " Failed to match the step2 name")
     }
 
 }

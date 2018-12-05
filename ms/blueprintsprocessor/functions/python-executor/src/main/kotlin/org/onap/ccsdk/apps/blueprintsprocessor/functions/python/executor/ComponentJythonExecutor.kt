@@ -16,37 +16,39 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor
 
+import com.fasterxml.jackson.databind.node.ArrayNode
 import org.apache.commons.io.FilenameUtils
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.utils.PythonExecutorUtils
 import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.AbstractComponentFunction
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.checkNotEmptyNThrow
 import org.onap.ccsdk.apps.controllerblueprints.core.data.OperationAssignment
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.config.ConfigurableBeanFactory
+import org.springframework.context.ApplicationContext
+import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
 
 @Component("component-jython-executor")
-class ComponentJythonExecutor(private val pythonExecutorProperty: PythonExecutorProperty) : AbstractComponentFunction() {
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+open class ComponentJythonExecutor(private val pythonExecutorProperty: PythonExecutorProperty) : AbstractComponentFunction() {
 
     private val log = LoggerFactory.getLogger(ComponentJythonExecutor::class.java)
 
     private var componentFunction: AbstractComponentFunction? = null
 
+    @Autowired
+    lateinit var applicationContext: ApplicationContext
 
-    override fun process(executionServiceInput: ExecutionServiceInput) {
-
-        log.info("Processing : ${executionServiceInput.metadata}")
-        checkNotNull(bluePrintRuntimeService) { "failed to get bluePrintRuntimeService" }
-
+    fun populateJythonComponentInstance(executionServiceInput: ExecutionServiceInput) {
         val bluePrintContext = bluePrintRuntimeService!!.bluePrintContext()
 
         val operationAssignment: OperationAssignment = bluePrintContext
                 .nodeTemplateInterfaceOperation(nodeTemplateName, interfaceName, operationName)
 
-        val blueprintBasePath: String = bluePrintRuntimeService!!.get(BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH)?.asText()
-                ?: throw BluePrintProcessorException("python execute path is missing for node template ($nodeTemplateName)")
+        val blueprintBasePath: String = bluePrintContext.rootPath
 
         val artifactName: String = operationAssignment.implementation?.primary
                 ?: throw BluePrintProcessorException("missing primary field to get artifact name for node template ($nodeTemplateName)")
@@ -66,12 +68,30 @@ class ComponentJythonExecutor(private val pythonExecutorProperty: PythonExecutor
         pythonPath.add(blueprintBasePath)
         pythonPath.addAll(pythonExecutorProperty.modulePaths)
 
-        val properties: MutableMap<String, Any> = hashMapOf()
-        properties["log"] = log
+        val jythonInstances: MutableMap<String, Any> = hashMapOf()
+        jythonInstances["log"] = LoggerFactory.getLogger(nodeTemplateName)
+
+        val instanceDependenciesNode: ArrayNode = operationInputs[PythonExecutorConstants.INPUT_INSTANCE_DEPENDENCIES] as? ArrayNode
+                ?: throw BluePrintProcessorException("Failed to get property(${PythonExecutorConstants.INPUT_INSTANCE_DEPENDENCIES})")
+
+        instanceDependenciesNode.forEach { instanceName ->
+            jythonInstances[instanceName.textValue()] = applicationContext.getBean(instanceName.textValue())
+        }
 
         componentFunction = PythonExecutorUtils.getPythonComponent(pythonExecutorProperty.executionPath,
-                pythonPath, content, pythonClassName, properties)
+                pythonPath, content, pythonClassName, jythonInstances)
+    }
 
+
+    override fun process(executionServiceInput: ExecutionServiceInput) {
+
+        log.info("Processing : ${operationInputs}")
+        checkNotNull(bluePrintRuntimeService) { "failed to get bluePrintRuntimeService" }
+
+        // Populate Component Instance
+        populateJythonComponentInstance(executionServiceInput)
+
+        // Invoke Jython Component Script
         componentFunction!!.process(executionServiceInput)
 
     }

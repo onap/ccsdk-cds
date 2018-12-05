@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor
+package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor
 
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
@@ -24,19 +23,4 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 @ComponentScan
 @EnableConfigurationProperties
-open class PythonExecutorConfiguration
-
-@Configuration
-open class PythonExecutorProperty {
-    @Value("\${blueprints.processor.functions.python.executor.executionPath}")
-    lateinit var executionPath: String
-    @Value("#{'\${blueprints.processor.functions.python.executor.modulePaths}'.split(',')}")
-    lateinit var modulePaths: List<String>
-
-}
-
-class PythonExecutorConstants {
-    companion object {
-        const val INPUT_INSTANCE_DEPENDENCIES = "instance-dependencies"
-    }
-}
+open class NetconfExecutorConfiguration

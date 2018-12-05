@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.apps.blueprintsprocessor.services.resolution
+package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution
 
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.AbstractComponentFunction
+import org.springframework.beans.factory.config.ConfigurableBeanFactory
+import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
 
 @Component("component-resource-resolution")
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class ResourceResolutionComponent : AbstractComponentFunction() {
     override fun process(executionRequest: ExecutionServiceInput) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
