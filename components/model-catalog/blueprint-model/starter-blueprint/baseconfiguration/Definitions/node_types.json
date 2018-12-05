@@ -108,6 +108,16 @@
         "JythonExecutorComponent": {
           "operations": {
             "process": {
+              "inputs": {
+                "instance-dependencies": {
+                  "required": true,
+                  "description": "Instance Names to Inject to Jython Script.",
+                  "type": "list",
+                  "entry_schema": {
+                    "type": "string"
+                  }
+                }
+              },
               "outputs": {
                 "response-data": {
                   "description": "Execution Response Data in JSON format.",
