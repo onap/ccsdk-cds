@@ -25,6 +25,7 @@
 **/.springBeans
 **/.directory
 
+**/transaction.log
 **/*versionsBackup
 **/blackDuckHub*
 **/*.jsonld
