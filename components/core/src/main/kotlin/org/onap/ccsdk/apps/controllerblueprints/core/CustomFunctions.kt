@@ -49,6 +49,10 @@ fun Double.asJsonPrimitive(): DoubleNode {
     return DoubleNode.valueOf(this)
 }
 
+fun MutableMap<String, *>.asJsonNode(): JsonNode {
+    return JacksonUtils.jsonNodeFromObject(this)
+}
+
 fun format(message: String, vararg args: Any?): String {
     if (args != null && args.isNotEmpty()) {
         return MessageFormatter.arrayFormat(message, args).message

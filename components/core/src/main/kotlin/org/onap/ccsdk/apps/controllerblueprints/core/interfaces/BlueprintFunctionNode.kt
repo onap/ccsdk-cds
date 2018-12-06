@@ -22,6 +22,8 @@ import java.util.function.Function
 
 interface BlueprintFunctionNode<T, R> : Function<T, R> {
 
+    fun getName(): String
+
     @Throws(BluePrintProcessorException::class)
     fun prepareRequest(executionRequest: T): T
 
