@@ -24,6 +24,7 @@ import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.CommonHeader
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.PythonExecutorProperty
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.apps.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.apps.controllerblueprints.core.putJsonElement
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -62,15 +63,15 @@ class ComponentNetconfExecutorTest {
         componentNetconfExecutor.bluePrintRuntimeService = bluePrintRuntimeService
 
 
-        val metaData: MutableMap<String, JsonNode> = hashMapOf()
-        metaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_STEP, "activate-jython")
-
         val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
         stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "activate-jython")
         stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "JythonExecutorComponent")
         stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
-        metaData.putJsonElement("activate-jython-step-inputs", stepMetaData)
-        executionServiceInput.metadata = metaData
+        // Set Step Inputs in Blueprint Runtime Service
+        bluePrintRuntimeService.put("activate-jython-step-inputs", stepMetaData.asJsonNode())
+
+        componentNetconfExecutor.bluePrintRuntimeService = bluePrintRuntimeService
+        componentNetconfExecutor.stepName = "activate-jython"
 
         componentNetconfExecutor.apply(executionServiceInput)
 

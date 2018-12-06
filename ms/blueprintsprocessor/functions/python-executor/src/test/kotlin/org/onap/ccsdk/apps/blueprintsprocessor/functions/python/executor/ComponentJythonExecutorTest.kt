@@ -23,6 +23,7 @@ import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ActionIdentifiers
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.CommonHeader
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.apps.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.apps.controllerblueprints.core.putJsonElement
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -58,18 +59,14 @@ class ComponentJythonExecutorTest {
         val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(commonHeader.requestId,
                 "./../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration")
 
-        componentJythonExecutor.bluePrintRuntimeService = bluePrintRuntimeService
-
-
-        val metaData: MutableMap<String, JsonNode> = hashMapOf()
-        metaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_STEP, "activate-jython")
-
         val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
         stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "activate-jython")
         stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "JythonExecutorComponent")
         stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
-        metaData.putJsonElement("activate-jython-step-inputs", stepMetaData)
-        executionServiceInput.metadata = metaData
+        bluePrintRuntimeService.put("activate-jython-step-inputs", stepMetaData.asJsonNode())
+
+        componentJythonExecutor.bluePrintRuntimeService = bluePrintRuntimeService
+        componentJythonExecutor.stepName = "activate-jython"
 
         componentJythonExecutor.apply(executionServiceInput)
 

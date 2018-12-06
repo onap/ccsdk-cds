@@ -29,6 +29,10 @@ import org.springframework.stereotype.Service
 @Service("resource-assignment-processor-db")
 open class DataBaseResourceAssignmentProcessor : ResourceAssignmentProcessor(){
 
+    override fun getName(): String {
+        return "resource-assignment-processor-db"
+    }
+
     override fun process(executionRequest: ResourceAssignment) {
     }
 

@@ -19,11 +19,5 @@
         "hostname": "localhost"
       }
     }
-  },
-  "metadata": {
-    "current-node-template": "resource-assignment-py",
-    "current-step": "resource-assignment-py",
-    "current-operation": "process",
-    "current-interface": "ResourceAssignmentComponent"
   }
 }

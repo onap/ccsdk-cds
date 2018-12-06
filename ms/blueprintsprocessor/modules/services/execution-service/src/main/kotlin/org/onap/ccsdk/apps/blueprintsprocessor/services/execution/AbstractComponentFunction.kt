@@ -24,9 +24,9 @@ import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInp
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.Status
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.apps.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.apps.controllerblueprints.core.getAsString
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BlueprintFunctionNode
-import org.onap.ccsdk.apps.controllerblueprints.core.putJsonElement
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.slf4j.LoggerFactory
 
@@ -49,35 +49,45 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     var nodeTemplateName: String = ""
     var operationInputs: MutableMap<String, JsonNode> = hashMapOf()
 
+    override fun getName(): String {
+        return stepName
+    }
 
     override fun prepareRequest(executionServiceInput: ExecutionServiceInput): ExecutionServiceInput {
         checkNotNull(bluePrintRuntimeService) { "failed to prepare blueprint runtime" }
 
+        check(stepName.isNotEmpty()) { "failed to assign step name" }
+
         this.executionServiceInput = executionServiceInput
 
         processId = executionServiceInput.commonHeader.requestId
-        workflowName = executionServiceInput.actionIdentifiers.actionName
+        check(processId.isNotEmpty()) { "couldn't get process id for step($stepName)" }
 
-        val metadata = executionServiceInput.metadata
-        stepName = metadata.getAsString(BluePrintConstants.PROPERTY_CURRENT_STEP)
+        workflowName = executionServiceInput.actionIdentifiers.actionName
+        check(workflowName.isNotEmpty()) { "couldn't get action name for step($stepName)" }
+
         log.info("preparing request id($processId) for workflow($workflowName) step($stepName)")
 
-        val operationInputs = metadata.get("$stepName-step-inputs") ?: JsonNodeFactory.instance.objectNode()
+        val operationInputs = bluePrintRuntimeService!!.get("$stepName-step-inputs")
+                ?: JsonNodeFactory.instance.objectNode()
 
         operationInputs.fields().forEach {
             this.operationInputs[it.key] = it.value
         }
 
         nodeTemplateName = this.operationInputs.getAsString(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE)
+        check(nodeTemplateName.isNotEmpty()) { "couldn't get NodeTemplate name for step($stepName)" }
+
         interfaceName = this.operationInputs.getAsString(BluePrintConstants.PROPERTY_CURRENT_INTERFACE)
+        check(interfaceName.isNotEmpty()) { "couldn't get Interface name for step($stepName)" }
+
         operationName = this.operationInputs.getAsString(BluePrintConstants.PROPERTY_CURRENT_OPERATION)
+        check(operationName.isNotEmpty()) { "couldn't get Operation name for step($stepName)" }
 
 
         val operationResolvedProperties = bluePrintRuntimeService!!.resolveNodeTemplateInterfaceOperationInputs(nodeTemplateName, interfaceName, operationName)
 
         this.operationInputs.putAll(operationResolvedProperties)
-
-
 
         return executionServiceInput
     }
@@ -87,12 +97,10 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         executionServiceOutput.commonHeader = executionServiceInput!!.commonHeader
 
         // Resolve the Output Expression
-        val operationResolvedProperties = bluePrintRuntimeService!!
+        val stepOutputs = bluePrintRuntimeService!!
                 .resolveNodeTemplateInterfaceOperationOutputs(nodeTemplateName, interfaceName, operationName)
 
-        val metadata = executionServiceOutput.metadata
-        metadata.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_STEP, stepName)
-        metadata.putJsonElement("$stepName-step-outputs", operationResolvedProperties)
+        bluePrintRuntimeService!!.put("$stepName-step-outputs", stepOutputs.asJsonNode())
 
         // Populate Status
         val status = Status()
@@ -110,6 +118,6 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     }
 
     fun getOperationInput(key: String): JsonNode {
-        return operationInputs.get(key) ?: NullNode.instance
+        return operationInputs[key] ?: NullNode.instance
     }
 }
