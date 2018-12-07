@@ -1,0 +1,49 @@
+syntax = "proto3";
+import "google/protobuf/struct.proto";
+option java_multiple_files = true;
+package org.onap.ccsdk.apps.controllerblueprints.processing.api;
+
+message ExecutionServiceInput {
+    CommonHeader commonHeader = 1;
+    ActionIdentifiers actionIdentifiers = 2;
+    google.protobuf.Struct payload = 3;
+}
+
+message ExecutionServiceOutput {
+    CommonHeader commonHeader = 1;
+    ActionIdentifiers actionIdentifiers = 2;
+    Status status = 3;
+    google.protobuf.Struct payload = 4;
+}
+
+message CommonHeader {
+    string timestamp = 1;
+    string originatorId = 23;
+    string requestId = 3;
+    string subRequestId = 4;
+    Flag flag = 5;
+}
+
+message Flag {
+    bool isForce = 1;
+    int32 ttl = 2;
+}
+
+message ActionIdentifiers {
+    string blueprintName = 1;
+    string blueprintVersion = 2;
+    string actionName = 3;
+    string mode = 4;
+}
+
+message Status {
+    int32 code = 1;
+    string errorMessage = 2;
+    string message = 3;
+    string eventType = 4;
+    string timestamp = 5;
+}
+
+service BluePrintProcessingService {
+    rpc process (ExecutionServiceInput) returns (stream ExecutionServiceOutput);
+}
