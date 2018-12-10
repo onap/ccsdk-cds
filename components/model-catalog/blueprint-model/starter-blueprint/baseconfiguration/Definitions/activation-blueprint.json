@@ -136,6 +136,9 @@
                   "resource-id": {
                     "get_input": "hostname"
                   },
+                  "artifact-prefix-names": [
+                    "baseconfig"
+                  ],
                   "template-content": {
                     "get_artifact": [
                       "SELF",

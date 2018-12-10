@@ -122,6 +122,11 @@ object JacksonUtils {
     }
 
     @JvmStatic
+    fun <T> getListFromJsonNode(node: JsonNode, valueType: Class<T>): List<T>? {
+        return getListFromJson(node.toString(), valueType)
+    }
+
+    @JvmStatic
     fun <T> getListFromJson(content: String, valueType: Class<T>): List<T>? {
         val objectMapper = jacksonObjectMapper()
         val javaType = objectMapper.typeFactory.constructCollectionType(List::class.java, valueType)
@@ -146,6 +151,13 @@ object JacksonUtils {
         val objectMapper = jacksonObjectMapper()
         val typeRef = object : TypeReference<MutableMap<String, T>>() {}
         return objectMapper.readValue(content, typeRef)
+    }
+
+    @JvmStatic
+    fun <T> getMapFromFile(fileName: String, valueType: Class<T>): MutableMap<String, T>? {
+        val content: String = FileUtils.readFileToString(File(fileName), Charset.defaultCharset())
+                ?: throw BluePrintException(format("Failed to read json file : {}", fileName))
+        return getMapFromJson(content, valueType)
     }
 
     @JvmStatic

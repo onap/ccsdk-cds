@@ -11,12 +11,12 @@
       "operations": {
         "process": {
           "inputs": {
-           "template-name": {
+            "template-name": {
               "description": "Service Template Name.",
               "required": true,
               "type": "string"
             },
-           "template-version": {
+            "template-version": {
               "description": "Service Template Version.",
               "required": true,
               "type": "string"
@@ -29,6 +29,14 @@
             "template-names": {
               "description": "Name of the artifact Node Templates, to get the template Content.",
               "required": true,
+              "type": "list",
+              "entry_schema": {
+                "type": "string"
+              }
+            },
+            "artifact-prefix-names": {
+              "required": false,
+              "description": "Template , Resource Assignment Artifact Prefix names",
               "type": "list",
               "entry_schema": {
                 "type": "string"
