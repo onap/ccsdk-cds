@@ -17,16 +17,19 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution
 
-import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ResourceResolutionInput
-import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ResourceResolutionOutput
-import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.Status
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolutionprocessor.ResourceAssignmentProcessor
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignmentProcessor
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.utils.BulkResourceSequencingUtils
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Service
+import java.io.File
 
 /**
  * ResourceResolutionService
@@ -37,25 +40,10 @@ import org.springframework.stereotype.Service
 @Service
 class ResourceResolutionService {
 
+    private val log = LoggerFactory.getLogger(ResourceResolutionService::class.java)
 
     @Autowired
     private lateinit var applicationContext: ApplicationContext
-
-    fun resolveResource(resourceResolutionInput: ResourceResolutionInput): ResourceResolutionOutput {
-        val resourceResolutionOutput = ResourceResolutionOutput()
-        resourceResolutionOutput.actionIdentifiers = resourceResolutionInput.actionIdentifiers
-        resourceResolutionOutput.commonHeader = resourceResolutionInput.commonHeader
-        resourceResolutionOutput.resourceAssignments = resourceResolutionInput.resourceAssignments
-
-        process(resourceResolutionOutput.resourceAssignments)
-
-        val status = Status()
-        status.code = 200
-        status.message = "Success"
-        resourceResolutionOutput.status = status
-
-        return resourceResolutionOutput
-    }
 
     fun registeredResourceSources(): List<String> {
         return applicationContext.getBeanNamesForType(ResourceAssignmentProcessor::class.java)
@@ -63,7 +51,65 @@ class ResourceResolutionService {
                 .map { it.substringAfter(ResourceResolutionConstants.PREFIX_RESOURCE_ASSIGNMENT_PROCESSOR) }
     }
 
-    fun process(resourceAssignments: MutableList<ResourceAssignment>) {
+
+    fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
+                         artifactNames: List<String>): MutableMap<String, String> {
+
+        val resolvedParams: MutableMap<String, String> = hashMapOf()
+        artifactNames.forEach { artifactName ->
+            val resolvedContent = resolveResources(bluePrintRuntimeService, nodeTemplateName, artifactName)
+            resolvedParams[artifactName] = resolvedContent
+        }
+        return resolvedParams
+    }
+
+
+    fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String, artifactName: String): String {
+
+        var resolvedContent = ""
+        // Velocity Artifact Definition Name
+        val templateArtifactName = "$artifactName-template"
+        // Resource Assignment Artifact Definition Name
+        val mappingArtifactName = "$artifactName-mapping"
+
+        log.info("Resolving resource for template artifact($templateArtifactName) with resource assignment artifact($mappingArtifactName)")
+
+        val resourceAssignmentContent = bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, mappingArtifactName)
+
+        val resourceAssignments: MutableList<ResourceAssignment> = JacksonUtils.getListFromJson(resourceAssignmentContent, ResourceAssignment::class.java)
+                as? MutableList<ResourceAssignment>
+                ?: throw BluePrintProcessorException("couldn't get Dictionary Definitions")
+
+        // Get the Resource Dictionary Name
+        val dictionaryFile = bluePrintRuntimeService.bluePrintContext().rootPath.plus(File.separator)
+                .plus(BluePrintConstants.TOSCA_DEFINITIONS_DIR).plus(File.separator)
+                .plus(ResourceResolutionConstants.FILE_NAME_RESOURCE_DICTIONARY_TYPES)
+
+        val resourceDictionaries: MutableMap<String, ResourceDefinition> = JacksonUtils.getMapFromFile(dictionaryFile, ResourceDefinition::class.java)
+                ?: throw BluePrintProcessorException("couldn't get Dictionary Definitions")
+
+        executeProcessors(bluePrintRuntimeService, resourceDictionaries, resourceAssignments)
+
+        // Check Template is there
+        val templateContent = bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, mappingArtifactName)
+
+        // TODO ("Generate Param JSON from Resource Assignment")
+        val resolvedParamJsonContent = "{}"
+
+        if (templateContent.isNotEmpty()) {
+            // TODO ( "Mash Data and Content")
+            resolvedContent = "Mashed Content"
+
+        } else {
+            resolvedContent = resolvedParamJsonContent
+        }
+        return resolvedContent
+    }
+
+
+    fun executeProcessors(bluePrintRuntimeService: BluePrintRuntimeService<*>,
+                          resourceDictionaries: MutableMap<String, ResourceDefinition>,
+                          resourceAssignments: MutableList<ResourceAssignment>) {
 
         val bulkSequenced = BulkResourceSequencingUtils.process(resourceAssignments)
 
@@ -77,6 +123,10 @@ class ResourceResolutionService {
                                 ?: throw BluePrintProcessorException("failed to get resource processor for instance name($processorInstanceName) " +
                                         "for resource assignment(${resourceAssignment.name})")
                         try {
+                            // Set BluePrint Runtime Service
+                            resourceAssignmentProcessor.bluePrintRuntimeService = bluePrintRuntimeService
+                            // Set Resource Dictionaries
+                            resourceAssignmentProcessor.resourceDictionaries = resourceDictionaries
                             // Invoke Apply Method
                             resourceAssignmentProcessor.apply(resourceAssignment)
                         } catch (e: RuntimeException) {
@@ -86,4 +136,5 @@ class ResourceResolutionService {
                     }
         }
     }
+
 }

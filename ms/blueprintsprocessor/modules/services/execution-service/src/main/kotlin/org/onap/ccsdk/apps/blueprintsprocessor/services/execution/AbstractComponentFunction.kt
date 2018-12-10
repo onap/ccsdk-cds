@@ -19,11 +19,11 @@ package org.onap.ccsdk.apps.blueprintsprocessor.services.execution
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
-import com.fasterxml.jackson.databind.node.NullNode
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.Status
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.apps.controllerblueprints.core.getAsString
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BlueprintFunctionNode
@@ -118,6 +118,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     }
 
     fun getOperationInput(key: String): JsonNode {
-        return operationInputs[key] ?: NullNode.instance
+        return operationInputs[key]
+                ?: throw BluePrintProcessorException("couldn't get the operation input($key) value.")
     }
 }

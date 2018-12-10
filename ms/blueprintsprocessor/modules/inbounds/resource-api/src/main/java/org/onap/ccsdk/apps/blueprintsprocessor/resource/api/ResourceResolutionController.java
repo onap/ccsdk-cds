@@ -16,12 +16,12 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.resource.api;
 
-import io.swagger.annotations.ApiOperation;
-import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ResourceResolutionInput;
-import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ResourceResolutionOutput;
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionService;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 /**
@@ -44,13 +44,5 @@ public class ResourceResolutionController {
     public @ResponseBody
     Mono<String> ping() {
         return Mono.just("Success");
-    }
-
-    @RequestMapping(path = "/resolve-mapping", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Resolve Resource Mappings",
-            notes = "Also returns a link to retrieve all students with rel - all-students")
-    public @ResponseBody
-    Mono<ResourceResolutionOutput> resolveResource(@RequestBody ResourceResolutionInput resourceResolutionInput) {
-        return Mono.just(resourceResolutionService.resolveResource(resourceResolutionInput));
     }
 }

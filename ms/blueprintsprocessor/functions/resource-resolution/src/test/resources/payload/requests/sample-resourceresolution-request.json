@@ -16,7 +16,13 @@
     "timestamp": "2012-04-23T18:25:43.511Z"
   },
   "payload": {
-  },
-  "resourceAssignments": [
-  ]
+    "resource-assignment-request": {
+      "resource-assignment-properties": {
+        "request-id": "1234",
+        "action-name": "assign-activate",
+        "scope-type": "vnf-type",
+        "hostname": "localhost"
+      }
+    }
+  }
 }
