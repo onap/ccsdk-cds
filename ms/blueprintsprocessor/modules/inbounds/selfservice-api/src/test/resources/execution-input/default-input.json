@@ -1,0 +1,29 @@
+{
+  "commonHeader": {
+    "originatorId": "System",
+    "requestId": "1234",
+    "subRequestId": "1234-12234"
+  },
+  "actionIdentifiers": {
+    "blueprintName": "baseconfiguration",
+    "blueprintVersion": "1.0.0",
+    "actionName": "activate",
+    "mode": "sync"
+  },
+  "payload": {
+    "activate-request": {
+      "activate-properties": {
+        "request-id": "1234",
+        "action-name": "activate",
+        "scope-type": "vnf-type",
+        "hostname": "localhost"
+      }
+    }
+  },
+  "metadata": {
+    "current-node-template": "resource-assignment-py",
+    "current-step": "resource-assignment-py",
+    "current-operation": "process",
+    "current-interface": "ResourceAssignmentComponent"
+  }
+}

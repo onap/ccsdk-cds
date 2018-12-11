@@ -23,7 +23,6 @@ import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ResourceResolutionInput
-import org.onap.ccsdk.apps.blueprintsprocessor.core.factory.ResourceAssignmentProcessorFactory
 import org.onap.ccsdk.apps.blueprintsprocessor.services.resolution.processor.DataBaseResourceAssignmentProcessor
 import org.onap.ccsdk.apps.blueprintsprocessor.services.resolution.processor.DefaultResourceAssignmentProcessor
 import org.onap.ccsdk.apps.blueprintsprocessor.services.resolution.processor.InputResourceAssignmentProcessor
@@ -45,7 +44,7 @@ import kotlin.test.assertTrue
  * @author Brinda Santh DATE : 8/15/2018
  */
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [ResourceResolutionService::class, ResourceAssignmentProcessorFactory::class,
+@ContextConfiguration(classes = [ResourceResolutionService::class,
     InputResourceAssignmentProcessor::class, DefaultResourceAssignmentProcessor::class,
     DataBaseResourceAssignmentProcessor::class, SimpleRestResourceAssignmentProcessor::class])
 class ResourceResolutionServiceTest {

@@ -64,10 +64,13 @@ class ComponentJythonExecutorTest {
 
 
         val metaData: MutableMap<String, JsonNode> = hashMapOf()
-        metaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_STEP, "resource-assignment-py")
-        metaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "resource-assignment-py")
-        metaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "ResourceAssignmentComponent")
-        metaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
+        metaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_STEP, "activate-jython")
+
+        val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
+        stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "activate-jython")
+        stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "JythonExecutorComponent")
+        stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
+        metaData.putJsonElement("activate-jython-step-inputs", stepMetaData)
         executionServiceInput.metadata = metaData
 
         componentJythonExecutor.apply(executionServiceInput)

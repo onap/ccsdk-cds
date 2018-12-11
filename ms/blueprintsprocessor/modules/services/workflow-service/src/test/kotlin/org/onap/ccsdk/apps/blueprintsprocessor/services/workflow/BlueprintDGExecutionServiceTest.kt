@@ -43,7 +43,7 @@ class BlueprintDGExecutionServiceTest {
         val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
                 "./../../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration")
 
-        val executionServiceInput = JacksonUtils.readValueFromClassPathFile("execution-input/default-input.json", ExecutionServiceInput::class.java)!!
+        val executionServiceInput = JacksonUtils.readValueFromClassPathFile("execution-input/resource-assignment-input.json", ExecutionServiceInput::class.java)!!
 
         blueprintDGExecutionService.executeDirectedGraph(bluePrintRuntimeService, executionServiceInput)
 
