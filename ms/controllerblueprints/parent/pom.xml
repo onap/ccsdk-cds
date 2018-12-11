@@ -33,6 +33,8 @@
         <kotlin.version>1.3.10</kotlin.version>
         <kotlin.maven.version>1.3.10</kotlin.maven.version>
         <kotlin.couroutines.version>1.0.1</kotlin.couroutines.version>
+        <grpc.version>1.16.1</grpc.version>
+        <protobuff.java.utils.version>3.6.1</protobuff.java.utils.version>
         <eelf.version>1.0.0</eelf.version>
         <guava.version>26.0-jre</guava.version>
         <springfox.swagger2.version>2.9.2</springfox.swagger2.version>
@@ -125,6 +127,33 @@
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-stdlib-jdk7</artifactId>
                 <version>${kotlin.version}</version>
+            </dependency>
+
+            <!-- GRPC Dependencies -->
+            <dependency>
+                <groupId>io.grpc</groupId>
+                <artifactId>grpc-core</artifactId>
+                <version>${grpc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.grpc</groupId>
+                <artifactId>grpc-netty</artifactId>
+                <version>${grpc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.grpc</groupId>
+                <artifactId>grpc-protobuf</artifactId>
+                <version>${grpc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.grpc</groupId>
+                <artifactId>grpc-stub</artifactId>
+                <version>${grpc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java-util</artifactId>
+                <version>${protobuff.java.utils.version}</version>
             </dependency>
 
             <!-- Database -->
