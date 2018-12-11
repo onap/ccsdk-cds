@@ -18,7 +18,6 @@
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolutionprocessor
 
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignmentProcessor
 import org.springframework.stereotype.Service
 
 /**

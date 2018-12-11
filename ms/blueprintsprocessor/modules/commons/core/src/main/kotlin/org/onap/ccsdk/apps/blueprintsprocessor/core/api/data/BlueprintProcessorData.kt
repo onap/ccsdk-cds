@@ -20,7 +20,6 @@ package org.onap.ccsdk.apps.blueprintsprocessor.core.api.data
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.databind.node.ObjectNode
 import io.swagger.annotations.ApiModelProperty
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import java.util.*
 
 /**
@@ -28,28 +27,6 @@ import java.util.*
  * @author Brinda Santh
  * DATE : 8/15/2018
  */
-
-open class ResourceResolutionInput {
-    @get:ApiModelProperty(required = true)
-    lateinit var commonHeader: CommonHeader
-    @get:ApiModelProperty(required = true)
-    lateinit var actionIdentifiers: ActionIdentifiers
-    @get:ApiModelProperty(required = true)
-    lateinit var resourceAssignments: MutableList<ResourceAssignment>
-    @get:ApiModelProperty(required = true)
-    lateinit var payload: ObjectNode
-}
-
-open class ResourceResolutionOutput {
-    @get:ApiModelProperty(required = true)
-    lateinit var commonHeader: CommonHeader
-    @get:ApiModelProperty(required = true)
-    lateinit var actionIdentifiers: ActionIdentifiers
-    @get:ApiModelProperty(required = true)
-    lateinit var status: Status
-    @get:ApiModelProperty(required = true)
-    lateinit var resourceAssignments: MutableList<ResourceAssignment>
-}
 
 open class ExecutionServiceInput {
     @get:ApiModelProperty(required = true)

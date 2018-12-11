@@ -16,56 +16,53 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution
 
-import org.junit.Assert
+import com.fasterxml.jackson.databind.JsonNode
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.apps.blueprintsprocessor.core.utils.PayloadUtils
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolutionprocessor.DataBaseResourceAssignmentProcessor
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolutionprocessor.DefaultResourceAssignmentProcessor
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolutionprocessor.InputResourceAssignmentProcessor
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolutionprocessor.SimpleRestResourceAssignmentProcessor
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.apps.controllerblueprints.core.asJsonNode
+import org.onap.ccsdk.apps.controllerblueprints.core.putJsonElement
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
-import org.slf4j.LoggerFactory
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 
-/**
- * ResourceResolutionServiceTest
- *
- * @author Brinda Santh DATE : 8/15/2018
- */
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [ResourceResolutionService::class,
+@ContextConfiguration(classes = [ResourceResolutionComponent::class, ResourceResolutionService::class,
     InputResourceAssignmentProcessor::class, DefaultResourceAssignmentProcessor::class,
     DataBaseResourceAssignmentProcessor::class, SimpleRestResourceAssignmentProcessor::class])
-class ResourceResolutionServiceTest {
-
-    private val log = LoggerFactory.getLogger(ResourceResolutionServiceTest::class.java)
+class ResourceResolutionComponentTest {
 
     @Autowired
-    lateinit var resourceResolutionService: ResourceResolutionService
-
-
-    @Test
-    fun testRegisteredSource() {
-        val sources = resourceResolutionService.registeredResourceSources()
-        assertNotNull(sources, "failed to get registered sources")
-        assertTrue(sources.containsAll(arrayListOf("input", "default", "db", "mdsal")), "failed to get registered sources")
-    }
+    lateinit var resourceResolutionComponent: ResourceResolutionComponent
 
     @Test
-    @Throws(Exception::class)
-    fun testResolveResource() {
-
-        Assert.assertNotNull("failed to create ResourceResolutionService", resourceResolutionService)
+    fun testProcess() {
 
         val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
                 "./../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration")
 
-        resourceResolutionService.resolveResources(bluePrintRuntimeService, "resource-assignment", "baseconfig")
+        val executionServiceInput = JacksonUtils.readValueFromClassPathFile("payload/requests/sample-resourceresolution-request.json",
+                ExecutionServiceInput::class.java)!!
 
+        // Prepare Inputs
+        PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService, executionServiceInput.payload, "resource-assignment")
+
+        val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
+        stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "resource-assignment")
+        stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "ResourceAssignmentComponent")
+        stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
+        bluePrintRuntimeService.put("resource-assignment-step-inputs", stepMetaData.asJsonNode())
+
+        resourceResolutionComponent.bluePrintRuntimeService = bluePrintRuntimeService
+        resourceResolutionComponent.stepName = "resource-assignment"
+        resourceResolutionComponent.apply(executionServiceInput)
     }
-
 }
