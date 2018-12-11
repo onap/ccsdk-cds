@@ -16,17 +16,34 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.core
 
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.context.properties.bind.Binder
+import org.springframework.boot.context.properties.source.ConfigurationPropertySources
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.env.Environment
 
 
 @Configuration
 open class BluePrintCoreConfiguration {
 
-    @Value("\${blueprintsprocessor.blueprint-deploy-path}")
+    @Value("\${blueprintsprocessor.blueprintDeployPath}")
     lateinit var deployPath: String
 
-    @Value("\${blueprintsprocessor.blueprint-archive-path}")
+    @Value("\${blueprintsprocessor.blueprintArchivePath}")
     lateinit var archivePath: String
 
+}
+
+@Configuration
+open class BlueprintPropertyConfiguration {
+    @Autowired
+    lateinit var environment: Environment
+
+    @Bean
+    open fun bluePrintPropertyBinder(): Binder {
+        val configurationPropertySource = ConfigurationPropertySources.get(environment)
+        return Binder(configurationPropertySource)
+    }
 }
