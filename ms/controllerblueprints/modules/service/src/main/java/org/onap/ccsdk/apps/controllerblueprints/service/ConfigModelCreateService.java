@@ -127,7 +127,7 @@ public class ConfigModelCreateService {
             String artifactName = configModel.getArtifactName();
             String artifactVersion = configModel.getArtifactVersion();
             String author = configModel.getUpdatedBy();
-            // configModel.setTags(artifactName);
+            
 
             if (StringUtils.isBlank(author)) {
                 throw new BluePrintException("Artifact Author is missing in the Service Template");
