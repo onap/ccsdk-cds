@@ -34,7 +34,6 @@ import org.onap.ccsdk.apps.controllerblueprints.service.enhancer.BluePrintEnhanc
 import org.onap.ccsdk.apps.controllerblueprints.service.enhancer.ResourceAssignmentEnhancerService;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -48,7 +47,7 @@ import java.util.Map;
  */
 
 @Service
-@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class BluePrintEnhancerService extends BluePrintEnhancerDefaultService {
 
     private static EELFLogger log = EELFManager.getInstance().getLogger(BluePrintEnhancerService.class);
