@@ -55,6 +55,7 @@ public class ConfigModelService {
     private ConfigModelRepository configModelRepository;
     private ConfigModelContentRepository configModelContentRepository;
     private ConfigModelCreateService configModelCreateService;
+    private static final String CONFIG_MODEL_ID_FAILURE_MSG= "failed to get config model id(%d) from repo";
 
     /**
      * This is a ConfigModelService constructor.
@@ -174,7 +175,7 @@ public class ConfigModelService {
         if (dbConfigModel.isPresent()) {
             configModel = dbConfigModel.get();
         } else {
-            throw new BluePrintException(String.format("failed to get config model id(%d) from repo", id));
+            throw new BluePrintException(String.format(CONFIG_MODEL_ID_FAILURE_MSG, id));
         }
 
         return configModel;
@@ -232,7 +233,7 @@ public class ConfigModelService {
                 }
             }
         } else {
-            throw new BluePrintException(String.format("failed to get config model id(%d) from repo", id));
+            throw new BluePrintException(String.format(CONFIG_MODEL_ID_FAILURE_MSG, id));
         }
 
         return cloneConfigModel;
@@ -252,7 +253,7 @@ public class ConfigModelService {
             configModelContentRepository.deleteByConfigModel(dbConfigModel.get());
             configModelRepository.delete(dbConfigModel.get());
         } else {
-            throw new BluePrintException(String.format("failed to get config model id(%d) from repo", id));
+            throw new BluePrintException(String.format(CONFIG_MODEL_ID_FAILURE_MSG, id));
         }
     }
 
