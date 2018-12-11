@@ -26,7 +26,8 @@ class BluePrintCatalogServiceImpl(private val bluePrintCoreConfiguration: BluePr
 
     override fun prepareBluePrint(name: String, version: String): String {
         //TODO("Get the Blueprint from the DB")
-        return bluePrintCoreConfiguration.deployPath.plus(File.separator).plus(name).plus(File.separator).plus(version)
+        return bluePrintCoreConfiguration.deployPath.plus(File.separator)
+                .plus(name).plus(File.separator).plus(version)
 
     }
 }
