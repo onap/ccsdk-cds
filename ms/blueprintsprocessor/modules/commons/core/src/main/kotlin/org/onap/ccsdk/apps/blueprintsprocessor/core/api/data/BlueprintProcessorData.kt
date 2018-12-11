@@ -18,7 +18,6 @@
 package org.onap.ccsdk.apps.blueprintsprocessor.core.api.data
 
 import com.fasterxml.jackson.annotation.JsonFormat
-import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import io.swagger.annotations.ApiModelProperty
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
@@ -59,7 +58,6 @@ open class ExecutionServiceInput {
     lateinit var actionIdentifiers: ActionIdentifiers
     @get:ApiModelProperty(required = true)
     lateinit var payload: ObjectNode
-    var metadata: MutableMap<String, JsonNode> = hashMapOf()
 }
 
 open class ExecutionServiceOutput {
@@ -71,7 +69,6 @@ open class ExecutionServiceOutput {
     var status: Status = Status()
     @get:ApiModelProperty(required = true)
     lateinit var payload: ObjectNode
-    var metadata: MutableMap<String, JsonNode> = hashMapOf()
 }
 
 open class ActionIdentifiers {

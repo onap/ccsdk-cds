@@ -21,6 +21,7 @@ import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInp
 import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.apps.blueprintsprocessor.services.workflow.BlueprintSvcLogicContext
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.apps.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.apps.controllerblueprints.core.putJsonElement
 import org.onap.ccsdk.sli.core.sli.SvcLogicContext
 import org.onap.ccsdk.sli.core.sli.SvcLogicException
@@ -69,18 +70,18 @@ open class ComponentExecuteNodeExecutor : ExecuteNodeExecutor() {
             val plugin = this.getComponentFunction(componentName)
             // Set the Blueprint Service
             plugin.bluePrintRuntimeService = ctx.getBluePrintService()
+            plugin.stepName = nodeTemplateName
 
             val executionInput = ctx.getRequest() as ExecutionServiceInput
 
-            val metaData = executionInput.metadata
-            metaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_STEP, nodeTemplateName)
             // Populate Step Meta Data
-            val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
-            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, nodeTemplateName)
-            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, interfaceName)
-            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, operationName)
+            val stepInputs: MutableMap<String, JsonNode> = hashMapOf()
+            stepInputs.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, nodeTemplateName)
+            stepInputs.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, interfaceName)
+            stepInputs.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, operationName)
 
-            metaData.putJsonElement("$nodeTemplateName-step-inputs", stepMetaData)
+            plugin.bluePrintRuntimeService!!.put("$nodeTemplateName-step-inputs", stepInputs.asJsonNode())
+
             // Get the Request from the Context and Set to the Function Input and Invoke the function
             val executionOutput = plugin.apply(executionInput)
 

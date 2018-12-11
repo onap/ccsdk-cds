@@ -29,6 +29,10 @@ import org.springframework.stereotype.Service
 @Service("resource-assignment-processor-mdsal")
 open class SimpleRestResourceAssignmentProcessor : ResourceAssignmentProcessor() {
 
+    override fun getName(): String {
+        return "resource-assignment-processor-mdsal"
+    }
+
     override fun process(executionRequest: ResourceAssignment) {
     }
 

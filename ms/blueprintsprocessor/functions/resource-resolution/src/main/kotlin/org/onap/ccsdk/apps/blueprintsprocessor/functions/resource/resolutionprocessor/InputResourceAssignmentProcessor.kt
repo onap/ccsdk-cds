@@ -29,6 +29,10 @@ import org.springframework.stereotype.Service
 @Service("resource-assignment-processor-input")
 open class InputResourceAssignmentProcessor : ResourceAssignmentProcessor() {
 
+    override fun getName(): String {
+        return "resource-assignment-processor-input"
+    }
+
     override fun process(executionRequest: ResourceAssignment) {
     }
 
