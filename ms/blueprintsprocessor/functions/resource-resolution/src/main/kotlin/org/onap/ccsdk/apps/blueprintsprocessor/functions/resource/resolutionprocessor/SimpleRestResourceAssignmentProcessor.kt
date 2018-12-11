@@ -15,19 +15,19 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.apps.blueprintsprocessor.services.resolution.processor
+package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolutionprocessor
 
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignmentProcessor
 import org.springframework.stereotype.Service
 
 /**
- * DataBaseResourceAssignmentProcessor
+ * SimpleRestResourceAssignmentProcessor
  *
  * @author Brinda Santh
  */
-@Service("resource-assignment-processor-db")
-open class DataBaseResourceAssignmentProcessor : ResourceAssignmentProcessor(){
+@Service("resource-assignment-processor-mdsal")
+open class SimpleRestResourceAssignmentProcessor : ResourceAssignmentProcessor() {
 
     override fun process(executionRequest: ResourceAssignment) {
     }

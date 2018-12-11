@@ -20,8 +20,11 @@ import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInp
 import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.apps.controllerblueprints.core.asJsonPrimitive
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Scope
+import org.springframework.stereotype.Component
 
 @Configuration
 open class MockComponentConfiguration {
@@ -41,6 +44,36 @@ class MockComponentFunction : AbstractComponentFunction() {
 
         bluePrintRuntimeService!!.setNodeTemplateAttributeValue(nodeTemplateName,
                 "assignment-params", "params".asJsonPrimitive())
+    }
+
+    override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
+        log.info("Recovering component..")
+    }
+}
+
+@Component("singleton-function")
+@Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
+class SingletonComponentFunction : AbstractComponentFunction() {
+
+    private val log = LoggerFactory.getLogger(MockComponentFunction::class.java)
+
+    override fun process(executionRequest: ExecutionServiceInput) {
+        log.info("Processing component : ${operationInputs}")
+    }
+
+    override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
+        log.info("Recovering component..")
+    }
+}
+
+@Component("prototype-function")
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+class PrototypeComponentFunction : AbstractComponentFunction() {
+
+    private val log = LoggerFactory.getLogger(MockComponentFunction::class.java)
+
+    override fun process(executionRequest: ExecutionServiceInput) {
+        log.info("Processing component : ${operationInputs}")
     }
 
     override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {

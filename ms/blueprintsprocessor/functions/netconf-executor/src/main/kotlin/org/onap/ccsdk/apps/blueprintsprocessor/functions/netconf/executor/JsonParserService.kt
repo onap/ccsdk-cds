@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.apps.blueprintsprocessor.services.resolution
+package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor
 
-class ResourceResolutionConstants {
-    companion object {
-        const val PREFIX_RESOURCE_ASSIGNMENT_PROCESSOR = "resource-assignment-processor-"
+import org.springframework.stereotype.Service
 
-    }
+@Service("json-parser-service")
+class JsonParserService {
 
 }

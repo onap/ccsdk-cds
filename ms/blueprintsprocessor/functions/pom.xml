@@ -32,6 +32,7 @@
     <modules>
         <module>resource-resolution</module>
         <module>python-executor</module>
+        <module>netconf-executor</module>
     </modules>
 
     <dependencies>

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.apps.blueprintsprocessor.services.resolution
+package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution
 
 import com.fasterxml.jackson.databind.node.ObjectNode
 import org.apache.commons.collections.CollectionUtils
@@ -23,10 +23,10 @@ import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ResourceResolutionInput
-import org.onap.ccsdk.apps.blueprintsprocessor.services.resolution.processor.DataBaseResourceAssignmentProcessor
-import org.onap.ccsdk.apps.blueprintsprocessor.services.resolution.processor.DefaultResourceAssignmentProcessor
-import org.onap.ccsdk.apps.blueprintsprocessor.services.resolution.processor.InputResourceAssignmentProcessor
-import org.onap.ccsdk.apps.blueprintsprocessor.services.resolution.processor.SimpleRestResourceAssignmentProcessor
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolutionprocessor.DataBaseResourceAssignmentProcessor
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolutionprocessor.DefaultResourceAssignmentProcessor
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolutionprocessor.InputResourceAssignmentProcessor
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolutionprocessor.SimpleRestResourceAssignmentProcessor
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory

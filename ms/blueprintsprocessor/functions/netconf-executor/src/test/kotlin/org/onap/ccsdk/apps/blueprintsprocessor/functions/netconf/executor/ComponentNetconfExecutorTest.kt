@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor
+package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor
 
 import com.fasterxml.jackson.databind.JsonNode
 import org.junit.Test
@@ -22,6 +22,7 @@ import org.junit.runner.RunWith
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ActionIdentifiers
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.CommonHeader
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.PythonExecutorProperty
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.putJsonElement
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
@@ -31,17 +32,17 @@ import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [PythonExecutorConfiguration::class, PythonExecutorProperty::class])
+@ContextConfiguration(classes = [NetconfExecutorConfiguration::class, PythonExecutorProperty::class])
 @TestPropertySource(properties =
 ["blueprints.processor.functions.python.executor.modulePaths=./../../../../components/scripts/python/ccsdk_blueprints",
     "blueprints.processor.functions.python.executor.executionPath=./../../../../components/scripts/python/ccsdk_blueprints"])
-class ComponentJythonExecutorTest {
+class ComponentNetconfExecutorTest {
 
     @Autowired
-    lateinit var componentJythonExecutor: ComponentJythonExecutor
+    lateinit var componentNetconfExecutor: ComponentNetconfExecutor
 
     @Test
-    fun testPythonComponentInjection() {
+    fun testComponentNetconfExecutor() {
 
         val executionServiceInput = ExecutionServiceInput()
         val commonHeader = CommonHeader()
@@ -58,7 +59,7 @@ class ComponentJythonExecutorTest {
         val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(commonHeader.requestId,
                 "./../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration")
 
-        componentJythonExecutor.bluePrintRuntimeService = bluePrintRuntimeService
+        componentNetconfExecutor.bluePrintRuntimeService = bluePrintRuntimeService
 
 
         val metaData: MutableMap<String, JsonNode> = hashMapOf()
@@ -71,7 +72,8 @@ class ComponentJythonExecutorTest {
         metaData.putJsonElement("activate-jython-step-inputs", stepMetaData)
         executionServiceInput.metadata = metaData
 
-        componentJythonExecutor.apply(executionServiceInput)
+        componentNetconfExecutor.apply(executionServiceInput)
 
     }
 }
+

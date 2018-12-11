@@ -33,10 +33,11 @@ class JythonExecutionService(private val pythonExecutorProperty: PythonExecutorP
     lateinit var applicationContext: ApplicationContext
 
 
-    fun processJythonNodeTemplate(pythonClassName: String, content: String, pythonPath: MutableList<String>,
-                                  jythonContextInstance: MutableMap<String, Any>,
-                                  dependencyInstanceNames: List<String>): AbstractComponentFunction {
+    fun getJythonComponentFunction(pythonClassName: String, content: String, pythonPath: MutableList<String>,
+                                   jythonContextInstance: MutableMap<String, Any>,
+                                   dependencyInstanceNames: List<String>): AbstractComponentFunction {
 
+        pythonPath.addAll(pythonExecutorProperty.modulePaths)
 
         dependencyInstanceNames.forEach { instanceName ->
             jythonContextInstance[instanceName] = applicationContext.getBean(instanceName)
