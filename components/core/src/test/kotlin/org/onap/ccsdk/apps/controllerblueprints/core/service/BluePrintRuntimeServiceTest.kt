@@ -53,8 +53,6 @@ class BluePrintRuntimeServiceTest {
         val propContext: MutableMap<String, JsonNode> = bluePrintRuntimeService.resolveNodeTemplateProperties("activate-process")
 
         assertNotNull(propContext, "Failed to populate interface property values")
-        assertEquals(propContext["process-name"], jsonNodeFromObject("sample-action"), "Failed to populate parameter process-name")
-        assertEquals(propContext["version"], jsonNodeFromObject("sample-action"), "Failed to populate parameter version")
     }
 
     @Test

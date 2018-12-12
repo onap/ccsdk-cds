@@ -39,17 +39,8 @@
     },
     "node_templates": {
       "resource-assignment-process": {
-        "type": "dg-activate",
+        "type": "dg-generic",
         "properties": {
-          "process-name": {
-            "get_input": "action-name"
-          },
-          "version": {
-            "get_property": [
-              "SELF",
-              "process-name"
-            ]
-          },
           "content": {
             "get_artifact": [
               "SELF",
@@ -65,17 +56,8 @@
         }
       },
       "activate-process": {
-        "type": "dg-activate",
+        "type": "dg-generic",
         "properties": {
-          "process-name": {
-            "get_input": "action-name"
-          },
-          "version": {
-            "get_property": [
-              "SELF",
-              "process-name"
-            ]
-          },
           "content": {
             "get_artifact": [
               "SELF",
@@ -91,17 +73,8 @@
         }
       },
       "assign-activate-process": {
-        "type": "dg-activate",
+        "type": "dg-generic",
         "properties": {
-          "process-name": {
-            "get_input": "action-name"
-          },
-          "version": {
-            "get_property": [
-              "SELF",
-              "process-name"
-            ]
-          },
           "content": {
             "get_artifact": [
               "SELF",

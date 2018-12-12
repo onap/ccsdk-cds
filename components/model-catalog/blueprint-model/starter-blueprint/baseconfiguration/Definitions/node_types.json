@@ -1,21 +1,12 @@
 {
   "node_types": {
-    "dg-activate": {
+    "dg-generic": {
       "description": "This is Generic Directed Graph Type",
       "version": "1.0.0",
       "properties": {
         "content": {
-          "required": false,
+          "required": true,
           "type": "string"
-        },
-        "process-name": {
-          "required": false,
-          "type": "string"
-        },
-        "version": {
-          "required": false,
-          "type": "string",
-          "default": "LATEST"
         }
       },
       "derived_from": "tosca.nodes.DG"
