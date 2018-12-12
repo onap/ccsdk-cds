@@ -30,7 +30,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.*;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceDefinitionRepoService;
-import org.onap.ccsdk.apps.controllerblueprints.service.enhancer.BluePrintEnhancerDefaultService;
+import org.onap.ccsdk.apps.controllerblueprints.service.enhancer.BluePrintEnhancerServiceImpl;
 import org.onap.ccsdk.apps.controllerblueprints.service.enhancer.ResourceAssignmentEnhancerService;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -46,9 +46,10 @@ import java.util.Map;
  * @author Brinda Santh DATE : 8/8/2018
  */
 
+@Deprecated
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class BluePrintEnhancerService extends BluePrintEnhancerDefaultService {
+public class BluePrintEnhancerService extends BluePrintEnhancerServiceImpl {
 
     private static EELFLogger log = EELFManager.getInstance().getLogger(BluePrintEnhancerService.class);
 
@@ -167,8 +168,8 @@ public class BluePrintEnhancerService extends BluePrintEnhancerDefaultService {
                         JacksonUtils.getListFromJson(resourceAssignmentContent, ResourceAssignment.class);
 
                 Preconditions.checkNotNull(resourceAssignments, "Failed to Processing Resource Mapping " + resourceAssignmentContent);
-                // Enhance Resource Assignment
-                resourceAssignmentEnhancerService.enhanceBluePrint(this, resourceAssignments);
+                // Enhance Resource Assignment TODO("Plug Resource Assignment Enhancer Service")
+                //resourceAssignmentEnhancerService.enhanceBluePrint(this, resourceAssignments);
 
                 dataTypeProperties = new HashMap<>();
 

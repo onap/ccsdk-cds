@@ -18,18 +18,9 @@ package org.onap.ccsdk.apps.controllerblueprints.service.enhancer;
 
 import com.att.eelf.configuration.EELFLogger;
 import com.att.eelf.configuration.EELFManager;
-import org.junit.Assert;
 import org.junit.Before;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
-import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate;
-import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonReactorUtils;
-import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment;
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceDefinitionFileRepoService;
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceDefinitionRepoService;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.utils.ResourceDictionaryTestUtils;
-
-import java.util.List;
 
 /**
  * ResourceAssignmentEnhancerService.
@@ -40,16 +31,18 @@ public class ResourceAssignmentEnhancerServiceTest {
     private static EELFLogger log = EELFManager.getInstance().getLogger(ResourceAssignmentEnhancerServiceTest.class);
 
     @Before
-    public void setUp(){
+    public void setUp() {
         // Setup dummy Source Instance Mapping
         ResourceDictionaryTestUtils.setUpResourceSourceMapping();
     }
 
     //@Test
     public void testEnhanceBluePrint() throws BluePrintException {
+        /*
+        FIXME("Test Once Implemented")
 
-        List<ResourceAssignment> resourceAssignments = JacksonReactorUtils
-                .getListFromClassPathFile("enhance/enhance-resource-assignment.json", ResourceAssignment.class).block();
+        List<ResourceAssignment> resourceAssignments = JacksonUtils
+                .getListFromClassPathFile("enhance/enhance-resource-assignment.json", ResourceAssignment.class);
         Assert.assertNotNull("Failed to get Resource Assignment", resourceAssignments);
 
         ResourceDefinitionRepoService resourceDefinitionRepoService = new ResourceDefinitionFileRepoService("./../../../../components/model-catalog");
@@ -58,6 +51,7 @@ public class ResourceAssignmentEnhancerServiceTest {
         ServiceTemplate serviceTemplate = resourceAssignmentEnhancerService.enhanceBluePrint(resourceAssignments);
         Assert.assertNotNull("Failed to get Enriched service Template", serviceTemplate);
         log.trace("Enhanced Service Template : {}", JacksonUtils.getJson(serviceTemplate, true));
+        */
     }
 }
 

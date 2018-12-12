@@ -31,7 +31,6 @@ import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionar
 import org.onap.ccsdk.apps.controllerblueprints.service.repository.ModelTypeRepository;
 import org.onap.ccsdk.apps.controllerblueprints.service.repository.ResourceDictionaryRepository;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 
@@ -55,54 +54,53 @@ public class ResourceDefinitionRepoDBService implements ResourceDefinitionRepoSe
     }
 
     @Override
-    public Mono<NodeType> getNodeType(@NotNull String nodeTypeName) throws BluePrintException {
+    public NodeType getNodeType(@NotNull String nodeTypeName) throws BluePrintException {
         return getModelType(nodeTypeName, NodeType.class);
     }
 
     @Override
-    public Mono<DataType> getDataType(@NotNull String dataTypeName) throws BluePrintException {
+    public DataType getDataType(@NotNull String dataTypeName) throws BluePrintException {
         return getModelType(dataTypeName, DataType.class);
     }
 
     @Override
-    public Mono<ArtifactType> getArtifactType(@NotNull String artifactTypeName) throws BluePrintException {
+    public ArtifactType getArtifactType(@NotNull String artifactTypeName) throws BluePrintException {
         return getModelType(artifactTypeName, ArtifactType.class);
     }
 
     @Override
-    public Mono<RelationshipType> getRelationshipType(@NotNull String relationshipTypeName) throws BluePrintException {
+    public RelationshipType getRelationshipType(@NotNull String relationshipTypeName) throws BluePrintException {
         return getModelType(relationshipTypeName, RelationshipType.class);
     }
 
     @Override
-    public Mono<CapabilityDefinition> getCapabilityDefinition(@NotNull String capabilityDefinitionName) throws BluePrintException {
+    public CapabilityDefinition getCapabilityDefinition(@NotNull String capabilityDefinitionName) throws BluePrintException {
         return getModelType(capabilityDefinitionName, CapabilityDefinition.class);
     }
 
     @NotNull
     @Override
-    public Mono<ResourceDefinition> getResourceDefinition(@NotNull String resourceDefinitionName) throws BluePrintException{
+    public ResourceDefinition getResourceDefinition(@NotNull String resourceDefinitionName) throws BluePrintException {
         Optional<ResourceDictionary> dbResourceDictionary = resourceDictionaryRepository.findByName(resourceDefinitionName);
-        if(dbResourceDictionary.isPresent()){
-            return Mono.just(dbResourceDictionary.get().getDefinition());
-        }else{
+        if (dbResourceDictionary.isPresent()) {
+            return dbResourceDictionary.get().getDefinition();
+        } else {
             throw new BluePrintException(String.format("failed to get resource dictionary (%s) from repo", resourceDefinitionName));
         }
     }
 
-    private <T> Mono<T> getModelType(String modelName, Class<T> valueClass) throws BluePrintException {
+    private <T> T getModelType(String modelName, Class<T> valueClass) throws BluePrintException {
         Preconditions.checkArgument(StringUtils.isNotBlank(modelName),
                 "Failed to get model from repo, model name is missing");
 
-        return getModelDefinition(modelName).map(modelDefinition -> {
-                    Preconditions.checkNotNull(modelDefinition,
-                            String.format("Failed to get model content for model name (%s)", modelName));
-                    return JacksonUtils.readValue(modelDefinition, valueClass);
-                }
-        );
+        JsonNode modelDefinition = getModelDefinition(modelName);
+        Preconditions.checkNotNull(modelDefinition,
+                String.format("Failed to get model content for model name (%s)", modelName));
+
+        return JacksonUtils.readValue(modelDefinition, valueClass);
     }
 
-    private Mono<JsonNode> getModelDefinition(String modelName) throws BluePrintException {
+    private JsonNode getModelDefinition(String modelName) throws BluePrintException {
         JsonNode modelDefinition;
         Optional<ModelType> modelTypeDb = modelTypeRepository.findByModelName(modelName);
         if (modelTypeDb.isPresent()) {
@@ -110,6 +108,6 @@ public class ResourceDefinitionRepoDBService implements ResourceDefinitionRepoSe
         } else {
             throw new BluePrintException(String.format("failed to get model definition (%s) from repo", modelName));
         }
-        return Mono.just(modelDefinition);
+        return modelDefinition;
     }
 }

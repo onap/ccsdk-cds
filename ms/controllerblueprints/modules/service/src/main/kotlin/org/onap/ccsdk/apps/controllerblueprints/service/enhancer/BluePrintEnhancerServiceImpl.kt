@@ -23,44 +23,15 @@ import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*
 import org.onap.ccsdk.apps.controllerblueprints.core.format
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintEnhancerService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRepoService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintFileUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
-import java.io.Serializable
 
-/**
- * BluePrintEnhancerService
- * @author Brinda Santh
- *
- */
-interface BluePrintEnhancerService : Serializable {
+open class BluePrintEnhancerServiceImpl(val bluePrintRepoService: BluePrintRepoService) : BluePrintEnhancerService {
 
-    @Throws(BluePrintException::class)
-    fun enhance(basePath: String, enrichedBasePath: String): BluePrintContext
-
-    /**
-     * Read Blueprint from CBA structure Directory
-     */
-    @Throws(BluePrintException::class)
-    fun enhance(basePath: String): BluePrintContext
-
-    @Throws(BluePrintException::class)
-    fun enhance(serviceTemplate: ServiceTemplate): ServiceTemplate
-
-    @Throws(BluePrintException::class)
-    fun enrichNodeTemplate(nodeTemplateName: String, nodeTemplate: NodeTemplate)
-
-    @Throws(BluePrintException::class)
-    fun enrichNodeType(nodeTypeName: String, nodeType: NodeType)
-
-    @Throws(BluePrintException::class)
-    fun enrichPropertyDefinition(propertyName: String, propertyDefinition: PropertyDefinition)
-}
-
-open class BluePrintEnhancerDefaultService(val bluePrintRepoService: BluePrintRepoService) : BluePrintEnhancerService {
-
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintEnhancerDefaultService::class.toString())
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintEnhancerServiceImpl::class.toString())
 
     lateinit var serviceTemplate: ServiceTemplate
 
@@ -124,7 +95,7 @@ open class BluePrintEnhancerDefaultService(val bluePrintRepoService: BluePrintRe
     }
 
     @Throws(BluePrintException::class)
-    override fun enrichNodeTemplate(nodeTemplateName: String, nodeTemplate: NodeTemplate) {
+    open fun enrichNodeTemplate(nodeTemplateName: String, nodeTemplate: NodeTemplate) {
         val nodeTypeName = nodeTemplate.type
         // Get NodeType from Repo and Update Service Template
         val nodeType = populateNodeType(nodeTypeName)
@@ -137,7 +108,7 @@ open class BluePrintEnhancerDefaultService(val bluePrintRepoService: BluePrintRe
     }
 
     @Throws(BluePrintException::class)
-    override fun enrichNodeType(nodeTypeName: String, nodeType: NodeType) {
+    fun enrichNodeType(nodeTypeName: String, nodeType: NodeType) {
         log.debug("Enriching NodeType({})", nodeTypeName)
         val derivedFrom = nodeType.derivedFrom
 
@@ -222,7 +193,7 @@ open class BluePrintEnhancerDefaultService(val bluePrintRepoService: BluePrintRe
     }
 
     @Throws(BluePrintException::class)
-    override fun enrichPropertyDefinition(propertyName: String, propertyDefinition: PropertyDefinition) {
+    fun enrichPropertyDefinition(propertyName: String, propertyDefinition: PropertyDefinition) {
         val propertyType = propertyDefinition.type
         if (BluePrintTypes.validPrimitiveTypes().contains(propertyType)) {
 
@@ -253,7 +224,7 @@ open class BluePrintEnhancerDefaultService(val bluePrintRepoService: BluePrintRe
     open fun populateNodeType(nodeTypeName: String): NodeType {
 
         val nodeType = serviceTemplate.nodeTypes?.get(nodeTypeName)
-                ?: bluePrintRepoService.getNodeType(nodeTypeName).block()
+                ?: bluePrintRepoService.getNodeType(nodeTypeName)
                 ?: throw BluePrintException(format("Couldn't get NodeType({}) from repo.", nodeTypeName))
         serviceTemplate.nodeTypes?.put(nodeTypeName, nodeType)
         return nodeType
@@ -261,7 +232,7 @@ open class BluePrintEnhancerDefaultService(val bluePrintRepoService: BluePrintRe
 
     open fun populateArtifactType(artifactTypeName: String): ArtifactType {
         val artifactType = serviceTemplate.artifactTypes?.get(artifactTypeName)
-                ?: bluePrintRepoService.getArtifactType(artifactTypeName).block()
+                ?: bluePrintRepoService.getArtifactType(artifactTypeName)
                 ?: throw BluePrintException(format("Couldn't get ArtifactType({}) from repo.", artifactTypeName))
         serviceTemplate.artifactTypes?.put(artifactTypeName, artifactType)
         return artifactType
@@ -269,7 +240,7 @@ open class BluePrintEnhancerDefaultService(val bluePrintRepoService: BluePrintRe
 
     open fun populateDataTypes(dataTypeName: String): DataType {
         val dataType = serviceTemplate.dataTypes?.get(dataTypeName)
-                ?: bluePrintRepoService.getDataType(dataTypeName).block()
+                ?: bluePrintRepoService.getDataType(dataTypeName)
                 ?: throw BluePrintException(format("Couldn't get DataType({}) from repo.", dataTypeName))
         serviceTemplate.dataTypes?.put(dataTypeName, dataType)
         return dataType

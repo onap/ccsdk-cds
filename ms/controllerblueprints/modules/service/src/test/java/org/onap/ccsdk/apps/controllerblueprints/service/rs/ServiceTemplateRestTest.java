@@ -81,7 +81,7 @@ public class ServiceTemplateRestTest {
         log.trace("Enriched Service Template :\n" + JacksonUtils.getJson(serviceTemplate, true));
     }
 
-    @Test
+    //@Test FIXME("Enable once Complete Enhancement Service Implemented")
     public void test03ValidateServiceTemplate() throws Exception {
         log.info("*********** test03ValidateServiceTemplate  *******************************************");
         String enhancedFile = "src/test/resources/enhance/enhanced-template.json";
