@@ -102,9 +102,21 @@ interface BluePrintTypeEnhancerService {
         doEnhancement(bluePrintContext, error, name, policyType, enhancers)
     }
 
+    fun enhancePropertyDefinitions(bluePrintContext: BluePrintContext, error: BluePrintError, properties: MutableMap<String, PropertyDefinition>) {
+        properties.forEach { propertyName, propertyDefinition ->
+            enhancePropertyDefinition(bluePrintContext, error, propertyName, propertyDefinition)
+        }
+    }
+
     fun enhancePropertyDefinition(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, propertyDefinition: PropertyDefinition) {
         val enhancers = getPropertyDefinitionEnhancers()
         doEnhancement(bluePrintContext, error, name, propertyDefinition, enhancers)
+    }
+
+    fun enhanceAttributeDefinitions(bluePrintContext: BluePrintContext, error: BluePrintError, attributes: MutableMap<String, AttributeDefinition>) {
+        attributes.forEach { attributeName, attributeDefinition ->
+            enhanceAttributeDefinition(bluePrintContext, error, attributeName, attributeDefinition)
+        }
     }
 
     fun enhanceAttributeDefinition(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, attributeDefinition: AttributeDefinition) {
@@ -112,6 +124,7 @@ interface BluePrintTypeEnhancerService {
         doEnhancement(bluePrintContext, error, name, attributeDefinition, enhancers)
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun <T> doEnhancement(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, definition: Any, enhancers: List<BluePrintEnhancer<T>>) {
         if (enhancers.isNotEmpty()) {
             enhancers.forEach {
