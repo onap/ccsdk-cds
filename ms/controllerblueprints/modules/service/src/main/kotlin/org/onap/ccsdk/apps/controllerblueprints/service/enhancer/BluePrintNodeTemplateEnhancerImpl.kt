@@ -16,6 +16,8 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.enhancer
 
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ArtifactType
@@ -23,9 +25,9 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeType
 import org.onap.ccsdk.apps.controllerblueprints.core.format
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintNodeTemplateEnhancer
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintRepoService
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
-import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRepoService
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
@@ -36,11 +38,13 @@ open class BluePrintNodeTemplateEnhancerImpl(private val bluePrintRepoService: B
                                              private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService)
     : BluePrintNodeTemplateEnhancer {
 
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintNodeTemplateEnhancerImpl::class.toString())
 
     lateinit var bluePrintContext: BluePrintContext
     lateinit var error: BluePrintError
 
     override fun enhance(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, nodeTemplate: NodeTemplate) {
+        log.info("Enhancing NodeTemplate($name)")
         this.bluePrintContext = bluePrintContext
         this.error = error
 

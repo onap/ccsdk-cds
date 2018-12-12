@@ -18,10 +18,10 @@ package org.onap.ccsdk.apps.controllerblueprints.service.enhancer
 
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.data.TopologyTemplate
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintRepoService
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTopologyTemplateEnhancer
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
-import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRepoService
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
@@ -40,6 +40,7 @@ open class BluePrintTopologyTemplateEnhancerImpl(private val bluePrintRepoServic
 
         enhanceTopologyTemplateInputs(type)
         enhanceTopologyTemplateNodeTemplates(type)
+        enhanceTopologyTemplateWorkflowss(type)
     }
 
     open fun enhanceTopologyTemplateInputs(topologyTemplate: TopologyTemplate) {
@@ -53,4 +54,11 @@ open class BluePrintTopologyTemplateEnhancerImpl(private val bluePrintRepoServic
             bluePrintTypeEnhancerService.enhanceNodeTemplate(bluePrintContext, error, nodeTemplateName, nodeTemplate)
         }
     }
+
+    open fun enhanceTopologyTemplateWorkflowss(topologyTemplate: TopologyTemplate) {
+        topologyTemplate.workflows?.forEach { workflowName, workflow ->
+            bluePrintTypeEnhancerService.enhanceWorkflow(bluePrintContext, error, workflowName, workflow)
+        }
+    }
+
 }

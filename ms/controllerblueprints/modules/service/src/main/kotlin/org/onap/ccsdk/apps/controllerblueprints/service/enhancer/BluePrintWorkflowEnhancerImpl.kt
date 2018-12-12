@@ -16,14 +16,16 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.enhancer
 
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.data.DataType
 import org.onap.ccsdk.apps.controllerblueprints.core.data.Workflow
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintRepoService
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintWorkflowEnhancer
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
-import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRepoService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
@@ -36,6 +38,7 @@ open class BluePrintWorkflowEnhancerImpl(private val bluePrintRepoService: BlueP
                                          private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService,
                                          private val resourceAssignmentEnhancerService: ResourceAssignmentEnhancerService)
     : BluePrintWorkflowEnhancer {
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintNodeTemplateEnhancerImpl::class.toString())
 
     lateinit var bluePrintContext: BluePrintContext
     lateinit var error: BluePrintError
@@ -43,14 +46,15 @@ open class BluePrintWorkflowEnhancerImpl(private val bluePrintRepoService: BlueP
     private val workflowDataTypes: MutableMap<String, DataType> = hashMapOf()
 
     override fun enhance(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, workflow: Workflow) {
+        log.info("Enhancing Workflow($name)")
         this.bluePrintContext = bluePrintContext
         this.error = error
 
         // Enrich Only for Resource Assignment and Dynamic Input Properties if any
-        enhanceStepTargets(workflow)
+        //enhanceStepTargets(workflow)
 
         // Enrich Workflow Inputs
-        enhanceWorkflowInputs(name, workflow)
+        //enhanceWorkflowInputs(name, workflow)
     }
 
     open fun enhanceWorkflowInputs(name: String, workflow: Workflow) {

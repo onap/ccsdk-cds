@@ -19,9 +19,9 @@ package org.onap.ccsdk.apps.controllerblueprints.service.enhancer
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.data.AttributeDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintAttributeDefinitionEnhancer
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintRepoService
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
-import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRepoService
 
 class BluePrintAttributeDefinitionEnhancerImpl(private val bluePrintRepoService: BluePrintRepoService,
                                                private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService)

@@ -21,7 +21,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.PolicyType
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintPolicyTypeEnhancer
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
-import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRepoService
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintRepoService
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
@@ -32,7 +32,14 @@ class BluePrintPolicyTypeEnhancerImpl(private val bluePrintRepoService: BluePrin
                                       private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService)
     : BluePrintPolicyTypeEnhancer {
 
+    lateinit var bluePrintContext: BluePrintContext
+    lateinit var error: BluePrintError
+
     override fun enhance(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, type: PolicyType) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        this.bluePrintContext = bluePrintContext
+        this.error = error
+
+        // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

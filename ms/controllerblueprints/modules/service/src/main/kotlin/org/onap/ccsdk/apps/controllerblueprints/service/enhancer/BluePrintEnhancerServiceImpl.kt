@@ -23,12 +23,14 @@ import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintEnhancerService
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintRepoService
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
-import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRepoService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintFileUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.springframework.stereotype.Service
 
+@Service
 open class BluePrintEnhancerServiceImpl(private val bluePrintRepoService: BluePrintRepoService,
                                         private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService) : BluePrintEnhancerService {
 
@@ -44,6 +46,7 @@ open class BluePrintEnhancerServiceImpl(private val bluePrintRepoService: BluePr
 
     @Throws(BluePrintException::class)
     override fun enhance(basePath: String): BluePrintContext {
+        log.info("Enhancing blueprint($basePath)")
         val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(basePath)
         val error = BluePrintError()
         bluePrintTypeEnhancerService.enhanceServiceTemplate(bluePrintContext, error, "service_template",

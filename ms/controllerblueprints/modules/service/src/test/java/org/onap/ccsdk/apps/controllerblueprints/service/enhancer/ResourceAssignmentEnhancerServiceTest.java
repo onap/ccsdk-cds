@@ -18,9 +18,14 @@ package org.onap.ccsdk.apps.controllerblueprints.service.enhancer;
 
 import com.att.eelf.configuration.EELFLogger;
 import com.att.eelf.configuration.EELFManager;
+import org.junit.Assert;
 import org.junit.Before;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.utils.ResourceDictionaryTestUtils;
+
+import java.util.List;
 
 /**
  * ResourceAssignmentEnhancerService.
@@ -38,20 +43,17 @@ public class ResourceAssignmentEnhancerServiceTest {
 
     //@Test
     public void testEnhanceBluePrint() throws BluePrintException {
-        /*
-        FIXME("Test Once Implemented")
 
-        List<ResourceAssignment> resourceAssignments = JacksonUtils
-                .getListFromClassPathFile("enhance/enhance-resource-assignment.json", ResourceAssignment.class);
+
+        List<ResourceAssignment> resourceAssignments = JacksonUtils.getListFromClassPathFile("enhance/enhance-resource-assignment.json", ResourceAssignment.class);
         Assert.assertNotNull("Failed to get Resource Assignment", resourceAssignments);
 
-        ResourceDefinitionRepoService resourceDefinitionRepoService = new ResourceDefinitionFileRepoService("./../../../../components/model-catalog");
-        ResourceAssignmentEnhancerService resourceAssignmentEnhancerService =
-                new ResourceAssignmentEnhancerDefaultService(resourceDefinitionRepoService);
-        ServiceTemplate serviceTemplate = resourceAssignmentEnhancerService.enhanceBluePrint(resourceAssignments);
-        Assert.assertNotNull("Failed to get Enriched service Template", serviceTemplate);
-        log.trace("Enhanced Service Template : {}", JacksonUtils.getJson(serviceTemplate, true));
-        */
+//        ResourceDefinitionRepoService resourceDefinitionRepoService = new ResourceDefinitionFileRepoService("./../../../../components/model-catalog");
+//        ResourceAssignmentEnhancerService resourceAssignmentEnhancerService = new ResourceAssignmentEnhancerServiceImpl(resourceDefinitionRepoService);
+//        ServiceTemplate serviceTemplate = resourceAssignmentEnhancerService.enhanceBluePrint(resourceAssignments);
+//        Assert.assertNotNull("Failed to get Enriched service Template", serviceTemplate);
+//        log.trace("Enhanced Service Template : {}", JacksonUtils.getJson(serviceTemplate, true));
+
     }
 }
 

@@ -23,9 +23,9 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.DataType
 import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.format
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintPropertyDefinitionEnhancer
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintRepoService
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
-import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRepoService
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service

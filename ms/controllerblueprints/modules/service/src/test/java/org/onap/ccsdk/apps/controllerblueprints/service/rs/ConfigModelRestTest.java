@@ -70,6 +70,7 @@ public class ConfigModelRestTest {
     }
 
 
+    @Deprecated
     @Test
     public void test02SaveServiceTemplate() throws Exception {
         log.info("************************ test02SaveServiceTemplate  ******************");
@@ -117,6 +118,7 @@ public class ConfigModelRestTest {
     }
 
 
+    @Deprecated
     @Test
     public void test04GetConfigModel() throws Exception {
         log.info("** test04GetConfigModel  *****************");
@@ -131,6 +133,7 @@ public class ConfigModelRestTest {
 
     }
 
+    @Deprecated
     @Test
     public void test05GetCloneConfigModel() throws Exception {
         log.info("** test05GetCloneConfigModel  *****************");

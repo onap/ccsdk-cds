@@ -28,7 +28,7 @@ import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDictionaryConstants
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.factory.ResourceSourceMappingFactory
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceDefinitionRepoService
+import org.onap.ccsdk.apps.controllerblueprints.service.ResourceDefinitionRepoService
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service

@@ -16,7 +16,7 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service;
 
-import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRepoService;
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintRepoService;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceDefinitionDefaultValidationService;
 import org.springframework.stereotype.Service;
 
