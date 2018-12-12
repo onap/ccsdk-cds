@@ -43,7 +43,6 @@ public class ServiceTemplateService {
     private ResourceDictionaryRepository dataDictionaryRepository;
 
     private ConfigModelCreateService configModelCreateService;
-    private BluePrintEnhancerService bluePrintEnhancerService;
     private ResourceAssignmentValidationService resourceAssignmentValidationService;
 
     /**
@@ -51,16 +50,13 @@ public class ServiceTemplateService {
      *
      * @param dataDictionaryRepository            dataDictionaryRepository
      * @param configModelCreateService            configModelCreateService
-     * @param bluePrintEnhancerService            bluePrintEnhancerService
      * @param resourceAssignmentValidationService resourceAssignmentValidationService
      */
     public ServiceTemplateService(ResourceDictionaryRepository dataDictionaryRepository,
                                   ConfigModelCreateService configModelCreateService,
-                                  BluePrintEnhancerService bluePrintEnhancerService,
                                   ResourceAssignmentValidationService resourceAssignmentValidationService) {
         this.dataDictionaryRepository = dataDictionaryRepository;
         this.configModelCreateService = configModelCreateService;
-        this.bluePrintEnhancerService = bluePrintEnhancerService;
         this.resourceAssignmentValidationService = resourceAssignmentValidationService;
     }
 
@@ -82,7 +78,7 @@ public class ServiceTemplateService {
      * @return ServiceTemplate
      */
     public ServiceTemplate enrichServiceTemplate(ServiceTemplate serviceTemplate) throws BluePrintException {
-        this.bluePrintEnhancerService.enhance(serviceTemplate);
+        //FIXME("Connect New Enrichment service")
         return serviceTemplate;
     }
 

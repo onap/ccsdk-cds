@@ -29,6 +29,8 @@ import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDictionaryConstants
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.factory.ResourceSourceMappingFactory
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceDefinitionRepoService
+import org.springframework.beans.factory.config.ConfigurableBeanFactory
+import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
 
 /**
@@ -50,6 +52,7 @@ interface ResourceAssignmentEnhancerService {
  * @author Brinda Santh
  */
 @Service
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class ResourceAssignmentEnhancerServiceImpl(private val resourceDefinitionRepoService: ResourceDefinitionRepoService)
     : ResourceAssignmentEnhancerService {
     private val log: EELFLogger = EELFManager.getInstance().getLogger(ResourceAssignmentEnhancerServiceImpl::class.java)

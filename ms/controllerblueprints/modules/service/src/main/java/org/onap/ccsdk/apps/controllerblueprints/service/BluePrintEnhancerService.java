@@ -29,12 +29,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.ConfigModelConstant;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment;
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceDefinitionRepoService;
-import org.onap.ccsdk.apps.controllerblueprints.service.enhancer.BluePrintEnhancerServiceImpl;
 import org.onap.ccsdk.apps.controllerblueprints.service.enhancer.ResourceAssignmentEnhancerService;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
@@ -47,53 +42,13 @@ import java.util.Map;
  */
 
 @Deprecated
-@Service
-@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class BluePrintEnhancerService extends BluePrintEnhancerServiceImpl {
+public class BluePrintEnhancerService {
 
     private static EELFLogger log = EELFManager.getInstance().getLogger(BluePrintEnhancerService.class);
 
     private ResourceAssignmentEnhancerService resourceAssignmentEnhancerService;
 
     private Map<String, DataType> recipeDataTypes = new HashMap<>();
-
-    public BluePrintEnhancerService(ResourceDefinitionRepoService resourceDefinitionRepoService,
-                                    ResourceAssignmentEnhancerService resourceAssignmentEnhancerService) {
-        super(resourceDefinitionRepoService);
-        this.resourceAssignmentEnhancerService = resourceAssignmentEnhancerService;
-    }
-
-    @Override
-    public void enrichTopologyTemplate(@NotNull ServiceTemplate serviceTemplate) throws BluePrintException {
-        super.enrichTopologyTemplate(serviceTemplate);
-
-        // Update the Recipe Inputs and DataTypes
-        populateRecipeInputs(serviceTemplate);
-    }
-
-
-    @Override
-    public void enrichNodeTemplate(@NotNull String nodeTemplateName, @NotNull NodeTemplate nodeTemplate) throws BluePrintException {
-        super.enrichNodeTemplate(nodeTemplateName, nodeTemplate);
-
-        String nodeTypeName = nodeTemplate.getType();
-        log.info("*** Enriching NodeType: {}", nodeTypeName);
-        // Get NodeType from Repo and Update Service Template
-        NodeType nodeType = super.populateNodeType(nodeTypeName);
-
-        // Enrich NodeType
-        super.enrichNodeType(nodeTypeName, nodeType);
-
-        // Custom for Artifact Population
-        if (StringUtils.isNotBlank(nodeType.getDerivedFrom())
-                && ConfigModelConstant.MODEL_TYPE_NODE_ARTIFACT.equalsIgnoreCase(nodeType.getDerivedFrom())) {
-            populateArtifactTemplateMappingDataType(nodeTemplateName, nodeTemplate);
-        }
-
-        //Enrich Node Template Artifacts
-        super.enrichNodeTemplateArtifactDefinition(nodeTemplateName, nodeTemplate);
-
-    }
 
 
     private void populateArtifactTemplateMappingDataType(@NotNull String nodeTemplateName, @NotNull NodeTemplate nodeTemplate)
