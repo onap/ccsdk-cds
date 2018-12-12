@@ -21,7 +21,7 @@ import com.att.eelf.configuration.EELFManager
 import com.google.common.base.Preconditions
 import org.apache.commons.lang3.StringUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintValidationError
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintServiceTemplateValidator
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
@@ -32,10 +32,10 @@ open class BluePrintServiceTemplateValidatorImpl(private val bluePrintTypeValida
     private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintServiceTemplateValidatorImpl::class.toString())
 
     var bluePrintContext: BluePrintContext? = null
-    var error: BluePrintValidationError? = null
+    var error: BluePrintError? = null
     var paths: MutableList<String> = arrayListOf()
 
-    override fun validate(bluePrintContext: BluePrintContext, error: BluePrintValidationError, name: String, serviceTemplate: ServiceTemplate) {
+    override fun validate(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, serviceTemplate: ServiceTemplate) {
         log.trace("Validating Service Template..")
         try {
             this.bluePrintContext = bluePrintContext

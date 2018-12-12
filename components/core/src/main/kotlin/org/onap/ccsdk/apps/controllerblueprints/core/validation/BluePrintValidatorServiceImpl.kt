@@ -19,7 +19,7 @@ package org.onap.ccsdk.apps.controllerblueprints.core.validation
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintValidationError
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintValidatorService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
@@ -30,7 +30,7 @@ open class BluePrintValidatorServiceImpl(private val bluePrintTypeValidatorServi
     private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintValidatorServiceImpl::class.toString())
 
     override fun validateBluePrints(bluePrintContext: BluePrintContext, properties: MutableMap<String, Any>): Boolean {
-        val error = BluePrintValidationError()
+        val error = BluePrintError()
         bluePrintTypeValidatorService.validateServiceTemplate(bluePrintContext, error, "default", bluePrintContext.serviceTemplate)
         if (error.errors.size > 0) {
             throw BluePrintException("failed in blueprint validation : ${error.errors.joinToString("\n")}")

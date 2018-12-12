@@ -18,7 +18,7 @@ package org.onap.ccsdk.apps.controllerblueprints.core.validation
 
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintValidationError
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.data.DataType
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintDataTypeValidator
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
@@ -27,7 +27,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 open class BluePrintDataTypeValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintDataTypeValidator {
     private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintDataTypeValidatorImpl::class.toString())
 
-    override fun validate(bluePrintContext: BluePrintContext, error: BluePrintValidationError, name: String, dataType: DataType) {
+    override fun validate(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, dataType: DataType) {
         log.trace("Validating DataType($name)")
 
         dataType.properties?.let {

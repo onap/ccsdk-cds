@@ -16,7 +16,7 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core.validation
 
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintValidationError
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ArtifactType
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintArtifactTypeValidator
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
@@ -24,7 +24,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 
 open class BluePrintArtifactTypeValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintArtifactTypeValidator {
 
-    override fun validate(bluePrintContext: BluePrintContext, error: BluePrintValidationError, name: String, artifactType: ArtifactType) {
+    override fun validate(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, artifactType: ArtifactType) {
         artifactType.properties?.let {
             bluePrintTypeValidatorService.validatePropertyDefinitions(bluePrintContext, error, artifactType.properties!!)
         }

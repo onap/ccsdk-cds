@@ -24,13 +24,13 @@ import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
 public class ResourceDefinitionRepoServiceTest {
 
     @Test
-    public void testGetResourceDefinition() throws Exception{
+    public void testGetResourceDefinition() throws Exception {
         ResourceDefinitionRepoService resourceDefinitionRepoService = new ResourceDefinitionFileRepoService("./../model-catalog");
         ResourceDefinition resourceDefinition = resourceDefinitionRepoService
-                .getResourceDefinition("db-source").block();
+                .getResourceDefinition("db-source");
         Assert.assertNotNull("Failed to get Resource Definition db-source", resourceDefinition);
 
-        NodeType nodeType = resourceDefinitionRepoService.getNodeType("source-db").block();
+        NodeType nodeType = resourceDefinitionRepoService.getNodeType("source-db");
         Assert.assertNotNull("Failed to get Node Type source-db", resourceDefinition);
     }
 }

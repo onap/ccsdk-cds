@@ -21,7 +21,7 @@ import com.att.eelf.configuration.EELFManager
 import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintTypes
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintValidationError
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*
 import org.onap.ccsdk.apps.controllerblueprints.core.format
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintNodeTemplateValidator
@@ -36,10 +36,10 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
     private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintNodeTemplateValidatorImpl::class.toString())
 
     var bluePrintContext: BluePrintContext? = null
-    var error: BluePrintValidationError? = null
+    var error: BluePrintError? = null
     var paths: MutableList<String> = arrayListOf()
 
-    override fun validate(bluePrintContext: BluePrintContext, error: BluePrintValidationError, nodeTemplateName: String, nodeTemplate: NodeTemplate) {
+    override fun validate(bluePrintContext: BluePrintContext, error: BluePrintError, nodeTemplateName: String, nodeTemplate: NodeTemplate) {
         log.trace("Validating NodeTemplate($nodeTemplateName)")
         this.bluePrintContext = bluePrintContext
         this.error = error

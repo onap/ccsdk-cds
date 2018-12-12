@@ -16,7 +16,7 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core
 
-class BluePrintValidationError {
+class BluePrintError {
     var errors: MutableList<String> = arrayListOf()
 
     fun addError(type: String, name: String, error: String) {

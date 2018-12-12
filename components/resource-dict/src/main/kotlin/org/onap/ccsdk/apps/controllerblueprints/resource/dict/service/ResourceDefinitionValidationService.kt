@@ -18,6 +18,7 @@
 package org.onap.ccsdk.apps.controllerblueprints.resource.dict.service
 
 import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.common.base.Preconditions
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
@@ -30,8 +31,8 @@ import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintExpression
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRepoService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
-import com.att.eelf.configuration.EELFManager
 import java.io.Serializable
+
 /**
  * ResourceDefinitionValidationService.
  *
@@ -43,6 +44,7 @@ interface ResourceDefinitionValidationService : Serializable {
     fun validate(resourceDefinition: ResourceDefinition)
 
 }
+
 /**
  * ResourceDefinitionValidationService.
  *
@@ -59,8 +61,7 @@ open class ResourceDefinitionDefaultValidationService(private val bluePrintRepoS
         resourceDefinition.sources.forEach { (name, nodeTemplate) ->
             val sourceType = nodeTemplate.type
 
-            val sourceNodeType = bluePrintRepoService.getNodeType(sourceType).block()
-                    ?: throw BluePrintException(format("Failed to get source({}) node type definition({})", name, sourceType))
+            val sourceNodeType = bluePrintRepoService.getNodeType(sourceType)
 
             // Validate Property Name, expression, values and Data Type
             validateNodeTemplateProperties(nodeTemplate, sourceNodeType)
@@ -91,7 +92,7 @@ open class ResourceDefinitionDefaultValidationService(private val bluePrintRepoS
 
     open fun checkPropertyValue(propertyDefinition: PropertyDefinition, propertyName: String, propertyAssignment: JsonNode) {
         val propertyType = propertyDefinition.type
-        val isValid : Boolean
+        val isValid: Boolean
 
         if (BluePrintTypes.validPrimitiveTypes().contains(propertyType)) {
             isValid = JacksonUtils.checkJsonNodeValueOfPrimitiveType(propertyType, propertyAssignment)
@@ -100,9 +101,7 @@ open class ResourceDefinitionDefaultValidationService(private val bluePrintRepoS
 
             isValid = JacksonUtils.checkJsonNodeValueOfCollectionType(propertyType, propertyAssignment)
         } else {
-            bluePrintRepoService.getDataType(propertyType).block()
-                    ?: throw BluePrintException(format("property({}) defined of data type({}) is not in repository",
-                            propertyName, propertyType))
+            bluePrintRepoService.getDataType(propertyType)
             isValid = true
         }
 

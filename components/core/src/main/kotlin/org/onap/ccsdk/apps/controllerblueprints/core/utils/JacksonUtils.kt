@@ -24,12 +24,12 @@ import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import org.apache.commons.io.FileUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.apache.commons.io.IOUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintTypes
-import org.onap.ccsdk.apps.controllerblueprints.core.format
 import java.io.File
 import java.nio.charset.Charset
 
@@ -56,19 +56,26 @@ object JacksonUtils {
 
     @JvmStatic
     fun getContent(fileName: String): String {
-        return File(fileName).readText(Charsets.UTF_8)
+        return runBlocking {
+            withContext(Dispatchers.Default) {
+                File(fileName).readText(Charsets.UTF_8)
+            }
+        }
     }
 
     @JvmStatic
     fun getClassPathFileContent(fileName: String): String {
-        return IOUtils.toString(JacksonUtils::class.java.classLoader
-                .getResourceAsStream(fileName), Charset.defaultCharset())
+        return runBlocking {
+            withContext(Dispatchers.Default) {
+                IOUtils.toString(JacksonUtils::class.java.classLoader
+                        .getResourceAsStream(fileName), Charset.defaultCharset())
+            }
+        }
     }
 
     @JvmStatic
     fun <T> readValueFromFile(fileName: String, valueType: Class<T>): T? {
-        val content: String = FileUtils.readFileToString(File(fileName), Charset.defaultCharset())
-                ?: throw BluePrintException(format("Failed to read json file : {}", fileName))
+        val content: String = getContent(fileName)
         return readValue(content, valueType)
     }
 
@@ -89,8 +96,7 @@ object JacksonUtils {
 
     @JvmStatic
     fun jsonNodeFromFile(fileName: String): JsonNode {
-        val content: String = FileUtils.readFileToString(File(fileName), Charset.defaultCharset())
-                ?: throw BluePrintException(format("Failed to read json file : {}", fileName))
+        val content: String = getContent(fileName)
         return jsonNode(content)
     }
 
@@ -135,8 +141,7 @@ object JacksonUtils {
 
     @JvmStatic
     fun <T> getListFromFile(fileName: String, valueType: Class<T>): List<T>? {
-        val content: String = FileUtils.readFileToString(File(fileName), Charset.defaultCharset())
-                ?: throw BluePrintException(format("Failed to read json file : {}", fileName))
+        val content: String = getContent(fileName)
         return getListFromJson(content, valueType)
     }
 
@@ -155,8 +160,7 @@ object JacksonUtils {
 
     @JvmStatic
     fun <T> getMapFromFile(fileName: String, valueType: Class<T>): MutableMap<String, T>? {
-        val content: String = FileUtils.readFileToString(File(fileName), Charset.defaultCharset())
-                ?: throw BluePrintException(format("Failed to read json file : {}", fileName))
+        val content: String = getContent(fileName)
         return getMapFromJson(content, valueType)
     }
 

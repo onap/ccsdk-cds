@@ -20,7 +20,7 @@ import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintTypes
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintValidationError
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.checkNotEmptyNThrow
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintNodeTypeValidator
@@ -33,10 +33,10 @@ open class BluePrintNodeTypeValidatorImpl(private val bluePrintTypeValidatorServ
     private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintServiceTemplateValidatorImpl::class.toString())
 
     var bluePrintContext: BluePrintContext? = null
-    var error: BluePrintValidationError? = null
+    var error: BluePrintError? = null
     var paths: MutableList<String> = arrayListOf()
 
-    override fun validate(bluePrintContext: BluePrintContext, error: BluePrintValidationError, nodeTypeName: String, nodeType: NodeType) {
+    override fun validate(bluePrintContext: BluePrintContext, error: BluePrintError, nodeTypeName: String, nodeType: NodeType) {
         log.trace("Validating NodeType($nodeTypeName)")
         this.bluePrintContext = bluePrintContext
         this.error = error

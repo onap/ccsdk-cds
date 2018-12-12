@@ -41,7 +41,7 @@
           "type": "string"
         }
       },
-      "derived_from": "tosca.datatypes.Root"
+      "derived_from": "tosca.datatypes.Dynamic"
     },
     "resource-assignment-properties": {
       "description": "This is Dynamically generated data type for workflow activate",
@@ -64,7 +64,7 @@
           "type": "string"
         }
       },
-      "derived_from": "tosca.datatypes.Root"
+      "derived_from": "tosca.datatypes.Dynamic"
     },
     "assign-activate-properties": {
       "description": "This is Dynamically generated data type for workflow assign-activate",
@@ -87,7 +87,7 @@
           "type": "string"
         }
       },
-      "derived_from": "tosca.datatypes.Root"
+      "derived_from": "tosca.datatypes.Dynamic"
     }
   }
 }

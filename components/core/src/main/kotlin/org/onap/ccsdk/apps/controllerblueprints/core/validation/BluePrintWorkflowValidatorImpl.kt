@@ -19,7 +19,7 @@ package org.onap.ccsdk.apps.controllerblueprints.core.validation
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintValidationError
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.data.Workflow
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintWorkflowValidator
@@ -29,10 +29,10 @@ open class BluePrintWorkflowValidatorImpl(private val bluePrintTypeValidatorServ
 
     private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintServiceTemplateValidatorImpl::class.toString())
     var bluePrintContext: BluePrintContext? = null
-    var error: BluePrintValidationError? = null
+    var error: BluePrintError? = null
     var paths: MutableList<String> = arrayListOf()
 
-    override fun validate(bluePrintContext: BluePrintContext, error: BluePrintValidationError, workflowName: String, workflow: Workflow) {
+    override fun validate(bluePrintContext: BluePrintContext, error: BluePrintError, workflowName: String, workflow: Workflow) {
         log.info("Validating Workflow($workflowName)")
 
         this.bluePrintContext = bluePrintContext

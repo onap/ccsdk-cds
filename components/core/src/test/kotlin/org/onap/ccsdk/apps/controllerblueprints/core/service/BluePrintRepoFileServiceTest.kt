@@ -33,25 +33,25 @@ class BluePrintRepoFileServiceTest {
 
     @Test
     fun testGetDataType() {
-        val dataType = bluePrintEnhancerRepoFileService.getDataType("dt-v4-aggregate").block()
+        val dataType = bluePrintEnhancerRepoFileService.getDataType("dt-v4-aggregate")
         assertNotNull(dataType, "Failed to get DataType from repo")
     }
 
     @Test
     fun testGetNodeType() {
-        val nodeType = bluePrintEnhancerRepoFileService.getNodeType("component-resource-assignment").block()
+        val nodeType = bluePrintEnhancerRepoFileService.getNodeType("component-resource-assignment")
         assertNotNull(nodeType, "Failed to get NodeType from repo")
     }
 
     @Test
     fun testGetArtifactType() {
-        val nodeType = bluePrintEnhancerRepoFileService.getArtifactType("artifact-template-velocity").block()
+        val nodeType = bluePrintEnhancerRepoFileService.getArtifactType("artifact-template-velocity")
         assertNotNull(nodeType, "Failed to get ArtifactType from repo")
     }
 
     @Test(expected = FileNotFoundException::class)
     fun testModelNotFound() {
-        val dataType = bluePrintEnhancerRepoFileService.getDataType("dt-not-found").block()
+        val dataType = bluePrintEnhancerRepoFileService.getDataType("dt-not-found")
         assertNotNull(dataType, "Failed to get DataType from repo")
     }
 }

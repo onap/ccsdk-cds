@@ -21,9 +21,8 @@ import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRepoFileService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRepoService
-import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonReactorUtils
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
-import reactor.core.publisher.Mono
 
 /**
  * ResourceDefinitionRepoService.
@@ -33,7 +32,7 @@ import reactor.core.publisher.Mono
 interface ResourceDefinitionRepoService : BluePrintRepoService {
 
     @Throws(BluePrintException::class)
-    fun getResourceDefinition(resourceDefinitionName: String): Mono<ResourceDefinition>
+    fun getResourceDefinition(resourceDefinitionName: String): ResourceDefinition
 }
 
 /**
@@ -57,11 +56,12 @@ open class ResourceDefinitionFileRepoService : BluePrintRepoFileService,
         resourceDefinitionPath = basePath.plus("/resource-dictionary/starter-dictionary")
     }
 
-    override fun getResourceDefinition(resourceDefinitionName: String): Mono<ResourceDefinition> {
+    override fun getResourceDefinition(resourceDefinitionName: String): ResourceDefinition {
 
         val fileName = resourceDefinitionPath.plus(BluePrintConstants.PATH_DIVIDER)
                 .plus(resourceDefinitionName).plus(extension)
 
-        return JacksonReactorUtils.readValueFromFile(fileName, ResourceDefinition::class.java)
+        return JacksonUtils.readValueFromFile(fileName, ResourceDefinition::class.java)
+                ?: throw BluePrintException("couldn't get resource definition for file($fileName)")
     }
 }
