@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ArtifactDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeTemplate
@@ -54,6 +55,10 @@ interface BluePrintRuntimeService<T> {
     fun getAsInt(key: String): Int?
 
     fun getAsDouble(key: String): Double?
+
+    fun getBluePrintError(): BluePrintError
+
+    fun setBluePrintError(bluePrintError: BluePrintError)
 
     /*
       Get the Node Type Definition for the Node Template, Then iterate Node Type Properties and resolve the expressing
@@ -113,6 +118,8 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
 
     private var store: MutableMap<String, JsonNode> = hashMapOf()
 
+    private var bluePrintError = BluePrintError()
+
     override fun id(): String {
         return id
     }
@@ -162,9 +169,17 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
         return get(key).asDouble()
     }
 
+    override fun getBluePrintError(): BluePrintError {
+        return this.bluePrintError
+    }
+
+    override fun setBluePrintError(bluePrintError: BluePrintError) {
+        this.bluePrintError = bluePrintError
+    }
+
     /*
-            Get the Node Type Definition for the Node Template, Then iterate Node Type Properties and resolve the expressing
-         */
+                Get the Node Type Definition for the Node Template, Then iterate Node Type Properties and resolve the expressing
+             */
     override fun resolveNodeTemplateProperties(nodeTemplateName: String): MutableMap<String, JsonNode> {
         log.info("resolveNodeTemplatePropertyValues for node template ({})", nodeTemplateName)
         val propertyAssignmentValue: MutableMap<String, JsonNode> = hashMapOf()
@@ -439,11 +454,11 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
                 setInputValue(propertyName, property, valueNode)
             }
         }
-
+        // Load Dynamic data Types
         val workflowDynamicInputs: JsonNode? = jsonNode.get(dynamicInputPropertiesName)
 
         workflowDynamicInputs?.let {
-            bluePrintContext.dataTypeByName(dynamicInputPropertiesName)?.properties?.forEach { propertyName, property ->
+            bluePrintContext.dataTypeByName("dt-$dynamicInputPropertiesName")?.properties?.forEach { propertyName, property ->
                 val valueNode: JsonNode = workflowDynamicInputs.at(BluePrintConstants.PATH_DIVIDER + propertyName)
                         ?: NullNode.getInstance()
                 setInputValue(propertyName, property, valueNode)

@@ -16,13 +16,13 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core.interfaces
 
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 
 interface BluePrintEnhancer<T> {
-    fun enhance(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, type: T)
+    fun enhance(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, type: T)
 }
 
 interface BluePrintServiceTemplateEnhancer : BluePrintEnhancer<ServiceTemplate>
@@ -49,9 +49,6 @@ interface BluePrintEnhancerService {
 
     @Throws(BluePrintException::class)
     fun enhance(basePath: String): BluePrintContext
-
-    @Throws(BluePrintException::class)
-    fun enhance(serviceTemplate: ServiceTemplate): ServiceTemplate
 }
 
 interface BluePrintTypeEnhancerService {
@@ -72,63 +69,63 @@ interface BluePrintTypeEnhancerService {
 
     fun getAttributeDefinitionEnhancers(): List<BluePrintAttributeDefinitionEnhancer>
 
-    fun enhanceServiceTemplate(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, serviceTemplate: ServiceTemplate) {
+    fun enhanceServiceTemplate(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, serviceTemplate: ServiceTemplate) {
         val enhancers = getServiceTemplateEnhancers()
-        doEnhancement(bluePrintContext, error, name, serviceTemplate, enhancers)
+        doEnhancement(bluePrintRuntimeService, name, serviceTemplate, enhancers)
     }
 
-    fun enhanceTopologyTemplate(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, topologyTemplate: TopologyTemplate) {
+    fun enhanceTopologyTemplate(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, topologyTemplate: TopologyTemplate) {
         val enhancers = getTopologyTemplateEnhancers()
-        doEnhancement(bluePrintContext, error, name, topologyTemplate, enhancers)
+        doEnhancement(bluePrintRuntimeService, name, topologyTemplate, enhancers)
     }
 
-    fun enhanceWorkflow(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, workflow: Workflow) {
+    fun enhanceWorkflow(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, workflow: Workflow) {
         val enhancers = getWorkflowEnhancers()
-        doEnhancement(bluePrintContext, error, name, workflow, enhancers)
+        doEnhancement(bluePrintRuntimeService, name, workflow, enhancers)
     }
 
-    fun enhanceNodeTemplate(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, nodeTemplate: NodeTemplate) {
+    fun enhanceNodeTemplate(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, nodeTemplate: NodeTemplate) {
         val enhancers = getNodeTemplateEnhancers()
-        doEnhancement(bluePrintContext, error, name, nodeTemplate, enhancers)
+        doEnhancement(bluePrintRuntimeService, name, nodeTemplate, enhancers)
     }
 
-    fun enhanceNodeType(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, nodeType: NodeType) {
+    fun enhanceNodeType(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, nodeType: NodeType) {
         val enhancers = getNodeTypeEnhancers()
-        doEnhancement(bluePrintContext, error, name, nodeType, enhancers)
+        doEnhancement(bluePrintRuntimeService, name, nodeType, enhancers)
     }
 
-    fun enhancePolicyType(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, policyType: PolicyType) {
+    fun enhancePolicyType(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, policyType: PolicyType) {
         val enhancers = getPolicyTypeEnhancers()
-        doEnhancement(bluePrintContext, error, name, policyType, enhancers)
+        doEnhancement(bluePrintRuntimeService, name, policyType, enhancers)
     }
 
-    fun enhancePropertyDefinitions(bluePrintContext: BluePrintContext, error: BluePrintError, properties: MutableMap<String, PropertyDefinition>) {
+    fun enhancePropertyDefinitions(bluePrintRuntimeService: BluePrintRuntimeService<*>, properties: MutableMap<String, PropertyDefinition>) {
         properties.forEach { propertyName, propertyDefinition ->
-            enhancePropertyDefinition(bluePrintContext, error, propertyName, propertyDefinition)
+            enhancePropertyDefinition(bluePrintRuntimeService, propertyName, propertyDefinition)
         }
     }
 
-    fun enhancePropertyDefinition(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, propertyDefinition: PropertyDefinition) {
+    fun enhancePropertyDefinition(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, propertyDefinition: PropertyDefinition) {
         val enhancers = getPropertyDefinitionEnhancers()
-        doEnhancement(bluePrintContext, error, name, propertyDefinition, enhancers)
+        doEnhancement(bluePrintRuntimeService, name, propertyDefinition, enhancers)
     }
 
-    fun enhanceAttributeDefinitions(bluePrintContext: BluePrintContext, error: BluePrintError, attributes: MutableMap<String, AttributeDefinition>) {
+    fun enhanceAttributeDefinitions(bluePrintRuntimeService: BluePrintRuntimeService<*>, attributes: MutableMap<String, AttributeDefinition>) {
         attributes.forEach { attributeName, attributeDefinition ->
-            enhanceAttributeDefinition(bluePrintContext, error, attributeName, attributeDefinition)
+            enhanceAttributeDefinition(bluePrintRuntimeService, attributeName, attributeDefinition)
         }
     }
 
-    fun enhanceAttributeDefinition(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, attributeDefinition: AttributeDefinition) {
+    fun enhanceAttributeDefinition(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, attributeDefinition: AttributeDefinition) {
         val enhancers = getAttributeDefinitionEnhancers()
-        doEnhancement(bluePrintContext, error, name, attributeDefinition, enhancers)
+        doEnhancement(bluePrintRuntimeService, name, attributeDefinition, enhancers)
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun <T> doEnhancement(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, definition: Any, enhancers: List<BluePrintEnhancer<T>>) {
+    private fun <T> doEnhancement(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, definition: Any, enhancers: List<BluePrintEnhancer<T>>) {
         if (enhancers.isNotEmpty()) {
             enhancers.forEach {
-                it.enhance(bluePrintContext, error, name, definition as T)
+                it.enhance(bluePrintRuntimeService, name, definition as T)
             }
         }
     }

@@ -55,6 +55,7 @@ object BluePrintConstants {
     const val PATH_TOPOLOGY_TEMPLATE: String = "topology_template"
     const val PATH_METADATA: String = "metadata"
     const val PATH_NODE_TYPES: String = "node_types"
+    const val PATH_POLICY_TYPES: String = "policy_types"
     const val PATH_ARTIFACT_TYPES: String = "artifact_types"
     const val PATH_DATA_TYPES: String = "data_types"
     const val PATH_INPUTS: String = "inputs"

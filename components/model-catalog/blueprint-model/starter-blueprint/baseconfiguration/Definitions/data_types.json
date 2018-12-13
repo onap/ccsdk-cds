@@ -20,7 +20,7 @@
       },
       "derived_from": "tosca.datatypes.Root"
     },
-    "activate-properties": {
+    "dt-resource-assignment-properties": {
       "description": "This is Dynamically generated data type for workflow activate",
       "version": "1.0.0",
       "properties": {
@@ -43,30 +43,7 @@
       },
       "derived_from": "tosca.datatypes.Dynamic"
     },
-    "resource-assignment-properties": {
-      "description": "This is Dynamically generated data type for workflow activate",
-      "version": "1.0.0",
-      "properties": {
-        "request-id": {
-          "required": true,
-          "type": "string"
-        },
-        "action-name": {
-          "required": true,
-          "type": "string"
-        },
-        "scope-type": {
-          "required": true,
-          "type": "string"
-        },
-        "hostname": {
-          "required": true,
-          "type": "string"
-        }
-      },
-      "derived_from": "tosca.datatypes.Dynamic"
-    },
-    "assign-activate-properties": {
+    "dt-assign-activate-properties": {
       "description": "This is Dynamically generated data type for workflow assign-activate",
       "version": "1.0.0",
       "properties": {

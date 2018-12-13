@@ -7,6 +7,14 @@
         "content": {
           "required": true,
           "type": "string"
+        },
+        "dependency-node-templates": {
+          "required": true,
+          "description": "Dependent Step Components",
+          "type": "list",
+          "entry_schema": {
+            "type": "string"
+          }
         }
       },
       "derived_from": "tosca.nodes.DG"

@@ -89,25 +89,37 @@ class BluePrintFileUtils {
                 throw BluePrintException("couldn't get definition file under path(${definitionDir.absolutePath})")
             }
 
-            blueprintContext.dataTypes.let {
-                val dataTypesContent = JacksonUtils.getWrappedJson(BluePrintConstants.PATH_DATA_TYPES, blueprintContext.dataTypes!!, true)
-                writeFile(definitionDir.absolutePath, BluePrintConstants.PATH_DATA_TYPES, dataTypesContent)
-
+            blueprintContext.serviceTemplate.dataTypes?.let {
+                val dataTypesContent = JacksonUtils.getWrappedJson(BluePrintConstants.PATH_DATA_TYPES, it, true)
+                writeTypeFile(definitionDir.absolutePath, BluePrintConstants.PATH_DATA_TYPES, dataTypesContent)
             }
 
-            blueprintContext.artifactTypes.let {
-                val artifactTypesContent = JacksonUtils.getWrappedJson(BluePrintConstants.PATH_ARTIFACT_TYPES, blueprintContext.artifactTypes!!, true)
-                writeFile(definitionDir.absolutePath, BluePrintConstants.PATH_ARTIFACT_TYPES, artifactTypesContent)
+            blueprintContext.serviceTemplate.artifactTypes?.let {
+                val artifactTypesContent = JacksonUtils.getWrappedJson(BluePrintConstants.PATH_ARTIFACT_TYPES, it, true)
+                writeTypeFile(definitionDir.absolutePath, BluePrintConstants.PATH_ARTIFACT_TYPES, artifactTypesContent)
             }
 
-            blueprintContext.nodeTypes.let {
-                val nodeTypesContent = JacksonUtils.getWrappedJson(BluePrintConstants.PATH_NODE_TYPES, blueprintContext.nodeTypes!!, true)
-                writeFile(definitionDir.absolutePath, BluePrintConstants.PATH_NODE_TYPES, nodeTypesContent)
+            blueprintContext.serviceTemplate.nodeTypes?.let {
+                val nodeTypesContent = JacksonUtils.getWrappedJson(BluePrintConstants.PATH_NODE_TYPES, it, true)
+                writeTypeFile(definitionDir.absolutePath, BluePrintConstants.PATH_NODE_TYPES, nodeTypesContent)
             }
 
+            blueprintContext.serviceTemplate.policyTypes?.let {
+                val nodeTypesContent = JacksonUtils.getWrappedJson(BluePrintConstants.PATH_POLICY_TYPES, it, true)
+                writeTypeFile(definitionDir.absolutePath, BluePrintConstants.PATH_POLICY_TYPES, nodeTypesContent)
+            }
         }
 
-        private fun writeFile(definitionPath: String, type: String, content: String) = runBlocking {
+        fun writeDefinitionFile(definitionFile: String, content: String) = runBlocking {
+            val definitionFile = File(definitionFile)
+
+            Files.write(definitionFile.toPath(), content.toByteArray(), StandardOpenOption.CREATE)
+            check(definitionFile.exists()) {
+                throw BluePrintException("couldn't write definition file under path(${definitionFile.absolutePath})")
+            }
+        }
+
+        private fun writeTypeFile(definitionPath: String, type: String, content: String) = runBlocking {
             val typeFile = File(definitionPath.plus(File.separator).plus("$type.json"))
 
             Files.write(typeFile.toPath(), content.toByteArray(), StandardOpenOption.CREATE_NEW)
