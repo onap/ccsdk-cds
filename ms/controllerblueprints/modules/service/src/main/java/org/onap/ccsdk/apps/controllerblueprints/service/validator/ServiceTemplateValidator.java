@@ -29,7 +29,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate;
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintValidatorDefaultService;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment;
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceAssignmentValidationDefaultService;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceAssignmentValidationServiceImpl;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceAssignmentValidationService;
 
 import java.util.HashMap;
@@ -114,7 +114,7 @@ public class ServiceTemplateValidator extends BluePrintValidatorDefaultService {
 
         if (BluePrintConstants.MODEL_TYPE_NODE_ARTIFACT.equals(derivedFrom)) {
             List<ResourceAssignment> resourceAssignment = getResourceAssignments(nodeTemplate);
-            ResourceAssignmentValidationService resourceAssignmentValidationService = new ResourceAssignmentValidationDefaultService();
+            ResourceAssignmentValidationService resourceAssignmentValidationService = new ResourceAssignmentValidationServiceImpl();
             resourceAssignmentValidationService.validate(resourceAssignment);
         }
     }

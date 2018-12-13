@@ -17,6 +17,8 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service;
 
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFManager;
 import com.google.common.base.Preconditions;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
@@ -31,8 +33,6 @@ import org.onap.ccsdk.apps.controllerblueprints.service.common.ApplicationConsta
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModel;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModelContent;
 import org.onap.ccsdk.apps.controllerblueprints.service.repository.ConfigModelRepository;
-import com.att.eelf.configuration.EELFLogger;
-import com.att.eelf.configuration.EELFManager;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -48,25 +48,21 @@ import java.util.Optional;
  * @author Brinda Santh
  * @version 1.0
  */
-
+@Deprecated
 @Service
 public class ConfigModelCreateService {
 
     private static EELFLogger log = EELFManager.getInstance().getLogger(ConfigModelCreateService.class);
 
     private ConfigModelRepository configModelRepository;
-    private ConfigModelValidatorService configModelValidatorService;
 
     /**
      * This is a ConfigModelCreateService
      *
-     * @param configModelRepository       ConfigModelRepository
-     * @param configModelValidatorService ConfigModelValidatorService
+     * @param configModelRepository ConfigModelRepository
      */
-    public ConfigModelCreateService(ConfigModelRepository configModelRepository,
-                                    ConfigModelValidatorService configModelValidatorService) {
+    public ConfigModelCreateService(ConfigModelRepository configModelRepository) {
         this.configModelRepository = configModelRepository;
-        this.configModelValidatorService = configModelValidatorService;
     }
 
     /**
@@ -127,7 +123,7 @@ public class ConfigModelCreateService {
             String artifactName = configModel.getArtifactName();
             String artifactVersion = configModel.getArtifactVersion();
             String author = configModel.getUpdatedBy();
-            
+
 
             if (StringUtils.isBlank(author)) {
                 throw new BluePrintException("Artifact Author is missing in the Service Template");
@@ -326,6 +322,7 @@ public class ConfigModelCreateService {
      * @throws BluePrintException BluePrintException
      */
     public ServiceTemplate validateServiceTemplate(ServiceTemplate serviceTemplate) throws BluePrintException {
-        return this.configModelValidatorService.validateServiceTemplate(serviceTemplate);
+        // FIXME("Plug right Validator")
+        return serviceTemplate;
     }
 }

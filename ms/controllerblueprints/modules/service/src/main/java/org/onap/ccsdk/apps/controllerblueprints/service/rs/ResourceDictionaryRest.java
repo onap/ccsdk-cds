@@ -48,7 +48,7 @@ public class ResourceDictionaryRest {
 
     @PostMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResourceDictionary saveResourceDictionary(@RequestBody ResourceDictionary dataDictionary) {
+    ResourceDictionary saveResourceDictionary(@RequestBody ResourceDictionary dataDictionary) throws BluePrintException {
         return resourceDictionaryService.saveResourceDictionary(dataDictionary);
     }
 

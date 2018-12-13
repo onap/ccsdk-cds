@@ -25,6 +25,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceSourceMapping;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.factory.ResourceSourceMappingFactory;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceDefinitionValidationService;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionary;
 import org.onap.ccsdk.apps.controllerblueprints.service.repository.ResourceDictionaryRepository;
 import org.onap.ccsdk.apps.controllerblueprints.service.validator.ResourceDictionaryValidator;
@@ -104,7 +105,7 @@ public class ResourceDictionaryService {
      * @param resourceDictionary resourceDictionary
      * @return DataDictionary
      */
-    public ResourceDictionary saveResourceDictionary(ResourceDictionary resourceDictionary) {
+    public ResourceDictionary saveResourceDictionary(ResourceDictionary resourceDictionary) throws BluePrintException {
         Preconditions.checkNotNull(resourceDictionary, "Resource Dictionary information is missing");
         Preconditions.checkNotNull(resourceDictionary.getDefinition(), "Resource Dictionary definition information is missing");
 
@@ -157,7 +158,6 @@ public class ResourceDictionaryService {
 
     /**
      * This is a getResourceSourceMapping service
-     *
      */
     public ResourceSourceMapping getResourceSourceMapping() {
         return ResourceSourceMappingFactory.INSTANCE.getRegisterSourceMapping();

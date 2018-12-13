@@ -22,6 +22,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.onap.ccsdk.apps.controllerblueprints.TestApplication;
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintEnhancerService;
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintValidatorService;
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext;
 import org.onap.ccsdk.apps.controllerblueprints.service.load.ModelTypeLoadService;
 import org.onap.ccsdk.apps.controllerblueprints.service.load.ResourceDictionaryLoadService;
@@ -29,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+
 import java.nio.file.Paths;
 
 @RunWith(SpringRunner.class)
@@ -45,6 +47,9 @@ public class BluePrintEnhancerServiceImplTest {
     @Autowired
     private BluePrintEnhancerService bluePrintEnhancerService;
 
+    @Autowired
+    private BluePrintValidatorService bluePrintValidatorService;
+
     @Before
     public void init() {
         modelTypeLoadService.loadModelType("./../../../../components/model-catalog/definition-type/starter-type");
@@ -52,7 +57,7 @@ public class BluePrintEnhancerServiceImplTest {
     }
 
     @Test
-    public void testEnhancement() throws Exception {
+    public void testEnhancementAndValidation() throws Exception {
 
         String basePath = "./../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration";
 
@@ -61,6 +66,8 @@ public class BluePrintEnhancerServiceImplTest {
         BluePrintContext bluePrintContext = bluePrintEnhancerService.enhance(basePath, targetPath);
         Assert.assertNotNull("failed to get blueprintContext ", bluePrintContext);
 
+        // Validate the Generated BluePrints
 
+        bluePrintValidatorService.validateBluePrints(targetPath);
     }
 }

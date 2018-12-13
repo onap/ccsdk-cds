@@ -20,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceAssignmentValidationService;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModelContent;
 import org.onap.ccsdk.apps.controllerblueprints.service.model.AutoMapResponse;
 import org.onap.ccsdk.apps.controllerblueprints.service.repository.ResourceDictionaryRepository;
