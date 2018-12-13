@@ -18,7 +18,6 @@ package org.onap.ccsdk.apps.controllerblueprints.service.enhancer
 
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.apps.controllerblueprints.core.data.InterfaceDefinition
@@ -26,9 +25,10 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeType
 import org.onap.ccsdk.apps.controllerblueprints.core.data.OperationDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.format
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintNodeTypeEnhancer
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintRepoService
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
-import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintRepoService
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
@@ -40,19 +40,21 @@ open class BluePrintNodeTypeEnhancerImpl(private val bluePrintRepoService: BlueP
 
     private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintNodeTypeEnhancerImpl::class.toString())
 
+    lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
     lateinit var bluePrintContext: BluePrintContext
-    lateinit var error: BluePrintError
 
-    override fun enhance(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, nodeType: NodeType) {
-        this.bluePrintContext = bluePrintContext
-        this.error = error
+
+    override fun enhance(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, nodeType: NodeType) {
+        this.bluePrintRuntimeService = bluePrintRuntimeService
+        this.bluePrintContext = bluePrintRuntimeService.bluePrintContext()
+
 
         val derivedFrom = nodeType.derivedFrom
 
         if (!BluePrintTypes.rootNodeTypes().contains(derivedFrom)) {
             val derivedFromNodeType = populateNodeType(name)
             // Enrich NodeType
-            enhance(bluePrintContext, error, derivedFrom, derivedFromNodeType)
+            enhance(bluePrintRuntimeService, derivedFrom, derivedFromNodeType)
         }
 
         // NodeType Property Definitions
@@ -71,7 +73,7 @@ open class BluePrintNodeTypeEnhancerImpl(private val bluePrintRepoService: BlueP
 
     open fun enrichNodeTypeProperties(nodeTypeName: String, nodeType: NodeType) {
         nodeType.properties?.let {
-            bluePrintTypeEnhancerService.enhancePropertyDefinitions(bluePrintContext, error, nodeType.properties!!)
+            bluePrintTypeEnhancerService.enhancePropertyDefinitions(bluePrintRuntimeService, nodeType.properties!!)
         }
     }
 
@@ -83,7 +85,7 @@ open class BluePrintNodeTypeEnhancerImpl(private val bluePrintRepoService: BlueP
                 // Get Requirement NodeType from Repo and Update Service Template
                 val requirementNodeType = populateNodeType(requirementNodeTypeName)
                 // Enhanypece Node T
-                enhance(bluePrintContext, error, requirementNodeTypeName, requirementNodeType)
+                enhance(bluePrintRuntimeService, requirementNodeTypeName, requirementNodeType)
             }
         }
     }
@@ -91,7 +93,7 @@ open class BluePrintNodeTypeEnhancerImpl(private val bluePrintRepoService: BlueP
     open fun enrichNodeTypeCapabilityProperties(nodeTypeName: String, nodeType: NodeType) {
         nodeType.capabilities?.forEach { _, capabilityDefinition ->
             capabilityDefinition.properties?.let { properties ->
-                bluePrintTypeEnhancerService.enhancePropertyDefinitions(bluePrintContext, error, properties)
+                bluePrintTypeEnhancerService.enhancePropertyDefinitions(bluePrintRuntimeService, properties)
             }
         }
     }
@@ -115,13 +117,13 @@ open class BluePrintNodeTypeEnhancerImpl(private val bluePrintRepoService: BlueP
 
     open fun enrichNodeTypeInterfaceOperationInputs(nodeTypeName: String, operationName: String, operation: OperationDefinition) {
         operation.inputs?.let { inputs ->
-            bluePrintTypeEnhancerService.enhancePropertyDefinitions(bluePrintContext, error, inputs)
+            bluePrintTypeEnhancerService.enhancePropertyDefinitions(bluePrintRuntimeService, inputs)
         }
     }
 
     open fun enrichNodeTypeInterfaceOperationOputputs(nodeTypeName: String, operationName: String, operation: OperationDefinition) {
         operation.outputs?.let { inputs ->
-            bluePrintTypeEnhancerService.enhancePropertyDefinitions(bluePrintContext, error, inputs)
+            bluePrintTypeEnhancerService.enhancePropertyDefinitions(bluePrintRuntimeService, inputs)
         }
     }
 

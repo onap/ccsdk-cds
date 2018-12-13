@@ -28,6 +28,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintNodeTem
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintRepoService
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
@@ -40,20 +41,22 @@ open class BluePrintNodeTemplateEnhancerImpl(private val bluePrintRepoService: B
 
     private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintNodeTemplateEnhancerImpl::class.toString())
 
+    lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
     lateinit var bluePrintContext: BluePrintContext
-    lateinit var error: BluePrintError
 
-    override fun enhance(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, nodeTemplate: NodeTemplate) {
+
+    override fun enhance(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, nodeTemplate: NodeTemplate) {
         log.info("Enhancing NodeTemplate($name)")
-        this.bluePrintContext = bluePrintContext
-        this.error = error
+        this.bluePrintRuntimeService = bluePrintRuntimeService
+        this.bluePrintContext = bluePrintRuntimeService.bluePrintContext()
+
 
         val nodeTypeName = nodeTemplate.type
         // Get NodeType from Repo and Update Service Template
         val nodeType = populateNodeType(nodeTypeName)
 
         // Enrich NodeType
-        bluePrintTypeEnhancerService.enhanceNodeType(bluePrintContext, error, nodeTypeName, nodeType)
+        bluePrintTypeEnhancerService.enhanceNodeType(bluePrintRuntimeService, nodeTypeName, nodeType)
 
         //Enrich Node Template Artifacts
         enhanceNodeTemplateArtifactDefinition(name, nodeTemplate)

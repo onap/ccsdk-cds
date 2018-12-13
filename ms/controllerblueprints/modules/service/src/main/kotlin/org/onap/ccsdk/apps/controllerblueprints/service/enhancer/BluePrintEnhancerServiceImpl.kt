@@ -19,9 +19,7 @@ package org.onap.ccsdk.apps.controllerblueprints.service.enhancer
 
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintEnhancerService
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintRepoService
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
@@ -29,6 +27,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintFileUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 open class BluePrintEnhancerServiceImpl(private val bluePrintRepoService: BluePrintRepoService,
@@ -37,9 +36,16 @@ open class BluePrintEnhancerServiceImpl(private val bluePrintRepoService: BluePr
     private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintEnhancerServiceImpl::class.toString())
 
     override fun enhance(basePath: String, enrichedBasePath: String): BluePrintContext {
+        // Copy the Blueprint Content to Target Location
         BluePrintFileUtils.copyBluePrint(basePath, enrichedBasePath)
-        BluePrintFileUtils.deleteBluePrintTypes(enrichedBasePath)
+
+        // Enhance the Blueprint
         val enhancedBluePrintContext = enhance(enrichedBasePath)
+
+        // Delete the Old Type files
+        BluePrintFileUtils.deleteBluePrintTypes(enrichedBasePath)
+
+        // Write the Type File Definitions
         BluePrintFileUtils.writeBluePrintTypes(enhancedBluePrintContext)
         return enhancedBluePrintContext
     }
@@ -47,20 +53,21 @@ open class BluePrintEnhancerServiceImpl(private val bluePrintRepoService: BluePr
     @Throws(BluePrintException::class)
     override fun enhance(basePath: String): BluePrintContext {
         log.info("Enhancing blueprint($basePath)")
-        val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(basePath)
-        val error = BluePrintError()
-        bluePrintTypeEnhancerService.enhanceServiceTemplate(bluePrintContext, error, "service_template",
-                bluePrintContext.serviceTemplate)
-        return bluePrintContext
+        val blueprintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(UUID.randomUUID().toString(), basePath)
+        try {
+
+            bluePrintTypeEnhancerService.enhanceServiceTemplate(blueprintRuntimeService, "service_template",
+                    blueprintRuntimeService.bluePrintContext().serviceTemplate)
+
+            if (blueprintRuntimeService.getBluePrintError().errors.isNotEmpty()) {
+                throw BluePrintException(blueprintRuntimeService.getBluePrintError().errors.toString())
+            }
+        } catch (e: Exception) {
+            log.error("failed in blueprint enhancement", e)
+        }
+
+        return blueprintRuntimeService.bluePrintContext()
     }
 
-    @Throws(BluePrintException::class)
-    override fun enhance(serviceTemplate: ServiceTemplate): ServiceTemplate {
-        val bluePrintContext = BluePrintContext(serviceTemplate)
-        val error = BluePrintError()
-        bluePrintTypeEnhancerService.enhanceServiceTemplate(bluePrintContext, error, "service_template",
-                bluePrintContext.serviceTemplate)
-        return bluePrintContext.serviceTemplate
-    }
 }
 

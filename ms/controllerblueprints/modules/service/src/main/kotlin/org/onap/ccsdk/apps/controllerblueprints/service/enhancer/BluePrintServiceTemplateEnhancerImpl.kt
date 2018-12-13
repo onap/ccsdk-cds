@@ -16,12 +16,14 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.enhancer
 
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintRepoService
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintServiceTemplateEnhancer
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
@@ -31,13 +33,16 @@ import org.springframework.stereotype.Service
 open class BluePrintServiceTemplateEnhancerImpl(private val bluePrintRepoService: BluePrintRepoService,
                                                 private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService)
     : BluePrintServiceTemplateEnhancer {
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintEnhancerServiceImpl::class.toString())
 
+
+    lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
     lateinit var bluePrintContext: BluePrintContext
-    lateinit var error: BluePrintError
 
-    override fun enhance(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, type: ServiceTemplate) {
-        this.bluePrintContext = bluePrintContext
-        this.error = error
+    override fun enhance(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, type: ServiceTemplate) {
+        this.bluePrintRuntimeService = bluePrintRuntimeService
+        this.bluePrintContext = bluePrintRuntimeService.bluePrintContext()
+
         initialCleanUp()
         enhanceTopologyTemplate()
     }
@@ -57,7 +62,7 @@ open class BluePrintServiceTemplateEnhancerImpl(private val bluePrintRepoService
 
     open fun enhanceTopologyTemplate() {
         bluePrintContext.serviceTemplate.topologyTemplate?.let { topologyTemplate ->
-            bluePrintTypeEnhancerService.enhanceTopologyTemplate(bluePrintContext, error, "default", topologyTemplate)
+            bluePrintTypeEnhancerService.enhanceTopologyTemplate(bluePrintRuntimeService, "default", topologyTemplate)
         }
     }
 }

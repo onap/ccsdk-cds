@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+import java.nio.file.Paths;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {TestApplication.class})
@@ -55,8 +56,11 @@ public class BluePrintEnhancerServiceImplTest {
 
         String basePath = "./../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration";
 
-        BluePrintContext bluePrintContext = bluePrintEnhancerService.enhance(basePath);
+        String targetPath = Paths.get("target", "bp-enhance").toUri().getPath();
+
+        BluePrintContext bluePrintContext = bluePrintEnhancerService.enhance(basePath, targetPath);
         Assert.assertNotNull("failed to get blueprintContext ", bluePrintContext);
+
 
     }
 }

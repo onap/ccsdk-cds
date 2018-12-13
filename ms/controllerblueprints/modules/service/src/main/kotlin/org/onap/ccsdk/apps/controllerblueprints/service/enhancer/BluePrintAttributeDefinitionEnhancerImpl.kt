@@ -16,18 +16,17 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.enhancer
 
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.data.AttributeDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintAttributeDefinitionEnhancer
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintRepoService
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
-import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 
 class BluePrintAttributeDefinitionEnhancerImpl(private val bluePrintRepoService: BluePrintRepoService,
                                                private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService)
     : BluePrintAttributeDefinitionEnhancer {
 
-    override fun enhance(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, type: AttributeDefinition) {
+    override fun enhance(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, type: AttributeDefinition) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

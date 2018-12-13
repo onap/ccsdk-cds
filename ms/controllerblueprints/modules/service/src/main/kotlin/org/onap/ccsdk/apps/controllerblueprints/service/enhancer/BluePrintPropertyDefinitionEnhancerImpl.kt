@@ -16,7 +16,6 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.enhancer
 
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.apps.controllerblueprints.core.data.DataType
@@ -26,6 +25,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintPropert
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintRepoService
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
@@ -37,12 +37,13 @@ open class BluePrintPropertyDefinitionEnhancerImpl(private val bluePrintRepoServ
     : BluePrintPropertyDefinitionEnhancer {
 
 
+    lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
     lateinit var bluePrintContext: BluePrintContext
-    lateinit var error: BluePrintError
 
-    override fun enhance(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, propertyDefinition: PropertyDefinition) {
-        this.bluePrintContext = bluePrintContext
-        this.error = error
+
+    override fun enhance(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, propertyDefinition: PropertyDefinition) {
+        this.bluePrintRuntimeService = bluePrintRuntimeService
+        this.bluePrintContext = bluePrintRuntimeService.bluePrintContext()
 
         val propertyType = propertyDefinition.type
         if (BluePrintTypes.validPrimitiveTypes().contains(propertyType)) {

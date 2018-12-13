@@ -19,9 +19,9 @@ package org.onap.ccsdk.apps.controllerblueprints.service.enhancer
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.data.PolicyType
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintPolicyTypeEnhancer
-import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
-import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintRepoService
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
@@ -32,13 +32,12 @@ class BluePrintPolicyTypeEnhancerImpl(private val bluePrintRepoService: BluePrin
                                       private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService)
     : BluePrintPolicyTypeEnhancer {
 
-    lateinit var bluePrintContext: BluePrintContext
-    lateinit var error: BluePrintError
+    lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
 
-    override fun enhance(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, type: PolicyType) {
 
-        this.bluePrintContext = bluePrintContext
-        this.error = error
+    override fun enhance(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, type: PolicyType) {
+
+       this.bluePrintRuntimeService = bluePrintRuntimeService
 
         // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
