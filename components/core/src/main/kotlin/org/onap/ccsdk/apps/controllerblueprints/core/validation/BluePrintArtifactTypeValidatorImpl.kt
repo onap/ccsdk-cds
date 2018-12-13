@@ -16,17 +16,17 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core.validation
 
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ArtifactType
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintArtifactTypeValidator
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
-import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 
 open class BluePrintArtifactTypeValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintArtifactTypeValidator {
 
-    override fun validate(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, artifactType: ArtifactType) {
+    override fun validate(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, artifactType: ArtifactType) {
+
         artifactType.properties?.let {
-            bluePrintTypeValidatorService.validatePropertyDefinitions(bluePrintContext, error, artifactType.properties!!)
+            bluePrintTypeValidatorService.validatePropertyDefinitions(bluePrintRuntimeService, artifactType.properties!!)
         }
         // TODO ("Files Present ")
     }

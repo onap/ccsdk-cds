@@ -1,14 +1,13 @@
 package org.onap.ccsdk.apps.controllerblueprints.core.interfaces
 
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*
-import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 
 
 interface BluePrintValidator<T> {
 
-    fun validate(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, type: T)
+    fun validate(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, type: T)
 
 }
 
@@ -37,7 +36,10 @@ interface BluePrintAttributeDefinitionValidator : BluePrintValidator<AttributeDe
 interface BluePrintValidatorService {
 
     @Throws(BluePrintException::class)
-    fun validateBluePrints(bluePrintContext: BluePrintContext, properties: MutableMap<String, Any>) : Boolean
+    fun validateBluePrints(basePath: String): Boolean
+
+    @Throws(BluePrintException::class)
+    fun validateBluePrints(bluePrintRuntimeService: BluePrintRuntimeService<*>): Boolean
 }
 
 
@@ -61,66 +63,67 @@ interface BluePrintTypeValidatorService {
 
     fun getAttributeDefinitionValidators(): List<BluePrintAttributeDefinitionValidator>
 
-    fun validateServiceTemplate(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, serviceTemplate: ServiceTemplate) {
+    fun validateServiceTemplate(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, serviceTemplate: ServiceTemplate) {
         val validators = getServiceTemplateValidators()
-        doValidation(bluePrintContext, error, name, serviceTemplate, validators)
+        doValidation(bluePrintRuntimeService, name, serviceTemplate, validators)
     }
 
-    fun validateArtifactType(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, artifactType: ArtifactType) {
+    fun validateArtifactType(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, artifactType: ArtifactType) {
         val validators = getArtifactTypeValidators()
-        doValidation(bluePrintContext, error, name, artifactType, validators)
+        doValidation(bluePrintRuntimeService, name, artifactType, validators)
     }
 
-    fun validateDataType(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, dataType: DataType) {
+    fun validateDataType(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, dataType: DataType) {
         val validators = getDataTypeValidators()
-        doValidation(bluePrintContext, error, name, dataType, validators)
+        doValidation(bluePrintRuntimeService, name, dataType, validators)
     }
 
-    fun validateNodeType(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, nodeType: NodeType) {
+    fun validateNodeType(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, nodeType: NodeType) {
         val validators = getNodeTypeValidators()
-        doValidation(bluePrintContext, error, name, nodeType, validators)
+        doValidation(bluePrintRuntimeService, name, nodeType, validators)
     }
 
-    fun validateTopologyTemplate(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, topologyTemplate: TopologyTemplate) {
+    fun validateTopologyTemplate(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, topologyTemplate: TopologyTemplate) {
         val validators = getTopologyTemplateValidators()
-        doValidation(bluePrintContext, error, name, topologyTemplate, validators)
+        doValidation(bluePrintRuntimeService, name, topologyTemplate, validators)
     }
 
-    fun validateNodeTemplate(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, nodeTemplate: NodeTemplate) {
+    fun validateNodeTemplate(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, nodeTemplate: NodeTemplate) {
         val validators = getNodeTemplateValidators()
-        doValidation(bluePrintContext, error, name, nodeTemplate, validators)
+        doValidation(bluePrintRuntimeService, name, nodeTemplate, validators)
     }
 
-    fun validateWorkflow(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, workflow: Workflow) {
+    fun validateWorkflow(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, workflow: Workflow) {
         val validators = getWorkflowValidators()
-        doValidation(bluePrintContext, error, name, workflow, validators)
+        doValidation(bluePrintRuntimeService, name, workflow, validators)
     }
 
-    fun validatePropertyDefinitions(bluePrintContext: BluePrintContext, error: BluePrintError, properties: MutableMap<String, PropertyDefinition>) {
+    fun validatePropertyDefinitions(bluePrintRuntimeService: BluePrintRuntimeService<*>, properties: MutableMap<String, PropertyDefinition>) {
         properties.forEach { propertyName, propertyDefinition ->
-            validatePropertyDefinition(bluePrintContext, error, propertyName, propertyDefinition)
+            validatePropertyDefinition(bluePrintRuntimeService, propertyName, propertyDefinition)
         }
     }
 
-    fun validatePropertyDefinition(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, propertyDefinition: PropertyDefinition) {
+    fun validatePropertyDefinition(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, propertyDefinition: PropertyDefinition) {
         val validators = getPropertyDefinitionValidators()
-        doValidation(bluePrintContext, error, name, propertyDefinition, validators)
+        doValidation(bluePrintRuntimeService, name, propertyDefinition, validators)
     }
 
-    fun validateAttributeDefinitions(bluePrintContext: BluePrintContext, error: BluePrintError, attributes: MutableMap<String, AttributeDefinition>) {
+    fun validateAttributeDefinitions(bluePrintRuntimeService: BluePrintRuntimeService<*>, attributes: MutableMap<String, AttributeDefinition>) {
         attributes.forEach { attributeName, attributeDefinition ->
-            validateAttributeDefinition(bluePrintContext, error, attributeName, attributeDefinition)
+            validateAttributeDefinition(bluePrintRuntimeService, attributeName, attributeDefinition)
         }
     }
 
-    fun validateAttributeDefinition(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, attributeDefinition: AttributeDefinition) {
+    fun validateAttributeDefinition(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, attributeDefinition: AttributeDefinition) {
         val validators = getAttributeDefinitionValidators()
-        doValidation(bluePrintContext, error, name, attributeDefinition, validators)
+        doValidation(bluePrintRuntimeService, name, attributeDefinition, validators)
     }
 
-    private fun <T> doValidation(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, definition: Any, validators: List<BluePrintValidator<T>>) {
+    @Suppress("UNCHECKED_CAST")
+    private fun <T> doValidation(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, definition: Any, validators: List<BluePrintValidator<T>>) {
         validators.forEach {
-            it.validate(bluePrintContext, error, name, definition as T)
+            it.validate(bluePrintRuntimeService, name, definition as T)
         }
     }
 }

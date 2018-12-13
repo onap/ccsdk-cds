@@ -19,21 +19,29 @@ package org.onap.ccsdk.apps.controllerblueprints.core.validation
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintValidatorService
-import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
+import java.util.*
 
 
 open class BluePrintValidatorServiceImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintValidatorService {
 
     private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintValidatorServiceImpl::class.toString())
 
-    override fun validateBluePrints(bluePrintContext: BluePrintContext, properties: MutableMap<String, Any>): Boolean {
-        val error = BluePrintError()
-        bluePrintTypeValidatorService.validateServiceTemplate(bluePrintContext, error, "default", bluePrintContext.serviceTemplate)
-        if (error.errors.size > 0) {
-            throw BluePrintException("failed in blueprint validation : ${error.errors.joinToString("\n")}")
+    override fun validateBluePrints(basePath: String): Boolean {
+
+        val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(UUID.randomUUID().toString(), basePath)
+        return validateBluePrints(bluePrintRuntimeService)
+    }
+
+    override fun validateBluePrints(bluePrintRuntimeService: BluePrintRuntimeService<*>): Boolean {
+
+        bluePrintTypeValidatorService.validateServiceTemplate(bluePrintRuntimeService, "service_template",
+                bluePrintRuntimeService.bluePrintContext().serviceTemplate)
+        if (bluePrintRuntimeService.getBluePrintError().errors.size > 0) {
+            throw BluePrintException("failed in blueprint validation : ${bluePrintRuntimeService.getBluePrintError().errors.joinToString("\n")}")
         }
         return true
     }

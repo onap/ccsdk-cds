@@ -43,7 +43,7 @@ class ResourceAssignmentValidationServiceTest {
     fun testValidateSuccess() {
         log.info("**************** testValidateSuccess *****************")
         val assignments = JacksonUtils.getListFromClassPathFile("validation/success.json", ResourceAssignment::class.java)
-        val resourceAssignmentValidator = ResourceAssignmentValidationDefaultService()
+        val resourceAssignmentValidator = ResourceAssignmentValidationServiceImpl()
         val result = resourceAssignmentValidator.validate(assignments!!)
         Assert.assertTrue("Failed to Validate", result)
     }
@@ -52,7 +52,7 @@ class ResourceAssignmentValidationServiceTest {
     fun testValidateDuplicate() {
         log.info(" **************** testValidateDuplicate *****************")
         val assignments = JacksonUtils.getListFromClassPathFile("validation/duplicate.json", ResourceAssignment::class.java)
-        val resourceAssignmentValidator = ResourceAssignmentValidationDefaultService()
+        val resourceAssignmentValidator = ResourceAssignmentValidationServiceImpl()
         resourceAssignmentValidator.validate(assignments!!)
     }
 
@@ -60,7 +60,7 @@ class ResourceAssignmentValidationServiceTest {
     fun testValidateCyclic() {
         log.info(" ****************  testValidateCyclic *****************")
         val assignments = JacksonUtils.getListFromClassPathFile("validation/cyclic.json", ResourceAssignment::class.java)
-        val resourceAssignmentValidator = ResourceAssignmentValidationDefaultService()
+        val resourceAssignmentValidator = ResourceAssignmentValidationServiceImpl()
         resourceAssignmentValidator.validate(assignments!!)
     }
 }

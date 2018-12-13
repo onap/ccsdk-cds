@@ -49,7 +49,7 @@ public class ResourceDefinitionValidationServiceTest {
         Assert.assertNotNull("Failed to populate dictionaryDefinition for  type", resourceDefinition);
 
         ResourceDefinitionValidationService resourceDictionaryValidationService =
-                new ResourceDefinitionDefaultValidationService(bluePrintRepoFileService);
+                new ResourceDefinitionValidationServiceImpl(bluePrintRepoFileService);
         resourceDictionaryValidationService.validate(resourceDefinition);
         Assert.assertNotNull(String.format("Failed to populate dictionaryDefinition for : %s", fileName), resourceDefinition);
     }

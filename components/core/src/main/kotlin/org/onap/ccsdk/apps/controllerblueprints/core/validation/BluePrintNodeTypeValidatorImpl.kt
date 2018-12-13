@@ -20,26 +20,26 @@ import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintTypes
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.checkNotEmptyNThrow
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintNodeTypeValidator
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 
 
 open class BluePrintNodeTypeValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintNodeTypeValidator {
 
     private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintServiceTemplateValidatorImpl::class.toString())
 
-    var bluePrintContext: BluePrintContext? = null
-    var error: BluePrintError? = null
+    lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
+    lateinit var bluePrintContext: BluePrintContext
     var paths: MutableList<String> = arrayListOf()
 
-    override fun validate(bluePrintContext: BluePrintContext, error: BluePrintError, nodeTypeName: String, nodeType: NodeType) {
+    override fun validate(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTypeName: String, nodeType: NodeType) {
         log.trace("Validating NodeType($nodeTypeName)")
-        this.bluePrintContext = bluePrintContext
-        this.error = error
+        this.bluePrintRuntimeService = bluePrintRuntimeService
+        this.bluePrintContext = bluePrintRuntimeService.bluePrintContext()
 
         paths.add(nodeTypeName)
 
@@ -52,7 +52,7 @@ open class BluePrintNodeTypeValidatorImpl(private val bluePrintTypeValidatorServ
                     ?: throw BluePrintException("Failed to get derivedFrom NodeType($derivedFrom)'s for NodeType($nodeTypeName)")
         }
 
-        nodeType.properties?.let { bluePrintTypeValidatorService.validatePropertyDefinitions(bluePrintContext, error, nodeType.properties!!) }
+        nodeType.properties?.let { bluePrintTypeValidatorService.validatePropertyDefinitions(bluePrintRuntimeService, nodeType.properties!!) }
         nodeType.capabilities?.let { validateCapabilityDefinitions(nodeTypeName, nodeType) }
         nodeType.requirements?.let { validateRequirementDefinitions(nodeTypeName, nodeType) }
         nodeType.interfaces?.let { validateInterfaceDefinitions(nodeType.interfaces!!) }
@@ -111,7 +111,7 @@ open class BluePrintNodeTypeValidatorImpl(private val bluePrintTypeValidatorServ
             throw BluePrintException("failed to get relationship($relationship) for NodeType($nodeTypeName)'s requirement($requirementDefinitionName)")
         }
 
-        val relationShipNodeType = bluePrintContext!!.serviceTemplate.nodeTypes?.get(requirementNodeTypeName)
+        val relationShipNodeType = bluePrintContext.serviceTemplate.nodeTypes?.get(requirementNodeTypeName)
                 ?: throw BluePrintException("failed to get requirement NodeType($requirementNodeTypeName)'s for requirement($requirementDefinitionName) ")
 
         relationShipNodeType.capabilities?.get(capabilityName)
@@ -137,11 +137,11 @@ open class BluePrintNodeTypeValidatorImpl(private val bluePrintTypeValidatorServ
             operationDefinition.implementation?.let { validateImplementation(operationDefinition.implementation!!) }
 
             operationDefinition.inputs?.let {
-                bluePrintTypeValidatorService.validatePropertyDefinitions(bluePrintContext!!, error!!, operationDefinition.inputs!!)
+                bluePrintTypeValidatorService.validatePropertyDefinitions(bluePrintRuntimeService, operationDefinition.inputs!!)
             }
 
             operationDefinition.outputs?.let {
-                bluePrintTypeValidatorService.validatePropertyDefinitions(bluePrintContext!!, error!!, operationDefinition.outputs!!)
+                bluePrintTypeValidatorService.validatePropertyDefinitions(bluePrintRuntimeService, operationDefinition.outputs!!)
             }
             paths.removeAt(paths.lastIndex)
         }

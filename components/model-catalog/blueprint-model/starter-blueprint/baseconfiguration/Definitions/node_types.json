@@ -75,16 +75,6 @@
                   "entry_schema": {
                     "type": "string"
                   }
-                },
-                "template-content": {
-                  "description": "Id used to pull the data content from the data base. Either template-data or resource-id should be present",
-                  "required": true,
-                  "type": "string"
-                },
-                "mapping-content": {
-                  "description": "Id used to pull the data content from the data base. Either template-data or resource-id should be present",
-                  "required": true,
-                  "type": "string"
                 }
               },
               "outputs": {

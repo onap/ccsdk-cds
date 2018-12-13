@@ -19,26 +19,23 @@ package org.onap.ccsdk.apps.controllerblueprints.core.validation
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.data.TopologyTemplate
 import org.onap.ccsdk.apps.controllerblueprints.core.data.Workflow
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTopologyTemplateValidator
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
-import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 
 open class BluePrintTopologyTemplateValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintTopologyTemplateValidator {
 
     private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintServiceTemplateValidatorImpl::class.toString())
 
-    var bluePrintContext: BluePrintContext? = null
-    var error: BluePrintError? = null
+    lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
 
-    override fun validate(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, topologyTemplate: TopologyTemplate) {
+    override fun validate(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, topologyTemplate: TopologyTemplate) {
         log.trace("Validating Topology Template..")
-        this.bluePrintContext = bluePrintContext
-        this.error = error
+        this.bluePrintRuntimeService = bluePrintRuntimeService
 
         // Validate Inputs
         topologyTemplate.inputs?.let { validateInputs(topologyTemplate.inputs!!) }
@@ -50,7 +47,7 @@ open class BluePrintTopologyTemplateValidatorImpl(private val bluePrintTypeValid
 
     @Throws(BluePrintException::class)
     fun validateInputs(inputs: MutableMap<String, PropertyDefinition>) {
-        bluePrintTypeValidatorService.validatePropertyDefinitions(bluePrintContext!!, error!!, inputs)
+        bluePrintTypeValidatorService.validatePropertyDefinitions(bluePrintRuntimeService, inputs)
     }
 
 
@@ -59,7 +56,7 @@ open class BluePrintTopologyTemplateValidatorImpl(private val bluePrintTypeValid
 
         nodeTemplates.forEach { nodeTemplateName, nodeTemplate ->
             // Validate Single Node Template
-            bluePrintTypeValidatorService.validateNodeTemplate(bluePrintContext!!, error!!, nodeTemplateName, nodeTemplate)
+            bluePrintTypeValidatorService.validateNodeTemplate(bluePrintRuntimeService, nodeTemplateName, nodeTemplate)
         }
     }
 
@@ -68,7 +65,7 @@ open class BluePrintTopologyTemplateValidatorImpl(private val bluePrintTypeValid
 
         workflows.forEach { workflowName, workflow ->
             // Validate Single workflow
-            bluePrintTypeValidatorService.validateWorkflow(bluePrintContext!!, error!!, workflowName, workflow)
+            bluePrintTypeValidatorService.validateWorkflow(bluePrintRuntimeService, workflowName, workflow)
         }
     }
 

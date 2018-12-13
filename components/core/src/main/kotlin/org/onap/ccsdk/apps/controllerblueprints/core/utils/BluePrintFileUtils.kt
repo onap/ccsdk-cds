@@ -90,22 +90,22 @@ class BluePrintFileUtils {
             }
 
             blueprintContext.serviceTemplate.dataTypes?.let {
-                val dataTypesContent = JacksonUtils.getWrappedJson(BluePrintConstants.PATH_DATA_TYPES, it, true)
+                val dataTypesContent = JacksonUtils.getWrappedJson(BluePrintConstants.PATH_DATA_TYPES, it.toSortedMap(), true)
                 writeTypeFile(definitionDir.absolutePath, BluePrintConstants.PATH_DATA_TYPES, dataTypesContent)
             }
 
             blueprintContext.serviceTemplate.artifactTypes?.let {
-                val artifactTypesContent = JacksonUtils.getWrappedJson(BluePrintConstants.PATH_ARTIFACT_TYPES, it, true)
+                val artifactTypesContent = JacksonUtils.getWrappedJson(BluePrintConstants.PATH_ARTIFACT_TYPES, it.toSortedMap(), true)
                 writeTypeFile(definitionDir.absolutePath, BluePrintConstants.PATH_ARTIFACT_TYPES, artifactTypesContent)
             }
 
             blueprintContext.serviceTemplate.nodeTypes?.let {
-                val nodeTypesContent = JacksonUtils.getWrappedJson(BluePrintConstants.PATH_NODE_TYPES, it, true)
+                val nodeTypesContent = JacksonUtils.getWrappedJson(BluePrintConstants.PATH_NODE_TYPES, it.toSortedMap(), true)
                 writeTypeFile(definitionDir.absolutePath, BluePrintConstants.PATH_NODE_TYPES, nodeTypesContent)
             }
 
             blueprintContext.serviceTemplate.policyTypes?.let {
-                val nodeTypesContent = JacksonUtils.getWrappedJson(BluePrintConstants.PATH_POLICY_TYPES, it, true)
+                val nodeTypesContent = JacksonUtils.getWrappedJson(BluePrintConstants.PATH_POLICY_TYPES, it.toSortedMap(), true)
                 writeTypeFile(definitionDir.absolutePath, BluePrintConstants.PATH_POLICY_TYPES, nodeTypesContent)
             }
         }

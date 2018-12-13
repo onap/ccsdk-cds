@@ -50,7 +50,7 @@ interface ResourceDefinitionValidationService : Serializable {
  *
  * @author Brinda Santh
  */
-open class ResourceDefinitionDefaultValidationService(private val bluePrintRepoService: BluePrintRepoService) : ResourceDefinitionValidationService {
+open class ResourceDefinitionValidationServiceImpl(private val bluePrintRepoService: BluePrintRepoService) : ResourceDefinitionValidationService {
 
     private val log: EELFLogger = EELFManager.getInstance().getLogger(ResourceDefinitionValidationService::class.java)
 
@@ -58,7 +58,7 @@ open class ResourceDefinitionDefaultValidationService(private val bluePrintRepoS
         Preconditions.checkNotNull(resourceDefinition, "Failed to get Resource Definition")
         log.trace("Validating Resource Dictionary Definition {}", resourceDefinition.name)
 
-        resourceDefinition.sources.forEach { (name, nodeTemplate) ->
+        resourceDefinition.sources.forEach { name, nodeTemplate ->
             val sourceType = nodeTemplate.type
 
             val sourceNodeType = bluePrintRepoService.getNodeType(sourceType)

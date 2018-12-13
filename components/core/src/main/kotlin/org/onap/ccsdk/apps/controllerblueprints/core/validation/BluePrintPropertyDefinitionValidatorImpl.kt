@@ -20,23 +20,22 @@ import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintTypes
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.format
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintPropertyDefinitionValidator
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
-import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 
 open class BluePrintPropertyDefinitionValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintPropertyDefinitionValidator {
 
     private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintServiceTemplateValidatorImpl::class.toString())
 
-    var bluePrintContext: BluePrintContext? = null
-    var error: BluePrintError? = null
+    lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
 
-    override fun validate(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, propertyDefinition: PropertyDefinition) {
-        this.bluePrintContext = bluePrintContext
-        this.error = error
+
+    override fun validate(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, propertyDefinition: PropertyDefinition) {
+        this.bluePrintRuntimeService = bluePrintRuntimeService
+
 
         log.trace("Validating PropertyDefinition($name)")
 
@@ -66,14 +65,14 @@ open class BluePrintPropertyDefinitionValidatorImpl(private val bluePrintTypeVal
 
     private fun checkPropertyDataType(dataTypeName: String, propertyName: String) {
 
-        val dataType = bluePrintContext!!.serviceTemplate.dataTypes?.get(dataTypeName)
+        val dataType = bluePrintRuntimeService.bluePrintContext().serviceTemplate.dataTypes?.get(dataTypeName)
                 ?: throw BluePrintException(format("DataType ({}) for the property ({}) not found", dataTypeName, propertyName))
 
         checkValidDataTypeDerivedFrom(propertyName, dataType.derivedFrom)
     }
 
     private fun checkDataType(key: String): Boolean {
-        return bluePrintContext!!.serviceTemplate.dataTypes?.containsKey(key) ?: false
+        return bluePrintRuntimeService.bluePrintContext().serviceTemplate.dataTypes?.containsKey(key) ?: false
     }
 
     open fun checkValidDataTypeDerivedFrom(dataTypeName: String, derivedFrom: String) {

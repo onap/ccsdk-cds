@@ -28,13 +28,13 @@ class BluePrintValidatorServiceImplTest {
 
     @Test
     fun testValidateOfType() {
-        val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(blueprintBasePath)
+        val bluePrintRuntime = BluePrintMetadataUtils.getBluePrintRuntime("1234", blueprintBasePath)
 
         val mockBluePrintTypeValidatorService = MockBluePrintTypeValidatorService()
 
         val defaultBluePrintValidatorService = BluePrintValidatorServiceImpl(mockBluePrintTypeValidatorService)
 
-        val valid = defaultBluePrintValidatorService.validateBluePrints(bluePrintContext, hashMapOf())
+        val valid = defaultBluePrintValidatorService.validateBluePrints(bluePrintRuntime)
 
         assertTrue(valid, "failed in blueprint Validation")
 

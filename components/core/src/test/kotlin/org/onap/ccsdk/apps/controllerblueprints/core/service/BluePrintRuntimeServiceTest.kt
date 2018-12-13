@@ -72,8 +72,7 @@ class BluePrintRuntimeServiceTest {
         assertNotNull(inContext, "Failed to populate interface input property values")
         assertEquals(inContext["action-name"], jsonNodeFromObject("sample-action"), "Failed to populate parameter action-name")
         assertEquals(inContext["request-id"], jsonNodeFromObject("12345"), "Failed to populate parameter action-name")
-        assertEquals(inContext["template-content"], jsonNodeFromObject("This is Sample Velocity Template"), "Failed to populate parameter action-name")
-    }
+      }
 
     @Test
     fun testResolveNodeTemplateInterfaceOperationOutputs() {

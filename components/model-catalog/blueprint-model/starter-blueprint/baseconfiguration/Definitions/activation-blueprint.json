@@ -104,9 +104,6 @@
       },
       "resource-assignment": {
         "type": "component-resource-assignment",
-        "properties": {
-          "request-id": "1234"
-        },
         "interfaces": {
           "ResourceAssignmentComponent": {
             "operations": {
@@ -124,19 +121,7 @@
                   },
                   "artifact-prefix-names": [
                     "baseconfig"
-                  ],
-                  "template-content": {
-                    "get_artifact": [
-                      "SELF",
-                      "baseconfig-template"
-                    ]
-                  },
-                  "mapping-content": {
-                    "get_artifact": [
-                      "SELF",
-                      "baseconfig-mapping"
-                    ]
-                  }
+                  ]
                 },
                 "outputs": {
                   "resource-assignment-params": {
@@ -164,9 +149,6 @@
       },
       "resource-assignment-py": {
         "type": "component-resource-assignment",
-        "properties": {
-          "request-id": "1234"
-        },
         "interfaces": {
           "ResourceAssignmentComponent": {
             "operations": {

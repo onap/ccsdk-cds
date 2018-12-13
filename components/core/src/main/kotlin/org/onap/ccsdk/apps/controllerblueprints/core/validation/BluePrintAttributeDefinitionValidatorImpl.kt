@@ -16,15 +16,14 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core.validation
 
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.data.AttributeDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintAttributeDefinitionValidator
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
-import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 
-class BluePrintAttributeDefinitionValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintAttributeDefinitionValidator {
+open class BluePrintAttributeDefinitionValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintAttributeDefinitionValidator {
 
-    override fun validate(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, type: AttributeDefinition) {
+    override fun validate(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, type: AttributeDefinition) {
         //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

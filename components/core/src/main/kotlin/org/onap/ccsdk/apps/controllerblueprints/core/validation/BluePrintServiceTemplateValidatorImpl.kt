@@ -25,21 +25,22 @@ import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintServiceTemplateValidator
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
-import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 
 open class BluePrintServiceTemplateValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintServiceTemplateValidator {
 
     private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintServiceTemplateValidatorImpl::class.toString())
 
-    var bluePrintContext: BluePrintContext? = null
-    var error: BluePrintError? = null
+    lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
+    lateinit var error: BluePrintError
+
     var paths: MutableList<String> = arrayListOf()
 
-    override fun validate(bluePrintContext: BluePrintContext, error: BluePrintError, name: String, serviceTemplate: ServiceTemplate) {
+    override fun validate(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, serviceTemplate: ServiceTemplate) {
         log.trace("Validating Service Template..")
         try {
-            this.bluePrintContext = bluePrintContext
-            this.error = error
+            this.bluePrintRuntimeService = bluePrintRuntimeService
+            this.error = bluePrintRuntimeService.getBluePrintError()
 
             serviceTemplate.metadata?.let { validateMetadata(serviceTemplate.metadata!!) }
             serviceTemplate.dataTypes?.let { validateDataTypes(serviceTemplate.dataTypes!!) }
@@ -47,6 +48,7 @@ open class BluePrintServiceTemplateValidatorImpl(private val bluePrintTypeValida
             serviceTemplate.nodeTypes?.let { validateNodeTypes(serviceTemplate.nodeTypes!!) }
             serviceTemplate.topologyTemplate?.let { validateTopologyTemplate(serviceTemplate.topologyTemplate!!) }
         } catch (e: Exception) {
+            log.error("failed in blueprint service template validation", e)
             error.addError(BluePrintConstants.PATH_SERVICE_TEMPLATE, paths.joinToString(BluePrintConstants.PATH_DIVIDER), e.message!!)
         }
     }
@@ -74,7 +76,7 @@ open class BluePrintServiceTemplateValidatorImpl(private val bluePrintTypeValida
         paths.add(BluePrintConstants.PATH_DATA_TYPES)
         dataTypes.forEach { dataTypeName, dataType ->
             // Validate Single Data Type
-            bluePrintTypeValidatorService.validateDataType(bluePrintContext!!, error!!, dataTypeName, dataType)
+            bluePrintTypeValidatorService.validateDataType(bluePrintRuntimeService, dataTypeName, dataType)
         }
         paths.removeAt(paths.lastIndex)
     }
@@ -83,7 +85,7 @@ open class BluePrintServiceTemplateValidatorImpl(private val bluePrintTypeValida
         paths.add(BluePrintConstants.PATH_ARTIFACT_TYPES)
         artifactTypes.forEach { artifactName, artifactType ->
             // Validate Single Artifact Type
-            bluePrintTypeValidatorService.validateArtifactType(bluePrintContext!!, error!!, artifactName, artifactType)
+            bluePrintTypeValidatorService.validateArtifactType(bluePrintRuntimeService, artifactName, artifactType)
         }
         paths.removeAt(paths.lastIndex)
     }
@@ -92,14 +94,14 @@ open class BluePrintServiceTemplateValidatorImpl(private val bluePrintTypeValida
         paths.add(BluePrintConstants.PATH_NODE_TYPES)
         nodeTypes.forEach { nodeTypeName, nodeType ->
             // Validate Single Node Type
-            bluePrintTypeValidatorService.validateNodeType(bluePrintContext!!, error!!, nodeTypeName, nodeType)
+            bluePrintTypeValidatorService.validateNodeType(bluePrintRuntimeService, nodeTypeName, nodeType)
         }
         paths.removeAt(paths.lastIndex)
     }
 
     fun validateTopologyTemplate(topologyTemplate: TopologyTemplate) {
         paths.add(BluePrintConstants.PATH_TOPOLOGY_TEMPLATE)
-        bluePrintTypeValidatorService.validateTopologyTemplate(bluePrintContext!!, error!!, "topologyTemplate", topologyTemplate)
+        bluePrintTypeValidatorService.validateTopologyTemplate(bluePrintRuntimeService, "topologyTemplate", topologyTemplate)
         paths.removeAt(paths.lastIndex)
     }
 }
