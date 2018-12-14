@@ -64,20 +64,24 @@ object BluePrintMetadataUtils {
     }
 
     @JvmStatic
-    fun getBluePrintContext(blueprintBasePath: String): BluePrintContext {
-
-        val toscaMetaData: ToscaMetaData = toscaMetaData(blueprintBasePath)
-
-        log.info("Processing blueprint base path ($blueprintBasePath) and entry definition file (${toscaMetaData.entityDefinitions})")
-
-        return readBlueprintFile(toscaMetaData.entityDefinitions, blueprintBasePath)
-    }
-
-    @JvmStatic
     fun getBluePrintRuntime(id: String, blueprintBasePath: String): BluePrintRuntimeService<MutableMap<String, JsonNode>> {
 
         val bluePrintContext: BluePrintContext = getBluePrintContext(blueprintBasePath)
 
+        val context: MutableMap<String, JsonNode> = hashMapOf()
+        context[BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH] = blueprintBasePath.asJsonPrimitive()
+        context[BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID] = id.asJsonPrimitive()
+
+        val bluePrintRuntimeService = DefaultBluePrintRuntimeService(id, bluePrintContext)
+        bluePrintRuntimeService.setExecutionContext(context)
+
+        return bluePrintRuntimeService
+    }
+
+    @JvmStatic
+    fun getBaseEnhancementBluePrintRuntime(id: String, blueprintBasePath: String): BluePrintRuntimeService<MutableMap<String, JsonNode>> {
+
+        val bluePrintContext: BluePrintContext = getBaseEnhancementBluePrintContext(blueprintBasePath)
         val context: MutableMap<String, JsonNode> = hashMapOf()
         context[BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH] = blueprintBasePath.asJsonPrimitive()
         context[BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID] = id.asJsonPrimitive()
@@ -94,6 +98,31 @@ object BluePrintMetadataUtils {
         val bluePrintRuntimeService = DefaultBluePrintRuntimeService(id, bluePrintContext)
         bluePrintRuntimeService.setExecutionContext(executionContext)
         return bluePrintRuntimeService
+    }
+
+    @JvmStatic
+    fun getBluePrintContext(blueprintBasePath: String): BluePrintContext {
+
+        val toscaMetaData: ToscaMetaData = toscaMetaData(blueprintBasePath)
+
+        log.info("Processing blueprint base path ($blueprintBasePath) and entry definition file (${toscaMetaData.entityDefinitions})")
+
+        return readBlueprintFile(toscaMetaData.entityDefinitions, blueprintBasePath)
+    }
+
+    fun getBaseEnhancementBluePrintContext(blueprintBasePath: String): BluePrintContext {
+        val toscaMetaData: ToscaMetaData = toscaMetaData(blueprintBasePath)
+        // Clean Type files
+        BluePrintFileUtils.deleteBluePrintTypes(blueprintBasePath)
+        val rootFilePath: String = blueprintBasePath.plus(File.separator).plus(toscaMetaData.entityDefinitions)
+        val rootServiceTemplate = ServiceTemplateUtils.getServiceTemplate(rootFilePath)
+
+        // Clean the Import Definitions
+        rootServiceTemplate.imports?.clear()
+
+        val blueprintContext = BluePrintContext(rootServiceTemplate)
+        blueprintContext.rootPath = blueprintBasePath
+        return blueprintContext
     }
 
     @JvmStatic

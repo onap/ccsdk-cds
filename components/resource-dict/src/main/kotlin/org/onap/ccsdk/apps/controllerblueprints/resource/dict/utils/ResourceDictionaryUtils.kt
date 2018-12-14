@@ -17,16 +17,20 @@
 package org.onap.ccsdk.apps.controllerblueprints.resource.dict.utils
 
 import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.NullNode
 import org.apache.commons.collections.MapUtils
 import org.apache.commons.lang3.StringUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeTemplate
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintFileUtils
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDictionaryConstants
-import com.att.eelf.configuration.EELFManager
+import java.io.File
 
 
 object ResourceDictionaryUtils {
@@ -49,7 +53,7 @@ object ResourceDictionaryUtils {
                     resourceAssignment.dictionarySource = ResourceDictionaryConstants.SOURCE_INPUT
                 }
                 log.info("auto map resourceAssignment : {}", resourceAssignment)
-            }else {
+            } else {
                 resourceAssignment.dictionarySource = ResourceDictionaryConstants.SOURCE_INPUT
             }
         }
@@ -74,5 +78,17 @@ object ResourceDictionaryUtils {
             log.trace("setting path ({}), values ({})", path, valueNode)
             context[path] = valueNode
         }
+    }
+
+    fun getResourceAssignmentFromFile(filePath: String): List<ResourceAssignment> {
+        return JacksonUtils.getListFromFile(filePath, ResourceAssignment::class.java)
+                ?: throw BluePrintProcessorException("couldn't get ResourceAssignment definitions for the file($filePath)")
+    }
+
+    fun writeResourceDefinitionTypes(basePath: String, resourceDefinitionMap: Map<String, ResourceDefinition>) {
+        val typePath = basePath.plus(File.separator).plus(BluePrintConstants.TOSCA_DEFINITIONS_DIR)
+                .plus(File.separator).plus("${ResourceDictionaryConstants.PATH_RESOURCE_DEFINITION_TYPE}.json")
+        val resourceDefinitionContent = JacksonUtils.getJson(resourceDefinitionMap.toSortedMap(), true)
+        BluePrintFileUtils.writeDefinitionFile(typePath, resourceDefinitionContent)
     }
 }

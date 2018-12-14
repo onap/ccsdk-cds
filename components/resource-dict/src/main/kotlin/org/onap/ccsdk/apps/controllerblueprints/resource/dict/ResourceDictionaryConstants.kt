@@ -31,4 +31,6 @@ object ResourceDictionaryConstants {
     const val PROPERTY_INPUT_KEY_MAPPING = "input-key-mapping"
     const val PROPERTY_OUTPUT_KEY_MAPPING = "output-key-mapping"
     const val PROPERTY_KEY_DEPENDENCIES = "key-dependencies"
+
+    const val PATH_RESOURCE_DEFINITION_TYPE = "resource_definition_types"
 }
