@@ -17,7 +17,7 @@
 
 <configuration>
 
-    <property name="localPattern" value="%d{HH:mm:ss.SSS} %-5level %logger{100} - %msg%n" />
+    <property name="localPattern" value="[%-8thread] %d{HH:mm:ss.SSS} %-5level %logger{100} - %msg%n" />
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- encoders are assigned the type

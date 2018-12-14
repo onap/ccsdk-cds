@@ -67,7 +67,7 @@ public class BluePrintEnhancerServiceImplTest {
         Assert.assertNotNull("failed to get blueprintContext ", bluePrintContext);
 
         // Validate the Generated BluePrints
-
-        bluePrintValidatorService.validateBluePrints(targetPath);
+        Boolean valid = bluePrintValidatorService.validateBluePrints(targetPath);
+        Assert.assertTrue("blueprint validation failed ", valid);
     }
 }
