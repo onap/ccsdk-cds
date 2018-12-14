@@ -19,11 +19,12 @@ package org.onap.ccsdk.apps.controllerblueprints.core.utils
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
 import org.junit.Test
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate
-import java.io.FileNotFoundException
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
+@Deprecated("Reactor will be replacecd by coroutines by default.")
 class JacksonReactorUtilsTest {
     private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
     @Test
@@ -43,7 +44,7 @@ class JacksonReactorUtilsTest {
         assertNotNull(jsonContent, "Failed to get json Node")
     }
 
-    @Test(expected = FileNotFoundException::class)
+    @Test(expected = BluePrintException::class)
     fun testReadValuesFailure() {
         JacksonReactorUtils.jsonNodeFromFile("load/blueprints/not-found.json")
                 .block()

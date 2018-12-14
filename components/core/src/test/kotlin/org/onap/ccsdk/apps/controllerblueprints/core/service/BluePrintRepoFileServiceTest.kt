@@ -18,7 +18,7 @@
 package org.onap.ccsdk.apps.controllerblueprints.core.service
 
 import org.junit.Test
-import java.io.FileNotFoundException
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import kotlin.test.assertNotNull
 
 /**
@@ -49,7 +49,7 @@ class BluePrintRepoFileServiceTest {
         assertNotNull(nodeType, "Failed to get ArtifactType from repo")
     }
 
-    @Test(expected = FileNotFoundException::class)
+    @Test(expected = BluePrintException::class)
     fun testModelNotFound() {
         val dataType = bluePrintRepoFileService.getDataType("dt-not-found")
         assertNotNull(dataType, "Failed to get DataType from repo")

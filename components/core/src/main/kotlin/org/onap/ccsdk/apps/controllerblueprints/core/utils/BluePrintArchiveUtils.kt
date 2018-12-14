@@ -16,9 +16,12 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core.utils
 
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream
 import org.apache.commons.io.IOUtils
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import java.io.*
 import java.nio.charset.Charset
@@ -28,6 +31,15 @@ class BluePrintArchiveUtils {
 
     companion object {
 
+        fun getFileContent(fileName: String): String = runBlocking {
+            async {
+                try {
+                    File(fileName).readText(Charsets.UTF_8)
+                } catch (e: Exception) {
+                    throw BluePrintException("couldn't find file($fileName)")
+                }
+            }.await()
+        }
 
         fun compress(source: String, destination: String, absolute: Boolean): Boolean {
             val rootDir = File(source)

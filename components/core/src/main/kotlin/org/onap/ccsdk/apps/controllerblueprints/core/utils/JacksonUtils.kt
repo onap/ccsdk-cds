@@ -25,10 +25,12 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.apache.commons.io.IOUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintTypes
 import java.io.File
 import java.nio.charset.Charset
@@ -55,12 +57,14 @@ object JacksonUtils {
     }
 
     @JvmStatic
-    fun getContent(fileName: String): String {
-        return runBlocking {
-            withContext(Dispatchers.Default) {
+    fun getContent(fileName: String): String = runBlocking {
+        async {
+            try {
                 File(fileName).readText(Charsets.UTF_8)
+            } catch (e: Exception) {
+                throw BluePrintException("couldn't get file ($fileName) content : ${e.message}")
             }
-        }
+        }.await()
     }
 
     @JvmStatic

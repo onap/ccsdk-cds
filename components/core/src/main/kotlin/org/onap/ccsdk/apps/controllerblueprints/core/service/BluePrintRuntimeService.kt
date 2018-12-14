@@ -46,6 +46,8 @@ interface BluePrintRuntimeService<T> {
 
     fun get(key: String): JsonNode?
 
+    fun check(key: String): Boolean
+
     fun cleanRuntime()
 
     fun getAsString(key: String): String?
@@ -114,6 +116,7 @@ interface BluePrintRuntimeService<T> {
 open class DefaultBluePrintRuntimeService(private var id: String, private var bluePrintContext: BluePrintContext)
     : BluePrintRuntimeService<MutableMap<String, JsonNode>> {
 
+    @Transient
     private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintRuntimeService::class.toString())
 
     private var store: MutableMap<String, JsonNode> = hashMapOf()
@@ -143,6 +146,10 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
 
     override fun get(key: String): JsonNode {
         return store[key] ?: throw BluePrintProcessorException("failed to get execution property($key)")
+    }
+
+    override fun check(key: String): Boolean {
+        return store.containsKey(key)
     }
 
     override fun cleanRuntime() {

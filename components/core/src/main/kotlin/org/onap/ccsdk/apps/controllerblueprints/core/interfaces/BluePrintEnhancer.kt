@@ -35,6 +35,8 @@ interface BluePrintNodeTemplateEnhancer : BluePrintEnhancer<NodeTemplate>
 
 interface BluePrintNodeTypeEnhancer : BluePrintEnhancer<NodeType>
 
+interface BluePrintArtifactDefinitionEnhancer : BluePrintEnhancer<ArtifactDefinition>
+
 interface BluePrintPolicyTypeEnhancer : BluePrintEnhancer<PolicyType>
 
 interface BluePrintPropertyDefinitionEnhancer : BluePrintEnhancer<PropertyDefinition>
@@ -62,6 +64,8 @@ interface BluePrintTypeEnhancerService {
     fun getNodeTemplateEnhancers(): List<BluePrintNodeTemplateEnhancer>
 
     fun getNodeTypeEnhancers(): List<BluePrintNodeTypeEnhancer>
+
+    fun getArtifactDefinitionEnhancers(): List<BluePrintArtifactDefinitionEnhancer>
 
     fun getPolicyTypeEnhancers(): List<BluePrintPolicyTypeEnhancer>
 
@@ -92,6 +96,11 @@ interface BluePrintTypeEnhancerService {
     fun enhanceNodeType(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, nodeType: NodeType) {
         val enhancers = getNodeTypeEnhancers()
         doEnhancement(bluePrintRuntimeService, name, nodeType, enhancers)
+    }
+
+    fun enhanceArtifactDefinition(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, artifactDefinition: ArtifactDefinition) {
+        val enhancers = getArtifactDefinitionEnhancers()
+        doEnhancement(bluePrintRuntimeService, name, artifactDefinition, enhancers)
     }
 
     fun enhancePolicyType(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, policyType: PolicyType) {

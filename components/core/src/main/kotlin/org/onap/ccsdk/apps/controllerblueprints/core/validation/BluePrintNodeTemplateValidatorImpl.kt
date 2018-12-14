@@ -242,7 +242,7 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
     open fun checkValidArtifactType(artifactDefinitionName: String, artifactTypeName: String) {
 
         val artifactType = bluePrintContext.serviceTemplate.artifactTypes?.get(artifactTypeName)
-                ?: throw BluePrintException("failed to artifactType($artifactTypeName) for ArtifactDefinition($artifactDefinitionName)")
+                ?: throw BluePrintException("failed to get artifactType($artifactTypeName) for ArtifactDefinition($artifactDefinitionName)")
 
         checkValidArtifactTypeDerivedFrom(artifactTypeName, artifactType.derivedFrom)
     }

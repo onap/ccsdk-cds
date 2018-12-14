@@ -23,6 +23,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import reactor.core.publisher.Mono
 import reactor.core.publisher.toMono
 
+@Deprecated("Reactor will be replaced by coroutines by default")
 object JacksonReactorUtils {
     private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
 
