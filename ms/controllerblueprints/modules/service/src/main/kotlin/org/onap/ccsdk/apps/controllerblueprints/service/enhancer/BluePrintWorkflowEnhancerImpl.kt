@@ -21,6 +21,7 @@ import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.ConfigModelConstant
+import org.onap.ccsdk.apps.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.apps.controllerblueprints.core.data.DataType
 import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.data.Workflow
@@ -41,19 +42,21 @@ open class BluePrintWorkflowEnhancerImpl(private val bluePrintRepoService: BlueP
                                          private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService,
                                          private val resourceAssignmentEnhancerService: ResourceAssignmentEnhancerService)
     : BluePrintWorkflowEnhancer {
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintNodeTemplateEnhancerImpl::class.toString())
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintWorkflowEnhancerImpl::class.toString())
+
+    companion object {
+        const val ARTIFACT_TYPE_MAPPING_SOURCE: String = "artifact-mapping-resource"
+        const val PROPERTY_DEPENDENCY_NODE_TEMPLATES = "dependency-node-templates"
+    }
 
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
     lateinit var bluePrintContext: BluePrintContext
 
-    val PROPERTY_DEPENDENCY_NODE_TEMPLATES = "dependency-node-templates"
-
-
     private val workflowDataTypes: MutableMap<String, DataType> = hashMapOf()
 
     override fun enhance(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, workflow: Workflow) {
-        log.info("Enhancing Workflow($name)")
-       this.bluePrintRuntimeService = bluePrintRuntimeService
+        log.info("##### Enhancing Workflow($name)")
+        this.bluePrintRuntimeService = bluePrintRuntimeService
         this.bluePrintContext = bluePrintRuntimeService.bluePrintContext()
 
         val dynamicPropertyName = "$name-properties"
@@ -94,10 +97,11 @@ open class BluePrintWorkflowEnhancerImpl(private val bluePrintRepoService: BlueP
 
         // Check and Get Resource Assignment File
         val resourceAssignmentArtifacts = dependencyNodeTemplates?.mapNotNull { componentNodeTemplateName ->
-            log.info("Identified workflow($name) targets($componentNodeTemplateName")
+            log.info("identified workflow($name) targets($componentNodeTemplateName)")
+
             val resourceAssignmentArtifacts = bluePrintContext.nodeTemplateByName(componentNodeTemplateName)
                     .artifacts?.filter {
-                it.value.type == "artifact-mapping-resource"
+                it.value.type == ARTIFACT_TYPE_MAPPING_SOURCE
             }?.map {
                 log.info("resource assignment artifacts(${it.key}) for NodeType(${componentNodeTemplateName})")
                 it.value.file
@@ -105,7 +109,7 @@ open class BluePrintWorkflowEnhancerImpl(private val bluePrintRepoService: BlueP
             resourceAssignmentArtifacts
         }?.flatten()
 
-        log.info("Workflow($name) resource assignment files($resourceAssignmentArtifacts")
+        log.info("workflow($name) resource assignment files($resourceAssignmentArtifacts")
 
         if (resourceAssignmentArtifacts != null && resourceAssignmentArtifacts.isNotEmpty()) {
 
@@ -113,19 +117,20 @@ open class BluePrintWorkflowEnhancerImpl(private val bluePrintRepoService: BlueP
             addWorkFlowDynamicPropertyDefinitions(name, workflow)
 
             resourceAssignmentArtifacts.forEach { fileName ->
-
-                val absoluteFilePath = "${bluePrintContext.rootPath}/$fileName"
-
-                log.info("enriching workflow($name) artifacts file(${absoluteFilePath}")
                 // Enhance Resource Assignment File
-                val resourceAssignmentProperties = enhanceResourceAssignmentFile(absoluteFilePath)
+                val resourceAssignmentProperties = enhanceResourceAssignmentFile(fileName!!)
                 // Add Workflow Dynamic DataType
                 addWorkFlowDynamicDataType(name, resourceAssignmentProperties)
             }
         }
     }
 
-    private fun enhanceResourceAssignmentFile(filePath: String): MutableMap<String, PropertyDefinition> {
+    // Enhancement for Dynamic Properties, Resource Assignment Properties, Resource Sources
+    private fun enhanceResourceAssignmentFile(fileName: String): MutableMap<String, PropertyDefinition> {
+
+        val filePath = "${bluePrintContext.rootPath}/$fileName"
+
+        log.info("enriching artifacts file(${filePath}")
 
         val resourceAssignmentProperties: MutableMap<String, PropertyDefinition> = hashMapOf()
 
@@ -133,8 +138,16 @@ open class BluePrintWorkflowEnhancerImpl(private val bluePrintRepoService: BlueP
                 as? MutableList<ResourceAssignment>
                 ?: throw BluePrintProcessorException("couldn't get ResourceAssignment definitions for the file($filePath)")
 
-        // Call Resource Assignment Enhancer
-        resourceAssignmentEnhancerService.enhanceBluePrint(bluePrintTypeEnhancerService, bluePrintRuntimeService, resourceAssignments)
+        val alreadyEnhancedKey = "enhanced-$fileName"
+        val alreadyEnhanced = bluePrintRuntimeService.check(alreadyEnhancedKey)
+
+        log.info("enhancing workflow resource mapping file($fileName) already enhanced($alreadyEnhanced)")
+
+        if (!alreadyEnhanced) {
+            // Call Resource Assignment Enhancer
+            resourceAssignmentEnhancerService.enhanceBluePrint(bluePrintTypeEnhancerService, bluePrintRuntimeService, resourceAssignments)
+            bluePrintRuntimeService.put(alreadyEnhancedKey, true.asJsonPrimitive())
+        }
 
         resourceAssignments.forEach { resourceAssignment ->
             resourceAssignmentProperties[resourceAssignment.name] = resourceAssignment.property!!
@@ -159,7 +172,7 @@ open class BluePrintWorkflowEnhancerImpl(private val bluePrintRepoService: BlueP
         var recipeDataType: DataType? = bluePrintContext.serviceTemplate.dataTypes?.get(dataTypeName)
 
         if (recipeDataType == null) {
-            log.info("DataType not present for the recipe({})", dataTypeName)
+            log.info("dataType not present for the recipe({})", dataTypeName)
             recipeDataType = DataType()
             recipeDataType.version = "1.0.0"
             recipeDataType.description = "Dynamic DataType definition for workflow($workflowName)."
@@ -172,7 +185,7 @@ open class BluePrintWorkflowEnhancerImpl(private val bluePrintRepoService: BlueP
             bluePrintContext.serviceTemplate.dataTypes?.put(dataTypeName, recipeDataType)
 
         } else {
-            log.info("Dynamic dataType($dataTypeName) already present for workflow($workflowName).")
+            log.info("dynamic dataType($dataTypeName) already present for workflow($workflowName).")
         }
         // Merge all the Recipe Properties
         mappingProperties.forEach { propertyName, propertyDefinition ->

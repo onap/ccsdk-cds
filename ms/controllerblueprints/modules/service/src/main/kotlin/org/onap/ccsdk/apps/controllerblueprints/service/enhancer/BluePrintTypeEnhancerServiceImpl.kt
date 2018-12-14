@@ -47,6 +47,10 @@ open class BluePrintTypeEnhancerServiceImpl : BluePrintTypeEnhancerService {
         return context.getBeansOfType(BluePrintNodeTypeEnhancer::class.java).map { it.value }
     }
 
+    override fun getArtifactDefinitionEnhancers(): List<BluePrintArtifactDefinitionEnhancer> {
+        return context.getBeansOfType(BluePrintArtifactDefinitionEnhancer::class.java).map { it.value }
+    }
+
     override fun getPolicyTypeEnhancers(): List<BluePrintPolicyTypeEnhancer> {
         return context.getBeansOfType(BluePrintPolicyTypeEnhancer::class.java).map { it.value }
     }

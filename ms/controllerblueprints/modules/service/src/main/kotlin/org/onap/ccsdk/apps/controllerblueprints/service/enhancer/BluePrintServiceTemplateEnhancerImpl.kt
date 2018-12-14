@@ -33,7 +33,7 @@ import org.springframework.stereotype.Service
 open class BluePrintServiceTemplateEnhancerImpl(private val bluePrintRepoService: BluePrintRepoService,
                                                 private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService)
     : BluePrintServiceTemplateEnhancer {
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintEnhancerServiceImpl::class.toString())
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintServiceTemplateEnhancerImpl::class.toString())
 
 
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>

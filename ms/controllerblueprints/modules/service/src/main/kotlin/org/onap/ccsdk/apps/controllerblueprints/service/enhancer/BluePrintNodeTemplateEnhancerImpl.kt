@@ -18,9 +18,7 @@ package org.onap.ccsdk.apps.controllerblueprints.service.enhancer
 
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.apps.controllerblueprints.core.data.ArtifactType
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeType
 import org.onap.ccsdk.apps.controllerblueprints.core.format
@@ -46,7 +44,7 @@ open class BluePrintNodeTemplateEnhancerImpl(private val bluePrintRepoService: B
 
 
     override fun enhance(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, nodeTemplate: NodeTemplate) {
-        log.info("Enhancing NodeTemplate($name)")
+        log.info("***** Enhancing NodeTemplate($name)")
         this.bluePrintRuntimeService = bluePrintRuntimeService
         this.bluePrintContext = bluePrintRuntimeService.bluePrintContext()
 
@@ -75,20 +73,9 @@ open class BluePrintNodeTemplateEnhancerImpl(private val bluePrintRepoService: B
     open fun enhanceNodeTemplateArtifactDefinition(nodeTemplateName: String, nodeTemplate: NodeTemplate) {
 
         nodeTemplate.artifacts?.forEach { artifactDefinitionName, artifactDefinition ->
-            val artifactTypeName = artifactDefinition.type
-                    ?: throw BluePrintException(format("Artifact type is missing for NodeTemplate({}) artifact({})", nodeTemplateName, artifactDefinitionName))
-
-            // Populate Artifact Type
-            populateArtifactType(artifactTypeName)
+            // Enhance Artifacct Definitions
+            bluePrintTypeEnhancerService.enhanceArtifactDefinition(bluePrintRuntimeService, artifactDefinitionName, artifactDefinition)
         }
-    }
-
-    open fun populateArtifactType(artifactTypeName: String): ArtifactType {
-        val artifactType = bluePrintContext.serviceTemplate.artifactTypes?.get(artifactTypeName)
-                ?: bluePrintRepoService.getArtifactType(artifactTypeName)
-                ?: throw BluePrintException(format("Couldn't get ArtifactType({}) from repo.", artifactTypeName))
-        bluePrintContext.serviceTemplate.artifactTypes?.put(artifactTypeName, artifactType)
-        return artifactType
     }
 
 }
