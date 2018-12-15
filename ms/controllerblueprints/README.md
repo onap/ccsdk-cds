@@ -8,6 +8,6 @@ Application VM Arguments :
 -Dspring.datasource.url=jdbc:mysql://127.0.0.1:3306/sdnctl
 -Dspring.datasource.username=sdnctl
 -Dspring.datasource.password=sdnctl
--Dblueprints.load.initial-data=true
+-Dcontrollerblueprints.loadInitialData=true
 -Dspring.profiles.active=dev
 

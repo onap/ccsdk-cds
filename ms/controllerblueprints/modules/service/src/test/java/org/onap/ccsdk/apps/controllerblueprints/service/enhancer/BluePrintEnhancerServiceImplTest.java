@@ -52,8 +52,8 @@ public class BluePrintEnhancerServiceImplTest {
 
     @Before
     public void init() {
-        modelTypeLoadService.loadModelType("./../../../../components/model-catalog/definition-type/starter-type");
-        resourceDictionaryLoadService.loadResourceDictionary("./../../../../components/model-catalog/resource-dictionary/starter-dictionary");
+        modelTypeLoadService.loadPathModelType("./../../../../components/model-catalog/definition-type/starter-type");
+        resourceDictionaryLoadService.loadPathResourceDictionary("./../../../../components/model-catalog/resource-dictionary/starter-dictionary");
     }
 
     @Test

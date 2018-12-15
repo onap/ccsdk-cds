@@ -16,13 +16,19 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.load
 
-import org.springframework.stereotype.Service
+open class BluePrintLoadConfiguration {
 
-@Service
-open class BluePrintCatalogLoad {
+    lateinit var blueprintDeployPath: String
+    lateinit var blueprintArchivePath: String
+    lateinit var blueprintEnrichmentPath: String
 
-    open fun loadBluePrintModelCatalog() {
-        // TODO
-    }
+    var loadInitialData: Boolean = false
+    var loadBluePrint: Boolean = false
+    var loadBluePrintPaths: String? = null
 
+    var loadModelType: Boolean = false
+    var loadModeTypePaths: String? = null
+
+    var loadResourceDictionary: Boolean = false
+    var loadResourceDictionaryPaths: String? = null
 }

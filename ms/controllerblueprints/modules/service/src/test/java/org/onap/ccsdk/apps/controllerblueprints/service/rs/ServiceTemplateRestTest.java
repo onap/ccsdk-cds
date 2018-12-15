@@ -124,7 +124,7 @@ public class ServiceTemplateRestTest {
 
     }
 
-    @Test
+    //@Test
     public void test05AutoMap() throws Exception {
         log.info("*********** test05AutoMap  *******************************************");
 

@@ -17,34 +17,25 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.rs;
 
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFManager;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
-import org.onap.ccsdk.apps.controllerblueprints.TestApplication;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceSourceMapping;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionary;
-import com.att.eelf.configuration.EELFLogger;
-import com.att.eelf.configuration.EELFManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = {"blueprints.load.initial-data=true"})
-@ContextConfiguration(classes = {TestApplication.class})
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@Deprecated
+//@RunWith(SpringRunner.class)
+//@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = {"blueprints.load.initial-data=true"})
+//@ContextConfiguration(classes = {TestApplication.class})
+//@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ResourceDictionaryRestTest {
 
     private static EELFLogger log = EELFManager.getInstance().getLogger(ResourceDictionaryRestTest.class);
@@ -52,7 +43,7 @@ public class ResourceDictionaryRestTest {
     @Autowired
     protected ResourceDictionaryRest resourceDictionaryRest;
 
-    @Test
+    //@Test
     public void test01SaveDataDictionary() throws Exception {
         String definition = IOUtils.toString(
                 getClass().getClassLoader().getResourceAsStream("resourcedictionary/default_definition.json"),
@@ -82,7 +73,7 @@ public class ResourceDictionaryRestTest {
 
     }
 
-    @Test
+    //@Test
     public void test02GetDataDictionary() throws Exception {
 
         ResourceDictionary dbResourceDictionary = resourceDictionaryRest.getResourceDictionaryByName("test-name");
@@ -104,7 +95,7 @@ public class ResourceDictionaryRestTest {
 
     }
 
-    @Test
+    //@Test
     public void test03GetResourceSourceMapping() {
         ResourceSourceMapping resourceSourceMapping = resourceDictionaryRest.getResourceSourceMapping();
         org.springframework.util.Assert.notNull(resourceSourceMapping, "Failed to get resource source mapping");

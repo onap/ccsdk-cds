@@ -36,11 +36,11 @@ open class ModelTypeLoadService(private val modelTypeService: ModelTypeService) 
     private val log = EELFManager.getInstance().getLogger(ModelTypeLoadService::class.java)
     private val updateBySystem = "System"
 
-    open fun loadModelType(modelTypePaths: List<String>) {
-        modelTypePaths.forEach { loadModelType(it) }
+    open fun loadPathsModelType(modelTypePaths: List<String>) {
+        modelTypePaths.forEach { loadPathModelType(it) }
     }
 
-    open fun loadModelType(modelTypePath: String) {
+    open fun loadPathModelType(modelTypePath: String) {
         log.info(" *************************** loadModelType **********************")
         try {
             val errorBuilder = StrBuilder()
