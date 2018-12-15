@@ -18,7 +18,7 @@ package org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api
 
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceOutput
-import org.onap.ccsdk.apps.blueprintsprocessor.core.interfaces.BluePrintCatalogService
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.apps.blueprintsprocessor.services.workflow.BlueprintDGExecutionService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.slf4j.LoggerFactory

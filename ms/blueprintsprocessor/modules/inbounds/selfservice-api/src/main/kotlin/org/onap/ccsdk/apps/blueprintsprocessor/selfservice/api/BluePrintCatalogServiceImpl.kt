@@ -17,12 +17,20 @@
 package org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api
 
 import org.onap.ccsdk.apps.blueprintsprocessor.core.BluePrintCoreConfiguration
-import org.onap.ccsdk.apps.blueprintsprocessor.core.interfaces.BluePrintCatalogService
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.springframework.stereotype.Service
 import java.io.File
 
 @Service
 class BluePrintCatalogServiceImpl(private val bluePrintCoreConfiguration: BluePrintCoreConfiguration) : BluePrintCatalogService {
+
+    override fun uploadToDataBase(file: String): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun downloadFromDataBase(name: String, version: String, path: String): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     override fun prepareBluePrint(name: String, version: String): String {
         //TODO("Get the Blueprint from the DB")

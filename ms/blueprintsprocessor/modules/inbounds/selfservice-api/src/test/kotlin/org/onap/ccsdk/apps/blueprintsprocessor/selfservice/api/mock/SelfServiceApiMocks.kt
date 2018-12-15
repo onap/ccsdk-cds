@@ -18,8 +18,8 @@ package org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api.mock
 
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceOutput
-import org.onap.ccsdk.apps.blueprintsprocessor.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.apps.blueprintsprocessor.services.workflow.BlueprintDGExecutionService
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.springframework.stereotype.Service
 import kotlin.test.assertNotNull
@@ -38,6 +38,15 @@ class MockBlueprintDGExecutionService : BlueprintDGExecutionService {
 
 @Service
 class MockBluePrintCatalogService : BluePrintCatalogService {
+
+    override fun uploadToDataBase(file: String): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun downloadFromDataBase(name: String, version: String, path: String): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun prepareBluePrint(name: String, version: String): String {
         assertNotNull(name, "failed to get blueprint Name")
         assertNotNull(version, "failed to get blueprint version")
