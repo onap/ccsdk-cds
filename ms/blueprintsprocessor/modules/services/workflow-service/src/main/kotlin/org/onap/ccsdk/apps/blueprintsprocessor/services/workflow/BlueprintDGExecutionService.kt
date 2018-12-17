@@ -33,7 +33,7 @@ interface BlueprintDGExecutionService {
 }
 
 @Service
-class DefaultBlueprintDGExecutionService(val blueprintSvcLogicService: BlueprintSvcLogicService) : BlueprintDGExecutionService {
+class DefaultBlueprintDGExecutionService(private val blueprintSvcLogicService: BlueprintSvcLogicService) : BlueprintDGExecutionService {
 
     private val log = LoggerFactory.getLogger(DefaultBlueprintDGExecutionService::class.java)
 

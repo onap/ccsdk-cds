@@ -43,7 +43,7 @@ open class ComponentJythonExecutor(private val pythonExecutorProperty: PythonExe
     lateinit var applicationContext: ApplicationContext
 
     fun populateJythonComponentInstance(executionServiceInput: ExecutionServiceInput) {
-        val bluePrintContext = bluePrintRuntimeService!!.bluePrintContext()
+        val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
 
         val operationAssignment: OperationAssignment = bluePrintContext
                 .nodeTemplateInterfaceOperation(nodeTemplateName, interfaceName, operationName)
@@ -53,14 +53,14 @@ open class ComponentJythonExecutor(private val pythonExecutorProperty: PythonExe
         val artifactName: String = operationAssignment.implementation?.primary
                 ?: throw BluePrintProcessorException("missing primary field to get artifact name for node template ($nodeTemplateName)")
 
-        val artifactDefinition = bluePrintRuntimeService!!.resolveNodeTemplateArtifactDefinition(nodeTemplateName, artifactName)
+        val artifactDefinition = bluePrintRuntimeService.resolveNodeTemplateArtifactDefinition(nodeTemplateName, artifactName)
 
         val pythonFileName = artifactDefinition.file
                 ?: throw BluePrintProcessorException("missing file name for node template ($nodeTemplateName)'s artifactName($artifactName)")
 
         val pythonClassName = FilenameUtils.getBaseName(pythonFileName)
 
-        val content: String? = bluePrintRuntimeService!!.resolveNodeTemplateArtifact(nodeTemplateName, artifactName)
+        val content: String? = bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactName)
 
         checkNotEmptyNThrow(content, "artifact ($artifactName) content is empty")
 
@@ -85,7 +85,7 @@ open class ComponentJythonExecutor(private val pythonExecutorProperty: PythonExe
 
     override fun process(executionServiceInput: ExecutionServiceInput) {
 
-        log.info("Processing : ${operationInputs}")
+        log.info("Processing : $operationInputs")
         checkNotNull(bluePrintRuntimeService) { "failed to get bluePrintRuntimeService" }
 
         // Populate Component Instance

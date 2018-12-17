@@ -34,7 +34,7 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
 
 
     open fun resourceDefinition(name: String): ResourceDefinition {
-        return resourceDictionaries.get(name)
+        return resourceDictionaries[name]
                 ?: throw BluePrintProcessorException("couldn't get resource definition($name)")
     }
 

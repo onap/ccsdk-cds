@@ -26,15 +26,15 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
-class BluePrintProcessingGRPCHandler(private val bluePrintCoreConfiguration: BluePrintCoreConfiguration)
+class BluePrintProcessingGRPCHandler(private val bluePrintCoreConfiguration: BluePrintCoreConfiguration,
+                                     private val executionServiceHandler: ExecutionServiceHandler)
     : BluePrintProcessingServiceGrpc.BluePrintProcessingServiceImplBase() {
     private val log = LoggerFactory.getLogger(BluePrintProcessingGRPCHandler::class.java)
 
     override fun process(request: ExecutionServiceInput,
                          responseObserver: StreamObserver<ExecutionServiceOutput>) {
 
-        val json = JsonFormat.printer().print(request)
-
+        //val json = JsonFormat.printer().print(request)
         //log.info("Received GRPC request ${json}")
         //TODO( Handle Processing Response")
         val response = ExecutionServiceOutput.newBuilder().setCommonHeader(request.commonHeader).build()

@@ -40,9 +40,9 @@ class MockComponentFunction : AbstractComponentFunction() {
     private val log = LoggerFactory.getLogger(MockComponentFunction::class.java)
 
     override fun process(executionRequest: ExecutionServiceInput) {
-        log.info("Processing component : ${operationInputs}")
+        log.info("Processing component : $operationInputs")
 
-        bluePrintRuntimeService!!.setNodeTemplateAttributeValue(nodeTemplateName,
+        bluePrintRuntimeService.setNodeTemplateAttributeValue(nodeTemplateName,
                 "assignment-params", "params".asJsonPrimitive())
     }
 
@@ -58,7 +58,7 @@ class SingletonComponentFunction : AbstractComponentFunction() {
     private val log = LoggerFactory.getLogger(MockComponentFunction::class.java)
 
     override fun process(executionRequest: ExecutionServiceInput) {
-        log.info("Processing component : ${operationInputs}")
+        log.info("Processing component : $operationInputs")
     }
 
     override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
@@ -73,7 +73,7 @@ class PrototypeComponentFunction : AbstractComponentFunction() {
     private val log = LoggerFactory.getLogger(MockComponentFunction::class.java)
 
     override fun process(executionRequest: ExecutionServiceInput) {
-        log.info("Processing component : ${operationInputs}")
+        log.info("Processing component : $operationInputs")
     }
 
     override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {

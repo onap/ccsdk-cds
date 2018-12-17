@@ -17,6 +17,9 @@
 package org.onap.ccsdk.apps.blueprintsprocessor.services.workflow.executor
 
 import com.fasterxml.jackson.databind.JsonNode
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.apps.blueprintsprocessor.services.workflow.BlueprintSvcLogicContext
@@ -26,9 +29,9 @@ import org.onap.ccsdk.apps.controllerblueprints.core.putJsonElement
 import org.onap.ccsdk.sli.core.sli.SvcLogicContext
 import org.onap.ccsdk.sli.core.sli.SvcLogicException
 import org.onap.ccsdk.sli.core.sli.SvcLogicNode
-import org.onap.ccsdk.sli.core.sli.provider.ExecuteNodeExecutor
-import org.onap.ccsdk.sli.core.sli.provider.SvcLogicExpressionResolver
-import org.onap.ccsdk.sli.core.sli.provider.SvcLogicService
+import org.onap.ccsdk.sli.core.sli.provider.base.ExecuteNodeExecutor
+import org.onap.ccsdk.sli.core.sli.provider.base.SvcLogicExpressionResolver
+import org.onap.ccsdk.sli.core.sli.provider.base.SvcLogicServiceBase
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
@@ -47,7 +50,16 @@ open class ComponentExecuteNodeExecutor : ExecuteNodeExecutor() {
     }
 
     @Throws(SvcLogicException::class)
-    override fun execute(svc: SvcLogicService, node: SvcLogicNode, svcLogicContext: SvcLogicContext): SvcLogicNode {
+    override fun execute(svc: SvcLogicServiceBase, node: SvcLogicNode, svcLogicContext: SvcLogicContext)
+            : SvcLogicNode = runBlocking {
+        coroutineScope {
+            val job = async { executeAsy(svc, node, svcLogicContext) }
+            job.await()
+        }
+    }
+
+
+    private fun executeAsy(svc: SvcLogicServiceBase, node: SvcLogicNode, svcLogicContext: SvcLogicContext): SvcLogicNode {
 
         var outValue: String
 
@@ -80,7 +92,7 @@ open class ComponentExecuteNodeExecutor : ExecuteNodeExecutor() {
             stepInputs.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, interfaceName)
             stepInputs.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, operationName)
 
-            plugin.bluePrintRuntimeService!!.put("$nodeTemplateName-step-inputs", stepInputs.asJsonNode())
+            plugin.bluePrintRuntimeService.put("$nodeTemplateName-step-inputs", stepInputs.asJsonNode())
 
             // Get the Request from the Context and Set to the Function Input and Invoke the function
             val executionOutput = plugin.apply(executionInput)

@@ -39,12 +39,12 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
         val artifactPrefixNamesNode = getOperationInput(ResourceResolutionConstants.INPUT_ARTIFACT_PREFIX_NAMES)
 
         val artifactPrefixNames = JacksonUtils.getListFromJsonNode(artifactPrefixNamesNode, String::class.java)
-                ?: throw BluePrintProcessorException("coundn't transform ${artifactPrefixNamesNode.asText()} to string array")
+                ?: throw BluePrintProcessorException("couldn't transform ${artifactPrefixNamesNode.asText()} to string array")
 
-        val resolvedParamContents = resourceResolutionService.resolveResources(bluePrintRuntimeService!!, nodeTemplateName, artifactPrefixNames)
+        val resolvedParamContents = resourceResolutionService.resolveResources(bluePrintRuntimeService, nodeTemplateName, artifactPrefixNames)
 
         // Set Output Attributes
-        bluePrintRuntimeService!!.setNodeTemplateAttributeValue(nodeTemplateName,
+        bluePrintRuntimeService.setNodeTemplateAttributeValue(nodeTemplateName,
                 ResourceResolutionConstants.OUTPUT_ASSIGNMENT_PARAMS, resolvedParamContents.asJsonNode())
     }
 

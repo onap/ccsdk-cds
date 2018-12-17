@@ -38,15 +38,15 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     @Transient
     private val log = LoggerFactory.getLogger(AbstractComponentFunction::class.java)
 
-    var executionServiceInput: ExecutionServiceInput? = null
+    lateinit var executionServiceInput: ExecutionServiceInput
     var executionServiceOutput = ExecutionServiceOutput()
-    var bluePrintRuntimeService: BluePrintRuntimeService<*>? = null
-    var processId: String = ""
-    var workflowName: String = ""
-    var stepName: String = ""
-    var interfaceName: String = ""
-    var operationName: String = ""
-    var nodeTemplateName: String = ""
+    lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
+    lateinit var processId: String
+    lateinit var workflowName: String
+    lateinit var stepName: String
+    lateinit var interfaceName: String
+    lateinit var operationName: String
+    lateinit var nodeTemplateName: String
     var operationInputs: MutableMap<String, JsonNode> = hashMapOf()
 
     override fun getName(): String {
@@ -68,7 +68,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
 
         log.info("preparing request id($processId) for workflow($workflowName) step($stepName)")
 
-        val operationInputs = bluePrintRuntimeService!!.get("$stepName-step-inputs")
+        val operationInputs = bluePrintRuntimeService.get("$stepName-step-inputs")
                 ?: JsonNodeFactory.instance.objectNode()
 
         operationInputs.fields().forEach {
@@ -84,8 +84,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         operationName = this.operationInputs.getAsString(BluePrintConstants.PROPERTY_CURRENT_OPERATION)
         check(operationName.isNotEmpty()) { "couldn't get Operation name for step($stepName)" }
 
-
-        val operationResolvedProperties = bluePrintRuntimeService!!.resolveNodeTemplateInterfaceOperationInputs(nodeTemplateName, interfaceName, operationName)
+        val operationResolvedProperties = bluePrintRuntimeService.resolveNodeTemplateInterfaceOperationInputs(nodeTemplateName, interfaceName, operationName)
 
         this.operationInputs.putAll(operationResolvedProperties)
 
@@ -94,13 +93,13 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
 
     override fun prepareResponse(): ExecutionServiceOutput {
         log.info("Preparing Response...")
-        executionServiceOutput.commonHeader = executionServiceInput!!.commonHeader
+        executionServiceOutput.commonHeader = executionServiceInput.commonHeader
 
         // Resolve the Output Expression
-        val stepOutputs = bluePrintRuntimeService!!
+        val stepOutputs = bluePrintRuntimeService
                 .resolveNodeTemplateInterfaceOperationOutputs(nodeTemplateName, interfaceName, operationName)
 
-        bluePrintRuntimeService!!.put("$stepName-step-outputs", stepOutputs.asJsonNode())
+        bluePrintRuntimeService.put("$stepName-step-outputs", stepOutputs.asJsonNode())
 
         // Populate Status
         val status = Status()

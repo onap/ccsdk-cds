@@ -18,8 +18,7 @@ package org.onap.ccsdk.apps.blueprintsprocessor.services.workflow
 
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.sli.core.sli.*
-import org.onap.ccsdk.sli.core.sli.provider.*
-import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker
+import org.onap.ccsdk.sli.core.sli.provider.base.*
 import org.slf4j.LoggerFactory
 import org.slf4j.MDC
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,11 +27,11 @@ import org.springframework.stereotype.Service
 import java.util.*
 import javax.annotation.PostConstruct
 
-interface BlueprintSvcLogicService : SvcLogicService {
+interface BlueprintSvcLogicService : SvcLogicServiceBase {
 
     fun registerDefaultExecutors()
 
-    fun registerExecutors(name: String, svcLogicNodeExecutor: SvcLogicNodeExecutor)
+    fun registerExecutors(name: String, svcLogicNodeExecutor: AbstractSvcLogicNodeExecutor)
 
     fun unRegisterExecutors(name: String)
 
@@ -52,11 +51,6 @@ interface BlueprintSvcLogicService : SvcLogicService {
     override fun execute(p0: String?, p1: String?, p2: String?, p3: String?, p4: Properties?): Properties {
         TODO("not implemented")
     }
-
-    @Deprecated("Not used in Micro service Implementation")
-    override fun execute(p0: String?, p1: String?, p2: String?, p3: String?, p4: Properties?, p5: DOMDataBroker?): Properties {
-        TODO("not implemented")
-    }
 }
 
 
@@ -65,7 +59,7 @@ class DefaultBlueprintSvcLogicService : BlueprintSvcLogicService {
 
     private val log = LoggerFactory.getLogger(DefaultBlueprintSvcLogicService::class.java)
 
-    private val nodeExecutors: MutableMap<String, SvcLogicNodeExecutor> = hashMapOf()
+    private val nodeExecutors: MutableMap<String, AbstractSvcLogicNodeExecutor> = hashMapOf()
 
     @Autowired
     private lateinit var context: ApplicationContext
@@ -81,9 +75,9 @@ class DefaultBlueprintSvcLogicService : BlueprintSvcLogicService {
         registerExecutors("exit", ExitNodeExecutor())
     }
 
-    override fun registerExecutors(name: String, svcLogicNodeExecutor: SvcLogicNodeExecutor) {
+    override fun registerExecutors(name: String, svcLogicNodeExecutor: AbstractSvcLogicNodeExecutor) {
         log.info("Registering executors($name) with type(${svcLogicNodeExecutor.javaClass}")
-        nodeExecutors.put(name, svcLogicNodeExecutor)
+        nodeExecutors[name] = svcLogicNodeExecutor
     }
 
     override fun unRegisterExecutors(name: String) {
@@ -108,17 +102,17 @@ class DefaultBlueprintSvcLogicService : BlueprintSvcLogicService {
         if (node == null) {
             return null
         } else {
-            if (log.isDebugEnabled()) {
-                log.debug("Executing node {}", node.getNodeId())
+            if (log.isDebugEnabled) {
+                log.debug("Executing node {}", node.nodeId)
             }
 
-            val executor = this.nodeExecutors[node.getNodeType()]
+            val executor = this.nodeExecutors[node.nodeType]
 
             if (executor != null) {
-                log.debug("Executing node executor for node type {} - {}", node.getNodeType(), executor.javaClass.name)
+                log.debug("Executing node executor for node type {} - {}", node.nodeType, executor.javaClass.name)
                 return executor.execute(this, node, ctx)
             } else {
-                throw SvcLogicException("Attempted to execute a node of type " + node.getNodeType() + ", but no executor was registered for this type")
+                throw SvcLogicException("Attempted to execute a node of type " + node.nodeType + ", but no executor was registered for this type")
             }
         }
     }
@@ -126,7 +120,7 @@ class DefaultBlueprintSvcLogicService : BlueprintSvcLogicService {
     override fun execute(graph: SvcLogicGraph, svcLogicContext: SvcLogicContext): SvcLogicContext {
         MDC.put("currentGraph", graph.toString())
 
-        var curNode: SvcLogicNode? = graph.getRootNode()
+        var curNode: SvcLogicNode? = graph.rootNode
         log.info("About to execute graph {}", graph.toString())
 
         try {
