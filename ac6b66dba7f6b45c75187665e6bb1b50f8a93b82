@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9adffdf1_570c32a5",
+        "filename": "cds-ui/client/pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2018-12-18T17:21:39Z",
+      "side": 1,
+      "message": "bad version.",
+      "range": {
+        "startLine": 26,
+        "startChar": 13,
+        "endLine": 26,
+        "endChar": 27
+      },
+      "revId": "ac6b66dba7f6b45c75187665e6bb1b50f8a93b82",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9adffdf1_f7fc4674",
+        "filename": "cds-ui/client/pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2018-12-18T17:21:39Z",
+      "side": 1,
+      "message": "ui",
+      "revId": "ac6b66dba7f6b45c75187665e6bb1b50f8a93b82",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
