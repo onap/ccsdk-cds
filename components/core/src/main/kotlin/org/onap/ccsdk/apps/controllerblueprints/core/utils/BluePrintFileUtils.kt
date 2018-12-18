@@ -22,6 +22,8 @@ import kotlinx.coroutines.runBlocking
 import org.apache.commons.io.FileUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.apps.controllerblueprints.core.data.ImportDefinition
+import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 import java.io.File
 import java.io.FileFilter
@@ -79,6 +81,46 @@ class BluePrintFileUtils {
             }
         }
 
+        fun populateDefaultImports(blueprintContext: BluePrintContext) {
+            // Get the Default Types
+            val types = arrayListOf(BluePrintConstants.PATH_DATA_TYPES, BluePrintConstants.PATH_ARTIFACT_TYPES,
+                    BluePrintConstants.PATH_NODE_TYPES, BluePrintConstants.PATH_POLICY_TYPES)
+
+            // Clean Type Imports
+            cleanImportTypes(blueprintContext.serviceTemplate)
+
+            val imports = mutableListOf<ImportDefinition>()
+            types.forEach { typeName ->
+                val import = ImportDefinition()
+                import.file = BluePrintConstants.TOSCA_DEFINITIONS_DIR.plus("/$typeName.json")
+                imports.add(import)
+            }
+
+            blueprintContext.serviceTemplate.imports = imports
+        }
+
+        fun cleanImportTypes(serviceTemplate: ServiceTemplate) {
+            // Clean the Type imports
+            val toDeleteTypes = serviceTemplate.imports?.filter {
+                it.file.endsWith("_types.json")
+            }
+
+            if (toDeleteTypes != null && toDeleteTypes.isNotEmpty()) {
+                serviceTemplate.imports?.removeAll(toDeleteTypes)
+            }
+        }
+
+        fun writeEnhancedBluePrint(blueprintContext: BluePrintContext) {
+
+            // Write Blueprint Types
+            writeBluePrintTypes(blueprintContext)
+            // Re Populate the Imports
+            populateDefaultImports(blueprintContext)
+            // Rewrite the Entry Definition Files
+            writeEntryDefinitionFile(blueprintContext)
+
+        }
+
         fun writeBluePrintTypes(blueprintContext: BluePrintContext) {
 
             val basePath = blueprintContext.rootPath
@@ -110,10 +152,29 @@ class BluePrintFileUtils {
             }
         }
 
+        fun writeEntryDefinitionFile(blueprintContext: BluePrintContext) {
+
+            val absoluteEntryDefinitionFile = blueprintContext.rootPath.plus(File.separator).plus(blueprintContext.entryDefinition)
+
+            val serviceTemplate = blueprintContext.serviceTemplate
+
+            // Clone the Service Template
+            val writeServiceTemplate = serviceTemplate.clone()
+            writeServiceTemplate.dataTypes = null
+            writeServiceTemplate.artifactTypes = null
+            writeServiceTemplate.policyTypes = null
+            writeServiceTemplate.nodeTypes = null
+
+            // Write the Serivice Template
+            writeDefinitionFile(absoluteEntryDefinitionFile, JacksonUtils.getJson(writeServiceTemplate, true))
+        }
+
         fun writeDefinitionFile(definitionFile: String, content: String) = runBlocking {
             val definitionFile = File(definitionFile)
+            // Delete the File If exists
+            Files.deleteIfExists(definitionFile.toPath())
 
-            Files.write(definitionFile.toPath(), content.toByteArray(), StandardOpenOption.CREATE)
+            Files.write(definitionFile.toPath(), content.toByteArray(), StandardOpenOption.CREATE_NEW)
             check(definitionFile.exists()) {
                 throw BluePrintException("couldn't write definition file under path(${definitionFile.absolutePath})")
             }

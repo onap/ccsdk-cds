@@ -37,9 +37,8 @@
     "component-resource-assignment": {
       "description": "This is Resource Assignment Component API",
       "version": "1.0.0",
-      "properties": {
-        "request-id": {
-          "description": "Request Id used to store the generated configuration, in the database along with the template-name",
+      "attributes": {
+        "assignment-params": {
           "required": true,
           "type": "string"
         }

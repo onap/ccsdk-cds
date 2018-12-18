@@ -36,6 +36,10 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
      * Blueprint CBA extracted file location
      */
     var rootPath = "."
+    /**
+     * Root Definition file path
+     */
+    var entryDefinition = ""
 
     val imports: List<ImportDefinition>? = serviceTemplate.imports
 

@@ -19,6 +19,7 @@ package org.onap.ccsdk.apps.controllerblueprints.core.data
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import com.fasterxml.jackson.databind.JsonNode
 import io.swagger.annotations.ApiModelProperty
 
@@ -183,12 +184,14 @@ class AttributeDefinition {
     @get:JsonIgnore
     var id: String? = null
     var description: String? = null
+    var required: Boolean? = null
     lateinit var type: String
     @JsonProperty("default")
     var defaultValue: JsonNode? = null
     var status: String? = null
+    var constraints: MutableList<ConstraintClause>? = null
     @JsonProperty("entry_schema")
-    var entrySchema: String? = null
+    var entrySchema: EntrySchema? = null
 }
 
 /*
@@ -579,7 +582,8 @@ class ConditionClause {
 A TOSCA Service Template (YAML) document contains element definitions of building blocks for cloud application, or complete models of cloud applications. This section describes the top-level structural elements (TOSCA keynames) along with their grammars, which are allowed to appear in a TOSCA Service Template document.
  */
 
-class ServiceTemplate {
+@JsonPropertyOrder(value = ["toscaDefinitionsVersion", "description", "metadata", "imports", "topologyTemplate"])
+class ServiceTemplate : Cloneable {
     @get:JsonIgnore
     var id: String? = null
     @get:JsonProperty("tosca_definitions_version")
@@ -600,6 +604,10 @@ class ServiceTemplate {
     var policyTypes: MutableMap<String, PolicyType>? = null
     @get:JsonProperty("topology_template")
     var topologyTemplate: TopologyTemplate? = null
+
+    override public fun clone(): ServiceTemplate {
+        return super.clone() as ServiceTemplate
+    }
 }
 
 class ToscaMetaData {

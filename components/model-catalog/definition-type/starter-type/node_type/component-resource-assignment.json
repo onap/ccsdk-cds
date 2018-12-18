@@ -1,6 +1,12 @@
 {
   "description": "This is Resource Assignment Component API",
   "version": "1.0.0",
+  "attributes": {
+    "assignment-params": {
+      "required": true,
+      "type": "string"
+    }
+  },
   "capabilities": {
     "component-node": {
       "type": "tosca.capabilities.Node"

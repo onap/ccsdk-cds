@@ -26,13 +26,5 @@ object ConfigModelConstant {
 
     const val MODEL_CONTENT_TYPE_TOSCA_JSON = "TOSCA_JSON"
     const val MODEL_CONTENT_TYPE_TEMPLATE = "TEMPLATE"
-
-    const val MODEL_TYPE_DATA_TYPE_DYNAMIC = "tosca.datatypes.Dynamic"
-
-    const val MODEL_TYPE_NODE_ARTIFACT = "tosca.nodes.Artifact"
-
     const val CAPABILITY_PROPERTY_MAPPING = "mapping"
-
-    const val PROPERTY_RECIPE_NAMES = "action-names"
-
 }
