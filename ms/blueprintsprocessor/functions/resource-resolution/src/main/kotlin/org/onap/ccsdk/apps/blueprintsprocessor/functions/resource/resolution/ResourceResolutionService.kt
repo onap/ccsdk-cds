@@ -83,7 +83,7 @@ class ResourceResolutionService {
         // Get the Resource Dictionary Name
         val dictionaryFile = bluePrintRuntimeService.bluePrintContext().rootPath.plus(File.separator)
                 .plus(BluePrintConstants.TOSCA_DEFINITIONS_DIR).plus(File.separator)
-                .plus(ResourceResolutionConstants.FILE_NAME_RESOURCE_DICTIONARY_TYPES)
+                .plus(ResourceResolutionConstants.FILE_NAME_RESOURCE_DEFINITION_TYPES)
 
         val resourceDictionaries: MutableMap<String, ResourceDefinition> = JacksonUtils.getMapFromFile(dictionaryFile, ResourceDefinition::class.java)
                 ?: throw BluePrintProcessorException("couldn't get Dictionary Definitions")
