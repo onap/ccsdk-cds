@@ -48,7 +48,7 @@ public class ConfigModelUtils {
 
     public static ConfigModel getConfigModel(String blueprintPath) throws Exception {
         Preconditions.checkArgument(StringUtils.isNotBlank(blueprintPath), "Blueprint Path is missing");
-        ToscaMetaData toscaMetaData = BluePrintMetadataUtils.toscaMetaData(blueprintPath);
+        ToscaMetaData toscaMetaData = BluePrintMetadataUtils.Companion.toscaMetaData(blueprintPath);
 
         Preconditions.checkNotNull(toscaMetaData, "failed to get Blueprint Metadata information");
         Preconditions.checkArgument(StringUtils.isNotBlank(toscaMetaData.getEntityDefinitions()), "failed to get Blueprint Definition file");

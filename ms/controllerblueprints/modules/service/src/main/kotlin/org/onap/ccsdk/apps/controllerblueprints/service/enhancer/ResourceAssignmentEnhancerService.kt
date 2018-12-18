@@ -20,7 +20,6 @@ import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintTypes
-import org.onap.ccsdk.apps.controllerblueprints.core.format
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
@@ -70,8 +69,7 @@ open class ResourceAssignmentEnhancerServiceImpl(private val resourceDefinitionR
         resourceAssignments.map { resourceAssignment ->
             val dictionaryName = resourceAssignment.dictionaryName!!
             val dictionarySource = resourceAssignment.dictionarySource!!
-            log.debug("Enriching Assignment name({}), dictionary name({}), source({})", resourceAssignment.name,
-                    dictionaryName, dictionarySource)
+            log.debug("Enriching assignment name(${resourceAssignment.name}), dictionary name($dictionaryName), source($dictionarySource)")
             val sourceNodeTypeName = ResourceSourceMappingFactory.getRegisterSourceMapping(dictionarySource)
 
             // Add Unique Node Types
@@ -87,7 +85,7 @@ open class ResourceAssignmentEnhancerServiceImpl(private val resourceDefinitionR
                 val resourceDefinition: ResourceDefinition = getResourceDefinition(dictionaryName)
 
                 val sourceNodeTemplate = resourceDefinition.sources.get(dictionarySource)
-                        ?: throw BluePrintException(format("failed to get assigned dictionarySource({}) from resourceDefinition({})", dictionarySource, dictionaryName))
+                        ?: throw BluePrintException("failed to get assigned dictionarySource($dictionarySource) from resourceDefinition($dictionaryName)")
 
                 // Enrich as NodeTemplate
                 bluePrintTypeEnhancerService.enhanceNodeTemplate(bluePrintRuntimeService, dictionarySource, sourceNodeTemplate)
@@ -101,15 +99,6 @@ open class ResourceAssignmentEnhancerServiceImpl(private val resourceDefinitionR
 
     }
 
-    /*
-        override fun enhanceBluePrint(resourceAssignments: List<ResourceAssignment>): ServiceTemplate {
-            val bluePrintEnhancerService = BluePrintEnhancerServiceImpl(resourceDefinitionRepoService)
-            bluePrintEnhancerService.serviceTemplate = ServiceTemplate()
-            bluePrintEnhancerService.initialCleanUp()
-            enhanceBluePrint(bluePrintEnhancerService, resourceAssignments)
-            return bluePrintEnhancerService.serviceTemplate
-        }
-    */
     private fun checkResourceDefinitionNeeded(resourceAssignment: ResourceAssignment): Boolean {
         return !((resourceAssignment.dictionarySource.equals(ResourceDictionaryConstants.SOURCE_INPUT)
                 || resourceAssignment.dictionarySource.equals(ResourceDictionaryConstants.SOURCE_DEFAULT))

@@ -22,7 +22,6 @@ import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ArtifactDefinition
-import org.onap.ccsdk.apps.controllerblueprints.core.data.ArtifactType
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintArtifactDefinitionEnhancer
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintRepoService
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
@@ -30,6 +29,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
+import org.onap.ccsdk.apps.controllerblueprints.service.utils.BluePrintEnhancerUtils
 import org.springframework.stereotype.Service
 
 @Service
@@ -56,10 +56,10 @@ open class BluePrintArtifactDefinitionEnhancerImpl(private val bluePrintRepoServ
         this.bluePrintContext = bluePrintRuntimeService.bluePrintContext()
 
         val artifactTypeName = artifactDefinition.type
-                ?: throw BluePrintException("Artifact type is missing for ArtifactDefinition($name)")
+                ?: throw BluePrintException("artifact type is missing for ArtifactDefinition($name)")
 
         // Populate Artifact Type
-        populateArtifactType(artifactTypeName)
+        BluePrintEnhancerUtils.populateArtifactType(bluePrintContext, bluePrintRepoService, artifactTypeName)
 
         when (artifactTypeName) {
             ARTIFACT_TYPE_MAPPING_SOURCE -> {
@@ -90,12 +90,4 @@ open class BluePrintArtifactDefinitionEnhancerImpl(private val bluePrintRepoServ
         }
     }
 
-    open fun populateArtifactType(artifactTypeName: String): ArtifactType {
-
-        val artifactType = bluePrintContext.serviceTemplate.artifactTypes?.get(artifactTypeName)
-                ?: bluePrintRepoService.getArtifactType(artifactTypeName)
-                ?: throw BluePrintException("couldn't get ArtifactType($artifactTypeName) from repo.")
-        bluePrintContext.serviceTemplate.artifactTypes?.put(artifactTypeName, artifactType)
-        return artifactType
-    }
 }

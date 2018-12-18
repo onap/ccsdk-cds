@@ -17,6 +17,7 @@
 package org.onap.ccsdk.apps.controllerblueprints.service.load
 
 import com.att.eelf.configuration.EELFManager
+import kotlinx.coroutines.*
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang3.text.StrBuilder
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
@@ -40,19 +41,39 @@ open class ModelTypeLoadService(private val modelTypeService: ModelTypeService) 
         modelTypePaths.forEach { loadPathModelType(it) }
     }
 
-    open fun loadPathModelType(modelTypePath: String) {
+    open fun loadPathModelType(modelTypePath: String) = runBlocking {
         log.info(" *************************** loadModelType **********************")
         try {
             val errorBuilder = StrBuilder()
 
-            val dataTypeFiles = File("$modelTypePath/data_type").listFiles()
-            dataTypeFiles.forEach { loadDataType(it, errorBuilder) }
+            coroutineScope {
+                val dataTypeFiles = File("$modelTypePath/data_type").listFiles()
 
-            val artifactTypefiles = File("$modelTypePath/artifact_type").listFiles()
-            artifactTypefiles.forEach { loadArtifactType(it, errorBuilder) }
+                val deferredResults = mutableListOf<Deferred<Unit>>()
 
-            val nodeTypeFiles = File("$modelTypePath/node_type").listFiles()
-            nodeTypeFiles.forEach { loadNodeType(it, errorBuilder) }
+                for (file in dataTypeFiles) deferredResults += async { loadDataType(file, errorBuilder) }
+
+                deferredResults.awaitAll()
+            }
+
+            coroutineScope {
+                val artifactTypefiles = File("$modelTypePath/artifact_type").listFiles()
+
+                val deferredResults = mutableListOf<Deferred<Unit>>()
+
+                for (file in artifactTypefiles) deferredResults += async { loadArtifactType(file, errorBuilder) }
+
+                deferredResults.awaitAll()
+            }
+
+            coroutineScope {
+                val nodeTypeFiles = File("$modelTypePath/node_type").listFiles()
+
+                val deferredResults = mutableListOf<Deferred<Unit>>()
+
+                for (file in nodeTypeFiles) deferredResults += async { loadNodeType(file, errorBuilder) }
+                deferredResults.awaitAll()
+            }
 
             if (!errorBuilder.isEmpty) {
                 log.error(errorBuilder.toString())

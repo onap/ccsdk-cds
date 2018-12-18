@@ -58,8 +58,8 @@ open class BluePrintEnhancerServiceImpl(private val bluePrintRepoService: BluePr
             bluePrintTypeEnhancerService.enhanceServiceTemplate(blueprintRuntimeService, "service_template",
                     blueprintRuntimeService.bluePrintContext().serviceTemplate)
 
-            // Write the Type File Definitions
-            BluePrintFileUtils.writeBluePrintTypes(blueprintRuntimeService.bluePrintContext())
+            // Write the Enhanced Blueprint Definitions
+            BluePrintFileUtils.writeEnhancedBluePrint(blueprintRuntimeService.bluePrintContext())
 
             // Enhance Resource Dictionary
             enhanceResourceDefinition(blueprintRuntimeService)

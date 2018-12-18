@@ -18,9 +18,9 @@ package org.onap.ccsdk.apps.controllerblueprints.service.enhancer
 
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.apps.controllerblueprints.core.ConfigModelConstant
 import org.onap.ccsdk.apps.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.apps.controllerblueprints.core.data.DataType
 import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition
@@ -169,27 +169,27 @@ open class BluePrintWorkflowEnhancerImpl(private val bluePrintRepoService: BlueP
 
         val dataTypeName = "dt-$workflowName-properties"
 
-        var recipeDataType: DataType? = bluePrintContext.serviceTemplate.dataTypes?.get(dataTypeName)
+        var dynamicDataType: DataType? = bluePrintContext.serviceTemplate.dataTypes?.get(dataTypeName)
 
-        if (recipeDataType == null) {
+        if (dynamicDataType == null) {
             log.info("dataType not present for the recipe({})", dataTypeName)
-            recipeDataType = DataType()
-            recipeDataType.version = "1.0.0"
-            recipeDataType.description = "Dynamic DataType definition for workflow($workflowName)."
-            recipeDataType.derivedFrom = ConfigModelConstant.MODEL_TYPE_DATA_TYPE_DYNAMIC
+            dynamicDataType = DataType()
+            dynamicDataType.version = "1.0.0"
+            dynamicDataType.description = "Dynamic DataType definition for workflow($workflowName)."
+            dynamicDataType.derivedFrom = BluePrintConstants.MODEL_TYPE_DATA_TYPE_DYNAMIC
 
             val dataTypeProperties: MutableMap<String, PropertyDefinition> = hashMapOf()
-            recipeDataType.properties = dataTypeProperties
+            dynamicDataType.properties = dataTypeProperties
 
             // Overwrite WorkFlow DataType
-            bluePrintContext.serviceTemplate.dataTypes?.put(dataTypeName, recipeDataType)
+            bluePrintContext.serviceTemplate.dataTypes?.put(dataTypeName, dynamicDataType)
 
         } else {
             log.info("dynamic dataType($dataTypeName) already present for workflow($workflowName).")
         }
         // Merge all the Recipe Properties
         mappingProperties.forEach { propertyName, propertyDefinition ->
-            recipeDataType.properties?.put(propertyName, propertyDefinition)
+            dynamicDataType.properties?.put(propertyName, propertyDefinition)
         }
     }
 }

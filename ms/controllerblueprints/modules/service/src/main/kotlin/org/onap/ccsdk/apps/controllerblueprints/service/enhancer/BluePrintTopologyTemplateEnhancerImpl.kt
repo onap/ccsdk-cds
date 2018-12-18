@@ -37,7 +37,7 @@ open class BluePrintTopologyTemplateEnhancerImpl(private val bluePrintRepoServic
 
         enhanceTopologyTemplateInputs(type)
         enhanceTopologyTemplateNodeTemplates(type)
-        enhanceTopologyTemplateWorkflowss(type)
+        enhanceTopologyTemplateWorkflows(type)
     }
 
     open fun enhanceTopologyTemplateInputs(topologyTemplate: TopologyTemplate) {
@@ -52,7 +52,7 @@ open class BluePrintTopologyTemplateEnhancerImpl(private val bluePrintRepoServic
         }
     }
 
-    open fun enhanceTopologyTemplateWorkflowss(topologyTemplate: TopologyTemplate) {
+    open fun enhanceTopologyTemplateWorkflows(topologyTemplate: TopologyTemplate) {
         topologyTemplate.workflows?.forEach { workflowName, workflow ->
             bluePrintTypeEnhancerService.enhanceWorkflow(bluePrintRuntimeService, workflowName, workflow)
         }

@@ -62,7 +62,7 @@ open class BluePrintServiceTemplateEnhancerImpl(private val bluePrintRepoService
 
     open fun enhanceTopologyTemplate() {
         bluePrintContext.serviceTemplate.topologyTemplate?.let { topologyTemplate ->
-            bluePrintTypeEnhancerService.enhanceTopologyTemplate(bluePrintRuntimeService, "default", topologyTemplate)
+            bluePrintTypeEnhancerService.enhanceTopologyTemplate(bluePrintRuntimeService, "topology_template", topologyTemplate)
         }
     }
 }

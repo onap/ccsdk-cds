@@ -16,17 +16,40 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.enhancer
 
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.apps.controllerblueprints.core.data.AttributeDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintAttributeDefinitionEnhancer
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintRepoService
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.apps.controllerblueprints.service.utils.BluePrintEnhancerUtils
 
 class BluePrintAttributeDefinitionEnhancerImpl(private val bluePrintRepoService: BluePrintRepoService,
                                                private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService)
     : BluePrintAttributeDefinitionEnhancer {
 
-    override fun enhance(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, type: AttributeDefinition) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
+    lateinit var bluePrintContext: BluePrintContext
+
+    override fun enhance(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, attributeDefinition: AttributeDefinition) {
+        this.bluePrintRuntimeService = bluePrintRuntimeService
+        this.bluePrintContext = bluePrintRuntimeService.bluePrintContext()
+
+        val propertyType = attributeDefinition.type
+        if (BluePrintTypes.validPrimitiveTypes().contains(propertyType)) {
+
+        } else if (BluePrintTypes.validCollectionTypes().contains(propertyType)) {
+            val entrySchema = attributeDefinition.entrySchema
+                    ?: throw BluePrintException("Entry Schema is missing for collection property($name)")
+
+            if (!BluePrintTypes.validPrimitiveTypes().contains(entrySchema.type)) {
+                BluePrintEnhancerUtils.populateDataTypes(bluePrintContext, bluePrintRepoService, entrySchema.type)
+            }
+        } else {
+            BluePrintEnhancerUtils.populateDataTypes(bluePrintContext, bluePrintRepoService, propertyType)
+        }
     }
+
 }
