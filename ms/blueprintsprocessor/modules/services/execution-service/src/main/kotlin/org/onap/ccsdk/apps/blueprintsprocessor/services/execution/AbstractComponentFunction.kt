@@ -120,4 +120,8 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         return operationInputs[key]
                 ?: throw BluePrintProcessorException("couldn't get the operation input($key) value.")
     }
+
+    fun setAttribute(key: String, value: JsonNode) {
+        bluePrintRuntimeService.setNodeTemplateAttributeValue(nodeTemplateName, key, value)
+    }
 }

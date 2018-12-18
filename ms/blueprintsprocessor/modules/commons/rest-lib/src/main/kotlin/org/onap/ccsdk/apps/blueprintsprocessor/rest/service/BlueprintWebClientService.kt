@@ -24,7 +24,11 @@ interface BlueprintWebClientService {
 
     fun <T> getResource(path: String, responseType: Class<T>): T
 
+    fun <T> getResource(path: String, headers: Map<String, String>?, responseType: Class<T>): T
+
     fun <T> postResource(path: String, request: Any, responseType: Class<T>): T
+
+    fun <T> postResource(path: String, headers: Map<String, String>?, request: Any, responseType: Class<T>): T
 
     fun <T> exchangeResource(methodType: String, path: String, request: Any, responseType: Class<T>): T
 

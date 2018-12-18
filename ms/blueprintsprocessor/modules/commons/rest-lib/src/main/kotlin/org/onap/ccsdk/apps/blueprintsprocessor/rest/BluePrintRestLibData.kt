@@ -23,10 +23,11 @@ open class RestClientProperties {
 }
 
 open class BasicAuthRestClientProperties : RestClientProperties() {
-    var passwd: String? = null
+    var token: String? = null
 }
 
 open class SSLBasicAuthRestClientProperties : RestClientProperties() {
+    lateinit var keyStoreInstance: String // JKS, PKCS12
     lateinit var sslTrust: String
     lateinit var sslTrustPasswd: String
     lateinit var sslKey: String

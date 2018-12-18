@@ -16,22 +16,64 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.rest.service
 
-import org.onap.ccsdk.apps.blueprintsprocessor.rest.RestClientProperties
+import org.onap.ccsdk.apps.blueprintsprocessor.rest.BasicAuthRestClientProperties
+import org.onap.ccsdk.apps.blueprintsprocessor.rest.utils.WebClientUtils
+import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
+import org.springframework.web.reactive.function.BodyInserters
+import org.springframework.web.reactive.function.client.ExchangeFilterFunctions
 import org.springframework.web.reactive.function.client.WebClient
 
 
-class BasicAuthRestClientService(restClientProperties: RestClientProperties) : BlueprintWebClientService {
+class BasicAuthRestClientService(private val restClientProperties: BasicAuthRestClientProperties) : BlueprintWebClientService {
+
+    private var webClient: WebClient? = null
 
     override fun webClient(): WebClient {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        if (webClient == null) {
+            webClient = WebClient.builder()
+                    .baseUrl(restClientProperties.url)
+                    .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+                    .filter(ExchangeFilterFunctions
+                            .basicAuthentication(restClientProperties.userId, restClientProperties.token))
+                    .filter(WebClientUtils.logRequest())
+                    .filter(WebClientUtils.logResponse())
+                    .build()
+        }
+        return webClient!!
     }
 
     override fun <T> getResource(path: String, responseType: Class<T>): T {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return getResource(path, null, responseType)
+    }
+
+    override fun <T> getResource(path: String, headers: Map<String, String>?, responseType: Class<T>): T {
+        return webClient().get()
+                .uri(path)
+                .headers { httpHeaders ->
+                    headers?.forEach {
+                        httpHeaders.set(it.key, it.value)
+                    }
+                }
+                .retrieve()
+                .bodyToMono(responseType).block()!!
     }
 
     override fun <T> postResource(path: String, request: Any, responseType: Class<T>): T {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return postResource(path, null, request, responseType)
+    }
+
+    override fun <T> postResource(path: String, headers: Map<String, String>?, request: Any, responseType: Class<T>): T {
+        return webClient().post()
+                .uri(path)
+                .headers { httpHeaders ->
+                    headers?.forEach {
+                        httpHeaders.set(it.key, it.value)
+                    }
+                }
+                .body(BodyInserters.fromObject(request))
+                .retrieve().bodyToMono(responseType).block()!!
     }
 
     override fun <T> exchangeResource(methodType: String, path: String, request: Any, responseType: Class<T>): T {

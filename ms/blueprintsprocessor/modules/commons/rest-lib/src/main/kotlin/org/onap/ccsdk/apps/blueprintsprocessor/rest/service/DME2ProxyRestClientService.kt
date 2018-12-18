@@ -28,7 +28,15 @@ class DME2ProxyRestClientService(restClientProperties: RestClientProperties) : B
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    override fun <T> getResource(path: String, headers: Map<String, String>?, responseType: Class<T>): T {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun <T> postResource(path: String, request: Any, responseType: Class<T>): T {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun <T> postResource(path: String, headers: Map<String, String>?, request: Any, responseType: Class<T>): T {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
