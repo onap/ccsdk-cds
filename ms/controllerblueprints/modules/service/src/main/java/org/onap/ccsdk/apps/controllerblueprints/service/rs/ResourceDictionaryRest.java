@@ -19,8 +19,8 @@ package org.onap.ccsdk.apps.controllerblueprints.service.rs;
 
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceSourceMapping;
-import org.onap.ccsdk.apps.controllerblueprints.service.ResourceDictionaryService;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionary;
+import org.onap.ccsdk.apps.controllerblueprints.service.handler.ResourceDictionaryHandler;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,51 +35,51 @@ import java.util.List;
 public class ResourceDictionaryRest {
 
 
-    private ResourceDictionaryService resourceDictionaryService;
+    private ResourceDictionaryHandler resourceDictionaryHandler;
 
     /**
      * This is a DataDictionaryRestImpl, used to save and get the Resource Mapping stored in database
      *
-     * @param dataDictionaryService Data Dictionary Service
+     * @param resourceDictionaryHandler Data Dictionary Handler
      */
-    public ResourceDictionaryRest(ResourceDictionaryService dataDictionaryService) {
-        this.resourceDictionaryService = dataDictionaryService;
+    public ResourceDictionaryRest(ResourceDictionaryHandler resourceDictionaryHandler) {
+        this.resourceDictionaryHandler = resourceDictionaryHandler;
     }
 
     @PostMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ResourceDictionary saveResourceDictionary(@RequestBody ResourceDictionary dataDictionary) throws BluePrintException {
-        return resourceDictionaryService.saveResourceDictionary(dataDictionary);
+        return resourceDictionaryHandler.saveResourceDictionary(dataDictionary);
     }
 
     @DeleteMapping(path = "/{name}")
     public void deleteResourceDictionaryByName(@PathVariable(value = "name") String name) {
-        resourceDictionaryService.deleteResourceDictionary(name);
+        resourceDictionaryHandler.deleteResourceDictionary(name);
     }
 
     @GetMapping(path = "/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ResourceDictionary getResourceDictionaryByName(@PathVariable(value = "name") String name) throws BluePrintException {
-        return resourceDictionaryService.getResourceDictionaryByName(name);
+        return resourceDictionaryHandler.getResourceDictionaryByName(name);
     }
 
     @PostMapping(path = "/by-names", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     List<ResourceDictionary> searchResourceDictionaryByNames(@RequestBody List<String> names) {
-        return resourceDictionaryService.searchResourceDictionaryByNames(names);
+        return resourceDictionaryHandler.searchResourceDictionaryByNames(names);
     }
 
     @GetMapping(path = "/search/{tags}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     List<ResourceDictionary> searchResourceDictionaryByTags(@PathVariable(value = "tags") String tags) {
-        return resourceDictionaryService.searchResourceDictionaryByTags(tags);
+        return resourceDictionaryHandler.searchResourceDictionaryByTags(tags);
 
     }
 
     @GetMapping(path = "/source-mapping", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ResourceSourceMapping getResourceSourceMapping() {
-        return resourceDictionaryService.getResourceSourceMapping();
+        return resourceDictionaryHandler.getResourceSourceMapping();
     }
 
 }

@@ -94,8 +94,8 @@ open class BluePrintRepoFileService(private val modelTypeRepository: ModelTypeRe
     private fun getModelDefinition(modelName: String): JsonNode {
         val modelDefinition: JsonNode
         val modelTypeDb = modelTypeRepository.findByModelName(modelName)
-        if (modelTypeDb.isPresent) {
-            modelDefinition = modelTypeDb.get().definition
+        if (modelTypeDb != null) {
+            modelDefinition = modelTypeDb.definition
         } else {
             throw BluePrintException(String.format("failed to get model definition (%s) from repo", modelName))
         }

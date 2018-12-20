@@ -84,7 +84,7 @@ public class ModelType implements Serializable {
 
     @Override
     public String toString() {
-        return "[" + ", modelName = " + modelName +
+        return "[" + "modelName = " + modelName +
                 ", derivedFrom = " + derivedFrom +
                 ", definitionType = " + definitionType +
                 ", description = " + description +

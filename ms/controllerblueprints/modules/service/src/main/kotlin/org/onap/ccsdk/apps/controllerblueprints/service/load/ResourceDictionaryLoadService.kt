@@ -25,14 +25,14 @@ import org.apache.commons.lang3.text.StrBuilder
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
-import org.onap.ccsdk.apps.controllerblueprints.service.ResourceDictionaryService
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionary
+import org.onap.ccsdk.apps.controllerblueprints.service.handler.ResourceDictionaryHandler
 import org.springframework.stereotype.Service
 import java.io.File
 import java.nio.charset.Charset
 
 @Service
-open class ResourceDictionaryLoadService(private val resourceDictionaryService: ResourceDictionaryService) {
+open class ResourceDictionaryLoadService(private val resourceDictionaryHandler: ResourceDictionaryHandler) {
 
     private val log = EELFManager.getInstance().getLogger(ResourceDictionaryLoadService::class.java)
 
@@ -92,7 +92,7 @@ open class ResourceDictionaryLoadService(private val resourceDictionaryService: 
                 } else {
                     resourceDictionary.tags = resourceDefinition.tags
                 }
-                resourceDictionaryService.saveResourceDictionary(resourceDictionary)
+                resourceDictionaryHandler.saveResourceDictionary(resourceDictionary)
 
                 log.trace("Resource dictionary(${file.name}) loaded successfully ")
             } else {

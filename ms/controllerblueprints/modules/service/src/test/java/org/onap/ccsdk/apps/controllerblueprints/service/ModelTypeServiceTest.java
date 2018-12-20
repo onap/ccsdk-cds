@@ -25,9 +25,11 @@ import org.onap.ccsdk.apps.controllerblueprints.TestApplication;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ModelType;
+import org.onap.ccsdk.apps.controllerblueprints.service.handler.ModelTypeHandler;
 import org.onap.ccsdk.apps.controllerblueprints.service.rs.ModelTypeRestTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Propagation;
@@ -43,11 +45,12 @@ import java.util.List;
 public class ModelTypeServiceTest {
     private static EELFLogger log = EELFManager.getInstance().getLogger(ModelTypeRestTest.class);
     @Autowired
-    ModelTypeService modelTypeService;
+    private ModelTypeHandler modelTypeHandler;
 
     String modelName = "test-datatype";
 
     @Test
+    @Commit
     public void test01SaveModelType() throws Exception {
         log.info("**************** test01SaveModelType  ********************");
 
@@ -62,18 +65,18 @@ public class ModelTypeServiceTest {
         modelType.setTags("test-datatype ," + BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT + ","
                 + BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE);
         modelType.setUpdatedBy("xxxxxx@xxx.com");
-        modelType = modelTypeService.saveModel(modelType);
+        modelType = modelTypeHandler.saveModel(modelType);
         log.info("Saved Mode {}", modelType.toString());
         Assert.assertNotNull("Failed to get Saved ModelType", modelType);
         Assert.assertNotNull("Failed to get Saved ModelType, Id", modelType.getModelName());
 
-        ModelType dbModelType = modelTypeService.getModelTypeByName(modelType.getModelName());
+        ModelType dbModelType = modelTypeHandler.getModelTypeByName(modelType.getModelName());
         Assert.assertNotNull("Failed to query ResourceMapping for ID (" + dbModelType.getModelName() + ")",
                 dbModelType);
 
         // Model Update
         modelType.setUpdatedBy("bs2796@xxx.com");
-        modelType = modelTypeService.saveModel(modelType);
+        modelType = modelTypeHandler.saveModel(modelType);
         Assert.assertNotNull("Failed to get Saved ModelType", modelType);
         Assert.assertEquals("Failed to get Saved getUpdatedBy ", "bs2796@xxx.com", modelType.getUpdatedBy());
 
@@ -85,7 +88,7 @@ public class ModelTypeServiceTest {
 
         String tags = "test-datatype";
 
-        List<ModelType> dbModelTypes = modelTypeService.searchModelTypes(tags);
+        List<ModelType> dbModelTypes = modelTypeHandler.searchModelTypes(tags);
         Assert.assertNotNull("Failed to search ResourceMapping by tags", dbModelTypes);
         Assert.assertTrue("Failed to search ResourceMapping by tags count", dbModelTypes.size() > 0);
 
@@ -94,17 +97,17 @@ public class ModelTypeServiceTest {
     @Test
     public void test03GetModelType() throws Exception {
         log.info("************************* test03GetModelType  *********************************");
-        ModelType dbModelType = modelTypeService.getModelTypeByName(modelName);
+        ModelType dbModelType = modelTypeHandler.getModelTypeByName(modelName);
         Assert.assertNotNull("Failed to get response for api call getModelByName ", dbModelType);
         Assert.assertNotNull("Failed to get Id for api call  getModelByName ", dbModelType.getModelName());
 
         List<ModelType> dbDatatypeModelTypes =
-                modelTypeService.getModelTypeByDefinitionType(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE);
+                modelTypeHandler.getModelTypeByDefinitionType(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE);
         Assert.assertNotNull("Failed to find getModelTypeByDefinitionType by tags", dbDatatypeModelTypes);
         Assert.assertTrue("Failed to find getModelTypeByDefinitionType by count", dbDatatypeModelTypes.size() > 0);
 
         List<ModelType> dbModelTypeByDerivedFroms =
-                modelTypeService.getModelTypeByDerivedFrom(BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT);
+                modelTypeHandler.getModelTypeByDerivedFrom(BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT);
         Assert.assertNotNull("Failed to find getModelTypeByDerivedFrom by tags", dbModelTypeByDerivedFroms);
         Assert.assertTrue("Failed to find getModelTypeByDerivedFrom by count", dbModelTypeByDerivedFroms.size() > 0);
 
@@ -114,10 +117,10 @@ public class ModelTypeServiceTest {
     public void test04DeleteModelType() throws Exception {
         log.info(
                 "************************ test03DeleteModelType  ***********************");
-        ModelType dbResourceMapping = modelTypeService.getModelTypeByName(modelName);
+        ModelType dbResourceMapping = modelTypeHandler.getModelTypeByName(modelName);
         Assert.assertNotNull("Failed to get response for api call getModelByName ", dbResourceMapping);
         Assert.assertNotNull("Failed to get Id for api call  getModelByName ", dbResourceMapping.getModelName());
 
-        modelTypeService.deleteByModelName(dbResourceMapping.getModelName());
+        modelTypeHandler.deleteByModelName(dbResourceMapping.getModelName());
     }
 }

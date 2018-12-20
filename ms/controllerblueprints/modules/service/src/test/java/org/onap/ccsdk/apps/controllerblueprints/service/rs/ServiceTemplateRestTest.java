@@ -29,6 +29,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.ConfigModelConstant;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment;
+import org.onap.ccsdk.apps.controllerblueprints.service.controller.ModelTypeController;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModelContent;
 import org.onap.ccsdk.apps.controllerblueprints.service.model.AutoMapResponse;
 import com.att.eelf.configuration.EELFLogger;
@@ -52,7 +53,7 @@ public class ServiceTemplateRestTest {
 
     private static EELFLogger log = EELFManager.getInstance().getLogger(ServiceTemplateRestTest.class);
     @Autowired
-    ModelTypeRest modelTypeRest;
+    ModelTypeController modelTypeRest;
 
     @Autowired
     private ServiceTemplateRest serviceTemplateRest;

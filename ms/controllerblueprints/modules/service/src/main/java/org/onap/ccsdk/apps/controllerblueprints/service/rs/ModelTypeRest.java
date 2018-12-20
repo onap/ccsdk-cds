@@ -18,8 +18,8 @@
 package org.onap.ccsdk.apps.controllerblueprints.service.rs;
 
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
-import org.onap.ccsdk.apps.controllerblueprints.service.ModelTypeService;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ModelType;
+import org.onap.ccsdk.apps.controllerblueprints.service.handler.ModelTypeHandler;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,18 +29,18 @@ import java.util.List;
  * {@inheritDoc}
  */
 @Deprecated
-@RestController
-@RequestMapping(value = "/api/v1/model-type")
+//@RestController
+//@RequestMapping(value = "/api/v1/model-type")
 public class ModelTypeRest {
 
-    private ModelTypeService modelTypeService;
+    private ModelTypeHandler modelTypeService;
 
     /**
      * This is a ModelTypeResourceImpl, used to save and get the model types stored in database
      *
      * @param modelTypeService Model Type Service
      */
-    public ModelTypeRest(ModelTypeService modelTypeService) {
+    public ModelTypeRest(ModelTypeHandler modelTypeService) {
         this.modelTypeService = modelTypeService;
     }
 

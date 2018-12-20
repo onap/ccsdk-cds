@@ -25,14 +25,14 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.ArtifactType
 import org.onap.ccsdk.apps.controllerblueprints.core.data.DataType
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeType
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
-import org.onap.ccsdk.apps.controllerblueprints.service.ModelTypeService
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ModelType
+import org.onap.ccsdk.apps.controllerblueprints.service.handler.ModelTypeHandler
 import org.springframework.stereotype.Service
 import java.io.File
 import java.nio.charset.Charset
 
 @Service
-open class ModelTypeLoadService(private val modelTypeService: ModelTypeService) {
+open class ModelTypeLoadService(private val modelTypeHandler: ModelTypeHandler) {
 
     private val log = EELFManager.getInstance().getLogger(ModelTypeLoadService::class.java)
     private val updateBySystem = "System"
@@ -100,7 +100,7 @@ open class ModelTypeLoadService(private val modelTypeService: ModelTypeService) 
             modelType.version = dataType.version
             modelType.updatedBy = updateBySystem
             modelType.tags = (dataKey + "," + dataType.derivedFrom + "," + BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)
-            modelTypeService.saveModel(modelType)
+            modelTypeHandler.saveModel(modelType)
             log.trace("DataType(${file.name}) loaded successfully ")
         } catch (e: Exception) {
             errorBuilder.appendln("Couldn't load DataType(${file.name}: ${e.message}")
@@ -124,7 +124,7 @@ open class ModelTypeLoadService(private val modelTypeService: ModelTypeService) 
             modelType.version = artifactType.version
             modelType.updatedBy = updateBySystem
             modelType.tags = (dataKey + "," + artifactType.derivedFrom + "," + BluePrintConstants.MODEL_DEFINITION_TYPE_ARTIFACT_TYPE)
-            modelTypeService.saveModel(modelType)
+            modelTypeHandler.saveModel(modelType)
             log.trace("ArtifactType(${file.name}) loaded successfully ")
         } catch (e: Exception) {
             errorBuilder.appendln("Couldn't load ArtifactType(${file.name}: ${e.message}")
@@ -148,7 +148,7 @@ open class ModelTypeLoadService(private val modelTypeService: ModelTypeService) 
             modelType.version = nodeType.version
             modelType.updatedBy = updateBySystem
             modelType.tags = (nodeKey + "," + BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TYPE + "," + nodeType.derivedFrom)
-            modelTypeService.saveModel(modelType)
+            modelTypeHandler.saveModel(modelType)
             log.trace("NodeType(${file.name}) loaded successfully ")
         } catch (e: Exception) {
             errorBuilder.appendln("Couldn't load NodeType(${file.name}: ${e.message}")
