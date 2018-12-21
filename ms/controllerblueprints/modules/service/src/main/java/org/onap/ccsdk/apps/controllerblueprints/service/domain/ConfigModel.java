@@ -119,6 +119,10 @@ public class ConfigModel implements Serializable {
     @JsonManagedReference
     private List<ConfigModelContent> configModelContents = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "cba_content_uuid")
+    private CbaContent configModelCBA;
+
     public Long getId() {
         return id;
     }
@@ -285,6 +289,14 @@ public class ConfigModel implements Serializable {
 
     public void setConfigModelContents(List<ConfigModelContent> configModelContents) {
         this.configModelContents = configModelContents;
+    }
+
+    public CbaContent getConfigModelCBA() {
+        return configModelCBA;
+    }
+    
+    public void setConfigModelCBA(CbaContent configModelCBA) {
+        this.configModelCBA = configModelCBA;
     }
 
 }
