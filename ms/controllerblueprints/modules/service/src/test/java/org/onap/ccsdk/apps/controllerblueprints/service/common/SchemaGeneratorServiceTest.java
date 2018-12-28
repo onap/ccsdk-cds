@@ -16,14 +16,14 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.common;
 
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFManager;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.onap.ccsdk.apps.controllerblueprints.service.SchemaGeneratorService;
-import com.att.eelf.configuration.EELFLogger;
-import com.att.eelf.configuration.EELFManager;
 
 import java.io.File;
 import java.nio.charset.Charset;

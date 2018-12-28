@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 Bell Canada.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +17,13 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
@@ -35,14 +36,13 @@ import java.util.Objects;
 @EntityListeners({AuditingEntityListener.class})
 @Entity
 @Table(name = "CONFIG_MODEL_CONTENT")
-public class ConfigModelContent {
+public class BlueprintModelContent implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "config_model_content_id")
-    private Long id;
+    private String id;
 
     @Column(name = "name", nullable = false)
     @ApiModelProperty(required=true)
@@ -52,28 +52,24 @@ public class ConfigModelContent {
     @ApiModelProperty(required=true)
     private String contentType;
 
-
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "config_model_id")
-    @JsonBackReference
-    private ConfigModel configModel;
+    private BlueprintModel blueprintModel;
 
     @Lob
     @Column(name = "description")
     private String description;
 
-    @Deprecated
     @Lob
     @Column(name = "content", nullable = false)
     @ApiModelProperty(required=true)
-    private String content;
-
+    private byte[]  content;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_date")
-    private Date creationDate;
+    private Date creationDate = new Date();
 
     @Override
     public String toString() {
@@ -89,12 +85,12 @@ public class ConfigModelContent {
         if (o == this) {
             return true;
         }
-        if (!(o instanceof ConfigModelContent)) {
+        if (!(o instanceof BlueprintModelContent)) {
             return false;
         }
-        ConfigModelContent configModelContent = (ConfigModelContent) o;
-        return Objects.equals(id, configModelContent.id) && Objects.equals(name, configModelContent.name)
-                && Objects.equals(contentType, configModelContent.contentType);
+        BlueprintModelContent blueprintModelContent = (BlueprintModelContent) o;
+        return Objects.equals(id, blueprintModelContent.id) && Objects.equals(name, blueprintModelContent.name)
+                && Objects.equals(contentType, blueprintModelContent.contentType);
     }
 
     @Override
@@ -102,12 +98,12 @@ public class ConfigModelContent {
         return Objects.hash(id, name, contentType);
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -132,13 +128,13 @@ public class ConfigModelContent {
     }
 
 
-    public ConfigModel getConfigModel() {
-        return configModel;
+    public BlueprintModel getBlueprintModel() {
+        return blueprintModel;
     }
 
 
-    public void setConfigModel(ConfigModel configModel) {
-        this.configModel = configModel;
+    public void setBlueprintModel(BlueprintModel blueprintModel) {
+        this.blueprintModel = blueprintModel;
     }
 
 
@@ -152,12 +148,12 @@ public class ConfigModelContent {
     }
 
 
-    public String getContent() {
+    public byte[] getContent() {
         return content;
     }
 
 
-    public void setContent(String content) {
+    public void setContent(byte[] content) {
         this.content = content;
     }
 

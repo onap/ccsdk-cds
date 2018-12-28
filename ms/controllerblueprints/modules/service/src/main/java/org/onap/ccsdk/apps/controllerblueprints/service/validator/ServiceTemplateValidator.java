@@ -29,8 +29,8 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate;
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintValidatorDefaultService;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment;
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceAssignmentValidationServiceImpl;
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceAssignmentValidationService;
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceAssignmentValidationServiceImpl;
 
 import java.util.HashMap;
 import java.util.List;

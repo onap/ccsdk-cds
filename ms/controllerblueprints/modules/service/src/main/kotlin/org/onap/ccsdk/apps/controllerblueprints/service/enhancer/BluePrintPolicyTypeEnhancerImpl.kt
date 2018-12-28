@@ -16,7 +16,6 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.enhancer
 
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.apps.controllerblueprints.core.data.PolicyType
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintPolicyTypeEnhancer
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintRepoService

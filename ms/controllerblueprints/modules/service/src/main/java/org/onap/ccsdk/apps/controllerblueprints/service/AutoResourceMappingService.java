@@ -17,6 +17,8 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service;
 
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFManager;
 import com.google.common.base.Preconditions;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -28,8 +30,6 @@ import org.onap.ccsdk.apps.controllerblueprints.resource.dict.utils.ResourceDict
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionary;
 import org.onap.ccsdk.apps.controllerblueprints.service.model.AutoMapResponse;
 import org.onap.ccsdk.apps.controllerblueprints.service.repository.ResourceDictionaryRepository;
-import com.att.eelf.configuration.EELFLogger;
-import com.att.eelf.configuration.EELFManager;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

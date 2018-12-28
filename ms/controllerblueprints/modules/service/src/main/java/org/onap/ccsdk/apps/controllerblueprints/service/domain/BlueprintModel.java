@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 Bell Canada.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +18,6 @@
 package org.onap.ccsdk.apps.controllerblueprints.service.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.Proxy;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -25,12 +25,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
- * ConfigModel.java Purpose: Provide Configuration Generator ConfigModel Entity
+ * BlueprintModel.java Purpose: Provide Configuration Generator BlueprintModel Entity
  *
  * @author Brinda Santh
  * @version 1.0
@@ -40,12 +38,11 @@ import java.util.List;
 @Entity
 @Table(name = "CONFIG_MODEL")
 @Proxy(lazy=false)
-public class ConfigModel implements Serializable {
+public class BlueprintModel implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "config_model_id")
-    private Long id;
+    private String id;
 
     @Column(name = "service_uuid")
     private String serviceUUID;
@@ -114,20 +111,14 @@ public class ConfigModel implements Serializable {
     @ApiModelProperty(required=true)
     private String tags;
 
+    @OneToOne(mappedBy = "blueprintModel", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
+    private BlueprintModelContent blueprintModelContent;
 
-    @OneToMany(mappedBy = "configModel", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<ConfigModelContent> configModelContents = new ArrayList<>();
-
-    @ManyToOne
-    @JoinColumn(name = "cba_content_uuid")
-    private CbaContent configModelCBA;
-
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -283,20 +274,11 @@ public class ConfigModel implements Serializable {
         this.tags = tags;
     }
 
-    public List<ConfigModelContent> getConfigModelContents() {
-        return configModelContents;
+    public BlueprintModelContent getBlueprintModelContent() {
+        return blueprintModelContent;
     }
 
-    public void setConfigModelContents(List<ConfigModelContent> configModelContents) {
-        this.configModelContents = configModelContents;
+    public void setBlueprintModelContent(BlueprintModelContent blueprintModelContent) {
+        this.blueprintModelContent = blueprintModelContent;
     }
-
-    public CbaContent getConfigModelCBA() {
-        return configModelCBA;
-    }
-    
-    public void setConfigModelCBA(CbaContent configModelCBA) {
-        this.configModelCBA = configModelCBA;
-    }
-
 }

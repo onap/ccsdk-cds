@@ -16,14 +16,12 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.validator;
 
-import static org.junit.Assert.*;
-
-import org.junit.*;
-import org.onap.ccsdk.apps.controllerblueprints.service.validator.ModelTypeValidator;
-import org.onap.ccsdk.apps.controllerblueprints.service.domain.ModelType;
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
-
 import com.fasterxml.jackson.databind.JsonNode;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
+import org.onap.ccsdk.apps.controllerblueprints.service.domain.ModelType;
 
 public class ModelTypeValidatorTest {
 
