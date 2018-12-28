@@ -39,7 +39,7 @@ class MockBlueprintDGExecutionService : BlueprintDGExecutionService {
 @Service
 class MockBluePrintCatalogService : BluePrintCatalogService {
 
-    override fun uploadToDataBase(file: String): String {
+    override fun uploadToDataBase(file: String, validate : Boolean): String {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -51,5 +51,9 @@ class MockBluePrintCatalogService : BluePrintCatalogService {
         assertNotNull(name, "failed to get blueprint Name")
         assertNotNull(version, "failed to get blueprint version")
         return "./../../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration"
+    }
+
+    override fun downloadFromDataBase(uuid: String, path: String): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

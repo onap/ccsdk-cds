@@ -24,7 +24,7 @@ import java.io.File
 @Service
 class BluePrintCatalogServiceImpl(private val bluePrintCoreConfiguration: BluePrintCoreConfiguration) : BluePrintCatalogService {
 
-    override fun uploadToDataBase(file: String): String {
+    override fun uploadToDataBase(file: String, validate : Boolean): String {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -37,5 +37,9 @@ class BluePrintCatalogServiceImpl(private val bluePrintCoreConfiguration: BluePr
         return bluePrintCoreConfiguration.deployPath.plus(File.separator)
                 .plus(name).plus(File.separator).plus(version)
 
+    }
+
+    override fun downloadFromDataBase(uuid: String, path: String): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
