@@ -20,6 +20,7 @@ import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.io.FileUtils
+import org.apache.commons.lang3.StringUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ImportDefinition
@@ -28,7 +29,16 @@ import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 import java.io.File
 import java.io.FileFilter
 import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
+import java.text.MessageFormat
+import java.time.Instant
+import java.time.temporal.ChronoUnit
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+
+
 
 class BluePrintFileUtils {
     companion object {
@@ -195,6 +205,42 @@ class BluePrintFileUtils {
                     "\nCreated-By: <AUTHOR NAME>" +
                     "\nEntry-Definitions: Definitions/<BLUEPRINT_NAME>.json" +
                     "\nTemplate-Tags: <TAGS>"
+        }
+       
+        fun getBluePrintFile(fileName: String, targetPath: Path) : File {
+            val filePath = targetPath.resolve(fileName).toString()
+            val file = File(filePath)
+            check(file.exists()) {
+                throw BluePrintException("couldn't get definition file under path(${file.absolutePath})")
+            }
+            return file
+        }
+
+        fun getCBAGeneratedFileName(fileName: String, prefix: String): String {
+            val DATE_FORMAT = "yyyyMMddHHmmss"
+            val formatter = DateTimeFormatter.ofPattern(DATE_FORMAT)
+            val datePrefix = Instant.now().atZone(ZoneId.systemDefault()).toLocalDateTime().format(formatter)
+            return MessageFormat.format(prefix, datePrefix, fileName)
+        }
+
+        fun getCbaStorageDirectory(path: String): Path {
+            check(StringUtils.isNotBlank(path)) {
+                throw BluePrintException("CBA Path is missing.")
+            }
+
+            val fileStorageLocation = Paths.get(path).toAbsolutePath().normalize()
+
+            if (!Files.exists(fileStorageLocation))
+                Files.createDirectories(fileStorageLocation)
+
+            return fileStorageLocation
+        }
+
+        fun stripFileExtension(fileName: String): String {
+            val dotIndexe = fileName.lastIndexOf('.')
+
+            // In case dot is in first position, we are dealing with a hidden file rather than an extension
+            return if (dotIndexe > 0) fileName.substring(0, dotIndexe) else fileName
         }
 
     }
