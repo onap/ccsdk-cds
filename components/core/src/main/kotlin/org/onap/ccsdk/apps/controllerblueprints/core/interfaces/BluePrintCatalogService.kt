@@ -21,7 +21,7 @@ interface BluePrintCatalogService {
     /**
      * Upload the CBA Zip fle to data base and return the Database identifier
      */
-    fun uploadToDataBase(file: String): String
+    fun uploadToDataBase(file: String, validate : Boolean): String
 
     /**
      * Download the CBA zip file from the data base and place it in a path and return the CBA zip absolute path
@@ -32,4 +32,9 @@ interface BluePrintCatalogService {
      * Get the Blueprint from Data Base and Download it under working directory and return the path path
      */
     fun prepareBluePrint(name: String, version: String): String
+
+    /**
+     * Get blueprint archive with zip file from Data Base
+     */
+    fun downloadFromDataBase(uuid: String, path: String): String
 }
