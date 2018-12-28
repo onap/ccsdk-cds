@@ -30,6 +30,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.ConfigModelConstant;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.service.common.ApplicationConstants;
+import org.onap.ccsdk.apps.controllerblueprints.service.domain.CbaContent;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModel;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModelContent;
 import org.onap.ccsdk.apps.controllerblueprints.service.repository.ConfigModelRepository;
@@ -123,7 +124,7 @@ public class ConfigModelCreateService {
             String artifactName = configModel.getArtifactName();
             String artifactVersion = configModel.getArtifactVersion();
             String author = configModel.getUpdatedBy();
-
+            CbaContent configModelCBA = configModel.getConfigModelCBA();
 
             if (StringUtils.isBlank(author)) {
                 throw new BluePrintException("Artifact Author is missing in the Service Template");
@@ -181,7 +182,7 @@ public class ConfigModelCreateService {
             addConfigModelContent(dbConfigModelId, configModel);
 
             // Populate Content model types
-            updateConfigModel = updateConfigModel(dbConfigModelId, artifactName, artifactVersion, author);
+            updateConfigModel = updateConfigModel(dbConfigModelId, artifactName, artifactVersion, author, configModelCBA);
 
 
             return updateConfigModel;
@@ -220,7 +221,7 @@ public class ConfigModelCreateService {
     }
 
     private ConfigModel updateConfigModel(Long dbConfigModelId, String artifactName, String artifactVersion,
-                                          String author) throws BluePrintException {
+                                          String author, CbaContent configModelCBA) throws BluePrintException {
 
         ConfigModel dbConfigModel = configModelRepository.getOne(dbConfigModelId);
         // Populate tags from metadata
@@ -234,6 +235,7 @@ public class ConfigModelCreateService {
         dbConfigModel.setUpdatedBy(author);
         dbConfigModel.setPublished(ApplicationConstants.ACTIVE_N);
         dbConfigModel.setTags(tags);
+        dbConfigModel.setConfigModelCBA(configModelCBA);
         configModelRepository.saveAndFlush(dbConfigModel);
         log.info("Config model ({}) saved successfully.", dbConfigModel.getId());
         return dbConfigModel;
