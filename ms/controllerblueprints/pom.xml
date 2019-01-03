@@ -23,7 +23,6 @@
         <version>0.4.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.onap.ccsdk.apps</groupId>
     <artifactId>controllerblueprints</artifactId>
     <name>Controller Blueprints Root</name>
     <version>0.4.0-SNAPSHOT</version>
