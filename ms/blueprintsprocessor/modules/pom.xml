@@ -28,7 +28,7 @@
 
     <artifactId>modules</artifactId>
     <packaging>pom</packaging>
-    <name>Blueprints Processor Modules POM</name>
+    <name>Blueprints Processor Modules</name>
     <description>Blueprints Processor Modules</description>
 
     <modules>
