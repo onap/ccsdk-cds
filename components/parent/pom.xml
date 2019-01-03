@@ -26,7 +26,7 @@
     </parent>
     <groupId>org.onap.ccsdk.apps.components</groupId>
     <artifactId>parent</artifactId>
-    <name>App Components Parent</name>
+    <name>Components Parent</name>
     <packaging>pom</packaging>
     <properties>
         <spring.boot.version>2.1.1.RELEASE</spring.boot.version>

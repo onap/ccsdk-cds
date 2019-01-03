@@ -23,9 +23,8 @@
         <version>0.4.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.onap.ccsdk.apps</groupId>
     <artifactId>components</artifactId>
-    <name>App Components Root</name>
+    <name>Components Root</name>
     <packaging>pom</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
