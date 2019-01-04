@@ -1,0 +1,52 @@
+<!-- ============LICENSE_START==========================================
+===================================================================
+Copyright (C) 2018 IBM Intellectual Property. All rights reserved.
+===================================================================
+
+Unless otherwise specified, all software contained herein is licensed
+under the Apache License, Version 2.0 (the License);
+you may not use this software except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+============LICENSE_END============================================ 
+-->
+
+
+<!-- <app-header></app-header> -->
+<!-- <mat-toolbar color="warn">
+  <mat-toolbar-row>
+    <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" color="primary">
+      <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+    </button>
+    <span>MY Image</span>
+  </mat-toolbar-row>
+</mat-toolbar> -->
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" color="primary">
+            <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+          </button>
+  <span>Controller Blueprint Design Studio</span>
+  </mat-toolbar-row>
+</mat-toolbar>
+<mat-sidenav-container class="example-container">
+  <mat-sidenav #drawer mode="side" [(opened)]="opened" (opened)="events.push('open!')"
+               (closed)="events.push('close!')">
+    <mat-toolbar color=""primary>Menu</mat-toolbar>
+    <mat-nav-list>
+        <a mat-list-item>Data dictionory</a>
+        <a mat-list-item [routerLink]="['/controllerBlueprint']">Controlled Blueprint</a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content (click)="drawer.close()">
+      <router-outlet></router-outlet>    
+  </mat-sidenav-content>
+</mat-sidenav-container>  
