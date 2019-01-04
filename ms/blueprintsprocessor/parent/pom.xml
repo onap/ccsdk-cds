@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.onap.ccsdk.apps</groupId>
         <artifactId>blueprintsprocessor</artifactId>
-        <version>0.4.0-SNAPSHOT</version>
+        <version>0.4.1-SNAPSHOT</version>
     </parent>
     <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
     <artifactId>parent</artifactId>
@@ -37,7 +37,7 @@
         <grpc.version>1.16.1</grpc.version>
         <protobuff.java.utils.version>3.6.1</protobuff.java.utils.version>
         <eelf.version>1.0.0</eelf.version>
-        <sli.version>0.4.0-SNAPSHOT</sli.version>
+        <sli.version>0.4.1-SNAPSHOT</sli.version>
         <guava.version>26.0-jre</guava.version>
         <jython.version>2.7.1</jython.version>
         <springfox.swagger2.version>2.9.2</springfox.swagger2.version>
