@@ -21,28 +21,20 @@ limitations under the License.
 
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-// import { AboutComponent } from './common/shared/components/about/about.component';
-// import { PageNotFoundComponent } from './common/shared/components/page-not-found/page-not-found.component';
-// import { SelectTemplateComponent } from './feature-module/select-template/select-template.component';
-// import { HomeComponent } from './common/shared/components/home/home.component';
+import { HomeComponent } from './common/shared/components/home/home.component';
 
 
 const routes: Routes = [
-// {
-//   path: '',
-//   component: HomeComponent,
-//   children: [
-//     {
-//       path: '',
-//       component: AboutComponent
-
-//     },
-//     {
-//       path: 'controllerBlueprint',
-//       loadChildren: './feature-module/controller-blueprint/controller-blueprint.module#ControllerBlueprintModule'
-//     }
-//   ]
-// }
+{
+  path: '',
+  component: HomeComponent,
+   children: [
+    {
+      path: 'blueprint',
+      loadChildren: './feature-modules/blueprint/blueprint.module#BlueprintModule'
+    }
+  ]
+}
 ];
 
 @NgModule({
