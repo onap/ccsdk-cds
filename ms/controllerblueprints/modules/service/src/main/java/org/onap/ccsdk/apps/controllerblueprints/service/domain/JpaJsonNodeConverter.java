@@ -16,11 +16,11 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.domain;
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
+
+import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 /**
  * @author Brinda Santh
  */

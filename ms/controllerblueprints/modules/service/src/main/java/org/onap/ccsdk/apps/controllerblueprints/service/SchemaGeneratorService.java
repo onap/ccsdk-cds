@@ -16,6 +16,8 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service;
 
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFManager;
 import com.google.common.base.Preconditions;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -24,8 +26,6 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.DataType;
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.service.common.SwaggerGenerator;
-import com.att.eelf.configuration.EELFLogger;
-import com.att.eelf.configuration.EELFManager;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -44,8 +44,8 @@ public class ControllerBluprintsApplicationTest {
     public void testConfigModel() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
-//        ResponseEntity<ConfigModel> entity = this.restTemplate
-//                .exchange("/api/v1/config-model/1", HttpMethod.GET, new HttpEntity<>(headers),ConfigModel.class);
+//        ResponseEntity<BlueprintModel> entity = this.restTemplate
+//                .exchange("/api/v1/config-model/1", HttpMethod.GET, new HttpEntity<>(headers),BlueprintModel.class);
 //        assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
 //        Assert.assertNotNull("failed to get response Config model",entity.getBody());
     }
@@ -54,8 +54,8 @@ public class ControllerBluprintsApplicationTest {
     public void testConfigModelFailure() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
-//        ResponseEntity<ConfigModel> entity = this.restTemplate
-//                .exchange("/api/v1/config-model-not-found/1", HttpMethod.GET, new HttpEntity<>(headers),ConfigModel.class);
+//        ResponseEntity<BlueprintModel> entity = this.restTemplate
+//                .exchange("/api/v1/config-model-not-found/1", HttpMethod.GET, new HttpEntity<>(headers),BlueprintModel.class);
 //        assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 //        Assert.assertNotNull("failed to get response Config model",entity.getBody());
     }

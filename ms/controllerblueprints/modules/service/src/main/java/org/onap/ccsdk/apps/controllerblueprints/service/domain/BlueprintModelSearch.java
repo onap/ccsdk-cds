@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 Bell Canada.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,13 +26,12 @@ import java.util.Date;
 
 @Entity
 @Table(name = "CONFIG_MODEL")
-public class ConfigModelSearch implements Serializable {
+public class BlueprintModelSearch implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "config_model_id")
-    private Long id;
+    private String id;
 
     @Column(name = "artifact_uuid")
     private String artifactUUId;
@@ -68,11 +68,11 @@ public class ConfigModelSearch implements Serializable {
     @Column(name = "tags", nullable = false)
     private String tags;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -159,7 +159,4 @@ public class ConfigModelSearch implements Serializable {
     public static long getSerialversionuid() {
         return serialVersionUID;
     }
-
-
-
 }

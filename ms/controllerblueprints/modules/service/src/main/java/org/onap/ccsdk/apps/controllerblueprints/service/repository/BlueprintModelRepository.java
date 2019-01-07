@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 Bell Canada.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +17,7 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.repository;
 
-import org.onap.ccsdk.apps.controllerblueprints.service.domain.ConfigModel;
+import org.onap.ccsdk.apps.controllerblueprints.service.domain.BlueprintModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -31,7 +32,7 @@ import java.util.Optional;
  * @version 1.0
  */
 @Repository
-public interface ConfigModelRepository extends JpaRepository<ConfigModel, Long> {
+public interface BlueprintModelRepository extends JpaRepository<BlueprintModel, String> {
     /**
      * This is a findById method
      * 
@@ -39,7 +40,7 @@ public interface ConfigModelRepository extends JpaRepository<ConfigModel, Long> 
      * @return Optional<AsdcArtifacts>
      */
     @NotNull
-    Optional<ConfigModel> findById(@NotNull Long id);
+    Optional<BlueprintModel> findById(@NotNull String id);
 
     /**
      * This is a findByArtifactNameAndArtifactVersion method
@@ -48,7 +49,7 @@ public interface ConfigModelRepository extends JpaRepository<ConfigModel, Long> 
      * @param artifactVersion artifactVersion
      * @return Optional<AsdcArtifacts>
      */
-    Optional<ConfigModel> findByArtifactNameAndArtifactVersion(String artifactName, String artifactVersion);
+    Optional<BlueprintModel> findByArtifactNameAndArtifactVersion(String artifactName, String artifactVersion);
 
     /**
      * This is a findTopByArtifactNameOrderByArtifactIdDesc method
@@ -56,7 +57,7 @@ public interface ConfigModelRepository extends JpaRepository<ConfigModel, Long> 
      * @param artifactName artifactName
      * @return Optional<AsdcArtifacts>
      */
-    Optional<ConfigModel> findTopByArtifactNameOrderByArtifactVersionDesc(String artifactName);
+    Optional<BlueprintModel> findTopByArtifactNameOrderByArtifactVersionDesc(String artifactName);
 
     /**
      * This is a findTopByArtifactName method
@@ -65,7 +66,7 @@ public interface ConfigModelRepository extends JpaRepository<ConfigModel, Long> 
      * @return Optional<AsdcArtifacts>
      */
     @SuppressWarnings("unused")
-    List<ConfigModel> findTopByArtifactName(String artifactName);
+    List<BlueprintModel> findTopByArtifactName(String artifactName);
 
     /**
      * This is a findByTagsContainingIgnoreCase method
@@ -73,7 +74,7 @@ public interface ConfigModelRepository extends JpaRepository<ConfigModel, Long> 
      * @param tags tags
      * @return Optional<ModelType>
      */
-    List<ConfigModel> findByTagsContainingIgnoreCase(String tags);
+    List<BlueprintModel> findByTagsContainingIgnoreCase(String tags);
 
     /**
      * This is a deleteByArtifactNameAndArtifactVersion method
@@ -90,6 +91,6 @@ public interface ConfigModelRepository extends JpaRepository<ConfigModel, Long> 
      * @param id id
      */
     @SuppressWarnings("unused")
-    void deleteById(@NotNull Long id);
+    void deleteById(@NotNull String id);
 
 }

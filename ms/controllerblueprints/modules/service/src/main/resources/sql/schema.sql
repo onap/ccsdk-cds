@@ -2,7 +2,7 @@
 -- table CONFIG_MODEL
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS configurator.CONFIG_MODEL (
-  config_model_id 		INT(11) NOT NULL AUTO_INCREMENT,
+  config_model_id 		VARCHAR(100) NOT NULL,
   service_uuid 			VARCHAR(50) NULL DEFAULT NULL,
   distribution_id 		VARCHAR(50) NULL DEFAULT NULL,
   service_name 			VARCHAR(255) NULL DEFAULT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS configurator.CONFIG_MODEL (
 -- table CONFIG_MODEL_CONTENT
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS configurator.CONFIG_MODEL_CONTENT (
-  config_model_content_id 	INT(11) NOT NULL AUTO_INCREMENT, 
+  config_model_content_id 	VARCHAR(100) NOT NULL,
   config_model_id 		INT NOT NULL,
   name 				VARCHAR(100) NOT NULL,
   content_type 			VARCHAR(50) NOT NULL,
