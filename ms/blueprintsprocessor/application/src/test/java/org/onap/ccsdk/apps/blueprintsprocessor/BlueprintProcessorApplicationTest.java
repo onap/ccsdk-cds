@@ -21,6 +21,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.onap.ccsdk.apps.controllerblueprints.core.config.BluePrintLoadConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
@@ -35,7 +36,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = BlueprintProcessorApplication.class)
+@ContextConfiguration(classes = {BlueprintProcessorApplication.class, BluePrintLoadConfiguration.class})
 @SpringBootTest(classes = BlueprintProcessorApplication.class,
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BlueprintProcessorApplicationTest {

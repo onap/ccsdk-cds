@@ -22,6 +22,7 @@ import org.onap.ccsdk.apps.blueprintsprocessor.core.BlueprintPropertyConfigurati
 import org.onap.ccsdk.apps.blueprintsprocessor.rest.BluePrintRestLibConfiguration
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
@@ -32,8 +33,8 @@ import org.springframework.web.bind.annotation.RestController
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 
-@EnableAutoConfiguration
 @RunWith(SpringRunner::class)
+@EnableAutoConfiguration(exclude = [DataSourceAutoConfiguration::class])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ContextConfiguration(classes = [BluePrintRestLibConfiguration::class, BlueprintPropertyConfiguration::class,
     SampleController::class, BluePrintProperties::class])

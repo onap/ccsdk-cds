@@ -45,8 +45,7 @@ open class PrimaryDatabaseConfiguration(private val primaryDataSourceProperties:
     open fun primaryEntityManager(): LocalContainerEntityManagerFactoryBean {
         val em = LocalContainerEntityManagerFactoryBean()
         em.dataSource = primaryDataSource()
-        em.setPackagesToScan(
-                "org.onap.ccsdk.apps.blueprintsprocessor.db.primary")
+        em.setPackagesToScan("org.onap.ccsdk.apps.blueprintsprocessor.db.primary")
 
         val vendorAdapter = HibernateJpaVendorAdapter()
         em.jpaVendorAdapter = vendorAdapter
