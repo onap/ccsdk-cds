@@ -22,13 +22,10 @@ import kotlinx.coroutines.runBlocking
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream
 import org.apache.commons.io.IOUtils
-import org.apache.commons.io.filefilter.DirectoryFileFilter
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
-import reactor.core.publisher.zip
 import java.io.*
 import java.nio.charset.Charset
-import java.nio.file.Files
 import java.util.zip.ZipFile
 
 class BluePrintArchiveUtils {
