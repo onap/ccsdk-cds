@@ -18,8 +18,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
 */
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { MatStepper } from '@angular/material';
 
 import { GlobalContants } from '../../../constants/app-constants';
 
@@ -30,18 +31,52 @@ import { GlobalContants } from '../../../constants/app-constants';
 })
 export class CBAWizardComponent implements OnInit {
   @Input() stepsRequired: any;
+  @ViewChild('stepper') stepper: MatStepper;
   @Output() stepChanged = new EventEmitter();
   public stepDetails = GlobalContants.cbawizard.stepsRequired.steps;
+  private routeLinks : any[];
+  activeLinkIndex = -1;
 
-  constructor(private router: Router) { }
+
+  constructor(private router: Router) { 
+    this.routeLinks = [
+      {
+          label: 'CBA Metadata',
+          link: '/blueprint/selectTemplate',
+          index: 0
+      }, {
+          label: 'Controller Blueprint Designer',
+          link: '/blueprint/modifyTemplate',
+          index: 1
+      }, {
+          label: 'Test',
+          link: '/blueprint/testTemplate',
+          index: 2
+      }, {
+          label: 'Deploy',
+          link: '/blueprint/deployTemplate',
+          index: 3
+      }
+  ];
+
+  }
 
   ngOnInit() {
+  //   this.router.events.subscribe((res) => {
+  //     this.activeLinkIndex = this.routeLinks.indexOf(this.routeLinks.find(tab => tab.link === this.router.url));
+  //     this.stepper.selectedIndex = this.activeLinkIndex; 
+  // });
+   this.routeLinks.forEach((step, index)=>{
+    if(step.link == this.router.url) {
+      this.stepper.selectedIndex = step.index
+    }
+   });
   }
 
   changeRoute(event){
-    this.stepDetails.forEach((step, index)=>{
+    this.routeLinks.forEach((step, index)=>{
       if(index == event.selectedIndex) {
-        this.router.navigate([step.componentURL]);
+        this.router.navigate([step.link]);
       }
     });
   }

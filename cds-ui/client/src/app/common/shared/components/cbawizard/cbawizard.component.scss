@@ -18,6 +18,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
 */
-.mat-horizontal-content-container{
+// .mat-horizontal-content-container {
+//     display: none !important;
+// }
+
+.mat-card {
+    padding: 0px !important;
+}
+
+mat-horizontal-stepper .mat-horizontal-content-container {
     display: none !important;
 }
