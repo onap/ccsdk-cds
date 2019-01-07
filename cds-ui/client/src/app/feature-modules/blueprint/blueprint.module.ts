@@ -21,8 +21,11 @@ limitations under the License.
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
 import { BlueprintComponent } from './blueprint.component';
 import { BlueprintRoutingModule } from './blueprint-routing.module';
+
+import { SharedModule } from '../../../app/common/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,8 @@ import { BlueprintRoutingModule } from './blueprint-routing.module';
   ],
   imports: [
     CommonModule,
-    BlueprintRoutingModule
+    BlueprintRoutingModule,
+    SharedModule
   ]
 })
 export class BlueprintModule { }
