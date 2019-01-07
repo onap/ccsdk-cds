@@ -38,7 +38,7 @@ class PythonExecutorUtilsTest {
 
         val content = JacksonUtils.getContent("./../../../../components/scripts/python/ccsdk_blueprints/sample_blueprint_component.py")
 
-        val abstractComponentFunction = PythonExecutorUtils.getPythonComponent("/home/brindasanth/onap/apps/components/scripts/python/ccsdk_blueprints", pythonPath, content,
+        val abstractComponentFunction = PythonExecutorUtils.getPythonComponent("./../../../../components/scripts/python/ccsdk_blueprints", pythonPath, content,
                 "SampleBlueprintComponent", properties)
 
         assertNotNull(abstractComponentFunction, "failed to get python component")
