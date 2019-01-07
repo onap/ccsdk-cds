@@ -30,10 +30,10 @@ limitations under the License.
 </mat-toolbar> -->
 <mat-toolbar color="primary">
     <mat-toolbar-row>
-        <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" color="primary">
-            <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-          </button>
-  <span>Controller Blueprint Design Studio</span>
+        <!-- <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" color="primary"> -->
+          <a class="menuBar" (click)="drawer.toggle()">&#9776;</a>
+          <!-- </button> -->
+  <span class="title">Controller Blueprint Design Studio</span>
   </mat-toolbar-row>
 </mat-toolbar>
 <mat-sidenav-container class="example-container">
@@ -41,8 +41,8 @@ limitations under the License.
                (closed)="events.push('close!')">
     <mat-toolbar color=""primary>Menu</mat-toolbar>
     <mat-nav-list>
+        <a mat-list-item [routerLink]="['/blueprint']">Controlled Blueprint</a>
         <a mat-list-item>Data dictionory</a>
-        <a mat-list-item [routerLink]="['/controllerBlueprint']">Controlled Blueprint</a>
     </mat-nav-list>
   </mat-sidenav>
 

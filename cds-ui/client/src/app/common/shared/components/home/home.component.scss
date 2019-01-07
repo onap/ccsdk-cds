@@ -36,3 +36,12 @@ limitations under the License.
 .mat-sidenav-container{
     height: 652px;
 }
+.mat-button.mat-primary, .mat-icon-button.mat-primary, .mat-stroked-button.mat-primary {
+    color: white !important;
+}
+.menuBar{
+    cursor: pointer;
+}
+.title{
+    margin: 1em;
+}
