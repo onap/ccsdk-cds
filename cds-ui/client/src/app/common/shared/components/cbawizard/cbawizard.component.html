@@ -18,7 +18,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
 -->
-<mat-card class="CBAform">
+<!-- <mat-card class="CBAform">
   <mat-card-content>
     <mat-horizontal-stepper [linear]=true #stepper (selectionChange)="changeRoute($event)">
       <div *ngFor="let step of stepDetails">
@@ -27,6 +27,19 @@ limitations under the License.
               </ng-template>
             </mat-step>
       </div>
+    </mat-horizontal-stepper>
+  </mat-card-content>
+</mat-card> -->
+
+<mat-card class="CBAform">
+  <mat-card-content>
+    <mat-horizontal-stepper [linear]=true #stepper (selectionChange)="changeRoute($event)">
+      <a *ngFor="let routeLink of routeLinks; let i = index;">
+          <mat-step>
+              <ng-template matStepLabel>{{routeLink.label}}
+              </ng-template>
+            </mat-step>
+          </a>
     </mat-horizontal-stepper>
   </mat-card-content>
 </mat-card>
