@@ -16,7 +16,7 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service
 
-import org.onap.ccsdk.apps.controllerblueprints.service.load.BluePrintLoadConfiguration
+import org.onap.ccsdk.apps.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.properties.bind.Bindable
 import org.springframework.boot.context.properties.bind.Binder
@@ -27,33 +27,33 @@ import org.springframework.core.env.Environment
 import org.springframework.stereotype.Service
 
 @Configuration
-open class BluePrintCoreConfiguration(private val bluePrintProperties: BluePrintProperties) {
+open class ControllerBluePrintCoreConfiguration(private val bluePrintProperties: ControllerBlueprintProperties) {
 
     companion object {
         const val PREFIX_BLUEPRINT_LOAD_CONFIGURATION = "controllerblueprints"
     }
 
     @Bean
-    open fun bluePrintLoadConfiguration(): BluePrintLoadConfiguration {
+    open fun controlelrBlueprintLoadConfiguration(): BluePrintLoadConfiguration {
         return bluePrintProperties
                 .propertyBeanType(PREFIX_BLUEPRINT_LOAD_CONFIGURATION, BluePrintLoadConfiguration::class.java)
     }
 }
 
 @Configuration
-open class BlueprintPropertyConfiguration {
+open class ControllerBlueprintPropertyConfiguration {
     @Autowired
     lateinit var environment: Environment
 
     @Bean
-    open fun bluePrintPropertyBinder(): Binder {
+    open fun controllerBluePrintPropertyBinder(): Binder {
         val configurationPropertySource = ConfigurationPropertySources.get(environment)
         return Binder(configurationPropertySource)
     }
 }
 
 @Service
-open class BluePrintProperties(var bluePrintPropertyBinder: Binder) {
+open class ControllerBlueprintProperties(var bluePrintPropertyBinder: Binder) {
     fun <T> propertyBeanType(prefix: String, type: Class<T>): T {
         return bluePrintPropertyBinder.bind(prefix, Bindable.of(type)).get()
     }

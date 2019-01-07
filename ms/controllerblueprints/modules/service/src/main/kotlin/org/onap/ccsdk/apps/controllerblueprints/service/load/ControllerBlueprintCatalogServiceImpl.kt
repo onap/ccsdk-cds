@@ -18,80 +18,31 @@
 package org.onap.ccsdk.apps.controllerblueprints.service.load
 
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintCatalogService
+import org.onap.ccsdk.apps.controllerblueprints.core.common.ApplicationConstants
+import org.onap.ccsdk.apps.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintValidatorService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintArchiveUtils
-import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintFileUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
-import org.onap.ccsdk.apps.controllerblueprints.service.common.ApplicationConstants
+import org.onap.ccsdk.apps.controllerblueprints.db.resources.BlueprintCatalogServiceImpl
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.BlueprintModel
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.BlueprintModelContent
-import org.onap.ccsdk.apps.controllerblueprints.service.repository.BlueprintModelContentRepository
-import org.onap.ccsdk.apps.controllerblueprints.service.repository.BlueprintModelRepository
+import org.onap.ccsdk.apps.controllerblueprints.service.repository.ControllerBlueprintModelContentRepository
+import org.onap.ccsdk.apps.controllerblueprints.service.repository.ControllerBlueprintModelRepository
 import org.springframework.stereotype.Service
 import java.io.File
 import java.nio.file.Files
 
+/**
+Similar implementation in [org.onap.ccsdk.apps.blueprintsprocessor.db.BlueprintProcessorCatalogServiceImpl]
+ */
 @Service
-class BluePrintCatalogServiceImpl(private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
-                                  private val bluePrintValidatorService: BluePrintValidatorService,
-                                  private val blueprintModelContentRepository: BlueprintModelContentRepository,
-                                  private val blueprintModelRepository: BlueprintModelRepository) : BluePrintCatalogService {
+class ControllerBlueprintCatalogServiceImpl(bluePrintLoadConfiguration: BluePrintLoadConfiguration,
+                                            private val bluePrintValidatorService: BluePrintValidatorService,
+                                            private val blueprintModelContentRepository: ControllerBlueprintModelContentRepository,
+                                            private val blueprintModelRepository: ControllerBlueprintModelRepository)
+    : BlueprintCatalogServiceImpl(bluePrintLoadConfiguration) {
 
-    override fun uploadToDataBase(file: String, validate: Boolean): String {
-        // The file name provided here is unique as we transform to UUID before storing
-        val blueprintFile = File(file)
-        val fileName = blueprintFile.name
-        val id = BluePrintFileUtils.stripFileExtension(fileName)
-        // If the file is directory
-        if (blueprintFile.isDirectory) {
-
-            val zipFile = File("${bluePrintLoadConfiguration.blueprintArchivePath}/$fileName")
-            // zip the directory
-            BluePrintArchiveUtils.compress(blueprintFile, zipFile, true)
-
-            // Upload to the Data Base
-            saveToDataBase(blueprintFile, id, zipFile)
-
-            // After Upload to Database delete the zip file
-            zipFile.delete()
-
-        } else {
-            // If the file is ZIP
-            // unzip the CBA file to validate before store in database
-            val targetDir = "${bluePrintLoadConfiguration.blueprintDeployPath}/$id/"
-            val extractedDirectory = BluePrintArchiveUtils.deCompress(blueprintFile, targetDir)
-
-            // Upload to the Data Base
-            saveToDataBase(extractedDirectory, id, blueprintFile)
-
-            // After Upload to Database delete the zip file
-            blueprintFile.delete()
-            extractedDirectory.delete()
-        }
-
-        return id
-    }
-
-    override fun downloadFromDataBase(name: String, version: String, path: String): String {
-        // If path ends with zip, then compress otherwise download as extracted folder
-
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun downloadFromDataBase(uuid: String, path: String): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun prepareBluePrint(name: String, version: String): String {
-        val preparedPath = "${bluePrintLoadConfiguration.blueprintDeployPath}/$name/$version"
-        downloadFromDataBase(name, version, preparedPath)
-        return preparedPath
-    }
-
-    private fun saveToDataBase(extractedDirectory: File, id: String, archiveFile: File, checkValidity: Boolean? = false) {
-        // Upload to the Data Base
-        //val id = "save-$uuid"
+    override fun saveToDataBase(extractedDirectory: File, id: String, archiveFile: File, checkValidity: Boolean?) {
         var valid = false
         val firstItem = BluePrintArchiveUtils.getFirstItemInDirectory(extractedDirectory)
         val blueprintBaseDirectory = extractedDirectory.absolutePath + "/" + firstItem
@@ -108,7 +59,7 @@ class BluePrintCatalogServiceImpl(private val bluePrintLoadConfiguration: BluePr
             // FIXME("Check Duplicate for Artifact Name and Artifact Version")
             val blueprintModel = BlueprintModel()
             blueprintModel.id = id
-            blueprintModel.artifactType =  ApplicationConstants.ASDC_ARTIFACT_TYPE_SDNC_MODEL
+            blueprintModel.artifactType = ApplicationConstants.ASDC_ARTIFACT_TYPE_SDNC_MODEL
             blueprintModel.published = ApplicationConstants.ACTIVE_N
             blueprintModel.artifactName = metaData[BluePrintConstants.METADATA_TEMPLATE_NAME]
             blueprintModel.artifactVersion = metaData[BluePrintConstants.METADATA_TEMPLATE_VERSION]

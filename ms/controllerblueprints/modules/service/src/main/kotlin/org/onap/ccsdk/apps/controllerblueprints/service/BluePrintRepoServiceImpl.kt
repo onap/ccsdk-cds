@@ -24,9 +24,20 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.*
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintRepoService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceAssignmentValidationServiceImpl
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceDefinitionValidationServiceImpl
 import org.onap.ccsdk.apps.controllerblueprints.service.repository.ModelTypeRepository
 import org.onap.ccsdk.apps.controllerblueprints.service.repository.ResourceDictionaryRepository
 import org.springframework.stereotype.Service
+
+// Resource Dictionary Validation Services
+
+@Service
+class DefaultResourceAssignmentValidationService : ResourceAssignmentValidationServiceImpl()
+
+@Service
+class DefalutResourceDefinitionValidationService(bluePrintRepoService: BluePrintRepoService)
+    : ResourceDefinitionValidationServiceImpl(bluePrintRepoService)
 
 interface ResourceDefinitionRepoService : BluePrintRepoService {
 

@@ -17,6 +17,7 @@
 package org.onap.ccsdk.apps.controllerblueprints.service.load
 
 import com.att.eelf.configuration.EELFManager
+import org.onap.ccsdk.apps.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service

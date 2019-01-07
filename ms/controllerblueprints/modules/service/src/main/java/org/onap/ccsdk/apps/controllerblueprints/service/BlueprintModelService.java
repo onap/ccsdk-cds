@@ -21,14 +21,14 @@ import com.att.eelf.configuration.EELFLogger;
 import com.att.eelf.configuration.EELFManager;
 import org.jetbrains.annotations.NotNull;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
+import org.onap.ccsdk.apps.controllerblueprints.core.config.BluePrintLoadConfiguration;
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintCatalogService;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintFileUtils;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.BlueprintModel;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.BlueprintModelSearch;
-import org.onap.ccsdk.apps.controllerblueprints.service.load.BluePrintLoadConfiguration;
-import org.onap.ccsdk.apps.controllerblueprints.service.repository.BlueprintModelContentRepository;
-import org.onap.ccsdk.apps.controllerblueprints.service.repository.BlueprintModelRepository;
-import org.onap.ccsdk.apps.controllerblueprints.service.repository.BlueprintModelSearchRepository;
+import org.onap.ccsdk.apps.controllerblueprints.service.repository.ControllerBlueprintModelContentRepository;
+import org.onap.ccsdk.apps.controllerblueprints.service.repository.ControllerBlueprintModelRepository;
+import org.onap.ccsdk.apps.controllerblueprints.service.repository.ControllerBlueprintModelSearchRepository;
 import org.onap.ccsdk.apps.controllerblueprints.service.utils.BluePrintEnhancerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -65,17 +65,17 @@ public class BlueprintModelService {
     private BluePrintCatalogService bluePrintCatalogService;
 
     @Autowired
-    private BlueprintModelSearchRepository blueprintModelSearchRepository;
+    private ControllerBlueprintModelSearchRepository blueprintModelSearchRepository;
 
     @Autowired
-    private BlueprintModelRepository blueprintModelRepository;
+    private ControllerBlueprintModelRepository blueprintModelRepository;
 
     @Autowired
-    private BlueprintModelContentRepository blueprintModelContentRepository;
+    private ControllerBlueprintModelContentRepository blueprintModelContentRepository;
 
     private static final String BLUEPRINT_MODEL_ID_FAILURE_MSG = "failed to get blueprint model id(%d) from repo";
     private static final String BLUEPRINT_MODEL_NAME_VERSION_FAILURE_MSG = "failed to get blueprint model by name(%d)" +
-                                                                    " and version(%d) from repo";
+        " and version(%d) from repo";
 
     /**
      * This is a saveBlueprintModel method
@@ -86,10 +86,12 @@ public class BlueprintModelService {
      */
     public Mono<BlueprintModelSearch> saveBlueprintModel(FilePart filePart) throws BluePrintException {
         try {
-            Path cbaLocation = BluePrintFileUtils.Companion.getCbaStorageDirectory(bluePrintLoadConfiguration.blueprintArchivePath);
+            Path cbaLocation = BluePrintFileUtils.Companion
+                .getCbaStorageDirectory(bluePrintLoadConfiguration.blueprintArchivePath);
             return BluePrintEnhancerUtils.Companion.saveCBAFile(filePart, cbaLocation).map(fileName -> {
-                        String blueprintId =   bluePrintCatalogService.uploadToDataBase(cbaLocation.resolve(fileName).toString(), false);
-                        return blueprintModelSearchRepository.findById(blueprintId).get();
+                String blueprintId = bluePrintCatalogService
+                    .uploadToDataBase(cbaLocation.resolve(fileName).toString(), false);
+                return blueprintModelSearchRepository.findById(blueprintId).get();
             });
 
         } catch (IOException | BluePrintException e) {
@@ -122,14 +124,15 @@ public class BlueprintModelService {
     /**
      * This is a getBlueprintModelByNameAndVersion method
      *
-     * @param name    name
+     * @param name name
      * @param version version
      * @return BlueprintModelSearch
      */
-    public BlueprintModelSearch getBlueprintModelByNameAndVersion(@NotNull String name, @NotNull String version) throws BluePrintException {
+    public BlueprintModelSearch getBlueprintModelByNameAndVersion(@NotNull String name, @NotNull String version)
+        throws BluePrintException {
         BlueprintModelSearch blueprintModelSearch;
         Optional<BlueprintModelSearch> dbBlueprintModel = blueprintModelSearchRepository
-                                                            .findByArtifactNameAndArtifactVersion(name, version);
+            .findByArtifactNameAndArtifactVersion(name, version);
         if (dbBlueprintModel.isPresent()) {
             blueprintModelSearch = dbBlueprintModel.get();
         } else {
@@ -142,7 +145,6 @@ public class BlueprintModelService {
     /**
      * This is a downloadBlueprintModelFile method to find the target file to download and return a file resource using MONO
      *
-     * @param (id)
      * @return ResponseEntity<Resource>
      */
     public ResponseEntity<Resource> downloadBlueprintModelFile(@NotNull String id) throws BluePrintException {

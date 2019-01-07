@@ -190,6 +190,16 @@
                 <artifactId>resource-dict</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+                <artifactId>db-resources</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+                <artifactId>blueprint-validation</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!-- Testing Dependencies -->
             <dependency>
