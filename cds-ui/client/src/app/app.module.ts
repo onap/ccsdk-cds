@@ -30,6 +30,9 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { SharedModule } from './common/shared/shared.module';
+
+
 // import { blueprintReducer } from './common/store/reducers/blueprint.reducer';
 // import { HeaderComponent, AboutComponent, PageNotFoundComponent, HomeComponent } from './common/shared/components/index';
 // import { SharedModule } from './common/shared/shared.module';
@@ -65,7 +68,8 @@ import { AppComponent } from './app.component';
     MatRadioModule, 
     MatFormFieldModule, 
     MatStepperModule,
-    HttpClientModule
+    HttpClientModule,
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]
