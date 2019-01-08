@@ -47,7 +47,7 @@ If Property Assignment is Expression.
  */
 
     fun resolveAssignmentExpression(nodeTemplateName: String, assignmentName: String,
-                                    assignment: Any): JsonNode {
+                                    assignment: JsonNode): JsonNode {
         val valueNode: JsonNode
         log.trace("Assignment ({})", assignment)
         val expressionData = BluePrintExpressionService.getExpressionData(assignment)

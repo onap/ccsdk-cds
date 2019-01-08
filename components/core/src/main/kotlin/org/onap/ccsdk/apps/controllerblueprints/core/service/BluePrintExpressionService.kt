@@ -16,15 +16,15 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core.service
 
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*
-import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
 
 /**
  *
@@ -33,12 +33,6 @@ import com.att.eelf.configuration.EELFManager
  */
 object BluePrintExpressionService {
     val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
-
-    @JvmStatic
-    fun getExpressionData(propertyAssignment: Any): ExpressionData {
-        val propertyAssignmentNode: JsonNode = JacksonUtils.jsonNodeFromObject(propertyAssignment)
-        return getExpressionData(propertyAssignmentNode)
-    }
 
     @JvmStatic
     fun getExpressionData(propertyAssignmentNode: JsonNode): ExpressionData {
@@ -53,19 +47,19 @@ object BluePrintExpressionService {
                 expressionData.expressionNode = propertyAssignmentNode
 
                 when (expressionData.command) {
-                    org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.EXPRESSION_GET_INPUT -> {
+                    BluePrintConstants.EXPRESSION_GET_INPUT -> {
                         expressionData.inputExpression = populateInputExpression(propertyAssignmentNode)
                     }
-                    org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.EXPRESSION_GET_ATTRIBUTE -> {
+                    BluePrintConstants.EXPRESSION_GET_ATTRIBUTE -> {
                         expressionData.attributeExpression = populateAttributeExpression(propertyAssignmentNode)
                     }
-                    org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.EXPRESSION_GET_PROPERTY -> {
+                    BluePrintConstants.EXPRESSION_GET_PROPERTY -> {
                         expressionData.propertyExpression = populatePropertyExpression(propertyAssignmentNode)
                     }
-                    org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.EXPRESSION_GET_OPERATION_OUTPUT -> {
+                    BluePrintConstants.EXPRESSION_GET_OPERATION_OUTPUT -> {
                         expressionData.operationOutputExpression = populateOperationOutputExpression(propertyAssignmentNode)
                     }
-                    org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants.EXPRESSION_GET_ARTIFACT -> {
+                    BluePrintConstants.EXPRESSION_GET_ARTIFACT -> {
                         expressionData.artifactExpression = populateArtifactExpression(propertyAssignmentNode)
                     }
                 }

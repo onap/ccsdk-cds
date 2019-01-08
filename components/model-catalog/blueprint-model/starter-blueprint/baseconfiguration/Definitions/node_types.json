@@ -29,10 +29,67 @@
       "version": "1.0.0",
       "derived_from": "tosca.nodes.Root"
     },
+    "tosca.nodes.ResourceSource" : {
+      "description" : "TOSCA base type for Resource Sources",
+      "version" : "1.0.0",
+      "derived_from" : "tosca.nodes.Root"
+    },
+    "tosca.nodes.Vnf" : {
+      "description" : "This is VNF Node Type",
+      "version" : "1.0.0",
+      "derived_from" : "tosca.nodes.Root"
+    },
     "tosca.nodes.component.Jython": {
       "description": "This is Resource Assignment Jython Component API",
       "version": "1.0.0",
       "derived_from": "tosca.nodes.Root"
+    },
+    "component-netconf-executor": {
+      "description": "This is Netconf Transaction Configuration Component API",
+      "version": "1.0.0",
+      "capabilities": {
+        "component-node": {
+          "type": "tosca.capabilities.Node"
+        }
+      },
+      "requirements": {
+        "netconf-connection": {
+          "capability": "netconf",
+          "node": "vnf-netconf-device",
+          "relationship": "tosca.relationships.ConnectsTo"
+        }
+      },
+      "interfaces": {
+        "NetconfExecutorComponent": {
+          "operations": {
+            "process": {
+              "inputs": {
+                "instance-dependencies": {
+                  "description": "Instance Names to Inject to Jython Script.",
+                  "required": true,
+                  "type": "list",
+                  "entry_schema": {
+                    "type": "string"
+                  }
+                }
+              },
+              "outputs": {
+                "response-data": {
+                  "description": "Execution Response Data in JSON format.",
+                  "required": false,
+                  "type": "string"
+                },
+                "status": {
+                  "description": "Status of the Component Execution ( success or failure )",
+                  "required": true,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.component.Jython"
     },
     "component-resource-assignment": {
       "description": "This is Resource Assignment Component API",
@@ -131,6 +188,47 @@
         }
       },
       "derived_from": "tosca.nodes.component.Jython"
+    },
+    "vnf-netconf-device": {
+      "description": "This is VNF Device with Netconf  Capability",
+      "version": "1.0.0",
+      "capabilities": {
+        "netconf": {
+          "type": "tosca.capabilities.Netconf",
+          "properties": {
+            "login-key": {
+              "required": true,
+              "type": "string",
+              "default": "sdnc"
+            },
+            "login-account": {
+              "required": true,
+              "type": "string",
+              "default": "sdnc-tacacs"
+            },
+            "source": {
+              "required": true,
+              "type": "string",
+              "default": "npm"
+            },
+            "target-ip-address": {
+              "required": true,
+              "type": "string"
+            },
+            "port-number": {
+              "required": true,
+              "type": "integer",
+              "default": 830
+            },
+            "connection-time-out": {
+              "required": false,
+              "type": "integer",
+              "default": 30
+            }
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.Vnf"
     }
   }
 }

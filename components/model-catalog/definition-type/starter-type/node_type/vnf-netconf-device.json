@@ -38,5 +38,4 @@
 		}
 	},
 	"derived_from": "tosca.nodes.Vnf"
-	
 }

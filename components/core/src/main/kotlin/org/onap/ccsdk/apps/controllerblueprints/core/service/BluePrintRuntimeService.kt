@@ -67,6 +67,12 @@ interface BluePrintRuntimeService<T> {
    */
     fun resolveNodeTemplateProperties(nodeTemplateName: String): MutableMap<String, JsonNode>
 
+    fun resolveNodeTemplateCapabilityProperties(nodeTemplateName: String, capability: String): MutableMap<String,
+            JsonNode>
+
+    fun resolveNodeTemplateRequirementProperties(nodeTemplateName: String, requirementName: String): MutableMap<String,
+            JsonNode>
+
     fun resolveNodeTemplateInterfaceOperationInputs(nodeTemplateName: String, interfaceName: String, operationName: String): MutableMap<String, JsonNode>
 
     fun resolveNodeTemplateInterfaceOperationOutputs(nodeTemplateName: String, interfaceName: String, operationName: String): MutableMap<String, JsonNode>
@@ -193,17 +199,15 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
 
         val nodeTemplate: NodeTemplate = bluePrintContext.nodeTemplateByName(nodeTemplateName)
 
-        val propertyAssignments: MutableMap<String, JsonNode> =
-                nodeTemplate.properties as MutableMap<String, JsonNode>
+        val propertyAssignments: MutableMap<String, JsonNode> = nodeTemplate.properties!!
 
         // Get the Node Type Definitions
-        val nodeTypeProperties: MutableMap<String, PropertyDefinition> =
-                bluePrintContext.nodeTypeChainedProperties(nodeTemplate.type)!!
+        val nodeTypeProperties: MutableMap<String, PropertyDefinition> = bluePrintContext.nodeTypeChainedProperties(nodeTemplate.type)!!
 
         // Iterate Node Type Properties
         nodeTypeProperties.forEach { nodeTypePropertyName, nodeTypeProperty ->
             // Get the Express or Value for the Node Template
-            val propertyAssignment: Any? = propertyAssignments[nodeTypePropertyName]
+            val propertyAssignment: JsonNode? = propertyAssignments[nodeTypePropertyName]
 
             var resolvedValue: JsonNode = NullNode.getInstance()
             if (propertyAssignment != null) {
@@ -223,6 +227,18 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
         return propertyAssignmentValue
     }
 
+    override fun resolveNodeTemplateCapabilityProperties(nodeTemplateName: String, capabilityName: String):
+            MutableMap<String, JsonNode> {
+        log.info("resolveNodeTemplateCapabilityProperties for node template($nodeTemplateName) capability " +
+                "($capabilityName)")
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun resolveNodeTemplateRequirementProperties(nodeTemplateName: String, requirementName: String): MutableMap<String, JsonNode> {
+        log.info("resolveNodeTemplateRequirementProperties for node template($nodeTemplateName) requirement ($requirementName)")
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun resolveNodeTemplateInterfaceOperationInputs(nodeTemplateName: String,
                                                              interfaceName: String, operationName: String): MutableMap<String, JsonNode> {
         log.info("resolveNodeTemplateInterfaceOperationInputs for node template ({}),interface name ({}), " +
@@ -230,8 +246,8 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
 
         val propertyAssignmentValue: MutableMap<String, JsonNode> = hashMapOf()
 
-        val propertyAssignments: MutableMap<String, Any> =
-                bluePrintContext.nodeTemplateInterfaceOperationInputs(nodeTemplateName, interfaceName, operationName) as? MutableMap<String, Any>
+        val propertyAssignments: MutableMap<String, JsonNode> =
+                bluePrintContext.nodeTemplateInterfaceOperationInputs(nodeTemplateName, interfaceName, operationName)
                         ?: hashMapOf()
 
         val nodeTypeName = bluePrintContext.nodeTemplateByName(nodeTemplateName).type
@@ -245,7 +261,7 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
         // Iterate Node Type Properties
         nodeTypeInterfaceOperationInputs.forEach { nodeTypePropertyName, nodeTypeProperty ->
             // Get the Express or Value for the Node Template
-            val propertyAssignment: Any? = propertyAssignments[nodeTypePropertyName]
+            val propertyAssignment: JsonNode? = propertyAssignments[nodeTypePropertyName]
 
             var resolvedValue: JsonNode = NullNode.getInstance()
             if (propertyAssignment != null) {
@@ -275,8 +291,8 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
 
         val propertyAssignmentValue: MutableMap<String, JsonNode> = hashMapOf()
 
-        val propertyAssignments: MutableMap<String, Any> =
-                bluePrintContext.nodeTemplateInterfaceOperationOutputs(nodeTemplateName, interfaceName, operationName) as? MutableMap<String, Any>
+        val propertyAssignments: MutableMap<String, JsonNode> =
+                bluePrintContext.nodeTemplateInterfaceOperationOutputs(nodeTemplateName, interfaceName, operationName)
                         ?: hashMapOf()
 
         val nodeTypeName = bluePrintContext.nodeTemplateByName(nodeTemplateName).type
@@ -289,7 +305,7 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
         nodeTypeInterfaceOperationOutputs.forEach { nodeTypePropertyName, nodeTypeProperty ->
 
             // Get the Express or Value for the Node Template
-            val propertyAssignment: Any? = propertyAssignments[nodeTypePropertyName]
+            val propertyAssignment: JsonNode? = propertyAssignments[nodeTypePropertyName]
 
             var resolvedValue: JsonNode = NullNode.getInstance()
             if (propertyAssignment != null) {

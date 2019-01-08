@@ -205,6 +205,57 @@
             "file": "Scripts/SamplePythonComponentNode.py"
           }
         }
+      },
+      "activate-netconf": {
+        "type": "component-netconf-executor",
+        "interfaces": {
+          "NetconfExecutorComponent": {
+            "operations": {
+              "process": {
+                "implementation": {
+                  "primary": "component-script"
+                },
+                "inputs": {
+                  "instance-dependencies": [
+                    "json-parser-service",
+                    "netconf-rpc-service"
+                  ]
+                },
+                "outputs": {
+                  "response-data": "",
+                  "status": ""
+                }
+              }
+            }
+          }
+        },
+        "requirements": {
+          "netconf-connection": {
+            "capability": "netconf",
+            "node": "sample-netconf-device",
+            "relationship": "tosca.relationships.ConnectsTo"
+          }
+        },
+        "artifacts": {
+          "component-script": {
+            "type": "artifact-script-jython",
+            "file": "Scripts/SamplePythonComponentNode.py"
+          }
+        }
+      },
+      "sample-netconf-device": {
+        "type": "vnf-netconf-device",
+        "capabilities": {
+          "netconf": {
+            "properties": {
+              "login-key": "sample-key",
+              "login-account": "sample-account",
+              "target-ip-address": "localhost",
+              "port-number": 830,
+              "connection-time-out": 30
+            }
+          }
+        }
       }
     },
     "workflows": {

@@ -18,45 +18,13 @@
       "operations": {
         "process": {
           "inputs": {
-            "request-id": {
-              "description": "Request Id used to store the generated configuration, in the database along with the template-name",
+            "instance-dependencies": {
               "required": true,
-              "type": "string"
-            },
-            "template-name": {
-              "description": "Service Template Name",
-              "required": true,
-              "type": "string"
-            },
-            "template-version": {
-              "description": "Service Template Version",
-              "required": true,
-              "type": "string"
-            },
-            "action-name": {
-              "description": "Action Name to get from Database, Either (message & mask-info ) or ( resource-id & resource-type & action-name & template-name ) should be present. Message will be given higest priority",
-              "required": false,
-              "type": "string"
-            },
-            "resource-type": {
-              "description": "Resource Type to get from Database, Either (message & mask-info ) or( resource-id & resource-type & action-name & template-name ) should be present. Message will be given higest priority",
-              "required": false,
-              "type": "string"
-            },
-            "resource-id": {
-              "description": "Resource Id to get from Database, Either (message & mask-info ) or ( resource-id & resource-type & action-name & template-name ) should be present. Message will be given higest priority",
-              "required": false,
-              "type": "string"
-            },
-            "reservation-id": {
-				"description": "Reservation Id used to send to NPM",
-				"required": false,
-				"type": "string"
-			},
-            "execution-script": {
-              "description": "Python Script to Execute for this Component action, It should refer any one of Prython Artifact Definition for this Node Template.",
-              "required": true,
-              "type": "string"
+              "description": "Instance Names to Inject to Jython Script.",
+              "type": "list",
+              "entry_schema": {
+                "type": "string"
+              }
             }
           },
           "outputs": {
