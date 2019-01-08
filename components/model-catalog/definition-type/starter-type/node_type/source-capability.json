@@ -1,0 +1,49 @@
+{
+  "description": "This is Component Resource Source Node Type",
+  "version": "1.0.0",
+  "properties": {
+    "type": {
+      "required": true,
+      "type": "string",
+      "default": "JAVA-COMPONENT",
+      "constraints": [
+        {
+          "valid_values": [
+            "JAVA-COMPONENT",
+            "JYTHON-COMPONENT"
+          ]
+        }
+      ]
+    },
+    "instance-name": {
+      "description": "Capability component instance reference name.",
+      "required": true,
+      "type": "string"
+    },
+    "input-key-mapping": {
+      "description": "Context name to input parameters name mapping.",
+      "required": false,
+      "type": "map",
+      "entry_schema": {
+        "type": "string"
+      }
+    },
+    "output-key-mapping": {
+      "description": "Context name to output parameters name mapping.",
+      "required": false,
+      "type": "map",
+      "entry_schema": {
+        "type": "string"
+      }
+    },
+    "key-dependencies": {
+      "description": "Resource Resolution dependency dictionary names.",
+      "required": true,
+      "type": "list",
+      "entry_schema": {
+        "type": "string"
+      }
+    }
+  },
+  "derived_from": "tosca.nodes.ResourceSource"
+}
