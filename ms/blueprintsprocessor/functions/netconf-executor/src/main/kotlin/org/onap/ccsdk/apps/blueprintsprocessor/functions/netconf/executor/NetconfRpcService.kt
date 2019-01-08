@@ -16,6 +16,9 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor
 
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.core.NetconfSessionFactory
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.interfaces.DeviceInfo
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.interfaces.NetconfSession
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
@@ -24,4 +27,20 @@ import org.springframework.stereotype.Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 class NetconfRpcService {
 
+    lateinit var deviceInfo: DeviceInfo
+    lateinit var netconfSession: NetconfSession
+
+    fun connect(netconfDeviceInfo: DeviceInfo) {
+        netconfSession = NetconfSessionFactory.instance("DEFAULT_NETCONF_SESSION", netconfDeviceInfo)
+        // TODO
+    }
+
+    fun disconnect() {
+        netconfSession.close()
+    }
+
+    fun reconnect() {
+        disconnect()
+        connect(deviceInfo)
+    }
 }
