@@ -21,9 +21,8 @@ import kotlinx.coroutines.*
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang3.text.StrBuilder
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.apps.controllerblueprints.core.data.ArtifactType
-import org.onap.ccsdk.apps.controllerblueprints.core.data.DataType
-import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeType
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.apps.controllerblueprints.core.data.*
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ModelType
 import org.onap.ccsdk.apps.controllerblueprints.service.handler.ModelTypeHandler
@@ -37,11 +36,14 @@ open class ModelTypeLoadService(private val modelTypeHandler: ModelTypeHandler) 
     private val log = EELFManager.getInstance().getLogger(ModelTypeLoadService::class.java)
     private val updateBySystem = "System"
 
-    open fun loadPathsModelType(modelTypePaths: List<String>) {
-        modelTypePaths.forEach { loadPathModelType(it) }
+    open suspend fun loadPathsModelType(modelTypePaths: List<String>) {
+        modelTypePaths.forEach { runBlocking { loadPathModelType(it) } }
     }
 
-    open fun loadPathModelType(modelTypePath: String) = runBlocking {
+    /**
+     * Load the Model Type file content from the defined path, Load of sequencing should be maintained.
+     */
+    open suspend fun loadPathModelType(modelTypePath: String) = runBlocking {
         log.info(" *************************** loadModelType **********************")
         try {
             val errorBuilder = StrBuilder()
@@ -51,17 +53,35 @@ open class ModelTypeLoadService(private val modelTypeHandler: ModelTypeHandler) 
 
                 val deferredResults = mutableListOf<Deferred<Unit>>()
 
-                for (file in dataTypeFiles) deferredResults += async { loadDataType(file, errorBuilder) }
+                for (file in dataTypeFiles) deferredResults += async {
+                    loadModelType(file, DataType::class.java, errorBuilder)
+                }
 
                 deferredResults.awaitAll()
             }
 
             coroutineScope {
-                val artifactTypefiles = File("$modelTypePath/artifact_type").listFiles()
+                val artifactTypeFiles = File("$modelTypePath/artifact_type").listFiles()
 
                 val deferredResults = mutableListOf<Deferred<Unit>>()
 
-                for (file in artifactTypefiles) deferredResults += async { loadArtifactType(file, errorBuilder) }
+                for (file in artifactTypeFiles) deferredResults += async {
+                    loadModelType(file,
+                            ArtifactType::class.java, errorBuilder)
+                }
+
+                deferredResults.awaitAll()
+            }
+
+            coroutineScope {
+                val relationshipTypeFiles = File("$modelTypePath/relationship_type").listFiles()
+
+                val deferredResults = mutableListOf<Deferred<Unit>>()
+
+                for (file in relationshipTypeFiles) deferredResults += async {
+                    loadModelType(file,
+                            RelationshipType::class.java, errorBuilder)
+                }
 
                 deferredResults.awaitAll()
             }
@@ -71,7 +91,10 @@ open class ModelTypeLoadService(private val modelTypeHandler: ModelTypeHandler) 
 
                 val deferredResults = mutableListOf<Deferred<Unit>>()
 
-                for (file in nodeTypeFiles) deferredResults += async { loadNodeType(file, errorBuilder) }
+                for (file in nodeTypeFiles) deferredResults += async {
+                    loadModelType(file,
+                            NodeType::class.java, errorBuilder)
+                }
                 deferredResults.awaitAll()
             }
 
@@ -83,76 +106,45 @@ open class ModelTypeLoadService(private val modelTypeHandler: ModelTypeHandler) 
         }
     }
 
-    private fun loadDataType(file: File, errorBuilder: StrBuilder) {
+    private inline fun <reified T> loadModelType(file: File, classType: Class<T>, errorBuilder: StrBuilder) {
         try {
-            log.trace("Loading DataType(${file.name}")
+            log.trace("Loading ${classType.name} (${file.name})")
             val dataKey = FilenameUtils.getBaseName(file.name)
             val definitionContent = file.readText(Charset.defaultCharset())
-            val dataType = JacksonUtils.readValue(definitionContent, DataType::class.java)
-            checkNotNull(dataType) { "failed to get data type from file : ${file.name}" }
+            val definition = JacksonUtils.readValue(definitionContent, classType) as EntityType
+            //checkNotNull(definition) { "failed to get data type from file : ${file.name}" }
 
             val modelType = ModelType()
-            modelType.definitionType = BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE
-            modelType.derivedFrom = dataType.derivedFrom
-            modelType.description = dataType.description
+            val definitionType: String?
+            when (T::class) {
+                DataType::class -> {
+                    definitionType = BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE
+                }
+                RelationshipType::class -> {
+                    definitionType = BluePrintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TYPE
+                }
+                ArtifactType::class -> {
+                    definitionType = BluePrintConstants.MODEL_DEFINITION_TYPE_ARTIFACT_TYPE
+                }
+                NodeType::class -> {
+                    definitionType = BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TYPE
+                }
+                else -> {
+                    throw BluePrintException("couldn't process model type($classType) definition")
+                }
+            }
+            modelType.definitionType = definitionType
+            modelType.derivedFrom = definition.derivedFrom
+            modelType.description = definition.description
             modelType.definition = JacksonUtils.jsonNode(definitionContent)
             modelType.modelName = dataKey
-            modelType.version = dataType.version
+            modelType.version = definition.version
             modelType.updatedBy = updateBySystem
-            modelType.tags = (dataKey + "," + dataType.derivedFrom + "," + BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)
+            modelType.tags = (dataKey + "," + definition.derivedFrom + "," + definitionType)
             modelTypeHandler.saveModel(modelType)
-            log.trace("DataType(${file.name}) loaded successfully ")
+            log.trace("${classType.name}(${file.name}) loaded successfully ")
         } catch (e: Exception) {
-            errorBuilder.appendln("Couldn't load DataType(${file.name}: ${e.message}")
+            errorBuilder.appendln("Couldn't load ${classType.name}(${file.name}: ${e.message}")
         }
     }
-
-    private fun loadArtifactType(file: File, errorBuilder: StrBuilder) {
-        try {
-            log.trace("Loading ArtifactType(${file.name}")
-            val dataKey = FilenameUtils.getBaseName(file.name)
-            val definitionContent = file.readText(Charset.defaultCharset())
-            val artifactType = JacksonUtils.readValue(definitionContent, ArtifactType::class.java)
-            checkNotNull(artifactType) { "failed to get artifact type from file : ${file.name}" }
-
-            val modelType = ModelType()
-            modelType.definitionType = BluePrintConstants.MODEL_DEFINITION_TYPE_ARTIFACT_TYPE
-            modelType.derivedFrom = artifactType.derivedFrom
-            modelType.description = artifactType.description
-            modelType.definition = JacksonUtils.jsonNode(definitionContent)
-            modelType.modelName = dataKey
-            modelType.version = artifactType.version
-            modelType.updatedBy = updateBySystem
-            modelType.tags = (dataKey + "," + artifactType.derivedFrom + "," + BluePrintConstants.MODEL_DEFINITION_TYPE_ARTIFACT_TYPE)
-            modelTypeHandler.saveModel(modelType)
-            log.trace("ArtifactType(${file.name}) loaded successfully ")
-        } catch (e: Exception) {
-            errorBuilder.appendln("Couldn't load ArtifactType(${file.name}: ${e.message}")
-        }
-    }
-
-    private fun loadNodeType(file: File, errorBuilder: StrBuilder) {
-        try {
-            log.trace("Loading NodeType(${file.name}")
-            val nodeKey = FilenameUtils.getBaseName(file.name)
-            val definitionContent = file.readText(Charset.defaultCharset())
-            val nodeType = JacksonUtils.readValue(definitionContent, NodeType::class.java)
-            checkNotNull(nodeType) { "failed to get node type from file : ${file.name}" }
-
-            val modelType = ModelType()
-            modelType.definitionType = BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TYPE
-            modelType.derivedFrom = nodeType.derivedFrom
-            modelType.description = nodeType.description
-            modelType.definition = JacksonUtils.jsonNode(definitionContent)
-            modelType.modelName = nodeKey
-            modelType.version = nodeType.version
-            modelType.updatedBy = updateBySystem
-            modelType.tags = (nodeKey + "," + BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TYPE + "," + nodeType.derivedFrom)
-            modelTypeHandler.saveModel(modelType)
-            log.trace("NodeType(${file.name}) loaded successfully ")
-        } catch (e: Exception) {
-            errorBuilder.appendln("Couldn't load NodeType(${file.name}: ${e.message}")
-        }
-    }
-
 }
