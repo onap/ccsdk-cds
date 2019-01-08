@@ -21,10 +21,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.utils.PayloadUtils
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolutionprocessor.DataBaseResourceAssignmentProcessor
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolutionprocessor.DefaultResourceAssignmentProcessor
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolutionprocessor.InputResourceAssignmentProcessor
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolutionprocessor.SimpleRestResourceAssignmentProcessor
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor.*
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.apps.controllerblueprints.core.putJsonElement
@@ -37,7 +34,8 @@ import org.springframework.test.context.junit4.SpringRunner
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [ResourceResolutionComponent::class, ResourceResolutionService::class,
     InputResourceAssignmentProcessor::class, DefaultResourceAssignmentProcessor::class,
-    DataBaseResourceAssignmentProcessor::class, SimpleRestResourceAssignmentProcessor::class])
+    DataBaseResourceAssignmentProcessor::class, SimpleRestResourceAssignmentProcessor::class,
+    CapabilityResourceAssignmentProcessor::class])
 class ResourceResolutionComponentTest {
 
     @Autowired

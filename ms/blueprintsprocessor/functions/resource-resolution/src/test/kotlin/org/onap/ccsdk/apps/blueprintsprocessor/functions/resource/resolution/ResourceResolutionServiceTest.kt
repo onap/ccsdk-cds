@@ -19,10 +19,7 @@ package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolutionprocessor.DataBaseResourceAssignmentProcessor
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolutionprocessor.DefaultResourceAssignmentProcessor
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolutionprocessor.InputResourceAssignmentProcessor
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolutionprocessor.SimpleRestResourceAssignmentProcessor
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor.*
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -39,7 +36,8 @@ import kotlin.test.assertTrue
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [ResourceResolutionService::class,
     InputResourceAssignmentProcessor::class, DefaultResourceAssignmentProcessor::class,
-    DataBaseResourceAssignmentProcessor::class, SimpleRestResourceAssignmentProcessor::class])
+    DataBaseResourceAssignmentProcessor::class, SimpleRestResourceAssignmentProcessor::class,
+    CapabilityResourceAssignmentProcessor::class])
 class ResourceResolutionServiceTest {
 
     private val log = LoggerFactory.getLogger(ResourceResolutionServiceTest::class.java)

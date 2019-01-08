@@ -1,6 +1,6 @@
 /*
- *  Copyright © 2018 IBM.
- *  Modifications Copyright © 2017-2018 AT&T Intellectual Property.
+ *  Copyright © 2017-2018 AT&T Intellectual Property.
+ *  Modifications Copyright © 2018 IBM.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,21 +15,21 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolutionprocessor
+package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor
 
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.springframework.stereotype.Service
 
 /**
- * DataBaseResourceAssignmentProcessor
+ * DefaultResourceAssignmentProcessor
  *
  * @author Brinda Santh
  */
-@Service("resource-assignment-processor-db")
-open class DataBaseResourceAssignmentProcessor : ResourceAssignmentProcessor(){
+@Service("resource-assignment-processor-default")
+open class DefaultResourceAssignmentProcessor : ResourceAssignmentProcessor() {
 
     override fun getName(): String {
-        return "resource-assignment-processor-db"
+        return "resource-assignment-processor-default"
     }
 
     override fun process(executionRequest: ResourceAssignment) {

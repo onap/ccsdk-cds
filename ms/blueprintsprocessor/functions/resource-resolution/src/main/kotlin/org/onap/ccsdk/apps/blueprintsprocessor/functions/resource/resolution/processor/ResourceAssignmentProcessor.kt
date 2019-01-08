@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolutionprocessor
+package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor
 
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BlueprintFunctionNode
@@ -28,9 +28,9 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
 
     private val log = LoggerFactory.getLogger(ResourceAssignmentProcessor::class.java)
 
-    var bluePrintRuntimeService: BluePrintRuntimeService<*>? = null
+    lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
 
-    var resourceDictionaries: Map<String, ResourceDefinition> = hashMapOf()
+    lateinit var resourceDictionaries: Map<String, ResourceDefinition>
 
 
     open fun resourceDefinition(name: String): ResourceDefinition {

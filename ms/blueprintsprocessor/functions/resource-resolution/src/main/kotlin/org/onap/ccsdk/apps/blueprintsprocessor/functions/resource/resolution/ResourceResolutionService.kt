@@ -17,7 +17,7 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution
 
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolutionprocessor.ResourceAssignmentProcessor
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor.ResourceAssignmentProcessor
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService

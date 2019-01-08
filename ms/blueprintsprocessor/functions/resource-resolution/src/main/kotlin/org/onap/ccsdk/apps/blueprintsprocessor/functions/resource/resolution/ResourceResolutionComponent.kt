@@ -21,18 +21,13 @@ import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.AbstractCompon
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
-import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
 
 @Component("component-resource-resolution")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class ResourceResolutionComponent(private val resourceResolutionService: ResourceResolutionService) : AbstractComponentFunction() {
-
-    @Autowired
-    private lateinit var applicationContext: ApplicationContext
 
     override fun process(executionRequest: ExecutionServiceInput) {
 
