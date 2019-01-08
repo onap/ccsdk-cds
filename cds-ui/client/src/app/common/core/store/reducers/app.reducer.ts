@@ -19,29 +19,13 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { StoreModule, Store } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreRouterConnectingModule } from '@ngrx/router-store';
-import { HttpClientModule } from '@angular/common/http';
+import { ActionReducerMap } from '@ngrx/store';
+import { routerReducer } from '@ngrx/router-store';
 
-import { appReducers } from './store/reducers/app.reducer';
-import { BlueprintEffects } from './store/effects/blueprint.effects';
+import { IAppState } from '../state/app.state';
+import { blueprintReducer } from '../reducers/blueprint.reducer';
 
-import { ApiService } from './services/api.service';
-// import { BlueprintService } from './services/blueprint.service';
-
-@NgModule({
-  declarations: [
-  ],
-  imports: [
-    CommonModule,
-    StoreModule.forRoot(appReducers),
-    EffectsModule.forRoot([BlueprintEffects]),
-    StoreRouterConnectingModule.forRoot({stateKey: 'router'}),
-    HttpClientModule
-  ],
-  providers : [ ApiService ]
-})
-export class CoreModule { }
+export const appReducers: ActionReducerMap<IAppState, any> = {
+    router: routerReducer,
+    blueprint: blueprintReducer
+};

@@ -31,24 +31,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './common/shared/shared.module';
-
-
-// import { blueprintReducer } from './common/store/reducers/blueprint.reducer';
-// import { HeaderComponent, AboutComponent, PageNotFoundComponent, HomeComponent } from './common/shared/components/index';
-// import { SharedModule } from './common/shared/shared.module';
+import { CoreModule } from './common/core/core.module';
 
 @NgModule({ 
   declarations: [
-    AppComponent,
-    // HeaderComponent,
-    // AboutComponent,
-    // PageNotFoundComponent,
-    // HomeComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
     CommonModule,
-   // StoreModule.forRoot({blueprint: blueprintReducer}),
     AppRoutingModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
@@ -69,7 +60,8 @@ import { SharedModule } from './common/shared/shared.module';
     MatFormFieldModule, 
     MatStepperModule,
     HttpClientModule,
-    SharedModule
+    SharedModule,
+    CoreModule
   ],
   providers: [],
   bootstrap: [AppComponent]
