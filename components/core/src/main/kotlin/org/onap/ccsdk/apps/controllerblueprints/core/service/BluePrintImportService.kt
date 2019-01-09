@@ -28,11 +28,13 @@ import java.net.URLDecoder
 import java.nio.charset.Charset
 
 class BluePrintImportService(private val parentServiceTemplate: ServiceTemplate, private val blueprintBasePath: String) {
+    companion object {
+        private const val PARENT_SERVICE_TEMPLATE: String = "parent"
+    }
 
     private val log: Logger = LoggerFactory.getLogger(this::class.toString())
-    val PARENT_SERVICE_TEMPLATE: String = "parent"
 
-    var importServiceTemplateMap: MutableMap<String, ServiceTemplate> = hashMapOf()
+    private var importServiceTemplateMap: MutableMap<String, ServiceTemplate> = hashMapOf()
 
 
     fun getImportResolvedServiceTemplate(): ServiceTemplate {

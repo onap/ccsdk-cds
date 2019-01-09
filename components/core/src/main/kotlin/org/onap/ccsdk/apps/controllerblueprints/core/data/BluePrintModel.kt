@@ -598,6 +598,8 @@ class ServiceTemplate : Cloneable {
     var artifactTypes: MutableMap<String, ArtifactType>? = null
     @get:JsonProperty("data_types")
     var dataTypes: MutableMap<String, DataType>? = null
+    @get:JsonProperty("relationship_types")
+    var relationshipTypes: MutableMap<String, RelationshipType>? = null
     @get:JsonProperty("node_types")
     var nodeTypes: MutableMap<String, NodeType>? = null
     @get:JsonProperty("policy_types")

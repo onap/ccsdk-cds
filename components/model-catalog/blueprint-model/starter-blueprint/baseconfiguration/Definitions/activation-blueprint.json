@@ -12,6 +12,9 @@
       "file": "Definitions/data_types.json"
     },
     {
+      "file": "Definitions/relationship_types.json"
+    },
+    {
       "file": "Definitions/artifact_types.json"
     },
     {

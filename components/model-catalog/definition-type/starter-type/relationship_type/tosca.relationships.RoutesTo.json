@@ -1,0 +1,5 @@
+{
+  "description": "Relationship tosca.relationships.RoutesTo",
+  "version": "1.0.0",
+  "derived_from": "tosca.relationships.Root"
+}

@@ -33,12 +33,6 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
-import java.text.MessageFormat
-import java.time.Instant
-import java.time.temporal.ChronoUnit
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-
 
 
 class BluePrintFileUtils {
@@ -56,8 +50,9 @@ class BluePrintFileUtils {
             val metaDataDir = File(blueprintDir.absolutePath.plus(File.separator).plus(BluePrintConstants.TOSCA_METADATA_DIR))
             Files.createDirectories(metaDataDir.toPath())
 
-            val metafile = File(blueprintDir.absolutePath.plus(File.separator).plus(BluePrintConstants.TOSCA_METADATA_ENTRY_DEFINITION_FILE))
-            Files.write(metafile.toPath(), getMetaDataContent().toByteArray(), StandardOpenOption.CREATE_NEW)
+            val metaFile = File(blueprintDir.absolutePath.plus(File.separator).plus(BluePrintConstants
+                    .TOSCA_METADATA_ENTRY_DEFINITION_FILE))
+            Files.write(metaFile.toPath(), getMetaDataContent().toByteArray(), StandardOpenOption.CREATE_NEW)
 
             val definitionsDir = File(blueprintDir.absolutePath.plus(File.separator).plus(BluePrintConstants.TOSCA_DEFINITIONS_DIR))
             Files.createDirectories(definitionsDir.toPath())
@@ -92,35 +87,6 @@ class BluePrintFileUtils {
             }
         }
 
-        fun populateDefaultImports(blueprintContext: BluePrintContext) {
-            // Get the Default Types
-            val types = arrayListOf(BluePrintConstants.PATH_DATA_TYPES, BluePrintConstants.PATH_ARTIFACT_TYPES,
-                    BluePrintConstants.PATH_NODE_TYPES, BluePrintConstants.PATH_POLICY_TYPES)
-
-            // Clean Type Imports
-            cleanImportTypes(blueprintContext.serviceTemplate)
-
-            val imports = mutableListOf<ImportDefinition>()
-            types.forEach { typeName ->
-                val import = ImportDefinition()
-                import.file = BluePrintConstants.TOSCA_DEFINITIONS_DIR.plus("/$typeName.json")
-                imports.add(import)
-            }
-
-            blueprintContext.serviceTemplate.imports = imports
-        }
-
-        fun cleanImportTypes(serviceTemplate: ServiceTemplate) {
-            // Clean the Type imports
-            val toDeleteTypes = serviceTemplate.imports?.filter {
-                it.file.endsWith("_types.json")
-            }
-
-            if (toDeleteTypes != null && toDeleteTypes.isNotEmpty()) {
-                serviceTemplate.imports?.removeAll(toDeleteTypes)
-            }
-        }
-
         fun writeEnhancedBluePrint(blueprintContext: BluePrintContext) {
 
             // Write Blueprint Types
@@ -147,6 +113,11 @@ class BluePrintFileUtils {
                 writeTypeFile(definitionDir.absolutePath, BluePrintConstants.PATH_DATA_TYPES, dataTypesContent)
             }
 
+            blueprintContext.serviceTemplate.relationshipTypes?.let {
+                val nodeTypesContent = JacksonUtils.getWrappedJson(BluePrintConstants.PATH_RELATIONSHIP_TYPES, it.toSortedMap(), true)
+                writeTypeFile(definitionDir.absolutePath, BluePrintConstants.PATH_RELATIONSHIP_TYPES, nodeTypesContent)
+            }
+
             blueprintContext.serviceTemplate.artifactTypes?.let {
                 val artifactTypesContent = JacksonUtils.getWrappedJson(BluePrintConstants.PATH_ARTIFACT_TYPES, it.toSortedMap(), true)
                 writeTypeFile(definitionDir.absolutePath, BluePrintConstants.PATH_ARTIFACT_TYPES, artifactTypesContent)
@@ -163,7 +134,40 @@ class BluePrintFileUtils {
             }
         }
 
-        fun writeEntryDefinitionFile(blueprintContext: BluePrintContext) {
+        private fun populateDefaultImports(blueprintContext: BluePrintContext) {
+            // Get the Default Types
+            val types = arrayListOf(BluePrintConstants.PATH_DATA_TYPES, BluePrintConstants.PATH_RELATIONSHIP_TYPES,
+                    BluePrintConstants.PATH_ARTIFACT_TYPES, BluePrintConstants.PATH_NODE_TYPES,
+                    BluePrintConstants.PATH_POLICY_TYPES)
+
+            // Clean Type Imports
+            cleanImportTypes(blueprintContext.serviceTemplate)
+
+            val imports = mutableListOf<ImportDefinition>()
+            types.forEach { typeName ->
+                val import = ImportDefinition()
+                import.file = BluePrintConstants.TOSCA_DEFINITIONS_DIR.plus("/$typeName.json")
+                imports.add(import)
+            }
+
+            blueprintContext.serviceTemplate.imports = imports
+        }
+
+        fun cleanImportTypes(serviceTemplate: ServiceTemplate) {
+            // Clean the Type imports
+            val toDeleteTypes = serviceTemplate.imports?.filter {
+                it.file.endsWith("_types.json")
+            }
+
+            if (toDeleteTypes != null && toDeleteTypes.isNotEmpty()) {
+                serviceTemplate.imports?.removeAll(toDeleteTypes)
+            }
+        }
+
+        /**
+         * Re Generate the Blueprint Service Template Definition file based on BluePrint Context.
+         */
+        private fun writeEntryDefinitionFile(blueprintContext: BluePrintContext) {
 
             val absoluteEntryDefinitionFile = blueprintContext.rootPath.plus(File.separator).plus(blueprintContext.entryDefinition)
 
@@ -174,14 +178,15 @@ class BluePrintFileUtils {
             writeServiceTemplate.dataTypes = null
             writeServiceTemplate.artifactTypes = null
             writeServiceTemplate.policyTypes = null
+            writeServiceTemplate.relationshipTypes = null
             writeServiceTemplate.nodeTypes = null
 
-            // Write the Serivice Template
+            // Write the Service Template
             writeDefinitionFile(absoluteEntryDefinitionFile, JacksonUtils.getJson(writeServiceTemplate, true))
         }
 
-        fun writeDefinitionFile(definitionFile: String, content: String) = runBlocking {
-            val definitionFile = File(definitionFile)
+        fun writeDefinitionFile(definitionFileName: String, content: String) = runBlocking {
+            val definitionFile = File(definitionFileName)
             // Delete the File If exists
             Files.deleteIfExists(definitionFile.toPath())
 
@@ -206,22 +211,6 @@ class BluePrintFileUtils {
                     "\nCreated-By: <AUTHOR NAME>" +
                     "\nEntry-Definitions: Definitions/<BLUEPRINT_NAME>.json" +
                     "\nTemplate-Tags: <TAGS>"
-        }
-       
-        fun getBluePrintFile(fileName: String, targetPath: Path) : File {
-            val filePath = targetPath.resolve(fileName).toString()
-            val file = File(filePath)
-            check(file.exists()) {
-                throw BluePrintException("couldn't get definition file under path(${file.absolutePath})")
-            }
-            return file
-        }
-
-        fun getCBAGeneratedFileName(fileName: String, prefix: String): String {
-            val DATE_FORMAT = "yyyyMMddHHmmss"
-            val formatter = DateTimeFormatter.ofPattern(DATE_FORMAT)
-            val datePrefix = Instant.now().atZone(ZoneId.systemDefault()).toLocalDateTime().format(formatter)
-            return MessageFormat.format(prefix, datePrefix, fileName)
         }
 
         fun getCbaStorageDirectory(path: String): Path {

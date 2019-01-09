@@ -45,17 +45,13 @@ object BluePrintConstants {
 
     const val USER_SYSTEM: String = "System"
 
-    const val MODEL_CONTENT_TYPE_JSON: String = "JSON"
-    const val MODEL_CONTENT_TYPE_YAML: String = "YAML"
-    const val MODEL_CONTENT_TYPE_YANG: String = "YANG"
-    const val MODEL_CONTENT_TYPE_SCHEMA: String = "SCHEMA"
-
     const val PATH_DIVIDER: String = "/"
     const val PATH_SERVICE_TEMPLATE: String = "service_template"
     const val PATH_TOPOLOGY_TEMPLATE: String = "topology_template"
     const val PATH_METADATA: String = "metadata"
     const val PATH_NODE_TYPES: String = "node_types"
     const val PATH_POLICY_TYPES: String = "policy_types"
+    const val PATH_RELATIONSHIP_TYPES: String = "relationship_types"
     const val PATH_ARTIFACT_TYPES: String = "artifact_types"
     const val PATH_DATA_TYPES: String = "data_types"
     const val PATH_INPUTS: String = "inputs"
