@@ -18,30 +18,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
 */
-
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { StoreModule, Store } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreRouterConnectingModule } from '@ngrx/router-store';
-import { HttpClientModule } from '@angular/common/http';
-
-import { appReducers } from './store/reducers/app.reducer';
-import { BlueprintEffects } from './store/effects/blueprint.effects';
-
-import { ApiService } from './services/api.service';
-// import { BlueprintService } from './services/blueprint.service';
-
-@NgModule({
-  declarations: [
-  ],
-  imports: [
-    CommonModule,
-    StoreModule.forRoot(appReducers),
-    EffectsModule.forRoot([BlueprintEffects]),
-    StoreRouterConnectingModule.forRoot({stateKey: 'router'}),
-    HttpClientModule
-  ],
-  providers : [ ApiService ]
-})
-export class CoreModule { }
+export interface IMetaData {
+    template_author: string;
+    author_email: String;
+    user_groups: string;
+    template_name: string;
+    template_version: string;
+    template_tags: string;
+}
