@@ -30,7 +30,7 @@ import { GlobalContants } from '../../../constants/app-constants';
   styleUrls: ['./cbawizard.component.scss']
 })
 export class CBAWizardComponent implements OnInit {
-  @Input() stepsRequired: any;
+  @Input() stepsRequired: any[];
   @ViewChild('stepper') stepper: MatStepper;
   @Output() stepChanged = new EventEmitter();
   public stepDetails = GlobalContants.cbawizard.stepsRequired.steps;
@@ -38,7 +38,7 @@ export class CBAWizardComponent implements OnInit {
   activeLinkIndex = -1;
 
 
-  constructor(private router: Router) { 
+  constructor(private router: Router) {
     this.routeLinks = [
       {
           label: 'CBA Metadata',
@@ -66,7 +66,7 @@ export class CBAWizardComponent implements OnInit {
   //     this.activeLinkIndex = this.routeLinks.indexOf(this.routeLinks.find(tab => tab.link === this.router.url));
   //     this.stepper.selectedIndex = this.activeLinkIndex; 
   // });
-   this.routeLinks.forEach((step, index)=>{
+   this.stepsRequired.forEach((step, index)=>{
     if(step.link == this.router.url) {
       this.stepper.selectedIndex = step.index
     }
@@ -74,7 +74,7 @@ export class CBAWizardComponent implements OnInit {
   }
 
   changeRoute(event){
-    this.routeLinks.forEach((step, index)=>{
+    this.stepsRequired.forEach((step, index)=>{
       if(index == event.selectedIndex) {
         this.router.navigate([step.link]);
       }
