@@ -19,7 +19,6 @@ package org.onap.ccsdk.apps.controllerblueprints.service.enhancer
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate
-import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintRepoService
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintServiceTemplateEnhancer
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
@@ -30,8 +29,7 @@ import org.springframework.stereotype.Service
 
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-open class BluePrintServiceTemplateEnhancerImpl(private val bluePrintRepoService: BluePrintRepoService,
-                                                private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService)
+open class BluePrintServiceTemplateEnhancerImpl(private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService)
     : BluePrintServiceTemplateEnhancer {
     private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintServiceTemplateEnhancerImpl::class.toString())
 
@@ -52,11 +50,14 @@ open class BluePrintServiceTemplateEnhancerImpl(private val bluePrintRepoService
         bluePrintContext.serviceTemplate.nodeTypes?.clear()
         bluePrintContext.serviceTemplate.dataTypes?.clear()
         bluePrintContext.serviceTemplate.policyTypes?.clear()
+        bluePrintContext.serviceTemplate.relationshipTypes?.clear()
 
         bluePrintContext.serviceTemplate.artifactTypes = mutableMapOf()
         bluePrintContext.serviceTemplate.nodeTypes = mutableMapOf()
         bluePrintContext.serviceTemplate.dataTypes = mutableMapOf()
         bluePrintContext.serviceTemplate.policyTypes = mutableMapOf()
+        bluePrintContext.serviceTemplate.relationshipTypes = mutableMapOf()
+        log.info("reinitialized all type definitions")
 
     }
 

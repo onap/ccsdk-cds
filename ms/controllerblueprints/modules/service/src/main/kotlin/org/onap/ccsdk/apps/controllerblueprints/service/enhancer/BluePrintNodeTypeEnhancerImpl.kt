@@ -18,6 +18,7 @@ package org.onap.ccsdk.apps.controllerblueprints.service.enhancer
 
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.apps.controllerblueprints.core.data.InterfaceDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeType
@@ -57,7 +58,7 @@ open class BluePrintNodeTypeEnhancerImpl(private val bluePrintRepoService: BlueP
         }
 
         // NodeType Attribute Definitions
-        enrichNodeTypeAtributes(name, nodeType)
+        enrichNodeTypeAttributes(name, nodeType)
 
         // NodeType Property Definitions
         enrichNodeTypeProperties(name, nodeType)
@@ -73,7 +74,7 @@ open class BluePrintNodeTypeEnhancerImpl(private val bluePrintRepoService: BlueP
 
     }
 
-    open fun enrichNodeTypeAtributes(nodeTypeName: String, nodeType: NodeType) {
+    open fun enrichNodeTypeAttributes(nodeTypeName: String, nodeType: NodeType) {
         nodeType.attributes?.let {
             bluePrintTypeEnhancerService.enhanceAttributeDefinitions(bluePrintRuntimeService, nodeType.attributes!!)
         }
@@ -87,14 +88,20 @@ open class BluePrintNodeTypeEnhancerImpl(private val bluePrintRepoService: BlueP
 
     open fun enrichNodeTypeRequirements(nodeTypeName: String, nodeType: NodeType) {
 
-        nodeType.requirements?.forEach { _, requirementDefinition ->
+        nodeType.requirements?.forEach { requirementName, requirementDefinition ->
             // Populate Requirement Node
             requirementDefinition.node?.let { requirementNodeTypeName ->
                 // Get Requirement NodeType from Repo and Update Service Template
                 val requirementNodeType = BluePrintEnhancerUtils.populateNodeType(bluePrintContext,
                         bluePrintRepoService, requirementNodeTypeName)
-                // Enhanypece Node T
+                // Enhance Node Type
                 enhance(bluePrintRuntimeService, requirementNodeTypeName, requirementNodeType)
+
+                // Enhance Relationship Type
+                val relationShipTypeName = requirementDefinition.relationship
+                        ?: throw BluePrintException("couldn't get relationship name for the NodeType($nodeTypeName) " +
+                                "Requirement($requirementName)")
+                enrichRelationShipType(relationShipTypeName)
             }
         }
     }
@@ -120,7 +127,7 @@ open class BluePrintNodeTypeEnhancerImpl(private val bluePrintRepoService: BlueP
 
         interfaceObj.operations?.forEach { operationName, operation ->
             enrichNodeTypeInterfaceOperationInputs(nodeTypeName, operationName, operation)
-            enrichNodeTypeInterfaceOperationOputputs(nodeTypeName, operationName, operation)
+            enrichNodeTypeInterfaceOperationOutputs(nodeTypeName, operationName, operation)
         }
     }
 
@@ -130,10 +137,18 @@ open class BluePrintNodeTypeEnhancerImpl(private val bluePrintRepoService: BlueP
         }
     }
 
-    open fun enrichNodeTypeInterfaceOperationOputputs(nodeTypeName: String, operationName: String, operation: OperationDefinition) {
+    open fun enrichNodeTypeInterfaceOperationOutputs(nodeTypeName: String, operationName: String,
+                                                     operation: OperationDefinition) {
         operation.outputs?.let { inputs ->
             bluePrintTypeEnhancerService.enhancePropertyDefinitions(bluePrintRuntimeService, inputs)
         }
+    }
+
+    /**
+     * Get the Relationship Type from database and add to Blueprint Context
+     */
+    open fun enrichRelationShipType(relationshipName: String) {
+        BluePrintEnhancerUtils.populateRelationshipType(bluePrintContext, bluePrintRepoService, relationshipName)
     }
 
 }

@@ -21,7 +21,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ArtifactType
 import org.onap.ccsdk.apps.controllerblueprints.core.data.DataType
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeType
-import org.onap.ccsdk.apps.controllerblueprints.core.format
+import org.onap.ccsdk.apps.controllerblueprints.core.data.RelationshipType
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintRepoService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 import org.springframework.http.codec.multipart.FilePart
@@ -45,13 +45,23 @@ class BluePrintEnhancerUtils {
             return dataType
         }
 
+        fun populateRelationshipType(bluePrintContext: BluePrintContext, bluePrintRepoService: BluePrintRepoService,
+                             relationshipName: String): RelationshipType {
+
+            val relationshipType = bluePrintContext.serviceTemplate.relationshipTypes?.get(relationshipName)
+                    ?: bluePrintRepoService.getRelationshipType(relationshipName)
+                    ?: throw BluePrintException("couldn't get RelationshipType($relationshipName) from repo.")
+            bluePrintContext.serviceTemplate.relationshipTypes?.put(relationshipName, relationshipType)
+            return relationshipType
+        }
+
 
         fun populateNodeType(bluePrintContext: BluePrintContext, bluePrintRepoService: BluePrintRepoService,
                              nodeTypeName: String): NodeType {
 
             val nodeType = bluePrintContext.serviceTemplate.nodeTypes?.get(nodeTypeName)
                     ?: bluePrintRepoService.getNodeType(nodeTypeName)
-                    ?: throw BluePrintException(format("Couldn't get NodeType({}) from repo.", nodeTypeName))
+                    ?: throw BluePrintException("couldn't get NodeType($nodeTypeName) from repo.")
             bluePrintContext.serviceTemplate.nodeTypes?.put(nodeTypeName, nodeType)
             return nodeType
         }
