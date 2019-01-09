@@ -19,11 +19,15 @@ package org.onap.ccsdk.apps.controllerblueprints.service.common;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import java.io.Serializable;
 import java.util.Date;
 
 @JsonInclude(Include.NON_NULL)
+@JsonTypeName("errorMessage")
+@JsonTypeInfo(include= JsonTypeInfo.As.WRAPPER_OBJECT, use=JsonTypeInfo.Id.NAME)
 public class ErrorMessage implements Serializable {
     private String message;
     private Integer code;

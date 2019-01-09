@@ -42,31 +42,38 @@ public class BlueprintModelRest {
 
     @PostMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public @ResponseBody
-    Mono<BlueprintModelSearch> saveBluePrint(@RequestPart("file") FilePart file) throws BluePrintException{
+    Mono<BlueprintModelSearch> saveBlueprint(@RequestPart("file") FilePart file) throws BluePrintException{
         return blueprintModelService.saveBlueprintModel(file);
     }
 
     @DeleteMapping(path = "/{id}")
-    public void deleteBluePrint(@PathVariable(value = "id") String id) throws BluePrintException {
+    public void deleteBlueprint(@PathVariable(value = "id") String id) throws BluePrintException {
         this.blueprintModelService.deleteBlueprintModel(id);
     }
 
     @GetMapping(path = "/by-name/{name}/version/{version}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    BlueprintModelSearch getBluePrintByNameAndVersion(@PathVariable(value = "name") String name,
-                                                          @PathVariable(value = "version") String version) throws BluePrintException {
-        return this.blueprintModelService.getBlueprintModelByNameAndVersion(name, version);
+    BlueprintModelSearch getBlueprintByNameAndVersion(@PathVariable(value = "name") String name,
+                                                      @PathVariable(value = "version") String version) throws BluePrintException {
+        return this.blueprintModelService.getBlueprintModelSearchByNameAndVersion(name, version);
+    }
+
+    @GetMapping(path = "/download/by-name/{name}/version/{version}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    ResponseEntity<Resource> downloadBlueprintByNameAndVersion(@PathVariable(value = "name") String name,
+                                                               @PathVariable(value = "version") String version) throws BluePrintException {
+        return this.blueprintModelService.downloadBlueprintModelFileByNameAndVersion(name, version);
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    BlueprintModelSearch getCBA(@PathVariable(value = "id") String id) throws BluePrintException {
+    BlueprintModelSearch getBlueprintModel(@PathVariable(value = "id") String id) throws BluePrintException {
         return this.blueprintModelService.getBlueprintModelSearch(id);
     }
 
     @GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    List<BlueprintModelSearch> getAllCBA() {
+    List<BlueprintModelSearch> getAllBlueprintModel() {
         return this.blueprintModelService.getAllBlueprintModel();
     }
 
@@ -76,7 +83,7 @@ public class BlueprintModelRest {
         return this.blueprintModelService.downloadBlueprintModelFile(id);
     }
 
-    @GetMapping(path = "/publish/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/publish/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     BlueprintModelSearch publishBlueprintModel(@PathVariable(value = "id") String id) throws BluePrintException {
         return this.blueprintModelService.publishBlueprintModel(id);

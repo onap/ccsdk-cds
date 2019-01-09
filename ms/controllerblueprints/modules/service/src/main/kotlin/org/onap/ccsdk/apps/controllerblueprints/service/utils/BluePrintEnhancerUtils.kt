@@ -20,6 +20,7 @@ package org.onap.ccsdk.apps.controllerblueprints.service.utils
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ArtifactType
 import org.onap.ccsdk.apps.controllerblueprints.core.data.DataType
+import org.onap.ccsdk.apps.controllerblueprints.core.data.ErrorCode
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeType
 import org.onap.ccsdk.apps.controllerblueprints.core.data.RelationshipType
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintRepoService
@@ -92,7 +93,7 @@ class BluePrintEnhancerUtils {
 
             // Check if the file's extension is "CBA"
             if (StringUtils.getFilenameExtension(fileName) != "zip") {
-                throw BluePrintException("Invalid file extension required ZIP")
+                throw BluePrintException(ErrorCode.INVALID_FILE_EXTENSION.value, "Invalid file extension required ZIP")
             }
 
             // Change file name to match a pattern
