@@ -19,7 +19,10 @@ package org.onap.ccsdk.apps.controllerblueprints.core.validation
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.apps.controllerblueprints.core.data.Workflow
+import org.onap.ccsdk.apps.controllerblueprints.core.format
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintWorkflowValidator
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
@@ -42,14 +45,35 @@ open class BluePrintWorkflowValidatorImpl(private val bluePrintTypeValidatorServ
 
         // Step Validation Start
         paths.add("steps")
-        workflow.steps?.forEach { stepName, _ ->
+        workflow.steps?.forEach { stepName, step ->
             paths.add(stepName)
             paths.joinToString(BluePrintConstants.PATH_DIVIDER)
-            // TODO("Step Validation")
+
+            // Validate target
+            step.target?.let {
+                try {
+                    val nodeTemplate = bluePrintRuntimeService.bluePrintContext().nodeTemplateByName(it)
+
+                    val nodeTypeDerivedFrom = bluePrintRuntimeService.bluePrintContext().nodeTemplateNodeType(it).derivedFrom
+
+                    check(nodeTypeDerivedFrom == BluePrintConstants.MODEL_TYPE_NODE_DG) {
+                        "NodeType(${nodeTemplate.type}) derived from is '$nodeTypeDerivedFrom', Expected is " +
+                                "'${BluePrintConstants.MODEL_TYPE_NODE_DG}'"
+                    }
+                } catch (e: Exception) {
+                    bluePrintRuntimeService.getBluePrintError()
+                            .addError("Failed to validate Workflow($workflowName)'s step($stepName)'s " +
+                                    "definition", paths.joinToString(BluePrintConstants.PATH_DIVIDER), e.message!!)
+                }
+            }
             paths.removeAt(paths.lastIndex)
         }
         paths.removeAt(paths.lastIndex)
         // Step Validation Ends
         paths.removeAt(paths.lastIndex)
+
+        workflow.inputs?.let {
+            bluePrintTypeValidatorService.validatePropertyDefinitions(bluePrintRuntimeService, workflow.inputs!!)
+        }
     }
 }

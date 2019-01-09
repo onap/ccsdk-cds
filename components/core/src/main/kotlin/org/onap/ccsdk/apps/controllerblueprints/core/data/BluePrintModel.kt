@@ -502,7 +502,7 @@ class InterfaceAssignment {
 A Node Template specifies the occurrence of a manageable software component as part of an application’s topology model which is defined in a TOSCA Service Template.  A Node template is an instance of a specified Node Type and can provide customized properties, constraints or operations which override the defaults provided by its Node Type and its implementations.
  */
 
-class NodeTemplate {
+open class NodeTemplate {
     @get:JsonIgnore
     var id: String? = null
     var description: String? = null

@@ -148,7 +148,7 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
     val nodeTemplates: MutableMap<String, NodeTemplate>? = serviceTemplate.topologyTemplate?.nodeTemplates
 
     fun nodeTemplateByName(name: String): NodeTemplate =
-            nodeTemplates?.get(name) ?: throw BluePrintException("could't get node template for the name($name) ")
+            nodeTemplates?.get(name) ?: throw BluePrintException("could't get node template for the name($name)")
 
     fun nodeTemplateForNodeType(name: String): MutableMap<String, NodeTemplate>? {
         return nodeTemplates?.filterValues { nodeTemplate -> nodeTemplate.type == name }?.toMutableMap()
