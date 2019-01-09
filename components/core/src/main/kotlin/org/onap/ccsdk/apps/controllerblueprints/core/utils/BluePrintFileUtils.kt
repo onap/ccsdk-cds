@@ -24,6 +24,7 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.apps.controllerblueprints.core.data.ErrorCode
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ImportDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
@@ -105,7 +106,8 @@ class BluePrintFileUtils {
             val definitionDir = File(definitionPath)
 
             check(definitionDir.exists()) {
-                throw BluePrintException("couldn't get definition file under path(${definitionDir.absolutePath})")
+                throw BluePrintException(ErrorCode.BLUEPRINT_PATH_MISSING.value, "couldn't get definition file under " +
+                        "path(${definitionDir.absolutePath})")
             }
 
             blueprintContext.serviceTemplate.dataTypes?.let {
@@ -192,7 +194,8 @@ class BluePrintFileUtils {
 
             Files.write(definitionFile.toPath(), content.toByteArray(), StandardOpenOption.CREATE_NEW)
             check(definitionFile.exists()) {
-                throw BluePrintException("couldn't write definition file under path(${definitionFile.absolutePath})")
+                throw BluePrintException(ErrorCode.BLUEPRINT_WRITING_FAIL.value, "couldn't write definition file under " +
+                        "path(${definitionFile.absolutePath})")
             }
         }
 
@@ -201,7 +204,8 @@ class BluePrintFileUtils {
 
             Files.write(typeFile.toPath(), content.toByteArray(), StandardOpenOption.CREATE_NEW)
             check(typeFile.exists()) {
-                throw BluePrintException("couldn't write $type.json file under path(${typeFile.absolutePath})")
+                throw BluePrintException(ErrorCode.BLUEPRINT_WRITING_FAIL.value, "couldn't write $type.json file under " +
+                        "path(${typeFile.absolutePath})")
             }
         }
 
@@ -213,9 +217,21 @@ class BluePrintFileUtils {
                     "\nTemplate-Tags: <TAGS>"
         }
 
+       
+        fun getBluePrintFile(fileName: String, targetPath: Path) : File {
+            val filePath = targetPath.resolve(fileName).toString()
+            val file = File(filePath)
+            check(file.exists()) {
+                throw BluePrintException(ErrorCode.BLUEPRINT_PATH_MISSING.value, "couldn't get definition file under " +
+                        "path(${file.absolutePath})")
+            }
+            return file
+        }
+
         fun getCbaStorageDirectory(path: String): Path {
             check(StringUtils.isNotBlank(path)) {
-                throw BluePrintException("CBA Path is missing.")
+                throw BluePrintException(ErrorCode.BLUEPRINT_PATH_MISSING.value, "couldn't get " +
+                        "Blueprint folder under path($path)")
             }
 
             val fileStorageLocation = Paths.get(path).toAbsolutePath().normalize()
