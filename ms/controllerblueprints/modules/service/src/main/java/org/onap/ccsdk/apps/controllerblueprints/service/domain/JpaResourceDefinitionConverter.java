@@ -29,11 +29,11 @@ public class JpaResourceDefinitionConverter implements
         AttributeConverter<ResourceDefinition, String> {
     @Override
     public String convertToDatabaseColumn(ResourceDefinition resourceDefinition) {
-        return JacksonUtils.getJson(resourceDefinition);
+        return JacksonUtils.Companion.getJson(resourceDefinition);
     }
 
     @Override
     public ResourceDefinition convertToEntityAttribute(String content) {
-        return JacksonUtils.readValue(content, ResourceDefinition.class);
+        return JacksonUtils.Companion.readValue(content, ResourceDefinition.class);
     }
 }

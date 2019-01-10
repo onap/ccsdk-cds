@@ -30,11 +30,11 @@ public class JpaJsonNodeConverter implements
 
     @Override
     public String convertToDatabaseColumn(JsonNode node) {
-        return JacksonUtils.getJson(node, true);
+        return JacksonUtils.Companion.getJson(node, true);
     }
 
     @Override
     public JsonNode convertToEntityAttribute(String dbData) {
-        return JacksonUtils.jsonNode(dbData);
+        return JacksonUtils.Companion.jsonNode(dbData);
     }
 }

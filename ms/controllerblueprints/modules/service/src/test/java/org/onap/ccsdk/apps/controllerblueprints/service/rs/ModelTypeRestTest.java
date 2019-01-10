@@ -53,12 +53,12 @@ public class ModelTypeRestTest {
     public void test01SaveModelType() throws Exception {
         log.info("**************** test01SaveModelType  ********************");
 
-        String content = JacksonUtils.getClassPathFileContent("model_type/data_type/datatype-property.json");
+        String content = JacksonUtils.Companion.getClassPathFileContent("model_type/data_type/datatype-property.json");
         ModelType modelType = new ModelType();
         modelType.setDefinitionType(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE);
         modelType.setDerivedFrom(BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT);
         modelType.setDescription("Definition for Sample Datatype ");
-        modelType.setDefinition(JacksonUtils.jsonNode(content));
+        modelType.setDefinition(JacksonUtils.Companion.jsonNode(content));
         modelType.setModelName(modelName);
         modelType.setVersion("1.0.0");
         modelType.setTags("test-datatype ," + BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT + ","

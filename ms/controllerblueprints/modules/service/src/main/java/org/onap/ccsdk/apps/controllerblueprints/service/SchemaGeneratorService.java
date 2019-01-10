@@ -59,7 +59,7 @@ public class SchemaGeneratorService {
      */
     public String generateSchema(String serviceTemplateContent) throws BluePrintException {
         if (StringUtils.isNotBlank(serviceTemplateContent)) {
-            ServiceTemplate serviceTemplate = JacksonUtils.readValue(serviceTemplateContent,
+            ServiceTemplate serviceTemplate = JacksonUtils.Companion.readValue(serviceTemplateContent,
                     ServiceTemplate.class);
             return generateSchema(serviceTemplate);
         } else {

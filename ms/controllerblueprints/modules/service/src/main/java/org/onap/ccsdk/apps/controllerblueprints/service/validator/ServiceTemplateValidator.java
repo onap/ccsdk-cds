@@ -58,7 +58,7 @@ public class ServiceTemplateValidator extends BluePrintValidatorDefaultService {
     public boolean validateServiceTemplate(String serviceTemplateContent) throws BluePrintException {
         if (StringUtils.isNotBlank(serviceTemplateContent)) {
             ServiceTemplate serviceTemplate =
-                    JacksonUtils.readValue(serviceTemplateContent, ServiceTemplate.class);
+                    JacksonUtils.Companion.readValue(serviceTemplateContent, ServiceTemplate.class);
             return validateServiceTemplate(serviceTemplate);
         } else {
             throw new BluePrintException(
@@ -131,11 +131,11 @@ public class ServiceTemplateValidator extends BluePrintValidatorDefaultService {
                 Object mappingObject =
                         capabilityAssignment.getProperties().get(ConfigModelConstant.CAPABILITY_PROPERTY_MAPPING);
                 if (mappingObject != null) {
-                    String mappingContent = JacksonUtils.getJson(mappingObject);
+                    String mappingContent = JacksonUtils.Companion.getJson(mappingObject);
                     Preconditions.checkArgument(StringUtils.isNotBlank(mappingContent),
                             String.format("Failed to get capability mapping property (%s) ", ConfigModelConstant.CAPABILITY_PROPERTY_MAPPING));
 
-                    resourceAssignment = JacksonUtils.getListFromJson(mappingContent, ResourceAssignment.class);
+                    resourceAssignment = JacksonUtils.Companion.getListFromJson(mappingContent, ResourceAssignment.class);
 
                     Preconditions.checkNotNull(resourceAssignment,
                             String.format("Failed to get resource assignment info from the content (%s) ", mappingContent));

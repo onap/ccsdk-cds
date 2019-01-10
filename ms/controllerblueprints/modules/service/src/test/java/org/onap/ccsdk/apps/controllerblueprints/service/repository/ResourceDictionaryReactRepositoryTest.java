@@ -55,7 +55,7 @@ public class ResourceDictionaryReactRepositoryTest {
     @Test
     @Commit
     public void test01Save() {
-        ResourceDefinition resourceDefinition = JacksonUtils.readValueFromFile("./../../../../components/model-catalog/resource-dictionary/starter-dictionary/sample-db-source.json", ResourceDefinition.class);
+        ResourceDefinition resourceDefinition = JacksonUtils.Companion.readValueFromFile("./../../../../components/model-catalog/resource-dictionary/starter-dictionary/sample-db-source.json", ResourceDefinition.class);
         Assert.assertNotNull("Failed to get resourceDefinition from content", resourceDefinition);
         resourceDefinition.setName(sourceName);
 
