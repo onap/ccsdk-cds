@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.onap.ccsdk.apps.controllerblueprints.core.utils
 
 import com.att.eelf.configuration.EELFLogger
@@ -22,6 +21,9 @@ import com.att.eelf.configuration.EELFManager
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.ArrayNode
+import com.fasterxml.jackson.databind.node.NullNode
+import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.Dispatchers
@@ -40,241 +42,209 @@ import java.nio.charset.Charset
  *
  * @author Brinda Santh
  */
-object JacksonUtils {
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
+class JacksonUtils {
+    companion object {
+        private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
+        inline fun <reified T : Any> readValue(content: String): T =
+                jacksonObjectMapper().readValue(content, T::class.java)
 
-    inline fun <reified T : Any> readValue(content: String): T =
-            jacksonObjectMapper().readValue(content, T::class.java)
+        fun <T> readValue(content: String, valueType: Class<T>): T? {
+            return jacksonObjectMapper().readValue(content, valueType)
+        }
 
-    @JvmStatic
-    fun <T> readValue(content: String, valueType: Class<T>): T? {
-        return jacksonObjectMapper().readValue(content, valueType)
-    }
+        fun <T> readValue(node: JsonNode, valueType: Class<T>): T? {
+            return jacksonObjectMapper().treeToValue(node, valueType)
+        }
 
-    @JvmStatic
-    fun <T> readValue(node: JsonNode, valueType: Class<T>): T? {
-        return jacksonObjectMapper().treeToValue(node, valueType)
-    }
+        fun getContent(fileName: String): String = runBlocking {
+            async {
+                try {
+                    File(fileName).readText(Charsets.UTF_8)
+                } catch (e: Exception) {
+                    throw BluePrintException("couldn't get file ($fileName) content : ${e.message}")
+                }
+            }.await()
+        }
 
-    @JvmStatic
-    fun getContent(fileName: String): String = runBlocking {
-        async {
-            try {
-                File(fileName).readText(Charsets.UTF_8)
-            } catch (e: Exception) {
-                throw BluePrintException("couldn't get file ($fileName) content : ${e.message}")
-            }
-        }.await()
-    }
-
-    @JvmStatic
-    fun getClassPathFileContent(fileName: String): String {
-        return runBlocking {
-            withContext(Dispatchers.Default) {
-                IOUtils.toString(JacksonUtils::class.java.classLoader
-                        .getResourceAsStream(fileName), Charset.defaultCharset())
+        fun getClassPathFileContent(fileName: String): String {
+            return runBlocking {
+                withContext(Dispatchers.Default) {
+                    IOUtils.toString(JacksonUtils::class.java.classLoader
+                            .getResourceAsStream(fileName), Charset.defaultCharset())
+                }
             }
         }
-    }
 
-    @JvmStatic
-    fun <T> readValueFromFile(fileName: String, valueType: Class<T>): T? {
-        val content: String = getContent(fileName)
-        return readValue(content, valueType)
-    }
-
-    @JvmStatic
-    fun <T> readValueFromClassPathFile(fileName: String, valueType: Class<T>): T? {
-        val content: String = getClassPathFileContent(fileName)
-        return readValue(content, valueType)
-    }
-
-    @JvmStatic
-    fun jsonNodeFromObject(from: kotlin.Any): JsonNode = jacksonObjectMapper().convertValue(from, JsonNode::class.java)
-
-    @JvmStatic
-    fun jsonNodeFromClassPathFile(fileName: String): JsonNode {
-        val content: String = getClassPathFileContent(fileName)
-        return jsonNode(content)
-    }
-
-    @JvmStatic
-    fun jsonNodeFromFile(fileName: String): JsonNode {
-        val content: String = getContent(fileName)
-        return jsonNode(content)
-    }
-
-    @JvmStatic
-    fun jsonNode(content: String): JsonNode {
-        return jacksonObjectMapper().readTree(content)
-    }
-
-    @JvmStatic
-    fun getJson(any: kotlin.Any): String {
-        return getJson(any, false)
-    }
-
-    @JvmStatic
-    fun getWrappedJson(wrapper: String, any: kotlin.Any, pretty: Boolean = false): String {
-        val wrapperMap = hashMapOf<String, Any>()
-        wrapperMap[wrapper] = any
-        return getJson(wrapperMap, pretty)
-    }
-
-    @JvmStatic
-    fun getJson(any: kotlin.Any, pretty: Boolean = false): String {
-        val objectMapper = jacksonObjectMapper()
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL)
-        if (pretty) {
-            objectMapper.enable(SerializationFeature.INDENT_OUTPUT)
-        }
-        return objectMapper.writeValueAsString(any)
-    }
-
-    @JvmStatic
-    fun <T> getListFromJsonNode(node: JsonNode, valueType: Class<T>): List<T>? {
-        return getListFromJson(node.toString(), valueType)
-    }
-
-    @JvmStatic
-    fun <T> getListFromJson(content: String, valueType: Class<T>): List<T>? {
-        val objectMapper = jacksonObjectMapper()
-        val javaType = objectMapper.typeFactory.constructCollectionType(List::class.java, valueType)
-        return objectMapper.readValue<List<T>>(content, javaType)
-    }
-
-    @JvmStatic
-    fun <T> getListFromFile(fileName: String, valueType: Class<T>): List<T>? {
-        val content: String = getContent(fileName)
-        return getListFromJson(content, valueType)
-    }
-
-    @JvmStatic
-    fun <T> getListFromClassPathFile(fileName: String, valueType: Class<T>): List<T>? {
-        val content: String = getClassPathFileContent(fileName)
-        return getListFromJson(content, valueType)
-    }
-
-    @JvmStatic
-    fun <T> getMapFromJson(content: String, valueType: Class<T>): MutableMap<String, T>? {
-        val objectMapper = jacksonObjectMapper()
-        val typeRef = object : TypeReference<MutableMap<String, T>>() {}
-        return objectMapper.readValue(content, typeRef)
-    }
-
-    @JvmStatic
-    fun <T> getMapFromFile(fileName: String, valueType: Class<T>): MutableMap<String, T>? {
-        val content: String = getContent(fileName)
-        return getMapFromJson(content, valueType)
-    }
-
-    @JvmStatic
-    fun checkJsonNodeValueOfType(type: String, jsonNode: JsonNode): Boolean {
-        if (BluePrintTypes.validPrimitiveTypes().contains(type)) {
-            return checkJsonNodeValueOfPrimitiveType(type, jsonNode)
-        } else if (BluePrintTypes.validCollectionTypes().contains(type)) {
-            return checkJsonNodeValueOfCollectionType(type, jsonNode)
-        }
-        return false
-    }
-
-    @JvmStatic
-    fun checkJsonNodeValueOfPrimitiveType(primitiveType: String, jsonNode: JsonNode): Boolean {
-        when (primitiveType) {
-            BluePrintConstants.DATA_TYPE_STRING -> return jsonNode.isTextual
-            BluePrintConstants.DATA_TYPE_BOOLEAN -> return jsonNode.isBoolean
-            BluePrintConstants.DATA_TYPE_INTEGER -> return jsonNode.isInt
-            BluePrintConstants.DATA_TYPE_FLOAT -> return jsonNode.isDouble
-            BluePrintConstants.DATA_TYPE_TIMESTAMP -> return jsonNode.isTextual
-            else -> return false
-        }
-    }
-
-    @JvmStatic
-    fun checkJsonNodeValueOfCollectionType(type: String, jsonNode: JsonNode): Boolean {
-        when (type) {
-            BluePrintConstants.DATA_TYPE_LIST -> return jsonNode.isArray
-            BluePrintConstants.DATA_TYPE_MAP -> return jsonNode.isContainerNode
-            else -> return false
+        fun <T> readValueFromFile(fileName: String, valueType: Class<T>): T? {
+            val content: String = getContent(fileName)
+            return readValue(content, valueType)
         }
 
-    }
-/*
-    @JvmStatic
-    fun populatePrimitiveValues(key: String, value: Any, primitiveType: String, objectNode: ObjectNode) {
-        if (BluePrintConstants.DATA_TYPE_BOOLEAN == primitiveType) {
-            objectNode.put(key, value as Boolean)
-        } else if (BluePrintConstants.DATA_TYPE_INTEGER == primitiveType) {
-            objectNode.put(key, value as Int)
-        } else if (BluePrintConstants.DATA_TYPE_FLOAT == primitiveType) {
-            objectNode.put(key, value as Float)
-        } else if (BluePrintConstants.DATA_TYPE_TIMESTAMP == primitiveType) {
-            objectNode.put(key, value as String)
-        } else {
-            objectNode.put(key, value as String)
+        fun <T> readValueFromClassPathFile(fileName: String, valueType: Class<T>): T? {
+            val content: String = getClassPathFileContent(fileName)
+            return readValue(content, valueType)
         }
-    }
 
-    @JvmStatic
-    fun populatePrimitiveValues(value: Any, primitiveType: String, objectNode: ArrayNode) {
-        if (BluePrintConstants.DATA_TYPE_BOOLEAN == primitiveType) {
-            objectNode.add(value as Boolean)
-        } else if (BluePrintConstants.DATA_TYPE_INTEGER == primitiveType) {
-            objectNode.add(value as Int)
-        } else if (BluePrintConstants.DATA_TYPE_FLOAT == primitiveType) {
-            objectNode.add(value as Float)
-        } else if (BluePrintConstants.DATA_TYPE_TIMESTAMP == primitiveType) {
-            objectNode.add(value as String)
-        } else {
-            objectNode.add(value as String)
+        fun jsonNodeFromObject(from: kotlin.Any): JsonNode {
+            return jacksonObjectMapper().convertValue(from, JsonNode::class.java)
         }
-    }
 
-    @JvmStatic
-    fun populatePrimitiveDefaultValues(key: String, primitiveType: String, objectNode: ObjectNode) {
-        if (BluePrintConstants.DATA_TYPE_BOOLEAN == primitiveType) {
-            objectNode.put(key, false)
-        } else if (BluePrintConstants.DATA_TYPE_INTEGER == primitiveType) {
-            objectNode.put(key, 0)
-        } else if (BluePrintConstants.DATA_TYPE_FLOAT == primitiveType) {
-            objectNode.put(key, 0.0)
-        } else {
-            objectNode.put(key, "")
+        fun jsonNodeFromClassPathFile(fileName: String): JsonNode {
+            val content: String = getClassPathFileContent(fileName)
+            return jsonNode(content)
         }
-    }
 
-    @JvmStatic
-    fun populatePrimitiveDefaultValuesForArrayNode(primitiveType: String, arrayNode: ArrayNode) {
-        if (BluePrintConstants.DATA_TYPE_BOOLEAN == primitiveType) {
-            arrayNode.add(false)
-        } else if (BluePrintConstants.DATA_TYPE_INTEGER == primitiveType) {
-            arrayNode.add(0)
-        } else if (BluePrintConstants.DATA_TYPE_FLOAT == primitiveType) {
-            arrayNode.add(0.0)
-        } else {
-            arrayNode.add("")
+        fun jsonNodeFromFile(fileName: String): JsonNode {
+            val content: String = getContent(fileName)
+            return jsonNode(content)
         }
-    }
 
-    @JvmStatic
-    fun populateJsonNodeValues(key: String, nodeValue: JsonNode?, type: String, objectNode: ObjectNode) {
-        if (nodeValue == null || nodeValue is NullNode) {
-            objectNode.set(key, nodeValue)
-        } else if (BluePrintTypes.validPrimitiveTypes().contains(type)) {
-            if (BluePrintConstants.DATA_TYPE_BOOLEAN == type) {
-                objectNode.put(key, nodeValue.asBoolean())
-            } else if (BluePrintConstants.DATA_TYPE_INTEGER == type) {
-                objectNode.put(key, nodeValue.asInt())
-            } else if (BluePrintConstants.DATA_TYPE_FLOAT == type) {
-                objectNode.put(key, nodeValue.floatValue())
-            } else if (BluePrintConstants.DATA_TYPE_TIMESTAMP == type) {
-                objectNode.put(key, nodeValue.asText())
+        fun jsonNode(content: String): JsonNode {
+            return jacksonObjectMapper().readTree(content)
+        }
+
+        fun getJson(any: kotlin.Any): String {
+            return getJson(any, false)
+        }
+
+        fun getWrappedJson(wrapper: String, any: kotlin.Any, pretty: Boolean = false): String {
+            val wrapperMap = hashMapOf<String, Any>()
+            wrapperMap[wrapper] = any
+            return getJson(wrapperMap, pretty)
+        }
+
+        fun getJson(any: kotlin.Any, pretty: Boolean = false): String {
+            val objectMapper = jacksonObjectMapper()
+            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL)
+            if (pretty) {
+                objectMapper.enable(SerializationFeature.INDENT_OUTPUT)
+            }
+            return objectMapper.writeValueAsString(any)
+        }
+
+        fun getJsonNode(any: kotlin.Any?, pretty: Boolean = false): JsonNode {
+            val objectMapper = jacksonObjectMapper()
+            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL)
+            if (pretty) {
+                objectMapper.enable(SerializationFeature.INDENT_OUTPUT)
+            }
+            return objectMapper.valueToTree(any)
+        }
+
+        fun <T> getListFromJsonNode(node: JsonNode, valueType: Class<T>): List<T>? {
+            return getListFromJson(node.toString(), valueType)
+        }
+
+        fun <T> getListFromJson(content: String, valueType: Class<T>): List<T>? {
+            val objectMapper = jacksonObjectMapper()
+            val javaType = objectMapper.typeFactory.constructCollectionType(List::class.java, valueType)
+            return objectMapper.readValue<List<T>>(content, javaType)
+        }
+
+        fun <T> getListFromFile(fileName: String, valueType: Class<T>): List<T>? {
+            val content: String = getContent(fileName)
+            return getListFromJson(content, valueType)
+        }
+
+        fun <T> getListFromClassPathFile(fileName: String, valueType: Class<T>): List<T>? {
+            val content: String = getClassPathFileContent(fileName)
+            return getListFromJson(content, valueType)
+        }
+
+        fun <T> getMapFromJson(content: String, valueType: Class<T>): MutableMap<String, T>? {
+            val objectMapper = jacksonObjectMapper()
+            val typeRef = object : TypeReference<MutableMap<String, T>>() {}
+            return objectMapper.readValue(content, typeRef)
+        }
+
+        fun <T> getMapFromFile(fileName: String, valueType: Class<T>): MutableMap<String, T>? {
+            val content: String = getContent(fileName)
+            return getMapFromJson(content, valueType)
+        }
+
+        fun checkJsonNodeValueOfType(type: String, jsonNode: JsonNode): Boolean {
+            if (BluePrintTypes.validPrimitiveTypes().contains(type)) {
+                return checkJsonNodeValueOfPrimitiveType(type, jsonNode)
+            } else if (BluePrintTypes.validCollectionTypes().contains(type)) {
+                return checkJsonNodeValueOfCollectionType(type, jsonNode)
+            }
+            return false
+        }
+
+        fun checkJsonNodeValueOfPrimitiveType(primitiveType: String, jsonNode: JsonNode): Boolean {
+            when (primitiveType) {
+                BluePrintConstants.DATA_TYPE_STRING -> return jsonNode.isTextual
+                BluePrintConstants.DATA_TYPE_BOOLEAN -> return jsonNode.isBoolean
+                BluePrintConstants.DATA_TYPE_INTEGER -> return jsonNode.isInt
+                BluePrintConstants.DATA_TYPE_FLOAT -> return jsonNode.isDouble
+                BluePrintConstants.DATA_TYPE_TIMESTAMP -> return jsonNode.isTextual
+                else -> return false
+            }
+        }
+
+        fun checkJsonNodeValueOfCollectionType(type: String, jsonNode: JsonNode): Boolean {
+            when (type) {
+                BluePrintConstants.DATA_TYPE_LIST -> return jsonNode.isArray
+                BluePrintConstants.DATA_TYPE_MAP -> return jsonNode.isContainerNode
+                else -> return false
+            }
+        }
+
+        fun populatePrimitiveValues(key: String, value: Any, primitiveType: String, objectNode: ObjectNode) {
+            when (primitiveType) {
+                BluePrintConstants.DATA_TYPE_BOOLEAN -> objectNode.put(key, value as Boolean)
+                BluePrintConstants.DATA_TYPE_INTEGER -> objectNode.put(key, value as Int)
+                BluePrintConstants.DATA_TYPE_FLOAT -> objectNode.put(key, value as Float)
+                BluePrintConstants.DATA_TYPE_TIMESTAMP -> objectNode.put(key, value as String)
+                else -> objectNode.put(key, value as String)
+            }
+        }
+
+        fun populatePrimitiveValues(value: Any, primitiveType: String, arrayNode: ArrayNode) {
+            when (primitiveType) {
+                BluePrintConstants.DATA_TYPE_BOOLEAN -> arrayNode.add(value as Boolean)
+                BluePrintConstants.DATA_TYPE_INTEGER -> arrayNode.add(value as Int)
+                BluePrintConstants.DATA_TYPE_FLOAT -> arrayNode.add(value as Float)
+                BluePrintConstants.DATA_TYPE_TIMESTAMP -> arrayNode.add(value as String)
+                else -> arrayNode.add(value as String)
+            }
+        }
+
+        fun populatePrimitiveDefaultValues(key: String, primitiveType: String, objectNode: ObjectNode) {
+            when (primitiveType) {
+                BluePrintConstants.DATA_TYPE_BOOLEAN -> objectNode.put(key, false)
+                BluePrintConstants.DATA_TYPE_INTEGER -> objectNode.put(key, 0)
+                BluePrintConstants.DATA_TYPE_FLOAT -> objectNode.put(key, 0.0)
+                else -> objectNode.put(key, "")
+            }
+        }
+
+        fun populatePrimitiveDefaultValuesForArrayNode(primitiveType: String, arrayNode: ArrayNode) {
+            when (primitiveType) {
+                BluePrintConstants.DATA_TYPE_BOOLEAN -> arrayNode.add(false)
+                BluePrintConstants.DATA_TYPE_INTEGER -> arrayNode.add(0)
+                BluePrintConstants.DATA_TYPE_FLOAT -> arrayNode.add(0.0)
+                else -> arrayNode.add("")
+            }
+        }
+
+        fun populateJsonNodeValues(key: String, nodeValue: JsonNode?, type: String, objectNode: ObjectNode) {
+            if (nodeValue == null || nodeValue is NullNode) {
+                objectNode.set(key, nodeValue)
+            } else if (BluePrintTypes.validPrimitiveTypes().contains(type)) {
+                populatePrimitiveValues(key, nodeValue, type, objectNode)
             } else {
-                objectNode.put(key, nodeValue.asText())
+                objectNode.set(key, nodeValue)
             }
-        } else {
-            objectNode.set(key, nodeValue)
+        }
+
+        fun convertPrimitiveResourceValue(type: String, value: String): JsonNode? {
+            when (type) {
+                BluePrintConstants.DATA_TYPE_BOOLEAN -> return JacksonUtils.getJsonNode(value as Boolean)
+                BluePrintConstants.DATA_TYPE_INTEGER -> return JacksonUtils.getJsonNode(value as Int)
+                BluePrintConstants.DATA_TYPE_FLOAT -> return JacksonUtils.getJsonNode(value as Float)
+                else -> return JacksonUtils.getJsonNode(value)
+            }
         }
     }
-    */
 }
