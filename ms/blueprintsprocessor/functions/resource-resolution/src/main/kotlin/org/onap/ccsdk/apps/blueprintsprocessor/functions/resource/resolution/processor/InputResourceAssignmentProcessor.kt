@@ -17,8 +17,11 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor
 
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.utils.ResourceResolutionUtils
+import org.onap.ccsdk.apps.controllerblueprints.core.*
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.springframework.stereotype.Service
+import com.fasterxml.jackson.databind.node.NullNode
 
 /**
  * InputResourceAssignmentProcessor
@@ -33,6 +36,20 @@ open class InputResourceAssignmentProcessor : ResourceAssignmentProcessor() {
     }
 
     override fun process(executionRequest: ResourceAssignment) {
+        try {
+            if (checkNotEmpty(executionRequest.name)) {
+                val value = bluePrintRuntimeService!!.getInputValue(executionRequest.name)
+                // if value is null don't call setResourceDataValue to populate the value
+                if (value != null && value !is NullNode) {
+                    ResourceResolutionUtils.setResourceDataValue(executionRequest, value)
+                }
+            }
+            // Check the value has populated for mandatory case
+            ResourceResolutionUtils.assertTemplateKeyValueNotNull(executionRequest)
+        } catch (e: Exception) {
+            ResourceResolutionUtils.setFailedResourceDataValue(executionRequest, e.message)
+            throw BluePrintProcessorException("Failed in template key ($executionRequest) assignments with : (${e.message})", e)
+        }
     }
 
     override fun recover(runtimeException: RuntimeException, executionRequest: ResourceAssignment) {

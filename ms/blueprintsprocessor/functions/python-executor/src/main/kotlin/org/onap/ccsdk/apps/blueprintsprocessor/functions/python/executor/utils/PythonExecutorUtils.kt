@@ -20,6 +20,7 @@ import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.AbstractCompon
 import org.python.core.PyObject
 import org.python.util.PythonInterpreter
 import org.slf4j.LoggerFactory
+import java.io.File
 import java.util.*
 
 class PythonExecutorUtils {
@@ -61,9 +62,9 @@ class PythonExecutorUtils {
             sb.append(System.getProperty("java.class.path"))
 
             for (p in pythonPath) {
-                sb.append(":").append(p)
+                sb.append(File.pathSeparator).append(p)
             }
-            log.debug("Paths : $sb")
+            log.debug("Python Paths : $sb")
 
             props["python.import.site"] = "true"
             props.setProperty("python.path", sb.toString())

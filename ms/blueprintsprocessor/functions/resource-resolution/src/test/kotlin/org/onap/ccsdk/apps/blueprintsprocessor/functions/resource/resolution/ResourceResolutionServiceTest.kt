@@ -19,8 +19,11 @@ package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.apps.blueprintsprocessor.core.utils.PayloadUtils
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor.*
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
@@ -61,6 +64,12 @@ class ResourceResolutionServiceTest {
 
         val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
                 "./../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration")
+
+        val executionServiceInput = JacksonUtils.readValueFromClassPathFile("payload/requests/sample-resourceresolution-request.json",
+                ExecutionServiceInput::class.java)!!
+
+        // Prepare Inputs
+        PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService, executionServiceInput.payload, "resource-assignment")
 
         resourceResolutionService.resolveResources(bluePrintRuntimeService, "resource-assignment", "baseconfig")
 

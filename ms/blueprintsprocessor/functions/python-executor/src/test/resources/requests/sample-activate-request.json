@@ -1,7 +1,7 @@
 {
   "actionIdentifiers": {
-    "actionName": "sample-action",
-    "blueprintName": "sample-blurprint",
+    "actionName": "activate",
+    "blueprintName": "baseconfiguration",
     "blueprintVersion": "1.0.0",
     "mode": "sync"
   },

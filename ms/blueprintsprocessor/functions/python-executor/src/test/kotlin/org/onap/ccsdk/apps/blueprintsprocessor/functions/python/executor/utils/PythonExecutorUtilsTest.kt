@@ -30,7 +30,7 @@ class PythonExecutorUtilsTest {
     @Test
     fun testGetPythonComponent() {
 
-        val pythonPath: MutableList<String> = arrayListOf()
+        val pythonPath: MutableList<String> = mutableListOf()
         pythonPath.add("./../../../../components/scripts/python/ccsdk_blueprints")
 
         val properties: MutableMap<String, Any> = hashMapOf()
