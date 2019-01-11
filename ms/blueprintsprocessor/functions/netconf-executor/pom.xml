@@ -31,7 +31,29 @@
             <groupId>org.onap.ccsdk.apps.blueprintsprocessor.functions</groupId>
             <artifactId>python-executor</artifactId>
         </dependency>
-    </dependencies>
+        <dependency>
+            <groupId>org.codehaus.jettison</groupId>
+            <artifactId>jettison</artifactId>
+            <version>${jettison.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.sshd</groupId>
+            <artifactId>sshd-core</artifactId>
+            <version>1.7.0</version>
+        </dependency>
+     <!--   <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+             <version>${bouncycastle.version}</version>
+          </dependency>  -->
+          <dependency>
+              <groupId>com.jcraft</groupId>
+              <artifactId>jsch</artifactId>
+              <version>0.1.54</version>
+          </dependency>
+
+      </dependencies>
 
 
 </project>
