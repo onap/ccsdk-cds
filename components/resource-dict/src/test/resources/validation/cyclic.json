@@ -102,7 +102,7 @@
       "type": "string"
     },
     "dictionary-name": "loopback-ip",
-    "dictionary-source": "db",
+    "dictionary-source": "primary-db",
     "dependencies": [
       "bundle-mac",
       "managed-ip1"

@@ -25,13 +25,13 @@ public class ResourceSourceMappingFactoryTest {
     @Test
     public void testRegisterResourceMapping() {
 
-        ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("db", "source-db");
+        ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("primary-db", "source-primary-db");
         ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("input", "source-input");
         ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("default", "source-default");
         ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("mdsal", "source-rest");
 
-        String nodeTypeName = ResourceSourceMappingFactory.INSTANCE.getRegisterSourceMapping("db");
-        Assert.notNull(nodeTypeName, "Failed to get db mapping");
+        String nodeTypeName = ResourceSourceMappingFactory.INSTANCE.getRegisterSourceMapping("primary-db");
+        Assert.notNull(nodeTypeName, "Failed to get primary-db mapping");
 
         ResourceSourceMapping resourceSourceMapping = ResourceSourceMappingFactory.INSTANCE.getRegisterSourceMapping();
         Assert.notNull(resourceSourceMapping, "Failed to get resource source mapping");

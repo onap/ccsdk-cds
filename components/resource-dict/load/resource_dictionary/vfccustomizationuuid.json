@@ -7,8 +7,8 @@
     "type" : "string"
   },
   "sources" : {
-    "db" : {
-      "type" : "source-db",
+    "primary-db" : {
+      "type" : "source-primary-db",
       "properties" : {
         "type" : "SQL",
         "query" : "select sdnctl.VF_MODULE_TO_VFC_MAPPING.vfc_customization_uuid as vnf_customid from sdnctl.VF_MODULE_TO_VFC_MAPPING where vm_count = 1 and sdnctl.VF_MODULE_TO_VFC_MAPPING.vf_module_customization_uuid=:vfmodulecustomizationuuid",

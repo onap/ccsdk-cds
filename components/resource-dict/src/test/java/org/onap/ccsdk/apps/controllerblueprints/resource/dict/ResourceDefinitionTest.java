@@ -46,9 +46,9 @@ public class ResourceDefinitionTest {
     @Test
     public void testDictionaryDefinitionDBSource(){
 
-        String fileName = basePath + "/db-source.json";
+        String fileName = basePath + "/primary-db-source.json";
         ResourceDefinition resourceDefinition = JacksonUtils.Companion.readValueFromFile(fileName, ResourceDefinition.class);
-        Assert.assertNotNull("Failed to populate dictionaryDefinition for db type", resourceDefinition);
+        Assert.assertNotNull("Failed to populate dictionaryDefinition for primary-db type", resourceDefinition);
     }
 
     @Test
