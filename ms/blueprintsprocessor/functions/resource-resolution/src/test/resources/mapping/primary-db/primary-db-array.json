@@ -4,7 +4,7 @@
 		"data-type": "list",
 		"entry-schema": "dt-location",
 		"source": {
-			"db": {
+			"primary-db": {
 				"query": "SELECT db-country, db-state FROM DEVICE_PROFILE WHERE profile_name = :profile_name",
 				"input-key-mapping": {
 					"profile_name": "profile_name"
@@ -16,7 +16,7 @@
 			}
 		},
 		"candidate-dependency": {
-			"db": {
+			"primary-db": {
 				"names": [
 					"profile_name"
 				]

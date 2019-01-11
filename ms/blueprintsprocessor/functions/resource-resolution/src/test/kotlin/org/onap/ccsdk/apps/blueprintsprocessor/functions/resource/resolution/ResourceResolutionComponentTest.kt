@@ -34,7 +34,7 @@ import org.springframework.test.context.junit4.SpringRunner
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [ResourceResolutionComponent::class, ResourceResolutionService::class,
     InputResourceAssignmentProcessor::class, DefaultResourceAssignmentProcessor::class,
-    DataBaseResourceAssignmentProcessor::class, SimpleRestResourceAssignmentProcessor::class,
+    PrimaryDataResourceAssignmentProcessor::class, SimpleRestResourceAssignmentProcessor::class,
     CapabilityResourceAssignmentProcessor::class])
 class ResourceResolutionComponentTest {
 
