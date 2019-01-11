@@ -227,7 +227,7 @@
                 },
                 "input-param" : false,
                 "dictionary-name" : "sample-db-source",
-                "dictionary-source" : "db",
+                "dictionary-source" : "primary-db",
                 "dependencies" : [ "hostname" ],
                 "version" : 0
               }, {
