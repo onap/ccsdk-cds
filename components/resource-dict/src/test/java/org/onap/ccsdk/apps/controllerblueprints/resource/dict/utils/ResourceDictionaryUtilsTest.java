@@ -86,7 +86,7 @@ public class ResourceDictionaryUtilsTest {
 
     @Test
     public void testAssignInputs() {
-        JsonNode data = JacksonUtils.jsonNodeFromClassPathFile("data/resource-assignment-input.json");
+        JsonNode data = JacksonUtils.Companion.jsonNodeFromClassPathFile("data/resource-assignment-input.json");
         Map<String, Object> context = new HashMap<>();
         ResourceDictionaryUtils.assignInputs(data, context);
         String path = BluePrintConstants.PATH_INPUTS.concat(BluePrintConstants.PATH_DIVIDER).concat("mapValue");

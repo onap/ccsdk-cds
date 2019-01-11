@@ -28,6 +28,14 @@
           "required": true,
           "type": "string"
         },
+        "service-instance-id": {
+          "required": true,
+          "type": "string"
+        },
+        "vnf-id": {
+          "required": true,
+          "type": "string"
+        },
         "action-name": {
           "required": true,
           "type": "string"
@@ -37,6 +45,10 @@
           "type": "string"
         },
         "hostname": {
+          "required": true,
+          "type": "string"
+        },
+        "vnf_name": {
           "required": true,
           "type": "string"
         }

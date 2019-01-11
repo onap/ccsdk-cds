@@ -45,7 +45,7 @@ public class ResourceDefinitionValidationServiceTest {
 
     private void testValidate(String fileName) throws Exception {
 
-        ResourceDefinition resourceDefinition = JacksonUtils.readValueFromFile(fileName, ResourceDefinition.class);
+        ResourceDefinition resourceDefinition = JacksonUtils.Companion.readValueFromFile(fileName, ResourceDefinition.class);
         Assert.assertNotNull("Failed to populate dictionaryDefinition for  type", resourceDefinition);
 
         ResourceDefinitionValidationService resourceDictionaryValidationService =

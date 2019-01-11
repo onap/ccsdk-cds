@@ -31,7 +31,7 @@ public class ResourceDefinitionTest {
     public void testDictionaryDefinitionInputSource(){
 
         String fileName = basePath + "/input-source.json";
-        ResourceDefinition resourceDefinition = JacksonUtils.readValueFromFile(fileName, ResourceDefinition.class);
+        ResourceDefinition resourceDefinition = JacksonUtils.Companion.readValueFromFile(fileName, ResourceDefinition.class);
         Assert.assertNotNull("Failed to populate dictionaryDefinition for input type", resourceDefinition);
     }
 
@@ -39,7 +39,7 @@ public class ResourceDefinitionTest {
     public void testDictionaryDefinitionDefaultSource(){
 
         String fileName = basePath + "/default-source.json";
-        ResourceDefinition resourceDefinition = JacksonUtils.readValueFromFile(fileName, ResourceDefinition.class);
+        ResourceDefinition resourceDefinition = JacksonUtils.Companion.readValueFromFile(fileName, ResourceDefinition.class);
         Assert.assertNotNull("Failed to populate dictionaryDefinition for default type", resourceDefinition);
     }
 
@@ -47,14 +47,14 @@ public class ResourceDefinitionTest {
     public void testDictionaryDefinitionDBSource(){
 
         String fileName = basePath + "/db-source.json";
-        ResourceDefinition resourceDefinition = JacksonUtils.readValueFromFile(fileName, ResourceDefinition.class);
+        ResourceDefinition resourceDefinition = JacksonUtils.Companion.readValueFromFile(fileName, ResourceDefinition.class);
         Assert.assertNotNull("Failed to populate dictionaryDefinition for db type", resourceDefinition);
     }
 
     @Test
     public void testDictionaryDefinitionMDSALSource(){
         String fileName = basePath + "/mdsal-source.json";
-        ResourceDefinition resourceDefinition = JacksonUtils.readValueFromFile(fileName, ResourceDefinition.class);
+        ResourceDefinition resourceDefinition = JacksonUtils.Companion.readValueFromFile(fileName, ResourceDefinition.class);
         Assert.assertNotNull("Failed to populate dictionaryDefinition for mdsal type", resourceDefinition);
     }
 }

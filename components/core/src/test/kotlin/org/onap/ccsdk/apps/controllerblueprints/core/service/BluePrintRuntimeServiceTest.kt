@@ -26,8 +26,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintRuntimeUtils
-import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils.jsonNodeFromFile
-import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils.jsonNodeFromObject
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
@@ -47,7 +46,7 @@ class BluePrintRuntimeServiceTest {
 
         val inputDataPath = "src/test/resources/data/default-context.json"
 
-        val inputNode: JsonNode = jsonNodeFromFile(inputDataPath)
+        val inputNode: JsonNode = JacksonUtils.jsonNodeFromFile(inputDataPath)
         bluePrintRuntimeService.assignInputs(inputNode)
 
         val propContext: MutableMap<String, JsonNode> = bluePrintRuntimeService.resolveNodeTemplateProperties("activate-process")
@@ -82,9 +81,9 @@ class BluePrintRuntimeServiceTest {
                 "ResourceAssignmentComponent", "process")
 
         assertNotNull(inContext, "Failed to populate interface input property values")
-        assertEquals(inContext["action-name"], jsonNodeFromObject("sample-action"), "Failed to populate parameter action-name")
-        assertEquals(inContext["request-id"], jsonNodeFromObject("12345"), "Failed to populate parameter action-name")
-    }
+        assertEquals(inContext["action-name"], JacksonUtils.jsonNodeFromObject("sample-action"), "Failed to populate parameter action-name")
+        assertEquals(inContext["request-id"], JacksonUtils.jsonNodeFromObject("12345"), "Failed to populate parameter action-name")
+      }
 
     @Test
     fun testResolveNodeTemplateInterfaceOperationOutputs() {
@@ -113,9 +112,9 @@ class BluePrintRuntimeServiceTest {
         val bluePrintRuntimeService = getBluePrintRuntimeService()
 
         bluePrintRuntimeService.setNodeTemplateAttributeValue("resource-assignment-ra-component", "context1",
-                jsonNodeFromObject("context1-value"))
+                JacksonUtils.jsonNodeFromObject("context1-value"))
         bluePrintRuntimeService.setNodeTemplateAttributeValue("resource-assignment-ra-component", "context2",
-                jsonNodeFromObject("context2-value"))
+                JacksonUtils.jsonNodeFromObject("context2-value"))
 
         val keys = listOf("context1", "context2")
 
