@@ -31,13 +31,13 @@
     <properties>
         <spring.boot.version>2.1.1.RELEASE</spring.boot.version>
         <spring.version>5.1.3.RELEASE</spring.version>
-        <kotlin.version>1.3.10</kotlin.version>
-        <kotlin.maven.version>1.3.10</kotlin.maven.version>
-        <kotlin.couroutines.version>1.0.1</kotlin.couroutines.version>
-        <grpc.version>1.16.1</grpc.version>
+        <kotlin.version>1.3.11</kotlin.version>
+        <kotlin.maven.version>1.3.11</kotlin.maven.version>
+        <kotlin.couroutines.version>1.1.0</kotlin.couroutines.version>
+        <grpc.version>1.17.1</grpc.version>
         <protobuff.java.utils.version>3.6.1</protobuff.java.utils.version>
         <eelf.version>1.0.0</eelf.version>
-        <guava.version>26.0-jre</guava.version>
+        <guava.version>27.0.1-jre</guava.version>
         <springfox.swagger2.version>2.9.2</springfox.swagger2.version>
         <h2database.version>1.4.197</h2database.version>
         <onap.logger.slf4j>1.2.2</onap.logger.slf4j>
@@ -77,6 +77,7 @@
                 <version>${springfox.swagger2.version}</version>
             </dependency>
 
+            <!-- Common Utils Dependencies -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
@@ -112,6 +113,26 @@
             <dependency>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-stdlib</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-scripting-jvm-host</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-compiler-embeddable</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-script-util</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-script-runtime</artifactId>
                 <version>${kotlin.version}</version>
             </dependency>
             <dependency>
@@ -202,6 +223,12 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
+                <groupId>org.jetbrains.kotlinx</groupId>
+                <artifactId>kotlinx-coroutines-test</artifactId>
+                <version>${kotlin.couroutines.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <groupId>io.grpc</groupId>
                 <artifactId>grpc-testing</artifactId>
                 <version>${grpc.version}</version>
@@ -257,6 +284,10 @@
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-script-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
         </dependency>
         <dependency>
@@ -270,6 +301,10 @@
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-kotlin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-scripting-jvm-host</artifactId>
         </dependency>
         <!-- GRPC Dependencies -->
         <dependency>
