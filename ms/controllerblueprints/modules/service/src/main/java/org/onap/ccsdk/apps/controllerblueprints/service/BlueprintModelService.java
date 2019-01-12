@@ -17,6 +17,10 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException;
 import org.onap.ccsdk.apps.controllerblueprints.core.common.ApplicationConstants;
@@ -40,11 +44,6 @@ import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
-
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * BlueprintModelService.java Purpose: Provide Service Template Service processing BlueprintModelService
@@ -73,7 +72,7 @@ public class BlueprintModelService {
 
     private static final String BLUEPRINT_MODEL_ID_FAILURE_MSG = "failed to get blueprint model id(%s) from repo";
     private static final String BLUEPRINT_MODEL_NAME_VERSION_FAILURE_MSG = "failed to get blueprint model by name(%s)" +
-                                                                    " and version(%s) from repo";
+        " and version(%s) from repo";
 
     /**
      * This is a saveBlueprintModel method
@@ -85,15 +84,20 @@ public class BlueprintModelService {
     public Mono<BlueprintModelSearch> saveBlueprintModel(FilePart filePart) throws BluePrintException {
         try {
             Path cbaLocation = BluePrintFileUtils.Companion
-                    .getCbaStorageDirectory(bluePrintLoadConfiguration.blueprintArchivePath);
+                .getCbaStorageDirectory(bluePrintLoadConfiguration.blueprintArchivePath);
             return BluePrintEnhancerUtils.Companion.saveCBAFile(filePart, cbaLocation).map(fileName -> {
-                String blueprintId = bluePrintCatalogService
-                        .uploadToDataBase(cbaLocation.resolve(fileName).toString(), false);
+                String blueprintId = null;
+                try {
+                    blueprintId = bluePrintCatalogService
+                        .saveToDatabase(cbaLocation.toFile(), false);
+                } catch (BluePrintException e) {
+                    // FIXME handle expection
+                }
                 return blueprintModelSearchRepository.findById(blueprintId).get();
             });
         } catch (IOException e) {
             throw new BluePrintException(ErrorCode.IO_FILE_INTERRUPT.getValue(),
-                    String.format("I/O Error while uploading the CBA file: %s", e.getMessage()), e);
+                String.format("I/O Error while uploading the CBA file: %s", e.getMessage()), e);
         }
     }
 
@@ -136,15 +140,15 @@ public class BlueprintModelService {
      * @throws BluePrintException BluePrintException
      */
     public BlueprintModelSearch getBlueprintModelSearchByNameAndVersion(@NotNull String name, @NotNull String version)
-            throws BluePrintException {
+        throws BluePrintException {
         BlueprintModelSearch blueprintModelSearch;
         Optional<BlueprintModelSearch> dbBlueprintModel = blueprintModelSearchRepository
-                .findByArtifactNameAndArtifactVersion(name, version);
+            .findByArtifactNameAndArtifactVersion(name, version);
         if (dbBlueprintModel.isPresent()) {
             blueprintModelSearch = dbBlueprintModel.get();
         } else {
             throw new BluePrintException(ErrorCode.RESOURCE_NOT_FOUND.getValue(),
-                    String.format(BLUEPRINT_MODEL_NAME_VERSION_FAILURE_MSG, name, version));
+                String.format(BLUEPRINT_MODEL_NAME_VERSION_FAILURE_MSG, name, version));
         }
         return blueprintModelSearch;
     }
@@ -152,19 +156,20 @@ public class BlueprintModelService {
     /**
      * This is a downloadBlueprintModelFileByNameAndVersion method to download a Blueprint by Name and Version
      *
-     * @param name    name
+     * @param name name
      * @param version version
      * @return ResponseEntity<Resource>
      * @throws BluePrintException BluePrintException
      */
-    public ResponseEntity<Resource> downloadBlueprintModelFileByNameAndVersion(@NotNull String name, @NotNull String version)
-            throws BluePrintException {
+    public ResponseEntity<Resource> downloadBlueprintModelFileByNameAndVersion(@NotNull String name,
+        @NotNull String version)
+        throws BluePrintException {
         BlueprintModel blueprintModel;
         try {
             blueprintModel = getBlueprintModelByNameAndVersion(name, version);
         } catch (BluePrintException e) {
             throw new BluePrintException(ErrorCode.RESOURCE_NOT_FOUND.getValue(), String.format("Error while " +
-                    "downloading the CBA file: %s", e.getMessage()), e);
+                "downloading the CBA file: %s", e.getMessage()), e);
         }
         String fileName = blueprintModel.getId() + ".zip";
         byte[] file = blueprintModel.getBlueprintModelContent().getContent();
@@ -183,7 +188,7 @@ public class BlueprintModelService {
             blueprintModel = getBlueprintModel(id);
         } catch (BluePrintException e) {
             throw new BluePrintException(ErrorCode.RESOURCE_NOT_FOUND.getValue(), String.format("Error while " +
-                    "downloading the CBA file: %s", e.getMessage()), e);
+                "downloading the CBA file: %s", e.getMessage()), e);
         }
         String fileName = blueprintModel.getId() + ".zip";
         byte[] file = blueprintModel.getBlueprintModelContent().getContent();
@@ -191,15 +196,13 @@ public class BlueprintModelService {
     }
 
     /**
-     *
-     * @param (fileName, file)
      * @return ResponseEntity<Resource>
      */
     private ResponseEntity<Resource> prepareResourceEntity(String fileName, byte[] file) {
         return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType("text/plain"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
-                .body(new ByteArrayResource(file));
+            .contentType(MediaType.parseMediaType("text/plain"))
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+            .body(new ByteArrayResource(file));
     }
 
     /**
@@ -224,22 +227,21 @@ public class BlueprintModelService {
     /**
      * This is a getBlueprintModelByNameAndVersion method
      *
-     * @param name    name
+     * @param name name
      * @param version version
      * @return BlueprintModel
      * @throws BluePrintException BluePrintException
      */
     private BlueprintModel getBlueprintModelByNameAndVersion(@NotNull String name, @NotNull String version)
-            throws BluePrintException {
-        BlueprintModel blueprintModel;
-        Optional<BlueprintModel> dbBlueprintModel = blueprintModelRepository.findByArtifactNameAndArtifactVersion(name, version);
-        if (dbBlueprintModel.isPresent()) {
-            blueprintModel = dbBlueprintModel.get();
+        throws BluePrintException {
+        BlueprintModel blueprintModel = blueprintModelRepository
+            .findByArtifactNameAndArtifactVersion(name, version);
+        if (blueprintModel != null) {
+            return blueprintModel;
         } else {
             String msg = String.format(BLUEPRINT_MODEL_NAME_VERSION_FAILURE_MSG, name, version);
             throw new BluePrintException(ErrorCode.RESOURCE_NOT_FOUND.getValue(), msg);
         }
-        return blueprintModel;
     }
 
     /**

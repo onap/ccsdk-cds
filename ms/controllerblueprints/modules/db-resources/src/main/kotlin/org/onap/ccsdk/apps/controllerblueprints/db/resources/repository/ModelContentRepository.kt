@@ -43,25 +43,24 @@ interface ModelContentRepository<T, B> : JpaRepository<B, String> {
      *
      * @param blueprintModel blueprintModel
      * @param contentType contentType
-     * @return Optional<B>
+     * @return B?
      */
-    fun findTopByBlueprintModelAndContentType(blueprintModel: T,
-                                              contentType: String): Optional<B>
+    fun findTopByBlueprintModelAndContentType(blueprintModel: T, contentType: String): B?
 
     /**
      * This is a findByBlueprintModelAndContentType method
      *
      * @param blueprintModel blueprintModel
      * @param contentType contentType
-     * @return Optional<BlueprintModelContent>
+     * @return List<B>
      */
     fun findByBlueprintModelAndContentType(blueprintModel: T, contentType: String): List<B>
 
     /**
      * This is a findByBlueprintModel method
      *
-     * @param blueprintModel B
-     * @return Optional<T>
+     * @param blueprintModel T
+     * @return List<B>
      */
     fun findByBlueprintModel(blueprintModel: T): List<B>
 
@@ -71,15 +70,14 @@ interface ModelContentRepository<T, B> : JpaRepository<B, String> {
      * @param blueprintModel blueprintModel
      * @param contentType contentType
      * @param name name
-     * @return Optional<B>
+     * @return B?
      */
-    fun findByBlueprintModelAndContentTypeAndName(blueprintModel: T,
-                                                  contentType: String, name: String): Optional<B>
+    fun findByBlueprintModelAndContentTypeAndName(blueprintModel: T, contentType: String, name: String): B?
 
     /**
      * This is a deleteByMdeleteByBlueprintModelodelName method
      *
-     * @param blueprintModel B
+     * @param blueprintModel T
      */
     fun deleteByBlueprintModel(blueprintModel: T)
 
