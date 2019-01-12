@@ -16,25 +16,44 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core.interfaces
 
+import org.jetbrains.annotations.NotNull
+import org.jetbrains.annotations.Nullable
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
+import java.io.File
+import java.nio.file.Path
+
 interface BluePrintCatalogService {
 
     /**
-     * Upload the CBA Zip fle to data base and return the Database identifier
+     * Save the CBA to database.
+     * @param blueprintFile Either a directory, or an archive
+     * @param validate whether to validate blueprint content. Default true.
+     * @return The unique blueprint identifier
+     * @throws BluePrintException if process failed
      */
-    fun uploadToDataBase(file: String, validate : Boolean): String
+    @NotNull
+    @Throws(BluePrintException::class)
+    fun saveToDatabase(@NotNull blueprintFile: File, @Nullable validate: Boolean = true): String
 
     /**
-     * Download the CBA zip file from the data base and place it in a path and return the CBA zip absolute path
+     * Retrieve the CBA from database either archived or extracted.
+     * @param name Name of the blueprint
+     * @param version Version of the blueprint
+     * @param extract true to extract the content, false for archived content. Default to true
+     * @return Path where CBA is located
+     * @throws BluePrintException if process failed
      */
-    fun downloadFromDataBase(name: String, version: String, path: String): String
+    @NotNull
+    @Throws(BluePrintException::class)
+    fun getFromDatabase(@NotNull name: String, @NotNull version: String, @Nullable extract: Boolean = true): Path
 
     /**
-     * Get the Blueprint from Data Base and Download it under working directory and return the path path
+     * Delete the CBA from database.
+     * @param name Name of the blueprint
+     * @param version Version of the blueprint
+     * @throws BluePrintException if process failed
      */
-    fun prepareBluePrint(name: String, version: String): String
-
-    /**
-     * Get blueprint archive with zip file from Data Base
-     */
-    fun downloadFromDataBase(uuid: String, path: String): String
+    @NotNull
+    @Throws(BluePrintException::class)
+    fun deleteFromDatabase(@NotNull name: String, @NotNull version: String)
 }
