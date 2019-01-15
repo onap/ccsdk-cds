@@ -48,6 +48,9 @@ open class ExecutionServiceOutput {
     lateinit var payload: ObjectNode
 }
 
+const val ACTION_MODE_ASYNC = "async"
+const val ACTION_MODE_SYNC = "sync"
+
 open class ActionIdentifiers {
     @get:ApiModelProperty(required = false)
     lateinit var blueprintName: String
@@ -92,8 +95,3 @@ open class Status {
     @get:ApiModelProperty(required = true)
     var message: String = "success"
 }
-
-
-
-
-
