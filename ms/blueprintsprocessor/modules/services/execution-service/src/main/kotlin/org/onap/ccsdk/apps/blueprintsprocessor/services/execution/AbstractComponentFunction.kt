@@ -53,17 +53,17 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         return stepName
     }
 
-    override fun prepareRequest(executionServiceInput: ExecutionServiceInput): ExecutionServiceInput {
+    override fun prepareRequest(executionRequest: ExecutionServiceInput): ExecutionServiceInput {
         checkNotNull(bluePrintRuntimeService) { "failed to prepare blueprint runtime" }
 
         check(stepName.isNotEmpty()) { "failed to assign step name" }
 
-        this.executionServiceInput = executionServiceInput
+        this.executionServiceInput = executionRequest
 
-        processId = executionServiceInput.commonHeader.requestId
+        processId = executionRequest.commonHeader.requestId
         check(processId.isNotEmpty()) { "couldn't get process id for step($stepName)" }
 
-        workflowName = executionServiceInput.actionIdentifiers.actionName
+        workflowName = executionRequest.actionIdentifiers.actionName
         check(workflowName.isNotEmpty()) { "couldn't get action name for step($stepName)" }
 
         log.info("preparing request id($processId) for workflow($workflowName) step($stepName)")
@@ -88,12 +88,14 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
 
         this.operationInputs.putAll(operationResolvedProperties)
 
-        return executionServiceInput
+        return executionRequest
     }
 
     override fun prepareResponse(): ExecutionServiceOutput {
         log.info("Preparing Response...")
         executionServiceOutput.commonHeader = executionServiceInput.commonHeader
+        executionServiceOutput.actionIdentifiers = executionServiceInput.actionIdentifiers
+        executionServiceOutput.payload = executionServiceInput.payload
 
         // Resolve the Output Expression
         val stepOutputs = bluePrintRuntimeService

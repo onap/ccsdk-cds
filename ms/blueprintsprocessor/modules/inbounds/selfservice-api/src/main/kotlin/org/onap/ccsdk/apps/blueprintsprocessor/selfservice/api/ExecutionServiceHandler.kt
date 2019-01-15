@@ -16,19 +16,38 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api
 
+import org.onap.ccsdk.apps.blueprintsprocessor.core.BluePrintCoreConfiguration
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceOutput
-import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintCatalogService
+import org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api.utils.saveCBAFile
 import org.onap.ccsdk.apps.blueprintsprocessor.services.workflow.BlueprintDGExecutionService
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintCatalogService
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintFileUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.slf4j.LoggerFactory
+import org.springframework.http.codec.multipart.FilePart
 import org.springframework.stereotype.Service
+import reactor.core.publisher.Mono
 
 @Service
-class ExecutionServiceHandler(private val bluePrintCatalogService: BluePrintCatalogService,
+class ExecutionServiceHandler(private val bluePrintCoreConfiguration: BluePrintCoreConfiguration,
+                              private val bluePrintCatalogService: BluePrintCatalogService,
                               private val blueprintDGExecutionService: BlueprintDGExecutionService) {
 
     private val log = LoggerFactory.getLogger(ExecutionServiceHandler::class.toString())
+
+    fun upload(filePart: FilePart): Mono<String> {
+        try {
+            val archivedPath = BluePrintFileUtils.getCbaStorageDirectory(bluePrintCoreConfiguration.archivePath)
+            val cbaPath = saveCBAFile(filePart, archivedPath)
+            bluePrintCatalogService.saveToDatabase(cbaPath.toFile()).let {
+                return Mono.just("{\"status\": \"Successfully uploaded blueprint with id($it)\"}")
+            }
+        } catch (e: Exception) {
+            return Mono.error<String>(BluePrintException("Error uploading the CBA file.", e))
+        }
+    }
 
     fun process(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
 
@@ -47,6 +66,4 @@ class ExecutionServiceHandler(private val bluePrintCatalogService: BluePrintCata
 
         return blueprintDGExecutionService.executeDirectedGraph(blueprintRuntimeService, executionServiceInput)
     }
-
-
 }
