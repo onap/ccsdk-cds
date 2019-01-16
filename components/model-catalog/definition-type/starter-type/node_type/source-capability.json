@@ -5,10 +5,11 @@
     "type": {
       "required": true,
       "type": "string",
-      "default": "JAVA-COMPONENT",
+      "default": "KOTLIN-COMPONENT",
       "constraints": [
         {
           "valid_values": [
+            "KOTLIN-COMPONENT",
             "JAVA-COMPONENT",
             "JYTHON-COMPONENT"
           ]
