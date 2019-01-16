@@ -7,8 +7,8 @@
     "type" : "string"
   },
   "sources" : {
-    "db" : {
-      "type" : "source-db",
+    "primary-db" : {
+      "type" : "source-primary-db",
       "properties" : {
         "type" : "SQL",
         "query" : "select vf_module_type as vf_module_type from sdnctl.VF_MODULE_MODEL where customization_uuid=:customizationid",

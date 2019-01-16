@@ -5,10 +5,10 @@
     "type": "string"
   },
   "updated-by": "brindasanth@onap.com",
-  "tags": "db-source, brindasanth@onap.com",
+  "tags": "primary-db-source, brindasanth@onap.com",
   "sources": {
-    "db": {
-      "type": "source-db",
+    "primary-db": {
+      "type": "source-primary-db",
       "properties": {
         "query": "SELECT db-country, db-state FROM DEVICE_PROFILE WHERE profile_name = :profile_name",
         "input-key-mapping": {

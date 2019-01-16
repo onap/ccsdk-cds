@@ -7,8 +7,8 @@
     "type" : "string"
   },
   "sources" : {
-    "db" : {
-      "type" : "source-db",
+    "primary-db" : {
+      "type" : "source-primary-db",
       "properties" : {
         "type" : "SQL",
         "query" : "select sdnctl.VF_MODEL.naming_policy as vf_naming_policy from sdnctl.VF_MODEL where sdnctl.VF_MODEL.customization_uuid=:vnf_model_customization_uuid",

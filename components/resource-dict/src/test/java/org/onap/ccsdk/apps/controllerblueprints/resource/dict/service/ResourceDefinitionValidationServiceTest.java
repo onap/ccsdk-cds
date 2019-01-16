@@ -30,10 +30,10 @@ public class ResourceDefinitionValidationServiceTest {
     @Test
     public void testValidateSource() throws Exception {
 
-        String inputFileName = dictionaryPath + "/db-source.json";
+        String inputFileName = dictionaryPath + "/input-source.json";
         testValidate(inputFileName);
 
-        String dbFileName = dictionaryPath + "/db-source.json";
+        String dbFileName = dictionaryPath + "/primary-db-source.json";
         testValidate(dbFileName);
 
         String defaultFileName = dictionaryPath + "/default-source.json";
