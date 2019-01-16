@@ -7,7 +7,7 @@
       "required": true
     },
     "dictionary-name": "sample-db-source",
-    "dictionary-source": "db",
+    "dictionary-source": "primary-db",
     "dependencies": [
       "input-source"
     ]
