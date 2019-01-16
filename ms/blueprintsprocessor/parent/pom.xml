@@ -31,14 +31,14 @@
     <properties>
         <spring.boot.version>2.1.1.RELEASE</spring.boot.version>
         <spring.version>5.1.3.RELEASE</spring.version>
-        <kotlin.version>1.3.10</kotlin.version>
-        <kotlin.maven.version>1.3.10</kotlin.maven.version>
-        <kotlin.couroutines.version>1.0.1</kotlin.couroutines.version>
-        <grpc.version>1.16.1</grpc.version>
+        <kotlin.version>1.3.11</kotlin.version>
+        <kotlin.maven.version>1.3.11</kotlin.maven.version>
+        <kotlin.couroutines.version>1.1.0</kotlin.couroutines.version>
+        <grpc.version>1.17.1</grpc.version>
         <protobuff.java.utils.version>3.6.1</protobuff.java.utils.version>
         <eelf.version>1.0.0</eelf.version>
         <sli.version>0.4.1-SNAPSHOT</sli.version>
-        <guava.version>26.0-jre</guava.version>
+        <guava.version>27.0.1-jre</guava.version>
         <jython.version>2.7.1</jython.version>
         <springfox.swagger2.version>2.9.2</springfox.swagger2.version>
         <h2database.version>1.4.197</h2database.version>
@@ -68,10 +68,80 @@
                 <version>${onap.logger.slf4j}</version>
             </dependency>
 
+            <!--Swagger Dependencies -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${springfox.swagger2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${springfox.swagger2.version}</version>
+            </dependency>
+
+            <!-- Common Utils Dependencies -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.2.1</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>3.2.2</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.6</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-compress</artifactId>
+                <version>1.15</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.velocity</groupId>
+                <artifactId>velocity</artifactId>
+                <version>1.7</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.python</groupId>
+                <artifactId>jython-standalone</artifactId>
+                <version>${jython.version}</version>
+            </dependency>
+
             <!-- Kotlin Dependencies -->
             <dependency>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-stdlib</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-scripting-jvm-host</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-compiler-embeddable</artifactId>
+                <version>${kotlin.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-script-util</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-script-runtime</artifactId>
                 <version>${kotlin.version}</version>
             </dependency>
             <dependency>
@@ -234,50 +304,6 @@
                 <version>${project.version}</version>
             </dependency>
 
-            <!--Swagger Dependencies -->
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger2</artifactId>
-                <version>${springfox.swagger2.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger-ui</artifactId>
-                <version>${springfox.swagger2.version}</version>
-            </dependency>
-
-            <!-- Common Libs -->
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>3.2.1</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-collections</groupId>
-                <artifactId>commons-collections</artifactId>
-                <version>3.2.2</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>2.6</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.velocity</groupId>
-                <artifactId>velocity</artifactId>
-                <version>1.7</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>${guava.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.python</groupId>
-                <artifactId>jython-standalone</artifactId>
-                <version>${jython.version}</version>
-            </dependency>
-
             <!-- Database -->
             <dependency>
                 <groupId>com.h2database</groupId>
@@ -329,8 +355,16 @@
             <artifactId>commons-io</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
@@ -346,11 +380,27 @@
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-script-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-coroutines-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-coroutines-reactor</artifactId>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-kotlin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-scripting-jvm-host</artifactId>
         </dependency>
         <!-- GRPC Dependencies -->
         <dependency>

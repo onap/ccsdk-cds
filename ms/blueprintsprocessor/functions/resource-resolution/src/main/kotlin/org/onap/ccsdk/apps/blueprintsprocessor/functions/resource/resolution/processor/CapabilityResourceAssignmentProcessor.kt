@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service
 open class CapabilityResourceAssignmentProcessor : ResourceAssignmentProcessor() {
 
     companion object {
+        const val CAPABILITY_TYPE_KOTLIN_COMPONENT = "KOTLIN-COMPONENT"
         const val CAPABILITY_TYPE_JAVA_COMPONENT = "JAVA-COMPONENT"
         const val CAPABILITY_TYPE_JYTHON_COMPONENT = "JYTHON-COMPONENT"
     }
@@ -58,6 +59,9 @@ open class CapabilityResourceAssignmentProcessor : ResourceAssignmentProcessor()
         var componentResourceAssignmentProcessor: ResourceAssignmentProcessor? = null
 
         when (instanceType) {
+            CAPABILITY_TYPE_KOTLIN_COMPONENT ->{
+                TODO("NO implementation")
+            }
             CAPABILITY_TYPE_JAVA_COMPONENT -> {
                 // Initialize Capability Resource Assignment Processor
                 componentResourceAssignmentProcessor = applicationContext.getBean(instanceName, ResourceAssignmentProcessor::class.java)
