@@ -21,15 +21,15 @@ import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.springframework.stereotype.Service
 
 /**
- * DataBaseResourceAssignmentProcessor
+ * PrimaryDataResourceAssignmentProcessor
  *
  * @author Brinda Santh
  */
-@Service("resource-assignment-processor-db")
-open class DataBaseResourceAssignmentProcessor : ResourceAssignmentProcessor(){
+@Service("resource-assignment-processor-primary-db")
+open class PrimaryDataResourceAssignmentProcessor : ResourceAssignmentProcessor(){
 
     override fun getName(): String {
-        return "resource-assignment-processor-db"
+        return "resource-assignment-processor-primary-db"
     }
 
     override fun process(executionRequest: ResourceAssignment) {

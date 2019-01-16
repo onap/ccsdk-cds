@@ -3,7 +3,7 @@
 		"name": "location",
 		"data-type": "dt-location",
 		"source": {
-			"db": {
+			"primary-db": {
 				"query": "SELECT db-country, db-state FROM DEVICE_PROFILE WHERE profile_name = :profile_name",
 				"input-key-mapping": {
 					"profile_name": "profile_name"

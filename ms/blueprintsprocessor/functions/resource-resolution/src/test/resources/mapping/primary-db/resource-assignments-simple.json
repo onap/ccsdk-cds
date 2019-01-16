@@ -6,7 +6,7 @@
       "type": "string"
     },
     "dictionary-name": "country",
-    "dictionary-source": "db",
+    "dictionary-source": "primary-db",
     "dependencies": ["state"]
   },
   {

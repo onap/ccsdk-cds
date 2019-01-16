@@ -3,7 +3,7 @@
 		"name": "country",
 		"data-type": "string",
 		"source": {
-			"db": {
+			"primary-db": {
 				"query": "SELECT country FROM DEVICE_PROFILE WHERE profile_name = :profile_name",
 				"input-key-mapping": {
 					"profile_name": "profile_name"

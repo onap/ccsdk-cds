@@ -39,7 +39,7 @@ import kotlin.test.assertTrue
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [ResourceResolutionService::class,
     InputResourceAssignmentProcessor::class, DefaultResourceAssignmentProcessor::class,
-    DataBaseResourceAssignmentProcessor::class, SimpleRestResourceAssignmentProcessor::class,
+    PrimaryDataResourceAssignmentProcessor::class, SimpleRestResourceAssignmentProcessor::class,
     CapabilityResourceAssignmentProcessor::class])
 class ResourceResolutionServiceTest {
 
@@ -53,7 +53,7 @@ class ResourceResolutionServiceTest {
     fun testRegisteredSource() {
         val sources = resourceResolutionService.registeredResourceSources()
         assertNotNull(sources, "failed to get registered sources")
-        assertTrue(sources.containsAll(arrayListOf("input", "default", "db", "mdsal")), "failed to get registered sources")
+        assertTrue(sources.containsAll(arrayListOf("input", "default", "primary-db", "mdsal")), "failed to get registered sources")
     }
 
     @Test
