@@ -25,7 +25,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 
 /**
- * ControllerBlueprintExceptionHandler.java Purpose: Handle exceptions in controllerBlueprint API and provide the wright
+ * ControllerBlueprintExceptionHandler Purpose: Handle exceptions in controllerBlueprint API and provide the right
  * HTTP code status
  *
  * @author Vinal Patel
