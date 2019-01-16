@@ -17,11 +17,12 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor
 
-import org.onap.ccsdk.apps.controllerblueprints.core.*
+import com.fasterxml.jackson.databind.node.NullNode
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.apps.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.springframework.stereotype.Service
-import com.fasterxml.jackson.databind.node.NullNode
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.utils.ResourceAssignmentUtils
 
 /**
  * InputResourceAssignmentProcessor
@@ -35,23 +36,23 @@ open class InputResourceAssignmentProcessor : ResourceAssignmentProcessor() {
         return "resource-assignment-processor-input"
     }
 
-    override fun process(executionRequest: ResourceAssignment) {
+    override fun process(resourceAssignment: ResourceAssignment) {
         try {
-            if (checkNotEmpty(executionRequest.name)) {
-                val value = bluePrintRuntimeService!!.getInputValue(executionRequest.name)
+            if (checkNotEmpty(resourceAssignment.name)) {
+                val value = raRuntimeService.getInputValue(resourceAssignment.name)
                 // if value is null don't call setResourceDataValue to populate the value
                 if (value != null && value !is NullNode) {
-                    ResourceAssignmentUtils.setResourceDataValue(executionRequest, value)
+                    ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, value)
                 }
             }
             // Check the value has populated for mandatory case
-            ResourceAssignmentUtils.assertTemplateKeyValueNotNull(executionRequest)
+            ResourceAssignmentUtils.assertTemplateKeyValueNotNull(resourceAssignment)
         } catch (e: Exception) {
-            ResourceAssignmentUtils.setFailedResourceDataValue(executionRequest, e.message)
-            throw BluePrintProcessorException("Failed in template key ($executionRequest) assignments with : (${e.message})", e)
+            ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, e.message)
+            throw BluePrintProcessorException("Failed in template key ($resourceAssignment) assignments with : (${e.message})", e)
         }
     }
 
-    override fun recover(runtimeException: RuntimeException, executionRequest: ResourceAssignment) {
+    override fun recover(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
     }
 }

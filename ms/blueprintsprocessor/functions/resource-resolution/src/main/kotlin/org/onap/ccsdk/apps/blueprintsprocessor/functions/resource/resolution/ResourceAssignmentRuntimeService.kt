@@ -6,53 +6,83 @@ import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.apps.controllerblueprints.core.service.DefaultBluePrintRuntimeService
 
 class ResourceAssignmentRuntimeService(private var id: String, private var bluePrintContext: BluePrintContext)
-    : DefaultBluePrintRuntimeService(id, bluePrintContext){
+    : DefaultBluePrintRuntimeService(id, bluePrintContext) {
 
-    private var resourceResolutionStore: MutableMap<String, JsonNode> = hashMapOf()
+    private lateinit var resolutionId: String
+    private var resourceStore: MutableMap<String, JsonNode> = hashMapOf()
 
-    override fun getExecutionContext(): MutableMap<String, JsonNode> {
-        return resourceResolutionStore
+    fun createUniqueId(key: String) {
+        resolutionId = "$id-$key"
     }
 
-    @Suppress("UNCHECKED_CAST")
-    override fun setExecutionContext(executionContext: MutableMap<String, JsonNode>) {
-        this.resourceResolutionStore = executionContext
+    fun cleanResourceStore() {
+        resourceStore.clear()
     }
 
-    override fun put(key: String, value: JsonNode) {
-        resourceResolutionStore[key] = value
+    fun putResolutionStore(key: String, value: JsonNode) {
+        resourceStore[key] = value
     }
 
-    override fun get(key: String): JsonNode {
-        return resourceResolutionStore[key] ?: throw BluePrintProcessorException("failed to get execution property($key)")
+    fun getResolutionStore(key: String): JsonNode {
+        return resourceStore[key]
+                ?: throw BluePrintProcessorException("failed to get execution property ($key)")
     }
 
-    override fun check(key: String): Boolean {
-        return resourceResolutionStore.containsKey(key)
+    fun checkResolutionStore(key: String): Boolean {
+        return resourceStore.containsKey(key)
     }
 
-    override fun cleanRuntime() {
-        resourceResolutionStore.clear()
+    fun getJsonNodeFromResolutionStore(key: String): JsonNode {
+        return getResolutionStore(key)
     }
 
-    private fun getJsonNode(key: String): JsonNode {
-        return get(key)
+    fun getStringFromResolutionStore(key: String): String? {
+        return getResolutionStore(key).asText()
     }
 
-    override fun getAsString(key: String): String? {
-        return get(key).asText()
+    fun getBooleanFromResolutionStore(key: String): Boolean? {
+        return getResolutionStore(key).asBoolean()
     }
 
-    override fun getAsBoolean(key: String): Boolean? {
-        return get(key).asBoolean()
+    fun getIntFromResolutionStore(key: String): Int? {
+        return getResolutionStore(key).asInt()
     }
 
-    override fun getAsInt(key: String): Int? {
-        return get(key).asInt()
+    fun getDoubleFromResolutionStore(key: String): Double? {
+        return getResolutionStore(key).asDouble()
     }
 
-    override fun getAsDouble(key: String): Double? {
-        return get(key).asDouble()
+    fun putDictionaryStore(key: String, value: JsonNode) {
+        resourceStore["dictionary-$key"] = value
+    }
+
+    fun getDictionaryStore(key: String): JsonNode {
+        return resourceStore["dictionary-$key"]
+                ?: throw BluePrintProcessorException("failed to get execution property (dictionary-$key)")
+    }
+
+    fun checkDictionaryStore(key: String): Boolean {
+        return resourceStore.containsKey("dictionary-$key")
+    }
+
+    fun getJsonNodeFromDictionaryStore(key: String): JsonNode {
+        return getResolutionStore("dictionary-$key")
+    }
+
+    fun getStringFromDictionaryStore(key: String): String? {
+        return getResolutionStore("dictionary-$key").asText()
+    }
+
+    fun getBooleanFromDictionaryStore(key: String): Boolean? {
+        return getResolutionStore("dictionary-$key").asBoolean()
+    }
+
+    fun getIntFromDictionaryStore(key: String): Int? {
+        return getResolutionStore("dictionary-$key").asInt()
+    }
+
+    fun getDoubleFromDictionaryStore(key: String): Double? {
+        return getResolutionStore("dictionary-$key").asDouble()
     }
 
 }

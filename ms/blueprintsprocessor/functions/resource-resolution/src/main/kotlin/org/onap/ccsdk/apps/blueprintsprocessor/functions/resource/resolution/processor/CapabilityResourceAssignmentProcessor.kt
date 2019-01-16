@@ -18,8 +18,8 @@ package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.pr
 
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.CapabilityResourceSource
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.utils.ResourceAssignmentUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Service
@@ -40,17 +40,16 @@ open class CapabilityResourceAssignmentProcessor : ResourceAssignmentProcessor()
         return "resource-assignment-processor-capability"
     }
 
-    override fun process(executionRequest: ResourceAssignment) {
+    override fun process(resourceAssignment: ResourceAssignment) {
 
-        val resourceDefinition = resourceDictionaries[executionRequest.dictionaryName]
-                ?: throw BluePrintProcessorException("couldn't get resource definition for ${executionRequest.dictionaryName}")
+        val resourceDefinition = resourceDictionaries[resourceAssignment.dictionaryName]
+                ?: throw BluePrintProcessorException("couldn't get resource definition for ${resourceAssignment.dictionaryName}")
 
-        val resourceSource = resourceDefinition.sources[executionRequest.dictionarySource]
-                ?: throw BluePrintProcessorException("couldn't get resource definition ${executionRequest.dictionaryName} source(${executionRequest.dictionarySource})")
+        val resourceSource = resourceDefinition.sources[resourceAssignment.dictionarySource]
+                ?: throw BluePrintProcessorException("couldn't get resource definition ${resourceAssignment.dictionaryName} source(${resourceAssignment.dictionarySource})")
 
-        checkNotNull(resourceSource.properties) { "failed to get ${executionRequest.dictionarySource} properties" }
-
-        val capabilityResourceSourceProperty = ResourceAssignmentUtils.transformResourceSource(resourceSource.properties!!, CapabilityResourceSource::class.java)
+        val resourceSourceProps = checkNotNull(resourceSource.properties) { "failed to get $resourceSource properties" }
+        val capabilityResourceSourceProperty = JacksonUtils.getInstanceFromMap(resourceSourceProps, CapabilityResourceSource::class.java)
 
         val instanceType = capabilityResourceSourceProperty.type
         val instanceName = capabilityResourceSourceProperty.instanceName
@@ -74,14 +73,14 @@ open class CapabilityResourceAssignmentProcessor : ResourceAssignmentProcessor()
         checkNotNull(componentResourceAssignmentProcessor) { "failed to get capability resource assignment processor($instanceName)" }
 
         // Assign Current Blueprint runtime and ResourceDictionaries
-        componentResourceAssignmentProcessor.bluePrintRuntimeService = bluePrintRuntimeService
+        componentResourceAssignmentProcessor.raRuntimeService = raRuntimeService
         componentResourceAssignmentProcessor.resourceDictionaries = resourceDictionaries
 
         // Invoke componentResourceAssignmentProcessor
-        componentResourceAssignmentProcessor.apply(executionRequest)
+        componentResourceAssignmentProcessor.apply(resourceAssignment)
     }
 
-    override fun recover(runtimeException: RuntimeException, executionRequest: ResourceAssignment) {
+    override fun recover(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
 
         TODO("To Implement")
     }

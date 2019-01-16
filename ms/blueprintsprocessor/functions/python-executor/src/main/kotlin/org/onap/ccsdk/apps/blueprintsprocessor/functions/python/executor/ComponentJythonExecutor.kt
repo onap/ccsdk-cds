@@ -22,7 +22,7 @@ import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInp
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.utils.PythonExecutorUtils
 import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.apps.controllerblueprints.core.checkNotEmptyNThrow
+import org.onap.ccsdk.apps.controllerblueprints.core.checkNotEmptyOrThrow
 import org.onap.ccsdk.apps.controllerblueprints.core.data.OperationAssignment
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -62,7 +62,7 @@ open class ComponentJythonExecutor(private val pythonExecutorProperty: PythonExe
 
         val content: String? = bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactName)
 
-        checkNotEmptyNThrow(content, "artifact ($artifactName) content is empty")
+        checkNotEmptyOrThrow(content, "artifact ($artifactName) content is empty")
 
         val pythonPath: MutableList<String> = operationAssignment.implementation?.dependencies ?: arrayListOf()
         pythonPath.add(blueprintBasePath)

@@ -18,6 +18,7 @@
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution
 
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor.ResourceAssignmentProcessor
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
@@ -88,7 +89,7 @@ class ResourceResolutionService {
         val resourceDictionaries: MutableMap<String, ResourceDefinition> = JacksonUtils.getMapFromFile(dictionaryFile, ResourceDefinition::class.java)
                 ?: throw BluePrintProcessorException("couldn't get Dictionary Definitions")
 
-        executeProcessors(bluePrintRuntimeService, resourceDictionaries, resourceAssignments)
+        executeProcessors(bluePrintRuntimeService, resourceDictionaries, resourceAssignments, templateArtifactName)
 
         // Check Template is there
         val templateContent = bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, mappingArtifactName)
@@ -107,11 +108,13 @@ class ResourceResolutionService {
     }
 
 
-    fun executeProcessors(bluePrintRuntimeService: BluePrintRuntimeService<*>,
-                          resourceDictionaries: MutableMap<String, ResourceDefinition>,
-                          resourceAssignments: MutableList<ResourceAssignment>) {
+    private fun executeProcessors(blueprintRuntimeService: BluePrintRuntimeService<*>,
+                                  resourceDictionaries: MutableMap<String, ResourceDefinition>,
+                                  resourceAssignments: MutableList<ResourceAssignment>,
+                                  templateArtifactName: String) {
 
         val bulkSequenced = BulkResourceSequencingUtils.process(resourceAssignments)
+        val resourceAssignmentRuntimeService = ResourceAssignmentUtils.transformToRARuntimeService(blueprintRuntimeService, templateArtifactName)
 
         bulkSequenced.map { batchResourceAssignments ->
             batchResourceAssignments.filter { it.name != "*" && it.name != "start" }
@@ -124,7 +127,7 @@ class ResourceResolutionService {
                                         "for resource assignment(${resourceAssignment.name})")
                         try {
                             // Set BluePrint Runtime Service
-                            resourceAssignmentProcessor.bluePrintRuntimeService = bluePrintRuntimeService
+                            resourceAssignmentProcessor.raRuntimeService = resourceAssignmentRuntimeService
                             // Set Resource Dictionaries
                             resourceAssignmentProcessor.resourceDictionaries = resourceDictionaries
                             // Invoke Apply Method
