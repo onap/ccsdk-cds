@@ -21,10 +21,10 @@ import com.att.eelf.configuration.EELFManager
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
-import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -54,6 +54,18 @@ class JacksonUtils {
 
         fun <T> readValue(node: JsonNode, valueType: Class<T>): T? {
             return jacksonObjectMapper().treeToValue(node, valueType)
+        }
+
+        fun removeJsonNullNode(node: JsonNode) {
+            val it = node.iterator()
+            while (it.hasNext()) {
+                val child = it.next()
+                if (child.isNull) {
+                    it.remove()
+                } else {
+                    removeJsonNullNode(child)
+                }
+            }
         }
 
         fun getContent(fileName: String): String = runBlocking {
