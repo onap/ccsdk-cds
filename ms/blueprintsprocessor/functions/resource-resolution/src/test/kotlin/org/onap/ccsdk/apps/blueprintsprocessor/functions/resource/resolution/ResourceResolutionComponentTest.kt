@@ -19,23 +19,36 @@ package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution
 import com.fasterxml.jackson.databind.JsonNode
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.onap.ccsdk.apps.blueprintsprocessor.core.BluePrintProperties
+import org.onap.ccsdk.apps.blueprintsprocessor.core.BlueprintPropertyConfiguration
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.utils.PayloadUtils
+import org.onap.ccsdk.apps.blueprintsprocessor.db.BluePrintDBLibConfiguration
+import org.onap.ccsdk.apps.blueprintsprocessor.db.primary.service.PrimaryDBLibGenericService
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor.*
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.asJsonNode
+import org.onap.ccsdk.apps.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.apps.controllerblueprints.core.putJsonElement
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [ResourceResolutionComponent::class, ResourceResolutionService::class,
+@ContextConfiguration(classes = [ResourceResolutionService::class,
     InputResourceAssignmentProcessor::class, DefaultResourceAssignmentProcessor::class,
     PrimaryDataResourceAssignmentProcessor::class, SimpleRestResourceAssignmentProcessor::class,
-    CapabilityResourceAssignmentProcessor::class])
+    CapabilityResourceAssignmentProcessor::class, PrimaryDBLibGenericService::class,
+    BlueprintPropertyConfiguration::class, BluePrintProperties::class,
+    BluePrintDBLibConfiguration::class, BluePrintLoadConfiguration::class])
+@TestPropertySource(locations = ["classpath:application-test.properties"])
+@ComponentScan(basePackages = ["org.onap.ccsdk.apps.blueprintsprocessor", "org.onap.ccsdk.apps.controllerblueprints"])
+@EnableAutoConfiguration
 class ResourceResolutionComponentTest {
 
     @Autowired
