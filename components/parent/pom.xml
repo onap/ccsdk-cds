@@ -304,7 +304,19 @@
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-compiler-embeddable</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-scripting-jvm-host</artifactId>
+            <!--Use kotlin-compiler-embeddable as koltin-compiler wrap-->
+            <!--guava dependency creating classpath issues at runtime-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.jetbrains.kotlin</groupId>
+                    <artifactId>kotlin-compiler</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- GRPC Dependencies -->
         <dependency>
