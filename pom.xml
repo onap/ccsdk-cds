@@ -30,6 +30,7 @@ limitations under the License.
 	
 	<modules>
 		<module>cds-ui/client</module>
+		<module>cds-ui/server</module>
 	</modules>
 
     <properties>
