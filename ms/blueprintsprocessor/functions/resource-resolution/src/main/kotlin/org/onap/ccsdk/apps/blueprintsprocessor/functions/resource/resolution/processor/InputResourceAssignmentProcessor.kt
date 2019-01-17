@@ -22,15 +22,18 @@ import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.uti
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 /**
  * InputResourceAssignmentProcessor
  *
- * @author Brinda Santh
+ * @author Kapil Singal
  */
 @Service("resource-assignment-processor-input")
 open class InputResourceAssignmentProcessor : ResourceAssignmentProcessor() {
+
+    private val logger = LoggerFactory.getLogger(InputResourceAssignmentProcessor::class.java)
 
     override fun getName(): String {
         return "resource-assignment-processor-input"
@@ -42,6 +45,7 @@ open class InputResourceAssignmentProcessor : ResourceAssignmentProcessor() {
                 val value = raRuntimeService.getInputValue(resourceAssignment.name)
                 // if value is null don't call setResourceDataValue to populate the value
                 if (value != null && value !is NullNode) {
+                    logger.info("input source template key (${resourceAssignment.name}) found from input and value is ($value)")
                     ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, value)
                 }
             }
