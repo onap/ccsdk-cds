@@ -20,14 +20,16 @@ package org.onap.ccsdk.apps.controllerblueprints.service.load
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.common.ApplicationConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.config.BluePrintLoadConfiguration
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.apps.controllerblueprints.core.data.ErrorCode
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintValidatorService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintArchiveUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.apps.controllerblueprints.db.resources.BlueprintCatalogServiceImpl
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.BlueprintModel
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.BlueprintModelContent
-import org.onap.ccsdk.apps.controllerblueprints.service.repository.ControllerBlueprintModelContentRepository
 import org.onap.ccsdk.apps.controllerblueprints.service.repository.ControllerBlueprintModelRepository
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
 import java.io.File
 import java.nio.file.Files
@@ -38,7 +40,6 @@ Similar implementation in [org.onap.ccsdk.apps.blueprintsprocessor.db.BlueprintP
 @Service
 class ControllerBlueprintCatalogServiceImpl(bluePrintLoadConfiguration: BluePrintLoadConfiguration,
                                             private val bluePrintValidatorService: BluePrintValidatorService,
-                                            private val blueprintModelContentRepository: ControllerBlueprintModelContentRepository,
                                             private val blueprintModelRepository: ControllerBlueprintModelRepository)
     : BlueprintCatalogServiceImpl(bluePrintLoadConfiguration) {
 
@@ -56,7 +57,6 @@ class ControllerBlueprintCatalogServiceImpl(bluePrintLoadConfiguration: BluePrin
 
         if ((valid && checkValidity!!) || (!valid && !checkValidity!!)) {
             val metaData = bluePrintRuntimeService.bluePrintContext().metadata!!
-            // FIXME("Check Duplicate for Artifact Name and Artifact Version")
             val blueprintModel = BlueprintModel()
             blueprintModel.id = id
             blueprintModel.artifactType = ApplicationConstants.ASDC_ARTIFACT_TYPE_SDNC_MODEL
@@ -80,7 +80,12 @@ class ControllerBlueprintCatalogServiceImpl(bluePrintLoadConfiguration: BluePrin
             // Set the Blueprint Model Content into blueprintModel
             blueprintModel.blueprintModelContent = blueprintModelContent
 
-            blueprintModelRepository.saveAndFlush(blueprintModel)
+            try {
+                blueprintModelRepository.saveAndFlush(blueprintModel)
+            } catch (ex: DataIntegrityViolationException) {
+                throw BluePrintException(ErrorCode.CONFLICT_ADDING_RESOURCE.value, "The blueprint entry " +
+                        "is already exist in database: ${ex.message}", ex)
+            }
         }
     }
 }

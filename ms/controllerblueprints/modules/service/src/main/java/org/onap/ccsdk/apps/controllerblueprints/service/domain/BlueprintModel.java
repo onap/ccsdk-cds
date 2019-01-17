@@ -36,7 +36,7 @@ import java.util.Date;
 
 @EntityListeners({AuditingEntityListener.class})
 @Entity
-@Table(name = "CONFIG_MODEL")
+@Table(name = "CONFIG_MODEL", uniqueConstraints=@UniqueConstraint(columnNames={"artifact_name","artifact_version"}))
 @Proxy(lazy=false)
 public class BlueprintModel implements Serializable {
     private static final long serialVersionUID = 1L;

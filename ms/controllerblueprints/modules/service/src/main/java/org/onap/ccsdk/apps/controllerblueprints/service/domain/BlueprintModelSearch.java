@@ -18,6 +18,8 @@
 package org.onap.ccsdk.apps.controllerblueprints.service.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
@@ -26,6 +28,8 @@ import java.util.Date;
 
 @Entity
 @Table(name = "CONFIG_MODEL")
+@JsonTypeName("blueprintModel")
+@JsonTypeInfo(include= JsonTypeInfo.As.WRAPPER_OBJECT, use=JsonTypeInfo.Id.NAME)
 public class BlueprintModelSearch implements Serializable {
     private static final long serialVersionUID = 1L;
 
