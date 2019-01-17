@@ -62,20 +62,20 @@ interface BluePrintRuntimeService<T> {
 
     fun setBluePrintError(bluePrintError: BluePrintError)
 
-    /*
-      Get the Node Type Definition for the Node Template, Then iterate Node Type Properties and resolve the expressing
-   */
+    fun resolveNodeTemplatePropertyAssignments(nodeTemplateName: String,
+                                               propertyDefinitions: MutableMap<String, PropertyDefinition>,
+                                               propertyAssignments: MutableMap<String, JsonNode>): MutableMap<String, JsonNode>
+
     fun resolveNodeTemplateProperties(nodeTemplateName: String): MutableMap<String, JsonNode>
 
-    fun resolveNodeTemplateCapabilityProperties(nodeTemplateName: String, capability: String): MutableMap<String,
+    fun resolveNodeTemplateCapabilityProperties(nodeTemplateName: String, capabilityName: String): MutableMap<String,
             JsonNode>
 
-    fun resolveNodeTemplateRequirementProperties(nodeTemplateName: String, requirementName: String): MutableMap<String,
-            JsonNode>
+    fun resolveNodeTemplateInterfaceOperationInputs(nodeTemplateName: String, interfaceName: String,
+                                                    operationName: String): MutableMap<String, JsonNode>
 
-    fun resolveNodeTemplateInterfaceOperationInputs(nodeTemplateName: String, interfaceName: String, operationName: String): MutableMap<String, JsonNode>
-
-    fun resolveNodeTemplateInterfaceOperationOutputs(nodeTemplateName: String, interfaceName: String, operationName: String): MutableMap<String, JsonNode>
+    fun resolveNodeTemplateInterfaceOperationOutputs(nodeTemplateName: String, interfaceName: String,
+                                                     operationName: String): MutableMap<String, JsonNode>
 
     fun resolveNodeTemplateArtifact(nodeTemplateName: String, artifactName: String): String
 
@@ -89,23 +89,23 @@ interface BluePrintRuntimeService<T> {
 
     fun setNodeTemplateAttributeValue(nodeTemplateName: String, attributeName: String, value: JsonNode)
 
-    fun setNodeTemplateOperationPropertyValue(nodeTemplateName: String, interfaceName: String, operationName: String, propertyName: String, value: JsonNode)
+    fun setNodeTemplateOperationPropertyValue(nodeTemplateName: String, interfaceName: String,
+                                              operationName: String, propertyName: String, value: JsonNode)
 
-    fun setNodeTemplateOperationInputValue(nodeTemplateName: String, interfaceName: String, operationName: String, propertyName: String, value: JsonNode)
+    fun setNodeTemplateOperationInputValue(nodeTemplateName: String, interfaceName: String,
+                                           operationName: String, propertyName: String, value: JsonNode)
 
-    fun setNodeTemplateOperationOutputValue(nodeTemplateName: String, interfaceName: String, operationName: String, propertyName: String, value: JsonNode)
+    fun setNodeTemplateOperationOutputValue(nodeTemplateName: String, interfaceName: String,
+                                            operationName: String, propertyName: String, value: JsonNode)
 
     fun getInputValue(propertyName: String): JsonNode
 
-    fun getNodeTemplateOperationOutputValue(nodeTemplateName: String, interfaceName: String, operationName: String, propertyName: String): JsonNode
+    fun getNodeTemplateOperationOutputValue(nodeTemplateName: String, interfaceName: String,
+                                            operationName: String, propertyName: String): JsonNode
 
     fun getNodeTemplatePropertyValue(nodeTemplateName: String, propertyName: String): JsonNode?
 
     fun getNodeTemplateAttributeValue(nodeTemplateName: String, attributeName: String): JsonNode?
-
-    fun getNodeTemplateRequirementPropertyValue(nodeTemplateName: String, requirementName: String, propertyName: String): JsonNode?
-
-    fun getNodeTemplateCapabilityPropertyValue(nodeTemplateName: String, capabilityName: String, propertyName: String): JsonNode?
 
     fun assignInputs(jsonNode: JsonNode)
 
@@ -190,22 +190,17 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
         this.bluePrintError = bluePrintError
     }
 
-    /*
-                Get the Node Type Definition for the Node Template, Then iterate Node Type Properties and resolve the expressing
-             */
-    override fun resolveNodeTemplateProperties(nodeTemplateName: String): MutableMap<String, JsonNode> {
-        log.info("resolveNodeTemplatePropertyValues for node template ({})", nodeTemplateName)
+    /**
+     * Resolve any property assignments for the node
+     */
+    override fun resolveNodeTemplatePropertyAssignments(nodeTemplateName: String,
+                                                        propertyDefinitions: MutableMap<String, PropertyDefinition>,
+                                                        propertyAssignments: MutableMap<String, JsonNode>)
+            : MutableMap<String, JsonNode> {
+
         val propertyAssignmentValue: MutableMap<String, JsonNode> = hashMapOf()
 
-        val nodeTemplate: NodeTemplate = bluePrintContext.nodeTemplateByName(nodeTemplateName)
-
-        val propertyAssignments: MutableMap<String, JsonNode> = nodeTemplate.properties!!
-
-        // Get the Node Type Definitions
-        val nodeTypeProperties: MutableMap<String, PropertyDefinition> = bluePrintContext.nodeTypeChainedProperties(nodeTemplate.type)!!
-
-        // Iterate Node Type Properties
-        nodeTypeProperties.forEach { nodeTypePropertyName, nodeTypeProperty ->
+        propertyDefinitions.forEach { nodeTypePropertyName, nodeTypeProperty ->
             // Get the Express or Value for the Node Template
             val propertyAssignment: JsonNode? = propertyAssignments[nodeTypePropertyName]
 
@@ -213,38 +208,61 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
             if (propertyAssignment != null) {
                 // Resolve the Expressing
                 val propertyAssignmentExpression = PropertyAssignmentService(this)
-                resolvedValue = propertyAssignmentExpression.resolveAssignmentExpression(nodeTemplateName, nodeTypePropertyName, propertyAssignment)
+                resolvedValue = propertyAssignmentExpression.resolveAssignmentExpression(nodeTemplateName,
+                        nodeTypePropertyName, propertyAssignment)
             } else {
                 // Assign default value to the Operation
-                nodeTypeProperty.defaultValue?.let { defaultValue ->
-                    resolvedValue = defaultValue
+                nodeTypeProperty.defaultValue?.let {
+                    resolvedValue = JacksonUtils.jsonNodeFromObject(nodeTypeProperty.defaultValue!!)
                 }
             }
             // Set for Return of method
             propertyAssignmentValue[nodeTypePropertyName] = resolvedValue
         }
-        log.info("resolved property definition for node template ({}), values ({})", nodeTemplateName, propertyAssignmentValue)
         return propertyAssignmentValue
+    }
+
+    override fun resolveNodeTemplateProperties(nodeTemplateName: String): MutableMap<String, JsonNode> {
+        log.info("resolveNodeTemplatePropertyValues for node template ({})", nodeTemplateName)
+
+        val nodeTemplate: NodeTemplate = bluePrintContext.nodeTemplateByName(nodeTemplateName)
+
+        val propertyAssignments: MutableMap<String, JsonNode> = nodeTemplate.properties!!
+
+        // Get the Node Type Definitions
+        val nodeTypePropertieDefinitions: MutableMap<String, PropertyDefinition> = bluePrintContext
+                .nodeTypeChainedProperties(nodeTemplate.type)!!
+
+        /**
+         * Resolve the NodeTemplate Property Assignment Values.
+         */
+        return resolveNodeTemplatePropertyAssignments(nodeTemplateName, nodeTypePropertieDefinitions,
+                propertyAssignments)
     }
 
     override fun resolveNodeTemplateCapabilityProperties(nodeTemplateName: String, capabilityName: String):
             MutableMap<String, JsonNode> {
         log.info("resolveNodeTemplateCapabilityProperties for node template($nodeTemplateName) capability " +
                 "($capabilityName)")
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+        val nodeTemplate: NodeTemplate = bluePrintContext.nodeTemplateByName(nodeTemplateName)
 
-    override fun resolveNodeTemplateRequirementProperties(nodeTemplateName: String, requirementName: String): MutableMap<String, JsonNode> {
-        log.info("resolveNodeTemplateRequirementProperties for node template($nodeTemplateName) requirement ($requirementName)")
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val propertyAssignments = nodeTemplate.capabilities?.get(capabilityName)?.properties ?: hashMapOf()
+
+        val propertyDefinitions = bluePrintContext.nodeTemplateNodeType(nodeTemplateName)
+                .capabilities?.get(capabilityName)?.properties ?: hashMapOf()
+
+        /**
+         * Resolve the Capability Property Assignment Values.
+         */
+        return resolveNodeTemplatePropertyAssignments(nodeTemplateName, propertyDefinitions,
+                propertyAssignments)
     }
 
     override fun resolveNodeTemplateInterfaceOperationInputs(nodeTemplateName: String,
-                                                             interfaceName: String, operationName: String): MutableMap<String, JsonNode> {
-        log.info("resolveNodeTemplateInterfaceOperationInputs for node template ({}),interface name ({}), " +
-                "operationName({})", nodeTemplateName, interfaceName, operationName)
-
-        val propertyAssignmentValue: MutableMap<String, JsonNode> = hashMapOf()
+                                                             interfaceName: String,
+                                                             operationName: String): MutableMap<String, JsonNode> {
+        log.info("resolveNodeTemplateInterfaceOperationInputs for node template ($nodeTemplateName),interface name " +
+                "($interfaceName), operationName($operationName)")
 
         val propertyAssignments: MutableMap<String, JsonNode> =
                 bluePrintContext.nodeTemplateInterfaceOperationInputs(nodeTemplateName, interfaceName, operationName)
@@ -256,40 +274,22 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
                 bluePrintContext.nodeTypeInterfaceOperationInputs(nodeTypeName, interfaceName, operationName)
                         ?: hashMapOf()
 
-        log.info("input definition for node template ({}), values ({})", nodeTemplateName, propertyAssignments)
+        log.info("input definition for node template ($nodeTemplateName), values ($propertyAssignments)")
 
-        // Iterate Node Type Properties
-        nodeTypeInterfaceOperationInputs.forEach { nodeTypePropertyName, nodeTypeProperty ->
-            // Get the Express or Value for the Node Template
-            val propertyAssignment: JsonNode? = propertyAssignments[nodeTypePropertyName]
+        /**
+         * Resolve the Property Input Assignment Values.
+         */
+        return resolveNodeTemplatePropertyAssignments(nodeTemplateName, nodeTypeInterfaceOperationInputs,
+                propertyAssignments)
 
-            var resolvedValue: JsonNode = NullNode.getInstance()
-            if (propertyAssignment != null) {
-                // Resolve the Expressing
-                val propertyAssignmentExpression = PropertyAssignmentService(this)
-                resolvedValue = propertyAssignmentExpression.resolveAssignmentExpression(nodeTemplateName, nodeTypePropertyName, propertyAssignment)
-            } else {
-                // Assign default value to the Operation
-                nodeTypeProperty.defaultValue?.let {
-                    resolvedValue = JacksonUtils.jsonNodeFromObject(nodeTypeProperty.defaultValue!!)
-                }
-            }
-            // Set for Return of method
-            propertyAssignmentValue[nodeTypePropertyName] = resolvedValue
-        }
-        log.trace("resolved input assignments for node template ({}), values ({})", nodeTemplateName,
-                propertyAssignmentValue)
-
-        return propertyAssignmentValue
     }
 
 
     override fun resolveNodeTemplateInterfaceOperationOutputs(nodeTemplateName: String,
-                                                              interfaceName: String, operationName: String): MutableMap<String, JsonNode> {
-        log.info("resolveNodeTemplateInterfaceOperationOutputs for node template ({}),interface name ({}), " +
-                "operationName({})", nodeTemplateName, interfaceName, operationName)
-
-        val propertyAssignmentValue: MutableMap<String, JsonNode> = hashMapOf()
+                                                              interfaceName: String,
+                                                              operationName: String): MutableMap<String, JsonNode> {
+        log.info("resolveNodeTemplateInterfaceOperationOutputs for node template ($nodeTemplateName),interface name " +
+                "($interfaceName), operationName($operationName)")
 
         val propertyAssignments: MutableMap<String, JsonNode> =
                 bluePrintContext.nodeTemplateInterfaceOperationOutputs(nodeTemplateName, interfaceName, operationName)
@@ -300,30 +300,15 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
         val nodeTypeInterfaceOperationOutputs: MutableMap<String, PropertyDefinition> =
                 bluePrintContext.nodeTypeInterfaceOperationOutputs(nodeTypeName, interfaceName, operationName)
                         ?: hashMapOf()
+        /**
+         * Resolve the Property Output Assignment Values.
+         */
+        val propertyAssignmentValue = resolveNodeTemplatePropertyAssignments(nodeTemplateName,
+                nodeTypeInterfaceOperationOutputs, propertyAssignments)
 
-        // Iterate Node Type Properties
-        nodeTypeInterfaceOperationOutputs.forEach { nodeTypePropertyName, nodeTypeProperty ->
-
-            // Get the Express or Value for the Node Template
-            val propertyAssignment: JsonNode? = propertyAssignments[nodeTypePropertyName]
-
-            var resolvedValue: JsonNode = NullNode.getInstance()
-            if (propertyAssignment != null) {
-                // Resolve the Expressing
-                val propertyAssignmentExpression = PropertyAssignmentService(this)
-                resolvedValue = propertyAssignmentExpression.resolveAssignmentExpression(nodeTemplateName, nodeTypePropertyName, propertyAssignment)
-            } else {
-                // Assign default value to the Operation
-                nodeTypeProperty.defaultValue?.let {
-                    resolvedValue = JacksonUtils.jsonNodeFromObject(nodeTypeProperty.defaultValue!!)
-                }
-            }
-            // Set for Return of method
-            propertyAssignmentValue[nodeTypePropertyName] = resolvedValue
-
-            // Store  operation output values into context
-            setNodeTemplateOperationOutputValue(nodeTemplateName, interfaceName, operationName, nodeTypePropertyName, resolvedValue)
-            log.trace("resolved output assignments for node template ({}), property name ({}), value ({})", nodeTemplateName, nodeTypePropertyName, resolvedValue)
+        // Store  operation output values into context
+        propertyAssignmentValue.forEach { key, value ->
+            setNodeTemplateOperationOutputValue(nodeTemplateName, interfaceName, operationName, key, value)
         }
         return propertyAssignmentValue
     }
@@ -338,11 +323,10 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
         val nodeTemplate = bluePrintContext.nodeTemplateByName(nodeTemplateName)
 
         return nodeTemplate.artifacts?.get(artifactName)
-                ?: throw BluePrintProcessorException(String.format("failed to get artifat definition {} from the node template"
-                        , artifactName))
+                ?: throw BluePrintProcessorException("failed to get artifat definition($artifactName) from the node " +
+                        "template")
 
     }
-
 
     override fun setInputValue(propertyName: String, propertyDefinition: PropertyDefinition, value: JsonNode) {
         val path = StringBuilder(BluePrintConstants.PATH_INPUTS)
@@ -351,8 +335,10 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
         put(path, value)
     }
 
-    override fun setWorkflowInputValue(workflowName: String, propertyName: String, propertyDefinition: PropertyDefinition, value: JsonNode) {
-        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_WORKFLOWS).append(BluePrintConstants.PATH_DIVIDER).append(workflowName)
+    override fun setWorkflowInputValue(workflowName: String, propertyName: String,
+                                       propertyDefinition: PropertyDefinition, value: JsonNode) {
+        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_WORKFLOWS)
+                .append(BluePrintConstants.PATH_DIVIDER).append(workflowName)
                 .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_INPUTS)
                 .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_PROPERTIES)
                 .append(BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
@@ -361,7 +347,8 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
 
     override fun setNodeTemplatePropertyValue(nodeTemplateName: String, propertyName: String, value: JsonNode) {
 
-        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES).append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
+        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES)
+                .append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
                 .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_PROPERTIES)
                 .append(BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
         put(path, value)
@@ -369,7 +356,8 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
 
     override fun setNodeTemplateAttributeValue(nodeTemplateName: String, attributeName: String, value: JsonNode) {
 
-        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES).append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
+        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES)
+                .append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
                 .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_ATTRIBUTES)
                 .append(BluePrintConstants.PATH_DIVIDER).append(attributeName).toString()
         put(path, value)
@@ -377,31 +365,42 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
 
     override fun setNodeTemplateOperationPropertyValue(nodeTemplateName: String, interfaceName: String, operationName: String, propertyName: String,
                                                        value: JsonNode) {
-        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES).append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
-                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_INTERFACES).append(BluePrintConstants.PATH_DIVIDER).append(interfaceName)
-                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_OPERATIONS).append(BluePrintConstants.PATH_DIVIDER).append(operationName)
+        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES)
+                .append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_INTERFACES)
+                .append(BluePrintConstants.PATH_DIVIDER).append(interfaceName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_OPERATIONS)
+                .append(BluePrintConstants.PATH_DIVIDER).append(operationName)
                 .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_PROPERTIES)
                 .append(BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
         log.trace("setting operation property path ({}), values ({})", path, value)
         put(path, value)
     }
 
-    override fun setNodeTemplateOperationInputValue(nodeTemplateName: String, interfaceName: String, operationName: String, propertyName: String,
+    override fun setNodeTemplateOperationInputValue(nodeTemplateName: String, interfaceName: String,
+                                                    operationName: String, propertyName: String,
                                                     value: JsonNode) {
-        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES).append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
-                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_INTERFACES).append(BluePrintConstants.PATH_DIVIDER).append(interfaceName)
-                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_OPERATIONS).append(BluePrintConstants.PATH_DIVIDER).append(operationName)
+        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES)
+                .append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_INTERFACES)
+                .append(BluePrintConstants.PATH_DIVIDER).append(interfaceName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_OPERATIONS)
+                .append(BluePrintConstants.PATH_DIVIDER).append(operationName)
                 .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_INPUTS)
                 .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_PROPERTIES)
                 .append(BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
         put(path, value)
     }
 
-    override fun setNodeTemplateOperationOutputValue(nodeTemplateName: String, interfaceName: String, operationName: String, propertyName: String,
+    override fun setNodeTemplateOperationOutputValue(nodeTemplateName: String, interfaceName: String,
+                                                     operationName: String, propertyName: String,
                                                      value: JsonNode) {
-        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES).append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
-                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_INTERFACES).append(BluePrintConstants.PATH_DIVIDER).append(interfaceName)
-                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_OPERATIONS).append(BluePrintConstants.PATH_DIVIDER).append(operationName)
+        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES)
+                .append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_INTERFACES)
+                .append(BluePrintConstants.PATH_DIVIDER).append(interfaceName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_OPERATIONS)
+                .append(BluePrintConstants.PATH_DIVIDER).append(operationName)
                 .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_OUTPUTS)
                 .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_PROPERTIES)
                 .append(BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
@@ -415,44 +414,33 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
         return getJsonNode(path)
     }
 
-    override fun getNodeTemplateOperationOutputValue(nodeTemplateName: String, interfaceName: String, operationName: String, propertyName: String): JsonNode {
-        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES).append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
-                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_INTERFACES).append(BluePrintConstants.PATH_DIVIDER).append(interfaceName)
-                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_OPERATIONS).append(BluePrintConstants.PATH_DIVIDER).append(operationName)
-                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_OUTPUTS).append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_PROPERTIES)
+    override fun getNodeTemplateOperationOutputValue(nodeTemplateName: String, interfaceName: String,
+                                                     operationName: String, propertyName: String): JsonNode {
+        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES)
+                .append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_INTERFACES)
+                .append(BluePrintConstants.PATH_DIVIDER).append(interfaceName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_OPERATIONS)
+                .append(BluePrintConstants.PATH_DIVIDER).append(operationName)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_OUTPUTS)
+                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_PROPERTIES)
                 .append(BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
         return getJsonNode(path)
     }
 
     override fun getNodeTemplatePropertyValue(nodeTemplateName: String, propertyName: String): JsonNode {
-        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES).append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
+        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES)
+                .append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
                 .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_PROPERTIES)
                 .append(BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
         return getJsonNode(path)
     }
 
     override fun getNodeTemplateAttributeValue(nodeTemplateName: String, attributeName: String): JsonNode {
-        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES).append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
+        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES)
+                .append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
                 .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_ATTRIBUTES)
                 .append(BluePrintConstants.PATH_DIVIDER).append(attributeName).toString()
-        return getJsonNode(path)
-    }
-
-    override fun getNodeTemplateRequirementPropertyValue(nodeTemplateName: String, requirementName: String, propertyName:
-    String): JsonNode {
-        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES).append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
-                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_REQUIREMENTS).append(requirementName)
-                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_PROPERTIES)
-                .append(BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
-        return getJsonNode(path)
-    }
-
-    override fun getNodeTemplateCapabilityPropertyValue(nodeTemplateName: String, capabilityName: String, propertyName:
-    String): JsonNode {
-        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES).append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
-                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_CAPABILITIES).append(capabilityName)
-                .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_PROPERTIES)
-                .append(BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
         return getJsonNode(path)
     }
 
@@ -493,7 +481,8 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
     override fun getJsonForNodeTemplateAttributeProperties(nodeTemplateName: String, keys: List<String>): JsonNode {
 
         val jsonNode: ObjectNode = jacksonObjectMapper().createObjectNode()
-        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES).append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
+        val path: String = StringBuilder(BluePrintConstants.PATH_NODE_TEMPLATES)
+                .append(BluePrintConstants.PATH_DIVIDER).append(nodeTemplateName)
                 .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_ATTRIBUTES)
                 .append(BluePrintConstants.PATH_DIVIDER).toString()
         store.keys.filter {

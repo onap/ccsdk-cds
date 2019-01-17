@@ -39,7 +39,7 @@ class BluePrintRuntimeServiceTest {
     private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
 
     @Test
-    fun testResolveNodeTemplateProperties() {
+    fun `test Resolve NodeTemplate Properties`() {
         log.info("************************ testResolveNodeTemplateProperties **********************")
 
         val bluePrintRuntimeService = getBluePrintRuntimeService()
@@ -49,25 +49,31 @@ class BluePrintRuntimeServiceTest {
         val inputNode: JsonNode = JacksonUtils.jsonNodeFromFile(inputDataPath)
         bluePrintRuntimeService.assignInputs(inputNode)
 
-        val propContext: MutableMap<String, JsonNode> = bluePrintRuntimeService.resolveNodeTemplateProperties("activate-process")
+        val propContext: MutableMap<String, JsonNode> = bluePrintRuntimeService
+                .resolveNodeTemplateProperties("activate-process")
 
         assertNotNull(propContext, "Failed to populate interface property values")
     }
 
     @Test
-    fun testResolveNodeTemplateCapabilityProperties() {
+    fun `test resolve NodeTemplate Capability Properties`() {
         log.info("************************ testResolveNodeTemplateRequirementProperties **********************")
-        //TODO
+        val bluePrintRuntimeService = getBluePrintRuntimeService()
+
+        val executionContext = bluePrintRuntimeService.getExecutionContext()
+
+        BluePrintRuntimeUtils.assignInputsFromClassPathFile(bluePrintRuntimeService.bluePrintContext(),
+                "data/default-context.json", executionContext)
+
+        val capProperties = bluePrintRuntimeService.resolveNodeTemplateCapabilityProperties("sample-netconf-device",
+                "netconf")
+        assertNotNull(capProperties, "Failed to populate capability property values")
+        assertEquals(capProperties["target-ip-address"], JacksonUtils.jsonNodeFromObject("localhost"), "Failed to populate parameter target-ip-address")
+        assertEquals(capProperties["port-number"], JacksonUtils.jsonNodeFromObject(830), "Failed to populate parameter port-number")
     }
 
     @Test
-    fun testResolveNodeTemplateRequirementProperties() {
-        log.info("************************ testResolveNodeTemplateRequirementProperties **********************")
-        //TODO
-    }
-
-    @Test
-    fun testResolveNodeTemplateInterfaceOperationInputs() {
+    fun `test Resolve NodeTemplate Interface Operation Inputs`() {
         log.info("************************ testResolveNodeTemplateInterfaceOperationInputs **********************")
 
         val bluePrintRuntimeService = getBluePrintRuntimeService()
@@ -77,16 +83,17 @@ class BluePrintRuntimeServiceTest {
         BluePrintRuntimeUtils.assignInputsFromClassPathFile(bluePrintRuntimeService.bluePrintContext(),
                 "data/default-context.json", executionContext)
 
-        val inContext: MutableMap<String, JsonNode> = bluePrintRuntimeService.resolveNodeTemplateInterfaceOperationInputs("resource-assignment",
-                "ResourceAssignmentComponent", "process")
+        val inContext: MutableMap<String, JsonNode> = bluePrintRuntimeService
+                .resolveNodeTemplateInterfaceOperationInputs("resource-assignment",
+                        "ResourceAssignmentComponent", "process")
 
         assertNotNull(inContext, "Failed to populate interface input property values")
         assertEquals(inContext["action-name"], JacksonUtils.jsonNodeFromObject("sample-action"), "Failed to populate parameter action-name")
         assertEquals(inContext["request-id"], JacksonUtils.jsonNodeFromObject("12345"), "Failed to populate parameter action-name")
-      }
+    }
 
     @Test
-    fun testResolveNodeTemplateInterfaceOperationOutputs() {
+    fun `test Resolve NodeTemplate Interface Operation Outputs`() {
         log.info("************************ testResolveNodeTemplateInterfaceOperationOutputs **********************")
 
         val bluePrintRuntimeService = getBluePrintRuntimeService()
@@ -107,7 +114,7 @@ class BluePrintRuntimeServiceTest {
     }
 
     @Test
-    fun testNodeTemplateContextProperty() {
+    fun `test NodeTemplate Context Property`() {
         log.info("************************ testNodeTemplateContextProperty **********************")
         val bluePrintRuntimeService = getBluePrintRuntimeService()
 
