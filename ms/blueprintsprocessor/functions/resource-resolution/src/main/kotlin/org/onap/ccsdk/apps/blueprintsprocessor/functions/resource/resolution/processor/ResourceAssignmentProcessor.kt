@@ -17,9 +17,9 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor
 
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BlueprintFunctionNode
-import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
 import org.slf4j.LoggerFactory
@@ -28,14 +28,12 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
 
     private val log = LoggerFactory.getLogger(ResourceAssignmentProcessor::class.java)
 
-    lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
-
+    lateinit var raRuntimeService: ResourceAssignmentRuntimeService
     lateinit var resourceDictionaries: Map<String, ResourceDefinition>
-
 
     open fun resourceDefinition(name: String): ResourceDefinition {
         return resourceDictionaries[name]
-                ?: throw BluePrintProcessorException("couldn't get resource definition($name)")
+                ?: throw BluePrintProcessorException("couldn't get resource definition for ($name)")
     }
 
     override fun prepareRequest(resourceAssignment: ResourceAssignment): ResourceAssignment {
