@@ -45,5 +45,5 @@ message Status {
 }
 
 service BluePrintProcessingService {
-    rpc process (ExecutionServiceInput) returns (stream ExecutionServiceOutput);
+    rpc process (stream ExecutionServiceInput) returns (stream ExecutionServiceOutput);
 }
