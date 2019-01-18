@@ -33,8 +33,8 @@ open class DefaultResourceSource : ResourceSourceProperties() {
 open class DatabaseResourceSource : ResourceSourceProperties() {
     lateinit var type: String
     lateinit var query: String
-    var inputKeyMapping: MutableList<String>? = null
-    var outputKeyMapping: MutableList<String>? = null
+    var inputKeyMapping: MutableMap<String, String>? = null
+    var outputKeyMapping: MutableMap<String, String>? = null
     lateinit var keyDependencies: MutableList<String>
 }
 
@@ -43,8 +43,8 @@ open class RestResourceSource : ResourceSourceProperties() {
     lateinit var urlPath: String
     lateinit var path: String
     lateinit var expressionType: String
-    var inputKeyMapping: MutableList<String>? = null
-    var outputKeyMapping: MutableList<String>? = null
+    var inputKeyMapping: MutableMap<String, String>? = null
+    var outputKeyMapping: MutableMap<String, String>? = null
     lateinit var keyDependencies: MutableList<String>
 }
 
@@ -53,7 +53,7 @@ open class CapabilityResourceSource : ResourceSourceProperties() {
     lateinit var instanceName: String
     lateinit var path: String
     lateinit var expressionType: String
-    var inputKeyMapping: MutableList<String>? = null
-    var outputKeyMapping: MutableList<String>? = null
+    var inputKeyMapping: MutableMap<String, String>? = null
+    var outputKeyMapping: MutableMap<String, String>? = null
     lateinit var keyDependencies: MutableList<String>
 }
