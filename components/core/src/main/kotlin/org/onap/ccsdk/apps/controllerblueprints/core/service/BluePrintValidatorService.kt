@@ -523,7 +523,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
 
     @Throws(BluePrintException::class)
     open fun validateImplementation(implementation: Implementation) {
-        checkNotEmptyNThrow(implementation.primary)
+        checkNotEmptyOrThrow(implementation.primary)
     }
 
     @Throws(BluePrintException::class)

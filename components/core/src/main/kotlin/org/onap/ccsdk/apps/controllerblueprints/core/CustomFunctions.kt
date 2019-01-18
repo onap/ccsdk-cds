@@ -112,15 +112,35 @@ fun MutableMap<String, JsonNode>.getAsDouble(key: String): Double {
 // Checks
 
 fun checkNotEmpty(value: String?): Boolean {
-    return value != null && value.isNotEmpty()
+    return value != null && value.isNotBlank()
 }
 
-fun checkNotEmptyNThrow(value: String?, message: String? = value.plus(" is null/empty ")): Boolean {
-    val notEmpty = value != null && value.isNotEmpty()
+fun checkNotEmptyOrThrow(value: String?, message: String? = value.plus(" is null/empty ")): Boolean {
+    val notEmpty = checkNotEmpty(value)
     if (!notEmpty) {
         throw BluePrintException(message!!)
     }
     return notEmpty
+}
+
+fun checkEqualsOrThrow(value1: String?, value2: String?, lazyMessage: () -> Any): Boolean {
+    if (value1.equals(value2, ignoreCase = true)) {
+        return true
+    } else {
+        throw BluePrintException(lazyMessage().toString())
+    }
+}
+
+fun nullToEmpty(value: String?): String {
+    return if (checkNotEmpty(value)) value!! else ""
+}
+
+fun returnNotEmptyOrThrow(value: String?, lazyMessage: () -> Any): String {
+    if (checkNotEmpty(value)) {
+        return value!!
+    } else {
+        throw IllegalStateException(lazyMessage().toString())
+    }
 }
 
 fun InputStream.toFile(path: String): File {
@@ -128,9 +148,4 @@ fun InputStream.toFile(path: String): File {
     file.outputStream().use { this.copyTo(it) }
     return file
 }
-
-
-
-
-
 

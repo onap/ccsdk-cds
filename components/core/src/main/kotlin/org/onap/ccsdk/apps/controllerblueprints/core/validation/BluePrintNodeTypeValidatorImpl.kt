@@ -20,7 +20,7 @@ import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintTypes
-import org.onap.ccsdk.apps.controllerblueprints.core.checkNotEmptyNThrow
+import org.onap.ccsdk.apps.controllerblueprints.core.checkNotEmptyOrThrow
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintNodeTypeValidator
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
@@ -149,7 +149,7 @@ open class BluePrintNodeTypeValidatorImpl(private val bluePrintTypeValidatorServ
     }
 
     open fun validateImplementation(implementation: Implementation) {
-        checkNotEmptyNThrow(implementation.primary)
+        checkNotEmptyOrThrow(implementation.primary)
     }
 
 }
