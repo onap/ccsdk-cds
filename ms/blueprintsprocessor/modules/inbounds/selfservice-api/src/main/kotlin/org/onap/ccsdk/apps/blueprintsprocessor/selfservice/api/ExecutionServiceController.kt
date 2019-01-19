@@ -38,7 +38,6 @@ class ExecutionServiceController {
     @Autowired
     lateinit var executionServiceHandler: ExecutionServiceHandler
 
-
     @RequestMapping(path = ["/ping"], method = [RequestMethod.GET], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     fun ping(): Mono<String> {
@@ -58,8 +57,7 @@ class ExecutionServiceController {
     @RequestMapping(path = ["/process"], method = [RequestMethod.POST], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ApiOperation(value = "Resolve Resource Mappings", notes = "Takes the blueprint information and process as per the payload")
     @ResponseBody
-    fun process(@RequestBody executionServiceInput: ExecutionServiceInput): Mono<ExecutionServiceOutput> {
-        val executionServiceOutput = executionServiceHandler.process(executionServiceInput)
-        return Mono.just(executionServiceOutput)
+    fun process(@RequestBody executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
+        return executionServiceHandler.process(executionServiceInput)
     }
 }

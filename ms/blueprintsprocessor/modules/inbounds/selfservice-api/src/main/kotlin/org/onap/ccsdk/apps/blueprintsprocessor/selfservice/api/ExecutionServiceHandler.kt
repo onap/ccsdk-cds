@@ -16,11 +16,18 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.onap.ccsdk.apps.blueprintsprocessor.core.BluePrintCoreConfiguration
+import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ACTION_MODE_ASYNC
+import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ACTION_MODE_SYNC
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceOutput
+import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.Status
 import org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api.utils.saveCBAFile
 import org.onap.ccsdk.apps.blueprintsprocessor.services.workflow.BlueprintDGExecutionService
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintFileUtils
@@ -50,7 +57,20 @@ class ExecutionServiceHandler(private val bluePrintCoreConfiguration: BluePrintC
     }
 
     fun process(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
+        return when {
+            executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC -> {
+                GlobalScope.launch(Dispatchers.Default) {
+                    // TODO post result in DMaaP
+                    val executionServiceOutput = doProcess(executionServiceInput)
+                }
+                response(executionServiceInput)
+            }
+            executionServiceInput.actionIdentifiers.mode == ACTION_MODE_SYNC -> doProcess(executionServiceInput)
+            else -> response(executionServiceInput, true)
+        }
+    }
 
+    fun doProcess(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
         val requestId = executionServiceInput.commonHeader.requestId
         log.info("processing request id $requestId")
 
@@ -65,5 +85,27 @@ class ExecutionServiceHandler(private val bluePrintCoreConfiguration: BluePrintC
         val blueprintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(requestId, basePath.toString())
 
         return blueprintDGExecutionService.executeDirectedGraph(blueprintRuntimeService, executionServiceInput)
+    }
+
+    fun response(executionServiceInput: ExecutionServiceInput, failure: Boolean = false): ExecutionServiceOutput {
+        val executionServiceOutput = ExecutionServiceOutput()
+        executionServiceOutput.commonHeader = executionServiceInput.commonHeader
+        executionServiceOutput.actionIdentifiers = executionServiceInput.actionIdentifiers
+        executionServiceOutput.payload = executionServiceInput.payload
+
+        val status = Status()
+        if (failure) {
+            status.eventType = "EVENT-COMPONENT-FAILURE"
+            status.code = 500
+            status.message = BluePrintConstants.STATUS_FAILURE
+        } else {
+            status.eventType = "EVENT-COMPONENT-PROCESSING"
+            status.code = 200
+            status.message = BluePrintConstants.STATUS_PROCESSING
+        }
+
+        executionServiceOutput.status = status
+
+        return executionServiceOutput
     }
 }
