@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 Bell Canada.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,48 +17,94 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api
 
+import io.grpc.StatusException
 import io.grpc.stub.StreamObserver
 import org.apache.commons.io.FileUtils
 import org.onap.ccsdk.apps.blueprintsprocessor.core.BluePrintCoreConfiguration
-import org.onap.ccsdk.apps.controllerblueprints.management.api.*
+import org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api.utils.currentTimestamp
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintCatalogService
+import org.onap.ccsdk.apps.controllerblueprints.management.api.BluePrintManagementInput
+import org.onap.ccsdk.apps.controllerblueprints.management.api.BluePrintManagementOutput
+import org.onap.ccsdk.apps.controllerblueprints.management.api.BluePrintManagementServiceGrpc
+import org.onap.ccsdk.apps.controllerblueprints.management.api.CommonHeader
+import org.onap.ccsdk.apps.controllerblueprints.management.api.Status
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.File
 
 @Service
-class BluePrintManagementGRPCHandler(private val bluePrintCoreConfiguration: BluePrintCoreConfiguration)
+class BluePrintManagementGRPCHandler(private val bluePrintCoreConfiguration: BluePrintCoreConfiguration,
+                                     private val bluePrintCatalogService: BluePrintCatalogService)
     : BluePrintManagementServiceGrpc.BluePrintManagementServiceImplBase() {
 
     private val log = LoggerFactory.getLogger(BluePrintManagementGRPCHandler::class.java)
 
-    override fun uploadBlueprint(request: BluePrintUploadInput, responseObserver: StreamObserver<BluePrintUploadOutput>) {
-        val response = BluePrintUploadOutput.newBuilder().setCommonHeader(request.commonHeader).build()
+    override fun uploadBlueprint(request: BluePrintManagementInput, responseObserver: StreamObserver<BluePrintManagementOutput>) {
+        val blueprintName = request.blueprintName
+        val blueprintVersion = request.blueprintVersion
+        val blueprint = "blueprint $blueprintName:$blueprintVersion"
+
+        log.info("request(${request.commonHeader.requestId}): Received upload $blueprint")
+
+        val blueprintArchivedFilePath = "${bluePrintCoreConfiguration.archivePath}/$blueprintName/$blueprintVersion/$blueprintName.zip"
         try {
-            val blueprintName = request.blueprintName
-            val blueprintVersion = request.blueprintVersion
-            val filePath = "${bluePrintCoreConfiguration.archivePath}/$blueprintName/$blueprintVersion"
-            val blueprintDir = File(filePath)
+            val blueprintArchivedFile = File(blueprintArchivedFilePath)
 
-            log.info("Re-creating blueprint directory(${blueprintDir.absolutePath})")
-            FileUtils.deleteDirectory(blueprintDir)
-            FileUtils.forceMkdir(blueprintDir)
+            saveToDisk(request, blueprintArchivedFile)
+            val blueprintId = bluePrintCatalogService.saveToDatabase(blueprintArchivedFile)
 
-            val file = File("${blueprintDir.absolutePath}/$blueprintName.zip")
-            log.info("Writing CBA File under :${file.absolutePath}")
+            File("${bluePrintCoreConfiguration.archivePath}/$blueprintName").deleteRecursively()
 
-            val fileChunk = request.fileChunk
-
-            file.writeBytes(fileChunk.chunk.toByteArray()).apply {
-                log.info("CBA file(${file.absolutePath} written successfully")
-            }
+            responseObserver.onNext(successStatus("Successfully uploaded $blueprint with id($blueprintId)", request.commonHeader))
+            responseObserver.onCompleted()
         } catch (e: Exception) {
-            log.error("failed to upload file ", e)
+            failStatus("request(${request.commonHeader.requestId}): Failed to upload $blueprint at path $blueprintArchivedFilePath", e)
         }
-        responseObserver.onNext(response)
-        responseObserver.onCompleted()
     }
 
-    override fun removeBlueprint(request: BluePrintRemoveInput?, responseObserver: StreamObserver<BluePrintRemoveOutput>?) {
-        //TODO
+    override fun removeBlueprint(request: BluePrintManagementInput, responseObserver: StreamObserver<BluePrintManagementOutput>) {
+        val blueprintName = request.blueprintName
+        val blueprintVersion = request.blueprintVersion
+        val blueprint = "blueprint $blueprintName:$blueprintVersion"
+
+        log.info("request(${request.commonHeader.requestId}): Received delete $blueprint")
+
+        try {
+            bluePrintCatalogService.deleteFromDatabase(blueprintName, blueprintVersion)
+            responseObserver.onNext(successStatus("Successfully deleted $blueprint", request.commonHeader))
+            responseObserver.onCompleted()
+        } catch (e: Exception) {
+            failStatus("request(${request.commonHeader.requestId}): Failed to delete $blueprint", e)
+        }
+    }
+
+    private fun saveToDisk(request: BluePrintManagementInput, blueprintDir: File) {
+        log.debug("request(${request.commonHeader.requestId}): Writing CBA File under :${blueprintDir.absolutePath}")
+        if (blueprintDir.exists()) {
+            log.debug("request(${request.commonHeader.requestId}): Re-creating blueprint directory(${blueprintDir.absolutePath})")
+            FileUtils.deleteDirectory(blueprintDir.parentFile)
+        }
+        FileUtils.forceMkdir(blueprintDir.parentFile)
+        blueprintDir.writeBytes(request.fileChunk.chunk.toByteArray()).apply {
+            log.debug("request(${request.commonHeader.requestId}): CBA file(${blueprintDir.absolutePath} written successfully")
+        }
+    }
+
+    private fun successStatus(message: String, header: CommonHeader): BluePrintManagementOutput =
+            BluePrintManagementOutput.newBuilder()
+                    .setCommonHeader(header)
+                    .setStatus(Status.newBuilder()
+                            .setTimestamp(currentTimestamp())
+                            .setMessage(message)
+                            .setCode(200)
+                            .build())
+                    .build()
+
+    private fun failStatus(message: String, e: Exception): StatusException {
+        log.error(message, e)
+        return io.grpc.Status.INTERNAL
+                .withDescription(message)
+                .withCause(e)
+                .asException()
     }
 }
