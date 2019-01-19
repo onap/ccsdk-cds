@@ -17,6 +17,7 @@
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ActionIdentifiers
@@ -46,6 +47,8 @@ class ComponentNetconfExecutorTest {
     fun testComponentNetconfExecutor() {
 
         val executionServiceInput = ExecutionServiceInput()
+        executionServiceInput.payload = JsonNodeFactory.instance.objectNode()
+
         val commonHeader = CommonHeader()
         commonHeader.requestId = "1234"
         executionServiceInput.commonHeader = commonHeader

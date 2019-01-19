@@ -16,7 +16,6 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api
 
-import com.google.protobuf.util.JsonFormat
 import io.grpc.stub.StreamObserver
 import org.onap.ccsdk.apps.blueprintsprocessor.core.BluePrintCoreConfiguration
 import org.onap.ccsdk.apps.controllerblueprints.processing.api.BluePrintProcessingServiceGrpc

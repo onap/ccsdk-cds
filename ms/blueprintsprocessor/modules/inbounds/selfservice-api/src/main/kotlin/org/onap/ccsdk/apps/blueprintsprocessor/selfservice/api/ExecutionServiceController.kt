@@ -21,7 +21,14 @@ import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInp
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
-import org.springframework.web.bind.annotation.*
+import org.springframework.http.codec.multipart.FilePart
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.bind.annotation.RequestPart
+import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Mono
 
 @RestController
@@ -32,13 +39,23 @@ class ExecutionServiceController {
     lateinit var executionServiceHandler: ExecutionServiceHandler
 
 
-    @RequestMapping(path = arrayOf("/ping"), method = arrayOf(RequestMethod.GET), produces = arrayOf(MediaType.APPLICATION_JSON_VALUE))
+    @RequestMapping(path = ["/ping"], method = [RequestMethod.GET], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     fun ping(): Mono<String> {
         return Mono.just("Success")
     }
 
-    @RequestMapping(path = arrayOf("/process"), method = arrayOf(RequestMethod.POST), produces = arrayOf(MediaType.APPLICATION_JSON_VALUE))
+    @PostMapping(path = ["/upload"], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
+    @ApiOperation(value = "Upload CBA", notes = "Takes a File and load it in the runtime database")
+    @ResponseBody
+    fun upload(@RequestPart("file") parts: Mono<FilePart>): Mono<String> {
+        return parts
+                .filter { it is FilePart }
+                .ofType(FilePart::class.java)
+                .flatMap(executionServiceHandler::upload)
+    }
+
+    @RequestMapping(path = ["/process"], method = [RequestMethod.POST], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ApiOperation(value = "Resolve Resource Mappings", notes = "Takes the blueprint information and process as per the payload")
     @ResponseBody
     fun process(@RequestBody executionServiceInput: ExecutionServiceInput): Mono<ExecutionServiceOutput> {

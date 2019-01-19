@@ -17,6 +17,7 @@
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ActionIdentifiers
@@ -43,8 +44,9 @@ class ComponentJythonExecutorTest {
 
     @Test
     fun testPythonComponentInjection() {
-
         val executionServiceInput = ExecutionServiceInput()
+        executionServiceInput.payload = JsonNodeFactory.instance.objectNode()
+
         val commonHeader = CommonHeader()
         commonHeader.requestId = "1234"
         executionServiceInput.commonHeader = commonHeader
@@ -67,6 +69,7 @@ class ComponentJythonExecutorTest {
 
         componentJythonExecutor.bluePrintRuntimeService = bluePrintRuntimeService
         componentJythonExecutor.stepName = "activate-jython"
+
 
         componentJythonExecutor.apply(executionServiceInput)
 

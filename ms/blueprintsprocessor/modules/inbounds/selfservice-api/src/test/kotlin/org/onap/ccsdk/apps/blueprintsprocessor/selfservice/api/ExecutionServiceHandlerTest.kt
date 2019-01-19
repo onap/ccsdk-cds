@@ -17,45 +17,72 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api
 
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.onap.ccsdk.apps.blueprintsprocessor.core.BluePrintCoreConfiguration
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.context.annotation.ComponentScan
-import org.springframework.test.annotation.DirtiesContext
+import org.springframework.core.io.ByteArrayResource
+import org.springframework.http.client.MultipartBodyBuilder
+import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
+import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.web.reactive.function.BodyInserters
+import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.test.assertTrue
 
-@Ignore
 @RunWith(SpringRunner::class)
-@DirtiesContext
-@EnableAutoConfiguration
+@WebFluxTest
+@ContextConfiguration(classes = [ExecutionServiceHandler::class, BluePrintCoreConfiguration::class, BluePrintCatalogService::class])
 @ComponentScan(basePackages = ["org.onap.ccsdk.apps.blueprintsprocessor", "org.onap.ccsdk.apps.controllerblueprints"])
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class ExecutionServiceHandlerTest {
 
     @Autowired
-    lateinit var executionServiceHandler: ExecutionServiceHandler
-
-    @Autowired
     lateinit var blueprintCatalog: BluePrintCatalogService
+    @Autowired
+    lateinit var webTestClient: WebTestClient
+
 
     @Test
-    fun testProcess() {
+    fun `test rest upload blueprint`() {
         val file = Paths.get("./src/test/resources/test-cba.zip").toFile()
         assertTrue(file.exists(), "couldnt get file ${file.absolutePath}")
 
+        val body = MultipartBodyBuilder().apply {
+            part("file", object : ByteArrayResource(Files.readAllBytes(Paths.get("./src/test/resources/test-cba.zip"))) {
+                override fun getFilename(): String {
+                    return "test-cba.zip"
+                }
+            })
+        }.build()
+
+        webTestClient
+                .post()
+                .uri("/api/v1/execution-service/upload")
+                .body(BodyInserters.fromMultipartData(body))
+                .exchange()
+                .expectStatus().isOk
+    }
+
+    @Test
+    fun `test rest process`() {
+        val file = Paths.get("./src/test/resources/test-cba.zip").toFile()
+        assertTrue(file.exists(), "couldnt get file ${file.absolutePath}")
         blueprintCatalog.saveToDatabase(file)
 
         val executionServiceInput = JacksonUtils.readValueFromClassPathFile("execution-input/default-input.json", ExecutionServiceInput::class.java)!!
-
-        executionServiceHandler.process(executionServiceInput)
+        webTestClient
+                .post()
+                .uri("/api/v1/execution-service/process")
+                .body(BodyInserters.fromObject(executionServiceInput))
+                .exchange()
+                .expectStatus().isOk
     }
-
 }
