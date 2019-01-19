@@ -32,6 +32,10 @@ const routes: Routes = [
     {
       path: 'blueprint',
       loadChildren: './feature-modules/blueprint/blueprint.module#BlueprintModule'
+    },
+    {
+      path: 'resource-definition',
+      loadChildren: './feature-modules/resource-definition/resource-definition.module#ResourceDefinitionModule'
     }
   ]
 }
