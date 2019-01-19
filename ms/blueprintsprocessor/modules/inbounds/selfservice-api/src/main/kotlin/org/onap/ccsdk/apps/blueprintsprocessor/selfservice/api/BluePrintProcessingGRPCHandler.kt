@@ -30,14 +30,27 @@ class BluePrintProcessingGRPCHandler(private val bluePrintCoreConfiguration: Blu
     : BluePrintProcessingServiceGrpc.BluePrintProcessingServiceImplBase() {
     private val log = LoggerFactory.getLogger(BluePrintProcessingGRPCHandler::class.java)
 
-    override fun process(request: ExecutionServiceInput,
-                         responseObserver: StreamObserver<ExecutionServiceOutput>) {
 
-        //val json = JsonFormat.printer().print(request)
-        //log.info("Received GRPC request ${json}")
-        //TODO( Handle Processing Response")
-        val response = ExecutionServiceOutput.newBuilder().setCommonHeader(request.commonHeader).build()
-        responseObserver.onNext(response)
-        responseObserver.onCompleted()
+    override fun process(responseObserver: StreamObserver<ExecutionServiceOutput>?): StreamObserver<ExecutionServiceInput> {
+
+        return object : StreamObserver<ExecutionServiceInput> {
+
+            override fun onNext(executionServiceInput: ExecutionServiceInput) {
+                TODO("Handle Processing Response")
+//                executionServiceHandler.process(executionServiceInput)
+//                responseObserver.onNext(executionServiceOuput)
+            }
+
+            override fun onError(error: Throwable) {
+                log.warn("Fail to process message", error)
+            }
+
+            override fun onCompleted() {
+                responseObserver?.onCompleted()
+            }
+        }
+
     }
+
+
 }
