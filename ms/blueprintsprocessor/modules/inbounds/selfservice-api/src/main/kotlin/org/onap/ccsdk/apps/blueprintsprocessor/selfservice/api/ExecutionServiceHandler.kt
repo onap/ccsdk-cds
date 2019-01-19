@@ -40,10 +40,10 @@ class ExecutionServiceHandler(private val bluePrintCatalogService: BluePrintCata
         val blueprintName = actionIdentifiers.blueprintName
         val blueprintVersion = actionIdentifiers.blueprintVersion
 
-        val basePath = bluePrintCatalogService.prepareBluePrint(blueprintName, blueprintVersion)
+        val basePath = bluePrintCatalogService.getFromDatabase(blueprintName, blueprintVersion)
         log.info("blueprint base path $basePath")
 
-        val blueprintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(requestId, basePath)
+        val blueprintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(requestId, basePath.toString())
 
         return blueprintDGExecutionService.executeDirectedGraph(blueprintRuntimeService, executionServiceInput)
     }

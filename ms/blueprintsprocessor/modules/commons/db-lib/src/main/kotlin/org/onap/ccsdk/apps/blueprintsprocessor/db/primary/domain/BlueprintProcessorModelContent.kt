@@ -40,7 +40,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener
 class BlueprintProcessorModelContent : Serializable {
 
     @Id
-    @Column(name = "config_model_content_id")
+    @Column(name = "blueprint_content_runtime_id")
     var id: String? = null
 
     @Column(name = "name", nullable = false)
@@ -52,7 +52,7 @@ class BlueprintProcessorModelContent : Serializable {
     var contentType: String? = null
 
     @OneToOne
-    @JoinColumn(name = "config_model_id")
+    @JoinColumn(name = "blueprint_runtime_id")
     var blueprintModel: BlueprintProcessorModel? = null
 
     @Lob

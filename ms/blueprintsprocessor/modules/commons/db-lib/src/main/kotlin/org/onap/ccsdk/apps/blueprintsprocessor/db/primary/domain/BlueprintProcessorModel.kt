@@ -40,12 +40,10 @@ import javax.persistence.TemporalType
 @Table(name = "BLUEPRINT_RUNTIME")
 @Proxy(lazy = false)
 class BlueprintProcessorModel : Serializable {
-    @Id
-    @Column(name = "config_model_id")
-    var id: String? = null
 
-    @Column(name = "artifact_uuid")
-    var artifactUUId: String? = null
+    @Id
+    @Column(name = "blueprint_runtime_id")
+    var id: String? = null
 
     @Column(name = "artifact_type")
     var artifactType: String? = null
@@ -58,9 +56,6 @@ class BlueprintProcessorModel : Serializable {
     @Column(name = "artifact_description")
     var artifactDescription: String? = null
 
-    @Column(name = "internal_version")
-    var internalVersion: Int? = null
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
@@ -70,10 +65,6 @@ class BlueprintProcessorModel : Serializable {
     @Column(name = "artifact_name", nullable = false)
     @ApiModelProperty(required = true)
     var artifactName: String? = null
-
-    @Column(name = "published", nullable = false)
-    @ApiModelProperty(required = true)
-    var published: String? = null
 
     @Column(name = "updated_by", nullable = false)
     @ApiModelProperty(required = true)

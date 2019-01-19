@@ -22,6 +22,9 @@ import org.onap.ccsdk.apps.blueprintsprocessor.services.workflow.BlueprintDGExec
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.springframework.stereotype.Service
+import java.io.File
+import java.nio.file.Path
+import java.nio.file.Paths
 import kotlin.test.assertNotNull
 
 @Service
@@ -38,22 +41,17 @@ class MockBlueprintDGExecutionService : BlueprintDGExecutionService {
 
 @Service
 class MockBluePrintCatalogService : BluePrintCatalogService {
-
-    override fun uploadToDataBase(file: String, validate : Boolean): String {
+    override fun deleteFromDatabase(name: String, version: String) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun downloadFromDataBase(name: String, version: String, path: String): String {
+    override fun saveToDatabase(blueprintFile: File, validate: Boolean): String {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun prepareBluePrint(name: String, version: String): String {
+    override fun getFromDatabase(name: String, version: String, extract: Boolean): Path {
         assertNotNull(name, "failed to get blueprint Name")
         assertNotNull(version, "failed to get blueprint version")
-        return "./../../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration"
-    }
-
-    override fun downloadFromDataBase(uuid: String, path: String): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return Paths.get("./../../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration")
     }
 }
