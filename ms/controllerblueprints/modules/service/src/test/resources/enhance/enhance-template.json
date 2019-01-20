@@ -243,7 +243,7 @@
                   },
                   "input-param": false,
                   "dictionary-name": "sample-mdsal-source",
-                  "dictionary-source": "mdsal",
+                  "dictionary-source": "primary-config-data",
                   "dependencies": [
                     "service-instance-id"
                   ],
@@ -314,7 +314,7 @@
                   },
                   "input-param": false,
                   "dictionary-name": "sample-licenses",
-                  "dictionary-source": "mdsal",
+                  "dictionary-source": "primary-config-data",
                   "dependencies": [
                     "service-instance-id"
                   ],
