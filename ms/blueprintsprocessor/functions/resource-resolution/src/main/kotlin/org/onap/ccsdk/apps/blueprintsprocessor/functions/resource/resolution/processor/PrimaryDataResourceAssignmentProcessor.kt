@@ -33,7 +33,7 @@ import java.util.*
 /**
  * PrimaryDataResourceAssignmentProcessor
  *
- * @author Brinda Santh
+ * @author Kapil Singal
  */
 @Service("resource-assignment-processor-primary-db")
 open class PrimaryDataResourceAssignmentProcessor(private val primaryDBLibGenericService: PrimaryDBLibGenericService)
@@ -54,27 +54,27 @@ open class PrimaryDataResourceAssignmentProcessor(private val primaryDBLibGeneri
             if (value != null && value !is NullNode) {
                 logger.info("primary-db source template key (${resourceAssignment.name}) found from input and value is ($value)")
                 ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, value)
-                return
-            }
-
-            val dName = resourceAssignment.dictionaryName
-            val dSource = resourceAssignment.dictionarySource
-            val resourceDefinition = resourceDictionaries[dName]
-                    ?: throw BluePrintProcessorException("couldn't get resource dictionary definition for $dName")
-            val resourceSource = resourceDefinition.sources[dSource]
-                    ?: throw BluePrintProcessorException("couldn't get resource definition $dName source($dSource)")
-            val resourceSourceProperties = checkNotNull(resourceSource.properties) { "failed to get source properties for $dName " }
-            val sourceProperties = JacksonUtils.getInstanceFromMap(resourceSourceProperties, DatabaseResourceSource::class.java)
-            val sql = checkNotNull(sourceProperties.query) { "failed to get request query for $dName under $dSource properties" }
-            val inputKeyMapping = checkNotNull(sourceProperties.inputKeyMapping) { "failed to get input-key-mappings for $dName under $dSource properties" }
-
-            logger.info("$dSource dictionary information : ($sql), ($inputKeyMapping), (${sourceProperties.outputKeyMapping})")
-
-            val rows = primaryDBLibGenericService.query(sql, populateNamedParameter(inputKeyMapping))
-            if (rows.isNullOrEmpty()) {
-                logger.warn("Failed to get $dSource result for dictionary name ($dName) the query ($sql)")
             } else {
-                processDBResults(resourceAssignment, sourceProperties, rows)
+                val dName = resourceAssignment.dictionaryName
+                val dSource = resourceAssignment.dictionarySource
+                val resourceDefinition = resourceDictionaries[dName]
+                        ?: throw BluePrintProcessorException("couldn't get resource dictionary definition for $dName")
+                val resourceSource = resourceDefinition.sources[dSource]
+                        ?: throw BluePrintProcessorException("couldn't get resource definition $dName source($dSource)")
+                val resourceSourceProperties = checkNotNull(resourceSource.properties) { "failed to get source properties for $dName " }
+                val sourceProperties = JacksonUtils.getInstanceFromMap(resourceSourceProperties, DatabaseResourceSource::class.java)
+
+                val sql = checkNotNull(sourceProperties.query) { "failed to get request query for $dName under $dSource properties" }
+                val inputKeyMapping = checkNotNull(sourceProperties.inputKeyMapping) { "failed to get input-key-mappings for $dName under $dSource properties" }
+
+                logger.info("$dSource dictionary information : ($sql), ($inputKeyMapping), (${sourceProperties.outputKeyMapping})")
+
+                val rows = primaryDBLibGenericService.query(sql, populateNamedParameter(inputKeyMapping))
+                if (rows.isNullOrEmpty()) {
+                    logger.warn("Failed to get $dSource result for dictionary name ($dName) the query ($sql)")
+                } else {
+                    populateResource(resourceAssignment, sourceProperties, rows)
+                }
             }
 
             // Check the value has populated for mandatory case
@@ -106,7 +106,7 @@ open class PrimaryDataResourceAssignmentProcessor(private val primaryDBLibGeneri
     }
 
     @Throws(BluePrintProcessorException::class)
-    private fun processDBResults(resourceAssignment: ResourceAssignment, sourceProperties: DatabaseResourceSource, rows: List<Map<String, Any>>) {
+    private fun populateResource(resourceAssignment: ResourceAssignment, sourceProperties: DatabaseResourceSource, rows: List<Map<String, Any>>) {
         val dName = resourceAssignment.dictionaryName
         val dSource = resourceAssignment.dictionarySource
         val type = nullToEmpty(resourceAssignment.property?.type)
@@ -115,21 +115,17 @@ open class PrimaryDataResourceAssignmentProcessor(private val primaryDBLibGeneri
         logger.info("Response processing type($type)")
 
         // Primitive Types
-        if (BluePrintTypes.validPrimitiveTypes().contains(type)) {
-            val dbColumnValue = rows[0][outputKeyMapping[dName]]
-            ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, dbColumnValue)
-        }
-        // Array Types
-        else if (BluePrintTypes.validCollectionTypes().contains(type)) {
-            lateinit var entrySchemaType: String
-            if (resourceAssignment.property?.entrySchema != null) {
-                entrySchemaType = nullToEmpty(resourceAssignment.property?.entrySchema?.type)
+        when(type) {
+            in BluePrintTypes.validPrimitiveTypes() -> {
+                val dbColumnValue = rows[0][outputKeyMapping[dName]]
+                logger.info("For template key (${resourceAssignment.name}) setting value as ($dbColumnValue)")
+                ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, dbColumnValue)
             }
-
-            if (checkNotEmptyOrThrow(entrySchemaType, "Entry schema is not defined for dictionary ($dName) info")) {
-                val arrayNode = JsonNodeFactory.instance.arrayNode()
+            in BluePrintTypes.validCollectionTypes() -> {
+                val entrySchemaType = returnNotEmptyOrThrow(resourceAssignment.property?.entrySchema?.type) { "Entry schema is not defined for dictionary ($dName) info" }
+                var arrayNode = JsonNodeFactory.instance.arrayNode()
                 rows.forEach {
-                    if (BluePrintTypes.validPrimitiveTypes().contains(entrySchemaType)) {
+                    if (entrySchemaType in BluePrintTypes.validPrimitiveTypes()) {
                         val dbColumnValue = it[outputKeyMapping[dName]]
                         // Add Array JSON
                         JacksonUtils.populatePrimitiveValues(dbColumnValue!!, entrySchemaType, arrayNode)
@@ -143,19 +139,22 @@ open class PrimaryDataResourceAssignmentProcessor(private val primaryDBLibGeneri
                         arrayNode.add(arrayChildNode)
                     }
                 }
+                logger.info("For template key (${resourceAssignment.name}) setting value as ($arrayNode)")
                 // Set the List of Complex Values
                 ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, arrayNode)
             }
-        } else {
-            // Complex Types
-            val row = rows[0]
-            val objectNode = JsonNodeFactory.instance.objectNode()
-            for (mapping in outputKeyMapping.entries) {
-                val dbColumnValue = checkNotNull(row[mapping.key])
-                val propertyTypeForDataType = ResourceAssignmentUtils.getPropertyType(raRuntimeService, type, mapping.key)
-                JacksonUtils.populatePrimitiveValues(mapping.key, dbColumnValue, propertyTypeForDataType, objectNode)
+            else -> {
+                // Complex Types
+                val row = rows[0]
+                var objectNode = JsonNodeFactory.instance.objectNode()
+                for (mapping in outputKeyMapping.entries) {
+                    val dbColumnValue = checkNotNull(row[mapping.key])
+                    val propertyTypeForDataType = ResourceAssignmentUtils.getPropertyType(raRuntimeService, type, mapping.key)
+                    JacksonUtils.populatePrimitiveValues(mapping.key, dbColumnValue, propertyTypeForDataType, objectNode)
+                }
+                logger.info("For template key (${resourceAssignment.name}) setting value as ($objectNode)")
+                ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, objectNode)
             }
-            ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, objectNode)
         }
     }
 
