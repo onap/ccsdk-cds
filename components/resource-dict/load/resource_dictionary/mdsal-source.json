@@ -7,7 +7,7 @@
   },
   "updated-by": "brindasanth@onap.com",
   "sources": {
-    "mdsal": {
+    "primary-config-data": {
       "type": "source-rest",
       "properties": {
         "type": "JSON",

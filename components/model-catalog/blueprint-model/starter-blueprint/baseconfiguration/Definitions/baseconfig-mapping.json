@@ -27,7 +27,7 @@
       "type": "string"
     },
     "dictionary-name": "vnf_name",
-    "dictionary-source": "mdsal",
+    "dictionary-source": "primary-config-data",
     "dependencies": [
       "service-instance-id",
       "vnf-id"

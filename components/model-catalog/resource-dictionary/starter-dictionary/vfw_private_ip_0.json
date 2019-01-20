@@ -12,7 +12,7 @@
       "properties" : {
       }
     },
-    "mdsal" : {
+    "primary-config-data" : {
       "type" : "source-rest",
       "properties" : {
         "type" : "JSON",

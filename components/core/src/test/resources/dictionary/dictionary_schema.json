@@ -54,7 +54,7 @@
 				"aai": {
 					"type": "any"
 				},
-				"mdsal": {
+				"primary-config-data": {
 					"type": "object",
 					"properties": {
 						"path": {
@@ -188,7 +188,7 @@
 						}
 					}
 				},
-				"mdsal": {
+				"primary-config-data": {
 					"type": "object",
 					"properties": {
 						"names": {
