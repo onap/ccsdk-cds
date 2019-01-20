@@ -65,7 +65,7 @@ class ResourceResolutionServiceTest {
     fun testRegisteredSource() {
         val sources = resourceResolutionService.registeredResourceSources()
         assertNotNull(sources, "failed to get registered sources")
-        assertTrue(sources.containsAll(arrayListOf("input", "default", "primary-db", "mdsal")), "failed to get registered sources")
+        assertTrue(sources.containsAll(arrayListOf("input", "default", "primary-db", "primary-config-data")), "failed to get registered sources")
     }
 
     @Test
