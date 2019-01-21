@@ -3,6 +3,7 @@
   ~  Copyright © 2017-2018 AT&T Intellectual Property.
   ~
   ~  Modifications Copyright © 2018 IBM.
+  ~  Modifications Copyright © 2019 Bell Canada.
   ~
   ~  Licensed under the Apache License, Version 2.0 (the "License");
   ~  you may not use this file except in compliance with the License.
@@ -247,6 +248,11 @@
             <!-- Application Module Dependencies -->
             <dependency>
                 <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
+                <artifactId>application</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
                 <artifactId>db-lib</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -302,6 +308,11 @@
             <dependency>
                 <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
                 <artifactId>resource-dict</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+                <artifactId>core</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

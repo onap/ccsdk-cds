@@ -30,6 +30,10 @@
     <dependencies>
         <dependency>
             <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
             <artifactId>db-resources</artifactId>
             <version>${project.version}</version>
         </dependency>
