@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright © 2017-2018 AT&T Intellectual Property.
+  ~ Modifications Copyright © 2019 Bell Canada.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -56,6 +57,11 @@
         <fileSet>
             <directory>${project.basedir}/../application/etc</directory>
             <outputDirectory>./etc</outputDirectory>
+            <useDefaultExcludes>true</useDefaultExcludes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/../application/opt/app/onap/config</directory>
+            <outputDirectory>./config</outputDirectory>
             <useDefaultExcludes>true</useDefaultExcludes>
         </fileSet>
         <fileSet>

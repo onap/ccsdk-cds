@@ -31,12 +31,12 @@ import org.springframework.web.reactive.config.EnableWebFlux;
 @EnableWebFlux
 @ComponentScan(basePackages = {"org.onap.ccsdk.apps.controllerblueprints"})
 @EnableAutoConfiguration
-public class ControllerBluprintsApplication {
-    private static EELFLogger log = EELFManager.getInstance().getLogger(ControllerBluprintsApplication.class);
+public class ControllerBlueprintsApplication {
+    private static EELFLogger log = EELFManager.getInstance().getLogger(ControllerBlueprintsApplication.class);
 
     public static void main(String[] args) {
         log.info("****** Starting Controlled Blueprints Application ******");
-        SpringApplication.run(ControllerBluprintsApplication.class, args);
+        SpringApplication.run(ControllerBlueprintsApplication.class, args);
     }
 
 }

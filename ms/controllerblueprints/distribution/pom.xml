@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~  Copyright © 2017-2018 AT&T Intellectual Property.
+  ~  Modifications Copyright © 2019 Bell Canada.
   ~
   ~  Licensed under the Apache License, Version 2.0 (the "License");
   ~  you may not use this file except in compliance with the License.
@@ -30,10 +31,10 @@
         <name.space>org.onap.ccsdk.apps</name.space>     <!-- <name.space>${namespace}</name.space> -->
         <serviceArtifactName>controllerblueprints</serviceArtifactName>
         <image.name>onap/ccsdk-controllerblueprints</image.name>
-		<docker.buildArg.https_proxy>${https_proxy}</docker.buildArg.https_proxy>
-		<docker.push.phase>deploy</docker.push.phase>
-		<docker.verbose>true</docker.verbose>
-	</properties>
+        <docker.buildArg.https_proxy>${https_proxy}</docker.buildArg.https_proxy>
+        <docker.push.phase>deploy</docker.push.phase>
+        <docker.verbose>true</docker.verbose>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -120,20 +121,20 @@
                         </goals>
                         <configuration>
                             <source>
-                                println project.properties['ccsdk.project.version'];
-                                def versionArray;
+                                println project.properties['ccsdk.project.version']
+                                def versionArray
                                 if (project.properties['ccsdk.project.version'] != null ) {
-                                    versionArray = project.properties['ccsdk.project.version'].split('\\.');
+                                    versionArray = project.properties['ccsdk.project.version'].split('\\.')
                                 }
 
                                 if (project.properties['ccsdk.project.version'].endsWith("-SNAPSHOT"))
                                 {
-                                    project.properties['project.docker.latesttag.version']=versionArray[0] + '.' + versionArray[1] + "-STAGING-latest";
+                                    project.properties['project.docker.latesttag.version']=versionArray[0] + '.' + versionArray[1] + "-STAGING-latest"
                                 } else {
-                                    project.properties['project.docker.latesttag.version']=versionArray[0]+'.' + versionArray[1]+"-STAGING-latest";
+                                    project.properties['project.docker.latesttag.version']=versionArray[0]+'.' + versionArray[1]+"-STAGING-latest"
                                 }
 
-                                println 'New Tag for docker:' + project.properties['project.docker.latesttag.version'];
+                                println 'New Tag for docker:' + project.properties['project.docker.latesttag.version']
                             </source>
                         </configuration>
                     </execution>
@@ -143,34 +144,34 @@
         </plugins>
     </build>
 
-	<profiles>
-		<profile>
-			<id>docker</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>io.fabric8</groupId>
-						<artifactId>docker-maven-plugin</artifactId>
-						<version>0.26.1</version>
-						<inherited>false</inherited>
-						<configuration>
-							<images>
-								<image>
-									<name>${image.name}</name>
-									<build>
-										<cleanup>try</cleanup>
-										<dockerFileDir>${basedir}/target/docker-stage</dockerFileDir>
-										<tags>
-											<tag>${project.version}</tag>
-											<tag>${project.version}-STAGING-${maven.build.timestamp}</tag>
-											<tag>${project.docker.latesttag.version}</tag>
-										</tags>
-									</build>
-								</image>
-							</images>
-							<verbose>true</verbose>
-						</configuration>
-						<executions>
+    <profiles>
+        <profile>
+            <id>docker</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <version>0.26.1</version>
+                        <inherited>false</inherited>
+                        <configuration>
+                            <images>
+                                <image>
+                                    <name>${image.name}</name>
+                                    <build>
+                                        <cleanup>try</cleanup>
+                                        <dockerFileDir>${basedir}/target/docker-stage</dockerFileDir>
+                                        <tags>
+                                            <tag>${project.version}</tag>
+                                            <tag>${project.version}-STAGING-${maven.build.timestamp}</tag>
+                                            <tag>${project.docker.latesttag.version}</tag>
+                                        </tags>
+                                    </build>
+                                </image>
+                            </images>
+                            <verbose>true</verbose>
+                        </configuration>
+                        <executions>
                             <execution>
                                 <id>generate-images</id>
                                 <phase>package</phase>
@@ -186,11 +187,11 @@
                                     <goal>push</goal>
                                 </goals>
                             </execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
 
-	</profiles>
+    </profiles>
 </project>
