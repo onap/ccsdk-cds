@@ -1,35 +1,22 @@
 syntax = "proto3";
+import "BluePrintCommon.proto";
 option java_multiple_files = true;
 package org.onap.ccsdk.apps.controllerblueprints.management.api;
 
 message BluePrintManagementInput {
-  CommonHeader commonHeader = 1;
+  org.onap.ccsdk.apps.controllerblueprints.common.api.CommonHeader commonHeader = 1;
   string blueprintName = 2;
   string blueprintVersion = 3;
   FileChunk fileChunk = 4;
 }
 
 message BluePrintManagementOutput {
-  CommonHeader commonHeader = 1;
-  Status status = 3;
+  org.onap.ccsdk.apps.controllerblueprints.common.api.CommonHeader commonHeader = 1;
+  org.onap.ccsdk.apps.controllerblueprints.common.api.Status status = 3;
 }
 
 message FileChunk {
   bytes chunk = 1;
-}
-
-message CommonHeader {
-  string timestamp = 1;
-  string originatorId = 23;
-  string requestId = 3;
-  string subRequestId = 4;
-}
-
-message Status {
-  string timestamp = 1;
-  int32 code = 2;
-  string message = 3;
-  string errorMessage = 4;
 }
 
 service BluePrintManagementService {
