@@ -18,6 +18,8 @@ package org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api
 
 import io.grpc.stub.StreamObserver
 import org.onap.ccsdk.apps.blueprintsprocessor.core.BluePrintCoreConfiguration
+import org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api.utils.toJava
+import org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api.utils.toProto
 import org.onap.ccsdk.apps.controllerblueprints.processing.api.BluePrintProcessingServiceGrpc
 import org.onap.ccsdk.apps.controllerblueprints.processing.api.ExecutionServiceInput
 import org.onap.ccsdk.apps.controllerblueprints.processing.api.ExecutionServiceOutput
@@ -30,27 +32,29 @@ class BluePrintProcessingGRPCHandler(private val bluePrintCoreConfiguration: Blu
     : BluePrintProcessingServiceGrpc.BluePrintProcessingServiceImplBase() {
     private val log = LoggerFactory.getLogger(BluePrintProcessingGRPCHandler::class.java)
 
-
     override fun process(responseObserver: StreamObserver<ExecutionServiceOutput>?): StreamObserver<ExecutionServiceInput> {
 
         return object : StreamObserver<ExecutionServiceInput> {
-
             override fun onNext(executionServiceInput: ExecutionServiceInput) {
-                TODO("Handle Processing Response")
-//                executionServiceHandler.process(executionServiceInput)
-//                responseObserver.onNext(executionServiceOuput)
+                try {
+                    val output = executionServiceHandler.process(executionServiceInput.toJava())
+                            .toProto(executionServiceInput.payload)
+                    responseObserver?.onNext(output)
+                } catch (e: Exception) {
+                    onError(e)
+                }
             }
 
             override fun onError(error: Throwable) {
-                log.warn("Fail to process message", error)
+                log.debug("Fail to process message", error)
+                responseObserver?.onError(io.grpc.Status.INTERNAL
+                        .withDescription(error.message)
+                        .asException())
             }
 
             override fun onCompleted() {
                 responseObserver?.onCompleted()
             }
         }
-
     }
-
-
 }
