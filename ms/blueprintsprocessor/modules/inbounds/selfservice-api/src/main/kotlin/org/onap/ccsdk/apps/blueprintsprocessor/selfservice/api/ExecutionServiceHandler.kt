@@ -66,11 +66,11 @@ class ExecutionServiceHandler(private val bluePrintCoreConfiguration: BluePrintC
                 response(executionServiceInput)
             }
             executionServiceInput.actionIdentifiers.mode == ACTION_MODE_SYNC -> doProcess(executionServiceInput)
-            else -> response(executionServiceInput, true)
+            else -> response(executionServiceInput, "Failed to process request, 'actionIdentifiers.mode' not specified. Valid value are: 'sync' or 'async'.", true)
         }
     }
 
-    fun doProcess(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
+    private fun doProcess(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
         val requestId = executionServiceInput.commonHeader.requestId
         log.info("processing request id $requestId")
 
@@ -87,13 +87,14 @@ class ExecutionServiceHandler(private val bluePrintCoreConfiguration: BluePrintC
         return blueprintDGExecutionService.executeDirectedGraph(blueprintRuntimeService, executionServiceInput)
     }
 
-    fun response(executionServiceInput: ExecutionServiceInput, failure: Boolean = false): ExecutionServiceOutput {
+    fun response(executionServiceInput: ExecutionServiceInput, errorMessage: String = "", failure: Boolean = false): ExecutionServiceOutput {
         val executionServiceOutput = ExecutionServiceOutput()
         executionServiceOutput.commonHeader = executionServiceInput.commonHeader
         executionServiceOutput.actionIdentifiers = executionServiceInput.actionIdentifiers
         executionServiceOutput.payload = executionServiceInput.payload
 
         val status = Status()
+        status.errorMessage = errorMessage
         if (failure) {
             status.eventType = "EVENT-COMPONENT-FAILURE"
             status.code = 500

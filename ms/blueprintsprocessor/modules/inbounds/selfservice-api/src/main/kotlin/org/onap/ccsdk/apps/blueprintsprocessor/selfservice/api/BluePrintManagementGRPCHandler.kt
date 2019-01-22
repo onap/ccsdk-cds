@@ -22,12 +22,12 @@ import io.grpc.stub.StreamObserver
 import org.apache.commons.io.FileUtils
 import org.onap.ccsdk.apps.blueprintsprocessor.core.BluePrintCoreConfiguration
 import org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api.utils.currentTimestamp
+import org.onap.ccsdk.apps.controllerblueprints.common.api.CommonHeader
+import org.onap.ccsdk.apps.controllerblueprints.common.api.Status
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.apps.controllerblueprints.management.api.BluePrintManagementInput
 import org.onap.ccsdk.apps.controllerblueprints.management.api.BluePrintManagementOutput
 import org.onap.ccsdk.apps.controllerblueprints.management.api.BluePrintManagementServiceGrpc
-import org.onap.ccsdk.apps.controllerblueprints.management.api.CommonHeader
-import org.onap.ccsdk.apps.controllerblueprints.management.api.Status
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.File

@@ -95,3 +95,29 @@ open class Status {
     @get:ApiModelProperty(required = true)
     var message: String = "success"
 }
+
+open class BluePrintManagementInput {
+    @get:ApiModelProperty(required = true)
+    lateinit var commonHeader: CommonHeader
+    @get:ApiModelProperty(required = false)
+    lateinit var blueprintName: String
+    @get:ApiModelProperty(required = false)
+    lateinit var blueprintVersion: String
+    @get:ApiModelProperty(required = true)
+    lateinit var fileChunk: FileChunk
+}
+
+open class FileChunk {
+    @get:ApiModelProperty(required = true)
+    lateinit var chunk: ByteArray
+}
+
+open class BluePrintManagementOutput {
+    @get:ApiModelProperty(required = true)
+    lateinit var commonHeader: CommonHeader
+    @get:ApiModelProperty(required = true)
+    var status: Status = Status()
+}
+
+
+

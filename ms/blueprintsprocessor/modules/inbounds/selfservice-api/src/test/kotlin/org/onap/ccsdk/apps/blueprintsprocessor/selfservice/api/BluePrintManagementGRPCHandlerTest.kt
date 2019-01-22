@@ -23,9 +23,9 @@ import org.apache.commons.io.FileUtils
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.onap.ccsdk.apps.controllerblueprints.common.api.CommonHeader
 import org.onap.ccsdk.apps.controllerblueprints.management.api.BluePrintManagementInput
 import org.onap.ccsdk.apps.controllerblueprints.management.api.BluePrintManagementServiceGrpc
-import org.onap.ccsdk.apps.controllerblueprints.management.api.CommonHeader
 import org.onap.ccsdk.apps.controllerblueprints.management.api.FileChunk
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -87,7 +87,8 @@ class BluePrintManagementGRPCHandlerTest {
         val file = Paths.get("./src/test/resources/test-cba.zip").toFile()
         assertTrue(file.exists(), "couldnt get file ${file.absolutePath}")
 
-        val commonHeader = CommonHeader.newBuilder()
+        val commonHeader = CommonHeader
+                .newBuilder()
                 .setTimestamp("2012-04-23T18:25:43.511Z")
                 .setOriginatorId("System")
                 .setRequestId(id)
