@@ -27,6 +27,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.apps.controllerblueprints.core.putJsonElement
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
@@ -44,6 +45,7 @@ class ComponentJythonExecutorTest {
 
     @Test
     fun testPythonComponentInjection() {
+        /*
         val executionServiceInput = ExecutionServiceInput()
         executionServiceInput.payload = JsonNodeFactory.instance.objectNode()
 
@@ -57,8 +59,12 @@ class ComponentJythonExecutorTest {
         actionIdentifiers.actionName = "activate"
         executionServiceInput.actionIdentifiers = actionIdentifiers
 
+        */
 
-        val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(commonHeader.requestId,
+        val executionServiceInput = JacksonUtils.readValueFromClassPathFile("payload/requests/sample-activate-request.json",
+                ExecutionServiceInput::class.java)!!
+
+        val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
                 "./../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration")
 
         val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
