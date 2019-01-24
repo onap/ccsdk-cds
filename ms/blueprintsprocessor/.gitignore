@@ -29,3 +29,4 @@
 **/*versionsBackup
 **/blackDuckHub*
 **/*.jsonld
+/target-ide/
