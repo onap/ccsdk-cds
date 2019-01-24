@@ -21,10 +21,20 @@ limitations under the License.
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+		<groupId>org.onap.ccsdk.parent</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.2.1-SNAPSHOT</version>
+		<relativePath/>
+	</parent>
+    
     <groupId>org.onap.ccsdk.cds</groupId>
     <artifactId>controller-design-studio</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+    
+    
 
     <name>controller-design-studio</name>
 	
@@ -39,21 +49,6 @@ limitations under the License.
         <onap.nexus.url>https://nexus.onap.org</onap.nexus.url>
     </properties>
 
-    <!-- ================================================================================== -->
-    <!-- Distribution Management Sites -->
-    <!-- ================================================================================== -->
-    <distributionManagement>        
-        <repository>
-            <id>ecomp-releases</id>
-            <name>openecomp-repository-releases</name>
-            <url>${onap.nexus.url}/content/repositories/releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>ecomp-snapshots</id>
-            <name>openecomp-repository-snapshots</name>
-            <url>${onap.nexus.url}/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
 
 
   
