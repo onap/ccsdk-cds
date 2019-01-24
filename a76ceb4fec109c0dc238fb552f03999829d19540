@@ -1,0 +1,8 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+2: Dan Timoney <dtimoney@att.com>
+Code-Review+2: Jun (Nicolas) Hu <jun.nicolas.hu@att.com>
+Submitted-by: Dan Timoney <dtimoney@att.com>
+Submitted-at: Thu, 24 Jan 2019 21:04:36 +0000
+Reviewed-on: https://gerrit.onap.org/r/76292
+Project: ccsdk/cds
+Branch: refs/heads/master
