@@ -59,16 +59,21 @@ class BluePrintManagementGRPCHandlerTest {
         grpcServerRule.serviceRegistry.addService(bluePrintManagementGRPCHandler)
     }
 
-    @AfterTest
+    //@AfterTest
     fun cleanDir() {
+        //TODO It's giving fluctuating results, need to look for another way to cleanup
+        // works sometimes otherwise results IO Exception
+        // Most probably bufferReader stream is not getting closed when cleanDir is getting invoked
         FileUtils.deleteDirectory(File("./target/blueprints"))
     }
 
     @Test
     fun `test upload blueprint`() {
         val blockingStub = BluePrintManagementServiceGrpc.newBlockingStub(grpcServerRule.channel)
-        val id = "123"
-        val output = blockingStub.uploadBlueprint(createInputRequest(id))
+        val id = "123_upload"
+        val req = createInputRequest(id)
+        val output = blockingStub.uploadBlueprint(req)
+
         assertEquals(200, output.status.code)
         assertTrue(output.status.message.contains("Successfully uploaded blueprint sample:1.0.0 with id("))
         assertEquals(id, output.commonHeader.requestId)
@@ -77,10 +82,16 @@ class BluePrintManagementGRPCHandlerTest {
     @Test
     fun `test delete blueprint`() {
         val blockingStub = BluePrintManagementServiceGrpc.newBlockingStub(grpcServerRule.channel)
-        val id = "123"
+        val id = "123_delete"
         val req = createInputRequest(id)
-        blockingStub.uploadBlueprint(req)
-        blockingStub.removeBlueprint(req)
+
+        var output = blockingStub.uploadBlueprint(req)
+        assertEquals(200, output.status.code)
+        assertTrue(output.status.message.contains("Successfully uploaded blueprint sample:1.0.0 with id("))
+        assertEquals(id, output.commonHeader.requestId)
+
+        output = blockingStub.removeBlueprint(req)
+        assertEquals(200, output.status.code)
     }
 
     private fun createInputRequest(id: String): BluePrintManagementInput {
