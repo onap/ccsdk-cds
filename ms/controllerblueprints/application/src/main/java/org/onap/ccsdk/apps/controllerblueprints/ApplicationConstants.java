@@ -17,7 +17,7 @@
 package org.onap.ccsdk.apps.controllerblueprints;
 
 /**
- * ApplicationConstants.java Purpose: Provide ControllerBluprintsApplication Constant Information
+ * ApplicationConstants.java Purpose: Provide ControllerBlueprintsApplication Constant Information
  *
  * @author Brinda Santh
  * @version 1.0
