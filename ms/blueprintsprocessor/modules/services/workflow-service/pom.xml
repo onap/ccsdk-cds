@@ -28,6 +28,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
             <artifactId>execution-service</artifactId>
         </dependency>
