@@ -30,7 +30,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+            <groupId>org.onap.ccsdk.apps.components</groupId>
             <artifactId>proto-definition</artifactId>
             <version>${project.version}</version>
         </dependency>
