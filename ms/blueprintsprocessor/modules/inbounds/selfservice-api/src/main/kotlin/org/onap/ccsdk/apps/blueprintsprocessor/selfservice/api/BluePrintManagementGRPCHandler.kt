@@ -79,15 +79,16 @@ class BluePrintManagementGRPCHandler(private val bluePrintCoreConfiguration: Blu
     }
 
     private fun saveToDisk(request: BluePrintManagementInput, blueprintDir: File) {
-        log.debug("request(${request.commonHeader.requestId}): Writing CBA File under :${blueprintDir.absolutePath}")
+        log.info("request(${request.commonHeader.requestId}): Writing CBA File under :${blueprintDir.absolutePath}")
         if (blueprintDir.exists()) {
-            log.debug("request(${request.commonHeader.requestId}): Re-creating blueprint directory(${blueprintDir.absolutePath})")
+            log.info("request(${request.commonHeader.requestId}): Re-creating blueprint directory(${blueprintDir.absolutePath})")
             FileUtils.deleteDirectory(blueprintDir.parentFile)
         }
         FileUtils.forceMkdir(blueprintDir.parentFile)
         blueprintDir.writeBytes(request.fileChunk.chunk.toByteArray()).apply {
-            log.debug("request(${request.commonHeader.requestId}): CBA file(${blueprintDir.absolutePath} written successfully")
+            log.info("request(${request.commonHeader.requestId}): CBA file(${blueprintDir.absolutePath} written successfully")
         }
+
     }
 
     private fun successStatus(message: String, header: CommonHeader): BluePrintManagementOutput =

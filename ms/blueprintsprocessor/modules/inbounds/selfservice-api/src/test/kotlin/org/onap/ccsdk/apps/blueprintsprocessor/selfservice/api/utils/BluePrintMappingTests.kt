@@ -142,8 +142,8 @@ class BluePrintMappingsTest {
 
         val mapper = ObjectMapper()
 
-        Assert.assertEquals(JsonFormat.printer().print(struct).replace(" ", ""),
-                mapper.writerWithDefaultPrettyPrinter().writeValueAsString(struct2).replace(" ", ""))
+        Assert.assertEquals(JsonFormat.printer().print(struct).replace(" ", "").replace("\r",""),
+                mapper.writerWithDefaultPrettyPrinter().writeValueAsString(struct2).replace(" ", "").replace("\r",""))
     }
 
     fun createValues(): Map<String, Value> {
