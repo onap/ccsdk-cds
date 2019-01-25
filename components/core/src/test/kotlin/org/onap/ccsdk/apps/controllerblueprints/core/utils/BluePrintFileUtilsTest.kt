@@ -27,7 +27,7 @@ class BluePrintFileUtilsTest {
 
     @Test
     fun testNewBlueprint() = runBlocking {
-        val targetPath: String = Paths.get("target").toUri().toURL().path.plus("bp-new-test")
+        val targetPath: String = Paths.get("target").toUri().toURL().path.plus("/bp-new-test")
         BluePrintFileUtils.createEmptyBluePrint(targetPath)
 
     }
@@ -36,7 +36,7 @@ class BluePrintFileUtilsTest {
     fun testBlueprintCopy() = runBlocking {
         val sourcePath: String = "./../model-catalog/blueprint-model/starter-blueprint/baseconfiguration"
 
-        val targetPath: String = Paths.get("target").toUri().toURL().path.plus("bp-copy-test")
+        val targetPath: String = Paths.get("target").toUri().toURL().path.plus("/bp-copy-test")
 
         val targetDir = File(targetPath)
         targetDir.deleteOnExit()
