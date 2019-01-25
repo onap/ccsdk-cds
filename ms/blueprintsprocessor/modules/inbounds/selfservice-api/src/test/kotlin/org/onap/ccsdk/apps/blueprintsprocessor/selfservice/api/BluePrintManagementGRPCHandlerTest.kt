@@ -19,7 +19,6 @@ package org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api
 
 import com.google.protobuf.ByteString
 import io.grpc.testing.GrpcServerRule
-import org.apache.commons.io.FileUtils
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,7 +33,6 @@ import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import java.io.File
-import java.nio.file.Paths
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.assertEquals
@@ -59,12 +57,12 @@ class BluePrintManagementGRPCHandlerTest {
         grpcServerRule.serviceRegistry.addService(bluePrintManagementGRPCHandler)
     }
 
-    //@AfterTest
+    @AfterTest
     fun cleanDir() {
         //TODO It's giving fluctuating results, need to look for another way to cleanup
         // works sometimes otherwise results IO Exception
         // Most probably bufferReader stream is not getting closed when cleanDir is getting invoked
-        FileUtils.deleteDirectory(File("./target/blueprints"))
+        File("./target/blueprints").deleteRecursively()
     }
 
     @Test
@@ -95,7 +93,7 @@ class BluePrintManagementGRPCHandlerTest {
     }
 
     private fun createInputRequest(id: String): BluePrintManagementInput {
-        val file = Paths.get("./src/test/resources/test-cba.zip").toFile()
+        val file = File("./src/test/resources/test-cba.zip")
         assertTrue(file.exists(), "couldnt get file ${file.absolutePath}")
 
         val commonHeader = CommonHeader

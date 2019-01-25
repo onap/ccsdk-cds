@@ -19,7 +19,6 @@ package org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api
 
 import io.grpc.StatusException
 import io.grpc.stub.StreamObserver
-import org.apache.commons.io.FileUtils
 import org.onap.ccsdk.apps.blueprintsprocessor.core.BluePrintCoreConfiguration
 import org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api.utils.currentTimestamp
 import org.onap.ccsdk.apps.controllerblueprints.common.api.CommonHeader
@@ -82,9 +81,11 @@ class BluePrintManagementGRPCHandler(private val bluePrintCoreConfiguration: Blu
         log.info("request(${request.commonHeader.requestId}): Writing CBA File under :${blueprintDir.absolutePath}")
         if (blueprintDir.exists()) {
             log.info("request(${request.commonHeader.requestId}): Re-creating blueprint directory(${blueprintDir.absolutePath})")
-            FileUtils.deleteDirectory(blueprintDir.parentFile)
+            //FileUtils.deleteDirectory(blueprintDir.parentFile)
+            blueprintDir.parentFile.deleteRecursively()
         }
-        FileUtils.forceMkdir(blueprintDir.parentFile)
+        blueprintDir.parentFile.mkdirs()
+        //FileUtils.forceMkdir(blueprintDir.parentFile)
         blueprintDir.writeBytes(request.fileChunk.chunk.toByteArray()).apply {
             log.info("request(${request.commonHeader.requestId}): CBA file(${blueprintDir.absolutePath} written successfully")
         }
