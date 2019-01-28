@@ -32,10 +32,6 @@
     <dependencies>
         <dependency>
             <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
-            <artifactId>core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
             <artifactId>db-resources</artifactId>
         </dependency>
         <dependency>
@@ -44,7 +40,7 @@
         </dependency>
         <dependency>
             <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
-            <artifactId>resource-dict</artifactId>
+            <artifactId>blueprint-scripts</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.velocity</groupId>

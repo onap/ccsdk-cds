@@ -30,6 +30,7 @@
         <module>service</module>
         <module>blueprint-validation</module>
         <module>db-resources</module>
+        <module>blueprint-scripts</module>
     </modules>
 
     <build>
