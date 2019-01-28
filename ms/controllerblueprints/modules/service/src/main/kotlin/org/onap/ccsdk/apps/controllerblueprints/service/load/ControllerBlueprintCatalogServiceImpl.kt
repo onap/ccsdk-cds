@@ -97,6 +97,8 @@ class ControllerBlueprintCatalogServiceImpl(bluePrintValidatorService: BluePrint
         blueprintModelContent.description = "$artifactName:$artifactVersion CBA Zip Content"
         blueprintModelContent.content = Files.readAllBytes(archiveFile.toPath())
         blueprintModelContent.blueprintModel = blueprintModel
+        // Set the Blueprint Model Content into blueprintModel
+        blueprintModel.blueprintModelContent = blueprintModelContent
 
         try {
             blueprintModelRepository.saveAndFlush(blueprintModel)
