@@ -14,25 +14,15 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.apps.blueprintsprocessor.db.primary.service
+package org.onap.ccsdk.apps.blueprintsprocessor.db.primary
 
+import org.onap.ccsdk.apps.blueprintsprocessor.db.AbstractDBLibGenericService
 import org.onap.ccsdk.apps.blueprintsprocessor.db.BluePrintDBLibGenericService
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Service
 
 @Service
-class PrimaryDBLibGenericService(private val primaryNamedParameterJdbcTemplate: NamedParameterJdbcTemplate)
-    : BluePrintDBLibGenericService {
+open class PrimaryDBLibGenericService(private val primaryNamedParameterJdbcTemplate: NamedParameterJdbcTemplate)
+    : AbstractDBLibGenericService(primaryNamedParameterJdbcTemplate) {
 
-    override fun namedParameterJdbcTemplate(): NamedParameterJdbcTemplate {
-        return primaryNamedParameterJdbcTemplate
-    }
-
-    override fun query(sql: String, params: Map<String, Any>): List<Map<String, Any>> {
-        return primaryNamedParameterJdbcTemplate.queryForList(sql, params)
-    }
-
-    override fun update(sql: String, params: Map<String, Any>): Int {
-        return primaryNamedParameterJdbcTemplate.update(sql, params)
-    }
 }
