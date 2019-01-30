@@ -18,23 +18,22 @@ package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.pr
 
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.CapabilityResourceSource
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintScriptsService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Service
 
 @Service("resource-assignment-processor-capability")
-open class CapabilityResourceAssignmentProcessor : ResourceAssignmentProcessor() {
+open class CapabilityResourceAssignmentProcessor(private var applicationContext: ApplicationContext,
+                                                 private val bluePrintScriptsService: BluePrintScriptsService) :
+        ResourceAssignmentProcessor() {
 
     companion object {
         const val CAPABILITY_TYPE_KOTLIN_COMPONENT = "KOTLIN-COMPONENT"
         const val CAPABILITY_TYPE_JAVA_COMPONENT = "JAVA-COMPONENT"
         const val CAPABILITY_TYPE_JYTHON_COMPONENT = "JYTHON-COMPONENT"
     }
-
-    @Autowired
-    private lateinit var applicationContext: ApplicationContext
 
     override fun getName(): String {
         return "resource-assignment-processor-capability"
@@ -46,20 +45,25 @@ open class CapabilityResourceAssignmentProcessor : ResourceAssignmentProcessor()
                 ?: throw BluePrintProcessorException("couldn't get resource definition for ${resourceAssignment.dictionaryName}")
 
         val resourceSource = resourceDefinition.sources[resourceAssignment.dictionarySource]
-                ?: throw BluePrintProcessorException("couldn't get resource definition ${resourceAssignment.dictionaryName} source(${resourceAssignment.dictionarySource})")
+                ?: throw BluePrintProcessorException("couldn't get resource definition " +
+                        "${resourceAssignment.dictionaryName} source(${resourceAssignment.dictionarySource})")
 
         val resourceSourceProps = checkNotNull(resourceSource.properties) { "failed to get $resourceSource properties" }
-        val capabilityResourceSourceProperty = JacksonUtils.getInstanceFromMap(resourceSourceProps, CapabilityResourceSource::class.java)
+        /**
+         * Get the Capability Resource Source Info from Property Definitions.
+         */
+        val capabilityResourceSourceProperty = JacksonUtils
+                .getInstanceFromMap(resourceSourceProps, CapabilityResourceSource::class.java)
 
         val instanceType = capabilityResourceSourceProperty.type
         val instanceName = capabilityResourceSourceProperty.instanceName
 
-
         var componentResourceAssignmentProcessor: ResourceAssignmentProcessor? = null
 
         when (instanceType) {
-            CAPABILITY_TYPE_KOTLIN_COMPONENT ->{
-                TODO("NO implementation")
+            CAPABILITY_TYPE_KOTLIN_COMPONENT -> {
+                componentResourceAssignmentProcessor = getKotlinResourceAssignmentProcessorInstance(instanceName,
+                        capabilityResourceSourceProperty.instanceDependencies)
             }
             CAPABILITY_TYPE_JAVA_COMPONENT -> {
                 // Initialize Capability Resource Assignment Processor
@@ -83,5 +87,37 @@ open class CapabilityResourceAssignmentProcessor : ResourceAssignmentProcessor()
     override fun recover(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
 
         TODO("To Implement")
+    }
+
+    private fun getKotlinResourceAssignmentProcessorInstance(scriptClassName: String,
+                                                             instanceNames: List<String>? = null): ResourceAssignmentProcessor {
+        var scriptPropertyInstances: MutableMap<String, Any>? = null
+
+        if (instanceNames != null && instanceNames.isNotEmpty()) {
+            scriptPropertyInstances = hashMapOf()
+            instanceNames.forEach {
+                scriptPropertyInstances[it] = applicationContext.getBean(it)
+                        ?: throw BluePrintProcessorException("couldn't get the dependency instance($it)")
+            }
+        }
+
+        return getKotlinResourceAssignmentProcessorInstance(scriptClassName, scriptPropertyInstances)
+
+    }
+
+    fun getKotlinResourceAssignmentProcessorInstance(scriptClassName: String,
+                                                     scriptPropertyInstances: MutableMap<String, Any>? = null):
+            ResourceAssignmentProcessor {
+
+        val resourceAssignmentProcessor = bluePrintScriptsService
+                .scriptInstance<ResourceAssignmentProcessor>(raRuntimeService.bluePrintContext(),
+                        scriptClassName, false)
+
+        // Add additional Instance
+        if (scriptPropertyInstances != null) {
+            resourceAssignmentProcessor.scriptPropertyInstances = scriptPropertyInstances
+        }
+
+        return resourceAssignmentProcessor
     }
 }

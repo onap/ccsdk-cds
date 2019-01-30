@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("unused")
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution
 
-open class ResourceSourceProperties {
-
-}
+open class ResourceSourceProperties
 
 open class InputResourceSource : ResourceSourceProperties() {
     lateinit var key: String
@@ -51,6 +50,7 @@ open class RestResourceSource : ResourceSourceProperties() {
 open class CapabilityResourceSource : ResourceSourceProperties() {
     lateinit var type: String
     lateinit var instanceName: String
+    var instanceDependencies: List<String>? = null
     lateinit var path: String
     lateinit var expressionType: String
     var inputKeyMapping: MutableMap<String, String>? = null

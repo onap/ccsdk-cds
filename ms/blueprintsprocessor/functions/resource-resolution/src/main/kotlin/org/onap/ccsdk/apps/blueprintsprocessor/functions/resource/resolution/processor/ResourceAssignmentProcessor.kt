@@ -31,6 +31,16 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
     lateinit var raRuntimeService: ResourceAssignmentRuntimeService
     lateinit var resourceDictionaries: Map<String, ResourceDefinition>
 
+    var scriptPropertyInstances: Map<String, Any> = hashMapOf()
+
+    /**
+     * This will be called from the scripts to serve instance from runtime to scripts.
+     */
+    open fun <T> scriptPropertyInstanceType(name: String): T {
+        return scriptPropertyInstances as? T
+                ?: throw BluePrintProcessorException("couldn't get script property instance ($name)")
+    }
+
     open fun resourceDefinition(name: String): ResourceDefinition {
         return resourceDictionaries[name]
                 ?: throw BluePrintProcessorException("couldn't get resource definition for ($name)")
