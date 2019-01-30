@@ -27,8 +27,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./blueprint.component.scss']
 })
 export class BlueprintComponent implements OnInit {
+  appName: String;
 
-  constructor() { }
+  constructor() {
+    this.appName="cba";
+   }
 
   ngOnInit() {
   }

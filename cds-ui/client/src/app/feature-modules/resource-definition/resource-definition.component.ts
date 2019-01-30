@@ -26,8 +26,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./resource-definition.component.scss']
 })
 export class ResourceDefinitionComponent implements OnInit {
+  appName: String;
 
-  constructor() { }
+  constructor() { 
+    this.appName="datadict";
+  }
 
   ngOnInit() {
   }
