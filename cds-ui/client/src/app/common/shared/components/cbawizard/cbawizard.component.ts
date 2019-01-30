@@ -30,34 +30,36 @@ import { GlobalContants } from '../../../constants/app-constants';
   styleUrls: ['./cbawizard.component.scss']
 })
 export class CBAWizardComponent implements OnInit {
-  @Input() stepsRequired: any[];
+  // @Input() stepsRequired: any[];
+  @Input() appName: any;
   @ViewChild('stepper') stepper: MatStepper;
   @Output() stepChanged = new EventEmitter();
   public stepDetails = GlobalContants.cbawizard.stepsRequired.steps;
   private routeLinks : any[];
   activeLinkIndex = -1;
-
-
+  stepsRequired: any;
+  steps: any[];
+  
   constructor(private router: Router) {
-    this.routeLinks = [
-      {
-          label: 'CBA Metadata',
-          link: '/blueprint/selectTemplate',
-          index: 0
-      }, {
-          label: 'Controller Blueprint Designer',
-          link: '/blueprint/modifyTemplate',
-          index: 1
-      }, {
-          label: 'Test',
-          link: '/blueprint/testTemplate',
-          index: 2
-      }, {
-          label: 'Deploy',
-          link: '/blueprint/deployTemplate',
-          index: 3
-      }
-  ];
+  //   this.routeLinks = [
+  //     {
+  //         label: 'CBA Metadata',
+  //         link: '/blueprint/selectTemplate',
+  //         index: 0
+  //     }, {
+  //         label: 'Controller Blueprint Designer',
+  //         link: '/blueprint/modifyTemplate',
+  //         index: 1
+  //     }, {
+  //         label: 'Test',
+  //         link: '/blueprint/testTemplate',
+  //         index: 2
+  //     }, {
+  //         label: 'Deploy',
+  //         link: '/blueprint/deployTemplate',
+  //         index: 3
+  //     }
+  // ];
 
   }
 
@@ -66,11 +68,21 @@ export class CBAWizardComponent implements OnInit {
   //     this.activeLinkIndex = this.routeLinks.indexOf(this.routeLinks.find(tab => tab.link === this.router.url));
   //     this.stepper.selectedIndex = this.activeLinkIndex; 
   // });
-   this.stepsRequired.forEach((step, index)=>{
-    if(step.link == this.router.url) {
-      this.stepper.selectedIndex = step.index
-    }
-   });
+  //  this.stepsRequired.forEach((step, index)=>{
+  //   if(step.link == this.router.url) {
+  //     this.stepper.selectedIndex = step.index
+  //   }
+  //  });
+   if (this.appName == "cba") {
+    this.stepsRequired = GlobalContants.cbawizard.stepsRequired.stepCount;
+    this.steps = GlobalContants.cbawizard.stepsRequired.steps;
+    // this.createComponent();
+  }
+  if (this.appName == "datadict") {
+    this.stepsRequired = GlobalContants.datadictionary.stepsRequired.stepCount;
+    this.steps = GlobalContants.datadictionary.stepsRequired.steps;
+    // this.createComponent();
+  }
   }
 
   changeRoute(event){

@@ -31,7 +31,7 @@ limitations under the License.
   </mat-card-content>
 </mat-card> -->
 
-<mat-card class="CBAform">
+<!-- <mat-card class="CBAform">
   <mat-card-content>
     <mat-horizontal-stepper [linear]=true #stepper (selectionChange)="changeRoute($event)">
       <a *ngFor="let routeLink of stepsRequired; let i = index;">
@@ -40,6 +40,23 @@ limitations under the License.
               </ng-template>
             </mat-step>
           </a>
+    </mat-horizontal-stepper>
+  </mat-card-content>
+</mat-card> -->
+
+<mat-card class="CBAform">
+  <!-- <label>{{appName}}</label> -->
+  <mat-card-content>
+    <mat-horizontal-stepper [linear]=true #stepper >
+      <!-- <mat-step style="display: none;" *ngFor="let routeLink of stepsRequired; let i = index;"> -->
+        <mat-step style="display: none;" *ngFor="let routeLink of steps">
+        <ng-template matStepLabel>{{routeLink.label}}</ng-template>
+        <!-- {{appToLoad.component}} -->
+        <template #steppercontainer> </template>
+      </mat-step>
+      <div style="position:relative">
+        <button mat-button matStepperNext style="color:white;background:gray; right: 20px; position: absolute;bottom:5px; ">Next</button>
+      </div>
     </mat-horizontal-stepper>
   </mat-card-content>
 </mat-card>
