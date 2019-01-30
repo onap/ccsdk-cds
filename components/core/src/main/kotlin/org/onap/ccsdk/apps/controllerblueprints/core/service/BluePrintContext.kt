@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("unused")
 
 package org.onap.ccsdk.apps.controllerblueprints.core.service
 
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
 import com.fasterxml.jackson.databind.JsonNode
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
@@ -54,6 +56,15 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
     private fun print(type: String? = "json", pretty: Boolean = false): String {
         return JacksonUtils.getJson(serviceTemplate, pretty)
     }
+
+    fun name(): String = metadata?.get(BluePrintConstants.METADATA_TEMPLATE_NAME)
+            ?: throw BluePrintException("could't get template name from meta data")
+
+    fun version(): String = metadata?.get(BluePrintConstants.METADATA_TEMPLATE_VERSION)
+            ?: throw BluePrintException("could't get template version from meta data")
+
+    fun author(): String = metadata?.get(BluePrintConstants.METADATA_TEMPLATE_AUTHOR)
+            ?: throw BluePrintException("could't get template author from meta data")
 
     // Workflow
     val workflows: MutableMap<String, Workflow>? = serviceTemplate.topologyTemplate?.workflows

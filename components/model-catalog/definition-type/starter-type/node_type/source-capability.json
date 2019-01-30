@@ -17,9 +17,17 @@
       ]
     },
     "instance-name": {
-      "description": "Capability component instance reference name.",
+      "description": "Capability component instance reference name for JAVA-COMPONENT, Script Class name for KOTLIN-COMPONENT.",
       "required": true,
       "type": "string"
+    },
+    "instance-dependencies": {
+      "required": false,
+      "description": "Instance dependency Names to Inject to Kotlin / Jython Script.",
+      "type": "list",
+      "entry_schema": {
+        "type": "string"
+      }
     },
     "input-key-mapping": {
       "description": "Context name to input parameters name mapping.",

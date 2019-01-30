@@ -102,6 +102,7 @@ object BluePrintConstants {
     const val MODEL_TYPE_NODES_COMPONENT_SCRIPT: String = "tosca.nodes.component.Script"
     const val MODEL_TYPE_NODES_COMPONENT_PYTHON: String = "tosca.nodes.component.Python"
     const val MODEL_TYPE_NODES_COMPONENT_JYTHON: String = "tosca.nodes.component.Jython"
+    const val MODEL_TYPE_NODES_COMPONENT_KOTLIN: String = "tosca.nodes.component.Kotlin"
     const val MODEL_TYPE_NODES_COMPONENT_JAVA_SCRIPT: String = "tosca.nodes.component.JavaScript"
 
     const val MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION = "tosca.artifacts.Implementation"
@@ -148,6 +149,7 @@ object BluePrintConstants {
     const val TOSCA_SCRIPTS_DIR: String = "Scripts"
     const val TOSCA_MAPPINGS_DIR: String = "Mappings"
     const val TOSCA_TEMPLATES_DIR: String = "Templates"
+    const val TOSCA_SCRIPTS_KOTLIN_DIR: String = "$TOSCA_SCRIPTS_DIR/kotlin"
 
     const val METADATA_USER_GROUPS = "user-groups"
     const val METADATA_TEMPLATE_NAME = "template_name"
