@@ -41,12 +41,14 @@ open class BlueprintScriptingHost(evaluator: ScriptEvaluator) : BasicScriptingHo
                 compiler(script, scriptCompilationConfiguration)
                         .onSuccess {
                             evaluator(it, configuration)
+                        }.onFailure { failedResult ->
+                            val messages = failedResult.reports?.joinToString("\n")
+                            throw BluePrintProcessorException(messages)
                         }
             }
 }
 
-
-open class BluePrintScriptEvaluator<T>(private val scriptClassName: String) : ScriptEvaluator {
+open class BluePrintScriptEvaluator(private val scriptClassName: String) : ScriptEvaluator {
 
     private val log = LoggerFactory.getLogger(BluePrintScriptEvaluator::class.java)!!
 
@@ -55,7 +57,7 @@ open class BluePrintScriptEvaluator<T>(private val scriptClassName: String) : Sc
             scriptEvaluationConfiguration: ScriptEvaluationConfiguration?
     ): ResultWithDiagnostics<EvaluationResult> =
             try {
-                log.info("Getting class name($scriptClassName) of type() from the compiled sources ")
+                log.debug("Getting script class name($scriptClassName) from the compiled sources ")
                 val bluePrintCompiledScript = compiledScript as BluePrintCompiledScript
                 bluePrintCompiledScript.scriptClassFQName = scriptClassName
 
@@ -76,10 +78,10 @@ open class BluePrintScriptEvaluator<T>(private val scriptClassName: String) : Sc
                             args.addAll(it)
                         }
 
-                        val instance = scriptClass.java.newInstance() as? T
+                        val instance = scriptClass.java.constructors.single().newInstance(*args.toArray())
                                 ?: throw BluePrintProcessorException("failed to create instance from the script")
 
-                        log.info("Created script instance successfully....")
+                        log.info("Created script instance of type ${instance.javaClass}")
 
                         ResultWithDiagnostics.Success(EvaluationResult(ResultValue.Value(scriptClass.qualifiedName!!,
                                 instance, "", instance),

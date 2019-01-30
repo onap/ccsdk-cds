@@ -18,11 +18,9 @@ package org.onap.ccsdk.apps.controllerblueprints.scripts
 
 import java.io.File
 import kotlin.script.experimental.annotations.KotlinScript
-import kotlin.script.experimental.api.ScriptCompilationConfiguration
-import kotlin.script.experimental.api.SourceCode
-import kotlin.script.experimental.api.defaultImports
+import kotlin.script.experimental.api.*
 import kotlin.script.experimental.jvm.jvm
-import kotlin.script.experimental.jvm.util.classpathFromClassloader
+import kotlin.script.experimental.jvm.util.classpathFromClasspathProperty
 
 @KotlinScript(
         fileExtension = "cba.kts",
@@ -33,15 +31,14 @@ abstract class BluePrintKotlinScript
 
 object BluePrintScripCompilationConfiguration : ScriptCompilationConfiguration(
         {
-            defaultImports(
-                    "org.onap.ccsdk.apps.controllerblueprints.core.*",
-                    "org.onap.ccsdk.apps.controllerblueprints.core.data.*",
-                    "org.onap.ccsdk.apps.controllerblueprints.core.interfaces.*",
-                    "org.onap.ccsdk.apps.controllerblueprints.core.services.*",
-                    "org.onap.ccsdk.apps.controllerblueprints.core.utils.*")
             jvm {
-                classpathFromClassloader(BluePrintScripCompilationConfiguration::class.java.classLoader)
+                //classpathFromClassloader(BluePrintScripCompilationConfiguration::class.java.classLoader)
+                classpathFromClasspathProperty()
             }
+            ide{
+                acceptedLocations(ScriptAcceptedLocation.Everywhere)
+            }
+
         }
 )
 

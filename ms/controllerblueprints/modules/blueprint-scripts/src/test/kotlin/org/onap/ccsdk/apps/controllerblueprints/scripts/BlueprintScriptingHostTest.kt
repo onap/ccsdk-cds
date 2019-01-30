@@ -18,9 +18,7 @@ package org.onap.ccsdk.apps.controllerblueprints.scripts
 
 
 import org.apache.commons.io.FileUtils
-import org.junit.Ignore
 import org.junit.Test
-import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BlueprintFunctionNode
 import java.io.File
 import kotlin.script.experimental.jvm.util.classpathFromClass
 import kotlin.script.experimental.jvm.util.classpathFromClassloader
@@ -29,9 +27,7 @@ import kotlin.script.experimental.jvmhost.createJvmCompilationConfigurationFromT
 
 class BlueprintScriptingHostTest {
 
-    @Test
-    @Ignore
-    fun `test classpaths`() {
+    private fun viewClassPathInfo() {
 
         println(" *********** classpathFromClass  *********** ")
         classpathFromClass(BlueprintScriptingHostTest::class.java.classLoader,
@@ -65,7 +61,7 @@ class BlueprintScriptingHostTest {
 
         val compilationConfiguration = createJvmCompilationConfigurationFromTemplate<BluePrintKotlinScript>()
 
-        val scriptEvaluator = BluePrintScriptEvaluator<BlueprintFunctionNode<String, String>>(scriptClassName)
+        val scriptEvaluator = BluePrintScriptEvaluator(scriptClassName)
 
         val scriptSource2 = BluePrintSourceCode()
         scriptSource2.moduleName = "blueprint-test-script"

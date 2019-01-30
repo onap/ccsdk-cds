@@ -16,7 +16,6 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.scripts
 
-import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.config.addKotlinSourceRoots
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
@@ -28,6 +27,7 @@ import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinToJVMBytecodeCompiler
 import org.jetbrains.kotlin.cli.jvm.config.JvmClasspathRoot
+import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.config.*
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -94,13 +94,11 @@ open class BluePrintsCompilerProxy(private val hostConfiguration: ScriptingHostC
                 // Compile Kotlin Sources
                 val compiled = KotlinToJVMBytecodeCompiler.compileBunchOfSources(environment)
 
-                log.info("Generated jar(${compiledJarFile.absolutePath}) status : $compiled}")
-
                 val analyzerWithCompilerReport = AnalyzerWithCompilerReport(messageCollector,
                         environment.configuration.languageVersionSettings)
 
                 if (analyzerWithCompilerReport.hasErrors()) {
-                    return failure()
+                    return ResultWithDiagnostics.Failure(messageCollector.diagnostics)
                 }
             }
 
