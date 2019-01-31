@@ -19,12 +19,13 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.onap.ccsdk.apps.components</groupId>
-        <artifactId>parent</artifactId>
+        <groupId>org.onap.ccsdk.apps</groupId>
+        <artifactId>ccsdk-apps</artifactId>
         <version>0.4.1-SNAPSHOT</version>
-        <relativePath>../../parent</relativePath>
+        <relativePath>../../../</relativePath>
     </parent>
 
+    <groupId>org.onap.ccsdk.apps.components</groupId>
     <artifactId>proto-definition</artifactId>
     <packaging>jar</packaging>
 
@@ -35,14 +36,17 @@
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-protobuf</artifactId>
+            <version>1.17.1</version>
         </dependency>
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-stub</artifactId>
+            <version>1.17.1</version>
         </dependency>
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java-util</artifactId>
+            <version>3.6.1</version>
         </dependency>
     </dependencies>
 
