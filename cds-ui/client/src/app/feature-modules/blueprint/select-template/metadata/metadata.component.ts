@@ -19,7 +19,8 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-metadata',
@@ -27,10 +28,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./metadata.component.scss']
 })
 export class MetadataComponent implements OnInit {
+  CBAMetadata: FormGroup;
 
-  constructor() { }
+  constructor(private _formBuilder: FormBuilder) { }
 
   ngOnInit() {
+    this.CBAMetadata = this._formBuilder.group({
+      CBA_File_Name: ['', Validators.required],
+      CBA_Version: ['', Validators.required],
+      CSAR_Version: ['', Validators.required],
+      entry_Definition: ['', Validators.required],
+      author: ['', Validators.required]
+    });
   }
 
 }
