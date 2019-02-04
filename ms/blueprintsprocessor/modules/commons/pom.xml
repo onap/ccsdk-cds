@@ -33,6 +33,7 @@
         <module>db-lib</module>
         <module>rest-lib</module>
         <module>core</module>
+        <module>dmaap-lib</module>
     </modules>
     <dependencies>
         <dependency>
