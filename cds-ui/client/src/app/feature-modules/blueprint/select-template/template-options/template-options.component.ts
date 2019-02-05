@@ -19,7 +19,7 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-template-options',
@@ -27,13 +27,19 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./template-options.component.scss']
 })
 export class TemplateOptionsComponent implements OnInit {
+  selectedOption: string;
+  @Output() option = new EventEmitter();
 
   constructor() { }
 
   ngOnInit() {
   }
 
-  loadTemplateData() {
-   // to do
+  selected(value){
+    console.log(value);
+    this.option.emit(value);
   }
+  // loadTemplateData() {
+  //  // to do
+  // }
 }

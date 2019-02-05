@@ -18,7 +18,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
 -->
-<p>
-  template-options works!
-</p>
-<button (click)="loadTemplateData()">Load Template Data</button>
+<mat-radio-group>
+  <mat-radio-button value="1" (click)="selected(1)">Upload Template file</mat-radio-button><br><br>
+  <mat-radio-button value="2" (click)="selected(2)">Starter Template</mat-radio-button><br><br>
+  <mat-radio-button value="3" (click)="selected(3)">Existing Model File</mat-radio-button>
+</mat-radio-group>
