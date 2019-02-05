@@ -33,6 +33,9 @@ import { AppComponent } from './app.component';
 import { SharedModule } from './common/shared/shared.module';
 import { CoreModule } from './common/core/core.module';
 
+import { BlueprintModule } from './feature-modules/blueprint/blueprint.module';
+import { ResourceDefinitionModule } from './feature-modules/resource-definition/resource-definition.module';
+
 @NgModule({ 
   declarations: [
     AppComponent
@@ -61,7 +64,9 @@ import { CoreModule } from './common/core/core.module';
     MatStepperModule,
     HttpClientModule,
     SharedModule,
-    CoreModule
+    CoreModule,
+    BlueprintModule,
+    ResourceDefinitionModule
   ],
   providers: [],
   bootstrap: [AppComponent]
