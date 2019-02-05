@@ -18,8 +18,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
 -->
-<p>
-  select-template works!
-</p>
+<mat-vertical-stepper linear>
+  <mat-step [stepControl]="step1FormGroup">
+    <ng-template matStepLabel>Choose CBA Template file</ng-template>
+    <app-template-options></app-template-options>
+    <br>
+    <div>
+      <button mat-button matStepperNext class="matStepNextBtn">Proceed</button>
+    </div>
+  </mat-step>
 
+  <mat-step [stepControl]="step2FormGroup">
+    <ng-template matStepLabel>Browse CBA Template file</ng-template>
+    <app-search-template (change)="fileChange(fileupload.files)"></app-search-template>
+    <br>
+    <div>
+      <button mat-button matStepperNext class="matStepNextBtn">Upload</button>
+    </div>
+  </mat-step>
+  <mat-step [stepControl]="step3FormGroup">
+    <ng-template matStepLabel>Enter Metadata details</ng-template>
+    <app-metadata></app-metadata>
+    <br>
+  </mat-step>
+</mat-vertical-stepper>
+<button mat-button matStepperNext class="matStepNextBtn">Next</button>
 <!-- <router-outlet></router-outlet> -->
+
+<!-- </form> -->

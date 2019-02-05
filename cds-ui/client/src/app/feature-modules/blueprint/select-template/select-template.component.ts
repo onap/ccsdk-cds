@@ -19,7 +19,7 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 import { Component, OnInit } from '@angular/core';
-import { Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 @Component({
@@ -29,10 +29,18 @@ import { Store } from '@ngrx/store';
 })
 export class SelectTemplateComponent implements OnInit {
   blueprint: any
-  constructor() {
-   }
+  myFile: File; /* property of File type */
 
-  ngOnInit() {
+  constructor() {
   }
 
+  ngOnInit() {  
+  }
+  fileChange(files: any) {
+    console.log(files);
+    this.myFile = files[0].nativeElement;
+  }
+  upload(){
+    
+  }
 }
