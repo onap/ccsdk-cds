@@ -175,7 +175,7 @@
         "artifacts": {
           "component-script": {
             "type": "artifact-script-jython",
-            "file": "Scripts/SamplePythonComponentNode.py"
+            "file": "Scripts/python/SamplePythonComponentNode.py"
           }
         }
       },
@@ -205,7 +205,7 @@
         "artifacts": {
           "component-script": {
             "type": "artifact-script-jython",
-            "file": "Scripts/SamplePythonComponentNode.py"
+            "file": "Scripts/python/SamplePythonComponentNode.py"
           }
         }
       },
@@ -242,7 +242,7 @@
         "artifacts": {
           "component-script": {
             "type": "artifact-script-jython",
-            "file": "Scripts/SamplePythonComponentNode.py"
+            "file": "Scripts/python/DefaultGetNetConfig.py"
           }
         }
       },
