@@ -6,3 +6,24 @@ CONTROLLER DESIGN STUDIO DOCUMENTATION REPOSITORY
 -------------------------------------------------
 .. toctree::
    :maxdepth: 1
+   
+Introduction:
+-------------
+The system is designed to be self service, which means that users, not just programmers, can reconfigure the software system as needed to meet customer requirements. To accomplish this goal, the system is built around models that provide for real-time changes in how the system operates.  Users merely need to change a model to change how a service operates.
+
+Self service is a completely new way of delivering services.  It removes the dependence on code releases and the delays they cause and puts the control of services into the hands of the service providers.  They can change a model and its parameters and create a new service without writing a single line of code.  
+This makes SERVICE PROVIDER(S) more responsive to its customers and able to deliver products that more closely match the needs of its customers.
+
+Sections
+++++++++
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+   
+   sections/architecture/index
+   sections/installation/index
+   sections/configuration/index
+   sections/development/index
+   sections/logging
+   sections/release-notes
