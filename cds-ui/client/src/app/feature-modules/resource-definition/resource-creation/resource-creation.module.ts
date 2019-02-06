@@ -23,12 +23,32 @@ import { CommonModule } from '@angular/common';
 
 import { ResourceCreationRoutingModule } from './resource-creation-routing.module';
 import { ResourceCreationComponent } from './resource-creation.component';
+import { ResourceTemplateOptionsComponent } from './resource-template-options/resource-template-options.component';
+import { MatToolbarModule,MatIconModule, MatButtonModule, MatSidenavModule,  MatCheckboxModule, MatListModule, MatGridListModule, MatCardModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatFormFieldModule, MatStepperModule} from '@angular/material';
+import { UploadResourceComponent } from './upload-resource/upload-resource.component';
 
 @NgModule({
   declarations: [ResourceCreationComponent],
   imports: [
     CommonModule,
-    ResourceCreationRoutingModule
+    ResourceCreationRoutingModule,
+    MatToolbarModule,
+    MatIconModule, 
+    MatButtonModule, 
+    MatSidenavModule,  
+    MatCheckboxModule, 
+    MatListModule, 
+    MatGridListModule, 
+    MatCardModule, 
+    MatMenuModule, 
+    MatTableModule, 
+    MatPaginatorModule, 
+    MatSortModule, 
+    MatInputModule, 
+    MatSelectModule, 
+    MatRadioModule, 
+    MatFormFieldModule, 
+    MatStepperModule
   ]
 })
 export class ResourceCreationModule { }

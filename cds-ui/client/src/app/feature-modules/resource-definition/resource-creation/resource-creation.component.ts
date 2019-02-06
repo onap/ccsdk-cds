@@ -19,6 +19,8 @@
 */
 
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-resource-creation',
@@ -27,9 +29,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ResourceCreationComponent implements OnInit {
 
-  constructor() { }
+  myFile: File; /* property of File type */
 
-  ngOnInit() {
+  constructor() {
   }
-
+    
+  ngOnInit() {  
+  }
+    
+  fileChange(files: any) {
+    console.log(files);
+    this.myFile = files[0].nativeElement;
+  }
+    
+  upload(){
+    
+  }
 }

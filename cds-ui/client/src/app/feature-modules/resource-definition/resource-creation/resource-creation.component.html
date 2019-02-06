@@ -18,7 +18,23 @@
 * ============LICENSE_END=========================================================
 */-->
 
-<p>
-  resource-creation works!
-</p>
-<router-outlet></router-outlet>
+<mat-vertical-stepper linear>
+  <mat-step >
+    <ng-template matStepLabel>Choose Resource file</ng-template>
+    <br>
+    <app-resource-template-options></app-resource-template-options>
+    <br>
+    <div>
+      <button mat-button matStepperNext class="matStepNextBtn">Proceed</button>
+    </div>
+  </mat-step>
+  <mat-step >
+    <ng-template matStepLabel>Browse Template file</ng-template>
+  <app-upload-resource (change)="fileChange(fileupload.files)"></app-upload-resource>
+    <div>
+      <button mat-button matStepperNext class="matStepNextBtn">Upload</button>
+    </div>
+  </mat-step>
+</mat-vertical-stepper>
+
+<!-- <router-outlet></router-outlet> -->
