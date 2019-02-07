@@ -1,6 +1,5 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
- * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.apps.controllerblueprints.core.validation
+package org.onap.ccsdk.apps.controllerblueprints.validation
 
 import io.mockk.every
 import io.mockk.mockk
@@ -25,7 +24,6 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeType
 import org.onap.ccsdk.apps.controllerblueprints.core.data.Step
 import org.onap.ccsdk.apps.controllerblueprints.core.data.Workflow
-import org.onap.ccsdk.apps.controllerblueprints.core.mock.MockBluePrintTypeValidatorService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.apps.controllerblueprints.core.service.DefaultBluePrintRuntimeService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils

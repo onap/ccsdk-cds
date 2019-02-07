@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.apps.controllerblueprints.core.mock
+package org.onap.ccsdk.apps.controllerblueprints.validation
 
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.*
-import org.onap.ccsdk.apps.controllerblueprints.core.validation.*
 
 class MockBluePrintTypeValidatorService : BluePrintTypeValidatorService {
 

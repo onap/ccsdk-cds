@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +15,8 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.apps.controllerblueprints.blueprint.validation
+@file:Suppress("unused")
+package org.onap.ccsdk.apps.controllerblueprints.validation
 
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
@@ -23,16 +25,6 @@ import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeVal
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintValidatorService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
-import org.onap.ccsdk.apps.controllerblueprints.core.validation.BluePrintArtifactTypeValidatorImpl
-import org.onap.ccsdk.apps.controllerblueprints.core.validation.BluePrintAttributeDefinitionValidatorImpl
-import org.onap.ccsdk.apps.controllerblueprints.core.validation.BluePrintDataTypeValidatorImpl
-import org.onap.ccsdk.apps.controllerblueprints.core.validation.BluePrintNodeTemplateValidatorImpl
-import org.onap.ccsdk.apps.controllerblueprints.core.validation.BluePrintNodeTypeValidatorImpl
-import org.onap.ccsdk.apps.controllerblueprints.core.validation.BluePrintPropertyDefinitionValidatorImpl
-import org.onap.ccsdk.apps.controllerblueprints.core.validation.BluePrintServiceTemplateValidatorImpl
-import org.onap.ccsdk.apps.controllerblueprints.core.validation.BluePrintTopologyTemplateValidatorImpl
-import org.onap.ccsdk.apps.controllerblueprints.core.validation.BluePrintValidatorServiceImpl
-import org.onap.ccsdk.apps.controllerblueprints.core.validation.BluePrintWorkflowValidatorImpl
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -92,7 +84,7 @@ class DefaultBluePrintWorkflowValidator(bluePrintTypeValidatorService: BluePrint
     : BluePrintWorkflowValidatorImpl(bluePrintTypeValidatorService)
 
 @Service
-class DefaulBluePrintPropertyDefinitionValidator(bluePrintTypeValidatorService: BluePrintTypeValidatorService)
+class DefaultBluePrintPropertyDefinitionValidator(bluePrintTypeValidatorService: BluePrintTypeValidatorService)
     : BluePrintPropertyDefinitionValidatorImpl(bluePrintTypeValidatorService)
 
 @Service

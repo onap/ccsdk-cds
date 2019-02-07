@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.apps.controllerblueprints.blueprint.validation
+package org.onap.ccsdk.apps.controllerblueprints.validation
 
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.*
 import org.springframework.beans.factory.annotation.Autowired

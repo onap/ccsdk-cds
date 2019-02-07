@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.apps.controllerblueprints.core.validation
+package org.onap.ccsdk.apps.controllerblueprints.validation
 
 import org.onap.ccsdk.apps.controllerblueprints.core.data.AttributeDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintAttributeDefinitionValidator
