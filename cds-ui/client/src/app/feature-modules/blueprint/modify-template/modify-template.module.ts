@@ -27,6 +27,9 @@ import { ModifyTemplateRoutingModule } from './modify-template-routing.module';
   declarations: [
       ModifyTemplateComponent
   ],
+  exports:[
+    ModifyTemplateComponent
+  ],
   imports: [
     CommonModule,
     ModifyTemplateRoutingModule

@@ -28,6 +28,9 @@ import { TestTemplateRoutingModule } from './test-template-routing.module';
   declarations: [
     TestTemplateComponent
   ],
+  exports: [
+    TestTemplateComponent
+  ],
   imports: [
     CommonModule,
     TestTemplateRoutingModule

@@ -29,17 +29,14 @@ import { Store } from '@ngrx/store';
 })
 export class SelectTemplateComponent implements OnInit {
   blueprint: any
-  myFile: File; /* property of File type */
+   /* property of File type */
 
   constructor() {
   }
 
   ngOnInit() {  
   }
-  fileChange(files: any) {
-    console.log(files);
-    this.myFile = files[0].nativeElement;
-  }
+  
   upload(){
     
   }

@@ -19,8 +19,8 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-metadata',

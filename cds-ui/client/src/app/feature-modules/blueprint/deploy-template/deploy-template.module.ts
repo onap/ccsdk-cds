@@ -27,6 +27,9 @@ import { DeployTemplateRoutingModule } from './deploy-template-routing.module';
   declarations: [
     DeployTemplateComponent
   ],
+  exports: [
+    DeployTemplateComponent
+  ],
   imports: [
     CommonModule,
     DeployTemplateRoutingModule

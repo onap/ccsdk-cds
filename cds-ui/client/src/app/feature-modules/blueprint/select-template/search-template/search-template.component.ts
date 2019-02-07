@@ -19,7 +19,7 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-search-template',
@@ -27,10 +27,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./search-template.component.scss']
 })
 export class SearchTemplateComponent implements OnInit {
+  myFile: JSON;
+  @Output() fileObj = new EventEmitter<JSON>();
 
   constructor() { }
 
   ngOnInit() {
   }
-
+  fileChange(files: any) {
+    console.log(files);
+    this.myFile = <JSON>files[0].nativeElement;
+    this.fileObj.emit(this.myFile);
+  }
 }

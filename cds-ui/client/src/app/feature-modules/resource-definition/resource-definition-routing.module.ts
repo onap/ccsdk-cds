@@ -22,7 +22,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ResourceDefinitionComponent } from './resource-definition.component';
 
-
 const routes: Routes = [
     {
         path: '',
