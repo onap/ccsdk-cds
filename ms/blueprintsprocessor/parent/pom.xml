@@ -324,7 +324,7 @@
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
-                <artifactId>core</artifactId>
+                <artifactId>blueprint-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
