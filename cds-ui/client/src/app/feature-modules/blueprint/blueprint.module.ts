@@ -26,6 +26,8 @@ import { BlueprintComponent } from './blueprint.component';
 import { BlueprintRoutingModule } from './blueprint-routing.module';
 
 import { SharedModule } from '../../../app/common/shared/shared.module';
+import { MatToolbarModule, MatButtonModule, MatSidenavModule,  MatListModule, MatGridListModule, MatCardModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatFormFieldModule, MatStepperModule} from '@angular/material';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,24 @@ import { SharedModule } from '../../../app/common/shared/shared.module';
   imports: [
     CommonModule,
     BlueprintRoutingModule,
-    SharedModule
+    SharedModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatListModule,
+    MatGridListModule,
+    MatCardModule,
+    MatMenuModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatInputModule,
+    MatSelectModule, 
+    MatRadioModule, 
+    MatFormFieldModule, 
+    MatStepperModule,
+    
   ]
 })
 export class BlueprintModule { }
