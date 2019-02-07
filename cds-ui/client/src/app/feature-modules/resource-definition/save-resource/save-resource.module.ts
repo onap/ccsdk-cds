@@ -26,6 +26,7 @@ import { SaveResourceRoutingModule } from './save-resource-routing.module';
 
 @NgModule({
   declarations: [SaveResourceComponent],
+  exports: [ SaveResourceComponent ],
   imports: [
     CommonModule,
     SaveResourceRoutingModule

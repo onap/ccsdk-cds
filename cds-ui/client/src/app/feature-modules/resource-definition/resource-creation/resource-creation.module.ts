@@ -28,7 +28,16 @@ import { MatToolbarModule,MatIconModule, MatButtonModule, MatSidenavModule,  Mat
 import { UploadResourceComponent } from './upload-resource/upload-resource.component';
 
 @NgModule({
-  declarations: [ResourceCreationComponent],
+  declarations: [
+    ResourceCreationComponent,
+    ResourceTemplateOptionsComponent,
+    UploadResourceComponent
+  ],
+  exports: [
+    ResourceCreationComponent,
+    ResourceTemplateOptionsComponent,
+    UploadResourceComponent
+  ],
   imports: [
     CommonModule,
     ResourceCreationRoutingModule,

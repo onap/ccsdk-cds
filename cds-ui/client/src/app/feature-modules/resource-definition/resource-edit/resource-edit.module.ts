@@ -25,7 +25,8 @@ import { ResourceEditComponent } from './resource-edit.component';
 import { ResourceEditRoutingModule } from './resource-edit-routing.module';
 
 @NgModule({
-  declarations: [ResourceEditComponent],
+  declarations: [ ResourceEditComponent ],
+  exports: [ ResourceEditComponent ],
   imports: [
     CommonModule,
     ResourceEditRoutingModule
