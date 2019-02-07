@@ -202,18 +202,6 @@
             </dependency>
 
 
-            <!-- Application Components -->
-            <dependency>
-                <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
-                <artifactId>core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
-                <artifactId>resource-dict</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
             <!-- Testing Dependencies -->
             <dependency>
                 <groupId>io.mockk</groupId>
