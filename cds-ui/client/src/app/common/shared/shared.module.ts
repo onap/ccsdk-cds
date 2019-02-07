@@ -35,7 +35,8 @@ import { FileuploadComponent } from './fileupload/fileupload.component';
   ],
   exports: [
     HomeComponent,
-    CBAWizardComponent
+    CBAWizardComponent,
+    FileuploadComponent
   ],
   imports: [
     CommonModule,

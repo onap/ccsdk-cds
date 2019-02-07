@@ -26,7 +26,13 @@ import { BlueprintComponent } from './blueprint.component';
 import { BlueprintRoutingModule } from './blueprint-routing.module';
 
 import { SharedModule } from '../../../app/common/shared/shared.module';
+import { MatToolbarModule, MatButtonModule, MatSidenavModule,  MatListModule, MatGridListModule, MatCardModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatFormFieldModule, MatStepperModule} from '@angular/material';
+import { MatIconModule } from '@angular/material/icon';
 
+import { SelectTemplateModule } from './select-template/select-template.module';
+import { ModifyTemplateModule } from './modify-template/modify-template.module';
+import { DeployTemplateModule } from './deploy-template/deploy-template.module';
+import { TestTemplateModule } from './test-template/test-template.module';
 @NgModule({
   declarations: [
     BlueprintComponent 
@@ -34,7 +40,27 @@ import { SharedModule } from '../../../app/common/shared/shared.module';
   imports: [
     CommonModule,
     BlueprintRoutingModule,
-    SharedModule
+    SharedModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatListModule,
+    MatGridListModule,
+    MatCardModule,
+    MatMenuModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatInputModule,
+    MatSelectModule, 
+    MatRadioModule, 
+    MatFormFieldModule, 
+    MatStepperModule,
+    SelectTemplateModule,
+    ModifyTemplateModule,
+    DeployTemplateModule,
+    TestTemplateModule
   ]
 })
 export class BlueprintModule { }

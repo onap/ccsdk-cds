@@ -25,7 +25,10 @@ import { ModifyTemplateRoutingModule } from './modify-template-routing.module';
 
 @NgModule({
   declarations: [
-      ModifyTemplateComponent
+    ModifyTemplateComponent
+  ],
+  exports: [
+    ModifyTemplateComponent
   ],
   imports: [
     CommonModule,

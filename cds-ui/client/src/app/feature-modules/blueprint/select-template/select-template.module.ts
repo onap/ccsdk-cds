@@ -26,6 +26,10 @@ import { MetadataComponent } from './metadata/metadata.component';
 import { SelectTemplateComponent } from './select-template.component';
 import { SelectTemplateRoutingModule } from './select-template-routing.module';
 
+import { MatToolbarModule, MatButtonModule, MatSidenavModule,  MatListModule, MatGridListModule, MatCardModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatFormFieldModule, MatStepperModule} from '@angular/material';
+import { MatIconModule } from '@angular/material/icon';
+import { SharedModule } from '../../../common/shared/shared.module';
+
 @NgModule({
   declarations: [
     TemplateOptionsComponent,
@@ -33,9 +37,32 @@ import { SelectTemplateRoutingModule } from './select-template-routing.module';
     MetadataComponent,
     SelectTemplateComponent
   ],
+  exports: [
+    TemplateOptionsComponent,
+    SearchTemplateComponent,
+    MetadataComponent,
+    SelectTemplateComponent
+  ],
   imports: [
     CommonModule,
-    SelectTemplateRoutingModule
+    SelectTemplateRoutingModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatListModule,
+    MatGridListModule,
+    MatCardModule,
+    MatMenuModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatInputModule,
+    MatSelectModule, 
+    MatRadioModule, 
+    MatFormFieldModule, 
+    MatStepperModule,
+    SharedModule
   ]
 })
 export class SelectTemplateModule { }
