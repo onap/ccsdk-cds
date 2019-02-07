@@ -1,0 +1,31 @@
+{
+  "description": "This is Custom Java Component Resource Source Node Type",
+  "version": "1.0.0",
+  "properties": {
+    "type": {
+      "required": false,
+      "type": "string",
+      "default" : "DYNAMIC",
+      "constraints": [
+        {
+          "validValues": [
+            "DYNAMIC"
+          ]
+        }
+      ]
+    },
+    "class-name": {
+      "required": true,
+      "type": "string",
+      "description" : "Fully Qualified Class Name ( <Package Name> + . + <Class Name> )"
+    },
+    "key-dependencies": {
+      "required": false,
+      "type": "list",
+      "entry_schema": {
+        "type": "string"
+      }
+    }
+  },
+  "derived_from": "tosca.nodes.ResourceSource"
+}

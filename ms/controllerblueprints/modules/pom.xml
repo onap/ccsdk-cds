@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright © 2017-2018 AT&T Intellectual Property.
+  ~  Modifications Copyright © 2018 IBM.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -27,10 +28,12 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>service</module>
-        <module>blueprint-validation</module>
+        <module>blueprint-core</module>
+        <module>resource-dict</module>
         <module>db-resources</module>
         <module>blueprint-scripts</module>
+        <module>blueprint-validation</module>
+        <module>service</module>
     </modules>
 
     <build>

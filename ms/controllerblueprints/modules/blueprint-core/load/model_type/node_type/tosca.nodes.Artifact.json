@@ -1,0 +1,5 @@
+{
+  "description": "This is Deprecated Artifact Node Type.",
+  "version": "1.0.0",
+  "derived_from": "tosca.nodes.Root"
+}
