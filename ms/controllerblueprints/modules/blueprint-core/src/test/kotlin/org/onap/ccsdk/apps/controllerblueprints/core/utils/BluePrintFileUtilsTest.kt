@@ -35,7 +35,7 @@ class BluePrintFileUtilsTest {
 
     @Test
     fun testBlueprintCopy() = runBlocking {
-        val sourcePath: String = "./../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration"
+        val sourcePath: String = "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
 
         val targetPath: String = Paths.get("target").toUri().toURL().path.plus("/bp-copy-test")
 

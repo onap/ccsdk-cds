@@ -39,7 +39,7 @@ class BluePrintValidatorDefaultServiceTest {
     @Test
     fun testValidateBluePrint() {
 
-        val blueprintBasePath: String = ("./../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration")
+        val blueprintBasePath: String = ("./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
         val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(blueprintBasePath)
         val properties: MutableMap<String, Any> = hashMapOf()
 

@@ -32,7 +32,7 @@ import kotlin.test.assertTrue
 
 class BluePrintValidatorServiceImplTest {
 
-    private val blueprintBasePath: String = ("./../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration")
+    private val blueprintBasePath: String = ("./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
     private val bluePrintRuntime = BluePrintMetadataUtils.getBluePrintRuntime("1234", blueprintBasePath)
     private val mockBluePrintTypeValidatorService = MockBluePrintTypeValidatorService()
     private val defaultBluePrintValidatorService = BluePrintValidatorServiceImpl(mockBluePrintTypeValidatorService)

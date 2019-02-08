@@ -34,7 +34,7 @@ class BluePrintContextTest {
 
     private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
 
-    val blueprintBasePath: String = ("./../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration")
+    val blueprintBasePath: String = ("./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
     @Test
     fun testBluePrintContextCreation() {

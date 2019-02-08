@@ -132,7 +132,7 @@ class BluePrintRuntimeServiceTest {
     }
 
     private fun getBluePrintRuntimeService(): BluePrintRuntimeService<MutableMap<String, JsonNode>> {
-        val blueprintBasePath: String = ("./../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration")
+        val blueprintBasePath: String = ("./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
         val blueprintRuntime = BluePrintMetadataUtils.getBluePrintRuntime("1234", blueprintBasePath)
         val checkBasePath = blueprintRuntime.get(BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH)
 

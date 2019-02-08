@@ -27,7 +27,7 @@ class BluePrintMetadataUtilsTest {
     @Test
     fun testToscaMetaData(){
 
-        val basePath : String = "./../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration"
+        val basePath : String = "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
 
         val toscaMetaData : ToscaMetaData =  BluePrintMetadataUtils.toscaMetaData(basePath)
         assertNotNull(toscaMetaData, "Missing Tosca Definition Object")

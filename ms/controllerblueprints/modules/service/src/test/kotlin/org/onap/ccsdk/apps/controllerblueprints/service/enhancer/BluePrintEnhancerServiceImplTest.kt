@@ -61,7 +61,7 @@ class BluePrintEnhancerServiceImplTest {
     @Throws(Exception::class)
     fun testEnhancementAndValidation() {
 
-        val basePath = "./../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration"
+        val basePath = "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
 
         val targetPath = Paths.get("target", "bp-enhance").toUri().path
 
