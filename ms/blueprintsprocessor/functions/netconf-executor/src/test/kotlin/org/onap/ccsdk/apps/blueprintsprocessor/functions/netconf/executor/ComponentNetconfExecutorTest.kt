@@ -61,7 +61,7 @@ class ComponentNetconfExecutorTest {
 
 
         val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(commonHeader.requestId,
-                "./../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration")
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
         componentNetconfExecutor.bluePrintRuntimeService = bluePrintRuntimeService
 

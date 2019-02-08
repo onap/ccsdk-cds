@@ -47,7 +47,7 @@ class BlueprintServiceLogicTest {
     fun testExecuteGraphWithSingleComponent() {
 
         val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                "./../../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration")
+                "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
         val executionServiceInput = JacksonUtils.readValueFromClassPathFile("execution-input/resource-assignment-input.json", ExecutionServiceInput::class.java)!!
 
@@ -60,7 +60,7 @@ class BlueprintServiceLogicTest {
     fun testExecuteGraphWithMultipleComponents() {
 
         val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                "./../../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration")
+                "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
         val executionServiceInput = JacksonUtils.readValueFromClassPathFile("execution-input/assign-activate-input.json", ExecutionServiceInput::class.java)!!
 

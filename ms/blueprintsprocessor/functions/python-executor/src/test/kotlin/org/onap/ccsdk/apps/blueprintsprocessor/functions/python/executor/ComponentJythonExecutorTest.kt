@@ -62,7 +62,7 @@ class ComponentJythonExecutorTest {
                 ExecutionServiceInput::class.java)!!
 
         val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                "./../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration")
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
         val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
         stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "activate-jython")

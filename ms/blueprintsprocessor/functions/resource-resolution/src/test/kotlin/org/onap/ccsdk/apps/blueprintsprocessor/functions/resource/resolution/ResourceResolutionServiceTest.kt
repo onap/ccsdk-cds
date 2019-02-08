@@ -75,7 +75,7 @@ class ResourceResolutionServiceTest {
         Assert.assertNotNull("failed to create ResourceResolutionService", resourceResolutionService)
 
         val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                "./../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration")
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
         val executionServiceInput = JacksonUtils.readValueFromClassPathFile("payload/requests/sample-resourceresolution-request.json",
                 ExecutionServiceInput::class.java)!!

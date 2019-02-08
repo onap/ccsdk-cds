@@ -40,7 +40,7 @@ class CapabilityResourceAssignmentProcessorTest {
     fun `test kotlin capability`() {
 
         val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
-                "./../../../../components/model-catalog/blueprint-model/starter-blueprint/baseconfiguration")
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
         val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)
 
