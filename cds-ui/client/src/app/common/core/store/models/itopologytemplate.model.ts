@@ -19,12 +19,8 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { IMetaData } from './metadata.model';
-import { IImportModel } from './imports.model';
-import { ITopologyTemplate } from './itopologytemplate.model';
-
-export interface IBlueprint {
-        metadata: IMetaData;
-        fileImports: Array<IImportModel>
-        toplogyTemplates: ITopologyTemplate;
+export interface ITopologyTemplate {
+    inputs: object;
+	node_template: object;
+	workflow: object;
 }
