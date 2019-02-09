@@ -5,5 +5,4 @@ nodeName=ControllerBlueprints_1.0.0_$(cat /proc/self/cgroup | grep docker | sed 
 echo "APP Config HOME : ${APP_CONFIG_HOME}"
 export APP_HOME=/opt/app/onap
 
-cp -rf /config /opt/app/onap/
 source /etc/run.source

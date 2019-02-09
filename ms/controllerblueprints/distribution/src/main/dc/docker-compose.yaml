@@ -22,9 +22,6 @@ services:
     ports:
     - "8080:8080"
     restart: always
-    volumes:
-    - ~/share/vm_ms/controllerblueprints/config:/opt/app/onap/config
-    - ~/share/vm_ms/controllerblueprints/logs:/logs
     environment:
       APPLICATIONNAME: ControllerBluePrints
       BUNDLEVERSION: 1.0.0

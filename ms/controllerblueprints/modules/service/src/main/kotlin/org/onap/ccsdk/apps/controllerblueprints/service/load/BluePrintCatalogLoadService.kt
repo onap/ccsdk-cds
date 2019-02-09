@@ -61,7 +61,7 @@ open class BluePrintCatalogLoadService(private val bluePrintCatalogService: Blue
         try {
             bluePrintCatalogService.saveToDatabase(file)
         } catch (e: Exception) {
-            errorBuilder.appendln("Couldn't load DataType(${file.name}: ${e.message}")
+            errorBuilder.appendln("Couldn't load BlueprintModel(${file.name}: ${e.message}")
         }
     }
 

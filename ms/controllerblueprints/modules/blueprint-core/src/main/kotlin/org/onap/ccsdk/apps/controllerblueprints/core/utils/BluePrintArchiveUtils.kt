@@ -37,22 +37,6 @@ class BluePrintArchiveUtils {
     companion object {
         private val log = LoggerFactory.getLogger(BluePrintArchiveUtils::class.java)
 
-        fun getFileContent(fileName: String): String = runBlocking {
-            async {
-                try {
-                    File(fileName).readText(Charsets.UTF_8)
-                } catch (e: Exception) {
-                    throw BluePrintException("couldn't find file($fileName)")
-                }
-            }.await()
-        }
-
-        fun compress(source: String, destination: String, absolute: Boolean): Boolean {
-            val rootDir = File(source)
-            val saveFile = File(destination)
-            return compress(rootDir, saveFile, absolute)
-        }
-
         /**
          * Create a new Zip from a root directory
          *
@@ -63,11 +47,12 @@ class BluePrintArchiveUtils {
          */
         fun compress(source: File, destination: File, absolute: Boolean): Boolean {
             try {
+                destination.createNewFile()
                 ZipArchiveOutputStream(destination).use {
                     recurseFiles(source, source, it, absolute)
                 }
             } catch (e: Exception) {
-                log.error("Fail to compress folder(:$source) to path(${destination.path}", e)
+                log.error("Fail to compress folder($source) to path(${destination.path}", e)
                 return false
             }
             return true
@@ -100,7 +85,10 @@ class BluePrintArchiveUtils {
                 val zae = ZipArchiveEntry(filename)
                 zae.size = file.length()
                 zaos.putArchiveEntry(zae)
-                FileInputStream(file).use { IOUtils.copy(it, zaos) }
+                FileInputStream(file).use {
+                    IOUtils.copy(it, zaos)
+                    it.close()
+                }
                 zaos.closeArchiveEntry()
             }
         }
@@ -131,16 +119,6 @@ class BluePrintArchiveUtils {
             }
 
             return destinationDir
-        }
-
-        /**
-         * Get the first item in directory
-         *
-         * @param zipFile
-         * @return string
-         */
-        fun getFirstItemInDirectory(dir: File): String {
-            return dir.walk().map { it.name }.elementAt(1)
         }
     }
 

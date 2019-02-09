@@ -41,7 +41,7 @@ abstract class BlueprintCatalogServiceImpl(private val blueprintValidator: BlueP
 
         if (blueprintFile.isDirectory) {
             extractedDirectory = blueprintFile
-            archivedDirectory = File(":$blueprintFile.zip")
+            archivedDirectory = File("$blueprintFile.zip")
             toDeleteDirectory = archivedDirectory
 
             if (!BluePrintArchiveUtils.compress(blueprintFile, archivedDirectory, true)) {
