@@ -38,36 +38,12 @@
                 <include>application.properties</include>
                 <include>logback.xml</include>
             </includes>
-            <outputDirectory>./</outputDirectory>
+            <outputDirectory>/opt/app/onap/config</outputDirectory>
             <useDefaultExcludes>true</useDefaultExcludes>
         </fileSet>
         <fileSet>
-            <directory>${project.basedir}/src/main/docker</directory>
-            <includes>
-                <include>Dockerfile</include>
-                <include>startService.sh</include>
-            </includes>
-            <outputDirectory>./</outputDirectory>
-            <useDefaultExcludes>true</useDefaultExcludes>
-        </fileSet>
-        <fileSet>
-            <directory>${project.basedir}/../application/src/main/resources</directory>
-            <outputDirectory>src/main/resources</outputDirectory>
-            <useDefaultExcludes>true</useDefaultExcludes>
-        </fileSet>
-        <fileSet>
-            <directory>${project.basedir}/../application/opt/app/onap/config</directory>
-            <outputDirectory>./config</outputDirectory>
-            <useDefaultExcludes>true</useDefaultExcludes>
-        </fileSet>
-        <fileSet>
-            <directory>${project.basedir}/../../../components/scripts/python/ccsdk_blueprints</directory>
-            <outputDirectory>./scripts/jython</outputDirectory>
-            <useDefaultExcludes>true</useDefaultExcludes>
-        </fileSet>
-        <fileSet>
-            <directory>${project.basedir}/../application/etc</directory>
-            <outputDirectory>./etc</outputDirectory>
+            <directory>${project.basedir}/../../../components/scripts/python</directory>
+            <outputDirectory>/opt/app/onap/scripts/jython</outputDirectory>
             <useDefaultExcludes>true</useDefaultExcludes>
         </fileSet>
     </fileSets>

@@ -22,9 +22,6 @@ services:
     ports:
     - "8000:8080"
     restart: always
-    volumes:
-    - ~/share/vm_ms/blueprintsprocessor/config:/opt/app/onap/config
-    - ~/share/vm_ms/blueprintsprocessor/logs:/logs
     environment:
       APPLICATIONNAME: BlueprintsProcessor
       BUNDLEVERSION: 1.0.0
