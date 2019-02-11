@@ -106,9 +106,9 @@
         }
       },
       "resource-assignment": {
-        "type": "component-resource-assignment",
+        "type": "component-resource-resolution",
         "interfaces": {
-          "ResourceAssignmentComponent": {
+          "ResourceResolutionComponent": {
             "operations": {
               "process": {
                 "inputs": {
@@ -151,9 +151,9 @@
         }
       },
       "resource-assignment-py": {
-        "type": "component-resource-assignment",
+        "type": "component-resource-resolution",
         "interfaces": {
-          "ResourceAssignmentComponent": {
+          "ResourceResolutionComponent": {
             "operations": {
               "process": {
                 "implementation": {
@@ -182,7 +182,7 @@
       "activate-jython": {
         "type": "component-jython-executor",
         "interfaces": {
-          "JythonExecutorComponent": {
+          "ComponentJythonExecutor": {
             "operations": {
               "process": {
                 "implementation": {

@@ -91,7 +91,7 @@
       },
       "derived_from": "tosca.nodes.component.Jython"
     },
-    "component-resource-assignment": {
+    "component-resource-resolution": {
       "description": "This is Resource Assignment Component API",
       "version": "1.0.0",
       "attributes": {
@@ -101,7 +101,7 @@
         }
       },
       "interfaces": {
-        "ResourceAssignmentComponent": {
+        "ResourceResolutionComponent": {
           "operations": {
             "process": {
               "inputs": {
@@ -158,7 +158,7 @@
         }
       },
       "interfaces": {
-        "JythonExecutorComponent": {
+        "ComponentJythonExecutor": {
           "operations": {
             "process": {
               "inputs": {

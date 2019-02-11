@@ -7,7 +7,7 @@
     }
   },
   "interfaces": {
-    "JythonExecutorComponent": {
+    "ComponentJythonExecutor": {
       "operations": {
         "process": {
           "inputs": {
