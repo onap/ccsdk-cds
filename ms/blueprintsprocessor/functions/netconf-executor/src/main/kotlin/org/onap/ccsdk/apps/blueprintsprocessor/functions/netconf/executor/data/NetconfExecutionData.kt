@@ -20,6 +20,9 @@ import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.interf
 import java.io.IOException
 import java.util.*
 
+
+
+
 class NetconfExecutionRequest {
     lateinit var requestId: String
     val action: String? = null
@@ -55,61 +58,88 @@ class NetconfExecutionResponse {
     val responseData: Any = Any()
 }
 
-open class NetconfException(message: String) : IOException(message)
 
 class NetconfDeviceOutputEvent {
-    private var type: NetconfDeviceOutputEvent.Type
-    private var messagePayload: String? = null
-    private var messageID: String? = null
-    private var deviceInfo: DeviceInfo? = null
-    private var subject: Any? = null
-    private var time: Long = 0
+
+        private var type: NetconfDeviceOutputEvent.Type
+        private var messagePayload: String? = null
+        private var messageID: String? = null
+        private var deviceInfo: DeviceInfo? = null
+        private var subject: Any? = null
+        private var time: Long = 0
+
+        /**
+         * Type of device related events.
+         */
+        enum class Type {
+            DEVICE_REPLY,
+            DEVICE_NOTIFICATION,
+            DEVICE_UNREGISTERED,
+            DEVICE_ERROR,
+            SESSION_CLOSED
+        }
+
+        /**
+         * Creates an event of a given type and for the specified subject and the current time.
+         *
+         * @param type event type
+         * @param subject event subject
+         * @param payload message from the device
+         * @param msgID id of the message related to the event
+         * @param netconfDeviceInfo device of event
+         */
+        constructor(type: Type, subject: String, payload: String, msgID: Optional<String>, netconfDeviceInfo: DeviceInfo) {
+            this.type = type
+            this.subject = subject
+            this.messagePayload = payload
+            this.deviceInfo = netconfDeviceInfo
+            this.messageID = msgID.get()
+        }
+
+        /**
+         * Creates an event of a given type and for the specified subject and time.
+         *
+         * @param type event type
+         * @param subject event subject
+         * @param payload message from the device
+         * @param msgID id of the message related to the event
+         * @param netconfDeviceInfo device of event
+         * @param time occurrence time
+         */
+        constructor(type: Type, subject: Any, payload: String, msgID: String, netconfDeviceInfo: DeviceInfo, time: Long) {
+            this.type = type
+            this.subject = subject
+            this.time = time
+            this.messagePayload = payload
+            this.deviceInfo = netconfDeviceInfo
+            this.messageID = msgID
+        }
 
     /**
-     * Type of device related events.
+     * return the message payload of the reply form the device.
+     *
+     * @return reply
      */
-    enum class Type {
-        DEVICE_REPLY,
-        DEVICE_NOTIFICATION,
-        DEVICE_UNREGISTERED,
-        DEVICE_ERROR,
-        SESSION_CLOSED
+    fun getMessagePayload(): String? {
+        return messagePayload
     }
 
     /**
-     * Creates an event of a given type and for the specified subject and the current time.
+     * Event-related device information.
      *
-     * @param type event type
-     * @param subject event subject
-     * @param payload message from the device
-     * @param msgID id of the message related to the event
-     * @param netconfDeviceInfo device of event
+     * @return information about the device
      */
-    constructor(type: Type, subject: String, payload: String, msgID: Optional<String>, netconfDeviceInfo: DeviceInfo) {
-        this.type = type
-        this.subject = subject
-        this.messagePayload = payload
-        this.deviceInfo = netconfDeviceInfo
-        this.messageID = msgID.get()
+    fun getDeviceInfo(): DeviceInfo? {
+        return deviceInfo
     }
 
     /**
-     * Creates an event of a given type and for the specified subject and time.
+     * Reply messageId.
      *
-     * @param type event type
-     * @param subject event subject
-     * @param payload message from the device
-     * @param msgID id of the message related to the event
-     * @param netconfDeviceInfo device of event
-     * @param time occurrence time
+     * @return messageId
      */
-    constructor(type: Type, subject: Any, payload: String, msgID: String, netconfDeviceInfo: DeviceInfo, time: Long) {
-        this.type = type
-        this.subject = subject
-        this.time = time
-        this.messagePayload = payload
-        this.deviceInfo = netconfDeviceInfo
-        this.messageID = msgID
+    fun getMessageID(): String? {
+        return messageID
     }
 
 }

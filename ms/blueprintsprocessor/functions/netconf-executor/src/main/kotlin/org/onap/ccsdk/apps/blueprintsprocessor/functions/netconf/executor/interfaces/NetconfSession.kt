@@ -48,7 +48,7 @@ interface NetconfSession {
      *
      * @return Session ID as a string.
      */
-    fun getSessionId(): String
+    fun getSessionId(): String?
 
     /**
      * Gets the capabilities of the remote Netconf device associated to this session.
@@ -84,5 +84,27 @@ interface NetconfSession {
      *
      * @return DeviceInfo as device information
      */
-    //fun getDeviceInfo(): DeviceInfo
+    fun getDeviceInfo(): DeviceInfo
+
+
+    /**
+     * Executes an asynchronous RPC request to the server and obtains a future for it's response.
+     *
+     * @param request the XML containing the RPC request for the server.
+     * @param msgId message id of the request.
+     * @return Server response or ERROR
+     * @throws NetconfException when there is a problem in the communication process on the underlying
+     * connection
+     * @throws NetconfTransportException on secure transport-layer error
+     */
+    fun syncRpc(request: String, msgId: String): String
+
+    /**
+     * Closes the Netconf session with the device. the first time it tries gracefully, then kills it
+     * forcefully
+     *
+     * @return true if closed
+     * @throws NetconfException when there is a problem in the communication process on the underlying
+     * connection
+     */
 }

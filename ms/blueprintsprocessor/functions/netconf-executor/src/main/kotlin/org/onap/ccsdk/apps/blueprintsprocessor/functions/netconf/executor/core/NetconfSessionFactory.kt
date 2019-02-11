@@ -16,7 +16,7 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.core
 
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.data.NetconfException
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.NetconfException
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.interfaces.DeviceInfo
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.interfaces.NetconfSession
 import java.util.*

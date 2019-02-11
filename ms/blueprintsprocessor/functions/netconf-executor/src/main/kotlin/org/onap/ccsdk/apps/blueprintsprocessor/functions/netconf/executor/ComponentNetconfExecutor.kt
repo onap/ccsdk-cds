@@ -17,6 +17,7 @@
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor
 
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.interfaces.DeviceInfo
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.ComponentJythonExecutor
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.PythonExecutorProperty
 import org.slf4j.LoggerFactory
@@ -30,9 +31,18 @@ open class ComponentNetconfExecutor(private val netconfExecutorConfiguration: Ne
                                     private val pythonExecutorProperty: PythonExecutorProperty)
     : ComponentJythonExecutor(pythonExecutorProperty) {
 
-    private val log = LoggerFactory.getLogger(ComponentJythonExecutor::class.java)
+    private val log = LoggerFactory.getLogger(ComponentNetconfExecutor::class.java)
+    lateinit var deviceInfo: DeviceInfo
+
 
     override fun process(executionServiceInput: ExecutionServiceInput) {
-        super.process(executionServiceInput)
+
+         super.process(executionServiceInput)
+
+
+    }
+
+    fun setdeviceInfo(deviceInfo: DeviceInfo) {
+        this.deviceInfo = deviceInfo
     }
 }

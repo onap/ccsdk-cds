@@ -16,38 +16,30 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.interfaces
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
 
 data class DeviceInfo (
+        @get:JsonProperty("login-account")
         var name: String? = null,
+        @get:JsonProperty("login-key")
         var pass: String? = null,
+        @get:JsonProperty("target-ip-address")
         var ipAddress: String? = null,
+        @get:JsonProperty("port-number")
         var port: Int = 0,
+        @get:JsonIgnore
         var key: String? = null,
-   // private var sshClientLib: NetconfSshClientLib = NetconfSshClientLib,
-
+        @get:JsonProperty("source")
+        var source: String? = null,
+       // var sshClientLib: NetconfSshClientLib = NetconfSshClientLib,
+        @get:JsonProperty("connection-time-out")
         var connectTimeoutSec: Long = 30,
+        @get:JsonIgnore
         var replyTimeout: Int = 60,
+        @get:JsonIgnore
         var idleTimeout: Int = 45,
-        var deviceId: String? = null
+        @get:JsonIgnore
+        var deviceId: String =  ipAddress + ":" + port
 ){
-    /**
-     * Information for contacting the controller.
-     *
-     * @param name the connection type
-     * @param pass the pass for the device
-     * @param ipAddress the ip address
-     * @param port the tcp port
-     */
-    fun DeviceInfo(name: String, pass: String, ipAddress: String, port: Int, connectTimeoutSec: Long){
-        //checkArgument(name != "", "Empty device username")
-       // checkArgument(port > 0, "Negative port")
-        //checkNotNull(ipAddress, "Null ip address")
-        this.name = name
-        this.pass = pass
-        this.ipAddress = ipAddress
-        this.port = port
-        //this.sshClientLib = Optional.ofNullable(NetconfSshClientLib)
-        this.connectTimeoutSec = connectTimeoutSec
-        this. deviceId = "$ipAddress:$port"
     }
-}
