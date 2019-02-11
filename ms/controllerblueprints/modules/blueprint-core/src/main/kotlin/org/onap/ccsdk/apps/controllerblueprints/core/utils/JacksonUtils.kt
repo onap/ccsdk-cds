@@ -166,8 +166,8 @@ class JacksonUtils {
 
         fun <T> getMapFromJson(content: String, valueType: Class<T>): MutableMap<String, T>? {
             val objectMapper = jacksonObjectMapper()
-            val typeRef = object : TypeReference<MutableMap<String, T>>() {}
-            return objectMapper.readValue(content, typeRef)
+            val mapType = objectMapper.typeFactory.constructMapType(Map::class.java, String::class.java, valueType)
+            return objectMapper.readValue(content, mapType)
         }
 
         fun <T> getMapFromFile(fileName: String, valueType: Class<T>): MutableMap<String, T>? {

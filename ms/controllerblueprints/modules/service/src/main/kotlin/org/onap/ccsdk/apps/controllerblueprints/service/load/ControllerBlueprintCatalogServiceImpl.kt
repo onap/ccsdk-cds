@@ -74,10 +74,10 @@ class ControllerBlueprintCatalogServiceImpl(bluePrintValidatorService: BluePrint
         val artifactName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]
         val artifactVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]
 
-        log.isDebugEnabled.apply {
-            blueprintModelRepository.findByArtifactNameAndArtifactVersion(artifactName!!, artifactVersion!!)?.let {
-                log.debug("Overwriting blueprint model :$artifactName::$artifactVersion")
-            }
+
+        blueprintModelRepository.findByArtifactNameAndArtifactVersion(artifactName!!, artifactVersion!!)?.let {
+            log.info("Overwriting blueprint model :$artifactName::$artifactVersion")
+            blueprintModelRepository.deleteByArtifactNameAndArtifactVersion(artifactName, artifactVersion)
         }
 
         val blueprintModel = BlueprintModel()
