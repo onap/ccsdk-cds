@@ -3,9 +3,7 @@ from netconfclient import NetconfClient
 from java.lang import Exception
 from abstract_blueprint_function import AbstractPythonComponentFunction
 from org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor import NetconfRpcService
-from org.onap.ccsdk.apps.controllerblueprints.core.utils import JacksonUtils
-from org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.interfaces import DeviceInfo
-from org.onap.ccsdk.apps.controllerblueprints.core.service import BluePrintRuntimeService
+
 
 
 class DefaultGetNetConfig(AbstractPythonComponentFunction):
