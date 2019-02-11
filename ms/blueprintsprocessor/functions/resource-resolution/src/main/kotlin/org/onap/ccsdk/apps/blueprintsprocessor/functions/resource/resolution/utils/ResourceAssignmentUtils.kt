@@ -128,11 +128,7 @@ class ResourceAssignmentUtils {
                                     BluePrintConstants.DATA_TYPE_INTEGER -> (root as ObjectNode).put(rName, value as Int)
                                     BluePrintConstants.DATA_TYPE_FLOAT -> (root as ObjectNode).put(rName, value as Float)
                                     else -> {
-                                        if (JacksonUtils.getJsonNode(value) != null) {
-                                            (root as ObjectNode).set(rName, JacksonUtils.getJsonNode(value))
-                                        } else {
-                                            (root as ObjectNode).set(rName, null)
-                                        }
+                                        (root as ObjectNode).set(rName, JacksonUtils.getJsonNode(value))
                                     }
                                 }
                             }

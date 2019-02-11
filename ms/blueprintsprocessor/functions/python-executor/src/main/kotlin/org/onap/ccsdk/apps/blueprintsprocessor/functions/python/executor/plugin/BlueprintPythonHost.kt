@@ -38,7 +38,7 @@ open class BlueprintPythonHost(private val bluePrintPython: BluePrintPython){
     fun getPythonComponent(content: String?, interfaceName: String, properties: MutableMap<String, Any>?): PyObject {
         bluePrintPython.content = content!!
         bluePrintPython.pythonClassName = interfaceName
-        bluePrintPython.moduleName = "Blueprint Python Scripting [Class Name = $interfaceName]"
+        bluePrintPython.moduleName = "Blueprint Python Script [Class Name = $interfaceName]"
 
         return blueprintPythonInterpreterProxy.getPythonInstance(properties)
     }

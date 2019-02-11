@@ -28,7 +28,7 @@ open class BlueprintPythonInterpreterProxy(private val bluePrintPython: BluePrin
 
         this.exec("import sys")
 
-        bluePrintPython.content?.let {
+        bluePrintPython.content.let {
             this.exec(bluePrintPython.content)
         }
 

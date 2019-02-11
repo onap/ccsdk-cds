@@ -34,10 +34,10 @@ class BlueprintPythonService(val pythonExecutorProperty: PythonExecutorProperty)
         pythonPath.add(blueprintBasePath)
         pythonPath.addAll(pythonExecutorProperty.modulePaths)
 
-        var blueprintPythonConfigurations = BluePrintPython(pythonExecutorProperty.executionPath, pythonPath, arrayListOf())
+        val blueprintPythonConfigurations = BluePrintPython(pythonExecutorProperty.executionPath, pythonPath, arrayListOf())
 
         val blueprintPythonHost = BlueprintPythonHost(blueprintPythonConfigurations)
-        var pyObject = blueprintPythonHost.getPythonComponent(content, pythonClassName, dependencyInstanceNames)
+        val pyObject = blueprintPythonHost.getPythonComponent(content, pythonClassName, dependencyInstanceNames)
 
         log.info("Component Object {}", pyObject)
 

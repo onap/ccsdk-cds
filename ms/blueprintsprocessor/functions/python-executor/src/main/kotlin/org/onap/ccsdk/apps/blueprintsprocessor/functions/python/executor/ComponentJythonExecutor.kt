@@ -26,6 +26,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.checkNotEmptyOrThrow
 import org.onap.ccsdk.apps.controllerblueprints.core.data.OperationAssignment
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Scope
@@ -40,7 +41,25 @@ open class ComponentJythonExecutor(private var applicationContext: ApplicationCo
 
     private var componentFunction: AbstractComponentFunction? = null
 
-    fun populateJythonComponentInstance(executionServiceInput: ExecutionServiceInput) {
+    override fun prepareRequest(executionRequest: ExecutionServiceInput): ExecutionServiceInput {
+        val request = super.prepareRequest(executionRequest)
+        // Populate Component Instance
+        populateJythonComponentInstance()
+        return request
+    }
+
+    override fun process(executionRequest: ExecutionServiceInput) {
+        log.info("Processing : $operationInputs")
+        // Invoke Jython Component Script
+        componentFunction!!.process(executionServiceInput)
+
+    }
+
+    override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
+        componentFunction!!.recover(runtimeException, executionRequest)
+    }
+
+    private fun populateJythonComponentInstance() {
         val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
 
         val operationAssignment: OperationAssignment = bluePrintContext
@@ -63,36 +82,23 @@ open class ComponentJythonExecutor(private var applicationContext: ApplicationCo
         val instanceDependenciesNode: ArrayNode = operationInputs[PythonExecutorConstants.INPUT_INSTANCE_DEPENDENCIES] as? ArrayNode
                 ?: throw BluePrintProcessorException("Failed to get property(${PythonExecutorConstants.INPUT_INSTANCE_DEPENDENCIES})")
 
-        val jythonContextInstance: MutableMap<String, Any> = hashMapOf()
-        jythonContextInstance["log"] = LoggerFactory.getLogger(pythonClassName)
-        jythonContextInstance["bluePrintRuntimeService"] = bluePrintRuntimeService
-        instanceDependenciesNode?.forEach { instanceName ->
-            val instance = instanceName.textValue()
-            val value = applicationContext.getBean(instance)
-                    ?: throw BluePrintProcessorException("couldn't get the dependency instance($instance)")
-            jythonContextInstance[instance] = value
+        val jythonInstance: MutableMap<String, Any> = hashMapOf()
+        jythonInstance["log"] = LoggerFactory.getLogger(pythonClassName)
+        jythonInstance["bluePrintRuntimeService"] = bluePrintRuntimeService
+
+        instanceDependenciesNode.forEach { instanceName ->
+            jythonInstance[instanceName.textValue()] = applicationContext.getBean(instanceName.textValue())
         }
 
+        // Setup componentFunction
         componentFunction = blueprintPythonService.jythonInstance(bluePrintContext, pythonClassName,
-                content!!, jythonContextInstance)
+                content!!, jythonInstance)
+        componentFunction?.bluePrintRuntimeService = bluePrintRuntimeService
+        componentFunction?.executionServiceInput = executionServiceInput
+        componentFunction?.stepName = stepName
+        componentFunction?.interfaceName = interfaceName
+        componentFunction?.operationName = operationName
+        componentFunction?.processId = processId
+        componentFunction?.workflowName = workflowName
     }
-
-
-    override fun process(executionServiceInput: ExecutionServiceInput) {
-
-        log.info("Processing : $operationInputs")
-        checkNotNull(bluePrintRuntimeService) { "failed to get bluePrintRuntimeService" }
-
-        // Populate Component Instance
-        populateJythonComponentInstance(executionServiceInput)
-
-        // Invoke Jython Component Script
-        componentFunction!!.process(executionServiceInput)
-
-    }
-
-    override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        componentFunction!!.recover(runtimeException, executionRequest)
-    }
-
 }

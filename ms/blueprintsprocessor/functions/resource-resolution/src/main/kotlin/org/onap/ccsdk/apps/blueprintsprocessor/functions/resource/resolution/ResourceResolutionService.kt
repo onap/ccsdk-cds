@@ -17,11 +17,13 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution
 
+import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor.ResourceAssignmentProcessor
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintTemplateService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
@@ -89,24 +91,21 @@ class ResourceResolutionService {
         val resourceDictionaries: MutableMap<String, ResourceDefinition> = JacksonUtils.getMapFromFile(dictionaryFile, ResourceDefinition::class.java)
                 ?: throw BluePrintProcessorException("couldn't get Dictionary Definitions")
 
+        // Resolve resources
         executeProcessors(bluePrintRuntimeService, resourceDictionaries, resourceAssignments, templateArtifactName)
 
         // Check Template is there
-        val templateContent = bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, mappingArtifactName)
+        val templateContent = bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, templateArtifactName)
 
-        // TODO ("Generate Param JSON from Resource Assignment")
-        val resolvedParamJsonContent = "{}"
+        val resolvedParamJsonContent = ResourceAssignmentUtils.generateResourceDataForAssignments(resourceAssignments.toList())
 
         if (templateContent.isNotEmpty()) {
-            // TODO ( "Mash Data and Content")
-            resolvedContent = "Mashed Content"
-
+            resolvedContent = BluePrintTemplateService.generateContent(templateContent, resolvedParamJsonContent)
         } else {
             resolvedContent = resolvedParamJsonContent
         }
         return resolvedContent
     }
-
 
     private fun executeProcessors(blueprintRuntimeService: BluePrintRuntimeService<*>,
                                   resourceDictionaries: MutableMap<String, ResourceDefinition>,
