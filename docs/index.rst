@@ -27,3 +27,11 @@ Sections
    sections/development/index
    sections/logging
    sections/release-notes
+
+Data Flow:
+----------
+|image0|
+
+.. |image0| image:: media/image0.png
+   :width: 7.88889in 
+   :height: 4.43750in
