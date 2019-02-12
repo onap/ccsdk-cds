@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,43 +18,54 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution
 
+import com.fasterxml.jackson.annotation.JsonProperty
+
 open class ResourceSourceProperties
 
 open class InputResourceSource : ResourceSourceProperties() {
     lateinit var key: String
+    @get:JsonProperty("key-dependencies")
     lateinit var keyDependencies: MutableList<String>
 }
 
 open class DefaultResourceSource : ResourceSourceProperties() {
     lateinit var key: String
+    @get:JsonProperty("key-dependencies")
     lateinit var keyDependencies: MutableList<String>
 }
 
 open class DatabaseResourceSource : ResourceSourceProperties() {
     lateinit var type: String
     lateinit var query: String
+    @get:JsonProperty("input-key-mapping")
     var inputKeyMapping: MutableMap<String, String>? = null
+    @get:JsonProperty("output-key-mapping")
     var outputKeyMapping: MutableMap<String, String>? = null
+    @get:JsonProperty("key-dependencies")
     lateinit var keyDependencies: MutableList<String>
 }
 
 open class RestResourceSource : ResourceSourceProperties() {
     lateinit var type: String
+    @get:JsonProperty("url-path")
     lateinit var urlPath: String
     lateinit var path: String
+    @get:JsonProperty("expression-type")
     lateinit var expressionType: String
+    @get:JsonProperty("input-key-mapping")
     var inputKeyMapping: MutableMap<String, String>? = null
+    @get:JsonProperty("output-key-mapping")
     var outputKeyMapping: MutableMap<String, String>? = null
+    @get:JsonProperty("key-dependencies")
     lateinit var keyDependencies: MutableList<String>
 }
 
 open class CapabilityResourceSource : ResourceSourceProperties() {
     lateinit var type: String
+    @get:JsonProperty("instance-name")
     lateinit var instanceName: String
+    @get:JsonProperty("instance-dependencies")
     var instanceDependencies: List<String>? = null
-    lateinit var path: String
-    lateinit var expressionType: String
-    var inputKeyMapping: MutableMap<String, String>? = null
-    var outputKeyMapping: MutableMap<String, String>? = null
+    @get:JsonProperty("key-dependencies")
     lateinit var keyDependencies: MutableList<String>
 }

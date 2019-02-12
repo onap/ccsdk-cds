@@ -1,6 +1,8 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
  *
+ * Modifications Copyright © 2019 IBM, Bell Canada.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -20,6 +22,8 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
+import java.io.File
+import java.util.*
 
 @Configuration
 @ComponentScan
@@ -32,11 +36,33 @@ open class PythonExecutorProperty {
     lateinit var executionPath: String
     @Value("#{'\${blueprints.processor.functions.python.executor.modulePaths}'.split(',')}")
     lateinit var modulePaths: List<String>
-
 }
 
 class PythonExecutorConstants {
     companion object {
         const val INPUT_INSTANCE_DEPENDENCIES = "instance-dependencies"
+    }
+}
+
+open class BluePrintPython(executablePath: String, blueprintPythonPlatform: MutableList<String>,
+                           val argv: MutableList<String>){
+    lateinit var moduleName: String
+    lateinit var pythonClassName: String
+    lateinit var content: String
+    var props: Properties = Properties()
+
+    init {
+        // Build up the python.path
+        val sb = StringBuilder()
+        sb.append(System.getProperty("java.class.path"))
+
+        for (p in blueprintPythonPlatform) {
+            sb.append(File.pathSeparator).append(p)
+        }
+
+        props["python.import.site"] = "true"
+        props.setProperty("python.path", sb.toString())
+        props.setProperty("python.verbose", "error")
+        props.setProperty("python.executable", executablePath)
     }
 }

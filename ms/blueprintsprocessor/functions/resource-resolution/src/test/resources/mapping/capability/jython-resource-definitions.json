@@ -1,0 +1,18 @@
+{
+  "tags": "country",
+  "name": "country",
+  "updated-by": "brindasanth@onap.com",
+  "property": {
+    "description": "description",
+    "type": "string"
+  },
+  "sources": {
+    "capability": {
+      "properties": {
+        "type": "JYTHON-COMPONENT",
+        "instance-name": "SampleRAProcessor",
+        "instance-dependencies": []
+      }
+    }
+  }
+}

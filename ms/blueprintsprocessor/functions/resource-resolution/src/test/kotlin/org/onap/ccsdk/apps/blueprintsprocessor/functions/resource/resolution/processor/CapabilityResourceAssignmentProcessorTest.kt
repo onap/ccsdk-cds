@@ -1,6 +1,8 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
  *
+ * Modifications Copyright © 2019 IBM, Bell Canada.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,19 +20,27 @@ package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.pr
 
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.BlueprintPythonService
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.PythonExecutorProperty
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
 import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.apps.controllerblueprints.scripts.BluePrintScriptsServiceImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [CapabilityResourceAssignmentProcessor::class, BluePrintScriptsServiceImpl::class,
-    MockCapabilityService::class])
+    BlueprintPythonService::class, PythonExecutorProperty::class, MockCapabilityService::class])
+@TestPropertySource(properties =
+["blueprints.processor.functions.python.executor.modulePaths=./../../../../components/scripts/python/ccsdk_blueprints",
+    "blueprints.processor.functions.python.executor.executionPath=./../../../../components/scripts/python/ccsdk_blueprints"])
 class CapabilityResourceAssignmentProcessorTest {
 
     @Autowired
@@ -70,6 +80,37 @@ class CapabilityResourceAssignmentProcessorTest {
         val processorName = resourceAssignmentProcessor.apply(resourceAssignment)
         assertNotNull(processorName, "couldn't get kotlin script resource assignment processor name")
         println(processorName)
+    }
+
+    @Test
+    fun `test jython capability`() {
+
+        val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+
+        val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)
+
+        capabilityResourceAssignmentProcessor.raRuntimeService = resourceAssignmentRuntimeService
+
+        val resourceDefinition = JacksonUtils
+                .readValueFromClassPathFile("mapping/capability/jython-resource-definitions.json",
+                        ResourceDefinition::class.java)!!
+        val resourceDefinitions: MutableMap<String, ResourceDefinition> = mutableMapOf()
+        resourceDefinitions[resourceDefinition.name] = resourceDefinition
+        capabilityResourceAssignmentProcessor.resourceDictionaries = resourceDefinitions
+
+        val resourceAssignment = ResourceAssignment().apply {
+            name = "country"
+            dictionaryName = "country"
+            dictionarySource = "capability"
+            property = PropertyDefinition().apply {
+                type = "string"
+            }
+        }
+
+        val processorName = capabilityResourceAssignmentProcessor.apply(resourceAssignment)
+        assertNotNull(processorName, "couldn't get Jython script resource assignment processor name")
+
     }
 
 }

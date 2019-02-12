@@ -61,6 +61,11 @@
             <useDefaultExcludes>true</useDefaultExcludes>
         </fileSet>
         <fileSet>
+            <directory>${project.basedir}/../../../components/scripts/python/ccsdk_blueprints</directory>
+            <outputDirectory>./scripts/jython</outputDirectory>
+            <useDefaultExcludes>true</useDefaultExcludes>
+        </fileSet>
+        <fileSet>
             <directory>${project.basedir}/../application/etc</directory>
             <outputDirectory>./etc</outputDirectory>
             <useDefaultExcludes>true</useDefaultExcludes>

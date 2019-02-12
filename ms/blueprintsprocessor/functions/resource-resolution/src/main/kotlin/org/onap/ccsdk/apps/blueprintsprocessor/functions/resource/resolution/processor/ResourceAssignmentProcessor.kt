@@ -29,7 +29,7 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
     private val log = LoggerFactory.getLogger(ResourceAssignmentProcessor::class.java)
 
     lateinit var raRuntimeService: ResourceAssignmentRuntimeService
-    lateinit var resourceDictionaries: Map<String, ResourceDefinition>
+    lateinit var resourceDictionaries: MutableMap<String, ResourceDefinition>
 
     var scriptPropertyInstances: Map<String, Any> = hashMapOf()
 

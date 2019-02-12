@@ -15,6 +15,7 @@ RUN (mkdir -p /source /opt/app/onap) && (tar -xzf /source.tar.gz -C /source) \
 && (cp -rf /source/app/opt/app/onap/lib /opt/app/onap/) \
 && (cp -rf /source/app/etc /) \
 && (cp -rf /source/app/config /) \
+&& (cp -rf /source/app/scripts /opt/app/onap/) \
 && (rm -rf /source)
 
 ENTRYPOINT /startService.sh
