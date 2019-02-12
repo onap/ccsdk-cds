@@ -37,7 +37,7 @@ import kotlin.test.assertNotNull
 @EnableAutoConfiguration(exclude = [DataSourceAutoConfiguration::class])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ContextConfiguration(classes = [BluePrintRestLibConfiguration::class, BlueprintPropertyConfiguration::class,
-    SampleController::class, BluePrintProperties::class])
+    SampleController::class, BluePrintProperties::class, BluePrintProperties::class])
 @TestPropertySource(properties =
 ["server.port=9111",
     "blueprintsprocessor.restclient.sample.type=basic-auth",

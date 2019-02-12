@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +36,7 @@ import kotlin.test.assertNotNull
     "blueprintsprocessor.restclient.sample.url=http://localhost:8080",
     "blueprintsprocessor.restclient.sample.userId=sampleuser"])
 
-class RestPropertyPlaceHolderConfigurationTest {
+class BluePrintRestLibPropertyServiceTest {
 
     @Autowired
     lateinit var bluePrintRestLibPropertyService: BluePrintRestLibPropertyService

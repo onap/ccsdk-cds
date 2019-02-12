@@ -315,6 +315,11 @@
                 <artifactId>netconf-executor</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.apps.blueprintsprocessor.functions</groupId>
+                <artifactId>restconf-executor</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!-- Application Component Dependency -->
             <dependency>
