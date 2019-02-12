@@ -24,6 +24,12 @@ import { CommonModule } from '@angular/common';
 import { ResourceDefinitionRoutingModule } from './resource-definition-routing.module';
 import { ResourceDefinitionComponent } from './resource-definition.component';
 import { SharedModule } from '../../../app/common/shared/shared.module';
+import { SaveResourceModule } from './save-resource/save-resource.module';
+import { ResourceCreationModule } from './resource-creation/resource-creation.module';
+import { ResourceEditModule } from './resource-edit/resource-edit.module';
+
+import { MatToolbarModule, MatButtonModule, MatSidenavModule,  MatListModule, MatGridListModule, MatCardModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatFormFieldModule, MatStepperModule} from '@angular/material';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   
@@ -32,7 +38,26 @@ import { SharedModule } from '../../../app/common/shared/shared.module';
     imports: [
     CommonModule,
     ResourceDefinitionRoutingModule,
-    SharedModule
+    SharedModule,
+    SaveResourceModule,
+    ResourceCreationModule,
+    ResourceEditModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatListModule,
+    MatGridListModule,
+    MatCardModule,
+    MatMenuModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatInputModule,
+    MatSelectModule, 
+    MatRadioModule, 
+    MatFormFieldModule, 
+    MatStepperModule,
   ]
 })
 export class ResourceDefinitionModule { }
