@@ -190,8 +190,7 @@
                 },
                 "inputs": {
                   "instance-dependencies": [
-                    "json-parser-service",
-                    "netconf-rpc-service"
+                    "json-parser-service"
                   ]
                 },
                 "outputs": {
@@ -220,8 +219,7 @@
                 },
                 "inputs": {
                   "instance-dependencies": [
-                    "json-parser-service",
-                    "netconf-rpc-service"
+                    "json-parser-service"
                   ]
                 },
                 "outputs": {

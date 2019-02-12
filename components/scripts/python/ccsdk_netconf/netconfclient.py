@@ -4,15 +4,19 @@ from netconf_constant import CONFIG_TARGET_RUNNING, CONFIG_DEFAULT_OPERATION_REP
 
 class NetconfClient:
 
-    def __init__(self, log, nc):
+    def __init__(self, log, componentFunction):
         self.log = log
-        self.nc = nc
+        self.componentFunction = componentFunction
+        self.nc = None
+
+    def createRPCServiceFromRequirement(self, requirementName):
+        self.nc = self.componentFunction.netconfRpcClientService(requirementName)
 
     def disconnect(self):
         self.nc.disconnect()
         return
 
-    def connect(self,deviceInfo):
+    def connect(self, deviceInfo):
         self.nc.connect(deviceInfo)
         return
 

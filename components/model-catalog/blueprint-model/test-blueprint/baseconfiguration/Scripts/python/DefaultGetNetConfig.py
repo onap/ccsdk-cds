@@ -1,28 +1,21 @@
 import  netconf_constant
 from netconfclient import NetconfClient
 from java.lang import Exception
-from abstract_blueprint_function import AbstractPythonComponentFunction
-from org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor import NetconfRpcService
+from org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor import NetconfComponentFunction
 
+class DefaultGetNetConfig(NetconfComponentFunction):
 
-
-class DefaultGetNetConfig(AbstractPythonComponentFunction):
     def process(self, execution_request):
         try:
             log = globals()[netconf_constant.SERVICE_LOG]
             print(globals())
             #requestId = globals()[netconf_constant.PARAM_REQUEST_ID]
             requestId = '1234'
+            nc = NetconfClient(log, self)
 
-            bluePrintRuntimeService = globals()['bluePrintRuntimeService']
+            # Create RPC Serivice
+            nc.createRPCServiceFromRequirement("netconf-connection")
 
-            capabilityProperty = bluePrintRuntimeService.resolveNodeTemplateCapabilityProperties("sample-netconf-device","netconf")
-
-            log.info("capabilityProperty {}",capabilityProperty)
-            netconfService = NetconfRpcService()
-            nc = NetconfClient(log, netconfService)
-
-            nc.connect(netconfService.getNetconfDeviceInfo(capabilityProperty))
             runningConfigTemplate = "runningconfig-template"
 
             runningConfigMessageId = "get-config-" + requestId
@@ -38,7 +31,7 @@ class DefaultGetNetConfig(AbstractPythonComponentFunction):
                     errorMessage = "Get Running Config Failure ::"+ deviceResponse.errorMessage
 
         except Exception, err:
-            log.info("Exception in the script {}",err.getMessage())
+            log.error("Exception in the script {}",err.getMessage())
             status = netconf_constant.STATUS_FAILURE
             errorMessage = "Get Running Config Failure ::"+err.getMessage()
 
