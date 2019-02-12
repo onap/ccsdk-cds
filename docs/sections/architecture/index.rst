@@ -3,6 +3,12 @@
 .. Copyright (C) 2019 IBM.
 
 Architecture
--------------------------------------------------
+============
 .. toctree::
    :maxdepth: 1
+   
+   |image0|
+
+.. |image0| image:: images/CDS_architecture.jpg
+   :height: 600px
+   :width: 800px
