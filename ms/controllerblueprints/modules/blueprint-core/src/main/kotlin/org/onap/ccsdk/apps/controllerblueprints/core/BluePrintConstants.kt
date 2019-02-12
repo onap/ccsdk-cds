@@ -150,6 +150,7 @@ object BluePrintConstants {
     const val TOSCA_MAPPINGS_DIR: String = "Mappings"
     const val TOSCA_TEMPLATES_DIR: String = "Templates"
     const val TOSCA_SCRIPTS_KOTLIN_DIR: String = "$TOSCA_SCRIPTS_DIR/kotlin"
+    const val TOSCA_SCRIPTS_JYTHON_DIR: String = "$TOSCA_SCRIPTS_DIR/python"
 
     const val METADATA_USER_GROUPS = "user-groups"
     const val METADATA_TEMPLATE_NAME = "template_name"
