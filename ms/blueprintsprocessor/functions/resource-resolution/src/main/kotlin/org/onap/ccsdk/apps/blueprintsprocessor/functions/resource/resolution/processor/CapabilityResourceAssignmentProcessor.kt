@@ -18,7 +18,7 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor
 
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.BlueprintPythonService
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.BlueprintJythonService
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.CapabilityResourceSource
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
@@ -33,7 +33,7 @@ import java.io.File
 @Service("resource-assignment-processor-capability")
 open class CapabilityResourceAssignmentProcessor(private var applicationContext: ApplicationContext,
                                                  private val bluePrintScriptsService: BluePrintScriptsService,
-                                                 private val bluePrintPythonService: BlueprintPythonService) :
+                                                 private val bluePrintJythonService: BlueprintJythonService) :
         ResourceAssignmentProcessor() {
 
     companion object {
@@ -167,7 +167,7 @@ open class CapabilityResourceAssignmentProcessor(private var applicationContext:
                                                      dependencyInstances: MutableMap<String, Any>):
             ResourceAssignmentProcessor {
 
-        val resourceAssignmentProcessor = bluePrintPythonService
+        val resourceAssignmentProcessor = bluePrintJythonService
                 .jythonInstance<ResourceAssignmentProcessor>(raRuntimeService.bluePrintContext(), pythonClassName,
                         content, dependencyInstances)
 

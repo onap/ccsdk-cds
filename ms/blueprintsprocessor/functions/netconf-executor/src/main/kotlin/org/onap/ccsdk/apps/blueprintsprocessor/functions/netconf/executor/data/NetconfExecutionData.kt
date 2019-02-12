@@ -17,24 +17,8 @@
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.data
 
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.interfaces.DeviceInfo
-import java.io.IOException
 import java.util.*
 
-
-
-
-class NetconfExecutionRequest {
-    lateinit var requestId: String
-    val action: String? = null
-    val source: String? = null
-    val loginKey: String? = null
-    val loginAccount: String? = null
-    val targetIP: String? = null
-    val port: Int = 0
-    val connectionTimeoutSec: Int = 0
-    val implementationScript: String? = null
-    val context: MutableMap<String, Any> = mutableMapOf()
-}
 
 class DeviceResponse {
     lateinit var deviceInfo: DeviceInfo
@@ -51,13 +35,6 @@ class DeviceResponse {
         this.subDeviceResponse!![key] = subDeviceResponse
     }
 }
-
-class NetconfExecutionResponse {
-    val status: String? = null
-    val errorMessage: String? = null
-    val responseData: Any = Any()
-}
-
 
 class NetconfDeviceOutputEvent {
 

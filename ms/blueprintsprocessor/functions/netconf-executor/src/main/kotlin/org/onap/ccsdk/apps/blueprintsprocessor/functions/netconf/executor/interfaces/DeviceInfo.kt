@@ -19,27 +19,25 @@ package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.inter
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class DeviceInfo (
-        @get:JsonProperty("login-account")
-        var name: String? = null,
-        @get:JsonProperty("login-key")
-        var pass: String? = null,
-        @get:JsonProperty("target-ip-address")
-        var ipAddress: String? = null,
-        @get:JsonProperty("port-number")
-        var port: Int = 0,
-        @get:JsonIgnore
-        var key: String? = null,
-        @get:JsonProperty("source")
-        var source: String? = null,
-       // var sshClientLib: NetconfSshClientLib = NetconfSshClientLib,
-        @get:JsonProperty("connection-time-out")
-        var connectTimeoutSec: Long = 30,
-        @get:JsonIgnore
-        var replyTimeout: Int = 60,
-        @get:JsonIgnore
-        var idleTimeout: Int = 45,
-        @get:JsonIgnore
-        var deviceId: String =  ipAddress + ":" + port
-){
-    }
+class DeviceInfo {
+    @get:JsonProperty("login-account")
+    var name: String? = null
+    @get:JsonProperty("login-key")
+    var pass: String? = null
+    @get:JsonProperty("target-ip-address")
+    var ipAddress: String? = null
+    @get:JsonProperty("port-number")
+    var port: Int = 0
+    @get:JsonIgnore
+    var key: String? = null
+    @get:JsonProperty("source")
+    var source: String? = null
+    @get:JsonProperty("connection-time-out")
+    var connectTimeoutSec: Long = 30
+    @get:JsonIgnore
+    var replyTimeout: Int = 60
+    @get:JsonIgnore
+    var idleTimeout: Int = 45
+    @get:JsonIgnore
+    var deviceId: String = "$ipAddress:$port"
+}

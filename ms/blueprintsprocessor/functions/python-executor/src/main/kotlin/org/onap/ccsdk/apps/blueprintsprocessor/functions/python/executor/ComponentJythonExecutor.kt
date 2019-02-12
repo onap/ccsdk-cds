@@ -26,7 +26,6 @@ import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.checkNotEmptyOrThrow
 import org.onap.ccsdk.apps.controllerblueprints.core.data.OperationAssignment
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Scope
@@ -35,7 +34,7 @@ import org.springframework.stereotype.Component
 @Component("component-jython-executor")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class ComponentJythonExecutor(private var applicationContext: ApplicationContext,
-                                   private val blueprintPythonService: BlueprintPythonService) : AbstractComponentFunction() {
+                                   private val blueprintJythonService: BlueprintJythonService) : AbstractComponentFunction() {
 
     private val log = LoggerFactory.getLogger(ComponentJythonExecutor::class.java)
 
@@ -91,7 +90,7 @@ open class ComponentJythonExecutor(private var applicationContext: ApplicationCo
         }
 
         // Setup componentFunction
-        componentFunction = blueprintPythonService.jythonInstance(bluePrintContext, pythonClassName,
+        componentFunction = blueprintJythonService.jythonInstance(bluePrintContext, pythonClassName,
                 content!!, jythonInstance)
         componentFunction?.bluePrintRuntimeService = bluePrintRuntimeService
         componentFunction?.executionServiceInput = executionServiceInput

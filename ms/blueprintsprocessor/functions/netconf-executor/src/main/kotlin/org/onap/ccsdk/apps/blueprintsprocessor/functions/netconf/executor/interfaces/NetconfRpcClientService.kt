@@ -19,6 +19,13 @@ import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.data.D
 
 interface NetconfRpcClientService {
 
+    /**
+     * @param deviceProperties deviceProperties
+     * @return NetconfSession
+     */
+    fun connect(deviceInfo: DeviceInfo): NetconfSession
+
+
     fun disconnect()
 
 

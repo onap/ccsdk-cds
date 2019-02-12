@@ -28,14 +28,14 @@ import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [BlueprintPythonService::class, PythonExecutorProperty::class])
+@ContextConfiguration(classes = [BlueprintJythonService::class, PythonExecutorProperty::class])
 @TestPropertySource(properties =
 ["blueprints.processor.functions.python.executor.modulePaths=./../../../../components/scripts/python/ccsdk_blueprints",
     "blueprints.processor.functions.python.executor.executionPath=./../../../../components/scripts/python/ccsdk_blueprints"])
-class BlueprintPythonServiceTest {
+class BlueprintJythonServiceTest {
 
     @Autowired
-    private lateinit var blueprintPythonService: BlueprintPythonService
+    private lateinit var blueprintJythonService: BlueprintJythonService
 
     @Test
     fun testGetAbstractPythonPlugin() {
@@ -46,7 +46,7 @@ class BlueprintPythonServiceTest {
 
         val content = JacksonUtils.getContent("./../../../../components/scripts/python/ccsdk_blueprints/sample_blueprint_component.py")
 
-        val abstractComponentFunction = blueprintPythonService.jythonInstance<AbstractComponentFunction>(bluePrintContext, "SampleBlueprintComponent", content, dependencies)
+        val abstractComponentFunction = blueprintJythonService.jythonInstance<AbstractComponentFunction>(bluePrintContext, "SampleBlueprintComponent", content, dependencies)
 
         assertNotNull(abstractComponentFunction, "failed to get python component")
 

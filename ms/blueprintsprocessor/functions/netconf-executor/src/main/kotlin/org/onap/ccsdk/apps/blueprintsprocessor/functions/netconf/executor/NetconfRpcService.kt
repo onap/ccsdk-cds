@@ -16,8 +16,6 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.google.common.base.Preconditions
 import org.apache.commons.collections.CollectionUtils
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.core.NetconfSessionFactory
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.data.DeviceResponse
@@ -26,7 +24,6 @@ import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.interf
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.interfaces.NetconfRpcClientService
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.interfaces.NetconfSession
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.utils.RpcMessageUtils
-import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
@@ -48,37 +45,20 @@ class NetconfRpcService : NetconfRpcClientService {
     private val recordedApplyConfigIds = ArrayList<String>()
     private val DEFAULT_MESSAGE_TIME_OUT = 30
 
-    @Throws(NetconfException::class)
-    fun NetconfRpcService(capabilityProperty: MutableMap<String, JsonNode> ) {
-        try {
-             Preconditions.checkNotNull(capabilityProperty, "missing netconfDeviceInfo in netconf rpc client")
-             connect(getNetconfDeviceInfo(capabilityProperty))
-             log.info("NetconfRpcService initialised with deviceInfo {}", deviceInfo)
-            //configPersistService = ConfigPersistService(configResourceService)
 
+    override fun connect(deviceInfo: DeviceInfo): NetconfSession {
+        try {
+
+            this.deviceInfo = deviceInfo
+
+            log.info("Connecting Netconf Device .....")
+            this.netconfSession = NetconfSessionFactory.instance("DEFAULT_NETCONF_SESSION", deviceInfo)
+            publishMessage("Netconf Device Connection Established")
+            return this.netconfSession
         } catch (e: NetconfException) {
             publishMessage(String.format("Netconf Device Connection Failed, %s", e.message))
             throw NetconfException("Netconf Device Connection Failed,$deviceInfo",e)
         }
-
-    }
-
-    fun setdeviceInfo(deviceInfo: DeviceInfo) {
-        this.deviceInfo = deviceInfo
-    }
-
-    fun getNetconfDeviceInfo(capabilityProperty: MutableMap<String, JsonNode> ):DeviceInfo{
-        val netconfDeviceInfo = JacksonUtils.getInstanceFromMap(capabilityProperty, DeviceInfo::class.java)
-        this.deviceInfo = netconfDeviceInfo
-        return netconfDeviceInfo
-    }
-
-    fun connect(netconfDeviceInfo: DeviceInfo) {
-        log.info("in the connect method")
-        setdeviceInfo(netconfDeviceInfo)
-        netconfSession = NetconfSessionFactory.instance("DEFAULT_NETCONF_SESSION", netconfDeviceInfo)
-        publishMessage("Netconf Device Connection Established");
-
     }
 
     override  fun disconnect() {

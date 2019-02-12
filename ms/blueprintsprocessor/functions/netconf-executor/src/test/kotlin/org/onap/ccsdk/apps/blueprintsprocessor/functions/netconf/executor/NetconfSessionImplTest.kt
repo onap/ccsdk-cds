@@ -18,7 +18,6 @@ package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
-import org.junit.Test
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.core.NetconfSessionImpl
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.interfaces.DeviceInfo
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.utils.NetconfDeviceSimulator
@@ -31,7 +30,13 @@ class NetconfSessionImplTest {
 
     @Before
     fun before() {
-        deviceInfo =DeviceInfo("name", "password", "localhost", 2224, "10")
+        deviceInfo = DeviceInfo().apply {
+            name = "name"
+            pass = "password"
+            ipAddress = "localhost"
+            port = 2224
+            connectTimeoutSec = 10
+        }
 
         device = NetconfDeviceSimulator(deviceInfo!!.port)
         device!!.start()
