@@ -20,15 +20,17 @@
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { MatExpansionModule,MatToolbarModule,MatIconModule, MatButtonModule, MatSidenavModule,  MatCheckboxModule, MatListModule, MatGridListModule, MatCardModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatFormFieldModule, MatStepperModule} from '@angular/material';
 import { SaveResourceComponent } from './save-resource.component';
 import { SaveResourceRoutingModule } from './save-resource-routing.module';
 
 @NgModule({
-  declarations: [SaveResourceComponent],
+  declarations: [ SaveResourceComponent ],
+  exports: [ SaveResourceComponent ],
   imports: [
     CommonModule,
-    SaveResourceRoutingModule
+    SaveResourceRoutingModule,
+    MatExpansionModule,MatToolbarModule,MatIconModule, MatButtonModule, MatSidenavModule,  MatCheckboxModule, MatListModule, MatGridListModule, MatCardModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatFormFieldModule, MatStepperModule
   ]
 })
 export class SaveResourceModule { }
