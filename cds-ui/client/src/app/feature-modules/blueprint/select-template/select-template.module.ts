@@ -24,6 +24,7 @@ import { TemplateOptionsComponent } from './template-options/template-options.co
 import { SearchTemplateComponent } from './search-template/search-template.component';
 import { MetadataComponent } from './metadata/metadata.component';
 import { SelectTemplateComponent } from './select-template.component';
+import { ReactiveFormsModule } from '@angular/forms';
 import { SelectTemplateRoutingModule } from './select-template-routing.module';
 
 import { MatToolbarModule, MatButtonModule, MatSidenavModule,  MatListModule, MatGridListModule, MatCardModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatFormFieldModule, MatStepperModule} from '@angular/material';
@@ -61,6 +62,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatRadioModule, 
     MatFormFieldModule, 
     MatStepperModule,
+    ReactiveFormsModule
   ]
 })
 export class SelectTemplateModule { }
