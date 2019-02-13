@@ -251,7 +251,14 @@
             "properties": {
               "login-key": "sample-key",
               "login-account": "sample-account",
-              "target-ip-address": "localhost",
+              "target-ip-address": {
+                "get_attribute": [
+                  "resource-assignment",
+                  "",
+                  "assignment-params",
+                  "$.ipAddress"
+                ]
+              },
               "port-number": 830,
               "connection-time-out": 30
             }
