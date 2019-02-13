@@ -27,29 +27,7 @@ import { BlueprintComponent } from './blueprint.component';
 const routes: Routes = [
     {
         path: '',
-        component: BlueprintComponent,
-        children: [
-            {
-                path: '',
-                loadChildren: './select-template/select-template.module#SelectTemplateModule'
-            },
-            {
-                path: 'selectTemplate',
-                loadChildren: './select-template/select-template.module#SelectTemplateModule'
-            },
-            {
-                path: 'modifyTemplate',
-                loadChildren: './modify-template/modify-template.module#ModifyTemplateModule'
-            },
-            {
-                path: 'testTemplate',
-                loadChildren: './test-template/test-template.module#TestTemplateModule'
-            },
-            {
-                path: 'deployTemplate',
-                loadChildren: './deploy-template/deploy-template.module#DeployTemplateModule'
-            }
-        ]
+        component: BlueprintComponent
     }
 ];
 
