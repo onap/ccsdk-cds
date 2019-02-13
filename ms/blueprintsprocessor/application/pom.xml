@@ -50,6 +50,10 @@
             <artifactId>python-executor</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.onap.ccsdk.apps.blueprintsprocessor.functions</groupId>
+            <artifactId>netconf-executor</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
             <artifactId>selfservice-api</artifactId>
         </dependency>

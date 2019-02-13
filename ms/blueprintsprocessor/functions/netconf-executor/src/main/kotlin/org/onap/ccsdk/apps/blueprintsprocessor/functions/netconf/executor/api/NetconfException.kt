@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Copyright © 2017-2019 AT&T, Bell Canada
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.data
+package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.api
 
-enum class NetconfSshClientLib(val sshClientString :String) {
-    APACHE_MINA("apache-mina"),
-    ETHZ_SSH2("ethz-ssh2");
+class NetconfException : Exception {
 
-    fun getEnum(valueOf: String): NetconfSshClientLib {
-        return NetconfSshClientLib.valueOf(valueOf.toUpperCase().replace('-', '_'))
-    }
+    constructor(cause: Throwable) : super(cause)
+    constructor(message: String) : super(message)
+    constructor(message: String, cause: Throwable) : super(message, cause)
 
 }

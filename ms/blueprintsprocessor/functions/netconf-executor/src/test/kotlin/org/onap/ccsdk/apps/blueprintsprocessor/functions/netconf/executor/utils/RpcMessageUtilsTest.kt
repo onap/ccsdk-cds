@@ -16,10 +16,8 @@
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.utils
 
 import org.junit.Assert
+import org.junit.Assert.assertTrue
 import org.junit.Test
-
-import org.junit.Assert.*
-import org.springframework.beans.factory.annotation.Autowired
 
 class RpcMessageUtilsTest {
 
@@ -34,9 +32,9 @@ class RpcMessageUtilsTest {
         val configType = "candidate"
         val filterContent = "Test-Filter-Content"
 
-        val result = RpcMessageUtils.getConfig(messageId, configType, filterContent).replace("[\n\r\t]".toRegex(), "")
+        val result = NetconfMessageUtils.getConfig(messageId, configType, filterContent).replace("[\n\r\t]".toRegex(), "")
 
-        assertTrue(RpcMessageUtils.validateRPCXML(result))
+        assertTrue(NetconfMessageUtils.validateRPCXML(result))
         Assert.assertEquals(checkString, result)
     }
 
@@ -53,9 +51,9 @@ class RpcMessageUtilsTest {
         val configType = "candidate"
         val filterContent = "Test-Filter-Content"
 
-        val result = RpcMessageUtils.getConfig(messageId, configType, filterContent).replace("[\n\r\t]".toRegex(), "")
+        val result = NetconfMessageUtils.getConfig(messageId, configType, filterContent).replace("[\n\r\t]".toRegex(), "")
 
-        assertTrue(RpcMessageUtils.validateRPCXML(result))
+        assertTrue(NetconfMessageUtils.validateRPCXML(result))
         Assert.assertEquals(checkString, result)
     }
 
@@ -68,9 +66,9 @@ class RpcMessageUtilsTest {
         val messageId = "Test-Message-ID"
         val configType = "candidate"
 
-        val result = RpcMessageUtils.validate(messageId, configType).replace("[\n\r\t]".toRegex(), "")
+        val result = NetconfMessageUtils.validate(messageId, configType).replace("[\n\r\t]".toRegex(), "")
 
-        assertTrue(RpcMessageUtils.validateRPCXML(result))
+        assertTrue(NetconfMessageUtils.validateRPCXML(result))
         Assert.assertEquals(checkString, result)
     }
 
@@ -81,11 +79,10 @@ class RpcMessageUtilsTest {
                 + "<commit></commit></rpc>")
 
         val messageId = "Test-Message-ID"
-        val message = "Test-Message"
 
-        val result = RpcMessageUtils.commit(messageId, message).replace("[\n\r\t]".toRegex(), "")
+        val result = NetconfMessageUtils.commit(messageId).replace("[\n\r\t]".toRegex(), "")
 
-        assertTrue(RpcMessageUtils.validateRPCXML(result))
+        assertTrue(NetconfMessageUtils.validateRPCXML(result))
         Assert.assertEquals(checkString, result)
 
     }
@@ -99,9 +96,9 @@ class RpcMessageUtilsTest {
         val messageId = "Test-Message-ID"
         val configType = "candidate"
 
-        val result = RpcMessageUtils.unlock(messageId, configType).replace("[\n\r\t]".toRegex(), "")
+        val result = NetconfMessageUtils.unlock(messageId, configType).replace("[\n\r\t]".toRegex(), "")
 
-        assertTrue(RpcMessageUtils.validateRPCXML(result))
+        assertTrue(NetconfMessageUtils.validateRPCXML(result))
         Assert.assertEquals(checkString, result)
     }
 
@@ -114,9 +111,9 @@ class RpcMessageUtilsTest {
         val messageId = "Test-Message-ID"
         val netconfTargetConfig = "candidate"
 
-        val result = RpcMessageUtils.deleteConfig(messageId, netconfTargetConfig).replace("[\n\r\t]".toRegex(), "")
+        val result = NetconfMessageUtils.deleteConfig(messageId, netconfTargetConfig).replace("[\n\r\t]".toRegex(), "")
 
-        assertTrue(RpcMessageUtils.validateRPCXML(result))
+        assertTrue(NetconfMessageUtils.validateRPCXML(result))
         Assert.assertEquals(checkString, result)
     }
 
@@ -128,9 +125,9 @@ class RpcMessageUtilsTest {
 
         val messageId = "Test-Message-ID"
 
-        val result = RpcMessageUtils.discardChanges(messageId).replace("[\n\r\t]".toRegex(), "")
+        val result = NetconfMessageUtils.discardChanges(messageId).replace("[\n\r\t]".toRegex(), "")
 
-        assertTrue(RpcMessageUtils.validateRPCXML(result))
+        assertTrue(NetconfMessageUtils.validateRPCXML(result))
         Assert.assertEquals(checkString, result)
     }
 
@@ -142,9 +139,9 @@ class RpcMessageUtilsTest {
 
         val messageId = "Test-Message-ID"
         val configType = "candidate"
-        val result = RpcMessageUtils.lock(messageId, configType).replace("[\n\r\t]".toRegex(), "")
+        val result = NetconfMessageUtils.lock(messageId, configType).replace("[\n\r\t]".toRegex(), "")
 
-        assertTrue(RpcMessageUtils.validateRPCXML(result))
+        assertTrue(NetconfMessageUtils.validateRPCXML(result))
         Assert.assertEquals(checkString, result)
     }
 

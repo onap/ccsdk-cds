@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Copyright © 2017-2019 AT&T, Bell Canada
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.interfaces;
+package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.api
 
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.data.NetconfDeviceOutputEvent;
+interface NetconfSessionListener {
 
-public interface NetconfSessionDelegate {
-
-    void notify(NetconfDeviceOutputEvent event);
+    fun notify(event: NetconfReceivedEvent)
 }

@@ -29,7 +29,7 @@
     <name>Blueprints Processor Distribution</name>
     <properties>
         <assembly.id>maven</assembly.id>
-        <name.space>org.onap.ccsdk.apps</name.space>     <!-- <name.space>${namespace}</name.space> -->
+        <name.space>org.onap.ccsdk.apps</name.space>
         <serviceArtifactName>blueprintsprocessor</serviceArtifactName>
         <image.name>onap/ccsdk-blueprintsprocessor</image.name>
         <docker.buildArg.https_proxy>${https_proxy}</docker.buildArg.https_proxy>

@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.utils
+package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.mocks
 
 
 import org.apache.sshd.common.NamedFactory
 import org.apache.sshd.server.Command
-import java.util.ArrayList
-import org.apache.sshd.server.auth.UserAuthNoneFactory
-import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider
 import org.apache.sshd.server.SshServer
 import org.apache.sshd.server.auth.UserAuth
+import org.apache.sshd.server.auth.UserAuthNoneFactory
+import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.utils.NetconfSubsystemFactory
+import java.util.*
 
 
 class NetconfDeviceSimulator(private val port: Int) {

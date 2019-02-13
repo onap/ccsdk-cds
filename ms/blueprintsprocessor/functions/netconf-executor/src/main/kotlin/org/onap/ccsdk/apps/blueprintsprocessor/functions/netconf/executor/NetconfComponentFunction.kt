@@ -1,5 +1,5 @@
 /*
- *  Copyright © 2018 IBM.
+ *  Copyright © 2018-2019 IBM, Bell Canada.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,39 +17,16 @@
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.interfaces.DeviceInfo
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.interfaces.NetconfRpcClientService
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
 import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 
-
 abstract class NetconfComponentFunction : AbstractComponentFunction() {
 
-    fun deviceProperties(requirementName: String): DeviceInfo {
-
-        val blueprintContext = bluePrintRuntimeService.bluePrintContext()
-
-        val requirement = blueprintContext.nodeTemplateRequirement(nodeTemplateName, requirementName)
-
-        val capabilityProperties = bluePrintRuntimeService.resolveNodeTemplateCapabilityProperties(requirement
-                .node!!, requirement.capability!!)
-
-        return deviceProperties(capabilityProperties)
-    }
-
-    fun deviceProperties(capabilityProperty: MutableMap<String, JsonNode>): DeviceInfo {
-        return JacksonUtils.getInstanceFromMap(capabilityProperty, DeviceInfo::class.java)
-    }
-
-    fun netconfRpcClientService(): NetconfRpcClientService {
-        return NetconfRpcService()
-    }
-
-    fun netconfRpcClientService(requirementName: String): NetconfRpcClientService {
-        val deviceProperties = deviceProperties(requirementName)
-        val netconfRpcClientService = NetconfRpcService()
-        netconfRpcClientService.connect(deviceProperties)
-        return netconfRpcClientService
+    // Called from python script
+    fun initializeNetconfConnection(requirementName: String): NetconfDevice {
+        val deviceInfo = deviceProperties(requirementName)
+        return NetconfDevice(deviceInfo)
     }
 
     fun generateMessage(): String {
@@ -60,4 +37,19 @@ abstract class NetconfComponentFunction : AbstractComponentFunction() {
         TODO()
     }
 
+    private fun deviceProperties(requirementName: String): DeviceInfo {
+
+        val blueprintContext = bluePrintRuntimeService.bluePrintContext()
+
+        val requirement = blueprintContext.nodeTemplateRequirement(nodeTemplateName, requirementName)
+
+        val capabilityProperties = bluePrintRuntimeService.resolveNodeTemplateCapabilityProperties(requirement
+            .node!!, requirement.capability!!)
+
+        return deviceProperties(capabilityProperties)
+    }
+
+    private fun deviceProperties(capabilityProperty: MutableMap<String, JsonNode>): DeviceInfo {
+        return JacksonUtils.getInstanceFromMap(capabilityProperty, DeviceInfo::class.java)
+    }
 }

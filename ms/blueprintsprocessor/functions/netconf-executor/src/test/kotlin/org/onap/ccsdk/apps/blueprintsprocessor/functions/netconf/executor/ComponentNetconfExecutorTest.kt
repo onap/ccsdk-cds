@@ -35,8 +35,7 @@ import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [NetconfExecutorConfiguration::class, BlueprintJythonService::class,
-    PythonExecutorProperty::class])
+@ContextConfiguration(classes = [BlueprintJythonService::class, PythonExecutorProperty::class, ComponentNetconfExecutor::class, JsonParserService::class])
 @TestPropertySource(properties =
 ["blueprints.processor.functions.python.executor.modulePaths=./../../../../components/scripts/python/ccsdk_netconf,./../../../../components/scripts/python/ccsdk_blueprints",
     "blueprints.processor.functions.python.executor.executionPath=./../../../../components/scripts/python/ccsdk_netconf"])
@@ -50,10 +49,10 @@ class ComponentNetconfExecutorTest {
     fun testComponentNetconfExecutor() {
 
         val executionServiceInput = JacksonUtils.readValueFromClassPathFile("requests/sample-activate-request.json",
-                ExecutionServiceInput::class.java)!!
+            ExecutionServiceInput::class.java)!!
 
         val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+            "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
         val executionContext = bluePrintRuntimeService.getExecutionContext()
 
@@ -63,7 +62,7 @@ class ComponentNetconfExecutorTest {
 
         val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
         stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "activate-netconf")
-        stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "NetconfExecutorComponent")
+        stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "ComponentNetconfExecutor")
         stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
         // Set Step Inputs in Blueprint Runtime Service
         bluePrintRuntimeService.put("activate-netconf-step-inputs", stepMetaData.asJsonNode())

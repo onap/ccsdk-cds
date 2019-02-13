@@ -35,7 +35,7 @@ open class ComponentNetconfExecutor(private val blueprintJythonService: Blueprin
 
     lateinit var scriptComponent: NetconfComponentFunction
 
-    override fun process(executionServiceInput: ExecutionServiceInput) {
+    override fun process(executionRequest: ExecutionServiceInput) {
 
         scriptComponent = blueprintJythonService.jythonComponentInstance(this) as NetconfComponentFunction
         checkNotNull(scriptComponent) { "failed to get netconf script component" }
