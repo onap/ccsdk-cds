@@ -14,7 +14,7 @@
     }
   },
   "interfaces": {
-    "NetconfExecutorComponent": {
+    "ComponentNetconfExecutor": {
       "operations": {
         "process": {
           "inputs": {

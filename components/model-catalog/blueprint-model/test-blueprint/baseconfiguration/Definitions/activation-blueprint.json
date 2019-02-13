@@ -211,7 +211,7 @@
       "activate-netconf": {
         "type": "component-netconf-executor",
         "interfaces": {
-          "NetconfExecutorComponent": {
+          "ComponentNetconfExecutor": {
             "operations": {
               "process": {
                 "implementation": {
@@ -240,7 +240,7 @@
         "artifacts": {
           "component-script": {
             "type": "artifact-script-jython",
-            "file": "Scripts/python/DefaultGetNetConfig.py"
+            "file": "Scripts/python/NetconfRpcExample.py"
           }
         }
       },
