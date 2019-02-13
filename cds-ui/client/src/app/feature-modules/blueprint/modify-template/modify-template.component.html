@@ -18,8 +18,79 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
 -->
-<p>
-  modify-template works!
-</p>
 
-<router-outlet></router-outlet>
+<div class="modifyTemp">
+  <div class="outerDiv divone">
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header style="background-color: #f1f1f1">
+          <mat-panel-title>
+            Node types
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="flex-container">
+          <div class="item-box" *ngFor="let item of todo" cdkDrag>{{item}}</div>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header style="background-color: #f1f1f1">
+          <mat-panel-title>
+            Policy
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="flex-container">
+          <div class="item-box">Policy 1</div>
+          <div class="item-box">Policy 1</div>
+          <div class="item-box">Policy 1</div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+
+
+  <div class="outerDiv divtwo" (click)="on = !on" ondrop="dropcalled(event)" ondragover="allowDrop(event)" id="svgDiv">
+    <!-- <canvas class="cnv" height="500"> -->
+    <!-- <div cdkDropList #doneList="cdkDropList" [cdkDropListData]="done" [cdkDropListConnectedTo]="[pendingList,reviewList]"
+              style="height: 100%;width: 100%" (cdkDropListDropped)="drop($event)"> -->
+    <!-- <canvas id="canvasArea" class="cnv" height="500" width="500" (click)="selected($event)"> -->
+    <!-- <div class="item-box" *ngFor="let item of done" cdkDrag>{{item}}</div> -->
+    <!-- </canvas> -->
+    <!-- </div> -->
+    <!-- </canvas> -->
+    <!-- <svg id="svgArea" width="1000px" height="100%" style="background-color: #C0C0C0"> -->
+    <!-- <rect x="0" y="0" width="300" height="200" fill="yellow"></rect> -->
+    <!-- </svg> -->
+  </div>
+
+
+  <div cdkDropList id="list-2" cdkDropListConnectedTo="list-1" (cdkDropListDropped)="drop($event)">
+    <div *ngFor="let item of list" cdkDrag>{{ item }}</div>
+  </div>
+
+  <div *ngIf="on" id="overlay" class="outerDiv divThree">
+    <mat-accordion style="width: 100%">
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header style="background-color: #f1f1f1">
+          <mat-panel-title>
+            Properties
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+        <mat-expansion-panel-header style="background-color: #f1f1f1">
+          <mat-panel-title>
+            Interface
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="item-list">
+          <div class="item-box" *ngFor="let item of review" cdkDrag>{{item}}</div>
+        </div>
+      </mat-expansion-panel>
+
+    </mat-accordion>
+  </div>
+</div>
