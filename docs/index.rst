@@ -35,3 +35,11 @@ Data Flow:
 .. |image0| image:: media/image0.png
    :width: 7.88889in 
    :height: 4.43750in
+   
+Functional Decomposition:
+-------------------------
+|image1|
+
+.. |image1| image:: media/functional_decomposition.png
+   :width: 7.88889in 
+   :height: 4.43750in
