@@ -20,7 +20,8 @@ limitations under the License.
 */
 
 import { Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { IMetaData } from '../../../../common/core/store/models/metadata.model';
 
 @Component({
   selector: 'app-metadata',

@@ -33,8 +33,8 @@ import { AppComponent } from './app.component';
 import { SharedModule } from './common/shared/shared.module';
 import { CoreModule } from './common/core/core.module';
 
-import { BlueprintModule } from './feature-modules/blueprint/blueprint.module';
-import { ResourceDefinitionModule } from './feature-modules/resource-definition/resource-definition.module';
+// import { BlueprintModule } from './feature-modules/blueprint/blueprint.module';
+// import { ResourceDefinitionModule } from './feature-modules/resource-definition/resource-definition.module';
 
 @NgModule({ 
   declarations: [
@@ -65,8 +65,8 @@ import { ResourceDefinitionModule } from './feature-modules/resource-definition/
     HttpClientModule,
     SharedModule,
     CoreModule,
-    BlueprintModule,
-    ResourceDefinitionModule
+    // BlueprintModule,
+    // ResourceDefinitionModule
   ],
   providers: [],
   bootstrap: [AppComponent]
