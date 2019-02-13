@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -109,6 +110,7 @@ object BluePrintTypes {
         validTypes.add(BluePrintConstants.DATA_TYPE_NULL)
         validTypes.add(BluePrintConstants.DATA_TYPE_LIST)
         validTypes.add(BluePrintConstants.DATA_TYPE_MAP)
+        validTypes.add(BluePrintConstants.DATA_TYPE_JSON)
         return validTypes
     }
 

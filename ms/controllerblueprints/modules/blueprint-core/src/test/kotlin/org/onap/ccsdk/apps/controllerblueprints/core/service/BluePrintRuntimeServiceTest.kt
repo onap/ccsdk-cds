@@ -65,10 +65,18 @@ class BluePrintRuntimeServiceTest {
         BluePrintRuntimeUtils.assignInputsFromClassPathFile(bluePrintRuntimeService.bluePrintContext(),
                 "data/default-context.json", executionContext)
 
+        val assignmentParams = "{\n" +
+                "            \"ipAddress\": \"127.0.0.1\",\n" +
+                "            \"hostName\": \"vnf-host\"\n" +
+                "          }"
+
+        bluePrintRuntimeService.setNodeTemplateAttributeValue("resource-assignment", "assignment-params",
+                JacksonUtils.jsonNode(assignmentParams))
+
         val capProperties = bluePrintRuntimeService.resolveNodeTemplateCapabilityProperties("sample-netconf-device",
                 "netconf")
         assertNotNull(capProperties, "Failed to populate capability property values")
-        assertEquals(capProperties["target-ip-address"], JacksonUtils.jsonNodeFromObject("localhost"), "Failed to populate parameter target-ip-address")
+        assertEquals(capProperties["target-ip-address"], "127.0.0.1".asJsonPrimitive(), "Failed to populate parameter target-ip-address")
         assertEquals(capProperties["port-number"], JacksonUtils.jsonNodeFromObject(830), "Failed to populate parameter port-number")
     }
 
