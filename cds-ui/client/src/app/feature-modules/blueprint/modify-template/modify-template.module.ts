@@ -20,8 +20,11 @@ limitations under the License.
 */
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CdkTableModule } from '@angular/cdk/table';
+
 import { ModifyTemplateComponent } from './modify-template.component';
 import { ModifyTemplateRoutingModule } from './modify-template-routing.module';
+import { AppMaterialModule } from '../../../common/modules/app-material.module';
 
 @NgModule({
   declarations: [
@@ -32,6 +35,8 @@ import { ModifyTemplateRoutingModule } from './modify-template-routing.module';
   ],
   imports: [
     CommonModule,
+    CdkTableModule,
+    AppMaterialModule,
     ModifyTemplateRoutingModule
   ]
 })
