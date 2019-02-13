@@ -23,7 +23,6 @@ import { NgModule } from '@angular/core';
 import { StoreModule } from '@ngrx/store';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatToolbarModule, MatButtonModule, MatSidenavModule,  MatListModule, MatGridListModule, MatCardModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatFormFieldModule, MatStepperModule} from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { HttpClientModule } from '@angular/common/http';
@@ -32,8 +31,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './common/shared/shared.module';
 import { CoreModule } from './common/core/core.module';
-
-// import { BlueprintModule } from './feature-modules/blueprint/blueprint.module';
+import { AppMaterialModule } from './common/modules/app-material.module';
 import { ResourceDefinitionModule } from './feature-modules/resource-definition/resource-definition.module';
 
 @NgModule({ 
@@ -46,26 +44,10 @@ import { ResourceDefinitionModule } from './feature-modules/resource-definition/
     AppRoutingModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule,
-    MatGridListModule,
-    MatCardModule,
-    MatMenuModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatInputModule,
-    MatSelectModule, 
-    MatRadioModule, 
-    MatFormFieldModule, 
-    MatStepperModule,
     HttpClientModule,
+    AppMaterialModule,
     SharedModule,
     CoreModule,
-    // BlueprintModule,
     ResourceDefinitionModule
   ],
   providers: [],
