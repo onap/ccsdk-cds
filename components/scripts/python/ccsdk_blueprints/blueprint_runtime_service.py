@@ -11,3 +11,11 @@ class BluePrintRuntimeService:
 
     def setNodeTemplatePropertyValue(self, nodeTemplateName, propertyName, value):
         return self.bps.setNodeTemplatePropertyValue(nodeTemplateName, propertyName, value)
+
+    def put_resolution_store(self, ra_name, value):
+        self.bps.putResolutionStore(ra_name, value)
+        return None
+
+    def put_dictionary_store(self, ra_dictionary_name, value):
+        self.bps.putResolutionStore(ra_dictionary_name, value)
+        return None

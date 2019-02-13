@@ -1,0 +1,128 @@
+{
+  "tosca_definitions_version" : "controller_blueprint_1_0_0",
+  "metadata" : {
+    "template_author" : "Alexis de Talhouët",
+    "author-email" : "adetalhouet89@gmail.com",
+    "user-groups" : "ADMIN, OPERATION",
+    "template_name" : "capability_python",
+    "template_version" : "1.0.0",
+    "template_tags" : "test"
+  },
+  "imports" : [ {
+    "file" : "Definitions/data_types.json"
+  }, {
+    "file" : "Definitions/relationship_types.json"
+  }, {
+    "file" : "Definitions/artifact_types.json"
+  }, {
+    "file" : "Definitions/node_types.json"
+  }, {
+    "file" : "Definitions/policy_types.json"
+  } ],
+  "topology_template" : {
+    "inputs" : {
+      "request-id" : {
+        "required" : true,
+        "type" : "string"
+      },
+      "action-name" : {
+        "required" : true,
+        "type" : "string"
+      }
+    },
+    "workflows" : {
+      "assign-activate" : {
+        "steps" : {
+          "activate-process" : {
+            "description" : "Resource Assign and Netconf Activation Workflow",
+            "target" : "assign-activate-process",
+            "activities" : [ {
+              "call_operation" : ""
+            } ]
+          }
+        },
+        "inputs" : {
+          "assign-activate-properties" : {
+            "description" : "Dynamic PropertyDefinition for workflow(assign-activate).",
+            "required" : true,
+            "type" : "dt-assign-activate-properties"
+          }
+        }
+      }
+    },
+    "node_templates" : {
+      "assign-activate-process" : {
+        "type" : "dg-generic",
+        "properties" : {
+          "content" : {
+            "get_artifact" : [ "SELF", "dg-assign-activate-process" ]
+          },
+          "dependency-node-templates" : [ "resource-assignment", "activate-jython" ]
+        },
+        "artifacts" : {
+          "dg-assign-activate-process" : {
+            "type" : "artifact-directed-graph",
+            "file" : "Plans/CONFIG_AssignActivateNetconf_1.0.0.xml"
+          }
+        }
+      },
+      "resource-assignment" : {
+        "type" : "component-resource-resolution",
+        "interfaces" : {
+          "ResourceResolutionComponent" : {
+            "operations" : {
+              "process" : {
+                "inputs" : {
+                  "artifact-prefix-names" : [ "baseconfig" ]
+                },
+                "outputs" : {
+                  "resource-assignment-params" : {
+                    "get_attribute" : [ "SELF", "assignment-params" ]
+                  },
+                  "status" : "success"
+                }
+              }
+            }
+          }
+        },
+        "artifacts" : {
+          "baseconfig-template" : {
+            "type" : "artifact-template-velocity",
+            "file" : "Templates/baseconfig-template.vtl"
+          },
+          "baseconfig-mapping" : {
+            "type" : "artifact-mapping-resource",
+            "file" : "Definitions/baseconfig-mapping.json"
+          }
+        }
+      },
+      "activate-jython" : {
+        "type" : "component-jython-executor",
+        "interfaces" : {
+          "ComponentJythonExecutor" : {
+            "operations" : {
+              "process" : {
+                "implementation" : {
+                  "primary" : "component-script"
+                },
+                "inputs" : {
+                  "instance-dependencies" : [ ]
+                },
+                "outputs" : {
+                  "response-data" : "",
+                  "status" : ""
+                }
+              }
+            }
+          }
+        },
+        "artifacts" : {
+          "component-script" : {
+            "type" : "artifact-script-jython",
+            "file" : "Scripts/SamplePythonComponentNode.py"
+          }
+        }
+      }
+    }
+  }
+}

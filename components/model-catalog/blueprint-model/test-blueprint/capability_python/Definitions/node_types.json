@@ -1,0 +1,183 @@
+{
+  "node_types" : {
+    "component-jython-executor" : {
+      "description" : "This is Jython Execution Component.",
+      "version" : "1.0.0",
+      "capabilities" : {
+        "component-node" : {
+          "type" : "tosca.capabilities.Node"
+        }
+      },
+      "interfaces" : {
+        "ComponentJythonExecutor" : {
+          "operations" : {
+            "process" : {
+              "inputs" : {
+                "instance-dependencies" : {
+                  "description" : "Instance Names to Inject to Jython Script.",
+                  "required" : true,
+                  "type" : "list",
+                  "entry_schema" : {
+                    "type" : "string"
+                  }
+                }
+              },
+              "outputs" : {
+                "response-data" : {
+                  "description" : "Execution Response Data in JSON format.",
+                  "required" : false,
+                  "type" : "string"
+                },
+                "status" : {
+                  "description" : "Status of the Component Execution ( success or failure )",
+                  "required" : true,
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from" : "tosca.nodes.component.Jython"
+    },
+    "component-resource-resolution" : {
+      "description" : "This is Resource Assignment Component API",
+      "version" : "1.0.0",
+      "attributes" : {
+        "assignment-params" : {
+          "required" : true,
+          "type" : "string"
+        }
+      },
+      "capabilities" : {
+        "component-node" : {
+          "type" : "tosca.capabilities.Node"
+        }
+      },
+      "interfaces" : {
+        "ResourceResolutionComponent" : {
+          "operations" : {
+            "process" : {
+              "inputs" : {
+                "template-name" : {
+                  "description" : "Service Template Name.",
+                  "required" : true,
+                  "type" : "string"
+                },
+                "template-version" : {
+                  "description" : "Service Template Version.",
+                  "required" : true,
+                  "type" : "string"
+                },
+                "resource-type" : {
+                  "description" : "Request type.",
+                  "required" : true,
+                  "type" : "string"
+                },
+                "template-names" : {
+                  "description" : "Name of the artifact Node Templates, to get the template Content.",
+                  "required" : true,
+                  "type" : "list",
+                  "entry_schema" : {
+                    "type" : "string"
+                  }
+                },
+                "artifact-prefix-names" : {
+                  "description" : "Template , Resource Assignment Artifact Prefix names",
+                  "required" : false,
+                  "type" : "list",
+                  "entry_schema" : {
+                    "type" : "string"
+                  }
+                },
+                "request-id" : {
+                  "description" : "Request Id, Unique Id for the request.",
+                  "required" : false,
+                  "type" : "string"
+                },
+                "resource-id" : {
+                  "description" : "Resource Id.",
+                  "required" : false,
+                  "type" : "string"
+                },
+                "action-name" : {
+                  "description" : "Action Name of the process",
+                  "required" : false,
+                  "type" : "string"
+                }
+              },
+              "outputs" : {
+                "resource-assignment-params" : {
+                  "required" : true,
+                  "type" : "string"
+                },
+                "status" : {
+                  "required" : true,
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from" : "tosca.nodes.Component"
+    },
+    "dg-generic" : {
+      "description" : "This is Generic Directed Graph Type",
+      "version" : "1.0.0",
+      "properties" : {
+        "content" : {
+          "required" : true,
+          "type" : "string"
+        },
+        "dependency-node-templates" : {
+          "description" : "Dependent Step Components NodeTemplate name.",
+          "required" : true,
+          "type" : "list",
+          "entry_schema" : {
+            "type" : "string"
+          }
+        }
+      },
+      "derived_from" : "tosca.nodes.DG"
+    },
+    "source-input" : {
+      "description" : "This is Input Resource Source Node Type",
+      "version" : "1.0.0",
+      "properties" : {
+        "key" : {
+          "required" : false,
+          "type" : "string"
+        },
+        "key-dependencies" : {
+          "required" : true,
+          "type" : "list",
+          "entry_schema" : {
+            "type" : "string"
+          }
+        }
+      },
+      "derived_from" : "tosca.nodes.ResourceSource"
+    },
+    "tosca.nodes.Component" : {
+      "description" : "This is default Component Node",
+      "version" : "1.0.0",
+      "derived_from" : "tosca.nodes.Root"
+    },
+    "tosca.nodes.DG" : {
+      "description" : "This is Directed Graph Node Type",
+      "version" : "1.0.0",
+      "derived_from" : "tosca.nodes.Root"
+    },
+    "tosca.nodes.ResourceSource" : {
+      "description" : "TOSCA base type for Resource Sources",
+      "version" : "1.0.0",
+      "derived_from" : "tosca.nodes.Root"
+    },
+    "tosca.nodes.component.Jython" : {
+      "description" : "This is Jython Component",
+      "version" : "1.0.0",
+      "derived_from" : "tosca.nodes.Root"
+    }
+  }
+}
