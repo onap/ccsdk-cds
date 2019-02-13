@@ -23,6 +23,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TestTemplateComponent } from './test-template.component';
 import { TestTemplateRoutingModule } from './test-template-routing.module';
+import { AppMaterialModule } from '../../../common/modules/app-material.module';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { TestTemplateRoutingModule } from './test-template-routing.module';
   ],
   imports: [
     CommonModule,
+    AppMaterialModule,
     TestTemplateRoutingModule
   ]
 })
