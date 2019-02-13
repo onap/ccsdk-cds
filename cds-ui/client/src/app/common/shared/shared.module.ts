@@ -25,18 +25,16 @@ import { HomeComponent } from './components/home/home.component';
 import { CBAWizardComponent } from './components/cbawizard/cbawizard.component';
 import { MatToolbarModule,MatIconModule, MatButtonModule, MatSidenavModule,  MatListModule, MatGridListModule, MatCardModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatFormFieldModule, MatStepperModule} from '@angular/material';
 import { RouterModule } from "@angular/router";
-import { FileuploadComponent } from './fileupload/fileupload.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
-    CBAWizardComponent,
-    FileuploadComponent
+    CBAWizardComponent
+    
   ],
   exports: [
     HomeComponent,
-    CBAWizardComponent,
-    FileuploadComponent
+    CBAWizardComponent
   ],
   imports: [
     CommonModule,
