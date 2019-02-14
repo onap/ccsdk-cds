@@ -20,11 +20,13 @@ limitations under the License.
 */
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 import { TemplateOptionsComponent } from './template-options/template-options.component';
 import { SearchTemplateComponent } from './search-template/search-template.component';
 import { MetadataComponent } from './metadata/metadata.component';
 import { SelectTemplateComponent } from './select-template.component';
 import { SelectTemplateRoutingModule } from './select-template-routing.module';
+import { AppMaterialModule } from 'src/app/common/modules/app-material.module';
 
 import { MatToolbarModule, MatButtonModule, MatSidenavModule,  MatListModule, MatGridListModule, MatCardModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatFormFieldModule, MatStepperModule} from '@angular/material';
 import { MatIconModule } from '@angular/material/icon';
@@ -45,6 +47,7 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [
     CommonModule,
     SelectTemplateRoutingModule,
+    ReactiveFormsModule,
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
@@ -61,6 +64,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatRadioModule, 
     MatFormFieldModule, 
     MatStepperModule,
+    AppMaterialModule
   ]
 })
 export class SelectTemplateModule { }

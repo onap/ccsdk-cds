@@ -18,7 +18,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
 */
-.form-field{
+
+.form-field {
     width: 50%;
     margin: 10px;
+}
+
+.formDisplay {
+    display: flex;
+    flex-direction: row;
+}
+
+.matBtn {
+    color: white;
+    background: gray;
+    margin-top: 10px;
+    position: absolute;
 }
