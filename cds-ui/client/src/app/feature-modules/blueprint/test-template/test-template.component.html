@@ -18,7 +18,35 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
 -->
-<p>
-  test-template works!
-</p>
-<router-outlet></router-outlet>
+<div style="display: flex;flex-direction: row">
+  <div style="width: 20%;margin: 2px">
+    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+      <!-- This is the tree node template for leaf nodes -->
+      <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+        <!-- use a disabled button to provide padding for tree leaf -->
+        <button mat-icon-button disabled></button>
+        <span (click)="fileClicked(node.name)">{{node.name}}</span>
+      </mat-tree-node>
+      <!-- This is the tree node template for expandable nodes -->
+      <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
+        <button mat-icon-button matTreeNodeToggle
+                [attr.aria-label]="'toggle ' + node.name">
+          <mat-icon class="mat-icon-rtl-mirror">
+            {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+          </mat-icon>
+        </button>
+        <span (click)="fileClicked(node.name)">{{node.name}}</span>
+      </mat-tree-node>
+    </mat-tree>
+  </div>
+  <div style="width: 80%;background-color: gainsboro;height: 533px;"></div>
+</div>
+
+<div>
+  <button style="    background-color: #3f51b5;
+  color: white;
+  border: 2px solid;
+  width: 8em;
+  height: 3em;
+  border-radius: 2em;">Test</button>
+</div>

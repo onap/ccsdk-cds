@@ -20,6 +20,65 @@ limitations under the License.
 */
 
 import { Component, OnInit } from '@angular/core';
+import {FlatTreeControl} from '@angular/cdk/tree';
+import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
+
+
+
+interface FoodNode {
+  name: string;
+  children?: FoodNode[];
+}
+
+const TREE_DATA: FoodNode[] = [
+  {
+    name: 'Definitions',
+    children: [
+      {name: 'activation-blueprint.json'},
+      {name: 'artifacts_types.json'},
+      {name: 'data_types.json'},
+    ]
+  }, 
+  {
+    name: 'Scripts',
+    children: [
+      {
+        name: 'kotlin',
+        children: [
+          {name: 'ScriptComponent.cba.kts'},
+          {name: 'ResourceAssignmentProcessor.cba.kts'},
+        ]
+      }
+    ]
+  },
+  {
+    name: 'Templates',
+    children: [
+      {
+        name: 'baseconfig-template'
+      }
+    ]
+  },
+  {
+    name: 'TOSCA-Metada',
+    children: [
+      {
+        name: 'TOSCA.meta'
+      }
+    ]
+  },
+];
+
+/** Flat node with expandable and level information */
+interface ExampleFlatNode {
+  expandable: boolean;
+  name: string;
+  level: number;
+}
+
+
+
+
 
 @Component({
   selector: 'app-test-template',
@@ -28,9 +87,33 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TestTemplateComponent implements OnInit {
 
-  constructor() { }
+  private transformer = (node: FoodNode, level: number) => {
+    return {
+      expandable: !!node.children && node.children.length > 0,
+      name: node.name,
+      level: level,
+    };
+  }
+
+  treeControl = new FlatTreeControl<ExampleFlatNode>(
+      node => node.level, node => node.expandable);
+
+  treeFlattener = new MatTreeFlattener(
+      this.transformer, node => node.level, node => node.expandable, node => node.children);
+
+  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+
+  constructor() { 
+    this.dataSource.data = TREE_DATA;
+  }
+
+  hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
 
   ngOnInit() {
+  }
+
+  fileClicked(file) {
+    console.log('selected file:' + file);
   }
 
 }
