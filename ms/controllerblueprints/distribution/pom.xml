@@ -34,6 +34,8 @@
         <docker.buildArg.https_proxy>${https_proxy}</docker.buildArg.https_proxy>
         <docker.push.phase>deploy</docker.push.phase>
         <docker.verbose>true</docker.verbose>
+		<ccsdk.project.version>${project.version}</ccsdk.project.version>
+		<ccsdk.build.timestamp>${maven.build.timestamp}</ccsdk.build.timestamp>
     </properties>
 
     <dependencies>
@@ -120,22 +122,7 @@
                             <goal>execute</goal>
                         </goals>
                         <configuration>
-                            <source>
-                                println project.properties['ccsdk.project.version']
-                                def versionArray
-                                if (project.properties['ccsdk.project.version'] != null ) {
-                                    versionArray = project.properties['ccsdk.project.version'].split('\\.')
-                                }
-
-                                if (project.properties['ccsdk.project.version'].endsWith("-SNAPSHOT"))
-                                {
-                                    project.properties['project.docker.latesttag.version']=versionArray[0] + '.' + versionArray[1] + "-STAGING-latest"
-                                } else {
-                                    project.properties['project.docker.latesttag.version']=versionArray[0]+'.' + versionArray[1]+"-STAGING-latest"
-                                }
-
-                                println 'New Tag for docker:' + project.properties['project.docker.latesttag.version']
-                            </source>
+                            <source>${basedir}/../../../TagVersion.groovy</source>
                         </configuration>
                     </execution>
                 </executions>
@@ -162,9 +149,9 @@
                                         <cleanup>try</cleanup>
                                         <dockerFileDir>${basedir}/target/docker-stage</dockerFileDir>
                                         <tags>
-                                            <tag>${project.version}</tag>
-                                            <tag>${project.version}-STAGING-${maven.build.timestamp}</tag>
-                                            <tag>${project.docker.latesttag.version}</tag>
+											<tag>${project.docker.latestminortag.version}</tag>
+											<tag>${project.docker.latestfulltag.version}</tag>
+											<tag>${project.docker.latesttagtimestamp.version}</tag>
                                         </tags>
                                     </build>
                                 </image>
