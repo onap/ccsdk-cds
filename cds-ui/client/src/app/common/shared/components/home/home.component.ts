@@ -28,7 +28,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
   events: string[] = [];
-  opened: boolean;
+  opened: boolean = true;
   constructor() { }
 
   ngOnInit() {
