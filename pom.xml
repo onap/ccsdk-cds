@@ -1,4 +1,4 @@
-<!-- 
+<!--
 ============LICENSE_START==========================================
 ===================================================================
 Copyright (C) 2018 IBM Intellectual Property. All rights reserved.
@@ -21,23 +21,32 @@ limitations under the License.
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    
+
     <parent>
 		<groupId>org.onap.ccsdk.parent</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.2.1-SNAPSHOT</version>
 		<relativePath/>
 	</parent>
-    
+
     <groupId>org.onap.ccsdk.cds</groupId>
     <artifactId>controller-design-studio</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    
-    
+
 
     <name>controller-design-studio</name>
-	
+    <description>Creates Controller Design Studio UI Docker container</description>
+
+    <properties>
+        <image.name>onap/ccsdk-cds-ui</image.name>
+        <ccsdk.project.version>${project.version}</ccsdk.project.version>
+	      <ccsdk.distribution.version>${project.version}</ccsdk.distribution.version>
+        <maven.build.timestamp.format>yyyyMMdd'T'HHmmss'Z'</maven.build.timestamp.format>
+	<docker.verbose>true</docker.verbose>
+    </properties>
+
+<!--
 	<modules>
 		<module>cds-ui/client</module>
 		<module>cds-ui/server</module>
@@ -48,8 +57,94 @@ limitations under the License.
         <npm.executable>npm</npm.executable>
         <onap.nexus.url>https://nexus.onap.org</onap.nexus.url>
     </properties>
+-->
 
+<build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.groovy.maven</groupId>
+                <artifactId>gmaven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <source>
+                                println project.properties['ccsdk.project.version'];
+                                def versionArray;
+                                if ( project.properties['ccsdk.project.version'] != null ) {
+                                versionArray = project.properties['ccsdk.project.version'].split('\\.');
+                                }
 
+                                if (project.properties['ccsdk.project.version'].endsWith("-SNAPSHOT"))
+                                {
+                                project.properties['project.docker.latesttag.version']=versionArray[0] + '.' + versionArray[1] + "-STAGING-latest";
+                                } else {
+                                project.properties['project.docker.latesttag.version']=versionArray[0] + '.' + versionArray[1] + "-STAGING-latest";
+                                }
 
-  
+                                println 'New Tag for docker:' + project.properties['project.docker.latesttag.version'];
+                            </source>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>docker</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <version>0.28.0</version>
+                        <inherited>false</inherited>
+                        <configuration>
+                            <images>
+                                <image>
+                                    <name>${image.name}</name>
+                                    <build>
+                                        <cleanup>try</cleanup>
+                                        <dockerFileDir>${basedir}/cds-ui</dockerFileDir>
+                                        <tags>
+                                            <tag>${project.version}</tag>
+                                            <tag>${project.version}-STAGING-${maven.build.timestamp}</tag>
+                                            <tag>${project.docker.latesttag.version}</tag>
+                                        </tags>
+                                    </build>
+                                </image>
+                            </images>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>generate-images</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                            </execution>
+
+                            <execution>
+                                <id>push-images</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                    <goal>push</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+    <organization>
+        <name>ONAP</name>
+    </organization>
+
 </project>
