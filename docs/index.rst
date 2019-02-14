@@ -43,3 +43,9 @@ Functional Decomposition:
 .. |image1| image:: media/functional_decomposition.png
    :width: 7.88889in 
    :height: 4.43750in
+   
+Controller design Studio Presentation:
+--------------------------------------
+
+Details about CDS Architecture and Design detail, Please click below.
+:download:`CDS_Architecture_Design.pptx`
