@@ -20,6 +20,7 @@ limitations under the License.
 */
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 import { TemplateOptionsComponent } from './template-options/template-options.component';
 import { SearchTemplateComponent } from './search-template/search-template.component';
 import { MetadataComponent } from './metadata/metadata.component';
@@ -45,6 +46,7 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [
     CommonModule,
     SelectTemplateRoutingModule,
+    ReactiveFormsModule,
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,

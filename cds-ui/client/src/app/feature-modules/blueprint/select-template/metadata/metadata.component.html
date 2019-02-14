@@ -19,20 +19,28 @@ limitations under the License.
 ============LICENSE_END============================================
 -->
 
-<!-- <form [formGroup]="CBAMetadata"> -->
-  <mat-form-field class="form-field">
-    <input matInput placeholder="CBA File Name" formControlName="CBA_File_Name">
-  </mat-form-field>
-  <mat-form-field class="form-field">
-    <input matInput placeholder="CBA Version" formControlName="CBA_Version">
-  </mat-form-field>
-  <mat-form-field class="form-field">
-    <input matInput placeholder="CSAR Version" formControlName="CSAR_Version">
-  </mat-form-field>
-  <mat-form-field class="form-field">
-    <input matInput placeholder="Entry Definition" formControlName="entry_Definition">
-  </mat-form-field>
-  <mat-form-field class="form-field">
-    <input matInput placeholder="Author" formControlName="author">
-  </mat-form-field>
-  <!-- </form> -->
+<form [formGroup]="CBAMetadataForm" (ngSubmit)="UploadMetadata()">
+    <div class="formDisplay">
+        <mat-form-field class="form-field">
+            <input matInput placeholder="Template Author" id="CBA_File_Name" formControlName="template_author">
+        </mat-form-field>
+        <mat-form-field class="form-field">
+            <input matInput placeholder="Author Email" id="author_email" formControlName="author_email">
+        </mat-form-field>
+        <mat-form-field class="form-field">
+            <input matInput placeholder="User Groups" id="user_groups" formControlName="user_groups">
+        </mat-form-field>
+    </div>
+    <div class="formDisplay">
+        <mat-form-field class="form-field">
+            <input matInput placeholder="Template Name" id="template_name" formControlName="template_name">
+        </mat-form-field>
+        <mat-form-field class="form-field">
+            <input matInput placeholder="Template Version" id="template_version" formControlName="template_version">
+        </mat-form-field>
+        <mat-form-field class="form-field">
+            <input matInput placeholder="Template Tags" id="template_tags" formControlName="template_tags">
+        </mat-form-field>
+    </div>
+    <button mat-button class="matBtn" type="submit" [disabled]="!CBAMetadataForm.valid">Save Metadata</button>
+</form>

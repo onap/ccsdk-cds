@@ -21,6 +21,11 @@ limitations under the License.
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { IBlueprint } from 'src/app/common/core/store/models/blueprint.model';
+import { IBlueprintState } from 'src/app/common/core/store/models/blueprintState.model';
+import { IMetaData } from 'src/app/common/core/store/models/metadata.model';
+import { IImportModel } from 'src/app/common/core/store/models/imports.model';
+import { ITopologyTemplate } from 'src/app/common/core/store/models/itopologytemplate.model';
 
 @Component({
   selector: 'app-select-template',
@@ -28,19 +33,33 @@ import { Store } from '@ngrx/store';
   styleUrls: ['./select-template.component.scss']
 })
 export class SelectTemplateComponent implements OnInit {
-  blueprint: any
-  myFile: File; /* property of File type */
+  blueprint: IBlueprint;
+  topologyTemplate: ITopologyTemplate;
+  metaData: IMetaData;
+  blueprintState: IBlueprintState;
+  importModel: IImportModel;
 
-  constructor() {
+  constructor(private store: Store<IBlueprintState>) {
+    this.importModel.file = '';
   }
 
-  ngOnInit() {  
+  ngOnInit() {
   }
-  fileChange(files: any) {
-    console.log(files);
-    this.myFile = files[0].nativeElement;
+  fileChange(topologyTemp: ITopologyTemplate) {
+    this.topologyTemplate = topologyTemp;
+    console.log(topologyTemp);
   }
-  upload(){
+  metaDataDetail(data: IMetaData) {
     
+    this.metaData = data;
+    console.log("parent" + this.metaData.author_email);
+  }
+  upload() {
+
+  }
+  saveBlueprintModel(){
+    this.blueprint.toplogyTemplates=this.topologyTemplate;
+    this.blueprint.metadata= this.metaData;
+    this.store.dispatch(new CreateBlueprint(this.blueprint));
   }
 }
