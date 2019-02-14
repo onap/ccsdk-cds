@@ -19,8 +19,10 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { IMetaData } from '../../../../common/core/store/models/metadata.model';
+import { A11yModule } from '@angular/cdk/a11y';
 
 @Component({
   selector: 'app-metadata',
@@ -28,18 +30,26 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
   styleUrls: ['./metadata.component.scss']
 })
 export class MetadataComponent implements OnInit {
-  CBAMetadata: FormGroup;
+  CBAMetadataForm: FormGroup;
+  metadata: IMetaData;
+  @Output() metadataform = new EventEmitter<IMetaData>();
 
-  constructor(private _formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    this.CBAMetadata = this._formBuilder.group({
-      CBA_File_Name: ['', Validators.required],
-      CBA_Version: ['', Validators.required],
-      CSAR_Version: ['', Validators.required],
-      entry_Definition: ['', Validators.required],
-      author: ['', Validators.required]
+    this.CBAMetadataForm = this.formBuilder.group({
+      template_author: ['', Validators.required],
+      author_email: ['', Validators.required],
+      user_groups: ['', Validators.required],
+      template_name: ['', Validators.required],
+      template_version: ['', Validators.required],
+      template_tags: ['', Validators.required]
     });
+  }
+  UploadMetadata() {
+    this.metadata = Object.assign({}, this.CBAMetadataForm.value);
+    console.log(this.metadata.template_author);
+    this.metadataform.emit(this.metadata);
   }
 
 }
