@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eb27b25e_d1c23407",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2019-02-14T13:31:56Z",
+      "side": 1,
+      "message": "Please add this additional property:\n\u003cccsdk.build.timestamp\u003e${maven.build.timestamp}\u003c/ccsdk.build.timestamp\u003e",
+      "revId": "b491dc507dde030edcf7c6c43dd2ac51f42ac3e5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6a7c03cb_ced37b2e",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2019-02-14T13:31:56Z",
+      "side": 1,
+      "message": "Instead of having this inline, please copy src/main/scripts/TagVersion.groovy from ccsdk/distribution to src/main/scripts in the cds repo, and reference it in your source tag :\n\u003csource\u003e${basedir}/src/main/scripts/TagVersion.groovy\u003c/source\u003e",
+      "range": {
+        "startLine": 74,
+        "startChar": 36,
+        "endLine": 88,
+        "endChar": 119
+      },
+      "revId": "b491dc507dde030edcf7c6c43dd2ac51f42ac3e5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8b0b86c4_d811c19a",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2019-02-14T13:31:56Z",
+      "side": 1,
+      "message": "Please replace this with the following:\n  \u003ctag\u003e${project.docker.latestminortag.version}\u003c/tag\u003e\n  \u003ctag\u003e${project.docker.latestfulltag.version}\u003c/tag\u003e              \n  \u003ctag\u003e${project.docker.latesttagtimestamp.version}",
+      "range": {
+        "startLine": 115,
+        "startChar": 0,
+        "endLine": 117,
+        "endChar": 90
+      },
+      "revId": "b491dc507dde030edcf7c6c43dd2ac51f42ac3e5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
