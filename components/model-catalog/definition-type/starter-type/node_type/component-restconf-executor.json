@@ -1,5 +1,5 @@
 {
-  "description": "This is Netconf Transaction Configuration Component API",
+  "description": "This is Restconf Transaction Configuration Component API",
   "version": "1.0.0",
   "capabilities": {
     "component-node": {
@@ -11,9 +11,29 @@
       "operations": {
         "process": {
           "inputs": {
+            "script-type": {
+              "description": "Script type, kotlin type is supported",
+              "required": true,
+              "type": "string",
+              "default": "internal",
+              "constraints": [
+                {
+                  "valid_values": [
+                    "kotlin",
+                    "jython",
+                    "internal"
+                  ]
+                }
+              ]
+            },
+            "script-class-reference": {
+              "description": "Kotlin Script class name or jython script name.",
+              "required": true,
+              "type": "string"
+            },
             "instance-dependencies": {
               "required": true,
-              "description": "Instance Names to Inject to Jython Script.",
+              "description": "Instance names to inject to Jython or Kotlin Script.",
               "type": "list",
               "entry_schema": {
                 "type": "string"

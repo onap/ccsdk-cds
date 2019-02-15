@@ -43,5 +43,5 @@
       }
     }
   },
-  "derived_from": "tosca.nodes.component.Jython"
+  "derived_from": "tosca.nodes.Component"
 }
