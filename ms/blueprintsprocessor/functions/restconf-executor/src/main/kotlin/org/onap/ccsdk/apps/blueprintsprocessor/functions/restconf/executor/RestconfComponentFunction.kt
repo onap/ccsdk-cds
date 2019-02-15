@@ -13,9 +13,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
+@file:Suppress("unused")
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.restconf.executor
 
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionService
 import org.onap.ccsdk.apps.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
 import org.onap.ccsdk.apps.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.AbstractComponentFunction
@@ -24,10 +25,23 @@ import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.AbstractCompon
 abstract class RestconfComponentFunction : AbstractComponentFunction() {
 
     lateinit var bluePrintRestLibPropertyService: BluePrintRestLibPropertyService
+    lateinit var resourceResolutionService: ResourceResolutionService
 
     fun restClientService(selector: String): BlueprintWebClientService {
         return bluePrintRestLibPropertyService.blueprintWebClientService(selector)
     }
 
+    fun generateMessage(artifactName: String): String {
+        return bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactName)
+    }
 
+    fun resolveAndGenerateMessage(artifactMapping: String, artifactTemplate: String): String {
+        return resourceResolutionService.resolveResources(bluePrintRuntimeService, nodeTemplateName,
+                artifactMapping, artifactTemplate)
+    }
+
+    fun resolveAndGenerateMessage(artifactPrefix: String): String {
+        return resourceResolutionService.resolveResources(bluePrintRuntimeService, nodeTemplateName,
+                artifactPrefix)
+    }
 }

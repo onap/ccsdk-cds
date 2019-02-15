@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +41,7 @@ import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [ResourceResolutionService::class,
+@ContextConfiguration(classes = [ResourceResolutionServiceImpl::class,
     InputResourceAssignmentProcessor::class, DefaultResourceAssignmentProcessor::class,
     PrimaryDataResourceAssignmentProcessor::class, SimpleRestResourceAssignmentProcessor::class,
     CapabilityResourceAssignmentProcessor::class, PrimaryDBLibGenericService::class,

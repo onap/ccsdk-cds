@@ -17,7 +17,6 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution
 
-import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor.ResourceAssignmentProcessor
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
@@ -29,34 +28,43 @@ import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.utils.BulkResourceSequencingUtils
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Service
 import java.io.File
 
-/**
- * ResourceResolutionService
- * @author Brinda Santh
- * 8/14/2018
- */
+interface ResourceResolutionService {
+
+    fun registeredResourceSources(): List<String>
+
+    fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
+                         artifactNames: List<String>): MutableMap<String, String>
+
+    fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
+                         artifactPrefix: String): String
+
+    fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
+                         artifactMapping: String, artifactTemplate: String?): String
+
+    fun resolveResourceAssignments(blueprintRuntimeService: BluePrintRuntimeService<*>,
+                                   resourceDictionaries: MutableMap<String, ResourceDefinition>,
+                                   resourceAssignments: MutableList<ResourceAssignment>,
+                                   identifierName: String)
+}
 
 @Service
-class ResourceResolutionService {
+open class ResourceResolutionServiceImpl(private var applicationContext: ApplicationContext) :
+        ResourceResolutionService {
 
     private val log = LoggerFactory.getLogger(ResourceResolutionService::class.java)
 
-    @Autowired
-    private lateinit var applicationContext: ApplicationContext
-
-    fun registeredResourceSources(): List<String> {
+    override fun registeredResourceSources(): List<String> {
         return applicationContext.getBeanNamesForType(ResourceAssignmentProcessor::class.java)
                 .filter { it.startsWith(ResourceResolutionConstants.PREFIX_RESOURCE_ASSIGNMENT_PROCESSOR) }
                 .map { it.substringAfter(ResourceResolutionConstants.PREFIX_RESOURCE_ASSIGNMENT_PROCESSOR) }
     }
 
-
-    fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
-                         artifactNames: List<String>): MutableMap<String, String> {
+    override fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
+                                  artifactNames: List<String>): MutableMap<String, String> {
 
         val resolvedParams: MutableMap<String, String> = hashMapOf()
         artifactNames.forEach { artifactName ->
@@ -66,18 +74,27 @@ class ResourceResolutionService {
         return resolvedParams
     }
 
+    override fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
+                                  artifactPrefix: String): String {
 
-    fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String, artifactName: String): String {
+        // Velocity Artifact Definition Name
+        val artifactTemplate = "$artifactPrefix-template"
+        // Resource Assignment Artifact Definition Name
+        val artifactMapping = "$artifactPrefix-mapping"
+
+        return resolveResources(bluePrintRuntimeService, nodeTemplateName, artifactMapping, artifactTemplate)
+    }
+
+
+    override fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
+                                  artifactMapping: String, artifactTemplate: String?): String {
 
         var resolvedContent = ""
-        // Velocity Artifact Definition Name
-        val templateArtifactName = "$artifactName-template"
-        // Resource Assignment Artifact Definition Name
-        val mappingArtifactName = "$artifactName-mapping"
+        log.info("Resolving resource for template artifact($artifactTemplate) with resource assignment artifact($artifactMapping)")
 
-        log.info("Resolving resource for template artifact($templateArtifactName) with resource assignment artifact($mappingArtifactName)")
+        val identifierName = artifactTemplate ?: "no-template"
 
-        val resourceAssignmentContent = bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, mappingArtifactName)
+        val resourceAssignmentContent = bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactMapping)
 
         val resourceAssignments: MutableList<ResourceAssignment> = JacksonUtils.getListFromJson(resourceAssignmentContent, ResourceAssignment::class.java)
                 as? MutableList<ResourceAssignment>
@@ -92,14 +109,13 @@ class ResourceResolutionService {
                 ?: throw BluePrintProcessorException("couldn't get Dictionary Definitions")
 
         // Resolve resources
-        executeProcessors(bluePrintRuntimeService, resourceDictionaries, resourceAssignments, templateArtifactName)
-
-        // Check Template is there
-        val templateContent = bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, templateArtifactName)
+        resolveResourceAssignments(bluePrintRuntimeService, resourceDictionaries, resourceAssignments, identifierName)
 
         val resolvedParamJsonContent = ResourceAssignmentUtils.generateResourceDataForAssignments(resourceAssignments.toList())
 
-        if (templateContent.isNotEmpty()) {
+        // Check Template is there
+        if (artifactTemplate != null) {
+            val templateContent = bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactTemplate)
             resolvedContent = BluePrintTemplateService.generateContent(templateContent, resolvedParamJsonContent)
         } else {
             resolvedContent = resolvedParamJsonContent
@@ -107,13 +123,13 @@ class ResourceResolutionService {
         return resolvedContent
     }
 
-    private fun executeProcessors(blueprintRuntimeService: BluePrintRuntimeService<*>,
-                                  resourceDictionaries: MutableMap<String, ResourceDefinition>,
-                                  resourceAssignments: MutableList<ResourceAssignment>,
-                                  templateArtifactName: String) {
+    override fun resolveResourceAssignments(blueprintRuntimeService: BluePrintRuntimeService<*>,
+                                            resourceDictionaries: MutableMap<String, ResourceDefinition>,
+                                            resourceAssignments: MutableList<ResourceAssignment>,
+                                            identifierName: String) {
 
         val bulkSequenced = BulkResourceSequencingUtils.process(resourceAssignments)
-        val resourceAssignmentRuntimeService = ResourceAssignmentUtils.transformToRARuntimeService(blueprintRuntimeService, templateArtifactName)
+        val resourceAssignmentRuntimeService = ResourceAssignmentUtils.transformToRARuntimeService(blueprintRuntimeService, identifierName)
 
         bulkSequenced.map { batchResourceAssignments ->
             batchResourceAssignments.filter { it.name != "*" && it.name != "start" }

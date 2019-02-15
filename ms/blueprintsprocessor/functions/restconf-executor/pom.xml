@@ -32,21 +32,7 @@
     <dependencies>
         <dependency>
             <groupId>org.onap.ccsdk.apps.blueprintsprocessor.functions</groupId>
-            <artifactId>python-executor</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
-            <artifactId>blueprint-scripts</artifactId>
-        </dependency>
-
-        <!--Testing dependencies-->
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-test-junit</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.mockk</groupId>
-            <artifactId>mockk</artifactId>
+            <artifactId>resource-resolution</artifactId>
         </dependency>
     </dependencies>
 

@@ -29,6 +29,7 @@ import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.CommonHeader
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.BlueprintJythonService
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.PythonExecutorProperty
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionServiceImpl
 import org.onap.ccsdk.apps.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.asJsonNode
@@ -46,7 +47,8 @@ import kotlin.test.assertNotNull
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [RestconfExecutorConfiguration::class, ComponentRestconfExecutor::class,
     BlueprintJythonService::class, PythonExecutorProperty::class, BluePrintRestLibPropertyService::class,
-    BlueprintPropertyConfiguration::class, BluePrintProperties::class, BluePrintScriptsServiceImpl::class])
+    BlueprintPropertyConfiguration::class, BluePrintProperties::class, BluePrintScriptsServiceImpl::class,
+    ResourceResolutionServiceImpl::class])
 @TestPropertySource(properties =
 ["server.port=9111",
     "blueprintsprocessor.restconfEnabled=true",

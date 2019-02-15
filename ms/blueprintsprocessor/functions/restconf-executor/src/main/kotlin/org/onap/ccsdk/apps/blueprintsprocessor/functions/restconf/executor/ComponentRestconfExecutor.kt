@@ -18,6 +18,7 @@ package org.onap.ccsdk.apps.blueprintsprocessor.functions.restconf.executor
 
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.BlueprintJythonService
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionService
 import org.onap.ccsdk.apps.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
 import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
@@ -35,7 +36,8 @@ import org.springframework.stereotype.Component
 open class ComponentRestconfExecutor(private var applicationContext: ApplicationContext,
                                      private val blueprintJythonService: BlueprintJythonService,
                                      private val bluePrintScriptsService: BluePrintScriptsService,
-                                     private var bluePrintRestLibPropertyService: BluePrintRestLibPropertyService) :
+                                     private var bluePrintRestLibPropertyService: BluePrintRestLibPropertyService,
+                                     private var resourceResolutionService: ResourceResolutionService) :
         AbstractComponentFunction() {
 
     private val log = LoggerFactory.getLogger(ComponentRestconfExecutor::class.java)
@@ -68,6 +70,7 @@ open class ComponentRestconfExecutor(private var applicationContext: Application
 
         // Set the Rest Lib Property Service
         scriptComponent.bluePrintRestLibPropertyService = bluePrintRestLibPropertyService
+        scriptComponent.resourceResolutionService = resourceResolutionService
 
         scriptComponent.process(executionServiceInput)
     }
