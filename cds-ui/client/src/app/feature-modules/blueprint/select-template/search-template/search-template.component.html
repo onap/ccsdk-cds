@@ -18,4 +18,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
 -->
-<input type="file" accept=".cba">
+<div>
+    <input type="file" accept=".json" (change)="fileChanged($event)">
+</div>
+<div>
+    <button mat-button matStepperNext class="matStepNextBtn" (click)="extractBlueprint()">Upload</button>
+</div>
