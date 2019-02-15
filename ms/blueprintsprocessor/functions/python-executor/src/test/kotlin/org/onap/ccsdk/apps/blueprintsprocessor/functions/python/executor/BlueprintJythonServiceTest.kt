@@ -44,9 +44,9 @@ class BlueprintJythonServiceTest {
 
         val dependencies: MutableMap<String, Any> = hashMapOf()
 
-        val content = JacksonUtils.getContent("./../../../../components/scripts/python/ccsdk_blueprints/sample_blueprint_component.py")
+        val content = JacksonUtils.getContent("./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration/Scripts/python/SamplePythonComponentNode.py")
 
-        val abstractComponentFunction = blueprintJythonService.jythonInstance<AbstractComponentFunction>(bluePrintContext, "SampleBlueprintComponent", content, dependencies)
+        val abstractComponentFunction = blueprintJythonService.jythonInstance<AbstractComponentFunction>(bluePrintContext, "SamplePythonComponentNode", content, dependencies)
 
         assertNotNull(abstractComponentFunction, "failed to get python component")
 

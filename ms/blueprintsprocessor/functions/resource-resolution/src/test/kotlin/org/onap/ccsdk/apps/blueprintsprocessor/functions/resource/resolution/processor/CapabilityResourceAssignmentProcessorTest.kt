@@ -86,7 +86,7 @@ class CapabilityResourceAssignmentProcessorTest {
     fun `test jython capability`() {
 
         val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
-                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/capability_python")
 
         val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)
 
@@ -100,8 +100,8 @@ class CapabilityResourceAssignmentProcessorTest {
         capabilityResourceAssignmentProcessor.resourceDictionaries = resourceDefinitions
 
         val resourceAssignment = ResourceAssignment().apply {
-            name = "country"
-            dictionaryName = "country"
+            name = "service-instance-id"
+            dictionaryName = "service-instance-id"
             dictionarySource = "capability"
             property = PropertyDefinition().apply {
                 type = "string"
