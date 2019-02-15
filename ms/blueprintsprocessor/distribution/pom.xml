@@ -14,7 +14,9 @@
   ~  See the License for the specific language governing permissions and
   ~  limitations under the License.
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
@@ -33,6 +35,8 @@
         <docker.buildArg.https_proxy>${https_proxy}</docker.buildArg.https_proxy>
         <docker.push.phase>deploy</docker.push.phase>
         <docker.verbose>true</docker.verbose>
+        <ccsdk.project.version>${project.version}</ccsdk.project.version>
+        <ccsdk.build.timestamp>${maven.build.timestamp}</ccsdk.build.timestamp>
     </properties>
 
     <dependencies>
@@ -77,7 +81,8 @@
                         <phase>package</phase>
                         <configuration>
                             <tasks>
-                                <fixcrlf srcdir="${basedir}" eol="unix" includes="**/*.sh, **/*.source"/>
+                                <fixcrlf srcdir="${basedir}" eol="unix"
+                                    includes="**/*.sh, **/*.source" />
                             </tasks>
                         </configuration>
                         <goals>
@@ -91,7 +96,7 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <!-- <skipAssembly>${skip.assembly}</skipAssembly>-->
+                    <!-- <skipAssembly>${skip.assembly}</skipAssembly> -->
                     <outputDirectory>${basedir}/target/docker-stage</outputDirectory>
                     <descriptors>
                         <descriptor>src/main/docker/distribution.xml</descriptor>
@@ -119,22 +124,7 @@
                             <goal>execute</goal>
                         </goals>
                         <configuration>
-                            <source>
-                                println project.properties['ccsdk.project.version']
-                                def versionArray
-                                if (project.properties['ccsdk.project.version'] != null ) {
-                                    versionArray = project.properties['ccsdk.project.version'].split('\\.')
-                                }
-
-                                if (project.properties['ccsdk.project.version'].endsWith("-SNAPSHOT"))
-                                {
-                                    project.properties['project.docker.latesttag.version']=versionArray[0] + '.' + versionArray[1] + "-STAGING-latest"
-                                } else {
-                                    project.properties['project.docker.latesttag.version']=versionArray[0]+'.' + versionArray[1]+"-STAGING-latest"
-                                }
-
-                                println 'New Tag for docker:' + project.properties['project.docker.latesttag.version']
-                            </source>
+                            <source>${basedir}/../../../TagVersion.groovy</source>
                         </configuration>
                     </execution>
                 </executions>
@@ -147,30 +137,30 @@
         <profile>
             <id>docker</id>
             <build>
-                   <plugins>
-                        <plugin>
-                            <groupId>io.fabric8</groupId>
-                            <artifactId>docker-maven-plugin</artifactId>
-                            <version>0.26.1</version>
-                            <inherited>false</inherited>
-                            <configuration>
-                                <images>
-                                    <image>
-                                        <name>${image.name}</name>
-                                        <build>
-                                             <cleanup>try</cleanup>
-                                             <dockerFileDir>${basedir}/target/docker-stage</dockerFileDir>
-                                             <tags>
-                                                <tag>${project.version}</tag>
-                                                <tag>${project.version}-STAGING-${maven.build.timestamp}</tag>
-                                                <tag>${project.docker.latesttag.version}</tag>
-                                             </tags>
-                                        </build>
-                                    </image>
-                                </images>
-                                <verbose>true</verbose>
-                            </configuration>
-                            <executions>
+                <plugins>
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <version>0.26.1</version>
+                        <inherited>false</inherited>
+                        <configuration>
+                            <images>
+                                <image>
+                                    <name>${image.name}</name>
+                                    <build>
+                                        <cleanup>try</cleanup>
+                                        <dockerFileDir>${basedir}/target/docker-stage</dockerFileDir>
+                                        <tags>
+                                            <tag>${project.docker.latestminortag.version}</tag>
+                                            <tag>${project.docker.latestfulltag.version}</tag>
+                                            <tag>${project.docker.latesttagtimestamp.version}</tag>
+                                        </tags>
+                                    </build>
+                                </image>
+                            </images>
+                            <verbose>true</verbose>
+                        </configuration>
+                        <executions>
                             <execution>
                                 <id>generate-images</id>
                                 <phase>package</phase>
