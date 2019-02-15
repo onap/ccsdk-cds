@@ -21,25 +21,29 @@ limitations under the License.
 <mat-vertical-stepper linear>
     <mat-step [stepControl]="step1FormGroup">
         <ng-template matStepLabel>Choose CBA Template file</ng-template>
-        <app-template-options></app-template-options>
-        <br>
-        <div>
-            <button mat-button matStepperNext class="matStepNextBtn">Proceed</button>
+        <div class="matStepContent">
+            <app-template-options></app-template-options>
+            <br>
+            <div>
+                <button mat-button matStepperNext class="matStepNextBtn">Proceed</button>
+            </div>
         </div>
     </mat-step>
 
     <mat-step [stepControl]="step2FormGroup">
         <ng-template matStepLabel>Browse CBA Template file</ng-template>
-        <app-search-template (cbaFile)="fileChange($event)"></app-search-template>
-        <br>
-        <div>
-            <button mat-button matStepperNext class="matStepNextBtn">Upload</button>
+        <div class="matStepContent">
+            <app-search-template (cbaFile)="fileChange($event)"></app-search-template>
+            <div>
+                <button mat-button matStepperNext class="matStepNextBtn">Upload</button>
+            </div>
         </div>
     </mat-step>
     <mat-step [stepControl]="step3FormGroup">
         <ng-template matStepLabel>Enter Metadata details</ng-template>
-        <app-metadata (metadataform)="metaDataDetail($event)"></app-metadata>
-        <br>
+        <div class="matStepContent">
+            <app-metadata (metadataform)="metaDataDetail($event)"></app-metadata>
+        </div>
     </mat-step>
 </mat-vertical-stepper>
 <button mat-button matStepperNext class="matStepNextBtn" (click)="saveBlueprintModel()">Next</button>
