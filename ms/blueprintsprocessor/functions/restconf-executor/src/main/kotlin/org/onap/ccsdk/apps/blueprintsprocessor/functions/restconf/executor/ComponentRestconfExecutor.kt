@@ -20,6 +20,10 @@ import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInp
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.BlueprintJythonService
 import org.onap.ccsdk.apps.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
 import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.AbstractComponentFunction
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.apps.controllerblueprints.core.getAsString
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintScriptsService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.ApplicationContext
@@ -30,16 +34,28 @@ import org.springframework.stereotype.Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class ComponentRestconfExecutor(private var applicationContext: ApplicationContext,
                                      private val blueprintJythonService: BlueprintJythonService,
-                                     var bluePrintRestLibPropertyService: BluePrintRestLibPropertyService) :
+                                     private val bluePrintScriptsService: BluePrintScriptsService,
+                                     private var bluePrintRestLibPropertyService: BluePrintRestLibPropertyService) :
         AbstractComponentFunction() {
 
     private val log = LoggerFactory.getLogger(ComponentRestconfExecutor::class.java)
 
     lateinit var scriptComponent: RestconfComponentFunction
 
+    companion object {
+        const val SCRIPT_TYPE = "script-type"
+        const val SCRIPT_CLASS_REFERENCE = "script-class-reference"
+    }
+
     override fun process(executionRequest: ExecutionServiceInput) {
-        scriptComponent = blueprintJythonService.jythonComponentInstance(this) as RestconfComponentFunction
-        checkNotNull(scriptComponent) { "failed to get netconf script component" }
+
+        val scriptType = operationInputs.getAsString(SCRIPT_TYPE)
+        val scriptClassReference = operationInputs.getAsString(SCRIPT_CLASS_REFERENCE)
+        /**
+         * Populate the Script Instance based on the Type
+         */
+        restconfComponentFunction(scriptType, scriptClassReference)
+        checkNotNull(scriptComponent) { "failed to get restconf script component" }
 
         scriptComponent.bluePrintRuntimeService = bluePrintRuntimeService
         scriptComponent.processId = processId
@@ -58,5 +74,25 @@ open class ComponentRestconfExecutor(private var applicationContext: Application
 
     override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         scriptComponent.recover(runtimeException, executionRequest)
+    }
+
+    fun restconfComponentFunction(scriptType: String, scriptClassReference: String): RestconfComponentFunction {
+        log.info("processing restconf script type($scriptType), reference name($scriptClassReference)")
+        when (scriptType) {
+            BluePrintConstants.SCRIPT_INTERNAL -> {
+                scriptComponent = bluePrintScriptsService.scriptInstance<RestconfComponentFunction>(scriptClassReference)
+            }
+            BluePrintConstants.SCRIPT_KOTLIN -> {
+                scriptComponent = bluePrintScriptsService.scriptInstance<RestconfComponentFunction>(bluePrintRuntimeService
+                        .bluePrintContext(), scriptClassReference, false)
+            }
+            BluePrintConstants.SCRIPT_JYTHON -> {
+                scriptComponent = blueprintJythonService.jythonComponentInstance(this) as RestconfComponentFunction
+            }
+            else -> {
+                throw BluePrintProcessorException("script type($scriptType) is not supported")
+            }
+        }
+        return scriptComponent
     }
 }
