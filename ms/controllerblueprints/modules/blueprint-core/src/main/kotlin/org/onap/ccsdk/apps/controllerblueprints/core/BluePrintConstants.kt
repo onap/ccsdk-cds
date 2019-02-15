@@ -46,6 +46,10 @@ object BluePrintConstants {
     const val DATA_TYPE_MAP: String = "map"
     const val DATA_TYPE_JSON: String = "json"
 
+    const val SCRIPT_KOTLIN = "kotlin"
+    const val SCRIPT_JYTHON = "jython"
+    const val SCRIPT_INTERNAL = "internal"
+
     const val USER_SYSTEM: String = "System"
 
     const val PATH_DIVIDER: String = "/"

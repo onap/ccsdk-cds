@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,40 +66,45 @@ open class BluePrintsCompilerProxy(private val hostConfiguration: ScriptingHostC
 
                 val rootDisposable = Disposer.newDisposable()
 
-                val compilerConfiguration = CompilerConfiguration().apply {
+                try {
 
-                    put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY, messageCollector)
-                    put(CommonConfigurationKeys.MODULE_NAME, blueprintSourceCode.moduleName)
-                    put(JVMConfigurationKeys.OUTPUT_JAR, compiledJarFile)
-                    put(JVMConfigurationKeys.RETAIN_OUTPUT_IN_MEMORY, false)
+                    val compilerConfiguration = CompilerConfiguration().apply {
 
-                    // Load Current Class loader to Compilation Class loader
-                    val currentClassLoader = classpathFromClasspathProperty()
-                    currentClassLoader?.forEach {
-                        add(CLIConfigurationKeys.CONTENT_ROOTS, JvmClasspathRoot(it))
+                        put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY, messageCollector)
+                        put(CommonConfigurationKeys.MODULE_NAME, blueprintSourceCode.moduleName)
+                        put(JVMConfigurationKeys.OUTPUT_JAR, compiledJarFile)
+                        put(JVMConfigurationKeys.RETAIN_OUTPUT_IN_MEMORY, false)
+
+                        // Load Current Class loader to Compilation Class loader
+                        val currentClassLoader = classpathFromClasspathProperty()
+                        currentClassLoader?.forEach {
+                            add(CLIConfigurationKeys.CONTENT_ROOTS, JvmClasspathRoot(it))
+                        }
+
+                        // Add all Kotlin Sources
+                        addKotlinSourceRoots(blueprintSourceCode.blueprintKotlinSources)
+
+                        languageVersionSettings = LanguageVersionSettingsImpl(
+                                LanguageVersion.LATEST_STABLE, ApiVersion.LATEST_STABLE, mapOf(AnalysisFlags.skipMetadataVersionCheck to true)
+                        )
                     }
 
-                    // Add all Kotlin Sources
-                    addKotlinSourceRoots(blueprintSourceCode.blueprintKotlinSources)
+                    //log.info("Executing with compiler configuration : $compilerConfiguration")
 
-                    languageVersionSettings = LanguageVersionSettingsImpl(
-                            LanguageVersion.LATEST_STABLE, ApiVersion.LATEST_STABLE, mapOf(AnalysisFlags.skipMetadataVersionCheck to true)
-                    )
-                }
+                    environment = KotlinCoreEnvironment.createForProduction(rootDisposable, compilerConfiguration,
+                            EnvironmentConfigFiles.JVM_CONFIG_FILES)
 
-                //log.info("Executing with compiler configuration : $compilerConfiguration")
+                    // Compile Kotlin Sources
+                    val compiled = KotlinToJVMBytecodeCompiler.compileBunchOfSources(environment)
 
-                environment = KotlinCoreEnvironment.createForProduction(rootDisposable, compilerConfiguration,
-                        EnvironmentConfigFiles.JVM_CONFIG_FILES)
+                    val analyzerWithCompilerReport = AnalyzerWithCompilerReport(messageCollector,
+                            environment.configuration.languageVersionSettings)
 
-                // Compile Kotlin Sources
-                val compiled = KotlinToJVMBytecodeCompiler.compileBunchOfSources(environment)
-
-                val analyzerWithCompilerReport = AnalyzerWithCompilerReport(messageCollector,
-                        environment.configuration.languageVersionSettings)
-
-                if (analyzerWithCompilerReport.hasErrors()) {
-                    return ResultWithDiagnostics.Failure(messageCollector.diagnostics)
+                    if (analyzerWithCompilerReport.hasErrors()) {
+                        return ResultWithDiagnostics.Failure(messageCollector.diagnostics)
+                    }
+                } finally {
+                    rootDisposable.dispose()
                 }
             }
 

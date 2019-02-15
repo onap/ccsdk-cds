@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +22,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintScripts
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 import org.springframework.stereotype.Service
 import java.io.File
+import java.util.*
 import kotlin.script.experimental.api.ResultValue
 import kotlin.script.experimental.api.resultOrNull
 import kotlin.script.experimental.jvmhost.createJvmCompilationConfigurationFromTemplate
@@ -57,6 +59,11 @@ open class BluePrintScriptsServiceImpl : BluePrintScriptsService {
         return returnValue?.value!! as T
     }
 
+    override fun <T> scriptInstance(scriptClassName: String): T {
+        val args = ArrayList<Any?>()
+        return Thread.currentThread().contextClassLoader.loadClass(scriptClassName).constructors
+                .single().newInstance(*args.toArray()) as T
+    }
 }
 
 fun getBluePrintScriptsJarName(blueprintContext: BluePrintContext): String {
