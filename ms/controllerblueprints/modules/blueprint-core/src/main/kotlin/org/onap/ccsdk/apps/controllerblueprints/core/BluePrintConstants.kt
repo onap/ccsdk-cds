@@ -44,6 +44,7 @@ object BluePrintConstants {
     const val DATA_TYPE_NULL: String = "null"
     const val DATA_TYPE_LIST: String = "list"
     const val DATA_TYPE_MAP: String = "map"
+    const val DATA_TYPE_JSON: String = "json"
 
     const val USER_SYSTEM: String = "System"
 

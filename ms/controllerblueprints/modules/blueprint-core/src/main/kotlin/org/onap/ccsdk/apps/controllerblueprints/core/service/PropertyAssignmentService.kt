@@ -27,6 +27,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*
 import org.onap.ccsdk.apps.controllerblueprints.core.format
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JsonParserUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.ResourceResolverUtils
 
 /**
@@ -95,11 +96,11 @@ If Property Assignment is Expression.
     }
 
     /*
-    get_property: [ <modelable_entity_name>, <optional_req_or_cap_name>, <property_name>,
+    get_attribute: [ <modelable_entity_name>, <optional_req_or_cap_name>, <property_name>,
     <nested_property_name_or_index_1>, ..., <nested_property_name_or_index_n> ]
  */
     fun resolveAttributeExpression(nodeTemplateName: String, attributeExpression: AttributeExpression): JsonNode {
-        val valueNode: JsonNode
+        var valueNode: JsonNode
 
         val attributeName = attributeExpression.attributeName
         val subAttributeName: String? = attributeExpression.subAttributeName
@@ -114,24 +115,20 @@ If Property Assignment is Expression.
                 if (!attributeExpression.modelableEntityName.equals("SELF", true)) {
                     attributeNodeTemplateName = attributeExpression.modelableEntityName
                 }
-                /* Enable in ONAP Dublin Release
-                val nodeTemplateAttributeExpression = bluePrintContext.nodeTemplateByName(attributeNodeTemplateName).attributes?.get(attributeName)
-                        ?: throw BluePrintException(format("failed to get attribute definitions for node template " +
-                                "({})'s property name ({}) ", nodeTemplateName, attributeName))
 
-                var attributeDefinition: AttributeDefinition = bluePrintContext.nodeTemplateNodeType(attributeNodeTemplateName).attributes?.get(attributeName)!!
-
-                log.info("node template name ({}), property Name ({}) resolved value ({})", attributeNodeTemplateName, attributeName, nodeTemplateAttributeExpression)
-                */
+                var attributeDefinition: AttributeDefinition = bluePrintContext
+                        .nodeTemplateNodeType(attributeNodeTemplateName).attributes?.get(attributeName)
+                        ?: throw BluePrintException("failed to get attribute definitions for node template ($attributeNodeTemplateName)'s attribute name ($attributeName) ")
 
                 valueNode = bluePrintRuntimeService.getNodeTemplateAttributeValue(attributeNodeTemplateName, attributeName)
-                        ?: throw BluePrintException(format("failed to get node template ({})'s attribute ({}) ", nodeTemplateName, attributeName))
+                        ?: throw BluePrintException("failed to get node template ($attributeNodeTemplateName)'s attribute name ($attributeName) ")
             }
 
         }
-//        subPropertyName?.let {
-//            valueNode = valueNode.at(JsonPointer.valueOf(subPropertyName))
-//        }
+        if (subAttributeName != null) {
+            if (valueNode.isObject || valueNode.isArray)
+                valueNode = JsonParserUtils.parse(valueNode, subAttributeName)
+        }
         return valueNode
     }
 
@@ -140,7 +137,7 @@ If Property Assignment is Expression.
         <nested_property_name_or_index_1>, ..., <nested_property_name_or_index_n> ]
      */
     fun resolvePropertyExpression(nodeTemplateName: String, propertyExpression: PropertyExpression): JsonNode {
-        val valueNode: JsonNode
+        var valueNode: JsonNode
 
         val propertyName = propertyExpression.propertyName
         val subPropertyName: String? = propertyExpression.subPropertyName
@@ -160,9 +157,10 @@ If Property Assignment is Expression.
         // Check it it is a nested expression
         valueNode = resolveAssignmentExpression(propertyNodeTemplateName, propertyName, nodeTemplatePropertyExpression)
 
-//        subPropertyName?.let {
-//            valueNode = valueNode.at(JsonPointer.valueOf(subPropertyName))
-//        }
+        if (subPropertyName != null) {
+            if (valueNode.isObject || valueNode.isArray)
+                valueNode = JsonParserUtils.parse(valueNode, subPropertyName)
+        }
         return valueNode
     }
 
