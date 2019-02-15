@@ -25,25 +25,7 @@ import { ResourceDefinitionComponent } from './resource-definition.component';
 const routes: Routes = [
     {
         path: '',
-        component: ResourceDefinitionComponent,
-        children: [
-            {
-                path: '',
-               loadChildren: './resource-creation/resource-creation.module#ResourceCreationModule'
-            },
-            {
-                path: 'resource-creation',
-                loadChildren: './resource-creation/resource-creation.module#ResourceCreationModule'
-            },
-            {
-                path: 'resource-edit',
-                loadChildren: './resource-edit/resource-edit.module#ResourceEditModule'
-            },
-            {
-                path: 'save-resource',
-                loadChildren: './save-resource/save-resource.module#SaveResourceModule'
-            }
-        ]
+        component: ResourceDefinitionComponent
     }
 ];
 
