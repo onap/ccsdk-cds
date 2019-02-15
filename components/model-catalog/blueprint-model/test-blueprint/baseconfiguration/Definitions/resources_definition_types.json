@@ -11,6 +11,14 @@
       "input": {
         "type": "source-input",
         "properties": {}
+      },
+      "capability": {
+        "type": "source-capability",
+        "properties": {
+          "type": "JYTHON-COMPONENT",
+          "instance-name": "SampleRAProcessor",
+          "instance-dependencies": []
+        }
       }
     }
   },

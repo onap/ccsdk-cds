@@ -1,0 +1,17 @@
+{
+  "data_types" : {
+    "dt-assign-activate-properties" : {
+      "description" : "Dynamic DataType definition for workflow(assign-activate).",
+      "version" : "1.0.0",
+      "properties" : {
+        "vnf-id" : {
+          "type" : "string"
+        },
+        "service-instance-id" : {
+          "type" : "string"
+        }
+      },
+      "derived_from" : "tosca.datatypes.Dynamic"
+    }
+  }
+}
