@@ -40,7 +40,7 @@ export class SelectTemplateComponent implements OnInit {
   importModel: IImportModel;
 
   constructor(private store: Store<IBlueprintState>) {
-    this.importModel.file = '';
+    // this.importModel.file = '';
   }
 
   ngOnInit() {
