@@ -20,6 +20,7 @@ package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor
 
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.BlueprintJythonService
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionService
 import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
@@ -28,7 +29,8 @@ import org.springframework.stereotype.Component
 
 @Component("component-netconf-executor")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-open class ComponentNetconfExecutor(private val blueprintJythonService: BlueprintJythonService)
+open class ComponentNetconfExecutor(private val blueprintJythonService: BlueprintJythonService,
+                                    private var resourceResolutionService: ResourceResolutionService)
     : AbstractComponentFunction() {
 
     private val log = LoggerFactory.getLogger(ComponentNetconfExecutor::class.java)
@@ -41,6 +43,8 @@ open class ComponentNetconfExecutor(private val blueprintJythonService: Blueprin
         checkNotNull(scriptComponent) { "failed to get netconf script component" }
 
         scriptComponent.bluePrintRuntimeService = bluePrintRuntimeService
+        scriptComponent.resourceResolutionService = resourceResolutionService
+
         scriptComponent.processId = processId
         scriptComponent.workflowName = workflowName
         scriptComponent.stepName = stepName

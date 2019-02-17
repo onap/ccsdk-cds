@@ -24,6 +24,7 @@ import org.junit.runner.RunWith
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.BlueprintJythonService
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.PythonExecutorProperty
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionServiceImpl
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.apps.controllerblueprints.core.putJsonElement
@@ -35,7 +36,8 @@ import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [BlueprintJythonService::class, PythonExecutorProperty::class, ComponentNetconfExecutor::class, JsonParserService::class])
+@ContextConfiguration(classes = [BlueprintJythonService::class, PythonExecutorProperty::class,
+    ComponentNetconfExecutor::class, JsonParserService::class, ResourceResolutionServiceImpl::class])
 @TestPropertySource(properties =
 ["blueprints.processor.functions.python.executor.modulePaths=./../../../../components/scripts/python/ccsdk_netconf,./../../../../components/scripts/python/ccsdk_blueprints",
     "blueprints.processor.functions.python.executor.executionPath=./../../../../components/scripts/python/ccsdk_netconf"])
