@@ -25,6 +25,14 @@
               "entry_schema": {
                 "type": "string"
               }
+            },
+            "artifact-prefix-names": {
+              "required": false,
+              "description": "Template , Resource Assignment Artifact Prefix names",
+              "type": "list",
+              "entry_schema": {
+                "type": "string"
+              }
             }
           },
           "outputs": {

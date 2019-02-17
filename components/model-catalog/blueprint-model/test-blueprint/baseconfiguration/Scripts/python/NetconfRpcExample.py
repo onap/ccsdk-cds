@@ -13,8 +13,8 @@
 #  limitations under the License.
 
 import netconf_constant
+from common import ResolutionHelper
 from java.lang import Exception as JavaException
-from netconfclient import NetconfClient
 from org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor import \
   NetconfComponentFunction
 
@@ -26,21 +26,23 @@ class NetconfRpcExample(NetconfComponentFunction):
       log = globals()[netconf_constant.SERVICE_LOG]
       print(globals())
       nc = NetconfClient(log, self, "netconf-connection")
+      rr = ResolutionHelper(self)
+
+      payload = rr.resolve_and_generate_message_from_template_prefix("hostname")
+
       nc.connect()
-
-      payload = "<configuration xmlns:junos=\"http://xml.juniper.net/junos/17.4R1/junos\"><system xmlns=\"http://yang.juniper.net/junos-qfx/conf/system\"><host-name operation=\"delete\"/><host-name operation=\"create\">DEMO</host-name></system></configuration>"
-
       response = nc.lock(message_id="lock-123")
       if not response.isSuccess():
         log.error(response.errorMessage)
 
-      # nc.edit_config(message_id="edit-config-1", message_content=payload,edit_default_peration="none")
+      nc.edit_config(message_id="edit-config-1", message_content=payload,
+                     edit_default_peration="none")
       # nc.validate(message_id="validate-123")
       # nc.discard_change(message_id="discard-123")
-      # nc.validate(message_id="validate-123")
-      # nc.commit(message_id="commit-123")
-      # nc.unlock(message_id="unlock-123")
-      # nc.disconnect()
+      nc.validate(message_id="validate-123")
+      nc.commit(message_id="commit-123")
+      nc.unlock(message_id="unlock-123")
+      nc.disconnect()
 
     except JavaException, err:
       log.error("Java Exception in the script {}", err)

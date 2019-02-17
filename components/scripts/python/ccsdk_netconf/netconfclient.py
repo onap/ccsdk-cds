@@ -1,7 +1,6 @@
 from netconf_constant import CONFIG_TARGET_RUNNING, CONFIG_TARGET_CANDIDATE, \
   CONFIG_DEFAULT_OPERATION_REPLACE
 
-
 class NetconfClient:
 
   def __init__(self, log, component_function, requirement_name):
@@ -28,7 +27,6 @@ class NetconfClient:
 
   def get_config(self, message_id, filter="",
       config_target=CONFIG_TARGET_RUNNING, message_timeout=30):
-    self.log.info("in the ncclient getConfig {}", message_id)
     device_response = self.netconf_rpc_client.getConfig(message_id, filter,
                                                         config_target,
                                                         message_timeout)

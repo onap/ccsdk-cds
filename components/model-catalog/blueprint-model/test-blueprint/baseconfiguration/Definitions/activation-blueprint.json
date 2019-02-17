@@ -219,7 +219,10 @@
                 },
                 "inputs": {
                   "instance-dependencies": [
-                    "json-parser-service"
+
+                  ],
+                  "artifact-prefix-names": [
+                    "hostname"
                   ]
                 },
                 "outputs": {
@@ -238,6 +241,14 @@
           }
         },
         "artifacts": {
+          "hostname-template": {
+            "type": "artifact-template-velocity",
+            "file": "Templates/hostname-template.vtl"
+          },
+          "hostname-mapping": {
+            "type": "artifact-mapping-resource",
+            "file": "Templates/hostname-mapping.json"
+          },
           "component-script": {
             "type": "artifact-script-jython",
             "file": "Scripts/python/NetconfRpcExample.py"
