@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2017-2018 AT&T Intellectual Property.
+ *  Modifications Copyright © 2019 IBM.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -48,6 +49,10 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     lateinit var operationName: String
     lateinit var nodeTemplateName: String
     var operationInputs: MutableMap<String, JsonNode> = hashMapOf()
+    /**
+     * Store Dynamic Dependency Instances
+     */
+    var functionDependencyInstances: MutableMap<String, Any> = hashMapOf()
 
     override fun getName(): String {
         return stepName
@@ -125,5 +130,13 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
 
     fun setAttribute(key: String, value: JsonNode) {
         bluePrintRuntimeService.setNodeTemplateAttributeValue(nodeTemplateName, key, value)
+    }
+
+    /**
+     * This will be called from the scripts to serve instance from runtime to scripts.
+     */
+    open fun <T> functionDependencyInstanceAsType(name: String): T {
+        return functionDependencyInstances[name] as? T
+                ?: throw BluePrintProcessorException("couldn't get script property instance ($name)")
     }
 }

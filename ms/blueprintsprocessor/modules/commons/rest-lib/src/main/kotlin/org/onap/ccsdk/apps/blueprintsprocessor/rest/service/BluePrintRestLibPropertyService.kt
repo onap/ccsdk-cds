@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +22,7 @@ import org.onap.ccsdk.apps.blueprintsprocessor.rest.*
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.springframework.stereotype.Service
 
-@Service
+@Service(RestLibConstants.SERVICE_BLUEPRINT_REST_LIB_PROPERTY)
 open class BluePrintRestLibPropertyService(private var bluePrintProperties: BluePrintProperties) {
 
     @Throws(BluePrintProcessorException::class)
@@ -49,22 +50,31 @@ open class BluePrintRestLibPropertyService(private var bluePrintProperties: Blue
     @Throws(BluePrintProcessorException::class)
     fun blueprintWebClientService(selector: String): BlueprintWebClientService {
         val prefix = "blueprintsprocessor.restclient.$selector"
-        val beanProperties = restClientProperties(prefix)
-        when (beanProperties) {
+        val restClientProperties = restClientProperties(prefix)
+        return blueprintWebClientService(restClientProperties)
+    }
+
+
+    fun blueprintDynamicWebClientService(sourceType: String, selector: String): BlueprintWebClientService {
+        TODO()
+    }
+
+    @Throws(BluePrintProcessorException::class)
+    fun blueprintWebClientService(restClientProperties: RestClientProperties): BlueprintWebClientService {
+        when (restClientProperties) {
             is BasicAuthRestClientProperties -> {
-                return BasicAuthRestClientService(beanProperties)
+                return BasicAuthRestClientService(restClientProperties)
             }
             is SSLBasicAuthRestClientProperties -> {
-                return SSLBasicAuthRestClientService(beanProperties)
+                return SSLBasicAuthRestClientService(restClientProperties)
             }
             is DME2RestClientProperties -> {
-                return DME2ProxyRestClientService(beanProperties)
+                return DME2ProxyRestClientService(restClientProperties)
             }
             else -> {
-                throw BluePrintProcessorException("couldn't get rest service for selector($selector)")
+                throw BluePrintProcessorException("couldn't get rest service for")
             }
         }
-
     }
 
     fun basicAuthRestClientProperties(prefix: String): BasicAuthRestClientProperties {

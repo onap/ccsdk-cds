@@ -70,7 +70,7 @@ open class SimpleRestResourceAssignmentProcessor(private val blueprintRestLibPro
                 val inputKeyMapping = checkNotNull(sourceProperties.inputKeyMapping) { "failed to get input-key-mappings for $dName under $dSource properties" }
 
                 logger.info("$dSource dictionary information : ($urlPath), ($inputKeyMapping), (${sourceProperties.outputKeyMapping})")
-
+                // TODO("Dynamic Rest Client Service, call (blueprintDynamicWebClientService || blueprintWebClientService")
                 val restClientService = blueprintRestLibPropertyService.blueprintWebClientService("primary-config-data")
                 val response = restClientService.getResource(urlPath, String::class.java)
                 if (response.isNotBlank()) {

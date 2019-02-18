@@ -20,8 +20,8 @@ package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.pr
 
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.BlueprintJythonService
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.PythonExecutorProperty
+import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.scripts.BlueprintJythonService
+import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.scripts.PythonExecutorProperty
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
 import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils

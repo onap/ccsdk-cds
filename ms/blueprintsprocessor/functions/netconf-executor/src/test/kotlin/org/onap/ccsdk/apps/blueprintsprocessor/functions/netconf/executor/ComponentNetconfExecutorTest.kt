@@ -22,14 +22,16 @@ import com.fasterxml.jackson.databind.JsonNode
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.BlueprintJythonService
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.PythonExecutorProperty
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionServiceImpl
+import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
+import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.scripts.BlueprintJythonService
+import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.scripts.PythonExecutorProperty
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.apps.controllerblueprints.core.putJsonElement
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
+import org.onap.ccsdk.apps.controllerblueprints.scripts.BluePrintScriptsServiceImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
@@ -37,6 +39,7 @@ import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [BlueprintJythonService::class, PythonExecutorProperty::class,
+    BluePrintScriptsServiceImpl::class, ComponentFunctionScriptingService::class,
     ComponentNetconfExecutor::class, JsonParserService::class, ResourceResolutionServiceImpl::class])
 @TestPropertySource(properties =
 ["blueprints.processor.functions.python.executor.modulePaths=./../../../../components/scripts/python/ccsdk_netconf,./../../../../components/scripts/python/ccsdk_blueprints",
@@ -51,17 +54,17 @@ class ComponentNetconfExecutorTest {
     fun testComponentNetconfExecutor() {
 
         val executionServiceInput = JacksonUtils.readValueFromClassPathFile("requests/sample-activate-request.json",
-            ExecutionServiceInput::class.java)!!
+                ExecutionServiceInput::class.java)!!
 
         val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-            "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
         val executionContext = bluePrintRuntimeService.getExecutionContext()
 
 
         componentNetconfExecutor.bluePrintRuntimeService = bluePrintRuntimeService
 
-
+        //TODO("Set Attribute properties")
         val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
         stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "activate-netconf")
         stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "ComponentNetconfExecutor")

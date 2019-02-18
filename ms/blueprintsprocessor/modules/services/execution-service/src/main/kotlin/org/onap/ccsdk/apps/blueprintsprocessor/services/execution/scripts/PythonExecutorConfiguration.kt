@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor
+package org.onap.ccsdk.apps.blueprintsprocessor.services.execution.scripts
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.context.properties.EnableConfigurationProperties

@@ -51,7 +51,7 @@ interface ResourceResolutionService {
                                    identifierName: String)
 }
 
-@Service
+@Service(ResourceResolutionConstants.SERVICE_RESOURCE_RESOLUTION)
 open class ResourceResolutionServiceImpl(private var applicationContext: ApplicationContext) :
         ResourceResolutionService {
 

@@ -18,13 +18,16 @@ package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor
 
 import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionService
 import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 
 abstract class NetconfComponentFunction : AbstractComponentFunction() {
 
-    lateinit var resourceResolutionService: ResourceResolutionService
+
+    open fun resourceResolutionService(): ResourceResolutionService =
+            functionDependencyInstanceAsType(ResourceResolutionConstants.SERVICE_RESOURCE_RESOLUTION)
 
     // Called from python script
     fun initializeNetconfConnection(requirementName: String): NetconfDevice {
@@ -37,12 +40,12 @@ abstract class NetconfComponentFunction : AbstractComponentFunction() {
     }
 
     fun resolveAndGenerateMessage(artifactMapping: String, artifactTemplate: String): String {
-        return resourceResolutionService.resolveResources(bluePrintRuntimeService, nodeTemplateName,
+        return resourceResolutionService().resolveResources(bluePrintRuntimeService, nodeTemplateName,
             artifactMapping, artifactTemplate)
     }
 
     fun resolveAndGenerateMessage(artifactPrefix: String): String {
-        return resourceResolutionService.resolveResources(bluePrintRuntimeService, nodeTemplateName,
+        return resourceResolutionService().resolveResources(bluePrintRuntimeService, nodeTemplateName,
             artifactPrefix)
     }
 

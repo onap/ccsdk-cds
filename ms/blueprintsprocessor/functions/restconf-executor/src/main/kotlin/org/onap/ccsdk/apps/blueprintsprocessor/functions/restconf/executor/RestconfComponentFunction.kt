@@ -14,9 +14,12 @@
  *  limitations under the License.
  */
 @file:Suppress("unused")
+
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.restconf.executor
 
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionService
+import org.onap.ccsdk.apps.blueprintsprocessor.rest.RestLibConstants
 import org.onap.ccsdk.apps.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
 import org.onap.ccsdk.apps.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.AbstractComponentFunction
@@ -24,11 +27,15 @@ import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.AbstractCompon
 
 abstract class RestconfComponentFunction : AbstractComponentFunction() {
 
-    lateinit var bluePrintRestLibPropertyService: BluePrintRestLibPropertyService
-    lateinit var resourceResolutionService: ResourceResolutionService
+    open fun bluePrintRestLibPropertyService(): BluePrintRestLibPropertyService =
+            functionDependencyInstanceAsType(RestLibConstants.SERVICE_BLUEPRINT_REST_LIB_PROPERTY)
+
+    open fun resourceResolutionService(): ResourceResolutionService =
+            functionDependencyInstanceAsType(ResourceResolutionConstants.SERVICE_RESOURCE_RESOLUTION)
+
 
     fun restClientService(selector: String): BlueprintWebClientService {
-        return bluePrintRestLibPropertyService.blueprintWebClientService(selector)
+        return bluePrintRestLibPropertyService().blueprintWebClientService(selector)
     }
 
     fun generateMessage(artifactName: String): String {
@@ -36,12 +43,12 @@ abstract class RestconfComponentFunction : AbstractComponentFunction() {
     }
 
     fun resolveAndGenerateMessage(artifactMapping: String, artifactTemplate: String): String {
-        return resourceResolutionService.resolveResources(bluePrintRuntimeService, nodeTemplateName,
+        return resourceResolutionService().resolveResources(bluePrintRuntimeService, nodeTemplateName,
                 artifactMapping, artifactTemplate)
     }
 
     fun resolveAndGenerateMessage(artifactPrefix: String): String {
-        return resourceResolutionService.resolveResources(bluePrintRuntimeService, nodeTemplateName,
+        return resourceResolutionService().resolveResources(bluePrintRuntimeService, nodeTemplateName,
                 artifactPrefix)
     }
 }

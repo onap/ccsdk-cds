@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.plugin
+package org.onap.ccsdk.apps.blueprintsprocessor.services.execution.scripts
 
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.BluePrintPython
 import org.python.core.PyObject
 import org.python.util.PythonInterpreter
 

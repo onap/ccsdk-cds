@@ -20,6 +20,9 @@ import com.fasterxml.jackson.databind.JsonNode
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.mock.MockInstanceConfiguration
+import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.scripts.PythonExecutorConfiguration
+import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.scripts.PythonExecutorProperty
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.apps.controllerblueprints.core.putJsonElement
@@ -31,7 +34,8 @@ import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [PythonExecutorConfiguration::class, PythonExecutorProperty::class])
+@ContextConfiguration(classes = [PythonExecutorConfiguration::class, PythonExecutorProperty::class,
+    ComponentJythonExecutor::class, MockInstanceConfiguration::class])
 @TestPropertySource(properties =
 ["blueprints.processor.functions.python.executor.modulePaths=./../../../../components/scripts/python/ccsdk_blueprints",
     "blueprints.processor.functions.python.executor.executionPath=./../../../../components/scripts/python/ccsdk_blueprints"])

@@ -16,28 +16,21 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.restconf.executor
 
+import com.fasterxml.jackson.databind.node.ArrayNode
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.BlueprintJythonService
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionService
-import org.onap.ccsdk.apps.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
+import org.onap.ccsdk.apps.blueprintsprocessor.rest.RestLibConstants
 import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.AbstractComponentFunction
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
 import org.onap.ccsdk.apps.controllerblueprints.core.getAsString
-import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintScriptsService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
-import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
 
 @Component("component-restconf-executor")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-open class ComponentRestconfExecutor(private var applicationContext: ApplicationContext,
-                                     private val blueprintJythonService: BlueprintJythonService,
-                                     private val bluePrintScriptsService: BluePrintScriptsService,
-                                     private var bluePrintRestLibPropertyService: BluePrintRestLibPropertyService,
-                                     private var resourceResolutionService: ResourceResolutionService) :
+open class ComponentRestconfExecutor(private var componentFunctionScriptingService: ComponentFunctionScriptingService) :
         AbstractComponentFunction() {
 
     private val log = LoggerFactory.getLogger(ComponentRestconfExecutor::class.java)
@@ -47,16 +40,28 @@ open class ComponentRestconfExecutor(private var applicationContext: Application
     companion object {
         const val SCRIPT_TYPE = "script-type"
         const val SCRIPT_CLASS_REFERENCE = "script-class-reference"
+        const val INSTANCE_DEPENDENCIES = "instance-dependencies"
     }
 
     override fun process(executionRequest: ExecutionServiceInput) {
 
         val scriptType = operationInputs.getAsString(SCRIPT_TYPE)
         val scriptClassReference = operationInputs.getAsString(SCRIPT_CLASS_REFERENCE)
+        val instanceDependenciesNode = operationInputs.get(INSTANCE_DEPENDENCIES) as? ArrayNode
+
+        val scriptDependencies: MutableList<String> = arrayListOf()
+        scriptDependencies.add(RestLibConstants.SERVICE_BLUEPRINT_REST_LIB_PROPERTY)
+        scriptDependencies.add(ResourceResolutionConstants.SERVICE_RESOURCE_RESOLUTION)
+
+        instanceDependenciesNode?.forEach { instanceName ->
+            scriptDependencies.add(instanceName.textValue())
+        }
         /**
          * Populate the Script Instance based on the Type
          */
-        restconfComponentFunction(scriptType, scriptClassReference)
+        scriptComponent = componentFunctionScriptingService.scriptInstance<RestconfComponentFunction>(this, scriptType,
+                scriptClassReference, scriptDependencies)
+
         checkNotNull(scriptComponent) { "failed to get restconf script component" }
 
         scriptComponent.bluePrintRuntimeService = bluePrintRuntimeService
@@ -68,35 +73,10 @@ open class ComponentRestconfExecutor(private var applicationContext: Application
         scriptComponent.nodeTemplateName = nodeTemplateName
         scriptComponent.operationInputs = operationInputs
 
-        // FIXME("Populate the reference in Abstract Script Instance Injection map")
-        // Set the Rest Lib Property Service
-        scriptComponent.bluePrintRestLibPropertyService = bluePrintRestLibPropertyService
-        scriptComponent.resourceResolutionService = resourceResolutionService
-
         scriptComponent.process(executionServiceInput)
     }
 
     override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         scriptComponent.recover(runtimeException, executionRequest)
-    }
-
-    fun restconfComponentFunction(scriptType: String, scriptClassReference: String): RestconfComponentFunction {
-        log.info("processing restconf script type($scriptType), reference name($scriptClassReference)")
-        when (scriptType) {
-            BluePrintConstants.SCRIPT_INTERNAL -> {
-                scriptComponent = bluePrintScriptsService.scriptInstance<RestconfComponentFunction>(scriptClassReference)
-            }
-            BluePrintConstants.SCRIPT_KOTLIN -> {
-                scriptComponent = bluePrintScriptsService.scriptInstance<RestconfComponentFunction>(bluePrintRuntimeService
-                        .bluePrintContext(), scriptClassReference, false)
-            }
-            BluePrintConstants.SCRIPT_JYTHON -> {
-                scriptComponent = blueprintJythonService.jythonComponentInstance(this) as RestconfComponentFunction
-            }
-            else -> {
-                throw BluePrintProcessorException("script type($scriptType) is not supported")
-            }
-        }
-        return scriptComponent
     }
 }

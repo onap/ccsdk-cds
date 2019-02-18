@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor
+package org.onap.ccsdk.apps.blueprintsprocessor.services.execution.scripts
 
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -30,8 +30,8 @@ import kotlin.test.assertNotNull
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [BlueprintJythonService::class, PythonExecutorProperty::class])
 @TestPropertySource(properties =
-["blueprints.processor.functions.python.executor.modulePaths=./../../../../components/scripts/python/ccsdk_blueprints",
-    "blueprints.processor.functions.python.executor.executionPath=./../../../../components/scripts/python/ccsdk_blueprints"])
+["blueprints.processor.functions.python.executor.modulePaths=./../../../../../components/scripts/python/ccsdk_blueprints",
+    "blueprints.processor.functions.python.executor.executionPath=./../../../../../components/scripts/python/ccsdk_blueprints"])
 class BlueprintJythonServiceTest {
 
     @Autowired
@@ -40,11 +40,12 @@ class BlueprintJythonServiceTest {
     @Test
     fun testGetAbstractPythonPlugin() {
         val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
-                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+                "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
         val dependencies: MutableMap<String, Any> = hashMapOf()
 
-        val content = JacksonUtils.getContent("./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration/Scripts/python/SamplePythonComponentNode.py")
+        val content = JacksonUtils.getContent("./../../../../." +
+                "./components/model-catalog/blueprint-model/test-blueprint/baseconfiguration/Scripts/python/SamplePythonComponentNode.py")
 
         val abstractComponentFunction = blueprintJythonService.jythonInstance<AbstractComponentFunction>(bluePrintContext, "SamplePythonComponentNode", content, dependencies)
 

@@ -18,6 +18,8 @@ package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution
 
 class ResourceResolutionConstants {
     companion object {
+        const val SERVICE_RESOURCE_RESOLUTION = "resource-resolution-service"
+
         const val PREFIX_RESOURCE_ASSIGNMENT_PROCESSOR = "resource-assignment-processor-"
         const val INPUT_ARTIFACT_PREFIX_NAMES = "artifact-prefix-names"
         const val OUTPUT_ASSIGNMENT_PARAMS = "assignment-params"

@@ -17,6 +17,7 @@
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.restconf.executor
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import io.mockk.every
 import io.mockk.mockk
@@ -27,13 +28,15 @@ import org.onap.ccsdk.apps.blueprintsprocessor.core.BlueprintPropertyConfigurati
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ActionIdentifiers
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.CommonHeader
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.BlueprintJythonService
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.python.executor.PythonExecutorProperty
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionServiceImpl
 import org.onap.ccsdk.apps.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
+import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
+import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.scripts.BlueprintJythonService
+import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.scripts.PythonExecutorProperty
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.apps.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.apps.controllerblueprints.core.service.DefaultBluePrintRuntimeService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.scripts.BluePrintScriptsServiceImpl
@@ -48,7 +51,7 @@ import kotlin.test.assertNotNull
 @ContextConfiguration(classes = [RestconfExecutorConfiguration::class, ComponentRestconfExecutor::class,
     BlueprintJythonService::class, PythonExecutorProperty::class, BluePrintRestLibPropertyService::class,
     BlueprintPropertyConfiguration::class, BluePrintProperties::class, BluePrintScriptsServiceImpl::class,
-    ResourceResolutionServiceImpl::class])
+    ResourceResolutionServiceImpl::class, ComponentFunctionScriptingService::class])
 @TestPropertySource(properties =
 ["server.port=9111",
     "blueprintsprocessor.restconfEnabled=true",
@@ -83,7 +86,10 @@ class ComponentRestconfExecutorTest {
         operationInputs[BluePrintConstants.PROPERTY_CURRENT_OPERATION] = "operationName".asJsonPrimitive()
         operationInputs[ComponentRestconfExecutor.SCRIPT_TYPE] = BluePrintConstants.SCRIPT_INTERNAL.asJsonPrimitive()
         operationInputs[ComponentRestconfExecutor.SCRIPT_CLASS_REFERENCE] = "InternalSimpleRestconf_cba\$TestRestconfConfigure".asJsonPrimitive()
+        operationInputs[ComponentRestconfExecutor.INSTANCE_DEPENDENCIES] = JacksonUtils.jsonNode("[]") as ArrayNode
 
+        val blueprintContext = mockk<BluePrintContext>()
+        every { bluePrintRuntime.bluePrintContext() } returns blueprintContext
         every { bluePrintRuntime.get("sample-step-step-inputs") } returns operationInputs.asJsonNode()
         every {
             bluePrintRuntime.resolveNodeTemplateInterfaceOperationInputs("activate-restconf",
