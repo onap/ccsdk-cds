@@ -6,9 +6,9 @@ Architecture
 ============
 .. toctree::
    :maxdepth: 1
-   
+
    |image0|
 
 .. |image0| image:: images/CDS_architecture.jpg
-   :height: 600px
-   :width: 800px
+   :height: 4.43750in
+   :width: 7.88889in
