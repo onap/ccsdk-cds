@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,7 +76,7 @@ class ResourceDefinitionEnhancerServiceImpl(private val resourceDefinitionRepoSe
                 artifactDefinitionMap.value.file
             }
 
-        }?.single { it.isNotEmpty() }?.distinct()
+        }?.flatten()?.distinct()
     }
 
     // Convert file content to ResourceAssignments asynchronously
@@ -103,12 +104,12 @@ class ResourceDefinitionEnhancerServiceImpl(private val resourceDefinitionRepoSe
 
     // Read the Resource Definitions from the Database and write to type file.
     private fun generateResourceDictionaryFile(blueprintBasePath: String, resourceAssignments: List<ResourceAssignment>) {
-        val resourcekeys = resourceAssignments.mapNotNull { it.dictionaryName }.distinct()
-        log.info("distinct resource keys ($resourcekeys)")
+        val resourceKeys = resourceAssignments.mapNotNull { it.dictionaryName }.distinct().sorted()
+        log.info("distinct resource keys ($resourceKeys)")
 
         //TODO("Optimise DB single Query to multiple Query")
         // Collect the Resource Definition from database and convert to map to save in file
-        val resourceDefinitionMap = resourcekeys.map { resourceKey ->
+        val resourceDefinitionMap = resourceKeys.map { resourceKey ->
             getResourceDefinition(resourceKey)
         }.map { it.name to it }.toMap()
 

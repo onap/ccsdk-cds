@@ -67,14 +67,14 @@ open class BluePrintEnhancerServiceImpl(private val bluePrintTypeEnhancerService
             }
 
         } catch (e: Exception) {
-            log.error("failed in blueprint enhancement", e)
+            throw e
         }
 
         return blueprintRuntimeService.bluePrintContext()
     }
 
     private fun enhanceResourceDefinition(blueprintRuntimeService: BluePrintRuntimeService<*>) {
-
+        log.info("##### Enhancing blueprint Resource Definitions")
         resourceDefinitionEnhancerService.enhance(blueprintRuntimeService)
     }
 
