@@ -29,7 +29,7 @@ class RpcMessageUtilsTest {
                 + "</get-config></rpc>")
 
         val messageId = "Test-Message-ID"
-        val configType = "candidate"
+        val configType = NetconfDatastore.CANDIDATE.datastore
         val filterContent = "Test-Filter-Content"
 
         val result = NetconfMessageUtils.getConfig(messageId, configType, filterContent).replace("[\n\r\t]".toRegex(), "")
@@ -48,7 +48,7 @@ class RpcMessageUtilsTest {
                 + "</get-config></rpc>")
 
         val messageId = "Test-Message-ID"
-        val configType = "candidate"
+        val configType = NetconfDatastore.CANDIDATE.datastore
         val filterContent = "Test-Filter-Content"
 
         val result = NetconfMessageUtils.getConfig(messageId, configType, filterContent).replace("[\n\r\t]".toRegex(), "")
@@ -64,7 +64,7 @@ class RpcMessageUtilsTest {
                 + "<validate><source><candidate/></source></validate></rpc>")
 
         val messageId = "Test-Message-ID"
-        val configType = "candidate"
+        val configType = NetconfDatastore.CANDIDATE.datastore
 
         val result = NetconfMessageUtils.validate(messageId, configType).replace("[\n\r\t]".toRegex(), "")
 
@@ -94,7 +94,7 @@ class RpcMessageUtilsTest {
                 + "<unlock><target><candidate/></target></unlock></rpc>")
 
         val messageId = "Test-Message-ID"
-        val configType = "candidate"
+        val configType = NetconfDatastore.CANDIDATE.datastore
 
         val result = NetconfMessageUtils.unlock(messageId, configType).replace("[\n\r\t]".toRegex(), "")
 
@@ -109,7 +109,7 @@ class RpcMessageUtilsTest {
                 + "<delete-config><target><candidate/></target></delete-config></rpc>")
 
         val messageId = "Test-Message-ID"
-        val netconfTargetConfig = "candidate"
+        val netconfTargetConfig = NetconfDatastore.CANDIDATE.datastore
 
         val result = NetconfMessageUtils.deleteConfig(messageId, netconfTargetConfig).replace("[\n\r\t]".toRegex(), "")
 
@@ -138,7 +138,7 @@ class RpcMessageUtilsTest {
                 + "<lock><target><candidate/></target></lock></rpc>")
 
         val messageId = "Test-Message-ID"
-        val configType = "candidate"
+        val configType = NetconfDatastore.CANDIDATE.datastore
         val result = NetconfMessageUtils.lock(messageId, configType).replace("[\n\r\t]".toRegex(), "")
 
         assertTrue(NetconfMessageUtils.validateRPCXML(result))

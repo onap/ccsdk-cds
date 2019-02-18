@@ -15,9 +15,15 @@
  */
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.utils
 
-object NetconfDatastore {
-    const val RUNNING = "running"
-    const val CANDIDATE = "candidate"
+enum class NetconfDatastore(val datastore: String) {
+    RUNNING("running"),
+    CANDIDATE("candidate");
+}
+
+enum class ModifyAction(val action: String) {
+    MERGE("merge"),
+    REPLACE("replace"),
+    NONE("none")
 }
 
 object RpcStatus {

@@ -139,9 +139,9 @@ class NetconfMessageUtils {
         }
 
         @Throws(NetconfException::class)
-        fun deleteConfig(messageId: String, netconfTargetConfig: String): String {
-            if (netconfTargetConfig == NetconfDatastore.RUNNING) {
-                log.warn("Target configuration for delete operation can't be \"running\" {}", netconfTargetConfig)
+        fun deleteConfig(messageId: String, configType: String): String {
+            if (configType == NetconfDatastore.RUNNING.datastore) {
+                log.warn("Target configuration for delete operation can't be \"running\" {}", configType)
                 throw NetconfException("Target configuration for delete operation can't be running")
             }
 
@@ -149,7 +149,7 @@ class NetconfMessageUtils {
 
             request.append("<delete-config>").append(NEW_LINE)
             request.append(RpcMessageUtils.TARGET_OPEN).append(NEW_LINE)
-            request.append(RpcMessageUtils.OPEN).append(netconfTargetConfig)
+            request.append(RpcMessageUtils.OPEN).append(configType)
                 .append(RpcMessageUtils.TAG_CLOSE)
                 .append(NEW_LINE)
             request.append(RpcMessageUtils.TARGET_CLOSE).append(NEW_LINE)
@@ -304,8 +304,6 @@ class NetconfMessageUtils {
             }
             if (!message.startsWith(RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH)) {
                 // chunk encode message
-                //message = (RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH + message.getBytes(UTF_8).size + RpcMessageUtils.NEW_LINE + message +RpcMessageUtils. NEW_LINE + RpcMessageUtils.HASH + RpcMessageUtils.HASH
-                //       + RpcMessageUtils.NEW_LINE)
                 message =
                     (RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH + message.toByteArray(UTF_8).size + RpcMessageUtils.NEW_LINE + message + RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH + RpcMessageUtils.HASH
                             + RpcMessageUtils.NEW_LINE)

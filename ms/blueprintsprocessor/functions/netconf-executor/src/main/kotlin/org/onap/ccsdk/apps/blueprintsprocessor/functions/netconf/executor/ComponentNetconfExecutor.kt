@@ -42,6 +42,7 @@ open class ComponentNetconfExecutor(private val blueprintJythonService: Blueprin
         scriptComponent = blueprintJythonService.jythonComponentInstance(this) as NetconfComponentFunction
         checkNotNull(scriptComponent) { "failed to get netconf script component" }
 
+        // FIXME("Populate the reference in Abstract Script Instance Injection map")
         scriptComponent.bluePrintRuntimeService = bluePrintRuntimeService
         scriptComponent.resourceResolutionService = resourceResolutionService
 

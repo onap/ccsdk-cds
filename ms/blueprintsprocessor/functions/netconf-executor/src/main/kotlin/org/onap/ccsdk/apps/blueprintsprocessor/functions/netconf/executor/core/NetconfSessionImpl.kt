@@ -40,7 +40,6 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
-import java.util.concurrent.atomic.AtomicInteger
 
 class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcService: NetconfRpcService) :
     NetconfSession {
@@ -61,7 +60,6 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
     private lateinit var channel: ClientChannel
     private lateinit var streamHandler: NetconfDeviceCommunicator
 
-    private val messageIdInteger = AtomicInteger(1)
     private var capabilities =
         ImmutableList.of(RpcMessageUtils.NETCONF_10_CAPABILITY, RpcMessageUtils.NETCONF_11_CAPABILITY)
 
@@ -78,9 +76,9 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
     }
 
     override fun disconnect() {
-        if (rpcService.closeSession(messageIdInteger.incrementAndGet().toString(), false, replyTimeout).status.equals(
+        if (rpcService.closeSession(false).status.equals(
                 RpcStatus.FAILURE, true)) {
-            rpcService.closeSession(messageIdInteger.incrementAndGet().toString(), true, replyTimeout)
+            rpcService.closeSession(true)
         }
 
         session.close()

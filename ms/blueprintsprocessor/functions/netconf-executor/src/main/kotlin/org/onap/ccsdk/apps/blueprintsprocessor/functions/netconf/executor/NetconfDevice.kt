@@ -20,12 +20,11 @@ import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.api.Ne
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.core.NetconfRpcServiceImpl
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.core.NetconfSessionImpl
 
-class NetconfDevice(deviceInfo: DeviceInfo) {
-    val netconfRpcService: NetconfRpcServiceImpl
+data class NetconfDevice(val deviceInfo: DeviceInfo) {
+    val netconfRpcService = NetconfRpcServiceImpl(deviceInfo)
     val netconfSession: NetconfSession
 
     init {
-        netconfRpcService = NetconfRpcServiceImpl(deviceInfo)
         netconfSession = NetconfSessionImpl(deviceInfo, netconfRpcService)
         netconfRpcService.setNetconfSession(netconfSession)
     }

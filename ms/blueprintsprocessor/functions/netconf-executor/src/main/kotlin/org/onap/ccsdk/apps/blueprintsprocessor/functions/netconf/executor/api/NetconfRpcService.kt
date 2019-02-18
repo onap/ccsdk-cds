@@ -15,107 +15,90 @@
  */
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.api
 
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.utils.ModifyAction
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.utils.NetconfDatastore
+
 interface NetconfRpcService {
 
     /**
      * Lock
-     * @param messageId message id of the request.
-     * @param configTarget datastore ( running or candidate)
-     * @param messageTimeout message timeout of the request.
+     *
+     * @param configTarget running or candidate, default candidate
      * @return Device response
      */
-    fun lock(messageId: String, configTarget: String, messageTimeout: Int): DeviceResponse
+    fun lock(configTarget: String = NetconfDatastore.CANDIDATE.datastore): DeviceResponse
 
     /**
      * Get-config
-     * @param messageId message id of the request.
-     * @param filter filter content.
-     * @param configTarget config target ( running or candidate)
-     * @param messageTimeout message timeout of the request.
+     *
+     * @param filter filter content, default empty
+     * @param configTarget running or candidate, default running
      * @return Device response
      */
-    fun getConfig(messageId: String, filter: String, configTarget: String, messageTimeout: Int): DeviceResponse
+    fun getConfig(filter: String = "", configTarget: String = NetconfDatastore.RUNNING.datastore): DeviceResponse
 
     /**
-     * Delete config from datastore
-     * @param messageId message id of the request.
-     * @param configTarget config target ( running or candidate)
-     * @param messageTimeout message timeout of the request.
+     * Delete config
+     *
+     * @param configTarget running or candidate, default candidate
      * @return Device response
      */
-    fun deleteConfig(messageId: String, configTarget: String, messageTimeout: Int): DeviceResponse
+    fun deleteConfig(configTarget: String = NetconfDatastore.CANDIDATE.datastore): DeviceResponse
 
     /**
      * Edit-config
-     * @param messageId message id of the request.
+     *
      * @param messageContent edit config content.
-     * @param lock lock the device before performing edit.
-     * @param configTarget config target ( running or candidate)
-     * @param editDefaultOperation edit default operation (merge | replace | create | delete | remove or
-     * delete)
-     * @param clearCandidate commit after edit config
-     * @param commit clear candiate store before edit
-     * @param discardChanges Rollback on failure
-     * @param validate validate the config before commit
-     * @param unlock unlock device after edit
-     * @param messageTimeout message timeout of the request.
+     * @param configTarget running or candidate, default candidate
+     * @param editDefaultOperation, default set to none. Valid values: merge, replace, create, delete, none
      * @return Device response
      */
-    fun editConfig(messageId: String, messageContent: String, lock: Boolean, configTarget: String,
-                   editDefaultOperation: String, deleteConfig: Boolean, validate: Boolean, commit: Boolean,
-                   discardChanges: Boolean, unlock: Boolean, messageTimeout: Int): DeviceResponse
+    fun editConfig(messageContent: String, configTarget: String = NetconfDatastore.CANDIDATE.datastore,
+                   editDefaultOperation: String = ModifyAction.NONE.action): DeviceResponse
 
     /**
      * Validate
-     * @param messageId message id of the request.
-     * @param configTarget config target ( running or candidate)
-     * @param messageTimeout message timeout of the request.
+     *
+     * @param configTarget running or candidate, default candidate
      * @return Device response
      */
-    fun validate(messageId: String, configTarget: String, messageTimeout: Int): DeviceResponse
+    fun validate(configTarget: String = NetconfDatastore.CANDIDATE.datastore): DeviceResponse
 
     /**
      * Commit
-     * @param messageId message id of the request.
-     * @param discardChanges Rollback on failure
-     * @param messageTimeout message timeout of the request.
+     *
      * @return Device response
      */
-    fun commit(messageId: String, discardChanges: Boolean, messageTimeout: Int): DeviceResponse
+    fun commit(): DeviceResponse
 
     /**
      * Unlock
-     * @param messageId message id of the request.
-     * @param configTarget config target ( running or candidate)
-     * @param messageTimeout message timeout of the request.
+     *
+     * @param configTarget running or candidate, default candidate
      * @return Device response
      */
-    fun unLock(messageId: String, configTarget: String, messageTimeout: Int): DeviceResponse
+    fun unLock(configTarget: String = NetconfDatastore.CANDIDATE.datastore): DeviceResponse
 
     /**
      * Discard config
-     * @param messageId message id of the request.
-     * @param messageTimeout message timeout of the request.
+     *
      * @return Device response
      */
-    fun discardConfig(messageId: String, messageTimeout: Int): DeviceResponse
+    fun discardConfig(): DeviceResponse
 
     /**
      * Close session
-     * @param messageId message id of the request.
+     *
      * @param force force closeSession
-     * @param messageTimeout message timeout of the request.
      * @return Device response
      */
-    fun closeSession(messageId: String, force: Boolean, messageTimeout: Int): DeviceResponse
+    fun closeSession(force: Boolean): DeviceResponse
 
     /**
      * Executes an RPC request to the netconf server.
      *
      * @param request the XML containing the RPC request for the server.
-     * @param messageId message id of the request.
-     * @param messageTimeout message timeout of the request.
      * @return Device response
      */
-    fun asyncRpc(request: String, messageId: String, messageTimeout: Int): DeviceResponse
+    fun asyncRpc(request: String, messageId: String): DeviceResponse
 }

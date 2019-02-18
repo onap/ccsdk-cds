@@ -68,6 +68,7 @@ open class ComponentRestconfExecutor(private var applicationContext: Application
         scriptComponent.nodeTemplateName = nodeTemplateName
         scriptComponent.operationInputs = operationInputs
 
+        // FIXME("Populate the reference in Abstract Script Instance Injection map")
         // Set the Rest Lib Property Service
         scriptComponent.bluePrintRestLibPropertyService = bluePrintRestLibPropertyService
         scriptComponent.resourceResolutionService = resourceResolutionService
