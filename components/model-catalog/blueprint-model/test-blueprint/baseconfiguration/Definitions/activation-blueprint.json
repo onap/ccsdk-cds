@@ -218,11 +218,9 @@
                   "primary": "component-script"
                 },
                 "inputs": {
+                  "script-type": "jython",
+                  "script-class-reference": "Scripts/python/NetconfRpcExample.py",
                   "instance-dependencies": [
-
-                  ],
-                  "artifact-prefix-names": [
-                    "hostname"
                   ]
                 },
                 "outputs": {
@@ -247,7 +245,7 @@
           },
           "hostname-mapping": {
             "type": "artifact-mapping-resource",
-            "file": "Templates/hostname-mapping.json"
+            "file": "Definitions/hostname-mapping.json"
           },
           "component-script": {
             "type": "artifact-script-jython",

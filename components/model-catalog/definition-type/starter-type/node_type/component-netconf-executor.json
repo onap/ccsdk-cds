@@ -18,17 +18,29 @@
       "operations": {
         "process": {
           "inputs": {
+            "script-type": {
+              "description": "Script type, kotlin type is supported",
+              "required": true,
+              "type": "string",
+              "default": "internal",
+              "constraints": [
+                {
+                  "valid_values": [
+                    "kotlin",
+                    "jython",
+                    "internal"
+                  ]
+                }
+              ]
+            },
+            "script-class-reference": {
+              "description": "Kotlin Script class name or jython script name.",
+              "required": true,
+              "type": "string"
+            },
             "instance-dependencies": {
               "required": true,
-              "description": "Instance Names to Inject to Jython Script.",
-              "type": "list",
-              "entry_schema": {
-                "type": "string"
-              }
-            },
-            "artifact-prefix-names": {
-              "required": false,
-              "description": "Template , Resource Assignment Artifact Prefix names",
+              "description": "Instance names to inject to Jython or Kotlin Script.",
               "type": "list",
               "entry_schema": {
                 "type": "string"

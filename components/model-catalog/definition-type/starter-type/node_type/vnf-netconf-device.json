@@ -16,7 +16,7 @@
 					"default": "sdnc-tacacs"
 				},
 				"source": {
-					"required": true,
+					"required": false,
 					"type": "string",
 					"default": "npm"
 				},

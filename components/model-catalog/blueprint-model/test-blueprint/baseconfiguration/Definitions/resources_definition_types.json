@@ -1,35 +1,41 @@
 {
-  "service-instance-id": {
-    "name": "service-instance-id",
-    "tags": "service-instance-id, tosca.datatypes.Root, data_type",
+  "hostname": {
+    "tags": "hostname",
+    "name": "hostname",
+    "property": {
+      "description": "hostname",
+      "type": "string"
+    },
     "updated-by": "Singal, Kapil <ks220y@att.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      }
+    }
+  },
+  "service-instance-id": {
+    "tags": "service-instance-id, tosca.datatypes.Root, data_type",
+    "name": "service-instance-id",
     "property": {
       "description": "To be provided",
       "type": "string"
     },
+    "updated-by": "Singal, Kapil <ks220y@att.com>",
     "sources": {
       "input": {
         "type": "source-input",
         "properties": {}
-      },
-      "capability": {
-        "type": "source-capability",
-        "properties": {
-          "type": "JYTHON-COMPONENT",
-          "instance-name": "SampleRAProcessor",
-          "instance-dependencies": []
-        }
       }
     }
   },
   "vnf-id": {
-    "name": "vnf-id",
     "tags": "vnf-id",
-    "updated-by": "Singal, Kapil <ks220y@att.com>",
+    "name": "vnf-id",
     "property": {
       "description": "vnf-id",
       "type": "string"
     },
+    "updated-by": "Singal, Kapil <ks220y@att.com>",
     "sources": {
       "input": {
         "type": "source-input",
@@ -38,13 +44,13 @@
     }
   },
   "vnf_name": {
-    "name": "vnf_name",
     "tags": "vnf_name",
-    "updated-by": "Singal, Kapil <ks220y@att.com>",
+    "name": "vnf_name",
     "property": {
       "description": "vnf_name",
       "type": "string"
     },
+    "updated-by": "Singal, Kapil <ks220y@att.com>",
     "sources": {
       "primary-config-data": {
         "type": "source-rest",

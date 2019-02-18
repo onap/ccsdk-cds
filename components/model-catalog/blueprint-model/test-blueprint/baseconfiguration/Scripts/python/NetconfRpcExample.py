@@ -15,6 +15,7 @@
 import netconf_constant
 from common import ResolutionHelper
 from java.lang import Exception as JavaException
+from netconfclient import NetconfClient
 from org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor import \
   NetconfComponentFunction
 
@@ -31,17 +32,16 @@ class NetconfRpcExample(NetconfComponentFunction):
       payload = rr.resolve_and_generate_message_from_template_prefix("hostname")
 
       nc.connect()
-      response = nc.lock(message_id="lock-123")
+      response = nc.lock()
       if not response.isSuccess():
         log.error(response.errorMessage)
 
-      nc.edit_config(message_id="edit-config-1", message_content=payload,
-                     edit_default_peration="none")
-      # nc.validate(message_id="validate-123")
-      # nc.discard_change(message_id="discard-123")
-      nc.validate(message_id="validate-123")
-      nc.commit(message_id="commit-123")
-      nc.unlock(message_id="unlock-123")
+      nc.edit_config(message_content=payload, edit_default_peration="none")
+      nc.validate()
+      nc.discard_change()
+      nc.validate()
+      nc.commit()
+      nc.unlock()
       nc.disconnect()
 
     except JavaException, err:

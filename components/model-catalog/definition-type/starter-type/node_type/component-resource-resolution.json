@@ -17,31 +17,13 @@
       "operations": {
         "process": {
           "inputs": {
-            "template-name": {
-              "description": "Service Template Name.",
-              "required": true,
-              "type": "string"
-            },
-            "template-version": {
-              "description": "Service Template Version.",
-              "required": true,
-              "type": "string"
-            },
             "resource-type": {
               "description": "Request type.",
-              "required": true,
+              "required": false,
               "type": "string"
             },
-            "template-names": {
-              "description": "Name of the artifact Node Templates, to get the template Content.",
-              "required": true,
-              "type": "list",
-              "entry_schema": {
-                "type": "string"
-              }
-            },
             "artifact-prefix-names": {
-              "required": false,
+              "required": true,
               "description": "Template , Resource Assignment Artifact Prefix names",
               "type": "list",
               "entry_schema": {
@@ -50,7 +32,7 @@
             },
             "request-id": {
               "description": "Request Id, Unique Id for the request.",
-              "required": false,
+              "required": true,
               "type": "string"
             },
             "resource-id": {

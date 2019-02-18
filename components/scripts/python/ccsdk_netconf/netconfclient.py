@@ -1,6 +1,7 @@
 from netconf_constant import CONFIG_TARGET_RUNNING, CONFIG_TARGET_CANDIDATE, \
   CONFIG_DEFAULT_OPERATION_REPLACE
 
+
 class NetconfClient:
 
   def __init__(self, log, component_function, requirement_name):
@@ -19,54 +20,33 @@ class NetconfClient:
     self.netconf_session.connect()
     return
 
-  def lock(self, message_id, config_target=CONFIG_TARGET_CANDIDATE,
-      message_timeout=30):
-    device_response = self.netconf_rpc_client.lock(message_id, config_target,
-                                                   message_timeout)
+  def lock(self, config_target=CONFIG_TARGET_CANDIDATE):
+    device_response = self.netconf_rpc_client.lock(config_target)
     return device_response
 
-  def get_config(self, message_id, filter="",
-      config_target=CONFIG_TARGET_RUNNING, message_timeout=30):
-    device_response = self.netconf_rpc_client.getConfig(message_id, filter,
-                                                        config_target,
-                                                        message_timeout)
+  def get_config(self, filter="", config_target=CONFIG_TARGET_RUNNING):
+    device_response = self.netconf_rpc_client.getConfig(filter, config_target)
     return device_response
 
-  def edit_config(self, message_id, message_content, lock=False,
-      config_target=CONFIG_TARGET_CANDIDATE,
-      edit_default_peration=CONFIG_DEFAULT_OPERATION_REPLACE,
-      deleteConfig=False, validate=False, commit=False, discard_change=False,
-      unlock=False, message_timeout=30):
-    device_response = self.netconf_rpc_client.editConfig(message_id,
-                                                         message_content, lock,
+  def edit_config(self, message_content, config_target=CONFIG_TARGET_CANDIDATE,
+      edit_default_peration=CONFIG_DEFAULT_OPERATION_REPLACE):
+    device_response = self.netconf_rpc_client.editConfig(message_content,
                                                          config_target,
-                                                         edit_default_peration,
-                                                         deleteConfig, validate,
-                                                         commit, discard_change,
-                                                         unlock,
-                                                         message_timeout)
+                                                         edit_default_peration)
     return device_response
 
-  def commit(self, message_id, discard_change=True,
-      message_timeout=30):
-    device_response = self.netconf_rpc_client.commit(message_id, discard_change,
-                                                     message_timeout)
+  def commit(self):
+    device_response = self.netconf_rpc_client.commit()
     return device_response
 
-  def unlock(self, message_id, config_target=CONFIG_TARGET_CANDIDATE,
-      message_timeout=30):
-    device_response = self.netconf_rpc_client.unLock(message_id, config_target,
-                                                     message_timeout)
+  def unlock(self, config_target=CONFIG_TARGET_CANDIDATE):
+    device_response = self.netconf_rpc_client.unLock(config_target)
     return device_response
 
-  def validate(self, message_id, config_target=CONFIG_TARGET_CANDIDATE,
-      message_timeout=30):
-    device_response = self.netconf_rpc_client.validate(message_id,
-                                                       config_target,
-                                                       message_timeout)
+  def validate(self, config_target=CONFIG_TARGET_CANDIDATE):
+    device_response = self.netconf_rpc_client.validate(config_target)
     return device_response
 
-  def discard_change(self, message_id, message_timeout=30):
-    device_response = self.netconf_rpc_client.discardConfig(message_id,
-                                                            message_timeout)
+  def discard_change(self):
+    device_response = self.netconf_rpc_client.discardConfig()
     return device_response

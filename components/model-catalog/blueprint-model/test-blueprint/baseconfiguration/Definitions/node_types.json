@@ -1,48 +1,44 @@
 {
   "node_types": {
-    "dg-generic": {
-      "description": "This is Generic Directed Graph Type",
+    "component-jython-executor": {
+      "description": "This is Jython Execution Component.",
       "version": "1.0.0",
-      "properties": {
-        "content": {
-          "required": true,
-          "type": "string"
-        },
-        "dependency-node-templates": {
-          "required": true,
-          "description": "Dependent Step Components",
-          "type": "list",
-          "entry_schema": {
-            "type": "string"
+      "capabilities": {
+        "component-node": {
+          "type": "tosca.capabilities.Node"
+        }
+      },
+      "interfaces": {
+        "ComponentJythonExecutor": {
+          "operations": {
+            "process": {
+              "inputs": {
+                "instance-dependencies": {
+                  "description": "Instance Names to Inject to Jython Script.",
+                  "required": true,
+                  "type": "list",
+                  "entry_schema": {
+                    "type": "string"
+                  }
+                }
+              },
+              "outputs": {
+                "response-data": {
+                  "description": "Execution Response Data in JSON format.",
+                  "required": false,
+                  "type": "string"
+                },
+                "status": {
+                  "description": "Status of the Component Execution ( success or failure )",
+                  "required": true,
+                  "type": "string"
+                }
+              }
+            }
           }
         }
       },
-      "derived_from": "tosca.nodes.DG"
-    },
-    "tosca.nodes.Component": {
-      "description": "This is Resource Assignment Component API",
-      "version": "1.0.0",
-      "derived_from": "tosca.nodes.Root"
-    },
-    "tosca.nodes.DG": {
-      "description": "This is Directed Graph Node Type",
-      "version": "1.0.0",
-      "derived_from": "tosca.nodes.Root"
-    },
-    "tosca.nodes.ResourceSource" : {
-      "description" : "TOSCA base type for Resource Sources",
-      "version" : "1.0.0",
-      "derived_from" : "tosca.nodes.Root"
-    },
-    "tosca.nodes.Vnf" : {
-      "description" : "This is VNF Node Type",
-      "version" : "1.0.0",
-      "derived_from" : "tosca.nodes.Root"
-    },
-    "tosca.nodes.component.Jython": {
-      "description": "This is Resource Assignment Jython Component API",
-      "version": "1.0.0",
-      "derived_from": "tosca.nodes.Root"
+      "derived_from": "tosca.nodes.component.Jython"
     },
     "component-netconf-executor": {
       "description": "This is Netconf Transaction Configuration Component API",
@@ -64,17 +60,29 @@
           "operations": {
             "process": {
               "inputs": {
-                "instance-dependencies": {
-                  "description": "Instance Names to Inject to Jython Script.",
+                "script-type": {
+                  "description": "Script type, kotlin type is supported",
                   "required": true,
-                  "type": "list",
-                  "entry_schema": {
-                    "type": "string"
-                  }
+                  "type": "string",
+                  "constraints": [
+                    {
+                      "valid_values": [
+                        "kotlin",
+                        "jython",
+                        "internal"
+                      ]
+                    }
+                  ],
+                  "default": "internal"
                 },
-                "artifact-prefix-names": {
-                  "required": false,
-                  "description": "Template , Resource Assignment Artifact Prefix names",
+                "script-class-reference": {
+                  "description": "Kotlin Script class name or jython script name.",
+                  "required": true,
+                  "type": "string"
+                },
+                "instance-dependencies": {
+                  "description": "Instance names to inject to Jython or Kotlin Script.",
+                  "required": true,
                   "type": "list",
                   "entry_schema": {
                     "type": "string"
@@ -108,37 +116,43 @@
           "type": "string"
         }
       },
+      "capabilities": {
+        "component-node": {
+          "type": "tosca.capabilities.Node"
+        }
+      },
       "interfaces": {
         "ResourceResolutionComponent": {
           "operations": {
             "process": {
               "inputs": {
-                "action-name": {
-                  "description": "Recipe Name to get from Database, Either (message & mask-info ) or ( resource-id & resource-type & action-name & template-name ) should be present. Message will be given higest priority",
-                  "required": false,
-                  "type": "string"
-                },
                 "resource-type": {
+                  "description": "Request type.",
                   "required": false,
-                  "type": "string"
-                },
-                "request-id": {
-                  "description": "Request Id used to store the generated configuration, in the database along with the template-name",
-                  "required": true,
-                  "type": "string"
-                },
-                "resource-id": {
-                  "description": "Id used to pull the data content from the data base. Either template-data or resource-id should be present",
-                  "required": true,
                   "type": "string"
                 },
                 "artifact-prefix-names": {
-                  "required": false,
                   "description": "Template , Resource Assignment Artifact Prefix names",
+                  "required": true,
                   "type": "list",
                   "entry_schema": {
                     "type": "string"
                   }
+                },
+                "request-id": {
+                  "description": "Request Id, Unique Id for the request.",
+                  "required": true,
+                  "type": "string"
+                },
+                "resource-id": {
+                  "description": "Resource Id.",
+                  "required": false,
+                  "type": "string"
+                },
+                "action-name": {
+                  "description": "Action Name of the process",
+                  "required": false,
+                  "type": "string"
                 }
               },
               "outputs": {
@@ -157,45 +171,128 @@
       },
       "derived_from": "tosca.nodes.Component"
     },
-    "component-jython-executor": {
-      "description": "This is Jython Execution Component.",
+    "dg-generic": {
+      "description": "This is Generic Directed Graph Type",
       "version": "1.0.0",
-      "capabilities": {
-        "component-node": {
-          "type": "tosca.capabilities.Node"
-        }
-      },
-      "interfaces": {
-        "ComponentJythonExecutor": {
-          "operations": {
-            "process": {
-              "inputs": {
-                "instance-dependencies": {
-                  "required": true,
-                  "description": "Instance Names to Inject to Jython Script.",
-                  "type": "list",
-                  "entry_schema": {
-                    "type": "string"
-                  }
-                }
-              },
-              "outputs": {
-                "response-data": {
-                  "description": "Execution Response Data in JSON format.",
-                  "required": false,
-                  "type": "string"
-                },
-                "status": {
-                  "description": "Status of the Component Execution ( success or failure )",
-                  "required": true,
-                  "type": "string"
-                }
-              }
-            }
+      "properties": {
+        "content": {
+          "required": true,
+          "type": "string"
+        },
+        "dependency-node-templates": {
+          "description": "Dependent Step Components NodeTemplate name.",
+          "required": true,
+          "type": "list",
+          "entry_schema": {
+            "type": "string"
           }
         }
       },
-      "derived_from": "tosca.nodes.component.Jython"
+      "derived_from": "tosca.nodes.DG"
+    },
+    "source-input": {
+      "description": "This is Input Resource Source Node Type",
+      "version": "1.0.0",
+      "properties": {
+        "key": {
+          "required": false,
+          "type": "string"
+        },
+        "key-dependencies": {
+          "required": true,
+          "type": "list",
+          "entry_schema": {
+            "type": "string"
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.ResourceSource"
+    },
+    "source-rest": {
+      "description": "This is Rest Resource Source Node Type",
+      "version": "1.0.0",
+      "properties": {
+        "type": {
+          "required": false,
+          "type": "string",
+          "constraints": [
+            {
+              "valid_values": [
+                "JSON"
+              ]
+            }
+          ],
+          "default": "JSON"
+        },
+        "url-path": {
+          "required": true,
+          "type": "string"
+        },
+        "path": {
+          "required": true,
+          "type": "string"
+        },
+        "expression-type": {
+          "required": false,
+          "type": "string",
+          "constraints": [
+            {
+              "valid_values": [
+                "JSON_PATH",
+                "JSON_POINTER"
+              ]
+            }
+          ],
+          "default": "JSON_PATH"
+        },
+        "input-key-mapping": {
+          "required": false,
+          "type": "map",
+          "entry_schema": {
+            "type": "string"
+          }
+        },
+        "output-key-mapping": {
+          "required": false,
+          "type": "map",
+          "entry_schema": {
+            "type": "string"
+          }
+        },
+        "key-dependencies": {
+          "required": true,
+          "type": "list",
+          "entry_schema": {
+            "type": "string"
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.ResourceSource"
+    },
+    "tosca.nodes.Component": {
+      "description": "This is default Component Node",
+      "version": "1.0.0",
+      "derived_from": "tosca.nodes.Root"
+    },
+    "tosca.nodes.DG": {
+      "description": "This is Directed Graph Node Type",
+      "version": "1.0.0",
+      "derived_from": "tosca.nodes.Root"
+    },
+    "tosca.nodes.ResourceSource": {
+      "description": "TOSCA base type for Resource Sources",
+      "version": "1.0.0",
+      "derived_from": "tosca.nodes.Root"
+    },
+    "tosca.nodes.Vnf": {
+      "description": "This is VNF Node Type",
+      "version": "1.0.0",
+      "derived_from": "tosca.nodes.Root"
+    },
+    "tosca.nodes.component.Jython": {
+      "description": "This is Jython Component",
+      "version": "1.0.0",
+      "derived_from": "tosca.nodes.Root"
     },
     "vnf-netconf-device": {
       "description": "This is VNF Device with Netconf  Capability",
@@ -215,7 +312,7 @@
               "default": "sdnc-tacacs"
             },
             "source": {
-              "required": true,
+              "required": false,
               "type": "string",
               "default": "npm"
             },

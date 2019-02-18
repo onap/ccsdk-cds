@@ -29,22 +29,6 @@
         "type": "string"
       }
     },
-    "input-key-mapping": {
-      "description": "Context name to input parameters name mapping.",
-      "required": false,
-      "type": "map",
-      "entry_schema": {
-        "type": "string"
-      }
-    },
-    "output-key-mapping": {
-      "description": "Context name to output parameters name mapping.",
-      "required": false,
-      "type": "map",
-      "entry_schema": {
-        "type": "string"
-      }
-    },
     "key-dependencies": {
       "description": "Resource Resolution dependency dictionary names.",
       "required": true,
