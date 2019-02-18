@@ -154,6 +154,7 @@ object BluePrintConstants {
     const val TOSCA_SCRIPTS_DIR: String = "Scripts"
     const val TOSCA_MAPPINGS_DIR: String = "Mappings"
     const val TOSCA_TEMPLATES_DIR: String = "Templates"
+    const val TOSCA_ENVIRONMENTS_DIR: String = "Environments"
     const val TOSCA_SCRIPTS_KOTLIN_DIR: String = "$TOSCA_SCRIPTS_DIR/kotlin"
     const val TOSCA_SCRIPTS_JYTHON_DIR: String = "$TOSCA_SCRIPTS_DIR/python"
 
