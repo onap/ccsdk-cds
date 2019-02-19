@@ -30,10 +30,10 @@ import { Store } from '@ngrx/store';
 export class ResourceCreationComponent implements OnInit {
 
   myFile: File; /* property of File type */
-
+  selectedValue: any;
   constructor() {
   }
-    
+
   ngOnInit() {  
   }
     
@@ -41,8 +41,13 @@ export class ResourceCreationComponent implements OnInit {
     console.log(files);
     this.myFile = files[0].nativeElement;
   }
-    
   upload(){
     
   }
+
+  selectedOption(value){
+    this.selectedValue=value;
+    console.log(this.selectedValue);        
+}
+ 
 }
