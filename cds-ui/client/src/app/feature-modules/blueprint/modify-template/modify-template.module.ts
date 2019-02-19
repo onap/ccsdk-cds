@@ -25,13 +25,16 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { ModifyTemplateComponent } from './modify-template.component';
 import { ModifyTemplateRoutingModule } from './modify-template-routing.module';
 import { AppMaterialModule } from '../../../common/modules/app-material.module';
+import { DesignerComponent } from './designer/designer.component';
 
 @NgModule({
   declarations: [
-    ModifyTemplateComponent
+    ModifyTemplateComponent,
+    DesignerComponent
   ],
   exports: [
-    ModifyTemplateComponent
+    ModifyTemplateComponent,
+    DesignerComponent
   ],
   imports: [
     CommonModule,
