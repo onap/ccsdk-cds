@@ -35,8 +35,14 @@ class NetconfClient:
                                                          edit_default_peration)
     return device_response
 
-  def commit(self):
-    device_response = self.netconf_rpc_client.commit()
+  def commit(self, confirmed=False, confirm_timeout=60, persist="",
+      persist_id=""):
+    device_response = self.netconf_rpc_client.commit(confirmed, confirm_timeout,
+                                                     persist, persist_id)
+    return device_response
+
+  def cancel_commit(self, persist_id=""):
+    device_response = self.netconf_rpc_client.cancelCommit(persist_id)
     return device_response
 
   def unlock(self, config_target=CONFIG_TARGET_CANDIDATE):
