@@ -112,21 +112,21 @@ export class DesignerComponent implements OnInit {
           d.x = xbyMath;
           d.y = ybyMath;
                 
-        firstg.append('rect')
-                    .attr('x', 95)
-                    .attr('y', 20)
-                   // .attr('r', 10)
+        firstg.append('circle')
+                    .attr('cx', 97)
+                    .attr('cy', 20)
+                    .attr('r', 5)
                     .attr('width', 10)
                    .attr('height', 10)
                     .attr('fill', 'orange')
 
         if(d.requirementsArray) {
           d.requirementsArray.forEach(requirement =>{
-            firstg.append('rect')
+            firstg.append('circle')
                       .attr('id', d.name+requirement.name)
-                      .attr('x', 95)
-                      .attr('y', 60)
-                     // .attr('r', 10)
+                      .attr('cx', 97)
+                      .attr('cy', 60)
+                      .attr('r', 5)
                       .attr('width', 10)
                      .attr('height', 10)
                       .attr('fill', 'blue')
@@ -137,16 +137,16 @@ export class DesignerComponent implements OnInit {
 
         if(d.capabilitiesArray) {
           d.capabilitiesArray.forEach(capability =>{
-            firstg.append('rect')
+            firstg.append('circle')
                         .attr('id', d.name+capability.name)
-                        .attr('x', 95)
-                        .attr('y', 40)
-                       // .attr('r', 10)
+                        .attr('cx', 97)
+                        .attr('cy', 40)
+                        .attr('r', 5)
                         .attr('width', 10)
                        .attr('height', 10)
                         .attr('fill', 'green');
-            capability.x = xbyMath + 95;
-            capability.y = ybyMath + 60;
+            capability.x = xbyMath + 97;
+            capability.y = ybyMath + 40;
           }); 
         }
           
@@ -237,7 +237,7 @@ export class DesignerComponent implements OnInit {
       .attr('x2', link.targetX)
       .attr('y2', link.targetY)
       .attr('stroke','gray')
-      .attr('stroke-width', 5);
+      .attr('stroke-width', 2);
    });
  }
 
