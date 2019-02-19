@@ -18,6 +18,8 @@ package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.utils
 import org.junit.Assert
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.api.NetconfException
+import kotlin.test.fail
 
 class RpcMessageUtilsTest {
 
@@ -32,12 +34,12 @@ class RpcMessageUtilsTest {
         val configType = NetconfDatastore.CANDIDATE.datastore
         val filterContent = "Test-Filter-Content"
 
-        val result = NetconfMessageUtils.getConfig(messageId, configType, filterContent).replace("[\n\r\t]".toRegex(), "")
+        val result =
+            NetconfMessageUtils.getConfig(messageId, configType, filterContent).replace("[\n\r\t]".toRegex(), "")
 
         assertTrue(NetconfMessageUtils.validateRPCXML(result))
         Assert.assertEquals(checkString, result)
     }
-
 
 
     @Test
@@ -51,7 +53,8 @@ class RpcMessageUtilsTest {
         val configType = NetconfDatastore.CANDIDATE.datastore
         val filterContent = "Test-Filter-Content"
 
-        val result = NetconfMessageUtils.getConfig(messageId, configType, filterContent).replace("[\n\r\t]".toRegex(), "")
+        val result =
+            NetconfMessageUtils.getConfig(messageId, configType, filterContent).replace("[\n\r\t]".toRegex(), "")
 
         assertTrue(NetconfMessageUtils.validateRPCXML(result))
         Assert.assertEquals(checkString, result)
@@ -73,6 +76,40 @@ class RpcMessageUtilsTest {
     }
 
     @Test
+    fun cancelCommit() {
+        val checkString =
+            ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                    "<rpc message-id=\"Test-Message-ID\" xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">" +
+                    "<cancel-commit>" +
+                    "<persist-id>1234</persist-id>" +
+                    "</cancel-commit></rpc>")
+
+        val messageId = "Test-Message-ID"
+
+        val cancelCommitPersistId =
+            NetconfMessageUtils.cancelCommit(messageId, "1234").replace("[\n\r\t]".toRegex(), "")
+
+        assertTrue(NetconfMessageUtils.validateRPCXML(cancelCommitPersistId))
+        Assert.assertEquals(checkString, cancelCommitPersistId)
+    }
+
+    @Test
+    fun cancelCommitNoPersistId() {
+        val checkString =
+            ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                    "<rpc message-id=\"Test-Message-ID\" xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">" +
+                    "<cancel-commit>" +
+                    "</cancel-commit></rpc>")
+
+        val messageId = "Test-Message-ID"
+
+        val cancelCommitNoPersistId = NetconfMessageUtils.cancelCommit(messageId, "").replace("[\n\r\t]".toRegex(), "")
+
+        assertTrue(NetconfMessageUtils.validateRPCXML(cancelCommitNoPersistId))
+        Assert.assertEquals(checkString, cancelCommitNoPersistId)
+    }
+
+    @Test
     fun commit() {
         val checkString = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                 + "<rpc message-id=\"Test-Message-ID\" xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">"
@@ -80,11 +117,69 @@ class RpcMessageUtilsTest {
 
         val messageId = "Test-Message-ID"
 
-        val result = NetconfMessageUtils.commit(messageId).replace("[\n\r\t]".toRegex(), "")
+        val commit = NetconfMessageUtils.commit(messageId, false, 0, "", "").replace("[\n\r\t]".toRegex(), "")
+
+        val commitWithPersistButNotConfirmed =
+            NetconfMessageUtils.commit(messageId, false, 0, "1234", "").replace("[\n\r\t]".toRegex(), "")
+
+        assertTrue(NetconfMessageUtils.validateRPCXML(commit))
+        Assert.assertEquals(checkString, commit)
+        Assert.assertEquals(checkString, commitWithPersistButNotConfirmed)
+
+    }
+
+    @Test
+    fun commitPersistId() {
+        val checkString =
+            ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                    "<rpc message-id=\"Test-Message-ID\" xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">" +
+                    "<commit>" +
+                    "<persist-id>1234</persist-id>" +
+                    "</commit></rpc>")
+
+        val messageId = "Test-Message-ID"
+
+        val result = NetconfMessageUtils.commit(messageId, false, 30, "", "1234").replace("[\n\r\t]".toRegex(), "")
+        assertTrue(NetconfMessageUtils.validateRPCXML(result))
+        Assert.assertEquals(checkString, result)
+
+        try {
+            NetconfMessageUtils.commit(messageId, true, 30, "", "1234").replace("[\n\r\t]".toRegex(), "")
+        } catch (e: NetconfException) {
+            Assert.assertEquals("Can't proceed <commit> with both confirmed flag and persistId(1234) specified. Only one should be specified.",
+                e.message)
+            return
+        }
+
+        fail()
+    }
+
+    @Test
+    fun commitPersist() {
+        val checkString =
+            ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                    "<rpc message-id=\"Test-Message-ID\" xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">" +
+                    "<commit>" +
+                    "<confirmed/>" +
+                    "<confirm-timeout>30</confirm-timeout>" +
+                    "<persist>1234</persist>" +
+                    "</commit></rpc>")
+
+        val messageId = "Test-Message-ID"
+
+        val result = NetconfMessageUtils.commit(messageId, true, 30, "1234", "").replace("[\n\r\t]".toRegex(), "")
 
         assertTrue(NetconfMessageUtils.validateRPCXML(result))
         Assert.assertEquals(checkString, result)
 
+        try {
+            NetconfMessageUtils.commit(messageId, false, 30, "1234", "1234").replace("[\n\r\t]".toRegex(), "")
+        } catch (e: NetconfException) {
+            Assert.assertEquals("Can't proceed <commit> with both persist(1234) and persistId(1234) specified. Only one should be specified.",
+                e.message)
+            return
+        }
+        fail()
     }
 
     @Test

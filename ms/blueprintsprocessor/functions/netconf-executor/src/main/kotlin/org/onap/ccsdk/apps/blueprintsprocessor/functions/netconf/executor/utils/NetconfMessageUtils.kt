@@ -115,15 +115,45 @@ class NetconfMessageUtils {
             return doWrappedRpc(messageId, request.toString())
         }
 
-        fun commit(messageId: String): String {
-            val request = StringBuilder()
+        fun commit(messageId: String, confirmed: Boolean, confirmTimeout: Int, persist: String,
+                   persistId: String): String {
 
+            if (!persist.isEmpty() && !persistId.isEmpty()) {
+                throw NetconfException("Can't proceed <commit> with both persist($persist) and " +
+                        "persistId($persistId) specified. Only one should be specified.")
+            }
+            if (confirmed && !persistId.isEmpty()) {
+                throw NetconfException("Can't proceed <commit> with both confirmed flag and " +
+                        "persistId($persistId) specified. Only one should be specified.")
+            }
+
+            val request = StringBuilder()
             request.append("<commit>").append(NEW_LINE)
+            if (confirmed) {
+                request.append("<confirmed/>")
+                request.append("<confirm-timeout>$confirmTimeout</confirm-timeout>")
+                if (!persist.isEmpty()) {
+                    request.append("<persist>$persist</persist>")
+                }
+            }
+            if (!persistId.isEmpty()) {
+                request.append("<persist-id>$persistId</persist-id>")
+            }
             request.append("</commit>").append(NEW_LINE)
 
             return doWrappedRpc(messageId, request.toString())
         }
 
+        fun cancelCommit(messageId: String, persistId: String): String {
+            val request = StringBuilder()
+            request.append("<cancel-commit>").append(NEW_LINE)
+            if (!persistId.isEmpty()) {
+                request.append("<persist-id>$persistId</persist-id>")
+            }
+            request.append("</cancel-commit>").append(NEW_LINE)
+
+            return doWrappedRpc(messageId, request.toString())
+        }
 
         fun unlock(messageId: String, configType: String): String {
             val request = StringBuilder()

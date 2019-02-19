@@ -67,9 +67,29 @@ interface NetconfRpcService {
     /**
      * Commit
      *
+     * @param confirmed Perform a confirmed <commit> operation. If flag set to true,
+     * then it is expected to have a follow-up <commit> operation to confirm the request
+     * @param confirmTimeout Timeout period for confirmed commit, in seconds.
+     * @param persist Make the confirmed commit survive a session termination, and
+     * set a token on the ongoing confirmed commit.
+     * @param persistId Used to issue a follow-up confirmed commit or a confirming
+     * commit from any session, with the token from the previous <commit> operation.
+     * If unspecified, the confirm timeout defaults to 600 seconds.
      * @return Device response
      */
-    fun commit(): DeviceResponse
+    fun commit(confirmed: Boolean = false, confirmTimeout: Int = 60, persist: String = "",
+               persistId: String = ""): DeviceResponse
+
+    /**
+     * Cancels an ongoing confirmed commit.  If the <persist-id> parameter is not given,
+     * the <cancel-commit> operation MUST be issued on the same session that issued
+     * the confirmed commit.
+     *
+     * @param persistId Cancels a persistent confirmed commit.  The value MUST be equal
+     * to the value given in the <persist> parameter to the <commit> operation.
+     * If the value does not match, the operation fails with an "invalid-value" error.
+     */
+    fun cancelCommit(persistId: String = ""): DeviceResponse
 
     /**
      * Unlock

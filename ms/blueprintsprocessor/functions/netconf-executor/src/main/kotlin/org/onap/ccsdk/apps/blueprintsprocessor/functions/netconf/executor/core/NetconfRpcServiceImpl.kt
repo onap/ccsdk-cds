@@ -101,16 +101,30 @@ class NetconfRpcServiceImpl(private var deviceInfo: DeviceInfo) : NetconfRpcServ
         return output
     }
 
-    override fun commit(): DeviceResponse {
+    override fun commit(confirmed: Boolean, confirmTimeout: Int, persist: String, persistId: String): DeviceResponse {
         var output = DeviceResponse()
         val messageId = messageIdInteger.getAndIncrement().toString()
         log.info("$deviceInfo: commit: messageId($messageId)")
         try {
-            val messageContent = NetconfMessageUtils.commit(messageId)
+            val messageContent = NetconfMessageUtils.commit(messageId, confirmed, confirmTimeout, persist, persistId)
             output = asyncRpc(messageContent, messageId)
         } catch (e: Exception) {
             output.status = RpcStatus.FAILURE
             output.errorMessage = "$deviceInfo: failed in commit command $e.message"
+        }
+        return output
+    }
+
+    override fun cancelCommit(persistId: String): DeviceResponse {
+        var output = DeviceResponse()
+        val messageId = messageIdInteger.getAndIncrement().toString()
+        log.info("$deviceInfo: cancelCommit: messageId($messageId)")
+        try {
+            val messageContent = NetconfMessageUtils.cancelCommit(messageId, persistId)
+            output = asyncRpc(messageContent, messageId)
+        } catch (e: Exception) {
+            output.status = RpcStatus.FAILURE
+            output.errorMessage = "$deviceInfo: failed in cancelCommit command $e.message"
         }
         return output
     }
