@@ -19,17 +19,25 @@
 */
 
 import { Component, OnInit } from '@angular/core';
-
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 @Component({
   selector: 'app-search-resource',
   templateUrl: './search-resource.component.html',
   styleUrls: ['./search-resource.component.scss']
 })
-export class SearchResourceComponent implements OnInit {
+export class SearchResourceComponent implements OnInit  {
 
-  constructor() { }
+   myControl: FormGroup;
 
-  ngOnInit() {
+  constructor(private _formBuilder: FormBuilder)  { }
+  
+  options: string[] = ['One','One1', 'Two', 'Three'];
+    
+    ngOnInit() {
+    this.myControl = this._formBuilder.group({
+      search_input: ['', Validators.required]
+    });
   }
-
+    
 }
+
