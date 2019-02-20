@@ -50,18 +50,10 @@ limitations under the License.
 
 
   <div class="outerDiv divtwo" (click)="on = !on" ondrop="dropcalled(event)" ondragover="allowDrop(event)" id="svgDiv">
-    <!-- <canvas class="cnv" height="500"> -->
-    <!-- <div cdkDropList #doneList="cdkDropList" [cdkDropListData]="done" [cdkDropListConnectedTo]="[pendingList,reviewList]"
-              style="height: 100%;width: 100%" (cdkDropListDropped)="drop($event)"> -->
-    <!-- <canvas id="canvasArea" class="cnv" height="500" width="500" (click)="selected($event)"> -->
-    <!-- <div class="item-box" *ngFor="let item of done" cdkDrag>{{item}}</div> -->
-    <!-- </canvas> -->
-    <!-- </div> -->
-    <!-- </canvas> -->
-    <!-- <svg id="svgArea" width="1000px" height="100%" style="background-color: #C0C0C0"> -->
-    <!-- <rect x="0" y="0" width="300" height="200" fill="yellow"></rect> -->
-    <!-- </svg> -->
-    <app-designer></app-designer>
+    <button style="cursor: pointer; position: absolute;top: 4em;right: 27em; padding: 6px;color: white; background-color:#3f51b5;margin-right: 2em;border-radius: 2em; ">Enrichment</button>
+    <button (click) ="changeView()" style="cursor: pointer; position: absolute;top: 4em;right: 22em; padding: 6px;color: white;background-color:#3f51b5; border-radius: 2em">{{viewText}}</button>
+    <app-designer *ngIf="designerMode" (onNodeSelect)="on = !on; viewNodeDetails($event)"></app-designer>
+    <app-editor *ngIf="editorMode"></app-editor>
   </div>
 
 

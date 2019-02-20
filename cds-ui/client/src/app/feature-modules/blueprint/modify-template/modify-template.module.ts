@@ -26,11 +26,13 @@ import { ModifyTemplateComponent } from './modify-template.component';
 import { ModifyTemplateRoutingModule } from './modify-template-routing.module';
 import { AppMaterialModule } from '../../../common/modules/app-material.module';
 import { DesignerComponent } from './designer/designer.component';
+import { EditorComponent } from './editor/editor.component';
 
 @NgModule({
   declarations: [
     ModifyTemplateComponent,
-    DesignerComponent
+    DesignerComponent,
+    EditorComponent
   ],
   exports: [
     ModifyTemplateComponent,
