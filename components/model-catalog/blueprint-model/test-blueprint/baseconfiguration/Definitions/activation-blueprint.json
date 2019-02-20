@@ -24,6 +24,15 @@
       "file": "Definitions/policy_types.json"
     }
   ],
+  "dsl_definitions" : {
+    "dynamic-rest-source": {
+      "type" : "basic-type",
+      "url" : "http://localhost:8080",
+      "userId" : {
+        "get_input": "rest-user-name"
+      }
+    }
+  },
   "topology_template": {
     "inputs": {
       "request-id": {
