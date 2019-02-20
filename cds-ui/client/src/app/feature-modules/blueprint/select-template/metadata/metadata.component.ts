@@ -19,10 +19,14 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, AfterViewInit, AfterContentInit, OnChanges, DoCheck, AfterViewChecked } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IMetaData } from '../../../../common/core/store/models/metadata.model';
 import { A11yModule } from '@angular/cdk/a11y';
+import { IAppState } from '../../../../common/core/store/state/app.state';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { IBlueprintState } from 'src/app/common/core/store/models/blueprintState.model';
 
 @Component({
   selector: 'app-metadata',
@@ -32,11 +36,11 @@ import { A11yModule } from '@angular/cdk/a11y';
 export class MetadataComponent implements OnInit {
   CBAMetadataForm: FormGroup;
   metadata: IMetaData;
+  bpState: Observable<IBlueprintState>;
   @Output() metadataform = new EventEmitter<IMetaData>();
 
-  constructor(private formBuilder: FormBuilder) { }
-
-  ngOnInit() {
+  constructor(private formBuilder: FormBuilder, private store: Store<IAppState>) {
+    this.bpState = this.store.select('blueprint');
     this.CBAMetadataForm = this.formBuilder.group({
       template_author: ['', Validators.required],
       author_email: ['', Validators.required],
@@ -46,9 +50,33 @@ export class MetadataComponent implements OnInit {
       template_tags: ['', Validators.required]
     });
   }
+
+  ngOnInit() {
+    this.bpState.subscribe(
+      blueprintdata => {
+        var blueprintState: IBlueprintState = { blueprint: blueprintdata.blueprint, isLoadSuccess: blueprintdata.isLoadSuccess, isSaveSuccess: blueprintdata.isSaveSuccess, isUpdateSuccess: blueprintdata.isUpdateSuccess };
+        this.metadata = blueprintState.blueprint.metadata;
+        let metadatavalues = [];
+        for (let key in this.metadata) {
+          if (this.metadata.hasOwnProperty(key)) {
+            metadatavalues.push(this.metadata[key]);
+          }
+        }
+        let temp_author = metadatavalues[0];
+        console.log(temp_author);
+        this.CBAMetadataForm = this.formBuilder.group({
+          template_author: [metadatavalues[0], Validators.required],
+          author_email: [metadatavalues[1], Validators.required],
+          user_groups: [metadatavalues[2], Validators.required],
+          template_name: [metadatavalues[3], Validators.required],
+          template_version: [metadatavalues[4], Validators.required],
+          template_tags: [metadatavalues[5], Validators.required]
+        });
+      })
+  }
+
   UploadMetadata() {
     this.metadata = Object.assign({}, this.CBAMetadataForm.value);
-    console.log(this.metadata.template_author);
     this.metadataform.emit(this.metadata);
   }
 
