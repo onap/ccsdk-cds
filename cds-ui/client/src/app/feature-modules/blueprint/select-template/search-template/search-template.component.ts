@@ -21,7 +21,11 @@ limitations under the License.
 
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { IBlueprint} from '../../../../common/core/store/models/blueprint.model';
+import { IBlueprint } from '../../../../common/core/store/models/blueprint.model';
+import { IBlueprintState } from '../../../../common/core/store/models/blueprintState.model';
+import { IAppState } from '../../../../common/core/store/state/app.state';
+import { LoadBlueprintSuccess } from '../../../../common/core/store/actions/blueprint.action';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-search-template',
@@ -29,25 +33,28 @@ import { IBlueprint} from '../../../../common/core/store/models/blueprint.model'
   styleUrls: ['./search-template.component.scss']
 })
 export class SearchTemplateComponent implements OnInit {
-  file: any;
+  file: File;
   localBluePrintData: IBlueprint;
   fileText: object[];
-  
-  constructor() { }
+  blueprintState: IBlueprintState;
+  bpState: Observable<IBlueprintState>;
 
-  ngOnInit() { }
+  constructor(private store: Store<IAppState>) { }
+
+  ngOnInit() {
+  }
 
   fileChanged(e: any) {
     this.file = e.target.files[0];
+  }
+  
+  updateBlueprintState() {
     let fileReader = new FileReader();
-    fileReader.readAsText(e.srcElement.files[0]);
+    fileReader.readAsText(this.file);
     var me = this;
     fileReader.onload = function () {
-      let fileData = JSON.stringify(fileReader.result);
-      me.localBluePrintData = JSON.parse(fileData);
-      console.log(me.localBluePrintData);
+      var data: IBlueprint = JSON.parse(fileReader.result.toString());
+      me.store.dispatch(new LoadBlueprintSuccess(data));
     }
-  }
-  extractBlueprint(){
   }
 }
