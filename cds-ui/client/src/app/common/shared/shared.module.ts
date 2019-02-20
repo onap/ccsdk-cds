@@ -25,16 +25,19 @@ import { HomeComponent } from './components/home/home.component';
 import { CBAWizardComponent } from './components/cbawizard/cbawizard.component';
 import { MatToolbarModule,MatIconModule, MatButtonModule, MatSidenavModule,  MatListModule, MatGridListModule, MatCardModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatFormFieldModule, MatStepperModule} from '@angular/material';
 import { RouterModule } from "@angular/router";
+import { SearchPipe } from './pipes/search.pipe';
 
 @NgModule({
   declarations: [
     HomeComponent,
-    CBAWizardComponent
+    CBAWizardComponent,
+    SearchPipe
     
   ],
   exports: [
     HomeComponent,
-    CBAWizardComponent
+    CBAWizardComponent,
+    SearchPipe
   ],
   imports: [
     CommonModule,
