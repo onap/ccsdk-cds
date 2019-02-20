@@ -31,8 +31,7 @@ import { ModifyTemplateModule } from './modify-template/modify-template.module';
 import { DeployTemplateModule } from './deploy-template/deploy-template.module';
 import { TestTemplateModule } from './test-template/test-template.module';
 
-import { MatToolbarModule, MatButtonModule, MatSidenavModule,  MatListModule, MatGridListModule, MatCardModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatFormFieldModule, MatStepperModule} from '@angular/material';
-import { MatIconModule } from '@angular/material/icon';
+import { AppMaterialModule } from '../../../app/common/modules/app-material.module';
 
 @NgModule({
   declarations: [
@@ -42,22 +41,7 @@ import { MatIconModule } from '@angular/material/icon';
     CommonModule,
     BlueprintRoutingModule,
     SharedModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule,
-    MatGridListModule,
-    MatCardModule,
-    MatMenuModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatInputModule,
-    MatSelectModule, 
-    MatRadioModule, 
-    MatFormFieldModule, 
-    MatStepperModule,
+    AppMaterialModule,
     SelectTemplateModule,
     ModifyTemplateModule,
     DeployTemplateModule,
