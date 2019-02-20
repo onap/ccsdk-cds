@@ -19,7 +19,7 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import * as d3 from 'd3';
 import { text } from 'd3';
 
@@ -29,7 +29,7 @@ import { text } from 'd3';
   styleUrls: ['./designer.component.scss']
 })
 export class DesignerComponent implements OnInit {
-
+  @Output() onNodeSelect = new EventEmitter();
   @ViewChild('svgArea') graphContainer: ElementRef;
   dataForsimulation;
   svg;
@@ -116,8 +116,6 @@ export class DesignerComponent implements OnInit {
                     .attr('cx', 97)
                     .attr('cy', 20)
                     .attr('r', 5)
-                    .attr('width', 10)
-                   .attr('height', 10)
                     .attr('fill', 'orange')
 
         if(d.requirementsArray) {
@@ -127,8 +125,6 @@ export class DesignerComponent implements OnInit {
                       .attr('cx', 97)
                       .attr('cy', 60)
                       .attr('r', 5)
-                      .attr('width', 10)
-                     .attr('height', 10)
                       .attr('fill', 'blue')
             requirement.x = xbyMath + 95;
             requirement.y = ybyMath + 60;
@@ -142,8 +138,6 @@ export class DesignerComponent implements OnInit {
                         .attr('cx', 97)
                         .attr('cy', 40)
                         .attr('r', 5)
-                        .attr('width', 10)
-                       .attr('height', 10)
                         .attr('fill', 'green');
             capability.x = xbyMath + 97;
             capability.y = ybyMath + 40;
@@ -244,5 +238,9 @@ export class DesignerComponent implements OnInit {
  handleMouseOver() {
   console.log('mouse over');
  }
+
+ trigerNodeSelectEvent(d) {
+  this.onNodeSelect.emit(d);
+}
 
 }
