@@ -28,9 +28,6 @@ import { SelectTemplateComponent } from './select-template.component';
 import { SelectTemplateRoutingModule } from './select-template-routing.module';
 import { AppMaterialModule } from 'src/app/common/modules/app-material.module';
 
-import { MatToolbarModule, MatButtonModule, MatSidenavModule,  MatListModule, MatGridListModule, MatCardModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatFormFieldModule, MatStepperModule} from '@angular/material';
-import { MatIconModule } from '@angular/material/icon';
-
 @NgModule({
   declarations: [
     TemplateOptionsComponent,
@@ -48,22 +45,6 @@ import { MatIconModule } from '@angular/material/icon';
     CommonModule,
     SelectTemplateRoutingModule,
     ReactiveFormsModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule,
-    MatGridListModule,
-    MatCardModule,
-    MatMenuModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatInputModule,
-    MatSelectModule, 
-    MatRadioModule, 
-    MatFormFieldModule, 
-    MatStepperModule,
     AppMaterialModule
   ]
 })
