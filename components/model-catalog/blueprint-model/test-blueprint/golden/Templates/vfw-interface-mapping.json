@@ -55,7 +55,7 @@
       "type": "string"
     },
     "dictionary-name": "vf-module-type",
-    "dictionary-source": "primary-db",
+    "dictionary-source": "processor-db",
     "dependencies": [
       "vf-module-number"
     ]

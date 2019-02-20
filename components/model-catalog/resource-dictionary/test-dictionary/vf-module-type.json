@@ -7,8 +7,8 @@
   },
   "updated-by": "adetalhouet",
   "sources": {
-    "primary-db": {
-      "type": "source-primary-db",
+    "processor-db": {
+      "type": "source-processor-db",
       "properties": {
         "type": "SQL",
         "query": "select sdnctl.demo.value as value from sdnctl.demo where sdnctl.demo.id=:vfmoduleid",
