@@ -20,7 +20,7 @@ limitations under the License.
 */
 
 export interface ITopologyTemplate {
-    inputs: object;
-	node_template: object;
-	workflow: object;
+    inputs: object[];
+	node_template: object[];
+	workflow: object[];
 }
