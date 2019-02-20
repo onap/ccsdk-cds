@@ -32,7 +32,6 @@ object BluePrintTypes {
             BluePrintConstants.MODEL_TYPE_NODE_DG,
             BluePrintConstants.MODEL_TYPE_NODE_COMPONENT,
             BluePrintConstants.MODEL_TYPE_NODE_VNF,
-            BluePrintConstants.MODEL_TYPE_NODE_ARTIFACT,
             BluePrintConstants.MODEL_TYPE_NODE_RESOURCE_SOURCE,
             BluePrintConstants.MODEL_TYPE_NODES_COMPONENT_JAVA,
             BluePrintConstants.MODEL_TYPE_NODES_COMPONENT_BUNDLE,
@@ -54,7 +53,6 @@ object BluePrintTypes {
             BluePrintConstants.MODEL_TYPE_DATA_TYPE_DYNAMIC
     )
 
-    @Deprecated("This has to move to Relationship Types Model Drive")
     @JvmStatic
     val validRelationShipDerivedFroms: MutableList<String> = arrayListOf(
             BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_ROOT,
@@ -65,7 +63,6 @@ object BluePrintTypes {
             BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_ROUTES_TO
     )
 
-    @Deprecated("This has to move to Capability Types Model Drive")
     @JvmStatic
     val validCapabilityTypes: MutableList<String> = arrayListOf(
             BluePrintConstants.MODEL_TYPE_CAPABILITIES_ROOT,
@@ -144,7 +141,8 @@ object BluePrintTypes {
 
     @JvmStatic
     fun validCommands(): List<String> {
-        return listOf(BluePrintConstants.EXPRESSION_GET_INPUT,
+        return listOf(BluePrintConstants.EXPRESSION_DSL_REFERENCE,
+                BluePrintConstants.EXPRESSION_GET_INPUT,
                 BluePrintConstants.EXPRESSION_GET_ATTRIBUTE,
                 BluePrintConstants.EXPRESSION_GET_PROPERTY,
                 BluePrintConstants.EXPRESSION_GET_ARTIFACT,

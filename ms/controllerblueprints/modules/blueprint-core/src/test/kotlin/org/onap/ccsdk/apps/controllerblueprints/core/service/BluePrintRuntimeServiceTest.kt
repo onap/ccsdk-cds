@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.node.NullNode
 import org.junit.Test
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintRuntimeUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
@@ -137,6 +138,19 @@ class BluePrintRuntimeServiceTest {
         assertNotNull(jsonValueNode, "Failed to get Json for Node Template Context Properties")
         log.info("JSON Prepared Value Context {}", jsonValueNode)
 
+    }
+
+    @Test
+    fun `test Resolve DSL Properties`() {
+        log.info("************************ resolveDSLExpression **********************")
+
+        val bluePrintRuntimeService = getBluePrintRuntimeService()
+
+        bluePrintRuntimeService.setInputValue("rest-user-name", PropertyDefinition(), "sample-username"
+                .asJsonPrimitive())
+
+        val resolvedJsonNode: JsonNode = bluePrintRuntimeService.resolveDSLExpression("dynamic-rest-source")
+        assertNotNull(resolvedJsonNode, "Failed to populate dsl property values")
     }
 
     private fun getBluePrintRuntimeService(): BluePrintRuntimeService<MutableMap<String, JsonNode>> {

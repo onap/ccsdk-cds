@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,6 +45,8 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
     var entryDefinition = ""
 
     val imports: List<ImportDefinition>? = serviceTemplate.imports
+
+    val dslDefinitions = serviceTemplate.dslDefinitions
 
     val metadata: MutableMap<String, String>? = serviceTemplate.metadata
 
@@ -94,6 +97,10 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
         return workflowStepByName(workFlowName, stepName).activities?.filter { it.callOperation != null }?.single()?.callOperation
                 ?: throw BluePrintException("could't get first callOperation for WorkFlow($workFlowName) ")
     }
+
+    // DSL
+    fun dslPropertiesByName(name: String): JsonNode = dslDefinitions?.get(name)
+            ?: throw BluePrintException("could't get policy type for the dsl($name)")
 
     // Data Type
     fun dataTypeByName(name: String): DataType? = dataTypes?.get(name)

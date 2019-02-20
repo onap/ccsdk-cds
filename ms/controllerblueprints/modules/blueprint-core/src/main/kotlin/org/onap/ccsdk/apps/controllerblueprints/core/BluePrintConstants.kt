@@ -132,6 +132,7 @@ object BluePrintConstants {
     const val MODEL_TYPE_CAPABILITY_TYPE_SSH = "tosca.capabilities.Ssh"
     const val MODEL_TYPE_CAPABILITY_TYPE_SFTP = "tosca.capabilities.Sftp"
 
+    const val EXPRESSION_DSL_REFERENCE: String = "*"
     const val EXPRESSION_GET_INPUT: String = "get_input"
     const val EXPRESSION_GET_ATTRIBUTE: String = "get_attribute"
     const val EXPRESSION_GET_ARTIFACT: String = "get_artifact"

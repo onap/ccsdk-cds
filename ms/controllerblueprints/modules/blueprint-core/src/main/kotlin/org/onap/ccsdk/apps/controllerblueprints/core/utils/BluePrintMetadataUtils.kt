@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +31,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeSer
 import org.onap.ccsdk.apps.controllerblueprints.core.service.DefaultBluePrintRuntimeService
 import java.io.File
 import java.nio.charset.Charset
+import java.util.*
 
 class BluePrintMetadataUtils {
     companion object {
@@ -46,6 +48,27 @@ class BluePrintMetadataUtils {
             val toscaMetaPath = basePath.plus(BluePrintConstants.PATH_DIVIDER)
                     .plus(BluePrintConstants.TOSCA_METADATA_ENTRY_DEFINITION_FILE)
             return toscaMetaDataFromMetaFile(toscaMetaPath).entityDefinitions
+        }
+
+        fun bluePrintEnvProperties(basePath: String): Properties {
+            val blueprintsEnvFilePath = basePath.plus(File.separator)
+                    .plus(BluePrintConstants.TOSCA_ENVIRONMENTS_DIR)
+            return environmentFileProperties(blueprintsEnvFilePath)
+        }
+
+        fun environmentFileProperties(pathName: String): Properties {
+            val properties = Properties()
+            val envDir = File(pathName)
+            // Verify if the environment directory exists
+            if (envDir.exists() && envDir.isDirectory) {
+                //Find all available environment files
+                envDir.listFiles()
+                        .filter { it.name.endsWith(".properties") }
+                        .forEach {
+                            properties.load(it.inputStream())
+                        }
+            }
+            return properties
         }
 
         fun toscaMetaDataFromMetaFile(metaFilePath: String): ToscaMetaData {

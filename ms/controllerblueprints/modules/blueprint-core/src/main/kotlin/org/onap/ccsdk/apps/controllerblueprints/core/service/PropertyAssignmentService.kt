@@ -84,6 +84,9 @@ If Property Assignment is Expression.
                 BluePrintConstants.EXPRESSION_GET_ARTIFACT -> {
                     valueNode = resolveArtifactExpression(nodeTemplateName, expressionData.artifactExpression!!)
                 }
+                BluePrintConstants.EXPRESSION_DSL_REFERENCE -> {
+                    valueNode = bluePrintRuntimeService.resolveDSLExpression(expressionData.dslExpression!!.propertyName)
+                }
                 BluePrintConstants.EXPRESSION_GET_NODE_OF_TYPE -> {
 
                 }

@@ -24,13 +24,13 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintError
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.apps.controllerblueprints.core.*
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ArtifactDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
+import java.io.File
 
 interface BluePrintRuntimeService<T> {
 
@@ -62,6 +62,8 @@ interface BluePrintRuntimeService<T> {
 
     fun setBluePrintError(bluePrintError: BluePrintError)
 
+    fun loadEnvironments(fileName: String)
+
     fun resolveNodeTemplatePropertyAssignments(nodeTemplateName: String,
                                                propertyDefinitions: MutableMap<String, PropertyDefinition>,
                                                propertyAssignments: MutableMap<String, JsonNode>): MutableMap<String, JsonNode>
@@ -80,6 +82,8 @@ interface BluePrintRuntimeService<T> {
     fun resolveNodeTemplateArtifact(nodeTemplateName: String, artifactName: String): String
 
     fun resolveNodeTemplateArtifactDefinition(nodeTemplateName: String, artifactName: String): ArtifactDefinition
+
+    fun resolveDSLExpression(dslPropertyName: String): JsonNode
 
     fun setInputValue(propertyName: String, propertyDefinition: PropertyDefinition, value: JsonNode)
 
@@ -128,6 +132,16 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
     private var store: MutableMap<String, JsonNode> = hashMapOf()
 
     private var bluePrintError = BluePrintError()
+
+    init {
+        /**
+         * Load Default Environments Properties
+         */
+        val absoluteEnvFilePath = bluePrintContext.rootPath.plus(File.separator)
+                .plus(BluePrintConstants.TOSCA_ENVIRONMENTS_DIR)
+        loadEnvironments(absoluteEnvFilePath)
+
+    }
 
     override fun id(): String {
         return id
@@ -188,6 +202,12 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
 
     override fun setBluePrintError(bluePrintError: BluePrintError) {
         this.bluePrintError = bluePrintError
+    }
+
+    override fun loadEnvironments(fileName: String) {
+        BluePrintMetadataUtils.environmentFileProperties(fileName).forEach { key, value ->
+            setNodeTemplateAttributeValue("ENV", key.toString(), value.toString().asJsonPrimitive())
+        }
     }
 
     /**
@@ -326,6 +346,28 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
                 ?: throw BluePrintProcessorException("failed to get artifat definition($artifactName) from the node " +
                         "template")
 
+    }
+
+    /**
+     * Read the DSL Property reference, If there is any expression, then resolve those expression and return as Json
+     * Type
+     */
+    override fun resolveDSLExpression(dslPropertyName: String): JsonNode {
+        val propertyAssignments = bluePrintContext.dslPropertiesByName(dslPropertyName)
+        return if (BluePrintExpressionService.checkContainsExpression(propertyAssignments)
+                && propertyAssignments is ObjectNode) {
+
+            val rootKeyMap = propertyAssignments.rootFieldsToMap()
+            val propertyAssignmentValue: MutableMap<String, JsonNode> = hashMapOf()
+            rootKeyMap.forEach { propertyName, propertyValue ->
+                val propertyAssignmentExpression = PropertyAssignmentService(this)
+                propertyAssignmentValue[propertyName] = propertyAssignmentExpression
+                        .resolveAssignmentExpression("DSL", propertyName, propertyValue)
+            }
+            propertyAssignmentValue.asJsonNode()
+        } else {
+            propertyAssignments
+        }
     }
 
     override fun setInputValue(propertyName: String, propertyDefinition: PropertyDefinition, value: JsonNode) {

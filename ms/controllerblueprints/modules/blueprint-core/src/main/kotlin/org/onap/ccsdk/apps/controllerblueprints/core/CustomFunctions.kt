@@ -17,10 +17,7 @@
 package org.onap.ccsdk.apps.controllerblueprints.core
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.BooleanNode
-import com.fasterxml.jackson.databind.node.DoubleNode
-import com.fasterxml.jackson.databind.node.IntNode
-import com.fasterxml.jackson.databind.node.TextNode
+import com.fasterxml.jackson.databind.node.*
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.helpers.MessageFormatter
 import java.io.File
@@ -75,6 +72,22 @@ fun <T : Any> MutableMap<String, *>.castValue(key: String, valueType: KClass<T>)
         throw BluePrintException("couldn't find the key $key")
     }
 }
+
+/**
+ * Convert Json to map of json node, the root fields will be map keys
+ */
+fun JsonNode.rootFieldsToMap(): MutableMap<String, JsonNode> {
+    if (this is ObjectNode) {
+        val propertyMap: MutableMap<String, JsonNode> = hashMapOf()
+        this.fields().forEach {
+            propertyMap[it.key] = it.value
+        }
+        return propertyMap
+    } else {
+        throw BluePrintException("json node should be Object Node Type")
+    }
+}
+
 
 fun MutableMap<String, JsonNode>.putJsonElement(key: String, value: Any) {
     when (value) {

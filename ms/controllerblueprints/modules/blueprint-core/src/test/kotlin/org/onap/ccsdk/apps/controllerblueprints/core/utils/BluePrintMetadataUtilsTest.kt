@@ -20,16 +20,18 @@ package org.onap.ccsdk.apps.controllerblueprints.core.utils
 
 import org.junit.Test
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ToscaMetaData
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 class BluePrintMetadataUtilsTest {
-    
+
     @Test
-    fun testToscaMetaData(){
+    fun testToscaMetaData() {
 
-        val basePath : String = "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+        val basePath: String = "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
 
-        val toscaMetaData : ToscaMetaData =  BluePrintMetadataUtils.toscaMetaData(basePath)
+        val toscaMetaData: ToscaMetaData = BluePrintMetadataUtils.toscaMetaData(basePath)
         assertNotNull(toscaMetaData, "Missing Tosca Definition Object")
         assertNotNull(toscaMetaData.toscaMetaFileVersion, "Missing Tosca Metadata Version")
         assertNotNull(toscaMetaData.csarVersion, "Missing CSAR version")
@@ -37,5 +39,19 @@ class BluePrintMetadataUtilsTest {
         assertNotNull(toscaMetaData.entityDefinitions, "Missing Tosca Entity Definition")
         assertNotNull(toscaMetaData.templateTags, "Missing Template Tags")
 
+    }
+
+    @Test
+    fun environmentDataTest() {
+        val environmentPath = "./src/test/resources/environments"
+
+        val properties = BluePrintMetadataUtils.bluePrintEnvProperties(environmentPath)
+
+        assertNotNull(properties, "Could not read the properties")
+        assertEquals(properties.getProperty("blueprintsprocessor.database.alt1.username"), "username1", "failed 1")
+        assertEquals(properties.getProperty("blueprintsprocessor.database.alt1.password"), "password1", "failed 2")
+        assertEquals(properties.getProperty("blueprintsprocessor.database.alt2.username"), "username2", "failed 3")
+        assertEquals(properties.getProperty("blueprintsprocessor.database.alt2.password"), "password2", "failed 4")
+        assertNull(properties.getProperty("blueprintsprocessor.database.alt3.password"), "failed 5")
     }
 }

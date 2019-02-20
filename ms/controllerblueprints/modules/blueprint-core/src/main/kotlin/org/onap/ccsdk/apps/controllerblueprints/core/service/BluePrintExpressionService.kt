@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +22,7 @@ import com.att.eelf.configuration.EELFManager
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
+import com.fasterxml.jackson.databind.node.TextNode
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintTypes
@@ -35,11 +37,20 @@ object BluePrintExpressionService {
     val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
 
     @JvmStatic
+    fun checkContainsExpression(propertyAssignmentNode: JsonNode): Boolean {
+        val json = propertyAssignmentNode.toString()
+        // FIXME("Check if any Optimisation needed")
+        return (json.contains(BluePrintConstants.EXPRESSION_GET_INPUT)
+                || json.contains(BluePrintConstants.EXPRESSION_GET_ATTRIBUTE)
+                || json.contains(BluePrintConstants.EXPRESSION_GET_PROPERTY))
+
+    }
+
+    @JvmStatic
     fun getExpressionData(propertyAssignmentNode: JsonNode): ExpressionData {
         log.trace("Assignment Data/Expression : {}", propertyAssignmentNode)
         val expressionData = ExpressionData(valueNode = propertyAssignmentNode)
         if (propertyAssignmentNode is ObjectNode) {
-
             val commands: Set<String> = propertyAssignmentNode.fieldNames().asSequence().toList().intersect(BluePrintTypes.validCommands())
             if (commands.isNotEmpty()) {
                 expressionData.isExpression = true
@@ -64,8 +75,19 @@ object BluePrintExpressionService {
                     }
                 }
             }
+        } else if (propertyAssignmentNode is TextNode
+                && propertyAssignmentNode.textValue().startsWith(BluePrintConstants.EXPRESSION_DSL_REFERENCE)) {
+            expressionData.isExpression = true
+            expressionData.command = BluePrintConstants.EXPRESSION_DSL_REFERENCE
+            expressionData.dslExpression = populateDSLExpression(propertyAssignmentNode)
         }
         return expressionData
+    }
+
+    @JvmStatic
+    fun populateDSLExpression(jsonNode: TextNode): DSLExpression {
+        return DSLExpression(propertyName = jsonNode.textValue()
+                .removePrefix(BluePrintConstants.EXPRESSION_DSL_REFERENCE))
     }
 
     @JvmStatic

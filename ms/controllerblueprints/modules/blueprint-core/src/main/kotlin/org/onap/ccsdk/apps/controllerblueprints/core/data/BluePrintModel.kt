@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("unused")
 
 package org.onap.ccsdk.apps.controllerblueprints.core.data
 
@@ -582,7 +583,8 @@ class ConditionClause {
 A TOSCA Service Template (YAML) document contains element definitions of building blocks for cloud application, or complete models of cloud applications. This section describes the top-level structural elements (TOSCA keynames) along with their grammars, which are allowed to appear in a TOSCA Service Template document.
  */
 
-@JsonPropertyOrder(value = ["toscaDefinitionsVersion", "description", "metadata", "imports", "topologyTemplate"])
+@JsonPropertyOrder(value = ["toscaDefinitionsVersion", "description", "metadata", "imports", "dsl_definitions",
+    "topologyTemplate"])
 class ServiceTemplate : Cloneable {
     @get:JsonIgnore
     var id: String? = null
@@ -591,7 +593,7 @@ class ServiceTemplate : Cloneable {
     var metadata: MutableMap<String, String>? = null
     var description: String? = null
     @get:JsonProperty("dsl_definitions")
-    var dslDefinitions: MutableMap<String, Any>? = null
+    var dslDefinitions: MutableMap<String, JsonNode>? = null
     var repositories: MutableMap<String, RepositoryDefinition>? = null
     var imports: MutableList<ImportDefinition>? = null
     @get:JsonProperty("artifact_types")

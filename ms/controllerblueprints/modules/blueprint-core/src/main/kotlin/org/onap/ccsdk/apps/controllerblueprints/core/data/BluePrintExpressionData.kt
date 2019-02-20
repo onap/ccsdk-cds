@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("unused")
 
 package org.onap.ccsdk.apps.controllerblueprints.core.data
 
@@ -27,6 +29,7 @@ data class ExpressionData(
         var isExpression: Boolean = false,
         var valueNode: JsonNode,
         var expressionNode: ObjectNode? = null,
+        var dslExpression: DSLExpression? = null,
         var inputExpression: InputExpression? = null,
         var propertyExpression: PropertyExpression? = null,
         var attributeExpression: AttributeExpression? = null,
@@ -64,6 +67,10 @@ data class OperationOutputExpression(
         val modelableEntityName: String = "SELF",
         val interfaceName: String,
         val operationName: String,
+        val propertyName: String
+)
+
+data class DSLExpression(
         val propertyName: String
 )
 
