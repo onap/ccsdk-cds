@@ -40,6 +40,7 @@ class DBLibConstants {
 
         //list of database
         const val MARIA_DB: String = "maria-db"
+        const val PRIMARY_DB: String = "primary-db"
         const val MYSQL_DB: String = "mysql-db"
         const val ORACLE_DB: String = "oracle-db"
         const val POSTGRES_DB: String = "postgres-db"
