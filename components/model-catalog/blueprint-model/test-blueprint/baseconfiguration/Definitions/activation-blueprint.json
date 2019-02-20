@@ -31,6 +31,17 @@
       "userId" : {
         "get_input": "rest-user-name"
       }
+    },
+    "dynamic-db-source": {
+      "type" : "maria-db",
+      "url" : "jdbc:mysql://localhost:3306/sdnctl",
+      "username" : "sdnctl",
+      "password" : {
+        "get_attribute": [
+          "BPP",
+          "dynamic-db-source.password"
+        ]
+      }
     }
   },
   "topology_template": {
