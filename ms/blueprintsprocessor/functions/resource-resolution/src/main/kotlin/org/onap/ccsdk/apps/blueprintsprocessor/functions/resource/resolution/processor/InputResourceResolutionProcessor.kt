@@ -17,6 +17,7 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor
 
+import com.fasterxml.jackson.databind.node.MissingNode
 import com.fasterxml.jackson.databind.node.NullNode
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
@@ -47,7 +48,7 @@ open class InputResourceResolutionProcessor : ResourceAssignmentProcessor() {
             if (checkNotEmpty(resourceAssignment.name)) {
                 val value = raRuntimeService.getInputValue(resourceAssignment.name)
                 // if value is null don't call setResourceDataValue to populate the value
-                if (value != null && value !is NullNode) {
+                if (value !is MissingNode && value !is NullNode) {
                     logger.info("input source template key (${resourceAssignment.name}) found from input and value is ($value)")
                     ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, value)
                 }

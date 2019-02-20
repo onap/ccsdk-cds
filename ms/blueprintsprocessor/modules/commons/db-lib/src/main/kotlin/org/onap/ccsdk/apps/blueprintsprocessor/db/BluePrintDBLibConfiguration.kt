@@ -37,5 +37,19 @@ open class BluePrintDBLibConfiguration(private var bluePrintProperties: BluePrin
 class DBLibConstants {
     companion object {
         const val PREFIX_DB_PRIMARY: String = "blueprintsprocessor.db.primary"
+
+        //list of database
+        const val MARIA_DB: String = "maria-db"
+        const val MYSQL_DB: String = "mysql-db"
+        const val ORACLE_DB: String = "oracle-db"
+        const val POSTGRES_DB: String = "postgres-db"
+
+        //List of database drivers
+        const val DRIVER_MARIA_DB = "org.mariadb.jdbc.Driver"
+        const val DRIVER_MYSQL_DB = "com.mysql.jdbc.Driver"
+        const val DRIVER_ORACLE_DB = "oracle.jdbc.driver.OracleDriver"
+        const val DRIVER_POSTGRES_DB = "org.postgresql.Driver"
+
+
     }
 }

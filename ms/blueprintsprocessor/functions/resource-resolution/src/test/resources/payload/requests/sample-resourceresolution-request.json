@@ -19,6 +19,7 @@
     "resource-assignment-request": {
       "resource-assignment-properties": {
         "request-id": "1234",
+        "profile_name": "1.0.0",
         "service-instance-id": "siid_1234",
         "vnf-id": "vnf_1234",
         "action-name": "assign-activate",
