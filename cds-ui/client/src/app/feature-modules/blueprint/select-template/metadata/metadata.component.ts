@@ -19,14 +19,17 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Component, OnInit, EventEmitter, Output, AfterViewInit, AfterContentInit, OnChanges, DoCheck, AfterViewChecked } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IMetaData } from '../../../../common/core/store/models/metadata.model';
-import { A11yModule } from '@angular/cdk/a11y';
-import { IAppState } from '../../../../common/core/store/state/app.state';
-import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { A11yModule } from '@angular/cdk/a11y';
+
+import { IAppState } from '../../../../common/core/store/state/app.state';
 import { IBlueprintState } from 'src/app/common/core/store/models/blueprintState.model';
+import { IBlueprint } from 'src/app/common/core/store/models/blueprint.model';
+import { IMetaData } from '../../../../common/core/store/models/metadata.model';
+import { LoadBlueprintSuccess } from 'src/app/common/core/store/actions/blueprint.action';
 
 @Component({
   selector: 'app-metadata',
@@ -37,8 +40,8 @@ export class MetadataComponent implements OnInit {
   CBAMetadataForm: FormGroup;
   metadata: IMetaData;
   bpState: Observable<IBlueprintState>;
-  @Output() metadataform = new EventEmitter<IMetaData>();
-
+  blueprint: IBlueprint;
+  
   constructor(private formBuilder: FormBuilder, private store: Store<IAppState>) {
     this.bpState = this.store.select('blueprint');
     this.CBAMetadataForm = this.formBuilder.group({
@@ -77,7 +80,8 @@ export class MetadataComponent implements OnInit {
 
   UploadMetadata() {
     this.metadata = Object.assign({}, this.CBAMetadataForm.value);
-    this.metadataform.emit(this.metadata);
+    this.blueprint.metadata = this.metadata;
+    this.store.dispatch(new LoadBlueprintSuccess(this.blueprint));
   }
 
 }
