@@ -20,7 +20,7 @@ limitations under the License.
 -->
 
 <div class="modifyTemp">
-  <div class="outerDiv divone">
+  <div *ngIf="designerMode" class="outerDiv divone">
     <mat-accordion>
       <mat-expansion-panel>
         <mat-expansion-panel-header style="background-color: #f1f1f1">
@@ -48,20 +48,16 @@ limitations under the License.
     </mat-accordion>
   </div>
 
+  <button class="enrich-btn">Enrichment</button>
+  <button (click) ="changeView()" class="toggle-view-btn">{{viewText}}</button>
 
-  <div class="outerDiv divtwo" (click)="on = !on" ondrop="dropcalled(event)" ondragover="allowDrop(event)" id="svgDiv">
-    <button style="cursor: pointer; position: absolute;top: 4em;right: 27em; padding: 6px;color: white; background-color:#3f51b5;margin-right: 2em;border-radius: 2em; ">Enrichment</button>
-    <button (click) ="changeView()" style="cursor: pointer; position: absolute;top: 4em;right: 22em; padding: 6px;color: white;background-color:#3f51b5; border-radius: 2em">{{viewText}}</button>
+  <div *ngIf="designerMode" class="outerDiv divtwo" (click)="on = !on" ondrop="dropcalled(event)" ondragover="allowDrop(event)" id="svgDiv">
     <app-designer *ngIf="designerMode" (onNodeSelect)="on = !on; viewNodeDetails($event)"></app-designer>
-    <app-editor *ngIf="editorMode"></app-editor>
   </div>
 
+  <app-editor class="editor-selector" *ngIf="editorMode"></app-editor>
 
-  <div cdkDropList id="list-2" cdkDropListConnectedTo="list-1" (cdkDropListDropped)="drop($event)">
-    <div *ngFor="let item of list" cdkDrag>{{ item }}</div>
-  </div>
-
-  <div *ngIf="on" id="overlay" class="outerDiv divThree">
+  <div *ngIf="designerMode && on" id="overlay" class="outerDiv divThree">
     <mat-accordion style="width: 100%">
 
         <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">

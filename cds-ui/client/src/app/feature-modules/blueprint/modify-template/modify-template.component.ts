@@ -28,9 +28,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ModifyTemplateComponent implements OnInit {
 
-  designerMode: boolean = true;
-  editorMode: boolean = false;
-  viewText: string = "Editor View";
+  designerMode: boolean = false;
+  editorMode: boolean = true;
+  viewText: string = "Designer View";
 
   constructor() { }
 

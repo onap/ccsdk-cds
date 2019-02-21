@@ -79,3 +79,30 @@ limitations under the License.
 .mat-expansion-panel-header-title {
   color: white !important;
 }
+
+.enrich-btn {
+  cursor: pointer;
+  position: absolute;
+  top: 4em;
+  right: 27em;
+  padding: 6px;
+  color: white;
+  background-color:#3f51b5;
+  margin-right: 2em;
+  border-radius: 2em; 
+}
+
+.toggle-view-btn {
+  cursor: pointer;
+  position: absolute;
+  top: 4em;
+  right: 20em;
+  padding: 6px;
+  color: white;
+  background-color:#3f51b5;
+  border-radius: 2em
+}
+
+.editor-selector {
+  width: 100%;
+}
