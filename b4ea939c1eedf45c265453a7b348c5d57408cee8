@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b695914_5b741f15",
+        "filename": "cds-ui/client/src/app/common/shared/pipes/search.pipe.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2019-02-21T16:21:24Z",
+      "side": 1,
+      "message": "You need to add (C) after Copyright, so that the line should read\n\nCopyright (C) 2019 TechMahindra",
+      "revId": "b4ea939c1eedf45c265453a7b348c5d57408cee8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
