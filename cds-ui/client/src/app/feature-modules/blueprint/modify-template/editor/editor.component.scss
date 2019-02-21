@@ -18,3 +18,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
 */
+.container {
+    display: flex;
+    flex-direction: row;
+
+    .fileViewContainer {
+        width: 20%;
+        margin: 2px
+    }
+
+    .editorConatiner {
+        width: 80%;
+        background-color: gainsboro;
+        height: 533px;
+        margin-left: 5em;
+    }
+
+}
