@@ -1,0 +1,56 @@
+<!--/*
+* ============LICENSE_START=======================================================
+* ONAP : CDS
+* ================================================================================
+* Copyright 2019 TechMahindra
+*=================================================================================
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+* ============LICENSE_END=========================================================
+*/-->
+<div cdkDropListGroup>
+  <div class="sources-container">
+	<div
+      cdkDropList
+      [cdkDropListData]="todo"
+      class="sources-list"
+      (cdkDropListDropped)="drop($event)">
+      	<div class="sources-box" *ngFor="let item of todo" cdkDrag>
+      		<mat-expansion-panel class="expansion-panel">
+      			<mat-expansion-panel-header>
+        			<mat-panel-title>
+          				{{item}}
+        			</mat-panel-title>
+      			</mat-expansion-panel-header>
+     		 	{{item}}
+   			 </mat-expansion-panel>
+    	</div>
+    </div>
+  </div>
+
+  <div class="list-container">
+    <h3>Source Options</h3>
+	<mat-form-field>
+    	<input [(ngModel)]="searchText" type="input" matInput placeholder="search sources">
+    	<button matSuffix mat-icon-button><mat-icon>search</mat-icon></button>
+    	<mat-hint>db,mdsal,input,default,..</mat-hint>
+  	</mat-form-field>
+  	<br><br>
+    <div
+      cdkDropList
+      [cdkDropListData]="done"
+      class="options-list"
+      (cdkDropListDropped)="drop($event)">
+      <div class="options-box" *ngFor="let item of done | search : searchText" cdkDrag>{{item}}</div>
+    </div>
+  </div>
+</div>
