@@ -1,0 +1,106 @@
+<!--
+  ~ Copyright (C) 2019 Bell Canada. All rights reserved.
+  ~
+  ~ NOTICE:  All the intellectual and technical concepts contained herein are
+  ~ proprietary to Bell Canada and are protected by trade secret or copyright law.
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited.
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>cds-sdc-listener</artifactId>
+    <groupId>org.onap.ccsdk.apps</groupId>
+    <version>0.4.1-SNAPSHOT</version>
+  </parent>
+
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>distribution</artifactId>
+  <name>CDS-SDC Listener Distribution</name>
+
+  <properties>
+    <image.name>onap/ccsdk-cdssdclistener</image.name>
+    <docker.push.phase>deploy</docker.push.phase>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>2.6</version>
+        <executions>
+          <execution>
+            <id>copy-dockerfile</id>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <phase>validate</phase>
+            <configuration>
+              <outputDirectory>${basedir}/target/docker-stage</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/main/docker</directory>
+                  <includes>
+                    <include>*</include>
+                  </includes>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>docker</id>
+      <build>
+        <plugins>
+          <plugin>
+            <!-- Maven plugin for managing docker images and containers -->
+            <groupId>io.fabric8</groupId>
+            <artifactId>docker-maven-plugin</artifactId>
+            <version>0.26.1</version>
+            <inherited>false</inherited>
+            <configuration>
+              <images>
+                <image>
+                  <name>${image.name}</name>
+                  <build>
+                    <cleanup>try</cleanup>
+                    <dockerFileDir>${basedir}/target/docker-stage</dockerFileDir>
+                    <imagetags>
+                      <imageTag>${project.version}</imageTag>
+                      <imageTag>${project.version}-STAGING-${maven.build.timestamp}</imageTag>
+                    </imagetags>
+                  </build>
+                </image>
+              </images>
+              <verbose>true</verbose>
+            </configuration>
+            <executions>
+              <execution>
+                <id>generate-images</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>build</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>push-images</id>
+                <phase>${docker.push.phase}</phase>
+                <goals>
+                  <goal>build</goal>
+                  <goal>push</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+</project>
