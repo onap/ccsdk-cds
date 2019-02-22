@@ -27,6 +27,7 @@ import { ModifyTemplateRoutingModule } from './modify-template-routing.module';
 import { AppMaterialModule } from '../../../common/modules/app-material.module';
 import { DesignerComponent } from './designer/designer.component';
 import { EditorComponent } from './editor/editor.component';
+import { AceEditorModule } from 'ng2-ace-editor';
 
 @NgModule({
   declarations: [
@@ -36,13 +37,15 @@ import { EditorComponent } from './editor/editor.component';
   ],
   exports: [
     ModifyTemplateComponent,
-    DesignerComponent
+    DesignerComponent,
+    AceEditorModule
   ],
   imports: [
     CommonModule,
     CdkTableModule,
     AppMaterialModule,
-    ModifyTemplateRoutingModule
+    ModifyTemplateRoutingModule,
+    AceEditorModule
   ]
 })
 export class ModifyTemplateModule { }
