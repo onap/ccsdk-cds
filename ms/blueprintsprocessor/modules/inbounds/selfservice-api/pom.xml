@@ -39,8 +39,11 @@
         </dependency>
         <dependency>
             <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
-            <version>${project.version}</version>
             <artifactId>blueprint-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+            <artifactId>blueprint-validation</artifactId>
         </dependency>
         <dependency>
             <groupId>io.grpc</groupId>
