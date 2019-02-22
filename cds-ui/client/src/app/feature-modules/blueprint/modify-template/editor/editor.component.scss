@@ -18,20 +18,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
 */
+
 .container {
     display: flex;
     flex-direction: row;
-
+    margin-top: 8px;
     .fileViewContainer {
         width: 20%;
         margin: 2px
     }
-
     .editorConatiner {
         width: 80%;
         background-color: gainsboro;
-        height: 533px;
+        height: 450px !important;
         margin-left: 5em;
     }
+}
 
+.aceEditor {
+    overflow: hidden;
+    height: 100% !important;
+    background-color: white !important;
+    border: 1px solid #3f87a6;
+    border-left: 5px solid #3f87a6;
+}
+.savebtn {
+    color: white;
+    background-color: #3f51b5;
+    position: absolute;
+    bottom: 5px;
 }
