@@ -1,0 +1,39 @@
+{
+   "name": "restConfig",
+   "connector": "rest",
+   "options": {
+      "headers": {
+          "accept": "application/json",
+          "content-type": "application/json"
+      }
+   },
+   "operations": [
+       {
+      "template": {
+         "method": "GET",
+         "url": ""
+      },
+      "functions": {
+         "getEnricheddata": [""]
+      }
+   },
+   {
+      "template": {
+         "method": "POST",
+         "url": ""
+      },
+      "functions": {
+         "saveBlueprint": [""]
+      }
+   },
+   {
+      "template": {
+         "method": "POST",
+         "url": ""
+      },
+      "functions": {
+         "test": [""]
+      }
+   }
+]
+}
