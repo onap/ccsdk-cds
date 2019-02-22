@@ -57,9 +57,9 @@ export class SelectTemplateComponent implements OnInit {
   upload() {
 
   }
-  saveBlueprintModel(){
-    this.blueprint.toplogyTemplates=this.topologyTemplate;
-    this.blueprint.metadata= this.metaData;
-   // this.store.dispatch(new CreateBlueprint(this.blueprint));
-  }
+  // saveBlueprintModel(){
+  //   this.blueprint.toplogyTemplates=this.topologyTemplate;
+  //   this.blueprint.metadata= this.metaData;
+  //  // this.store.dispatch(new CreateBlueprint(this.blueprint));
+  // }
 }
