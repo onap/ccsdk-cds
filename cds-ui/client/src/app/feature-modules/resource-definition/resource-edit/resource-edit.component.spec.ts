@@ -2,7 +2,7 @@
 * ============LICENSE_START=======================================================
 * ONAP : CDS
 * ================================================================================
-* Copyright 2019 TechMahindra
+* Copyright (C) 2019 TechMahindra
 *=================================================================================
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.

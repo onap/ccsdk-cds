@@ -2,7 +2,7 @@
 * ============LICENSE_START=======================================================
 * ONAP : CDS
 * ================================================================================
-* Copyright 2019 TechMahindra
+* Copyright (C) 2019 TechMahindra
 *=================================================================================
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -23,13 +23,24 @@ import { CommonModule } from '@angular/common';
 
 import { ResourceEditComponent } from './resource-edit.component';
 import { ResourceEditRoutingModule } from './resource-edit-routing.module';
+import { MatExpansionModule,MatToolbarModule,MatIconModule, MatButtonModule, MatSidenavModule,  MatCheckboxModule, MatListModule, MatGridListModule, MatCardModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatFormFieldModule, MatStepperModule} from '@angular/material';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../../../../app/common/shared/shared.module';
+import { SourcesTemplateComponent } from './sources-template/sources-template.component';
+import { ResourceMetadataComponent } from './resource-metadata/resource-metadata.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
-  declarations: [ ResourceEditComponent ],
-  exports: [ ResourceEditComponent ],
+  declarations: [ ResourceEditComponent,SourcesTemplateComponent,ResourceMetadataComponent ],
   imports: [
-    CommonModule,
-    ResourceEditRoutingModule
-  ]
+   CommonModule,
+   ResourceEditRoutingModule,
+   SharedModule,
+   FormsModule,ReactiveFormsModule,
+   DragDropModule,
+   MatExpansionModule,MatToolbarModule,MatIconModule, MatButtonModule, MatSidenavModule,  MatCheckboxModule, MatListModule, MatGridListModule, MatCardModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatFormFieldModule, MatStepperModule
+
+  ],
+  exports: [ ResourceEditComponent,SharedModule ]
 })
 export class ResourceEditModule { }

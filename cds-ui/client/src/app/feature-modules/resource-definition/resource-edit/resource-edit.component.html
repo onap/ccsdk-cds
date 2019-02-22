@@ -2,7 +2,7 @@
 * ============LICENSE_START=======================================================
 * ONAP : CDS
 * ================================================================================
-* Copyright 2019 TechMahindra
+* Copyright (C) 2019 TechMahindra
 *=================================================================================
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -19,7 +19,27 @@
 */-->
 
 
-<p>
-  resource-edit works!
-</p>
-<router-outlet></router-outlet>
+<mat-card class="metadata-card">
+        <mat-card-header>
+            <mat-card-title>Resource Metadata</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <app-resource-metadata></app-resource-metadata>
+        </mat-card-content>
+</mat-card>
+
+<mat-card class="sources-card">
+     <mat-card-header>
+          <mat-card-title>
+                Sources
+          </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+          <app-sources-template></app-sources-template>
+    </mat-card-content>
+</mat-card>
+
+<mat-card class="submit">
+   <button mat-raised-button>Save</button>
+</mat-card>
+<!-- <router-outlet></router-outlet> -->
