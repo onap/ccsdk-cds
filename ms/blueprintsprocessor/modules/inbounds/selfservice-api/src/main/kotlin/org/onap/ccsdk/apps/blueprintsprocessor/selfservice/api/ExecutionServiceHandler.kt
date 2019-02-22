@@ -16,6 +16,7 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api
 
+import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import com.google.protobuf.Struct
 import io.grpc.stub.StreamObserver
 import kotlinx.coroutines.Dispatchers
@@ -66,19 +67,19 @@ class ExecutionServiceHandler(private val bluePrintCoreConfiguration: BluePrintC
             executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC -> {
                 GlobalScope.launch(Dispatchers.Default) {
                     val executionServiceOutput = doProcess(executionServiceInput)
-                    responseObserver.onNext(executionServiceOutput.toProto(inputPayload))
+                    responseObserver.onNext(executionServiceOutput.toProto())
                     responseObserver.onCompleted()
                 }
-                responseObserver.onNext(response(executionServiceInput).toProto(inputPayload))
+                responseObserver.onNext(response(executionServiceInput).toProto())
             }
             executionServiceInput.actionIdentifiers.mode == ACTION_MODE_SYNC -> {
                 val executionServiceOutput = doProcess(executionServiceInput)
-                responseObserver.onNext(executionServiceOutput.toProto(inputPayload))
+                responseObserver.onNext(executionServiceOutput.toProto())
                 responseObserver.onCompleted()
             }
             else -> responseObserver.onNext(response(executionServiceInput,
                 "Failed to process request, 'actionIdentifiers.mode' not specified. Valid value are: 'sync' or 'async'.",
-                true).toProto(inputPayload));
+                true).toProto());
         }
     }
 
@@ -108,7 +109,7 @@ class ExecutionServiceHandler(private val bluePrintCoreConfiguration: BluePrintC
         val executionServiceOutput = ExecutionServiceOutput()
         executionServiceOutput.commonHeader = executionServiceInput.commonHeader
         executionServiceOutput.actionIdentifiers = executionServiceInput.actionIdentifiers
-        executionServiceOutput.payload = executionServiceInput.payload
+        executionServiceOutput.payload = JsonNodeFactory.instance.objectNode()
 
         val status = Status()
         status.errorMessage = errorMessage

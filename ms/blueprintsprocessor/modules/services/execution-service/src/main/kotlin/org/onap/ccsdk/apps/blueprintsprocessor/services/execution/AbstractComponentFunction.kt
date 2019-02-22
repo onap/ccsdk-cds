@@ -29,6 +29,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.apps.controllerblueprints.core.getAsString
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BlueprintFunctionNode
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 
 /**
@@ -100,13 +101,15 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         log.info("Preparing Response...")
         executionServiceOutput.commonHeader = executionServiceInput.commonHeader
         executionServiceOutput.actionIdentifiers = executionServiceInput.actionIdentifiers
-        executionServiceOutput.payload = executionServiceInput.payload
+
 
         // Resolve the Output Expression
         val stepOutputs = bluePrintRuntimeService
                 .resolveNodeTemplateInterfaceOperationOutputs(nodeTemplateName, interfaceName, operationName)
 
         bluePrintRuntimeService.put("$stepName-step-outputs", stepOutputs.asJsonNode())
+
+        executionServiceOutput.payload = JacksonUtils.objectNodeFromObject(stepOutputs)
 
         // Populate Status
         val status = Status()

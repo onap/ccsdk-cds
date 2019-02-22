@@ -20,10 +20,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.google.common.base.Strings
 import com.google.protobuf.Struct
 import com.google.protobuf.Value
+import com.google.protobuf.util.JsonFormat
 import org.onap.ccsdk.apps.controllerblueprints.common.api.ActionIdentifiers
 import org.onap.ccsdk.apps.controllerblueprints.common.api.CommonHeader
 import org.onap.ccsdk.apps.controllerblueprints.common.api.Flag
 import org.onap.ccsdk.apps.controllerblueprints.common.api.Status
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.processing.api.ExecutionServiceInput
 import org.onap.ccsdk.apps.controllerblueprints.processing.api.ExecutionServiceOutput
 import java.text.SimpleDateFormat
@@ -158,11 +160,13 @@ fun ExecutionServiceInput.toJava(): org.onap.ccsdk.apps.blueprintsprocessor.core
 
 // EXECUTION OUPUT
 
-fun org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceOutput.toProto(payload: Struct): ExecutionServiceOutput {
+fun org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceOutput.toProto(): ExecutionServiceOutput {
     val executionServiceOuput = ExecutionServiceOutput.newBuilder()
     executionServiceOuput.actionIdentifiers = this.actionIdentifiers.toProto()
     executionServiceOuput.commonHeader = this.commonHeader.toProto()
     executionServiceOuput.status = this.status.toProto()
-    executionServiceOuput.payload = payload
+    val struct = Struct.newBuilder()
+    JsonFormat.parser().merge(JacksonUtils.getJson(this.payload), struct)
+    executionServiceOuput.payload = struct.build()
     return executionServiceOuput.build()
 }
