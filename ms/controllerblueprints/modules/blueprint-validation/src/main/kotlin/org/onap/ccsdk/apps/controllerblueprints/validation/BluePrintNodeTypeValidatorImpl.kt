@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +27,13 @@ import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintNodeTyp
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
+import org.springframework.beans.factory.config.ConfigurableBeanFactory
+import org.springframework.context.annotation.Scope
+import org.springframework.stereotype.Service
 
 
+@Service("default-node-type-validator")
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class BluePrintNodeTypeValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintNodeTypeValidator {
 
     private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintServiceTemplateValidatorImpl::class.toString())
@@ -52,7 +58,14 @@ open class BluePrintNodeTypeValidatorImpl(private val bluePrintTypeValidatorServ
                     ?: throw BluePrintException("Failed to get derivedFrom NodeType($derivedFrom)'s for NodeType($nodeTypeName)")
         }
 
-        nodeType.properties?.let { bluePrintTypeValidatorService.validatePropertyDefinitions(bluePrintRuntimeService, nodeType.properties!!) }
+        nodeType.attributes?.let {
+            bluePrintTypeValidatorService.validateAttributeDefinitions(bluePrintRuntimeService, nodeType.attributes!!)
+        }
+
+        nodeType.properties?.let {
+            bluePrintTypeValidatorService.validatePropertyDefinitions(bluePrintRuntimeService, nodeType.properties!!)
+        }
+
         nodeType.capabilities?.let { validateCapabilityDefinitions(nodeTypeName, nodeType) }
         nodeType.requirements?.let { validateRequirementDefinitions(nodeTypeName, nodeType) }
         nodeType.interfaces?.let { validateInterfaceDefinitions(nodeType.interfaces!!) }

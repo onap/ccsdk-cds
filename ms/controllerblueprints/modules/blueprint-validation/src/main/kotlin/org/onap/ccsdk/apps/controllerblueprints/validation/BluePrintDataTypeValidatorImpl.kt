@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +17,16 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.validation
 
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.apps.controllerblueprints.core.data.DataType
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintDataTypeValidator
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
+import org.springframework.stereotype.Service
 
+@Service("default-data-type-validator")
 open class BluePrintDataTypeValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintDataTypeValidator {
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintDataTypeValidatorImpl::class.toString())
 
     override fun validate(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, dataType: DataType) {
-        log.trace("Validating DataType($name)")
-
         dataType.properties?.let {
 
             bluePrintTypeValidatorService.validatePropertyDefinitions(bluePrintRuntimeService, dataType.properties!!)

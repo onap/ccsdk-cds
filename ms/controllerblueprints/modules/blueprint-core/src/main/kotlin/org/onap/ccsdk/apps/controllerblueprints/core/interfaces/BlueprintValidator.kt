@@ -1,3 +1,20 @@
+/*
+ * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.onap.ccsdk.apps.controllerblueprints.core.interfaces
 
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
@@ -17,6 +34,8 @@ interface BluePrintServiceTemplateValidator : BluePrintValidator<ServiceTemplate
 interface BluePrintTopologyTemplateValidator : BluePrintValidator<TopologyTemplate>
 
 interface BluePrintArtifactTypeValidator : BluePrintValidator<ArtifactType>
+
+interface BluePrintArtifactDefinitionValidator : BluePrintValidator<ArtifactDefinition>
 
 interface BluePrintDataTypeValidator : BluePrintValidator<DataType>
 
@@ -45,11 +64,19 @@ interface BluePrintValidatorService {
 
 interface BluePrintTypeValidatorService {
 
+    fun <T : BluePrintValidator<*>> bluePrintValidator(referenceName: String, classType: Class<T>): T?
+
+    fun <T : BluePrintValidator<*>> bluePrintValidators(referenceNamePrefix: String, classType: Class<T>): List<T>?
+
+    fun <T : BluePrintValidator<*>> bluePrintValidators(classType: Class<T>): List<T>?
+
     fun getServiceTemplateValidators(): List<BluePrintServiceTemplateValidator>
 
     fun getDataTypeValidators(): List<BluePrintDataTypeValidator>
 
     fun getArtifactTypeValidators(): List<BluePrintArtifactTypeValidator>
+
+    fun getArtifactDefinitionsValidators(): List<BluePrintArtifactDefinitionValidator>
 
     fun getNodeTypeValidators(): List<BluePrintNodeTypeValidator>
 
@@ -71,6 +98,12 @@ interface BluePrintTypeValidatorService {
     fun validateArtifactType(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, artifactType: ArtifactType) {
         val validators = getArtifactTypeValidators()
         doValidation(bluePrintRuntimeService, name, artifactType, validators)
+    }
+
+    fun validateArtifactDefinition(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String,
+                                   artifactDefinition: ArtifactDefinition) {
+        val validators = getArtifactDefinitionsValidators()
+        doValidation(bluePrintRuntimeService, name, artifactDefinition, validators)
     }
 
     fun validateDataType(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, dataType: DataType) {

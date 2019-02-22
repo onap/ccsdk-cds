@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,12 +24,14 @@ import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeVal
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintValidatorService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.springframework.stereotype.Service
 import java.util.*
 
 
-open class BluePrintValidatorServiceImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintValidatorService {
+@Service
+open class BluePrintDesignTimeValidatorService(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintValidatorService {
 
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintValidatorServiceImpl::class.toString())
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintDesignTimeValidatorService::class.toString())
 
     override fun validateBluePrints(basePath: String): Boolean {
 

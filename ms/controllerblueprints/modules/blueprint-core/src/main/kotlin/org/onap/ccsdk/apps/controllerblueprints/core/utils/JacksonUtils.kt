@@ -19,7 +19,6 @@ package org.onap.ccsdk.apps.controllerblueprints.core.utils
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
 import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.node.ArrayNode
@@ -148,22 +147,22 @@ class JacksonUtils {
             return objectMapper.valueToTree(any)
         }
 
-        fun <T> getListFromJsonNode(node: JsonNode, valueType: Class<T>): List<T>? {
+        fun <T> getListFromJsonNode(node: JsonNode, valueType: Class<T>): List<T> {
             return getListFromJson(node.toString(), valueType)
         }
 
-        fun <T> getListFromJson(content: String, valueType: Class<T>): List<T>? {
+        fun <T> getListFromJson(content: String, valueType: Class<T>): List<T> {
             val objectMapper = jacksonObjectMapper()
             val javaType = objectMapper.typeFactory.constructCollectionType(List::class.java, valueType)
             return objectMapper.readValue<List<T>>(content, javaType)
         }
 
-        fun <T> getListFromFile(fileName: String, valueType: Class<T>): List<T>? {
+        fun <T> getListFromFile(fileName: String, valueType: Class<T>): List<T> {
             val content: String = getContent(fileName)
             return getListFromJson(content, valueType)
         }
 
-        fun <T> getListFromClassPathFile(fileName: String, valueType: Class<T>): List<T>? {
+        fun <T> getListFromClassPathFile(fileName: String, valueType: Class<T>): List<T> {
             val content: String = getClassPathFileContent(fileName)
             return getListFromJson(content, valueType)
         }

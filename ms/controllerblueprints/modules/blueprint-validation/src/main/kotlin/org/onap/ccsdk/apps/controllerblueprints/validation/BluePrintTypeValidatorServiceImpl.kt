@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +17,7 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.validation
 
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
@@ -24,43 +26,79 @@ import org.springframework.stereotype.Service
 @Service
 class BluePrintTypeValidatorServiceImpl : BluePrintTypeValidatorService {
 
+    companion object {
+        const val PREFIX_DEFAULT = "default"
+    }
+
     @Autowired
     private lateinit var context: ApplicationContext
 
+    override fun <T : BluePrintValidator<*>> bluePrintValidator(referenceName: String, classType: Class<T>): T? {
+        return if (context.containsBean(referenceName)) {
+            context.getBean(referenceName, classType)
+        } else {
+            null
+        }
+    }
+
+    override fun <T : BluePrintValidator<*>> bluePrintValidators(referenceNamePrefix: String, classType: Class<T>): List<T>? {
+        return context.getBeansOfType(classType)
+                .filter { it.key.startsWith(referenceNamePrefix) }
+                .mapNotNull { it.value }
+    }
+
+    override fun <T : BluePrintValidator<*>> bluePrintValidators(classType: Class<T>): List<T>? {
+        return context.getBeansOfType(classType).mapNotNull { it.value }
+    }
+
     override fun getServiceTemplateValidators(): List<BluePrintServiceTemplateValidator> {
-        return context.getBeansOfType(BluePrintServiceTemplateValidator::class.java).mapNotNull { it.value }
+        return bluePrintValidators(PREFIX_DEFAULT, BluePrintServiceTemplateValidator::class.java)
+                ?: throw BluePrintProcessorException("failed to get default ServiceTemplate validators")
     }
 
     override fun getDataTypeValidators(): List<BluePrintDataTypeValidator> {
-        return context.getBeansOfType(BluePrintDataTypeValidator::class.java).mapNotNull { it.value }
+        return bluePrintValidators(PREFIX_DEFAULT, BluePrintDataTypeValidator::class.java)
+                ?: throw BluePrintProcessorException("failed to get default DataType validators")
     }
 
     override fun getArtifactTypeValidators(): List<BluePrintArtifactTypeValidator> {
-        return context.getBeansOfType(BluePrintArtifactTypeValidator::class.java).mapNotNull { it.value }
+        return bluePrintValidators(PREFIX_DEFAULT, BluePrintArtifactTypeValidator::class.java)
+                ?: throw BluePrintProcessorException("failed to get default ArtifactType validators")
+    }
+
+    override fun getArtifactDefinitionsValidators(): List<BluePrintArtifactDefinitionValidator> {
+        return bluePrintValidators(PREFIX_DEFAULT, BluePrintArtifactDefinitionValidator::class.java)
+                ?: throw BluePrintProcessorException("failed to get default ArtifactDefinition validators")
     }
 
     override fun getNodeTypeValidators(): List<BluePrintNodeTypeValidator> {
-        return context.getBeansOfType(BluePrintNodeTypeValidator::class.java).mapNotNull { it.value }
+        return bluePrintValidators(PREFIX_DEFAULT, BluePrintNodeTypeValidator::class.java)
+                ?: throw BluePrintProcessorException("failed to get default NodeType validators")
     }
 
     override fun getTopologyTemplateValidators(): List<BluePrintTopologyTemplateValidator> {
-        return context.getBeansOfType(BluePrintTopologyTemplateValidator::class.java).mapNotNull { it.value }
+        return bluePrintValidators(PREFIX_DEFAULT, BluePrintTopologyTemplateValidator::class.java)
+                ?: throw BluePrintProcessorException("failed to get default TopologyTemplate validators")
     }
 
     override fun getNodeTemplateValidators(): List<BluePrintNodeTemplateValidator> {
-        return context.getBeansOfType(BluePrintNodeTemplateValidator::class.java).mapNotNull { it.value }
+        return bluePrintValidators(PREFIX_DEFAULT, BluePrintNodeTemplateValidator::class.java)
+                ?: throw BluePrintProcessorException("failed to get default NodeTemplate validators")
     }
 
     override fun getWorkflowValidators(): List<BluePrintWorkflowValidator> {
-        return context.getBeansOfType(BluePrintWorkflowValidator::class.java).mapNotNull { it.value }
+        return bluePrintValidators(PREFIX_DEFAULT, BluePrintWorkflowValidator::class.java)
+                ?: throw BluePrintProcessorException("failed to get default Workflow validators")
     }
 
     override fun getPropertyDefinitionValidators(): List<BluePrintPropertyDefinitionValidator> {
-        return context.getBeansOfType(BluePrintPropertyDefinitionValidator::class.java).mapNotNull { it.value }
+        return bluePrintValidators(PREFIX_DEFAULT, BluePrintPropertyDefinitionValidator::class.java)
+                ?: throw BluePrintProcessorException("failed to get default PropertyDefinition validators")
     }
 
     override fun getAttributeDefinitionValidators(): List<BluePrintAttributeDefinitionValidator> {
-        return context.getBeansOfType(BluePrintAttributeDefinitionValidator::class.java).mapNotNull { it.value }
+        return bluePrintValidators(PREFIX_DEFAULT, BluePrintAttributeDefinitionValidator::class.java)
+                ?: throw BluePrintProcessorException("failed to get default AttributeDefinition validators")
     }
 }
 

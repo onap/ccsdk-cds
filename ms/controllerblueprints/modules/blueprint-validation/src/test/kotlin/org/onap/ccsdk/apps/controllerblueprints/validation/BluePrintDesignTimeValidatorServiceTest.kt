@@ -30,12 +30,12 @@ import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtil
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class BluePrintValidatorServiceImplTest {
+class BluePrintDesignTimeValidatorServiceTest {
 
     private val blueprintBasePath: String = ("./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
     private val bluePrintRuntime = BluePrintMetadataUtils.getBluePrintRuntime("1234", blueprintBasePath)
     private val mockBluePrintTypeValidatorService = MockBluePrintTypeValidatorService()
-    private val defaultBluePrintValidatorService = BluePrintValidatorServiceImpl(mockBluePrintTypeValidatorService)
+    private val defaultBluePrintValidatorService = BluePrintDesignTimeValidatorService(mockBluePrintTypeValidatorService)
     private val workflowValidator = BluePrintWorkflowValidatorImpl(mockBluePrintTypeValidatorService)
 
     @Test

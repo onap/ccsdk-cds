@@ -118,16 +118,13 @@ or Node Template and used by orchestration engine to facilitate deployment and i
 class ArtifactDefinition {
     @get:JsonIgnore
     var id: String? = null
-    var type: String? = null
-    var file: String? = null
+    lateinit var type: String
+    lateinit var file: String
     var repository: String? = null
     var description: String? = null
     @get:JsonProperty("deploy_Path")
     var deployPath: String? = null
     var properties: MutableMap<String, JsonNode>? = null
-    var content: String? = null
-    @Deprecated("Mapping content is define by the Type")
-    var mappingContent: String? = null
 }
 
 

@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +21,18 @@ import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.*
 
 class MockBluePrintTypeValidatorService : BluePrintTypeValidatorService {
 
+    override fun <T : BluePrintValidator<*>> bluePrintValidator(referenceName: String, classType: Class<T>): T? {
+        return null
+    }
+
+    override fun <T : BluePrintValidator<*>> bluePrintValidators(referenceNamePrefix: String, classType: Class<T>): List<T>? {
+       return null
+    }
+
+    override fun <T : BluePrintValidator<*>> bluePrintValidators(classType: Class<T>): List<T>? {
+       return null
+    }
+
     override fun getServiceTemplateValidators(): List<BluePrintServiceTemplateValidator> {
         return listOf(BluePrintServiceTemplateValidatorImpl(this))
     }
@@ -30,6 +43,10 @@ class MockBluePrintTypeValidatorService : BluePrintTypeValidatorService {
 
     override fun getArtifactTypeValidators(): List<BluePrintArtifactTypeValidator> {
         return listOf(BluePrintArtifactTypeValidatorImpl(this))
+    }
+
+    override fun getArtifactDefinitionsValidators(): List<BluePrintArtifactDefinitionValidator> {
+        return listOf(BluePrintArtifactDefinitionValidatorImpl(this))
     }
 
     override fun getNodeTypeValidators(): List<BluePrintNodeTypeValidator> {

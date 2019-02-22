@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +21,9 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.ArtifactType
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintArtifactTypeValidator
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
+import org.springframework.stereotype.Service
 
+@Service("default-artifact-type-validator")
 open class BluePrintArtifactTypeValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintArtifactTypeValidator {
 
     override fun validate(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, artifactType: ArtifactType) {
@@ -28,6 +31,5 @@ open class BluePrintArtifactTypeValidatorImpl(private val bluePrintTypeValidator
         artifactType.properties?.let {
             bluePrintTypeValidatorService.validatePropertyDefinitions(bluePrintRuntimeService, artifactType.properties!!)
         }
-        // TODO ("Files Present ")
     }
 }

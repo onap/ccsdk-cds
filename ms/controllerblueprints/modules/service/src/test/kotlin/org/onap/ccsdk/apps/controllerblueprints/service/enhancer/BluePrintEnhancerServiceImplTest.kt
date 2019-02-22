@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,22 +39,22 @@ import java.nio.file.Paths
 class BluePrintEnhancerServiceImplTest {
 
     @Autowired
-    private val modelTypeLoadService: ModelTypeLoadService? = null
+    lateinit var modelTypeLoadService: ModelTypeLoadService
 
     @Autowired
-    private val resourceDictionaryLoadService: ResourceDictionaryLoadService? = null
+    lateinit var resourceDictionaryLoadService: ResourceDictionaryLoadService
 
     @Autowired
-    private val bluePrintEnhancerService: BluePrintEnhancerService? = null
+    lateinit var bluePrintEnhancerService: BluePrintEnhancerService
 
     @Autowired
-    private val bluePrintValidatorService: BluePrintValidatorService? = null
+    lateinit var bluePrintValidatorService: BluePrintValidatorService
 
     @Before
     fun init() {
         runBlocking {
-            modelTypeLoadService!!.loadPathModelType("./../../../../components/model-catalog/definition-type/starter-type")
-            resourceDictionaryLoadService!!.loadPathResourceDictionary("./../../../../components/model-catalog/resource-dictionary/starter-dictionary")
+            modelTypeLoadService.loadPathModelType("./../../../../components/model-catalog/definition-type/starter-type")
+            resourceDictionaryLoadService.loadPathResourceDictionary("./../../../../components/model-catalog/resource-dictionary/starter-dictionary")
         }
     }
 
@@ -65,11 +66,11 @@ class BluePrintEnhancerServiceImplTest {
 
         val targetPath = Paths.get("target", "bp-enhance").toUri().path
 
-        val bluePrintContext = bluePrintEnhancerService!!.enhance(basePath, targetPath)
+        val bluePrintContext = bluePrintEnhancerService.enhance(basePath, targetPath)
         Assert.assertNotNull("failed to get blueprintContext ", bluePrintContext)
 
         // Validate the Generated BluePrints
-        val valid = bluePrintValidatorService!!.validateBluePrints(targetPath)
+        val valid = bluePrintValidatorService.validateBluePrints(targetPath)
         Assert.assertTrue("blueprint validation failed ", valid)
     }
 }

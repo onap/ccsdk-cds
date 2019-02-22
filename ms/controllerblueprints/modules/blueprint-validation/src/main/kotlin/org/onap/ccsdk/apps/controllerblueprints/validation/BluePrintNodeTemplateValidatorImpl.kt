@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +30,13 @@ import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintExpressionService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
+import org.springframework.beans.factory.config.ConfigurableBeanFactory
+import org.springframework.context.annotation.Scope
+import org.springframework.stereotype.Service
 
 
+@Service("default-node-template-validator")
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintNodeTemplateValidator {
 
     private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintNodeTemplateValidatorImpl::class.toString())
@@ -39,24 +45,27 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
     lateinit var bluePrintContext: BluePrintContext
     var paths: MutableList<String> = arrayListOf()
 
-    override fun validate(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String, nodeTemplate: NodeTemplate) {
-        log.info("Validating NodeTemplate($nodeTemplateName)")
+    override fun validate(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, nodeTemplate: NodeTemplate) {
+        log.info("Validating NodeTemplate($name)")
 
         this.bluePrintRuntimeService = bluePrintRuntimeService
         this.bluePrintContext = bluePrintRuntimeService.bluePrintContext()
 
-        paths.add(nodeTemplateName)
+        paths.add(name)
 
         val type: String = nodeTemplate.type
 
         val nodeType: NodeType = bluePrintContext.serviceTemplate.nodeTypes?.get(type)
-                ?: throw BluePrintException("Failed to get NodeType($type) definition for NodeTemplate($nodeTemplateName)")
+                ?: throw BluePrintException("Failed to get NodeType($type) definition for NodeTemplate($name)")
 
         nodeTemplate.properties?.let { validatePropertyAssignments(nodeType.properties!!, nodeTemplate.properties!!) }
-        nodeTemplate.capabilities?.let { validateCapabilityAssignments(nodeType, nodeTemplateName, nodeTemplate) }
-        nodeTemplate.requirements?.let { validateRequirementAssignments(nodeType, nodeTemplateName, nodeTemplate) }
-        nodeTemplate.interfaces?.let { validateInterfaceAssignments(nodeType, nodeTemplateName, nodeTemplate) }
+        nodeTemplate.capabilities?.let { validateCapabilityAssignments(nodeType, name, nodeTemplate) }
+        nodeTemplate.requirements?.let { validateRequirementAssignments(nodeType, name, nodeTemplate) }
+        nodeTemplate.interfaces?.let { validateInterfaceAssignments(nodeType, name, nodeTemplate) }
         nodeTemplate.artifacts?.let { validateArtifactDefinitions(nodeTemplate.artifacts!!) }
+
+        // Perform Extension Validation
+        validateExtension("$type-node-template-validator", name, nodeTemplate)
 
         paths.removeAt(paths.lastIndex)
     }
@@ -65,16 +74,8 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
     open fun validateArtifactDefinitions(artifacts: MutableMap<String, ArtifactDefinition>) {
         paths.add("artifacts")
         artifacts.forEach { artifactDefinitionName, artifactDefinition ->
-            paths.add(artifactDefinitionName)
-            val type: String = artifactDefinition.type
-                    ?: throw BluePrintException("type is missing for ArtifactDefinition$artifactDefinitionName)")
-            // Check Artifact Type
-            checkValidArtifactType(artifactDefinitionName, type)
-
-            val file: String = artifactDefinition.file
-                    ?: throw BluePrintException("file is missing for ArtifactDefinition($artifactDefinitionName)")
-
-            paths.removeAt(paths.lastIndex)
+            bluePrintTypeValidatorService.validateArtifactDefinition(bluePrintRuntimeService,
+                    artifactDefinitionName, artifactDefinition)
         }
         paths.removeAt(paths.lastIndex)
     }
@@ -239,21 +240,6 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
 
     }
 
-    open fun checkValidArtifactType(artifactDefinitionName: String, artifactTypeName: String) {
-
-        val artifactType = bluePrintContext.serviceTemplate.artifactTypes?.get(artifactTypeName)
-                ?: throw BluePrintException("failed to get artifactType($artifactTypeName) for ArtifactDefinition($artifactDefinitionName)")
-
-        checkValidArtifactTypeDerivedFrom(artifactTypeName, artifactType.derivedFrom)
-    }
-
-    @Throws(BluePrintException::class)
-    open fun checkValidArtifactTypeDerivedFrom(artifactTypeName: String, derivedFrom: String) {
-        check(BluePrintTypes.validArtifactTypeDerivedFroms.contains(derivedFrom)) {
-            throw BluePrintException("failed to get artifactType($artifactTypeName)'s derivedFrom($derivedFrom) definition")
-        }
-    }
-
     open fun checkPropertyValue(propertyName: String, propertyDefinition: PropertyDefinition, propertyAssignment: JsonNode) {
         val propertyType = propertyDefinition.type
         val isValid: Boolean
@@ -292,6 +278,15 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
     private fun checkValidDataTypeDerivedFrom(dataTypeName: String, derivedFrom: String) {
         check(BluePrintTypes.validDataTypeDerivedFroms.contains(derivedFrom)) {
             throw BluePrintException("Failed to get DataType($dataTypeName)'s  derivedFrom($derivedFrom) definition ")
+        }
+    }
+
+    private fun validateExtension(referencePrefix: String, name: String, nodeTemplate: NodeTemplate) {
+        val customValidator = bluePrintTypeValidatorService
+                .bluePrintValidator(referencePrefix, BluePrintNodeTemplateValidator::class.java)
+
+        customValidator?.let {
+            it.validate(bluePrintRuntimeService, name, nodeTemplate)
         }
     }
 
