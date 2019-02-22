@@ -19,7 +19,6 @@ package org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api
 import io.grpc.stub.StreamObserver
 import org.onap.ccsdk.apps.blueprintsprocessor.core.BluePrintCoreConfiguration
 import org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api.utils.toJava
-import org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api.utils.toProto
 import org.onap.ccsdk.apps.controllerblueprints.processing.api.BluePrintProcessingServiceGrpc
 import org.onap.ccsdk.apps.controllerblueprints.processing.api.ExecutionServiceInput
 import org.onap.ccsdk.apps.controllerblueprints.processing.api.ExecutionServiceOutput
@@ -32,14 +31,14 @@ class BluePrintProcessingGRPCHandler(private val bluePrintCoreConfiguration: Blu
     : BluePrintProcessingServiceGrpc.BluePrintProcessingServiceImplBase() {
     private val log = LoggerFactory.getLogger(BluePrintProcessingGRPCHandler::class.java)
 
-    override fun process(responseObserver: StreamObserver<ExecutionServiceOutput>?): StreamObserver<ExecutionServiceInput> {
+    override fun process(
+        responseObserver: StreamObserver<ExecutionServiceOutput>): StreamObserver<ExecutionServiceInput> {
 
         return object : StreamObserver<ExecutionServiceInput> {
             override fun onNext(executionServiceInput: ExecutionServiceInput) {
                 try {
-                    val output = executionServiceHandler.process(executionServiceInput.toJava())
-                            .toProto(executionServiceInput.payload)
-                    responseObserver?.onNext(output)
+                    val inputPayload = executionServiceInput.payload
+                    executionServiceHandler.process(executionServiceInput.toJava(), responseObserver, inputPayload)
                 } catch (e: Exception) {
                     onError(e)
                 }
@@ -47,13 +46,13 @@ class BluePrintProcessingGRPCHandler(private val bluePrintCoreConfiguration: Blu
 
             override fun onError(error: Throwable) {
                 log.debug("Fail to process message", error)
-                responseObserver?.onError(io.grpc.Status.INTERNAL
-                        .withDescription(error.message)
-                        .asException())
+                responseObserver.onError(io.grpc.Status.INTERNAL
+                    .withDescription(error.message)
+                    .asException())
             }
 
             override fun onCompleted() {
-                responseObserver?.onCompleted()
+                log.info("Completed")
             }
         }
     }

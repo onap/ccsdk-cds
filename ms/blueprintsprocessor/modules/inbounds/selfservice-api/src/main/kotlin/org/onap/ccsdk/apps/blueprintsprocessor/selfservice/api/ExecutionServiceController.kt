@@ -17,6 +17,7 @@
 package org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api
 
 import io.swagger.annotations.ApiOperation
+import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ACTION_MODE_ASYNC
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.springframework.beans.factory.annotation.Autowired
@@ -49,15 +50,19 @@ class ExecutionServiceController {
     @ResponseBody
     fun upload(@RequestPart("file") parts: Mono<FilePart>): Mono<String> {
         return parts
-                .filter { it is FilePart }
-                .ofType(FilePart::class.java)
-                .flatMap(executionServiceHandler::upload)
+            .filter { it is FilePart }
+            .ofType(FilePart::class.java)
+            .flatMap(executionServiceHandler::upload)
     }
 
     @RequestMapping(path = ["/process"], method = [RequestMethod.POST], produces = [MediaType.APPLICATION_JSON_VALUE])
-    @ApiOperation(value = "Resolve Resource Mappings", notes = "Takes the blueprint information and process as per the payload")
+    @ApiOperation(value = "Resolve Resource Mappings",
+        notes = "Takes the blueprint information and process as per the payload")
     @ResponseBody
     fun process(@RequestBody executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
-        return executionServiceHandler.process(executionServiceInput)
+        if (executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC) {
+            throw IllegalStateException("Can't process async request through the REST endpoint. Use gRPC for async processing.")
+        }
+        return executionServiceHandler.processSync(executionServiceInput)
     }
 }

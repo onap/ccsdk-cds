@@ -139,7 +139,7 @@ fun Flag.toJava(): org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.Flags {
 fun org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.Status.toProto(): Status {
     val status = Status.newBuilder()
     status.code = this.code
-    status.errorMessage = this.errorMessage
+    status.errorMessage = this.errorMessage ?: ""
     status.message = this.message
     status.timestamp = this.timestamp.toString()
     status.eventType = this.eventType
