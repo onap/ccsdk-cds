@@ -59,6 +59,7 @@ export class MetadataComponent implements OnInit {
       blueprintdata => {
         var blueprintState: IBlueprintState = { blueprint: blueprintdata.blueprint, isLoadSuccess: blueprintdata.isLoadSuccess, isSaveSuccess: blueprintdata.isSaveSuccess, isUpdateSuccess: blueprintdata.isUpdateSuccess };
         this.metadata = blueprintState.blueprint.metadata;
+        this.blueprint = blueprintState.blueprint;
         let metadatavalues = [];
         for (let key in this.metadata) {
           if (this.metadata.hasOwnProperty(key)) {

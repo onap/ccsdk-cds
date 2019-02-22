@@ -34,7 +34,7 @@ limitations under the License.
         <ng-template matStepLabel>Browse CBA Template file</ng-template>
         <div class="matStepContent">
             <app-search-template (cbaFile)="fileChange($event)"></app-search-template>
-           <!-- <div>
+            <!-- <div>
                 <button mat-button matStepperNext class="matStepNextBtn">Upload</button>
             </div>-->
         </div>
@@ -46,4 +46,4 @@ limitations under the License.
         </div>
     </mat-step>
 </mat-vertical-stepper>
-<button mat-button matStepperNext class="matStepNextBtn" (click)="saveBlueprintModel()">Next</button>
+<button mat-button matStepperNext class="matStepNextBtn">Next</button>
