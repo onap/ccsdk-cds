@@ -159,7 +159,11 @@ object BluePrintConstants {
     const val TOSCA_SCRIPTS_KOTLIN_DIR: String = "$TOSCA_SCRIPTS_DIR/kotlin"
     const val TOSCA_SCRIPTS_JYTHON_DIR: String = "$TOSCA_SCRIPTS_DIR/python"
 
-    const val METADATA_USER_GROUPS = "user-groups"
+    const val PROPERTY_ENV = "ENV"
+    const val PROPERTY_APP = "APP"
+    const val PROPERTY_BPP = "BPP"
+    const val PROPERTY_SELF = "SELF"
+
     const val METADATA_TEMPLATE_NAME = "template_name"
     const val METADATA_TEMPLATE_VERSION = "template_version"
     const val METADATA_TEMPLATE_AUTHOR = "template_author"
@@ -174,11 +178,5 @@ object BluePrintConstants {
     const val PROPERTY_CURRENT_IMPLEMENTATION = "current-implementation"
     const val PROPERTY_EXECUTION_REQUEST = "execution-request"
 
-    const val OPERATION_PROCESS = "process"
-    const val OPERATION_PREPARE = "prepare"
-
-    const val BLUEPRINT_RETRIEVE_TYPE_DB = "db"
-    const val BLUEPRINT_RETRIEVE_TYPE_FILE = "file"
-    const val BLUEPRINT_RETRIEVE_TYPE_REPO = "repo"
 
 }

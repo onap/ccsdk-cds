@@ -62,7 +62,7 @@ interface BluePrintRuntimeService<T> {
 
     fun setBluePrintError(bluePrintError: BluePrintError)
 
-    fun loadEnvironments(fileName: String)
+    fun loadEnvironments(type: String, fileName: String)
 
     fun resolveNodeTemplatePropertyAssignments(nodeTemplateName: String,
                                                propertyDefinitions: MutableMap<String, PropertyDefinition>,
@@ -135,11 +135,11 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
 
     init {
         /**
-         * Load Default Environments Properties
+         * Load Blueprint Environments Properties
          */
         val absoluteEnvFilePath = bluePrintContext.rootPath.plus(File.separator)
                 .plus(BluePrintConstants.TOSCA_ENVIRONMENTS_DIR)
-        loadEnvironments(absoluteEnvFilePath)
+        loadEnvironments(BluePrintConstants.PROPERTY_BPP, absoluteEnvFilePath)
 
     }
 
@@ -204,9 +204,10 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
         this.bluePrintError = bluePrintError
     }
 
-    override fun loadEnvironments(fileName: String) {
+    override fun loadEnvironments(type: String, fileName: String) {
         BluePrintMetadataUtils.environmentFileProperties(fileName).forEach { key, value ->
-            setNodeTemplateAttributeValue("ENV", key.toString(), value.toString().asJsonPrimitive())
+            setNodeTemplateAttributeValue(type, key.toString(), value.toString()
+                    .asJsonPrimitive())
         }
     }
 
