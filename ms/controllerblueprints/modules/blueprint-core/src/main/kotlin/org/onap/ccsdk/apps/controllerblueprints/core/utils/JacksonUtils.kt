@@ -98,6 +98,10 @@ class JacksonUtils {
             return readValue(content, valueType)
         }
 
+        fun objectNodeFromObject(from: kotlin.Any): ObjectNode {
+            return jacksonObjectMapper().convertValue(from, ObjectNode::class.java)
+        }
+
         fun jsonNodeFromObject(from: kotlin.Any): JsonNode {
             return jacksonObjectMapper().convertValue(from, JsonNode::class.java)
         }
