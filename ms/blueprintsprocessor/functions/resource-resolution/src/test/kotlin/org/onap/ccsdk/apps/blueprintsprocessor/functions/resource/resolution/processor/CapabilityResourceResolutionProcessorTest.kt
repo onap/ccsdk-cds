@@ -20,9 +20,9 @@ package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.pr
 
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
 import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.scripts.BlueprintJythonService
 import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.scripts.PythonExecutorProperty
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
 import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
@@ -36,15 +36,15 @@ import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [CapabilityResourceAssignmentProcessor::class, BluePrintScriptsServiceImpl::class,
+@ContextConfiguration(classes = [CapabilityResourceResolutionProcessor::class, BluePrintScriptsServiceImpl::class,
     BlueprintJythonService::class, PythonExecutorProperty::class, MockCapabilityService::class])
 @TestPropertySource(properties =
 ["blueprints.processor.functions.python.executor.modulePaths=./../../../../components/scripts/python/ccsdk_blueprints",
     "blueprints.processor.functions.python.executor.executionPath=./../../../../components/scripts/python/ccsdk_blueprints"])
-class CapabilityResourceAssignmentProcessorTest {
+class CapabilityResourceResolutionProcessorTest {
 
     @Autowired
-    lateinit var capabilityResourceAssignmentProcessor: CapabilityResourceAssignmentProcessor
+    lateinit var capabilityResourceResolutionProcessor: CapabilityResourceResolutionProcessor
 
     @Test
     fun `test kotlin capability`() {
@@ -54,15 +54,15 @@ class CapabilityResourceAssignmentProcessorTest {
 
         val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)
 
-        capabilityResourceAssignmentProcessor.raRuntimeService = resourceAssignmentRuntimeService
-        capabilityResourceAssignmentProcessor.resourceDictionaries = hashMapOf()
+        capabilityResourceResolutionProcessor.raRuntimeService = resourceAssignmentRuntimeService
+        capabilityResourceResolutionProcessor.resourceDictionaries = hashMapOf()
 
 
         val scriptPropertyInstances: MutableMap<String, Any> = mutableMapOf()
         scriptPropertyInstances["mock-service1"] = MockCapabilityService()
         scriptPropertyInstances["mock-service2"] = MockCapabilityService()
 
-        val resourceAssignmentProcessor = capabilityResourceAssignmentProcessor
+        val resourceAssignmentProcessor = capabilityResourceResolutionProcessor
                 .getKotlinResourceAssignmentProcessorInstance(
                         "ResourceAssignmentProcessor_cba\$ScriptResourceAssignmentProcessor", scriptPropertyInstances)
 
@@ -90,14 +90,14 @@ class CapabilityResourceAssignmentProcessorTest {
 
         val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)
 
-        capabilityResourceAssignmentProcessor.raRuntimeService = resourceAssignmentRuntimeService
+        capabilityResourceResolutionProcessor.raRuntimeService = resourceAssignmentRuntimeService
 
         val resourceDefinition = JacksonUtils
                 .readValueFromClassPathFile("mapping/capability/jython-resource-definitions.json",
                         ResourceDefinition::class.java)!!
         val resourceDefinitions: MutableMap<String, ResourceDefinition> = mutableMapOf()
         resourceDefinitions[resourceDefinition.name] = resourceDefinition
-        capabilityResourceAssignmentProcessor.resourceDictionaries = resourceDefinitions
+        capabilityResourceResolutionProcessor.resourceDictionaries = resourceDefinitions
 
         val resourceAssignment = ResourceAssignment().apply {
             name = "service-instance-id"
@@ -108,7 +108,7 @@ class CapabilityResourceAssignmentProcessorTest {
             }
         }
 
-        val processorName = capabilityResourceAssignmentProcessor.apply(resourceAssignment)
+        val processorName = capabilityResourceResolutionProcessor.apply(resourceAssignment)
         assertNotNull(processorName, "couldn't get Jython script resource assignment processor name")
 
     }

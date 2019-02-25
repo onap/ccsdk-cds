@@ -21,6 +21,7 @@ import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.pro
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.apps.controllerblueprints.core.checkNotEmptyOrThrow
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintTemplateService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
@@ -59,8 +60,8 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
 
     override fun registeredResourceSources(): List<String> {
         return applicationContext.getBeanNamesForType(ResourceAssignmentProcessor::class.java)
-                .filter { it.startsWith(ResourceResolutionConstants.PREFIX_RESOURCE_ASSIGNMENT_PROCESSOR) }
-                .map { it.substringAfter(ResourceResolutionConstants.PREFIX_RESOURCE_ASSIGNMENT_PROCESSOR) }
+                .filter { it.startsWith(ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR) }
+                .map { it.substringAfter(ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR) }
     }
 
     override fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
@@ -123,6 +124,11 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
         return resolvedContent
     }
 
+    /**
+     * Iterate the Batch, get the Resource Assignment, dictionary Name, Look for the Resource definition for the
+     * name, then get the type of the Resource Definition, Get the instance for the Resource Type and process the
+     * request.
+     */
     override fun resolveResourceAssignments(blueprintRuntimeService: BluePrintRuntimeService<*>,
                                             resourceDictionaries: MutableMap<String, ResourceDefinition>,
                                             resourceAssignments: MutableList<ResourceAssignment>,
@@ -133,12 +139,17 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
 
         bulkSequenced.map { batchResourceAssignments ->
             batchResourceAssignments.filter { it.name != "*" && it.name != "start" }
-                    .map { resourceAssignment ->
+                    .forEach { resourceAssignment ->
+                        val dictionaryName = resourceAssignment.dictionaryName
                         val dictionarySource = resourceAssignment.dictionarySource
-                        val processorInstanceName = ResourceResolutionConstants.PREFIX_RESOURCE_ASSIGNMENT_PROCESSOR.plus(dictionarySource)
+                        /**
+                         * Get the Processor name
+                         */
+                        val processorName = processorName(dictionaryName!!, dictionarySource!!,
+                                resourceDictionaries)
 
-                        val resourceAssignmentProcessor = applicationContext.getBean(processorInstanceName) as? ResourceAssignmentProcessor
-                                ?: throw BluePrintProcessorException("failed to get resource processor for instance name($processorInstanceName) " +
+                        val resourceAssignmentProcessor = applicationContext.getBean(processorName) as? ResourceAssignmentProcessor
+                                ?: throw BluePrintProcessorException("failed to get resource processor for name($processorName) " +
                                         "for resource assignment(${resourceAssignment.name})")
                         try {
                             // Set BluePrint Runtime Service
@@ -155,4 +166,37 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
         }
     }
 
+
+    /**
+     * If the Source instance is "input", then it is not mandatory to have source Resource Definition, So it can
+     *  derive the default input processor.
+     */
+    private fun processorName(dictionaryName: String, dictionarySource: String,
+                              resourceDictionaries: MutableMap<String, ResourceDefinition>): String {
+        var processorName: String? = null
+        when (dictionarySource) {
+            "input" -> {
+                processorName = "${ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-input"
+            }
+            "default" -> {
+                processorName = "${ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-default"
+            }
+            else -> {
+                val resourceDefinition = resourceDictionaries[dictionaryName]
+                        ?: throw BluePrintProcessorException("couldn't get resource dictionary definition for $dictionaryName")
+
+                val resourceSource = resourceDefinition.sources[dictionarySource]
+                        ?: throw BluePrintProcessorException("couldn't get resource definition $dictionaryName source($dictionarySource)")
+
+                processorName = ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
+                        .plus(resourceSource.type)
+            }
+        }
+        checkNotEmptyOrThrow(processorName,
+                "couldn't get processor name for resource dictionary definition($dictionaryName) source" +
+                        "($dictionarySource)")
+
+        return processorName
+
+    }
 }

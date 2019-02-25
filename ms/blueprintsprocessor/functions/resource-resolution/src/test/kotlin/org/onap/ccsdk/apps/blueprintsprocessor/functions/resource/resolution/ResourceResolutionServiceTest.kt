@@ -47,9 +47,9 @@ import kotlin.test.assertTrue
  */
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [ResourceResolutionServiceImpl::class,
-    InputResourceAssignmentProcessor::class, DefaultResourceAssignmentProcessor::class,
-    PrimaryDataResourceAssignmentProcessor::class, SimpleRestResourceAssignmentProcessor::class,
-    CapabilityResourceAssignmentProcessor::class, PrimaryDBLibGenericService::class,
+    InputResourceResolutionProcessor::class, DefaultResourceResolutionProcessor::class,
+    PrimaryDataResourceResolutionProcessor::class, RestResourceResolutionProcessor::class,
+    CapabilityResourceResolutionProcessor::class, PrimaryDBLibGenericService::class,
     BlueprintPropertyConfiguration::class, BluePrintProperties::class,
     BluePrintDBLibConfiguration::class, BluePrintLoadConfiguration::class])
 @TestPropertySource(locations = ["classpath:application-test.properties"])
@@ -66,7 +66,8 @@ class ResourceResolutionServiceTest {
     fun testRegisteredSource() {
         val sources = resourceResolutionService.registeredResourceSources()
         assertNotNull(sources, "failed to get registered sources")
-        assertTrue(sources.containsAll(arrayListOf("input", "default", "primary-db", "primary-config-data")), "failed to get registered sources")
+        assertTrue(sources.containsAll(arrayListOf("source-input", "source-default", "source-primary-db",
+                "source-rest")), "failed to get registered sources")
     }
 
     @Test

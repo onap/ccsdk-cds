@@ -24,26 +24,30 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.RestResourceSource
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.apps.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
+import org.onap.ccsdk.apps.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.apps.controllerblueprints.core.*
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDictionaryConstants
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.config.ConfigurableBeanFactory
+import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
 
 /**
- * SimpleRestResourceAssignmentProcessor
+ * RestResourceResolutionProcessor
  *
  * @author Kapil Singal
  */
-@Service("resource-assignment-processor-primary-config-data")
-open class SimpleRestResourceAssignmentProcessor(private val blueprintRestLibPropertyService: BluePrintRestLibPropertyService)
+@Service("rr-processor-source-rest")
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyService: BluePrintRestLibPropertyService)
     : ResourceAssignmentProcessor() {
 
-    private val logger = LoggerFactory.getLogger(SimpleRestResourceAssignmentProcessor::class.java)
+    private val logger = LoggerFactory.getLogger(RestResourceResolutionProcessor::class.java)
 
     override fun getName(): String {
-        return "resource-assignment-processor-primary-config-data"
+        return "rr-processor-source-rest"
     }
 
     override fun process(resourceAssignment: ResourceAssignment) {
@@ -70,8 +74,8 @@ open class SimpleRestResourceAssignmentProcessor(private val blueprintRestLibPro
                 val inputKeyMapping = checkNotNull(sourceProperties.inputKeyMapping) { "failed to get input-key-mappings for $dName under $dSource properties" }
 
                 logger.info("$dSource dictionary information : ($urlPath), ($inputKeyMapping), (${sourceProperties.outputKeyMapping})")
-                // TODO("Dynamic Rest Client Service, call (blueprintDynamicWebClientService || blueprintWebClientService")
-                val restClientService = blueprintRestLibPropertyService.blueprintWebClientService("primary-config-data")
+                // Get the Rest Client Service
+                val restClientService = blueprintWebClientService(resourceAssignment, sourceProperties)
                 val response = restClientService.getResource(urlPath, String::class.java)
                 if (response.isNotBlank()) {
                     logger.warn("Failed to get $dSource result for dictionary name ($dName) using urlPath ($urlPath)")
@@ -84,6 +88,16 @@ open class SimpleRestResourceAssignmentProcessor(private val blueprintRestLibPro
         } catch (e: Exception) {
             ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, e.message)
             throw BluePrintProcessorException("Failed in template key ($resourceAssignment) assignments with: ${e.message}", e)
+        }
+    }
+
+    open fun blueprintWebClientService(resourceAssignment: ResourceAssignment,
+                                       restResourceSource: RestResourceSource): BlueprintWebClientService {
+        return if (checkNotEmpty(restResourceSource.endpointSelector)) {
+            val restPropertiesJson = raRuntimeService.resolveDSLExpression(restResourceSource.endpointSelector!!)
+            blueprintRestLibPropertyService.blueprintWebClientService(restPropertiesJson)
+        } else {
+            blueprintRestLibPropertyService.blueprintWebClientService(resourceAssignment.dictionarySource!!)
         }
     }
 

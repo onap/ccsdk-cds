@@ -57,9 +57,13 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
         return ResourceAssignment()
     }
 
-    override fun apply(executionServiceInput: ResourceAssignment): ResourceAssignment {
-        prepareRequest(executionServiceInput)
-        process(executionServiceInput)
+    override fun apply(resourceAssignment: ResourceAssignment): ResourceAssignment {
+        try {
+            prepareRequest(resourceAssignment)
+            process(resourceAssignment)
+        } catch (runtimeException: RuntimeException) {
+            recover(runtimeException, resourceAssignment)
+        }
         return prepareResponse()
     }
 

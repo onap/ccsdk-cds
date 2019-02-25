@@ -36,6 +36,8 @@ open class DefaultResourceSource : ResourceSourceProperties() {
 
 open class DatabaseResourceSource : ResourceSourceProperties() {
     lateinit var type: String
+    @get:JsonProperty("endpoint-selector")
+    var endpointSelector: String? = null
     lateinit var query: String
     @get:JsonProperty("input-key-mapping")
     var inputKeyMapping: MutableMap<String, String>? = null
@@ -47,6 +49,8 @@ open class DatabaseResourceSource : ResourceSourceProperties() {
 
 open class RestResourceSource : ResourceSourceProperties() {
     lateinit var type: String
+    @get:JsonProperty("endpoint-selector")
+    var endpointSelector: String? = null
     @get:JsonProperty("url-path")
     lateinit var urlPath: String
     lateinit var path: String
@@ -61,9 +65,10 @@ open class RestResourceSource : ResourceSourceProperties() {
 }
 
 open class CapabilityResourceSource : ResourceSourceProperties() {
-    lateinit var type: String
-    @get:JsonProperty("instance-name")
-    lateinit var instanceName: String
+    @get:JsonProperty("script-type")
+    lateinit var scriptType: String
+    @get:JsonProperty("script-class-reference")
+    lateinit var scriptClassReference: String
     @get:JsonProperty("instance-dependencies")
     var instanceDependencies: List<String>? = null
     @get:JsonProperty("key-dependencies")

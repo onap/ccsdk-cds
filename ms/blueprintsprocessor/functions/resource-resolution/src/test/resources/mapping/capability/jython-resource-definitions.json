@@ -10,8 +10,8 @@
     "capability": {
       "type": "source-capability",
       "properties": {
-        "type": "JYTHON-COMPONENT",
-        "instance-name": "SampleRAProcessor",
+        "script-type": "jython",
+        "script-class-reference": "SampleRAProcessor",
         "instance-dependencies": []
       }
     }

@@ -23,20 +23,23 @@ import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.config.ConfigurableBeanFactory
+import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
 
 /**
- * InputResourceAssignmentProcessor
+ * InputResourceResolutionProcessor
  *
  * @author Kapil Singal
  */
-@Service("resource-assignment-processor-input")
-open class InputResourceAssignmentProcessor : ResourceAssignmentProcessor() {
+@Service("rr-processor-source-input")
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+open class InputResourceResolutionProcessor : ResourceAssignmentProcessor() {
 
-    private val logger = LoggerFactory.getLogger(InputResourceAssignmentProcessor::class.java)
+    private val logger = LoggerFactory.getLogger(InputResourceResolutionProcessor::class.java)
 
     override fun getName(): String {
-        return "resource-assignment-processor-input"
+        return "rr-processor-source-input"
     }
 
     override fun process(resourceAssignment: ResourceAssignment) {
