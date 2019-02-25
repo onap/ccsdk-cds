@@ -2,22 +2,22 @@
   "description": "This is Component Resource Source Node Type",
   "version": "1.0.0",
   "properties": {
-    "type": {
+    "script-type": {
       "required": true,
       "type": "string",
-      "default": "KOTLIN-COMPONENT",
+      "default": "kotlin",
       "constraints": [
         {
           "valid_values": [
-            "KOTLIN-COMPONENT",
-            "JAVA-COMPONENT",
-            "JYTHON-COMPONENT"
+            "kotlin",
+            "internal",
+            "jython"
           ]
         }
       ]
     },
-    "instance-name": {
-      "description": "Capability component instance reference name for JAVA-COMPONENT, Script Class name for KOTLIN-COMPONENT.",
+    "script-class-reference": {
+      "description": "Capability reference name for internal and kotlin, for jython script file path",
       "required": true,
       "type": "string"
     },
