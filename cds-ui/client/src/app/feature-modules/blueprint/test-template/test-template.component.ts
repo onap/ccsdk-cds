@@ -22,6 +22,14 @@ limitations under the License.
 import { Component, OnInit } from '@angular/core';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
+import { Observable, Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+
+import { IAppState } from '../../../common/core/store/state/app.state';
+import { IBlueprintState } from 'src/app/common/core/store/models/blueprintState.model';
+import { IBlueprint } from 'src/app/common/core/store/models/blueprint.model';
+import { IMetaData } from '../../../common/core/store/models/metadata.model';
+import { LoadBlueprintSuccess } from 'src/app/common/core/store/actions/blueprint.action';
 
 
 
@@ -86,6 +94,9 @@ interface ExampleFlatNode {
   styleUrls: ['./test-template.component.scss']
 })
 export class TestTemplateComponent implements OnInit {
+  private blueprintpState: Subscription;
+  private request ;
+  private workflows = [];
 
   private transformer = (node: FoodNode, level: number) => {
     return {
@@ -103,7 +114,15 @@ export class TestTemplateComponent implements OnInit {
 
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
-  constructor() { 
+  constructor(private store: Store<IAppState>) {
+    this.blueprintpState = this.store.select('blueprint')
+                            .subscribe((data: any)=>{
+                              console.log(data);
+                              if(data.blueprint.topology_template && data.blueprint.topology_template.workflows) {
+                                this.buildWorkflowData(data.blueprint.topology_template.workflows);
+                               // this.request = JSON.stringify(data.blueprint.topology_template.workflows[0], undefined, 4);
+                              }
+                            });
     this.dataSource.data = TREE_DATA;
   }
 
@@ -114,6 +133,20 @@ export class TestTemplateComponent implements OnInit {
 
   fileClicked(file) {
     console.log('selected file:' + file);
+  }
+
+  buildWorkflowData(data) {
+    this.workflows = [];
+    for (var property1 in data) {
+      data[property1].name = property1;
+      this.workflows.push(data[property1])
+    }
+    this.request = this.workflows[0];
+  }
+
+  createRequest(workflow) {
+    this.request = JSON.stringify(workflow, undefined, 4);
+
   }
 
 }

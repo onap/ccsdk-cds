@@ -19,34 +19,53 @@ limitations under the License.
 ============LICENSE_END============================================
 -->
 <div style="display: flex;flex-direction: row">
-  <div style="width: 20%;margin: 2px">
-    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-      <!-- This is the tree node template for leaf nodes -->
-      <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
-        <!-- use a disabled button to provide padding for tree leaf -->
-        <button mat-icon-button disabled></button>
-        <span (click)="fileClicked(node.name)">{{node.name}}</span>
-      </mat-tree-node>
-      <!-- This is the tree node template for expandable nodes -->
-      <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
-        <button mat-icon-button matTreeNodeToggle
-                [attr.aria-label]="'toggle ' + node.name">
-          <mat-icon class="mat-icon-rtl-mirror">
-            {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
-          </mat-icon>
-        </button>
-        <span (click)="fileClicked(node.name)">{{node.name}}</span>
-      </mat-tree-node>
-    </mat-tree>
-  </div>
-  <div style="width: 80%;background-color: gainsboro;height: 533px;"></div>
-</div>
 
-<div>
-  <button style="    background-color: #3f51b5;
-  color: white;
-  border: 2px solid;
-  width: 8em;
-  height: 3em;
-  border-radius: 2em;">Test</button>
+  <div style="width: 12%; height: 553px;">
+
+      <mat-accordion>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header style="background-color: #f1f1f1">
+              <mat-panel-title>
+                Workflows
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="flex-container">
+              <div style="cursor: pointer; padding: 2px" (click)="createRequest(workflow)" class="item-box" *ngFor="let workflow of workflows">{{workflow.name}}</div>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+  </div>
+
+  <div style="width: 90%;display: flex;flex-direction: row; margin-left: 1em">
+    <div style="width: 50%; margin: 2px;">
+      <p>Request</p>
+      <textarea style=" width: 99%;
+      min-height: 27rem;
+      font-family: Lucida Console, Monaco, monospace;
+      font-size: 0.8rem;
+      line-height: 1.2;" cols="30" rows="10">{{request }}</textarea>
+      <div style="height: 10%">
+          <button style="margin: 1em;
+          background-color: #3f51b5;
+          color: white;
+          border-radius: 2em;
+          padding: 0.5em;min-width: 6em;">Submit</button>
+          <button style="margin: 1em;
+          background-color: #3f51b5;
+          color: white;
+          border-radius: 2em;
+          padding: 0.5em;min-width: 6em;">Clear</button>
+        </div>
+    </div>
+
+    <div style="width: 50%; margin: 2px;">
+      <p>Response</p>
+      <textarea style=" width: 99%;
+      min-height: 27rem;
+      font-family: Lucida Console, Monaco, monospace;
+      font-size: 0.8rem;
+      line-height: 1.2;" cols="30" rows="10"></textarea>
+    </div>
+  </div>
+
 </div>
