@@ -1,0 +1,29 @@
+{
+  "tags": "sample-licenses",
+  "name": "sample-licenses",
+  "property": {
+    "description" : " Sample Data for licences",
+    "required": true,
+    "type": "list",
+    "entry_schema": {
+      "type": "dt-license-key"
+    }
+  },
+  "updated-by": "brindasanth@onap.com",
+  "sources": {
+    "primary-config-data": {
+      "type": "source-rest",
+      "properties": {
+        "type": "JSON",
+        "url-path": "config/L3VNF-API:services/service-list/",
+        "path": "/licenses",
+        "input-key-mapping": {
+        },
+        "output-key-mapping": {
+          "licenses": "licenses"
+        },
+        "key-dependencies": []
+      }
+    }
+  }
+}
