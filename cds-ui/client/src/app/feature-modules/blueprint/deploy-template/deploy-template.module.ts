@@ -22,6 +22,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DeployTemplateComponent } from './deploy-template.component';
 import { DeployTemplateRoutingModule } from './deploy-template-routing.module';
+import { AppMaterialModule } from '../../../common/modules/app-material.module';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { DeployTemplateRoutingModule } from './deploy-template-routing.module';
   ],
   imports: [
     CommonModule,
-    DeployTemplateRoutingModule
+    DeployTemplateRoutingModule,
+    AppMaterialModule
   ]
 })
 export class DeployTemplateModule { }
