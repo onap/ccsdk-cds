@@ -16,23 +16,12 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api.validation
 
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
-import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.apps.controllerblueprints.validation.BluePrintDesignTimeValidatorService
+import org.onap.ccsdk.apps.controllerblueprints.validation.extension.ResourceDefinitionValidator
 import org.springframework.stereotype.Service
 
 @Service
-open class BluePrintRuntimeValidatorService(
-        private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintDesignTimeValidatorService(bluePrintTypeValidatorService) {
-
-    override fun validateBluePrints(bluePrintRuntimeService: BluePrintRuntimeService<*>): Boolean {
-
-        bluePrintTypeValidatorService.validateServiceTemplate(bluePrintRuntimeService, "service_template",
-                bluePrintRuntimeService.bluePrintContext().serviceTemplate)
-        if (bluePrintRuntimeService.getBluePrintError().errors.size > 0) {
-            throw BluePrintException("failed in blueprint validation : ${bluePrintRuntimeService.getBluePrintError().errors.joinToString("\n")}")
-        }
-        return true
-    }
-}
+open class BluePrintRuntimeValidatorService(bluePrintTypeValidatorService: BluePrintTypeValidatorService,
+                                            resourceDefinitionValidator: ResourceDefinitionValidator)
+    : BluePrintDesignTimeValidatorService(bluePrintTypeValidatorService, resourceDefinitionValidator)

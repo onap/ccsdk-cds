@@ -17,6 +17,8 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor
 
+import com.fasterxml.jackson.databind.JsonNode
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
@@ -30,20 +32,20 @@ import org.springframework.stereotype.Service
  *
  * @author Kapil Singal
  */
-@Service("rr-processor-source-default")
+@Service("${PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-default")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class DefaultResourceResolutionProcessor : ResourceAssignmentProcessor() {
 
     private val logger = LoggerFactory.getLogger(DefaultResourceResolutionProcessor::class.java)
 
     override fun getName(): String {
-        return "rr-processor-source-default"
+        return "${PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-default"
     }
 
     override fun process(resourceAssignment: ResourceAssignment) {
         try {
             // Check if It has Input
-            var value: Any?
+            var value: JsonNode?
             try {
                 value = raRuntimeService.getInputValue(resourceAssignment.name)
             } catch (e: BluePrintProcessorException) {
@@ -60,7 +62,7 @@ open class DefaultResourceResolutionProcessor : ResourceAssignmentProcessor() {
         } catch (e: Exception) {
             ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, e.message)
             throw BluePrintProcessorException("Failed in template key ($resourceAssignment) assignments with: ${e.message}",
-                e)
+                    e)
         }
 
     }

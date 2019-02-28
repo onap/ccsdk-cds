@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,13 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintTypes
-import org.onap.ccsdk.apps.controllerblueprints.core.checkNotEmpty
-import org.onap.ccsdk.apps.controllerblueprints.core.checkNotEmptyOrThrow
-import org.onap.ccsdk.apps.controllerblueprints.core.nullToEmpty
-import org.onap.ccsdk.apps.controllerblueprints.core.returnNotEmptyOrThrow
+import org.onap.ccsdk.apps.controllerblueprints.core.*
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
@@ -40,9 +35,11 @@ class ResourceAssignmentUtils {
 
         private val logger: EELFLogger = EELFManager.getInstance().getLogger(ResourceAssignmentUtils::class.toString())
 
+        // TODO("Modify Value type from Any to JsonNode")
         @Synchronized
         @Throws(BluePrintProcessorException::class)
-        fun setResourceDataValue(resourceAssignment: ResourceAssignment, raRuntimeService: ResourceAssignmentRuntimeService, value: Any?) {
+        fun setResourceDataValue(resourceAssignment: ResourceAssignment,
+                                 raRuntimeService: ResourceAssignmentRuntimeService, value: Any?) {
 
             val resourceProp = checkNotNull(resourceAssignment.property) { "Failed in setting resource value for resource mapping $resourceAssignment" }
             checkNotEmptyOrThrow(resourceAssignment.name, "Failed in setting resource value for resource mapping $resourceAssignment")
@@ -111,10 +108,10 @@ class ResourceAssignmentUtils {
         @Synchronized
         @Throws(BluePrintProcessorException::class)
         fun generateResourceDataForAssignments(assignments: List<ResourceAssignment>): String {
-            var result = "{}"
+            val result: String
             try {
                 val mapper = ObjectMapper()
-                val root = mapper.readTree(result)
+                val root: ObjectNode = mapper.createObjectNode()
 
                 assignments.forEach {
                     if (checkNotEmpty(it.name) && it.property != null) {
@@ -122,23 +119,7 @@ class ResourceAssignmentUtils {
                         val type = nullToEmpty(it.property?.type).toLowerCase()
                         val value = it.property?.value
                         logger.info("Generating Resource name ($rName), type ($type), value ($value)")
-
-                        when (value) {
-                            null -> (root as ObjectNode).set(rName, null)
-                            is JsonNode -> (root as ObjectNode).set(rName, value)
-                            else -> {
-                                when (type) {
-                                    BluePrintConstants.DATA_TYPE_TIMESTAMP -> (root as ObjectNode).put(rName, value as String)
-                                    BluePrintConstants.DATA_TYPE_STRING -> (root as ObjectNode).put(rName, value as String)
-                                    BluePrintConstants.DATA_TYPE_BOOLEAN -> (root as ObjectNode).put(rName, value as Boolean)
-                                    BluePrintConstants.DATA_TYPE_INTEGER -> (root as ObjectNode).put(rName, value as Int)
-                                    BluePrintConstants.DATA_TYPE_FLOAT -> (root as ObjectNode).put(rName, value as Float)
-                                    else -> {
-                                        (root as ObjectNode).set(rName, JacksonUtils.getJsonNode(value))
-                                    }
-                                }
-                            }
-                        }
+                        root.set(rName, value)
                     }
                 }
                 result = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(root)

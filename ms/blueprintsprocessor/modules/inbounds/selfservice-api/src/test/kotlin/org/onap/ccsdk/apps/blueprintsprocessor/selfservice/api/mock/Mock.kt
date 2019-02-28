@@ -15,7 +15,9 @@
  */
 package org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api.mock
 
+import io.mockk.mockk
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor.ResourceAssignmentProcessor
 import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.apps.controllerblueprints.core.asJsonPrimitive
 import org.slf4j.LoggerFactory
@@ -45,4 +47,16 @@ class MockComponentFunction : AbstractComponentFunction() {
     override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         log.info("Recovering component..")
     }
+}
+
+open class MockResourceSource {
+    @Bean(name = [
+        "rr-processor-source-input",
+        "rr-processor-source-default",
+        "rr-processor-source-primary-db",
+        "rr-processor-source-rest"])
+    open fun sourceInstance(): ResourceAssignmentProcessor {
+        return mockk<ResourceAssignmentProcessor>()
+    }
+
 }

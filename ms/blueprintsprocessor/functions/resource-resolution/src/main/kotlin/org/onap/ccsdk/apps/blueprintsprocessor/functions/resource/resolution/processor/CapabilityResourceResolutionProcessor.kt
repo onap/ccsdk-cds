@@ -19,6 +19,7 @@
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor
 
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.CapabilityResourceSource
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
 import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.scripts.BlueprintJythonService
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
@@ -32,7 +33,7 @@ import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
 import java.io.File
 
-@Service("rr-processor-source-capability")
+@Service("${PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-capability")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class CapabilityResourceResolutionProcessor(private var applicationContext: ApplicationContext,
                                                  private val bluePrintScriptsService: BluePrintScriptsService,
@@ -40,7 +41,7 @@ open class CapabilityResourceResolutionProcessor(private var applicationContext:
         ResourceAssignmentProcessor() {
 
     override fun getName(): String {
-        return "resource-assignment-processor-capability"
+        return "${PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-capability"
     }
 
     override fun process(resourceAssignment: ResourceAssignment) {
