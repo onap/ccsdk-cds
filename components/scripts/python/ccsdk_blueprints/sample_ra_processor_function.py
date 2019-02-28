@@ -4,15 +4,11 @@ from blueprint_constants import *
 
 class SampleRAProcessorFunction(AbstractRAProcessor):
 
-    def __init__(self):
-        AbstractRAProcessor.__init__(self)
-
-    def process(self, execution_request):
-        AbstractRAProcessor.process(self, execution_request)
+    def process(self, resource_assignment):
         print "Processing calling.." + PROPERTY_BLUEPRINT_BASE_PATH
+        self.set_resource_data_value(resource_assignment, "")
         return None
 
-    def recover(self, runtime_exception, execution_request):
-        AbstractRAProcessor.recover(self, runtime_exception, execution_request)
+    def recover(self, runtime_exception, resource_assignment):
         print "Recovering calling.." + PROPERTY_BLUEPRINT_BASE_PATH
         return None
