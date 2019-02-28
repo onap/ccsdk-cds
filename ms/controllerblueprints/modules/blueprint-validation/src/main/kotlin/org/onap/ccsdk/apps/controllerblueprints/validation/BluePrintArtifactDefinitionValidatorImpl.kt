@@ -49,7 +49,7 @@ open class BluePrintArtifactDefinitionValidatorImpl(
 
         paths.add(name)
         val type: String = artifactDefinition.type
-        log.info("Validation ArtifactDefinition of type {$type}")
+        log.trace("Validation ArtifactDefinition of type {$type}")
         // Check Artifact Type
         checkValidArtifactType(name, type)
 

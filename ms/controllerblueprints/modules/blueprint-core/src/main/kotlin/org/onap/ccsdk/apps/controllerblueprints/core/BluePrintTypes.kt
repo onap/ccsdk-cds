@@ -98,16 +98,9 @@ object BluePrintTypes {
     @JvmStatic
     fun validPropertyTypes(): List<String> {
         val validTypes: MutableList<String> = arrayListOf()
-        validTypes.add(BluePrintConstants.DATA_TYPE_STRING)
-        validTypes.add(BluePrintConstants.DATA_TYPE_INTEGER)
-        validTypes.add(BluePrintConstants.DATA_TYPE_FLOAT)
-        validTypes.add(BluePrintConstants.DATA_TYPE_DOUBLE)
-        validTypes.add(BluePrintConstants.DATA_TYPE_BOOLEAN)
-        validTypes.add(BluePrintConstants.DATA_TYPE_TIMESTAMP)
-        validTypes.add(BluePrintConstants.DATA_TYPE_NULL)
-        validTypes.add(BluePrintConstants.DATA_TYPE_LIST)
-        validTypes.add(BluePrintConstants.DATA_TYPE_MAP)
-        validTypes.add(BluePrintConstants.DATA_TYPE_JSON)
+        validTypes.addAll(validPrimitiveTypes())
+        validTypes.addAll(validComplexTypes())
+        validTypes.addAll(validCollectionTypes())
         return validTypes
     }
 
@@ -121,6 +114,13 @@ object BluePrintTypes {
         validTypes.add(BluePrintConstants.DATA_TYPE_BOOLEAN)
         validTypes.add(BluePrintConstants.DATA_TYPE_TIMESTAMP)
         validTypes.add(BluePrintConstants.DATA_TYPE_NULL)
+        return validTypes
+    }
+
+    @JvmStatic
+    fun validComplexTypes(): List<String> {
+        val validTypes: MutableList<String> = arrayListOf()
+        validTypes.add(BluePrintConstants.DATA_TYPE_JSON)
         return validTypes
     }
 

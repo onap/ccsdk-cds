@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +28,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.Workflow
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.apps.controllerblueprints.core.service.DefaultBluePrintRuntimeService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.apps.controllerblueprints.validation.extension.ResourceDefinitionValidator
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -35,11 +37,14 @@ class BluePrintDesignTimeValidatorServiceTest {
     private val blueprintBasePath: String = ("./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
     private val bluePrintRuntime = BluePrintMetadataUtils.getBluePrintRuntime("1234", blueprintBasePath)
     private val mockBluePrintTypeValidatorService = MockBluePrintTypeValidatorService()
-    private val defaultBluePrintValidatorService = BluePrintDesignTimeValidatorService(mockBluePrintTypeValidatorService)
+    private val resourceDefinitionValidator = mockk<ResourceDefinitionValidator>()
+    private val defaultBluePrintValidatorService = BluePrintDesignTimeValidatorService(mockBluePrintTypeValidatorService, resourceDefinitionValidator)
     private val workflowValidator = BluePrintWorkflowValidatorImpl(mockBluePrintTypeValidatorService)
 
     @Test
     fun testValidateOfType() {
+        every { resourceDefinitionValidator.validate(bluePrintRuntime, any(), any()) } returns Unit
+
         val valid = defaultBluePrintValidatorService.validateBluePrints(bluePrintRuntime)
         assertTrue(valid, "failed in blueprint Validation")
     }

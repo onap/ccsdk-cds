@@ -68,12 +68,14 @@ class JacksonUtils {
             }
         }
 
-        fun getContent(fileName: String): String = runBlocking {
+        fun getContent(fileName: String): String = getContent(File(fileName))
+
+        fun getContent(file: File): String = runBlocking {
             async {
                 try {
-                    File(fileName).readText(Charsets.UTF_8)
+                    file.readText(Charsets.UTF_8)
                 } catch (e: Exception) {
-                    throw BluePrintException("couldn't get file ($fileName) content : ${e.message}")
+                    throw BluePrintException("couldn't get file (${file.absolutePath}) content : ${e.message}")
                 }
             }.await()
         }
@@ -167,16 +169,18 @@ class JacksonUtils {
             return getListFromJson(content, valueType)
         }
 
-        fun <T> getMapFromJson(content: String, valueType: Class<T>): MutableMap<String, T>? {
+        fun <T> getMapFromJson(content: String, valueType: Class<T>): MutableMap<String, T> {
             val objectMapper = jacksonObjectMapper()
             val mapType = objectMapper.typeFactory.constructMapType(Map::class.java, String::class.java, valueType)
             return objectMapper.readValue(content, mapType)
         }
 
-        fun <T> getMapFromFile(fileName: String, valueType: Class<T>): MutableMap<String, T>? {
-            val content: String = getContent(fileName)
+        fun <T> getMapFromFile(file: File, valueType: Class<T>): MutableMap<String, T> {
+            val content: String = getContent(file)
             return getMapFromJson(content, valueType)
         }
+
+        fun <T> getMapFromFile(fileName: String, valueType: Class<T>): MutableMap<String, T> = getMapFromFile(File(fileName), valueType)
 
         fun <T> getInstanceFromMap(properties: MutableMap<String, JsonNode>, classType: Class<T>): T {
             return readValue(getJson(properties), classType)

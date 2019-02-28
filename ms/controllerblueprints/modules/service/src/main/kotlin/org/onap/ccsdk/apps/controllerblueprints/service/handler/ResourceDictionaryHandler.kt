@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,17 +21,15 @@ import com.google.common.base.Preconditions
 import org.apache.commons.collections.CollectionUtils
 import org.apache.commons.lang3.StringUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.apps.controllerblueprints.core.checkNotEmptyOrThrow
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceSourceMapping
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.factory.ResourceSourceMappingFactory
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.service.ResourceDefinitionValidationService
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionary
 import org.onap.ccsdk.apps.controllerblueprints.service.repository.ResourceDictionaryRepository
-import org.onap.ccsdk.apps.controllerblueprints.service.validator.ResourceDictionaryValidator
 import org.springframework.stereotype.Service
 
 @Service
-class ResourceDictionaryHandler(private val resourceDictionaryRepository: ResourceDictionaryRepository,
-                                private val resourceDictionaryValidationService: ResourceDefinitionValidationService) {
+class ResourceDictionaryHandler(private val resourceDictionaryRepository: ResourceDictionaryRepository) {
 
 
     /**
@@ -86,7 +85,8 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
         val resourceDefinition = resourceDictionary.definition
         Preconditions.checkNotNull(resourceDefinition, "failed to get resource definition from content")
         // Validate the Resource Definitions
-        resourceDictionaryValidationService.validate(resourceDefinition)
+        //TODO( Save Validator)
+        //validate(resourceDefinition)
 
         resourceDictionary.tags = resourceDefinition.tags
         resourceDefinition.updatedBy = resourceDictionary.updatedBy
@@ -98,7 +98,7 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
             resourceDictionary.entrySchema = propertyDefinition.entrySchema!!.type
         }
 
-        ResourceDictionaryValidator.validateResourceDictionary(resourceDictionary)
+        validateResourceDictionary(resourceDictionary)
 
         val dbResourceDictionaryData = resourceDictionaryRepository.findByName(resourceDictionary.name)
         if (dbResourceDictionaryData.isPresent) {
@@ -134,5 +134,15 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
      */
     fun getResourceSourceMapping(): ResourceSourceMapping {
         return ResourceSourceMappingFactory.getRegisterSourceMapping()
+    }
+
+    private fun validateResourceDictionary(resourceDictionary: ResourceDictionary): Boolean {
+        checkNotEmptyOrThrow(resourceDictionary.name, "DataDictionary Definition name is missing.")
+        checkNotNull(resourceDictionary.definition) { "DataDictionary Definition Information is missing." }
+        checkNotEmptyOrThrow(resourceDictionary.description, "DataDictionary Definition Information is missing.")
+        checkNotEmptyOrThrow(resourceDictionary.tags, "DataDictionary Definition tags is missing.")
+        checkNotEmptyOrThrow(resourceDictionary.updatedBy, "DataDictionary Definition updatedBy is missing.")
+        return true
+
     }
 }

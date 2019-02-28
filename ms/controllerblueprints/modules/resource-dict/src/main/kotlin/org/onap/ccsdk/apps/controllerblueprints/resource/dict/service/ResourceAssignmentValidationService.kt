@@ -23,10 +23,8 @@ import org.apache.commons.collections.CollectionUtils
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.text.StrBuilder
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.apps.controllerblueprints.core.format
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.TopologicalSortingUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.factory.ResourceSourceMappingFactory
 import java.io.Serializable
 
 /**
@@ -53,7 +51,6 @@ open class ResourceAssignmentValidationServiceImpl : ResourceAssignmentValidatio
 
     override fun validate(resourceAssignments: List<ResourceAssignment>): Boolean {
         try {
-            validateSources(resourceAssignments)
             validateTemplateNDictionaryKeys(resourceAssignments)
             validateCyclicDependency(resourceAssignments)
             if (StringUtils.isNotBlank(validationMessage)) {
@@ -65,17 +62,6 @@ open class ResourceAssignmentValidationServiceImpl : ResourceAssignmentValidatio
         return true
     }
 
-    open fun validateSources(resourceAssignments: List<ResourceAssignment>) {
-        log.info("validating resource assignment sources")
-        // Check the Resource Assignment Source(Dynamic Instance) is valid.
-        resourceAssignments.forEach { resourceAssignment ->
-            try {
-                ResourceSourceMappingFactory.getRegisterSourceMapping(resourceAssignment.dictionarySource!!)
-            } catch (e: BluePrintException) {
-                validationMessage.appendln(e.message + format(" for resource assignment({})", resourceAssignment.name))
-            }
-        }
-    }
 
     open fun validateTemplateNDictionaryKeys(resourceAssignments: List<ResourceAssignment>) {
 
@@ -121,7 +107,7 @@ open class ResourceAssignmentValidationServiceImpl : ResourceAssignmentValidatio
         resourceAssignmentMap.map { it.value }.map { resourceAssignment ->
             if (CollectionUtils.isNotEmpty(resourceAssignment.dependencies)) {
                 resourceAssignment.dependencies!!.map {
-                    log.info("Topological Graph link from {} to {}", it, resourceAssignment.name)
+                    log.trace("Topological Graph link from {} to {}", it, resourceAssignment.name)
                     topologySorting.add(resourceAssignmentMap[it]!!, resourceAssignment)
                 }
             } else {

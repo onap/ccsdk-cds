@@ -19,17 +19,25 @@ package org.onap.ccsdk.apps.controllerblueprints.validation
 
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintValidatorService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDictionaryConstants
+import org.onap.ccsdk.apps.controllerblueprints.validation.extension.ResourceDefinitionValidator
 import org.springframework.stereotype.Service
+import java.io.File
 import java.util.*
 
 
 @Service
-open class BluePrintDesignTimeValidatorService(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintValidatorService {
+open class BluePrintDesignTimeValidatorService(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService,
+                                               private val resourceDefinitionValidator: ResourceDefinitionValidator)
+    : BluePrintValidatorService {
 
     private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintDesignTimeValidatorService::class.toString())
 
@@ -43,9 +51,32 @@ open class BluePrintDesignTimeValidatorService(private val bluePrintTypeValidato
 
         bluePrintTypeValidatorService.validateServiceTemplate(bluePrintRuntimeService, "service_template",
                 bluePrintRuntimeService.bluePrintContext().serviceTemplate)
+
+        // Validate Resource Definitions
+        validateResourceDefinitions(bluePrintRuntimeService)
+
         if (bluePrintRuntimeService.getBluePrintError().errors.size > 0) {
             throw BluePrintException("failed in blueprint validation : ${bluePrintRuntimeService.getBluePrintError().errors.joinToString("\n")}")
         }
         return true
+    }
+
+    private fun validateResourceDefinitions(bluePrintRuntimeService: BluePrintRuntimeService<*>) {
+        // Validate Resource Dictionary
+        val blueprintBasePath = bluePrintRuntimeService.bluePrintContext().rootPath
+
+        val resourceDefinitionsPath = blueprintBasePath.plus(File.separator)
+                .plus(BluePrintConstants.TOSCA_DEFINITIONS_DIR).plus(File.separator)
+                .plus("${ResourceDictionaryConstants.PATH_RESOURCE_DEFINITION_TYPE}.json")
+
+        val resourceDefinitionFile = File(resourceDefinitionsPath)
+
+        if (resourceDefinitionFile.exists()) {
+            val resourceDefinitionMap = JacksonUtils.getMapFromFile(resourceDefinitionFile, ResourceDefinition::class.java)
+
+            resourceDefinitionMap?.forEach { resourceDefinitionName, resourceDefinition ->
+                resourceDefinitionValidator.validate(bluePrintRuntimeService, resourceDefinitionName, resourceDefinition)
+            }
+        }
     }
 }

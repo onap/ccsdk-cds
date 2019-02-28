@@ -29,7 +29,6 @@ import org.onap.ccsdk.apps.controllerblueprints.core.data.ArtifactDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
-import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import java.io.File
 
 interface BluePrintRuntimeService<T> {
@@ -234,7 +233,7 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
             } else {
                 // Assign default value to the Operation
                 nodeTypeProperty.defaultValue?.let {
-                    resolvedValue = JacksonUtils.jsonNodeFromObject(nodeTypeProperty.defaultValue!!)
+                    resolvedValue = nodeTypeProperty.defaultValue!!
                 }
             }
             // Set for Return of method

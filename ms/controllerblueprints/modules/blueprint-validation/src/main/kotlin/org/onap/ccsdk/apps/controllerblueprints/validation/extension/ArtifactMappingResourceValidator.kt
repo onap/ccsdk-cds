@@ -40,7 +40,7 @@ open class ArtifactMappingResourceValidator(private val bluePrintTypeValidatorSe
         val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
         val file: String = artifactDefinition.file
         val completePath = bluePrintContext.rootPath.plus(File.separator).plus(file)
-        log.info("Validation artifact-mapping-resource($completePath)")
+        log.trace("Validation artifact-mapping-resource($completePath)")
         val resourceAssignment = JacksonUtils.getListFromFile(completePath, ResourceAssignment::class.java)
         val resourceAssignmentValidationService = ResourceAssignmentValidationServiceImpl()
         resourceAssignmentValidationService.validate(resourceAssignment)
