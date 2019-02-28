@@ -1,0 +1,228 @@
+<!-- QUESTION
+     lines 74-78 and 157-161: if I have to resolve the variables I need based on
+     the pnf id, do I need to specify a restconf-connection? Another point, the
+     connection is aimed to ODL, not to the PNF, so I am not sure what to fill
+     for this model (lines 122-137)
+-->
+{
+  "tosca_definitions_version" : "controller_blueprint_1_0_0",
+  "metadata" : {
+    "template_author" : "Rodrigo Ottero",
+    "author-email" : "rodrigo.ottero@est.tech",
+    "user-groups" : "ADMIN, OPERATION",
+    "template_name" : "pnf restconf",
+    "template_version" : "1.0.0",
+    "template_tags" : "pnf, restconf, config, configuration"
+  },
+  "imports" : [ {
+    "file" : "Definitions/data_types.json"
+  }, {
+    "file" : "Definitions/relationship_types.json"
+  }, {
+    "file" : "Definitions/artifact_types.json"
+  }, {
+    "file" : "Definitions/node_types.json"
+  }, {
+    "file" : "Definitions/policy_types.json"
+  } ],
+  "topology_template" : {
+    "inputs" : {
+      "serviceInstanceId" : {
+        "required" : true,
+        "type" : "string"
+      },
+      "identifier" : {
+        "required" : true,
+        "type" : "string"
+      }
+    },
+    "workflows" : {
+      "config-assign" : {
+        "steps" : {
+          "activate-process" : {
+            "description" : "Create a configlet",
+            "target" : "config-assign-process",
+            "activities" : [ {
+              "call_operation" : ""
+            } ]
+          }
+        },
+        "inputs" : {
+          "config-assign-properties" : {
+            "description" : "Dynamic PropertyDefinition for workflow(config-assign).",
+            "required" : true,
+            "type" : "dt-config-assign-properties"
+          }
+        }
+      },
+      "configure" : {
+        "steps" : {
+          "activate-process" : {
+            "description" : "Send a configlet to the pnf",
+            "target" : "configure-process",
+            "activities" : [ {
+              "call_operation" : ""
+            } ]
+          }
+        },
+        "inputs" : {
+          "configure-properties" : {
+            "description" : "Dynamic PropertyDefinition for workflow(configure).",
+            "required" : true,
+            "type" : "dt-configure-properties"
+          }
+        }
+      }
+    },
+    "node_templates" : {
+      "config-assign-process" : {
+        "type" : "dg-generic",
+        "properties" : {
+          "content" : {
+            "get_artifact" : [ "SELF", "dg-config-assign-process" ]
+          },
+          "dependency-node-templates" : [ "config-assign" ]
+        },
+        "artifacts" : {
+          "dg-config-assign-process" : {
+            "type" : "artifact-directed-graph",
+            "file" : "Plans/CONFIG_configAssign.xml"
+          }
+        }
+      },
+      "config-assign" : {
+        "type" : "component-restconf-executor",
+        "requirements" : {
+          "restconf-connection" : {
+            "capability" : "restconf",
+            "node" : "sample-restconf-server",
+            "relationship" : "tosca.relationships.ConnectsTo"
+          }
+        },
+        "interfaces" : {
+          "ComponentRestconfExecutor" : {
+            "operations" : {
+              "process" : {
+                "implementation" : {
+                  "primary" : "component-script"
+                },
+                "inputs" : {
+                  "script-type" : "kotlin",
+                  "script-class-reference" : "Scripts/kotlin/RestconfAssignConfig.kts",
+                  "instance-dependencies" : [ ],
+                  "artifact-prefix-names": [
+                      "config-assign"
+                  ]
+                },
+                "outputs" : {
+                  "response-data" : "",
+                  "status" : ""
+                }
+              }
+            }
+          }
+        },
+        "artifacts" : {
+          "config-assign-template" : {
+            "type" : "artifact-template-velocity",
+            "file" : "Templates/config-assign-restconf-configlet-template.vtl"
+          },
+          "config-assign-mapping" : {
+            "type" : "artifact-mapping-resource",
+            "file" : "Templates/config-assign-pnf-mapping.json"
+          },
+          "component-script" : {
+            "type" : "artifact-script-kotlin",
+            "file" : "Scripts/kotlin/RestconfAssignConfig.py"
+          }
+        }
+      },
+      "configure-process" : {
+        "type" : "dg-generic",
+        "properties" : {
+          "content" : {
+            "get_artifact" : [ "SELF", "dg-configure-process" ]
+          },
+          "dependency-node-templates" : [ "configure" ]
+        },
+        "artifacts" : {
+          "dg-config-assign-process" : {
+            "type" : "artifact-directed-graph",
+            "file" : "Plans/CONFIG_configure.xml"
+          }
+        }
+      },
+      "configure" : {
+        "type" : "component-restconf-executor",
+        "requirements" : {
+          "restconf-connection" : {
+            "capability" : "restconf",
+            "node" : "sample-restconf-server",
+            "relationship" : "tosca.relationships.ConnectsTo"
+          }
+        },
+        "interfaces" : {
+          "ComponentRestconfExecutor" : {
+            "operations" : {
+              "process" : {
+                "implementation" : {
+                  "primary" : "component-script"
+                },
+                "inputs" : {
+                  "script-type" : "kotlin",
+                  "script-class-reference" : "Scripts/kotlin/RestconfConfigure.kts",
+                  "instance-dependencies" : [ ],
+                  "artifact-prefix-names": [
+                      "configure-restconf-mount", "configure-restconf-unmount"
+                  ]
+                },
+                "outputs" : {
+                  "response-data" : "",
+                  "status" : ""
+                }
+              }
+            }
+          }
+        },
+        "artifacts" : {
+          "configure-mount-template" : {
+            "type" : "artifact-template-velocity",
+            "file" : "Templates/configure-restconf-mount-template.vtl"
+          },
+          "configure-unmount-template" : {
+            "type" : "artifact-template-velocity",
+            "file" : "Templates/configure-restconf-unmount-template.vtl"
+          },
+          "configure-mapping" : {
+            "type" : "artifact-mapping-resource",
+            "file" : "Templates/configure-pnf-mapping.json"
+          },
+          "component-script" : {
+            "type" : "artifact-script-kotlin",
+            "file" : "Scripts/kotlin/RestconfConfigure.py"
+          }
+        }
+      },
+      "sample-restconf-device" : {
+        "type" : "pnf-netconf-device",
+        "capabilities" : {
+          "restconf" : {
+            "properties" : {
+              "login-key" : {
+                "get_input" : "password"
+              },
+              "login-account" : {
+                "get_input" : "username"
+              },
+              "target-ip-address" : {
+                "get_input" : "ip"
+              },
+              "port-number" : 830,
+              "connection-time-out" : 5
+            }
+          }
+        }
+      }
+    }
+  }
+}

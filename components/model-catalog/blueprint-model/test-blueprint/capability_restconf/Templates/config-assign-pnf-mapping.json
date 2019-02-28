@@ -1,0 +1,16 @@
+<!-- QUESTION:
+     when using dictionary-source as capability, what else needs to be defined?
+     because odl_host will come from the application.properties entry -->
+[
+  {
+    "name": "odl_host",
+    "input-param": true,
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "odl_host",
+    "dictionary-source": "capability",
+    "dependencies": [
+    ]
+  }
+]

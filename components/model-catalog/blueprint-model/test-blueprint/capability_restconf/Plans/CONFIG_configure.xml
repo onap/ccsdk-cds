@@ -1,0 +1,19 @@
+<!-- QUESTION:
+     is the usage of <method rpc="ResourceAssignAndActivate" mode="sync">
+     correct in the context of CCSDK-926? -->
+     
+<?xml version="1.0" encoding="UTF-8"?>
+<service-logic xmlns="http://www.onap.org/sdnc/svclogic" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.onap.org/sdnc/svclogic ./svclogic.xsd" module="CONFIG" version="1.0.0">
+   <method rpc="ResourceAssignAndActivate" mode="sync">
+      <block atomic="true">
+         <execute plugin="configure" method="process">
+            <outcome value="failure">
+               <return status="failure" />
+            </outcome>
+            <outcome value="success">
+               <return status="success" />
+            </outcome>
+         </execute>
+      </block>
+   </method>
+</service-logic>
