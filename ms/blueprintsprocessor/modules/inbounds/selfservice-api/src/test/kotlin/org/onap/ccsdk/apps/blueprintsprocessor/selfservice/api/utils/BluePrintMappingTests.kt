@@ -1,11 +1,5 @@
 package org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api.utils
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.protobuf.ListValue
-import com.google.protobuf.NullValue
-import com.google.protobuf.Struct
-import com.google.protobuf.Value
-import com.google.protobuf.util.JsonFormat
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -133,40 +127,5 @@ class BluePrintMappingsTest {
         Assert.assertEquals(actionIdentifiers.blueprintName, actionIdentifiers2.blueprintName)
         Assert.assertEquals(actionIdentifiers.blueprintVersion, actionIdentifiers2.blueprintVersion)
         Assert.assertEquals(actionIdentifiers.mode, actionIdentifiers2.mode)
-    }
-
-    @Test
-    fun testStructToJava() {
-        val struct = Struct.newBuilder().putAllFields(createValues()).build()
-        val struct2 = struct.toJava()
-
-        val mapper = ObjectMapper()
-
-        Assert.assertEquals(JsonFormat.printer().print(struct).replace(" ", "").replace("\r",""),
-                mapper.writerWithDefaultPrettyPrinter().writeValueAsString(struct2).replace(" ", "").replace("\r",""))
-    }
-
-    fun createValues(): Map<String, Value> {
-        val map = mutableMapOf<String, Value>()
-
-        val boolValue = Value.newBuilder().setBoolValue(true).build()
-        val stringValue = Value.newBuilder().setStringValue("string").build()
-        val doubleValue = Value.newBuilder().setNumberValue(Double.MAX_VALUE).build()
-        val jsonValue = Value.newBuilder().setStringValue("{\"bblah\": \"bbblo\"}").build()
-        val listValue = Value.newBuilder().setListValue(ListValue.newBuilder().addValues(boolValue).addValues(boolValue).build()).build()
-        val nullValue = Value.newBuilder().setNullValue(NullValue.NULL_VALUE).build()
-
-        map.put("bool", boolValue)
-        map.put("string", stringValue)
-        map.put("doublbe", doubleValue)
-        map.put("json", jsonValue)
-        map.put("list", listValue)
-        map.put("null", nullValue)
-
-        val structValue = Value.newBuilder().setStructValue(Struct.newBuilder().putAllFields(map).build()).build()
-
-        map.put("struct", structValue)
-
-        return map
     }
 }

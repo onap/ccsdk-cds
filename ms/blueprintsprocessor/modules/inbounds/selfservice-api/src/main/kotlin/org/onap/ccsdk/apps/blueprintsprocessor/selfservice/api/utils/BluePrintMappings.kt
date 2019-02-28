@@ -15,11 +15,9 @@
  */
 package org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api.utils
 
-import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.google.common.base.Strings
 import com.google.protobuf.Struct
-import com.google.protobuf.Value
 import com.google.protobuf.util.JsonFormat
 import org.onap.ccsdk.apps.controllerblueprints.common.api.ActionIdentifiers
 import org.onap.ccsdk.apps.controllerblueprints.common.api.CommonHeader
@@ -32,47 +30,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 private val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-
-// STRUCT
-
-fun Struct.toJava(): ObjectNode {
-    val objectNode = JsonNodeFactory.instance.objectNode()
-    return getNode(objectNode)
-}
-
-fun Struct.getNode(objectNode: ObjectNode): ObjectNode {
-    this.fieldsMap.forEach {
-        when (it.value.kindCase.name) {
-            "BOOL_VALUE" -> objectNode.put(it.key, it.value.boolValue)
-            "KIND_NOT_SET" -> objectNode.put(it.key, it.value.toByteArray())
-            "LIST_VALUE" -> {
-                val arrayNode = JsonNodeFactory.instance.arrayNode()
-                it.value.listValue.valuesList.forEach { arrayNode.addPOJO(it.getValue()) }
-                objectNode.put(it.key, arrayNode)
-            }
-            "NULL_VALUE" -> objectNode.put(it.key, JsonNodeFactory.instance.nullNode())
-            "NUMBER_VALUE" -> objectNode.put(it.key, it.value.numberValue)
-            "STRING_VALUE" -> objectNode.put(it.key, it.value.stringValue)
-            "STRUCT_VALUE" -> objectNode.put(it.key, it.value.structValue.getNode(JsonNodeFactory.instance.objectNode()))
-        }
-    }
-    return objectNode
-}
-
-fun Value.getValue(): Any {
-    return when (this.kindCase.name) {
-        "BOOL_VALUE" -> this.boolValue
-        "KIND_NOT_SET" -> this.toByteArray()
-        "LIST_VALUE" -> listOf(this.listValue.valuesList.forEach { it.getValue() })
-        "NULL_VALUE" -> JsonNodeFactory.instance.nullNode()
-        "NUMBER_VALUE" -> this.numberValue
-        "STRING_VALUE" -> this.stringValue
-        "STRUCT_VALUE" -> this.structValue.getNode(JsonNodeFactory.instance.objectNode())
-        else -> {
-            "undefined"
-        }
-    }
-}
 
 // ACTION IDENTIFIER
 
@@ -154,7 +111,7 @@ fun ExecutionServiceInput.toJava(): org.onap.ccsdk.apps.blueprintsprocessor.core
     val executionServiceInput = org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput()
     executionServiceInput.actionIdentifiers = this.actionIdentifiers.toJava()
     executionServiceInput.commonHeader = this.commonHeader.toJava()
-    executionServiceInput.payload = this.payload.toJava()
+    executionServiceInput.payload = JacksonUtils.jsonNode(JsonFormat.printer().print(this.payload)) as ObjectNode
     return executionServiceInput
 }
 

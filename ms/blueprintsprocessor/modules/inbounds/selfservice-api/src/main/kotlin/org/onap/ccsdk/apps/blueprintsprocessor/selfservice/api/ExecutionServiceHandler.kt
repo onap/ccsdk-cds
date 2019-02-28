@@ -17,7 +17,6 @@
 package org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
-import com.google.protobuf.Struct
 import io.grpc.stub.StreamObserver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -61,8 +60,7 @@ class ExecutionServiceHandler(private val bluePrintCoreConfiguration: BluePrintC
     }
 
     fun process(executionServiceInput: ExecutionServiceInput,
-                responseObserver: StreamObserver<org.onap.ccsdk.apps.controllerblueprints.processing.api.ExecutionServiceOutput>,
-                inputPayload: Struct) {
+                responseObserver: StreamObserver<org.onap.ccsdk.apps.controllerblueprints.processing.api.ExecutionServiceOutput>) {
         when {
             executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC -> {
                 GlobalScope.launch(Dispatchers.Default) {

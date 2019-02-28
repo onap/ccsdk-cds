@@ -23,7 +23,13 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
-import org.onap.ccsdk.apps.controllerblueprints.core.*
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.apps.controllerblueprints.core.checkNotEmpty
+import org.onap.ccsdk.apps.controllerblueprints.core.checkNotEmptyOrThrow
+import org.onap.ccsdk.apps.controllerblueprints.core.nullToEmpty
+import org.onap.ccsdk.apps.controllerblueprints.core.returnNotEmptyOrThrow
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
@@ -41,13 +47,13 @@ class ResourceAssignmentUtils {
             val resourceProp = checkNotNull(resourceAssignment.property) { "Failed in setting resource value for resource mapping $resourceAssignment" }
             checkNotEmptyOrThrow(resourceAssignment.name, "Failed in setting resource value for resource mapping $resourceAssignment")
 
-            if (checkNotEmpty(resourceAssignment.dictionaryName)) {
+            if (resourceAssignment.dictionaryName.isNullOrEmpty()) {
                 resourceAssignment.dictionaryName = resourceAssignment.name
                 logger.warn("Missing dictionary key, setting with template key (${resourceAssignment.name}) as dictionary key (${resourceAssignment.dictionaryName})")
             }
 
             try {
-                if (checkNotEmpty(resourceProp.type)) {
+                if (resourceProp.type.isNotEmpty()) {
                     val convertedValue = convertResourceValue(resourceProp.type, value)
                     logger.info("Setting Resource Value ($convertedValue) for Resource Name (${resourceAssignment.dictionaryName}) of type (${resourceProp.type})")
                     setResourceValue(resourceAssignment, raRuntimeService, convertedValue)

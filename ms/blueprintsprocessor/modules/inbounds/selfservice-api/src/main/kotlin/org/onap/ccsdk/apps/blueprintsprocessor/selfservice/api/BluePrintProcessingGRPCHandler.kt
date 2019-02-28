@@ -37,8 +37,7 @@ class BluePrintProcessingGRPCHandler(private val bluePrintCoreConfiguration: Blu
         return object : StreamObserver<ExecutionServiceInput> {
             override fun onNext(executionServiceInput: ExecutionServiceInput) {
                 try {
-                    val inputPayload = executionServiceInput.payload
-                    executionServiceHandler.process(executionServiceInput.toJava(), responseObserver, inputPayload)
+                    executionServiceHandler.process(executionServiceInput.toJava(), responseObserver)
                 } catch (e: Exception) {
                     onError(e)
                 }
