@@ -14,6 +14,10 @@
         }
       ]
     },
+    "endpoint-selector": {
+      "required": false,
+      "type": "string"
+    },
     "query": {
       "required": true,
       "type": "string"
