@@ -1,6 +1,7 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
  * Modifications Copyright © 2019 Bell Canada.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,10 +41,10 @@ import java.nio.file.Paths
  * Similar/Duplicate implementation in [org.onap.ccsdk.apps.controllerblueprints.service.load.ControllerBlueprintCatalogServiceImpl]
  */
 @Service
-class BlueprintProcessorCatalogServiceImpl(bluePrintValidatorService: BluePrintValidatorService,
+class BlueprintProcessorCatalogServiceImpl(bluePrintRuntimeValidatorService: BluePrintValidatorService,
                                            private val blueprintConfig: BluePrintCoreConfiguration,
                                            private val blueprintModelRepository: BlueprintProcessorModelRepository)
-    : BlueprintCatalogServiceImpl(bluePrintValidatorService) {
+    : BlueprintCatalogServiceImpl(bluePrintRuntimeValidatorService) {
 
     private val log = LoggerFactory.getLogger(BlueprintProcessorCatalogServiceImpl::class.toString())
 

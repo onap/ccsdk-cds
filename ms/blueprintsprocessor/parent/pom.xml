@@ -339,6 +339,11 @@
                 <artifactId>blueprint-scripts</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+                <artifactId>blueprint-validation</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!-- Database -->
             <dependency>
