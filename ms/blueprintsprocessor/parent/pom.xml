@@ -32,10 +32,10 @@
     <description>Blueprints Processor Parent</description>
     <properties>
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
-        <spring.boot.version>2.1.2.RELEASE</spring.boot.version>
-        <spring.version>5.1.4.RELEASE</spring.version>
-        <kotlin.version>1.3.20</kotlin.version>
-        <kotlin.maven.version>1.3.20</kotlin.maven.version>
+        <spring.boot.version>2.1.3.RELEASE</spring.boot.version>
+        <spring.version>5.1.5.RELEASE</spring.version>
+        <kotlin.version>1.3.21</kotlin.version>
+        <kotlin.maven.version>1.3.21</kotlin.maven.version>
         <kotlin.couroutines.version>1.1.1</kotlin.couroutines.version>
         <grpc.version>1.18.0</grpc.version>
         <protobuff.java.utils.version>3.6.1</protobuff.java.utils.version>
