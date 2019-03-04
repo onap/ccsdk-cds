@@ -26,6 +26,13 @@ message Status {
   int32 code = 1;
   string errorMessage = 2;
   string message = 3;
-  string eventType = 4;
+  EventType eventType = 4;
   string timestamp = 5;
+}
+
+enum EventType {
+  EVENT_COMPONENT_FAILURE = 0;
+  EVENT_COMPONENT_PROCESSING = 1;
+  EVENT_COMPONENT_NOTIFICATION = 2;
+  EVENT_COMPONENT_EXECUTED = 3;
 }
