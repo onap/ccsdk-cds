@@ -20,7 +20,6 @@
 
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import sample_licenses from '../../../../../assets/sample-licenses.json';
 
 @Component({
   selector: 'app-resource-metadata',
@@ -30,28 +29,17 @@ import sample_licenses from '../../../../../assets/sample-licenses.json';
 export class ResourceMetadataComponent implements OnInit {
 
     ResourceMetadata: FormGroup;
-   data=sample_licenses;
     
     constructor(private _formBuilder: FormBuilder) {
       this.ResourceMetadata = this._formBuilder.group({
       Resource_Name: ['', Validators.required],
       _tags: ['', Validators.required],
       _description : ['', Validators.required],
-      _type: ['', Validators.required],
-      _required: ['', Validators.required],
-      entry_schema: ['', Validators.required]
-    });
+      _type: ['string', Validators.required],
+      _required: ['false', Validators.required],
+      entry_schema: ['']
+    });   
     }
 
-    ngOnInit() {
-        this.ResourceMetadata = this._formBuilder.group({
-      Resource_Name: [this.data["name"], Validators.required],
-      _tags: [this.data["tags"], Validators.required],
-      _required : [this.data["property"]["required"], Validators.required],
-      _description : [this.data["property"]["description"], Validators.required],
-      _type: [this.data["property"]["type"], Validators.required],
-      entry_schema: [this.data["property"]["entry_schema"]["type"], Validators.required]
-    });    
-     
-  }
+    ngOnInit() {}
 }
