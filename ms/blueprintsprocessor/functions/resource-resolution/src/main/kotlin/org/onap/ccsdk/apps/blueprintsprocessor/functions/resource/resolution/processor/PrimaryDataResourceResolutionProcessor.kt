@@ -28,22 +28,25 @@ import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDictionaryConstants
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.config.ConfigurableBeanFactory
+import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
 import java.util.*
 
 /**
- * PrimaryDataResourceAssignmentProcessor
+ * PrimaryDataResourceResolutionProcessor
  *
  * @author Kapil Singal
  */
-@Service("resource-assignment-processor-primary-db")
-open class PrimaryDataResourceAssignmentProcessor(private val primaryDBLibGenericService: PrimaryDBLibGenericService)
+@Service("rr-processor-source-primary-db")
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+open class PrimaryDataResourceResolutionProcessor(private val primaryDBLibGenericService: PrimaryDBLibGenericService)
     : ResourceAssignmentProcessor() {
 
-    private val logger = LoggerFactory.getLogger(PrimaryDataResourceAssignmentProcessor::class.java)
+    private val logger = LoggerFactory.getLogger(PrimaryDataResourceResolutionProcessor::class.java)
 
     override fun getName(): String {
-        return "resource-assignment-processor-primary-db"
+        return "rr-processor-source-primary-db"
     }
 
     override fun process(resourceAssignment: ResourceAssignment) {

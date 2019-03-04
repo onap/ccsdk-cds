@@ -42,9 +42,9 @@ import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [ResourceResolutionServiceImpl::class,
-    InputResourceAssignmentProcessor::class, DefaultResourceAssignmentProcessor::class,
-    PrimaryDataResourceAssignmentProcessor::class, SimpleRestResourceAssignmentProcessor::class,
-    CapabilityResourceAssignmentProcessor::class, PrimaryDBLibGenericService::class,
+    InputResourceResolutionProcessor::class, DefaultResourceResolutionProcessor::class,
+    PrimaryDataResourceResolutionProcessor::class, RestResourceResolutionProcessor::class,
+    CapabilityResourceResolutionProcessor::class, PrimaryDBLibGenericService::class,
     BlueprintPropertyConfiguration::class, BluePrintProperties::class,
     BluePrintDBLibConfiguration::class, BluePrintLoadConfiguration::class])
 @TestPropertySource(locations = ["classpath:application-test.properties"])

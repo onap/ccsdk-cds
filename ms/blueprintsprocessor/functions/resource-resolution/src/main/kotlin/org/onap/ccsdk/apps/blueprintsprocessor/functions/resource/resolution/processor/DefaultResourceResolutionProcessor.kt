@@ -22,20 +22,23 @@ import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.uti
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.config.ConfigurableBeanFactory
+import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
 
 /**
- * DefaultResourceAssignmentProcessor
+ * DefaultResourceResolutionProcessor
  *
  * @author Kapil Singal
  */
-@Service("resource-assignment-processor-default")
-open class DefaultResourceAssignmentProcessor : ResourceAssignmentProcessor() {
+@Service("rr-processor-source-default")
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+open class DefaultResourceResolutionProcessor : ResourceAssignmentProcessor() {
 
-    private val logger = LoggerFactory.getLogger(DefaultResourceAssignmentProcessor::class.java)
+    private val logger = LoggerFactory.getLogger(DefaultResourceResolutionProcessor::class.java)
 
     override fun getName(): String {
-        return "resource-assignment-processor-default"
+        return "rr-processor-source-default"
     }
 
     override fun process(resourceAssignment: ResourceAssignment) {

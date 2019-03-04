@@ -17,15 +17,16 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.rest.service
 
+import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.apps.blueprintsprocessor.core.BluePrintProperties
 import org.onap.ccsdk.apps.blueprintsprocessor.rest.*
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.stereotype.Service
 
 @Service(RestLibConstants.SERVICE_BLUEPRINT_REST_LIB_PROPERTY)
 open class BluePrintRestLibPropertyService(private var bluePrintProperties: BluePrintProperties) {
 
-    @Throws(BluePrintProcessorException::class)
     fun restClientProperties(prefix: String): RestClientProperties {
         val type = bluePrintProperties.propertyBeanType("$prefix.type", String::class.java)
         return when (type) {
@@ -47,19 +48,39 @@ open class BluePrintRestLibPropertyService(private var bluePrintProperties: Blue
         }
     }
 
-    @Throws(BluePrintProcessorException::class)
+    fun restClientProperties(jsonNode: JsonNode): RestClientProperties {
+        val type = jsonNode.get("type").textValue()
+        return when (type) {
+            RestLibConstants.TYPE_BASIC_AUTH -> {
+                JacksonUtils.readValue(jsonNode, BasicAuthRestClientProperties::class.java)!!
+            }
+            RestLibConstants.TYPE_SSL_BASIC_AUTH -> {
+                JacksonUtils.readValue(jsonNode, SSLBasicAuthRestClientProperties::class.java)!!
+            }
+            RestLibConstants.TYPE_DME2_PROXY -> {
+                JacksonUtils.readValue(jsonNode, DME2RestClientProperties::class.java)!!
+            }
+            RestLibConstants.TYPE_POLICY_MANAGER -> {
+                JacksonUtils.readValue(jsonNode, PolicyManagerRestClientProperties::class.java)!!
+            }
+            else -> {
+                throw BluePrintProcessorException("Rest adaptor($type) is not supported")
+            }
+        }
+    }
+
+
     fun blueprintWebClientService(selector: String): BlueprintWebClientService {
         val prefix = "blueprintsprocessor.restclient.$selector"
         val restClientProperties = restClientProperties(prefix)
         return blueprintWebClientService(restClientProperties)
     }
 
-
-    fun blueprintDynamicWebClientService(sourceType: String, selector: String): BlueprintWebClientService {
-        TODO()
+    fun blueprintWebClientService(jsonNode: JsonNode): BlueprintWebClientService {
+        val restClientProperties = restClientProperties(jsonNode)
+        return blueprintWebClientService(restClientProperties)
     }
 
-    @Throws(BluePrintProcessorException::class)
     fun blueprintWebClientService(restClientProperties: RestClientProperties): BlueprintWebClientService {
         when (restClientProperties) {
             is BasicAuthRestClientProperties -> {

@@ -18,29 +18,26 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor
 
-import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.scripts.BlueprintJythonService
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.CapabilityResourceSource
+import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.scripts.BlueprintJythonService
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintScriptsService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.ApplicationContext
+import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
 import java.io.File
 
-@Service("resource-assignment-processor-capability")
-open class CapabilityResourceAssignmentProcessor(private var applicationContext: ApplicationContext,
+@Service("rr-processor-source-capability")
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+open class CapabilityResourceResolutionProcessor(private var applicationContext: ApplicationContext,
                                                  private val bluePrintScriptsService: BluePrintScriptsService,
                                                  private val bluePrintJythonService: BlueprintJythonService) :
         ResourceAssignmentProcessor() {
-
-    companion object {
-        const val CAPABILITY_TYPE_KOTLIN_COMPONENT = "KOTLIN-COMPONENT"
-        const val CAPABILITY_TYPE_JAVA_COMPONENT = "JAVA-COMPONENT"
-        const val CAPABILITY_TYPE_JYTHON_COMPONENT = "JYTHON-COMPONENT"
-    }
 
     override fun getName(): String {
         return "resource-assignment-processor-capability"
@@ -62,28 +59,28 @@ open class CapabilityResourceAssignmentProcessor(private var applicationContext:
         val capabilityResourceSourceProperty = JacksonUtils
                 .getInstanceFromMap(resourceSourceProps, CapabilityResourceSource::class.java)
 
-        val instanceType = capabilityResourceSourceProperty.type
-        val instanceName = capabilityResourceSourceProperty.instanceName
+        val scriptType = capabilityResourceSourceProperty.scriptType
+        val scriptClassReference = capabilityResourceSourceProperty.scriptClassReference
 
         var componentResourceAssignmentProcessor: ResourceAssignmentProcessor? = null
 
-        when (instanceType) {
-            CAPABILITY_TYPE_KOTLIN_COMPONENT -> {
-                componentResourceAssignmentProcessor = getKotlinResourceAssignmentProcessorInstance(instanceName,
+        when (scriptType) {
+            BluePrintConstants.SCRIPT_KOTLIN -> {
+                componentResourceAssignmentProcessor = getKotlinResourceAssignmentProcessorInstance(scriptClassReference,
                         capabilityResourceSourceProperty.instanceDependencies)
             }
-            CAPABILITY_TYPE_JAVA_COMPONENT -> {
+            BluePrintConstants.SCRIPT_INTERNAL -> {
                 // Initialize Capability Resource Assignment Processor
-                componentResourceAssignmentProcessor = applicationContext.getBean(instanceName, ResourceAssignmentProcessor::class.java)
+                componentResourceAssignmentProcessor = applicationContext.getBean(scriptClassReference, ResourceAssignmentProcessor::class.java)
             }
-            CAPABILITY_TYPE_JYTHON_COMPONENT -> {
-                val content = getJythonContent(instanceName)
-                componentResourceAssignmentProcessor = getJythonResourceAssignmentProcessorInstance(instanceName,
+            BluePrintConstants.SCRIPT_JYTHON -> {
+                val content = getJythonContent(scriptClassReference)
+                componentResourceAssignmentProcessor = getJythonResourceAssignmentProcessorInstance(scriptClassReference,
                         content, capabilityResourceSourceProperty.instanceDependencies)
             }
         }
 
-        checkNotNull(componentResourceAssignmentProcessor) { "failed to get capability resource assignment processor($instanceName)" }
+        checkNotNull(componentResourceAssignmentProcessor) { "failed to get capability resource assignment processor($scriptClassReference)" }
 
         // Assign Current Blueprint runtime and ResourceDictionaries
         componentResourceAssignmentProcessor.raRuntimeService = raRuntimeService
