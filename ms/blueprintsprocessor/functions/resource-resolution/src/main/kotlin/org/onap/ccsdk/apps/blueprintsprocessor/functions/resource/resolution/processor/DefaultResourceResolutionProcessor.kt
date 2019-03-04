@@ -17,7 +17,6 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor
 
-import com.fasterxml.jackson.databind.node.NullNode
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
@@ -44,10 +43,11 @@ open class DefaultResourceResolutionProcessor : ResourceAssignmentProcessor() {
     override fun process(resourceAssignment: ResourceAssignment) {
         try {
             // Check if It has Input
-            var value: Any? = raRuntimeService.getInputValue(resourceAssignment.name)
-
-            // If value is null get it from default source
-            if (value == null || value is NullNode) {
+            var value: Any?
+            try {
+                value = raRuntimeService.getInputValue(resourceAssignment.name)
+            } catch (e: BluePrintProcessorException) {
+                // If value is null get it from default source
                 logger.info("Looking for defaultValue as couldn't find value in input For template key (${resourceAssignment.name})")
                 value = resourceAssignment.property?.defaultValue
             }
@@ -59,7 +59,8 @@ open class DefaultResourceResolutionProcessor : ResourceAssignmentProcessor() {
             ResourceAssignmentUtils.assertTemplateKeyValueNotNull(resourceAssignment)
         } catch (e: Exception) {
             ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, e.message)
-            throw BluePrintProcessorException("Failed in template key ($resourceAssignment) assignments with: ${e.message}", e)
+            throw BluePrintProcessorException("Failed in template key ($resourceAssignment) assignments with: ${e.message}",
+                e)
         }
 
     }
