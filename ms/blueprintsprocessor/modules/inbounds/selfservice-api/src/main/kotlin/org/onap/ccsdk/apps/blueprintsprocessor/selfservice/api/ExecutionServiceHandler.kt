@@ -30,6 +30,7 @@ import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.Status
 import org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api.utils.saveCBAFile
 import org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api.utils.toProto
 import org.onap.ccsdk.apps.blueprintsprocessor.services.workflow.BlueprintDGExecutionService
+import org.onap.ccsdk.apps.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintCatalogService
@@ -112,11 +113,11 @@ class ExecutionServiceHandler(private val bluePrintCoreConfiguration: BluePrintC
         val status = Status()
         status.errorMessage = errorMessage
         if (failure) {
-            status.eventType = "EVENT-COMPONENT-FAILURE"
+            status.eventType = EventType.EVENT_COMPONENT_FAILURE.name
             status.code = 500
             status.message = BluePrintConstants.STATUS_FAILURE
         } else {
-            status.eventType = "EVENT-COMPONENT-PROCESSING"
+            status.eventType = EventType.EVENT_COMPONENT_PROCESSING.name
             status.code = 200
             status.message = BluePrintConstants.STATUS_PROCESSING
         }

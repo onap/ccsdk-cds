@@ -6,6 +6,7 @@ import org.junit.runner.RunWith
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.Flags
 import org.onap.ccsdk.apps.controllerblueprints.common.api.ActionIdentifiers
 import org.onap.ccsdk.apps.controllerblueprints.common.api.CommonHeader
+import org.onap.ccsdk.apps.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.apps.controllerblueprints.common.api.Flag
 import org.springframework.test.context.junit4.SpringRunner
 import java.text.SimpleDateFormat
@@ -47,7 +48,7 @@ class BluePrintMappingsTest {
         val status = org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.Status()
         status.code = 400
         status.errorMessage = "Concurrent modification exception"
-        status.eventType = "Update"
+        status.eventType = EventType.EVENT_COMPONENT_PROCESSING.name
         status.message = "Error uploading data"
         status.timestamp = dateForTest
         return status
@@ -60,7 +61,7 @@ class BluePrintMappingsTest {
 
         Assert.assertEquals(status.code, status2.code)
         Assert.assertEquals(status.errorMessage, status2.errorMessage)
-        Assert.assertEquals(status.eventType, status2.eventType)
+        Assert.assertEquals(status.eventType, status2.eventType.name)
         Assert.assertEquals(status.message, status2.message)
         Assert.assertEquals(status.timestamp.toString(), status2.timestamp)
     }

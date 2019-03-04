@@ -21,6 +21,7 @@ import com.google.protobuf.Struct
 import com.google.protobuf.util.JsonFormat
 import org.onap.ccsdk.apps.controllerblueprints.common.api.ActionIdentifiers
 import org.onap.ccsdk.apps.controllerblueprints.common.api.CommonHeader
+import org.onap.ccsdk.apps.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.apps.controllerblueprints.common.api.Flag
 import org.onap.ccsdk.apps.controllerblueprints.common.api.Status
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
@@ -101,7 +102,7 @@ fun org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.Status.toProto(): Stat
     status.errorMessage = this.errorMessage ?: ""
     status.message = this.message
     status.timestamp = this.timestamp.toString()
-    status.eventType = this.eventType
+    status.eventType = EventType.valueOf(this.eventType)
     return status.build()
 }
 

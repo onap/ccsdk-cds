@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.Status
+import org.onap.ccsdk.apps.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.asJsonNode
@@ -113,7 +114,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
 
         // Populate Status
         val status = Status()
-        status.eventType = "EVENT-COMPONENT-EXECUTED"
+        status.eventType = EventType.EVENT_COMPONENT_EXECUTED.name
         status.code = 200
         status.message = BluePrintConstants.STATUS_SUCCESS
         executionServiceOutput.status = status
