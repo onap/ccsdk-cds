@@ -18,6 +18,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
 */
+
 import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 import { IBlueprint } from '../models/blueprint.model';
@@ -36,6 +37,8 @@ export const SAVE_BLUEPRINT_FAILURE = 'SAVE_BLUEPRINT_FAILURE';
 export const SET_BLUEPRINT = 'SET Blueprint';
 export const REMOVE_BLUEPRINT = 'Remove Blueprint';
 
+export const SET_BLUEPRINT_STATE = 'SET Blueprint state';
+
 
 export class LoadBlueprint implements Action {
     readonly type = LOAD_BLUEPRINT;
@@ -50,6 +53,11 @@ export class LoadBlueprintSuccess implements Action {
 export class LoadBlueprintFailure implements Action {
     readonly type = LOAD_BLUEPRINT_FAILURE;
     constructor(public error: any) {}
+}
+
+export class SetBlueprintState implements Action {
+    readonly type = SET_BLUEPRINT_STATE;
+    constructor(public payload: IBlueprintState) {}
 }
 
 // export class SetBlueprint implements Action {
@@ -67,4 +75,4 @@ export class UpdateBlueprint implements Action {
     constructor(public payload: IBlueprint) {}
 }
 
-export type Actions = LoadBlueprint | LoadBlueprintSuccess | LoadBlueprintFailure;
+export type Actions = LoadBlueprint | LoadBlueprintSuccess | LoadBlueprintFailure | SetBlueprintState;
