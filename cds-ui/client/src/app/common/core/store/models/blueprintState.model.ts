@@ -26,7 +26,9 @@ import { IBlueprint } from './blueprint.model';
 
 export interface IBlueprintState {
     blueprint: IBlueprint,
-    isLoadSuccess: boolean;
-    isUpdateSuccess: boolean;
-    isSaveSuccess: boolean;
+    files?: any;
+    filesData?: any;
+    isLoadSuccess?: boolean;
+    isUpdateSuccess?: boolean;
+    isSaveSuccess?: boolean;
 }

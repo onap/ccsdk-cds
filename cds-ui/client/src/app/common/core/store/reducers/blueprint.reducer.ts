@@ -50,6 +50,12 @@ export function blueprintReducer(state: IBlueprintState = initialBlueprintState,
             return {...state,
                     blueprint: action.payload
                     }
+        case BlueprintActions.SET_BLUEPRINT_STATE :
+            return {...state,
+                    blueprint: action.payload.blueprint,
+                    files: action.payload.files,
+                    filesData: action.payload.filesData
+                    }
         default:
             return state;
     }
