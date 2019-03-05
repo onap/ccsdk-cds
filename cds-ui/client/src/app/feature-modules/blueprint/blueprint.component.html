@@ -16,6 +16,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================ -->
+
 <!-- <app-cbawizard [appName]="appName"></app-cbawizard>
 <router-outlet></router-outlet> -->
 <mat-card class="CBAform">
@@ -32,10 +33,10 @@ limitations under the License.
                     <button mat-button matStepperNext class="matStepNextBtn">Proceed</button>
                 </div>
             </mat-step>
-            <mat-step [stepControl]="thirdFormGroup">
+            <!-- <mat-step [stepControl]="thirdFormGroup">
                 <ng-template matStepLabel>Deploy</ng-template>
                 <app-deploy-template></app-deploy-template>
-            </mat-step>            
+            </mat-step>             -->
             <mat-step [stepControl]="thirdFormGroup">
                 <ng-template matStepLabel>Test</ng-template>
                 <app-test-template></app-test-template>
