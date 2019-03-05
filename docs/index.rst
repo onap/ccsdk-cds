@@ -45,7 +45,7 @@ Functional Decomposition:
    :height: 4.43750in
    
 Controller design Studio Presentation:
-=======================================
+======================================
 
 Details about CDS Architecture and Design detail, Please click below.
 :download:`CDS_Architecture_Design.pptx`
