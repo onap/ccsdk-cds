@@ -17,10 +17,7 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor
 
-import com.fasterxml.jackson.databind.node.ArrayNode
-import com.fasterxml.jackson.databind.node.JsonNodeFactory
-import com.fasterxml.jackson.databind.node.NullNode
-import com.fasterxml.jackson.databind.node.ObjectNode
+import com.fasterxml.jackson.databind.node.*
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.RestResourceSource
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.apps.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
@@ -56,7 +53,7 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
 
             // Check if It has Input
             val value = raRuntimeService.getInputValue(resourceAssignment.name)
-            if (value != null && value !is NullNode) {
+            if (value !is MissingNode && value !is NullNode) {
                 logger.info("primary-db source template key (${resourceAssignment.name}) found from input and value is ($value)")
                 ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, value)
             } else {
@@ -77,7 +74,7 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                 // Get the Rest Client Service
                 val restClientService = blueprintWebClientService(resourceAssignment, sourceProperties)
                 val response = restClientService.getResource(urlPath, String::class.java)
-                if (response.isNotBlank()) {
+                if (response.isBlank()) {
                     logger.warn("Failed to get $dSource result for dictionary name ($dName) using urlPath ($urlPath)")
                 } else {
                     populateResource(resourceAssignment, sourceProperties, response, path)
