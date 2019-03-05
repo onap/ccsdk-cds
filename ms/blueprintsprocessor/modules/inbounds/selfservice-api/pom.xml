@@ -32,6 +32,12 @@
     <description>Blueprints Processor Selfservice API</description>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.onap.ccsdk.apps.components</groupId>
             <artifactId>proto-definition</artifactId>

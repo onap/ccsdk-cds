@@ -23,6 +23,7 @@ import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceOut
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.http.codec.multipart.FilePart
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -34,7 +35,7 @@ import reactor.core.publisher.Mono
 
 @RestController
 @RequestMapping("/api/v1/execution-service")
-class ExecutionServiceController {
+open class ExecutionServiceController {
 
     @Autowired
     lateinit var executionServiceHandler: ExecutionServiceHandler
@@ -48,6 +49,7 @@ class ExecutionServiceController {
     @PostMapping(path = ["/upload"], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     @ApiOperation(value = "Upload CBA", notes = "Takes a File and load it in the runtime database")
     @ResponseBody
+    @PreAuthorize("hasRole('USER')")
     fun upload(@RequestPart("file") parts: Mono<FilePart>): Mono<String> {
         return parts
             .filter { it is FilePart }
@@ -59,6 +61,7 @@ class ExecutionServiceController {
     @ApiOperation(value = "Resolve Resource Mappings",
         notes = "Takes the blueprint information and process as per the payload")
     @ResponseBody
+    @PreAuthorize("hasRole('USER')")
     fun process(@RequestBody executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
         if (executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC) {
             throw IllegalStateException("Can't process async request through the REST endpoint. Use gRPC for async processing.")

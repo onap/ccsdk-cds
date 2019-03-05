@@ -28,16 +28,18 @@ import org.onap.ccsdk.apps.controllerblueprints.management.api.BluePrintManageme
 import org.onap.ccsdk.apps.controllerblueprints.management.api.BluePrintManagementOutput
 import org.onap.ccsdk.apps.controllerblueprints.management.api.BluePrintManagementServiceGrpc
 import org.slf4j.LoggerFactory
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Service
 import java.io.File
 
 @Service
-class BluePrintManagementGRPCHandler(private val bluePrintCoreConfiguration: BluePrintCoreConfiguration,
+open class BluePrintManagementGRPCHandler(private val bluePrintCoreConfiguration: BluePrintCoreConfiguration,
                                      private val bluePrintCatalogService: BluePrintCatalogService)
     : BluePrintManagementServiceGrpc.BluePrintManagementServiceImplBase() {
 
     private val log = LoggerFactory.getLogger(BluePrintManagementGRPCHandler::class.java)
 
+    @PreAuthorize("hasRole('USER')")
     override fun uploadBlueprint(request: BluePrintManagementInput, responseObserver: StreamObserver<BluePrintManagementOutput>) {
         val blueprintName = request.blueprintName
         val blueprintVersion = request.blueprintVersion
@@ -61,6 +63,7 @@ class BluePrintManagementGRPCHandler(private val bluePrintCoreConfiguration: Blu
         }
     }
 
+    @PreAuthorize("hasRole('USER')")
     override fun removeBlueprint(request: BluePrintManagementInput, responseObserver: StreamObserver<BluePrintManagementOutput>) {
         val blueprintName = request.blueprintName
         val blueprintVersion = request.blueprintVersion

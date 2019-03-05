@@ -23,14 +23,16 @@ import org.onap.ccsdk.apps.controllerblueprints.processing.api.BluePrintProcessi
 import org.onap.ccsdk.apps.controllerblueprints.processing.api.ExecutionServiceInput
 import org.onap.ccsdk.apps.controllerblueprints.processing.api.ExecutionServiceOutput
 import org.slf4j.LoggerFactory
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Service
 
 @Service
-class BluePrintProcessingGRPCHandler(private val bluePrintCoreConfiguration: BluePrintCoreConfiguration,
+open class BluePrintProcessingGRPCHandler(private val bluePrintCoreConfiguration: BluePrintCoreConfiguration,
                                      private val executionServiceHandler: ExecutionServiceHandler)
     : BluePrintProcessingServiceGrpc.BluePrintProcessingServiceImplBase() {
     private val log = LoggerFactory.getLogger(BluePrintProcessingGRPCHandler::class.java)
 
+    @PreAuthorize("hasRole('USER')")
     override fun process(
         responseObserver: StreamObserver<ExecutionServiceOutput>): StreamObserver<ExecutionServiceInput> {
 

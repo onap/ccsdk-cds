@@ -18,6 +18,7 @@ package org.onap.ccsdk.apps.blueprintsprocessor;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import org.onap.ccsdk.apps.blueprintsprocessor.security.BasicAuthServerInterceptor;
 import org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api.BluePrintManagementGRPCHandler;
 import org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api.BluePrintProcessingGRPCHandler;
 import org.slf4j.Logger;
@@ -37,9 +38,10 @@ public class BlueprintGRPCServer implements ApplicationListener<ContextRefreshed
 
     @Autowired
     private BluePrintProcessingGRPCHandler bluePrintProcessingGRPCHandler;
-
     @Autowired
     private BluePrintManagementGRPCHandler bluePrintManagementGRPCHandler;
+    @Autowired
+    private BasicAuthServerInterceptor authInterceptor;
 
     @Value("${blueprintsprocessor.grpcPort}")
     private Integer grpcPort;
@@ -49,10 +51,11 @@ public class BlueprintGRPCServer implements ApplicationListener<ContextRefreshed
         try {
             log.info("Starting Blueprint Processor GRPC Starting..");
             Server server = ServerBuilder
-                    .forPort(grpcPort)
-                    .addService(bluePrintProcessingGRPCHandler)
-                    .addService(bluePrintManagementGRPCHandler)
-                    .build();
+                .forPort(grpcPort)
+                .intercept(authInterceptor)
+                .addService(bluePrintProcessingGRPCHandler)
+                .addService(bluePrintManagementGRPCHandler)
+                .build();
 
             server.start();
             log.info("Blueprint Processor GRPC server started and ready to serve on port({})...", server.getPort());

@@ -16,23 +16,21 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.embedded.netty.NettyReactiveWebServerFactory;
 import org.springframework.boot.web.reactive.server.ReactiveWebServerFactory;
 import org.springframework.boot.web.server.WebServer;
 import org.springframework.http.server.reactive.HttpHandler;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
-@ConditionalOnProperty(name = "blueprintsprocessor.grpcEnable", havingValue = "true")
 @Component
 public class BlueprintHttpServer {
+
     private static Logger log = LoggerFactory.getLogger(BlueprintHttpServer.class);
 
     @Value("${blueprintsprocessor.httpPort}")

@@ -17,8 +17,17 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor;
 
+import org.onap.ccsdk.apps.blueprintsprocessor.security.AuthenticationManager;
+import org.onap.ccsdk.apps.blueprintsprocessor.security.SecurityContextRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.reactive.config.*;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.web.reactive.config.CorsRegistry;
+import org.springframework.web.reactive.config.ResourceHandlerRegistry;
+import org.springframework.web.reactive.config.WebFluxConfigurationSupport;
 
 /**
  * WebConfig
@@ -27,21 +36,43 @@ import org.springframework.web.reactive.config.*;
  */
 @Configuration
 public class WebConfig extends WebFluxConfigurationSupport {
-	@Override
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private SecurityContextRepository securityContextRepository;
+
+    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("swagger-ui.html")
-                .addResourceLocations("classpath:/META-INF/resources/");
+            .addResourceLocations("classpath:/META-INF/resources/");
 
         registry.addResourceHandler("/webjars/**")
-                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+            .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
     @Override
     public void addCorsMappings(CorsRegistry corsRegistry) {
         corsRegistry.addMapping("/**")
-                .allowedOrigins("*")
-                .allowedMethods("*")
-                .allowedHeaders("DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range")
-                .maxAge(3600);
+            .allowedOrigins("*")
+            .allowedMethods("*")
+            .allowedHeaders("*")
+            .maxAge(3600);
+    }
+
+
+    @Bean
+    public SecurityWebFilterChain securitygWebFilterChain(ServerHttpSecurity http) {
+        return http.csrf().disable()
+            .formLogin().disable()
+            .httpBasic().disable()
+            .authenticationManager(authenticationManager)
+            .securityContextRepository(securityContextRepository)
+            .authorizeExchange()
+            .pathMatchers(HttpMethod.OPTIONS).permitAll()
+            .anyExchange().authenticated()
+            .and().build();
+
     }
 }
