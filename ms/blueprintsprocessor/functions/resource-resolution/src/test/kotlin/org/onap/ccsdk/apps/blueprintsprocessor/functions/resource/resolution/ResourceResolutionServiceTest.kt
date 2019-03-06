@@ -25,7 +25,7 @@ import org.onap.ccsdk.apps.blueprintsprocessor.core.BlueprintPropertyConfigurati
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.utils.PayloadUtils
 import org.onap.ccsdk.apps.blueprintsprocessor.db.BluePrintDBLibConfiguration
-import org.onap.ccsdk.apps.blueprintsprocessor.db.primary.PrimaryDBLibGenericService
+import org.onap.ccsdk.apps.blueprintsprocessor.db.primary.DBLibGenericService
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor.*
 import org.onap.ccsdk.apps.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
@@ -48,8 +48,8 @@ import kotlin.test.assertTrue
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [ResourceResolutionServiceImpl::class,
     InputResourceResolutionProcessor::class, DefaultResourceResolutionProcessor::class,
-    PrimaryDataResourceResolutionProcessor::class, RestResourceResolutionProcessor::class,
-    CapabilityResourceResolutionProcessor::class, PrimaryDBLibGenericService::class,
+    DatabaseResourceAssignmentProcessor::class, RestResourceResolutionProcessor::class,
+    CapabilityResourceResolutionProcessor::class, DBLibGenericService::class,
     BlueprintPropertyConfiguration::class, BluePrintProperties::class,
     BluePrintDBLibConfiguration::class, BluePrintLoadConfiguration::class])
 @TestPropertySource(locations = ["classpath:application-test.properties"])
