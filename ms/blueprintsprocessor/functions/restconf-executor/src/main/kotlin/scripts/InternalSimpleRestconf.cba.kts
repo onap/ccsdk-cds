@@ -13,9 +13,15 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+@file:Suppress("unused") //TODO remove this line!
 
+
+import com.fasterxml.jackson.databind.node.ObjectNode
+import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ActionIdentifiers
+import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.CommonHeader
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.restconf.executor.RestconfComponentFunction
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 
 open class EditConfigure : RestconfComponentFunction() {
@@ -27,7 +33,7 @@ open class EditConfigure : RestconfComponentFunction() {
     }
 
     override fun process(executionRequest: ExecutionServiceInput) {
-        val webClientService = restClientService("odlparent")
+        //val webClientService = restClientService("odlparent")
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -46,12 +52,15 @@ open class MountNEditConfigure : RestconfComponentFunction() {
 
     override fun process(executionRequest: ExecutionServiceInput) {
         val webClientService = restClientService("odlparent")
+        println("foi?")
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
+
 }
 
 /**
@@ -73,3 +82,19 @@ open class TestRestconfConfigure : RestconfComponentFunction() {
         log.info("recovering..")
     }
 }
+
+
+
+println("zzzzzzzzzzzzz")
+val x = MountNEditConfigure()
+println(x.getName())
+val executionServiceInput = ExecutionServiceInput().apply {
+    commonHeader = CommonHeader().apply {
+        requestId = "1234"
+    }
+    actionIdentifiers = ActionIdentifiers().apply {
+        actionName = "activate"
+    }
+    payload = JacksonUtils.jsonNode("{}") as ObjectNode
+}
+x.process(executionServiceInput);
