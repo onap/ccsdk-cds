@@ -1,0 +1,168 @@
+{
+  "node_types" : {
+    "component-restconf-executor" : {
+      "description" : "This is Restconf Configuration Component API",
+      "version" : "1.0.0",
+      "capabilities" : {
+        "component-node" : {
+          "type" : "tosca.capabilities.Node"
+        }
+      },
+      "requirements" : {
+        "restconf-connection" : {
+          "capability" : "restconf",
+          "node" : "pnf-restconf-device",
+          "relationship" : "tosca.relationships.ConnectsTo"
+        }
+      },
+      "interfaces" : {
+        "ComponentRestconfExecutor" : {
+          "operations" : {
+            "process" : {
+              "inputs" : {
+                "script-type" : {
+                  "description" : "Script type, kotlin type is supported",
+                  "required" : true,
+                  "type" : "string",
+                  "constraints" : [ {
+                    "valid_values" : [ "kotlin", "jython", "internal" ]
+                  } ],
+                  "default" : "internal"
+                },
+                "script-class-reference" : {
+                  "description" : "Kotlin Script class name or jython script name.",
+                  "required" : true,
+                  "type" : "string"
+                },
+                "instance-dependencies" : {
+                  "description" : "Instance names to inject to Jython or Kotlin Script.",
+                  "required" : true,
+                  "type" : "list",
+                  "entry_schema" : {
+                    "type" : "string"
+                  }
+                }
+              },
+              "outputs" : {
+                "response-data" : {
+                  "description" : "Execution Response Data in JSON format.",
+                  "required" : false,
+                  "type" : "string"
+                },
+                "status" : {
+                  "description" : "Status of the Component Execution ( success or failure )",
+                  "required" : true,
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from" : "tosca.nodes.Component"
+    },
+    "dg-generic" : {
+      "description" : "This is Generic Directed Graph Type",
+      "version" : "1.0.0",
+      "properties" : {
+        "content" : {
+          "required" : true,
+          "type" : "string"
+        },
+        "dependency-node-templates" : {
+          "description" : "Dependent Step Components NodeTemplate name.",
+          "required" : true,
+          "type" : "list",
+          "entry_schema" : {
+            "type" : "string"
+          }
+        }
+      },
+      "derived_from" : "tosca.nodes.DG"
+    },
+    "source-input" : {
+      "description" : "This is Input Resource Source Node Type",
+      "version" : "1.0.0",
+      "properties" : {
+        "key" : {
+          "required" : false,
+          "type" : "string"
+        },
+        "key-dependencies" : {
+          "required" : true,
+          "type" : "list",
+          "entry_schema" : {
+            "type" : "string"
+          }
+        }
+      },
+      "derived_from" : "tosca.nodes.ResourceSource"
+    },
+    "tosca.nodes.Component" : {
+      "description" : "This is default Component Node",
+      "version" : "1.0.0",
+      "derived_from" : "tosca.nodes.Root"
+    },
+    "tosca.nodes.DG" : {
+      "description" : "This is Directed Graph Node Type",
+      "version" : "1.0.0",
+      "derived_from" : "tosca.nodes.Root"
+    },
+    "tosca.nodes.ResourceSource" : {
+      "description" : "TOSCA base type for Resource Sources",
+      "version" : "1.0.0",
+      "derived_from" : "tosca.nodes.Root"
+    },
+    "tosca.nodes.Vnf" : {
+      "description" : "This is VNF Node Type",
+      "version" : "1.0.0",
+      "derived_from" : "tosca.nodes.Root"
+    },
+    "tosca.nodes.Pnf": {
+      "description": "This is the PNF Node Type",
+      "version": "1.0.0",
+      "derived_from": "tosca.nodes.Root"
+    },
+     "pnf-restconf-device" : {
+      "description" : "This is a PNF Device with Restconf Capability",
+      "version" : "1.0.0",
+      "capabilities" : {
+        "netconf" : {
+          "type" : "tosca.capabilities.Restconf",
+          "properties" : {
+            "login-key" : {
+              "required" : true,
+              "type" : "string",
+              "default" : "sdnc"
+            },
+            "login-account" : {
+              "required" : true,
+              "type" : "string",
+              "default" : "sdnc-tacacs"
+            },
+            "source" : {
+              "required" : false,
+              "type" : "string",
+              "default" : "npm"
+            },
+            "target-ip-address" : {
+              "required" : true,
+              "type" : "string"
+            },
+            "port-number" : {
+              "required" : true,
+              "type" : "integer",
+              "default" : 830
+            },
+            "connection-time-out" : {
+              "required" : false,
+              "type" : "integer",
+              "default" : 30
+            }
+          }
+        }
+      },
+      "derived_from" : "tosca.nodes.Pnf"
+    }
+  }
+}

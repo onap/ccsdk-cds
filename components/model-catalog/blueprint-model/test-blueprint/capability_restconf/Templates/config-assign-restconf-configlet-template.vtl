@@ -1,0 +1,19 @@
+<yang-patch xmlns="urn:ietf:params:xml:ns:yang:ietf-yang-patch">
+<patch-id>example-patch</patch-id>
+<comment>Example patch</comment>
+<edit>
+  <edit-id>edit1</edit-id>
+  <operation>create</operation>
+  <target>/car-entry</target>
+  <value>
+    <car-entry xmlns="urn:opendaylight:params:xml:ns:yang:controller:config:sal-clustering-it:car">
+      <id>0</id>
+    </car-entry>
+  </value>
+</edit>
+<edit>
+  <edit-id>edit2</edit-id>
+  <operation>delete</operation>
+  <target>/car-entry/0</target>
+</edit>
+</yang-patch>
