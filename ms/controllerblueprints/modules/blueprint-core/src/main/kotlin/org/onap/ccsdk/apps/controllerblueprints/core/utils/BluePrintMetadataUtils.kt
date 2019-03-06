@@ -97,12 +97,9 @@ class BluePrintMetadataUtils {
 
             val bluePrintContext: BluePrintContext = getBluePrintContext(blueprintBasePath)
 
-            val context: MutableMap<String, JsonNode> = hashMapOf()
-            context[BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH] = blueprintBasePath.asJsonPrimitive()
-            context[BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID] = id.asJsonPrimitive()
-
             val bluePrintRuntimeService = DefaultBluePrintRuntimeService(id, bluePrintContext)
-            bluePrintRuntimeService.setExecutionContext(context)
+            bluePrintRuntimeService.put(BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH, blueprintBasePath.asJsonPrimitive())
+            bluePrintRuntimeService.put(BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID, id.asJsonPrimitive())
 
             return bluePrintRuntimeService
         }
@@ -110,12 +107,10 @@ class BluePrintMetadataUtils {
         fun getBaseEnhancementBluePrintRuntime(id: String, blueprintBasePath: String): BluePrintRuntimeService<MutableMap<String, JsonNode>> {
 
             val bluePrintContext: BluePrintContext = getBaseEnhancementBluePrintContext(blueprintBasePath)
-            val context: MutableMap<String, JsonNode> = hashMapOf()
-            context[BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH] = blueprintBasePath.asJsonPrimitive()
-            context[BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID] = id.asJsonPrimitive()
 
             val bluePrintRuntimeService = DefaultBluePrintRuntimeService(id, bluePrintContext)
-            bluePrintRuntimeService.setExecutionContext(context)
+            bluePrintRuntimeService.put(BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH, blueprintBasePath.asJsonPrimitive())
+            bluePrintRuntimeService.put(BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID, id.asJsonPrimitive())
 
             return bluePrintRuntimeService
         }
@@ -123,6 +118,10 @@ class BluePrintMetadataUtils {
         fun getBluePrintRuntime(id: String, blueprintBasePath: String, executionContext: MutableMap<String, JsonNode>): BluePrintRuntimeService<MutableMap<String, JsonNode>> {
             val bluePrintContext: BluePrintContext = getBluePrintContext(blueprintBasePath)
             val bluePrintRuntimeService = DefaultBluePrintRuntimeService(id, bluePrintContext)
+            executionContext.forEach{
+                bluePrintRuntimeService.put(it.key,it.value)
+            }
+
             bluePrintRuntimeService.setExecutionContext(executionContext)
             return bluePrintRuntimeService
         }
