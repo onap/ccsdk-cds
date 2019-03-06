@@ -18,7 +18,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
 */
-
 import { IMetaData } from './metadata.model';
 import { IImportModel } from './imports.model';
 import { IBlueprint } from './blueprint.model';
@@ -26,7 +25,9 @@ import { IBlueprint } from './blueprint.model';
 
 export interface IBlueprintState {
     blueprint: IBlueprint,
-    isLoadSuccess: boolean;
-    isUpdateSuccess: boolean;
-    isSaveSuccess: boolean;
+    files?: any;
+    filesData?: any;
+    isLoadSuccess?: boolean;
+    isUpdateSuccess?: boolean;
+    isSaveSuccess?: boolean;
 }
