@@ -27,14 +27,14 @@
     <mat-form-field class="form-field">
       <mat-select matInput placeholder="Data Type" formControlName="_type">
       	<mat-option value="string">string</mat-option>
-      	<mat-option value="string">list</mat-option>
+      	<mat-option value="list">list</mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field class="form-field" >
       <input matInput placeholder="entry_schema" formControlName="entry_schema">
     </mat-form-field>
     <mat-form-field class="form-field" >
-      <mat-select placeholder="required" formControlName="_required">
+      <mat-select matInput placeholder="required" formControlName="required">
       	<mat-option value="true">true</mat-option>
       	<mat-option value="false">false</mat-option>
       </mat-select>
