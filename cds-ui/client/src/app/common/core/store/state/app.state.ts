@@ -22,12 +22,16 @@ limitations under the License.
 import { RouterReducerState     } from '@ngrx/router-store';
 import { IBlueprintState } from '../models/blueprintState.model';
 import { initialBlueprintState } from './blueprint.state';
+import { IResourcesState } from '../models/resourcesState.model';
+import { initialResourcesState } from './resources.state';
 
 export interface IAppState {
     router? : RouterReducerState,
-    blueprint: IBlueprintState
+    blueprint: IBlueprintState,
+    resources: IResourcesState
 }
 
 export const initialAppState: IAppState = {
-    blueprint: initialBlueprintState
+    blueprint: initialBlueprintState,
+    resources: initialResourcesState
 }

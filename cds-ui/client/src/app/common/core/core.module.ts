@@ -28,7 +28,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { appReducers } from './store/reducers/app.reducer';
 import { BlueprintEffects } from './store/effects/blueprint.effects';
-
+import { ResourcesEffects } from './store/effects/resources.effects';
 import { ApiService } from './services/api.service';
 // import { BlueprintService } from './services/blueprint.service';
 
@@ -38,7 +38,7 @@ import { ApiService } from './services/api.service';
   imports: [
     CommonModule,
     StoreModule.forRoot(appReducers),
-    EffectsModule.forRoot([BlueprintEffects]),
+    EffectsModule.forRoot([BlueprintEffects,ResourcesEffects]),
     StoreRouterConnectingModule.forRoot({stateKey: 'router'}),
     HttpClientModule
   ],

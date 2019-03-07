@@ -24,8 +24,10 @@ import { routerReducer } from '@ngrx/router-store';
 
 import { IAppState } from '../state/app.state';
 import { blueprintReducer } from '../reducers/blueprint.reducer';
+import { resourcesReducer } from '../reducers/resources.reducer';
 
 export const appReducers: ActionReducerMap<IAppState, any> = {
     router: routerReducer,
-    blueprint: blueprintReducer
+    blueprint: blueprintReducer,
+    resources:resourcesReducer
 };
