@@ -33,6 +33,11 @@
                 }
               ]
             },
+            "dynamic-properties": {
+              "description": "Resolvable dynamic property.",
+              "required": false,
+              "type": "string"
+            },
             "script-class-reference": {
               "description": "Kotlin Script class name or jython script name.",
               "required": true,

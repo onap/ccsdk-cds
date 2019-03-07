@@ -23,3 +23,6 @@ class ResolutionHelper:
   def resolve_and_generate_message(self, artifact_mapping, artifact_template):
     return self.component_function.resolveAndGenerateMessage(artifact_mapping,
                                                              artifact_template)
+
+  def retrieve_resolved_template_from_database(self, key, artifact_template):
+    return self.component_function.resolveFromDatabase(key, artifact_template)
