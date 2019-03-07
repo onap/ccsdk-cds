@@ -28,7 +28,7 @@
       		<mat-expansion-panel class="expansion-panel">
       			<mat-expansion-panel-header>
         			<mat-panel-title>
-          				{{item}}
+          				{{item.type}}
         			</mat-panel-title>
       			</mat-expansion-panel-header>
      		 	{{item}}
@@ -47,10 +47,10 @@
   	<br><br>
     <div
       cdkDropList
-      [cdkDropListData]="done"
+      [cdkDropListData]="sourcesOptions"
       class="options-list"
       (cdkDropListDropped)="drop($event)">
-      <div class="options-box" *ngFor="let item of done | search : searchText" cdkDrag>{{item}}</div>
+      <div class="options-box" *ngFor="let item of sourcesOptions | search : searchText" cdkDrag>{{item.type}}</div>
     </div>
   </div>
 </div>
