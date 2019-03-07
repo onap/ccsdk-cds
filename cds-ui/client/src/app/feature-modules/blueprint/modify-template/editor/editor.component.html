@@ -25,7 +25,7 @@ limitations under the License.
             <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
                 <!-- use a disabled button to provide padding for tree leaf -->
                 <button mat-icon-button disabled></button>
-                <span (click)="fileClicked(node.name)">{{node.name}}</span>
+                <button mat-icon-button (click)="selectFileToView(node)">{{node.name}}</button>
             </mat-tree-node>
             <!-- This is the tree node template for expandable nodes -->
             <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
@@ -34,7 +34,7 @@ limitations under the License.
                   {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
                 </mat-icon>
               </button>
-                <span (click)="fileClicked(node.name)">{{node.name}}</span>
+                <button mat-icon-button (click)="selectFileToView(node)">{{node.name}}</button>
             </mat-tree-node>
         </mat-tree>
     </div>
@@ -43,5 +43,6 @@ limitations under the License.
     </div>
 </div>
 <div style="position:relative">
-    <button mat-button class="savebtn" (click)="updateBlueprint()">Save</button>
+    <button mat-button class="savebtn" (click)="updateBlueprint();SaveToBackend()">Save</button>
+    <button mat-button class="savebtn" (click)="download();">Download</button>
 </div>
