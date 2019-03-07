@@ -27,7 +27,8 @@ import { Observable } from 'rxjs';
 import { IBlueprint } from '../../../../common/core/store/models/blueprint.model';
 import { IBlueprintState } from '../../../../common/core/store/models/blueprintState.model';
 import { IAppState } from '../../../../common/core/store/state/app.state';
-import { LoadBlueprintSuccess } from '../../../../common/core/store/actions/blueprint.action';
+import { LoadBlueprintSuccess, SET_BLUEPRINT_STATE, SetBlueprintState } from '../../../../common/core/store/actions/blueprint.action';
+import { json } from 'd3';
 
 @Component({
   selector: 'app-search-template',
@@ -44,10 +45,13 @@ export class SearchTemplateComponent implements OnInit {
   @ViewChild('fileInput') fileInput;
   result: string = '';
 
-  public paths = [];
-  public tree;
+  private paths = [];
+  private tree;
   private zipFile: JSZip = new JSZip();
   private fileObject: any;
+  private activationBlueprint: any;
+  private tocsaMetadaData: any;
+  private blueprintName: string;
 
   constructor(private store: Store<IAppState>) { }
 
@@ -57,22 +61,31 @@ export class SearchTemplateComponent implements OnInit {
   fileChanged(e: any) {
     this.file = e.target.files[0];
 
-    // this.zipFile.loadAsync(this.file)
-    //   .then((zip) => {
-    //     if(zip) {            
-    //       this.buildFileViewData(zip);
-    //     }
-    //   });
+    this.zipFile.loadAsync(this.file)
+      .then((zip) => {
+        if(zip) {            
+          this.buildFileViewData(zip);
+        }
+      });
   }
 
   updateBlueprintState() {
-    let fileReader = new FileReader();
-    fileReader.readAsText(this.file);
-    var me = this;
-    fileReader.onload = function () {
-      var data: IBlueprint = JSON.parse(fileReader.result.toString());
-      me.store.dispatch(new LoadBlueprintSuccess(data));
+    // let fileReader = new FileReader();
+    // fileReader.readAsText(this.file);
+    // var me = this;
+    // fileReader.onload = function () {
+    //   var data: IBlueprint = JSON.parse(fileReader.result.toString());
+    //   me.store.dispatch(new LoadBlueprintSuccess(data));
+    // }
+
+    let data: IBlueprint = this.activationBlueprint ? JSON.parse(this.activationBlueprint.toString()) : this.activationBlueprint;
+    let blueprintState = {
+      blueprint: data,
+      files: this.tree,
+      filesData: this.paths
     }
+    this.store.dispatch(new SetBlueprintState(blueprintState))
+    // this.store.dispatch(new LoadBlueprintSuccess(data));
   }
 
   async buildFileViewData(zip) {
@@ -85,7 +98,8 @@ export class SearchTemplateComponent implements OnInit {
       this.fileObject.data = value;
       this.paths.push(this.fileObject); 
     }
-    this.arrangeTreeData(this.paths);
+    this.fetchTOSACAMetadata();
+   this.tree = this.arrangeTreeData(this.paths);
   }
 
   arrangeTreeData(paths) {
@@ -108,13 +122,34 @@ export class SearchTemplateComponent implements OnInit {
             children: [],
             data: path.data
           };
-
-          currentLevel.push(newPart);
-          currentLevel = newPart.children;
+          if(part.trim() == this.blueprintName.trim()) { 
+            this.activationBlueprint = path.data; 
+            newPart.data = JSON.parse(this.activationBlueprint.toString());            
+            console.log('newpart', newPart);
+          }
+          if(newPart.name !== '') {            
+              currentLevel.push(newPart);
+              currentLevel = newPart.children;
+          }
         }
       });
     });
-    console.log('tree: ', tree);
+    console.log('tree', tree);
     return tree;
+  }
+
+  fetchTOSACAMetadata() {
+    let toscaData = {};
+    this.paths.forEach(file =>{
+      if(file.name.includes('TOSCA.meta')) {
+        let keys = file.data.split("\n");
+        keys.forEach((key)=>{
+          let propertyData = key.split(':');
+          toscaData[propertyData[0]] = propertyData[1];
+        });
+      }
+    });
+    this.blueprintName = (((toscaData['Entry-Definitions']).split('/'))[1]).toString();;
+    console.log(toscaData);
   }
 }
