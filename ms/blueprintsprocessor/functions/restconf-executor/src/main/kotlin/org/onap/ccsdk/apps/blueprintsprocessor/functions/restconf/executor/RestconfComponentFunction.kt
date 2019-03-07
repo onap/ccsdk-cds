@@ -17,6 +17,7 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.restconf.executor
 
+import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionService
 import org.onap.ccsdk.apps.blueprintsprocessor.rest.RestLibConstants
@@ -38,6 +39,14 @@ abstract class RestconfComponentFunction : AbstractComponentFunction() {
         return bluePrintRestLibPropertyService().blueprintWebClientService(selector)
     }
 
+    fun getDynamicProperties(key: String): JsonNode {
+        return operationInputs["dynamic-properties"]!!.get(key)
+    }
+
+    fun resolveFromDatabase(resolutionKey: String, artifactName: String): String {
+        return resourceResolutionService().resolveFromDatabase(bluePrintRuntimeService, artifactName, resolutionKey)
+    }
+
     fun generateMessage(artifactName: String): String {
         return bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactName)
     }
@@ -49,6 +58,6 @@ abstract class RestconfComponentFunction : AbstractComponentFunction() {
 
     fun resolveAndGenerateMessage(artifactPrefix: String): String {
         return resourceResolutionService().resolveResources(bluePrintRuntimeService, nodeTemplateName,
-                artifactPrefix)
+                artifactPrefix, mapOf())
     }
 }

@@ -29,11 +29,10 @@
     <description>Blueprints Processor Function - Resource Resolution</description>
 
     <dependencies>
-        <!--<dependency>
-            <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
-            <artifactId>db-resources</artifactId>
-            <version>${project.version}</version>
-        </dependency>-->
+        <dependency>
+            <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
+            <artifactId>db-lib</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.onap.ccsdk.apps.blueprintsprocessor.functions</groupId>
             <artifactId>python-executor</artifactId>

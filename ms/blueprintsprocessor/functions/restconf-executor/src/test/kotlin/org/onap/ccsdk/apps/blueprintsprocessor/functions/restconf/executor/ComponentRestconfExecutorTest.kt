@@ -23,42 +23,35 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.apps.blueprintsprocessor.core.BluePrintProperties
-import org.onap.ccsdk.apps.blueprintsprocessor.core.BlueprintPropertyConfiguration
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ActionIdentifiers
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.CommonHeader
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionServiceImpl
-import org.onap.ccsdk.apps.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
-import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
-import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.scripts.BlueprintJythonService
-import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.scripts.PythonExecutorProperty
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.apps.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.apps.controllerblueprints.core.service.DefaultBluePrintRuntimeService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
-import org.onap.ccsdk.apps.controllerblueprints.scripts.BluePrintScriptsServiceImpl
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.test.context.ContextConfiguration
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.context.annotation.ComponentScan
+import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.assertNotNull
 
-
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [RestconfExecutorConfiguration::class, ComponentRestconfExecutor::class,
-    BlueprintJythonService::class, PythonExecutorProperty::class, BluePrintRestLibPropertyService::class,
-    BlueprintPropertyConfiguration::class, BluePrintProperties::class, BluePrintScriptsServiceImpl::class,
-    ResourceResolutionServiceImpl::class, ComponentFunctionScriptingService::class])
+@EnableAutoConfiguration
+@ComponentScan(basePackages = ["org.onap.ccsdk.apps.blueprintsprocessor", "org.onap.ccsdk.apps.controllerblueprints"])
+@DirtiesContext
 @TestPropertySource(properties =
 ["server.port=9111",
     "blueprintsprocessor.restconfEnabled=true",
     "blueprintsprocessor.restclient.odlPrimary.type=basic-auth",
     "blueprintsprocessor.restclient.odlPrimary.url=http://127.0.0.1:9111",
     "blueprintsprocessor.restclient.odlPrimary.userId=sampleuser",
-    "blueprintsprocessor.restclient.odlPrimary.token=sampletoken"])
+    "blueprintsprocessor.restclient.odlPrimary.token=sampletoken"],
+    locations = ["classpath:application-test.properties"])
 class ComponentRestconfExecutorTest {
 
     @Autowired
@@ -85,7 +78,8 @@ class ComponentRestconfExecutorTest {
         operationInputs[BluePrintConstants.PROPERTY_CURRENT_INTERFACE] = "interfaceName".asJsonPrimitive()
         operationInputs[BluePrintConstants.PROPERTY_CURRENT_OPERATION] = "operationName".asJsonPrimitive()
         operationInputs[ComponentRestconfExecutor.SCRIPT_TYPE] = BluePrintConstants.SCRIPT_INTERNAL.asJsonPrimitive()
-        operationInputs[ComponentRestconfExecutor.SCRIPT_CLASS_REFERENCE] = "InternalSimpleRestconf_cba\$TestRestconfConfigure".asJsonPrimitive()
+        operationInputs[ComponentRestconfExecutor.SCRIPT_CLASS_REFERENCE] =
+            "InternalSimpleRestconf_cba\$TestRestconfConfigure".asJsonPrimitive()
         operationInputs[ComponentRestconfExecutor.INSTANCE_DEPENDENCIES] = JacksonUtils.jsonNode("[]") as ArrayNode
 
         val blueprintContext = mockk<BluePrintContext>()
@@ -93,13 +87,13 @@ class ComponentRestconfExecutorTest {
         every { bluePrintRuntime.get("sample-step-step-inputs") } returns operationInputs.asJsonNode()
         every {
             bluePrintRuntime.resolveNodeTemplateInterfaceOperationInputs("activate-restconf",
-                    "interfaceName", "operationName")
+                "interfaceName", "operationName")
         } returns operationInputs
 
         val operationOutputs = hashMapOf<String, JsonNode>()
         every {
             bluePrintRuntime.resolveNodeTemplateInterfaceOperationOutputs("activate-restconf",
-                    "interfaceName", "operationName")
+                "interfaceName", "operationName")
         } returns operationOutputs
         every { bluePrintRuntime.put("sample-step-step-outputs", any()) } returns Unit
 

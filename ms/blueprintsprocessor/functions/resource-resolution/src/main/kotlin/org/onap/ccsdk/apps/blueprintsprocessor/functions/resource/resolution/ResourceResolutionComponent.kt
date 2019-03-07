@@ -27,20 +27,33 @@ import org.springframework.stereotype.Component
 
 @Component("component-resource-resolution")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-open class ResourceResolutionComponent(private val resourceResolutionService: ResourceResolutionService) : AbstractComponentFunction() {
+open class ResourceResolutionComponent(private val resourceResolutionService: ResourceResolutionService) :
+    AbstractComponentFunction() {
 
     override fun process(executionRequest: ExecutionServiceInput) {
 
+        val properties: MutableMap<String, Any> = mutableMapOf()
+
+        try {
+            val key = getOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY)
+            val storeResult = getOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT)
+            properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY] = key.asText()
+            properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] = storeResult.asBoolean()
+        } catch (e: BluePrintProcessorException) {
+            // NoOp - these property aren't mandatory, so don't fail the process if not provided.
+        }
+
         val artifactPrefixNamesNode = getOperationInput(ResourceResolutionConstants.INPUT_ARTIFACT_PREFIX_NAMES)
-
         val artifactPrefixNames = JacksonUtils.getListFromJsonNode(artifactPrefixNamesNode, String::class.java)
-                ?: throw BluePrintProcessorException("couldn't transform ${artifactPrefixNamesNode.asText()} to string array")
 
-        val resolvedParamContents = resourceResolutionService.resolveResources(bluePrintRuntimeService, nodeTemplateName, artifactPrefixNames)
+        val resolvedParamContents = resourceResolutionService.resolveResources(bluePrintRuntimeService,
+            nodeTemplateName,
+            artifactPrefixNames,
+            properties)
 
         // Set Output Attributes
         bluePrintRuntimeService.setNodeTemplateAttributeValue(nodeTemplateName,
-                ResourceResolutionConstants.OUTPUT_ASSIGNMENT_PARAMS, resolvedParamContents.asJsonNode())
+            ResourceResolutionConstants.OUTPUT_ASSIGNMENT_PARAMS, resolvedParamContents.asJsonNode())
     }
 
     override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {

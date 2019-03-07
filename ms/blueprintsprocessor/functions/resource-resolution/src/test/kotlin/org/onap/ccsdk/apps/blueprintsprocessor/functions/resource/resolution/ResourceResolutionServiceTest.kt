@@ -26,7 +26,11 @@ import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInp
 import org.onap.ccsdk.apps.blueprintsprocessor.core.utils.PayloadUtils
 import org.onap.ccsdk.apps.blueprintsprocessor.db.BluePrintDBLibConfiguration
 import org.onap.ccsdk.apps.blueprintsprocessor.db.primary.DBLibGenericService
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor.*
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor.CapabilityResourceResolutionProcessor
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor.DatabaseResourceAssignmentProcessor
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor.DefaultResourceResolutionProcessor
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor.InputResourceResolutionProcessor
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor.RestResourceResolutionProcessor
 import org.onap.ccsdk.apps.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
@@ -85,7 +89,7 @@ class ResourceResolutionServiceTest {
         // Prepare Inputs
         PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService, executionServiceInput.payload, "resource-assignment")
 
-        resourceResolutionService.resolveResources(bluePrintRuntimeService, "resource-assignment", "baseconfig")
+        resourceResolutionService.resolveResources(bluePrintRuntimeService, "resource-assignment", "baseconfig", mapOf())
 
     }
 
