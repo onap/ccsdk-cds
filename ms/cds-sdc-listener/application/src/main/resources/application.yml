@@ -1,0 +1,17 @@
+listenerservice:
+    config:
+      asdcAddress: localhost:8443
+      messageBusAddress: localhost
+      user: vid
+      password: Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U
+      pollingInterval: 15
+      pollingTimeout: 15
+      relevantArtifactTypes: TOSCA_CSAR
+      consumerGroup: cds-id-local
+      environmentName: AUTO
+      consumerId: cds-id-local
+      keyStorePassword:
+      keyStorePath:
+      activateServerTLSAuth : false
+      isUseHttpsWithDmaap: false
+

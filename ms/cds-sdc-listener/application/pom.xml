@@ -36,6 +36,21 @@
       <artifactId>spring-boot-devtools</artifactId>
       <optional>true</optional>
     </dependency>
+
+    <!-- SDC Distribution client dependency -->
+    <dependency>
+      <groupId>org.onap.sdc.sdc-distribution-client</groupId>
+      <artifactId>sdc-distribution-client</artifactId>
+      <version>1.3.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jmockit</groupId>
+      <artifactId>jmockit</artifactId>
+      <version>1.19</version>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 
   <build>
