@@ -21,6 +21,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { IResources } from 'src/app/common/core/store/models/resources.model';
+import { IAppState } from '../../../common/core/store/state/app.state';
+import { LoadResourcesSuccess } from 'src/app/common/core/store/actions/resources.action';
 
 @Component({
   selector: 'app-resource-creation',
@@ -29,25 +32,32 @@ import { Store } from '@ngrx/store';
 })
 export class ResourceCreationComponent implements OnInit {
 
-  myFile: File; /* property of File type */
+  myFile: any;
   selectedValue: any;
-  constructor() {
+  constructor(private store: Store<IAppState>) {
   }
 
   ngOnInit() {  
   }
     
-  fileChange(files: any) {
-    console.log(files);
-    this.myFile = files[0].nativeElement;
-  }
-  upload(){
+  upload(value){
+    this.myFile=value; 
+ }
     
-  }
+ updateResourcesState() {
+    let fileReader = new FileReader();
+    fileReader.readAsText(this.myFile);
+    var me = this;
+    fileReader.onload = function () {
+    var data: IResources = JSON.parse(fileReader.result.toString());
+    me.store.dispatch(new LoadResourcesSuccess(data));
+    console.log(data);
+    }
+ }
 
-  selectedOption(value){
+ selectedOption(value){
     this.selectedValue=value;
     console.log(this.selectedValue);        
-}
+ }
  
 }

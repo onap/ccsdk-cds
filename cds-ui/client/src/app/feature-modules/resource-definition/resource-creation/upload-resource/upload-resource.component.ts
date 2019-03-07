@@ -18,7 +18,13 @@
 * ============LICENSE_END=========================================================
 */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { IResources } from 'src/app/common/core/store/models/resources.model';
+import { IResourcesState } from 'src/app/common/core/store/models/resourcesState.model';
+import { LoadResourcesSuccess } from 'src/app/common/core/store/actions/resources.action';
+import { IAppState } from '../../../../common/core/store/state/app.state';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-upload-resource',
@@ -27,9 +33,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UploadResourceComponent implements OnInit {
 
-  constructor() { }
+  @Output() fileData = new EventEmitter();
+  file: File;
+  localResourcesData: IResources;
+  fileText: object[];
+  blueprintState: IResourcesState;
+  bpState: Observable<IResourcesState>;
+
+  constructor(private store: Store<IAppState>) { }
 
   ngOnInit() {
   }
 
+  fileChanged(e: any) {
+    this.file = e.target.files[0];
+    this.fileData.emit(this.file);  
+  }
+  
 }

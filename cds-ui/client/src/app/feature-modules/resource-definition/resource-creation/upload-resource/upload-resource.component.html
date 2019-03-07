@@ -19,4 +19,6 @@
 */-->
 
 
-<input type="file" accept=".json">
+<div>
+    <input #myInput type="file" accept=".json" (change)="fileChanged($event)">
+</div>

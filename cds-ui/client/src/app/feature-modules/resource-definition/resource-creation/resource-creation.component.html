@@ -34,10 +34,10 @@
   </mat-step>
   <mat-step [stepControl]="step2FormGroup">
     <ng-template matStepLabel>Browse or Search Resources</ng-template>
-  <app-upload-resource (change)="fileChange(fileupload.files)"></app-upload-resource><br><br>
+  <app-upload-resource (fileData)=upload($event)></app-upload-resource><br><br>
   <app-existing-model></app-existing-model>
     <div>
-      <button mat-button matStepperNext class="matStepNextBtn">Upload</button>
+      <button mat-button matStepperNext (click)="updateResourcesState()" class="matStepNextBtn">Upload</button>
     </div>
   </mat-step>
  </mat-vertical-stepper>
