@@ -24,19 +24,23 @@
       "file": "Definitions/policy_types.json"
     }
   ],
-  "dsl_definitions" : {
+  "dsl_definitions": {
+    "dynamic-netconf-properties": {
+      "device-name": "netconf device",
+      "host-name": "sample-host"
+    },
     "dynamic-rest-source": {
-      "type" : "basic-type",
-      "url" : "http://localhost:8080",
-      "userId" : {
+      "type": "basic-type",
+      "url": "http://localhost:8080",
+      "userId": {
         "get_input": "rest-user-name"
       }
     },
     "dynamic-db-source": {
-      "type" : "maria-db",
-      "url" : "jdbc:mysql://localhost:3306/sdnctl",
-      "username" : "sdnctl",
-      "password" : {
+      "type": "maria-db",
+      "url": "jdbc:mysql://localhost:3306/sdnctl",
+      "username": "sdnctl",
+      "password": {
         "get_attribute": [
           "BPP",
           "dynamic-db-source.password"
@@ -241,7 +245,8 @@
                   "script-type": "jython",
                   "script-class-reference": "Scripts/python/NetconfRpcExample.py",
                   "instance-dependencies": [
-                  ]
+                  ],
+                  "dynamic-properties": "*dynamic-netconf-properties"
                 },
                 "outputs": {
                   "response-data": "",

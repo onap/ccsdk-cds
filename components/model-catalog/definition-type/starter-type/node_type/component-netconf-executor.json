@@ -50,6 +50,11 @@
               "entry_schema": {
                 "type": "string"
               }
+            },
+            "dynamic-properties": {
+              "description": "Dynamic Json Content or DSL Json reference.",
+              "required": false,
+              "type": "json"
             }
           },
           "outputs": {

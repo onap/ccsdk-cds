@@ -54,6 +54,11 @@
               "description": "Action Name of the process",
               "required": false,
               "type": "string"
+            },
+            "dynamic-properties": {
+              "description": "Dynamic Json Content or DSL Json reference.",
+              "required": false,
+              "type": "json"
             }
           },
           "outputs": {
