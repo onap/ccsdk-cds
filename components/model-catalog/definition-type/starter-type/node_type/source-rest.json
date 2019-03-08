@@ -14,6 +14,23 @@
         }
       ]
     },
+    "verb": {
+      "required": false,
+      "type": "string",
+      "default": "GET",
+      "constraints": [
+        {
+          "valid_values": [
+            "GET", "POST", "DELETE", "PUT"
+          ]
+        }
+      ]
+    },
+    "payload": {
+      "required": false,
+      "type": "string",
+      "default": ""
+    },
     "endpoint-selector": {
       "required": false,
       "type": "string"
