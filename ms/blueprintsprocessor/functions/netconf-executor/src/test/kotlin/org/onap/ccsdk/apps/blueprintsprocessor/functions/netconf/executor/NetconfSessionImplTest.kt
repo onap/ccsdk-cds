@@ -15,13 +15,18 @@
  */
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor
 
+import org.apache.sshd.client.channel.ChannelSubsystem
+import org.apache.sshd.client.session.ClientSessionImpl
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
+import org.junit.Test
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.core.NetconfRpcServiceImpl
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.core.NetconfSessionImpl
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.mocks.NetconfDeviceSimulator
+import java.util.concurrent.atomic.AtomicReference
+import kotlin.script.experimental.api.asSuccess
 
 class NetconfSessionImplTest {
 
@@ -61,5 +66,46 @@ class NetconfSessionImplTest {
 
         Assert.assertTrue(!netconfSession.getDeviceCapabilitiesSet().isEmpty())
     }
+
+    @Test
+    fun testNetconfSessionconnect() {
+        val netconfSession = NetconfSessionImpl(deviceInfo!!, NetconfRpcServiceImpl(deviceInfo!!))
+        netconfSession.connect()
+        Assert.assertTrue(netconfSession.sessionstatus("Open"))
+    }
+
+    @Test
+    fun testNetconfSessionreconnect() {
+        val netconfSession = NetconfSessionImpl(deviceInfo!!, NetconfRpcServiceImpl(deviceInfo!!))
+        netconfSession.connect()
+        netconfSession.reconnect()
+        Assert.assertTrue(netconfSession.sessionstatus("Open"))
+
+    }
+    @Test
+    fun testNetconfSessiondisconnect() {
+        val netconfSession = NetconfSessionImpl(deviceInfo!!, NetconfRpcServiceImpl(deviceInfo!!))
+        netconfSession.connect()
+        netconfSession.disconnect()
+        Assert.assertTrue(netconfSession.sessionstatus("Close"))
+
+    }
+    @Test
+    fun testNetconfSessioncheckAndReestablish() {
+        val netconfSession = NetconfSessionImpl(deviceInfo!!, NetconfRpcServiceImpl(deviceInfo!!))
+        netconfSession.connect()
+        netconfSession.checkAndReestablish()
+        Assert.assertTrue(netconfSession.sessionstatus("Open"))
+
+
+    }
+    @Test
+    fun testNetconfSessionconnecgetDeviceInfo() {
+        val netconfSession = NetconfSessionImpl(deviceInfo!!, NetconfRpcServiceImpl(deviceInfo!!))
+        netconfSession.connect()
+        Assert.assertNotNull(netconfSession.getDeviceInfo())
+        Assert.assertFalse(!netconfSession.getDeviceCapabilitiesSet().isEmpty())
+    }
+
 
 }
