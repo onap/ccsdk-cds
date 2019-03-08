@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.HttpMethod
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
@@ -39,11 +40,10 @@ import kotlin.test.assertNotNull
 @ContextConfiguration(classes = [BluePrintRestLibConfiguration::class, BlueprintPropertyConfiguration::class,
     SampleController::class, BluePrintProperties::class, BluePrintProperties::class])
 @TestPropertySource(properties =
-["server.port=9111",
-    "blueprintsprocessor.restclient.sample.type=basic-auth",
-    "blueprintsprocessor.restclient.sample.url=http://127.0.0.1:9111",
-    "blueprintsprocessor.restclient.sample.userId=sampleuser",
-    "blueprintsprocessor.restclient.sample.token=sampletoken"])
+["blueprintsprocessor.restclient.sample.type=basic-auth",
+    "blueprintsprocessor.restclient.sample.url=http://127.0.0.1:8080",
+    "blueprintsprocessor.restclient.sample.username=sampleuser",
+    "blueprintsprocessor.restclient.sample.password=sampletoken"])
 class RestClientServiceTest {
 
     @Autowired
@@ -51,11 +51,10 @@ class RestClientServiceTest {
 
     @Test
     fun testBaseAuth() {
-
         val restClientService = bluePrintRestLibPropertyService.blueprintWebClientService("sample")
         val headers = mutableMapOf<String, String>()
         headers["X-Transaction-Id"] = "1234"
-        val response = restClientService.getResource("/sample/name", headers, String::class.java)
+        val response = restClientService.exchangeResource(HttpMethod.GET.name, "/sample/name", "")
         assertNotNull(response, "failed to get response")
     }
 

@@ -19,19 +19,23 @@ package org.onap.ccsdk.apps.blueprintsprocessor.rest
 open class RestClientProperties {
     lateinit var type: String
     lateinit var url: String
-    lateinit var userId: String
 }
 
 open class BasicAuthRestClientProperties : RestClientProperties() {
+    lateinit var password: String
+    lateinit var username: String
+}
+
+open class TokenAuthRestClientProperties : RestClientProperties() {
     var token: String? = null
 }
 
 open class SSLBasicAuthRestClientProperties : RestClientProperties() {
     lateinit var keyStoreInstance: String // JKS, PKCS12
     lateinit var sslTrust: String
-    lateinit var sslTrustPasswd: String
+    lateinit var sslTrustPassword: String
     lateinit var sslKey: String
-    lateinit var sslKeyPasswd: String
+    lateinit var sslKeyPassword: String
 }
 
 open class DME2RestClientProperties : RestClientProperties() {

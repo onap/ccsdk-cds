@@ -19,9 +19,8 @@ package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.pr
 
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
-import com.fasterxml.jackson.databind.node.MissingNode
-import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
+import org.apache.commons.collections.MapUtils
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.RestResourceSource
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
@@ -41,6 +40,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
+import java.util.*
 
 /**
  * RestResourceResolutionProcessor
@@ -63,11 +63,11 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
             validate(resourceAssignment)
 
             // Check if It has Input
-            val value = raRuntimeService.getInputValue(resourceAssignment.name)
-            if (value !is MissingNode && value !is NullNode) {
-                logger.info("primary-db source template key (${resourceAssignment.name}) found from input and value is ($value)")
+            try {
+                val value = raRuntimeService.getInputValue(resourceAssignment.name)
+                logger.info("rest source template key (${resourceAssignment.name}) found from input and value is ($value)")
                 ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, value)
-            } else {
+            } catch (e: BluePrintProcessorException) {
                 val dName = resourceAssignment.dictionaryName
                 val dSource = resourceAssignment.dictionarySource
                 val resourceDefinition = resourceDictionaries[dName]
@@ -78,17 +78,22 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                     checkNotNull(resourceSource.properties) { "failed to get source properties for $dName " }
                 val sourceProperties =
                     JacksonUtils.getInstanceFromMap(resourceSourceProperties, RestResourceSource::class.java)
-
-                val urlPath =
-                    checkNotNull(sourceProperties.urlPath) { "failed to get request urlPath for $dName under $dSource properties" }
                 val path = nullToEmpty(sourceProperties.path)
                 val inputKeyMapping =
                     checkNotNull(sourceProperties.inputKeyMapping) { "failed to get input-key-mappings for $dName under $dSource properties" }
+                val resolvedInputKeyMapping = populateInputKeyMappingVariables(inputKeyMapping)
+
+                // Resolving content Variables
+                val payload = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.payload), resolvedInputKeyMapping)
+                val urlPath =
+                    resolveFromInputKeyMapping(checkNotNull(sourceProperties.urlPath), resolvedInputKeyMapping)
+                val verb = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.verb), resolvedInputKeyMapping)
 
                 logger.info("$dSource dictionary information : ($urlPath), ($inputKeyMapping), (${sourceProperties.outputKeyMapping})")
                 // Get the Rest Client Service
                 val restClientService = blueprintWebClientService(resourceAssignment, sourceProperties)
-                val response = restClientService.getResource(urlPath, String::class.java)
+
+                val response = restClientService.exchangeResource(verb, urlPath, payload)
                 if (response.isBlank()) {
                     logger.warn("Failed to get $dSource result for dictionary name ($dName) using urlPath ($urlPath)")
                 } else {
@@ -104,8 +109,8 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
         }
     }
 
-    open fun blueprintWebClientService(resourceAssignment: ResourceAssignment,
-                                       restResourceSource: RestResourceSource): BlueprintWebClientService {
+    private fun blueprintWebClientService(resourceAssignment: ResourceAssignment,
+                                          restResourceSource: RestResourceSource): BlueprintWebClientService {
         return if (checkNotEmpty(restResourceSource.endpointSelector)) {
             val restPropertiesJson = raRuntimeService.resolveDSLExpression(restResourceSource.endpointSelector!!)
             blueprintRestLibPropertyService.blueprintWebClientService(restPropertiesJson)
@@ -179,6 +184,29 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                 ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, objectNode)
             }
         }
+    }
+
+    private fun populateInputKeyMappingVariables(inputKeyMapping: Map<String, String>): Map<String, Any> {
+        val resolvedInputKeyMapping = HashMap<String, Any>()
+        if (MapUtils.isNotEmpty(inputKeyMapping)) {
+            for ((key, value) in inputKeyMapping) {
+                val expressionValue = raRuntimeService.getResolutionStore(value).asText()
+                logger.trace("Reference dictionary key ({}), value ({})", key, expressionValue)
+                resolvedInputKeyMapping[key] = expressionValue
+            }
+        }
+        return resolvedInputKeyMapping
+    }
+
+    private fun resolveFromInputKeyMapping(valueToResolve: String, keyMapping: Map<String, Any>): String {
+        if (valueToResolve.isEmpty() || !valueToResolve.contains("$")) {
+            return valueToResolve
+        }
+        var res = valueToResolve
+        for (entry in keyMapping.entries) {
+            res = res.replace(("\\$" + entry.key).toRegex(), entry.value.toString())
+        }
+        return res
     }
 
     @Throws(BluePrintProcessorException::class)

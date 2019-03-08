@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Copyright © 2017-2019 AT&T, Bell Canada
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,31 +16,15 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.rest.service
 
+import org.apache.http.message.BasicHeader
 import org.onap.ccsdk.apps.blueprintsprocessor.rest.RestClientProperties
-import org.springframework.web.reactive.function.client.WebClient
 
 class DME2ProxyRestClientService(restClientProperties: RestClientProperties) : BlueprintWebClientService {
-    override fun webClient(): WebClient {
+    override fun headers(): Array<BasicHeader> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun <T> getResource(path: String, responseType: Class<T>): T {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun <T> getResource(path: String, headers: Map<String, String>?, responseType: Class<T>): T {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun <T> postResource(path: String, request: Any, responseType: Class<T>): T {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun <T> postResource(path: String, headers: Map<String, String>?, request: Any, responseType: Class<T>): T {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun <T> exchangeResource(methodType: String, path: String, request: Any, responseType: Class<T>): T {
+    override fun host(uri: String): String {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

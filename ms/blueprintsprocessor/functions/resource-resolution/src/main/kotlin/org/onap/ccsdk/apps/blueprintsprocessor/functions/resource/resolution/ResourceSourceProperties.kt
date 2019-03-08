@@ -48,6 +48,9 @@ open class DatabaseResourceSource : ResourceSourceProperties() {
 }
 
 open class RestResourceSource : ResourceSourceProperties() {
+    lateinit var verb: String
+    @get:JsonProperty("payload")
+    var payload: String? = null
     lateinit var type: String
     @get:JsonProperty("endpoint-selector")
     var endpointSelector: String? = null

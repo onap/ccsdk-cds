@@ -24,7 +24,13 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
-import org.onap.ccsdk.apps.controllerblueprints.core.*
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.apps.controllerblueprints.core.checkNotEmpty
+import org.onap.ccsdk.apps.controllerblueprints.core.checkNotEmptyOrThrow
+import org.onap.ccsdk.apps.controllerblueprints.core.nullToEmpty
+import org.onap.ccsdk.apps.controllerblueprints.core.returnNotEmptyOrThrow
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
@@ -36,7 +42,6 @@ class ResourceAssignmentUtils {
         private val logger: EELFLogger = EELFManager.getInstance().getLogger(ResourceAssignmentUtils::class.toString())
 
         // TODO("Modify Value type from Any to JsonNode")
-        @Synchronized
         @Throws(BluePrintProcessorException::class)
         fun setResourceDataValue(resourceAssignment: ResourceAssignment,
                                  raRuntimeService: ResourceAssignmentRuntimeService, value: Any?) {
@@ -85,7 +90,6 @@ class ResourceAssignmentUtils {
 
         }
 
-        @Synchronized
         fun setFailedResourceDataValue(resourceAssignment: ResourceAssignment, message: String?) {
             if (checkNotEmpty(resourceAssignment.name)) {
                 resourceAssignment.updatedDate = Date()
@@ -95,7 +99,6 @@ class ResourceAssignmentUtils {
             }
         }
 
-        @Synchronized
         @Throws(BluePrintProcessorException::class)
         fun assertTemplateKeyValueNotNull(resourceAssignment: ResourceAssignment) {
             val resourceProp = checkNotNull(resourceAssignment.property) { "Failed to populate mandatory resource resource mapping $resourceAssignment" }
@@ -105,7 +108,6 @@ class ResourceAssignmentUtils {
             }
         }
 
-        @Synchronized
         @Throws(BluePrintProcessorException::class)
         fun generateResourceDataForAssignments(assignments: List<ResourceAssignment>): String {
             val result: String
@@ -139,10 +141,6 @@ class ResourceAssignmentUtils {
             return resourceAssignmentRuntimeService
         }
 
-        /*
-         * Populate the Field property type for the Data type
-         */
-        @Synchronized
         @Throws(BluePrintProcessorException::class)
         fun getPropertyType(raRuntimeService: ResourceAssignmentRuntimeService, dataTypeName: String, propertyName: String): String {
             lateinit var type: String
