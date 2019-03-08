@@ -23,9 +23,9 @@ import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintEnhancerService
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
-import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintFileUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.utils.ResourceDictionaryUtils
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -56,11 +56,15 @@ open class BluePrintEnhancerServiceImpl(private val bluePrintTypeEnhancerService
             bluePrintTypeEnhancerService.enhanceServiceTemplate(blueprintRuntimeService, "service_template",
                     blueprintRuntimeService.bluePrintContext().serviceTemplate)
 
+            log.info("##### Enhancing blueprint Resource Definitions")
+            val resourceDefinitions = resourceDefinitionEnhancerService.enhance(bluePrintTypeEnhancerService,
+                    blueprintRuntimeService)
+
             // Write the Enhanced Blueprint Definitions
             BluePrintFileUtils.writeEnhancedBluePrint(blueprintRuntimeService.bluePrintContext())
 
-            // Enhance Resource Dictionary
-            enhanceResourceDefinition(blueprintRuntimeService)
+            // Write the Enhanced Blueprint Resource Definitions
+            ResourceDictionaryUtils.writeResourceDefinitionTypes(basePath, resourceDefinitions)
 
             if (blueprintRuntimeService.getBluePrintError().errors.isNotEmpty()) {
                 throw BluePrintException(blueprintRuntimeService.getBluePrintError().errors.toString())
@@ -71,11 +75,6 @@ open class BluePrintEnhancerServiceImpl(private val bluePrintTypeEnhancerService
         }
 
         return blueprintRuntimeService.bluePrintContext()
-    }
-
-    private fun enhanceResourceDefinition(blueprintRuntimeService: BluePrintRuntimeService<*>) {
-        log.info("##### Enhancing blueprint Resource Definitions")
-        resourceDefinitionEnhancerService.enhance(blueprintRuntimeService)
     }
 
 }

@@ -23,18 +23,21 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.utils.ResourceDictionaryUtils
 import org.onap.ccsdk.apps.controllerblueprints.service.ResourceDefinitionRepoService
+import org.onap.ccsdk.apps.controllerblueprints.service.utils.BluePrintEnhancerUtils
 import org.springframework.stereotype.Service
 
 interface ResourceDefinitionEnhancerService {
 
     @Throws(BluePrintException::class)
-    fun enhance(bluePrintRuntimeService: BluePrintRuntimeService<*>)
+    fun enhance(bluePrintTypeEnhancerService: BluePrintTypeEnhancerService,
+                bluePrintRuntimeService: BluePrintRuntimeService<*>): List<ResourceDefinition>
 }
 
 @Service
@@ -45,7 +48,6 @@ class ResourceDefinitionEnhancerServiceImpl(private val resourceDefinitionRepoSe
 
     companion object {
         const val ARTIFACT_TYPE_MAPPING_SOURCE: String = "artifact-mapping-resource"
-        const val PROPERTY_DEPENDENCY_NODE_TEMPLATES = "dependency-node-templates"
     }
 
     // Enhance the Resource Definition
@@ -53,15 +55,21 @@ class ResourceDefinitionEnhancerServiceImpl(private val resourceDefinitionRepoSe
     // 2. Get all the Unique Resource assignments from all mapping files
     // 3. Collect the Resource Definition for Resource Assignment names from database.
     // 4. Create the Resource Definition under blueprint base path.
-    override fun enhance(bluePrintRuntimeService: BluePrintRuntimeService<*>) {
+    override fun enhance(bluePrintTypeEnhancerService: BluePrintTypeEnhancerService,
+                         bluePrintRuntimeService: BluePrintRuntimeService<*>): List<ResourceDefinition> {
+
+        var resourceDefinitions: List<ResourceDefinition> = mutableListOf()
 
         val blueprintContext = bluePrintRuntimeService.bluePrintContext()
 
         val mappingFiles = getAllResourceMappingFiles(blueprintContext)
         log.info("resources assignment files ($mappingFiles)")
         if (mappingFiles != null) {
-            getResourceDefinition(blueprintContext, mappingFiles)
+            resourceDefinitions = getResourceDefinition(blueprintContext, mappingFiles)
+            // Enriching Resource Definition Sources
+            enrichResourceDefinitionSources(bluePrintRuntimeService.bluePrintContext(), resourceDefinitions)
         }
+        return resourceDefinitions
     }
 
     // Get all the Mapping files from all node templates.
@@ -80,42 +88,54 @@ class ResourceDefinitionEnhancerServiceImpl(private val resourceDefinitionRepoSe
     }
 
     // Convert file content to ResourceAssignments asynchronously
-    private fun getResourceDefinition(blueprintContext: BluePrintContext, files: List<String>) {
-        runBlocking {
-            val blueprintBasePath = blueprintContext.rootPath
-            val deferredResourceAssignments = mutableListOf<Deferred<List<ResourceAssignment>>>()
-            for (file in files) {
-                log.info("processing file ($file)")
-                deferredResourceAssignments += async {
-                    ResourceDictionaryUtils.getResourceAssignmentFromFile("$blueprintBasePath/$file")
-                }
+    private fun getResourceDefinition(blueprintContext: BluePrintContext, files: List<String>) = runBlocking {
+        val blueprintBasePath = blueprintContext.rootPath
+        val deferredResourceAssignments = mutableListOf<Deferred<List<ResourceAssignment>>>()
+        for (file in files) {
+            log.info("processing file ($file)")
+            deferredResourceAssignments += async {
+                ResourceDictionaryUtils.getResourceAssignmentFromFile("$blueprintBasePath/$file")
             }
-
-            val resourceAssignments = mutableListOf<ResourceAssignment>()
-            for (deferredResourceAssignment in deferredResourceAssignments) {
-                resourceAssignments.addAll(deferredResourceAssignment.await())
-            }
-
-            val distinctResourceAssignments = resourceAssignments.distinctBy { it.name }
-            generateResourceDictionaryFile(blueprintBasePath, distinctResourceAssignments)
-            //log.info("distinct Resource assignment ($distinctResourceAssignments)")
         }
+
+        val resourceAssignments = mutableListOf<ResourceAssignment>()
+        for (deferredResourceAssignment in deferredResourceAssignments) {
+            resourceAssignments.addAll(deferredResourceAssignment.await())
+        }
+
+        val distinctResourceAssignments = resourceAssignments.distinctBy { it.name }
+        generateResourceDictionary(blueprintBasePath, distinctResourceAssignments)
+        //log.info("distinct Resource assignment ($distinctResourceAssignments)")
     }
 
+
     // Read the Resource Definitions from the Database and write to type file.
-    private fun generateResourceDictionaryFile(blueprintBasePath: String, resourceAssignments: List<ResourceAssignment>) {
+    private fun generateResourceDictionary(blueprintBasePath: String, resourceAssignments: List<ResourceAssignment>)
+            : List<ResourceDefinition> {
         val resourceKeys = resourceAssignments.mapNotNull { it.dictionaryName }.distinct().sorted()
         log.info("distinct resource keys ($resourceKeys)")
 
         //TODO("Optimise DB single Query to multiple Query")
-        // Collect the Resource Definition from database and convert to map to save in file
-        val resourceDefinitionMap = resourceKeys.map { resourceKey ->
+        return resourceKeys.map { resourceKey ->
             getResourceDefinition(resourceKey)
-        }.map { it.name to it }.toMap()
+        }
+    }
 
-        // Recreate the Resource Definition File
-        ResourceDictionaryUtils.writeResourceDefinitionTypes(blueprintBasePath, resourceDefinitionMap)
-        log.info("resource definition file created successfully")
+    private fun enrichResourceDefinitionSources(bluePrintContext: BluePrintContext,
+                                                resourceDefinitions: List<ResourceDefinition>) {
+        val sources = resourceDefinitions
+                .map { it.sources }
+                .map {
+                    it.values
+                            .map { nodeTemplate ->
+                                nodeTemplate.type
+                            }
+                }
+                .flatten().distinct()
+        log.info("Enriching Resource Definition sources Node Template: $sources")
+        sources.forEach {
+            BluePrintEnhancerUtils.populateNodeType(bluePrintContext, resourceDefinitionRepoService, it)
+        }
     }
 
     // Get the Resource Definition from Database

@@ -85,6 +85,12 @@ object ResourceDictionaryUtils {
                 ?: throw BluePrintProcessorException("couldn't get ResourceAssignment definitions for the file($filePath)")
     }
 
+    fun writeResourceDefinitionTypes(basePath: String, resourceDefinitions: List<ResourceDefinition>) {
+        val resourceDefinitionMap = resourceDefinitions.map { it.name to it }.toMap()
+        writeResourceDefinitionTypes(basePath, resourceDefinitionMap)
+
+    }
+
     fun writeResourceDefinitionTypes(basePath: String, resourceDefinitionMap: Map<String, ResourceDefinition>) {
         val typePath = basePath.plus(File.separator).plus(BluePrintConstants.TOSCA_DEFINITIONS_DIR)
                 .plus(File.separator).plus("${ResourceDictionaryConstants.PATH_RESOURCE_DEFINITION_TYPE}.json")

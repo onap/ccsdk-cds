@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +19,13 @@ package org.onap.ccsdk.apps.controllerblueprints.service.enhancer
 
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeTemplate
-import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeType
-import org.onap.ccsdk.apps.controllerblueprints.core.format
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintNodeTemplateEnhancer
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintRepoService
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.apps.controllerblueprints.service.utils.BluePrintEnhancerUtils
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
@@ -51,23 +50,13 @@ open class BluePrintNodeTemplateEnhancerImpl(private val bluePrintRepoService: B
 
         val nodeTypeName = nodeTemplate.type
         // Get NodeType from Repo and Update Service Template
-        val nodeType = populateNodeType(nodeTypeName)
+        val nodeType = BluePrintEnhancerUtils.populateNodeType(bluePrintContext, bluePrintRepoService, nodeTypeName)
 
         // Enrich NodeType
         bluePrintTypeEnhancerService.enhanceNodeType(bluePrintRuntimeService, nodeTypeName, nodeType)
 
         //Enrich Node Template Artifacts
         enhanceNodeTemplateArtifactDefinition(name, nodeTemplate)
-    }
-
-
-    open fun populateNodeType(nodeTypeName: String): NodeType {
-
-        val nodeType = bluePrintContext.serviceTemplate.nodeTypes?.get(nodeTypeName)
-                ?: bluePrintRepoService.getNodeType(nodeTypeName)
-                ?: throw BluePrintException(format("Couldn't get NodeType({}) from repo.", nodeTypeName))
-        bluePrintContext.serviceTemplate.nodeTypes?.put(nodeTypeName, nodeType)
-        return nodeType
     }
 
     open fun enhanceNodeTemplateArtifactDefinition(nodeTemplateName: String, nodeTemplate: NodeTemplate) {
