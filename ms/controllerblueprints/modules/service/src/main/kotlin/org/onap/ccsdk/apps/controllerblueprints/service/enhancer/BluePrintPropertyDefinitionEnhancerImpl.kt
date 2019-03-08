@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,8 +44,9 @@ open class BluePrintPropertyDefinitionEnhancerImpl(private val bluePrintRepoServ
         this.bluePrintContext = bluePrintRuntimeService.bluePrintContext()
 
         val propertyType = propertyDefinition.type
-        if (BluePrintTypes.validPrimitiveTypes().contains(propertyType)) {
-
+        if (BluePrintTypes.validPrimitiveTypes().contains(propertyType)
+                || BluePrintTypes.validComplexTypes().contains(propertyType)) {
+            // Do Nothing,
         } else if (BluePrintTypes.validCollectionTypes().contains(propertyType)) {
             val entrySchema = propertyDefinition.entrySchema
                     ?: throw BluePrintException("Entry Schema is missing for collection property($name)")

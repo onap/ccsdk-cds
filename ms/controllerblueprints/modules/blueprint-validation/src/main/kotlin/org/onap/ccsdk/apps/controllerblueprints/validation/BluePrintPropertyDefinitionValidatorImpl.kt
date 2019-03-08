@@ -51,6 +51,9 @@ open class BluePrintPropertyDefinitionValidatorImpl(private val bluePrintTypeVal
             BluePrintTypes.validPrimitiveTypes().contains(dataType) -> {
                 // Do Nothing
             }
+            BluePrintTypes.validComplexTypes().contains(dataType) -> {
+                // Do Nothing
+            }
             BluePrintTypes.validCollectionTypes().contains(dataType) -> {
                 val entrySchemaType: String = propertyDefinition.entrySchema?.type
                         ?: throw BluePrintException(format("Entry schema for DataType ({}) for the property ({}) not found", dataType, name))

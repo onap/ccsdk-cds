@@ -41,6 +41,7 @@ interface BluePrintValidatorService : Serializable {
     fun validateBlueprint(serviceTemplate: ServiceTemplate, properties: MutableMap<String, Any>)
 }
 
+@Deprecated("Decomposed implementation moved to blueprint-validation module")
 open class BluePrintValidatorDefaultService : BluePrintValidatorService {
 
     val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintValidatorDefaultService::class.toString())
