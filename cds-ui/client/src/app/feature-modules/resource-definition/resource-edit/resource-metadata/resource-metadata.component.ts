@@ -22,7 +22,6 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { IResources } from 'src/app/common/core/store/models/resources.model';
 import { IResourcesState } from 'src/app/common/core/store/models/resourcesState.model';
-import { IResourcesMetaData } from '../../../../common/core/store/models/resourcesMetadata.model';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { IAppState } from '../../../../common/core/store/state/app.state';
