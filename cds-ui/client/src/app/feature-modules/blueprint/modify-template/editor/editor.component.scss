@@ -25,13 +25,15 @@ limitations under the License.
     margin-top: 8px;
     .fileViewContainer {
         width: 20%;
-        margin: 2px
+        margin: 2px;
+        height: 450px !important;
+        overflow-x: scroll;
+        overflow-y: scroll;
     }
     .editorConatiner {
         width: 80%;
         background-color: gainsboro;
         height: 450px !important;
-        margin-left: 5em;
     }
 }
 

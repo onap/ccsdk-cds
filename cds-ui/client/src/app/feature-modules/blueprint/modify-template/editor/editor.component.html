@@ -42,7 +42,64 @@ limitations under the License.
         <ace-editor [(text)]="text" mode="json" #editor class="aceEditor"></ace-editor>
     </div>
 </div>
-<div style="position:relative">
+<!-- <div style="position:relative">
     <button mat-button class="savebtn" (click)="updateBlueprint();SaveToBackend()">Save</button>
-    <button mat-button class="savebtn" (click)="download();">Download</button>
+    <button mat-button class="savebtn" style="margin-left: 82px;" (click)="download();">Download</button>
+</div>
+
+<div>
+    <mat-form-field>
+        <select matNativeControl required>
+          <option value="volvo">SDC</option>
+          <option value="saab">CCSDK</option>
+        </select>
+    </mat-form-field>
+    <button  mat-button class="savebtn">Deploy</button>
+    <button  mat-button class="savebtn">Save</button>
+</div> -->
+
+<div style="display: flex;flex-direction: row">
+    <div style="height: 6em;
+    width: 30em;">
+
+    </div>
+    <div style="height: 6em;
+    width: 16em">
+    <button style="margin: 0.5em;
+        background-color: #3f51b5;
+        color: white;
+        border-radius: 2em;
+        padding: 0.5em;
+        min-width: 6em;">Save Changes</button>
+    </div>
+    <div style="height: 6em;
+    width: 100%;">
+    <div style="margin-left: 38em">
+        <mat-form-field>
+            <select matNativeControl required>
+              <option value="volvo">SDC</option>
+              <option value="saab">CCSDK</option>
+            </select>
+        </mat-form-field>
+        <button style="margin: 0.5em;
+        background-color: #3f51b5;
+        color: white;
+        border-radius: 2em;
+        padding: 0.5em;
+        min-width: 6em;">Deploy</button>
+        <button style="margin: 0.5em;
+        background-color: #3f51b5;
+        color: white;
+        border-radius: 2em;
+        padding: 0.5em;
+        min-width: 6em;">Save</button>
+        <button style="margin: 0.5em;
+        background-color: #3f51b5;
+        color: white;
+        border-radius: 2em;
+        padding: 0.5em;
+        min-width: 6em;">Download</button>
+
+    </div>
+    </div>
 </div>
