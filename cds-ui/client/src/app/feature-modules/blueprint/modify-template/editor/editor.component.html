@@ -39,7 +39,7 @@ limitations under the License.
         </mat-tree>
     </div>
     <div class="editorConatiner">
-        <ace-editor [(text)]="text" mode="json" #editor class="aceEditor"></ace-editor>
+        <ace-editor [(text)]="text" [(mode)]="mode" #editor class="aceEditor"></ace-editor>
     </div>
 </div>
 <!-- <div style="position:relative">
@@ -65,7 +65,7 @@ limitations under the License.
     </div>
     <div style="height: 6em;
     width: 16em">
-    <button style="margin: 0.5em;
+        <button style="margin: 0.5em;
         background-color: #3f51b5;
         color: white;
         border-radius: 2em;
@@ -74,32 +74,32 @@ limitations under the License.
     </div>
     <div style="height: 6em;
     width: 100%;">
-    <div style="margin-left: 38em">
-        <mat-form-field>
-            <select matNativeControl required>
+        <div style="margin-left: 38em">
+            <mat-form-field>
+                <select matNativeControl required>
               <option value="volvo">SDC</option>
               <option value="saab">CCSDK</option>
             </select>
-        </mat-form-field>
-        <button style="margin: 0.5em;
+            </mat-form-field>
+            <button style="margin: 0.5em;
         background-color: #3f51b5;
         color: white;
         border-radius: 2em;
         padding: 0.5em;
         min-width: 6em;">Deploy</button>
-        <button style="margin: 0.5em;
+            <button style="margin: 0.5em;
         background-color: #3f51b5;
         color: white;
         border-radius: 2em;
         padding: 0.5em;
         min-width: 6em;">Save</button>
-        <button style="margin: 0.5em;
+            <button style="margin: 0.5em;
         background-color: #3f51b5;
         color: white;
         border-radius: 2em;
         padding: 0.5em;
         min-width: 6em;">Download</button>
 
-    </div>
+        </div>
     </div>
 </div>

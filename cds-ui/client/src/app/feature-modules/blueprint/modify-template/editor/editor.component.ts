@@ -79,6 +79,8 @@ export class EditorComponent implements OnInit {
   selectedFile: string;
   zipFolder: any;
   blueprintName: string;
+  fileExtension: string;
+  mode: string;
   private zipFile: JSZip = new JSZip();
 
   private transformer = (node: Node, level: number) => {
@@ -145,22 +147,21 @@ export class EditorComponent implements OnInit {
         // this.editor.getEditor().getSession().setMode("ace/mode/json");
         this.editor.getEditor().getSession().setTabSize(2);
         this.editor.getEditor().getSession().setUseWrapMode(true);
-        // this.editor.getEditor().setValue(JSON.stringify(this.blueprintdata, null, '\t'));
-        // console.log(this.text);
+        this.setEditorMode();
       })
   }
 
   updateBlueprint() {
     console.log(this.blueprint);
-    this.filesData.forEach(fileNode=>{
-      if(fileNode.name.includes(this.blueprintName.trim()) && fileNode.name.includes(this.selectedFile.trim())) {
+    this.filesData.forEach(fileNode => {
+      if (fileNode.name.includes(this.blueprintName.trim()) && fileNode.name.includes(this.selectedFile.trim())) {
         fileNode.data = this.text;
-      } else if(fileNode.name.includes(this.selectedFile.trim())) {
+      } else if (fileNode.name.includes(this.selectedFile.trim())) {
         fileNode.data = this.text;
       }
     });
 
-    if(this.selectedFile == this.blueprintName) {
+    if (this.selectedFile == this.blueprintName) {
       this.blueprint = JSON.parse(this.text);
     } else {
       this.blueprint = this.blueprintdata;
@@ -183,12 +184,15 @@ export class EditorComponent implements OnInit {
         this.text = fileNode.data;
       }
     })
+    this.fileExtension = this.selectedFile.substr(this.selectedFile.lastIndexOf('.') + 1);
+    // console.log(this.fileExtension);
+    this.setEditorMode();
   }
 
   SaveToBackend() {
     this.zipFile.generateAsync({ type: "blob" })
       .then(blob => {
-        
+
       });
   }
 
@@ -196,7 +200,7 @@ export class EditorComponent implements OnInit {
     // to do
   }
 
-  create() {    
+  create() {
     this.filesData.forEach((path) => {
       this.zipFile.file(path.name, path.data);
     });
@@ -209,5 +213,30 @@ export class EditorComponent implements OnInit {
       .then(blob => {
         saveAs(blob, zipFilename);
       });
+  }
+  setEditorMode() {
+    switch (this.fileExtension) {
+      case "xml":
+        // console.log("xml mode set");
+        this.mode = 'xml';
+        break;
+      case "py":
+        console.log("python mode set");
+        this.mode = 'python';
+        break;
+      case "kts":
+        // console.log("kotlin mode set");
+        this.mode = 'kotlin';
+        break;
+      case "txt":
+        this.mode = 'text';
+        break;
+      case "meta":
+        this.mode = 'text';
+        break;
+      default:
+        this.mode = 'json';
+        console.log("json mode set");
+    }
   }
 }
