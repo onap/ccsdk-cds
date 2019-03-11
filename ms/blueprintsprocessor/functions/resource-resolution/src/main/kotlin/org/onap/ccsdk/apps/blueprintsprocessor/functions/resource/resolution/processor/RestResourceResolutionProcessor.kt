@@ -19,8 +19,6 @@ package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.pr
 
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
-import com.fasterxml.jackson.databind.node.ObjectNode
-import org.apache.commons.collections.MapUtils
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.RestResourceSource
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
@@ -40,7 +38,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
-import java.util.*
 
 /**
  * RestResourceResolutionProcessor
@@ -81,7 +78,7 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                 val path = nullToEmpty(sourceProperties.path)
                 val inputKeyMapping =
                     checkNotNull(sourceProperties.inputKeyMapping) { "failed to get input-key-mappings for $dName under $dSource properties" }
-                val resolvedInputKeyMapping = populateInputKeyMappingVariables(inputKeyMapping)
+                val resolvedInputKeyMapping = resolveInputKeyMappingVariables(inputKeyMapping)
 
                 // Resolving content Variables
                 val payload = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.payload), resolvedInputKeyMapping)
@@ -170,7 +167,9 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
             }
             else -> {
                 // Complex Types
-                val objectNode = responseNode as ObjectNode
+                entrySchemaType =
+                    returnNotEmptyOrThrow(resourceAssignment.property?.entrySchema?.type) { "Entry schema is not defined for dictionary ($dName) info" }
+                val objectNode = JsonNodeFactory.instance.objectNode()
                 outputKeyMapping.map {
                     val responseKeyValue = responseNode.get(it.key)
                     val propertyTypeForDataType =
@@ -184,29 +183,6 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                 ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, objectNode)
             }
         }
-    }
-
-    private fun populateInputKeyMappingVariables(inputKeyMapping: Map<String, String>): Map<String, Any> {
-        val resolvedInputKeyMapping = HashMap<String, Any>()
-        if (MapUtils.isNotEmpty(inputKeyMapping)) {
-            for ((key, value) in inputKeyMapping) {
-                val expressionValue = raRuntimeService.getResolutionStore(value).asText()
-                logger.trace("Reference dictionary key ({}), value ({})", key, expressionValue)
-                resolvedInputKeyMapping[key] = expressionValue
-            }
-        }
-        return resolvedInputKeyMapping
-    }
-
-    private fun resolveFromInputKeyMapping(valueToResolve: String, keyMapping: Map<String, Any>): String {
-        if (valueToResolve.isEmpty() || !valueToResolve.contains("$")) {
-            return valueToResolve
-        }
-        var res = valueToResolve
-        for (entry in keyMapping.entries) {
-            res = res.replace(("\\$" + entry.key).toRegex(), entry.value.toString())
-        }
-        return res
     }
 
     @Throws(BluePrintProcessorException::class)

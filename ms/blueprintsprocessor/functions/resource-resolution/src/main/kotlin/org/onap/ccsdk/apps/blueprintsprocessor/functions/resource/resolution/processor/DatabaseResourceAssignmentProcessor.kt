@@ -37,7 +37,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Service
-import java.util.*
 
 /**
  * DatabaseResourceAssignmentProcessor
@@ -77,12 +76,16 @@ open class DatabaseResourceAssignmentProcessor(private val dBLibGenericService: 
                 val sql = checkNotNull(sourceProperties.query) { "failed to get request query for $dName under $dSource properties" }
                 val inputKeyMapping = checkNotNull(sourceProperties.inputKeyMapping) { "failed to get input-key-mappings for $dName under $dSource properties" }
 
-                logger.info("$dSource dictionary information : ($sql), ($inputKeyMapping), (${sourceProperties.outputKeyMapping})")
+                val resolvedInputKeyMapping = resolveInputKeyMappingVariables(inputKeyMapping)
+
+                val resolvedSql = resolveFromInputKeyMapping(sql, resolvedInputKeyMapping)
+
+                logger.info("$dSource dictionary information : ($resolvedSql), ($inputKeyMapping), (${sourceProperties.outputKeyMapping})")
                 val jdbcTemplate = blueprintDBLibService(sourceProperties)
 
-                val rows = jdbcTemplate.queryForList(sql, populateNamedParameter(inputKeyMapping))
+                val rows = jdbcTemplate.queryForList(resolvedSql, resolvedInputKeyMapping)
                 if (rows.isNullOrEmpty()) {
-                    logger.warn("Failed to get $dSource result for dictionary name ($dName) the query ($sql)")
+                    logger.warn("Failed to get $dSource result for dictionary name ($dName) the query ($resolvedSql)")
                 } else {
                     populateResource(resourceAssignment, sourceProperties, rows)
                 }
@@ -113,17 +116,6 @@ open class DatabaseResourceAssignmentProcessor(private val dBLibGenericService: 
         checkEqualsOrThrow(ResourceDictionaryConstants.SOURCE_PRIMARY_DB, resourceAssignment.dictionarySource) {
             "resource assignment source is not ${ResourceDictionaryConstants.SOURCE_PRIMARY_DB} but it is ${resourceAssignment.dictionarySource}"
         }
-    }
-
-    private fun populateNamedParameter(inputKeyMapping: Map<String, String>): Map<String, Any> {
-        val namedParameters = HashMap<String, Any>()
-        inputKeyMapping.forEach {
-            val expressionValue = raRuntimeService.getDictionaryStore(it.value).textValue()
-            logger.trace("Reference dictionary key (${it.key}) resulted in value ($expressionValue)")
-            namedParameters[it.key] = expressionValue
-        }
-        logger.info("Parameter information : ({})", namedParameters)
-        return namedParameters
     }
 
     @Throws(BluePrintProcessorException::class)
