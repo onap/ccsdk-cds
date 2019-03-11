@@ -37,7 +37,7 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
     lateinit var raRuntimeService: ResourceAssignmentRuntimeService
     lateinit var resourceDictionaries: MutableMap<String, ResourceDefinition>
 
-    var scriptPropertyInstances: Map<String, Any> = hashMapOf()
+    var scriptPropertyInstances: MutableMap<String, Any> = hashMapOf()
 
     /**
      * This will be called from the scripts to serve instance from runtime to scripts.

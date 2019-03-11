@@ -11,7 +11,7 @@
       "type": "source-capability",
       "properties": {
         "script-type": "jython",
-        "script-class-reference": "SampleRAProcessor",
+        "script-class-reference": "Scripts/python/SampleRAProcessor.py",
         "instance-dependencies": []
       }
     }

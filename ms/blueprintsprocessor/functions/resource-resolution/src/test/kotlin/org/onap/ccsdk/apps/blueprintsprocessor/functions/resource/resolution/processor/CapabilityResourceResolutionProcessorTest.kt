@@ -21,6 +21,7 @@ package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.pr
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
+import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
 import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.scripts.BlueprintJythonService
 import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.scripts.PythonExecutorProperty
 import org.onap.ccsdk.apps.controllerblueprints.core.data.PropertyDefinition
@@ -36,7 +37,8 @@ import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [CapabilityResourceResolutionProcessor::class, BluePrintScriptsServiceImpl::class,
+@ContextConfiguration(classes = [CapabilityResourceResolutionProcessor::class, ComponentFunctionScriptingService::class,
+    BluePrintScriptsServiceImpl::class,
     BlueprintJythonService::class, PythonExecutorProperty::class, MockCapabilityService::class])
 @TestPropertySource(properties =
 ["blueprints.processor.functions.python.executor.modulePaths=./../../../../components/scripts/python/ccsdk_blueprints",
@@ -62,9 +64,11 @@ class CapabilityResourceResolutionProcessorTest {
         scriptPropertyInstances["mock-service1"] = MockCapabilityService()
         scriptPropertyInstances["mock-service2"] = MockCapabilityService()
 
+        val instanceDependencies: List<String> = listOf()
+
         val resourceAssignmentProcessor = capabilityResourceResolutionProcessor
-                .getKotlinResourceAssignmentProcessorInstance(
-                        "ResourceAssignmentProcessor_cba\$ScriptResourceAssignmentProcessor", scriptPropertyInstances)
+                .scriptInstance("kotlin",
+                        "ResourceAssignmentProcessor_cba\$ScriptResourceAssignmentProcessor", instanceDependencies)
 
         assertNotNull(resourceAssignmentProcessor, "couldn't get kotlin script resource assignment processor")
 

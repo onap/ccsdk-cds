@@ -20,6 +20,7 @@ import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.scripts.Bluepr
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintScriptsService
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BlueprintFunctionNode
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationContext
@@ -34,19 +35,24 @@ class ComponentFunctionScriptingService(private val applicationContext: Applicat
 
     fun <T : AbstractComponentFunction> scriptInstance(componentFunction: AbstractComponentFunction, scriptType: String,
                                                        scriptClassReference: String,
-                                                       instanceDependencies: MutableList<String>): T {
+                                                       instanceDependencies: List<String>): T {
+
         log.info("creating component function of script type($scriptType), reference name($scriptClassReference) and " +
                 "instanceDependencies($instanceDependencies)")
 
         val scriptComponent: T = scriptInstance(componentFunction.bluePrintRuntimeService.bluePrintContext(),
                 scriptType, scriptClassReference)
-        populateScriptDependencies(scriptComponent, instanceDependencies)
+       // Populate Instance Properties
+        instanceDependencies.forEach { instanceDependency ->
+            componentFunction.functionDependencyInstances[instanceDependency] = applicationContext
+                    .getBean(instanceDependency)
+        }
         return scriptComponent
     }
 
 
-    fun <T : AbstractComponentFunction> scriptInstance(bluePrintContext: BluePrintContext, scriptType: String,
-                                                       scriptClassReference: String): T {
+    fun <T : BlueprintFunctionNode<*, *>> scriptInstance(bluePrintContext: BluePrintContext, scriptType: String,
+                                                         scriptClassReference: String): T {
         var scriptComponent: T? = null
 
         when (scriptType) {
@@ -66,12 +72,4 @@ class ComponentFunctionScriptingService(private val applicationContext: Applicat
         return scriptComponent
     }
 
-
-    private fun populateScriptDependencies(componentFunction: AbstractComponentFunction,
-                                   instanceDependencies: MutableList<String>) {
-        instanceDependencies.forEach { instanceDependency ->
-            componentFunction.functionDependencyInstances[instanceDependency] = applicationContext
-                    .getBean(instanceDependency)
-        }
-    }
 }

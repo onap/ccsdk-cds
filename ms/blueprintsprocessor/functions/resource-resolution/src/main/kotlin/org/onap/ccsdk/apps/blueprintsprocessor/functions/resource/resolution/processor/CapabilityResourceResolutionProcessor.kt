@@ -20,10 +20,8 @@ package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.pr
 
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.CapabilityResourceSource
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
-import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.scripts.BlueprintJythonService
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintScriptsService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory
@@ -31,14 +29,16 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
-import java.io.File
 
 @Service("${PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-capability")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-open class CapabilityResourceResolutionProcessor(private var applicationContext: ApplicationContext,
-                                                 private val bluePrintScriptsService: BluePrintScriptsService,
-                                                 private val bluePrintJythonService: BlueprintJythonService) :
-        ResourceAssignmentProcessor() {
+open class CapabilityResourceResolutionProcessor(private val applicationContext: ApplicationContext,
+                                                 private var componentFunctionScriptingService: ComponentFunctionScriptingService)
+    : ResourceAssignmentProcessor() {
+
+    private val log = LoggerFactory.getLogger(CapabilityResourceResolutionProcessor::class.java)
+
+    var componentResourceAssignmentProcessor: ResourceAssignmentProcessor? = null
 
     override fun getName(): String {
         return "${PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-capability"
@@ -62,118 +62,43 @@ open class CapabilityResourceResolutionProcessor(private var applicationContext:
 
         val scriptType = capabilityResourceSourceProperty.scriptType
         val scriptClassReference = capabilityResourceSourceProperty.scriptClassReference
+        val instanceDependencies = capabilityResourceSourceProperty.instanceDependencies ?: listOf()
 
-        var componentResourceAssignmentProcessor: ResourceAssignmentProcessor? = null
+        componentResourceAssignmentProcessor = scriptInstance(scriptType, scriptClassReference, instanceDependencies)
 
-        when (scriptType) {
-            BluePrintConstants.SCRIPT_KOTLIN -> {
-                componentResourceAssignmentProcessor = getKotlinResourceAssignmentProcessorInstance(scriptClassReference,
-                        capabilityResourceSourceProperty.instanceDependencies)
-            }
-            BluePrintConstants.SCRIPT_INTERNAL -> {
-                // Initialize Capability Resource Assignment Processor
-                componentResourceAssignmentProcessor = applicationContext.getBean(scriptClassReference, ResourceAssignmentProcessor::class.java)
-            }
-            BluePrintConstants.SCRIPT_JYTHON -> {
-                val content = getJythonContent(scriptClassReference)
-                componentResourceAssignmentProcessor = getJythonResourceAssignmentProcessorInstance(scriptClassReference,
-                        content, capabilityResourceSourceProperty.instanceDependencies)
-            }
+        checkNotNull(componentResourceAssignmentProcessor) {
+            "failed to get capability resource assignment processor($scriptClassReference)"
         }
 
-        checkNotNull(componentResourceAssignmentProcessor) { "failed to get capability resource assignment processor($scriptClassReference)" }
-
         // Assign Current Blueprint runtime and ResourceDictionaries
-        componentResourceAssignmentProcessor.raRuntimeService = raRuntimeService
-        componentResourceAssignmentProcessor.resourceDictionaries = resourceDictionaries
+        componentResourceAssignmentProcessor!!.raRuntimeService = raRuntimeService
+        componentResourceAssignmentProcessor!!.resourceDictionaries = resourceDictionaries
 
         // Invoke componentResourceAssignmentProcessor
-        componentResourceAssignmentProcessor.apply(resourceAssignment)
+        componentResourceAssignmentProcessor!!.apply(resourceAssignment)
     }
 
     override fun recover(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
-
-        TODO("To Implement")
-    }
-
-    private fun getKotlinResourceAssignmentProcessorInstance(scriptClassName: String,
-                                                             instanceNames: List<String>? = null): ResourceAssignmentProcessor {
-        var scriptPropertyInstances: MutableMap<String, Any>? = null
-
-        if (instanceNames != null && instanceNames.isNotEmpty()) {
-            scriptPropertyInstances = hashMapOf()
-            instanceNames.forEach {
-                scriptPropertyInstances[it] = applicationContext.getBean(it)
-                        ?: throw BluePrintProcessorException("couldn't get the dependency instance($it)")
-            }
+        log.info("Recovering for : ${resourceAssignment.name} : ${runtimeException.toString()}")
+        if (componentResourceAssignmentProcessor != null) {
+            componentResourceAssignmentProcessor!!.recover(runtimeException, resourceAssignment)
         }
-
-        return getKotlinResourceAssignmentProcessorInstance(scriptClassName, scriptPropertyInstances)
-
     }
 
-    fun getKotlinResourceAssignmentProcessorInstance(scriptClassName: String,
-                                                     scriptPropertyInstances: MutableMap<String, Any>? = null):
-            ResourceAssignmentProcessor {
+    fun scriptInstance(scriptType: String, scriptClassReference: String, instanceDependencies: List<String>)
+            : ResourceAssignmentProcessor {
 
-        val resourceAssignmentProcessor = bluePrintScriptsService
-                .scriptInstance<ResourceAssignmentProcessor>(raRuntimeService.bluePrintContext(),
-                        scriptClassName, false)
+        log.info("creating resource resolution of script type($scriptType), reference name($scriptClassReference) and" +
+                "instanceDependencies($instanceDependencies)")
 
-        // Add additional Instance
-        if (scriptPropertyInstances != null) {
-            resourceAssignmentProcessor.scriptPropertyInstances = scriptPropertyInstances
+        val scriptComponent = componentFunctionScriptingService
+                .scriptInstance<ResourceAssignmentProcessor>(raRuntimeService.bluePrintContext(), scriptType,
+                        scriptClassReference)
+
+        instanceDependencies.forEach { instanceDependency ->
+            scriptPropertyInstances[instanceDependency] = applicationContext
+                    .getBean(instanceDependency)
         }
-
-        return resourceAssignmentProcessor
-    }
-
-    private fun getJythonContent(instanceName: String): String {
-        val absolutePath = raRuntimeService.bluePrintContext().rootPath
-                .plus(File.separator)
-                .plus(BluePrintConstants.TOSCA_SCRIPTS_JYTHON_DIR)
-                .plus(File.separator)
-                .plus("$instanceName.py")
-
-        return JacksonUtils.getContent(absolutePath)
-
-    }
-
-    /**
-     * getJythonResourceAssignmentProcessorInstance Purpose: prepare the jython
-     * executor component as a resource assignment processor
-     *
-     * @param pythonClassName String
-     * @param content String
-     * @param dependencyInstances List<String>
-     * @return resourceAssignmentProcessor ResourceAssignmentProcessor
-     */
-    private fun getJythonResourceAssignmentProcessorInstance(pythonClassName: String, content: String,
-                                                             dependencyInstances: List<String>?):
-            ResourceAssignmentProcessor {
-        val jythonContextInstance: MutableMap<String, Any> = hashMapOf()
-        jythonContextInstance["log"] = LoggerFactory.getLogger(pythonClassName)
-        jythonContextInstance["raRuntimeService"] = raRuntimeService
-        dependencyInstances?.forEach { instanceName ->
-            jythonContextInstance[instanceName] = applicationContext.getBean(instanceName)
-        }
-
-        return getJythonResourceAssignmentProcessorInstance(pythonClassName, content, jythonContextInstance)
-    }
-
-    fun getJythonResourceAssignmentProcessorInstance(pythonClassName: String, content: String,
-                                                     dependencyInstances: MutableMap<String, Any>):
-            ResourceAssignmentProcessor {
-
-        val resourceAssignmentProcessor = bluePrintJythonService
-                .jythonInstance<ResourceAssignmentProcessor>(raRuntimeService.bluePrintContext(), pythonClassName,
-                        content, dependencyInstances)
-
-        // Add additional Instance
-        if (dependencyInstances != null) {
-            resourceAssignmentProcessor.scriptPropertyInstances = dependencyInstances
-        }
-
-        return resourceAssignmentProcessor
+        return scriptComponent
     }
 }

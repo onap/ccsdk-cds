@@ -22,6 +22,7 @@ import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.AbstractCompon
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.checkNotEmptyOrThrow
 import org.onap.ccsdk.apps.controllerblueprints.core.data.OperationAssignment
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BlueprintFunctionNode
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.Logger
@@ -55,7 +56,7 @@ class BlueprintJythonService(val pythonExecutorProperty: PythonExecutorProperty,
     }
 
     fun jythonComponentInstance(bluePrintContext: BluePrintContext, scriptClassReference: String):
-            AbstractComponentFunction {
+            BlueprintFunctionNode<*, *> {
         val blueprintBasePath: String = bluePrintContext.rootPath
 
         val pythonFileName = bluePrintContext.rootPath
@@ -74,7 +75,7 @@ class BlueprintJythonService(val pythonExecutorProperty: PythonExecutorProperty,
         val jythonInstances: MutableMap<String, Any> = hashMapOf()
         jythonInstances["log"] = LoggerFactory.getLogger(pythonClassName)
 
-        return jythonInstance<AbstractComponentFunction>(bluePrintContext, pythonClassName,
+        return jythonInstance<BlueprintFunctionNode<*, *>>(bluePrintContext, pythonClassName,
                 content, jythonInstances)
     }
 
