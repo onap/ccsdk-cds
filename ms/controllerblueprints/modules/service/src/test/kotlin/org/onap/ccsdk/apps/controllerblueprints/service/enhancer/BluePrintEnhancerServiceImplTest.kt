@@ -65,7 +65,7 @@ class BluePrintEnhancerServiceImplTest {
         val basePath = "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
 
         val targetPath = Paths.get("target", "bp-enhance").toUri().path
-
+        
         val bluePrintContext = bluePrintEnhancerService.enhance(basePath, targetPath)
         Assert.assertNotNull("failed to get blueprintContext ", bluePrintContext)
 
