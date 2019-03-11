@@ -160,7 +160,7 @@ export class EditorComponent implements OnInit {
       }
     });
 
-    if(this.selectedFile == this.blueprintName) {
+    if(this.selectedFile == this.blueprintName.trim()) {
       this.blueprint = JSON.parse(this.text);
     } else {
       this.blueprint = this.blueprintdata;
