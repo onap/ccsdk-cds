@@ -34,55 +34,16 @@ import { IAppState } from '../../../../common/core/store/state/app.state';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { IBlueprintState } from 'src/app/common/core/store/models/blueprintState.model';
-import { LoadBlueprintSuccess } from '../../../../common/core/store/actions/blueprint.action'
+import { LoadBlueprintSuccess, SetBlueprintState } from '../../../../common/core/store/actions/blueprint.action'
 
 
-interface FoodNode {
+interface Node {
   name: string;
-  children?: FoodNode[];
+  children?: Node[];
   data?: any
 }
 
-// const TREE_DATA: FoodNode[] = [
-//   {
-//     name: 'Definitions',
-//     children: [
-//       { name: 'activation-blueprint.json' },
-//       { name: 'artifacts_types.json' },
-//       { name: 'data_types.json' },
-//     ]
-//   },
-//   {
-//     name: 'Scripts',
-//     children: [
-//       {
-//         name: 'kotlin',
-//         children: [
-//           { name: 'ScriptComponent.cba.kts' },
-//           { name: 'ResourceAssignmentProcessor.cba.kts' },
-//         ]
-//       }
-//     ]
-//   },
-//   {
-//     name: 'Templates',
-//     children: [
-//       {
-//         name: 'baseconfig-template'
-//       }
-//     ]
-//   },
-//   {
-//     name: 'TOSCA-Metada',
-//     children: [
-//       {
-//         name: 'TOSCA.meta'
-//       }
-//     ]
-//   },
-// ];
-
-const TREE_DATA: FoodNode[] = [
+const TREE_DATA: Node[] = [
   {
     name: 'Definitions',
     children: [
@@ -117,9 +78,10 @@ export class EditorComponent implements OnInit {
   filesData: any = [];
   selectedFile: string;
   zipFolder: any;
+  blueprintName: string;
   private zipFile: JSZip = new JSZip();
 
-  private transformer = (node: FoodNode, level: number) => {
+  private transformer = (node: Node, level: number) => {
     return {
       expandable: !!node.children && node.children.length > 0,
       name: node.name,
@@ -172,6 +134,7 @@ export class EditorComponent implements OnInit {
         this.filesTree = blueprintdata.files;
         this.filesData = blueprintdata.filesData;
         this.dataSource.data = this.filesTree;
+        this.blueprintName = blueprintdata.name;
         let blueprint = [];
         for (let key in this.blueprintdata) {
           if (this.blueprintdata.hasOwnProperty(key)) {
@@ -188,13 +151,28 @@ export class EditorComponent implements OnInit {
   }
 
   updateBlueprint() {
-    if (this.selectedFile == 'activation-blueprint.json') {
-      // to do
+    console.log(this.blueprint);
+    this.filesData.forEach(fileNode=>{
+      if(fileNode.name.includes(this.blueprintName.trim()) && fileNode.name.includes(this.selectedFile.trim())) {
+        fileNode.data = this.text;
+      } else if(fileNode.name.includes(this.selectedFile.trim())) {
+        fileNode.data = this.text;
+      }
+    });
+
+    if(this.selectedFile == this.blueprintName) {
+      this.blueprint = JSON.parse(this.text);
     } else {
-      // to do
+      this.blueprint = this.blueprintdata;
     }
-    this.blueprint = JSON.parse(this.text);
-    this.store.dispatch(new LoadBlueprintSuccess(this.blueprint));
+
+    let blueprintState = {
+      blueprint: this.blueprint,
+      name: this.blueprintName,
+      files: this.filesTree,
+      filesData: this.filesData
+    }
+    this.store.dispatch(new SetBlueprintState(blueprintState));
     // console.log(this.text);
   }
 
