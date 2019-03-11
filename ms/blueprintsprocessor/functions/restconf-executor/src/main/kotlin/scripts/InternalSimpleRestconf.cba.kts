@@ -52,14 +52,12 @@ open class MountNEditConfigure : RestconfComponentFunction() {
 
     override fun process(executionRequest: ExecutionServiceInput) {
         val webClientService = restClientService("odlparent")
-        println("foi?")
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
-
 
 }
 
@@ -82,19 +80,3 @@ open class TestRestconfConfigure : RestconfComponentFunction() {
         log.info("recovering..")
     }
 }
-
-
-
-println("zzzzzzzzzzzzz")
-val x = MountNEditConfigure()
-println(x.getName())
-val executionServiceInput = ExecutionServiceInput().apply {
-    commonHeader = CommonHeader().apply {
-        requestId = "1234"
-    }
-    actionIdentifiers = ActionIdentifiers().apply {
-        actionName = "activate"
-    }
-    payload = JacksonUtils.jsonNode("{}") as ObjectNode
-}
-x.process(executionServiceInput);
