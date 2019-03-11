@@ -1,16 +1,10 @@
-<!-- QUESTION
-     lines 74-78 and 157-161: if I have to resolve the variables I need based on
-     the pnf id, do I need to specify a restconf-connection? Another point, the
-     connection is aimed to ODL, not to the PNF, so I am not sure what to fill
-     for this model (lines 122-137)
--->
 {
   "tosca_definitions_version" : "controller_blueprint_1_0_0",
   "metadata" : {
     "template_author" : "Rodrigo Ottero",
     "author-email" : "rodrigo.ottero@est.tech",
     "user-groups" : "ADMIN, OPERATION",
-    "template_name" : "pnf restconf",
+    "template_name" : "configuration_over_restconf",
     "template_version" : "1.0.0",
     "template_tags" : "pnf, restconf, config, configuration"
   },
@@ -90,15 +84,10 @@
           }
         }
       },
+
+
       "config-assign" : {
         "type" : "component-restconf-executor",
-        "requirements" : {
-          "restconf-connection" : {
-            "capability" : "restconf",
-            "node" : "sample-restconf-server",
-            "relationship" : "tosca.relationships.ConnectsTo"
-          }
-        },
         "interfaces" : {
           "ComponentRestconfExecutor" : {
             "operations" : {
@@ -107,12 +96,9 @@
                   "primary" : "component-script"
                 },
                 "inputs" : {
-                  "script-type" : "kotlin",
-                  "script-class-reference" : "Scripts/kotlin/RestconfAssignConfig.kts",
-                  "instance-dependencies" : [ ],
-                  "artifact-prefix-names": [
-                      "config-assign"
-                  ]
+                  "script-type" : "jython",
+                  "script-class-reference" : "Scripts/python/RestconfAssignConfig.py",
+                  "instance-dependencies" : [ ]
                 },
                 "outputs" : {
                   "response-data" : "",
@@ -132,11 +118,14 @@
             "file" : "Templates/config-assign-pnf-mapping.json"
           },
           "component-script" : {
-            "type" : "artifact-script-kotlin",
-            "file" : "Scripts/kotlin/RestconfAssignConfig.py"
+            "type" : "artifact-script-jython",
+            "file" : "Scripts/python/RestconfAssignConfig.py"
           }
         }
       },
+
+
+
       "configure-process" : {
         "type" : "dg-generic",
         "properties" : {
@@ -154,13 +143,6 @@
       },
       "configure" : {
         "type" : "component-restconf-executor",
-        "requirements" : {
-          "restconf-connection" : {
-            "capability" : "restconf",
-            "node" : "sample-restconf-server",
-            "relationship" : "tosca.relationships.ConnectsTo"
-          }
-        },
         "interfaces" : {
           "ComponentRestconfExecutor" : {
             "operations" : {
@@ -169,12 +151,9 @@
                   "primary" : "component-script"
                 },
                 "inputs" : {
-                  "script-type" : "kotlin",
-                  "script-class-reference" : "Scripts/kotlin/RestconfConfigure.kts",
-                  "instance-dependencies" : [ ],
-                  "artifact-prefix-names": [
-                      "configure-restconf-mount", "configure-restconf-unmount"
-                  ]
+                  "script-type" : "jython",
+                  "script-class-reference" : "Scripts/python/RestconfConfigure.py",
+                  "instance-dependencies" : [ ]
                 },
                 "outputs" : {
                   "response-data" : "",
@@ -198,28 +177,8 @@
             "file" : "Templates/configure-pnf-mapping.json"
           },
           "component-script" : {
-            "type" : "artifact-script-kotlin",
-            "file" : "Scripts/kotlin/RestconfConfigure.py"
-          }
-        }
-      },
-      "sample-restconf-device" : {
-        "type" : "pnf-netconf-device",
-        "capabilities" : {
-          "restconf" : {
-            "properties" : {
-              "login-key" : {
-                "get_input" : "password"
-              },
-              "login-account" : {
-                "get_input" : "username"
-              },
-              "target-ip-address" : {
-                "get_input" : "ip"
-              },
-              "port-number" : 830,
-              "connection-time-out" : 5
-            }
+            "type" : "artifact-script-jython",
+            "file" : "Scripts/python/RestconfConfigure.py"
           }
         }
       }

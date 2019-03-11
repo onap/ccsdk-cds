@@ -1,38 +1,3 @@
-<!-- QUESTION:
-     when using dictionary-source as capability, what else needs to be defined?
-     because these variables will be obtained based on the pnf_id -->
 [
-  {
-    "name": "pnf_id",
-    "input-param": true,
-    "property": {
-      "type": "string"
-    },
-    "dictionary-name": "pnf_id",
-    "dictionary-source": "capability",
-    "dependencies": [
-    ]
-  },
-  {
-    "name": "pnf_ip",
-    "input-param": true,
-    "property": {
-      "type": "string"
-    },
-    "dictionary-name": "pnf_ip",
-    "dictionary-source": "capability",
-    "dependencies": [
-    ]
-  },
-  {
-    "name": "pnf_ip_port",
-    "input-param": true,
-    "property": {
-      "type": "string"
-    },
-    "dictionary-name": "pnf_ip_port",
-    "dictionary-source": "capability",
-    "dependencies": [
-    ]
-  }
+
 ]

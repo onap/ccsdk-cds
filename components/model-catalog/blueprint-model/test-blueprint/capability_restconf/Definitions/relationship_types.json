@@ -1,9 +1,3 @@
 {
-  "relationship_types" : {
-    "tosca.relationships.ConnectsTo" : {
-      "description" : "Relationship tosca.relationships.ConnectsTo",
-      "version" : "1.0.0",
-      "derived_from" : "tosca.relationships.Root"
-    }
-  }
+  "relationship_types" : { }
 }
