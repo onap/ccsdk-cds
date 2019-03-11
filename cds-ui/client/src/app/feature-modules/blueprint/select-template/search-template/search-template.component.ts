@@ -81,6 +81,7 @@ export class SearchTemplateComponent implements OnInit {
     let data: IBlueprint = this.activationBlueprint ? JSON.parse(this.activationBlueprint.toString()) : this.activationBlueprint;
     let blueprintState = {
       blueprint: data,
+      name: this.blueprintName,
       files: this.tree,
       filesData: this.paths
     }
