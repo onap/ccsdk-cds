@@ -1,14 +1,14 @@
 <node xmlns="urn:TBD:params:xml:ns:yang:network-topology">
-    <node-id>$pnf_id</node-id>
+    <node-id>$pnf-id</node-id>
     <key-based xmlns="urn:opendaylight:netconf-node-topology">
         <key-id xmlns="urn:opendaylight:netconf-node-topology">ODL-private-key</key-id>
         <username xmlns="urn:opendaylight:netconf-node-topology">netconf</username>
      </key-based>
-    <host xmlns="urn:opendaylight:netconf-node-topology">$pnf_ip</host>
-    <port xmlns="urn:opendaylight:netconf-node-topology">$pnf_ip_port</port>
+    <host xmlns="urn:opendaylight:netconf-node-topology">$pnf-ip</host>
+    <port xmlns="urn:opendaylight:netconf-node-topology">6513</port>
     <tcp-only xmlns="urn:opendaylight:netconf-node-topology">false</tcp-only>
  	<protocol xmlns="urn:opendaylight:netconf-node-topology">
         <name xmlns="urn:opendaylight:netconf-node-topology">TLS</name>
     </protocol>
-    <max-connection-attempts xmlns="urn:opendaylight:netconf-node-topology">2</max-connection-attempts>
+    <max-connection-attempts xmlns="urn:opendaylight:netconf-node-topology">5</max-connection-attempts>
 </node>

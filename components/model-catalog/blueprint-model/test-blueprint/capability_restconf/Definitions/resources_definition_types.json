@@ -1,16 +1,1 @@
-{
-  "hostname" : {
-    "tags" : "hostname",
-    "name" : "hostname",
-    "property" : {
-      "description" : "hostname",
-      "type" : "string"
-    },
-    "updated-by" : "Singal, Kapil <ks220y@att.com>",
-    "sources" : {
-      "input" : {
-        "type" : "source-input"
-      }
-    }
-  }
-}
+{ }
