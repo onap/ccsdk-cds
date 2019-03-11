@@ -15,9 +15,12 @@ This makes SERVICE PROVIDER(S) more responsive to its customers and able to deli
 
 Design tools:
 =============
+.. toctree::
+   :maxdepth: 1
+   :glob:
 
-Controller Blueprint Archived
-Data dictionary
+   CBA/index
+   datadictionary/index
 
 
 Architecture:
