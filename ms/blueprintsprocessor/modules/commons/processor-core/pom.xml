@@ -24,7 +24,7 @@
         <version>0.4.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>core</artifactId>
+    <artifactId>processor-core</artifactId>
     <packaging>jar</packaging>
     <name>Blueprints Processor Core</name>
     <description>Blueprints Processor Core</description>

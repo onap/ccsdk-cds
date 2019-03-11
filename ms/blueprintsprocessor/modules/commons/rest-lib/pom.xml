@@ -34,7 +34,7 @@
         </dependency>
         <dependency>
             <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
-            <artifactId>core</artifactId>
+            <artifactId>processor-core</artifactId>
         </dependency>
     </dependencies>
 
