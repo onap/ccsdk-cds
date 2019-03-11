@@ -25,6 +25,7 @@ import { IBlueprint } from './blueprint.model';
 
 export interface IBlueprintState {
     blueprint: IBlueprint,
+    name?: string;
     files?: any;
     filesData?: any;
     isLoadSuccess?: boolean;

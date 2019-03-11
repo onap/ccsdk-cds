@@ -25,6 +25,7 @@ import { IBlueprint } from '../models/blueprint.model';
 
 export const initialBlueprintState : IBlueprintState = {
     blueprint : {} as IBlueprint,
+    name: '',
     files: [],
     filesData: [],
     isLoadSuccess: false,
