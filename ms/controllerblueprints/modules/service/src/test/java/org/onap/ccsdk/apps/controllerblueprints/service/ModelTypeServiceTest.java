@@ -28,7 +28,6 @@ import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants;
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ModelType;
 import org.onap.ccsdk.apps.controllerblueprints.service.handler.ModelTypeHandler;
-import org.onap.ccsdk.apps.controllerblueprints.service.rs.ModelTypeRestTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Commit;
@@ -45,7 +44,7 @@ import java.util.List;
 @ContextConfiguration(classes = {TestApplication.class})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ModelTypeServiceTest {
-    private static EELFLogger log = EELFManager.getInstance().getLogger(ModelTypeRestTest.class);
+    private static EELFLogger log = EELFManager.getInstance().getLogger(ModelTypeServiceTest.class);
     @Autowired
     private ModelTypeHandler modelTypeHandler;
 

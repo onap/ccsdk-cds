@@ -1,5 +1,6 @@
 /*
  * Copyright © 2019 Bell Canada Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +49,7 @@ import java.nio.file.Files
 import java.nio.file.Paths
 
 /**
- * BlueprintModelRestTest Purpose: Integration test at API level
+ * BlueprintModelControllerTest Purpose: Integration test at API level
  *
  * @author Vinal Patel
  * @version 1.0
@@ -60,7 +61,7 @@ import java.nio.file.Paths
 @ComponentScan(basePackages = ["org.onap.ccsdk.apps.controllerblueprints"])
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @EnableAutoConfiguration
-class BlueprintModelRestTest {
+class BlueprintModelControllerTest {
 
     companion object {
 
