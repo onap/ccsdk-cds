@@ -58,7 +58,7 @@ open class BluePrintArtifactDefinitionValidatorImpl(
         val completePath = bluePrintContext.rootPath.plus(File.separator).plus(file)
 
         check(File(completePath).exists()) {
-            throw BluePrintException("couldn't file ($completePath)")
+            throw BluePrintException("couldn't find file ($completePath)")
         }
 
         // Perform Extension Validation
