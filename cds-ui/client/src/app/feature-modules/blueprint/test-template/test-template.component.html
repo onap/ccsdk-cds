@@ -20,7 +20,7 @@ limitations under the License.
 -->
 <div style="display: flex;flex-direction: row">
 
-  <div style="width: 12%; height: 553px;">
+    <!-- <div style="width: 12%; height: 553px;">
 
       <mat-accordion>
           <mat-expansion-panel>
@@ -34,38 +34,32 @@ limitations under the License.
             </div>
           </mat-expansion-panel>
         </mat-accordion>
-  </div>
+  </div> -->
 
-  <div style="width: 90%;display: flex;flex-direction: row; margin-left: 1em">
-    <div style="width: 50%; margin: 2px;">
-      <p>Request</p>
-      <textarea style=" width: 99%;
-      min-height: 27rem;
-      font-family: Lucida Console, Monaco, monospace;
-      font-size: 0.8rem;
-      line-height: 1.2;" cols="30" rows="10">{{request }}</textarea>
-      <div style="height: 10%">
-          <button style="margin: 1em;
-          background-color: #3f51b5;
-          color: white;
-          border-radius: 2em;
-          padding: 0.5em;min-width: 6em;">Submit</button>
-          <button style="margin: 1em;
-          background-color: #3f51b5;
-          color: white;
-          border-radius: 2em;
-          padding: 0.5em;min-width: 6em;">Clear</button>
+    <div style="width: 100%;display: flex;flex-direction: row; margin-left: 1em">
+        <div style="width: 50%; margin: 2px; ">
+            <p>Request</p>
+            <!-- <textarea style=" width: 99%;
+  min-height: 27rem;
+  font-family: Lucida Console, Monaco, monospace;
+  font-size: 0.8rem;
+  line-height: 1.2;" cols="30" rows="10">{{request }}</textarea> -->
+            <ace-editor [(text)]="text" mode="json" [theme]="eclipse" [options]="options" #editor class="aceEditor"></ace-editor>
+            <div style="height: 10%">
+                <button class="button">Submit</button>
+                <button class="button">Clear</button>
+            </div>
+        </div>
+
+        <div style="width: 50%; margin: 2px;">
+            <p>Response</p>
+            <ace-editor [(text)]="text" mode="json" [theme]="eclipse" [options]="options" #editor class="aceEditor"></ace-editor>
+            <!-- <textarea style=" width: 99%;
+  min-height: 27rem;
+  font-family: Lucida Console, Monaco, monospace;
+  font-size: 0.8rem;
+  line-height: 1.2;" cols="30" rows="10"></textarea> -->
         </div>
     </div>
-
-    <div style="width: 50%; margin: 2px;">
-      <p>Response</p>
-      <textarea style=" width: 99%;
-      min-height: 27rem;
-      font-family: Lucida Console, Monaco, monospace;
-      font-size: 0.8rem;
-      line-height: 1.2;" cols="30" rows="10"></textarea>
-    </div>
-  </div>
 
 </div>
