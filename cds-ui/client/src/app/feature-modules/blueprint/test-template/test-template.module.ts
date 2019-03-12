@@ -24,6 +24,7 @@ import { CommonModule } from '@angular/common';
 import { TestTemplateComponent } from './test-template.component';
 import { TestTemplateRoutingModule } from './test-template-routing.module';
 import { AppMaterialModule } from '../../../common/modules/app-material.module';
+import { AceEditorModule } from 'ng2-ace-editor';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { AppMaterialModule } from '../../../common/modules/app-material.module';
   imports: [
     CommonModule,
     AppMaterialModule,
-    TestTemplateRoutingModule
+    TestTemplateRoutingModule,
+    AceEditorModule
   ]
 })
 export class TestTemplateModule { }
