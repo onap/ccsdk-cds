@@ -41,6 +41,10 @@ class NetconfClient:
                                                      persist, persist_id)
     return device_response
 
+  def invoke_rpc(self, rpc):
+    device_response = self.netconf_rpc_client.invokeRpc(rpc)
+    return device_response
+
   def cancel_commit(self, persist_id=""):
     device_response = self.netconf_rpc_client.cancelCommit(persist_id)
     return device_response
