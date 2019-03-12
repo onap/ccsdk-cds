@@ -57,6 +57,24 @@ interface NetconfRpcService {
                    editDefaultOperation: String = ModifyAction.NONE.action): DeviceResponse
 
     /**
+     * Invoke custom RPC as provided as input.
+     *
+     * Some use cases might required one to directly invoke a device
+     * specific RPC. The RPC must be correctly formatted.
+     *
+     * Ex: in order to rollback last submitted configuration
+     * for JUNOS devices, such RPC can be use:
+     * <code>
+     *  &lt;rpc>
+     *      &lt;load-configuration rollback="1"/>
+     *  &lt;/rpc>
+     * </code>
+     *
+     * @param rpc the rpc content.
+     */
+    fun invokeRpc(rpc: String): DeviceResponse
+
+    /**
      * Validate
      *
      * @param configTarget running or candidate, default candidate
