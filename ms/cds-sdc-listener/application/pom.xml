@@ -17,7 +17,8 @@
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>application</artifactId>
+  <groupId>org.onap.ccsdk.apps</groupId>
+  <artifactId>cds-sdc-listener-application</artifactId>
   <name>CDS-SDC Listener Application </name>
 
   <dependencies>

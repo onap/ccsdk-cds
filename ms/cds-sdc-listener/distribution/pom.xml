@@ -15,7 +15,8 @@
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>distribution</artifactId>
+  <groupId>org.onap.ccsdk.apps</groupId>
+  <artifactId>cds-sdc-listener-distribution</artifactId>
   <name>CDS-SDC Listener Distribution</name>
 
   <properties>
@@ -71,10 +72,10 @@
                   <build>
                     <cleanup>try</cleanup>
                     <dockerFileDir>${basedir}/target/docker-stage</dockerFileDir>
-                    <imagetags>
-                      <imageTag>${project.version}</imageTag>
-                      <imageTag>${project.version}-STAGING-${maven.build.timestamp}</imageTag>
-                    </imagetags>
+                    <tags>
+                      <tag>${project.version}</tag>
+                      <tag>${project.version}-STAGING-${maven.build.timestamp}</tag>
+                    </tags>
                   </build>
                 </image>
               </images>
