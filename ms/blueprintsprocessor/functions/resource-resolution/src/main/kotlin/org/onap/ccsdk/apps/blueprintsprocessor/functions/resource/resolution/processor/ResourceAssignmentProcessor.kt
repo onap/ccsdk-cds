@@ -17,8 +17,10 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor
 
+import com.fasterxml.jackson.databind.JsonNode
 import org.apache.commons.collections.MapUtils
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
+import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BlueprintFunctionNode
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintTemplateService
@@ -43,6 +45,17 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
     open fun <T> scriptPropertyInstanceType(name: String): T {
         return scriptPropertyInstances as? T
             ?: throw BluePrintProcessorException("couldn't get script property instance ($name)")
+    }
+
+    open fun getFromInput(resourceAssignment: ResourceAssignment): JsonNode? {
+        var value: JsonNode? = null
+        try {
+            value = raRuntimeService.getInputValue(resourceAssignment.name)
+            ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, value)
+        } catch (e: BluePrintProcessorException) {
+            // NoOp - couldn't find value from input
+        }
+        return value
     }
 
     open fun resourceDefinition(name: String): ResourceDefinition {
