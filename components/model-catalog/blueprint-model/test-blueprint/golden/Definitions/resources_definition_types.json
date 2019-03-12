@@ -1,0 +1,148 @@
+{
+  "create_netbox_ip" : {
+    "tags" : "oam-local-ipv4-address",
+    "name" : "create_netbox_ip",
+    "property" : {
+      "description" : "netbox ip",
+      "type" : "dt-netbox-ip"
+    },
+    "updated-by" : "adetalhouet",
+    "sources" : {
+      "primary-config-data" : {
+        "type" : "source-rest",
+        "properties" : {
+          "type" : "JSON",
+          "verb" : "POST",
+          "endpoint-selector" : "ipam-1",
+          "url-path" : "/api/ipam/prefixes/$prefix-id/available-ips/",
+          "path" : "",
+          "input-key-mapping" : {
+            "prefix-id" : "prefix-id"
+          },
+          "output-key-mapping" : {
+            "address" : "address",
+            "id" : "id"
+          },
+          "key-dependencies" : [ "prefix-id" ]
+        }
+      }
+    }
+  },
+  "hostname" : {
+    "tags" : "hostname",
+    "name" : "hostname",
+    "property" : {
+      "description" : "hostname",
+      "type" : "string"
+    },
+    "updated-by" : "adetalhouet",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      }
+    }
+  },
+  "interface-description" : {
+    "tags" : "interface-description",
+    "name" : "interface-description",
+    "property" : {
+      "description" : "interface-description",
+      "type" : "string"
+    },
+    "updated-by" : "adetalhouet",
+    "sources" : {
+      "capability" : {
+        "type" : "source-capability",
+        "properties" : {
+          "script-type" : "jython",
+          "script-class-reference" : "DescriptionExample",
+          "instance-dependencies" : [ ]
+        }
+      }
+    }
+  },
+  "interface-name" : {
+    "tags" : "interface-name",
+    "name" : "interface-name",
+    "property" : {
+      "description" : "interface-name",
+      "type" : "string"
+    },
+    "updated-by" : "adetalhouet",
+    "sources" : {
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      }
+    }
+  },
+  "prefix-id" : {
+    "tags" : "prefix-id",
+    "name" : "prefix-id",
+    "property" : {
+      "description" : "prefix-id",
+      "type" : "integer"
+    },
+    "updated-by" : "adetalhouet",
+    "sources" : {
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      }
+    }
+  },
+  "unit-number" : {
+    "tags" : "unit-number",
+    "name" : "unit-number",
+    "property" : {
+      "description" : "unit-number",
+      "type" : "string"
+    },
+    "updated-by" : "adetalhouet",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      }
+    }
+  },
+  "vf-module-number" : {
+    "tags" : "vf-module-number",
+    "name" : "vf-module-number",
+    "property" : {
+      "description" : "vf-module-number",
+      "type" : "string"
+    },
+    "updated-by" : "adetalhouet",
+    "sources" : {
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      }
+    }
+  },
+  "vf-module-type" : {
+    "tags" : "vf-module-type",
+    "name" : "vf-module-type",
+    "property" : {
+      "description" : "vf-module-type",
+      "type" : "string"
+    },
+    "updated-by" : "adetalhouet",
+    "sources" : {
+      "primary-db" : {
+        "type" : "source-primary-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select sdnctl.demo.value as value from sdnctl.demo where sdnctl.demo.id=:vfmoduleid",
+          "input-key-mapping" : {
+            "vfmoduleid" : "vf-module-number"
+          },
+          "output-key-mapping" : {
+            "vf-module-type" : "value"
+          },
+          "key-dependencies" : [ "vf-module-number" ]
+        }
+      }
+    }
+  }
+}

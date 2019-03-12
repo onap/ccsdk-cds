@@ -1,0 +1,15 @@
+{
+  "name" : "interface-name",
+  "tags" : "interface-name",
+  "updated-by" : "adetalhouet",
+  "property" : {
+    "description" : "interface-name",
+    "type" : "string"
+  },
+  "sources" : {
+    "input" : {
+      "type" : "source-input",
+      "properties" : { }
+    }
+  }
+}

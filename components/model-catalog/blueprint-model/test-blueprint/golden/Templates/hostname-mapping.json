@@ -1,0 +1,13 @@
+[
+  {
+    "name": "hostname",
+    "input-param": true,
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "hostname",
+    "dictionary-source": "input",
+    "dependencies": [
+    ]
+  }
+]
