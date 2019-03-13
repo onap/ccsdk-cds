@@ -19,51 +19,6 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-.outerDiv {
-    display: flex;
-    // align-items: center;
-    // justify-content: center;
-    margin: 1px;
-    padding: 16px;
-    border-radius: 8px;
-  }
-
-  .divone {
-    height: 100%;
-    width: 18%;
-    background-color: #D7D1D1;
-  }
-.divtwo {
-  height: 100%;
-    width: 100%;
-    background-color: #D7D1D1;
-}
-.divThree{
-  width: 30%;
-  height: 100%;
-  background-color: #D7D1D1;
-}
-
-.flex-container {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.flex-container > div {
-  background-color: #f1f1f1;
-  width: 53px;
-  margin: 2px;
-  text-align: center;
-  line-height: 53px;
-  font-size: 13px;
-}
-.cnv
-{
-  background-image: url('http://i.imgur.com/M3PFd.png');
-  background-position: 39px 32px;
-  background-repeat: repeat;
-  width: 100%
-}
 
 .modifyTemp {
     display: flex; 
@@ -72,35 +27,29 @@ limitations under the License.
     width: 100%
 }
 
-.mat-expansion-panel-header{
-  background-color: #3f51b5 !important; 
-}
-
-.mat-expansion-panel-header-title {
-  color: white !important;
-}
-
 .enrich-btn {
   cursor: pointer;
   position: absolute;
-  top: 4em;
-  right: 27em;
+  top: 3.6em;
+  right: 10em;
   padding: 6px;
   color: white;
   background-color:#3f51b5;
   margin-right: 2em;
-  border-radius: 2em; 
+  border-radius: 2em;
+  z-index: 1;
 }
 
 .toggle-view-btn {
   cursor: pointer;
   position: absolute;
-  top: 4em;
-  right: 20em;
+  top: 3.6em;
+  right: 3em;
   padding: 6px;
   color: white;
   background-color:#3f51b5;
-  border-radius: 2em
+  border-radius: 2em;
+  z-index: 1;
 }
 
 .editor-selector {
