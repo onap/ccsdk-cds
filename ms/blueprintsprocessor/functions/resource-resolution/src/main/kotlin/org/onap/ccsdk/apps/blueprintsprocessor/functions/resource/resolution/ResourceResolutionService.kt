@@ -182,6 +182,9 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                             resourceAssignmentProcessor.resourceDictionaries = resourceDictionaries
                             // Invoke Apply Method
                             resourceAssignmentProcessor.apply(resourceAssignment)
+
+                            // Set errors from RA
+                            blueprintRuntimeService.setBluePrintError(resourceAssignmentRuntimeService.getBluePrintError())
                         } catch (e: RuntimeException) {
                             throw BluePrintProcessorException(e)
                         }

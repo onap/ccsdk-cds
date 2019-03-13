@@ -57,6 +57,6 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
     }
 
     override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        bluePrintRuntimeService.getBluePrintError().addError(runtimeException.message!!)
     }
 }
