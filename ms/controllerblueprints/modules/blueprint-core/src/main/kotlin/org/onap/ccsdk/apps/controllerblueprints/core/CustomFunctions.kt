@@ -50,6 +50,10 @@ fun MutableMap<String, *>.asJsonNode(): JsonNode {
     return JacksonUtils.jsonNodeFromObject(this)
 }
 
+fun MutableMap<String, *>.asObjectNode(): ObjectNode {
+    return JacksonUtils.objectNodeFromObject(this)
+}
+
 fun format(message: String, vararg args: Any?): String {
     if (args != null && args.isNotEmpty()) {
         return MessageFormatter.arrayFormat(message, args).message
