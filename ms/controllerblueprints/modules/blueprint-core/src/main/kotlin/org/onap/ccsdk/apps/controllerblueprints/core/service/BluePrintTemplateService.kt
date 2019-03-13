@@ -34,34 +34,32 @@ open class BluePrintTemplateService {
     companion object {
 
         /**
-         * Generate Content from Velocity Template and JSON Content.
+         * Generate Content from Velocity Template and JSON Content or property map.
          */
-        fun generateContent(template: String, json: String,
+        fun generateContent(template: String, json: String = "",
                             ignoreJsonNull: Boolean = false,
-                            additionalContext: MutableMap<String, Any> = hashMapOf()): String {
+                            additionalContext: Map<String, Any> = hashMapOf()): String {
             Velocity.init()
             val mapper = ObjectMapper()
             val nodeFactory = BluePrintJsonNodeFactory()
-            mapper.setNodeFactory(nodeFactory)
-
-            val jsonNode = mapper.readValue<JsonNode>(json, JsonNode::class.java)
-                    ?: throw BluePrintProcessorException("couldn't get json node from json")
-
-            if (ignoreJsonNull)
-                JacksonUtils.removeJsonNullNode(jsonNode)
+            mapper.nodeFactory = nodeFactory
 
             val velocityContext = VelocityContext()
             velocityContext.put("StringUtils", StringUtils::class.java)
             velocityContext.put("BooleanUtils", BooleanUtils::class.java)
-            /**
-             * Add the Custom Velocity Context API
-             */
+
+            // Add the Custom Velocity Context API
             additionalContext.forEach { name, value -> velocityContext.put(name, value) }
-            /**
-             * Add the JSON Data to the context
-             */
-            jsonNode.fields().forEach { entry ->
-                velocityContext.put(entry.key, entry.value)
+
+            // Add the JSON Data to the context
+            if (json.isNotEmpty()) {
+                val jsonNode = mapper.readValue<JsonNode>(json, JsonNode::class.java)
+                    ?: throw BluePrintProcessorException("couldn't get json node from json")
+                if (ignoreJsonNull)
+                    JacksonUtils.removeJsonNullNode(jsonNode)
+                jsonNode.fields().forEach { entry ->
+                    velocityContext.put(entry.key, entry.value)
+                }
             }
 
             val stringWriter = StringWriter()

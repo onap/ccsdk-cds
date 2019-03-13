@@ -22,8 +22,13 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.node.ArrayNode
+import com.fasterxml.jackson.databind.node.BooleanNode
+import com.fasterxml.jackson.databind.node.DoubleNode
+import com.fasterxml.jackson.databind.node.FloatNode
+import com.fasterxml.jackson.databind.node.IntNode
 import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
+import com.fasterxml.jackson.databind.node.TextNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -46,7 +51,7 @@ class JacksonUtils {
     companion object {
         private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
         inline fun <reified T : Any> readValue(content: String): T =
-                jacksonObjectMapper().readValue(content, T::class.java)
+            jacksonObjectMapper().readValue(content, T::class.java)
 
         fun <T> readValue(content: String, valueType: Class<T>): T? {
             return jacksonObjectMapper().readValue(content, valueType)
@@ -84,7 +89,7 @@ class JacksonUtils {
             return runBlocking {
                 withContext(Dispatchers.Default) {
                     IOUtils.toString(JacksonUtils::class.java.classLoader
-                            .getResourceAsStream(fileName), Charset.defaultCharset())
+                        .getResourceAsStream(fileName), Charset.defaultCharset())
                 }
             }
         }
@@ -184,7 +189,7 @@ class JacksonUtils {
 
         fun <T> getInstanceFromMap(properties: MutableMap<String, JsonNode>, classType: Class<T>): T {
             return readValue(getJson(properties), classType)
-                    ?: throw BluePrintProcessorException("failed to transform content ($properties) to type ($classType)")
+                ?: throw BluePrintProcessorException("failed to transform content ($properties) to type ($classType)")
         }
 
         fun checkJsonNodeValueOfType(type: String, jsonNode: JsonNode): Boolean {
@@ -228,14 +233,35 @@ class JacksonUtils {
             }
         }
 
+        fun getValue(value: JsonNode): Any {
+            return when (value) {
+                is BooleanNode -> value.booleanValue()
+                is IntNode -> value.intValue()
+                is FloatNode -> value.floatValue()
+                is DoubleNode -> value.doubleValue()
+                is TextNode -> value.textValue()
+                else -> value
+            }
+        }
+
+        fun getValue(value: Any, type: String): Any {
+            return when (type.toLowerCase()) {
+                BluePrintConstants.DATA_TYPE_BOOLEAN -> (value as BooleanNode).booleanValue()
+                BluePrintConstants.DATA_TYPE_INTEGER -> (value as IntNode).intValue()
+                BluePrintConstants.DATA_TYPE_FLOAT -> (value as FloatNode).floatValue()
+                BluePrintConstants.DATA_TYPE_DOUBLE -> (value as DoubleNode).doubleValue()
+                BluePrintConstants.DATA_TYPE_STRING -> (value as TextNode).textValue()
+                else -> (value as JsonNode)
+            }
+        }
+
         fun populatePrimitiveValues(key: String, value: Any, primitiveType: String, objectNode: ObjectNode) {
             when (primitiveType.toLowerCase()) {
-                BluePrintConstants.DATA_TYPE_BOOLEAN -> objectNode.put(key, value as Boolean)
-                BluePrintConstants.DATA_TYPE_INTEGER -> objectNode.put(key, value as Int)
-                BluePrintConstants.DATA_TYPE_FLOAT -> objectNode.put(key, value as Float)
-                BluePrintConstants.DATA_TYPE_DOUBLE -> objectNode.put(key, value as Double)
-                BluePrintConstants.DATA_TYPE_TIMESTAMP -> objectNode.put(key, value as String)
-                else -> objectNode.put(key, value as String)
+                BluePrintConstants.DATA_TYPE_BOOLEAN -> objectNode.put(key, (value as BooleanNode).booleanValue())
+                BluePrintConstants.DATA_TYPE_INTEGER -> objectNode.put(key, (value as IntNode).intValue())
+                BluePrintConstants.DATA_TYPE_FLOAT -> objectNode.put(key, (value as FloatNode).floatValue())
+                BluePrintConstants.DATA_TYPE_DOUBLE -> objectNode.put(key, (value as DoubleNode).doubleValue())
+                else -> objectNode.put(key, (value as TextNode).textValue())
             }
         }
 

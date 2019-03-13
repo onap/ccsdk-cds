@@ -76,14 +76,6 @@ open class ResourceAssignmentValidationServiceImpl : ResourceAssignmentValidatio
             validationMessage.appendln(String.format("Duplicate Assignment Template Keys (%s) is Present", duplicateKeyNames))
         }
 
-        // Check the Resource Assignment has Duplicate Dictionary Names
-        val duplicateDictionaryKeyNames = resourceAssignments.groupBy { it.dictionaryName }
-                .filter { it.value.size > 1 }
-                .map { it.key }
-        if (duplicateDictionaryKeyNames.isNotEmpty()) {
-            validationMessage.appendln(String.format("Duplicate Assignment Dictionary Keys (%s) is Present", duplicateDictionaryKeyNames))
-        }
-
         // Collect all the dependencies as a single list
         val dependenciesNames = resourceAssignments.mapNotNull { it.dependencies }.flatten()
 
