@@ -41,6 +41,19 @@ class NetconfRpcServiceImpl(private var deviceInfo: DeviceInfo) : NetconfRpcServ
         this.netconfSession = netconfSession
     }
 
+    override fun invokeRpc(rpc: String): DeviceResponse {
+        var output = DeviceResponse()
+        val messageId = messageIdInteger.getAndIncrement().toString()
+        log.info("$deviceInfo: invokeRpc: messageId($messageId)")
+        try {
+            output = asyncRpc(rpc, messageId)
+        } catch (e: Exception) {
+            output.status = RpcStatus.FAILURE
+            output.errorMessage = "$deviceInfo: failed in invokeRpc command $e.message"
+        }
+        return output
+    }
+
     override fun getConfig(filter: String, configTarget: String): DeviceResponse {
         var output = DeviceResponse()
         val messageId = messageIdInteger.getAndIncrement().toString()
