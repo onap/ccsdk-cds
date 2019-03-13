@@ -17,12 +17,16 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor
 
+import org.apache.commons.collections.MapUtils
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BlueprintFunctionNode
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintTemplateService
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
 import org.slf4j.LoggerFactory
+import java.util.*
 
 abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssignment, ResourceAssignment> {
 
@@ -38,12 +42,32 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
      */
     open fun <T> scriptPropertyInstanceType(name: String): T {
         return scriptPropertyInstances as? T
-                ?: throw BluePrintProcessorException("couldn't get script property instance ($name)")
+            ?: throw BluePrintProcessorException("couldn't get script property instance ($name)")
     }
 
     open fun resourceDefinition(name: String): ResourceDefinition {
         return resourceDictionaries[name]
-                ?: throw BluePrintProcessorException("couldn't get resource definition for ($name)")
+            ?: throw BluePrintProcessorException("couldn't get resource definition for ($name)")
+    }
+
+    open fun resolveInputKeyMappingVariables(inputKeyMapping: Map<String, String>): Map<String, Any> {
+        val resolvedInputKeyMapping = HashMap<String, Any>()
+        if (MapUtils.isNotEmpty(inputKeyMapping)) {
+            for ((key, value) in inputKeyMapping) {
+                val resultValue = raRuntimeService.getResolutionStore(value)
+                val expressionValue = JacksonUtils.getValue(resultValue)
+                log.trace("Reference dictionary key ({}), value ({})", key, expressionValue)
+                resolvedInputKeyMapping[key] = expressionValue
+            }
+        }
+        return resolvedInputKeyMapping
+    }
+
+    open fun resolveFromInputKeyMapping(valueToResolve: String, keyMapping: Map<String, Any>): String {
+        if (valueToResolve.isEmpty() || !valueToResolve.contains("$")) {
+            return valueToResolve
+        }
+        return BluePrintTemplateService.generateContent(valueToResolve, additionalContext = keyMapping)
     }
 
     override fun prepareRequest(resourceAssignment: ResourceAssignment): ResourceAssignment {
