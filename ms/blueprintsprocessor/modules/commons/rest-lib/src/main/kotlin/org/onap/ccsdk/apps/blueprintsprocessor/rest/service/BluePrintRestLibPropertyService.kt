@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Copyright © 2017-2019 AT&T, Bell Canada
  * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,13 +19,30 @@ package org.onap.ccsdk.apps.blueprintsprocessor.rest.service
 
 import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.apps.blueprintsprocessor.core.BluePrintProperties
-import org.onap.ccsdk.apps.blueprintsprocessor.rest.*
+import org.onap.ccsdk.apps.blueprintsprocessor.rest.BasicAuthRestClientProperties
+import org.onap.ccsdk.apps.blueprintsprocessor.rest.DME2RestClientProperties
+import org.onap.ccsdk.apps.blueprintsprocessor.rest.PolicyManagerRestClientProperties
+import org.onap.ccsdk.apps.blueprintsprocessor.rest.RestClientProperties
+import org.onap.ccsdk.apps.blueprintsprocessor.rest.RestLibConstants
+import org.onap.ccsdk.apps.blueprintsprocessor.rest.SSLBasicAuthRestClientProperties
+import org.onap.ccsdk.apps.blueprintsprocessor.rest.TokenAuthRestClientProperties
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.stereotype.Service
 
 @Service(RestLibConstants.SERVICE_BLUEPRINT_REST_LIB_PROPERTY)
 open class BluePrintRestLibPropertyService(private var bluePrintProperties: BluePrintProperties) {
+
+    fun blueprintWebClientService(jsonNode: JsonNode): BlueprintWebClientService {
+        val restClientProperties = restClientProperties(jsonNode)
+        return blueprintWebClientService(restClientProperties)
+    }
+
+    fun blueprintWebClientService(selector: String): BlueprintWebClientService {
+        val prefix = "blueprintsprocessor.restclient.$selector"
+        val restClientProperties = restClientProperties(prefix)
+        return blueprintWebClientService(restClientProperties)
+    }
 
     fun restClientProperties(prefix: String): RestClientProperties {
         val type = bluePrintProperties.propertyBeanType("$prefix.type", String::class.java)
@@ -48,9 +65,12 @@ open class BluePrintRestLibPropertyService(private var bluePrintProperties: Blue
         }
     }
 
-    fun restClientProperties(jsonNode: JsonNode): RestClientProperties {
+    private fun restClientProperties(jsonNode: JsonNode): RestClientProperties {
         val type = jsonNode.get("type").textValue()
         return when (type) {
+            RestLibConstants.TYPE_TOKEN_AUTH -> {
+                JacksonUtils.readValue(jsonNode, TokenAuthRestClientProperties::class.java)!!
+            }
             RestLibConstants.TYPE_BASIC_AUTH -> {
                 JacksonUtils.readValue(jsonNode, BasicAuthRestClientProperties::class.java)!!
             }
@@ -69,20 +89,11 @@ open class BluePrintRestLibPropertyService(private var bluePrintProperties: Blue
         }
     }
 
-
-    fun blueprintWebClientService(selector: String): BlueprintWebClientService {
-        val prefix = "blueprintsprocessor.restclient.$selector"
-        val restClientProperties = restClientProperties(prefix)
-        return blueprintWebClientService(restClientProperties)
-    }
-
-    fun blueprintWebClientService(jsonNode: JsonNode): BlueprintWebClientService {
-        val restClientProperties = restClientProperties(jsonNode)
-        return blueprintWebClientService(restClientProperties)
-    }
-
-    fun blueprintWebClientService(restClientProperties: RestClientProperties): BlueprintWebClientService {
+    private fun blueprintWebClientService(restClientProperties: RestClientProperties): BlueprintWebClientService {
         when (restClientProperties) {
+            is TokenAuthRestClientProperties -> {
+                return TokenAuthRestClientService(restClientProperties)
+            }
             is BasicAuthRestClientProperties -> {
                 return BasicAuthRestClientService(restClientProperties)
             }
@@ -98,19 +109,19 @@ open class BluePrintRestLibPropertyService(private var bluePrintProperties: Blue
         }
     }
 
-    fun basicAuthRestClientProperties(prefix: String): BasicAuthRestClientProperties {
+    private fun basicAuthRestClientProperties(prefix: String): BasicAuthRestClientProperties {
         return bluePrintProperties.propertyBeanType(prefix, BasicAuthRestClientProperties::class.java)
     }
 
-    fun sslBasicAuthRestClientProperties(prefix: String): SSLBasicAuthRestClientProperties {
+    private fun sslBasicAuthRestClientProperties(prefix: String): SSLBasicAuthRestClientProperties {
         return bluePrintProperties.propertyBeanType(prefix, SSLBasicAuthRestClientProperties::class.java)
     }
 
-    fun dme2ProxyClientProperties(prefix: String): DME2RestClientProperties {
+    private fun dme2ProxyClientProperties(prefix: String): DME2RestClientProperties {
         return bluePrintProperties.propertyBeanType(prefix, DME2RestClientProperties::class.java)
     }
 
-    fun policyManagerRestClientProperties(prefix: String): PolicyManagerRestClientProperties {
+    private fun policyManagerRestClientProperties(prefix: String): PolicyManagerRestClientProperties {
         return bluePrintProperties.propertyBeanType(prefix, PolicyManagerRestClientProperties::class.java)
     }
 }

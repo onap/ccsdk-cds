@@ -30,6 +30,7 @@ open class BluePrintRestLibConfiguration
 class RestLibConstants {
     companion object {
         const val SERVICE_BLUEPRINT_REST_LIB_PROPERTY = "blueprint-rest-lib-property-service"
+        const val TYPE_TOKEN_AUTH = "token-auth"
         const val TYPE_BASIC_AUTH = "basic-auth"
         const val TYPE_SSL_BASIC_AUTH = "ssl-basic-auth"
         const val TYPE_DME2_PROXY = "dme2-proxy"

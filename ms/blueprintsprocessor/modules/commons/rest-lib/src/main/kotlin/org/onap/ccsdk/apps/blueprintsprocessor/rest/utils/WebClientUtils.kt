@@ -16,29 +16,20 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.rest.utils
 
+import org.apache.http.HttpRequestInterceptor
+import org.apache.http.HttpResponseInterceptor
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.web.reactive.function.client.ExchangeFilterFunction
-import reactor.core.publisher.Mono
-
 
 class WebClientUtils {
     companion object {
 
-        val log = LoggerFactory.getLogger(WebClientUtils::class.java)!!
+        val log: Logger = LoggerFactory.getLogger(WebClientUtils::class.java)
 
-        fun logRequest(): ExchangeFilterFunction {
+        fun logRequest(): HttpRequestInterceptor =
+            HttpRequestInterceptor { request, _ -> log.info("Rest request method(${request?.requestLine?.method}), url(${request?.requestLine?.uri})") }
 
-            return ExchangeFilterFunction.ofRequestProcessor { clientRequest ->
-                log.info("Rest request method(${clientRequest.method()}), url(${clientRequest.url()})")
-                Mono.just(clientRequest)
-            }
-        }
-
-        fun logResponse(): ExchangeFilterFunction {
-            return ExchangeFilterFunction.ofResponseProcessor { clientResponse ->
-                log.info("Response status(${clientResponse.statusCode()})")
-                Mono.just(clientResponse)
-            }
-        }
+        fun logResponse(): HttpResponseInterceptor =
+            HttpResponseInterceptor { response, _ -> log.info("Response status(${response.statusLine.statusCode})") }
     }
 }

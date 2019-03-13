@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Copyright © 2017-2019 AT&T, Bell Canada
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,82 +16,59 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.rest.service
 
-import io.netty.handler.ssl.SslContextBuilder
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory
+import org.apache.http.impl.client.CloseableHttpClient
+import org.apache.http.impl.client.HttpClients
+import org.apache.http.message.BasicHeader
+import org.apache.http.ssl.SSLContextBuilder
 import org.onap.ccsdk.apps.blueprintsprocessor.rest.SSLBasicAuthRestClientProperties
 import org.onap.ccsdk.apps.blueprintsprocessor.rest.utils.WebClientUtils
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
-import org.springframework.http.client.reactive.ReactorClientHttpConnector
-import org.springframework.web.reactive.function.BodyInserters
-import org.springframework.web.reactive.function.client.WebClient
-import reactor.netty.http.client.HttpClient
 import java.io.File
+import java.io.FileInputStream
 import java.security.KeyStore
 import java.security.cert.X509Certificate
 
+class SSLBasicAuthRestClientService(private val restClientProperties: SSLBasicAuthRestClientProperties) :
+    BlueprintWebClientService {
 
-class SSLBasicAuthRestClientService(private val restClientProperties: SSLBasicAuthRestClientProperties) : BlueprintWebClientService {
-
-    override fun webClient(): WebClient {
-
-        // Load the Keystore Information
-        val ketInputStream = File(restClientProperties.sslKey).inputStream()
-        val ks = KeyStore.getInstance(restClientProperties.keyStoreInstance)
-        ks.load(ketInputStream, restClientProperties.sslKeyPasswd.toCharArray())
-
-        // Manage Trust Store
-        val trustCertCollection = ks.aliases().toList().map { alias ->
-            ks.getCertificate(alias) as X509Certificate
-        }.toTypedArray()
-        val sslContext = SslContextBuilder
-                .forClient()
-                .trustManager(*trustCertCollection)
-                .build()
-
-        // Create Http Client
-        val httpClient = HttpClient.create().secure { t -> t.sslContext(sslContext) }
-
-        return WebClient.builder()
-                .baseUrl(restClientProperties.url)
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-                .filter(WebClientUtils.logRequest())
-                .clientConnector(ReactorClientHttpConnector(httpClient)).build()
+    override fun headers(): Array<BasicHeader> {
+        val params = arrayListOf<BasicHeader>()
+        params.add(BasicHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+        params.add(BasicHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE))
+        return params.toTypedArray()
     }
 
-    override fun <T> getResource(path: String, responseType: Class<T>): T {
-        return getResource(path, null, responseType)
+    override fun host(uri: String): String {
+        return restClientProperties.url + uri
     }
 
-    override fun <T> getResource(path: String, headers: Map<String, String>?, responseType: Class<T>): T {
-        return webClient().get()
-                .uri(path)
-                .headers { httpHeaders ->
-                    headers?.forEach {
-                        httpHeaders.set(it.key, it.value)
-                    }
-                }
-                .retrieve()
-                .bodyToMono(responseType).block()!!
-    }
+    override fun httpClient(): CloseableHttpClient {
 
-    override fun <T> postResource(path: String, request: Any, responseType: Class<T>): T {
-        return postResource(path, null, request, responseType)
-    }
+        val keystoreInstance = restClientProperties.keyStoreInstance
+        val sslKey = restClientProperties.sslKey
+        val sslKeyPwd = restClientProperties.sslKeyPassword
+        val sslTrust = restClientProperties.sslTrust
+        val sslTrustPwd = restClientProperties.sslTrustPassword
 
-    override fun <T> postResource(path: String, headers: Map<String, String>?, request: Any, responseType: Class<T>): T {
-        return webClient().post()
-                .uri(path)
-                .headers { httpHeaders ->
-                    headers?.forEach {
-                        httpHeaders.set(it.key, it.value)
-                    }
-                }
-                .body(BodyInserters.fromObject(request))
-                .retrieve().bodyToMono(responseType).block()!!
-    }
+        val acceptingTrustStrategy = { chain: Array<X509Certificate>, authType: String -> true }
 
-    override fun <T> exchangeResource(methodType: String, path: String, request: Any, responseType: Class<T>): T {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        FileInputStream(sslKey).use { keyInput ->
+            val keyStore = KeyStore.getInstance(keystoreInstance)
+            keyStore.load(keyInput, sslKeyPwd.toCharArray())
+
+            val sslContext =
+                SSLContextBuilder.create()
+                    .loadKeyMaterial(keyStore, sslKeyPwd.toCharArray())
+                    .loadTrustMaterial(File(sslTrust), sslTrustPwd.toCharArray(), acceptingTrustStrategy).build()
+
+            val csf = SSLConnectionSocketFactory(sslContext!!)
+
+            return HttpClients.custom()
+                .addInterceptorFirst(WebClientUtils.logRequest())
+                .addInterceptorLast(WebClientUtils.logResponse())
+                .setSSLSocketFactory(csf).build()
+        }
     }
 }
