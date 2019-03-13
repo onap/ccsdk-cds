@@ -3,6 +3,7 @@
   ~  Copyright © 2017-2018 AT&T Intellectual Property.
   ~
   ~  Modifications Copyright © 2019 Bell Canada.
+  ~  Modifications Copyright © 2019 IBM.
   ~
   ~  Licensed under the Apache License, Version 2.0 (the "License");
   ~  you may not use this file except in compliance with the License.
@@ -16,7 +17,8 @@
   ~  See the License for the specific language governing permissions and
   ~  limitations under the License.
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
@@ -30,9 +32,9 @@
     <description>Blueprints Processor Commons</description>
 
     <modules>
+        <module>processor-core</module>
         <module>db-lib</module>
         <module>rest-lib</module>
-        <module>core</module>
         <module>dmaap-lib</module>
     </modules>
     <dependencies>
@@ -41,6 +43,11 @@
             <artifactId>resource-dict</artifactId>
         </dependency>
         <!-- Test Dependencies -->
+        <dependency>
+            <groupId>io.mockk</groupId>
+            <artifactId>mockk</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.powermock</groupId>
             <artifactId>powermock-api-mockito2</artifactId>
@@ -54,6 +61,11 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-test-junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-coroutines-test</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

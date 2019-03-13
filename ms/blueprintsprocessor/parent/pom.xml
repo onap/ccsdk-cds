@@ -264,10 +264,10 @@
             </dependency>
 
 
-            <!-- Application Module Dependencies -->
+            <!-- Blueprint Processor Application Module Dependencies -->
             <dependency>
                 <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
-                <artifactId>application</artifactId>
+                <artifactId>processor-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -282,7 +282,7 @@
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
-                <artifactId>core</artifactId>
+                <artifactId>dmaap-lib</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -303,6 +303,11 @@
             <dependency>
                 <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
                 <artifactId>selfservice-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
+                <artifactId>application</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -328,7 +333,7 @@
                 <version>${project.version}</version>
             </dependency>
 
-            <!-- Application Component Dependency -->
+            <!-- Controller Blueprints Application Dependency -->
             <dependency>
                 <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
                 <artifactId>resource-dict</artifactId>
@@ -346,6 +351,11 @@
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+                <artifactId>db-resources</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
                 <artifactId>blueprint-validation</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -357,6 +367,7 @@
                 <version>${h2database.version}</version>
                 <scope>test</scope>
             </dependency>
+
             <!-- Test Dependency -->
             <dependency>
                 <groupId>io.mockk</groupId>
