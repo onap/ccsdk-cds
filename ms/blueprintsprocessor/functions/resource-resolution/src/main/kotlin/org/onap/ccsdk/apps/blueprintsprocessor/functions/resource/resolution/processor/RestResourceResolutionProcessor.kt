@@ -19,6 +19,7 @@ package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.pr
 
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
+import com.fasterxml.jackson.databind.node.MissingNode
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.RestResourceSource
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
@@ -60,11 +61,8 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
             validate(resourceAssignment)
 
             // Check if It has Input
-            try {
-                val value = raRuntimeService.getInputValue(resourceAssignment.name)
-                logger.info("rest source template key (${resourceAssignment.name}) found from input and value is ($value)")
-                ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, value)
-            } catch (e: BluePrintProcessorException) {
+            val value = getFromInput(resourceAssignment)
+            if (value == null || value is MissingNode) {
                 val dName = resourceAssignment.dictionaryName
                 val dSource = resourceAssignment.dictionarySource
                 val resourceDefinition = resourceDictionaries[dName]
@@ -168,7 +166,7 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
             else -> {
                 // Complex Types
                 entrySchemaType =
-                    returnNotEmptyOrThrow(resourceAssignment.property?.entrySchema?.type) { "Entry schema is not defined for dictionary ($dName) info" }
+                    returnNotEmptyOrThrow(resourceAssignment.property?.type) { "Entry schema is not defined for dictionary ($dName) info" }
                 val objectNode = JsonNodeFactory.instance.objectNode()
                 outputKeyMapping.map {
                     val responseKeyValue = responseNode.get(it.key)

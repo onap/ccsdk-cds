@@ -17,7 +17,7 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor
 
-import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.MissingNode
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
@@ -44,19 +44,11 @@ open class DefaultResourceResolutionProcessor : ResourceAssignmentProcessor() {
 
     override fun process(resourceAssignment: ResourceAssignment) {
         try {
-            // Check if It has Input
-            var value: JsonNode?
-            try {
-                value = raRuntimeService.getInputValue(resourceAssignment.name)
-            } catch (e: BluePrintProcessorException) {
-                // If value is null get it from default source
-                logger.info("Looking for defaultValue as couldn't find value in input For template key (${resourceAssignment.name})")
+            var value = getFromInput(resourceAssignment)
+            if (value == null || value is MissingNode) {
                 value = resourceAssignment.property?.defaultValue
+                ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, value)
             }
-
-            logger.info("For template key (${resourceAssignment.name}) setting value as ($value)")
-            ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, value)
-
             // Check the value has populated for mandatory case
             ResourceAssignmentUtils.assertTemplateKeyValueNotNull(resourceAssignment)
         } catch (e: Exception) {

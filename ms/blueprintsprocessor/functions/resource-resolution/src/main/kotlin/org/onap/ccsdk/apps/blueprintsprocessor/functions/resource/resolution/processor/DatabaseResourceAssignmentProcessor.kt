@@ -18,6 +18,7 @@
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
+import com.fasterxml.jackson.databind.node.MissingNode
 import org.onap.ccsdk.apps.blueprintsprocessor.db.primary.DBLibGenericService
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.DatabaseResourceSource
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
@@ -59,11 +60,8 @@ open class DatabaseResourceAssignmentProcessor(private val dBLibGenericService: 
             validate(resourceAssignment)
 
             // Check if It has Input
-            try {
-                val value = raRuntimeService.getInputValue(resourceAssignment.name)
-                logger.info("primary-db source template key (${resourceAssignment.name}) found from input and value is ($value)")
-                ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, value)
-            } catch (e: BluePrintProcessorException) {
+            val value = getFromInput(resourceAssignment)
+            if (value == null || value is MissingNode) {
                 val dName = resourceAssignment.dictionaryName
                 val dSource = resourceAssignment.dictionarySource
                 val resourceDefinition = resourceDictionaries[dName]
