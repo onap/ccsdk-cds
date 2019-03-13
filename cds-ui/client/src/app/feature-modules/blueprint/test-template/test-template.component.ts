@@ -19,9 +19,9 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Component, OnInit } from '@angular/core';
-import {FlatTreeControl} from '@angular/cdk/tree';
-import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FlatTreeControl } from '@angular/cdk/tree';
+import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 
@@ -31,7 +31,10 @@ import { IBlueprint } from 'src/app/common/core/store/models/blueprint.model';
 import { IMetaData } from '../../../common/core/store/models/metadata.model';
 import { LoadBlueprintSuccess } from 'src/app/common/core/store/actions/blueprint.action';
 
-
+import "ace-builds/webpack-resolver";
+import 'brace';
+import 'brace/ext/language_tools';
+import 'ace-builds/src-min-noconflict/snippets/html';
 
 interface FoodNode {
   name: string;
@@ -42,19 +45,19 @@ const TREE_DATA: FoodNode[] = [
   {
     name: 'Definitions',
     children: [
-      {name: 'activation-blueprint.json'},
-      {name: 'artifacts_types.json'},
-      {name: 'data_types.json'},
+      { name: 'activation-blueprint.json' },
+      { name: 'artifacts_types.json' },
+      { name: 'data_types.json' },
     ]
-  }, 
+  },
   {
     name: 'Scripts',
     children: [
       {
         name: 'kotlin',
         children: [
-          {name: 'ScriptComponent.cba.kts'},
-          {name: 'ResourceAssignmentProcessor.cba.kts'},
+          { name: 'ScriptComponent.cba.kts' },
+          { name: 'ResourceAssignmentProcessor.cba.kts' },
         ]
       }
     ]
@@ -95,9 +98,10 @@ interface ExampleFlatNode {
 })
 export class TestTemplateComponent implements OnInit {
   private blueprintpState: Subscription;
-  private request ;
+  private request;
   private workflows = [];
-
+  @ViewChild('editor') editor;
+  options: any = { fontSize: "100%", printMargin: false, tabSize: 2 };
   private transformer = (node: FoodNode, level: number) => {
     return {
       expandable: !!node.children && node.children.length > 0,
@@ -107,23 +111,24 @@ export class TestTemplateComponent implements OnInit {
   }
 
   treeControl = new FlatTreeControl<ExampleFlatNode>(
-      node => node.level, node => node.expandable);
+    node => node.level, node => node.expandable);
 
   treeFlattener = new MatTreeFlattener(
-      this.transformer, node => node.level, node => node.expandable, node => node.children);
+    this.transformer, node => node.level, node => node.expandable, node => node.children);
 
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
   constructor(private store: Store<IAppState>) {
     this.blueprintpState = this.store.select('blueprint')
-                            .subscribe((data: any)=>{
-                              console.log(data);
-                              if(data.blueprint.topology_template && data.blueprint.topology_template.workflows) {
-                                this.buildWorkflowData(data.blueprint.topology_template.workflows);
-                               // this.request = JSON.stringify(data.blueprint.topology_template.workflows[0], undefined, 4);
-                              }
-                            });
+      .subscribe((data: any) => {
+        console.log(data);
+        if (data.blueprint.topology_template && data.blueprint.topology_template.workflows) {
+          this.buildWorkflowData(data.blueprint.topology_template.workflows);
+          // this.request = JSON.stringify(data.blueprint.topology_template.workflows[0], undefined, 4);
+        }
+      });
     this.dataSource.data = TREE_DATA;
+
   }
 
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;

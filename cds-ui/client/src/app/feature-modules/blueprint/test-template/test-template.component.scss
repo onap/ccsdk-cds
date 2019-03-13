@@ -18,3 +18,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
 */
+
+.aceEditor {
+    overflow: hidden;
+    // height: 100% !important;
+    min-height: 27rem;
+    background-color: white !important;
+    border: 1px solid #3f87a6;
+    border-left: 3px solid #3f87a6;
+    line-height: 1.2;
+    width: 99%;
+}
+
+.button {
+    margin: 1em;
+    background-color: #3f51b5;
+    color: white;
+    border-radius: 2em;
+    padding: 0.5em;
+    min-width: 6em;
+}
