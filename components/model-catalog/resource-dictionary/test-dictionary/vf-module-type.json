@@ -1,0 +1,27 @@
+{
+  "name": "vf-module-type",
+  "tags": "vf-module-type",
+  "property": {
+    "description": "vf-module-type",
+    "type": "string"
+  },
+  "updated-by": "adetalhouet",
+  "sources": {
+    "primary-db": {
+      "type": "source-primary-db",
+      "properties": {
+        "type": "SQL",
+        "query": "select sdnctl.demo.value as value from sdnctl.demo where sdnctl.demo.id=:vfmoduleid",
+        "input-key-mapping": {
+          "vfmoduleid": "vf-module-number"
+        },
+        "output-key-mapping": {
+          "vf-module-type": "value"
+        },
+        "key-dependencies": [
+          "vf-module-number"
+        ]
+      }
+    }
+  }
+}

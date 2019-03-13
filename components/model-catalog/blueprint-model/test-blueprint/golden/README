@@ -1,0 +1,134 @@
+
+Example
+
+    Pre-requisite
+
+        Netbox running: https://github.com/netbox-community/netbox-docker
+        NETCONF capable device (JUNOS use in this example, but templates could be changed for another OS)
+        Blueprint processor
+
+    resources
+
+         Bellow a table of the resource used within this example, and how this resource
+         are resolved.
+         The resources are used in the context of device configuration. These shouldn't be
+         confused with SDC model resources.
+
+              name               |   resolve through
+          ------------------------------------------------------
+          prefix-id              |   default
+          vfw_interface_ip       |   rest (through Netbox)
+          hostname               |   input
+          vf-module-number       |   default
+          vf-module-type         |   database
+          unit-number            |   input
+          interface-name         |   input
+          interface-description  |   capability (python script)
+
+    3 workflow
+
+        resource-assignment (dry-run)
+
+            Ability to resolve multiple templates and mappings at the same time,
+            based on the request 'artifact-name', and provide the result as output.
+            Example provide two templates: hostname and vf-module-1
+
+            In order to perform dry-run, we need to store the template and have
+            the ability to retrieve the stored result later point in time. For this
+            we have to specify that we want to store the result, and we need to provide
+            a resolution-key.
+
+            Here is the request payload:
+
+                artifact name:    template(s) to resolve
+                store-result:     whether to save the generated configlet in DB
+                resolution-key:   To identify the configlet saved in the DB
+                hostname:         Value defined to be result trough input in the hostname mapping file
+
+                {
+                  "resource-assignment-request": {
+                    "artifact-name": [ "hostname", "vf-module-1" ],
+                    "resolution-key": "hostname-demo-123",
+                    "store-result": true,
+                    "resource-assignment-properties": {
+                      "hostname": "demo123"
+                    }
+                  }
+                }
+
+            Output:
+
+                {
+                  "resource-assignment-params": {
+                      "hostname": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<configuration xmlns:junos=\"http://xml.juniper.net/junos/17.4R1/junos\">\n   <system xmlns=\"http://yang.juniper.net/junos-qfx/conf/system\">\n      <host-name operation=\"delete\" />\n      <host-name operation=\"create\">demo123</host-name>\n   </system>\n</configuration>\n",
+                      "vf-module-1": "<interface>\n    <description>This is the Virtual Firewall entity</description>\n    <vfw>10.10.10.39/24</vfw>\n</interface>"
+                  },
+                  "status": "success"
+                }
+
+        config-deploy
+
+            This action will run a python script that will retrieved the resolved template
+            from previous step using the resolution-key and the artifact-name.
+            The script will also resolve another template during its execution: the Interface Template.
+            Finally, this action will push these resolved templates into a device (JUNOS) using NETCONF.
+            The python script will make use of utilities classes provided by the platform:
+            resolution helper and netconf client.
+
+            Information about the device is modelled as a requirement of this action, specifying that
+            username, password and ip of the device should be provided as input. Note: you could resolve
+            those information using the resource resolution framework, if need be.
+
+            Here is the request payload:
+
+                resolution-key:   To identify the configlet saved in the DB in previous step
+                username:         NETCONF device user
+                password:         NETCONF device password
+                ip:               NETCONF device ip
+                interface-name:   Name of the interface to configure
+                unit-number:      Unit to configure for the interface
+
+                {
+                  "resolution-key": "hostname-demo-123",
+                  "username": "user",
+                  "password": "pass",
+                  "ip": "10.198.1.35",
+                  "config-deploy-properties": {
+                    "interface-name": "ge-0/0/7",
+                    unit-number": "0"
+                  }
+                }
+
+            Output:
+
+                No specific output beside success or failure.
+
+        rollback
+
+            This action will rollback the last committed config on the device, using NETCONF and device
+            specific RPC. To do so, a python script will be used, similar as in previous action, to dynamically
+            resolve the rollback template payload, and send the RPC to the device.
+
+            Information about the NETCONF device is provided in a similar fashion as previous step. Actually, the
+            same model is used.
+
+            Here is the request payload:
+
+                username:         NETCONF device user
+                password:         NETCONF device password
+                ip:               NETCONF device ip
+
+                 {
+                    "username": "pass",
+                    "password": "user",
+                    "ip": "10.10.10.10"
+                 }
+
+            Output:
+
+                No specific output beside success or failure.
+
+
+Postman collection used for this example. 4 requests are provided one per workflow to execute, and 1 to load the CBA in the runtime environment.
+
+    https://www.getpostman.com/collections/4d199ff02a735bd3e680

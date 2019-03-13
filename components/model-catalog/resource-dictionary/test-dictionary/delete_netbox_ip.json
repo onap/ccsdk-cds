@@ -1,0 +1,30 @@
+{
+  "tags": "oam-local-ipv4-address",
+  "name": "delete_netbox_ip",
+  "property": {
+    "description": "delete netbox ip",
+    "type": "string"
+  },
+  "updated-by": "adetalhouet",
+  "sources": {
+    "primary-config-data": {
+      "type": "source-rest",
+      "properties": {
+        "type": "JSON",
+        "verb": "DELETE",
+        "endpoint-selector": "ipam-1",
+        "url-path": "/api/ipam/ip-addresses/$ip-address-id",
+        "path": "/address",
+        "input-key-mapping": {
+          "ip-address-id": "ip-address-id"
+        },
+        "output-key-mapping": {
+
+        },
+        "key-dependencies": [
+          "ip-address-id"
+        ]
+      }
+    }
+  }
+}
