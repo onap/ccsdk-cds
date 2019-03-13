@@ -1,5 +1,6 @@
 /*
  * Copyright © 2019 Bell Canada Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,14 +28,14 @@ import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Mono
 
 /**
- * BlueprintModelRest Purpose: Handle controllerBlueprint API request
+ * BlueprintModelController Purpose: Handle controllerBlueprint API request
  *
  * @author Vinal Patel
  * @version 1.0
  */
 @RestController
 @RequestMapping("/api/v1/blueprint-model")
-open class BlueprintModelRest(private val bluePrintModelHandler: BluePrintModelHandler) {
+open class BlueprintModelController(private val bluePrintModelHandler: BluePrintModelHandler) {
 
     @PostMapping("", produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     @ResponseBody
