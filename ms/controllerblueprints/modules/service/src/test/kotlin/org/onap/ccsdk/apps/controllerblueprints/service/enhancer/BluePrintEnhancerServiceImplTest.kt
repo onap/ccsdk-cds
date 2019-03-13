@@ -55,6 +55,7 @@ class BluePrintEnhancerServiceImplTest {
         runBlocking {
             modelTypeLoadService.loadPathModelType("./../../../../components/model-catalog/definition-type/starter-type")
             resourceDictionaryLoadService.loadPathResourceDictionary("./../../../../components/model-catalog/resource-dictionary/starter-dictionary")
+            resourceDictionaryLoadService.loadPathResourceDictionary("./../../../../components/model-catalog/resource-dictionary/test-dictionary")
         }
     }
 
@@ -66,6 +67,22 @@ class BluePrintEnhancerServiceImplTest {
 
         val targetPath = Paths.get("target", "bp-enhance").toUri().path
         
+        val bluePrintContext = bluePrintEnhancerService.enhance(basePath, targetPath)
+        Assert.assertNotNull("failed to get blueprintContext ", bluePrintContext)
+
+        // Validate the Generated BluePrints
+        val valid = bluePrintValidatorService.validateBluePrints(targetPath)
+        Assert.assertTrue("blueprint validation failed ", valid)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun testEnhancementAndValidation2() {
+
+        val basePath = "./../../../../components/model-catalog/blueprint-model/test-blueprint/golden"
+
+        val targetPath = Paths.get("target", "bp-enhance").toUri().path
+
         val bluePrintContext = bluePrintEnhancerService.enhance(basePath, targetPath)
         Assert.assertNotNull("failed to get blueprintContext ", bluePrintContext)
 
