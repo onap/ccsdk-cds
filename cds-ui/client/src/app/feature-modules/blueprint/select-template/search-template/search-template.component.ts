@@ -41,6 +41,7 @@ export class SearchTemplateComponent implements OnInit {
   fileText: object[];
   blueprintState: IBlueprintState;
   bpState: Observable<IBlueprintState>;
+  validfile: boolean = false;
 
   @ViewChild('fileInput') fileInput;
   result: string = '';
@@ -60,7 +61,7 @@ export class SearchTemplateComponent implements OnInit {
 
   fileChanged(e: any) {
     this.file = e.target.files[0];
-
+    this.zipFile.files = {};
     this.zipFile.loadAsync(this.file)
       .then((zip) => {
         if(zip) {            
@@ -70,14 +71,6 @@ export class SearchTemplateComponent implements OnInit {
   }
 
   updateBlueprintState() {
-    // let fileReader = new FileReader();
-    // fileReader.readAsText(this.file);
-    // var me = this;
-    // fileReader.onload = function () {
-    //   var data: IBlueprint = JSON.parse(fileReader.result.toString());
-    //   me.store.dispatch(new LoadBlueprintSuccess(data));
-    // }
-
     let data: IBlueprint = this.activationBlueprint ? JSON.parse(this.activationBlueprint.toString()) : this.activationBlueprint;
     let blueprintState = {
       blueprint: data,
@@ -90,6 +83,8 @@ export class SearchTemplateComponent implements OnInit {
   }
 
   async buildFileViewData(zip) {
+    this.validfile = false;
+    this.paths = [];
     for (var file in zip.files) {
       this.fileObject = {
         name: zip.files[file].name,
@@ -99,8 +94,23 @@ export class SearchTemplateComponent implements OnInit {
       this.fileObject.data = value;
       this.paths.push(this.fileObject); 
     }
-    this.fetchTOSACAMetadata();
-   this.tree = this.arrangeTreeData(this.paths);
+
+    if(this.paths) {
+      this.paths.forEach(path =>{
+        if(path.name.includes("TOSCA.meta")) {
+          this.validfile = true
+        }
+      });
+    } else {
+      alert('Please update proper file');
+    }
+
+    if(this.validfile) {      
+      this.fetchTOSACAMetadata();
+      this.tree = this.arrangeTreeData(this.paths);
+    } else {
+      alert('Please update proper file with TOSCA metadata');
+    }
   }
 
   arrangeTreeData(paths) {
