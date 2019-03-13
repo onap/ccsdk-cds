@@ -18,130 +18,58 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
 -->
+<!-- <div style="display: flex;flex-direction: row">
+  <div style="width: 30em;">
+  <button (click) ="changeView()" style="
+  background-color: #3f51b5;
+  color: white;
+  border-radius: 2em;
+  padding: 0.5em;
+  min-width: 6em;">{{viewText}}</button>
+  </div>
+  <div style="width: 16em">
+      <button style="margin: 0.5em;
+      background-color: #3f51b5;
+      color: white;
+      border-radius: 2em;
+      padding: 0.5em;
+      min-width: 6em;">Save Changes</button>
+  </div>
+  <div style="width: 100%;height: 3em;">
+      <div style="margin-left: 38em">
+          <mat-form-field>
+              <select matNativeControl required>
+            <option value="volvo">SDC</option>
+            <option value="saab">CCSDK</option>
+          </select>
+          </mat-form-field>
+          <button style="margin: 0.5em;
+      background-color: #3f51b5;
+      color: white;
+      border-radius: 2em;
+      padding: 0.5em;
+      min-width: 6em;">Deploy</button>
+          <button style="margin: 0.5em;
+      background-color: #3f51b5;
+      color: white;
+      border-radius: 2em;
+      padding: 0.5em;
+      min-width: 6em;">Save</button>
+          <button style="margin: 0.5em;
+      background-color: #3f51b5;
+      color: white;
+      border-radius: 2em;
+      padding: 0.5em;
+      min-width: 6em;">Download</button>
+
+      </div>
+  </div>
+</div> -->
+
 
 <div class="modifyTemp">
-  <div *ngIf="designerMode" class="outerDiv divone">
-    <mat-accordion>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header style="background-color: #f1f1f1">
-          <mat-panel-title>
-            Node types
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <div class="flex-container">
-          <div class="item-box" *ngFor="let item of todo" cdkDrag>{{item}}</div>
-        </div>
-      </mat-expansion-panel>
-
-      <mat-expansion-panel>
-        <mat-expansion-panel-header style="background-color: #f1f1f1">
-          <mat-panel-title>
-            Policy
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <div class="flex-container">
-          <div class="item-box">Policy 1</div>
-          <div class="item-box">Policy 1</div>
-          <div class="item-box">Policy 1</div>
-        </div>
-      </mat-expansion-panel>
-    </mat-accordion>
-  </div>
-
   <button class="enrich-btn">Enrichment</button>
   <button (click) ="changeView()" class="toggle-view-btn">{{viewText}}</button>
-
-  <div *ngIf="designerMode" class="outerDiv divtwo" (click)="on = !on" ondrop="dropcalled(event)" ondragover="allowDrop(event)" id="svgDiv">
-    <app-designer *ngIf="designerMode" (onNodeSelect)="on = !on; viewNodeDetails($event)"></app-designer>
-  </div>
-
+  <app-designer *ngIf="designerMode" (onNodeSelect)="on = !on; viewNodeDetails($event)"></app-designer>
   <app-editor class="editor-selector" *ngIf="editorMode"></app-editor>
-
-  <div *ngIf="designerMode && on" id="overlay" class="outerDiv divThree">
-    <mat-accordion style="width: 100%">
-
-        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-            <mat-expansion-panel-header style="background-color: #f1f1f1">
-              <mat-panel-title>
-                Type
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-    
-            <div class="item-list">
-              <div class="item-box">vnf-netconf-device</div>
-            </div>
-          </mat-expansion-panel>
-
-      <mat-expansion-panel>
-        <mat-expansion-panel-header style="background-color: #f1f1f1">
-          <mat-panel-title>
-            Properties
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-      </mat-expansion-panel>
-
-      <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-        <mat-expansion-panel-header style="background-color: #f1f1f1">
-          <mat-panel-title>
-            Interface
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-
-        <div class="item-list">
-          <div class="item-box" *ngFor="let item of review" cdkDrag>{{item}}</div>
-        </div>
-      </mat-expansion-panel>
-
-      <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-        <mat-expansion-panel-header style="background-color: #f1f1f1">
-          <mat-panel-title>
-            Interface
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-
-        <div class="item-list">
-          <div class="item-box" *ngFor="let item of review" cdkDrag>{{item}}</div>
-        </div>
-      </mat-expansion-panel>
-
-      <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-        <mat-expansion-panel-header style="background-color: #f1f1f1">
-          <mat-panel-title>
-            Artifacts
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-
-        <div class="item-list">
-          <div class="item-box" *ngFor="let item of review" cdkDrag>{{item}}</div>
-        </div>
-      </mat-expansion-panel>
-
-      <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-        <mat-expansion-panel-header style="background-color: #f1f1f1">
-          <mat-panel-title>
-            Inputs
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-
-        <div class="item-list">
-          <div class="item-box" *ngFor="let item of review" cdkDrag>{{item}}</div>
-        </div>
-      </mat-expansion-panel>
-
-      <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-        <mat-expansion-panel-header style="background-color: #f1f1f1">
-          <mat-panel-title>
-            Capabilities
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-
-        <div class="item-list">
-          <div class="item-box" *ngFor="let item of review" cdkDrag>{{item}}</div>
-        </div>
-      </mat-expansion-panel>
-
-
-
-    </mat-accordion>
-  </div>
 </div>
