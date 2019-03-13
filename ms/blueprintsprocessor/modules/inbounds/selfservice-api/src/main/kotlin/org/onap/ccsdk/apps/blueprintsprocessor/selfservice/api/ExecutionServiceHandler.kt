@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,18 +23,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.onap.ccsdk.apps.blueprintsprocessor.core.BluePrintCoreConfiguration
-import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ACTION_MODE_ASYNC
-import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ACTION_MODE_SYNC
-import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
-import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceOutput
-import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.Status
+import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.*
 import org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api.utils.saveCBAFile
 import org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api.utils.toProto
-import org.onap.ccsdk.apps.blueprintsprocessor.services.workflow.BlueprintDGExecutionService
 import org.onap.ccsdk.apps.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintCatalogService
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintWorkflowExecutionService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintFileUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.slf4j.LoggerFactory
@@ -44,7 +41,8 @@ import reactor.core.publisher.Mono
 @Service
 class ExecutionServiceHandler(private val bluePrintCoreConfiguration: BluePrintCoreConfiguration,
                               private val bluePrintCatalogService: BluePrintCatalogService,
-                              private val blueprintDGExecutionService: BlueprintDGExecutionService) {
+                              private val bluePrintWorkflowExecutionService
+                              : BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput>) {
 
     private val log = LoggerFactory.getLogger(ExecutionServiceHandler::class.toString())
 
@@ -60,8 +58,8 @@ class ExecutionServiceHandler(private val bluePrintCoreConfiguration: BluePrintC
         }
     }
 
-    fun process(executionServiceInput: ExecutionServiceInput,
-                responseObserver: StreamObserver<org.onap.ccsdk.apps.controllerblueprints.processing.api.ExecutionServiceOutput>) {
+    suspend fun process(executionServiceInput: ExecutionServiceInput,
+                        responseObserver: StreamObserver<org.onap.ccsdk.apps.controllerblueprints.processing.api.ExecutionServiceOutput>) {
         when {
             executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC -> {
                 GlobalScope.launch(Dispatchers.Default) {
@@ -77,16 +75,12 @@ class ExecutionServiceHandler(private val bluePrintCoreConfiguration: BluePrintC
                 responseObserver.onCompleted()
             }
             else -> responseObserver.onNext(response(executionServiceInput,
-                "Failed to process request, 'actionIdentifiers.mode' not specified. Valid value are: 'sync' or 'async'.",
-                true).toProto());
+                    "Failed to process request, 'actionIdentifiers.mode' not specified. Valid value are: 'sync' or 'async'.",
+                    true).toProto());
         }
     }
 
-    fun processSync(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
-        return doProcess(executionServiceInput)
-    }
-
-    private fun doProcess(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
+    suspend fun doProcess(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
         val requestId = executionServiceInput.commonHeader.requestId
         log.info("processing request id $requestId")
 
@@ -100,7 +94,8 @@ class ExecutionServiceHandler(private val bluePrintCoreConfiguration: BluePrintC
 
         val blueprintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(requestId, basePath.toString())
 
-        return blueprintDGExecutionService.executeDirectedGraph(blueprintRuntimeService, executionServiceInput)
+        return bluePrintWorkflowExecutionService.executeBluePrintWorkflow(blueprintRuntimeService,
+                executionServiceInput, hashMapOf())
     }
 
     private fun response(executionServiceInput: ExecutionServiceInput, errorMessage: String = "",

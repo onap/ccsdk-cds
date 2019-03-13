@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +18,7 @@
 package org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api
 
 import io.grpc.stub.StreamObserver
+import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.apps.blueprintsprocessor.core.BluePrintCoreConfiguration
 import org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api.utils.toJava
 import org.onap.ccsdk.apps.controllerblueprints.processing.api.BluePrintProcessingServiceGrpc
@@ -28,18 +30,20 @@ import org.springframework.stereotype.Service
 
 @Service
 open class BluePrintProcessingGRPCHandler(private val bluePrintCoreConfiguration: BluePrintCoreConfiguration,
-                                     private val executionServiceHandler: ExecutionServiceHandler)
+                                          private val executionServiceHandler: ExecutionServiceHandler)
     : BluePrintProcessingServiceGrpc.BluePrintProcessingServiceImplBase() {
     private val log = LoggerFactory.getLogger(BluePrintProcessingGRPCHandler::class.java)
 
     @PreAuthorize("hasRole('USER')")
     override fun process(
-        responseObserver: StreamObserver<ExecutionServiceOutput>): StreamObserver<ExecutionServiceInput> {
+            responseObserver: StreamObserver<ExecutionServiceOutput>): StreamObserver<ExecutionServiceInput> {
 
         return object : StreamObserver<ExecutionServiceInput> {
             override fun onNext(executionServiceInput: ExecutionServiceInput) {
                 try {
-                    executionServiceHandler.process(executionServiceInput.toJava(), responseObserver)
+                    runBlocking {
+                        executionServiceHandler.process(executionServiceInput.toJava(), responseObserver)
+                    }
                 } catch (e: Exception) {
                     onError(e)
                 }
@@ -48,8 +52,8 @@ open class BluePrintProcessingGRPCHandler(private val bluePrintCoreConfiguration
             override fun onError(error: Throwable) {
                 log.debug("Fail to process message", error)
                 responseObserver.onError(io.grpc.Status.INTERNAL
-                    .withDescription(error.message)
-                    .asException())
+                        .withDescription(error.message)
+                        .asException())
             }
 
             override fun onCompleted() {

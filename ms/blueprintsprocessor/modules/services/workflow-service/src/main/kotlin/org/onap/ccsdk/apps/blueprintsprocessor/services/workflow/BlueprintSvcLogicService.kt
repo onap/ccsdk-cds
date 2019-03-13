@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +36,7 @@ interface BlueprintSvcLogicService : SvcLogicServiceBase {
 
     fun unRegisterExecutors(name: String)
 
-    fun execute(graph: SvcLogicGraph, bluePrintRuntimeService: BluePrintRuntimeService<*>, input: Any): Any
+    suspend fun execute(graph: SvcLogicGraph, bluePrintRuntimeService: BluePrintRuntimeService<*>, input: Any): Any
 
     @Deprecated("Populate Graph Dynamically from Blueprints, No need to get from Database Store ")
     override fun getStore(): SvcLogicStore {
@@ -87,7 +88,8 @@ class DefaultBlueprintSvcLogicService : BlueprintSvcLogicService {
         }
     }
 
-    override fun execute(graph: SvcLogicGraph, bluePrintRuntimeService: BluePrintRuntimeService<*>, input: Any): Any {
+    override suspend fun execute(graph: SvcLogicGraph, bluePrintRuntimeService: BluePrintRuntimeService<*>,
+                                 input: Any): Any {
         //Initialise BlueprintSvcLogic Context with Blueprint Runtime Service and Input Request
         val blueprintSvcLogicContext = BlueprintSvcLogicContext()
         blueprintSvcLogicContext.setBluePrintRuntimeService(bluePrintRuntimeService)

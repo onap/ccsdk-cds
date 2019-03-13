@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,26 +20,22 @@ package org.onap.ccsdk.apps.blueprintsprocessor.services.workflow
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.apps.blueprintsprocessor.services.workflow.utils.SvcGraphUtils
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintWorkflowExecutionService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.File
 
 
-interface BlueprintDGExecutionService {
+@Service("dgWorkflowExecutionService")
+open class DGWorkflowExecutionService(private val blueprintSvcLogicService: BlueprintSvcLogicService)
+    : BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput> {
 
-    fun executeDirectedGraph(bluePrintRuntimeService: BluePrintRuntimeService<*>,
-                             executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput
+    private val log = LoggerFactory.getLogger(DGWorkflowExecutionService::class.java)
 
-}
-
-@Service
-class DefaultBlueprintDGExecutionService(private val blueprintSvcLogicService: BlueprintSvcLogicService) : BlueprintDGExecutionService {
-
-    private val log = LoggerFactory.getLogger(DefaultBlueprintDGExecutionService::class.java)
-
-    override fun executeDirectedGraph(bluePrintRuntimeService: BluePrintRuntimeService<*>,
-                                      executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
+    override suspend fun executeBluePrintWorkflow(bluePrintRuntimeService: BluePrintRuntimeService<*>,
+                                                  executionServiceInput: ExecutionServiceInput,
+                                                  properties: MutableMap<String, Any>): ExecutionServiceOutput {
 
         val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
 

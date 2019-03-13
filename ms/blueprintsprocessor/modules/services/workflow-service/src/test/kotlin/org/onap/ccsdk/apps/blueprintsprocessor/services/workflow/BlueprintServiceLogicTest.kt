@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +17,7 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.services.workflow
 
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
@@ -41,7 +43,7 @@ class BlueprintServiceLogicTest {
     lateinit var applicationContext: ApplicationContext
 
     @Autowired
-    lateinit var blueprintDGExecutionService: BlueprintDGExecutionService
+    lateinit var dgWorkflowExecutionService: DGWorkflowExecutionService
 
     @Test
     fun testExecuteGraphWithSingleComponent() {
@@ -51,8 +53,10 @@ class BlueprintServiceLogicTest {
 
         val executionServiceInput = JacksonUtils.readValueFromClassPathFile("execution-input/resource-assignment-input.json", ExecutionServiceInput::class.java)!!
 
+        runBlocking {
+            dgWorkflowExecutionService.executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, mutableMapOf())
+        }
 
-        blueprintDGExecutionService.executeDirectedGraph(bluePrintRuntimeService, executionServiceInput)
 
     }
 
@@ -64,7 +68,9 @@ class BlueprintServiceLogicTest {
 
         val executionServiceInput = JacksonUtils.readValueFromClassPathFile("execution-input/assign-activate-input.json", ExecutionServiceInput::class.java)!!
 
-        blueprintDGExecutionService.executeDirectedGraph(bluePrintRuntimeService, executionServiceInput)
+        runBlocking {
+            dgWorkflowExecutionService.executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, mutableMapOf())
+        }
 
     }
 

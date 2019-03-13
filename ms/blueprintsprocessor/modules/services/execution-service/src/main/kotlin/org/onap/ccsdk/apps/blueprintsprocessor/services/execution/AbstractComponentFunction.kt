@@ -26,11 +26,10 @@ import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.Status
 import org.onap.ccsdk.apps.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.apps.controllerblueprints.core.asJsonNode
+import org.onap.ccsdk.apps.controllerblueprints.core.asObjectNode
 import org.onap.ccsdk.apps.controllerblueprints.core.getAsString
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BlueprintFunctionNode
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
-import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 
 /**
@@ -51,8 +50,11 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     lateinit var operationName: String
     lateinit var nodeTemplateName: String
     var operationInputs: MutableMap<String, JsonNode> = hashMapOf()
+
+    //FIXME("Move to Script abstract class")
     /**
-     * Store Dynamic Dependency Instances
+     * Store Dynamic Script Dependency Instances, Objects present inside won't be persisted or state maintained.
+     * Later it will be moved to ScriptComponentFunction class, sub class for abstract class
      */
     var functionDependencyInstances: MutableMap<String, Any> = hashMapOf()
 
@@ -91,7 +93,8 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         operationName = this.operationInputs.getAsString(BluePrintConstants.PROPERTY_CURRENT_OPERATION)
         check(operationName.isNotEmpty()) { "couldn't get Operation name for step($stepName)" }
 
-        val operationResolvedProperties = bluePrintRuntimeService.resolveNodeTemplateInterfaceOperationInputs(nodeTemplateName, interfaceName, operationName)
+        val operationResolvedProperties = bluePrintRuntimeService
+                .resolveNodeTemplateInterfaceOperationInputs(nodeTemplateName, interfaceName, operationName)
 
         this.operationInputs.putAll(operationResolvedProperties)
 
@@ -103,15 +106,16 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         executionServiceOutput.commonHeader = executionServiceInput.commonHeader
         executionServiceOutput.actionIdentifiers = executionServiceInput.actionIdentifiers
 
-
         // Resolve the Output Expression
         val stepOutputs = bluePrintRuntimeService
                 .resolveNodeTemplateInterfaceOperationOutputs(nodeTemplateName, interfaceName, operationName)
 
-        bluePrintRuntimeService.put("$stepName-step-outputs", stepOutputs.asJsonNode())
+        // FIXME("Not the right place to populate the response payload")
+        executionServiceOutput.payload = stepOutputs.asObjectNode()
 
-        executionServiceOutput.payload = JacksonUtils.objectNodeFromObject(stepOutputs)
+        bluePrintRuntimeService.put("$stepName-step-outputs", executionServiceOutput.payload)
 
+        // FIXME("Not the right place to populate the status")
         // Populate Status
         val status = Status()
         status.eventType = EventType.EVENT_COMPONENT_EXECUTED.name
@@ -122,8 +126,12 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     }
 
     override fun apply(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
-        prepareRequest(executionServiceInput)
-        process(executionServiceInput)
+        try {
+            prepareRequest(executionServiceInput)
+            process(executionServiceInput)
+        } catch (runtimeException: RuntimeException) {
+            recover(runtimeException, executionServiceInput)
+        }
         return prepareResponse()
     }
 
@@ -136,6 +144,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         bluePrintRuntimeService.setNodeTemplateAttributeValue(nodeTemplateName, key, value)
     }
 
+    //FIXME("Move to Script abstract class")
     /**
      * This will be called from the scripts to serve instance from runtime to scripts.
      */
