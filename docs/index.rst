@@ -2,8 +2,8 @@
 .. http://creativecommons.org/licenses/by/4.0
 .. Copyright (C) 2019 IBM.
 
-CONTROLLER DESIGN STUDIO DOCUMENTATION REPOSITORY
--------------------------------------------------
+CONTROLLER DESIGN STUDIO (CDS) 
+------------------------------
 .. toctree::
    :maxdepth: 1
    
@@ -14,7 +14,7 @@ Self service is a completely new way of delivering services.  It removes the dep
 This makes SERVICE PROVIDER(S) more responsive to its customers and able to deliver products that more closely match the needs of its customers.
 
 Design tools:
-=============
+-------------
 .. toctree::
    :maxdepth: 1
    :glob:
@@ -33,16 +33,16 @@ The GUI handles direct user input and allows for displaying both design time and
 Resource assignment:
 =====================
 Component executor:
--------------------
+===================
 Workflow:
----------
+=========
 
 A workflow defines an overall action to be taken for the service; it can be composed of a set of sub-actions to execute. Currently, workflows are backed by Directed Graph engine.
 
 A CBA can have as many workflow as needed.
 
 Template:
----------
+=========
 
 A template is an artifact.
 
@@ -58,7 +58,7 @@ ${artifact-prefix}-mapping
 A template can represent anything, such as device config, payload to interact with 3rd party systems, resource-accumulator template, etc...
 
 Mapping:
---------
+========
 Defines the contract of each resource to be resolved. Each placeholder in the template must have a corresponding mapping definition.
 
 A mapping is comprised of:
@@ -69,8 +69,8 @@ A mapping is comprised of:
 - dictionary-name
 - dictionary-source
 
-dependencies:
--------------
+Dependencies:
+=============
 
 This allows to make sure given resources get resolved prior the resolution of the resources defining the dependency.
 The dictionary fields reference to a specific data dictionary.
