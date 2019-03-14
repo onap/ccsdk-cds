@@ -217,15 +217,12 @@ export class EditorComponent implements OnInit {
   setEditorMode() {
     switch (this.fileExtension) {
       case "xml":
-        // console.log("xml mode set");
         this.mode = 'xml';
         break;
       case "py":
-        console.log("python mode set");
         this.mode = 'python';
         break;
       case "kts":
-        // console.log("kotlin mode set");
         this.mode = 'kotlin';
         break;
       case "txt":
@@ -234,9 +231,11 @@ export class EditorComponent implements OnInit {
       case "meta":
         this.mode = 'text';
         break;
+      case "vtl":
+        this.mode = 'velocity';
+        break;
       default:
         this.mode = 'json';
-        console.log("json mode set");
     }
   }
 }
