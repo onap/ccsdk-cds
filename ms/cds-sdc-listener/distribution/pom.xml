@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright (C) 2019 Bell Canada. All rights reserved.
   ~
@@ -5,9 +6,7 @@
   ~ proprietary to Bell Canada and are protected by trade secret or copyright law.
   ~ Unauthorized copying of this file, via any medium is strictly prohibited.
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
     <artifactId>cds-sdc-listener</artifactId>
     <groupId>org.onap.ccsdk.apps</groupId>
