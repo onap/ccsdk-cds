@@ -38,3 +38,23 @@ limitations under the License.
     padding: 0.5em;
     min-width: 6em;
 }
+
+.testTemplateContainer {
+    display: flex;
+    flex-direction: row
+}
+.editorContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    margin-left: 1em
+}
+
+.editorDiv {
+    width: 50%; 
+    margin: 2px;
+}
+
+.btnContainer {
+    height: 10%
+}

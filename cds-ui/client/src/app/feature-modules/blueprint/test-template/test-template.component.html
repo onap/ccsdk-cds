@@ -18,47 +18,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
 -->
-<div style="display: flex;flex-direction: row">
+<div class="testTemplateContainer">
 
-    <!-- <div style="width: 12%; height: 553px;">
-
-      <mat-accordion>
-          <mat-expansion-panel>
-            <mat-expansion-panel-header style="background-color: #f1f1f1">
-              <mat-panel-title>
-                Workflows
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <div class="flex-container">
-              <div style="cursor: pointer; padding: 2px" (click)="createRequest(workflow)" class="item-box" *ngFor="let workflow of workflows">{{workflow.name}}</div>
-            </div>
-          </mat-expansion-panel>
-        </mat-accordion>
-  </div> -->
-
-    <div style="width: 100%;display: flex;flex-direction: row; margin-left: 1em">
-        <div style="width: 50%; margin: 2px; ">
+    <div class="editorContainer">
+        <div class="editorDiv">
             <p>Request</p>
-            <!-- <textarea style=" width: 99%;
-  min-height: 27rem;
-  font-family: Lucida Console, Monaco, monospace;
-  font-size: 0.8rem;
-  line-height: 1.2;" cols="30" rows="10">{{request }}</textarea> -->
             <ace-editor [(text)]="text" mode="json" [theme]="eclipse" [options]="options" #editor class="aceEditor"></ace-editor>
-            <div style="height: 10%">
+            <div class="btnContainer">
                 <button class="button">Submit</button>
                 <button class="button">Clear</button>
             </div>
         </div>
 
-        <div style="width: 50%; margin: 2px;">
+        <div class="editorDiv">
             <p>Response</p>
             <ace-editor [(text)]="text" mode="json" [theme]="eclipse" [options]="options" #editor class="aceEditor"></ace-editor>
-            <!-- <textarea style=" width: 99%;
-  min-height: 27rem;
-  font-family: Lucida Console, Monaco, monospace;
-  font-size: 0.8rem;
-  line-height: 1.2;" cols="30" rows="10"></textarea> -->
         </div>
     </div>
 

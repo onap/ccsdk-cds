@@ -36,61 +36,6 @@ import 'brace';
 import 'brace/ext/language_tools';
 import 'ace-builds/src-min-noconflict/snippets/html';
 
-interface FoodNode {
-  name: string;
-  children?: FoodNode[];
-}
-
-const TREE_DATA: FoodNode[] = [
-  {
-    name: 'Definitions',
-    children: [
-      { name: 'activation-blueprint.json' },
-      { name: 'artifacts_types.json' },
-      { name: 'data_types.json' },
-    ]
-  },
-  {
-    name: 'Scripts',
-    children: [
-      {
-        name: 'kotlin',
-        children: [
-          { name: 'ScriptComponent.cba.kts' },
-          { name: 'ResourceAssignmentProcessor.cba.kts' },
-        ]
-      }
-    ]
-  },
-  {
-    name: 'Templates',
-    children: [
-      {
-        name: 'baseconfig-template'
-      }
-    ]
-  },
-  {
-    name: 'TOSCA-Metada',
-    children: [
-      {
-        name: 'TOSCA.meta'
-      }
-    ]
-  },
-];
-
-/** Flat node with expandable and level information */
-interface ExampleFlatNode {
-  expandable: boolean;
-  name: string;
-  level: number;
-}
-
-
-
-
-
 @Component({
   selector: 'app-test-template',
   templateUrl: './test-template.component.html',
@@ -102,36 +47,18 @@ export class TestTemplateComponent implements OnInit {
   private workflows = [];
   @ViewChild('editor') editor;
   options: any = { fontSize: "100%", printMargin: false, tabSize: 2 };
-  private transformer = (node: FoodNode, level: number) => {
-    return {
-      expandable: !!node.children && node.children.length > 0,
-      name: node.name,
-      level: level,
-    };
-  }
-
-  treeControl = new FlatTreeControl<ExampleFlatNode>(
-    node => node.level, node => node.expandable);
-
-  treeFlattener = new MatTreeFlattener(
-    this.transformer, node => node.level, node => node.expandable, node => node.children);
-
-  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
   constructor(private store: Store<IAppState>) {
     this.blueprintpState = this.store.select('blueprint')
       .subscribe((data: any) => {
         console.log(data);
-        if (data.blueprint.topology_template && data.blueprint.topology_template.workflows) {
+        if (data && data.blueprint && data.blueprint.topology_template && data.blueprint.topology_template.workflows) {
           this.buildWorkflowData(data.blueprint.topology_template.workflows);
           // this.request = JSON.stringify(data.blueprint.topology_template.workflows[0], undefined, 4);
         }
       });
-    this.dataSource.data = TREE_DATA;
 
   }
-
-  hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
 
   ngOnInit() {
   }
