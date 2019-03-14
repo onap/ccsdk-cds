@@ -32,6 +32,14 @@
           "service-instance-id": "artifact_name"
         }
       }
+    },
+    "capability": {
+      "type": "source-capability",
+      "properties": {
+          "script-type": "jython",
+          "script-class-reference": "SampleRAProcessor",
+          "instance-dependencies": []
+      }
     }
   }
 }
