@@ -3,7 +3,7 @@
 .. Copyright (C) 2019 IBM.
 
 Installation
-============
+------------
    
 Building client html and js files
 =================================
@@ -37,6 +37,7 @@ Building and creating server
 	* RUN npm install
 
 	* COPY server /opt/cds-ui/
+	
 	* COPY --from=builder /opt/cds-ui/server/public /opt/cds-ui/public
 
 	* RUN npm run build
