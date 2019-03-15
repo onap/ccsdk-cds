@@ -44,15 +44,15 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
      */
     var entryDefinition = ""
 
-    val imports: List<ImportDefinition>? = serviceTemplate.imports
+    fun imports(): List<ImportDefinition>? = serviceTemplate.imports
 
-    val dslDefinitions = serviceTemplate.dslDefinitions
+    fun dslDefinitions() = serviceTemplate.dslDefinitions
 
     val metadata: MutableMap<String, String>? = serviceTemplate.metadata
 
-    val dataTypes: MutableMap<String, DataType>? = serviceTemplate.dataTypes
+    fun dataTypes(): MutableMap<String, DataType>? = serviceTemplate.dataTypes
 
-    val inputs: MutableMap<String, PropertyDefinition>? = serviceTemplate.topologyTemplate?.inputs
+    fun inputs(): MutableMap<String, PropertyDefinition>? = serviceTemplate.topologyTemplate?.inputs
 
     fun blueprintJson(pretty: Boolean = false): String = print("json", pretty)
 
@@ -70,9 +70,9 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
             ?: throw BluePrintException("could't get template author from meta data")
 
     // Workflow
-    val workflows: MutableMap<String, Workflow>? = serviceTemplate.topologyTemplate?.workflows
+    fun workflows(): MutableMap<String, Workflow>? = serviceTemplate.topologyTemplate?.workflows
 
-    fun workflowByName(workFlowName: String): Workflow = workflows?.get(workFlowName)
+    fun workflowByName(workFlowName: String): Workflow = workflows()?.get(workFlowName)
             ?: throw BluePrintException("could't get workflow($workFlowName)")
 
     fun workflowInputs(workFlowName: String) = workflowByName(workFlowName).inputs
@@ -99,27 +99,27 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
     }
 
     // DSL
-    fun dslPropertiesByName(name: String): JsonNode = dslDefinitions?.get(name)
+    fun dslPropertiesByName(name: String): JsonNode = dslDefinitions()?.get(name)
             ?: throw BluePrintException("could't get policy type for the dsl($name)")
 
     // Data Type
-    fun dataTypeByName(name: String): DataType? = dataTypes?.get(name)
+    fun dataTypeByName(name: String): DataType? = dataTypes()?.get(name)
 
     // Artifact Type
-    val artifactTypes: MutableMap<String, ArtifactType>? = serviceTemplate.artifactTypes
+    fun artifactTypes(): MutableMap<String, ArtifactType>? = serviceTemplate.artifactTypes
 
     // Policy Types
-    val policyTypes: MutableMap<String, PolicyType>? = serviceTemplate.policyTypes
+    fun policyTypes(): MutableMap<String, PolicyType>? = serviceTemplate.policyTypes
 
-    fun policyTypeByName(policyName: String) = policyTypes?.get(policyName)
+    fun policyTypeByName(policyName: String) = policyTypes()?.get(policyName)
             ?: throw BluePrintException("could't get policy type for the name($policyName)")
 
     fun policyTypesDerivedFrom(name: String): MutableMap<String, PolicyType>? {
-        return policyTypes?.filterValues { policyType -> policyType.derivedFrom == name }?.toMutableMap()
+        return policyTypes()?.filterValues { policyType -> policyType.derivedFrom == name }?.toMutableMap()
     }
 
     fun policyTypesTarget(target: String): MutableMap<String, PolicyType>? {
-        return policyTypes?.filterValues { it.targets.contains(target) }?.toMutableMap()
+        return policyTypes()?.filterValues { it.targets.contains(target) }?.toMutableMap()
     }
 
     fun policyTypesTargetNDerivedFrom(target: String, derivedFrom: String): MutableMap<String, PolicyType>? {
@@ -129,14 +129,14 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
     }
 
     // Node Type Methods
-    val nodeTypes: MutableMap<String, NodeType>? = serviceTemplate.nodeTypes
+    fun nodeTypes(): MutableMap<String, NodeType>? = serviceTemplate.nodeTypes
 
     fun nodeTypeByName(name: String): NodeType =
-            nodeTypes?.get(name)
+            nodeTypes()?.get(name)
                     ?: throw BluePrintException("could't get node type for the name($name)")
 
     fun nodeTypeDerivedFrom(name: String): MutableMap<String, NodeType>? {
-        return nodeTypes?.filterValues { nodeType -> nodeType.derivedFrom == name }?.toMutableMap()
+        return nodeTypes()?.filterValues { nodeType -> nodeType.derivedFrom == name }?.toMutableMap()
     }
 
     fun nodeTypeInterface(nodeTypeName: String, interfaceName: String): InterfaceDefinition {
@@ -163,13 +163,13 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
     }
 
     // Node Template Methods
-    val nodeTemplates: MutableMap<String, NodeTemplate>? = serviceTemplate.topologyTemplate?.nodeTemplates
+    fun nodeTemplates(): MutableMap<String, NodeTemplate>? = serviceTemplate.topologyTemplate?.nodeTemplates
 
     fun nodeTemplateByName(name: String): NodeTemplate =
-            nodeTemplates?.get(name) ?: throw BluePrintException("could't get node template for the name($name)")
+            nodeTemplates()?.get(name) ?: throw BluePrintException("could't get node template for the name($name)")
 
     fun nodeTemplateForNodeType(name: String): MutableMap<String, NodeTemplate>? {
-        return nodeTemplates?.filterValues { nodeTemplate -> nodeTemplate.type == name }?.toMutableMap()
+        return nodeTemplates()?.filterValues { nodeTemplate -> nodeTemplate.type == name }?.toMutableMap()
     }
 
     fun nodeTemplateNodeType(nodeTemplateName: String): NodeType {

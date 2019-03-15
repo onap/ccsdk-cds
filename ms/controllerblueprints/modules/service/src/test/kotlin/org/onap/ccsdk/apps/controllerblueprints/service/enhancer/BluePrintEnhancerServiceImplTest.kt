@@ -64,30 +64,34 @@ class BluePrintEnhancerServiceImplTest {
     fun testEnhancementAndValidation() {
 
         val basePath = "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
-
-        val targetPath = Paths.get("target", "bp-enhance").toUri().path
-        
-        val bluePrintContext = bluePrintEnhancerService.enhance(basePath, targetPath)
-        Assert.assertNotNull("failed to get blueprintContext ", bluePrintContext)
-
-        // Validate the Generated BluePrints
-        val valid = bluePrintValidatorService.validateBluePrints(targetPath)
-        Assert.assertTrue("blueprint validation failed ", valid)
+        testComponentInvokeEnhancementAndValidation(basePath, "base-enhance")
     }
 
     @Test
     @Throws(Exception::class)
-    fun testEnhancementAndValidation2() {
+    fun testComponentInvokeEnhancementAndValidation() {
+        val basePath = "./../../../../components/model-catalog/blueprint-model/test-blueprint/component_invoke"
+        testComponentInvokeEnhancementAndValidation(basePath, "component-enhance")
+    }
 
+    @Test
+    @Throws(Exception::class)
+    fun testGoldenEnhancementAndValidation() {
         val basePath = "./../../../../components/model-catalog/blueprint-model/test-blueprint/golden"
+        testComponentInvokeEnhancementAndValidation(basePath, "golden-enhance")
+    }
 
-        val targetPath = Paths.get("target", "bp-enhance").toUri().path
+
+    private fun testComponentInvokeEnhancementAndValidation(basePath: String, targetDirName: String) {
+
+        val targetPath = Paths.get("target", targetDirName).toUri().path
 
         val bluePrintContext = bluePrintEnhancerService.enhance(basePath, targetPath)
         Assert.assertNotNull("failed to get blueprintContext ", bluePrintContext)
 
         // Validate the Generated BluePrints
         val valid = bluePrintValidatorService.validateBluePrints(targetPath)
-        Assert.assertTrue("blueprint validation failed ", valid)
+        Assert.assertTrue("blueprint($basePath) validation failed ", valid)
     }
+
 }
