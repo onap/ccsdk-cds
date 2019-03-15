@@ -2,7 +2,7 @@
 .. http://creativecommons.org/licenses/by/4.0
 .. Copyright (C) 2019 IBM.
 
-Controller Blueprint Archived Tool(.cba)
+Controller Blueprint Archived Tool(CBA)
 ----------------------------------------
 .. toctree::
    :maxdepth: 1
@@ -19,17 +19,31 @@ The CBA is .zip file, comprised of the following folder structure, the files may
    :width: 7.88889in 
    :height: 4.43750in
 
+Architecture:
+=============
 
-Sections:
-========
+|image3|
+
+.. |image3| image:: media/CDS_architecture.jpg
+   :height: 4.43750in
+   :width: 7.88889in
+   
+Installation:
+=============
 
 .. toctree::
    :maxdepth: 1
    :glob:
    
-   sections/architecture/index
    sections/installation/index
-   sections/configuration/index
+   
+Development:
+=============
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+   
    sections/development/index
    
 Data Flow:
@@ -51,5 +65,5 @@ Functional Decomposition:
 Controller design Studio Presentation:
 ======================================
 
-Details about CDS Architecture and Design detail, Please click below.
+Details about CDS Architecture and Design detail, Please click the link.
 :download:`CDS_Architecture_Design.pptx`
