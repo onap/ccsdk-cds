@@ -14,7 +14,7 @@ Self service is a completely new way of delivering services.  It removes the dep
 This makes SERVICE PROVIDER(S) more responsive to its customers and able to deliver products that more closely match the needs of its customers.
 
 Design tools:
--------------
+=============
 .. toctree::
    :maxdepth: 1
    :glob:
