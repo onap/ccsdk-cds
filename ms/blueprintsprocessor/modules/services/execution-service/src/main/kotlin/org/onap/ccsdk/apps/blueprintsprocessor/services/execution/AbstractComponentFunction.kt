@@ -51,13 +51,6 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     lateinit var nodeTemplateName: String
     var operationInputs: MutableMap<String, JsonNode> = hashMapOf()
 
-    //FIXME("Move to Script abstract class")
-    /**
-     * Store Dynamic Script Dependency Instances, Objects present inside won't be persisted or state maintained.
-     * Later it will be moved to ScriptComponentFunction class, sub class for abstract class
-     */
-    var functionDependencyInstances: MutableMap<String, Any> = hashMapOf()
-
     override fun getName(): String {
         return stepName
     }
@@ -144,12 +137,12 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         bluePrintRuntimeService.setNodeTemplateAttributeValue(nodeTemplateName, key, value)
     }
 
-    //FIXME("Move to Script abstract class")
-    /**
-     * This will be called from the scripts to serve instance from runtime to scripts.
-     */
-    open fun <T> functionDependencyInstanceAsType(name: String): T {
-        return functionDependencyInstances[name] as? T
-                ?: throw BluePrintProcessorException("couldn't get script property instance ($name)")
+    fun addError(type: String, name: String, error: String) {
+        bluePrintRuntimeService.getBluePrintError().addError(type, name, type)
     }
+
+    fun addError(error: String) {
+        bluePrintRuntimeService.getBluePrintError().addError(error)
+    }
+
 }

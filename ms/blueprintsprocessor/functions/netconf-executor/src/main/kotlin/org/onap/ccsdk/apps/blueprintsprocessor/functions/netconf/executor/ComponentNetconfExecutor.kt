@@ -64,15 +64,6 @@ open class ComponentNetconfExecutor(private var componentFunctionScriptingServic
 
         checkNotNull(scriptComponent) { "failed to get netconf script component" }
 
-        scriptComponent.bluePrintRuntimeService = bluePrintRuntimeService
-        scriptComponent.processId = processId
-        scriptComponent.workflowName = workflowName
-        scriptComponent.stepName = stepName
-        scriptComponent.interfaceName = interfaceName
-        scriptComponent.operationName = operationName
-        scriptComponent.nodeTemplateName = nodeTemplateName
-        scriptComponent.operationInputs = operationInputs
-
         scriptComponent.process(executionServiceInput)
     }
 

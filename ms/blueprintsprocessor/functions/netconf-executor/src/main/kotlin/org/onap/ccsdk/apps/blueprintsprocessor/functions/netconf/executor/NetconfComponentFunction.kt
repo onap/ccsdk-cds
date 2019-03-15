@@ -20,13 +20,13 @@ import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceResolutionService
-import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.AbstractComponentFunction
+import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 
-abstract class NetconfComponentFunction : AbstractComponentFunction() {
+abstract class NetconfComponentFunction : AbstractScriptComponentFunction() {
 
     open fun resourceResolutionService(): ResourceResolutionService =
-        functionDependencyInstanceAsType(ResourceResolutionConstants.SERVICE_RESOURCE_RESOLUTION)
+            functionDependencyInstanceAsType(ResourceResolutionConstants.SERVICE_RESOURCE_RESOLUTION)
 
     // Called from python script
     fun initializeNetconfConnection(requirementName: String): NetconfDevice {
@@ -38,22 +38,18 @@ abstract class NetconfComponentFunction : AbstractComponentFunction() {
         return bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactName)
     }
 
-    fun getDynamicProperties(key: String): JsonNode {
-        return operationInputs["dynamic-properties"]!!.get(key)
-    }
-
     fun resolveFromDatabase(resolutionKey: String, artifactName: String): String {
         return resourceResolutionService().resolveFromDatabase(bluePrintRuntimeService, artifactName, resolutionKey)
     }
 
     fun resolveAndGenerateMessage(artifactMapping: String, artifactTemplate: String): String {
         return resourceResolutionService().resolveResources(bluePrintRuntimeService, nodeTemplateName,
-            artifactMapping, artifactTemplate)
+                artifactMapping, artifactTemplate)
     }
 
     fun resolveAndGenerateMessage(artifactPrefix: String): String {
         return resourceResolutionService().resolveResources(bluePrintRuntimeService, nodeTemplateName,
-            artifactPrefix, mapOf())
+                artifactPrefix, mapOf())
     }
 
     private fun deviceProperties(requirementName: String): DeviceInfo {
@@ -63,7 +59,7 @@ abstract class NetconfComponentFunction : AbstractComponentFunction() {
         val requirement = blueprintContext.nodeTemplateRequirement(nodeTemplateName, requirementName)
 
         val capabilityProperties = bluePrintRuntimeService.resolveNodeTemplateCapabilityProperties(requirement
-            .node!!, requirement.capability!!)
+                .node!!, requirement.capability!!)
 
         return deviceProperties(capabilityProperties)
     }

@@ -33,18 +33,30 @@ class ComponentFunctionScriptingService(private val applicationContext: Applicat
 
     private val log = LoggerFactory.getLogger(ComponentFunctionScriptingService::class.java)
 
-    fun <T : AbstractComponentFunction> scriptInstance(componentFunction: AbstractComponentFunction, scriptType: String,
-                                                       scriptClassReference: String,
-                                                       instanceDependencies: List<String>): T {
+    fun <T : AbstractScriptComponentFunction> scriptInstance(componentFunction: AbstractComponentFunction, scriptType: String,
+                                                             scriptClassReference: String,
+                                                             instanceDependencies: List<String>): T {
 
         log.info("creating component function of script type($scriptType), reference name($scriptClassReference) and " +
                 "instanceDependencies($instanceDependencies)")
 
         val scriptComponent: T = scriptInstance(componentFunction.bluePrintRuntimeService.bluePrintContext(),
                 scriptType, scriptClassReference)
-       // Populate Instance Properties
+
+        checkNotNull(scriptComponent) { "failed to initialize script component" }
+
+        scriptComponent.bluePrintRuntimeService = componentFunction.bluePrintRuntimeService
+        scriptComponent.processId = componentFunction.processId
+        scriptComponent.workflowName = componentFunction.workflowName
+        scriptComponent.stepName = componentFunction.stepName
+        scriptComponent.interfaceName = componentFunction.interfaceName
+        scriptComponent.operationName = componentFunction.operationName
+        scriptComponent.nodeTemplateName = componentFunction.nodeTemplateName
+        scriptComponent.operationInputs = componentFunction.operationInputs
+
+        // Populate Instance Properties
         instanceDependencies.forEach { instanceDependency ->
-            componentFunction.functionDependencyInstances[instanceDependency] = applicationContext
+            scriptComponent.functionDependencyInstances[instanceDependency] = applicationContext
                     .getBean(instanceDependency)
         }
         return scriptComponent
