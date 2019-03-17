@@ -19,17 +19,20 @@
   }, {
     "file" : "Definitions/policy_types.json"
   } ],
-  "topology_template" : {
-    "inputs" : {
-      "serviceInstanceId" : {
-        "required" : true,
-        "type" : "string"
-      },
-      "identifier" : {
-        "required" : true,
-        "type" : "string"
+  "dsl_definitions" : {
+    "config-assign-properties" : {
+      "resolution-key" : {
+        "get_input" : "resolution-key"
       }
     },
+    "config-deploy-properties" : {
+      "resolution-key" : {
+        "get_input" : "resolution-key"
+      }
+    }
+
+  },
+  "topology_template" : {
     "workflows" : {
       "config-assign" : {
         "steps" : {
@@ -42,6 +45,21 @@
           }
         },
         "inputs" : {
+          "resolution-key" : {
+            "required" : true,
+            "type" : "string"
+          },
+          "artifact-name" : {
+            "required" : true,
+            "type" : "list",
+            "entry_schema" : {
+              "type" : "string"
+            }
+          },
+          "store-result" : {
+            "required" : true,
+            "type" : "boolean"
+          },
           "config-assign-properties" : {
             "description" : "Dynamic PropertyDefinition for workflow(config-assign).",
             "required" : true,
@@ -49,21 +67,25 @@
           }
         }
       },
-      "configure" : {
+      "config-deploy" : {
         "steps" : {
           "activate-process" : {
             "description" : "Send a configlet to the pnf",
-            "target" : "configure-process",
+            "target" : "config-deploy-process",
             "activities" : [ {
               "call_operation" : ""
             } ]
           }
         },
         "inputs" : {
-          "configure-properties" : {
-            "description" : "Dynamic PropertyDefinition for workflow(configure).",
+          "resolution-key" : {
             "required" : true,
-            "type" : "dt-configure-properties"
+            "type" : "string"
+          },
+          "config-deploy-properties" : {
+            "description" : "Dynamic PropertyDefinition for workflow(config-deploy).",
+            "required" : true,
+            "type" : "dt-config-deploy-properties"
           }
         }
       }
@@ -84,25 +106,24 @@
           }
         }
       },
-
-
       "config-assign" : {
-        "type" : "component-restconf-executor",
+        "type" : "component-resource-resolution",
         "interfaces" : {
-          "ComponentRestconfExecutor" : {
+          "ResourceResolutionComponent" : {
             "operations" : {
               "process" : {
-                "implementation" : {
-                  "primary" : "component-script"
-                },
                 "inputs" : {
-                  "script-type" : "jython",
-                  "script-class-reference" : "Scripts/python/RestconfAssignConfig.py",
-                  "instance-dependencies" : [ ]
+                  "resolution-key" : {
+                    "get_input" : "resolution-key"
+                  },
+                  "store-result" : true,
+                  "artifact-prefix-names" : ["config-assign"]
                 },
                 "outputs" : {
-                  "response-data" : "",
-                  "status" : ""
+                  "resource-assignment-params" : {
+                    "get_attribute" : [ "SELF", "assignment-params" ]
+                  },
+                  "status" : "success"
                 }
               }
             }
@@ -115,33 +136,26 @@
           },
           "config-assign-mapping" : {
             "type" : "artifact-mapping-resource",
-            "file" : "Templates/config-assign-pnf-mapping.json"
-          },
-          "component-script" : {
-            "type" : "artifact-script-jython",
-            "file" : "Scripts/python/RestconfAssignConfig.py"
+            "file" : "Definitions/config-assign-pnf-mapping.json"
           }
         }
       },
-
-
-
-      "configure-process" : {
+      "config-deploy-process" : {
         "type" : "dg-generic",
         "properties" : {
           "content" : {
-            "get_artifact" : [ "SELF", "dg-configure-process" ]
+            "get_artifact" : [ "SELF", "dg-config-deploy-process" ]
           },
-          "dependency-node-templates" : [ "configure" ]
+          "dependency-node-templates" : [ "config-deploy" ]
         },
         "artifacts" : {
           "dg-config-assign-process" : {
             "type" : "artifact-directed-graph",
-            "file" : "Plans/CONFIG_configure.xml"
+            "file" : "Plans/CONFIG_configDeploy.xml"
           }
         }
       },
-      "configure" : {
+      "config-deploy" : {
         "type" : "component-restconf-executor",
         "interfaces" : {
           "ComponentRestconfExecutor" : {
@@ -152,33 +166,30 @@
                 },
                 "inputs" : {
                   "script-type" : "jython",
-                  "script-class-reference" : "Scripts/python/RestconfConfigure.py",
-                  "instance-dependencies" : [ ]
+                  "script-class-reference" : "Scripts/python/RestconfConfigDeploy.py",
+                  "instance-dependencies" : [ ],
+                  "dynamic-properties" : "*config-deploy-properties"
                 },
                 "outputs" : {
                   "response-data" : "",
-                  "status" : ""
+                  "status" : "success"
                 }
               }
             }
           }
         },
         "artifacts" : {
-          "configure-mount-template" : {
+          "config-deploy-template" : {
             "type" : "artifact-template-velocity",
-            "file" : "Templates/configure-restconf-mount-template.vtl"
+            "file" : "Templates/config-deploy-restconf-mount-template.vtl"
           },
-          "configure-unmount-template" : {
-            "type" : "artifact-template-velocity",
-            "file" : "Templates/configure-restconf-unmount-template.vtl"
-          },
-          "configure-mapping" : {
+          "config-deploy-mapping" : {
             "type" : "artifact-mapping-resource",
-            "file" : "Templates/configure-pnf-mapping.json"
+            "file" : "Definitions/config-deploy-pnf-mapping.json"
           },
           "component-script" : {
             "type" : "artifact-script-jython",
-            "file" : "Scripts/python/RestconfConfigure.py"
+            "file" : "Scripts/python/RestconfConfigDeploy.py"
           }
         }
       }
