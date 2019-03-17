@@ -19,7 +19,6 @@ package org.onap.ccsdk.apps.blueprintsprocessor.rest.service
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory
 import org.apache.http.impl.client.CloseableHttpClient
 import org.apache.http.impl.client.HttpClients
-import org.apache.http.message.BasicHeader
 import org.apache.http.ssl.SSLContextBuilder
 import org.onap.ccsdk.apps.blueprintsprocessor.rest.SSLBasicAuthRestClientProperties
 import org.onap.ccsdk.apps.blueprintsprocessor.rest.utils.WebClientUtils
@@ -33,11 +32,10 @@ import java.security.cert.X509Certificate
 class SSLBasicAuthRestClientService(private val restClientProperties: SSLBasicAuthRestClientProperties) :
     BlueprintWebClientService {
 
-    override fun headers(): Array<BasicHeader> {
-        val params = arrayListOf<BasicHeader>()
-        params.add(BasicHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
-        params.add(BasicHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE))
-        return params.toTypedArray()
+    override fun defaultHeaders(): Map<String, String> {
+        return mapOf(
+                HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE,
+                HttpHeaders.ACCEPT to MediaType.APPLICATION_JSON_VALUE)
     }
 
     override fun host(uri: String): String {

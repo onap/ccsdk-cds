@@ -30,6 +30,6 @@ class WebClientUtils {
             HttpRequestInterceptor { request, _ -> log.info("Rest request method(${request?.requestLine?.method}), url(${request?.requestLine?.uri})") }
 
         fun logResponse(): HttpResponseInterceptor =
-            HttpResponseInterceptor { response, _ -> log.info("Response status(${response.statusLine.statusCode})") }
+            HttpResponseInterceptor { response, _ -> log.info("Response status(${response.statusLine.statusCode} - ${response.statusLine.reasonPhrase})") }
     }
 }

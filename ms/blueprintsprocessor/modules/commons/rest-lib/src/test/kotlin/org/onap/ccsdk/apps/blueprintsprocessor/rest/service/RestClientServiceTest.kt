@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Copyright (C) 2019 Nordix Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,6 +13,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package org.onap.ccsdk.apps.blueprintsprocessor.rest.service
@@ -29,9 +32,11 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
@@ -58,6 +63,13 @@ class RestClientServiceTest {
         assertNotNull(response, "failed to get response")
     }
 
+    @Test
+    fun testPatch() {
+        val restClientService = bluePrintRestLibPropertyService.blueprintWebClientService("sample")
+        val response = restClientService.exchangeResource(HttpMethod.PATCH.name, "/sample/name", "")
+        assertEquals("Patch request successful", response, "failed to get patch response")
+    }
+
 }
 
 @RestController
@@ -65,5 +77,7 @@ class RestClientServiceTest {
 open class SampleController {
     @GetMapping("/name")
     fun getName(): String = "Sample Controller"
+    @PatchMapping("/name")
+    fun patchName(): String = "Patch request successful"
 }
 
