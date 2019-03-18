@@ -1,0 +1,88 @@
+{
+  "tosca_definitions_version": "controller_blueprint_1_0_0",
+  "metadata": {
+    "template_author": "Brinda Santh <brindasanth@in.ibm.com>",
+    "template_name": "component_invoke",
+    "template_version": "1.0.0",
+    "template_tags": "brinda, component_invoke"
+  },
+  "imports": [
+    {
+      "file": "Definitions/data_types.json"
+    },
+    {
+      "file": "Definitions/relationship_types.json"
+    },
+    {
+      "file": "Definitions/artifact_types.json"
+    },
+    {
+      "file": "Definitions/node_types.json"
+    },
+    {
+      "file": "Definitions/policy_types.json"
+    }
+  ],
+  "topology_template": {
+    "workflows": {
+      "component-invoke": {
+        "steps": {
+          "activate-process": {
+            "description": "Sample Component Invocation flow",
+            "target": "sample-component",
+            "activities": [
+              {
+                "call_operation": "sample-component"
+              }
+            ]
+          }
+        },
+        "inputs": {
+          "request-id": {
+            "required": true,
+            "type": "string"
+          },
+          "action-name": {
+            "required": true,
+            "type": "string"
+          },
+          "scope-type": {
+            "required": true,
+            "type": "string"
+          },
+          "hostname": {
+            "required": true,
+            "type": "string"
+          }
+        }
+      }
+    },
+    "node_templates": {
+      "sample-component": {
+        "type": "component-sample-executor",
+        "interfaces": {
+          "ComponentSampleExecutor": {
+            "operations": {
+              "process": {
+                "inputs": {
+                  "sample-property": "sample-value",
+                  "sample-list-property": [
+                    "json-parser-service"
+                  ],
+                  "dynamic-properties": {
+                    "prop1": "prop1-value",
+                    "prop2": "prop2-value"
+                  }
+                },
+                "outputs": {
+                  "response-data": "",
+                  "status": ""
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
