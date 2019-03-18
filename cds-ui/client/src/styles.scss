@@ -24,3 +24,25 @@ limitations under the License.
 .mat-card:not([class*=mat-elevation-z]) {
     box-shadow: none !important;
 }
+
+.btn-active {
+    margin: 0.5em;
+    background-color: #3f51b5;
+    color: white;
+    border-radius: 4px;
+    border: none;
+    padding: 0.5em;
+    min-width: 6em;
+    cursor: pointer;
+}
+
+.btn-disablled {
+    background-color: #c5cae8;
+    border-radius: 4px;
+    color: darkgray;
+    margin: 0.5em;
+    padding: 0.5em;
+    min-width: 6em;
+    border: none;
+    cursor: initial;
+}

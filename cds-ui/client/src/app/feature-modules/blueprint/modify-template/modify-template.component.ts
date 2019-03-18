@@ -19,7 +19,9 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+
+import { EditorComponent } from './editor/editor.component';
 
 @Component({
   selector: 'app-modify-template',
@@ -28,9 +30,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ModifyTemplateComponent implements OnInit {
 
+  isEnriched: boolean = false;
   designerMode: boolean = false;
   editorMode: boolean = true;
   viewText: string = "Designer View";
+
+  @ViewChild(EditorComponent) editorComp: EditorComponent;
 
   constructor() { }
 
@@ -51,6 +56,10 @@ export class ModifyTemplateComponent implements OnInit {
       this.designerMode = true;
       this.viewText = 'Editor View'
     }
+  }
+
+  downloadCBA() {
+    this.editorComp.download();
   }
 
 }
