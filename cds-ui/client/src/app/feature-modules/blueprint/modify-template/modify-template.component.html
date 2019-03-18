@@ -18,58 +18,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
 -->
-<!-- <div style="display: flex;flex-direction: row">
-  <div style="width: 30em;">
-  <button (click) ="changeView()" style="
-  background-color: #3f51b5;
-  color: white;
-  border-radius: 2em;
-  padding: 0.5em;
-  min-width: 6em;">{{viewText}}</button>
-  </div>
-  <div style="width: 16em">
-      <button style="margin: 0.5em;
-      background-color: #3f51b5;
-      color: white;
-      border-radius: 2em;
-      padding: 0.5em;
-      min-width: 6em;">Save Changes</button>
-  </div>
-  <div style="width: 100%;height: 3em;">
-      <div style="margin-left: 38em">
-          <mat-form-field>
-              <select matNativeControl required>
-            <option value="volvo">SDC</option>
-            <option value="saab">CCSDK</option>
-          </select>
-          </mat-form-field>
-          <button style="margin: 0.5em;
-      background-color: #3f51b5;
-      color: white;
-      border-radius: 2em;
-      padding: 0.5em;
-      min-width: 6em;">Deploy</button>
-          <button style="margin: 0.5em;
-      background-color: #3f51b5;
-      color: white;
-      border-radius: 2em;
-      padding: 0.5em;
-      min-width: 6em;">Save</button>
-          <button style="margin: 0.5em;
-      background-color: #3f51b5;
-      color: white;
-      border-radius: 2em;
-      padding: 0.5em;
-      min-width: 6em;">Download</button>
-
-      </div>
-  </div>
-</div> -->
-
 
 <div class="modifyTemp">
-  <button class="enrich-btn">Enrichment</button>
-  <button (click) ="changeView()" class="toggle-view-btn">{{viewText}}</button>
   <app-designer *ngIf="designerMode" (onNodeSelect)="on = !on; viewNodeDetails($event)"></app-designer>
   <app-editor class="editor-selector" *ngIf="editorMode"></app-editor>
 </div>
+
+<div style="display: flex;flex-direction: row">
+    <div style="width: 30em;">
+    <button class="btn-active" (click) ="changeView()">{{viewText}}</button>
+    </div>
+    <div style="width: 16em">        
+    </div>
+    <div style="width: 100%;height: 3em;">
+        <div style="display: flex;flex-direction: row-reverse">        
+        <button class="btn-active" (click)="downloadCBA()">Download</button>
+        <button [disabled]="!isEnriched" [ngClass]="{ 'mat-button-active': isEnriched, 'mat-button-disablled': !isEnriched}" mat-button [matMenuTriggerFor]="menu">Deploy</button>
+         <mat-menu #menu="matMenu">
+                  <button mat-menu-item>Deploy</button>
+                  <button mat-menu-item>Test</button>
+          </mat-menu>
+        <button [disabled]="!isEnriched" [ngClass]="{ 'btn-active': isEnriched, 'btn-disablled': !isEnriched}" class="btn-active">Publish</button>        
+        <button class="btn-active">Save</button>
+        <button class="btn-active">Enrich</button>
+  
+        </div>
+    </div>
+  </div>

@@ -55,3 +55,26 @@ limitations under the License.
 .editor-selector {
   width: 100%;
 }
+
+.mat-button-active{
+  margin: 0.5em;
+    background-color: #3f51b5 !important;
+    color: white !important;
+    border-radius: 4px;
+    border: none;
+    line-height: none !important;
+    // padding: 0.5em;
+    min-width: 6em;
+    cursor: pointer;
+}
+
+.mat-button-disablled {
+    background-color: #c5cae8 !important;
+    border-radius: 4px;
+    color: darkgray !important;
+    line-height: none !important;
+    margin: 0.5em;
+    // padding: 0.5em;
+    min-width: 6em;
+    cursor: initial;
+}
