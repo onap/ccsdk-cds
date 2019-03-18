@@ -75,7 +75,7 @@ class ResourceDefinitionEnhancerServiceImpl(private val resourceDefinitionRepoSe
     // Get all the Mapping files from all node templates.
     private fun getAllResourceMappingFiles(blueprintContext: BluePrintContext): List<String>? {
 
-        return blueprintContext.nodeTemplates?.mapNotNull { nodeTemplateMap ->
+        return blueprintContext.nodeTemplates()?.mapNotNull { nodeTemplateMap ->
 
             // Return only Mapping Artifact File Names
             nodeTemplateMap.value.artifacts?.filter { artifactDefinitionMap ->

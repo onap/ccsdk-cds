@@ -58,9 +58,10 @@ open class BluePrintWorkflowValidatorImpl(private val bluePrintTypeValidatorServ
 
                     val nodeTypeDerivedFrom = bluePrintRuntimeService.bluePrintContext().nodeTemplateNodeType(it).derivedFrom
 
-                    check(nodeTypeDerivedFrom == BluePrintConstants.MODEL_TYPE_NODE_DG) {
-                        "NodeType(${nodeTemplate.type}) derived from is '$nodeTypeDerivedFrom', Expected is " +
-                                "'${BluePrintConstants.MODEL_TYPE_NODE_DG}'"
+                    check(nodeTypeDerivedFrom == BluePrintConstants.MODEL_TYPE_NODE_DG
+                            || nodeTypeDerivedFrom == BluePrintConstants.MODEL_TYPE_NODE_COMPONENT) {
+                        "NodeType(${nodeTemplate.type}) derived from is '$nodeTypeDerivedFrom', Expected " +
+                                "'${BluePrintConstants.MODEL_TYPE_NODE_DG}' or '${BluePrintConstants.MODEL_TYPE_NODE_COMPONENT}'"
                     }
                 } catch (e: Exception) {
                     bluePrintRuntimeService.getBluePrintError()

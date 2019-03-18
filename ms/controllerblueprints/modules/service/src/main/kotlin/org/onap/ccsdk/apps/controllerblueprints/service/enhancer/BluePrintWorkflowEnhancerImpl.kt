@@ -82,8 +82,27 @@ open class BluePrintWorkflowEnhancerImpl(private val bluePrintRepoService: BlueP
 
     private fun enhanceStepTargets(name: String, workflow: Workflow) {
 
-        // Get the first Step Target NodeTemplate name( Since that is the DG Node Template)
-        val dgNodeTemplateName = bluePrintContext.workflowFirstStepNodeTemplate(name)
+        // Get the first Step Target NodeTemplate name( It may be Component or DG Node Template)
+        val firstNodeTemplateName = bluePrintContext.workflowFirstStepNodeTemplate(name)
+
+        val derivedFrom = bluePrintContext.nodeTemplateNodeType(firstNodeTemplateName).derivedFrom
+
+        when {
+            derivedFrom.startsWith(BluePrintConstants.MODEL_TYPE_NODE_COMPONENT, true) -> {
+                // DO Nothing
+            }
+            derivedFrom.startsWith(BluePrintConstants.MODEL_TYPE_NODE_DG, true) -> {
+                enhanceDGStepTargets(name, workflow, firstNodeTemplateName)
+            }
+            else -> {
+                throw BluePrintProcessorException("couldn't execute workflow($name) step mapped " +
+                        "to node template($firstNodeTemplateName) derived from($derivedFrom)")
+            }
+        }
+
+    }
+
+    private fun enhanceDGStepTargets(name: String, workflow: Workflow, dgNodeTemplateName: String) {
 
         val dgNodeTemplate = bluePrintContext.nodeTemplateByName(dgNodeTemplateName)
 

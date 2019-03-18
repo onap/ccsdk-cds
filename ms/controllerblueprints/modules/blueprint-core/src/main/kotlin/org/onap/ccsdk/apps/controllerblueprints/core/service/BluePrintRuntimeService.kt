@@ -488,7 +488,7 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
 
     override fun assignInputs(jsonNode: JsonNode) {
         log.info("assignInputs from input JSON ({})", jsonNode.toString())
-        bluePrintContext.inputs?.forEach { propertyName, property ->
+        bluePrintContext.inputs()?.forEach { propertyName, property ->
             val valueNode: JsonNode = jsonNode.at(BluePrintConstants.PATH_DIVIDER + propertyName)
                     ?: NullNode.getInstance()
             setInputValue(propertyName, property, valueNode)

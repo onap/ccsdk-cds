@@ -90,7 +90,9 @@ class BluePrintDesignTimeValidatorServiceTest {
         workflowValidator.validate(bluePrintRuntime, workflowName, workflow)
 
         assertEquals(1, bluePrintRuntime.getBluePrintError().errors.size)
-        assertEquals("Failed to validate Workflow(resource-assignment)'s step(test)'s definition : resource-assignment/steps/test : NodeType(TestNodeType) derived from is 'tosca.nodes.TEST', Expected is 'tosca.nodes.DG'", bluePrintRuntime.getBluePrintError().errors[0])
+        assertEquals("Failed to validate Workflow(resource-assignment)'s step(test)'s definition : " +
+                "resource-assignment/steps/test : NodeType(TestNodeType) derived from is 'tosca.nodes.TEST', " +
+                "Expected 'tosca.nodes.DG' or 'tosca.nodes.Component'", bluePrintRuntime.getBluePrintError().errors[0])
     }
 
     @Test

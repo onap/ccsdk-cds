@@ -247,6 +247,8 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
         if (BluePrintTypes.validPrimitiveTypes().contains(propertyType)) {
             isValid = JacksonUtils.checkJsonNodeValueOfPrimitiveType(propertyType, propertyAssignment)
 
+        } else if (BluePrintTypes.validComplexTypes().contains(propertyType)) {
+            isValid = true
         } else if (BluePrintTypes.validCollectionTypes().contains(propertyType)) {
 
             val entrySchemaType = propertyDefinition.entrySchema?.type
