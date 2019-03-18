@@ -170,5 +170,6 @@ open class DatabaseResourceAssignmentProcessor(private val dBLibGenericService: 
     }
 
     override fun recover(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
+        raRuntimeService.getBluePrintError().addError(runtimeException.message!!)
     }
 }

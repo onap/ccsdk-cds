@@ -30,7 +30,7 @@ import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
 import org.slf4j.LoggerFactory
 import java.util.*
 
-abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssignment, ResourceAssignment> {
+abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssignment, Boolean> {
 
     private val log = LoggerFactory.getLogger(ResourceAssignmentProcessor::class.java)
 
@@ -89,12 +89,12 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
         return resourceAssignment
     }
 
-    override fun prepareResponse(): ResourceAssignment {
+    override fun prepareResponse(): Boolean {
         log.info("Preparing Response...")
-        return ResourceAssignment()
+        return true
     }
 
-    override fun apply(resourceAssignment: ResourceAssignment): ResourceAssignment {
+    override fun apply(resourceAssignment: ResourceAssignment): Boolean {
         try {
             prepareRequest(resourceAssignment)
             process(resourceAssignment)
@@ -102,6 +102,14 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
             recover(runtimeException, resourceAssignment)
         }
         return prepareResponse()
+    }
+
+    fun addError(type: String, name: String, error: String) {
+        raRuntimeService.getBluePrintError().addError(type, name, error)
+    }
+
+    fun addError(error: String) {
+        raRuntimeService.getBluePrintError().addError(error)
     }
 
 }

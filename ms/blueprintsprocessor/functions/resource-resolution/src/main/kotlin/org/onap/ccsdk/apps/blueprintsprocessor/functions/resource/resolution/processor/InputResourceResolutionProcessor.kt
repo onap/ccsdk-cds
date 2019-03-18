@@ -63,5 +63,6 @@ open class InputResourceResolutionProcessor : ResourceAssignmentProcessor() {
     }
 
     override fun recover(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
+        raRuntimeService.getBluePrintError().addError(runtimeException.message!!)
     }
 }

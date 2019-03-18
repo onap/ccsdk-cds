@@ -197,6 +197,7 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
     }
 
     override fun recover(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
+        raRuntimeService.getBluePrintError().addError(runtimeException.message!!)
     }
 
 

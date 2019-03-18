@@ -138,7 +138,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     }
 
     fun addError(type: String, name: String, error: String) {
-        bluePrintRuntimeService.getBluePrintError().addError(type, name, type)
+        bluePrintRuntimeService.getBluePrintError().addError(type, name, error)
     }
 
     fun addError(error: String) {

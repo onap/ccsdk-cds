@@ -18,6 +18,7 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor
 
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
@@ -48,6 +49,7 @@ class CapabilityResourceResolutionProcessorTest {
     @Autowired
     lateinit var capabilityResourceResolutionProcessor: CapabilityResourceResolutionProcessor
 
+    @Ignore
     @Test
     fun `test kotlin capability`() {
 
