@@ -16,11 +16,10 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.rest.service
 
-import org.apache.http.message.BasicHeader
 import org.onap.ccsdk.apps.blueprintsprocessor.rest.RestClientProperties
 
 class DME2ProxyRestClientService(restClientProperties: RestClientProperties) : BlueprintWebClientService {
-    override fun headers(): Array<BasicHeader> {
+    override fun defaultHeaders(): Map<String, String> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
