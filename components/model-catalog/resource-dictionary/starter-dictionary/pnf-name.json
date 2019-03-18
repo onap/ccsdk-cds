@@ -1,0 +1,15 @@
+{
+  "name" : "pnf-name",
+  "tags" : "pnf-name",
+  "updated-by" : "Rodrigo Ottero <rodrigo.ottero@est.tech>",
+  "property" : {
+    "description" : "pnf-name",
+    "type" : "string"
+  },
+  "sources" : {
+    "input" : {
+      "type" : "source-input",
+      "properties" : { }
+    }
+  }
+}

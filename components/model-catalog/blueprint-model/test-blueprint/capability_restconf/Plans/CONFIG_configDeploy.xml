@@ -2,7 +2,7 @@
 <service-logic xmlns="http://www.onap.org/sdnc/svclogic" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.onap.org/sdnc/svclogic ./svclogic.xsd" module="CONFIG" version="1.0.0">
    <method rpc="ResourceAssignAndActivate" mode="sync">
       <block atomic="true">
-         <execute plugin="configure" method="process">
+         <execute plugin="config-deploy" method="process">
             <outcome value="failure">
                <return status="failure" />
             </outcome>

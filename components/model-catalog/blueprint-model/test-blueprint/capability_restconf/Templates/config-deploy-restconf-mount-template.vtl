@@ -1,10 +1,10 @@
 <node xmlns="urn:TBD:params:xml:ns:yang:network-topology">
-    <node-id>$pnf-id</node-id>
+    <node-id>$entity.pnf-id</node-id>
     <key-based xmlns="urn:opendaylight:netconf-node-topology">
         <key-id xmlns="urn:opendaylight:netconf-node-topology">ODL-private-key</key-id>
         <username xmlns="urn:opendaylight:netconf-node-topology">netconf</username>
      </key-based>
-    <host xmlns="urn:opendaylight:netconf-node-topology">$pnf-ip</host>
+    <host xmlns="urn:opendaylight:netconf-node-topology">$entity.pnf-name</host>
     <port xmlns="urn:opendaylight:netconf-node-topology">6513</port>
     <tcp-only xmlns="urn:opendaylight:netconf-node-topology">false</tcp-only>
  	<protocol xmlns="urn:opendaylight:netconf-node-topology">
