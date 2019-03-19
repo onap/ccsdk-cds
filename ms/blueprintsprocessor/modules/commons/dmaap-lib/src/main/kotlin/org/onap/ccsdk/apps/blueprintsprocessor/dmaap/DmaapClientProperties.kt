@@ -20,37 +20,27 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.dmaap
 
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.core.env.Environment
-import org.springframework.stereotype.Component
-import javax.annotation.PostConstruct
+import java.util.Properties
 
 /**
- * Abstraction of environment context information component.
+ * Representation of data required for all DMAAP client.
  */
-@Component
-class EnvironmentContext {
+open class DmaapClientProperties {
+    lateinit var props: Properties
+    lateinit var type: String
+    lateinit var host: String
+    lateinit var topic: String
+}
 
-    /**
-     * Environment information.
-     */
-    companion object {
-        var env: Environment? = null
-    }
+/**
+ * Representation of data required for HTTP no auth DMAAP client.
+ */
+open class HttpNoAuthDmaapClientProperties : DmaapClientProperties()
 
-    /**
-     * Environment auto-wired information.
-     */
-    @Autowired
-    var environment: Environment? = null
-
-    /**
-     * Initiates the static variable after the instantiation takes place to
-     * the auto-wired variable.
-     */
-    @PostConstruct
-    private fun initStaticContext() {
-        env = environment
-    }
-
+/**
+ * Representation of data required for AAF auth DMAAP client.
+ */
+open class AafAuthDmaapClientProperties : DmaapClientProperties() {
+    lateinit var username: String
+    lateinit var password: String
 }
