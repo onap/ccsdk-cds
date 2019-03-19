@@ -18,12 +18,12 @@
     <parent>
         <groupId>org.onap.ccsdk.apps</groupId>
         <artifactId>ccsdk-apps-ms</artifactId>
-        <version>0.4.1-SNAPSHOT</version>
+        <version>0.4.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>controllerblueprints</artifactId>
     <name>Controller Blueprints Root</name>
-    <version>0.4.1-SNAPSHOT</version>
+    <version>0.4.2-SNAPSHOT</version>
     <properties>
         <service.name>ControllerBlueprints</service.name>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
