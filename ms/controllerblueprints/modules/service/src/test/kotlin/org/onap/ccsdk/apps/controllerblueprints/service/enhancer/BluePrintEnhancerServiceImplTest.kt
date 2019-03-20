@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
+import java.io.File
 import java.nio.file.Paths
 
 @RunWith(SpringRunner::class)
@@ -81,10 +82,19 @@ class BluePrintEnhancerServiceImplTest {
         testComponentInvokeEnhancementAndValidation(basePath, "golden-enhance")
     }
 
+    @Test
+    @Throws(Exception::class)
+    fun testCapabilityRestconfEnhancementAndValidation() {
+        val basePath = "./../../../../components/model-catalog/blueprint-model/test-blueprint/capability_restconf"
+        testComponentInvokeEnhancementAndValidation(basePath, "capability_restconf-enhance")
+
+    }
 
     private fun testComponentInvokeEnhancementAndValidation(basePath: String, targetDirName: String) {
 
         val targetPath = Paths.get("target", targetDirName).toUri().path
+
+        deleteTargetDirectory(targetPath)
 
         val bluePrintContext = bluePrintEnhancerService.enhance(basePath, targetPath)
         Assert.assertNotNull("failed to get blueprintContext ", bluePrintContext)
@@ -92,6 +102,11 @@ class BluePrintEnhancerServiceImplTest {
         // Validate the Generated BluePrints
         val valid = bluePrintValidatorService.validateBluePrints(targetPath)
         Assert.assertTrue("blueprint($basePath) validation failed ", valid)
+    }
+
+    private fun deleteTargetDirectory(targetPath: String) {
+        val targetDirectory = File(targetPath)
+        targetDirectory.deleteRecursively()
     }
 
 }
