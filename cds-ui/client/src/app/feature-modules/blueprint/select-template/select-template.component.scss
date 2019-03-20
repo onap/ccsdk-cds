@@ -25,14 +25,12 @@ limitations under the License.
     margin-top: 10px;
     position: absolute;
     margin-bottom: 5px;
-    border-radius: 2em;
+    border-radius: 4px;    
+    min-width: 6em;
+    cursor: pointer;
 }
 
 .matStepContent {
     margin-top: 15px !important;
     margin-bottom: 20px !important;
 }
-
-// .mat-vertical-content {
-//     margin: 10px !important;
-// }
