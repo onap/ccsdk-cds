@@ -1,6 +1,7 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
  * Modifications Copyright © 2019 Bell Canada.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +23,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.common.ApplicationConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ErrorCode
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintCatalogService
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintEnhancerService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintFileUtils
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.BlueprintModel
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.BlueprintModelSearch
@@ -38,7 +40,9 @@ import org.springframework.http.codec.multipart.FilePart
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Mono
+import java.io.File
 import java.io.IOException
+import java.util.*
 
 /**
  * BlueprintModelHandler Purpose: Handler service to handle the request from BlurPrintModelRest
@@ -48,10 +52,12 @@ import java.io.IOException
  */
 
 @Service
-open class BluePrintModelHandler(private val bluePrintCatalogService: BluePrintCatalogService, private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
+open class BluePrintModelHandler(private val bluePrintCatalogService: BluePrintCatalogService,
+                                 private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
                                  private val blueprintModelSearchRepository: ControllerBlueprintModelSearchRepository,
                                  private val blueprintModelRepository: ControllerBlueprintModelRepository,
-                                 private val blueprintModelContentRepository: ControllerBlueprintModelContentRepository) {
+                                 private val blueprintModelContentRepository: ControllerBlueprintModelContentRepository,
+                                 private val bluePrintEnhancerService: BluePrintEnhancerService) {
 
     /**
      * This is a getAllBlueprintModel method to retrieve all the BlueprintModel in Database
@@ -272,6 +278,40 @@ open class BluePrintModelHandler(private val bluePrintCatalogService: BluePrintC
         } else {
             val msg = String.format(BLUEPRINT_MODEL_ID_FAILURE_MSG, id)
             throw BluePrintException(ErrorCode.RESOURCE_NOT_FOUND.value, msg)
+        }
+    }
+
+    /**
+     * This is a CBA enrichBlueprint method
+     * Save the Zip File in archive location and extract the cba content.
+     * Populate the Enhancement Location
+     * Enhance the CBA content
+     * Compress the Enhanced Content
+     * Return back the the compressed content back to the caller.
+     *
+     * @param filePart filePart
+     * @return ResponseEntity<Resource>
+     * @throws BluePrintException BluePrintException
+     */
+    @Throws(BluePrintException::class)
+    open suspend fun enrichBlueprint(filePart: FilePart): ResponseEntity<Resource> {
+        val enhanceId = UUID.randomUUID().toString()
+        val blueprintArchive = bluePrintLoadConfiguration.blueprintArchivePath.plus(File.separator).plus(enhanceId)
+        val blueprintEnrichmentDir = bluePrintLoadConfiguration.blueprintEnrichmentPath.plus(File.separator).plus(enhanceId)
+
+        try {
+            BluePrintEnhancerUtils.decompressFilePart(filePart, blueprintArchive, blueprintEnrichmentDir)
+
+            // Enhance the Blue Prints
+            bluePrintEnhancerService.enhance(blueprintEnrichmentDir)
+
+            return BluePrintEnhancerUtils.compressToFilePart(blueprintEnrichmentDir, blueprintArchive)
+
+        } catch (e: IOException) {
+            throw BluePrintException(ErrorCode.IO_FILE_INTERRUPT.value,
+                    String.format("I/O Error while uploading the CBA file: %s", e.message), e)
+        } finally {
+            BluePrintEnhancerUtils.cleanEnhancer(blueprintArchive, blueprintEnrichmentDir)
         }
     }
 

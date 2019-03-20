@@ -1,6 +1,7 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
  * Modifications Copyright © 2019 Bell Canada.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,20 +18,29 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.utils
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.reactive.awaitSingle
+import kotlinx.coroutines.withContext
+import org.apache.commons.io.FileUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.apps.controllerblueprints.core.data.ArtifactType
-import org.onap.ccsdk.apps.controllerblueprints.core.data.DataType
-import org.onap.ccsdk.apps.controllerblueprints.core.data.ErrorCode
-import org.onap.ccsdk.apps.controllerblueprints.core.data.NodeType
-import org.onap.ccsdk.apps.controllerblueprints.core.data.RelationshipType
+import org.onap.ccsdk.apps.controllerblueprints.core.data.*
+import org.onap.ccsdk.apps.controllerblueprints.core.deCompress
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintRepoService
+import org.onap.ccsdk.apps.controllerblueprints.core.reCreateDirs
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintArchiveUtils
+import org.springframework.core.io.ByteArrayResource
+import org.springframework.core.io.Resource
+import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.util.StringUtils
 import reactor.core.publisher.Mono
 import java.io.File
 import java.io.IOException
 import java.nio.file.Path
+import java.nio.file.Paths
 import java.util.*
 
 
@@ -47,7 +57,7 @@ class BluePrintEnhancerUtils {
         }
 
         fun populateRelationshipType(bluePrintContext: BluePrintContext, bluePrintRepoService: BluePrintRepoService,
-                             relationshipName: String): RelationshipType {
+                                     relationshipName: String): RelationshipType {
 
             val relationshipType = bluePrintContext.serviceTemplate.relationshipTypes?.get(relationshipName)
                     ?: bluePrintRepoService.getRelationshipType(relationshipName)
@@ -75,6 +85,47 @@ class BluePrintEnhancerUtils {
                     ?: throw BluePrintException("couldn't get ArtifactType($artifactTypeName) from repo.")
             bluePrintContext.serviceTemplate.artifactTypes?.put(artifactTypeName, artifactType)
             return artifactType
+        }
+
+        suspend fun copyFromFilePart(filePart: FilePart, targetFile: File): File {
+            // Delete the Directory
+            targetFile.deleteRecursively()
+            return filePart.transferTo(targetFile)
+                    .thenReturn(targetFile)
+                    .awaitSingle()
+        }
+
+        suspend fun decompressFilePart(filePart: FilePart, archiveDir: String, enhanceDir: String): File {
+            //Recreate the Base Directories
+            Paths.get(archiveDir).toFile().reCreateDirs()
+            Paths.get(enhanceDir).toFile().reCreateDirs()
+
+            val filePartFile = Paths.get(archiveDir, "cba.zip").toFile()
+            // Copy the File Part to ZIP
+            copyFromFilePart(filePart, filePartFile)
+            val deCompressFileName = Paths.get(enhanceDir).toUri().path
+            return filePartFile.deCompress(deCompressFileName)
+        }
+
+        suspend fun compressToFilePart(enhanceDir: String, archiveDir: String): ResponseEntity<Resource> {
+            val compressedFile = Paths.get(archiveDir, "enhanced-cba.zip").toFile()
+            BluePrintArchiveUtils.compress(Paths.get(enhanceDir).toFile(), compressedFile, true)
+            return prepareResourceEntity(compressedFile.name, compressedFile.readBytes())
+        }
+
+        suspend fun prepareResourceEntity(fileName: String, file: ByteArray): ResponseEntity<Resource> {
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType("text/plain"))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"$fileName\"")
+                    .body(ByteArrayResource(file))
+        }
+
+        suspend fun cleanEnhancer(archiveLocation: String, enhancementLocation: String) = withContext(Dispatchers.Default) {
+            val enrichDir = File(enhancementLocation)
+            FileUtils.forceDeleteOnExit(enrichDir)
+
+            val archiveDir = File(archiveLocation)
+            FileUtils.forceDeleteOnExit(archiveDir)
         }
 
         /**

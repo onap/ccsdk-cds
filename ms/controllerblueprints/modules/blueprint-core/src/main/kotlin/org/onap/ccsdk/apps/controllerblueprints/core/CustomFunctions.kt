@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +21,6 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.*
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.helpers.MessageFormatter
-import java.io.File
-import java.io.InputStream
 import kotlin.reflect.KClass
 
 /**
@@ -158,11 +157,5 @@ fun returnNotEmptyOrThrow(value: String?, lazyMessage: () -> Any): String {
     } else {
         throw IllegalStateException(lazyMessage().toString())
     }
-}
-
-fun InputStream.toFile(path: String): File {
-    val file = File(path)
-    file.outputStream().use { this.copyTo(it) }
-    return file
 }
 
