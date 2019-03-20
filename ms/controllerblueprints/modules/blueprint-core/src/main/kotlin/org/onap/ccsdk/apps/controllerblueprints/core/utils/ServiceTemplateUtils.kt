@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +17,8 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core.utils
 
-import org.apache.commons.io.FileUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate
 import org.onap.ccsdk.apps.controllerblueprints.core.data.TopologyTemplate
-import java.io.File
-import java.nio.charset.Charset
 
 /**
  *
@@ -29,14 +27,11 @@ import java.nio.charset.Charset
  */
 object ServiceTemplateUtils {
 
-    @JvmStatic
-    fun getServiceTemplate(fileName: String): ServiceTemplate {
-        val content: String = FileUtils.readFileToString(File(fileName), Charset.defaultCharset())
+    suspend fun getServiceTemplate(fileName: String): ServiceTemplate {
+        val content: String = JacksonReactorUtils.getContent(fileName)
         return getServiceTemplateFromContent(content)
     }
 
-
-    @JvmStatic
     fun getServiceTemplateFromContent(content: String): ServiceTemplate {
         return JacksonUtils.readValue(content)
     }
@@ -80,31 +75,34 @@ object ServiceTemplateUtils {
         parentServiceTemplate.topologyTemplate = parentServiceTemplate.topologyTemplate ?: TopologyTemplate()
 
         toMerge.topologyTemplate?.inputs?.let {
-            parentServiceTemplate.topologyTemplate?.inputs = parentServiceTemplate.topologyTemplate?.inputs ?: hashMapOf()
+            parentServiceTemplate.topologyTemplate?.inputs = parentServiceTemplate.topologyTemplate?.inputs
+                    ?: hashMapOf()
             parentServiceTemplate.topologyTemplate?.inputs?.putAll(parentServiceTemplate.topologyTemplate?.inputs as MutableMap)
         }
 
         toMerge.topologyTemplate?.nodeTemplates?.let {
-            parentServiceTemplate.topologyTemplate?.nodeTemplates = parentServiceTemplate.topologyTemplate?.nodeTemplates ?: hashMapOf()
+            parentServiceTemplate.topologyTemplate?.nodeTemplates = parentServiceTemplate.topologyTemplate?.nodeTemplates
+                    ?: hashMapOf()
             parentServiceTemplate.topologyTemplate?.nodeTemplates?.putAll(parentServiceTemplate.topologyTemplate?.nodeTemplates as MutableMap)
         }
 
         toMerge.topologyTemplate?.relationshipTemplates?.let {
-            parentServiceTemplate.topologyTemplate?.relationshipTemplates = parentServiceTemplate.topologyTemplate?.relationshipTemplates ?: hashMapOf()
+            parentServiceTemplate.topologyTemplate?.relationshipTemplates = parentServiceTemplate.topologyTemplate?.relationshipTemplates
+                    ?: hashMapOf()
             parentServiceTemplate.topologyTemplate?.relationshipTemplates?.putAll(parentServiceTemplate.topologyTemplate?.relationshipTemplates as MutableMap)
         }
 
         toMerge.topologyTemplate?.policies?.let {
-            parentServiceTemplate.topologyTemplate?.policies = parentServiceTemplate.topologyTemplate?.policies ?: hashMapOf()
+            parentServiceTemplate.topologyTemplate?.policies = parentServiceTemplate.topologyTemplate?.policies
+                    ?: hashMapOf()
             parentServiceTemplate.topologyTemplate?.policies?.putAll(parentServiceTemplate.topologyTemplate?.policies as MutableMap)
         }
 
         toMerge.topologyTemplate?.workflows?.let {
-            parentServiceTemplate.topologyTemplate?.workflows = parentServiceTemplate.topologyTemplate?.workflows ?: hashMapOf()
+            parentServiceTemplate.topologyTemplate?.workflows = parentServiceTemplate.topologyTemplate?.workflows
+                    ?: hashMapOf()
             parentServiceTemplate.topologyTemplate?.workflows?.putAll(parentServiceTemplate.topologyTemplate?.workflows as MutableMap)
         }
         return parentServiceTemplate
     }
-
-
 }

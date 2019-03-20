@@ -21,24 +21,14 @@ import com.att.eelf.configuration.EELFManager
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.databind.node.ArrayNode
-import com.fasterxml.jackson.databind.node.BooleanNode
-import com.fasterxml.jackson.databind.node.DoubleNode
-import com.fasterxml.jackson.databind.node.FloatNode
-import com.fasterxml.jackson.databind.node.IntNode
-import com.fasterxml.jackson.databind.node.NullNode
-import com.fasterxml.jackson.databind.node.ObjectNode
-import com.fasterxml.jackson.databind.node.TextNode
+import com.fasterxml.jackson.databind.node.*
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.apache.commons.io.IOUtils
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.apps.controllerblueprints.core.*
 import java.io.File
 import java.nio.charset.Charset
 
@@ -51,7 +41,7 @@ class JacksonUtils {
     companion object {
         private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
         inline fun <reified T : Any> readValue(content: String): T =
-            jacksonObjectMapper().readValue(content, T::class.java)
+                jacksonObjectMapper().readValue(content, T::class.java)
 
         fun <T> readValue(content: String, valueType: Class<T>): T? {
             return jacksonObjectMapper().readValue(content, valueType)
@@ -73,7 +63,8 @@ class JacksonUtils {
             }
         }
 
-        fun getContent(fileName: String): String = getContent(File(fileName))
+
+        fun getContent(fileName: String): String = getContent(normalizedFile(fileName))
 
         fun getContent(file: File): String = runBlocking {
             async {
@@ -89,7 +80,7 @@ class JacksonUtils {
             return runBlocking {
                 withContext(Dispatchers.Default) {
                     IOUtils.toString(JacksonUtils::class.java.classLoader
-                        .getResourceAsStream(fileName), Charset.defaultCharset())
+                            .getResourceAsStream(fileName), Charset.defaultCharset())
                 }
             }
         }
@@ -189,7 +180,7 @@ class JacksonUtils {
 
         fun <T> getInstanceFromMap(properties: MutableMap<String, JsonNode>, classType: Class<T>): T {
             return readValue(getJson(properties), classType)
-                ?: throw BluePrintProcessorException("failed to transform content ($properties) to type ($classType)")
+                    ?: throw BluePrintProcessorException("failed to transform content ($properties) to type ($classType)")
         }
 
         fun checkJsonNodeValueOfType(type: String, jsonNode: JsonNode): Boolean {

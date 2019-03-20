@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +17,13 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core.utils
 
-import org.apache.commons.io.FileUtils
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.apps.controllerblueprints.core.checkNotEmpty
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.apps.controllerblueprints.core.checkNotEmpty
 import java.io.File
 import java.net.URL
-import java.nio.charset.Charset
+
 /**
  *
  *
@@ -32,30 +32,30 @@ import java.nio.charset.Charset
 object ResourceResolverUtils {
     private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
 
-    @JvmStatic
-    fun getFileContent(filename : String, basePath : String?): String {
+    fun getFileContent(filename: String, basePath: String?): String {
         log.trace("file ({}), basePath ({}) ", filename, basePath)
-        try{
-            var resolvedFileName : String = filename
-            if(filename.startsWith("http", true)
-                    || filename.startsWith("https", true)){
-                val givenUrl : String = URL(filename).toString()
-                val systemUrl : String = File(".").toURI().toURL().toString()
+        try {
+            var resolvedFileName: String = filename
+            if (filename.startsWith("http", true)
+                    || filename.startsWith("https", true)) {
+                val givenUrl: String = URL(filename).toString()
+                val systemUrl: String = File(".").toURI().toURL().toString()
                 log.trace("givenUrl ({}), systemUrl ({}) ", givenUrl, systemUrl)
-                if(givenUrl.startsWith(systemUrl)){
+                if (givenUrl.startsWith(systemUrl)) {
 
                 }
-            }else{
-                if(!filename.startsWith("/")){
+            } else {
+                if (!filename.startsWith("/")) {
                     if (checkNotEmpty(basePath)) {
                         resolvedFileName = basePath.plus(File.separator).plus(filename)
-                    }else{
+                    } else {
                         resolvedFileName = javaClass.classLoader.getResource(".").path.plus(filename)
                     }
                 }
             }
-            return FileUtils.readFileToString(File(resolvedFileName), Charset.defaultCharset())
-        }catch (e : Exception){
+            //FIXME("Convert into reactive")
+            return JacksonUtils.getContent(resolvedFileName)
+        } catch (e: Exception) {
             throw BluePrintException(e, "failed to file (%s), basePath (%s) ", filename, basePath)
         }
     }

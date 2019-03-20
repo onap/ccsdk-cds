@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2017-2018 AT&T Intellectual Property.
+ *  Modifications Copyright © 2019 IBM.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,91 +20,73 @@ package org.onap.ccsdk.apps.controllerblueprints.core.utils
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import reactor.core.publisher.Mono
-import reactor.core.publisher.toMono
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.apache.commons.io.IOUtils
+import org.onap.ccsdk.apps.controllerblueprints.core.normalizedFile
+import java.io.File
+import java.nio.charset.Charset
 
-@Deprecated("Reactor will be replaced by coroutines by default")
-object JacksonReactorUtils {
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
+class JacksonReactorUtils {
+    companion object {
 
-    @JvmStatic
-    fun getContent(fileName: String): Mono<String> {
-        return JacksonUtils.getContent(fileName).toMono()
-    }
+        private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
 
-    @JvmStatic
-    fun getClassPathFileContent(fileName: String): Mono<String> {
-        return JacksonUtils.getClassPathFileContent(fileName).toMono()
-    }
+        suspend fun getContent(fileName: String): String {
+            //log.info("Reading File($fileName)")
+            return getContent(normalizedFile(fileName))
+        }
 
-    @JvmStatic
-    fun <T> readValue(content: String, valueType: Class<T>): Mono<T> {
-        return Mono.just(jacksonObjectMapper().readValue(content, valueType))
-    }
+        suspend fun getContent(file: File): String  = withContext(Dispatchers.IO) {
+            // log.info("Reading File(${file.absolutePath})")
+            file.readText(Charsets.UTF_8)
+        }
 
-    @JvmStatic
-    fun jsonNode(content: String): Mono<JsonNode> {
-        return Mono.just(jacksonObjectMapper().readTree(content))
-    }
+        suspend fun getClassPathFileContent(fileName: String): String = withContext(Dispatchers.IO) {
+            //log.trace("Reading Classpath File($fileName)")
+            IOUtils.toString(JacksonUtils::class.java.classLoader
+                    .getResourceAsStream(fileName), Charset.defaultCharset())
+        }
 
-    @JvmStatic
-    fun getJson(any: kotlin.Any, pretty: Boolean = false): Mono<String> {
-        return Mono.just(JacksonUtils.getJson(any, pretty))
-    }
+        suspend fun <T> readValueFromFile(fileName: String, valueType: Class<T>): T? {
+            val content: String = getContent(fileName)
+            return JacksonUtils.readValue(content, valueType)
+        }
 
-    @JvmStatic
-    fun <T> getListFromJson(content: String, valueType: Class<T>): Mono<List<T>> {
-        val objectMapper = jacksonObjectMapper()
-        val javaType = objectMapper.typeFactory.constructCollectionType(List::class.java, valueType)
-        return objectMapper.readValue<List<T>>(content, javaType).toMono()
-    }
+        suspend fun <T> readValueFromClassPathFile(fileName: String, valueType: Class<T>): T? {
+            val content: String = getClassPathFileContent(fileName)
+            return JacksonUtils.readValue(content, valueType)
+        }
 
-    @JvmStatic
-    fun <T> readValueFromFile(fileName: String, valueType: Class<T>): Mono<T> {
-        return getContent(fileName)
-                .flatMap { content ->
-                    readValue(content, valueType)
-                }
-    }
+        suspend fun jsonNodeFromClassPathFile(fileName: String): JsonNode {
+            val content: String = getClassPathFileContent(fileName)
+            return JacksonUtils.jsonNode(content)
+        }
 
-    @JvmStatic
-    fun <T> readValueFromClassPathFile(fileName: String, valueType: Class<T>): Mono<T> {
-        return getClassPathFileContent(fileName)
-                .flatMap { content ->
-                    readValue(content, valueType)
-                }
-    }
+        suspend fun jsonNodeFromFile(fileName: String): JsonNode {
+            val content: String = getContent(fileName)
+            return JacksonUtils.jsonNode(content)
+        }
 
-    @JvmStatic
-    fun jsonNodeFromFile(fileName: String): Mono<JsonNode> {
-        return getContent(fileName)
-                .flatMap { content ->
-                    jsonNode(content)
-                }
-    }
+        suspend fun <T> getListFromFile(fileName: String, valueType: Class<T>): List<T> {
+            val content: String = getContent(fileName)
+            return JacksonUtils.getListFromJson(content, valueType)
+        }
 
-    @JvmStatic
-    fun jsonNodeFromClassPathFile(fileName: String): Mono<JsonNode> {
-        return getClassPathFileContent(fileName)
-                .flatMap { content ->
-                    jsonNode(content)
-                }
-    }
+        suspend fun <T> getListFromClassPathFile(fileName: String, valueType: Class<T>): List<T> {
+            val content: String = getClassPathFileContent(fileName)
+            return JacksonUtils.getListFromJson(content, valueType)
+        }
 
-    @JvmStatic
-    fun <T> getListFromFile(fileName: String, valueType: Class<T>): Mono<List<T>> {
-        return getContent(fileName)
-                .flatMap { content ->
-                    getListFromJson(content, valueType)
-                }
-    }
+        suspend fun <T> getMapFromFile(file: File, valueType: Class<T>): MutableMap<String, T> {
+            val content: String = getContent(file)
+            return JacksonUtils.getMapFromJson(content, valueType)
+        }
 
-    @JvmStatic
-    fun <T> getListFromClassPathFile(fileName: String, valueType: Class<T>): Mono<List<T>> {
-        return getClassPathFileContent(fileName)
-                .flatMap { content ->
-                    getListFromJson(content, valueType)
-                }
+        suspend fun <T> getMapFromClassPathFile(fileName: String, valueType: Class<T>): MutableMap<String, T> {
+            val content: String = getClassPathFileContent(fileName)
+            return JacksonUtils.getMapFromJson(content, valueType)
+        }
+
     }
 }

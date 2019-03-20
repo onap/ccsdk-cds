@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,10 +48,10 @@ interface BluePrintAttributeDefinitionEnhancer : BluePrintEnhancer<AttributeDefi
 interface BluePrintEnhancerService {
 
     @Throws(BluePrintException::class)
-    fun enhance(basePath: String, enrichedBasePath: String): BluePrintContext
+    suspend fun enhance(basePath: String, enrichedBasePath: String): BluePrintContext
 
     @Throws(BluePrintException::class)
-    fun enhance(basePath: String): BluePrintContext
+    suspend fun enhance(basePath: String): BluePrintContext
 }
 
 interface BluePrintTypeEnhancerService {

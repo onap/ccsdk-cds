@@ -20,10 +20,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.onap.ccsdk.apps.controllerblueprints.core.compress
-import org.onap.ccsdk.apps.controllerblueprints.core.deleteDir
-import org.onap.ccsdk.apps.controllerblueprints.core.normalizedFile
-import org.onap.ccsdk.apps.controllerblueprints.core.reCreateDirs
+import org.onap.ccsdk.apps.controllerblueprints.core.*
 import org.onap.ccsdk.apps.controllerblueprints.service.controller.mock.MockFilePart
 import java.nio.file.Paths
 import java.util.*
@@ -34,10 +31,9 @@ class BluePrintEnhancerUtilsTest {
     private val blueprintDir = "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
     private val blueprintArchivePath: String = "./target/blueprints/archive"
     private val blueprintEnrichmentPath: String = "./target/blueprints/enrichment"
-    private var zipBlueprintFileName = Paths.get(blueprintArchivePath, "test.zip").toFile().normalize().absolutePath
+    private var zipBlueprintFileName = Paths.get(blueprintArchivePath, "test.zip").normalize().toUri().path
 
     @Before
-    @Throws(Exception::class)
     fun setUp() {
         val archiveDir = normalizedFile(blueprintArchivePath).reCreateDirs()
         assertTrue(archiveDir.exists(), "failed to create archiveDir(${archiveDir.absolutePath}")
@@ -49,20 +45,19 @@ class BluePrintEnhancerUtilsTest {
     }
 
     @After
-    @Throws(Exception::class)
     fun tearDown() {
         deleteDir(blueprintArchivePath)
         deleteDir(blueprintEnrichmentPath)
     }
 
     @Test
-    fun testDecompressFilePart() {
+    fun testFilePartCompressionNDeCompression() {
         val filePart = MockFilePart(zipBlueprintFileName)
 
         runBlocking {
             val enhanceId = UUID.randomUUID().toString()
-            val blueprintArchiveLocation = "$blueprintArchivePath/$enhanceId"
-            val blueprintEnrichmentLocation = "$blueprintEnrichmentPath/$enhanceId"
+            val blueprintArchiveLocation = normalizedPathName(blueprintArchivePath, enhanceId)
+            val blueprintEnrichmentLocation = normalizedPathName(blueprintEnrichmentPath, enhanceId)
             BluePrintEnhancerUtils.decompressFilePart(filePart, blueprintArchiveLocation, blueprintEnrichmentLocation)
             BluePrintEnhancerUtils.compressToFilePart(blueprintEnrichmentLocation, blueprintArchiveLocation)
         }

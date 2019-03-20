@@ -35,7 +35,7 @@ open class BluePrintEnhancerServiceImpl(private val bluePrintTypeEnhancerService
 
     private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintEnhancerServiceImpl::class.toString())
 
-    override fun enhance(basePath: String, enrichedBasePath: String): BluePrintContext {
+    override suspend fun enhance(basePath: String, enrichedBasePath: String): BluePrintContext {
 
         // Copy the Blueprint Content to Target Location
         BluePrintFileUtils.copyBluePrint(basePath, enrichedBasePath)
@@ -45,7 +45,7 @@ open class BluePrintEnhancerServiceImpl(private val bluePrintTypeEnhancerService
     }
 
     @Throws(BluePrintException::class)
-    override fun enhance(basePath: String): BluePrintContext {
+    override suspend fun enhance(basePath: String): BluePrintContext {
 
         log.info("Enhancing blueprint($basePath)")
         val blueprintRuntimeService = BluePrintMetadataUtils
@@ -73,7 +73,6 @@ open class BluePrintEnhancerServiceImpl(private val bluePrintTypeEnhancerService
         } catch (e: Exception) {
             throw e
         }
-
         return blueprintRuntimeService.bluePrintContext()
     }
 

@@ -20,6 +20,7 @@ import org.apache.commons.io.FileUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintArchiveUtils
 import java.io.File
 import java.io.InputStream
+import java.nio.file.Path
 import java.nio.file.Paths
 
 fun InputStream.toFile(path: String): File {
@@ -65,10 +66,18 @@ fun File.deCompress(targetFile: File): File {
 }
 
 fun deleteDir(path: String) {
-    Paths.get(path).toFile().deleteRecursively()
+    normalizedFile(path).deleteRecursively()
 }
 
-
-fun normalizedFile(path: String): File {
-    return Paths.get(path).toFile().normalize()
+fun normalizedFile(path: String, vararg more: String?): File {
+    return Paths.get(path, *more).toFile().normalize()
 }
+
+fun normalizedPath(path: String, vararg more: String?): Path {
+    return Paths.get(path, *more).normalize().toAbsolutePath()
+}
+
+fun normalizedPathName(path: String, vararg more: String?): String {
+    return normalizedPath(path, *more).toUri().path
+}
+

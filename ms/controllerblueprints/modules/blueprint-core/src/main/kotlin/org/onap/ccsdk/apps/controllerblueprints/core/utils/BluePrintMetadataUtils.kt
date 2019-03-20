@@ -21,16 +21,17 @@ package org.onap.ccsdk.apps.controllerblueprints.core.utils
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
 import com.fasterxml.jackson.databind.JsonNode
+import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ToscaMetaData
+import org.onap.ccsdk.apps.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintImportService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.DefaultBluePrintRuntimeService
 import java.io.File
 import java.nio.charset.Charset
-import java.nio.file.Paths
 import java.util.*
 
 class BluePrintMetadataUtils {
@@ -73,7 +74,7 @@ class BluePrintMetadataUtils {
 
         fun toscaMetaDataFromMetaFile(metaFilePath: String): ToscaMetaData {
             val toscaMetaData = ToscaMetaData()
-            val lines = Paths.get(metaFilePath).toFile().readLines(Charset.defaultCharset())
+            val lines = normalizedFile(metaFilePath).readLines(Charset.defaultCharset())
             lines.forEach { line ->
                 if (line.contains(":")) {
                     val keyValue = line.split(":")
@@ -104,7 +105,8 @@ class BluePrintMetadataUtils {
             return bluePrintRuntimeService
         }
 
-        fun getBaseEnhancementBluePrintRuntime(id: String, blueprintBasePath: String): BluePrintRuntimeService<MutableMap<String, JsonNode>> {
+        suspend fun getBaseEnhancementBluePrintRuntime(id: String, blueprintBasePath: String)
+                : BluePrintRuntimeService<MutableMap<String, JsonNode>> {
 
             val bluePrintContext: BluePrintContext = getBaseEnhancementBluePrintContext(blueprintBasePath)
 
@@ -115,7 +117,8 @@ class BluePrintMetadataUtils {
             return bluePrintRuntimeService
         }
 
-        fun getBluePrintRuntime(id: String, blueprintBasePath: String, executionContext: MutableMap<String, JsonNode>): BluePrintRuntimeService<MutableMap<String, JsonNode>> {
+        fun getBluePrintRuntime(id: String, blueprintBasePath: String, executionContext: MutableMap<String, JsonNode>):
+                BluePrintRuntimeService<MutableMap<String, JsonNode>> {
             val bluePrintContext: BluePrintContext = getBluePrintContext(blueprintBasePath)
             val bluePrintRuntimeService = DefaultBluePrintRuntimeService(id, bluePrintContext)
             executionContext.forEach {
@@ -126,16 +129,16 @@ class BluePrintMetadataUtils {
             return bluePrintRuntimeService
         }
 
-        fun getBluePrintContext(blueprintBasePath: String): BluePrintContext {
+        fun getBluePrintContext(blueprintBasePath: String): BluePrintContext = runBlocking {
 
             val toscaMetaData: ToscaMetaData = toscaMetaData(blueprintBasePath)
 
             log.info("Reading blueprint path($blueprintBasePath) and entry definition file (${toscaMetaData.entityDefinitions})")
 
-            return readBlueprintFile(toscaMetaData.entityDefinitions, blueprintBasePath)
+            readBlueprintFile(toscaMetaData.entityDefinitions, blueprintBasePath)
         }
 
-        private fun getBaseEnhancementBluePrintContext(blueprintBasePath: String): BluePrintContext {
+        private suspend fun getBaseEnhancementBluePrintContext(blueprintBasePath: String): BluePrintContext {
             val toscaMetaData: ToscaMetaData = toscaMetaData(blueprintBasePath)
             // Clean Type files
             BluePrintFileUtils.deleteBluePrintTypes(blueprintBasePath)
@@ -151,7 +154,7 @@ class BluePrintMetadataUtils {
             return blueprintContext
         }
 
-        private fun readBlueprintFile(entityDefinitions: String, basePath: String): BluePrintContext {
+        private suspend fun readBlueprintFile(entityDefinitions: String, basePath: String): BluePrintContext {
             val rootFilePath: String = basePath.plus(File.separator).plus(entityDefinitions)
             val rootServiceTemplate = ServiceTemplateUtils.getServiceTemplate(rootFilePath)
             // Recursively Import Template files

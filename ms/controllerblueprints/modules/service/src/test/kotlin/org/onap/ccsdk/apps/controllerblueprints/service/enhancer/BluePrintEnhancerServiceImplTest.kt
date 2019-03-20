@@ -91,17 +91,18 @@ class BluePrintEnhancerServiceImplTest {
     }
 
     private fun testComponentInvokeEnhancementAndValidation(basePath: String, targetDirName: String) {
+        runBlocking {
+            val targetPath = Paths.get("target", targetDirName).toUri().path
 
-        val targetPath = Paths.get("target", targetDirName).toUri().path
+            deleteTargetDirectory(targetPath)
 
-        deleteTargetDirectory(targetPath)
+            val bluePrintContext = bluePrintEnhancerService.enhance(basePath, targetPath)
+            Assert.assertNotNull("failed to get blueprintContext ", bluePrintContext)
 
-        val bluePrintContext = bluePrintEnhancerService.enhance(basePath, targetPath)
-        Assert.assertNotNull("failed to get blueprintContext ", bluePrintContext)
-
-        // Validate the Generated BluePrints
-        val valid = bluePrintValidatorService.validateBluePrints(targetPath)
-        Assert.assertTrue("blueprint($basePath) validation failed ", valid)
+            // Validate the Generated BluePrints
+            val valid = bluePrintValidatorService.validateBluePrints(targetPath)
+            Assert.assertTrue("blueprint($basePath) validation failed ", valid)
+        }
     }
 
     private fun deleteTargetDirectory(targetPath: String) {

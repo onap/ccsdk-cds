@@ -19,11 +19,11 @@
 package org.onap.ccsdk.apps.controllerblueprints.service.handler
 
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.apps.controllerblueprints.core.common.ApplicationConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ErrorCode
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintEnhancerService
+import org.onap.ccsdk.apps.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintFileUtils
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.BlueprintModel
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.BlueprintModelSearch
@@ -95,26 +95,6 @@ open class BluePrintModelHandler(private val bluePrintCatalogService: BluePrintC
 
     }
 
-    /**
-     * This is a publishBlueprintModel method to change the status published to YES
-     *
-     * @param id id
-     * @return BlueprintModelSearch
-     * @throws BluePrintException BluePrintException
-     */
-    @Throws(BluePrintException::class)
-    open fun publishBlueprintModel(id: String): BlueprintModelSearch {
-        val blueprintModelSearch: BlueprintModelSearch
-        val dbBlueprintModel = blueprintModelSearchRepository.findById(id)
-        if (dbBlueprintModel.isPresent) {
-            blueprintModelSearch = dbBlueprintModel.get()
-        } else {
-            val msg = String.format(BLUEPRINT_MODEL_ID_FAILURE_MSG, id)
-            throw BluePrintException(ErrorCode.RESOURCE_NOT_FOUND.value, msg)
-        }
-        blueprintModelSearch.published = ApplicationConstants.ACTIVE_Y
-        return blueprintModelSearchRepository.saveAndFlush(blueprintModelSearch)
-    }
 
     /**
      * This is a searchBlueprintModels method
@@ -296,9 +276,8 @@ open class BluePrintModelHandler(private val bluePrintCatalogService: BluePrintC
     @Throws(BluePrintException::class)
     open suspend fun enrichBlueprint(filePart: FilePart): ResponseEntity<Resource> {
         val enhanceId = UUID.randomUUID().toString()
-        val blueprintArchive = bluePrintLoadConfiguration.blueprintArchivePath.plus(File.separator).plus(enhanceId)
-        val blueprintEnrichmentDir = bluePrintLoadConfiguration.blueprintEnrichmentPath.plus(File.separator).plus(enhanceId)
-
+        val blueprintArchive = normalizedPathName(bluePrintLoadConfiguration.blueprintArchivePath, enhanceId)
+        val blueprintEnrichmentDir = normalizedPathName(bluePrintLoadConfiguration.blueprintEnrichmentPath, enhanceId)
         try {
             BluePrintEnhancerUtils.decompressFilePart(filePart, blueprintArchive, blueprintEnrichmentDir)
 
@@ -309,7 +288,35 @@ open class BluePrintModelHandler(private val bluePrintCatalogService: BluePrintC
 
         } catch (e: IOException) {
             throw BluePrintException(ErrorCode.IO_FILE_INTERRUPT.value,
-                    String.format("I/O Error while uploading the CBA file: %s", e.message), e)
+                    "Error in Enriching CBA: ${e.message}", e)
+        } finally {
+            BluePrintEnhancerUtils.cleanEnhancer(blueprintArchive, blueprintEnrichmentDir)
+        }
+    }
+
+    /**
+     * This is a publishBlueprintModel method to change the status published to YES
+     *
+     * @param filePart filePart
+     * @return BlueprintModelSearch
+     * @throws BluePrintException BluePrintException
+     */
+    @Throws(BluePrintException::class)
+    open suspend fun publishBlueprint(filePart: FilePart): BlueprintModelSearch {
+        val publishId = UUID.randomUUID().toString()
+        val blueprintArchive = bluePrintLoadConfiguration.blueprintArchivePath.plus(File.separator).plus(publishId)
+        val blueprintEnrichmentDir = bluePrintLoadConfiguration.blueprintEnrichmentPath.plus(File.separator).plus(publishId)
+        try {
+            val compressedFilePart = BluePrintEnhancerUtils
+                    .extractCompressFilePart(filePart, blueprintArchive, blueprintEnrichmentDir)
+
+            val blueprintId = bluePrintCatalogService.saveToDatabase(compressedFilePart, true)
+
+            return blueprintModelSearchRepository.findById(blueprintId).get()
+
+        } catch (e: Exception) {
+            throw BluePrintException(ErrorCode.IO_FILE_INTERRUPT.value,
+                    "Error in Publishing CBA: ${e.message}", e)
         } finally {
             BluePrintEnhancerUtils.cleanEnhancer(blueprintArchive, blueprintEnrichmentDir)
         }
