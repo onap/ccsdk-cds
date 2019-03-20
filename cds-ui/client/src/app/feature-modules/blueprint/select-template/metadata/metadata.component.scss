@@ -31,7 +31,10 @@ limitations under the License.
 
 .matBtn {
     color: white;
-    background: gray;
+    background:#3f51b5;
     margin-top: 10px;
     position: absolute;
+    border-radius: 4px;
+    min-width: 6em;
+    cursor: pointer;
 }
