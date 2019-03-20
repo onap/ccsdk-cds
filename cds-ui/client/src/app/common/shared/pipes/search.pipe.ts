@@ -26,11 +26,12 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 export class SearchPipe implements PipeTransform{
    
-    transform(item: any, searchText: any): any {
-        if(searchText == null) return item;
-
-        return item.filter(function(search){
-          return search.type.toLowerCase().indexOf(searchText.toLowerCase()) > -1;
-        })
-      }
+    transform(items: any[], searchText: string): any[] {
+        if(!items) return [];
+        if(!searchText) return items;
+        searchText = searchText.toLowerCase();
+        return items.filter( it => {
+            return it.toLowerCase().includes(searchText);
+        });
+    } 
 }
