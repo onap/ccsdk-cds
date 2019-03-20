@@ -25,5 +25,18 @@ limitations under the License.
     margin-top: 10px;
     position: absolute;
     margin-bottom: 5px;
-    border-radius: 2em;
+    border-radius: 4px;
+    min-width: 6em;
+    cursor: pointer;
+}
+
+.mat-upload-btn-disabled {
+    background-color: #c5cae8;
+    margin-top: 10px;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    color: darkgray;
+    min-width: 6em;
+    border: none;
+    cursor: initial;
 }

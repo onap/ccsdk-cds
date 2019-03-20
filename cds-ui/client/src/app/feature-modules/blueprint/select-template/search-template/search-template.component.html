@@ -22,5 +22,5 @@ limitations under the License.
     <input type="file" accept=".zip" (change)="fileChanged($event)">
 </div>
 <div>
-    <button mat-button matStepperNext class="matStepNextBtn" (click)="updateBlueprintState()" [disabled]="!validfile">Upload</button>
+    <button mat-button matStepperNext (click)="updateBlueprintState()" [ngClass] = "{'mat-upload-btn-disabled': !validfile, 'matStepNextBtn': validfile}" [disabled]="!validfile">Upload</button>
 </div>
