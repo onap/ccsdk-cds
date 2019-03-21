@@ -15,7 +15,7 @@ The CBA is .zip file, comprised of the following folder structure, the files may
 
 |image0|
 
-.. |image0| image:: media/image0.png
+.. |image0| image:: media/image0.jpg
    :width: 7.88889in 
    :height: 4.43750in
 
@@ -50,7 +50,7 @@ Data Flow:
 ==========
 |image1|
 
-.. |image1| image:: media/image1.png
+.. |image1| image:: media/image1.jpg
    :width: 7.88889in 
    :height: 4.43750in
    
@@ -58,7 +58,7 @@ Functional Decomposition:
 =========================
 |image2|
 
-.. |image2| image:: media/image2.png
+.. |image2| image:: media/image2.jpg
    :width: 7.88889in 
    :height: 4.43750in
    
