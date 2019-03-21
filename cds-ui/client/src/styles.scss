@@ -20,7 +20,7 @@ limitations under the License.
 */
 
 /* You can add global styles to this file, and also import other style files */
-
+@import "~jsoneditor/dist/jsoneditor.min.css";
 .mat-card:not([class*=mat-elevation-z]) {
     box-shadow: none !important;
 }
