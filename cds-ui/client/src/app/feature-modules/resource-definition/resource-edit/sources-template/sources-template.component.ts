@@ -18,7 +18,7 @@
 * ============LICENSE_END=========================================================
 */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { IResources } from 'src/app/common/core/store/models/resources.model';
 import { IResourcesState } from 'src/app/common/core/store/models/resourcesState.model';
@@ -28,6 +28,7 @@ import { IAppState } from '../../../../common/core/store/state/app.state';
 import { A11yModule } from '@angular/cdk/a11y';
 import { LoadResourcesSuccess } from 'src/app/common/core/store/actions/resources.action';
 import { ISourcesData } from 'src/app/common/core/store/models/sourcesData.model';
+import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 
 @Component({
   selector: 'app-sources-template',
@@ -35,14 +36,29 @@ import { ISourcesData } from 'src/app/common/core/store/models/sourcesData.model
   styleUrls: ['./sources-template.component.scss']
 })
 export class SourcesTemplateComponent implements OnInit {
+//    rdState: Observable<IResourcesState>;
+//    resources: IResources;
+//    todo = [];
+//    sources:ISourcesData; 
+//    sourcesOptions = [];
+
+    @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
+    options = new JsonEditorOptions();
+    
     rdState: Observable<IResourcesState>;
     resources: IResources;
-    todo = [];
+    option = ['mdsal','default'];
     sources:ISourcesData; 
     sourcesOptions = [];
-
+    sourcesData = [];
+    
  constructor(private store: Store<IAppState>) {
-    this.rdState = this.store.select('resources');
+   this.rdState = this.store.select('resources');
+      this.options.mode = 'text';
+    this.options.modes = [ 'text', 'tree', 'view'];
+    this.options.statusBar = false;
+    this.options.onChange = () => console.log(this.editor.get());
+     
  }
 
  ngOnInit() {
@@ -51,14 +67,22 @@ export class SourcesTemplateComponent implements OnInit {
         var resourcesState: IResourcesState = { resources: resourcesdata.resources, isLoadSuccess: resourcesdata.isLoadSuccess, isSaveSuccess: resourcesdata.isSaveSuccess, isUpdateSuccess: resourcesdata.isUpdateSuccess };
         this.sources = resourcesState.resources.sources;
         for (let key in this.sources) {
-          if (this.sources.hasOwnProperty(key)) {
-            this.sourcesOptions.push(this.sources[key]);             
-          }
+            this.sourcesOptions.push(key);  
         }
-        console.log(this.sourcesOptions);
+        //console.log(this.sourcesOptions);
     })
  }
 
+ onChange() {
+     console.log(this.editor.get())
+ };
+    
+ selected(value){
+    console.log(value);
+        this.sourcesData=this.sources[value];
+        return this.sourcesData;    
+ }    
+    
  drop(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);

@@ -29,6 +29,7 @@ import { SharedModule } from '../../../../app/common/shared/shared.module';
 import { SourcesTemplateComponent } from './sources-template/sources-template.component';
 import { ResourceMetadataComponent } from './resource-metadata/resource-metadata.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { NgJsonEditorModule } from 'ang-jsoneditor';
 
 @NgModule({
   declarations: [ ResourceEditComponent,SourcesTemplateComponent,ResourceMetadataComponent ],
@@ -38,8 +39,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
    SharedModule,
    FormsModule,ReactiveFormsModule,
    DragDropModule,
-   MatExpansionModule,MatToolbarModule,MatIconModule, MatButtonModule, MatSidenavModule,  MatCheckboxModule, MatListModule, MatGridListModule, MatCardModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatFormFieldModule, MatStepperModule
-
+   MatExpansionModule,MatToolbarModule,MatIconModule, MatButtonModule, MatSidenavModule,  MatCheckboxModule, MatListModule, MatGridListModule, MatCardModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatFormFieldModule, MatStepperModule,
+   NgJsonEditorModule
   ],
   exports: [ ResourceEditComponent,SharedModule ]
 })

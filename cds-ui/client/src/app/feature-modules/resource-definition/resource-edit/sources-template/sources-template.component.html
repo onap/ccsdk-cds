@@ -21,17 +21,17 @@
   <div class="sources-container">
 	<div
       cdkDropList
-      [cdkDropListData]="todo"
+      [cdkDropListData]="sourcesOptions"
       class="sources-list"
       (cdkDropListDropped)="drop($event)">
-      	<div class="sources-box" *ngFor="let item of todo" cdkDrag>
+      	<div class="sources-box" *ngFor="let item of sourcesOptions" cdkDrag>
       		<mat-expansion-panel class="expansion-panel">
       			<mat-expansion-panel-header>
         			<mat-panel-title>
-          				{{item.type}}
+          				{{item}}
         			</mat-panel-title>
       			</mat-expansion-panel-header>
-     		 	{{item}}
+     		 	<json-editor [options]="options" [data]="selected(item)" on-change="onChange()"></json-editor>
    			 </mat-expansion-panel>
     	</div>
     </div>
@@ -47,10 +47,10 @@
   	<br><br>
     <div
       cdkDropList
-      [cdkDropListData]="sourcesOptions"
+      [cdkDropListData]="option"
       class="options-list"
       (cdkDropListDropped)="drop($event)">
-      <div class="options-box" *ngFor="let item of sourcesOptions | search : searchText" cdkDrag>{{item.type}}</div>
+      <div class="options-box" *ngFor="let item of option | search :searchText" cdkDrag>{{item}}</div>
     </div>
   </div>
 </div>
