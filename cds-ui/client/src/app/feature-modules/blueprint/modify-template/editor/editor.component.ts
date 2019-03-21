@@ -82,6 +82,7 @@ export class EditorComponent implements OnInit {
   fileExtension: string;
   mode: string;
   private zipFile: JSZip = new JSZip();
+  activeNode: any;
 
   private transformer = (node: Node, level: number) => {
     return {
@@ -143,7 +144,7 @@ export class EditorComponent implements OnInit {
             blueprint.push(this.blueprintdata[key]);
           }
         }
-        this.text = JSON.stringify(this.blueprintdata, null, '\t');
+        // this.text = JSON.stringify(this.blueprintdata, null, '\t');
         // this.editor.getEditor().getSession().setMode("ace/mode/json");
         this.editor.getEditor().getSession().setTabSize(2);
         this.editor.getEditor().getSession().setUseWrapMode(true);

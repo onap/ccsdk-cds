@@ -20,8 +20,8 @@ limitations under the License.
 
 <div class="container">
     <div class="fileViewContainer">
-        <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-            <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+        <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" style="background-color: #ebebeb">
+            <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding (click)="selectFileToView(node);activeNode = node" [ngClass]="{ 'background-highlight': activeNode === node }">
                 <button mat-icon-button disabled></button>
                 <button mat-icon-button (click)="selectFileToView(node)">{{node.name}}</button>
             </mat-tree-node>
@@ -31,7 +31,7 @@ limitations under the License.
                   {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
                 </mat-icon>
               </button>
-                <button mat-icon-button (click)="selectFileToView(node)">{{node.name}}</button>
+                <button mat-icon-button>{{node.name}}</button>
             </mat-tree-node>
         </mat-tree>
     </div>
@@ -40,49 +40,3 @@ limitations under the License.
         <ace-editor [(text)]="text" [(mode)]="mode" #editor class="aceEditor"></ace-editor>
     </div>
 </div>
-
-<!-- <div style="display: flex;flex-direction: row">
-    <div style="height: 6em;
-    width: 30em;">
-
-    </div>
-    <div style="height: 6em;
-    width: 16em">
-        <button style="margin: 0.5em;
-        background-color: #3f51b5;
-        color: white;
-        border-radius: 2em;
-        padding: 0.5em;
-        min-width: 6em;" (click)="updateBlueprint()">Save Changes</button>
-    </div>
-    <div style="height: 6em;
-    width: 100%;">
-        <div style="margin-left: 38em">
-            <mat-form-field>
-                <select matNativeControl required>
-              <option value="volvo">SDC</option>
-              <option value="saab">CCSDK</option>
-            </select>
-            </mat-form-field>
-            <button style="margin: 0.5em;
-        background-color: #3f51b5;
-        color: white;
-        border-radius: 2em;
-        padding: 0.5em;
-        min-width: 6em;">Deploy</button>
-            <button style="margin: 0.5em;
-        background-color: #3f51b5;
-        color: white;
-        border-radius: 2em;
-        padding: 0.5em;
-        min-width: 6em;">Save</button>
-            <button style="margin: 0.5em;
-        background-color: #3f51b5;
-        color: white;
-        border-radius: 2em;
-        padding: 0.5em;
-        min-width: 6em;" (click)="download()">Download</button>
-
-        </div>
-    </div>
-</div> -->
