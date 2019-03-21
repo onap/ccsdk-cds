@@ -1,6 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
- * Modifications Copyright © 2018 IBM.
+ * Modifications Copyright © 2018-2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -151,6 +151,20 @@ class BluePrintRuntimeServiceTest {
 
         val resolvedJsonNode: JsonNode = bluePrintRuntimeService.resolveDSLExpression("dynamic-rest-source")
         assertNotNull(resolvedJsonNode, "Failed to populate dsl property values")
+    }
+
+    @Test
+    fun `test Resolve Workflow Outputs`() {
+        log.info("************************ resolvePropertyAssignments **********************")
+        val bluePrintRuntimeService = getBluePrintRuntimeService()
+
+        val assignmentParams = "{\"ipAddress\": \"127.0.0.1\", \"hostName\": \"vnf-host\"}"
+
+        bluePrintRuntimeService.setNodeTemplateAttributeValue("resource-assignment", "assignment-params",
+                JacksonUtils.jsonNode(assignmentParams))
+
+        val resolvedJsonNode = bluePrintRuntimeService.resolveWorkflowOutputs("resource-assignment")
+        assertNotNull(resolvedJsonNode, "Failed to populate workflow output property values")
     }
 
     private fun getBluePrintRuntimeService(): BluePrintRuntimeService<MutableMap<String, JsonNode>> {

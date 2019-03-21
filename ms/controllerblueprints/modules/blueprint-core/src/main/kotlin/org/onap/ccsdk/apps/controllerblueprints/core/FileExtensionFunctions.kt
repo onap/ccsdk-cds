@@ -65,8 +65,8 @@ fun File.deCompress(targetFile: File): File {
     return targetFile
 }
 
-fun deleteDir(path: String) {
-    normalizedFile(path).deleteRecursively()
+fun deleteDir(path: String, vararg more: String?) {
+    normalizedFile(path, *more).deleteRecursively()
 }
 
 fun normalizedFile(path: String, vararg more: String?): File {
@@ -78,6 +78,6 @@ fun normalizedPath(path: String, vararg more: String?): Path {
 }
 
 fun normalizedPathName(path: String, vararg more: String?): String {
-    return normalizedPath(path, *more).toUri().path
+    return normalizedPath(path, *more).toString()
 }
 

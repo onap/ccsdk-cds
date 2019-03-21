@@ -1,6 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
- * Modifications Copyright © 2018 IBM.
+ * Modifications Copyright © 2018-2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -163,7 +163,8 @@ class PropertyDefinition {
     var constraints: MutableList<ConstraintClause>? = null
     @get:JsonProperty("entry_schema")
     var entrySchema: EntrySchema? = null
-    @get:ApiModelProperty(notes = "Property Value, It may be raw JSON or primitive data type values")
+    // Mainly used in Workflow Outputs
+    @get:ApiModelProperty(notes = "Property Value, It may be Expression or Json type values")
     var value: JsonNode? = null
 }
 
@@ -565,6 +566,7 @@ class Workflow {
     var steps: MutableMap<String, Step>? = null
     var preconditions: ArrayList<PreConditionDefinition>? = null
     var inputs: MutableMap<String, PropertyDefinition>? = null
+    var outputs: MutableMap<String, PropertyDefinition>? = null
 }
 
 

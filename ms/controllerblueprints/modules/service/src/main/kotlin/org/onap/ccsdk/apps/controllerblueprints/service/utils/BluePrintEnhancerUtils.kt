@@ -103,7 +103,7 @@ class BluePrintEnhancerUtils {
 
         suspend fun decompressFilePart(filePart: FilePart, archiveDir: String, enhanceDir: String): File {
             val filePartFile = extractCompressFilePart(filePart, archiveDir, enhanceDir)
-            val deCompressFileName = Paths.get(enhanceDir).toUri().path
+            val deCompressFileName = normalizedPathName(enhanceDir)
             return filePartFile.deCompress(deCompressFileName)
         }
 
