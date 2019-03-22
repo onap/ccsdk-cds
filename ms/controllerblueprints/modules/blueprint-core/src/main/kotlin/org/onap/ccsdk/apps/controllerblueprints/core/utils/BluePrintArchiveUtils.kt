@@ -17,12 +17,9 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core.utils
 
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream
 import org.apache.commons.io.IOUtils
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.slf4j.LoggerFactory
 import java.io.BufferedInputStream
@@ -52,7 +49,7 @@ class BluePrintArchiveUtils {
                     recurseFiles(source, source, it, absolute)
                 }
             } catch (e: Exception) {
-                log.error("Fail to compress folder($source) to path(${destination.path}", e)
+                log.error("Fail to compress folder($source) to path(${destination.path})", e)
                 return false
             }
             return true

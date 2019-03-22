@@ -17,6 +17,7 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.controller
 
+import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.BlueprintModelSearch
 import org.onap.ccsdk.apps.controllerblueprints.service.handler.BluePrintModelHandler
@@ -84,6 +85,14 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @Throws(BluePrintException::class)
     fun downloadBluePrint(@PathVariable(value = "id") id: String): ResponseEntity<Resource> {
         return this.bluePrintModelHandler.downloadBlueprintModelFile(id)
+    }
+
+    @PostMapping("/enrich", produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
+            .MULTIPART_FORM_DATA_VALUE])
+    @ResponseBody
+    @Throws(BluePrintException::class)
+    fun enrichBlueprint(@RequestPart("file") file: FilePart): ResponseEntity<Resource> = runBlocking {
+        bluePrintModelHandler.enrichBlueprint(file)
     }
 
     @PutMapping("/publish/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])

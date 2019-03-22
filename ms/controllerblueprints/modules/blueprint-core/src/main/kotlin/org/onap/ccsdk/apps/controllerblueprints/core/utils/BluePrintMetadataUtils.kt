@@ -21,7 +21,6 @@ package org.onap.ccsdk.apps.controllerblueprints.core.utils
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
 import com.fasterxml.jackson.databind.JsonNode
-import org.apache.commons.io.FileUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.apps.controllerblueprints.core.data.ToscaMetaData
@@ -31,6 +30,7 @@ import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeSer
 import org.onap.ccsdk.apps.controllerblueprints.core.service.DefaultBluePrintRuntimeService
 import java.io.File
 import java.nio.charset.Charset
+import java.nio.file.Paths
 import java.util.*
 
 class BluePrintMetadataUtils {
@@ -73,7 +73,7 @@ class BluePrintMetadataUtils {
 
         fun toscaMetaDataFromMetaFile(metaFilePath: String): ToscaMetaData {
             val toscaMetaData = ToscaMetaData()
-            val lines: MutableList<String> = FileUtils.readLines(File(metaFilePath), Charset.defaultCharset())
+            val lines = Paths.get(metaFilePath).toFile().readLines(Charset.defaultCharset())
             lines.forEach { line ->
                 if (line.contains(":")) {
                     val keyValue = line.split(":")
@@ -118,8 +118,8 @@ class BluePrintMetadataUtils {
         fun getBluePrintRuntime(id: String, blueprintBasePath: String, executionContext: MutableMap<String, JsonNode>): BluePrintRuntimeService<MutableMap<String, JsonNode>> {
             val bluePrintContext: BluePrintContext = getBluePrintContext(blueprintBasePath)
             val bluePrintRuntimeService = DefaultBluePrintRuntimeService(id, bluePrintContext)
-            executionContext.forEach{
-                bluePrintRuntimeService.put(it.key,it.value)
+            executionContext.forEach {
+                bluePrintRuntimeService.put(it.key, it.value)
             }
 
             bluePrintRuntimeService.setExecutionContext(executionContext)
