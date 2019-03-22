@@ -31,7 +31,7 @@ class BluePrintEnhancerUtilsTest {
     private val blueprintDir = "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
     private val blueprintArchivePath: String = "./target/blueprints/archive"
     private val blueprintEnrichmentPath: String = "./target/blueprints/enrichment"
-    private var zipBlueprintFileName = Paths.get(blueprintArchivePath, "test.zip").normalize().toUri().path
+    private var zipBlueprintFileName =  normalizedPathName(blueprintArchivePath, "test.zip")
 
     @Before
     fun setUp() {

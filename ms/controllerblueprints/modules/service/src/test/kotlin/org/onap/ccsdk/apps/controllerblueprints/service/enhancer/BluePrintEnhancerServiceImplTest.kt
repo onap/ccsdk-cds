@@ -23,16 +23,16 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.apps.controllerblueprints.TestApplication
+import org.onap.ccsdk.apps.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintEnhancerService
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintValidatorService
+import org.onap.ccsdk.apps.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.apps.controllerblueprints.service.load.ModelTypeLoadService
 import org.onap.ccsdk.apps.controllerblueprints.service.load.ResourceDictionaryLoadService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import java.io.File
-import java.nio.file.Paths
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = arrayOf(TestApplication::class))
@@ -92,9 +92,9 @@ class BluePrintEnhancerServiceImplTest {
 
     private fun testComponentInvokeEnhancementAndValidation(basePath: String, targetDirName: String) {
         runBlocking {
-            val targetPath = Paths.get("target", targetDirName).toUri().path
+            val targetPath = normalizedPathName("target/blueprints/enrichment", targetDirName)
 
-            deleteTargetDirectory(targetPath)
+            deleteDir(targetPath)
 
             val bluePrintContext = bluePrintEnhancerService.enhance(basePath, targetPath)
             Assert.assertNotNull("failed to get blueprintContext ", bluePrintContext)
@@ -102,12 +102,10 @@ class BluePrintEnhancerServiceImplTest {
             // Validate the Generated BluePrints
             val valid = bluePrintValidatorService.validateBluePrints(targetPath)
             Assert.assertTrue("blueprint($basePath) validation failed ", valid)
+
+            deleteDir(targetPath)
         }
     }
 
-    private fun deleteTargetDirectory(targetPath: String) {
-        val targetDirectory = File(targetPath)
-        targetDirectory.deleteRecursively()
-    }
 
 }
