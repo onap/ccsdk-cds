@@ -24,6 +24,8 @@ package org.onap.ccsdk.apps.controllerblueprints.resource.dict
 object ResourceDictionaryConstants {
     const val SOURCE_INPUT = "input"
     const val SOURCE_DEFAULT = "default"
+    //const val SOURCE_PRIMARY_CONFIG_DATA = "rest"
+    const val SOURCE_PROCESSOR_DB = "processor-db"
     const val SOURCE_PRIMARY_CONFIG_DATA = "primary-config-data"
     const val SOURCE_PRIMARY_DB = "primary-db"
 
