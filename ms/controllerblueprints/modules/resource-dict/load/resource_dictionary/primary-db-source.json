@@ -1,0 +1,24 @@
+{
+  "name": "primary-db-source",
+  "property" :{
+    "description": "name of the ",
+    "type": "string"
+  },
+  "updated-by": "brindasanth@onap.com",
+  "tags": "bundle-id, brindasanth@onap.com",
+  "sources": {
+    "primary-db": {
+      "type": "source-primary-db",
+      "properties": {
+        "query": "SELECT db-country, db-state FROM DEVICE_PROFILE WHERE profile_name = :profile_name",
+        "input-key-mapping": {
+          "profile_name": "profile_name"
+        },
+        "output-key-mapping": {
+          "db-country": "country",
+          "db-state": "state"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "description": "This is Database Resource Source Node Type",
+  "version": "1.0.0",
+  "properties": {
+    "type": {
+      "required": true,
+      "type": "string",
+      "constraints": [
+        {
+          "valid_values": [
+            "SQL",
+            "PLSQL"
+          ]
+        }
+      ]
+    },
+    "query": {
+      "required": true,
+      "type": "string"
+    },
+    "input-key-mapping": {
+      "required": false,
+      "type": "map",
+      "entry_schema": {
+        "type": "string"
+      }
+    },
+    "output-key-mapping": {
+      "required": false,
+      "type": "map",
+      "entry_schema": {
+        "type": "string"
+      }
+    },
+    "key-dependencies": {
+      "required": true,
+      "type": "list",
+      "entry_schema": {
+        "type": "string"
+      }
+    }
+  },
+  "derived_from": "tosca.nodes.ResourceSource"
+}

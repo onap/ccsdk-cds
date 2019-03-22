@@ -1,0 +1,62 @@
+[
+  {
+    "name": "rs-db-source",
+    "input-param": true,
+    "property": {
+      "type": "string",
+      "required": true
+    },
+    "dictionary-name": "sample-db-source",
+    "dictionary-source": "primary-db",
+    "dependencies": [
+      "input-source"
+    ]
+  },
+  {
+    "name": "ra-default-source",
+    "input-param": true,
+    "property": {
+      "type": "string",
+      "required": true
+    },
+    "dictionary-name": "sample-default-source",
+    "dictionary-source": "default",
+    "dependencies": []
+  },
+  {
+    "name": "ra-input-source",
+    "input-param": true,
+    "property": {
+      "type": "string",
+      "required": true
+    },
+    "dictionary-name": "sample-input-source",
+    "dictionary-source": "input",
+    "dependencies": []
+  },
+  {
+    "name": "ra-list-input-source",
+    "input-param": true,
+    "property": {
+      "type": "list",
+      "required": true,
+      "entry_schema": {
+        "type": "string"
+      }
+    },
+    "dictionary-name": "ra-list-input-source",
+    "dictionary-source": "input",
+    "dependencies": []
+  },
+  {
+    "name": "ra-complex-input-source",
+    "input-param": true,
+    "property": {
+      "type": "dt-v4-aggregate",
+      "required": true
+    },
+    "dictionary-name": "sample-mdsal-source",
+    "dictionary-source": "primary-config-data",
+    "dependencies": []
+  }
+]

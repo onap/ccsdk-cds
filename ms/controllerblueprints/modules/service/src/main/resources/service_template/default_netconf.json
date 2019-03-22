@@ -1,0 +1,862 @@
+{
+	"version": "1.0.0",
+	"metadata": {
+		"template_author": "xxxx@onap.com",
+		"template_name": "default_netconf",
+		"template_version": "1.0.0",
+		"service-type": "XXXXXXXXXXX",
+		"vnf-type": "XXXXXXXXX"
+	},
+	"topology_template": {
+		"inputs": {
+			"request-id": {
+				"required": true,
+				"type": "string"
+			},
+			"template-name": {
+				"required": true,
+				"type": "string"
+			},
+			"template-version": {
+				"required": true,
+				"type": "string"
+			},
+			"action-name": {
+				"required": true,
+				"type": "string"
+			},
+			"service-instance-id": {
+				"required": true,
+				"type": "string"
+			},
+			"resource-type": {
+				"required": true,
+				"type": "string"
+			}
+		},
+		"node_templates": {
+			"base-config-template": {
+				"type": "artifact-config-template",
+				"properties": {
+					"action-names": [
+						"resource-assignment-action"
+					]
+				},
+				"capabilities": {
+					"content": {
+						"properties": {
+							"content": ""
+						}
+					},
+					"mapping": {
+						"properties": {
+							"mapping": []
+						}
+					}
+				}
+			},
+			"licence-template": {
+				"type": "artifact-config-template",
+				"properties": {
+					"action-names": [
+						"activate-netconf-action"
+					]
+				},
+				"capabilities": {
+					"content": {
+						"properties": {
+							"content": ""
+						}
+					},
+					"mapping": {
+						"properties": {
+							"mapping": []
+						}
+					}
+				}
+			},
+			"runningconfig-template": {
+				"type": "artifact-config-template",
+				"properties": {
+					"action-names": [
+						"activate-netconf-action"
+					]
+				},
+				"capabilities": {
+					"content": {
+						"properties": {
+							"content": "<get-config><source><running/></source></get-config>"
+						}
+					},
+					"mapping": {
+						"properties": {
+							"mapping": []
+						}
+					}
+				}
+			},
+			"resource-assignment-action": {
+				"type": "dg-resource-assignment",
+				"interfaces": {
+					"CONFIG": {
+						"operations": {
+							"ResourceAssignment": {
+								
+							}
+						}
+					}
+				},
+				"capabilities": {
+					"dg-node": {
+						
+					}
+				},
+				"requirements": {
+					"component-dependency": {
+						"capability": "component-node",
+						"node": "get-resource-assignment",
+						"relationship": "tosca.relationships.DependsOn"
+					}
+				}
+			},
+			"activate-netconf-action": {
+				"type": "dg-activate-netconf",
+				"interfaces": {
+					"CONFIG": {
+						"operations": {
+							"ActivateNetconf": {
+								
+							}
+						}
+					}
+				},
+				"capabilities": {
+					"dg-node": {
+						
+					}
+				},
+				"requirements": {
+					"component-dependency": {
+						"capability": "component-node",
+						"node": "transaction-netconf-baseconfig",
+						"relationship": "tosca.relationships.DependsOn"
+					}
+				}
+			},
+			"resource-assignment": {
+				"type": "component-resource-assignment",
+				"interfaces": {
+					"org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode": {
+						"operations": {
+							"process": {
+								"inputs": {
+									"resource-type": "vnf-type",
+									"template-names": [
+										"base-config-template",
+										"licence-template"
+									],
+									"request-id": { "get_input" : "request-id" },
+									"resource-id": { "get_input" : "vnf-id" }
+								},
+								"outputs": {
+									"resource-assignment-params": "",
+									"status": ""
+								}
+							}
+						}
+					}
+				},
+				"capabilities": {
+					"component-node": {
+						
+					}
+				}
+			},
+			"edit-netconf-config": {
+				"type": "component-netconf-edit",
+				"interfaces": {
+					"org-openecomp-sdnc-netconf-adaptor-service-SimpleNetconfEditConfigNode": {
+						"operations": {
+							"process": {
+								"inputs": {
+									"rpc-message": false,
+									"wait": 0,
+									"unlock": false,
+									"config-target": "RUNNING",
+									"commit": true,
+									"edit-default-operation": "repalce",
+									"lock": false,
+									"post-restart-wait": false,
+									"pre-restart-wait": false
+								},
+								"outputs": {
+									"rpc-response-message": "",
+									"status": ""
+								}
+							}
+						}
+					}
+				},
+				"capabilities": {
+					"component-node": {
+						
+					}
+				}
+			},
+			"transaction-netconf-baseconfig": {
+				"type": "component-transaction-netconf",
+				"interfaces": {
+					"org-openecomp-sdnc-netconf-adaptor-service-NetconfTransactionNode": {
+						"operations": {
+							"process": {
+								"inputs": {
+									"rollback": false,
+									"transaction-templates": [
+										"runningconfig-template"
+									],
+									"assignment-action-name": "resource-assignment-action",
+									"transaction-components": [
+										"get-netconf-config"
+									],
+									"resource-type": "vnf-type",
+									"initialise-sftp": false,
+									"request-id": {"get_input" : "request-id"},
+									"initialise-ssh": false,
+									"resource-id": { "get_input" : "vnf-id" },
+									"action-name": {"get_input" : "action-name"}
+								},
+								"outputs": {
+									"rpc-response-message": "",
+									"status": ""
+								}
+							}
+						}
+					}
+				},
+				"capabilities": {
+					"component-node": {
+						
+					}
+				},
+				"requirements": {
+					"netconf-connection": {
+						"capability": "netconf",
+						"node": "vdbe-netconf-device",
+						"relationship": "tosca.relationships.ConnectsTo"
+					}
+				}
+			},
+			"get-netconf-config": {
+				"type": "component-netconf-get",
+				"interfaces": {
+					"org-openecomp-sdnc-netconf-adaptor-service-SimpleNetconfGetConfigNode": {
+						"operations": {
+							"process": {
+								"inputs": {
+									"rpc-message": true,
+									"wait": 1,
+									"message-time-out": 10
+								},
+								"outputs": {
+									"rpc-response-message": "",
+									"status": ""
+								}
+							}
+						}
+					}
+				},
+				"capabilities": {
+					"component-node": {
+						
+					}
+				}
+			}
+		}
+	},
+	"node_types": {
+		"vnf-netconf-device": {
+			"description": "This is VNF Device with Netconf and SSH Capability",
+			"version": "1.0.0",
+			"capabilities": {
+				"netconf": {
+					"type": "tosca.capabilities.Netconf",
+					"properties": {
+						"password": {
+							"required": false,
+							"type": "string"
+						},
+						"user-id": {
+							"required": true,
+							"type": "string"
+						},
+						"host-ip-address": {
+							"required": true,
+							"type": "string"
+						},
+						"port-number": {
+							"required": true,
+							"type": "integer",
+							"default": 830
+						},
+						"message-time-out": {
+							"required": false,
+							"type": "integer",
+							"default": 3000
+						},
+						"connection-time-out": {
+							"required": false,
+							"type": "integer",
+							"default": 30
+						}
+					}
+				},
+				"ssh": {
+					"type": "tosca.capabilities.Ssh",
+					"properties": {
+						"password": {
+							"required": false,
+							"type": "string"
+						},
+						"user-id": {
+							"required": true,
+							"type": "string"
+						},
+						"host-ip-address": {
+							"required": true,
+							"type": "string"
+						},
+						"port-number": {
+							"required": true,
+							"type": "integer",
+							"default": 22
+						},
+						"message-time-out": {
+							"required": false,
+							"type": "integer",
+							"default": 180
+						},
+						"connection-time-out": {
+							"required": false,
+							"type": "integer",
+							"default": 30
+						}
+					}
+				},
+				"sftp": {
+					"type": "tosca.capabilities.Sftp",
+					"properties": {
+						"password": {
+							"required": false,
+							"type": "string"
+						},
+						"user-id": {
+							"required": true,
+							"type": "string"
+						},
+						"host-ip-address": {
+							"required": true,
+							"type": "string"
+						},
+						"port-number": {
+							"required": true,
+							"type": "integer",
+							"default": 22
+						},
+						"message-time-out": {
+							"required": false,
+							"type": "integer",
+							"default": 180
+						},
+						"connection-time-out": {
+							"required": false,
+							"type": "integer",
+							"default": 30
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.Vnf"
+		},
+		"dg-resource-assignment": {
+			"description": "This is Resource Assignment Directed Graph",
+			"version": "1.0.0",
+			"properties": {
+				"mode": {
+					"required": false,
+					"type": "string",
+					"default": "sync"
+				},
+				"version": {
+					"required": false,
+					"type": "string",
+					"default": "LATEST"
+				},
+				"is-start-flow": {
+					"required": false,
+					"type": "boolean",
+					"default": false
+				}
+			},
+			"capabilities": {
+				"dg-node": {
+					"type": "tosca.capabilities.Node"
+				}
+			},
+			"requirements": {
+				"component-dependency": {
+					"capability": "component-node",
+					"node": "component-resource-assignment",
+					"relationship": "tosca.relationships.DependsOn"
+				}
+			},
+			"interfaces": {
+				"CONFIG": {
+					"operations": {
+						"ResourceAssignment": {
+							"inputs": {
+								"params": {
+									"required": false,
+									"type": "list",
+									"entry_schema": {
+										"type": "datatype-property"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.DG"
+		},
+		"dg-activate-netconf": {
+			"description": "This is Download Netconf Directed Graph",
+			"version": "1.0.0",
+			"properties": {
+				"mode": {
+					"required": false,
+					"type": "string",
+					"default": "sync"
+				},
+				"version": {
+					"required": false,
+					"type": "string",
+					"default": "LATEST"
+				},
+				"is-start-flow": {
+					"required": false,
+					"type": "boolean",
+					"default": false
+				}
+			},
+			"capabilities": {
+				"dg-node": {
+					"type": "tosca.capabilities.Node"
+				}
+			},
+			"requirements": {
+				"component-dependency": {
+					"capability": "component-node",
+					"node": "component-transaction-netconf",
+					"relationship": "tosca.relationships.DependsOn"
+				}
+			},
+			"interfaces": {
+				"CONFIG": {
+					"operations": {
+						"ActivateNetconf": {
+							"inputs": {
+								"params": {
+									"required": false,
+									"type": "list",
+									"entry_schema": {
+										"type": "datatype-property"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.DG"
+		},
+		"artifact-config-template": {
+			"description": "This is Configuration Velocity Template",
+			"version": "1.0.0",
+			"properties": {
+				"action-names": {
+					"required": true,
+					"type": "list",
+					"entry_schema": {
+						"type": "string"
+					}
+				}
+			},
+			"capabilities": {
+				"content": {
+					"type": "tosca.capabilities.Content",
+					"properties": {
+						"content": {
+							"required": true,
+							"type": "string"
+						}
+					}
+				},
+				"mapping": {
+					"type": "tosca.capabilities.Mapping",
+					"properties": {
+						"mapping": {
+							"required": false,
+							"type": "list",
+							"entry_schema": {
+								"type": "datatype-resource-assignment"
+							}
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.Artifact"
+		},
+		"component-resource-assignment": {
+			"description": "This is Resource Assignment Component API",
+			"version": "1.0.0",
+			"capabilities": {
+				"component-node": {
+					"type": "tosca.capabilities.Node"
+				}
+			},
+			"interfaces": {
+				"org-onap-ccsdk-config-assignment-service-ConfigAssignmentNode": {
+					"operations": {
+						"process": {
+							"inputs": {
+								"handler-name": {
+									"description": "Name of the Artifact Node Template, to get the template Content. If template-content is present, then content wont be reterived from the Artifact Node Template.",
+									"required": true,
+									"type": "string"
+								},
+								"resource-type": {
+									"required": false,
+									"type": "string"
+								},
+								"template-names": {
+									"description": "Name of the Artifact Node Templates, to get the template Content.",
+									"required": true,
+									"type": "list",
+									"entry_schema": {
+										"type": "string"
+									}
+								},
+								"request-id": {
+									"description": "Request Id used to store the generated configuration, in the database along with the template-name",
+									"required": true,
+									"type": "string"
+								},
+								"resource-id": {
+									"description": "Id used to pull the data content from the data base. Either template-data or resource-id should be present",
+									"required": true,
+									"type": "string"
+								},
+								"action-name": {
+									"description": "Action Name to get from Database, Either (message & mask-info ) or ( resource-id & resource-type & action-name & template-name ) should be present. Message will be given higest priority",
+									"required": false,
+									"type": "string"
+								}
+							},
+							"outputs": {
+								"resource-assignment-params": {
+									"required": true,
+									"type": "string"
+								},
+								"status": {
+									"required": true,
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.Component"
+		},
+		"component-netconf-get": {
+			"description": "This is Netconf Get Running Configuration Component API",
+			"version": "1.0.0",
+			"capabilities": {
+				"component-node": {
+					"type": "tosca.capabilities.Node"
+				}
+			},
+			"interfaces": {
+				"org-openecomp-sdnc-netconf-adaptor-service-SimpleNetconfGetConfigNode": {
+					"operations": {
+						"process": {
+							"inputs": {
+								"rpc-message": {
+									"description": "It should be true, If the message is Neconf RPC message, It should be false If it is plain Config message.",
+									"required": false,
+									"type": "boolean",
+									"default": false
+								},
+								"wait": {
+									"required": false,
+									"type": "integer",
+									"default": 0
+								},
+								"message-time-out": {
+									"required": false,
+									"type": "integer",
+									"default": 30
+								}
+							},
+							"outputs": {
+								"config-message": {
+									"type": "string"
+								},
+								"status": {
+									"description": "Status of the Component Execution ( success or failure )",
+									"required": true,
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.Component"
+		},
+		"component-netconf-edit": {
+			"description": "This is Netconf Edit Configuration Component API",
+			"version": "1.0.0",
+			"capabilities": {
+				"component-node": {
+					"type": "tosca.capabilities.Node"
+				}
+			},
+			"interfaces": {
+				"org-openecomp-sdnc-netconf-adaptor-service-SimpleNetconfEditConfigNode": {
+					"operations": {
+						"process": {
+							"inputs": {
+								"rpc-message": {
+									"description": "If the message is Neconf RPC message,It should be true or false.",
+									"required": false,
+									"type": "boolean",
+									"default": false
+								},
+								"wait": {
+									"description": "Delay time in sec before performing edit-config action.",
+									"required": false,
+									"type": "integer",
+									"default": 0
+								},
+								"unlock": {
+									"description": "If unLock command has to send before Edit Configuration.",
+									"required": false,
+									"type": "boolean",
+									"default": false
+								},
+								"config-target": {
+									"required": false,
+									"type": "string"
+								},
+								"commit": {
+									"description": "Issue commit command to the device after performing edit-config action.",
+									"required": false,
+									"type": "boolean",
+									"default": false
+								},
+								"edit-default-operation": {
+									"required": false,
+									"type": "string"
+								},
+								"lock": {
+									"description": "Issue lock command to the device before performing edit-config action.",
+									"required": false,
+									"type": "boolean",
+									"default": false
+								},
+								"post-restart-wait": {
+									"description": "If Restart command should be issued before the Edit Operation, Provide the time to wait after restart. 0 meanno restart required or wait time in sec ex : 3000 for 5 ",
+									"required": false,
+									"type": "integer",
+									"default": 0
+								},
+								"pre-restart-wait": {
+									"description": "If Restart command should be issued after the Edit Operation, Provide the time to wait after restart. 0 meanno restart required or wait time in sec ex : 3000 for 5 ",
+									"required": false,
+									"type": "integer",
+									"default": 0
+								},
+								"message-time-out": {
+									"required": false,
+									"type": "integer",
+									"default": 30
+								}
+							},
+							"outputs": {
+								"rpc-response-message": {
+									"type": "string"
+								},
+								"status": {
+									"description": "Status of the Component Execution ( success or failure )",
+									"required": true,
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.Component"
+		},
+		"component-transaction-netconf": {
+			"description": "This is Netconf Transaction Configuration Component API",
+			"version": "1.0.0",
+			"capabilities": {
+				"component-node": {
+					"type": "tosca.capabilities.Node"
+				}
+			},
+			"requirements": {
+				"netconf-connection": {
+					"capability": "netconf",
+					"node": "vnf-netconf-device",
+					"relationship": "tosca.relationships.ConnectsTo"
+				}
+			},
+			"interfaces": {
+				"org-openecomp-sdnc-netconf-adaptor-service-NetconfTransactionNode": {
+					"operations": {
+						"process": {
+							"inputs": {
+								"rollback": {
+									"required": false,
+									"type": "boolean"
+								},
+								"transaction-templates": {
+									"description": "Templates used by the Transaction Components during processing",
+									"required": true,
+									"type": "list",
+									"entry_schema": {
+										"type": "string"
+									}
+								},
+								"assignment-action-name": {
+									"description": "Assignment Action Name to get from Database, Either (message & mask-info ) or ( resource-id & resource-type & action-name & template-name ) should be present. Message will be given higest priority",
+									"required": true,
+									"type": "string"
+								},
+								"transaction-components": {
+									"description": "Components used to used for the atomic transaction, Default Handlers are org.openecomp.sdnc.netconf.adaptor.service.SimpleNetconfEditConfigNode and org.openecomp.sdnc.netconf.adaptor.service.SimpleNetconfGetConfigNode",
+									"required": true,
+									"type": "list",
+									"entry_schema": {
+										"type": "string"
+									}
+								},
+								"resource-type": {
+									"description": "Resource Type to get from Database, Either (message & mask-info ) or( resource-id & resource-type & action-name & template-name ) should be present. Message will be given higest priority",
+									"required": false,
+									"type": "string"
+								},
+								"initialise-sftp": {
+									"required": false,
+									"type": "boolean"
+								},
+								"request-id": {
+									"description": "Request Id used to store the generated configuration, in the database along with the template-name",
+									"required": true,
+									"type": "string"
+								},
+								"initialise-ssh": {
+									"required": false,
+									"type": "boolean"
+								},
+								"resource-id": {
+									"description": "Resource Id to get from Database, Either (message & mask-info ) or ( resource-id & resource-type & action-name & template-name ) should be present. Message will be given higest priority",
+									"required": false,
+									"type": "string"
+								},
+								"action-name": {
+									"description": "Action Name to get from Database, Either (message & mask-info ) or ( resource-id & resource-type & action-name & template-name ) should be present. Message will be given higest priority",
+									"required": false,
+									"type": "string"
+								}
+							},
+							"outputs": {
+								"rpc-response-message": {
+									"type": "string"
+								},
+								"status": {
+									"description": "Status of the Component Execution ( success or failure )",
+									"required": true,
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			},
+			"derived_from": "tosca.nodes.Component"
+		}
+	},
+	"data_types": {
+		"datatype-resource-assignment": {
+			"version": "1.0.0",
+			"description": "This is Resource Assignment Data Type",
+			"properties": {
+				"property": {
+					"required": true,
+					"type": "datatype-property"
+				},
+				"input-param": {
+					"required": true,
+					"type": "boolean"
+				},
+				"dictionary-name": {
+					"required": false,
+					"type": "string"
+				},
+				"dictionary-source": {
+					"required": false,
+					"type": "string"
+				},
+				"dependencies": {
+					"required": true,
+					"type": "list",
+					"entry_schema": {
+						"type": "string"
+					}
+				}
+			},
+			"derived_from": "tosca.datatypes.Root"
+		},
+		"datatype-property": {
+			"version": "1.0.0",
+			"description": "This is Entry point Input Data Type, which is dynamic datatype, The parameter names will be populated during the Design time for each inputs",
+			"properties": {
+				"type": {
+					"required": true,
+					"type": "string"
+				},
+				"description": {
+					"required": false,
+					"type": "string"
+				},
+				"required": {
+					"required": false,
+					"type": "boolean"
+				},
+				"default": {
+					"required": false,
+					"type": "string"
+				},
+				"entry_schema": {
+					"required": false,
+					"type": "string"
+				}
+			},
+			"derived_from": "tosca.datatypes.Root"
+		}
+	}
+}

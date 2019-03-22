@@ -1,0 +1,25 @@
+/target/
+/logs/
+.classpath
+.settings/
+
+# Target dirs in all projects
+**/target-ide/*
+**/target/*
+**/logs/*
+**/debug-logs/*
+**/tokens/*
+
+# Added for Intellij IDEA IDE
+**/debug-logs/*
+**/.idea/*
+**/*.iml
+**/*.project
+**/.springBeans
+**/.directory
+
+
+**/*versionsBackup
+**/blackDuckHub*
+**/*.jsonld
+/target-ide/

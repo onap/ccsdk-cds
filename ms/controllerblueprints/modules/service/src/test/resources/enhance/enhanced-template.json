@@ -1,0 +1,327 @@
+{
+  "metadata" : {
+    "template_author" : "Brinda Santh",
+    "template_name" : "enhance-template",
+    "template_version" : "1.0.0",
+    "template_tags" : "brinda, VPE",
+    "service-type" : "Sample Service",
+    "release" : "1806",
+    "vnf-type" : "VPE"
+  },
+  "tosca_definitions_version" : "controller_blueprint_1_0_0",
+  "artifact_types" : { },
+  "data_types" : {
+  },
+  "node_types" : {
+  },
+  "topology_template" : {
+    "inputs" : {
+      "request-id" : {
+        "required" : true,
+        "type" : "string"
+      },
+      "service-instance-id" : {
+        "required" : true,
+        "type" : "string"
+      },
+      "scope-type" : {
+        "required" : true,
+        "type" : "string"
+      },
+      "action-name" : {
+        "required" : true,
+        "type" : "string"
+      },
+      "hostname" : {
+        "required" : true,
+        "type" : "string"
+      },
+      "resource-assignment-request" : {
+        "description" : "This is Dynamic Data type for the receipe resource-assignment-action.",
+        "required" : false,
+        "type" : "dt-resource-assignment-request"
+      }
+    },
+    "node_templates" : {
+      "vpe-netconf-device" : {
+        "type" : "vnf-netconf-device",
+        "capabilities" : {
+          "netconf" : {
+            "properties" : {
+              "login-key" : "sdnc",
+              "login-account" : "sndc-local",
+              "source" : "local",
+              "target-ip-address" : {
+                "get_attribute" : [ "SELF", "lo0-local-ipv4-address" ]
+              },
+              "port-number" : 22,
+              "connection-time-out" : 30
+            }
+          }
+        }
+      },
+      "activate-netconf-component" : {
+        "type" : "component-netconf-executor",
+        "capabilities" : {
+          "component-node" : { }
+        },
+        "requirements" : {
+          "netconf-connection" : {
+            "capability" : "netconf",
+            "node" : "vpe-netconf-device",
+            "relationship" : "tosca.relationships.ConnectsTo"
+          }
+        },
+        "interfaces" : {
+          "NetconfExecutorComponent" : {
+            "operations" : {
+              "process" : {
+                "implementation" : {
+                  "primary" : "file://netconf_adaptor/DefaultBaseLicenceConfig.py"
+                },
+                "inputs" : {
+                  "action-name" : {
+                    "get_input" : "action-name"
+                  },
+                  "template-name" : {
+                    "get_input" : "template_name"
+                  },
+                  "template-version" : {
+                    "get_input" : "template_version"
+                  },
+                  "resource-type" : "vnf-type",
+                  "request-id" : {
+                    "get_input" : "request-id"
+                  },
+                  "resource-id" : {
+                    "get_input" : "hostname"
+                  },
+                  "execution-script" : "execution-script"
+                },
+                "outputs" : {
+                  "response-data" : {
+                    "get_attribute" : [ "SELF", "netconf-executor-baseconfig.response-data" ]
+                  },
+                  "status" : {
+                    "get_attribute" : [ "SELF", "netconf-executor-baseconfig.status" ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "resource-assignment-ra-component" : {
+        "type" : "component-resource-assignment",
+        "capabilities" : {
+          "component-node" : { }
+        },
+        "interfaces" : {
+          "ResourceAssignmentComponent" : {
+            "operations" : {
+              "process" : {
+                "inputs" : {
+                  "template-names" : [ "base-config-template", "licence-template" ],
+                  "action-name" : {
+                    "get_input" : "action-name"
+                  },
+                  "template-name" : {
+                    "get_input" : "template_name"
+                  },
+                  "template-version" : {
+                    "get_input" : "template-version"
+                  },
+                  "resource-type" : "vnf-type",
+                  "request-id" : {
+                    "get_input" : "request-id"
+                  },
+                  "resource-id" : {
+                    "get_input" : "hostname"
+                  }
+                },
+                "outputs" : {
+                  "resource-assignment-params" : "success",
+                  "status" : "status"
+                }
+              }
+            }
+          }
+        }
+      },
+      "resource-assignment-action" : {
+        "type" : "dg-resource-assignment",
+        "properties" : {
+          "mode" : "sync",
+          "version" : "LATEST",
+          "is-start-flow" : false
+        },
+        "capabilities" : {
+          "dg-node" : { }
+        },
+        "requirements" : {
+          "component-dependency" : {
+            "capability" : "component-node",
+            "node" : "resource-assignment-ra-component",
+            "relationship" : "tosca.relationships.DependsOn"
+          }
+        },
+        "interfaces" : {
+          "CONFIG" : {
+            "operations" : {
+              "ResourceAssignment" : {
+                "inputs" : {
+                  "params" : [ ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "activate-action" : {
+        "type" : "dg-activate-netconf",
+        "properties" : {
+          "mode" : "sync",
+          "version" : "LATEST",
+          "is-start-flow" : false
+        },
+        "capabilities" : {
+          "dg-node" : { }
+        },
+        "requirements" : {
+          "component-dependency" : {
+            "capability" : "component-node",
+            "node" : "activate-netconf-component",
+            "relationship" : "tosca.relationships.DependsOn"
+          }
+        },
+        "interfaces" : {
+          "CONFIG" : {
+            "operations" : {
+              "ActivateNetconf" : {
+                "inputs" : {
+                  "params" : [ ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "base-config-template" : {
+        "type" : "artifact-config-template",
+        "properties" : {
+          "action-names" : [ "resource-assignment-action" ]
+        },
+        "capabilities" : {
+          "content" : {
+            "properties" : {
+              "content" : "db://base-config-template"
+            }
+          },
+          "mapping" : {
+            "properties" : {
+              "mapping" : [ {
+                "name" : "rs-db-source",
+                "property" : {
+                  "required" : true,
+                  "type" : "string"
+                },
+                "input-param" : false,
+                "dictionary-name" : "sample-db-source",
+                "dictionary-source" : "primary-db",
+                "dependencies" : [ "hostname" ],
+                "version" : 0
+              }, {
+                "name" : "mdsal-source",
+                "property" : {
+                  "description" : "",
+                  "required" : true,
+                  "type" : "list",
+                  "entry_schema" : {
+                    "type" : "dt-v4-aggregate"
+                  }
+                },
+                "input-param" : false,
+                "dictionary-name" : "sample-mdsal-source",
+                "dictionary-source" : "primary-config-data",
+                "dependencies" : [ "service-instance-id" ],
+                "version" : 0
+              }, {
+                "name" : "hostname",
+                "property" : {
+                  "required" : true,
+                  "type" : "string"
+                },
+                "dictionary-name" : "hostname",
+                "dictionary-source" : "input",
+                "version" : 0,
+                "input-param" : false
+              }, {
+                "name" : "service",
+                "property" : {
+                  "required" : true,
+                  "type" : "string"
+                },
+                "dictionary-name" : "service",
+                "dictionary-source" : "input",
+                "version" : 0,
+                "input-param" : false
+              }, {
+                "name" : "service-instance-id",
+                "property" : {
+                  "required" : true,
+                  "type" : "string"
+                },
+                "dictionary-name" : "service-instance-id",
+                "dictionary-source" : "input",
+                "version" : 0,
+                "input-param" : false
+              } ]
+            }
+          }
+        }
+      },
+      "licence-template" : {
+        "type" : "artifact-config-template",
+        "properties" : {
+          "action-names" : [ "resource-assignment-action" ]
+        },
+        "capabilities" : {
+          "content" : {
+            "properties" : {
+              "content" : "db://licence-template"
+            }
+          },
+          "mapping" : {
+            "properties" : {
+              "mapping" : [ {
+                "name" : "licenses",
+                "property" : {
+                  "required" : true,
+                  "type" : "list",
+                  "entry_schema" : {
+                    "type" : "dt-license-key"
+                  }
+                },
+                "input-param" : false,
+                "dictionary-name" : "sample-licenses",
+                "dictionary-source" : "primary-config-data",
+                "dependencies" : [ "service-instance-id" ],
+                "version" : 0
+              }, {
+                "name" : "service-instance-id",
+                "property" : {
+                  "required" : true,
+                  "type" : "string"
+                },
+                "dictionary-name" : "service-instance-id",
+                "dictionary-source" : "input",
+                "version" : 0,
+                "input-param" : false
+              } ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

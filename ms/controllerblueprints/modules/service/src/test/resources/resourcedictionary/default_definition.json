@@ -1,0 +1,17 @@
+{
+  "name": "ipaddress",
+  "property": {
+    "description": "name of the ",
+    "type": "list",
+    "entry_schema": {
+      "type": "dt-v4-aggregate"
+    }
+  },
+  "updated-by": "Brinda Santh (bs2796)",
+  "tags": "ipaddress",
+  "sources": {
+    "input": {
+      "type": "source-input"
+    }
+  }
+}

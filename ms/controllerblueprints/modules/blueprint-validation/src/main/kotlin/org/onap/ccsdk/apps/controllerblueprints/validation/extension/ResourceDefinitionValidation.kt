@@ -1,0 +1,44 @@
+/*
+ *  Copyright © 2019 IBM.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+package org.onap.ccsdk.apps.controllerblueprints.validation.extension
+
+import com.att.eelf.configuration.EELFLogger
+import com.att.eelf.configuration.EELFManager
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintValidator
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
+import org.springframework.beans.factory.config.ConfigurableBeanFactory
+import org.springframework.context.annotation.Scope
+import org.springframework.stereotype.Service
+
+interface ResourceDefinitionValidator : BluePrintValidator<ResourceDefinition>
+
+@Service
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+open class ResourceDefinitionValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : ResourceDefinitionValidator {
+
+    private val log: EELFLogger = EELFManager.getInstance().getLogger(ResourceDefinitionValidatorImpl::class.java)
+
+    override fun validate(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String,
+                          resourceDefinition: ResourceDefinition) {
+        log.trace("validating resource definition($name)")
+        resourceDefinition.sources.forEach { name, nodeTemplate ->
+            bluePrintTypeValidatorService.validateNodeTemplate(bluePrintRuntimeService, name, nodeTemplate)
+        }
+    }
+}
