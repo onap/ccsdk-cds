@@ -1,0 +1,26 @@
+{
+	"country": {
+		"name": "country",
+		"data-type": "string",
+		"source": {
+			"primary-db": {
+				"query": "SELECT country FROM DEVICE_PROFILE WHERE profile_name = :profile_name",
+				"input-key-mapping": {
+					"profile_name": "profile_name"
+				},
+				"output-key-mapping": {
+					"country": "country"
+				}
+			}
+		}
+	},
+	"profile_name": {
+		"name": "profile_name",
+		"data-type": "string",
+		"source": {
+			"input": {
+				
+			}
+		}
+	}
+}

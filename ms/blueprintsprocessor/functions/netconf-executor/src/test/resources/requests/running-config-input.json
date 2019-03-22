@@ -1,0 +1,15 @@
+{
+  "api-ver": "2.00",
+  "originator-id": "MSO",
+  "request-id": "123456",
+  "service-instance-id": "ibcx0001vm001",
+  "service-type": "AVPN",
+  "vnf-type": "vUSP - vDBE-IPX HUB",
+  "vnf-id": "123456",
+  "service-template-name": "VRR-baseconfiguration",
+  "service-template-version": "1.0.0",
+  "action-name": "running-config-action",
+  "hostname": "localhost",
+  "host-port": "22",
+  "reservation-id": "hostname"
+}

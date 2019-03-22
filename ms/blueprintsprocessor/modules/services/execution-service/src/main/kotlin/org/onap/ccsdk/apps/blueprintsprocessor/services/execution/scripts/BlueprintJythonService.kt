@@ -1,0 +1,131 @@
+/*
+ * Copyright © 2019 IBM, Bell Canada.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.onap.ccsdk.apps.blueprintsprocessor.services.execution.scripts
+
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.ArrayNode
+import org.apache.commons.io.FilenameUtils
+import org.onap.ccsdk.apps.blueprintsprocessor.services.execution.AbstractComponentFunction
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.apps.controllerblueprints.core.checkNotEmptyOrThrow
+import org.onap.ccsdk.apps.controllerblueprints.core.data.OperationAssignment
+import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BlueprintFunctionNode
+import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import org.springframework.context.ApplicationContext
+import org.springframework.stereotype.Service
+import java.io.File
+
+@Service
+class BlueprintJythonService(val pythonExecutorProperty: PythonExecutorProperty,
+                             private val applicationContext: ApplicationContext) {
+
+    val log: Logger = LoggerFactory.getLogger(BlueprintJythonService::class.java)
+
+    inline fun <reified T> jythonInstance(blueprintContext: BluePrintContext, pythonClassName: String, content: String,
+                                          dependencyInstanceNames: MutableMap<String, Any>?): T {
+
+        val blueprintBasePath: String = blueprintContext.rootPath
+        val pythonPath: MutableList<String> = arrayListOf()
+        pythonPath.add(blueprintBasePath)
+        pythonPath.addAll(pythonExecutorProperty.modulePaths)
+
+        val blueprintPythonConfigurations = BluePrintPython(pythonExecutorProperty.executionPath, pythonPath, arrayListOf())
+
+        val blueprintPythonHost = BlueprintPythonHost(blueprintPythonConfigurations)
+        val pyObject = blueprintPythonHost.getPythonComponent(content, pythonClassName, dependencyInstanceNames)
+
+        log.info("Component Object {}", pyObject)
+
+        return pyObject.__tojava__(T::class.java) as T
+    }
+
+    fun jythonComponentInstance(bluePrintContext: BluePrintContext, scriptClassReference: String):
+            BlueprintFunctionNode<*, *> {
+        val blueprintBasePath: String = bluePrintContext.rootPath
+
+        val pythonFileName = bluePrintContext.rootPath
+                .plus(File.separator)
+                .plus(scriptClassReference)
+
+        val pythonClassName = FilenameUtils.getBaseName(pythonFileName)
+        log.info("Getting Jython Script Class($pythonClassName)")
+
+        val content: String = JacksonUtils.getContent(pythonFileName)
+
+        val pythonPath: MutableList<String> = arrayListOf()
+        pythonPath.add(blueprintBasePath)
+        pythonPath.addAll(pythonExecutorProperty.modulePaths)
+
+        val jythonInstances: MutableMap<String, Any> = hashMapOf()
+        jythonInstances["log"] = LoggerFactory.getLogger(pythonClassName)
+
+        return jythonInstance<BlueprintFunctionNode<*, *>>(bluePrintContext, pythonClassName,
+                content, jythonInstances)
+    }
+
+    fun jythonComponentInstance(abstractComponentFunction: AbstractComponentFunction): AbstractComponentFunction {
+
+        val bluePrintRuntimeService = abstractComponentFunction.bluePrintRuntimeService
+        val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
+        val nodeTemplateName: String = abstractComponentFunction.nodeTemplateName
+        val operationInputs: MutableMap<String, JsonNode> = abstractComponentFunction.operationInputs
+
+        val operationAssignment: OperationAssignment = bluePrintContext
+                .nodeTemplateInterfaceOperation(abstractComponentFunction.nodeTemplateName,
+                        abstractComponentFunction.interfaceName, abstractComponentFunction.operationName)
+
+        val blueprintBasePath: String = bluePrintContext.rootPath
+
+        val artifactName: String = operationAssignment.implementation?.primary
+                ?: throw BluePrintProcessorException("missing primary field to get artifact name for node template ($nodeTemplateName)")
+
+        val artifactDefinition = bluePrintRuntimeService.resolveNodeTemplateArtifactDefinition(nodeTemplateName, artifactName)
+
+        val pythonFileName = artifactDefinition.file
+                ?: throw BluePrintProcessorException("missing file name for node template ($nodeTemplateName)'s artifactName($artifactName)")
+
+        val pythonClassName = FilenameUtils.getBaseName(pythonFileName)
+        log.info("Getting Jython Script Class($pythonClassName)")
+
+        val content: String? = bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactName)
+
+        checkNotEmptyOrThrow(content, "artifact ($artifactName) content is empty")
+
+        val pythonPath: MutableList<String> = operationAssignment.implementation?.dependencies ?: arrayListOf()
+        pythonPath.add(blueprintBasePath)
+        pythonPath.addAll(pythonExecutorProperty.modulePaths)
+
+        val jythonInstances: MutableMap<String, Any> = hashMapOf()
+        jythonInstances["log"] = LoggerFactory.getLogger(nodeTemplateName)
+
+        val instanceDependenciesNode: ArrayNode = operationInputs[PythonExecutorConstants.INPUT_INSTANCE_DEPENDENCIES] as? ArrayNode
+                ?: throw BluePrintProcessorException("Failed to get property(${PythonExecutorConstants.INPUT_INSTANCE_DEPENDENCIES})")
+
+        instanceDependenciesNode.forEach { instanceName ->
+            jythonInstances[instanceName.textValue()] = applicationContext.getBean(instanceName.textValue())
+        }
+
+        val scriptComponentFunction = jythonInstance<AbstractComponentFunction>(bluePrintContext, pythonClassName,
+                content!!, jythonInstances)
+
+        return scriptComponentFunction
+
+    }
+
+}

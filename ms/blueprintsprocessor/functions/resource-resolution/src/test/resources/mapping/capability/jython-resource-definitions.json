@@ -1,0 +1,19 @@
+{
+  "tags": "service-instance-id, tosca.datatypes.Root, data_type",
+  "name": "service-instance-id",
+  "property": {
+    "description": "To be provided",
+    "type": "string"
+  },
+  "updated-by": "Singal, Kapil <ks220y@att.com>",
+  "sources": {
+    "capability": {
+      "type": "source-capability",
+      "properties": {
+        "script-type": "jython",
+        "script-class-reference": "Scripts/python/SampleRAProcessor.py",
+        "instance-dependencies": []
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+<rpc-reply message-id="runningconfig-template-123456"
+           xmlns="urn:ietf:params:xml:ns:netconf:base:1.0"
+           xmlns:junos="http://xml.juniper.net/junos/17.4R1/junos">
+    <interface-information
+            xmlns="http://xml.juniper.net/junos/17.4R1/junos-interface">
+        <physical-interface>
+            <name>ge-2/3/0</name>
+        </physical-interface>
+    </interface-information>
+</rpc-reply>

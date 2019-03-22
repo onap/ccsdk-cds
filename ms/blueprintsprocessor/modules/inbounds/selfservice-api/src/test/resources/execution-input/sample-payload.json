@@ -1,0 +1,10 @@
+{
+  "activate-request": {
+    "activate-properties": {
+      "request-id": "1234",
+      "action-name": "activate",
+      "scope-type": "vnf-type",
+      "hostname": "localhost"
+    }
+  }
+}

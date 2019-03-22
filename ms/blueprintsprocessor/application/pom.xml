@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~  Copyright © 2017-2018 AT&T Intellectual Property.
+  ~
+  ~  Modifications Copyright © 2018 IBM.
+  ~  Modifications Copyright © 2019 Bell Canada.
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
+        <artifactId>parent</artifactId>
+        <version>0.4.2-SNAPSHOT</version>
+        <relativePath>../parent</relativePath>
+    </parent>
+    <artifactId>application</artifactId>
+    <packaging>jar</packaging>
+    <name>Blueprints Processor Application</name>
+    <description>Blueprints Processor Application</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+            <artifactId>blueprint-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!-- North Bound -->
+        <dependency>
+            <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
+            <artifactId>resource-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.onap.ccsdk.apps.blueprintsprocessor.functions</groupId>
+            <artifactId>python-executor</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.onap.ccsdk.apps.blueprintsprocessor.functions</groupId>
+            <artifactId>netconf-executor</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.onap.ccsdk.apps.blueprintsprocessor.functions</groupId>
+            <artifactId>restconf-executor</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
+            <artifactId>selfservice-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito2</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test-junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <resources>
+            <resource>
+                <!--config and resource files -->
+                <directory>${basedir}/etc</directory>
+                <targetPath>${basedir}/target/etc</targetPath>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+            <resource>
+                <!--config and resource files -->
+                <directory>${basedir}/src/main/resources</directory>
+                <targetPath>${basedir}/target/src/main/resources</targetPath>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-dockerfile</id>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals><!-- here the phase you need -->
+                        <phase>validate</phase>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/docker-stage</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/docker</directory>
+                                    <includes>
+                                        <include>*</include>
+                                    </includes>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>ant-test</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <tasks>
+                                <fixcrlf srcdir="${basedir}" eol="unix" includes="**/*.sh, **/*.source"/>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <!-- <skip>${skip.compile}</skip>-->
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

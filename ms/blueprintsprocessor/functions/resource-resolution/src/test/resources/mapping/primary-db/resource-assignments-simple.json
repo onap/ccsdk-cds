@@ -1,0 +1,22 @@
+[
+  {
+    "name": "country",
+    "input-param": true,
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "country",
+    "dictionary-source": "primary-db",
+    "dependencies": ["state"]
+  },
+  {
+    "name": "state",
+    "input-param": true,
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "state",
+    "dictionary-source": "input",
+    "dependencies": []
+  }
+]
