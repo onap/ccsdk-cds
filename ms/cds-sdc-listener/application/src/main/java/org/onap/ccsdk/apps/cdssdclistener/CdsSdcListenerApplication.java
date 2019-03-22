@@ -10,8 +10,10 @@ package org.onap.ccsdk.apps.cdssdclistener;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @SpringBootApplication
+@EnableConfigurationProperties(CdsSdcListenerConfiguration.class)
 public class CdsSdcListenerApplication {
     public static void main(String[] args) {
         SpringApplication.run(CdsSdcListenerApplication.class, args);
