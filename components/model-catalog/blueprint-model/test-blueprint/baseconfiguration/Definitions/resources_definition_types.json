@@ -1,0 +1,89 @@
+{
+  "hostname": {
+    "tags": "hostname",
+    "name": "hostname",
+    "property": {
+      "description": "hostname",
+      "type": "string"
+    },
+    "updated-by": "Singal, Kapil <ks220y@att.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      }
+    }
+  },
+  "service-instance-id": {
+    "tags": "service-instance-id, tosca.datatypes.Root, data_type",
+    "name": "service-instance-id",
+    "property": {
+      "description": "To be provided",
+      "type": "string"
+    },
+    "updated-by": "Singal, Kapil <ks220y@att.com>",
+    "sources": {
+      "input": {
+        "type": "source-input",
+        "properties": {}
+      },
+      "processor-db": {
+        "type": "source-processor-db",
+        "properties": {
+          "endpoint-selector": "dynamic-db-source",
+          "query": "SELECT artifact_name FROM sdnctl.BLUEPRINT_RUNTIME where artifact_version=\"1.0.0\"",
+          "input-key-mapping": {
+          },
+          "output-key-mapping": {
+            "service-instance-id": "artifact_name"
+          },
+          "key-dependencies" : []
+        }
+      }
+    }
+  },
+  "vnf-id": {
+    "tags": "vnf-id",
+    "name": "vnf-id",
+    "property": {
+      "description": "vnf-id",
+      "type": "string"
+    },
+    "updated-by": "Singal, Kapil <ks220y@att.com>",
+    "sources": {
+      "input": {
+        "type": "source-input",
+        "properties": {}
+      }
+    }
+  },
+  "vnf_name": {
+    "tags": "vnf_name",
+    "name": "vnf_name",
+    "property": {
+      "description": "vnf_name",
+      "type": "string"
+    },
+    "updated-by": "Singal, Kapil <ks220y@att.com>",
+    "sources": {
+      "primary-config-data": {
+        "type": "source-rest",
+        "properties": {
+          "type": "JSON",
+          "url-path": "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vnf_name",
+          "path": "/param/0/value",
+          "input-key-mapping": {
+            "service-instance-id": "service-instance-id",
+            "vnf-id": "vnf-id"
+          },
+          "output-key-mapping": {
+            "vnf_name": "value"
+          },
+          "key-dependencies": [
+            "service-instance-id",
+            "vnf-id"
+          ]
+        }
+      }
+    }
+  }
+}

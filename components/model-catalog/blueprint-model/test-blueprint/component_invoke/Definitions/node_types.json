@@ -1,0 +1,54 @@
+{
+  "node_types": {
+    "component-sample-executor": {
+      "description": "This is Sample Component API",
+      "version": "1.0.0",
+      "interfaces": {
+        "ComponentSampleExecutor": {
+          "operations": {
+            "process": {
+              "inputs": {
+                "sample-property": {
+                  "description": "Sample Property.",
+                  "required": true,
+                  "type": "string"
+                },
+                "sample-list-property": {
+                  "description": "Dependent Step Components NodeTemplate name.",
+                  "required": true,
+                  "type": "list",
+                  "entry_schema": {
+                    "type": "string"
+                  }
+                },
+                "dynamic-properties": {
+                  "description": "Dynamic Json Content or DSL Json reference.",
+                  "required": false,
+                  "type": "json"
+                }
+              },
+              "outputs": {
+                "response-data": {
+                  "description": "Execution Response Data in JSON format.",
+                  "required": false,
+                  "type": "string"
+                },
+                "status": {
+                  "description": "Status of the Component Execution ( success or failure )",
+                  "required": true,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.Component"
+    },
+    "tosca.nodes.Component": {
+      "description": "This is default Component Node",
+      "version": "1.0.0",
+      "derived_from": "tosca.nodes.Root"
+    }
+  }
+}

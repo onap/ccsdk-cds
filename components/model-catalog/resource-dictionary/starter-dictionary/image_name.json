@@ -1,0 +1,33 @@
+{
+  "name": "image_name",
+  "tags": "image_name",
+  "updated-by": "Singal, Kapil <ks220y@att.com>",
+  "property": {
+    "type": "string",
+    "description": "image_name"
+  },
+  "sources": {
+    "input": {
+      "type": "source-input"
+    },
+    "primary-config-data": {
+      "type": "source-rest",
+      "properties": {
+        "type": "JSON",
+        "url-path": "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/image_name",
+        "path": "/param/0/value",
+        "input-key-mapping": {
+          "service-instance-id": "service-instance-id",
+          "vnf-id": "vnf-id"
+        },
+        "output-key-mapping": {
+          "image_name": "value"
+        },
+        "key-dependencies": [
+          "service-instance-id",
+          "vnf-id"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "description": "Jython Script File",
+  "version": "1.0.0",
+  "file_ext": [
+    "py"
+  ],
+  "derived_from": "tosca.artifacts.Implementation"
+}

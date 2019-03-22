@@ -1,0 +1,25 @@
+{
+  "tags": "sample-mdsal-source",
+  "name": "sample-mdsal-source",
+  "property": {
+    "description": "Sample sample-mdsal-source",
+    "type": "string"
+  },
+  "updated-by": "brindasanth@onap.com",
+  "sources": {
+    "primary-config-data": {
+      "type": "source-rest",
+      "properties": {
+        "type": "JSON",
+        "url-path": "config/L3VNF-API:services/service-list/$service-instance-id/service-data/vnf-topology-information/vnf-assignments/vnf-vms/$vm-type/vm-networks/$network-role/v4-assigned-ip-list/$v4-ip-type",
+        "path": "/v4-assigned-ip-list/0/v4-ip-prefix",
+        "input-key-mapping": {
+        },
+        "output-key-mapping": {
+          "mdsal-source": "v4-ip-prefix"
+        },
+        "key-dependencies": []
+      }
+    }
+  }
+}

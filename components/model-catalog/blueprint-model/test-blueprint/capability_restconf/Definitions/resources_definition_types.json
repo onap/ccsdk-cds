@@ -1,0 +1,17 @@
+{
+  "entity" : {
+    "tags" : "entity",
+    "name" : "entity",
+    "property" : {
+      "description" : "entity",
+      "type" : "json"
+    },
+    "updated-by" : "Rodrigo Ottero <rodrigo.ottero@est.tech>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      }
+    }
+  }
+}

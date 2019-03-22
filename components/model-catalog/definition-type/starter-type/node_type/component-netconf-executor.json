@@ -1,0 +1,72 @@
+{
+  "description": "This is Netconf Transaction Configuration Component API",
+  "version": "1.0.0",
+  "capabilities": {
+    "component-node": {
+      "type": "tosca.capabilities.Node"
+    }
+  },
+  "requirements": {
+    "netconf-connection": {
+      "capability": "netconf",
+      "node": "vnf-netconf-device",
+      "relationship": "tosca.relationships.ConnectsTo"
+    }
+  },
+  "interfaces": {
+    "ComponentNetconfExecutor": {
+      "operations": {
+        "process": {
+          "inputs": {
+            "script-type": {
+              "description": "Script type, kotlin type is supported",
+              "required": true,
+              "type": "string",
+              "default": "internal",
+              "constraints": [
+                {
+                  "valid_values": [
+                    "kotlin",
+                    "jython",
+                    "internal"
+                  ]
+                }
+              ]
+            },
+            "script-class-reference": {
+              "description": "Kotlin Script class name or jython script name.",
+              "required": true,
+              "type": "string"
+            },
+            "instance-dependencies": {
+              "required": true,
+              "description": "Instance names to inject to Jython or Kotlin Script.",
+              "type": "list",
+              "entry_schema": {
+                "type": "string"
+              }
+            },
+            "dynamic-properties": {
+              "description": "Dynamic Json Content or DSL Json reference.",
+              "required": false,
+              "type": "json"
+            }
+          },
+          "outputs": {
+            "response-data": {
+              "description": "Execution Response Data in JSON format.",
+              "required": false,
+              "type": "string"
+            },
+            "status": {
+              "description": "Status of the Component Execution ( success or failure )",
+              "required": true,
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "derived_from": "tosca.nodes.Component"
+}

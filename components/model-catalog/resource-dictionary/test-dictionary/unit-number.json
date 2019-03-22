@@ -1,0 +1,14 @@
+{
+    "tags": "unit-number",
+    "name": "unit-number",
+    "property": {
+      "description": "unit-number",
+      "type": "string"
+    },
+    "updated-by": "adetalhouet",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      }
+    }
+  }

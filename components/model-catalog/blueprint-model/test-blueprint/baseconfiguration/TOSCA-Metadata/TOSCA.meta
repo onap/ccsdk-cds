@@ -1,0 +1,6 @@
+TOSCA-Meta-File-Version: 1.0.0
+CSAR-Version: 1.0
+Created-By: Brinda Santh <brindasanth@in.ibm.com>
+Entry-Definitions: Definitions/activation-blueprint.json
+Template-Tags: Brinda Santh, activation-blueprint
+

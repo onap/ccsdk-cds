@@ -1,0 +1,88 @@
+[
+  {
+    "name": "interface-description",
+    "input-param": true,
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "interface-description",
+    "dictionary-source": "capability",
+    "dependencies": [
+      "vf-module-type"
+    ]
+  },
+  {
+    "name": "interface-name",
+    "input-param": true,
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "interface-name",
+    "dictionary-source": "input",
+    "dependencies": [
+      
+    ]
+  },
+  {
+    "name": "unit-number",
+    "input-param": true,
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "unit-number",
+    "dictionary-source": "input",
+    "dependencies": [
+      
+    ]
+  },
+  {
+    "name": "prefix-id",
+    "input-param": true,
+    "property": {
+      "type": "string",
+      "default": "11"
+    },
+    "dictionary-name": "prefix-id",
+    "dictionary-source": "default",
+    "dependencies": [
+      
+    ]
+  },
+  {
+    "name": "vf-module-type",
+    "input-param": true,
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "vf-module-type",
+    "dictionary-source": "processor-db",
+    "dependencies": [
+      "vf-module-number"
+    ]
+  },
+  {
+    "name": "vf-module-number",
+    "input-param": true,
+    "property": {
+      "type": "string",
+      "default": "3"
+    },
+    "dictionary-name": "vf-module-number",
+    "dictionary-source": "default",
+    "dependencies": [
+      
+    ]
+  },
+  {
+    "name": "vfw_interface_ip",
+    "input-param": true,
+    "property": {
+        "type": "dt-netbox-ip"
+    },
+    "dictionary-name": "create_netbox_ip",
+    "dictionary-source": "primary-config-data",
+    "dependencies": [
+      "prefix-id"
+    ]
+  }
+]

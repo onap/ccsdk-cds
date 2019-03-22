@@ -1,0 +1,390 @@
+{
+  "metadata": {
+    "template_author": "Brinda Santh Muthuramalingam",
+    "author-email": "brindasanth@in.ibm.com",
+    "user-groups": "ADMIN, OPERATION",
+    "template_name": "baseconfiguration",
+    "template_version": "1.0.0",
+    "template_tags": "brinda, tosca"
+  },
+  "imports": [
+    {
+      "file": "Definitions/data_types.json"
+    },
+    {
+      "file": "Definitions/relationship_types.json"
+    },
+    {
+      "file": "Definitions/artifact_types.json"
+    },
+    {
+      "file": "Definitions/node_types.json"
+    },
+    {
+      "file": "Definitions/policy_types.json"
+    }
+  ],
+  "dsl_definitions": {
+    "dynamic-netconf-properties": {
+      "device-name": "netconf device",
+      "host-name": "sample-host"
+    },
+    "dynamic-rest-source": {
+      "type": "basic-type",
+      "url": "http://localhost:8080",
+      "userId": {
+        "get_input": "rest-user-name"
+      }
+    },
+    "dynamic-db-source": {
+      "type": "maria-db",
+      "url": "jdbc:mysql://localhost:3306/sdnctl",
+      "username": "sdnctl",
+      "password": {
+        "get_attribute": [
+          "BPP",
+          "dynamic-db-source.password"
+        ]
+      }
+    }
+  },
+  "topology_template": {
+    "inputs": {
+      "request-id": {
+        "required": true,
+        "type": "string"
+      },
+      "action-name": {
+        "required": true,
+        "type": "string"
+      },
+      "scope-type": {
+        "required": true,
+        "type": "string"
+      },
+      "hostname": {
+        "required": true,
+        "type": "string"
+      }
+    },
+    "node_templates": {
+      "resource-assignment-process": {
+        "type": "dg-generic",
+        "properties": {
+          "content": {
+            "get_artifact": [
+              "SELF",
+              "dg-resource-assignment-process"
+            ]
+          },
+          "dependency-node-templates": [
+            "resource-assignment"
+          ]
+        },
+        "artifacts": {
+          "dg-resource-assignment-process": {
+            "type": "artifact-directed-graph",
+            "file": "Plans/CONFIG_ResourceAssignment_1.0.0.xml"
+          }
+        }
+      },
+      "activate-process": {
+        "type": "dg-generic",
+        "properties": {
+          "content": {
+            "get_artifact": [
+              "SELF",
+              "dg-activate-process"
+            ]
+          },
+          "dependency-node-templates": [
+            "activate-jython"
+          ]
+        },
+        "artifacts": {
+          "dg-activate-process": {
+            "type": "artifact-directed-graph",
+            "file": "Plans/CONFIG_ActivateNetconf_1.0.0.xml"
+          }
+        }
+      },
+      "assign-activate-process": {
+        "type": "dg-generic",
+        "properties": {
+          "content": {
+            "get_artifact": [
+              "SELF",
+              "dg-assign-activate-process"
+            ]
+          },
+          "dependency-node-templates": [
+            "resource-assignment",
+            "activate-jython"
+          ]
+        },
+        "artifacts": {
+          "dg-assign-activate-process": {
+            "type": "artifact-directed-graph",
+            "file": "Plans/CONFIG_AssignActivateNetconf_1.0.0.xml"
+          }
+        }
+      },
+      "resource-assignment": {
+        "type": "component-resource-resolution",
+        "interfaces": {
+          "ResourceResolutionComponent": {
+            "operations": {
+              "process": {
+                "inputs": {
+                  "action-name": {
+                    "get_input": "action-name"
+                  },
+                  "resource-type": "vnf-type",
+                  "request-id": {
+                    "get_input": "request-id"
+                  },
+                  "resource-id": {
+                    "get_input": "hostname"
+                  },
+                  "artifact-prefix-names": [
+                    "baseconfig"
+                  ]
+                },
+                "outputs": {
+                  "resource-assignment-params": {
+                    "get_attribute": [
+                      "SELF",
+                      "assignment-params"
+                    ]
+                  },
+                  "status": "success"
+                }
+              }
+            }
+          }
+        },
+        "artifacts": {
+          "baseconfig-template": {
+            "type": "artifact-template-velocity",
+            "file": "Templates/baseconfig-template.vtl"
+          },
+          "baseconfig-mapping": {
+            "type": "artifact-mapping-resource",
+            "file": "Definitions/baseconfig-mapping.json"
+          }
+        }
+      },
+      "resource-assignment-py": {
+        "type": "component-resource-resolution",
+        "interfaces": {
+          "ResourceResolutionComponent": {
+            "operations": {
+              "process": {
+                "implementation": {
+                  "primary": "component-script"
+                },
+                "inputs": {
+                  "action-name": {
+                    "get_input": "action-name"
+                  }
+                },
+                "outputs": {
+                  "resource-assignment-params": "",
+                  "status": ""
+                }
+              }
+            }
+          }
+        },
+        "artifacts": {
+          "component-script": {
+            "type": "artifact-script-jython",
+            "file": "Scripts/python/SamplePythonComponentNode.py"
+          }
+        }
+      },
+      "activate-jython": {
+        "type": "component-jython-executor",
+        "interfaces": {
+          "ComponentJythonExecutor": {
+            "operations": {
+              "process": {
+                "implementation": {
+                  "primary": "component-script"
+                },
+                "inputs": {
+                  "instance-dependencies": [
+                    "json-parser-service"
+                  ]
+                },
+                "outputs": {
+                  "response-data": "",
+                  "status": ""
+                }
+              }
+            }
+          }
+        },
+        "artifacts": {
+          "component-script": {
+            "type": "artifact-script-jython",
+            "file": "Scripts/python/SamplePythonComponentNode.py"
+          }
+        }
+      },
+      "activate-netconf": {
+        "type": "component-netconf-executor",
+        "interfaces": {
+          "ComponentNetconfExecutor": {
+            "operations": {
+              "process": {
+                "implementation": {
+                  "primary": "component-script"
+                },
+                "inputs": {
+                  "script-type": "jython",
+                  "script-class-reference": "Scripts/python/NetconfRpcExample.py",
+                  "instance-dependencies": [
+                  ],
+                  "dynamic-properties": "*dynamic-netconf-properties"
+                },
+                "outputs": {
+                  "response-data": "",
+                  "status": ""
+                }
+              }
+            }
+          }
+        },
+        "requirements": {
+          "netconf-connection": {
+            "capability": "netconf",
+            "node": "sample-netconf-device",
+            "relationship": "tosca.relationships.ConnectsTo"
+          }
+        },
+        "artifacts": {
+          "hostname-template": {
+            "type": "artifact-template-velocity",
+            "file": "Templates/hostname-template.vtl"
+          },
+          "hostname-mapping": {
+            "type": "artifact-mapping-resource",
+            "file": "Definitions/hostname-mapping.json"
+          },
+          "component-script": {
+            "type": "artifact-script-jython",
+            "file": "Scripts/python/NetconfRpcExample.py"
+          }
+        }
+      },
+      "sample-netconf-device": {
+        "type": "vnf-netconf-device",
+        "capabilities": {
+          "netconf": {
+            "properties": {
+              "login-key": "sample-key",
+              "login-account": "sample-account",
+              "target-ip-address": {
+                "get_attribute": [
+                  "resource-assignment",
+                  "",
+                  "assignment-params",
+                  "$.ipAddress"
+                ]
+              },
+              "port-number": 830,
+              "connection-time-out": 30
+            }
+          }
+        }
+      }
+    },
+    "workflows": {
+      "resource-assignment": {
+        "inputs": {
+          "resource-assignment-properties": {
+            "required": true,
+            "type": "dt-resource-assignment-properties"
+          }
+        },
+        "steps": {
+          "call-resource-assignment": {
+            "description": "Resource Assignment Workflow",
+            "target": "resource-assignment-process",
+            "activities": [
+              {
+                "call_operation": "CONFIG.ResourceAssignment"
+              }
+            ]
+          }
+        },
+        "outputs": {
+          "response-property": {
+            "type": "string",
+            "value": "executed"
+          },
+          "template-properties": {
+            "type": "json",
+            "value": {
+              "get_attribute": [
+                "resource-assignment",
+                "assignment-params"
+              ]
+            }
+          }
+        }
+      },
+      "activate": {
+        "inputs": {
+          "request-id": {
+            "required": true,
+            "type": "string"
+          },
+          "action-name": {
+            "required": true,
+            "type": "string"
+          },
+          "scope-type": {
+            "required": true,
+            "type": "string"
+          },
+          "hostname": {
+            "required": true,
+            "type": "string"
+          }
+        },
+        "steps": {
+          "activate-process": {
+            "description": "Netconf Activation Workflow",
+            "target": "activate-process",
+            "activities": [
+              {
+                "call_operation": "CONFIG.ActivateProcess"
+              }
+            ]
+          }
+        }
+      },
+      "assign-activate": {
+        "inputs": {
+          "assign-activate-properties": {
+            "required": true,
+            "type": "dt-assign-activate-properties"
+          }
+        },
+        "steps": {
+          "activate-process": {
+            "description": "Resource Assign and Netconf Activation Workflow",
+            "target": "assign-activate-process",
+            "activities": [
+              {
+                "call_operation": "CONFIG.AssignActivateProcess"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

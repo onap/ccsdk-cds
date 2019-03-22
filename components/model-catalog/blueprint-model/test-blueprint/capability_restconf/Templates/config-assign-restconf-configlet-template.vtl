@@ -1,0 +1,37 @@
+{
+   "ietf-restconf:yang-patch":{
+      "patch-id":"patch-1",
+      "edit":[
+         {
+            "edit-id":"edit1",
+            "operation":"merge",
+            "target":"/",
+            "value":{
+               "netconflist":{
+                  "netconf":[
+                     {
+                        "netconf-id":"40",
+                        "netconf-param":"4040"
+                     }
+                  ]
+               }
+            }
+         },
+         {
+            "edit-id":"edit2",
+            "operation":"merge",
+            "target":"/",
+            "value":{
+               "netconflist":{
+                  "netconf":[
+                     {
+                        "netconf-id":"50",
+                        "netconf-param":"98765"
+                     }
+                  ]
+               }
+            }
+         }
+      ]
+   }
+}

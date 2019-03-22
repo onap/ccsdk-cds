@@ -1,0 +1,198 @@
+{
+  "tosca_definitions_version" : "controller_blueprint_1_0_0",
+  "metadata" : {
+    "template_author" : "Rodrigo Ottero",
+    "author-email" : "rodrigo.ottero@est.tech",
+    "user-groups" : "ADMIN, OPERATION",
+    "template_name" : "configuration_over_restconf",
+    "template_version" : "1.0.0",
+    "template_tags" : "pnf, restconf, config, configuration"
+  },
+  "imports" : [ {
+    "file" : "Definitions/data_types.json"
+  }, {
+    "file" : "Definitions/relationship_types.json"
+  }, {
+    "file" : "Definitions/artifact_types.json"
+  }, {
+    "file" : "Definitions/node_types.json"
+  }, {
+    "file" : "Definitions/policy_types.json"
+  } ],
+  "dsl_definitions" : {
+    "config-assign-properties" : {
+      "resolution-key" : {
+        "get_input" : "resolution-key"
+      }
+    },
+    "config-deploy-properties" : {
+      "resolution-key" : {
+        "get_input" : "resolution-key"
+      }
+    }
+
+  },
+  "topology_template" : {
+    "workflows" : {
+      "config-assign" : {
+        "steps" : {
+          "activate-process" : {
+            "description" : "Create a configlet",
+            "target" : "config-assign-process",
+            "activities" : [ {
+              "call_operation" : ""
+            } ]
+          }
+        },
+        "inputs" : {
+          "resolution-key" : {
+            "required" : true,
+            "type" : "string"
+          },
+          "artifact-name" : {
+            "required" : true,
+            "type" : "list",
+            "entry_schema" : {
+              "type" : "string"
+            }
+          },
+          "store-result" : {
+            "required" : true,
+            "type" : "boolean"
+          },
+          "config-assign-properties" : {
+            "description" : "Dynamic PropertyDefinition for workflow(config-assign).",
+            "required" : true,
+            "type" : "dt-config-assign-properties"
+          }
+        }
+      },
+      "config-deploy" : {
+        "steps" : {
+          "activate-process" : {
+            "description" : "Send a configlet to the pnf",
+            "target" : "config-deploy-process",
+            "activities" : [ {
+              "call_operation" : ""
+            } ]
+          }
+        },
+        "inputs" : {
+          "resolution-key" : {
+            "required" : true,
+            "type" : "string"
+          },
+          "config-deploy-properties" : {
+            "description" : "Dynamic PropertyDefinition for workflow(config-deploy).",
+            "required" : true,
+            "type" : "dt-config-deploy-properties"
+          }
+        }
+      }
+    },
+    "node_templates" : {
+      "config-assign-process" : {
+        "type" : "dg-generic",
+        "properties" : {
+          "content" : {
+            "get_artifact" : [ "SELF", "dg-config-assign-process" ]
+          },
+          "dependency-node-templates" : [ "config-assign" ]
+        },
+        "artifacts" : {
+          "dg-config-assign-process" : {
+            "type" : "artifact-directed-graph",
+            "file" : "Plans/CONFIG_configAssign.xml"
+          }
+        }
+      },
+      "config-assign" : {
+        "type" : "component-resource-resolution",
+        "interfaces" : {
+          "ResourceResolutionComponent" : {
+            "operations" : {
+              "process" : {
+                "inputs" : {
+                  "resolution-key" : {
+                    "get_input" : "resolution-key"
+                  },
+                  "store-result" : true,
+                  "artifact-prefix-names" : ["config-assign"]
+                },
+                "outputs" : {
+                  "resource-assignment-params" : {
+                    "get_attribute" : [ "SELF", "assignment-params" ]
+                  },
+                  "status" : "success"
+                }
+              }
+            }
+          }
+        },
+        "artifacts" : {
+          "config-assign-template" : {
+            "type" : "artifact-template-velocity",
+            "file" : "Templates/config-assign-restconf-configlet-template.vtl"
+          },
+          "config-assign-mapping" : {
+            "type" : "artifact-mapping-resource",
+            "file" : "Definitions/config-assign-pnf-mapping.json"
+          }
+        }
+      },
+      "config-deploy-process" : {
+        "type" : "dg-generic",
+        "properties" : {
+          "content" : {
+            "get_artifact" : [ "SELF", "dg-config-deploy-process" ]
+          },
+          "dependency-node-templates" : [ "config-deploy" ]
+        },
+        "artifacts" : {
+          "dg-config-assign-process" : {
+            "type" : "artifact-directed-graph",
+            "file" : "Plans/CONFIG_configDeploy.xml"
+          }
+        }
+      },
+      "config-deploy" : {
+        "type" : "component-restconf-executor",
+        "interfaces" : {
+          "ComponentRestconfExecutor" : {
+            "operations" : {
+              "process" : {
+                "implementation" : {
+                  "primary" : "component-script"
+                },
+                "inputs" : {
+                  "script-type" : "jython",
+                  "script-class-reference" : "Scripts/python/RestconfConfigDeploy.py",
+                  "instance-dependencies" : [ ],
+                  "dynamic-properties" : "*config-deploy-properties"
+                },
+                "outputs" : {
+                  "response-data" : "",
+                  "status" : "success"
+                }
+              }
+            }
+          }
+        },
+        "artifacts" : {
+          "config-deploy-template" : {
+            "type" : "artifact-template-velocity",
+            "file" : "Templates/config-deploy-restconf-mount-template.vtl"
+          },
+          "config-deploy-mapping" : {
+            "type" : "artifact-mapping-resource",
+            "file" : "Definitions/config-deploy-pnf-mapping.json"
+          },
+          "component-script" : {
+            "type" : "artifact-script-jython",
+            "file" : "Scripts/python/RestconfConfigDeploy.py"
+          }
+        }
+      }
+    }
+  }
+}

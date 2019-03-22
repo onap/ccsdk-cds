@@ -1,0 +1,16 @@
+{
+  "tags": "prefix-id",
+  "name": "prefix-id",
+  "property" :{
+    "description": "prefix-id",
+    "type": "integer"
+  },
+  "updated-by": "adetalhouet",
+  "sources": {
+    "default": {
+      "type": "source-default",
+      "properties": {
+      }
+    }
+  }
+}

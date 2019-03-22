@@ -1,0 +1,5 @@
+{
+  "description": "TOSCA base type for implementation artifacts",
+  "version": "1.0.0",
+  "derived_from": "tosca.artifacts.Root"
+}

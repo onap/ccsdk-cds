@@ -1,0 +1,45 @@
+{
+  "name" : "service-instance-id",
+  "tags" : "service-instance-id, tosca.datatypes.Root, data_type",
+  "updated-by" : "Singal, Kapil <ks220y@att.com>",
+  "property" : {
+    "description" : "To be provided",
+    "type" : "string"
+  },
+  "sources" : {
+    "input" : {
+      "type" : "source-input",
+      "properties" : { }
+    },
+    "any-db": {
+      "type": "source-primary-db",
+      "properties": {
+        "query": "SELECT artifact_name FROM BLUEPRINT_RUNTIME where artifact_version=\"1.0.0\"",
+        "input-key-mapping": {
+        },
+        "output-key-mapping": {
+          "service-instance-id": "artifact_name"
+        }
+      }
+    },
+    "primary-db": {
+      "type": "source-primary-db",
+      "properties": {
+        "query": "SELECT artifact_name FROM BLUEPRINT_RUNTIME where artifact_version=\"1.0.0\"",
+        "input-key-mapping": {
+        },
+        "output-key-mapping": {
+          "service-instance-id": "artifact_name"
+        }
+      }
+    },
+    "capability": {
+      "type": "source-capability",
+      "properties": {
+          "script-type": "jython",
+          "script-class-reference": "SampleRAProcessor",
+          "instance-dependencies": []
+      }
+    }
+  }
+}
