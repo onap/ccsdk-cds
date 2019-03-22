@@ -54,6 +54,18 @@
             "required": true,
             "type": "string"
           }
+        },
+        "outputs": {
+          "response-property1": {
+            "type": "string",
+            "value": "executed"
+          },
+          "response-property2": {
+            "type": "string",
+            "value": {
+              "get_input": "action-name"
+            }
+          }
         }
       }
     },

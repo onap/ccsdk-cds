@@ -318,6 +318,21 @@
               }
             ]
           }
+        },
+        "outputs": {
+          "response-property": {
+            "type": "string",
+            "value": "executed"
+          },
+          "template-properties": {
+            "type": "json",
+            "value": {
+              "get_attribute": [
+                "resource-assignment",
+                "assignment-params"
+              ]
+            }
+          }
         }
       },
       "activate": {
