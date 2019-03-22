@@ -236,7 +236,7 @@
       },
       "derived_from" : "tosca.nodes.ResourceSource"
     },
-    "source-primary-db" : {
+    "source-processor-db" : {
       "description" : "This is Database Resource Source Node Type",
       "version" : "1.0.0",
       "properties" : {
