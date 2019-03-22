@@ -20,10 +20,14 @@
 
 package org.ccsdk.apps.blueprintprocessor.dmaap
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.apps.blueprintsprocessor.dmaap.DmaapEventPublisher
-import org.onap.ccsdk.apps.blueprintsprocessor.dmaap.EnvironmentContext
+import org.onap.ccsdk.apps.blueprintsprocessor.core.BluePrintProperties
+import org.onap.ccsdk.apps.blueprintsprocessor.core.BlueprintPropertyConfiguration
+import org.onap.ccsdk.apps.blueprintsprocessor.dmaap.BluePrintDmaapLibConfiguration
+import org.onap.ccsdk.apps.blueprintsprocessor.dmaap.BluePrintDmaapLibPropertyService
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
@@ -45,13 +49,19 @@ import kotlin.test.assertNotNull
 @RunWith(SpringRunner::class)
 @EnableAutoConfiguration(exclude = [DataSourceAutoConfiguration::class])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@ContextConfiguration(classes = [EnvironmentContext::class, TestController::class,
-    DmaapEventPublisher::class])
-@TestPropertySource(properties = ["server.port=9111","aai.topic=cds_aai",
-    "aai.username=admin","aai.password=admin","aai.host=127.0.0.1:9111",
-    "mul.topic=cds_mul_1,cds_mul_2", "mul.username=admin","mul.password=admin",
-    "mul.host=127.0.0.1:9111"])
+@ContextConfiguration(classes = [BluePrintDmaapLibConfiguration::class, TestController::class,
+    BlueprintPropertyConfiguration::class, BluePrintProperties::class])
+@TestPropertySource(properties = ["server.port=9111",
+    "blueprintsprocessor.dmaapclient.aai.topic=cds_aai",
+    "blueprintsprocessor.dmaapclient.aai.type=HTTPNOAUTH",
+    "blueprintsprocessor.dmaapclient.aai.host=127.0.0.1:9111",
+    "blueprintsprocessor.dmaapclient.multi.topic=cds_multi1,cds_multi2",
+    "blueprintsprocessor.dmaapclient.multi.type=HTTPNOAUTH",
+    "blueprintsprocessor.dmaapclient.multi.host=127.0.0.1:9111"])
 class TestDmaapEventPublisher {
+
+    @Autowired
+    lateinit var dmaapService : BluePrintDmaapLibPropertyService
 
     /**
      * Tests the event properties being set properly and sent as request.
@@ -59,18 +69,33 @@ class TestDmaapEventPublisher {
     @Test
     fun testEventProperties() {
         val strList = mutableListOf<String>()
-        val pub = DmaapEventPublisher(compName = "aai")
+        val dmaapClient = dmaapService.blueprintDmaapClientService("aai")
+
         strList.add("{\n" +
                 "    \"a\" : \"hello\"\n" +
                 "}")
-        pub.sendMessage("1", strList)
-        pub.close(2)
-        pub.prodProps
-        assertNotNull(pub.prodProps, "The property file updation failed")
-        assertEquals(pub.prodProps.get("topic"), "cds_aai")
-        assertEquals(pub.prodProps.get("username"), "admin")
-        assertEquals(pub.prodProps.get("password"), "admin")
-        assertEquals(pub.prodProps.get("host"), "127.0.0.1:9111")
+        dmaapClient.sendMessage(strList)
+        val msgs = dmaapClient.close(2)
+        assertEquals(msgs!!.size, 1)
+        val topic1 = msgs.get(0)
+        assertEquals(topic1!!.size, 0)
+    }
+
+    /**
+     * Tests the event properties being set properly and sent as request with
+     * single message.
+     */
+    @Test
+    fun testEventPropertiesWithSingleMsg() {
+        val dmaapClient = dmaapService.blueprintDmaapClientService("aai")
+        val str : String = "{\n" +
+                "    \"a\" : \"hello\"\n" +
+                "}"
+        dmaapClient.sendMessage(str)
+        val msgs = dmaapClient.close(2)
+        assertEquals(msgs!!.size, 1)
+        val topic1 = msgs.get(0)
+        assertEquals(topic1!!.size, 0)
     }
 
     /**
@@ -79,21 +104,93 @@ class TestDmaapEventPublisher {
     @Test
     fun testMultiTopicProperties() {
         val strList = mutableListOf<String>()
-        val pub = DmaapEventPublisher(compName = "mul")
+        val dmaapClient = dmaapService.blueprintDmaapClientService("multi")
+
         strList.add("{\n" +
                 "    \"a\" : \"hello\"\n" +
                 "}")
-        pub.sendMessage("1", strList)
-        pub.close(2)
-        var tops = pub.topics
-        assertNotNull(pub.prodProps, "The property file updation failed")
-        assertEquals(tops[0], "cds_mul_1")
-        assertEquals(tops[1], "cds_mul_2")
-        //assertEquals(pub.topics.contains("cds_mul_2`"), true)
-        assertEquals(pub.prodProps.get("username"), "admin")
-        assertEquals(pub.prodProps.get("password"), "admin")
-        assertEquals(pub.prodProps.get("host"), "127.0.0.1:9111")
+        dmaapClient.sendMessage(strList)
+        val msgs = dmaapClient.close(2)
+        assertEquals(msgs!!.size, 2)
+        val topic1 = msgs.get(0)
+        assertEquals(topic1!!.size, 0)
+        val topic2 = msgs.get(1)
+        assertEquals(topic2!!.size, 0)
     }
+
+
+    /**
+     * Tests the event properties with multiple topics with JSON node as input.
+     */
+    @Test
+    fun testMultiTopicPropertiesWithJsonInput() {
+        val jsonString = "{\n" +
+                "    \"topic\" : \"cds_json1,cds_json2\",\n" +
+                "    \"type\" : \"HTTPNOAUTH\",\n" +
+                "    \"host\" : \"127.0.0.1:9111\"\n" +
+                "}"
+        val mapper = ObjectMapper()
+        val node = mapper.readTree(jsonString)
+        val strList = mutableListOf<String>()
+        val dmaapClient = dmaapService.blueprintDmaapClientService(node)
+
+        strList.add("{\n" +
+                "    \"a\" : \"hello\"\n" +
+                "}")
+        dmaapClient.sendMessage(strList)
+        val msgs = dmaapClient.close(2)
+        assertEquals(msgs!!.size, 2)
+        val topic1 = msgs.get(0)
+        assertEquals(topic1!!.size, 0)
+        val topic2 = msgs.get(1)
+        assertEquals(topic2!!.size, 0)
+    }
+
+
+    /**
+     * Tests the event properties with multiple messages.
+     */
+    @Test
+    fun testMultiMsgsProperties() {
+        val strList = mutableListOf<String>()
+        val dmaapClient = dmaapService.blueprintDmaapClientService("aai")
+
+        strList.add("{\n" +
+                "    \"a\" : \"hello\"\n" +
+                "}")
+        strList.add("{\n" +
+                "    \"a\" : \"second\"\n" +
+                "}")
+        dmaapClient.sendMessage(strList)
+        val msgs = dmaapClient.close(2)
+        assertEquals(msgs!!.size, 1)
+        val topic1 = msgs.get(0)
+        assertEquals(topic1!!.size, 0)
+    }
+
+    /**
+     * Tests the DMAAP client properties generated with the complete prefix.
+     */
+    @Test
+    fun testDmaapClientProperties() {
+        val properties = dmaapService.dmaapClientProperties(
+            "blueprintsprocessor.dmaapclient.aai")
+        assertNotNull(properties, "failed to create property bean")
+        assertNotNull(properties.host, "failed to get url property" +
+                " in property bean")
+    }
+
+    /**
+     * Tests the blueprint DMAAP client service with only selector prefix.
+     */
+    @Test
+    fun testBlueprintDmaapClientService() {
+        val blueprintDmaapClientService =
+            dmaapService.blueprintDmaapClientService("aai")
+        assertNotNull(blueprintDmaapClientService,
+            "failed to create blueprintDmaapClientService")
+    }
+
 }
 
 /**

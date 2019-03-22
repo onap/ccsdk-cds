@@ -50,6 +50,7 @@
         <onap.logger.slf4j>1.2.2</onap.logger.slf4j>
         <powermock.version>1.7.4</powermock.version>
         <mockk.version>1.9</mockk.version>
+        <dmaap.client.version>1.1.5</dmaap.client.version>
     </properties>
     <dependencyManagement>
         <dependencies>

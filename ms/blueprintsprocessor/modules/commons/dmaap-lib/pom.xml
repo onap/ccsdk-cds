@@ -31,9 +31,6 @@
     <name>Blueprints Processor Dmaap Lib</name>
     <description>Blueprints Processor Dmaap Lib</description>
 
-    <properties>
-        <dmaap.client.version>1.1.5</dmaap.client.version>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -70,6 +67,10 @@
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-test-junit</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
+            <artifactId>processor-core</artifactId>
         </dependency>
     </dependencies>
 

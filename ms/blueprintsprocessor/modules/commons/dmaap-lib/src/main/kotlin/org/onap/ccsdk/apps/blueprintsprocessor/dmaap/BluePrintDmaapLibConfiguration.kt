@@ -20,20 +20,27 @@
 
 package org.onap.ccsdk.apps.blueprintsprocessor.dmaap
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties
+import org.springframework.context.annotation.ComponentScan
+import org.springframework.context.annotation.Configuration
+
 /**
- * Abstraction of a publisher, to send messages with the given partition in a
- * session and closing the same.
+ * Representation of DMAAP lib configuration to load the required property
+ * files into the application context.
  */
-interface EventPublisher {
+@Configuration
+@ComponentScan
+@EnableConfigurationProperties
+open class BluePrintDmaapLibConfiguration
 
-    /**
-     * Sends messages through a session on a given partition.
-     */
-    fun sendMessage(partition: String, messages: Collection<String>): Boolean
-
-    /**
-     * Closes the session with the given time.
-     */
-    fun close(timeout: Long)
-
+/**
+ * Util constants required for DMAAP library to use.
+ */
+class DmaapLibConstants {
+    companion object {
+        const val SERVICE_BLUEPRINT_DMAAP_LIB_PROPERTY = "blueprint" +
+                "-dmaap-lib-property-service"
+        const val TYPE_HTTP_NO_AUTH = "HTTPNOAUTH"
+        const val TYPE_HTTP_AAF_AUTH = "HTTPAAF"
+    }
 }
