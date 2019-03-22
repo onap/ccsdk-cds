@@ -17,13 +17,36 @@
 package org.onap.ccsdk.apps.blueprintsprocessor.db
 
 
-open class PrimaryDataSourceProperties {
+open class DBDataSourceProperties {
     lateinit var url: String
     lateinit var username: String
     lateinit var password: String
-    lateinit var driverClassName: String
+    open lateinit var driverClassName: String
+
+}
+
+open class PrimaryDataSourceProperties: DBDataSourceProperties() {
     lateinit var hibernateHbm2ddlAuto: String
     lateinit var hibernateDDLAuto: String
     lateinit var hibernateNamingStrategy: String
     lateinit var hibernateDialect: String
 }
+
+open class MariaDataSourceProperties: DBDataSourceProperties() {
+    lateinit var hibernateHbm2ddlAuto: String
+    lateinit var hibernateDDLAuto: String
+    lateinit var hibernateNamingStrategy: String
+    lateinit var type: String
+    lateinit var hibernateDialect: String
+    override var driverClassName = DBLibConstants.DRIVER_MARIA_DB
+}
+
+open class MySqlDataSourceProperties: DBDataSourceProperties() {
+    lateinit var hibernateHbm2ddlAuto: String
+    lateinit var hibernateDDLAuto: String
+    lateinit var hibernateNamingStrategy: String
+    lateinit var type: String
+    lateinit var hibernateDialect: String
+    override var driverClassName = DBLibConstants.DRIVER_MYSQL_DB
+}
+

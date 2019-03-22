@@ -25,7 +25,6 @@ import org.onap.ccsdk.apps.blueprintsprocessor.core.BlueprintPropertyConfigurati
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.utils.PayloadUtils
 import org.onap.ccsdk.apps.blueprintsprocessor.db.BluePrintDBLibConfiguration
-import org.onap.ccsdk.apps.blueprintsprocessor.db.primary.DBLibGenericService
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor.*
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.asJsonNode
@@ -44,7 +43,7 @@ import org.springframework.test.context.junit4.SpringRunner
 @ContextConfiguration(classes = [ResourceResolutionServiceImpl::class,
     InputResourceResolutionProcessor::class, DefaultResourceResolutionProcessor::class,
     DatabaseResourceAssignmentProcessor::class, RestResourceResolutionProcessor::class,
-    CapabilityResourceResolutionProcessor::class, DBLibGenericService::class,
+    CapabilityResourceResolutionProcessor::class,
     BlueprintPropertyConfiguration::class, BluePrintProperties::class,
     BluePrintDBLibConfiguration::class, BluePrintLoadConfiguration::class])
 @TestPropertySource(locations = ["classpath:application-test.properties"])
