@@ -19,8 +19,10 @@ package org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.core
 import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableSet
 import org.apache.sshd.client.SshClient
+import org.apache.sshd.client.channel.ChannelSubsystem
 import org.apache.sshd.client.channel.ClientChannel
 import org.apache.sshd.client.session.ClientSession
+import org.apache.sshd.client.session.ClientSessionImpl
 import org.apache.sshd.common.FactoryManager
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider
 import org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
@@ -40,6 +42,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
+import java.util.concurrent.atomic.AtomicReference
 
 class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcService: NetconfRpcService) :
     NetconfSession {
@@ -271,6 +274,14 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
                 NetconfReceivedEvent.Type.DEVICE_REPLY -> replies[messageId]?.complete(event.getMessagePayload())
                 NetconfReceivedEvent.Type.SESSION_CLOSED -> disconnect()
             }
+        }
+    }
+
+    fun sessionstatus(state:String): Boolean{
+        return when (state){
+            "Close" -> channel.isClosed
+            "Open" -> channel.isOpen
+            else -> false
         }
     }
 }
