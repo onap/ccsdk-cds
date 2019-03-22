@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (C) 2019 Bell Canada. All rights reserved.
+  ~
+  ~ NOTICE:  All the intellectual and technical concepts contained herein are
+  ~ proprietary to Bell Canada and are protected by trade secret or copyright law.
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited.
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>ccsdk-apps-ms</artifactId>
+    <groupId>org.onap.ccsdk.apps</groupId>
+    <version>0.4.2-SNAPSHOT</version>
+  </parent>
+
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>cds-sdc-listener</artifactId>
+  <name>CDS-SDC Listener Root</name>
+  <description>A microservice to get the cba file from SDC and store it into database at runtime</description>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>application</module>
+    <!--  Module is not currently working
+    <module>distribution</module>
+    -->
+  </modules>
+
+</project>
