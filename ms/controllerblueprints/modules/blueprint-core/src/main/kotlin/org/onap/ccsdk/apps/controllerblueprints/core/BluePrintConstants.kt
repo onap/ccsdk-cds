@@ -33,6 +33,9 @@ object BluePrintConstants {
     const val STATUS_PROCESSING: String = "processing"
     const val STATUS_FAILURE: String = "failure"
 
+    const val FLAG_Y: String = "Y"
+    const val FLAG_N: String = "N"
+
     const val TYPE_DEFAULT: String = "default"
 
     const val DATA_TYPE_STRING: String = "string"
@@ -98,8 +101,6 @@ object BluePrintConstants {
     const val MODEL_TYPE_NODE_DG = "tosca.nodes.DG"
     const val MODEL_TYPE_NODE_COMPONENT = "tosca.nodes.Component"
     const val MODEL_TYPE_NODE_VNF = "tosca.nodes.Vnf"
-    @Deprecated("Artifacts will be attached to Node Template")
-    const val MODEL_TYPE_NODE_ARTIFACT = "tosca.nodes.Artifact"
     const val MODEL_TYPE_NODE_RESOURCE_SOURCE = "tosca.nodes.ResourceSource"
 
     const val MODEL_TYPE_NODES_COMPONENT_JAVA: String = "tosca.nodes.component.Java"
@@ -141,6 +142,7 @@ object BluePrintConstants {
     const val EXPRESSION_GET_NODE_OF_TYPE: String = "get_nodes_of_type"
 
     const val PROPERTY_BLUEPRINT_PROCESS_ID: String = "blueprint-process-id"
+    const val PROPERTY_BLUEPRINT_VALID: String = "blueprint-valid"
     const val PROPERTY_BLUEPRINT_BASE_PATH: String = "blueprint-basePath"
     const val PROPERTY_BLUEPRINT_RUNTIME: String = "blueprint-runtime"
     const val PROPERTY_BLUEPRINT_INPUTS_DATA: String = "blueprint-inputs-data"

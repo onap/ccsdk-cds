@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +38,7 @@ class BluePrintImportService(private val parentServiceTemplate: ServiceTemplate,
     private var importServiceTemplateMap: MutableMap<String, ServiceTemplate> = hashMapOf()
 
 
-    fun getImportResolvedServiceTemplate(): ServiceTemplate {
+    suspend fun getImportResolvedServiceTemplate(): ServiceTemplate {
         // Populate Imported Service Templates
         traverseSchema(PARENT_SERVICE_TEMPLATE, parentServiceTemplate)
 
@@ -48,7 +49,7 @@ class BluePrintImportService(private val parentServiceTemplate: ServiceTemplate,
         return parentServiceTemplate
     }
 
-    private fun traverseSchema(key: String, serviceTemplate: ServiceTemplate) {
+    private suspend fun traverseSchema(key: String, serviceTemplate: ServiceTemplate) {
         if (key != PARENT_SERVICE_TEMPLATE) {
             importServiceTemplateMap[key] = serviceTemplate
         }
@@ -63,7 +64,7 @@ class BluePrintImportService(private val parentServiceTemplate: ServiceTemplate,
         }
     }
 
-    private fun resolveImportDefinition(importDefinition: ImportDefinition): ServiceTemplate {
+    private suspend fun resolveImportDefinition(importDefinition: ImportDefinition): ServiceTemplate {
         var serviceTemplate: ServiceTemplate? = null
         val file: String = importDefinition.file
         val decodedSystemId: String = URLDecoder.decode(file, Charset.defaultCharset().toString())

@@ -1,6 +1,7 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
  * Modifications Copyright © 2019 Bell Canada.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,7 +84,8 @@ class ControllerBlueprintCatalogServiceImpl(bluePrintValidatorService: BluePrint
         val blueprintModel = BlueprintModel()
         blueprintModel.id = metadata[BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID]
         blueprintModel.artifactType = ApplicationConstants.ASDC_ARTIFACT_TYPE_SDNC_MODEL
-        blueprintModel.published = ApplicationConstants.ACTIVE_N
+        blueprintModel.published = metadata[BluePrintConstants.PROPERTY_BLUEPRINT_VALID]
+                ?: BluePrintConstants.FLAG_N
         blueprintModel.artifactName = artifactName
         blueprintModel.artifactVersion = artifactVersion
         blueprintModel.updatedBy = metadata[BluePrintConstants.METADATA_TEMPLATE_AUTHOR]

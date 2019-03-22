@@ -95,11 +95,11 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
         bluePrintModelHandler.enrichBlueprint(file)
     }
 
-    @PutMapping("/publish/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping("/publish", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     @Throws(BluePrintException::class)
-    fun publishBlueprintModel(@PathVariable(value = "id") id: String): BlueprintModelSearch {
-        return this.bluePrintModelHandler.publishBlueprintModel(id)
+    fun publishBlueprint(@RequestPart("file") file: FilePart): BlueprintModelSearch = runBlocking {
+        bluePrintModelHandler.publishBlueprint(file)
     }
 
     @GetMapping("/search/{tags}", produces = [MediaType.APPLICATION_JSON_VALUE])

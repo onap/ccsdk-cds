@@ -21,12 +21,9 @@ package org.onap.ccsdk.apps.controllerblueprints.service.utils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.reactive.awaitSingle
 import kotlinx.coroutines.withContext
-import org.apache.commons.io.FileUtils
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.apps.controllerblueprints.core.*
 import org.onap.ccsdk.apps.controllerblueprints.core.data.*
-import org.onap.ccsdk.apps.controllerblueprints.core.deCompress
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintRepoService
-import org.onap.ccsdk.apps.controllerblueprints.core.reCreateDirs
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintArchiveUtils
 import org.springframework.core.io.ByteArrayResource
@@ -87,7 +84,7 @@ class BluePrintEnhancerUtils {
             return artifactType
         }
 
-        suspend fun copyFromFilePart(filePart: FilePart, targetFile: File): File {
+        private suspend fun copyFromFilePart(filePart: FilePart, targetFile: File): File {
             // Delete the Directory
             targetFile.deleteRecursively()
             return filePart.transferTo(targetFile)
@@ -95,20 +92,23 @@ class BluePrintEnhancerUtils {
                     .awaitSingle()
         }
 
-        suspend fun decompressFilePart(filePart: FilePart, archiveDir: String, enhanceDir: String): File {
+        suspend fun extractCompressFilePart(filePart: FilePart, archiveDir: String, enhanceDir: String): File {
             //Recreate the Base Directories
-            Paths.get(archiveDir).toFile().reCreateDirs()
-            Paths.get(enhanceDir).toFile().reCreateDirs()
-
-            val filePartFile = Paths.get(archiveDir, "cba.zip").toFile()
+            normalizedFile(archiveDir).reCreateDirs()
+            normalizedFile(enhanceDir).reCreateDirs()
+            val filePartFile = normalizedFile(archiveDir, "cba.zip")
             // Copy the File Part to ZIP
-            copyFromFilePart(filePart, filePartFile)
+            return copyFromFilePart(filePart, filePartFile)
+        }
+
+        suspend fun decompressFilePart(filePart: FilePart, archiveDir: String, enhanceDir: String): File {
+            val filePartFile = extractCompressFilePart(filePart, archiveDir, enhanceDir)
             val deCompressFileName = Paths.get(enhanceDir).toUri().path
             return filePartFile.deCompress(deCompressFileName)
         }
 
         suspend fun compressToFilePart(enhanceDir: String, archiveDir: String): ResponseEntity<Resource> {
-            val compressedFile = Paths.get(archiveDir, "enhanced-cba.zip").toFile()
+            val compressedFile = normalizedFile(archiveDir, "enhanced-cba.zip")
             BluePrintArchiveUtils.compress(Paths.get(enhanceDir).toFile(), compressedFile, true)
             return prepareResourceEntity(compressedFile.name, compressedFile.readBytes())
         }
@@ -121,11 +121,8 @@ class BluePrintEnhancerUtils {
         }
 
         suspend fun cleanEnhancer(archiveLocation: String, enhancementLocation: String) = withContext(Dispatchers.Default) {
-            val enrichDir = File(enhancementLocation)
-            FileUtils.forceDeleteOnExit(enrichDir)
-
-            val archiveDir = File(archiveLocation)
-            FileUtils.forceDeleteOnExit(archiveDir)
+            deleteDir(archiveLocation)
+            deleteDir(enhancementLocation)
         }
 
         /**

@@ -219,7 +219,7 @@ If Property Assignment is Expression.
         if (artifactDefinition.repository != null) {
             TODO()
         } else if (artifactDefinition.file != null) {
-            return ResourceResolverUtils.getFileContent(artifactDefinition.file!!, bluePrintBasePath)
+            return ResourceResolverUtils.getFileContent(artifactDefinition.file, bluePrintBasePath)
         }
         return ""
     }

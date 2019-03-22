@@ -1,6 +1,7 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
  * Modifications Copyright © 2019 Bell Canada.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,13 +56,16 @@ abstract class BlueprintCatalogServiceImpl(private val blueprintValidator: BlueP
             toDeleteDirectory = extractedDirectory
         }
 
+        var valid = BluePrintConstants.FLAG_N
         if (validate) {
             blueprintValidator.validateBluePrints(extractedDirectory.path)
+            valid = BluePrintConstants.FLAG_Y
         }
 
         val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(blueprintId, extractedDirectory.path)
         val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
         metadata[BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID] = blueprintId
+        metadata[BluePrintConstants.PROPERTY_BLUEPRINT_VALID] = valid
 
         save(metadata, archivedDirectory)
 
