@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +19,7 @@ package org.onap.ccsdk.cds.controllerblueprints.validation
 
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
+import org.onap.ccsdk.cds.controllerblueprints.validation.utils.PropertyAssignmentValidationUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Workflow
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
@@ -45,6 +47,12 @@ open class BluePrintWorkflowValidatorImpl(private val bluePrintTypeValidatorServ
         paths.add(workflowName)
         paths.joinToString(BluePrintConstants.PATH_DIVIDER)
 
+        // Validate Workflow Inputs
+        validateInputs(workflow)
+
+        // Validate Workflow outputs
+        validateOutputs(workflow)
+
         // Step Validation Start
         paths.add("steps")
         workflow.steps?.forEach { stepName, step ->
@@ -69,14 +77,33 @@ open class BluePrintWorkflowValidatorImpl(private val bluePrintTypeValidatorServ
                                     "definition", paths.joinToString(BluePrintConstants.PATH_DIVIDER), e.message!!)
                 }
             }
-            paths.removeAt(paths.lastIndex)
+
         }
         paths.removeAt(paths.lastIndex)
         // Step Validation Ends
         paths.removeAt(paths.lastIndex)
 
+        paths.removeAt(paths.lastIndex)
+    }
+
+    private fun validateInputs(workflow: Workflow) {
         workflow.inputs?.let {
             bluePrintTypeValidatorService.validatePropertyDefinitions(bluePrintRuntimeService, workflow.inputs!!)
         }
     }
+
+    private fun validateOutputs(workflow: Workflow) {
+        workflow.outputs?.let {
+
+            bluePrintTypeValidatorService.validatePropertyDefinitions(bluePrintRuntimeService, workflow.outputs!!)
+
+            PropertyAssignmentValidationUtils(bluePrintRuntimeService.bluePrintContext())
+                    .validatePropertyDefinitionNAssignments(workflow.outputs!!)
+        }
+        // Validate Value or Expression
+        workflow.outputs?.forEach { propertyName, propertyDefinition ->
+
+        }
+    }
+
 }
