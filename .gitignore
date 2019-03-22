@@ -80,3 +80,36 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
+
+# Microservices
+
+.classpath
+.settings/
+
+# Target dirs in all projects
+**/target-ide/*
+**/target/*
+**/logs/*
+**/tokens/*
+
+# Added for Intellij IDEA IDE
+**/*.ipr
+**/*.iws
+**/debug-logs/*
+**/.idea/*
+**/*.iml
+**/*.project
+**/.springBeans
+
+**/*versionsBackup
+**/blackDuckHub*
+**/*.jsonld
+**/.checkstyle
+**/.gitignore
+
+**/*.log
+**/*py.class
+**/.DS_Store
+
+# To Remove Kotlin Script Generated Jars
+**/*cba-kts.jar
