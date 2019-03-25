@@ -16,9 +16,10 @@
   -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
-        <groupId>org.onap.ccsdk.apps</groupId>
-        <artifactId>ccsdk-apps-ms</artifactId>
+        <groupId>org.onap.ccsdk.cds</groupId>
+        <artifactId>ms</artifactId>
         <version>0.4.2-SNAPSHOT</version>
+        <relativePath>..</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>controllerblueprints</artifactId>

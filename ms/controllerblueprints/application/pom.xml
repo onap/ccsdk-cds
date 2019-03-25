@@ -19,7 +19,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+        <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
         <artifactId>parent</artifactId>
         <version>0.4.2-SNAPSHOT</version>
         <relativePath>../parent</relativePath>
@@ -29,7 +29,7 @@
     <properties>
         <swagger.directory>${basedir}/target/src/main/resources/swagger-ui</swagger.directory>
         <java.version>1.8</java.version>
-        <name.space>org.onap.ccsdk.apps</name.space>     <!-- <name.space>${namespace}</name.space> -->
+        <name.space>org.onap.ccsdk.cds</name.space>     <!-- <name.space>${namespace}</name.space> -->
         <serviceArtifactName>controllerblueprints</serviceArtifactName>
         <!-- Sonar -->
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
@@ -46,7 +46,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+            <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
             <artifactId>service</artifactId>
         </dependency>
         <dependency>
@@ -208,7 +208,7 @@
                     <apiSources>
                         <apiSource>
                             <springmvc>true</springmvc>
-                            <locations>org.onap.ccsdk.apps.controllerblueprints.service.rs
+                            <locations>org.onap.ccsdk.cds.controllerblueprints.service.rs
                             </locations>
                             <schemes>
                                 <scheme>http</scheme>

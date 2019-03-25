@@ -18,7 +18,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
+        <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
         <artifactId>services</artifactId>
         <version>0.4.2-SNAPSHOT</version>
     </parent>
@@ -34,31 +34,31 @@
             <artifactId>jython-standalone</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+            <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
             <artifactId>blueprint-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+            <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
             <artifactId>blueprint-scripts</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
             <artifactId>processor-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
             <artifactId>db-lib</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.onap.ccsdk.apps.blueprintsprocessor</groupId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
             <artifactId>rest-lib</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+            <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
             <artifactId>resource-dict</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.onap.ccsdk.apps.components</groupId>
+            <groupId>org.onap.ccsdk.cds.components</groupId>
             <artifactId>proto-definition</artifactId>
         </dependency>
 

@@ -2,7 +2,7 @@ import  netconf_constant
 from netconfclient import NetconfClient
 from java.lang import Exception
 from abstract_blueprint_function import AbstractPythonComponentFunction
-from org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor import NetconfRpcService
+from org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor import NetconfRpcService
 
 
 

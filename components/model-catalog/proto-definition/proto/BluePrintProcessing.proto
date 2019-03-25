@@ -2,19 +2,19 @@ syntax = "proto3";
 import "google/protobuf/struct.proto";
 import "BluePrintCommon.proto";
 option java_multiple_files = true;
-package org.onap.ccsdk.apps.controllerblueprints.processing.api;
+package org.onap.ccsdk.cds.controllerblueprints.processing.api;
 
 
 message ExecutionServiceInput {
-  org.onap.ccsdk.apps.controllerblueprints.common.api.CommonHeader commonHeader = 1;
-  org.onap.ccsdk.apps.controllerblueprints.common.api.ActionIdentifiers actionIdentifiers = 2;
+  org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader commonHeader = 1;
+  org.onap.ccsdk.cds.controllerblueprints.common.api.ActionIdentifiers actionIdentifiers = 2;
   google.protobuf.Struct payload = 3;
 }
 
 message ExecutionServiceOutput {
-  org.onap.ccsdk.apps.controllerblueprints.common.api.CommonHeader commonHeader = 1;
-  org.onap.ccsdk.apps.controllerblueprints.common.api.ActionIdentifiers actionIdentifiers = 2;
-  org.onap.ccsdk.apps.controllerblueprints.common.api.Status status = 3;
+  org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader commonHeader = 1;
+  org.onap.ccsdk.cds.controllerblueprints.common.api.ActionIdentifiers actionIdentifiers = 2;
+  org.onap.ccsdk.cds.controllerblueprints.common.api.Status status = 3;
   google.protobuf.Struct payload = 4;
 }
 

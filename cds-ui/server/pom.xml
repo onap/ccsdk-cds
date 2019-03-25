@@ -19,19 +19,18 @@ limitations under the License.
 ============LICENSE_END============================================ -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    
+
     <parent>
         <groupId>org.onap.ccsdk.cds</groupId>
-        <artifactId>controller-design-studio</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
-        <relativePath>../..</relativePath>
+        <artifactId>ui</artifactId>
+        <version>0.4.2-SNAPSHOT</version>
+        <relativePath>..</relativePath>
     </parent>
-    
-    <groupId>org.onap.ccsdk.cds.server</groupId>
-    <artifactId>controller-design-studio-server</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+
+    <artifactId>ui-server</artifactId>
+    <version>0.4.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>cds-ui-server</name>
@@ -41,8 +40,6 @@ limitations under the License.
         <npm.executable>npm</npm.executable>
         <onap.nexus.url>https://nexus.onap.org</onap.nexus.url>
     </properties>
-
-
 
     <build>
         <plugins>

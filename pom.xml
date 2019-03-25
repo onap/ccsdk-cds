@@ -1,8 +1,5 @@
 <!--
-============LICENSE_START==========================================
-===================================================================
-Copyright (C) 2018 IBM Intellectual Property. All rights reserved.
-===================================================================
+Copyright (C) 2019 Bell Canada
 
 Unless otherwise specified, all software contained herein is licensed
 under the Apache License, Version 2.0 (the License);
@@ -16,111 +13,94 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-============LICENSE_END============================================ -->
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
-    <parent>
-		<groupId>org.onap.ccsdk.parent</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.2.1-SNAPSHOT</version>
-		<relativePath/>
-	</parent>
-
-    <groupId>org.onap.ccsdk.cds</groupId>
-    <artifactId>controller-design-studio</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
-
-
-    <name>controller-design-studio</name>
-    <description>Creates Controller Design Studio UI Docker container</description>
-
-    <properties>
-        <image.name>onap/ccsdk-cds-ui</image.name>
-        <ccsdk.project.version>${project.version}</ccsdk.project.version>
-	      <ccsdk.distribution.version>${project.version}</ccsdk.distribution.version>
-        <ccsdk.build.timestamp>${maven.build.timestamp}</ccsdk.build.timestamp>
-        <maven.build.timestamp.format>yyyyMMdd'T'HHmmss'Z'</maven.build.timestamp.format>
-	<docker.verbose>true</docker.verbose>
-    </properties>
-
-<!--
-	<modules>
-		<module>cds-ui/client</module>
-		<module>cds-ui/server</module>
-	</modules>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <npm.executable>npm</npm.executable>
-        <onap.nexus.url>https://nexus.onap.org</onap.nexus.url>
-    </properties>
 -->
 
-<build>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <parent>
+        <groupId>org.onap.ccsdk.parent</groupId>
+        <artifactId>odlparent-lite</artifactId>
+        <version>1.2.1</version>
+        <relativePath/>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.onap.ccsdk.cds</groupId>
+    <artifactId>parent</artifactId>
+    <version>0.4.2-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>cds-parent</name>
+    <description>CCSDK Controller Design Studio</description>
+
+    <modules>
+        <!--<module>cds-ui</module>-->
+        <module>components</module>
+        <module>ms</module>
+    </modules>
+
+    <url>https://wiki.onap.org</url>
+    <organization>
+        <name>ONAP</name>
+    </organization>
+
+    <properties>
+        <!--Don't set any language to let sonar enable multi-language support-->
+        <sonar.language/>
+        <!--Provide src/main as source path so both src/main/java and src/main/kotlin are scanned-->
+        <sonar.sources>src/main</sonar.sources>
+        <!--Provide src/test as source path for test so both src/test/java and src/test/kotlin are scanned-->
+        <sonar.tests>src/test</sonar.tests>
+        <!--Only include java and kt files to the scan-->
+        <sonar.inclusions>**/*.java,**/*.kt</sonar.inclusions>
+        <!--Specify path to load jacoco XLM report, as Sonar can't load Kotlin coverage from binary report.
+        Note: coverage for now is invalid and is failing to load because of:
+        "Cannot import coverage information for file '{file}', coverage data is invalid."
+        see https://github.com/jacoco/jacoco/issues/763
+        That issue has been fixed in 0.8.3 , so we override the default ONAP
+        version here to pick up that fix -->
+        <sonar.coverage.jacoco.xmlReportPaths>${project.reporting.outputDirectory}/jacoco-ut/jacoco.xml
+        </sonar.coverage.jacoco.xmlReportPaths>
+        <jacoco.version>0.8.3</jacoco.version>
+    </properties>
+
+    <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.groovy.maven</groupId>
-                <artifactId>gmaven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <source>${basedir}/TagVersion.groovy</source>
-                        </configuration>
-                    </execution>
-                </executions>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
             </plugin>
         </plugins>
     </build>
 
     <profiles>
         <profile>
-            <id>docker</id>
+            <id>blackduck</id>
+            <activation>
+                <property>
+                    <name>blackduck-scan</name>
+                </property>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>io.fabric8</groupId>
-                        <artifactId>docker-maven-plugin</artifactId>
-                        <version>0.28.0</version>
+                        <groupId>com.blackducksoftware.integration</groupId>
+                        <artifactId>hub-maven-plugin</artifactId>
+                        <version>1.4.0</version>
                         <inherited>false</inherited>
                         <configuration>
-                            <images>
-                                <image>
-                                    <name>${image.name}</name>
-                                    <build>
-                                        <cleanup>try</cleanup>
-                                        <dockerFileDir>${basedir}/cds-ui</dockerFileDir>
-                                        <tags>
-                                            <tag>${project.docker.latestminortag.version}</tag>
-                                            <tag>${project.docker.latestfulltag.version}</tag>
-                                            <tag>${project.docker.latesttagtimestamp.version}</tag>
-                                        </tags>
-                                    </build>
-                                </image>
-                            </images>
+                            <hubProjectName>${project.name}</hubProjectName>
+                            <outputDirectory>${project.basedir}</outputDirectory>
                         </configuration>
                         <executions>
                             <execution>
-                                <id>generate-images</id>
+                                <id>create-bdio-file</id>
                                 <phase>package</phase>
                                 <goals>
-                                    <goal>build</goal>
-                                </goals>
-                            </execution>
-
-                            <execution>
-                                <id>push-images</id>
-                                <phase>deploy</phase>
-                                <goals>
-                                    <goal>build</goal>
-                                    <goal>push</goal>
+                                    <goal>createHubOutput</goal>
                                 </goals>
                             </execution>
                         </executions>
@@ -129,8 +109,5 @@ limitations under the License.
             </build>
         </profile>
     </profiles>
-    <organization>
-        <name>ONAP</name>
-    </organization>
 
 </project>
