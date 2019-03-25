@@ -16,23 +16,29 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.core
 
+import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintPathConfiguration
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.context.properties.bind.Bindable
 import org.springframework.boot.context.properties.bind.Binder
 import org.springframework.boot.context.properties.source.ConfigurationPropertySources
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.env.Environment
+import org.springframework.stereotype.Service
 
 
 @Configuration
-open class BluePrintCoreConfiguration {
+open class BluePrintCoreConfiguration(private val bluePrintProperties: BlueprintProcessorProperties) {
 
-    @Value("\${blueprintsprocessor.blueprintDeployPath}")
-    lateinit var deployPath: String
+    companion object {
+        const val PREFIX_BLUEPRINT_PROCESSOR = "blueprintsprocessor"
+    }
 
-    @Value("\${blueprintsprocessor.blueprintArchivePath}")
-    lateinit var archivePath: String
+    @Bean
+    open fun bluePrintPathConfiguration(): BluePrintPathConfiguration {
+        return bluePrintProperties
+                .propertyBeanType(PREFIX_BLUEPRINT_PROCESSOR, BluePrintPathConfiguration::class.java)
+    }
 
 }
 
@@ -45,5 +51,12 @@ open class BlueprintPropertyConfiguration {
     open fun bluePrintPropertyBinder(): Binder {
         val configurationPropertySource = ConfigurationPropertySources.get(environment)
         return Binder(configurationPropertySource)
+    }
+}
+
+@Service
+open class BlueprintProcessorProperties(private var bluePrintPropertyBinder: Binder) {
+    fun <T> propertyBeanType(prefix: String, type: Class<T>): T {
+        return bluePrintPropertyBinder.bind(prefix, Bindable.of(type)).get()
     }
 }

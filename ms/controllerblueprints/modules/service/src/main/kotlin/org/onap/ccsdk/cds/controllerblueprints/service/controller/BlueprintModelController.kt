@@ -26,7 +26,6 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.web.bind.annotation.*
-import reactor.core.publisher.Mono
 
 /**
  * BlueprintModelController Purpose: Handle controllerBlueprint API request
@@ -41,8 +40,8 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @PostMapping("", produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     @ResponseBody
     @Throws(BluePrintException::class)
-    fun saveBlueprint(@RequestPart("file") file: FilePart): Mono<BlueprintModelSearch> {
-        return bluePrintModelHandler.saveBlueprintModel(file)
+    fun saveBlueprint(@RequestPart("file") filePart: FilePart): BlueprintModelSearch = runBlocking {
+        bluePrintModelHandler.saveBlueprintModel(filePart)
     }
 
     @GetMapping("", produces = [MediaType.APPLICATION_JSON_VALUE])

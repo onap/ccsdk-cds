@@ -1,6 +1,7 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
  * Modifications Copyright © 2019 Bell Canada.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,78 +20,87 @@ package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 
 import io.grpc.StatusException
 import io.grpc.stub.StreamObserver
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
+import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.utils.currentTimestamp
 import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader
 import org.onap.ccsdk.cds.controllerblueprints.common.api.Status
+import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintPathConfiguration
+import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
-import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintManagementInput
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
+import org.onap.ccsdk.cds.controllerblueprints.core.reCreateDirs
 import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintManagementOutput
 import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintManagementServiceGrpc
+import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintRemoveInput
+import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintUploadInput
 import org.slf4j.LoggerFactory
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Service
 import java.io.File
+import java.util.*
 
 @Service
-open class BluePrintManagementGRPCHandler(private val bluePrintCoreConfiguration: BluePrintCoreConfiguration,
-                                     private val bluePrintCatalogService: BluePrintCatalogService)
+open class BluePrintManagementGRPCHandler(private val bluePrintPathConfiguration: BluePrintPathConfiguration,
+                                          private val bluePrintCatalogService: BluePrintCatalogService)
     : BluePrintManagementServiceGrpc.BluePrintManagementServiceImplBase() {
 
     private val log = LoggerFactory.getLogger(BluePrintManagementGRPCHandler::class.java)
 
     @PreAuthorize("hasRole('USER')")
-    override fun uploadBlueprint(request: BluePrintManagementInput, responseObserver: StreamObserver<BluePrintManagementOutput>) {
-        val blueprintName = request.blueprintName
-        val blueprintVersion = request.blueprintVersion
-        val blueprint = "blueprint $blueprintName:$blueprintVersion"
+    override fun uploadBlueprint(request: BluePrintUploadInput, responseObserver:
+    StreamObserver<BluePrintManagementOutput>) {
+        runBlocking {
 
-        log.info("request(${request.commonHeader.requestId}): Received upload $blueprint")
+            log.info("request(${request.commonHeader.requestId})")
+            val uploadId = UUID.randomUUID().toString()
+            try {
+                val cbaFile = normalizedFile(bluePrintPathConfiguration.blueprintArchivePath, uploadId, "cba-zip")
 
-        val blueprintArchivedFilePath = "${bluePrintCoreConfiguration.archivePath}/$blueprintName/$blueprintVersion/$blueprintName.zip"
-        try {
-            val blueprintArchivedFile = File(blueprintArchivedFilePath)
+                saveToDisk(request, cbaFile)
 
-            saveToDisk(request, blueprintArchivedFile)
-            val blueprintId = bluePrintCatalogService.saveToDatabase(blueprintArchivedFile)
-
-            File("${bluePrintCoreConfiguration.archivePath}/$blueprintName").deleteRecursively()
-
-            responseObserver.onNext(successStatus("Successfully uploaded $blueprint with id($blueprintId)", request.commonHeader))
-            responseObserver.onCompleted()
-        } catch (e: Exception) {
-            failStatus("request(${request.commonHeader.requestId}): Failed to upload $blueprint at path $blueprintArchivedFilePath", e)
+                val blueprintId = bluePrintCatalogService.saveToDatabase(uploadId, cbaFile)
+                responseObserver.onNext(successStatus("Successfully uploaded CBA($blueprintId)...", request.commonHeader))
+                responseObserver.onCompleted()
+            } catch (e: Exception) {
+                failStatus("request(${request.commonHeader.requestId}): Failed to upload CBA", e)
+            } finally {
+                deleteDir(bluePrintPathConfiguration.blueprintArchivePath, uploadId)
+                deleteDir(bluePrintPathConfiguration.blueprintWorkingPath, uploadId)
+            }
         }
     }
 
     @PreAuthorize("hasRole('USER')")
-    override fun removeBlueprint(request: BluePrintManagementInput, responseObserver: StreamObserver<BluePrintManagementOutput>) {
-        val blueprintName = request.blueprintName
-        val blueprintVersion = request.blueprintVersion
-        val blueprint = "blueprint $blueprintName:$blueprintVersion"
+    override fun removeBlueprint(request: BluePrintRemoveInput, responseObserver:
+    StreamObserver<BluePrintManagementOutput>) {
 
-        log.info("request(${request.commonHeader.requestId}): Received delete $blueprint")
+        runBlocking {
+            val blueprintName = request.blueprintName
+            val blueprintVersion = request.blueprintVersion
+            val blueprint = "blueprint $blueprintName:$blueprintVersion"
 
-        try {
-            bluePrintCatalogService.deleteFromDatabase(blueprintName, blueprintVersion)
-            responseObserver.onNext(successStatus("Successfully deleted $blueprint", request.commonHeader))
-            responseObserver.onCompleted()
-        } catch (e: Exception) {
-            failStatus("request(${request.commonHeader.requestId}): Failed to delete $blueprint", e)
+            log.info("request(${request.commonHeader.requestId}): Received delete $blueprint")
+
+
+            try {
+                bluePrintCatalogService.deleteFromDatabase(blueprintName, blueprintVersion)
+                responseObserver.onNext(successStatus("Successfully deleted $blueprint", request.commonHeader))
+                responseObserver.onCompleted()
+            } catch (e: Exception) {
+                failStatus("request(${request.commonHeader.requestId}): Failed to delete $blueprint", e)
+            }
         }
     }
 
-    private fun saveToDisk(request: BluePrintManagementInput, blueprintDir: File) {
-        log.info("request(${request.commonHeader.requestId}): Writing CBA File under :${blueprintDir.absolutePath}")
-        if (blueprintDir.exists()) {
-            log.info("request(${request.commonHeader.requestId}): Re-creating blueprint directory(${blueprintDir.absolutePath})")
-            //FileUtils.deleteDirectory(blueprintDir.parentFile)
-            blueprintDir.parentFile.deleteRecursively()
-        }
-        blueprintDir.parentFile.mkdirs()
-        //FileUtils.forceMkdir(blueprintDir.parentFile)
-        blueprintDir.writeBytes(request.fileChunk.chunk.toByteArray()).apply {
-            log.info("request(${request.commonHeader.requestId}): CBA file(${blueprintDir.absolutePath} written successfully")
+    private fun saveToDisk(request: BluePrintUploadInput, cbaFile: File) {
+        log.info("request(${request.commonHeader.requestId}): Writing CBA File under :${cbaFile.absolutePath}")
+
+        // Recreate Folder
+        cbaFile.parentFile.reCreateDirs()
+
+        // Write the File
+        cbaFile.writeBytes(request.fileChunk.chunk.toByteArray()).apply {
+            log.info("request(${request.commonHeader.requestId}): CBA file(${cbaFile.absolutePath} written successfully")
         }
 
     }

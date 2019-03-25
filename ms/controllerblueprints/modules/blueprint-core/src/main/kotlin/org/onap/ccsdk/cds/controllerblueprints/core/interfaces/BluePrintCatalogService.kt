@@ -16,8 +16,6 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.interfaces
 
-import org.jetbrains.annotations.NotNull
-import org.jetbrains.annotations.Nullable
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import java.io.File
 import java.nio.file.Path
@@ -26,14 +24,14 @@ interface BluePrintCatalogService {
 
     /**
      * Save the CBA to database.
+     * @param processingId Processing Id
      * @param blueprintFile Either a directory, or an archive
      * @param validate whether to validate blueprint content. Default true.
      * @return The unique blueprint identifier
      * @throws BluePrintException if process failed
      */
-    @NotNull
     @Throws(BluePrintException::class)
-    fun saveToDatabase(@NotNull blueprintFile: File, @Nullable validate: Boolean = true): String
+    suspend fun saveToDatabase(processingId: String, blueprintFile: File, validate: Boolean = true): String
 
     /**
      * Retrieve the CBA from database either archived or extracted.
@@ -43,9 +41,9 @@ interface BluePrintCatalogService {
      * @return Path where CBA is located
      * @throws BluePrintException if process failed
      */
-    @NotNull
+
     @Throws(BluePrintException::class)
-    fun getFromDatabase(@NotNull name: String, @NotNull version: String, @Nullable extract: Boolean = true): Path
+    suspend fun getFromDatabase(name: String, version: String, extract: Boolean = true): Path
 
     /**
      * Delete the CBA from database.
@@ -53,7 +51,7 @@ interface BluePrintCatalogService {
      * @param version Version of the blueprint
      * @throws BluePrintException if process failed
      */
-    @NotNull
+
     @Throws(BluePrintException::class)
-    fun deleteFromDatabase(@NotNull name: String, @NotNull version: String)
+    suspend fun deleteFromDatabase(name: String, version: String)
 }

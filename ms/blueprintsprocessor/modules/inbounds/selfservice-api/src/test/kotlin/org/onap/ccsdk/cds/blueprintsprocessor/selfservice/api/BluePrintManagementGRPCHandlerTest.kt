@@ -1,6 +1,7 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
  * Modifications Copyright © 2019 Bell Canada.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +24,11 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader
-import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintManagementInput
+import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintManagementServiceGrpc
+import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintRemoveInput
+import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintUploadInput
 import org.onap.ccsdk.cds.controllerblueprints.management.api.FileChunk
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -32,7 +36,6 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import java.io.File
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.assertEquals
@@ -55,25 +58,23 @@ class BluePrintManagementGRPCHandlerTest {
     fun init() {
         // Create a server, add service, start, and register for automatic graceful shutdown.
         grpcServerRule.serviceRegistry.addService(bluePrintManagementGRPCHandler)
+        deleteDir("target", "blueprints")
     }
 
     @AfterTest
     fun cleanDir() {
-        //TODO It's giving fluctuating results, need to look for another way to cleanup
-        // works sometimes otherwise results IO Exception
-        // Most probably bufferReader stream is not getting closed when cleanDir is getting invoked
-        File("./target/blueprints").deleteRecursively()
+        deleteDir("target", "blueprints")
     }
 
     @Test
     fun `test upload blueprint`() {
         val blockingStub = BluePrintManagementServiceGrpc.newBlockingStub(grpcServerRule.channel)
         val id = "123_upload"
-        val req = createInputRequest(id)
+        val req = createUploadInputRequest(id)
         val output = blockingStub.uploadBlueprint(req)
 
         assertEquals(200, output.status.code)
-        assertTrue(output.status.message.contains("Successfully uploaded blueprint sample:1.0.0 with id("))
+        assertTrue(output.status.message.contains("Successfully uploaded CBA"))
         assertEquals(id, output.commonHeader.requestId)
     }
 
@@ -81,19 +82,20 @@ class BluePrintManagementGRPCHandlerTest {
     fun `test delete blueprint`() {
         val blockingStub = BluePrintManagementServiceGrpc.newBlockingStub(grpcServerRule.channel)
         val id = "123_delete"
-        val req = createInputRequest(id)
+        val req = createUploadInputRequest(id)
 
         var output = blockingStub.uploadBlueprint(req)
         assertEquals(200, output.status.code)
-        assertTrue(output.status.message.contains("Successfully uploaded blueprint sample:1.0.0 with id("))
+        assertTrue(output.status.message.contains("Successfully uploaded CBA"))
         assertEquals(id, output.commonHeader.requestId)
 
-        output = blockingStub.removeBlueprint(req)
+        val removeReq = createRemoveInputRequest(id)
+        output = blockingStub.removeBlueprint(removeReq)
         assertEquals(200, output.status.code)
     }
 
-    private fun createInputRequest(id: String): BluePrintManagementInput {
-        val file = File("./src/test/resources/test-cba.zip")
+    private fun createUploadInputRequest(id: String): BluePrintUploadInput {
+        val file = normalizedFile("./src/test/resources/test-cba.zip")
         assertTrue(file.exists(), "couldnt get file ${file.absolutePath}")
 
         val commonHeader = CommonHeader
@@ -106,11 +108,24 @@ class BluePrintManagementGRPCHandlerTest {
         val fileChunk = FileChunk.newBuilder().setChunk(ByteString.copyFrom(file.inputStream().readBytes()))
                 .build()
 
-        return BluePrintManagementInput.newBuilder()
+        return BluePrintUploadInput.newBuilder()
+                .setCommonHeader(commonHeader)
+                .setFileChunk(fileChunk)
+                .build()
+    }
+
+    private fun createRemoveInputRequest(id: String): BluePrintRemoveInput {
+        val commonHeader = CommonHeader
+                .newBuilder()
+                .setTimestamp("2012-04-23T18:25:43.511Z")
+                .setOriginatorId("System")
+                .setRequestId(id)
+                .setSubRequestId("1234-56").build()
+
+        return BluePrintRemoveInput.newBuilder()
                 .setCommonHeader(commonHeader)
                 .setBlueprintName("sample")
                 .setBlueprintVersion("1.0.0")
-                .setFileChunk(fileChunk)
                 .build()
     }
 }

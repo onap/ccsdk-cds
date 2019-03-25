@@ -17,9 +17,9 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.service.controller
 
-import com.google.gson.Gson
+import kotlinx.coroutines.reactive.awaitSingle
+import kotlinx.coroutines.runBlocking
 import org.json.JSONException
-import org.json.JSONObject
 import org.junit.After
 import org.junit.Before
 import org.junit.FixMethodOrder
@@ -27,26 +27,31 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.onap.ccsdk.cds.controllerblueprints.TestApplication
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintArchiveUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.*
+import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintPathConfiguration
+import org.onap.ccsdk.cds.controllerblueprints.service.ControllerBluePrintCoreConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.service.domain.BlueprintModelSearch
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
+import org.springframework.http.client.MultipartBodyBuilder
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.test.web.reactive.server.returnResult
 import org.springframework.util.Base64Utils
 import org.springframework.web.reactive.function.BodyInserters
 import java.io.File
-import java.io.IOException
 import java.nio.charset.StandardCharsets.UTF_8
-import java.nio.file.Files
 import java.nio.file.Paths
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 /**
  * BlueprintModelControllerTest Purpose: Integration test at API level
@@ -57,109 +62,142 @@ import java.nio.file.Paths
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes = [TestApplication::class])
+@ContextConfiguration(classes = [TestApplication::class, ControllerBluePrintCoreConfiguration::class])
 @ComponentScan(basePackages = ["org.onap.ccsdk.cds.controllerblueprints"])
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @EnableAutoConfiguration
 class BlueprintModelControllerTest {
 
-    companion object {
+    private val log = LoggerFactory.getLogger(BlueprintModelControllerTest::class.java)!!
 
-        private var id: String? = null
-        private var name: String? = null
-        private var version: String? = null
-        private var tag: String? = null
-        private var result: String? = null
+    companion object {
+        private var bp: BlueprintModelSearch? = null
     }
 
-    @Value("\${controllerblueprints.loadBluePrintPaths}")
-    private val loadBluePrintPaths: String? = null
-
     @Autowired
-    private val webTestClient: WebTestClient? = null
+    lateinit var webTestClient: WebTestClient
 
-    @Value("\${controllerblueprints.loadBlueprintsExamplesPath}")
-    private val blueprintArchivePath: String? = null
+    private var bluePrintLoadConfiguration: BluePrintPathConfiguration? = null
 
-    private val filename = "test.zip"
-    private var blueprintFile: File? = null
-    private var zipBlueprintFile: File? = null
+    private val blueprintDir = "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+    private var zipBlueprintFileName: String? = null
+
+    private var testZipFile: File? = null
+
 
     @Before
-    @Throws(Exception::class)
     fun setUp() {
-        blueprintFile = File(loadBluePrintPaths+"/baseconfiguration")
-        if (blueprintFile!!.isDirectory) {
-            zipBlueprintFile = File(Paths.get(blueprintArchivePath).resolve(filename).toString())
-            BluePrintArchiveUtils.compress(blueprintFile!!, zipBlueprintFile!!, true)
+        assertNotNull(webTestClient, " Failed to create WebTestClient")
+
+        bluePrintLoadConfiguration = BluePrintPathConfiguration().apply {
+            blueprintArchivePath = "./target/blueprints/archive"
+            blueprintWorkingPath = "./target/blueprints/work"
+            blueprintDeployPath = "./target/blueprints/deploy"
         }
+        zipBlueprintFileName = normalizedPathName(bluePrintLoadConfiguration!!.blueprintArchivePath, "test.zip")
+
+        val archiveDir = normalizedFile(bluePrintLoadConfiguration!!.blueprintArchivePath).reCreateDirs()
+        assertTrue(archiveDir.exists(), "failed to create archiveDir(${archiveDir.absolutePath}")
+
+        val blueprintFile = Paths.get(blueprintDir).toFile().normalize()
+        testZipFile = blueprintFile.compress(zipBlueprintFileName!!)
+        assertNotNull(testZipFile, "test zip is null")
+        assertTrue(testZipFile!!.exists(), "Failed to create blueprint test zip(${testZipFile!!.absolutePath}")
     }
 
     @After
-    @Throws(Exception::class)
     fun tearDown() {
-        zipBlueprintFile!!.delete()
+        deleteDir(bluePrintLoadConfiguration!!.blueprintArchivePath)
+        deleteDir(bluePrintLoadConfiguration!!.blueprintWorkingPath)
     }
 
     @Test
-    @Throws(IOException::class, JSONException::class)
-    fun test1_saveBluePrint() {
-        webTestClient(HttpMethod.POST,
-                BodyInserters.fromMultipartData("file", object : ByteArrayResource(Files.readAllBytes(zipBlueprintFile!!.toPath())) {
-                    override fun getFilename(): String? {
+    fun test01_saveBluePrint() {
+        bp = runBlocking {
+            val body = MultipartBodyBuilder().apply {
+                part("file", object : ByteArrayResource(testZipFile!!.readBytes()) {
+                    override fun getFilename(): String {
                         return "test.zip"
                     }
-                }),
-                "/api/v1/blueprint-model",
-                HttpStatus.OK, true)
+                })
+            }.build()
+
+            val saveBP = webTestClient
+                    .post()
+                    .uri("/api/v1/blueprint-model")
+                    .body(BodyInserters.fromMultipartData(body))
+                    .exchange()
+                    .expectStatus().isOk
+                    .returnResult<BlueprintModelSearch>()
+                    .responseBody
+                    .awaitSingle()
+
+            assertNotNull(saveBP, "failed to get response")
+            assertEquals("baseconfiguration", saveBP.artifactName, "mismatch artifact name")
+            assertEquals("1.0.0", saveBP.artifactVersion, "mismatch artifact version")
+            assertEquals("N", saveBP.published, "mismatch publish")
+            saveBP
+        }
     }
 
     @Test
     @Throws(JSONException::class)
-    fun test2_getBluePrintByNameAndVersion() {
-        webTestClient(HttpMethod.GET, null, "/api/v1/blueprint-model/by-name/$name/version/$version", HttpStatus.OK, false)
+    fun test02_getBluePrintByNameAndVersion() {
+        webTestClient(HttpMethod.GET, null,
+                "/api/v1/blueprint-model/by-name/${bp!!.artifactName}/version/${bp!!.artifactVersion}",
+                HttpStatus.OK, false)
     }
 
 
     @Test
     @Throws(JSONException::class)
-    fun test3_getBlueprintModel() {
-        webTestClient(HttpMethod.GET, null, "/api/v1/blueprint-model/$id", HttpStatus.OK, false)
+    fun test03_getBlueprintModel() {
+        webTestClient(HttpMethod.GET, null,
+                "/api/v1/blueprint-model/${bp!!.id}",
+                HttpStatus.OK, false)
     }
 
     @Test
     @Throws(JSONException::class)
-    fun test4_getAllBlueprintModel() {
+    fun test04_getAllBlueprintModel() {
         webTestClient(HttpMethod.GET, null, "/api/v1/blueprint-model", HttpStatus.OK, false)
     }
 
     @Test
     @Throws(JSONException::class)
-    fun test5_downloadBluePrint() {
-        webTestClient(HttpMethod.GET, null, "/api/v1/blueprint-model/download/$id", HttpStatus.OK, false)
+    fun test05_downloadBluePrint() {
+        webTestClient(HttpMethod.GET, null,
+                "/api/v1/blueprint-model/download/${bp!!.id}",
+                HttpStatus.OK, false)
     }
 
     @Test
-    fun test6_publishBlueprintModel() {
+    fun test06_enrichBlueprintModel() {
+    }
+
+    @Test
+    fun test07_publishBlueprintModel() {
     }
 
     @Test
     @Throws(JSONException::class)
-    fun test7_searchBlueprintModels() {
-        webTestClient(HttpMethod.GET, null, "/api/v1/blueprint-model/search/$name", HttpStatus.OK, false)
+    fun test08_searchBlueprintModels() {
+        webTestClient(HttpMethod.GET, null,
+                "/api/v1/blueprint-model/search/${bp!!.artifactName}",
+                HttpStatus.OK, false)
     }
 
     @Test
     @Throws(JSONException::class)
-    fun test8_downloadBlueprintByNameAndVersion() {
-        webTestClient(HttpMethod.GET, null, "/api/v1/blueprint-model/download/by-name/$name/version/$version", HttpStatus.OK, false)
+    fun test09_downloadBlueprintByNameAndVersion() {
+        webTestClient(HttpMethod.GET, null,
+                "/api/v1/blueprint-model/download/by-name/${bp!!.artifactName}/version/${bp!!.artifactVersion}",
+                HttpStatus.OK, false)
     }
 
     @Test
-    fun test9_deleteBluePrint() {
-        //TODO: Use webTestClient function
-        //webTestClient(HttpMethod.DELETE, null, "/api/v1/blueprint-model/" + id, HttpStatus.OK, false);
-        webTestClient!!.delete().uri("/api/v1/blueprint-model/$id")
+    fun test10_deleteBluePrint() {
+        webTestClient.delete().uri("/api/v1/blueprint-model/${bp!!.id}")
                 .header("Authorization", "Basic " + Base64Utils
                         .encodeToString(("ccsdkapps" + ":" + "ccsdkapps").toByteArray(UTF_8)))
                 .exchange()
@@ -167,27 +205,20 @@ class BlueprintModelControllerTest {
     }
 
     @Throws(JSONException::class)
-    private fun webTestClient(requestMethod: HttpMethod, body: BodyInserters.MultipartInserter?, uri: String, expectedResponceStatus: HttpStatus, setParam: Boolean) {
+    private fun webTestClient(requestMethod: HttpMethod, body: BodyInserters.MultipartInserter?, uri: String,
+                              expectedResponceStatus: HttpStatus, setParam: Boolean) {
 
-        result = String(webTestClient!!.method(requestMethod).uri(uri)
+        log.info("Requesting($uri): Method(${requestMethod.name})")
+
+        webTestClient.method(requestMethod).uri(uri)
                 .header("Authorization", "Basic " + Base64Utils
                         .encodeToString(("ccsdkapps" + ":" + "ccsdkapps").toByteArray(UTF_8)))
                 .body(body)
                 .exchange()
                 .expectStatus().isEqualTo(expectedResponceStatus)
                 .expectBody()
-                .returnResult().responseBody!!)
+                .returnResult().responseBody!!
 
-        if (setParam) {
-            val jsonResponse = JSONObject(result)
-            val blueprintModelSearchJSON = jsonResponse.getJSONObject("blueprintModel")
-            val gson = Gson()
-            val blueprintModelSearch = gson.fromJson(blueprintModelSearchJSON.toString(), BlueprintModelSearch::class.java)
-            id = blueprintModelSearch.id
-            name = blueprintModelSearch.artifactName
-            version = blueprintModelSearch.artifactVersion
-            tag = blueprintModelSearch.tags
-        }
     }
 
 }
