@@ -60,6 +60,7 @@ export class SearchTemplateComponent implements OnInit {
   }
 
   fileChanged(e: any) {
+    this.paths = [];
     this.file = e.target.files[0];
     this.zipFile.files = {};
     this.zipFile.loadAsync(this.file)
@@ -119,7 +120,7 @@ export class SearchTemplateComponent implements OnInit {
     paths.forEach((path) => {
 
       const pathParts = path.name.split('/');
-      pathParts.shift();
+      // pathParts.shift();
       let currentLevel = tree;
 
       pathParts.forEach((part) => {
@@ -131,7 +132,8 @@ export class SearchTemplateComponent implements OnInit {
           const newPart = {
             name: part,
             children: [],
-            data: path.data
+            data: path.data,
+            path : path.name
           };
           if(part.trim() == this.blueprintName.trim()) { 
             this.activationBlueprint = path.data; 
