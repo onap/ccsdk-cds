@@ -1,6 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
- * Modifications Copyright © 2018 IBM.
+ * Modifications Copyright © 2018-2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,12 +26,12 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ToscaMetaData
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
+import org.onap.ccsdk.cds.controllerblueprints.core.readNBLines
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintImportService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRuntimeService
 import java.io.File
-import java.nio.charset.Charset
 import java.util.*
 
 class BluePrintMetadataUtils {
@@ -39,13 +39,13 @@ class BluePrintMetadataUtils {
         private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
 
 
-        fun toscaMetaData(basePath: String): ToscaMetaData {
+        suspend fun toscaMetaData(basePath: String): ToscaMetaData {
             val toscaMetaPath = basePath.plus(BluePrintConstants.PATH_DIVIDER)
                     .plus(BluePrintConstants.TOSCA_METADATA_ENTRY_DEFINITION_FILE)
             return toscaMetaDataFromMetaFile(toscaMetaPath)
         }
 
-        fun entryDefinitionFile(basePath: String): String {
+        suspend fun entryDefinitionFile(basePath: String): String {
             val toscaMetaPath = basePath.plus(BluePrintConstants.PATH_DIVIDER)
                     .plus(BluePrintConstants.TOSCA_METADATA_ENTRY_DEFINITION_FILE)
             return toscaMetaDataFromMetaFile(toscaMetaPath).entityDefinitions
@@ -59,7 +59,7 @@ class BluePrintMetadataUtils {
 
         fun environmentFileProperties(pathName: String): Properties {
             val properties = Properties()
-            val envDir = File(pathName)
+            val envDir = normalizedFile(pathName)
             // Verify if the environment directory exists
             if (envDir.exists() && envDir.isDirectory) {
                 //Find all available environment files
@@ -72,9 +72,9 @@ class BluePrintMetadataUtils {
             return properties
         }
 
-        fun toscaMetaDataFromMetaFile(metaFilePath: String): ToscaMetaData {
+        private suspend fun toscaMetaDataFromMetaFile(metaFilePath: String): ToscaMetaData {
             val toscaMetaData = ToscaMetaData()
-            val lines = normalizedFile(metaFilePath).readLines(Charset.defaultCharset())
+            val lines = normalizedFile(metaFilePath).readNBLines()
             lines.forEach { line ->
                 if (line.contains(":")) {
                     val keyValue = line.split(":")
