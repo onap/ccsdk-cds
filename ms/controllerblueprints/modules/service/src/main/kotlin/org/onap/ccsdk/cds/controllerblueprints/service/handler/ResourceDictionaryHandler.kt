@@ -40,11 +40,11 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
      * @throws BluePrintException BluePrintException
      */
     @Throws(BluePrintException::class)
-    fun getResourceDictionaryByName(name: String): ResourceDictionary {
+    suspend fun getResourceDictionaryByName(name: String): ResourceDictionary {
         Preconditions.checkArgument(StringUtils.isNotBlank(name), "Resource dictionary Name Information is missing.")
         val resourceDictionaryDb = resourceDictionaryRepository.findByName(name)
-        return if (resourceDictionaryDb.isPresent) {
-            resourceDictionaryDb.get()
+        return if (resourceDictionaryDb != null) {
+            resourceDictionaryDb
         } else {
             throw BluePrintException(String.format("couldn't get resource dictionary for name (%s)", name))
         }
@@ -56,7 +56,7 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
      * @param names names
      * @return List<ResourceDictionary>
     </ResourceDictionary> */
-    fun searchResourceDictionaryByNames(names: List<String>): List<ResourceDictionary> {
+    suspend fun searchResourceDictionaryByNames(names: List<String>): List<ResourceDictionary> {
         Preconditions.checkArgument(CollectionUtils.isNotEmpty(names), "No Search Information provide")
         return resourceDictionaryRepository.findByNameIn(names)
     }
@@ -67,7 +67,7 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
      * @param tags tags
      * @return List<ResourceDictionary>
     </ResourceDictionary> */
-    fun searchResourceDictionaryByTags(tags: String): List<ResourceDictionary> {
+    suspend fun searchResourceDictionaryByTags(tags: String): List<ResourceDictionary> {
         Preconditions.checkArgument(StringUtils.isNotBlank(tags), "No search tag information provide")
         return resourceDictionaryRepository.findByTagsContainingIgnoreCase(tags)
     }
@@ -79,7 +79,7 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
      * @return DataDictionary
      */
     @Throws(BluePrintException::class)
-    fun saveResourceDictionary(resourceDictionary: ResourceDictionary): ResourceDictionary {
+    suspend fun saveResourceDictionary(resourceDictionary: ResourceDictionary): ResourceDictionary {
         var resourceDictionary = resourceDictionary
 
         val resourceDefinition = resourceDictionary.definition
@@ -101,8 +101,8 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
         validateResourceDictionary(resourceDictionary)
 
         val dbResourceDictionaryData = resourceDictionaryRepository.findByName(resourceDictionary.name)
-        if (dbResourceDictionaryData.isPresent) {
-            val dbResourceDictionary = dbResourceDictionaryData.get()
+        if (dbResourceDictionaryData != null) {
+            val dbResourceDictionary = dbResourceDictionaryData
 
             dbResourceDictionary.name = resourceDictionary.name
             dbResourceDictionary.definition = resourceDictionary.definition
@@ -124,7 +124,7 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
      *
      * @param name name
      */
-    fun deleteResourceDictionary(name: String) {
+    suspend fun deleteResourceDictionary(name: String) {
         check(name.isNotBlank()) { "Resource dictionary name is missing." }
         resourceDictionaryRepository.deleteByName(name)
     }
@@ -132,7 +132,7 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
     /**
      * This is a getResourceSourceMapping service
      */
-    fun getResourceSourceMapping(): ResourceSourceMapping {
+    suspend fun getResourceSourceMapping(): ResourceSourceMapping {
         return ResourceSourceMappingFactory.getRegisterSourceMapping()
     }
 

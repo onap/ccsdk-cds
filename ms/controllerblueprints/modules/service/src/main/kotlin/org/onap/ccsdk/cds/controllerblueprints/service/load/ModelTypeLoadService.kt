@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +18,21 @@
 package org.onap.ccsdk.cds.controllerblueprints.service.load
 
 import com.att.eelf.configuration.EELFManager
-import kotlinx.coroutines.*
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang3.text.StrBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.data.*
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
+import org.onap.ccsdk.cds.controllerblueprints.core.readNBText
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.service.domain.ModelType
 import org.onap.ccsdk.cds.controllerblueprints.service.handler.ModelTypeHandler
 import org.springframework.stereotype.Service
 import java.io.File
-import java.nio.charset.Charset
 
 @Service
 open class ModelTypeLoadService(private val modelTypeHandler: ModelTypeHandler) {
@@ -37,65 +41,57 @@ open class ModelTypeLoadService(private val modelTypeHandler: ModelTypeHandler) 
     private val updateBySystem = "System"
 
     open suspend fun loadPathsModelType(modelTypePaths: List<String>) {
-        modelTypePaths.forEach { runBlocking { loadPathModelType(it) } }
+        modelTypePaths.forEach {
+            loadPathModelType(it)
+        }
     }
 
     /**
      * Load the Model Type file content from the defined path, Load of sequencing should be maintained.
      */
-    open suspend fun loadPathModelType(modelTypePath: String) = runBlocking {
+    open suspend fun loadPathModelType(modelTypePath: String) {
         log.info(" *************************** loadModelType **********************")
         try {
             val errorBuilder = StrBuilder()
 
             coroutineScope {
-                val dataTypeFiles = File("$modelTypePath/data_type").listFiles()
-
-                val deferredResults = mutableListOf<Deferred<Unit>>()
-
-                for (file in dataTypeFiles) deferredResults += async {
-                    loadModelType(file, DataType::class.java, errorBuilder)
+                val dataTypeFiles = normalizedFile("$modelTypePath", "data_type").listFiles()
+                val deferred = dataTypeFiles.map {
+                    async {
+                        loadModelType(it, DataType::class.java, errorBuilder)
+                    }
                 }
-
-                deferredResults.awaitAll()
+                deferred.awaitAll()
             }
 
             coroutineScope {
-                val artifactTypeFiles = File("$modelTypePath/artifact_type").listFiles()
-
-                val deferredResults = mutableListOf<Deferred<Unit>>()
-
-                for (file in artifactTypeFiles) deferredResults += async {
-                    loadModelType(file,
-                            ArtifactType::class.java, errorBuilder)
+                val artifactTypeFiles = normalizedFile("$modelTypePath", "artifact_type").listFiles()
+                val deferred = artifactTypeFiles.map {
+                    async {
+                        loadModelType(it, ArtifactType::class.java, errorBuilder)
+                    }
                 }
-
-                deferredResults.awaitAll()
+                deferred.awaitAll()
             }
 
             coroutineScope {
-                val relationshipTypeFiles = File("$modelTypePath/relationship_type").listFiles()
-
-                val deferredResults = mutableListOf<Deferred<Unit>>()
-
-                for (file in relationshipTypeFiles) deferredResults += async {
-                    loadModelType(file,
-                            RelationshipType::class.java, errorBuilder)
+                val relationshipTypeFiles = normalizedFile("$modelTypePath", "relationship_type").listFiles()
+                val deferred = relationshipTypeFiles.map {
+                    async {
+                        loadModelType(it, RelationshipType::class.java, errorBuilder)
+                    }
                 }
-
-                deferredResults.awaitAll()
+                deferred.awaitAll()
             }
 
             coroutineScope {
-                val nodeTypeFiles = File("$modelTypePath/node_type").listFiles()
-
-                val deferredResults = mutableListOf<Deferred<Unit>>()
-
-                for (file in nodeTypeFiles) deferredResults += async {
-                    loadModelType(file,
-                            NodeType::class.java, errorBuilder)
+                val nodeTypeFiles = normalizedFile("$modelTypePath", "node_type").listFiles()
+                val deferred = nodeTypeFiles.map {
+                    async {
+                        loadModelType(it, NodeType::class.java, errorBuilder)
+                    }
                 }
-                deferredResults.awaitAll()
+                deferred.awaitAll()
             }
 
             if (!errorBuilder.isEmpty) {
@@ -106,11 +102,11 @@ open class ModelTypeLoadService(private val modelTypeHandler: ModelTypeHandler) 
         }
     }
 
-    private inline fun <reified T> loadModelType(file: File, classType: Class<T>, errorBuilder: StrBuilder) {
+    private suspend inline fun <reified T> loadModelType(file: File, classType: Class<T>, errorBuilder: StrBuilder) {
         try {
             log.trace("Loading ${classType.name} (${file.name})")
             val dataKey = FilenameUtils.getBaseName(file.name)
-            val definitionContent = file.readText(Charset.defaultCharset())
+            val definitionContent = file.readNBText()
             val definition = JacksonUtils.readValue(definitionContent, classType) as EntityType
             //checkNotNull(definition) { "failed to get data type from file : ${file.name}" }
 

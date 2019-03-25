@@ -72,8 +72,8 @@ open class BluePrintRepoFileService(private val modelTypeRepository: ModelTypeRe
     @Throws(BluePrintException::class)
     override fun getResourceDefinition(resourceDefinitionName: String): ResourceDefinition {
         val dbResourceDictionary = resourceDictionaryRepository.findByName(resourceDefinitionName)
-        return if (dbResourceDictionary.isPresent) {
-            dbResourceDictionary.get().definition
+        return if (dbResourceDictionary != null) {
+            dbResourceDictionary.definition
         } else {
             throw BluePrintException(String.format("failed to get resource dictionary (%s) from repo", resourceDefinitionName))
         }
