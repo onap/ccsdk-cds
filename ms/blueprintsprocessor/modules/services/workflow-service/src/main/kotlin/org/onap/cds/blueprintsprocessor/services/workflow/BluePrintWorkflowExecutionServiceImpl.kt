@@ -59,7 +59,7 @@ open class BluePrintWorkflowExecutionServiceImpl(
                 componentWorkflowExecutionService
                         .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, properties)
             }
-            derivedFrom.startsWith(BluePrintConstants.MODEL_TYPE_NODE_DG, true) -> {
+            derivedFrom.startsWith(BluePrintConstants.MODEL_TYPE_NODE_WORKFLOW, true) -> {
                 dgWorkflowExecutionService
                         .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, properties)
             }
