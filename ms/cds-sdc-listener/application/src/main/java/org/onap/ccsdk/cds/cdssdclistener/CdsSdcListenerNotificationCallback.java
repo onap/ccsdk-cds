@@ -9,7 +9,8 @@
 package org.onap.ccsdk.cds.cdssdclistener;
 
 import static org.onap.sdc.utils.DistributionActionResultEnum.SUCCESS;
-import java.util.List;
+import java.util.Objects;
+import org.onap.ccsdk.cds.cdssdclistener.service.ListenerServiceImpl;
 import org.onap.sdc.api.IDistributionClient;
 import org.onap.sdc.api.consumer.INotificationCallback;
 import org.onap.sdc.api.notification.IArtifactInfo;
@@ -26,6 +27,9 @@ public class CdsSdcListenerNotificationCallback implements INotificationCallback
     @Autowired
     private CdsSdcListenerDto cdsSdcListenerDto;
 
+    @Autowired
+    private ListenerServiceImpl listenerService;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(CdsSdcListenerNotificationCallback.class);
 
     @Override
@@ -35,35 +39,32 @@ public class CdsSdcListenerNotificationCallback implements INotificationCallback
     }
 
     private void processNotification(INotificationData notificationData) {
-        downlaodCsarArtifacts(notificationData.getServiceArtifacts());
+        final IDistributionClient distributionClient = cdsSdcListenerDto.getDistributionClient();
+        notificationData.getServiceArtifacts()
+            .forEach(artifactInfo -> downloadCsarArtifacts(artifactInfo, distributionClient));
     }
 
     /**
      * Download the TOSCA CSAR artifact.
-     * @param artifactInfo - An object consists of Artifact information.
+     *
+     * @param info - Artifact information
+     * @param distributionClient - SDC distribution client
      */
-    private void downlaodCsarArtifacts(List<IArtifactInfo> artifactInfo) {
-        final IDistributionClient distributionClient = cdsSdcListenerDto.getDistributionClient();
+    private void downloadCsarArtifacts(IArtifactInfo info, IDistributionClient distributionClient) {
+        final String url = info.getArtifactURL();
+        final String id = info.getArtifactUUID();
+        if (Objects.equals(info.getArtifactType(), CdsSdcListenerConfiguration.TOSCA_CSAR)) {
+            LOGGER.info("Trying to download the artifact from : {} and UUID is {} ", url, id);
 
-        artifactInfo.forEach(info -> {
-            final String url = info.getArtifactURL();
-            final String id = info.getArtifactUUID();
-            if (info.getArtifactType().equals(CdsSdcListenerConfiguration.TOSCA_CSAR)) {
-                LOGGER.info("Trying to download the artifact from : {} and UUID is {} ", url, id);
+            // Download the artifact
+            IDistributionClientDownloadResult result = distributionClient.download(info);
 
-                IDistributionClientDownloadResult result = distributionClient.download(info);
-
-                if (!result.getDistributionActionResult().equals(SUCCESS)) {
-                    LOGGER.info("Failed to download the artifact from : {} due to {} ", url,
-                        result.getDistributionActionResult());
-                } else {
-                    parseCBAFileFromCsar(result);
-                }
+            if (!Objects.equals(result.getDistributionActionResult(), SUCCESS)) {
+                LOGGER.error("Failed to download the artifact from : {} due to {} ", url,
+                    result.getDistributionActionResult());
+            } else {
+                // TODO Store the CSAR into CSARArchive path and extract the Blueprint using ListenerServiceImpl.extractBluePrint
             }
-        });
-    }
-
-    private void parseCBAFileFromCsar(IDistributionClientDownloadResult result) {
-
+        }
     }
 }

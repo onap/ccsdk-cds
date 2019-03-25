@@ -8,11 +8,22 @@
 
 package org.onap.ccsdk.cds.cdssdclistener.service;
 
-import java.io.File;
+import java.util.zip.ZipFile;
 
 public interface ListenerService {
 
-    void extractBluePrint(File file);
+    /**
+     * Get the controller blueprint archive from CSAR package.
+     *
+     * @param csarArchivePath The path where CSAR archive is stored.
+     * @param cbaArchivePath The destination path where CBA will be stored.
+     */
+    void extractBluePrint(String csarArchivePath, String cbaArchivePath);
 
-    void storeBluePrint(File file);
+    /**
+     * Store the Zip file into CDS database.
+     *
+     * @param file The file to be stored.
+     */
+    void saveBluePrintToCdsDatabase(ZipFile file);
 }
