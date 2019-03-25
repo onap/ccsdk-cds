@@ -15,16 +15,19 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.db
 
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import java.io.File
-import java.nio.file.Paths
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
@@ -36,17 +39,30 @@ class BlueprintProcessorCatalogServiceImplTest {
     @Autowired
     lateinit var blueprintCatalog: BluePrintCatalogService
 
+    @BeforeTest
+    fun setup() {
+        deleteDir("target", "blueprints")
+    }
+
+    @AfterTest
+    fun cleanDir() {
+        deleteDir("target", "blueprints")
+    }
+
     @Test
     fun `test catalog service`() {
-        val file = Paths.get("./src/test/resources/test-cba.zip").toFile()
-        assertTrue(file.exists(), "couldnt get file ${file.absolutePath}")
+        runBlocking {
+            //FIXME("Create ZIP from test blueprints")
 
-        blueprintCatalog.saveToDatabase(file)
+            val file = normalizedFile("./src/test/resources/test-cba.zip")
+            assertTrue(file.exists(), "couldn't get file ${file.absolutePath}")
 
-        blueprintCatalog.getFromDatabase("baseconfiguration", "1.0.0")
+            blueprintCatalog.saveToDatabase("1234", file)
 
-        blueprintCatalog.deleteFromDatabase("baseconfiguration", "1.0.0")
+            blueprintCatalog.getFromDatabase("baseconfiguration", "1.0.0")
 
-        File("./src/test/resources/baseconfiguration").deleteRecursively()
+            blueprintCatalog.deleteFromDatabase("baseconfiguration", "1.0.0")
+
+        }
     }
 }

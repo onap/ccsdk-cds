@@ -84,7 +84,7 @@ class BluePrintEnhancerUtils {
             return artifactType
         }
 
-        private suspend fun copyFromFilePart(filePart: FilePart, targetFile: File): File {
+        suspend fun copyFromFilePart(filePart: FilePart, targetFile: File): File {
             // Delete the Directory
             targetFile.deleteRecursively()
             return filePart.transferTo(targetFile)

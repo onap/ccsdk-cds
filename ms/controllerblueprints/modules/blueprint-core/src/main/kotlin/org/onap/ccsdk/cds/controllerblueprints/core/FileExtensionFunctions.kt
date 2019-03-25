@@ -84,6 +84,14 @@ fun normalizedPathName(path: String, vararg more: String?): String {
     return normalizedPath(path, *more).toString()
 }
 
+suspend fun File.reCreateNBDirs(): File = withContext(Dispatchers.IO) {
+    reCreateDirs()
+}
+
+suspend fun deleteNBDir(path: String, vararg more: String?) = withContext(Dispatchers.IO) {
+    normalizedFile(path, *more).deleteRecursively()
+}
+
 suspend fun File.readNBText(): String = withContext(Dispatchers.IO) {
     readText(Charset.defaultCharset())
 }

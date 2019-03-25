@@ -18,19 +18,18 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.service.handler
 
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ErrorCode
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintEnhancerService
-import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
 import org.onap.ccsdk.cds.controllerblueprints.service.domain.BlueprintModel
 import org.onap.ccsdk.cds.controllerblueprints.service.domain.BlueprintModelSearch
 import org.onap.ccsdk.cds.controllerblueprints.service.repository.ControllerBlueprintModelContentRepository
 import org.onap.ccsdk.cds.controllerblueprints.service.repository.ControllerBlueprintModelRepository
 import org.onap.ccsdk.cds.controllerblueprints.service.repository.ControllerBlueprintModelSearchRepository
 import org.onap.ccsdk.cds.controllerblueprints.service.utils.BluePrintEnhancerUtils
+import org.slf4j.LoggerFactory
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.core.io.Resource
 import org.springframework.http.HttpHeaders
@@ -39,7 +38,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import reactor.core.publisher.Mono
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -59,6 +57,8 @@ open class BluePrintModelHandler(private val bluePrintCatalogService: BluePrintC
                                  private val blueprintModelContentRepository: ControllerBlueprintModelContentRepository,
                                  private val bluePrintEnhancerService: BluePrintEnhancerService) {
 
+    private val log = LoggerFactory.getLogger(BluePrintModelHandler::class.java)!!
+
     /**
      * This is a getAllBlueprintModel method to retrieve all the BlueprintModel in Database
      *
@@ -76,23 +76,28 @@ open class BluePrintModelHandler(private val bluePrintCatalogService: BluePrintC
      * @throws BluePrintException BluePrintException
     </BlueprintModelSearch> */
     @Throws(BluePrintException::class)
-    open fun saveBlueprintModel(filePart: FilePart): Mono<BlueprintModelSearch> {
+    open suspend fun saveBlueprintModel(filePart: FilePart): BlueprintModelSearch {
+        val saveId = UUID.randomUUID().toString()
+        val blueprintArchive = normalizedPathName(bluePrintLoadConfiguration.blueprintArchivePath, saveId)
         try {
-            val cbaLocation = BluePrintFileUtils.getCbaStorageDirectory(bluePrintLoadConfiguration.blueprintArchivePath)
-            return BluePrintEnhancerUtils.saveCBAFile(filePart, cbaLocation).map { fileName ->
-                var blueprintId: String? = null
-                try {
-                    blueprintId = bluePrintCatalogService.saveToDatabase(cbaLocation.resolve(fileName).toFile(), false)
-                } catch (e: BluePrintException) {
-                    // FIXME handle expection
-                }
-                blueprintModelSearchRepository.findById(blueprintId!!).get()
-            }
+            //Recreate the Dir
+            normalizedFile(bluePrintLoadConfiguration.blueprintArchivePath, saveId).reCreateDirs()
+            val deCompressedFile = normalizedFile(blueprintArchive, "cba.zip")
+            // Copy the File Part to Local File
+            BluePrintEnhancerUtils.copyFromFilePart(filePart, deCompressedFile)
+            // Save the Copied file to Database
+            val blueprintId = bluePrintCatalogService.saveToDatabase(saveId, deCompressedFile, false)
+            // Check and Return the Saved File
+            val blueprintModelSearch = blueprintModelSearchRepository.findById(blueprintId).get()
+            log.info("Save($saveId) successful for blueprint(${blueprintModelSearch.artifactName}) " +
+                    "version(${blueprintModelSearch.artifactVersion})")
+            return blueprintModelSearch
         } catch (e: IOException) {
             throw BluePrintException(ErrorCode.IO_FILE_INTERRUPT.value,
-                    String.format("I/O Error while uploading the CBA file: %s", e.message), e)
+                    "Error in Save CBA: ${e.message}", e)
+        } finally {
+            deleteDir(blueprintArchive)
         }
-
     }
 
 
@@ -277,20 +282,20 @@ open class BluePrintModelHandler(private val bluePrintCatalogService: BluePrintC
     open suspend fun enrichBlueprint(filePart: FilePart): ResponseEntity<Resource> {
         val enhanceId = UUID.randomUUID().toString()
         val blueprintArchive = normalizedPathName(bluePrintLoadConfiguration.blueprintArchivePath, enhanceId)
-        val blueprintEnrichmentDir = normalizedPathName(bluePrintLoadConfiguration.blueprintEnrichmentPath, enhanceId)
+        val blueprintWorkingDir = normalizedPathName(bluePrintLoadConfiguration.blueprintWorkingPath, enhanceId)
         try {
-            BluePrintEnhancerUtils.decompressFilePart(filePart, blueprintArchive, blueprintEnrichmentDir)
+            BluePrintEnhancerUtils.decompressFilePart(filePart, blueprintArchive, blueprintWorkingDir)
 
             // Enhance the Blue Prints
-            bluePrintEnhancerService.enhance(blueprintEnrichmentDir)
+            bluePrintEnhancerService.enhance(blueprintWorkingDir)
 
-            return BluePrintEnhancerUtils.compressToFilePart(blueprintEnrichmentDir, blueprintArchive)
+            return BluePrintEnhancerUtils.compressToFilePart(blueprintWorkingDir, blueprintArchive)
 
         } catch (e: IOException) {
             throw BluePrintException(ErrorCode.IO_FILE_INTERRUPT.value,
                     "Error in Enriching CBA: ${e.message}", e)
         } finally {
-            BluePrintEnhancerUtils.cleanEnhancer(blueprintArchive, blueprintEnrichmentDir)
+            BluePrintEnhancerUtils.cleanEnhancer(blueprintArchive, blueprintWorkingDir)
         }
     }
 
@@ -305,12 +310,12 @@ open class BluePrintModelHandler(private val bluePrintCatalogService: BluePrintC
     open suspend fun publishBlueprint(filePart: FilePart): BlueprintModelSearch {
         val publishId = UUID.randomUUID().toString()
         val blueprintArchive = bluePrintLoadConfiguration.blueprintArchivePath.plus(File.separator).plus(publishId)
-        val blueprintEnrichmentDir = bluePrintLoadConfiguration.blueprintEnrichmentPath.plus(File.separator).plus(publishId)
+        val blueprintWorkingDir = bluePrintLoadConfiguration.blueprintWorkingPath.plus(File.separator).plus(publishId)
         try {
             val compressedFilePart = BluePrintEnhancerUtils
-                    .extractCompressFilePart(filePart, blueprintArchive, blueprintEnrichmentDir)
+                    .extractCompressFilePart(filePart, blueprintArchive, blueprintWorkingDir)
 
-            val blueprintId = bluePrintCatalogService.saveToDatabase(compressedFilePart, true)
+            val blueprintId = bluePrintCatalogService.saveToDatabase(publishId, compressedFilePart, true)
 
             return blueprintModelSearchRepository.findById(blueprintId).get()
 
@@ -318,7 +323,7 @@ open class BluePrintModelHandler(private val bluePrintCatalogService: BluePrintC
             throw BluePrintException(ErrorCode.IO_FILE_INTERRUPT.value,
                     "Error in Publishing CBA: ${e.message}", e)
         } finally {
-            BluePrintEnhancerUtils.cleanEnhancer(blueprintArchive, blueprintEnrichmentDir)
+            BluePrintEnhancerUtils.cleanEnhancer(blueprintArchive, blueprintWorkingDir)
         }
     }
 
