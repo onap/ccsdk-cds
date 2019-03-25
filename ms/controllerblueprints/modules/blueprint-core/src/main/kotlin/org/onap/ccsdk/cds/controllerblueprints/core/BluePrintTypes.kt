@@ -29,7 +29,7 @@ object BluePrintTypes {
     @JvmStatic
     val validNodeTypeDerivedFroms: MutableList<String> = arrayListOf(
             BluePrintConstants.MODEL_TYPE_NODES_ROOT,
-            BluePrintConstants.MODEL_TYPE_NODE_DG,
+            BluePrintConstants.MODEL_TYPE_NODE_WORKFLOW,
             BluePrintConstants.MODEL_TYPE_NODE_COMPONENT,
             BluePrintConstants.MODEL_TYPE_NODE_VNF,
             BluePrintConstants.MODEL_TYPE_NODE_RESOURCE_SOURCE,

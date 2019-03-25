@@ -1,5 +1,0 @@
-{
-  "description": "This is Jython Component",
-  "version": "1.0.0",
-  "derived_from": "tosca.nodes.Root"
-}
