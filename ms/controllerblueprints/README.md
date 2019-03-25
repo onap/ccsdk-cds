@@ -1,7 +1,7 @@
 Application VM Arguments :
 
 -DappName=ControllerBluePrints
--Dms_name=org.onap.ccsdk.apps.controllerblueprints
+-Dms_name=org.onap.ccsdk.cds.controllerblueprints
 -DappVersion=1.0.0
 -Dlogging.config=etc/logback.xml
 -Dspring.config.location=opt/app/onap/config/

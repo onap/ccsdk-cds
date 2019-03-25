@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.onap.ccsdk.apps.blueprintsprocessor.security;
+package org.onap.ccsdk.cds.blueprintsprocessor.security;
 
 import com.google.common.base.Strings;
 import io.grpc.Metadata;

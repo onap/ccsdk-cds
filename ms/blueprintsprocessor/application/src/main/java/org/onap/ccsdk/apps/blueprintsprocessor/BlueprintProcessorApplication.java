@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.apps.blueprintsprocessor;
+package org.onap.ccsdk.cds.blueprintsprocessor;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -29,8 +29,8 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
-@ComponentScan(basePackages = {"org.onap.ccsdk.apps.controllerblueprints",
-    "org.onap.ccsdk.apps.blueprintsprocessor"})
+@ComponentScan(basePackages = {"org.onap.ccsdk.cds.controllerblueprints",
+    "org.onap.ccsdk.cds.blueprintsprocessor"})
 public class BlueprintProcessorApplication {
 
     public static void main(String[] args) {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.apps.blueprintsprocessor;
+package org.onap.ccsdk.cds.blueprintsprocessor;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.apps.controllerblueprints;
+package org.onap.ccsdk.cds.controllerblueprints;
 
 import org.junit.Before;
 import org.junit.Test;

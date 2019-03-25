@@ -1,8 +1,8 @@
-from org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor import \
+from org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor import \
     ResourceAssignmentProcessor
-from org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.utils import \
+from org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils import \
     ResourceAssignmentUtils
-from org.onap.ccsdk.apps.controllerblueprints.core import \
+from org.onap.ccsdk.cds.controllerblueprints.core import \
     BluePrintProcessorException
 
 

@@ -21,7 +21,7 @@
  *
  */
 
-package org.onap.ccsdk.distribution
+package org.onap.ccsdk.cds
 
 
 def versionArray;

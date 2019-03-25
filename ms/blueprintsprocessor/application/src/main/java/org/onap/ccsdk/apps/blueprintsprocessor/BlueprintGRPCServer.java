@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.apps.blueprintsprocessor;
+package org.onap.ccsdk.cds.blueprintsprocessor;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
-import org.onap.ccsdk.apps.blueprintsprocessor.security.BasicAuthServerInterceptor;
-import org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api.BluePrintManagementGRPCHandler;
-import org.onap.ccsdk.apps.blueprintsprocessor.selfservice.api.BluePrintProcessingGRPCHandler;
+import org.onap.ccsdk.cds.blueprintsprocessor.security.BasicAuthServerInterceptor;
+import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.BluePrintManagementGRPCHandler;
+import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.BluePrintProcessingGRPCHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

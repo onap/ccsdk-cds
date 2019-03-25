@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.apps.blueprintsprocessor;
+package org.onap.ccsdk.cds.blueprintsprocessor;
 
 
 import org.springframework.context.annotation.Bean;

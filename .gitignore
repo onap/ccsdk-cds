@@ -1,4 +1,6 @@
 # Node.js
+**/node
+
 # Logs
 logs
 *.log
@@ -80,3 +82,31 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
+
+# Added for Intellij IDEA IDE
+**/*.ipr
+**/*.iws
+**/debug-logs/*
+**/.idea/*
+**/*.iml
+**/*.project
+**/.springBeans
+
+# Target dirs in all projects
+**/target-ide/*
+**/target/*
+**/logs/*
+**/tokens/*
+
+# Public site
+*/**/package-lock.json
+cds-ui/server/public
+
+# Python generated class
+**/*py.class
+
+MacOS
+**/.DS_Store
+
+# To Remove Kotlin Script Generated Jars
+**/*cba-kts.jar

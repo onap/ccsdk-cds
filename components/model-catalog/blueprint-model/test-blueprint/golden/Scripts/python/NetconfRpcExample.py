@@ -16,7 +16,7 @@ import netconf_constant
 from common import ResolutionHelper
 from java.lang import Exception as JavaException
 from netconfclient import NetconfClient
-from org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor import \
+from org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor import \
   NetconfComponentFunction
 
 

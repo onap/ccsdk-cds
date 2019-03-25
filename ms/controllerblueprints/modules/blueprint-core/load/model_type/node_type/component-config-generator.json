@@ -54,7 +54,7 @@
 							"type": "string"
 						},
 						"mask-info": {
-							"description": "If template contains mask encription keys, then this mask-info field will be generated, This JSON Content alligns to the bean org.onap.ccsdk.apps.controllerblueprints.core.data.custom.MaskInfo ",
+							"description": "If template contains mask encription keys, then this mask-info field will be generated, This JSON Content alligns to the bean org.onap.ccsdk.cds.controllerblueprints.core.data.custom.MaskInfo ",
 							"required": false,
 							"type": "string"
 						},

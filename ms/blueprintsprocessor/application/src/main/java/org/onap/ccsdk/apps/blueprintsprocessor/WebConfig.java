@@ -15,10 +15,10 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.apps.blueprintsprocessor;
+package org.onap.ccsdk.cds.blueprintsprocessor;
 
-import org.onap.ccsdk.apps.blueprintsprocessor.security.AuthenticationManager;
-import org.onap.ccsdk.apps.blueprintsprocessor.security.SecurityContextRepository;
+import org.onap.ccsdk.cds.blueprintsprocessor.security.AuthenticationManager;
+import org.onap.ccsdk.cds.blueprintsprocessor.security.SecurityContextRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

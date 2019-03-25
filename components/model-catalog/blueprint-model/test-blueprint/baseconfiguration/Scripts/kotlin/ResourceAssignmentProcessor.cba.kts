@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.processor.*
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.resource.resolution.CapabilityResourceSource
-import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintScriptsService
-import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceAssignment
-import org.onap.ccsdk.apps.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.*
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.CapabilityResourceSource
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintScriptsService
+import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 
 open class ScriptResourceAssignmentProcessor : ResourceAssignmentProcessor() {
 
