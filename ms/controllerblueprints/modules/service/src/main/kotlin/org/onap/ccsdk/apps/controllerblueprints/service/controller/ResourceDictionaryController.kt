@@ -16,6 +16,7 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.service.controller
 
+import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceSourceMapping
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionary
@@ -30,39 +31,39 @@ open class ResourceDictionaryController(private val resourceDictionaryHandler: R
     @GetMapping(path = ["/{name}"], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     @Throws(BluePrintException::class)
-    fun getResourceDictionaryByName(@PathVariable(value = "name") name: String): ResourceDictionary {
-        return resourceDictionaryHandler.getResourceDictionaryByName(name)
+    fun getResourceDictionaryByName(@PathVariable(value = "name") name: String): ResourceDictionary = runBlocking {
+        resourceDictionaryHandler.getResourceDictionaryByName(name)
     }
 
     @PostMapping(path = [""], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     @Throws(BluePrintException::class)
-    fun saveResourceDictionary(@RequestBody dataDictionary: ResourceDictionary): ResourceDictionary {
-        return resourceDictionaryHandler.saveResourceDictionary(dataDictionary)
+    fun saveResourceDictionary(@RequestBody dataDictionary: ResourceDictionary): ResourceDictionary = runBlocking {
+        resourceDictionaryHandler.saveResourceDictionary(dataDictionary)
     }
 
     @DeleteMapping(path = ["/{name}"])
-    fun deleteResourceDictionaryByName(@PathVariable(value = "name") name: String) {
+    fun deleteResourceDictionaryByName(@PathVariable(value = "name") name: String) = runBlocking {
         resourceDictionaryHandler.deleteResourceDictionary(name)
     }
 
     @PostMapping(path = ["/by-names"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
-    fun searchResourceDictionaryByNames(@RequestBody names: List<String>): List<ResourceDictionary> {
-        return resourceDictionaryHandler.searchResourceDictionaryByNames(names)
+    fun searchResourceDictionaryByNames(@RequestBody names: List<String>): List<ResourceDictionary> = runBlocking {
+        resourceDictionaryHandler.searchResourceDictionaryByNames(names)
     }
 
     @GetMapping(path = ["/search/{tags}"], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
-    fun searchResourceDictionaryByTags(@PathVariable(value = "tags") tags: String): List<ResourceDictionary> {
-        return resourceDictionaryHandler.searchResourceDictionaryByTags(tags)
+    fun searchResourceDictionaryByTags(@PathVariable(value = "tags") tags: String): List<ResourceDictionary> = runBlocking {
+        resourceDictionaryHandler.searchResourceDictionaryByTags(tags)
 
     }
 
     @GetMapping(path = ["/source-mapping"], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
-    fun getResourceSourceMapping(): ResourceSourceMapping {
-        return resourceDictionaryHandler.getResourceSourceMapping()
+    fun getResourceSourceMapping(): ResourceSourceMapping = runBlocking {
+        resourceDictionaryHandler.getResourceSourceMapping()
     }
 
 }

@@ -16,10 +16,13 @@
 
 package org.onap.ccsdk.apps.controllerblueprints.core
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.apache.commons.io.FileUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintArchiveUtils
 import java.io.File
 import java.io.InputStream
+import java.nio.charset.Charset
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -79,5 +82,13 @@ fun normalizedPath(path: String, vararg more: String?): Path {
 
 fun normalizedPathName(path: String, vararg more: String?): String {
     return normalizedPath(path, *more).toString()
+}
+
+suspend fun File.readNBText(): String = withContext(Dispatchers.IO) {
+    readText(Charset.defaultCharset())
+}
+
+suspend fun File.readNBLines(): List<String> = withContext(Dispatchers.IO) {
+    readLines(Charset.defaultCharset())
 }
 

@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,57 +18,56 @@
 package org.onap.ccsdk.apps.controllerblueprints.service.load
 
 import com.att.eelf.configuration.EELFManager
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.text.StrBuilder
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.apps.controllerblueprints.core.normalizedFile
+import org.onap.ccsdk.apps.controllerblueprints.core.readNBText
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.apps.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.apps.controllerblueprints.service.domain.ResourceDictionary
 import org.onap.ccsdk.apps.controllerblueprints.service.handler.ResourceDictionaryHandler
 import org.springframework.stereotype.Service
 import java.io.File
-import java.nio.charset.Charset
 
 @Service
 open class ResourceDictionaryLoadService(private val resourceDictionaryHandler: ResourceDictionaryHandler) {
 
     private val log = EELFManager.getInstance().getLogger(ResourceDictionaryLoadService::class.java)
 
-    open fun loadPathsResourceDictionary(paths: List<String>) {
-        paths.forEach { loadPathResourceDictionary(it) }
-    }
-
-    open fun loadPathResourceDictionary(path: String) {
-        log.info(" *************************** loadResourceDictionary **********************")
-        val files = File(path).listFiles()
-
-        runBlocking {
-            val errorBuilder = StrBuilder()
-            val deferredResults = mutableListOf<Deferred<Unit>>()
-
-            for (file in files) {
-                deferredResults += async {
-                    loadResourceDictionary(errorBuilder, file)
-                }
-            }
-
-            for (deferredResult in deferredResults) {
-                deferredResult.await()
-            }
-
-            if (!errorBuilder.isEmpty) {
-                log.error(errorBuilder.toString())
-            }
+    open suspend fun loadPathsResourceDictionary(paths: List<String>) {
+        paths.forEach {
+            loadPathResourceDictionary(it)
         }
     }
 
-    private fun loadResourceDictionary(errorBuilder: StrBuilder, file: File) {
+    open suspend fun loadPathResourceDictionary(path: String) {
+        log.info(" *************************** loadResourceDictionary **********************")
+        val files = normalizedFile(path).listFiles()
+        val errorBuilder = StrBuilder()
+
+        coroutineScope {
+            val deferred = files.map {
+                async {
+                    loadResourceDictionary(errorBuilder, it)
+                }
+            }
+            deferred.awaitAll()
+        }
+
+        if (!errorBuilder.isEmpty) {
+            log.error(errorBuilder.toString())
+        }
+
+    }
+
+    private suspend fun loadResourceDictionary(errorBuilder: StrBuilder, file: File) {
         try {
-            log.trace("Loading NodeType(${file.name}")
-            val definitionContent = file.readText(Charset.defaultCharset())
+            log.trace("Loading NodeType(${file.name}}")
+            val definitionContent = file.readNBText()
             val resourceDefinition = JacksonUtils.readValue(definitionContent, ResourceDefinition::class.java)
             if (resourceDefinition != null) {
 
