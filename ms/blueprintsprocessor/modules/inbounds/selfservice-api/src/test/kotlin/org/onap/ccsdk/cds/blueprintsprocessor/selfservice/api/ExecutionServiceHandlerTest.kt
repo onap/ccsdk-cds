@@ -17,10 +17,12 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -36,6 +38,9 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.BodyInserters
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.util.*
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
@@ -50,11 +55,21 @@ class ExecutionServiceHandlerTest {
     @Autowired
     lateinit var webTestClient: WebTestClient
 
+    @BeforeTest
+    fun init() {
+        deleteDir("target", "blueprints")
+    }
+
+    @AfterTest
+    fun cleanDir() {
+        deleteDir("target", "blueprints")
+    }
+
 
     @Test
     fun `test rest upload blueprint`() {
         val file = Paths.get("./src/test/resources/test-cba.zip").toFile()
-        assertTrue(file.exists(), "couldnt get file ${file.absolutePath}")
+        assertTrue(file.exists(), "couldn't get file ${file.absolutePath}")
 
         val body = MultipartBodyBuilder().apply {
             part("file", object : ByteArrayResource(Files.readAllBytes(Paths.get("./src/test/resources/test-cba.zip"))) {
@@ -74,16 +89,21 @@ class ExecutionServiceHandlerTest {
 
     @Test
     fun `test rest process`() {
-        val file = Paths.get("./src/test/resources/test-cba.zip").toFile()
-        assertTrue(file.exists(), "couldnt get file ${file.absolutePath}")
-        blueprintCatalog.saveToDatabase(file)
+        runBlocking {
+            val file = Paths.get("./src/test/resources/test-cba.zip").toFile()
+            assertTrue(file.exists(), "couldnt get file ${file.absolutePath}")
+            blueprintCatalog.saveToDatabase(UUID.randomUUID().toString(), file)
 
-        val executionServiceInput = JacksonUtils.readValueFromClassPathFile("execution-input/default-input.json", ExecutionServiceInput::class.java)!!
-        webTestClient
-                .post()
-                .uri("/api/v1/execution-service/process")
-                .body(BodyInserters.fromObject(executionServiceInput))
-                .exchange()
-                .expectStatus().isOk
+            val executionServiceInput = JacksonUtils
+                    .readValueFromClassPathFile("execution-input/default-input.json",
+                            ExecutionServiceInput::class.java)!!
+
+            webTestClient
+                    .post()
+                    .uri("/api/v1/execution-service/process")
+                    .body(BodyInserters.fromObject(executionServiceInput))
+                    .exchange()
+                    .expectStatus().isOk
+        }
     }
 }

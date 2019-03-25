@@ -3,11 +3,15 @@ import "BluePrintCommon.proto";
 option java_multiple_files = true;
 package org.onap.ccsdk.cds.controllerblueprints.management.api;
 
-message BluePrintManagementInput {
+message BluePrintUploadInput {
+  org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader commonHeader = 1;
+  FileChunk fileChunk = 2;
+}
+
+message BluePrintRemoveInput {
   org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader commonHeader = 1;
   string blueprintName = 2;
   string blueprintVersion = 3;
-  FileChunk fileChunk = 4;
 }
 
 message BluePrintManagementOutput {
@@ -20,6 +24,6 @@ message FileChunk {
 }
 
 service BluePrintManagementService {
-  rpc uploadBlueprint (BluePrintManagementInput) returns (BluePrintManagementOutput);
-  rpc removeBlueprint (BluePrintManagementInput) returns (BluePrintManagementOutput);
+  rpc uploadBlueprint (BluePrintUploadInput) returns (BluePrintManagementOutput);
+  rpc removeBlueprint (BluePrintRemoveInput) returns (BluePrintManagementOutput);
 }

@@ -20,67 +20,71 @@ package org.onap.ccsdk.cds.controllerblueprints.db.resources
 
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintPathConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidatorService
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintArchiveUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.nio.file.Path
-import java.util.*
 import javax.persistence.MappedSuperclass
 
 @MappedSuperclass
-abstract class BlueprintCatalogServiceImpl(private val blueprintValidator: BluePrintValidatorService)
-    : BluePrintCatalogService {
+abstract class BlueprintCatalogServiceImpl(
+        private val bluePrintPathConfiguration: BluePrintPathConfiguration,
+        private val blueprintValidator: BluePrintValidatorService) : BluePrintCatalogService {
 
-    override fun saveToDatabase(blueprintFile: File, validate: Boolean): String {
-        val extractedDirectory: File
-        val archivedDirectory: File
-        val toDeleteDirectory: File
-        val blueprintId = UUID.randomUUID().toString()
+    private val log = LoggerFactory.getLogger(BlueprintCatalogServiceImpl::class.java)!!
+
+    override suspend fun saveToDatabase(processingId: String, blueprintFile: File, validate: Boolean): String {
+
+        var archiveFile: File? = null
+        var workingDir: String? = null
 
         if (blueprintFile.isDirectory) {
-            extractedDirectory = blueprintFile
-            archivedDirectory = File("$blueprintFile.zip")
-            toDeleteDirectory = archivedDirectory
+            log.info("Save processing($processingId) Working Dir(${blueprintFile.absolutePath})")
+            workingDir = blueprintFile.absolutePath
+            archiveFile = normalizedFile(bluePrintPathConfiguration.blueprintArchivePath, processingId, "cba.zip")
 
-            if (!BluePrintArchiveUtils.compress(blueprintFile, archivedDirectory, true)) {
+            if (!BluePrintArchiveUtils.compress(blueprintFile, archiveFile, true)) {
                 throw BluePrintException("Fail to compress blueprint")
             }
         } else {
-            val targetDir = "${blueprintFile.parent}/${BluePrintFileUtils.stripFileExtension(blueprintFile.name)}"
-
-            extractedDirectory = BluePrintArchiveUtils.deCompress(blueprintFile, targetDir)
-            archivedDirectory = blueprintFile
-            toDeleteDirectory = extractedDirectory
+            // Compressed File
+            log.info("Save processing($processingId) CBA(${blueprintFile.absolutePath})")
+            workingDir = normalizedPathName(bluePrintPathConfiguration.blueprintWorkingPath, processingId)
+            archiveFile = blueprintFile
+            // Decompress the CBA file to working Directory
+            BluePrintArchiveUtils.deCompress(blueprintFile, workingDir)
         }
 
         var valid = BluePrintConstants.FLAG_N
         if (validate) {
-            blueprintValidator.validateBluePrints(extractedDirectory.path)
+            blueprintValidator.validateBluePrints(workingDir!!)
             valid = BluePrintConstants.FLAG_Y
         }
 
-        val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(blueprintId, extractedDirectory.path)
+        val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(processingId, workingDir!!)
         val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
-        metadata[BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID] = blueprintId
+        metadata[BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID] = processingId
         metadata[BluePrintConstants.PROPERTY_BLUEPRINT_VALID] = valid
 
-        save(metadata, archivedDirectory)
+        save(metadata, archiveFile)
 
-        toDeleteDirectory.deleteRecursively()
-
-        return blueprintId
+        return processingId
     }
 
-    override fun getFromDatabase(name: String, version: String, extract: Boolean): Path = get(name, version, extract)
+    override suspend fun getFromDatabase(name: String, version: String, extract: Boolean): Path = get(name, version,
+            extract)
             ?: throw BluePrintException("Could not find blueprint $name:$version from database")
 
-    override fun deleteFromDatabase(name: String, version: String) = delete(name, version)
+    override suspend fun deleteFromDatabase(name: String, version: String) = delete(name, version)
 
-    abstract fun save(metadata: MutableMap<String, String>, archiveFile: File)
-    abstract fun get(name: String, version: String, extract: Boolean): Path?
-    abstract fun delete(name: String, version: String)
+    abstract suspend fun save(metadata: MutableMap<String, String>, archiveFile: File)
+    abstract suspend fun get(name: String, version: String, extract: Boolean): Path?
+    abstract suspend fun delete(name: String, version: String)
 
 }

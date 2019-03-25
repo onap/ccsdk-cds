@@ -18,13 +18,12 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.db
 
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintProcessorModel
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintProcessorModelContent
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.BlueprintProcessorModelRepository
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.common.ApplicationConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintPathConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ErrorCode
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidatorService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintArchiveUtils
@@ -35,16 +34,16 @@ import org.springframework.stereotype.Service
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
+import java.util.*
 
 /**
  * Similar/Duplicate implementation in [org.onap.ccsdk.cds.controllerblueprints.service.load.ControllerBlueprintCatalogServiceImpl]
  */
 @Service
 class BlueprintProcessorCatalogServiceImpl(bluePrintRuntimeValidatorService: BluePrintValidatorService,
-                                           private val blueprintConfig: BluePrintCoreConfiguration,
+                                           private val bluePrintPathConfiguration: BluePrintPathConfiguration,
                                            private val blueprintModelRepository: BlueprintProcessorModelRepository)
-    : BlueprintCatalogServiceImpl(bluePrintRuntimeValidatorService) {
+    : BlueprintCatalogServiceImpl(bluePrintPathConfiguration, bluePrintRuntimeValidatorService) {
 
     private val log = LoggerFactory.getLogger(BlueprintProcessorCatalogServiceImpl::class.toString())
 
@@ -53,32 +52,46 @@ class BlueprintProcessorCatalogServiceImpl(bluePrintRuntimeValidatorService: Blu
         log.info("BlueprintProcessorCatalogServiceImpl initialized")
     }
 
-    override fun delete(name: String, version: String) = blueprintModelRepository.deleteByArtifactNameAndArtifactVersion(name, version)
+    override suspend fun delete(name: String, version: String) {
+        // Cleaning Deployed Blueprint
+        deleteDir(bluePrintPathConfiguration.blueprintDeployPath, name, version)
+        // Cleaning Data Base
+        blueprintModelRepository
+                .deleteByArtifactNameAndArtifactVersion(name, version)
+    }
 
 
-    override fun get(name: String, version: String, extract: Boolean): Path? {
-        var path = "${blueprintConfig.archivePath}/$name/$version.zip"
+    override suspend fun get(name: String, version: String, extract: Boolean): Path? {
+
+        val getId = UUID.randomUUID().toString()
+        var path = "${bluePrintPathConfiguration.blueprintArchivePath}/$getId/cba.zip"
+
+        // TODO("Check first location for the file", If not get from database")
 
         blueprintModelRepository.findByArtifactNameAndArtifactVersion(name, version)?.also {
             it.blueprintModelContent.run {
-                val file = File(path)
-                file.parentFile.mkdirs()
-                file.createNewFile()
+                val file = normalizedFile(path)
+                file.parentFile.reCreateDirs()
+
                 file.writeBytes(this!!.content!!).let {
                     if (extract) {
-                        path = "${blueprintConfig.archivePath}/$name/$version"
+                        path = "${bluePrintPathConfiguration.blueprintDeployPath}/$name/$version"
                         BluePrintArchiveUtils.deCompress(file, path)
                     }
-                    return Paths.get(path)
+                    return normalizedPath(path)
                 }
             }
         }
         return null
     }
 
-    override fun save(metadata: MutableMap<String, String>, archiveFile: File) {
+    override suspend fun save(metadata: MutableMap<String, String>, archiveFile: File) {
         val artifactName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]
         val artifactVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]
+
+        check(archiveFile.isFile && !archiveFile.isDirectory) {
+            throw BluePrintException("Not a valid Archive file(${archiveFile.absolutePath})")
+        }
 
         blueprintModelRepository.findByArtifactNameAndArtifactVersion(artifactName!!, artifactVersion!!)?.let {
             log.info("Overwriting blueprint model :$artifactName::$artifactVersion")
