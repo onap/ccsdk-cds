@@ -17,7 +17,7 @@
 # ============LICENSE_END=========================================================
 from time import sleep
 
-from org.onap.ccsdk.apps.blueprintsprocessor.functions.restconf.executor import \
+from org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor import \
     RestconfComponentFunction
 from java.lang import Exception as JavaException
 

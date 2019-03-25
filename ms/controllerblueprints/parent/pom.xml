@@ -19,11 +19,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.onap.ccsdk.apps</groupId>
+        <groupId>org.onap.ccsdk.cds</groupId>
         <artifactId>controllerblueprints</artifactId>
         <version>0.4.2-SNAPSHOT</version>
     </parent>
-    <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+    <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
     <artifactId>parent</artifactId>
     <name>Controller Blueprints Parent</name>
     <packaging>pom</packaging>
@@ -211,37 +211,37 @@
 
             <!-- Application Components -->
             <dependency>
-                <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+                <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
                 <artifactId>blueprint-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+                <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
                 <artifactId>resource-dict</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+                <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
                 <artifactId>db-resources</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+                <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
                 <artifactId>blueprint-validation</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+                <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
                 <artifactId>blueprint-scripts</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+                <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
                 <artifactId>service</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+                <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
                 <artifactId>application</artifactId>
                 <version>${project.version}</version>
             </dependency>

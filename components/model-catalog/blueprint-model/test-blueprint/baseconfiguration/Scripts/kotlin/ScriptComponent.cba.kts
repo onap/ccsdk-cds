@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import org.onap.ccsdk.apps.controllerblueprints.core.asJsonPrimitive
-import org.onap.ccsdk.apps.controllerblueprints.core.data.ServiceTemplate
-import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BlueprintFunctionNode
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ServiceTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintFunctionNode
 
 open class SampleKotlinComponent : BlueprintFunctionNode<String, String> {
 

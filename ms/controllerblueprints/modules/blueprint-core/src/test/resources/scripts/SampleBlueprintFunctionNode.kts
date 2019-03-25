@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BlueprintFunctionNode
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintFunctionNode
 
 open class SampleBlueprintFunctionNode : BlueprintFunctionNode<String, String>{
 

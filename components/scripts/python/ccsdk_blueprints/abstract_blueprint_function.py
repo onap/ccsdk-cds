@@ -1,4 +1,4 @@
-from org.onap.ccsdk.apps.blueprintsprocessor.services.execution import AbstractComponentFunction
+from org.onap.ccsdk.cds.blueprintsprocessor.services.execution import AbstractComponentFunction
 
 
 class AbstractPythonComponentFunction(AbstractComponentFunction):

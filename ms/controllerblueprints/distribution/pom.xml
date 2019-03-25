@@ -18,7 +18,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+        <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
         <artifactId>parent</artifactId>
         <version>0.4.2-SNAPSHOT</version>
         <relativePath>../parent</relativePath>
@@ -28,7 +28,7 @@
     <name>Controller Blueprints Distribution</name>
     <properties>
         <assembly.id>maven</assembly.id>
-        <name.space>org.onap.ccsdk.apps</name.space>     <!-- <name.space>${namespace}</name.space> -->
+        <name.space>org.onap.ccsdk.cds</name.space>     <!-- <name.space>${namespace}</name.space> -->
         <serviceArtifactName>controllerblueprints</serviceArtifactName>
         <image.name>onap/ccsdk-controllerblueprints</image.name>
         <docker.buildArg.https_proxy>${https_proxy}</docker.buildArg.https_proxy>
@@ -40,7 +40,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.onap.ccsdk.apps.controllerblueprints</groupId>
+            <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
             <artifactId>application</artifactId>
         </dependency>
     </dependencies>

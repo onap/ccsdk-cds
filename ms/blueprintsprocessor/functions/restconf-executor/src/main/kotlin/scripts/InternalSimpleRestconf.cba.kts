@@ -17,11 +17,11 @@
 
 
 import com.fasterxml.jackson.databind.node.ObjectNode
-import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ActionIdentifiers
-import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.CommonHeader
-import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
-import org.onap.ccsdk.apps.blueprintsprocessor.functions.restconf.executor.RestconfComponentFunction
-import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ActionIdentifiers
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.CommonHeader
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor.RestconfComponentFunction
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 
 open class EditConfigure : RestconfComponentFunction() {
