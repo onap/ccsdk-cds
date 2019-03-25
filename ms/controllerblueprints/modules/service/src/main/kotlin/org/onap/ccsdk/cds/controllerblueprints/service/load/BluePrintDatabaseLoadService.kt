@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +34,7 @@ open class BluePrintDatabaseLoadService(private val bluePrintLoadConfiguration: 
 
 
     @EventListener(ApplicationReadyEvent::class)
-    open fun init() {
+    open fun init() = runBlocking {
         if (bluePrintLoadConfiguration.loadInitialData) {
             initModelTypes()
             initResourceDictionary()
@@ -41,23 +42,22 @@ open class BluePrintDatabaseLoadService(private val bluePrintLoadConfiguration: 
         } else {
             log.info("Initial data load is disabled")
         }
+
     }
 
-    open fun initModelTypes() {
+    open suspend fun initModelTypes() {
         log.info("model types load configuration(${bluePrintLoadConfiguration.loadModelType}) " +
                 "under paths(${bluePrintLoadConfiguration.loadModeTypePaths})")
 
         if (bluePrintLoadConfiguration.loadModelType) {
             val paths = bluePrintLoadConfiguration.loadModeTypePaths?.split(",")
             paths?.let {
-                runBlocking {
-                    modelTypeLoadService.loadPathsModelType(paths)
-                }
+                modelTypeLoadService.loadPathsModelType(paths)
             }
         }
     }
 
-    open fun initResourceDictionary() {
+    open suspend fun initResourceDictionary() {
         log.info("resource dictionary load configuration(${bluePrintLoadConfiguration.loadResourceDictionary}) " +
                 "under paths(${bluePrintLoadConfiguration.loadResourceDictionaryPaths})")
 
@@ -69,7 +69,7 @@ open class BluePrintDatabaseLoadService(private val bluePrintLoadConfiguration: 
         }
     }
 
-    open fun initBluePrintCatalog() {
+    open suspend fun initBluePrintCatalog() {
         log.info("blueprint load configuration(${bluePrintLoadConfiguration.loadBluePrint}) " +
                 "under paths(${bluePrintLoadConfiguration.loadBluePrintPaths})")
 
