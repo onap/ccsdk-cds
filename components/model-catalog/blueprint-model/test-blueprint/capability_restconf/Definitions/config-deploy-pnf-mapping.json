@@ -1,11 +1,22 @@
 [
   {
-    "name": "entity",
+    "name": "pnf-id",
     "input-param": true,
     "property": {
-      "type": "json"
+      "type": "string"
     },
-    "dictionary-name": "entity",
+    "dictionary-name": "pnf-id",
+    "dictionary-source": "input",
+    "dependencies": [
+    ]
+  },
+  {
+    "name": "pnf-name",
+    "input-param": true,
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "pnf-name",
     "dictionary-source": "input",
     "dependencies": [
     ]

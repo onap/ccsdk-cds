@@ -1,13 +1,1 @@
-[
-  {
-    "name": "entity",
-    "input-param": true,
-    "property": {
-      "type": "json"
-    },
-    "dictionary-name": "entity",
-    "dictionary-source": "input",
-    "dependencies": [
-    ]
-  }
-]
+[]
