@@ -16,40 +16,19 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.embedded.netty.NettyReactiveWebServerFactory;
-import org.springframework.boot.web.reactive.server.ReactiveWebServerFactory;
-import org.springframework.boot.web.server.WebServer;
-import org.springframework.http.server.reactive.HttpHandler;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BlueprintHttpServer {
-
-    private static Logger log = LoggerFactory.getLogger(BlueprintHttpServer.class);
+public class BlueprintHttpServer implements WebServerFactoryCustomizer<NettyReactiveWebServerFactory> {
 
     @Value("${blueprintsprocessor.httpPort}")
     private Integer httpPort;
 
-    @Autowired
-    HttpHandler httpHandler;
-
-    WebServer http;
-
-    @PostConstruct
-    public void start() {
-        ReactiveWebServerFactory factory = new NettyReactiveWebServerFactory(httpPort);
-        this.http = factory.getWebServer(this.httpHandler);
-        this.http.start();
-    }
-
-    @PreDestroy
-    public void stop() {
-        this.http.stop();
+    @Override
+    public void customize(NettyReactiveWebServerFactory serverFactory) {
+        serverFactory.setPort(httpPort);
     }
 }
