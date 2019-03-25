@@ -43,7 +43,7 @@ open class ExecutionServiceOutput {
     @get:ApiModelProperty(required = true)
     lateinit var actionIdentifiers: ActionIdentifiers
     @get:ApiModelProperty(required = true)
-    var status: Status = Status()
+    lateinit var status: Status
     @get:ApiModelProperty(required = true)
     lateinit var payload: ObjectNode
 }

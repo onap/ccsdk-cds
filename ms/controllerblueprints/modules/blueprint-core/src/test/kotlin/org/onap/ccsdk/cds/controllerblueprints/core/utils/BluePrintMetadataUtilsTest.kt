@@ -18,6 +18,7 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
 
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ToscaMetaData
 import kotlin.test.assertEquals
@@ -29,15 +30,17 @@ class BluePrintMetadataUtilsTest {
     @Test
     fun testToscaMetaData() {
 
-        val basePath: String = "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+        runBlocking {
+            val basePath = "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
 
-        val toscaMetaData: ToscaMetaData = BluePrintMetadataUtils.toscaMetaData(basePath)
-        assertNotNull(toscaMetaData, "Missing Tosca Definition Object")
-        assertNotNull(toscaMetaData.toscaMetaFileVersion, "Missing Tosca Metadata Version")
-        assertNotNull(toscaMetaData.csarVersion, "Missing CSAR version")
-        assertNotNull(toscaMetaData.createdBy, "Missing Created by")
-        assertNotNull(toscaMetaData.entityDefinitions, "Missing Tosca Entity Definition")
-        assertNotNull(toscaMetaData.templateTags, "Missing Template Tags")
+            val toscaMetaData: ToscaMetaData = BluePrintMetadataUtils.toscaMetaData(basePath)
+            assertNotNull(toscaMetaData, "Missing Tosca Definition Object")
+            assertNotNull(toscaMetaData.toscaMetaFileVersion, "Missing Tosca Metadata Version")
+            assertNotNull(toscaMetaData.csarVersion, "Missing CSAR version")
+            assertNotNull(toscaMetaData.createdBy, "Missing Created by")
+            assertNotNull(toscaMetaData.entityDefinitions, "Missing Tosca Entity Definition")
+            assertNotNull(toscaMetaData.templateTags, "Missing Template Tags")
+        }
 
     }
 
