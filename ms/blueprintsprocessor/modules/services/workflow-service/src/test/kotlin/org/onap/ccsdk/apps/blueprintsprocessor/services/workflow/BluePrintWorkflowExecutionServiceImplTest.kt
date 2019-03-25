@@ -21,12 +21,15 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceOutput
+import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintWorkflowExecutionService
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 
 @RunWith(SpringRunner::class)
@@ -38,16 +41,20 @@ class BluePrintWorkflowExecutionServiceImplTest {
 
     @Test
     fun testBluePrintWorkflowExecutionService() {
-
-        val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
-
-        val executionServiceInput = JacksonUtils.readValueFromClassPathFile("execution-input/resource-assignment-input.json",
-                ExecutionServiceInput::class.java)!!
-
         runBlocking {
-            bluePrintWorkflowExecutionService.executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput,
-                    hashMapOf())
+            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
+                    "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+
+            val executionServiceInput = JacksonUtils.readValueFromClassPathFile("execution-input/resource-assignment-input.json",
+                    ExecutionServiceInput::class.java)!!
+
+
+            val executionServiceOutput = bluePrintWorkflowExecutionService
+                    .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, hashMapOf())
+
+            assertNotNull(executionServiceOutput, "failed to get response")
+            assertEquals(BluePrintConstants.STATUS_SUCCESS, executionServiceOutput.status.message,
+                    "failed to get successful response")
         }
     }
 

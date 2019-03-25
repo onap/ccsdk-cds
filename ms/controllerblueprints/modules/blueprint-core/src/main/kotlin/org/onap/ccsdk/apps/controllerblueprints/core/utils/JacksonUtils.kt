@@ -16,15 +16,12 @@
  */
 package org.onap.ccsdk.apps.controllerblueprints.core.utils
 
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.node.*
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.apache.commons.io.IOUtils
@@ -39,16 +36,18 @@ import java.nio.charset.Charset
  */
 class JacksonUtils {
     companion object {
-        private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
+
+        val objectMapper = jacksonObjectMapper()
+
         inline fun <reified T : Any> readValue(content: String): T =
-                jacksonObjectMapper().readValue(content, T::class.java)
+                objectMapper.readValue(content, T::class.java)
 
         fun <T> readValue(content: String, valueType: Class<T>): T? {
-            return jacksonObjectMapper().readValue(content, valueType)
+            return objectMapper.readValue(content, valueType)
         }
 
         fun <T> readValue(node: JsonNode, valueType: Class<T>): T? {
-            return jacksonObjectMapper().treeToValue(node, valueType)
+            return objectMapper.treeToValue(node, valueType)
         }
 
         fun removeJsonNullNode(node: JsonNode) {
@@ -64,16 +63,12 @@ class JacksonUtils {
         }
 
 
-        fun getContent(fileName: String): String = getContent(normalizedFile(fileName))
-
-        fun getContent(file: File): String = runBlocking {
-            async {
-                try {
-                    file.readText(Charsets.UTF_8)
-                } catch (e: Exception) {
-                    throw BluePrintException("couldn't get file (${file.absolutePath}) content : ${e.message}")
-                }
-            }.await()
+        fun getContent(fileName: String): String = runBlocking {
+            try {
+                normalizedFile(fileName).readNBText()
+            } catch (e: Exception) {
+                throw BluePrintException("couldn't get file ($fileName) content : ${e.message}")
+            }
         }
 
         fun getClassPathFileContent(fileName: String): String {
@@ -96,11 +91,11 @@ class JacksonUtils {
         }
 
         fun objectNodeFromObject(from: kotlin.Any): ObjectNode {
-            return jacksonObjectMapper().convertValue(from, ObjectNode::class.java)
+            return objectMapper.convertValue(from, ObjectNode::class.java)
         }
 
         fun jsonNodeFromObject(from: kotlin.Any): JsonNode {
-            return jacksonObjectMapper().convertValue(from, JsonNode::class.java)
+            return objectMapper.convertValue(from, JsonNode::class.java)
         }
 
         fun jsonNodeFromClassPathFile(fileName: String): JsonNode {
@@ -171,9 +166,9 @@ class JacksonUtils {
             return objectMapper.readValue(content, mapType)
         }
 
-        fun <T> getMapFromFile(file: File, valueType: Class<T>): MutableMap<String, T> {
-            val content: String = getContent(file)
-            return getMapFromJson(content, valueType)
+        fun <T> getMapFromFile(file: File, valueType: Class<T>): MutableMap<String, T> = runBlocking {
+            val content: String = file.readNBText()
+            getMapFromJson(content, valueType)
         }
 
         fun <T> getMapFromFile(fileName: String, valueType: Class<T>): MutableMap<String, T> = getMapFromFile(File(fileName), valueType)

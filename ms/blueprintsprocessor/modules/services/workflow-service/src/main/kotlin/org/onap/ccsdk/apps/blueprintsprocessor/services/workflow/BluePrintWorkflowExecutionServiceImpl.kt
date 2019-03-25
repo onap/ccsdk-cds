@@ -20,8 +20,10 @@ import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInp
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.apps.controllerblueprints.core.asObjectNode
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BluePrintWorkflowExecutionService
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
@@ -40,6 +42,10 @@ open class BluePrintWorkflowExecutionServiceImpl(
         val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
 
         val workflowName = executionServiceInput.actionIdentifiers.actionName
+
+        // Assign Workflow inputs
+        val input = executionServiceInput.payload.get("$workflowName-request")
+        bluePrintRuntimeService.assignWorkflowInputs(workflowName, input)
 
         // Get the DG Node Template
         val nodeTemplateName = bluePrintContext.workflowFirstStepNodeTemplate(workflowName)
@@ -65,7 +71,12 @@ open class BluePrintWorkflowExecutionServiceImpl(
 
         executionServiceOutput.commonHeader = executionServiceInput.commonHeader
         executionServiceOutput.actionIdentifiers = executionServiceInput.actionIdentifiers
-        // TODO("Populate Response Payload and status")
+        // Resolve Workflow Outputs
+        val workflowOutputs = bluePrintRuntimeService.resolveWorkflowOutputs(workflowName)
+
+        // Set the Response Payload
+        executionServiceOutput.payload = JacksonUtils.objectMapper.createObjectNode()
+        executionServiceOutput.payload.set("$workflowName-response", workflowOutputs.asObjectNode())
         return executionServiceOutput
     }
 

@@ -38,10 +38,6 @@ open class ComponentWorkflowExecutionService(private val nodeTemplateExecutionSe
         // Get the DG Node Template
         val nodeTemplateName = bluePrintContext.workflowFirstStepNodeTemplate(workflowName)
 
-        // Assign Workflow inputs
-        val input = executionServiceInput.payload.get("$workflowName-request")
-        bluePrintRuntimeService.assignWorkflowInputs(workflowName, input)
-
         return nodeTemplateExecutionService.executeNodeTemplate(bluePrintRuntimeService,
                 nodeTemplateName, executionServiceInput)
     }

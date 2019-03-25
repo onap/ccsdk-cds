@@ -19,17 +19,16 @@ package org.onap.ccsdk.apps.blueprintsprocessor.services.execution
 
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.apps.blueprintsprocessor.core.api.data.Status
-import org.onap.ccsdk.apps.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.apps.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.apps.controllerblueprints.core.asObjectNode
 import org.onap.ccsdk.apps.controllerblueprints.core.getAsString
 import org.onap.ccsdk.apps.controllerblueprints.core.interfaces.BlueprintFunctionNode
 import org.onap.ccsdk.apps.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.apps.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 
 /**
@@ -70,10 +69,10 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
 
         log.info("preparing request id($processId) for workflow($workflowName) step($stepName)")
 
-        val operationInputs = bluePrintRuntimeService.get("$stepName-step-inputs")
-                ?: JsonNodeFactory.instance.objectNode()
+        val stepInputs = bluePrintRuntimeService.get("$stepName-step-inputs")
+                ?: JacksonUtils.objectMapper.createObjectNode()
 
-        operationInputs.fields().forEach {
+        stepInputs.fields().forEach {
             this.operationInputs[it.key] = it.value
         }
 
@@ -98,23 +97,20 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         log.info("Preparing Response...")
         executionServiceOutput.commonHeader = executionServiceInput.commonHeader
         executionServiceOutput.actionIdentifiers = executionServiceInput.actionIdentifiers
+        var status: Status?
+        try {
+            // Resolve the Output Expression
+            val stepOutputs = bluePrintRuntimeService
+                    .resolveNodeTemplateInterfaceOperationOutputs(nodeTemplateName, interfaceName, operationName)
 
-        // Resolve the Output Expression
-        val stepOutputs = bluePrintRuntimeService
-                .resolveNodeTemplateInterfaceOperationOutputs(nodeTemplateName, interfaceName, operationName)
-
-        // FIXME("Not the right place to populate the response payload")
-        executionServiceOutput.payload = stepOutputs.asObjectNode()
-
-        bluePrintRuntimeService.put("$stepName-step-outputs", executionServiceOutput.payload)
-
-        // FIXME("Not the right place to populate the status")
-        // Populate Status
-        val status = Status()
-        status.eventType = EventType.EVENT_COMPONENT_EXECUTED.name
-        status.code = 200
-        status.message = BluePrintConstants.STATUS_SUCCESS
-        executionServiceOutput.status = status
+            bluePrintRuntimeService.put("$stepName-step-outputs", stepOutputs.asObjectNode())
+            // Set the Default Step Status
+            status = Status()
+        } catch (e: Exception) {
+            status = Status()
+            status.message = BluePrintConstants.STATUS_FAILURE
+        }
+        executionServiceOutput.status = status!!
         return this.executionServiceOutput
     }
 
