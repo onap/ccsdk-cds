@@ -14,4 +14,6 @@ listenerservice:
       keyStorePath:
       activateServerTLSAuth : false
       isUseHttpsWithDmaap: false
+      csarArchive: /opt/app/onap/cds-sdc-listener/csar-archive
+      cbaArchive: /opt/app/onap/cds/sdc-listener/cba-archive
 
