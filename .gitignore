@@ -83,6 +83,24 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+.settings/
+
+# Target dirs in all projects
+**/target-ide/*
+**/target/*
+**/logs/*
+**/tokens/*
+**/lib/cachedir/**
+
 # Added for Intellij IDEA IDE
 **/*.ipr
 **/*.iws
