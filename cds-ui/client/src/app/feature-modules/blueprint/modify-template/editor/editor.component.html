@@ -20,18 +20,29 @@ limitations under the License.
 
 <div class="container">
     <div class="fileViewContainer">
+        <!-- <div style="width:inherit; height: inherit; position: fixed;z-index: 1; background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.4);"></div> -->
+        <div style="display: flex;">
+            <div>
+                <i class="fa fa-folder" aria-hidden="true" style="color:#3f51b5; font-size: 20px;margin: 3px; cursor: pointer;" (click)="enableNameInputEl('createFolder')"></i>
+                <i class="fa fa-file" aria-hidden="true" style="color:#3f51b5; font-size: 18px; margin: 3px; cursor: pointer;" (click)="enableNameInputEl('createFile')"></i>
+                <i class="fa fa-trash" aria-hidden="true" style="color:#3f51b5; font-size: 20px; margin: 3px; cursor: pointer;" (click)="deleteFolderOrFile('deleteFile')"></i>
+            </div>
+            <div>
+                <input *ngIf="isNameTextboxEnablled" type="text" (focusout)="createFolderOrFile($event)"/>
+            </div>
+        </div>
         <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" style="background-color: #ebebeb">
             <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding (click)="selectFileToView(node);activeNode = node" [ngClass]="{ 'background-highlight': activeNode === node }">
                 <button mat-icon-button disabled></button>
                 <button mat-icon-button (click)="selectFileToView(node)">{{node.name}}</button>
             </mat-tree-node>
-            <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
+            <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding (click)="activeNode = node" [ngClass]="{ 'background-highlight': activeNode === node }">
                 <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.name">
                 <mat-icon class="mat-icon-rtl-mirror">
                   {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
                 </mat-icon>
               </button>
-                <button mat-icon-button>{{node.name}}</button>
+                <button mat-icon-button (click)="selectFolder(node)">{{node.name}}</button>
             </mat-tree-node>
         </mat-tree>
     </div>

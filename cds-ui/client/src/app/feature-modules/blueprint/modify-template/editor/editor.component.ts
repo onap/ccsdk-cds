@@ -83,6 +83,11 @@ export class EditorComponent implements OnInit {
   mode: string;
   private zipFile: JSZip = new JSZip();
   activeNode: any;
+  selectedFolder: string;
+  activationBlueprint: string;
+  isNameTextboxEnablled : boolean = false;
+  fileAction : string;
+  filetoDelete : string;
 
   private transformer = (node: Node, level: number) => {
     return {
@@ -155,14 +160,14 @@ export class EditorComponent implements OnInit {
   updateBlueprint() {
     console.log(this.blueprint);
     this.filesData.forEach(fileNode => {
-      if (fileNode.name.includes(this.blueprintName.trim()) && fileNode.name.includes(this.selectedFile.trim())) {
+      if (this.selectedFile && fileNode.name.includes(this.blueprintName.trim()) && fileNode.name.includes(this.selectedFile.trim())) {
         fileNode.data = this.text;
-      } else if (fileNode.name.includes(this.selectedFile.trim())) {
+      } else if (this.selectedFile && fileNode.name.includes(this.selectedFile.trim())) {
         fileNode.data = this.text;
       }
     });
 
-    if (this.selectedFile == this.blueprintName.trim()) {
+    if (this.selectedFile && this.selectedFile == this.blueprintName.trim()) {
       this.blueprint = JSON.parse(this.text);
     } else {
       this.blueprint = this.blueprintdata;
@@ -180,6 +185,7 @@ export class EditorComponent implements OnInit {
 
   selectFileToView(file) {
     this.selectedFile = file.name;
+    this.filetoDelete = file.name;
     this.filesData.forEach((fileNode) => {
       if (fileNode.name.includes(file.name)) {
         this.text = fileNode.data;
@@ -238,5 +244,109 @@ export class EditorComponent implements OnInit {
       default:
         this.mode = 'json';
     }
+  }
+
+  selectFolder(node) {
+    this.selectedFolder = node.name;
+    this.filetoDelete = node.name;
+    console.log(node);
+    // this.createFolderOrFile(node.name, 'folder');
+  }
+
+  createFolderOrFile(name) {
+    let newFilesData: [any] = this.filesData;
+    let newFileNode = {
+      name: '',
+      data: ''
+    }
+    let newFileNode1 = {
+      name: '',
+      data: ''
+    }
+    for(let i=0; i< this.filesData.length; i++) {
+      if (this.filesData[i].name.includes(this.selectedFolder)) {
+        if(this.fileAction == 'createFolder') {          
+           newFileNode.name = this.filesData[i].name + name.srcElement.value + '/';
+           newFileNode.data = '';
+
+           newFileNode1.name = this.filesData[i].name + name.srcElement.value + '/README.md'
+           newFileNode1.data = name.srcElement.value + ' Folder';
+        } else {
+           newFileNode.name = this.filesData[i].name + name.srcElement.value;
+           newFileNode.data = '';
+        }
+        break;
+      }
+    }
+
+    this.filesData.splice(this.findIndexForNewNode()+1, 0, newFileNode);
+    this.filesData.splice(this.findIndexForNewNode()+1, 0, newFileNode1);
+    this.arrangeTreeData(this.filesData);
+  }
+
+  findIndexForNewNode() {
+    let indexForNewNode;
+    for(let i=0; i< this.filesData.length; i++) {
+      if (this.filesData[i].name.includes(this.selectedFolder)) {
+         indexForNewNode = i;
+      }
+    }
+    return indexForNewNode;
+  }
+
+  arrangeTreeData(paths) {
+    const tree = [];
+
+    paths.forEach((path) => {
+
+      const pathParts = path.name.split('/');
+      // pathParts.shift();
+      let currentLevel = tree;
+
+      pathParts.forEach((part) => {
+        const existingPath = currentLevel.filter(level => level.name === part);
+
+        if (existingPath.length > 0) {
+          currentLevel = existingPath[0].children;
+        } else {
+          const newPart = {
+            name: part,
+            children: [],
+            data: path.data,
+            path : path.name
+          };
+          if(part.trim() == this.blueprintName.trim()) { 
+            this.activationBlueprint = path.data; 
+            newPart.data = JSON.parse(this.activationBlueprint.toString());            
+            console.log('newpart', newPart);
+          }
+          if(newPart.name !== '') {           
+              currentLevel.push(newPart);
+              currentLevel = newPart.children;
+          }
+        }
+      });
+    });
+    this.dataSource.data = tree;
+    this.filesTree = tree;
+    this.isNameTextboxEnablled = false;
+    this.updateBlueprint();
+  }
+
+  enableNameInputEl(action) {    
+    this.fileAction = action;
+    if (action == 'createFolder' || action == 'createFile') {      
+      this.isNameTextboxEnablled = true;
+    }
+  }
+
+  deleteFolderOrFile(action) {
+    for(let i=0;i< this.filesData.length ; i++) {
+      if(this.filesData[i].name.includes(this.filetoDelete.trim())) {
+        this.filesData.splice(i, 1);
+        i = i-1;
+      }
+    }
+    this.arrangeTreeData(this.filesData);
   }
 }
