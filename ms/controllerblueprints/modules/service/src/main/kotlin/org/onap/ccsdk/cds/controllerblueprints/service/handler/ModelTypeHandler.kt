@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,10 +35,15 @@ open class ModelTypeHandler(private val modelTypeRepository: ModelTypeRepository
      * @param modelTypeName modelTypeName
      * @return ModelType
      */
-    fun getModelTypeByName(modelTypeName: String): ModelType? {
+    suspend fun getModelTypeByName(modelTypeName: String): ModelType {
         log.info("Searching : $modelTypeName")
         check(modelTypeName.isNotBlank()) { "Model Name Information is missing." }
-        return modelTypeRepository.findByModelName(modelTypeName)
+        val modelType = modelTypeRepository.findByModelName(modelTypeName)
+        return if (modelType != null) {
+            modelType
+        } else {
+            throw BluePrintException("couldn't get modelType($modelTypeName)")
+        }
     }
 
 
@@ -47,7 +53,7 @@ open class ModelTypeHandler(private val modelTypeRepository: ModelTypeRepository
      * @param tags tags
      * @return List<ModelType>
     </ModelType> */
-    fun searchModelTypes(tags: String): List<ModelType> {
+    suspend fun searchModelTypes(tags: String): List<ModelType> {
         check(tags.isNotBlank()) { "No Search Information provide" }
         return modelTypeRepository.findByTagsContainingIgnoreCase(tags)
     }
@@ -60,7 +66,7 @@ open class ModelTypeHandler(private val modelTypeRepository: ModelTypeRepository
      * @throws BluePrintException BluePrintException
      */
     @Throws(BluePrintException::class)
-    open fun saveModel(modelType: ModelType): ModelType {
+    suspend open fun saveModel(modelType: ModelType): ModelType {
         lateinit var dbModel: ModelType
         ModelTypeValidator.validateModelType(modelType)
         val dbModelType: ModelType? = modelTypeRepository.findByModelName(modelType.modelName)
@@ -86,7 +92,7 @@ open class ModelTypeHandler(private val modelTypeRepository: ModelTypeRepository
      *
      * @param modelName modelName
      */
-    open fun deleteByModelName(modelName: String) {
+    suspend open fun deleteByModelName(modelName: String) {
         check(modelName.isNotBlank()) { "Model Name Information is missing." }
         modelTypeRepository.deleteByModelName(modelName)
 
@@ -97,8 +103,8 @@ open class ModelTypeHandler(private val modelTypeRepository: ModelTypeRepository
      *
      * @param definitionType definitionType
      * @return List<ModelType>
-    */
-    fun getModelTypeByDefinitionType(definitionType: String): List<ModelType> {
+     */
+    suspend fun getModelTypeByDefinitionType(definitionType: String): List<ModelType> {
         check(definitionType.isNotBlank()) { "Model definitionType Information is missing." }
         return modelTypeRepository.findByDefinitionType(definitionType)
     }
@@ -108,8 +114,8 @@ open class ModelTypeHandler(private val modelTypeRepository: ModelTypeRepository
      *
      * @param derivedFrom derivedFrom
      * @return List<ModelType>
-    */
-    fun getModelTypeByDerivedFrom(derivedFrom: String): List<ModelType> {
+     */
+    suspend fun getModelTypeByDerivedFrom(derivedFrom: String): List<ModelType> {
         check(derivedFrom.isNotBlank()) { "Model derivedFrom Information is missing." }
         return modelTypeRepository.findByDerivedFrom(derivedFrom)
     }
