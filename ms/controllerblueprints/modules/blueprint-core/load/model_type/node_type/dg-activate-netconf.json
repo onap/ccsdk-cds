@@ -48,5 +48,5 @@
 		}
 	},
 	
-	"derived_from": "tosca.nodes.DG"
+	"derived_from": "tosca.nodes.Workflow"
 }

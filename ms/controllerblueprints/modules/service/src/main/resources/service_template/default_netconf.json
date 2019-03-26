@@ -426,7 +426,7 @@
 					}
 				}
 			},
-			"derived_from": "tosca.nodes.DG"
+			"derived_from": "tosca.nodes.Workflow"
 		},
 		"dg-activate-netconf": {
 			"description": "This is Download Netconf Directed Graph",
@@ -477,7 +477,7 @@
 					}
 				}
 			},
-			"derived_from": "tosca.nodes.DG"
+			"derived_from": "tosca.nodes.Workflow"
 		},
 		"artifact-config-template": {
 			"description": "This is Configuration Velocity Template",

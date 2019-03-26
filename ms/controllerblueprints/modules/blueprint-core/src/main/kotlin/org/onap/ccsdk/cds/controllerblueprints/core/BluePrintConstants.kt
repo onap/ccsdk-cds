@@ -98,7 +98,7 @@ object BluePrintConstants {
     const val MODEL_TYPE_RELATIONSHIPS_ATTACH_TO = "tosca.relationships.AttachesTo"
     const val MODEL_TYPE_RELATIONSHIPS_ROUTES_TO = "tosca.relationships.RoutesTo"
 
-    const val MODEL_TYPE_NODE_DG = "tosca.nodes.DG"
+    const val MODEL_TYPE_NODE_WORKFLOW = "tosca.nodes.Workflow"
     const val MODEL_TYPE_NODE_COMPONENT = "tosca.nodes.Component"
     const val MODEL_TYPE_NODE_VNF = "tosca.nodes.Vnf"
     const val MODEL_TYPE_NODE_RESOURCE_SOURCE = "tosca.nodes.ResourceSource"
