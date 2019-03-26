@@ -85,9 +85,11 @@ export class EditorComponent implements OnInit {
   activeNode: any;
   selectedFolder: string;
   activationBlueprint: string;
-  isNameTextboxEnablled : boolean = false;
-  fileAction : string;
-  filetoDelete : string;
+  isNameTextboxEnablled: boolean = false;
+  fileAction: string;
+  filetoDelete: string;
+  currentFilePath: string = '';
+  selectedFileObj = { name: '', type: '' };
 
   private transformer = (node: Node, level: number) => {
     return {
@@ -118,9 +120,6 @@ export class EditorComponent implements OnInit {
     this.dataSource.data = this.filesTree;
   }
 
-  fileClicked(file) {
-    console.log('selected file:' + file);
-  }
   editorContent() {
     this.editor.setTheme("eclipse");
     this.editor.getEditor().setOptions({
@@ -162,7 +161,8 @@ export class EditorComponent implements OnInit {
     this.filesData.forEach(fileNode => {
       if (this.selectedFile && fileNode.name.includes(this.blueprintName.trim()) && fileNode.name.includes(this.selectedFile.trim())) {
         fileNode.data = this.text;
-      } else if (this.selectedFile && fileNode.name.includes(this.selectedFile.trim())) {
+      } else if (this.selectedFile && fileNode.name.includes(this.currentFilePath)) {
+        // this.selectedFile && fileNode.name.includes(this.selectedFile.trim())) {
         fileNode.data = this.text;
       }
     });
@@ -184,8 +184,13 @@ export class EditorComponent implements OnInit {
   }
 
   selectFileToView(file) {
+    this.currentFilePath = '';
+    this.expandParents(file);
+    this.selectedFileObj.name = file.name;
+    this.selectedFileObj.type = 'file';
     this.selectedFile = file.name;
     this.filetoDelete = file.name;
+    this.currentFilePath = this.currentFilePath + this.selectedFile;
     this.filesData.forEach((fileNode) => {
       if (fileNode.name.includes(file.name)) {
         this.text = fileNode.data;
@@ -247,48 +252,47 @@ export class EditorComponent implements OnInit {
   }
 
   selectFolder(node) {
+    this.currentFilePath = '';
+    this.expandParents(node);
     this.selectedFolder = node.name;
     this.filetoDelete = node.name;
-    console.log(node);
-    // this.createFolderOrFile(node.name, 'folder');
+    this.selectedFileObj.name = node.name;
+    this.selectedFileObj.type = 'folder';
+    this.currentFilePath = this.currentFilePath + this.selectedFolder + '/';
   }
 
   createFolderOrFile(name) {
-    let newFilesData: [any] = this.filesData;
-    let newFileNode = {
-      name: '',
-      data: ''
-    }
-    let newFileNode1 = {
-      name: '',
-      data: ''
-    }
-    for(let i=0; i< this.filesData.length; i++) {
-      if (this.filesData[i].name.includes(this.selectedFolder)) {
-        if(this.fileAction == 'createFolder') {          
-           newFileNode.name = this.filesData[i].name + name.srcElement.value + '/';
-           newFileNode.data = '';
-
-           newFileNode1.name = this.filesData[i].name + name.srcElement.value + '/README.md'
-           newFileNode1.data = name.srcElement.value + ' Folder';
-        } else {
-           newFileNode.name = this.filesData[i].name + name.srcElement.value;
-           newFileNode.data = '';
-        }
-        break;
+    if (name && name.srcElement.value !== null && name.srcElement.value !== '') {
+      let newFilesData: [any] = this.filesData;
+      let newFileNode = {
+        name: '',
+        data: ''
       }
+      let newFileNode1 = {
+        name: '',
+        data: ''
+      }
+      if (this.fileAction == 'createFolder') {
+        newFileNode.name = this.currentFilePath + name.srcElement.value + '/'
+        newFileNode.data = '';
+        newFileNode1.name = this.currentFilePath + name.srcElement.value + '/README.md'
+        newFileNode1.data = name.srcElement.value + ' Folder';
+        this.filesData.push(newFileNode);
+        this.filesData.push(newFileNode1);
+      } else {
+        newFileNode.name = this.currentFilePath + name.srcElement.value;
+        newFileNode.data = '';
+        this.filesData.push(newFileNode);
+      }
+      this.arrangeTreeData(this.filesData);
     }
-
-    this.filesData.splice(this.findIndexForNewNode()+1, 0, newFileNode);
-    this.filesData.splice(this.findIndexForNewNode()+1, 0, newFileNode1);
-    this.arrangeTreeData(this.filesData);
   }
 
   findIndexForNewNode() {
     let indexForNewNode;
-    for(let i=0; i< this.filesData.length; i++) {
+    for (let i = 0; i < this.filesData.length; i++) {
       if (this.filesData[i].name.includes(this.selectedFolder)) {
-         indexForNewNode = i;
+        indexForNewNode = i;
       }
     }
     return indexForNewNode;
@@ -300,7 +304,6 @@ export class EditorComponent implements OnInit {
     paths.forEach((path) => {
 
       const pathParts = path.name.split('/');
-      // pathParts.shift();
       let currentLevel = tree;
 
       pathParts.forEach((part) => {
@@ -313,16 +316,16 @@ export class EditorComponent implements OnInit {
             name: part,
             children: [],
             data: path.data,
-            path : path.name
+            path: path.name
           };
-          if(part.trim() == this.blueprintName.trim()) { 
-            this.activationBlueprint = path.data; 
-            newPart.data = JSON.parse(this.activationBlueprint.toString());            
+          if (part.trim() == this.blueprintName.trim()) {
+            this.activationBlueprint = path.data;
+            newPart.data = JSON.parse(this.activationBlueprint.toString());
             console.log('newpart', newPart);
           }
-          if(newPart.name !== '') {           
-              currentLevel.push(newPart);
-              currentLevel = newPart.children;
+          if (newPart.name !== '') {
+            currentLevel.push(newPart);
+            currentLevel = newPart.children;
           }
         }
       });
@@ -333,20 +336,52 @@ export class EditorComponent implements OnInit {
     this.updateBlueprint();
   }
 
-  enableNameInputEl(action) {    
+  enableNameInputEl(action) {
     this.fileAction = action;
-    if (action == 'createFolder' || action == 'createFile') {      
+    if (action == 'createFolder' || action == 'createFile') {
       this.isNameTextboxEnablled = true;
     }
   }
 
   deleteFolderOrFile(action) {
-    for(let i=0;i< this.filesData.length ; i++) {
-      if(this.filesData[i].name.includes(this.filetoDelete.trim())) {
+    for (let i = 0; i < this.filesData.length; i++) {
+      if (this.filesData[i].name.includes(this.filetoDelete.trim()) && this.filesData[i].name.includes(this.currentFilePath)) {
         this.filesData.splice(i, 1);
-        i = i-1;
+        i = i - 1;
       }
     }
     this.arrangeTreeData(this.filesData);
+  }
+
+  expandParents(node) {
+    const parent = this.getParent(node);
+    this.treeControl.expand(parent);
+
+    if (parent && parent.level > 0) {
+      this.expandParents(parent);
+    }
+
+    console.log(this.currentFilePath);
+  }
+
+  getParent(node) {
+    const { treeControl } = this;
+    const currentLevel = treeControl.getLevel(node);
+
+    if (currentLevel < 1) {
+      // this.currentFilePath = this.currentFilePath + this.selectedFolder;
+      return null;
+    }
+
+    const startIndex = treeControl.dataNodes.indexOf(node) - 1;
+
+    for (let i = startIndex; i >= 0; i--) {
+      const currentNode = treeControl.dataNodes[i];
+
+      if (treeControl.getLevel(currentNode) < currentLevel) {
+        this.currentFilePath = currentNode.name + '/' + this.currentFilePath;
+        return currentNode;
+      }
+    }
   }
 }
