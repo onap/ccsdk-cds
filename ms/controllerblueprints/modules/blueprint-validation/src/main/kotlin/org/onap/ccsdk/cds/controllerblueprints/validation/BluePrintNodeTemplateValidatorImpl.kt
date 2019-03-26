@@ -1,6 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
- * Modifications Copyright © 2018 IBM.
+ * Modifications Copyright © 2018-2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,17 +19,14 @@ package org.onap.ccsdk.cds.controllerblueprints.validation
 
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
-import com.fasterxml.jackson.databind.JsonNode
+import org.onap.ccsdk.cds.controllerblueprints.validation.utils.PropertyAssignmentValidationUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.data.*
-import org.onap.ccsdk.cds.controllerblueprints.core.format
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintNodeTemplateValidator
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintExpressionService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
@@ -43,6 +40,7 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
 
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
     lateinit var bluePrintContext: BluePrintContext
+    lateinit var propertyAssignmentValidationUtils: PropertyAssignmentValidationUtils
     var paths: MutableList<String> = arrayListOf()
 
     override fun validate(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, nodeTemplate: NodeTemplate) {
@@ -51,6 +49,8 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
         this.bluePrintRuntimeService = bluePrintRuntimeService
         this.bluePrintContext = bluePrintRuntimeService.bluePrintContext()
 
+        propertyAssignmentValidationUtils = PropertyAssignmentValidationUtils(bluePrintContext)
+
         paths.add(name)
 
         val type: String = nodeTemplate.type
@@ -58,7 +58,10 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
         val nodeType: NodeType = bluePrintContext.serviceTemplate.nodeTypes?.get(type)
                 ?: throw BluePrintException("Failed to get NodeType($type) definition for NodeTemplate($name)")
 
-        nodeTemplate.properties?.let { validatePropertyAssignments(nodeType.properties!!, nodeTemplate.properties!!) }
+        nodeTemplate.properties?.let {
+            propertyAssignmentValidationUtils
+                    .validatePropertyAssignments(nodeType.properties!!, nodeTemplate.properties!!)
+        }
         nodeTemplate.capabilities?.let { validateCapabilityAssignments(nodeType, name, nodeTemplate) }
         nodeTemplate.requirements?.let { validateRequirementAssignments(nodeType, name, nodeTemplate) }
         nodeTemplate.interfaces?.let { validateInterfaceAssignments(nodeType, name, nodeTemplate) }
@@ -78,29 +81,6 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
                     artifactDefinitionName, artifactDefinition)
         }
         paths.removeAt(paths.lastIndex)
-    }
-
-
-    @Throws(BluePrintException::class)
-    open fun validatePropertyAssignments(nodeTypeProperties: MutableMap<String, PropertyDefinition>,
-                                         properties: MutableMap<String, JsonNode>) {
-        properties.forEach { propertyName, propertyAssignment ->
-            val propertyDefinition: PropertyDefinition = nodeTypeProperties[propertyName]
-                    ?: throw BluePrintException("failed to get definition for the property ($propertyName)")
-
-            validatePropertyAssignment(propertyName, propertyDefinition, propertyAssignment)
-
-        }
-    }
-
-    @Throws(BluePrintException::class)
-    open fun validatePropertyAssignment(propertyName: String, propertyDefinition: PropertyDefinition,
-                                        propertyAssignment: JsonNode) {
-        // Check and Validate if Expression Node
-        val expressionData = BluePrintExpressionService.getExpressionData(propertyAssignment)
-        if (!expressionData.isExpression) {
-            checkPropertyValue(propertyName, propertyDefinition, propertyAssignment)
-        }
     }
 
     @Throws(BluePrintException::class)
@@ -125,7 +105,10 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
     open fun validateCapabilityAssignment(nodeTemplateName: String, capabilityName: String,
                                           capabilityDefinition: CapabilityDefinition, capabilityAssignment: CapabilityAssignment) {
 
-        capabilityAssignment.properties?.let { validatePropertyAssignments(capabilityDefinition.properties!!, capabilityAssignment.properties!!) }
+        capabilityAssignment.properties?.let {
+            propertyAssignmentValidationUtils
+                    .validatePropertyAssignments(capabilityDefinition.properties!!, capabilityAssignment.properties!!)
+        }
 
     }
 
@@ -224,7 +207,8 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
                             ?: throw BluePrintException("Failed to get NodeTemplate($nodeTemplateName) operation " +
                                     "definition ($operationAssignmentName) property definition($propertyName)")
                     // Check the property values with property definition
-                    validatePropertyAssignment(propertyName, propertyDefinition, propertyAssignment)
+                    propertyAssignmentValidationUtils
+                            .validatePropertyAssignment(propertyName, propertyDefinition, propertyAssignment)
                 }
 
                 outputs?.forEach { propertyName, propertyAssignment ->
@@ -232,7 +216,8 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
                             ?: throw BluePrintException("Failed to get NodeTemplate($nodeTemplateName) operation definition ($operationAssignmentName) " +
                                     "output property definition($propertyName)")
                     // Check the property values with property definition
-                    validatePropertyAssignment(propertyName, propertyDefinition, propertyAssignment)
+                    propertyAssignmentValidationUtils
+                            .validatePropertyAssignment(propertyName, propertyDefinition, propertyAssignment)
                 }
 
             }
@@ -240,48 +225,6 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
 
     }
 
-    open fun checkPropertyValue(propertyName: String, propertyDefinition: PropertyDefinition, propertyAssignment: JsonNode) {
-        val propertyType = propertyDefinition.type
-        val isValid: Boolean
-
-        if (BluePrintTypes.validPrimitiveTypes().contains(propertyType)) {
-            isValid = JacksonUtils.checkJsonNodeValueOfPrimitiveType(propertyType, propertyAssignment)
-
-        } else if (BluePrintTypes.validComplexTypes().contains(propertyType)) {
-            isValid = true
-        } else if (BluePrintTypes.validCollectionTypes().contains(propertyType)) {
-
-            val entrySchemaType = propertyDefinition.entrySchema?.type
-                    ?: throw BluePrintException(format("Failed to get EntrySchema type for the collection property ({})", propertyName))
-
-            if (!BluePrintTypes.validPropertyTypes().contains(entrySchemaType)) {
-                checkPropertyDataType(entrySchemaType, propertyName)
-            }
-            isValid = JacksonUtils.checkJsonNodeValueOfCollectionType(propertyType, propertyAssignment)
-        } else {
-            checkPropertyDataType(propertyType, propertyName)
-            isValid = true
-        }
-
-        check(isValid) {
-            throw BluePrintException("property(propertyName) defined of type(propertyType) is not comptable with the value (propertyAssignment)")
-        }
-    }
-
-    private fun checkPropertyDataType(dataTypeName: String, propertyName: String) {
-
-        val dataType = bluePrintContext.serviceTemplate.dataTypes?.get(dataTypeName)
-                ?: throw BluePrintException("DataType ($dataTypeName) for the property ($propertyName) not found")
-
-        checkValidDataTypeDerivedFrom(propertyName, dataType.derivedFrom)
-
-    }
-
-    private fun checkValidDataTypeDerivedFrom(dataTypeName: String, derivedFrom: String) {
-        check(BluePrintTypes.validDataTypeDerivedFroms.contains(derivedFrom)) {
-            throw BluePrintException("Failed to get DataType($dataTypeName)'s  derivedFrom($derivedFrom) definition ")
-        }
-    }
 
     private fun validateExtension(referencePrefix: String, name: String, nodeTemplate: NodeTemplate) {
         val customValidator = bluePrintTypeValidatorService

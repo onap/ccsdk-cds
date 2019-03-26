@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,17 +67,28 @@ open class BluePrintWorkflowEnhancerImpl(private val bluePrintRepoService: BlueP
         // Clean Dynamic Property Field, If present
         workflow.inputs?.remove(dynamicPropertyName)
 
+        // Enrich Workflow Inputs
+        enhanceWorkflowInputs(name, workflow)
+
+        // Enrich Workflow Outputs
+        enhanceWorkflowOutputs(name, workflow)
+
         // Enrich Only for Resource Assignment and Dynamic Input Properties if any
         enhanceStepTargets(name, workflow)
 
-        // Enrich Workflow Inputs
-        enhanceWorkflowInputs(name, workflow)
+
     }
 
     open fun enhanceWorkflowInputs(name: String, workflow: Workflow) {
 
         workflow.inputs?.let { inputs ->
             bluePrintTypeEnhancerService.enhancePropertyDefinitions(bluePrintRuntimeService, inputs)
+        }
+    }
+
+    open fun enhanceWorkflowOutputs(name: String, workflow: Workflow) {
+        workflow.outputs?.let { outputs ->
+            bluePrintTypeEnhancerService.enhancePropertyDefinitions(bluePrintRuntimeService, outputs)
         }
     }
 
