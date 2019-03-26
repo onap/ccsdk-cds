@@ -38,7 +38,7 @@ class BlueprintProcessorCatalogServiceImplTest {
 
     @Test
     fun `test catalog service`() {
-        val file = Paths.get("./src/test/resources/test-cba.zip").toFile()
+        val file = Paths.get("./src/test/resources/test-cba").toFile()
         assertTrue(file.exists(), "couldnt get file ${file.absolutePath}")
 
         blueprintCatalog.saveToDatabase(file)
