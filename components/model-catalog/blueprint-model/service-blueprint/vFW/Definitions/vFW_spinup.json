@@ -3318,7 +3318,7 @@
       "version": "1.0.0",
       "derived_from": "tosca.nodes.Root"
     },
-    "tosca.nodes.DG": {
+    "tosca.nodes.Workflow": {
       "description": "This is Directed Graph Node Type",
       "version": "1.0.0",
       "derived_from": "tosca.nodes.Root"
@@ -3459,7 +3459,7 @@
           }
         }
       },
-      "derived_from": "tosca.nodes.DG"
+      "derived_from": "tosca.nodes.Workflow"
     },
     "artifact-config-template": {
       "description": "This is Configuration Velocity Template",

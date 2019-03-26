@@ -203,7 +203,7 @@
           }
         }
       },
-      "derived_from": "tosca.nodes.DG"
+      "derived_from": "tosca.nodes.Workflow"
     },
     "source-input": {
       "description": "This is Input Resource Source Node Type",
@@ -341,7 +341,7 @@
       "version": "1.0.0",
       "derived_from": "tosca.nodes.Root"
     },
-    "tosca.nodes.DG": {
+    "tosca.nodes.Workflow": {
       "description": "This is Directed Graph Node Type",
       "version": "1.0.0",
       "derived_from": "tosca.nodes.Root"
