@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "730a7e22_bd92c320",
+        "filename": "components/model-catalog/blueprint-model/test-blueprint/capability_restconf/Scripts/python/RestconfConfigDeploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 5060
+      },
+      "writtenOn": "2019-03-26T11:19:42Z",
+      "side": 1,
+      "message": "Yuriy requested this.",
+      "parentUuid": "8e678ac7_bcb76c19",
+      "revId": "ea23b36caec04c3988c8722ff6cfce34c8937387",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "857d54e7_4ff6c3d7",
         "filename": "components/model-catalog/blueprint-model/test-blueprint/capability_restconf/Scripts/python/RestconfConfigDeploy.py",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2019-03-26T11:08:06Z",
       "side": 1,
       "message": "Will you look at improvement for this step as well?",
+      "revId": "ea23b36caec04c3988c8722ff6cfce34c8937387",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "168aed9b_a968a552",
+        "filename": "components/model-catalog/blueprint-model/test-blueprint/capability_restconf/Scripts/python/RestconfConfigDeploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 5060
+      },
+      "writtenOn": "2019-03-26T11:19:42Z",
+      "side": 1,
+      "message": "currently developing it now.",
+      "parentUuid": "857d54e7_4ff6c3d7",
       "revId": "ea23b36caec04c3988c8722ff6cfce34c8937387",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
