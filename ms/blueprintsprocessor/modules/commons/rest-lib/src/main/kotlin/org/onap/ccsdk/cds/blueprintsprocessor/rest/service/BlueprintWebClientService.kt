@@ -12,8 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- * SPDX-License-Identifier: Apache-2.0
  */
 
 package org.onap.ccsdk.cds.blueprintsprocessor.rest.service
@@ -59,12 +57,7 @@ interface BlueprintWebClientService {
     }
 
     fun convertToBasicHeaders(headers: Map<String, String>): Array<BasicHeader> {
-        val convertedHeaders = Array<BasicHeader>(headers.size){ BasicHeader("","") }
-        var currentElement = 0
-        for ((name, value) in headers) {
-            convertedHeaders[currentElement++] = BasicHeader(name, value)
-        }
-        return convertedHeaders
+        return headers.map{ BasicHeader(it.key, it.value)}.toTypedArray()
     }
 
     fun delete(path: String, headers: Array<BasicHeader>): String {

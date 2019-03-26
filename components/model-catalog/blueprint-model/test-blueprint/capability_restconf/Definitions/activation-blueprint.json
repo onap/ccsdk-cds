@@ -20,17 +20,11 @@
     "file" : "Definitions/policy_types.json"
   } ],
   "dsl_definitions" : {
-    "config-assign-properties" : {
-      "resolution-key" : {
-        "get_input" : "resolution-key"
-      }
-    },
     "config-deploy-properties" : {
       "resolution-key" : {
         "get_input" : "resolution-key"
       }
     }
-
   },
   "topology_template" : {
     "workflows" : {
@@ -48,13 +42,6 @@
           "resolution-key" : {
             "required" : true,
             "type" : "string"
-          },
-          "artifact-name" : {
-            "required" : true,
-            "type" : "list",
-            "entry_schema" : {
-              "type" : "string"
-            }
           },
           "store-result" : {
             "required" : true,
