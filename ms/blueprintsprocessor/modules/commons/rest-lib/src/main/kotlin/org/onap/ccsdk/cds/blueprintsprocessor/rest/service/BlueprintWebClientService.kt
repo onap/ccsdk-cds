@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2019 AT&T, Bell Canada, Nordix Foundation
+ * Modifications Copyright © 2018-2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +19,9 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.rest.service
 
+import com.fasterxml.jackson.databind.JsonNode
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.apache.commons.io.IOUtils
 import org.apache.http.client.methods.*
 import org.apache.http.entity.StringEntity
@@ -26,6 +30,7 @@ import org.apache.http.impl.client.HttpClients
 import org.apache.http.message.BasicHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.utils.WebClientUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.http.HttpMethod
 import java.nio.charset.Charset
 
@@ -37,9 +42,9 @@ interface BlueprintWebClientService {
 
     fun httpClient(): CloseableHttpClient {
         return HttpClients.custom()
-            .addInterceptorFirst(WebClientUtils.logRequest())
-            .addInterceptorLast(WebClientUtils.logResponse())
-            .build()
+                .addInterceptorFirst(WebClientUtils.logRequest())
+                .addInterceptorLast(WebClientUtils.logResponse())
+                .build()
     }
 
     fun exchangeResource(methodType: String, path: String, request: String): String {
@@ -59,7 +64,7 @@ interface BlueprintWebClientService {
     }
 
     fun convertToBasicHeaders(headers: Map<String, String>): Array<BasicHeader> {
-        val convertedHeaders = Array<BasicHeader>(headers.size){ BasicHeader("","") }
+        val convertedHeaders = Array<BasicHeader>(headers.size) { BasicHeader("", "") }
         var currentElement = 0
         for ((name, value) in headers) {
             convertedHeaders[currentElement++] = BasicHeader(name, value)
@@ -111,5 +116,133 @@ interface BlueprintWebClientService {
         httpClient().execute(httpPatch).entity.content.use {
             return IOUtils.toString(it, Charset.defaultCharset())
         }
+    }
+
+    // Non Blocking Rest Implementation
+    suspend fun httpClientNB(): CloseableHttpClient {
+        return HttpClients.custom()
+                .addInterceptorFirst(WebClientUtils.logRequest())
+                .addInterceptorLast(WebClientUtils.logResponse())
+                .build()
+    }
+
+    suspend fun getNB(path: String): String {
+        return getNB(path, null, String::class.java)
+    }
+
+    suspend fun getNB(path: String, additionalHeaders: Map<String, String>?): String {
+        return getNB(path, additionalHeaders, String::class.java)
+    }
+
+    suspend fun <T> getNB(path: String, additionalHeaders: Map<String, String>?,
+                          responseType: Class<T>): T = withContext(Dispatchers.IO) {
+        val httpGet = HttpGet(host(path))
+        httpGet.setHeaders(basicHeaders(additionalHeaders))
+        httpClientNB().execute(httpGet).entity.content.use {
+            JacksonUtils.readValue(it, responseType)!!
+        }
+    }
+
+    suspend fun postNB(path: String, request: Any): String {
+        return postNB(path, request, null, String::class.java)
+    }
+
+    suspend fun postNB(path: String, request: Any, additionalHeaders: Map<String, String>?): String {
+        return postNB(path, request, additionalHeaders, String::class.java)
+    }
+
+    suspend fun <T> postNB(path: String, request: Any, additionalHeaders: Map<String, String>?,
+                           responseType: Class<T>): T =
+            withContext(Dispatchers.IO) {
+                val httpPost = HttpPost(host(path))
+                httpPost.entity = StringEntity(strRequest(request))
+                httpPost.setHeaders(basicHeaders(additionalHeaders))
+                httpClientNB().execute(httpPost).entity.content.use {
+                    JacksonUtils.readValue(it, responseType)!!
+                }
+            }
+
+    suspend fun putNB(path: String, request: Any): String {
+        return putNB(path, request, null, String::class.java)
+    }
+
+    suspend fun putNB(path: String, request: Any, additionalHeaders: Map<String, String>?): String {
+        return putNB(path, request, additionalHeaders, String::class.java)
+    }
+
+    suspend fun <T> putNB(path: String, request: Any, additionalHeaders: Map<String, String>?,
+                          responseType: Class<T>): T = withContext(Dispatchers.IO) {
+        val httpPut = HttpPut(host(path))
+        httpPut.entity = StringEntity(strRequest(request))
+        httpPut.setHeaders(basicHeaders(additionalHeaders))
+        httpClientNB().execute(httpPut).entity.content.use {
+            JacksonUtils.readValue(it, responseType)!!
+        }
+    }
+
+    suspend fun <T> deleteNB(path: String): String {
+        return deleteNB(path, null, String::class.java)
+    }
+
+    suspend fun <T> deleteNB(path: String, additionalHeaders: Map<String, String>?): String {
+        return deleteNB(path, additionalHeaders, String::class.java)
+    }
+
+    suspend fun <T> deleteNB(path: String, additionalHeaders: Map<String, String>?, responseType: Class<T>): T =
+            withContext(Dispatchers.IO) {
+                val httpDelete = HttpDelete(host(path))
+                httpDelete.setHeaders(basicHeaders(additionalHeaders))
+                httpClient().execute(httpDelete).entity.content.use {
+                    JacksonUtils.readValue(it, responseType)!!
+                }
+            }
+
+    suspend fun <T> patchNB(path: String, request: Any, additionalHeaders: Map<String, String>?,
+                            responseType: Class<T>): T = withContext(Dispatchers.IO) {
+        val httpPatch = HttpPatch(host(path))
+        httpPatch.entity = StringEntity(strRequest(request))
+        httpPatch.setHeaders(basicHeaders(additionalHeaders))
+        httpClient().execute(httpPatch).entity.content.use {
+            JacksonUtils.readValue(it, responseType)!!
+        }
+    }
+
+    suspend fun exchangeNB(methodType: String, path: String, request: Any): String {
+        return exchangeNB(methodType, path, request, hashMapOf(), String::class.java)
+    }
+
+    suspend fun exchangeNB(methodType: String, path: String, request: Any, additionalHeaders: Map<String, String>?): String {
+        return exchangeNB(methodType, path, request, additionalHeaders, String::class.java)
+    }
+
+    suspend fun <T> exchangeNB(methodType: String, path: String, request: Any, additionalHeaders: Map<String, String>?,
+                               responseType: Class<T>): T {
+        return when (HttpMethod.resolve(methodType)) {
+            HttpMethod.GET -> getNB(path, additionalHeaders, responseType)
+            HttpMethod.POST -> postNB(path, request, additionalHeaders, responseType)
+            HttpMethod.DELETE -> deleteNB(path, additionalHeaders, responseType)
+            HttpMethod.PUT -> putNB(path, request, additionalHeaders, responseType)
+            HttpMethod.PATCH -> patchNB(path, request, additionalHeaders, responseType)
+            else -> throw BluePrintProcessorException("Unsupported methodType($methodType)")
+        }
+    }
+
+    private fun strRequest(request: Any): String {
+        return when (request) {
+            is String -> request.toString()
+            is JsonNode -> request.toString()
+            else -> JacksonUtils.getJson(request)
+        }
+    }
+
+    private fun basicHeaders(headers: Map<String, String>?): Array<BasicHeader> {
+        val basicHeaders = mutableListOf<BasicHeader>()
+        defaultHeaders().forEach { name, value ->
+            basicHeaders.add(BasicHeader(name, value))
+        }
+        headers?.forEach { name, value ->
+            basicHeaders.add(BasicHeader(name, value))
+        }
+        return basicHeaders.toTypedArray()
     }
 }

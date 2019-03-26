@@ -1,6 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
- * Modifications Copyright © 2018 IBM.
+ * Modifications Copyright © 2018-2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import kotlinx.coroutines.withContext
 import org.apache.commons.io.IOUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.*
 import java.io.File
+import java.io.InputStream
 import java.nio.charset.Charset
 
 /**
@@ -42,8 +43,15 @@ class JacksonUtils {
         inline fun <reified T : Any> readValue(content: String): T =
                 objectMapper.readValue(content, T::class.java)
 
+        inline fun <reified T : Any> readValue(stream: InputStream): T =
+                objectMapper.readValue(stream, T::class.java)
+
         fun <T> readValue(content: String, valueType: Class<T>): T? {
             return objectMapper.readValue(content, valueType)
+        }
+
+        fun <T> readValue(stream: InputStream, valueType: Class<T>): T? {
+            return objectMapper.readValue(stream, valueType)
         }
 
         fun <T> readValue(node: JsonNode, valueType: Class<T>): T? {
