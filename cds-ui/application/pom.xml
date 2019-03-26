@@ -56,7 +56,7 @@ limitations under the License.
                             <goal>execute</goal>
                         </goals>
                         <configuration>
-                            <source>../TagVersion.groovy</source>
+                            <source>${project.basedir}/../../TagVersion.groovy</source>
                         </configuration>
                     </execution>
                 </executions>
@@ -80,7 +80,6 @@ limitations under the License.
                                     <name>${image.name}</name>
                                     <build>
                                         <cleanup>try</cleanup>
-                                        <dockerFileDir>..</dockerFileDir>
                                         <tags>
                                             <tag>${project.docker.latestminortag.version}</tag>
                                             <tag>${project.docker.latestfulltag.version}</tag>
