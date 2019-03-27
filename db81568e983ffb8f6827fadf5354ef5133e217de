@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33933b3c_74bc0c9b",
+        "filename": "components/scripts/python/ccsdk_restconf/restconf_client.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 5279
+      },
+      "writtenOn": "2019-03-27T20:03:29Z",
+      "side": 1,
+      "message": "Add comment that connection-status should be used instead, once confirmed to be reliable?",
+      "revId": "db81568e983ffb8f6827fadf5354ef5133e217de",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "941077e1_b358718d",
+        "filename": "components/scripts/python/ccsdk_restconf/restconf_client.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 5279
+      },
+      "writtenOn": "2019-03-27T20:03:29Z",
+      "side": 1,
+      "message": "Replace pnf_id with nf_id throughout file, since it is reusable for both VNF and PNF",
+      "revId": "db81568e983ffb8f6827fadf5354ef5133e217de",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "87092f90_8eece0e9",
+        "filename": "components/scripts/python/ccsdk_restconf/restconf_client.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 5279
+      },
+      "writtenOn": "2019-03-27T20:03:29Z",
+      "side": 1,
+      "message": "Suggest to either rename method to configure_device_json or add content-type as parameter, as YANG patch can use either JSON or XML encoding.",
+      "revId": "db81568e983ffb8f6827fadf5354ef5133e217de",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4254fa35_6267315e",
+        "filename": "components/scripts/python/ccsdk_restconf/restconf_client.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 5279
+      },
+      "writtenOn": "2019-03-27T20:03:29Z",
+      "side": 1,
+      "message": "For reusable code, I don\u0027t think this should always be done due to overhead. The name is also a bit misleading.",
+      "revId": "db81568e983ffb8f6827fadf5354ef5133e217de",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
