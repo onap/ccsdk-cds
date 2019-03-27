@@ -19,10 +19,8 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.core
 import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableSet
 import org.apache.sshd.client.SshClient
-import org.apache.sshd.client.channel.ChannelSubsystem
 import org.apache.sshd.client.channel.ClientChannel
 import org.apache.sshd.client.session.ClientSession
-import org.apache.sshd.client.session.ClientSessionImpl
 import org.apache.sshd.common.FactoryManager
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
@@ -195,9 +193,9 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
 
     private fun startClient() {
         client = SshClient.setUpDefaultClient()
+
         client.properties.putIfAbsent(FactoryManager.IDLE_TIMEOUT, TimeUnit.SECONDS.toMillis(idleTimeout.toLong()))
         client.properties.putIfAbsent(FactoryManager.NIO2_READ_TIMEOUT, TimeUnit.SECONDS.toMillis(idleTimeout + 15L))
-        client.keyPairProvider = SimpleGeneratorHostKeyProvider()
         client.start()
 
         startSession()

@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.utils
+package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.mocks
 
 
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import org.apache.sshd.common.NamedFactory;
-import org.apache.sshd.server.Command;
+import org.apache.sshd.server.command.Command;
 import org.apache.sshd.server.Environment;
 import org.apache.sshd.server.ExitCallback;
 
