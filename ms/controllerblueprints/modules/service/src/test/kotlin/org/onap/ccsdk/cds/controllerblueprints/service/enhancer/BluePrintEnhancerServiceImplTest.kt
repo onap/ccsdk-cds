@@ -70,13 +70,6 @@ class BluePrintEnhancerServiceImplTest {
 
     @Test
     @Throws(Exception::class)
-    fun testComponentInvokeEnhancementAndValidation() {
-        val basePath = "./../../../../components/model-catalog/blueprint-model/test-blueprint/component_invoke"
-        testComponentInvokeEnhancementAndValidation(basePath, "component-enhance")
-    }
-
-    @Test
-    @Throws(Exception::class)
     fun testGoldenEnhancementAndValidation() {
         val basePath = "./../../../../components/model-catalog/blueprint-model/test-blueprint/golden"
         testComponentInvokeEnhancementAndValidation(basePath, "golden-enhance")

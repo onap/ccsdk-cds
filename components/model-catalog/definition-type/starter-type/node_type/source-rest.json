@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "properties": {
     "type": {
-      "required": false,
+      "required": true,
       "type": "string",
       "default": "JSON",
       "constraints": [
@@ -15,7 +15,7 @@
       ]
     },
     "verb": {
-      "required": false,
+      "required": true,
       "type": "string",
       "default": "GET",
       "constraints": [

@@ -4,12 +4,12 @@
   "properties": {
     "type": {
       "required": true,
+      "default": "SQL",
       "type": "string",
       "constraints": [
         {
           "valid_values": [
-            "SQL",
-            "PLSQL"
+            "SQL"
           ]
         }
       ]

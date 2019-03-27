@@ -103,7 +103,7 @@ open class BluePrintWorkflowEnhancerImpl(private val bluePrintRepoService: BlueP
             derivedFrom.startsWith(BluePrintConstants.MODEL_TYPE_NODE_COMPONENT, true) -> {
                 // DO Nothing
             }
-            derivedFrom.startsWith(BluePrintConstants.MODEL_TYPE_NODE_DG, true) -> {
+            derivedFrom.startsWith(BluePrintConstants.MODEL_TYPE_NODE_WORKFLOW, true) -> {
                 enhanceDGStepTargets(name, workflow, firstNodeTemplateName)
             }
             else -> {
