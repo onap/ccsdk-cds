@@ -33,12 +33,12 @@ limitations under the License.
     <div style="width: 100%;height: 3em;">
         <div style="display: flex;flex-direction: row-reverse">        
         <button class="btn-active" (click)="downloadCBA()">Download</button>
-        <button [disabled]="!isEnriched" [ngClass]="{ 'mat-button-active': isEnriched, 'mat-button-disablled': !isEnriched}" mat-button [matMenuTriggerFor]="menu">Deploy</button>
+        <button class="mat-button-active" mat-button [matMenuTriggerFor]="menu">Deploy</button>
          <mat-menu #menu="matMenu">
                   <button mat-menu-item>Deploy</button>
                   <button mat-menu-item>Test</button>
           </mat-menu>
-        <button [disabled]="!isEnriched" [ngClass]="{ 'btn-active': isEnriched, 'btn-disablled': !isEnriched}" class="btn-active">Publish</button>        
+        <button [disabled]="!isEnriched" class="btn-active">Publish</button>        
         <button class="btn-active">Save</button>
         <button class="btn-active">Enrich</button>
   
