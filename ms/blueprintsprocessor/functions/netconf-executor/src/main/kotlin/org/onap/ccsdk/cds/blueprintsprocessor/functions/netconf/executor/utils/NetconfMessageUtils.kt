@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2019 AT&T, Bell Canada
+ * Copyright © 2017-2019 Amdocs, AT&T, Bell Canada
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -295,9 +295,9 @@ class NetconfMessageUtils {
 
         fun formatRPCRequest(request: String, messageId: String, deviceCapabilities: Set<String>): String {
             var request = request
-            request = NetconfMessageUtils.formatNetconfMessage(deviceCapabilities, request)
-            request = NetconfMessageUtils.formatXmlHeader(request)
-            request = NetconfMessageUtils.formatRequestMessageId(request, messageId)
+            request = formatNetconfMessage(deviceCapabilities, request)
+            request = formatXmlHeader(request)
+            request = formatRequestMessageId(request, messageId)
 
             return request
         }
@@ -312,7 +312,7 @@ class NetconfMessageUtils {
          */
         fun formatNetconfMessage(deviceCapabilities: Set<String>, message: String): String {
             var message = message
-            if (deviceCapabilities.contains(RpcMessageUtils.NETCONF_11_CAPABILITY)) {
+            if (deviceCapabilities.contains(RpcMessageUtils.NETCONF_1_1_CAPABILITY)) {
                 message = formatChunkedMessage(message)
             } else if (!message.endsWith(RpcMessageUtils.END_PATTERN)) {
                 message = message + NEW_LINE + RpcMessageUtils.END_PATTERN
@@ -368,7 +368,7 @@ class NetconfMessageUtils {
                     request.replaceFirst((RpcMessageUtils.MESSAGE_ID_STRING + RpcMessageUtils.EQUAL + RpcMessageUtils.NUMBER_BETWEEN_QUOTES_MATCHER).toRegex(),
                         RpcMessageUtils.MESSAGE_ID_STRING + RpcMessageUtils.EQUAL + RpcMessageUtils.QUOTE + messageId + RpcMessageUtils.QUOTE)
             } else if (!request.contains(RpcMessageUtils.MESSAGE_ID_STRING) && !request.contains(
-                    RpcMessageUtils.HELLO)) {
+                            RpcMessageUtils.HELLO)) {
                 request = request.replaceFirst(RpcMessageUtils.END_OF_RPC_OPEN_TAG.toRegex(),
                     RpcMessageUtils.QUOTE_SPACE + RpcMessageUtils.MESSAGE_ID_STRING + RpcMessageUtils.EQUAL + RpcMessageUtils.QUOTE + messageId + RpcMessageUtils.QUOTE + ">")
             }
@@ -398,6 +398,19 @@ class NetconfMessageUtils {
             return if (reply != null) {
                 !reply.contains("rpc-error>") || reply.contains("warning") || reply.contains("ok/>")
             } else false
+        }
+
+        /**
+         * Extract the Netconf Session ID from the server HELLO message.
+         * used by exchangeHelloMessage
+         * @return SessionID as {@link String} or null on error.
+         */
+        fun extractNetconfSessionIdFromHelloResponse(response: String) :String? {
+            val sessionIDMatcher = SESSION_ID_REGEX_PATTERN.matcher(response)
+            return when {
+                sessionIDMatcher.find() -> sessionIDMatcher.group(1)
+                else -> null
+            }
         }
     }
 
