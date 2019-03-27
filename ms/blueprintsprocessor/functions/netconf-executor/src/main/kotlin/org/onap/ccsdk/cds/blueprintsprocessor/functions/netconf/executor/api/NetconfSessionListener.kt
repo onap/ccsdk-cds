@@ -16,6 +16,5 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api
 
 interface NetconfSessionListener {
-
-    fun notify(event: NetconfReceivedEvent)
+    fun accept(event: NetconfReceivedEvent)
 }

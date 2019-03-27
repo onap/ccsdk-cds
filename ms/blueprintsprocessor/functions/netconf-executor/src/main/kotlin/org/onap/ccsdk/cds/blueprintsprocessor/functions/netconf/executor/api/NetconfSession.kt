@@ -57,13 +57,6 @@ interface NetconfSession {
     fun asyncRpc(request: String, messageId: String): CompletableFuture<String>
 
     /**
-     * Checks the state of the underlying SSH session and connection and if necessary it reestablishes
-     * it.
-     */
-    @Throws(NetconfException::class)
-    fun checkAndReestablish()
-
-    /**
      * Get the device information for initialised session.
      *
      * @return DeviceInfo as device information
