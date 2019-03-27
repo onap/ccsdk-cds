@@ -21,6 +21,8 @@ import com.fasterxml.jackson.databind.JsonNode
 import org.apache.commons.collections.MapUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintFunctionNode
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintTemplateService
@@ -38,13 +40,14 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
     lateinit var resourceDictionaries: MutableMap<String, ResourceDefinition>
 
     var scriptPropertyInstances: MutableMap<String, Any> = hashMapOf()
+    lateinit var scriptType: String
 
     /**
      * This will be called from the scripts to serve instance from runtime to scripts.
      */
     open fun <T> scriptPropertyInstanceType(name: String): T {
         return scriptPropertyInstances as? T
-            ?: throw BluePrintProcessorException("couldn't get script property instance ($name)")
+                ?: throw BluePrintProcessorException("couldn't get script property instance ($name)")
     }
 
     open fun getFromInput(resourceAssignment: ResourceAssignment): JsonNode? {
@@ -60,7 +63,7 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
 
     open fun resourceDefinition(name: String): ResourceDefinition {
         return resourceDictionaries[name]
-            ?: throw BluePrintProcessorException("couldn't get resource definition for ($name)")
+                ?: throw BluePrintProcessorException("couldn't get resource definition for ($name)")
     }
 
     open fun resolveInputKeyMappingVariables(inputKeyMapping: Map<String, String>): Map<String, Any> {
@@ -83,25 +86,80 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
         return BluePrintTemplateService.generateContent(valueToResolve, additionalContext = keyMapping)
     }
 
-    override fun prepareRequest(resourceAssignment: ResourceAssignment): ResourceAssignment {
-        log.info("prepareRequest for ${resourceAssignment.name}, dictionary(${resourceAssignment.dictionaryName})," +
-                "source(${resourceAssignment.dictionarySource})")
-        return resourceAssignment
-    }
-
-    override fun prepareResponse(): Boolean {
-        log.info("Preparing Response...")
+    final override suspend fun applyNB(resourceAssignment: ResourceAssignment): Boolean {
+        try {
+            processNB(resourceAssignment)
+        } catch (runtimeException: RuntimeException) {
+            log.error("failed in ${getName()} : ${runtimeException.message}", runtimeException)
+            recoverNB(runtimeException, resourceAssignment)
+        }
         return true
     }
 
-    override fun apply(resourceAssignment: ResourceAssignment): Boolean {
+    suspend fun executeScript(resourceAssignment: ResourceAssignment) {
+        return when (scriptType) {
+            BluePrintConstants.SCRIPT_JYTHON -> {
+                executeScriptBlocking(resourceAssignment)
+            }
+            else -> {
+                executeScriptNB(resourceAssignment)
+            }
+        }
+    }
+
+    private suspend fun executeScriptNB(resourceAssignment: ResourceAssignment) {
         try {
-            prepareRequest(resourceAssignment)
+            processNB(resourceAssignment)
+        } catch (runtimeException: RuntimeException) {
+            log.error("failed in ${getName()} : ${runtimeException.message}", runtimeException)
+            recoverNB(runtimeException, resourceAssignment)
+        }
+    }
+
+    private fun executeScriptBlocking(resourceAssignment: ResourceAssignment) {
+        try {
             process(resourceAssignment)
         } catch (runtimeException: RuntimeException) {
+            log.error("failed in ${getName()} : ${runtimeException.message}", runtimeException)
             recover(runtimeException, resourceAssignment)
         }
-        return prepareResponse()
+    }
+
+    /**
+     * If Jython Script, Override Blocking methods(process() and recover())
+     * If Kotlin or Internal Scripts, Override non blocking methods ( processNB() and recoverNB()), so default
+     * blocking
+     * methods will have default implementation,
+     *
+     * Always applyNB() method will be invoked, apply() won't be called from parent
+     */
+
+    final override fun apply(resourceAssignment: ResourceAssignment): Boolean {
+        throw BluePrintException("Not Implemented, use applyNB method")
+    }
+
+    final override fun prepareRequest(resourceAssignment: ResourceAssignment): ResourceAssignment {
+        throw BluePrintException("Not Implemented required")
+    }
+
+    final override fun prepareResponse(): Boolean {
+        throw BluePrintException("Not Implemented required")
+    }
+
+    final override suspend fun prepareRequestNB(resourceAssignment: ResourceAssignment): ResourceAssignment {
+        throw BluePrintException("Not Implemented required")
+    }
+
+    final override suspend fun prepareResponseNB(): Boolean {
+        throw BluePrintException("Not Implemented required")
+    }
+
+    override fun process(resourceAssignment: ResourceAssignment) {
+        throw BluePrintException("Not Implemented, child class will implement this")
+    }
+
+    override fun recover(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
+        throw BluePrintException("Not Implemented, child class will implement this")
     }
 
     fun addError(type: String, name: String, error: String) {
@@ -111,5 +169,4 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
     fun addError(error: String) {
         raRuntimeService.getBluePrintError().addError(error)
     }
-
 }

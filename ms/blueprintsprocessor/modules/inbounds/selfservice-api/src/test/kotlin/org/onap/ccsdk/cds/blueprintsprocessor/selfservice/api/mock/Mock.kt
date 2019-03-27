@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2019 Bell Canada.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,14 +38,14 @@ class MockComponentFunction : AbstractComponentFunction() {
 
     private val log = LoggerFactory.getLogger(MockComponentFunction::class.java)
 
-    override fun process(executionRequest: ExecutionServiceInput) {
+    override suspend fun processNB(executionRequest: ExecutionServiceInput) {
         log.info("Processing component : $operationInputs")
 
         bluePrintRuntimeService.setNodeTemplateAttributeValue(nodeTemplateName,
                 "assignment-params", "params".asJsonPrimitive())
     }
 
-    override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
+    override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         log.info("Recovering component..")
     }
 }

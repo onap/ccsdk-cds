@@ -27,11 +27,11 @@ open class ScriptResourceAssignmentProcessor : ResourceAssignmentProcessor() {
         return "ScriptResourceAssignmentProcessor"
     }
 
-    override fun process(executionRequest: ResourceAssignment) {
+    override suspend fun processNB(executionRequest: ResourceAssignment) {
         log.info("Processing input")
     }
 
-    override fun recover(runtimeException: RuntimeException, executionRequest: ResourceAssignment) {
+    override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ResourceAssignment) {
         log.info("Recovering input")
     }
 }

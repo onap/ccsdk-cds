@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +31,7 @@ import org.springframework.stereotype.Component
 open class ResourceResolutionComponent(private val resourceResolutionService: ResourceResolutionService) :
     AbstractComponentFunction() {
 
-    override fun process(executionRequest: ExecutionServiceInput) {
+    override suspend fun processNB(executionRequest: ExecutionServiceInput) {
 
         val properties: MutableMap<String, Any> = mutableMapOf()
 
@@ -56,7 +57,7 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
             ResourceResolutionConstants.OUTPUT_ASSIGNMENT_PARAMS, resolvedParamContents.asJsonNode())
     }
 
-    override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
+    override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         bluePrintRuntimeService.getBluePrintError().addError(runtimeException.message!!)
     }
 }

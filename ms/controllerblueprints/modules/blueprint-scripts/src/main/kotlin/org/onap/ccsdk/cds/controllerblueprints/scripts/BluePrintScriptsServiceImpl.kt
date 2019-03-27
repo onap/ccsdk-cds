@@ -30,14 +30,14 @@ import kotlin.script.experimental.jvmhost.createJvmCompilationConfigurationFromT
 @Service
 open class BluePrintScriptsServiceImpl : BluePrintScriptsService {
 
-    override fun <T> scriptInstance(blueprintContext: BluePrintContext, scriptClassName: String,
-                                    reCompile: Boolean): T {
+    override suspend fun <T> scriptInstance(blueprintContext: BluePrintContext, scriptClassName: String,
+                                            reCompile: Boolean): T {
 
         val kotlinScriptPath = blueprintContext.rootPath.plus(File.separator)
                 .plus(BluePrintConstants.TOSCA_SCRIPTS_KOTLIN_DIR)
 
         val compiledJar = kotlinScriptPath.plus(File.separator)
-                .plus(getBluePrintScriptsJarName(blueprintContext))
+                .plus(bluePrintScriptsJarName(blueprintContext))
 
         val scriptSource = BluePrintSourceCode()
 
@@ -59,13 +59,13 @@ open class BluePrintScriptsServiceImpl : BluePrintScriptsService {
         return returnValue?.value!! as T
     }
 
-    override fun <T> scriptInstance(scriptClassName: String): T {
+    override suspend fun <T> scriptInstance(scriptClassName: String): T {
         val args = ArrayList<Any?>()
         return Thread.currentThread().contextClassLoader.loadClass(scriptClassName).constructors
                 .single().newInstance(*args.toArray()) as T
     }
-}
 
-fun getBluePrintScriptsJarName(blueprintContext: BluePrintContext): String {
-    return "${blueprintContext.name()}-${blueprintContext.version()}-cba-kts.jar"
+    private fun bluePrintScriptsJarName(blueprintContext: BluePrintContext): String {
+        return "${blueprintContext.name()}-${blueprintContext.version()}-cba-kts.jar"
+    }
 }

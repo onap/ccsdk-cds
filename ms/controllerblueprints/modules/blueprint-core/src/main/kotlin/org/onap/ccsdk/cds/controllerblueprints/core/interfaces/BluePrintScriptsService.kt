@@ -21,8 +21,8 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 
 interface BluePrintScriptsService {
 
-    fun <T> scriptInstance(blueprintContext: BluePrintContext, scriptClassName: String,
+    suspend fun <T> scriptInstance(blueprintContext: BluePrintContext, scriptClassName: String,
                            reCompile: Boolean): T
 
-    fun <T> scriptInstance(scriptClassName: String): T
+    suspend fun <T> scriptInstance(scriptClassName: String): T
 }
