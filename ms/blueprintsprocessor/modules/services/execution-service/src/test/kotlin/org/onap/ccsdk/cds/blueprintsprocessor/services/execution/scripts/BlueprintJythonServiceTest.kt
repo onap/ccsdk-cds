@@ -1,5 +1,6 @@
 /*
  * Copyright © 2019 IBM, Bell Canada.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +16,14 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts
 
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
@@ -39,15 +43,16 @@ class BlueprintJythonServiceTest {
 
     @Test
     fun testGetAbstractPythonPlugin() {
-        val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
-                "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+        val bluePrintContext = mockk<BluePrintContext>()
+        every { bluePrintContext.rootPath } returns normalizedPathName("target")
 
         val dependencies: MutableMap<String, Any> = hashMapOf()
 
-        val content = JacksonUtils.getContent("./../../../../." +
-                "./components/model-catalog/blueprint-model/test-blueprint/baseconfiguration/Scripts/python/SamplePythonComponentNode.py")
+        val content = JacksonUtils.getClassPathFileContent("scripts/SamplePythonComponentNode.py")
 
-        val abstractComponentFunction = blueprintJythonService.jythonInstance<AbstractComponentFunction>(bluePrintContext, "SamplePythonComponentNode", content, dependencies)
+        val abstractComponentFunction = blueprintJythonService
+                .jythonInstance<AbstractComponentFunction>(bluePrintContext, "SamplePythonComponentNode",
+                        content, dependencies)
 
         assertNotNull(abstractComponentFunction, "failed to get python component")
 

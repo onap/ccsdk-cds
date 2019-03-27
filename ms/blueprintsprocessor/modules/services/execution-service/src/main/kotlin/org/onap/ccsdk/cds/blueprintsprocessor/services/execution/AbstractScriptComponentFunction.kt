@@ -17,13 +17,21 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.services.execution
 
 import com.fasterxml.jackson.databind.JsonNode
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.slf4j.LoggerFactory
 
 abstract class AbstractScriptComponentFunction : AbstractComponentFunction() {
+    private val log = LoggerFactory.getLogger(AbstractScriptComponentFunction::class.java)!!
 
     companion object {
         const val DYNAMIC_PROPERTIES = "dynamic-properties"
     }
+
+    lateinit var scriptType: String
 
     /**
      * Store Dynamic Script Dependency Instances, Objects present inside won't be persisted or state maintained.
@@ -46,5 +54,73 @@ abstract class AbstractScriptComponentFunction : AbstractComponentFunction() {
         return operationInputs[DYNAMIC_PROPERTIES]!!.get(key)
     }
 
+    suspend fun executeScript(executionServiceInput: ExecutionServiceInput) {
+        return when (scriptType) {
+            BluePrintConstants.SCRIPT_JYTHON -> {
+                executeScriptBlocking(executionServiceInput)
+            }
+            else -> {
+                executeScriptNB(executionServiceInput)
+            }
+        }
+    }
 
+    private suspend fun executeScriptNB(executionServiceInput: ExecutionServiceInput) {
+        try {
+            processNB(executionServiceInput)
+        } catch (runtimeException: RuntimeException) {
+            log.error("failed in ${getName()} : ${runtimeException.message}", runtimeException)
+            recoverNB(runtimeException, executionServiceInput)
+        }
+    }
+
+    private fun executeScriptBlocking(executionServiceInput: ExecutionServiceInput) {
+        try {
+            process(executionServiceInput)
+        } catch (runtimeException: RuntimeException) {
+            log.error("failed in ${getName()} : ${runtimeException.message}", runtimeException)
+            recover(runtimeException, executionServiceInput)
+        }
+    }
+
+    /**
+     * If Jython Script, Override Blocking methods(process() and recover())
+     * If Kotlin or Internal Scripts, Override non blocking methods ( processNB() and recoverNB()), so default
+     * blocking
+     * methods will have default implementation,
+     *
+     * Always applyNB() method will be invoked, apply() won't be called from parent
+     */
+
+    final override fun apply(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
+        throw BluePrintException("Not Implemented, use applyNB method")
+    }
+
+    final override fun prepareRequest(executionRequest: ExecutionServiceInput): ExecutionServiceInput {
+        throw BluePrintException("Not Implemented required")
+    }
+
+    final override fun prepareResponse(): ExecutionServiceOutput {
+        throw BluePrintException("Not Implemented required")
+    }
+
+    final override suspend fun applyNB(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
+        throw BluePrintException("Not Implemented required")
+    }
+
+    final override suspend fun prepareRequestNB(executionRequest: ExecutionServiceInput): ExecutionServiceInput {
+        throw BluePrintException("Not Implemented required")
+    }
+
+    final override suspend fun prepareResponseNB(): ExecutionServiceOutput {
+        throw BluePrintException("Not Implemented required")
+    }
+
+    override fun process(executionRequest: ExecutionServiceInput) {
+        throw BluePrintException("Not Implemented, child class will implement this")
+    }
+
+    override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
+        throw BluePrintException("Not Implemented, child class will implement this")
+    }
 }

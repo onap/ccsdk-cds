@@ -23,7 +23,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestLibConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
 import org.onap.ccsdk.cds.controllerblueprints.core.getAsString
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
@@ -33,8 +32,6 @@ import org.springframework.stereotype.Component
 open class ComponentRestconfExecutor(private var componentFunctionScriptingService: ComponentFunctionScriptingService) :
         AbstractComponentFunction() {
 
-    private val log = LoggerFactory.getLogger(ComponentRestconfExecutor::class.java)
-
     lateinit var scriptComponent: RestconfComponentFunction
 
     companion object {
@@ -43,7 +40,7 @@ open class ComponentRestconfExecutor(private var componentFunctionScriptingServi
         const val INSTANCE_DEPENDENCIES = "instance-dependencies"
     }
 
-    override fun process(executionRequest: ExecutionServiceInput) {
+    override suspend fun processNB(executionRequest: ExecutionServiceInput) {
 
         val scriptType = operationInputs.getAsString(SCRIPT_TYPE)
         val scriptClassReference = operationInputs.getAsString(SCRIPT_CLASS_REFERENCE)
@@ -59,15 +56,18 @@ open class ComponentRestconfExecutor(private var componentFunctionScriptingServi
         /**
          * Populate the Script Instance based on the Type
          */
-        scriptComponent = componentFunctionScriptingService.scriptInstance<RestconfComponentFunction>(this, scriptType,
-                scriptClassReference, scriptDependencies)
+        scriptComponent = componentFunctionScriptingService
+                .scriptInstance<RestconfComponentFunction>(this, scriptType,
+                        scriptClassReference, scriptDependencies)
 
         checkNotNull(scriptComponent) { "failed to get restconf script component" }
 
-        scriptComponent.process(executionServiceInput)
+        // Handles both script processing and error handling
+        scriptComponent.executeScript(executionServiceInput)
     }
 
-    override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        scriptComponent.recover(runtimeException, executionRequest)
+    override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
+        bluePrintRuntimeService.getBluePrintError()
+                .addError("Failed in ComponentRestconfExecutor : ${runtimeException.message}")
     }
 }

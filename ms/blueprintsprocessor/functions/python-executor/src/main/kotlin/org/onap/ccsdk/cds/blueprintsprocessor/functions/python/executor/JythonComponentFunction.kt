@@ -14,24 +14,20 @@
  *  limitations under the License.
  */
 
+package org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor
+
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor.RestconfComponentFunction
-import org.slf4j.LoggerFactory
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 
-open class MountNEditConfigure : RestconfComponentFunction() {
-
-    val log = LoggerFactory.getLogger(MountNEditConfigure::class.java)!!
-
-    override fun getName(): String {
-        return "MountNEditConfigure"
-    }
+open class JythonComponentFunction : AbstractScriptComponentFunction() {
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
-        log.info("processing request..")
-
+        throw BluePrintException("Not Implemented required")
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        log.info("processing request..")
+        throw BluePrintException("Not Implemented required")
     }
+
 }

@@ -44,7 +44,7 @@ open class InputResourceResolutionProcessor : ResourceAssignmentProcessor() {
         return "${PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-input"
     }
 
-    override fun process(resourceAssignment: ResourceAssignment) {
+    override suspend fun processNB(resourceAssignment: ResourceAssignment) {
         try {
             if (checkNotEmpty(resourceAssignment.name)) {
                 val value = raRuntimeService.getInputValue(resourceAssignment.name)
@@ -62,7 +62,7 @@ open class InputResourceResolutionProcessor : ResourceAssignmentProcessor() {
         }
     }
 
-    override fun recover(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
+    override suspend fun recoverNB(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
         raRuntimeService.getBluePrintError().addError(runtimeException.message!!)
     }
 }
