@@ -64,3 +64,12 @@ limitations under the License.
     background-color: #3f51b5 !important;
     color: white !important;
   }
+
+  .fa-disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  .mat-tree-node {
+    min-height: 40px !important;
+  }
