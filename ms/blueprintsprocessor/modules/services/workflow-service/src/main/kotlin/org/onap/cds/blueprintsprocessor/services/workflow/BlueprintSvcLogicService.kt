@@ -77,7 +77,7 @@ class DefaultBlueprintSvcLogicService : BlueprintSvcLogicService {
     }
 
     override fun registerExecutors(name: String, svcLogicNodeExecutor: AbstractSvcLogicNodeExecutor) {
-        log.info("Registering executors($name) with type(${svcLogicNodeExecutor.javaClass}")
+        log.debug("Registering executors($name) with type(${svcLogicNodeExecutor.javaClass}")
         nodeExecutors[name] = svcLogicNodeExecutor
     }
 

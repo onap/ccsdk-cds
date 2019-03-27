@@ -22,7 +22,6 @@ import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.Status
-import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asObjectNode
@@ -120,6 +119,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
             prepareRequest(executionServiceInput)
             process(executionServiceInput)
         } catch (runtimeException: RuntimeException) {
+            log.error("failed in ${getName()} : ${runtimeException.message}", runtimeException)
             recover(runtimeException, executionServiceInput)
         }
         return prepareResponse()

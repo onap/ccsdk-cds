@@ -19,7 +19,6 @@ package org.onap.ccsdk.cds.controllerblueprints.validation
 
 import com.att.eelf.configuration.EELFLogger
 import com.att.eelf.configuration.EELFManager
-import org.onap.ccsdk.cds.controllerblueprints.validation.utils.PropertyAssignmentValidationUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.data.*
@@ -27,6 +26,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintNodeTemp
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.validation.utils.PropertyAssignmentValidationUtils
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
@@ -44,7 +44,7 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
     var paths: MutableList<String> = arrayListOf()
 
     override fun validate(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, nodeTemplate: NodeTemplate) {
-        log.info("Validating NodeTemplate($name)")
+        log.debug("Validating NodeTemplate($name)")
 
         this.bluePrintRuntimeService = bluePrintRuntimeService
         this.bluePrintContext = bluePrintRuntimeService.bluePrintContext()
@@ -132,7 +132,8 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
     @Throws(BluePrintException::class)
     open fun validateRequirementAssignment(nodeTemplateName: String, requirementAssignmentName: String,
                                            requirementDefinition: RequirementDefinition, requirementAssignment: RequirementAssignment) {
-        log.info("Validating NodeTemplate({}) requirement assignment ({}) ", nodeTemplateName, requirementAssignmentName)
+        log.debug("Validating NodeTemplate({}) requirement assignment ({}) ", nodeTemplateName,
+                requirementAssignmentName)
         val requirementNodeTemplateName = requirementAssignment.node!!
         val capabilityName = requirementAssignment.capability
         val relationship = requirementAssignment.relationship!!
@@ -197,7 +198,8 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
                 val operationDefinition = interfaceDefinition.operations?.get(operationAssignmentName)
                         ?: throw BluePrintException("Failed to get NodeTemplate($nodeTemplateName) operation definition ($operationAssignmentName)")
 
-                log.info("Validation NodeTemplate($nodeTemplateName) Interface($interfaceAssignmentName) Operation ($operationAssignmentName)")
+                log.debug("Validation NodeTemplate($nodeTemplateName) Interface($interfaceAssignmentName) Operation " +
+                        "($operationAssignmentName)")
 
                 val inputs = operationAssignments.inputs
                 val outputs = operationAssignments.outputs
