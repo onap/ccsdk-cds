@@ -1,9 +1,9 @@
 /*
- * Copyright © 2017-2019 AT&T, Bell Canada
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Copyright (C) 2019 AT&T, Amdocs, Bell Canada
+ *  ================================================================================
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -30,6 +30,7 @@ import java.io.OutputStream
 import java.io.OutputStreamWriter
 import java.nio.charset.StandardCharsets
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.TimeUnit
 
 class NetconfDeviceCommunicator(private var inputStream: InputStream,
                                 private var out: OutputStream,
@@ -39,6 +40,7 @@ class NetconfDeviceCommunicator(private var inputStream: InputStream,
 
     private val log = LoggerFactory.getLogger(NetconfDeviceCommunicator::class.java)
     private var state = NetconfMessageState.NO_MATCHING_PATTERN
+    private val sendMessageLockObject = Any()
 
     init {
         start()
@@ -57,11 +59,7 @@ class NetconfDeviceCommunicator(private var inputStream: InputStream,
                 val cInt = bufferReader.read()
                 if (cInt == -1) {
                     log.error("$deviceInfo: Received cInt = -1")
-//                    bufferReader.close()
                     socketClosed = true
-//                    sessionListener.notify(NetconfReceivedEvent(
-//                        NetconfReceivedEvent.Type.SESSION_CLOSED,
-//                        deviceInfo = deviceInfo))
                 }
                 val c = cInt.toChar()
                 state = state.evaluateChar(c)
@@ -95,142 +93,59 @@ class NetconfDeviceCommunicator(private var inputStream: InputStream,
                     }
                 }
             }
+            //TODO: Bufferedreader should be closed
 
         } catch (e: IOException) {
-            log.warn("$deviceInfo: Fail while reading from channel", e)
+            log.warn("$deviceInfo: Failed to read from Netconf SSH channel", e)
             sessionListener.notify(NetconfReceivedEvent(
                 NetconfReceivedEvent.Type.DEVICE_ERROR,
                 deviceInfo = deviceInfo))
         }
-
-    }
-
-    private enum class NetconfMessageState {
-        NO_MATCHING_PATTERN {
-            override fun evaluateChar(c: Char): NetconfMessageState {
-                return if (c == ']') {
-                    FIRST_BRACKET
-                } else if (c == '\n') {
-                    FIRST_LF
-                } else {
-                    this
-                }
-            }
-        },
-        FIRST_BRACKET {
-            override fun evaluateChar(c: Char): NetconfMessageState {
-                return if (c == ']') {
-                    SECOND_BRACKET
-                } else {
-                    NO_MATCHING_PATTERN
-                }
-            }
-        },
-        SECOND_BRACKET {
-            override fun evaluateChar(c: Char): NetconfMessageState {
-                return if (c == '>') {
-                    FIRST_BIGGER
-                } else {
-                    NO_MATCHING_PATTERN
-                }
-            }
-        },
-        FIRST_BIGGER {
-            override fun evaluateChar(c: Char): NetconfMessageState {
-                return if (c == ']') {
-                    THIRD_BRACKET
-                } else {
-                    NO_MATCHING_PATTERN
-                }
-            }
-        },
-        THIRD_BRACKET {
-            override fun evaluateChar(c: Char): NetconfMessageState {
-                return if (c == ']') {
-                    ENDING_BIGGER
-                } else {
-                    NO_MATCHING_PATTERN
-                }
-            }
-        },
-        ENDING_BIGGER {
-            override fun evaluateChar(c: Char): NetconfMessageState {
-                return if (c == '>') {
-                    END_PATTERN
-                } else {
-                    NO_MATCHING_PATTERN
-                }
-            }
-        },
-        FIRST_LF {
-            override fun evaluateChar(c: Char): NetconfMessageState {
-                return if (c == '#') {
-                    FIRST_HASH
-                } else if (c == ']') {
-                    FIRST_BRACKET
-                } else if (c == '\n') {
-                    this
-                } else {
-                    NO_MATCHING_PATTERN
-                }
-            }
-        },
-        FIRST_HASH {
-            override fun evaluateChar(c: Char): NetconfMessageState {
-                return if (c == '#') {
-                    SECOND_HASH
-                } else {
-                    NO_MATCHING_PATTERN
-                }
-            }
-        },
-        SECOND_HASH {
-            override fun evaluateChar(c: Char): NetconfMessageState {
-                return if (c == '\n') {
-                    END_CHUNKED_PATTERN
-                } else {
-                    NO_MATCHING_PATTERN
-                }
-            }
-        },
-        END_CHUNKED_PATTERN {
-            override fun evaluateChar(c: Char): NetconfMessageState {
-                return NO_MATCHING_PATTERN
-            }
-        },
-        END_PATTERN {
-            override fun evaluateChar(c: Char): NetconfMessageState {
-                return NO_MATCHING_PATTERN
-            }
-        };
-
-        internal abstract fun evaluateChar(c: Char): NetconfMessageState
     }
 
     fun sendMessage(request: String, messageId: String): CompletableFuture<String> {
         log.info("$deviceInfo: Sending message: \n $request")
         val future = CompletableFuture<String>()
-        replies.put(messageId, future)
+        replies[messageId] = future
         val outputStream = OutputStreamWriter(out, StandardCharsets.UTF_8)
-        synchronized(this) {
+        synchronized(sendMessageLockObject) {
             try {
                 outputStream.write(request)
                 outputStream.flush()
+                //NOTE: Completion of this future happens in {@link NetconfSessionImpl#addDeviceReply},
+                //which is triggered by {@link NetconfSessionListenerImpl}
+                // on {@link org.onap.ccsdk.apps.blueprintsprocessor.functions.netconf.executor.api.Type.DEVICE_REPLY} event.
             } catch (e: IOException) {
                 log.error("$deviceInfo: Failed to send message : \n $request", e)
                 future.completeExceptionally(e)
             }
-
         }
         return future
     }
 
+    /**
+     * Gets the value of the {@link CompletableFuture} from {@link NetconfDeviceCommunicator#sendMessage}
+     * This function is used by NetconfSessionImpl. Needed to wrap exception testing in NetconfSessionImpl.
+     * @param fut {@link CompletableFuture} object
+     * @param timeout the maximum time to wait
+     * @param timeUnit the time unit of the timeout argument
+     * @return the result value
+     * @throws CancellationException if this future was cancelled
+     * @throws ExecutionException if this future completed exceptionally
+     * @throws InterruptedException if the current thread was interrupted while waiting
+     * @throws TimeoutException if the wait timed out
+     */
+    internal fun getFutureFromSendMessage(
+            fut: CompletableFuture<String>, timeout: Long, timeUnit: TimeUnit): String {
+        return fut.get(timeout, timeUnit)
+    }
+
     private fun receivedMessage(deviceReply: String) {
-        if (deviceReply.contains(RpcMessageUtils.RPC_REPLY) || deviceReply.contains(RpcMessageUtils.RPC_ERROR)
+        if (deviceReply.contains(RpcMessageUtils.RPC_REPLY)
+            || deviceReply.contains(RpcMessageUtils.RPC_ERROR)
             || deviceReply.contains(RpcMessageUtils.HELLO)) {
             log.info("$deviceInfo: Received message with messageId: {}  \n $deviceReply",
                 NetconfMessageUtils.getMsgId(deviceReply))
-
         } else {
             log.error("$deviceInfo: Invalid message received: \n $deviceReply")
         }
