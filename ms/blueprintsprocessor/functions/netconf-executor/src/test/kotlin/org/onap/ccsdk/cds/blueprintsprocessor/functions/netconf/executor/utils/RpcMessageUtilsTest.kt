@@ -17,8 +17,12 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.utils
 
 import org.junit.Assert
 import org.junit.Assert.assertTrue
+import org.junit.Ignore
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfException
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
 import kotlin.test.fail
 
 class RpcMessageUtilsTest {
@@ -214,6 +218,15 @@ class RpcMessageUtilsTest {
     }
 
     @Test
+    fun deleteConfigThrowsNetconfExceptionOnRunningDataStore() {
+        assertFailsWith(exceptionClass = NetconfException::class) {
+            val netconfTargetConfig = NetconfDatastore.RUNNING.datastore
+            val msgId = "35"
+            NetconfMessageUtils.deleteConfig(msgId, netconfTargetConfig)
+        }
+    }
+
+    @Test
     fun discardChanges() {
         val checkString = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                 + "<rpc message-id=\"Test-Message-ID\" xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">"
@@ -270,16 +283,30 @@ class RpcMessageUtilsTest {
     }
 
     @Test
-    fun validateChunkedFraming() {
+    fun validateChunkedFraming() { //TODO add negative tests.
         val reply = ("hello")
         val result = NetconfMessageUtils.validateChunkedFraming(reply)
         Assert.assertFalse(result)
     }
 
+    @Ignore
     @Test
+    //TODO: this is really not rpc-error function. maybe !rpc-error && (warning || ok) ?
     fun checkReply(){
-        assertTrue(NetconfMessageUtils.checkReply("ok"))
+        assertTrue(NetconfMessageUtils.checkReply("ok")) //TODO: this function's logic seems off
     }
+
+    @Test
+    fun `checkReply on rpc-error should return false`() {
+        //TODO: same as above
+        assertFalse{ NetconfMessageUtils.checkReply("something something rpc-error>")}
+    }
+
+    @Test
+    fun `checkReply on null input should return false`() {
+        assertFalse { NetconfMessageUtils.checkReply(null) }
+    }
+
 
     @Test
     fun formatRPCRequest(){
@@ -296,11 +323,21 @@ class RpcMessageUtilsTest {
 
         val result = NetconfMessageUtils.formatRPCRequest(request,messageId,capabilities).replace("[\n\r\t]".toRegex(), "")
         Assert.assertEquals(checkString, result)
-
-
     }
 
+    @Test
+    fun `validateRPCXML on empty input returns false`() {
+        assertFalse { NetconfMessageUtils.validateRPCXML("") }
+    }
 
+    @Test
+    fun `validateRPCXML on bad input returns false`() {
+        assertFalse { NetconfMessageUtils.validateRPCXML("really bad XML ~~~input") }
+    }
 
+    @Test
+    fun `extractNetconfSessionIdFromHelloResponse should return null on wrong input`() {
+        assertEquals(null, NetconfMessageUtils.extractNetconfSessionIdFromHelloResponse("blah"))
+    }
 
 }
