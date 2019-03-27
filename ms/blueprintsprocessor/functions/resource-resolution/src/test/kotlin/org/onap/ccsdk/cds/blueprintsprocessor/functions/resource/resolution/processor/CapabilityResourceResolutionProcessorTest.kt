@@ -18,6 +18,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor
 
+import kotlinx.coroutines.runBlocking
 import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -52,70 +53,74 @@ class CapabilityResourceResolutionProcessorTest {
     @Ignore
     @Test
     fun `test kotlin capability`() {
+        runBlocking {
 
-        val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
-                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+            val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
+                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
-        val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)
+            val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)
 
-        capabilityResourceResolutionProcessor.raRuntimeService = resourceAssignmentRuntimeService
-        capabilityResourceResolutionProcessor.resourceDictionaries = hashMapOf()
+            capabilityResourceResolutionProcessor.raRuntimeService = resourceAssignmentRuntimeService
+            capabilityResourceResolutionProcessor.resourceDictionaries = hashMapOf()
 
 
-        val scriptPropertyInstances: MutableMap<String, Any> = mutableMapOf()
-        scriptPropertyInstances["mock-service1"] = MockCapabilityService()
-        scriptPropertyInstances["mock-service2"] = MockCapabilityService()
+            val scriptPropertyInstances: MutableMap<String, Any> = mutableMapOf()
+            scriptPropertyInstances["mock-service1"] = MockCapabilityService()
+            scriptPropertyInstances["mock-service2"] = MockCapabilityService()
 
-        val instanceDependencies: List<String> = listOf()
+            val instanceDependencies: List<String> = listOf()
 
-        val resourceAssignmentProcessor = capabilityResourceResolutionProcessor
-                .scriptInstance("kotlin",
-                        "ResourceAssignmentProcessor_cba\$ScriptResourceAssignmentProcessor", instanceDependencies)
+            val resourceAssignmentProcessor = capabilityResourceResolutionProcessor
+                    .scriptInstance("kotlin",
+                            "ResourceAssignmentProcessor_cba\$ScriptResourceAssignmentProcessor", instanceDependencies)
 
-        assertNotNull(resourceAssignmentProcessor, "couldn't get kotlin script resource assignment processor")
+            assertNotNull(resourceAssignmentProcessor, "couldn't get kotlin script resource assignment processor")
 
-        val resourceAssignment = ResourceAssignment().apply {
-            name = "ra-name"
-            dictionaryName = "ra-dict-name"
-            dictionarySource = "capability"
-            property = PropertyDefinition().apply {
-                type = "string"
+            val resourceAssignment = ResourceAssignment().apply {
+                name = "ra-name"
+                dictionaryName = "ra-dict-name"
+                dictionarySource = "capability"
+                property = PropertyDefinition().apply {
+                    type = "string"
+                }
             }
-        }
 
-        val processorName = resourceAssignmentProcessor.apply(resourceAssignment)
-        assertNotNull(processorName, "couldn't get kotlin script resource assignment processor name")
-        println(processorName)
+            val processorName = resourceAssignmentProcessor.applyNB(resourceAssignment)
+            assertNotNull(processorName, "couldn't get kotlin script resource assignment processor name")
+            println(processorName)
+        }
     }
 
     @Test
     fun `test jython capability`() {
+        runBlocking {
 
-        val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
-                "./../../../../components/model-catalog/blueprint-model/test-blueprint/capability_python")
+            val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
+                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/capability_python")
 
-        val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)
+            val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)
 
-        capabilityResourceResolutionProcessor.raRuntimeService = resourceAssignmentRuntimeService
+            capabilityResourceResolutionProcessor.raRuntimeService = resourceAssignmentRuntimeService
 
-        val resourceDefinition = JacksonUtils
-                .readValueFromClassPathFile("mapping/capability/jython-resource-definitions.json",
-                        ResourceDefinition::class.java)!!
-        val resourceDefinitions: MutableMap<String, ResourceDefinition> = mutableMapOf()
-        resourceDefinitions[resourceDefinition.name] = resourceDefinition
-        capabilityResourceResolutionProcessor.resourceDictionaries = resourceDefinitions
+            val resourceDefinition = JacksonUtils
+                    .readValueFromClassPathFile("mapping/capability/jython-resource-definitions.json",
+                            ResourceDefinition::class.java)!!
+            val resourceDefinitions: MutableMap<String, ResourceDefinition> = mutableMapOf()
+            resourceDefinitions[resourceDefinition.name] = resourceDefinition
+            capabilityResourceResolutionProcessor.resourceDictionaries = resourceDefinitions
 
-        val resourceAssignment = ResourceAssignment().apply {
-            name = "service-instance-id"
-            dictionaryName = "service-instance-id"
-            dictionarySource = "capability"
-            property = PropertyDefinition().apply {
-                type = "string"
+            val resourceAssignment = ResourceAssignment().apply {
+                name = "service-instance-id"
+                dictionaryName = "service-instance-id"
+                dictionarySource = "capability"
+                property = PropertyDefinition().apply {
+                    type = "string"
+                }
             }
-        }
 
-        val processorName = capabilityResourceResolutionProcessor.apply(resourceAssignment)
-        assertNotNull(processorName, "couldn't get Jython script resource assignment processor name")
+            val processorName = capabilityResourceResolutionProcessor.processNB(resourceAssignment)
+            assertNotNull(processorName, "couldn't get Jython script resource assignment processor name")
+        }
 
     }
 

@@ -42,7 +42,7 @@ open class DefaultResourceResolutionProcessor : ResourceAssignmentProcessor() {
         return "${PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-default"
     }
 
-    override fun process(resourceAssignment: ResourceAssignment) {
+    override suspend fun processNB(resourceAssignment: ResourceAssignment) {
         try {
             var value = getFromInput(resourceAssignment)
             if (value == null || value is MissingNode) {
@@ -59,7 +59,7 @@ open class DefaultResourceResolutionProcessor : ResourceAssignmentProcessor() {
 
     }
 
-    override fun recover(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
+    override suspend fun recoverNB(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
         raRuntimeService.getBluePrintError().addError(runtimeException.message!!)
     }
 }

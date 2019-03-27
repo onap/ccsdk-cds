@@ -17,8 +17,6 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.services.workflow
 
 import com.fasterxml.jackson.databind.JsonNode
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
@@ -64,9 +62,7 @@ open class NodeTemplateExecutionService(private val applicationContext: Applicat
         plugin.bluePrintRuntimeService.put("$nodeTemplateName-step-inputs", stepInputs.asJsonNode())
 
         // Get the Request from the Context and Set to the Function Input and Invoke the function
-        return withContext(Dispatchers.Default) {
-            plugin.apply(executionServiceInput)
-        }
+        return plugin.apply(executionServiceInput)
     }
 
 }

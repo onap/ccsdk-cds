@@ -25,13 +25,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.Rest
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
-import org.onap.ccsdk.cds.controllerblueprints.core.checkEqualsOrThrow
-import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
-import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmptyOrThrow
-import org.onap.ccsdk.cds.controllerblueprints.core.nullToEmpty
-import org.onap.ccsdk.cds.controllerblueprints.core.returnNotEmptyOrThrow
+import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDictionaryConstants
@@ -56,7 +50,7 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
         return "${PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-rest"
     }
 
-    override fun process(resourceAssignment: ResourceAssignment) {
+    override suspend fun processNB(resourceAssignment: ResourceAssignment) {
         try {
             validate(resourceAssignment)
 
@@ -196,7 +190,7 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
             "resource assignment dictionary name is not defined for template key (${resourceAssignment.name})")
     }
 
-    override fun recover(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
+    override suspend fun recoverNB(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
         raRuntimeService.getBluePrintError().addError(runtimeException.message!!)
     }
 

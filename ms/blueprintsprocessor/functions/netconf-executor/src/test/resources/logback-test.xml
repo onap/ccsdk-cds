@@ -26,7 +26,9 @@
     <logger name="org.springframework.test" level="warn"/>
     <logger name="org.springframework" level="warn"/>
     <logger name="org.hibernate" level="info"/>
+    <logger name="org.apache.sshd" level="warn"/>
     <logger name="org.onap.ccsdk.cds.blueprintsprocessor" level="info"/>
+    <logger name="org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.core" level="warn"/>
 
     <root level="warn">
         <appender-ref ref="STDOUT"/>
