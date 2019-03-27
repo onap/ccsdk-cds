@@ -52,7 +52,7 @@ open class DatabaseResourceAssignmentProcessor(private val bluePrintDBLibPropert
         return "${PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-processor-db"
     }
 
-    override fun process(resourceAssignment: ResourceAssignment) {
+    override suspend fun processNB(resourceAssignment: ResourceAssignment) {
         try {
             validate(resourceAssignment)
 
@@ -184,7 +184,7 @@ open class DatabaseResourceAssignmentProcessor(private val bluePrintDBLibPropert
         }
     }
 
-    override fun recover(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
+    override suspend fun recoverNB(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
         raRuntimeService.getBluePrintError().addError(runtimeException.message!!)
     }
 }

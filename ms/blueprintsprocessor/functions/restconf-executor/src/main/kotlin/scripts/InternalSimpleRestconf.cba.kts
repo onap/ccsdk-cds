@@ -13,15 +13,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-@file:Suppress("unused") //TODO remove this line!
+@file:Suppress("unused")
 
-
-import com.fasterxml.jackson.databind.node.ObjectNode
-import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ActionIdentifiers
-import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.CommonHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor.RestconfComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 
 open class EditConfigure : RestconfComponentFunction() {
@@ -32,12 +27,12 @@ open class EditConfigure : RestconfComponentFunction() {
         return "EditConfigure"
     }
 
-    override fun process(executionRequest: ExecutionServiceInput) {
+    override suspend fun processNB(executionRequest: ExecutionServiceInput) {
         //val webClientService = restClientService("odlparent")
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
+    override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
@@ -50,13 +45,12 @@ open class MountNEditConfigure : RestconfComponentFunction() {
         return "MountNEditConfigure"
     }
 
-    override fun process(executionRequest: ExecutionServiceInput) {
-        val webClientService = restClientService("odlparent")
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override suspend fun processNB(executionRequest: ExecutionServiceInput) {
+        log.info("Processing Restconf Request : ${executionRequest.payload}")
     }
 
-    override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
+        addError("failed in restconf execution : ${runtimeException.message}")
     }
 
 }
@@ -72,11 +66,11 @@ open class TestRestconfConfigure : RestconfComponentFunction() {
         return "TestRestconfConfigure"
     }
 
-    override fun process(executionRequest: ExecutionServiceInput) {
+    override suspend fun processNB(executionRequest: ExecutionServiceInput) {
         log.info("processing request..")
     }
 
-    override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
+    override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         log.info("recovering..")
     }
 }

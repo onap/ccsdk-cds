@@ -18,6 +18,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 
 import com.fasterxml.jackson.databind.JsonNode
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
@@ -56,24 +57,26 @@ class ResourceResolutionComponentTest {
 
     @Test
     fun testProcess() {
+        runBlocking {
 
-        val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
+                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
-        val executionServiceInput = JacksonUtils.readValueFromClassPathFile("payload/requests/sample-resourceresolution-request.json",
-                ExecutionServiceInput::class.java)!!
+            val executionServiceInput = JacksonUtils.readValueFromClassPathFile("payload/requests/sample-resourceresolution-request.json",
+                    ExecutionServiceInput::class.java)!!
 
-        // Prepare Inputs
-        PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService, executionServiceInput.payload, "resource-assignment")
+            // Prepare Inputs
+            PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService, executionServiceInput.payload, "resource-assignment")
 
-        val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
-        stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "resource-assignment")
-        stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "ResourceResolutionComponent")
-        stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
-        bluePrintRuntimeService.put("resource-assignment-step-inputs", stepMetaData.asJsonNode())
+            val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
+            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "resource-assignment")
+            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "ResourceResolutionComponent")
+            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
+            bluePrintRuntimeService.put("resource-assignment-step-inputs", stepMetaData.asJsonNode())
 
-        resourceResolutionComponent.bluePrintRuntimeService = bluePrintRuntimeService
-        resourceResolutionComponent.stepName = "resource-assignment"
-        resourceResolutionComponent.apply(executionServiceInput)
+            resourceResolutionComponent.bluePrintRuntimeService = bluePrintRuntimeService
+            resourceResolutionComponent.stepName = "resource-assignment"
+            resourceResolutionComponent.applyNB(executionServiceInput)
+        }
     }
 }

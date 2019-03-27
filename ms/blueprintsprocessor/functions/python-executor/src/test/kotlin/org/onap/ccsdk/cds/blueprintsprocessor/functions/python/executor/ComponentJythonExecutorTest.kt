@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +18,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor
 
 import com.fasterxml.jackson.databind.JsonNode
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
@@ -46,23 +48,26 @@ class ComponentJythonExecutorTest {
 
     @Test
     fun testPythonComponentInjection() {
-        val executionServiceInput = JacksonUtils.readValueFromClassPathFile("payload/requests/sample-activate-request.json",
-                ExecutionServiceInput::class.java)!!
+        runBlocking {
 
-        val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+            val executionServiceInput = JacksonUtils.readValueFromClassPathFile("payload/requests/sample-activate-request.json",
+                    ExecutionServiceInput::class.java)!!
 
-        val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
-        stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "activate-jython")
-        stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "ComponentJythonExecutor")
-        stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
-        bluePrintRuntimeService.put("activate-jython-step-inputs", stepMetaData.asJsonNode())
+            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
+                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
-        componentJythonExecutor.bluePrintRuntimeService = bluePrintRuntimeService
-        componentJythonExecutor.stepName = "activate-jython"
+            val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
+            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "activate-jython")
+            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "ComponentJythonExecutor")
+            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
+            bluePrintRuntimeService.put("activate-jython-step-inputs", stepMetaData.asJsonNode())
+
+            componentJythonExecutor.bluePrintRuntimeService = bluePrintRuntimeService
+            componentJythonExecutor.stepName = "activate-jython"
 
 
-        componentJythonExecutor.apply(executionServiceInput)
+            componentJythonExecutor.applyNB(executionServiceInput)
+        }
 
     }
 }
