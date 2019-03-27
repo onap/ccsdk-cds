@@ -24,8 +24,12 @@ Design tools:
 
 MicroServices:
 ==============
-    * Controller Blueprints Studio Processor
-	* Blueprints Processor
+.. toctree::
+   :maxdepth: 1
+   :glob:
+    
+	controllerBlueprintStudioProcessor
+	bluePrintsProcessor
 
 Architecture:
 =============
