@@ -17,12 +17,11 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.mocks
 
 
 import org.apache.sshd.common.NamedFactory
-import org.apache.sshd.server.Command
+import org.apache.sshd.server.command.Command
 import org.apache.sshd.server.SshServer
 import org.apache.sshd.server.auth.UserAuth
 import org.apache.sshd.server.auth.UserAuthNoneFactory
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.utils.NetconfSubsystemFactory
 import java.util.*
 
 

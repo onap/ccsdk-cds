@@ -38,7 +38,7 @@
         <kotlin.couroutines.version>1.1.1</kotlin.couroutines.version>
         <grpc.version>1.18.0</grpc.version>
         <!-- TODO("Migrate SSHD to 2.x version") -->
-        <sshd.version>1.7.0</sshd.version>
+        <sshd.version>2.2.0</sshd.version>
         <jsch.version>0.1.55</jsch.version>
         <protobuff.java.utils.version>3.6.1</protobuff.java.utils.version>
         <eelf.version>1.0.0</eelf.version>
