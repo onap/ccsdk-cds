@@ -24,7 +24,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.Reso
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
 import org.onap.ccsdk.cds.controllerblueprints.core.getAsString
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
@@ -34,18 +33,15 @@ import org.springframework.stereotype.Component
 open class ComponentNetconfExecutor(private var componentFunctionScriptingService: ComponentFunctionScriptingService)
     : AbstractComponentFunction() {
 
-    private val log = LoggerFactory.getLogger(ComponentNetconfExecutor::class.java)
-
     companion object {
         const val SCRIPT_TYPE = "script-type"
         const val SCRIPT_CLASS_REFERENCE = "script-class-reference"
         const val INSTANCE_DEPENDENCIES = "instance-dependencies"
     }
 
-
     lateinit var scriptComponent: NetconfComponentFunction
 
-    override fun process(executionRequest: ExecutionServiceInput) {
+    override suspend fun processNB(executionRequest: ExecutionServiceInput) {
 
         val scriptType = operationInputs.getAsString(SCRIPT_TYPE)
         val scriptClassReference = operationInputs.getAsString(SCRIPT_CLASS_REFERENCE)
@@ -64,12 +60,13 @@ open class ComponentNetconfExecutor(private var componentFunctionScriptingServic
 
         checkNotNull(scriptComponent) { "failed to get netconf script component" }
 
-        scriptComponent.process(executionServiceInput)
+        // Handles both script processing and error handling
+        scriptComponent.executeScript(executionServiceInput)
     }
 
-    override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        scriptComponent.recover(runtimeException, executionRequest)
+    override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
+        bluePrintRuntimeService.getBluePrintError()
+                .addError("Failed in ComponentNetconfExecutor : ${runtimeException.message}")
+
     }
-
-
 }

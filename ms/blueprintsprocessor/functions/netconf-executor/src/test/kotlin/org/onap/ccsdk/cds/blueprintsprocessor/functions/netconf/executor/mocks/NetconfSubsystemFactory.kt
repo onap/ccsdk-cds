@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +17,13 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.utils
 
 
+import org.apache.sshd.common.NamedFactory
+import org.apache.sshd.server.Command
+import org.apache.sshd.server.Environment
+import org.apache.sshd.server.ExitCallback
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
-import org.apache.sshd.common.NamedFactory;
-import org.apache.sshd.server.Command;
-import org.apache.sshd.server.Environment;
-import org.apache.sshd.server.ExitCallback;
 
 
 class NetconfSubsystemFactory : NamedFactory<Command> {
@@ -78,7 +79,6 @@ class NetconfSubsystemFactory : NamedFactory<Command> {
 
                 @Throws(IOException::class)
                 private fun process(xmlMessage: String) {
-                    println("Sending message:\n$xmlMessage")
                     out!!.write(xmlMessage.toByteArray(charset("UTF-8")))
                     out!!.write((END_CHAR_SEQUENCE + "\n").toByteArray(charset("UTF-8")))
                     out!!.flush()

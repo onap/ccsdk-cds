@@ -54,7 +54,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         return stepName
     }
 
-    override fun prepareRequest(executionRequest: ExecutionServiceInput): ExecutionServiceInput {
+    override suspend fun prepareRequestNB(executionRequest: ExecutionServiceInput): ExecutionServiceInput {
         checkNotNull(bluePrintRuntimeService) { "failed to prepare blueprint runtime" }
 
         check(stepName.isNotEmpty()) { "failed to assign step name" }
@@ -93,7 +93,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         return executionRequest
     }
 
-    override fun prepareResponse(): ExecutionServiceOutput {
+    override suspend fun prepareResponseNB(): ExecutionServiceOutput {
         log.info("Preparing Response...")
         executionServiceOutput.commonHeader = executionServiceInput.commonHeader
         executionServiceOutput.actionIdentifiers = executionServiceInput.actionIdentifiers
@@ -114,15 +114,15 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         return this.executionServiceOutput
     }
 
-    override fun apply(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
+    override suspend fun applyNB(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
         try {
-            prepareRequest(executionServiceInput)
-            process(executionServiceInput)
+            prepareRequestNB(executionServiceInput)
+            processNB(executionServiceInput)
         } catch (runtimeException: RuntimeException) {
             log.error("failed in ${getName()} : ${runtimeException.message}", runtimeException)
-            recover(runtimeException, executionServiceInput)
+            recoverNB(runtimeException, executionServiceInput)
         }
-        return prepareResponse()
+        return prepareResponseNB()
     }
 
     fun getOperationInput(key: String): JsonNode {

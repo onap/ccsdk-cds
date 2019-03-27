@@ -44,7 +44,7 @@ open class CapabilityResourceResolutionProcessor(private val applicationContext:
         return "${PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-capability"
     }
 
-    override fun process(resourceAssignment: ResourceAssignment) {
+    override suspend fun processNB(resourceAssignment: ResourceAssignment) {
 
         val resourceDefinition = resourceDictionaries[resourceAssignment.dictionaryName]
                 ?: throw BluePrintProcessorException("couldn't get resource definition for ${resourceAssignment.dictionaryName}")
@@ -71,21 +71,20 @@ open class CapabilityResourceResolutionProcessor(private val applicationContext:
         }
 
         // Assign Current Blueprint runtime and ResourceDictionaries
+        componentResourceAssignmentProcessor!!.scriptType = scriptType
         componentResourceAssignmentProcessor!!.raRuntimeService = raRuntimeService
         componentResourceAssignmentProcessor!!.resourceDictionaries = resourceDictionaries
 
         // Invoke componentResourceAssignmentProcessor
-        componentResourceAssignmentProcessor!!.apply(resourceAssignment)
+        componentResourceAssignmentProcessor!!.executeScript(resourceAssignment)
     }
 
-    override fun recover(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
-        log.info("Recovering for : ${resourceAssignment.name} : ${runtimeException.toString()}")
-        if (componentResourceAssignmentProcessor != null) {
-            componentResourceAssignmentProcessor!!.recover(runtimeException, resourceAssignment)
-        }
+    override suspend fun recoverNB(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
+        raRuntimeService.getBluePrintError()
+                .addError("Failed in ComponentNetconfExecutor : ${runtimeException.message}")
     }
 
-    fun scriptInstance(scriptType: String, scriptClassReference: String, instanceDependencies: List<String>)
+    suspend fun scriptInstance(scriptType: String, scriptClassReference: String, instanceDependencies: List<String>)
             : ResourceAssignmentProcessor {
 
         log.info("creating resource resolution of script type($scriptType), reference name($scriptClassReference) and" +
@@ -101,4 +100,5 @@ open class CapabilityResourceResolutionProcessor(private val applicationContext:
         }
         return scriptComponent
     }
+
 }

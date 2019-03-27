@@ -17,6 +17,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 
+import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolutionResultService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.ResourceAssignmentProcessor
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
@@ -180,9 +181,11 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                             resourceAssignmentProcessor.raRuntimeService = resourceAssignmentRuntimeService
                             // Set Resource Dictionaries
                             resourceAssignmentProcessor.resourceDictionaries = resourceDictionaries
-                            // Invoke Apply Method
-                            resourceAssignmentProcessor.apply(resourceAssignment)
-
+                            // TODO ("Implement suspend function")
+                            runBlocking {
+                                // Invoke Apply Method
+                                resourceAssignmentProcessor.applyNB(resourceAssignment)
+                            }
                             // Set errors from RA
                             blueprintRuntimeService.setBluePrintError(resourceAssignmentRuntimeService.getBluePrintError())
                         } catch (e: RuntimeException) {

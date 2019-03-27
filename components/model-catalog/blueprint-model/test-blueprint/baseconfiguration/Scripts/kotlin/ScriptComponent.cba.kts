@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,23 +25,23 @@ open class SampleKotlinComponent : BlueprintFunctionNode<String, String> {
         return "my Name"
     }
 
-    override fun prepareRequest(executionRequest: String): String {
+    override suspend fun prepareRequestNB(executionRequest: String): String {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun process(executionRequest: String) {
+    override suspend fun processNB(executionRequest: String) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun recover(runtimeException: RuntimeException, executionRequest: String) {
+    override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: String) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun prepareResponse(): String {
+    override suspend fun prepareResponseNB(): String {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun apply(t: String): String {
+    override suspend fun applyNB(t: String): String {
         return "Successfully Executed Scripts"
     }
 }

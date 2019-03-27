@@ -24,6 +24,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInpu
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.BlueprintJythonService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.PythonExecutorConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmptyOrThrow
 import org.onap.ccsdk.cds.controllerblueprints.core.data.OperationAssignment
@@ -40,24 +41,22 @@ open class ComponentJythonExecutor(private var applicationContext: ApplicationCo
 
     private val log = LoggerFactory.getLogger(ComponentJythonExecutor::class.java)
 
-    private var componentFunction: AbstractComponentFunction? = null
+    private lateinit var componentFunction: JythonComponentFunction
 
-    override fun prepareRequest(executionRequest: ExecutionServiceInput): ExecutionServiceInput {
-        val request = super.prepareRequest(executionRequest)
+    override suspend fun processNB(executionRequest: ExecutionServiceInput) {
+
+        log.info("Processing : $operationInputs")
         // Populate Component Instance
         populateJythonComponentInstance()
-        return request
-    }
 
-    override fun process(executionRequest: ExecutionServiceInput) {
-        log.info("Processing : $operationInputs")
         // Invoke Jython Component Script
-        componentFunction!!.process(executionServiceInput)
+        componentFunction.executeScript(executionServiceInput)
 
     }
 
-    override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        componentFunction!!.recover(runtimeException, executionRequest)
+    override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
+        bluePrintRuntimeService.getBluePrintError()
+                .addError("Failed in ComponentJythonExecutor : ${runtimeException.message}")
     }
 
     private fun populateJythonComponentInstance() {
@@ -92,14 +91,14 @@ open class ComponentJythonExecutor(private var applicationContext: ApplicationCo
         }
 
         // Setup componentFunction
-        componentFunction = blueprintJythonService.jythonInstance(bluePrintContext, pythonClassName,
-                content!!, jythonInstance)
-        componentFunction?.bluePrintRuntimeService = bluePrintRuntimeService
-        componentFunction?.executionServiceInput = executionServiceInput
-        componentFunction?.stepName = stepName
-        componentFunction?.interfaceName = interfaceName
-        componentFunction?.operationName = operationName
-        componentFunction?.processId = processId
-        componentFunction?.workflowName = workflowName
+        componentFunction = blueprintJythonService.jythonInstance(bluePrintContext, pythonClassName, content!!, jythonInstance)
+        componentFunction.bluePrintRuntimeService = bluePrintRuntimeService
+        componentFunction.executionServiceInput = executionServiceInput
+        componentFunction.stepName = stepName
+        componentFunction.interfaceName = interfaceName
+        componentFunction.operationName = operationName
+        componentFunction.processId = processId
+        componentFunction.workflowName = workflowName
+        componentFunction.scriptType = BluePrintConstants.SCRIPT_JYTHON
     }
 }

@@ -33,7 +33,8 @@ class ComponentFunctionScriptingService(private val applicationContext: Applicat
 
     private val log = LoggerFactory.getLogger(ComponentFunctionScriptingService::class.java)
 
-    fun <T : AbstractScriptComponentFunction> scriptInstance(componentFunction: AbstractComponentFunction, scriptType: String,
+    suspend fun <T : AbstractScriptComponentFunction> scriptInstance(componentFunction: AbstractComponentFunction,
+    scriptType: String,
                                                              scriptClassReference: String,
                                                              instanceDependencies: List<String>): T {
 
@@ -53,6 +54,7 @@ class ComponentFunctionScriptingService(private val applicationContext: Applicat
         scriptComponent.operationName = componentFunction.operationName
         scriptComponent.nodeTemplateName = componentFunction.nodeTemplateName
         scriptComponent.operationInputs = componentFunction.operationInputs
+        scriptComponent.scriptType = scriptType
 
         // Populate Instance Properties
         instanceDependencies.forEach { instanceDependency ->
@@ -63,7 +65,7 @@ class ComponentFunctionScriptingService(private val applicationContext: Applicat
     }
 
 
-    fun <T : BlueprintFunctionNode<*, *>> scriptInstance(bluePrintContext: BluePrintContext, scriptType: String,
+    suspend fun <T : BlueprintFunctionNode<*, *>> scriptInstance(bluePrintContext: BluePrintContext, scriptType: String,
                                                          scriptClassReference: String): T {
         var scriptComponent: T? = null
 
