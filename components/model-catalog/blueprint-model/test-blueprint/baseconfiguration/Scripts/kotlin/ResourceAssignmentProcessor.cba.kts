@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,31 +15,23 @@
  * limitations under the License.
  */
 
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.*
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.CapabilityResourceSource
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintScriptsService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.ResourceAssignmentProcessor
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
-import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.slf4j.LoggerFactory
 
 open class ScriptResourceAssignmentProcessor : ResourceAssignmentProcessor() {
 
-    lateinit var resourceAssignment: ResourceAssignment
+    private val log = LoggerFactory.getLogger(ScriptResourceAssignmentProcessor::class.java)!!
 
     override fun getName(): String {
-        return "resource-assignment-processor-custom-capability"
+        return "ScriptResourceAssignmentProcessor"
     }
 
-    override fun process(resourceAssignment: ResourceAssignment) {
-        this.resourceAssignment = resourceAssignment
+    override fun process(executionRequest: ResourceAssignment) {
+        log.info("Processing input")
     }
 
-    override fun prepareResponse(): ResourceAssignment {
-        return resourceAssignment
+    override fun recover(runtimeException: RuntimeException, executionRequest: ResourceAssignment) {
+        log.info("Recovering input")
     }
-
-    override fun recover(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
-        TODO("To Implement")
-    }
-
 }

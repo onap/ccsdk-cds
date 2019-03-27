@@ -59,7 +59,7 @@ class ExecutionServiceHandler(private val bluePrintPathConfiguration: BluePrintP
             // Copy the File Part to Local File
             copyFromFilePart(filePart, compressedFile)
             // Save the Copied file to Database
-            return bluePrintCatalogService.saveToDatabase(saveId, compressedFile, false)
+            return bluePrintCatalogService.saveToDatabase(saveId, compressedFile, true)
         } catch (e: IOException) {
             throw BluePrintException(ErrorCode.IO_FILE_INTERRUPT.value,
                     "Error in Upload CBA: ${e.message}", e)
