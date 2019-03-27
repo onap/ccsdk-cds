@@ -93,6 +93,7 @@ interface NetconfRpcService {
      * @param persistId Used to issue a follow-up confirmed commit or a confirming
      * commit from any session, with the token from the previous <commit> operation.
      * If unspecified, the confirm timeout defaults to 600 seconds.
+     * (persist and persistId are mutually exclusive)
      * @return Device response
      */
     fun commit(confirmed: Boolean = false, confirmTimeout: Int = 60, persist: String = "",
