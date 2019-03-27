@@ -37,8 +37,8 @@ limitations under the License.
 
     <modules>
         <module>cds-ui</module>
-        <!--<module>components</module>-->
-        <!--<module>ms</module>-->
+        <module>components</module>
+        <module>ms</module>
     </modules>
 
     <url>https://wiki.onap.org</url>
