@@ -69,6 +69,10 @@ class ExecutionServiceHandler(private val bluePrintPathConfiguration: BluePrintP
         }
     }
 
+    suspend fun remove(name: String, version: String) {
+        bluePrintCatalogService.deleteFromDatabase(name, version)
+    }
+
     suspend fun process(executionServiceInput: ExecutionServiceInput,
                         responseObserver: StreamObserver<org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceOutput>) {
         when {

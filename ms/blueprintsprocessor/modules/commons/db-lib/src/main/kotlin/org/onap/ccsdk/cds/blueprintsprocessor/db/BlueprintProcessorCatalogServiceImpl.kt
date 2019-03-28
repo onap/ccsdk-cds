@@ -26,13 +26,11 @@ import org.onap.ccsdk.cds.controllerblueprints.core.common.ApplicationConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintPathConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ErrorCode
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidatorService
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintArchiveUtils
 import org.onap.ccsdk.cds.controllerblueprints.db.resources.BlueprintCatalogServiceImpl
 import org.slf4j.LoggerFactory
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
 import java.io.File
-import java.nio.file.Files
 import java.nio.file.Path
 import java.util.*
 
@@ -55,34 +53,54 @@ class BlueprintProcessorCatalogServiceImpl(bluePrintRuntimeValidatorService: Blu
     override suspend fun delete(name: String, version: String) {
         // Cleaning Deployed Blueprint
         deleteNBDir(bluePrintPathConfiguration.blueprintDeployPath, name, version)
+        log.info("removed cba file name($name), version($version) from deploy location")
         // Cleaning Data Base
         blueprintModelRepository
                 .deleteByArtifactNameAndArtifactVersion(name, version)
+        log.info("removed cba file name($name), version($version) from database")
     }
 
 
     override suspend fun get(name: String, version: String, extract: Boolean): Path? {
 
-        val getId = UUID.randomUUID().toString()
-        var path = "${bluePrintPathConfiguration.blueprintArchivePath}/$getId/cba.zip"
+        val deployFile = normalizedFile(bluePrintPathConfiguration.blueprintDeployPath, name, version)
+        val cbaFile = normalizedFile(bluePrintPathConfiguration.blueprintArchivePath,
+                UUID.randomUUID().toString(), "cba.zip")
 
-        // TODO("Check first location for the file", If not get from database")
+        if (extract && deployFile.exists()) {
+            log.info("cba file name($name), version($version) already present(${deployFile.absolutePath})")
+        } else {
+            deployFile.reCreateNBDirs()
+            cbaFile.parentFile.reCreateNBDirs()
 
-        blueprintModelRepository.findByArtifactNameAndArtifactVersion(name, version)?.also {
-            it.blueprintModelContent.run {
-                val file = normalizedFile(path)
-                file.parentFile.reCreateDirs()
+            try {
+                log.info("getting cba file name($name), version($version) from db")
+                blueprintModelRepository.findByArtifactNameAndArtifactVersion(name, version)?.also {
+                    it.blueprintModelContent.run {
 
-                file.writeBytes(this!!.content!!).let {
-                    if (extract) {
-                        path = "${bluePrintPathConfiguration.blueprintDeployPath}/$name/$version"
-                        BluePrintArchiveUtils.deCompress(file, path)
+                        cbaFile.writeBytes(this!!.content!!)
+                        cbaFile.deCompress(deployFile)
+                        log.info("cba file name($name), version($version) saved in (${deployFile.absolutePath})")
                     }
-                    return normalizedPath(path)
                 }
+
+                check(deployFile.exists() && deployFile.list().isNotEmpty()) {
+                    throw BluePrintProcessorException("file check failed")
+                }
+            } catch (e: Exception) {
+                deleteNBDir(deployFile.absolutePath)
+                throw BluePrintProcessorException("failed to get  get cba file name($name), version($version) from db" +
+                        " : ${e.message}")
+            } finally {
+                deleteNBDir(cbaFile.parentFile.absolutePath)
             }
         }
-        return null
+
+        return if (extract) {
+            deployFile.toPath()
+        } else {
+            cbaFile.toPath()
+        }
     }
 
     override suspend fun save(metadata: MutableMap<String, String>, archiveFile: File) {
@@ -112,7 +130,7 @@ class BlueprintProcessorCatalogServiceImpl(bluePrintRuntimeValidatorService: Blu
         blueprintModelContent.contentType = "CBA_ZIP"
         blueprintModelContent.name = "$artifactName:$artifactVersion"
         blueprintModelContent.description = "$artifactName:$artifactVersion CBA Zip Content"
-        blueprintModelContent.content = Files.readAllBytes(archiveFile.toPath())
+        blueprintModelContent.content = archiveFile.readBytes()
         blueprintModelContent.blueprintModel = blueprintModel
 
         blueprintModel.blueprintModelContent = blueprintModelContent
