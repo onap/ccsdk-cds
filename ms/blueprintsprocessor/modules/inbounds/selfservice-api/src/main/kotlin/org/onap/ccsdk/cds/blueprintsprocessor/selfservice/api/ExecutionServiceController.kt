@@ -22,6 +22,7 @@ import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ACTION_MODE_ASYNC
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.http.codec.multipart.FilePart
@@ -47,6 +48,14 @@ open class ExecutionServiceController {
     @PreAuthorize("hasRole('USER')")
     fun upload(@RequestPart("file") filePart: FilePart): String = runBlocking {
         executionServiceHandler.upload(filePart)
+    }
+
+    @DeleteMapping("/name/{name}/version/{version}")
+    @Throws(BluePrintException::class)
+    @PreAuthorize("hasRole('USER')")
+    fun deleteBlueprint(@PathVariable(value = "name") name: String,
+                        @PathVariable(value = "version") version: String) = runBlocking {
+        executionServiceHandler.remove(name, version)
     }
 
     @RequestMapping(path = ["/process"], method = [RequestMethod.POST], produces = [MediaType.APPLICATION_JSON_VALUE])
