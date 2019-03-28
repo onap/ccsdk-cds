@@ -47,11 +47,23 @@ class BlueprintJythonServiceTest {
         val content = JacksonUtils.getContent("./../../../../." +
                 "./components/model-catalog/blueprint-model/test-blueprint/baseconfiguration/Scripts/python/SamplePythonComponentNode.py")
 
-        val abstractComponentFunction = blueprintJythonService.jythonInstance<AbstractComponentFunction>(bluePrintContext, "SamplePythonComponentNode", content, dependencies)
+        val abstractPythonPlugin = blueprintJythonService.jythonInstance<AbstractComponentFunction>(bluePrintContext, "SamplePythonComponentNode", content, dependencies)
 
-        assertNotNull(abstractComponentFunction, "failed to get python component")
+        assertNotNull(abstractPythonPlugin, "failed to get python component")
 
-        abstractComponentFunction.process(ExecutionServiceInput())
+        abstractPythonPlugin.process(ExecutionServiceInput())
 
+    }
+
+    @Test
+    fun testGetAbstractJythonComponent() {
+        val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
+                "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+
+        val scriptInstance = "Scripts/python/SamplePythonComponentNode.py"
+
+        val abstractJythonComponent = blueprintJythonService.jythonComponentInstance(bluePrintContext, scriptInstance)
+
+        assertNotNull(abstractJythonComponent, "failed to get jython component")
     }
 }

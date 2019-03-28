@@ -116,7 +116,7 @@ class CapabilityResourceResolutionProcessorTest {
 
         val processorName = capabilityResourceResolutionProcessor.apply(resourceAssignment)
         assertNotNull(processorName, "couldn't get Jython script resource assignment processor name")
-
+        println(processorName)
     }
 
 }
