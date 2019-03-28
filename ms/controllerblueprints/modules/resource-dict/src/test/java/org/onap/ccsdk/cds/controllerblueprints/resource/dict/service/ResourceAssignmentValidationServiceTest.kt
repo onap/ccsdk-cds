@@ -32,7 +32,7 @@ import org.onap.ccsdk.cds.controllerblueprints.resource.dict.utils.ResourceDicti
  * @author Brinda Santh
  */
 class ResourceAssignmentValidationServiceTest {
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(ResourceAssignmentValidationServiceTest::class.java)
+    private val log= LoggerFactory.getLogger(ResourceAssignmentValidationServiceTest::class.java)
     @Before
     fun setUp() {
         // Setup dummy Source Instance Mapping
