@@ -17,8 +17,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.validation
 
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
+import org.slf4j.LoggerFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
@@ -39,7 +38,7 @@ open class BluePrintDesignTimeValidatorService(private val bluePrintTypeValidato
                                                private val resourceDefinitionValidator: ResourceDefinitionValidator)
     : BluePrintValidatorService {
 
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintDesignTimeValidatorService::class.toString())
+    private val log= LoggerFactory.getLogger(BluePrintDesignTimeValidatorService::class.toString())
 
     override fun validateBluePrints(basePath: String): Boolean {
 

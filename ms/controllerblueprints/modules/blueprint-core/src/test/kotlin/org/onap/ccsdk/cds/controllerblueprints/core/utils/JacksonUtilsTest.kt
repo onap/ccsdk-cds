@@ -17,8 +17,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
+import org.slf4j.LoggerFactory
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import kotlin.test.assertNotNull
@@ -31,7 +30,7 @@ import kotlin.test.assertTrue
  */
 class JacksonUtilsTest {
 
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
+    private val log= LoggerFactory.getLogger(this::class.toString())
 
     @Test
     fun testJsonNodeFromClassPathFile() {

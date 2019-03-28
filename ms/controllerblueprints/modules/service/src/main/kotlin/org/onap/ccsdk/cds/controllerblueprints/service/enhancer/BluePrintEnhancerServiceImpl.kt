@@ -17,8 +17,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.service.enhancer
 
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
+import org.slf4j.LoggerFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintEnhancerService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
@@ -33,7 +32,7 @@ import java.util.*
 open class BluePrintEnhancerServiceImpl(private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService,
                                         private val resourceDefinitionEnhancerService: ResourceDefinitionEnhancerService) : BluePrintEnhancerService {
 
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintEnhancerServiceImpl::class.toString())
+    private val log= LoggerFactory.getLogger(BluePrintEnhancerServiceImpl::class.toString())
 
     override suspend fun enhance(basePath: String, enrichedBasePath: String): BluePrintContext {
 
