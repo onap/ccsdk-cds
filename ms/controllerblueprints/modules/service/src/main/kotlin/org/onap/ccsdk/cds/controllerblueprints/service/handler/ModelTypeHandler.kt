@@ -17,17 +17,17 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.service.handler
 
-import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.service.domain.ModelType
 import org.onap.ccsdk.cds.controllerblueprints.service.repository.ModelTypeRepository
 import org.onap.ccsdk.cds.controllerblueprints.service.validator.ModelTypeValidator
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
 open class ModelTypeHandler(private val modelTypeRepository: ModelTypeRepository) {
 
-    private val log = EELFManager.getInstance().getLogger(ModelTypeHandler::class.java)!!
+    private val log = LoggerFactory.getLogger(ModelTypeHandler::class.java)!!
 
     /**
      * This is a getModelTypeByName service

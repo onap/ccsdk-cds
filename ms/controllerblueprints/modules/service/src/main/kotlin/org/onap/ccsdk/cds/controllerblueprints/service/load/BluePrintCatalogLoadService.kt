@@ -17,16 +17,16 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.service.load
 
-import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.File
 
 @Service
 open class BluePrintCatalogLoadService(private val bluePrintCatalogService: BluePrintCatalogService) {
 
-    private val log = EELFManager.getInstance().getLogger(BluePrintCatalogLoadService::class.java)
+    private val log = LoggerFactory.getLogger(BluePrintCatalogLoadService::class.java)
 
     open suspend fun loadPathsBluePrintModelCatalog(paths: List<String>) {
         paths.forEach { loadPathBluePrintModelCatalog(it) }
