@@ -37,11 +37,19 @@ class RestconfConfigDeploy(RestconfComponentFunction):
             web_client_service = self.restClientService(self.restconf_server_identifier)
 
             try:
+                # mount the device
                 mount_payload = self.resolveAndGenerateMessage("config-deploy-mapping", "config-deploy-template")
                 restconf_client.mount_device(web_client_service, pnf_id, mount_payload)
 
+                # log the current configuration subtree
+                current_configuration = restconf_client.retrieve_device_configuration_subtree(
+                    web_client_service, pnf_id, self.configlet_resource_path)
+                self.log.info("Current configuration subtree: {}", current_configuration)
+
+                # apply configuration
                 configlet = self.resolveFromDatabase(resolution_key, self.configlet_template_name)
-                restconf_client.configure_device(web_client_service, pnf_id, self.configlet_resource_path, configlet)
+                restconf_client.configure_device_json_patch(
+                    web_client_service, pnf_id, self.configlet_resource_path, configlet)
             except Exception, err:
                 self.log.error("an error occurred while configuring device {}", err)
                 raise err
