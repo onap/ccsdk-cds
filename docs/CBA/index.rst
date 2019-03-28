@@ -79,6 +79,9 @@ Pre-requiste:
 =============
 	Visual Studio code editor
 	Git bash
+	Node.js & npm
+	loopback 4 cli
+	
 
 Steps
 =====
