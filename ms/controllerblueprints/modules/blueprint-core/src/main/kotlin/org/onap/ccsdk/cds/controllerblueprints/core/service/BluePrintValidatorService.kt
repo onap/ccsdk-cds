@@ -17,8 +17,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
+import org.slf4j.LoggerFactory
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.common.base.Preconditions
 import org.apache.commons.lang3.StringUtils
@@ -44,7 +43,7 @@ interface BluePrintValidatorService : Serializable {
 @Deprecated("Decomposed implementation moved to blueprint-validation module")
 open class BluePrintValidatorDefaultService : BluePrintValidatorService {
 
-    val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintValidatorDefaultService::class.toString())
+    val log= LoggerFactory.getLogger(BluePrintValidatorDefaultService::class.toString())
 
     lateinit var bluePrintContext: BluePrintContext
     lateinit var serviceTemplate: ServiceTemplate

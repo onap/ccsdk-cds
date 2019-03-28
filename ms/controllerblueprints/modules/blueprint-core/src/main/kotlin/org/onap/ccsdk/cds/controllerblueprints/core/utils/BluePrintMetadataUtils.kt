@@ -18,8 +18,7 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
 
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
+import org.slf4j.LoggerFactory
 import com.fasterxml.jackson.databind.JsonNode
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
@@ -36,7 +35,7 @@ import java.util.*
 
 class BluePrintMetadataUtils {
     companion object {
-        private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
+        private val log= LoggerFactory.getLogger(this::class.toString())
 
 
         suspend fun toscaMetaData(basePath: String): ToscaMetaData {

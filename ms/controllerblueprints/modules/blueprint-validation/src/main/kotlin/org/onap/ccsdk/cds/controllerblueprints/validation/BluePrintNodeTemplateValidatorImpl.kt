@@ -17,8 +17,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.validation
 
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
+import org.slf4j.LoggerFactory
 import org.onap.ccsdk.cds.controllerblueprints.validation.utils.PropertyAssignmentValidationUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
@@ -36,7 +35,7 @@ import org.springframework.stereotype.Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintNodeTemplateValidator {
 
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintNodeTemplateValidatorImpl::class.toString())
+    private val log= LoggerFactory.getLogger(BluePrintNodeTemplateValidatorImpl::class.toString())
 
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
     lateinit var bluePrintContext: BluePrintContext
