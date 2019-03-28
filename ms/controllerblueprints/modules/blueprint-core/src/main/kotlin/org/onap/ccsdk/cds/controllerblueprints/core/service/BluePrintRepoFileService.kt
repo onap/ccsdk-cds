@@ -16,8 +16,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
+import org.slf4j.LoggerFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.data.*
@@ -26,7 +25,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 
 open class BluePrintRepoFileService(modelTypePath: String) : BluePrintRepoService {
 
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintRepoFileService::class.toString())
+    private val log= LoggerFactory.getLogger(BluePrintRepoFileService::class.toString())
 
     private val dataTypePath = modelTypePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)
     private val nodeTypePath = modelTypePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TYPE)

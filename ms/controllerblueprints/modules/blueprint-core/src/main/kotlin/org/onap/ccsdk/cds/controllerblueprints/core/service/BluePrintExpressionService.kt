@@ -17,8 +17,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
+import org.slf4j.LoggerFactory
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
@@ -34,7 +33,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.data.*
  * @author Brinda Santh
  */
 object BluePrintExpressionService {
-    val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
+    val log= LoggerFactory.getLogger(this::class.toString())
 
     @JvmStatic
     fun checkContainsExpression(propertyAssignmentNode: JsonNode): Boolean {

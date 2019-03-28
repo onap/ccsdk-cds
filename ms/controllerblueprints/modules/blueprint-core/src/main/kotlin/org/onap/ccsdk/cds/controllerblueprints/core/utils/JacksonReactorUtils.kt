@@ -17,8 +17,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
+import org.slf4j.LoggerFactory
 import com.fasterxml.jackson.databind.JsonNode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -30,7 +29,7 @@ import java.nio.charset.Charset
 class JacksonReactorUtils {
     companion object {
 
-        private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
+        private val log= LoggerFactory.getLogger(this::class.toString())
 
         suspend fun getContent(fileName: String): String {
             //log.info("Reading File($fileName)")

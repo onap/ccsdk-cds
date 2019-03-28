@@ -17,8 +17,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.service.enhancer
 
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
+import org.slf4j.LoggerFactory
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
@@ -44,7 +43,7 @@ interface ResourceDefinitionEnhancerService {
 class ResourceDefinitionEnhancerServiceImpl(private val resourceDefinitionRepoService: ResourceDefinitionRepoService) :
         ResourceDefinitionEnhancerService {
 
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(ResourceDefinitionEnhancerService::class.toString())
+    private val log= LoggerFactory.getLogger(ResourceDefinitionEnhancerService::class.toString())
 
     companion object {
         const val ARTIFACT_TYPE_MAPPING_SOURCE: String = "artifact-mapping-resource"
