@@ -16,8 +16,6 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.service;
 
-import com.att.eelf.configuration.EELFLogger;
-import com.att.eelf.configuration.EELFManager;
 import com.google.common.base.Preconditions;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +27,8 @@ import org.onap.ccsdk.cds.controllerblueprints.service.common.SwaggerGenerator;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * SchemaGeneratorService.java Purpose: Provide Service to generate service template input schema definition and Sample
@@ -39,7 +39,7 @@ import java.util.Map;
  */
 @Deprecated
 public class SchemaGeneratorService {
-    private static EELFLogger log = EELFManager.getInstance().getLogger(SchemaGeneratorService.class);
+    private static Logger log = LoggerFactory.getLogger(SchemaGeneratorService.class);
 
     private Map<String, DataType> dataTypes;
 

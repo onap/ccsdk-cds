@@ -17,9 +17,13 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.service.load
 
-import com.att.eelf.configuration.EELFManager
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
+import org.apache.commons.lang.text.StrBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.File
 import java.util.*
@@ -27,30 +31,40 @@ import java.util.*
 @Service
 open class BluePrintCatalogLoadService(private val bluePrintCatalogService: BluePrintCatalogService) {
 
-    private val log = EELFManager.getInstance().getLogger(BluePrintCatalogLoadService::class.java)
+    private val log = LoggerFactory.getLogger(BluePrintCatalogLoadService::class.java)
 
-    open suspend fun loadPathsBluePrintModelCatalog(paths: List<String>) {
+    open fun loadPathsBluePrintModelCatalog(paths: List<String>) {
         paths.forEach { loadPathBluePrintModelCatalog(it) }
     }
 
-    open suspend fun loadPathBluePrintModelCatalog(path: String) {
+    open fun loadPathBluePrintModelCatalog(path: String) {
 
-        val files = normalizedFile(path).listFiles()
-        val errors = mutableListOf<String>()
-        files.forEach {
-            loadBluePrintModelCatalog(errors, it)
-        }
-        if (!errors.isEmpty()) {
-            log.error(errors.joinToString("\n"))
+        val files = File(path).listFiles()
+        runBlocking {
+            val errorBuilder = StrBuilder()
+            val deferredResults = mutableListOf<Deferred<Unit>>()
+
+            for (file in files) {
+                deferredResults += async {
+                    loadBluePrintModelCatalog(errorBuilder, file)
+                }
+            }
+
+            for (deferredResult in deferredResults) {
+                deferredResult.await()
+            }
+
+            if (!errorBuilder.isEmpty) {
+                log.error(errorBuilder.toString())
+            }
         }
     }
 
-    open suspend fun loadBluePrintModelCatalog(errorBuilder: MutableList<String>, file: File) {
+    open suspend fun loadBluePrintModelCatalog(errorBuilder: StrBuilder, file: File) {
         try {
-            log.info("loading blueprint cba(${file.absolutePath})")
             bluePrintCatalogService.saveToDatabase(UUID.randomUUID().toString(), file)
         } catch (e: Exception) {
-            errorBuilder.add("Couldn't load BlueprintModel(${file.name}: ${e.message}")
+            errorBuilder.appendln("Couldn't load BlueprintModel(${file.name}: ${e.message}")
         }
     }
 
