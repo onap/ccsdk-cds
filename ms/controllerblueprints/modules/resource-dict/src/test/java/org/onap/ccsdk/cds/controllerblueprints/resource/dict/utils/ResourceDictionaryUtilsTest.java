@@ -27,18 +27,19 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment;
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition;
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDictionaryConstants;
-import com.att.eelf.configuration.EELFLogger;
-import com.att.eelf.configuration.EELFManager;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * ResourceDictionaryUtilsTest.
  *
  * @author Brinda Santh
  */
 public class ResourceDictionaryUtilsTest {
-    private static final EELFLogger log = EELFManager.getInstance().getLogger(ResourceDictionaryUtilsTest.class);
+    private static final Logger log = LoggerFactory.getLogger(ResourceDictionaryUtilsTest.class);
 
     @Test
     public void testPopulateSourceMapping() {

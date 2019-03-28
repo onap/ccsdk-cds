@@ -17,8 +17,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils
 
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
+import org.slf4j.LoggerFactory
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.NullNode
@@ -39,7 +38,7 @@ import java.util.*
 class ResourceAssignmentUtils {
     companion object {
 
-        private val logger: EELFLogger = EELFManager.getInstance().getLogger(ResourceAssignmentUtils::class.toString())
+        private val logger= LoggerFactory.getLogger(ResourceAssignmentUtils::class.toString())
 
         // TODO("Modify Value type from Any to JsonNode")
         @Throws(BluePrintProcessorException::class)

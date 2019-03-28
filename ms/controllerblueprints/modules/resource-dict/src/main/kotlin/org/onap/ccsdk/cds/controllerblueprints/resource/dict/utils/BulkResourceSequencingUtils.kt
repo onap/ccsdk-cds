@@ -16,11 +16,10 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.resource.dict.utils
 
-import com.att.eelf.configuration.EELFLogger
 import org.apache.commons.collections.CollectionUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.TopologicalSortingUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
-import com.att.eelf.configuration.EELFManager
+import org.slf4j.LoggerFactory
 import java.util.ArrayList
 /**
  * BulkResourceSequencingUtils.
@@ -28,7 +27,7 @@ import java.util.ArrayList
  * @author Brinda Santh
  */
 object BulkResourceSequencingUtils {
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(BulkResourceSequencingUtils::class.java)
+    private val log= LoggerFactory.getLogger(BulkResourceSequencingUtils::class.java)
 
     @JvmStatic
     fun process(resourceAssignments: MutableList<ResourceAssignment>): List<List<ResourceAssignment>> {

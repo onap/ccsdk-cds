@@ -54,17 +54,6 @@
                 <scope>import</scope>
             </dependency>
 
-            <dependency>
-                <groupId>com.att.eelf</groupId>
-                <artifactId>eelf-core</artifactId>
-                <version>${eelf.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.onap.logging-analytics</groupId>
-                <artifactId>logging-slf4j</artifactId>
-                <version>${onap.logger.slf4j}</version>
-            </dependency>
-
             <!--Swagger Dependencies -->
             <dependency>
                 <groupId>io.springfox</groupId>
@@ -232,14 +221,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.att.eelf</groupId>
-            <artifactId>eelf-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.onap.logging-analytics</groupId>
-            <artifactId>logging-slf4j</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
@@ -258,6 +239,12 @@
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>

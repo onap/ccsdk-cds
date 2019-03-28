@@ -17,8 +17,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.service.enhancer
 
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
+import org.slf4j.LoggerFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
@@ -43,7 +42,7 @@ open class BluePrintWorkflowEnhancerImpl(private val bluePrintRepoService: BlueP
                                          private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService,
                                          private val resourceAssignmentEnhancerService: ResourceAssignmentEnhancerService)
     : BluePrintWorkflowEnhancer {
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintWorkflowEnhancerImpl::class.toString())
+    private val log= LoggerFactory.getLogger(BluePrintWorkflowEnhancerImpl::class.toString())
 
     companion object {
         const val ARTIFACT_TYPE_MAPPING_SOURCE: String = "artifact-mapping-resource"
