@@ -1,6 +1,9 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ *
  * Modifications Copyright © 2018 IBM.
+ *
+ *  Modifications Copyright © 2019 IBM, Bell Canada.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,5 +78,28 @@ class ResourceResolutionComponentTest {
         resourceResolutionComponent.bluePrintRuntimeService = bluePrintRuntimeService
         resourceResolutionComponent.stepName = "resource-assignment"
         resourceResolutionComponent.apply(executionServiceInput)
+    }
+
+    @Test
+    fun testRecover() {
+
+        val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+
+        val executionServiceInput = JacksonUtils.readValueFromClassPathFile("payload/requests/sample-resourceresolution-request.json",
+                ExecutionServiceInput::class.java)!!
+
+        // Prepare Inputs
+        PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService, executionServiceInput.payload, "resource-assignment")
+
+        val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
+        stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "resource-assignment")
+        stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "ResourceResolutionComponent")
+        stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
+        bluePrintRuntimeService.put("resource-assignment-step-inputs", stepMetaData.asJsonNode())
+
+        resourceResolutionComponent.bluePrintRuntimeService = bluePrintRuntimeService
+        resourceResolutionComponent.stepName = "resource-assignment"
+        resourceResolutionComponent.recover(RuntimeException("TEST PASSED"), executionServiceInput)
     }
 }

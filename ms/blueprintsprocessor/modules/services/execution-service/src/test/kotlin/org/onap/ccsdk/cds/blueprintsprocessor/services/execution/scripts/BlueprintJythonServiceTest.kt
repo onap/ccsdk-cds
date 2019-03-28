@@ -19,6 +19,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -26,6 +27,7 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.assertNotNull
+import kotlin.test.BeforeTest
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [BlueprintJythonService::class, PythonExecutorProperty::class])
@@ -34,24 +36,39 @@ import kotlin.test.assertNotNull
     "blueprints.processor.functions.python.executor.executionPath=./../../../../../components/scripts/python/ccsdk_blueprints"])
 class BlueprintJythonServiceTest {
 
+    lateinit var blueprintContext: BluePrintContext
     @Autowired
     private lateinit var blueprintJythonService: BlueprintJythonService
 
+    @BeforeTest
+    fun init() {
+        blueprintContext = BluePrintMetadataUtils.getBluePrintContext(
+                "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+    }
+
     @Test
     fun testGetAbstractPythonPlugin() {
-        val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
-                "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
         val dependencies: MutableMap<String, Any> = hashMapOf()
 
         val content = JacksonUtils.getContent("./../../../../." +
-                "./components/model-catalog/blueprint-model/test-blueprint/baseconfiguration/Scripts/python/SamplePythonComponentNode.py")
+                "./components/model-catalog/blueprint-model/test-blueprint/baseconfiguration/Scripts/python/PythonTestScript.py")
 
-        val abstractComponentFunction = blueprintJythonService.jythonInstance<AbstractComponentFunction>(bluePrintContext, "SamplePythonComponentNode", content, dependencies)
+        val abstractPythonPlugin = blueprintJythonService.jythonInstance<AbstractComponentFunction>(blueprintContext, "SamplePythonComponentNode", content, dependencies)
 
-        assertNotNull(abstractComponentFunction, "failed to get python component")
+        assertNotNull(abstractPythonPlugin, "failed to get python component")
 
-        abstractComponentFunction.process(ExecutionServiceInput())
+        abstractPythonPlugin.process(ExecutionServiceInput())
 
+    }
+
+    @Test
+    fun testGetAbstractJythonComponent() {
+
+        val scriptInstance = "Scripts/python/PythonTestScript.py"
+
+        val abstractJythonComponent = blueprintJythonService.jythonComponentInstance(blueprintContext, scriptInstance)
+
+        assertNotNull(abstractJythonComponent, "failed to get Jython component")
     }
 }
