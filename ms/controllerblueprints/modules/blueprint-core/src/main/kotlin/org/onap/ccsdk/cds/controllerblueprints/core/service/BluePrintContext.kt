@@ -18,8 +18,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
+import org.slf4j.LoggerFactory
 import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
@@ -33,7 +32,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
  */
 class BluePrintContext(val serviceTemplate: ServiceTemplate) {
 
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
+    private val log= LoggerFactory.getLogger(this::class.toString())
 
     /**
      * Blueprint CBA extracted file location

@@ -17,8 +17,6 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.service;
 
-import com.att.eelf.configuration.EELFLogger;
-import com.att.eelf.configuration.EELFManager;
 import com.google.common.base.Preconditions;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +28,8 @@ import org.onap.ccsdk.cds.controllerblueprints.resource.dict.utils.ResourceDicti
 import org.onap.ccsdk.cds.controllerblueprints.service.domain.ResourceDictionary;
 import org.onap.ccsdk.cds.controllerblueprints.service.model.AutoMapResponse;
 import org.onap.ccsdk.cds.controllerblueprints.service.repository.ResourceDictionaryRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -48,7 +48,7 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public class AutoResourceMappingService {
 
-    private static EELFLogger log = EELFManager.getInstance().getLogger(AutoResourceMappingService.class);
+    private static Logger log = LoggerFactory.getLogger(AutoResourceMappingService.class);
 
     private ResourceDictionaryRepository dataDictionaryRepository;
 

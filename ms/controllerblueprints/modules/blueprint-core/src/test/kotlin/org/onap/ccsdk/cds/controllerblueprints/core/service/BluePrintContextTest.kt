@@ -18,8 +18,7 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
 
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
+import org.slf4j.LoggerFactory
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -32,7 +31,7 @@ import kotlin.test.assertNotNull
  */
 class BluePrintContextTest {
 
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
+    private val log= LoggerFactory.getLogger(this::class.toString())
 
     val blueprintBasePath: String = ("./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 

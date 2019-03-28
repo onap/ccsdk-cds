@@ -16,11 +16,11 @@
 
 package org.onap.ccsdk.cds.controllerblueprints;
 
-import com.att.eelf.configuration.EELFLogger;
-import com.att.eelf.configuration.EELFManager;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
@@ -29,7 +29,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  * @author Brinda Santh
  */
 public class VersionSplitTest {
-    private static EELFLogger log = EELFManager.getInstance().getLogger(VersionSplitTest.class);
+    private static Logger log = LoggerFactory.getLogger(VersionSplitTest.class);
 
     @Test
     public void testVersionSplit() {

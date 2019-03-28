@@ -16,8 +16,8 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.security;
 
-import com.att.eelf.configuration.EELFLogger;
-import com.att.eelf.configuration.EELFManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
@@ -37,7 +37,7 @@ public class ApplicationSecurityConfigurerAdapter {
     @Value("${basic-auth.hashed-pwd}")
     private String userHashedPassword;
 
-    private static EELFLogger log = EELFManager.getInstance().getLogger(ApplicationSecurityConfigurerAdapter.class);
+    private static Logger log = LoggerFactory.getLogger(ApplicationSecurityConfigurerAdapter.class);
 
     @Bean
     public SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) throws Exception {
