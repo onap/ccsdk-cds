@@ -16,8 +16,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.service.enhancer
 
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
+import org.slf4j.LoggerFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.data.InterfaceDefinition
@@ -38,7 +37,7 @@ import org.springframework.stereotype.Service
 open class BluePrintNodeTypeEnhancerImpl(private val bluePrintRepoService: BluePrintRepoService,
                                          private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService) : BluePrintNodeTypeEnhancer {
 
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintNodeTypeEnhancerImpl::class.toString())
+    private val log= LoggerFactory.getLogger(BluePrintNodeTypeEnhancerImpl::class.toString())
 
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
     lateinit var bluePrintContext: BluePrintContext

@@ -17,8 +17,8 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.core.factory
 
-import com.att.eelf.configuration.EELFManager
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
 
@@ -48,7 +48,7 @@ interface ComponentNode {
  * @author Brinda Santh
  */
 open class ComponentNodeFactory : ApplicationContextAware {
-    private val log = EELFManager.getInstance().getLogger(ComponentNodeFactory::class.java)
+    private val log = LoggerFactory.getLogger(ComponentNodeFactory::class.java)
 
     var componentNodes: MutableMap<String, ComponentNode> = hashMapOf()
 
