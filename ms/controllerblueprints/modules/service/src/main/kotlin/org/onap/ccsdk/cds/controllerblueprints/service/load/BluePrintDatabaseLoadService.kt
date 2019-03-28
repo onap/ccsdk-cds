@@ -17,9 +17,9 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.service.load
 
-import com.att.eelf.configuration.EELFManager
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
+import org.slf4j.LoggerFactory
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
@@ -30,7 +30,7 @@ open class BluePrintDatabaseLoadService(private val bluePrintLoadConfiguration: 
                                         private val resourceDictionaryLoadService: ResourceDictionaryLoadService,
                                         private val bluePrintCatalogLoadService: BluePrintCatalogLoadService) {
 
-    private val log = EELFManager.getInstance().getLogger(BluePrintDatabaseLoadService::class.java)
+    private val log = LoggerFactory.getLogger(BluePrintDatabaseLoadService::class.java)
 
 
     @EventListener(ApplicationReadyEvent::class)

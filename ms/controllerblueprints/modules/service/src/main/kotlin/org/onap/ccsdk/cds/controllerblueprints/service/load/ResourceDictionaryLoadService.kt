@@ -17,7 +17,6 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.service.load
 
-import com.att.eelf.configuration.EELFManager
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -30,13 +29,14 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.cds.controllerblueprints.service.domain.ResourceDictionary
 import org.onap.ccsdk.cds.controllerblueprints.service.handler.ResourceDictionaryHandler
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.File
 
 @Service
 open class ResourceDictionaryLoadService(private val resourceDictionaryHandler: ResourceDictionaryHandler) {
 
-    private val log = EELFManager.getInstance().getLogger(ResourceDictionaryLoadService::class.java)
+    private val log = LoggerFactory.getLogger(ResourceDictionaryLoadService::class.java)
 
     open suspend fun loadPathsResourceDictionary(paths: List<String>) {
         paths.forEach {
