@@ -17,10 +17,10 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.service;
 
-import com.att.eelf.configuration.EELFLogger;
-import com.att.eelf.configuration.EELFManager;
 import org.apache.commons.collections.CollectionUtils;
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.factory.ResourceSourceMappingFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -30,7 +30,7 @@ import java.util.List;
 @Component
 @SuppressWarnings("unused")
 public class ApplicationRegistrationService {
-    private static EELFLogger log = EELFManager.getInstance().getLogger(ApplicationRegistrationService.class);
+    private static Logger log = LoggerFactory.getLogger(ApplicationRegistrationService.class);
 
     @Value("#{'${resourceSourceMappings}'.split(',')}")
     private List<String> resourceSourceMappings;

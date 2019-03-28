@@ -18,8 +18,7 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
 
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
+import org.slf4j.LoggerFactory
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.NullNode
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
@@ -37,7 +36,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.ResourceResolverUtils
  * @author Brinda Santh
  */
 class PropertyAssignmentService(var bluePrintRuntimeService: BluePrintRuntimeService<MutableMap<String, JsonNode>>) {
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
+    private val log= LoggerFactory.getLogger(this::class.toString())
 
     private var bluePrintContext: BluePrintContext = bluePrintRuntimeService.bluePrintContext()
 

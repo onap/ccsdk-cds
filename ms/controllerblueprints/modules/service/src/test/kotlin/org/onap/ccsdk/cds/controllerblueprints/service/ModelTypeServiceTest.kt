@@ -16,7 +16,6 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.service
 
-import com.att.eelf.configuration.EELFManager
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.FixMethodOrder
@@ -28,6 +27,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.service.domain.ModelType
 import org.onap.ccsdk.cds.controllerblueprints.service.handler.ModelTypeHandler
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.test.annotation.Commit
@@ -48,7 +48,7 @@ class ModelTypeServiceTest {
 
     internal var modelName = "test-datatype"
 
-    private val log = EELFManager.getInstance().getLogger(ModelTypeServiceTest::class.java)
+    private val log = LoggerFactory.getLogger(ModelTypeServiceTest::class.java)
 
     @Test
     @Commit

@@ -16,8 +16,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.service.enhancer
 
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
+import org.slf4j.LoggerFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
@@ -43,7 +42,7 @@ open class BluePrintArtifactDefinitionEnhancerImpl(private val bluePrintRepoServ
     }
 
 
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintArtifactDefinitionEnhancerImpl::class.toString())
+    private val log= LoggerFactory.getLogger(BluePrintArtifactDefinitionEnhancerImpl::class.toString())
 
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
     lateinit var bluePrintContext: BluePrintContext
