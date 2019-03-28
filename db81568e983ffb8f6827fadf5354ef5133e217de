@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "cb640272_a76fd2be",
+        "filename": "components/scripts/python/ccsdk_restconf/restconf_client.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 5060
+      },
+      "writtenOn": "2019-03-28T11:26:19Z",
+      "side": 1,
+      "message": "will do",
+      "parentUuid": "33933b3c_74bc0c9b",
+      "revId": "db81568e983ffb8f6827fadf5354ef5133e217de",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "941077e1_b358718d",
         "filename": "components/scripts/python/ccsdk_restconf/restconf_client.py",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2019-03-27T20:03:29Z",
       "side": 1,
       "message": "Replace pnf_id with nf_id throughout file, since it is reusable for both VNF and PNF",
+      "revId": "db81568e983ffb8f6827fadf5354ef5133e217de",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "49a0de9e_c1760572",
+        "filename": "components/scripts/python/ccsdk_restconf/restconf_client.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 5060
+      },
+      "writtenOn": "2019-03-28T11:26:19Z",
+      "side": 1,
+      "message": "will do",
+      "parentUuid": "941077e1_b358718d",
       "revId": "db81568e983ffb8f6827fadf5354ef5133e217de",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "6318c94f_44a9d95f",
+        "filename": "components/scripts/python/ccsdk_restconf/restconf_client.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 5060
+      },
+      "writtenOn": "2019-03-28T11:26:19Z",
+      "side": 1,
+      "message": "will do",
+      "parentUuid": "87092f90_8eece0e9",
+      "revId": "db81568e983ffb8f6827fadf5354ef5133e217de",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4254fa35_6267315e",
         "filename": "components/scripts/python/ccsdk_restconf/restconf_client.py",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2019-03-27T20:03:29Z",
       "side": 1,
       "message": "For reusable code, I don\u0027t think this should always be done due to overhead. The name is also a bit misleading.",
+      "revId": "db81568e983ffb8f6827fadf5354ef5133e217de",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d9c3f658_b29f3c2f",
+        "filename": "components/scripts/python/ccsdk_restconf/restconf_client.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 5060
+      },
+      "writtenOn": "2019-03-28T11:26:19Z",
+      "side": 1,
+      "message": "sent you an email about this, explaining the original reason for this step and providing some alternatives for discussion.",
+      "parentUuid": "4254fa35_6267315e",
       "revId": "db81568e983ffb8f6827fadf5354ef5133e217de",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
