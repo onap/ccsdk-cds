@@ -33,7 +33,7 @@ import java.io.File
 
 @Service
 class BlueprintJythonService(val pythonExecutorProperty: PythonExecutorProperty,
-                             private val applicationContext: ApplicationContext) {
+                                  private val applicationContext: ApplicationContext) {
 
     val log: Logger = LoggerFactory.getLogger(BlueprintJythonService::class.java)
 
@@ -57,7 +57,6 @@ class BlueprintJythonService(val pythonExecutorProperty: PythonExecutorProperty,
 
     fun jythonComponentInstance(bluePrintContext: BluePrintContext, scriptClassReference: String):
             BlueprintFunctionNode<*, *> {
-        val blueprintBasePath: String = bluePrintContext.rootPath
 
         val pythonFileName = bluePrintContext.rootPath
                 .plus(File.separator)
@@ -67,10 +66,6 @@ class BlueprintJythonService(val pythonExecutorProperty: PythonExecutorProperty,
         log.info("Getting Jython Script Class($pythonClassName)")
 
         val content: String = JacksonUtils.getContent(pythonFileName)
-
-        val pythonPath: MutableList<String> = arrayListOf()
-        pythonPath.add(blueprintBasePath)
-        pythonPath.addAll(pythonExecutorProperty.modulePaths)
 
         val jythonInstances: MutableMap<String, Any> = hashMapOf()
         jythonInstances["log"] = LoggerFactory.getLogger(pythonClassName)
