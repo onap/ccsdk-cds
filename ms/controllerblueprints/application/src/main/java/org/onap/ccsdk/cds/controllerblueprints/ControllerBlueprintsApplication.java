@@ -16,8 +16,8 @@
 
 package org.onap.ccsdk.cds.controllerblueprints;
 
-import com.att.eelf.configuration.EELFLogger;
-import com.att.eelf.configuration.EELFManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -32,7 +32,7 @@ import org.springframework.web.reactive.config.EnableWebFlux;
 @ComponentScan(basePackages = {"org.onap.ccsdk.cds.controllerblueprints"})
 @EnableAutoConfiguration
 public class ControllerBlueprintsApplication {
-    private static EELFLogger log = EELFManager.getInstance().getLogger(ControllerBlueprintsApplication.class);
+    private static Logger log = LoggerFactory.getLogger(ControllerBlueprintsApplication.class);
 
     public static void main(String[] args) {
         log.info("****** Starting Controlled Blueprints Application ******");

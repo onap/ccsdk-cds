@@ -17,8 +17,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.resource.dict.service
 
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
+import org.slf4j.LoggerFactory
 import org.apache.commons.collections.CollectionUtils
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.text.StrBuilder
@@ -44,7 +43,7 @@ interface ResourceAssignmentValidationService : Serializable {
  * @author Brinda Santh
  */
 open class ResourceAssignmentValidationServiceImpl : ResourceAssignmentValidationService {
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(ResourceAssignmentValidationServiceImpl::class.java)
+    private val log= LoggerFactory.getLogger(ResourceAssignmentValidationServiceImpl::class.java)
 
     open var resourceAssignmentMap: Map<String, ResourceAssignment> = hashMapOf()
     open val validationMessage = StrBuilder()

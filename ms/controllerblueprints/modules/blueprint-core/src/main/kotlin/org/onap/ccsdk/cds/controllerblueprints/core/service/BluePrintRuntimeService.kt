@@ -18,8 +18,7 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
 
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
+import org.slf4j.LoggerFactory
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
@@ -134,7 +133,7 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
     : BluePrintRuntimeService<MutableMap<String, JsonNode>> {
 
     @Transient
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(BluePrintRuntimeService::class.toString())
+    private val log= LoggerFactory.getLogger(BluePrintRuntimeService::class.toString())
 
     private var store: MutableMap<String, JsonNode> = hashMapOf()
 

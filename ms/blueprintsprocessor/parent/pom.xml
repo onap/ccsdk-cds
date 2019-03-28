@@ -54,6 +54,14 @@
     </properties>
     <dependencyManagement>
         <dependencies>
+
+            <!-- Logging -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
             <!-- Spring Boot -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -63,23 +71,17 @@
                 <scope>import</scope>
             </dependency>
 
-            <!-- Logging Dependencies -->
-            <dependency>
-                <groupId>com.att.eelf</groupId>
-                <artifactId>eelf-core</artifactId>
-                <version>${eelf.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.onap.logging-analytics</groupId>
-                <artifactId>logging-slf4j</artifactId>
-                <version>${onap.logger.slf4j}</version>
-            </dependency>
-
             <!--Swagger Dependencies -->
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger2</artifactId>
                 <version>${springfox.swagger2.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>io.springfox</groupId>
@@ -418,13 +420,10 @@
     </dependencyManagement>
 
     <dependencies>
+        <!-- Logging -->
         <dependency>
-            <groupId>com.att.eelf</groupId>
-            <artifactId>eelf-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.onap.logging-analytics</groupId>
-            <artifactId>logging-slf4j</artifactId>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -445,6 +444,12 @@
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -453,6 +458,12 @@
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
