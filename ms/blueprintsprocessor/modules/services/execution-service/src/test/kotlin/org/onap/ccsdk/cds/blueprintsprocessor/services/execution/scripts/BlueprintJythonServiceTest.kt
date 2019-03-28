@@ -30,6 +30,7 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.assertNotNull
+import kotlin.test.BeforeTest
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [BlueprintJythonService::class, PythonExecutorProperty::class])
@@ -38,25 +39,39 @@ import kotlin.test.assertNotNull
     "blueprints.processor.functions.python.executor.executionPath=./../../../../../components/scripts/python/ccsdk_blueprints"])
 class BlueprintJythonServiceTest {
 
+    lateinit var blueprintContext: BluePrintContext
     @Autowired
     private lateinit var blueprintJythonService: BlueprintJythonService
 
+    @BeforeTest
+    fun init() {
+        blueprintContext = mockk<BluePrintContext>()
+        every { blueprintContext.rootPath } returns normalizedPathName("target")
+    }
+
     @Test
     fun testGetAbstractPythonPlugin() {
-        val bluePrintContext = mockk<BluePrintContext>()
-        every { bluePrintContext.rootPath } returns normalizedPathName("target")
-
-        val dependencies: MutableMap<String, Any> = hashMapOf()
 
         val content = JacksonUtils.getClassPathFileContent("scripts/SamplePythonComponentNode.py")
+        val dependencies: MutableMap<String, Any> = hashMapOf()
 
-        val abstractComponentFunction = blueprintJythonService
-                .jythonInstance<AbstractComponentFunction>(bluePrintContext, "SamplePythonComponentNode",
+        val abstractPythonPlugin = blueprintJythonService
+                .jythonInstance<AbstractComponentFunction>(blueprintContext, "SamplePythonComponentNode",
                         content, dependencies)
 
-        assertNotNull(abstractComponentFunction, "failed to get python component")
+        assertNotNull(abstractPythonPlugin, "failed to get python component")
 
-        abstractComponentFunction.process(ExecutionServiceInput())
+        abstractPythonPlugin.process(ExecutionServiceInput())
 
+    }
+
+    @Test
+    fun testGetAbstractJythonComponent() {
+
+        val scriptInstance = "test-classes/scripts/SamplePythonComponentNode.py"
+
+        val abstractJythonComponent = blueprintJythonService.jythonComponentInstance(blueprintContext, scriptInstance)
+
+        assertNotNull(abstractJythonComponent, "failed to get Jython component")
     }
 }

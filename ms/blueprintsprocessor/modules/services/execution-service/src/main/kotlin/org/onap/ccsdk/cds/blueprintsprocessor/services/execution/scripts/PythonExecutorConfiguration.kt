@@ -23,7 +23,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import java.io.File
-import java.util.*
+import java.util.Properties
 
 @Configuration
 @ComponentScan
