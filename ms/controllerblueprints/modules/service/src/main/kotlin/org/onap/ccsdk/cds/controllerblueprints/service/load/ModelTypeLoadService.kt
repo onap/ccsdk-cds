@@ -17,7 +17,6 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.service.load
 
-import com.att.eelf.configuration.EELFManager
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -31,13 +30,14 @@ import org.onap.ccsdk.cds.controllerblueprints.core.readNBText
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.service.domain.ModelType
 import org.onap.ccsdk.cds.controllerblueprints.service.handler.ModelTypeHandler
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.File
 
 @Service
 open class ModelTypeLoadService(private val modelTypeHandler: ModelTypeHandler) {
 
-    private val log = EELFManager.getInstance().getLogger(ModelTypeLoadService::class.java)
+    private val log = LoggerFactory.getLogger(ModelTypeLoadService::class.java)
     private val updateBySystem = "System"
 
     open suspend fun loadPathsModelType(modelTypePaths: List<String>) {
