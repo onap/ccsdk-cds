@@ -1,6 +1,6 @@
 TOSCA-Meta-File-Version: 1.0.0
 CSAR-Version: 1.0
 Created-By: Alexis de Talhouët
-Entry-Definitions: Definitions/activation-blueprint.json
+Entry-Definitions: Definitions/golden-blueprint.json
 Template-Tags: test
 Content-Type: application/vnd.oasis.bpmn

@@ -55,7 +55,7 @@
         "type" : "source-capability",
         "properties" : {
           "script-type" : "jython",
-          "script-class-reference" : "DescriptionExample",
+          "script-class-reference" : "Scripts/python/DescriptionExample.py",
           "instance-dependencies" : [ ]
         }
       }
