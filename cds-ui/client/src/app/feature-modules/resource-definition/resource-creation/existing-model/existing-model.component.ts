@@ -19,6 +19,10 @@
 */
 
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { IResources } from 'src/app/common/core/store/models/resources.model';
+import { IAppState } from 'src/app/common/core/store/state/app.state';
+import { LoadResourcesSuccess } from 'src/app/common/core/store/actions/resources.action';
 
 @Component({
   selector: 'app-existing-model',
@@ -27,9 +31,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ExistingModelComponent implements OnInit {
 
-  constructor() { }
+  resourceName:string;
+  
+ constructor(private store: Store<IAppState>) { }
 
   ngOnInit() {
-  }
+ }
+ 
+ selectedResource(value){
+  console.log(value);
+  this.resourceName=value;
+ }
+
+ getDataUsingResouceName(){
+ 
+ }
+
+ updateResourcesState() {
+    var me = this; 
+    var data:IResources;
+    me.store.dispatch(new LoadResourcesSuccess(data));   
+ }
+
 
 }
