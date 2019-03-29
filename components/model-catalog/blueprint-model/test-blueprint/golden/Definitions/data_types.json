@@ -1,106 +1,90 @@
 {
-  "data_types" : {
-    "dt-config-deploy-properties" : {
-      "description" : "Dynamic DataType definition for workflow(config-deploy).",
-      "version" : "1.0.0",
-      "properties" : {
-        "vfw_interface_ip" : {
-          "type" : "dt-netbox-ip"
+  "data_types": {
+    "dt-resource-assignment-properties": {
+      "description": "Dynamic DataType definition for workflow(resource-assignment).",
+      "version": "1.0.0",
+      "properties": {
+        "vfw_interface_ip": {
+          "type": "dt-netbox-ip"
         },
-        "interface-name" : {
-          "type" : "string"
+        "interface-description": {
+          "type": "string"
         },
-        "interface-description" : {
-          "type" : "string"
+        "vf-module-type": {
+          "type": "string"
         },
-        "unit-number" : {
-          "type" : "string"
+        "vf-module-number": {
+          "type": "string",
+          "default": "3"
         },
-        "prefix-id" : {
-          "type" : "string",
-          "default" : "11"
-        },
-        "vf-module-type" : {
-          "type" : "string"
-        },
-        "vf-module-number" : {
-          "type" : "string",
-          "default" : "3"
+        "prefix-id": {
+          "type": "integer",
+          "default": 11
         }
       },
-      "derived_from" : "tosca.datatypes.Dynamic"
+      "derived_from": "tosca.datatypes.Dynamic"
     },
-    "dt-netbox-ip" : {
-      "description" : "This is Netbox IP Data Type",
-      "version" : "1.0.0",
-      "properties" : {
-        "address" : {
-          "required" : true,
-          "type" : "string"
-        },
-        "id" : {
-          "required" : true,
-          "type" : "integer"
+    "dt-config-assign-properties": {
+      "description": "Dynamic DataType definition for workflow(config-assign).",
+      "version": "1.0.0",
+      "properties": {
+        "hostname": {
+          "type": "string"
         }
       },
-      "derived_from" : "tosca.datatypes.Root"
+      "derived_from": "tosca.datatypes.Dynamic"
     },
-    "dt-resource-assignment-properties" : {
-      "description" : "Dynamic DataType definition for workflow(resource-assignment).",
-      "version" : "1.0.0",
-      "properties" : {
-        "hostname" : {
-          "type" : "string"
+    "dt-config-deploy-properties": {
+      "description": "Dynamic DataType definition for workflow(config-deploy).",
+      "version": "1.0.0",
+      "properties": {
+        "vfw_interface_ip": {
+          "type": "dt-netbox-ip"
         },
-        "vfw_interface_ip" : {
-          "type" : "dt-netbox-ip"
+        "interface-name": {
+          "type": "string"
         },
-        "interface-description" : {
-          "type" : "string"
+        "interface-description": {
+          "type": "string"
         },
-        "vf-module-type" : {
-          "type" : "string"
+        "unit-number": {
+          "type": "string"
         },
-        "vf-module-number" : {
-          "type" : "string",
-          "default" : "3"
+        "prefix-id": {
+          "type": "string",
+          "default": "11"
         },
-        "prefix-id" : {
-          "type" : "integer",
-          "default" : 11
+        "vf-module-type": {
+          "type": "string"
+        },
+        "vf-module-number": {
+          "type": "string",
+          "default": "3"
         }
       },
-      "derived_from" : "tosca.datatypes.Dynamic"
+      "derived_from": "tosca.datatypes.Dynamic"
     },
-    "dt-rollback-properties" : {
-      "description" : "Dynamic DataType definition for workflow(rollback).",
-      "version" : "1.0.0",
-      "properties" : {
-        "vfw_interface_ip" : {
-          "type" : "dt-netbox-ip"
+    "dt-rollback-properties": {
+      "description": "Dynamic DataType definition for workflow(rollback).",
+      "version": "1.0.0",
+      "properties": {
+      },
+      "derived_from": "tosca.datatypes.Dynamic"
+    },
+    "dt-netbox-ip": {
+      "description": "This is Netbox IP Data Type",
+      "version": "1.0.0",
+      "properties": {
+        "address": {
+          "required": true,
+          "type": "string"
         },
-        "interface-name" : {
-          "type" : "string"
-        },
-        "interface-description" : {
-          "type" : "string"
-        },
-        "unit-number" : {
-          "type" : "string"
-        },
-        "prefix-id" : {
-          "type" : "string",
-          "default" : "11"
-        },
-        "vf-module-type" : {
-          "type" : "string"
-        },
-        "vf-module-number" : {
-          "type" : "string",
-          "default" : "3"
+        "id": {
+          "required": true,
+          "type": "integer"
         }
       },
-      "derived_from" : "tosca.datatypes.Dynamic"
+      "derived_from": "tosca.datatypes.Root"
     }
   }
 }
