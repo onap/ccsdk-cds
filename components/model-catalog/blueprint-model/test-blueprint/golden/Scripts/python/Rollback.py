@@ -14,7 +14,6 @@
 
 import netconf_constant
 from common import ResolutionHelper
-from java.lang import Exception as JavaException
 from netconfclient import NetconfClient
 from org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor import \
   NetconfComponentFunction
@@ -23,25 +22,22 @@ from org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor import \
 class Rollback(NetconfComponentFunction):
 
   def process(self, execution_request):
-    try:
-      log = globals()[netconf_constant.SERVICE_LOG]
-      print(globals())
 
-      nc = NetconfClient(log, self, "netconf-connection")
-      rr = ResolutionHelper(self)
+        log = globals()[netconf_constant.SERVICE_LOG]
+        print(globals())
 
-      # rollback config on device
-      nc.connect()
-      payloadHostnameRollback = rr.resolve_and_generate_message_from_template_prefix("junos-rollback-RPC")
-      nc.invoke_rpc(payloadHostnameRollback)
-      nc.commit()
-      nc.disconnect()
+        nc = NetconfClient(log, self, "netconf-connection")
+        rr = ResolutionHelper(self)
 
-    except JavaException, err:
-      log.error("Java Exception in the script {}", err)
-    except Exception, err:
-      log.error("Python Exception in the script {}", err)
+        # rollback config on device
+        nc.connect()
+        payloadHostnameRollback = rr.resolve_and_generate_message_from_template_prefix("junos-rollback-RPC")
+        nc.invoke_rpc(payloadHostnameRollback)
+        nc.commit()
+        nc.disconnect()
+        return None
 
   def recover(self, runtime_exception, execution_request):
-    print self.addError(runtime_exception.getMessage())
-    return None
+        log.error("Exception in the script {}", runtime_exception)
+        print self.addError(runtime_exception.cause.message)
+        return None
