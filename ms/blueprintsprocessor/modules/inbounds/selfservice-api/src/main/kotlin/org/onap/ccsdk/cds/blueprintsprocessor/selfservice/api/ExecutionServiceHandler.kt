@@ -62,7 +62,7 @@ class ExecutionServiceHandler(private val bluePrintPathConfiguration: BluePrintP
             return bluePrintCatalogService.saveToDatabase(saveId, compressedFile, true)
         } catch (e: IOException) {
             throw BluePrintException(ErrorCode.IO_FILE_INTERRUPT.value,
-                    "Error in Upload CBA: ${e.message}", e)
+                "Error in Upload CBA: ${e.message}", e)
         } finally {
             deleteNBDir(blueprintArchive)
             deleteNBDir(blueprintWorking)
@@ -90,41 +90,42 @@ class ExecutionServiceHandler(private val bluePrintPathConfiguration: BluePrintP
                 responseObserver.onCompleted()
             }
             else -> responseObserver.onNext(response(executionServiceInput,
-                    "Failed to process request, 'actionIdentifiers.mode' not specified. Valid value are: 'sync' or 'async'.",
-                    true).toProto());
+                "Failed to process request, 'actionIdentifiers.mode' not specified. Valid value are: 'sync' or 'async'.",
+                true).toProto());
         }
     }
 
     suspend fun doProcess(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
         val requestId = executionServiceInput.commonHeader.requestId
         log.info("processing request id $requestId")
-
         val actionIdentifiers = executionServiceInput.actionIdentifiers
-
         val blueprintName = actionIdentifiers.blueprintName
         val blueprintVersion = actionIdentifiers.blueprintVersion
+        try {
+            val basePath = bluePrintCatalogService.getFromDatabase(blueprintName, blueprintVersion)
+            log.info("blueprint base path $basePath")
 
-        val basePath = bluePrintCatalogService.getFromDatabase(blueprintName, blueprintVersion)
-        log.info("blueprint base path $basePath")
+            val blueprintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(requestId, basePath.toString())
 
-        val blueprintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(requestId, basePath.toString())
-
-        val output = bluePrintWorkflowExecutionService.executeBluePrintWorkflow(blueprintRuntimeService,
+            val output = bluePrintWorkflowExecutionService.executeBluePrintWorkflow(blueprintRuntimeService,
                 executionServiceInput, hashMapOf())
 
-        val errors = blueprintRuntimeService.getBluePrintError().errors
-        if (errors.isNotEmpty()) {
-            val errorMessage = errors.stream().map { it.toString() }.collect(Collectors.joining(", "))
-            setErrorStatus(errorMessage, output.status)
+            val errors = blueprintRuntimeService.getBluePrintError().errors
+            if (errors.isNotEmpty()) {
+                val errorMessage = errors.stream().map { it.toString() }.collect(Collectors.joining(", "))
+                setErrorStatus(errorMessage, output.status)
+            }
+            return output
+        } catch (e: Exception) {
+            log.error("fail processing request id $requestId", e)
+            return response(executionServiceInput, e.localizedMessage, true)
         }
-
-        return output
     }
 
     private suspend fun copyFromFilePart(filePart: FilePart, targetFile: File): File {
         return filePart.transferTo(targetFile)
-                .thenReturn(targetFile)
-                .awaitSingle()
+            .thenReturn(targetFile)
+            .awaitSingle()
     }
 
     private fun setErrorStatus(errorMessage: String, status: Status) {
@@ -139,10 +140,10 @@ class ExecutionServiceHandler(private val bluePrintPathConfiguration: BluePrintP
         val executionServiceOutput = ExecutionServiceOutput()
         executionServiceOutput.commonHeader = executionServiceInput.commonHeader
         executionServiceOutput.actionIdentifiers = executionServiceInput.actionIdentifiers
-        executionServiceOutput.payload = JsonNodeFactory.instance.objectNode()
 
         val status = Status()
         if (failure) {
+            executionServiceOutput.payload = JsonNodeFactory.instance.objectNode()
             setErrorStatus(errorMessage, status)
         } else {
             status.eventType = EventType.EVENT_COMPONENT_PROCESSING.name
