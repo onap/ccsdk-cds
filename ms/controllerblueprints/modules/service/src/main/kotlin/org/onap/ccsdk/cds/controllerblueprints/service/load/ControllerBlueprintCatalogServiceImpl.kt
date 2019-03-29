@@ -23,7 +23,9 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.common.ApplicationConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ErrorCode
+import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidatorService
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPath
 import org.onap.ccsdk.cds.controllerblueprints.db.resources.BlueprintCatalogServiceImpl
 import org.onap.ccsdk.cds.controllerblueprints.service.domain.BlueprintModel
 import org.onap.ccsdk.cds.controllerblueprints.service.domain.BlueprintModelContent
@@ -34,7 +36,7 @@ import org.springframework.stereotype.Service
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
+import java.util.*
 
 /**
  * Similar implementation in [org.onap.ccsdk.cds.blueprintsprocessor.db.BlueprintProcessorCatalogServiceImpl]
@@ -43,7 +45,7 @@ import java.nio.file.Paths
 class ControllerBlueprintCatalogServiceImpl(bluePrintValidatorService: BluePrintValidatorService,
                                             private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
                                             private val blueprintModelRepository: ControllerBlueprintModelRepository)
-    : BlueprintCatalogServiceImpl(bluePrintValidatorService) {
+    : BlueprintCatalogServiceImpl(bluePrintLoadConfiguration, bluePrintValidatorService) {
 
 
     private val log = LoggerFactory.getLogger(ControllerBlueprintCatalogServiceImpl::class.toString())
@@ -52,13 +54,18 @@ class ControllerBlueprintCatalogServiceImpl(bluePrintValidatorService: BluePrint
         log.info("BlueprintProcessorCatalogServiceImpl initialized")
     }
 
-    override fun delete(name: String, version: String) = blueprintModelRepository.deleteByArtifactNameAndArtifactVersion(name, version)
+    override suspend fun delete(name: String, version: String) {
+        // Cleaning Deployed Blueprint
+        deleteDir(bluePrintLoadConfiguration.blueprintDeployPath, name, version)
+        // Cleaning Data Base
+        blueprintModelRepository.deleteByArtifactNameAndArtifactVersion(name, version)
+    }
 
-    override fun get(name: String, version: String, extract: Boolean): Path? {
+    override suspend fun get(name: String, version: String, extract: Boolean): Path? {
         val path = if (extract) {
-            Paths.get("${bluePrintLoadConfiguration.blueprintDeployPath}/$name/$version")
+            normalizedPath(bluePrintLoadConfiguration.blueprintDeployPath, name, version)
         } else {
-            Paths.get("${bluePrintLoadConfiguration.blueprintArchivePath}/$name/$version.zip")
+            normalizedPath(bluePrintLoadConfiguration.blueprintArchivePath, UUID.randomUUID().toString(), "cba.zip")
         }
         blueprintModelRepository.findByArtifactNameAndArtifactVersion(name, version)?.also {
             it.blueprintModelContent.run {
@@ -70,11 +77,14 @@ class ControllerBlueprintCatalogServiceImpl(bluePrintValidatorService: BluePrint
         return null
     }
 
-    override fun save(metadata: MutableMap<String, String>, archiveFile: File) {
+    override suspend fun save(metadata: MutableMap<String, String>, archiveFile: File) {
 
         val artifactName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]
         val artifactVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]
 
+        check(archiveFile.isFile && !archiveFile.isDirectory) {
+            throw BluePrintException("Not a valid Archive file(${archiveFile.absolutePath})")
+        }
 
         blueprintModelRepository.findByArtifactNameAndArtifactVersion(artifactName!!, artifactVersion!!)?.let {
             log.info("Overwriting blueprint model :$artifactName::$artifactVersion")

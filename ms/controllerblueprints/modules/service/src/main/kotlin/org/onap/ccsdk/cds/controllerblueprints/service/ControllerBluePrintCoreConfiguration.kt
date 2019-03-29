@@ -34,7 +34,7 @@ open class ControllerBluePrintCoreConfiguration(private val bluePrintProperties:
     }
 
     @Bean
-    open fun controlelrBlueprintLoadConfiguration(): BluePrintLoadConfiguration {
+    open fun bluePrintLoadConfiguration(): BluePrintLoadConfiguration {
         return bluePrintProperties
                 .propertyBeanType(PREFIX_BLUEPRINT_LOAD_CONFIGURATION, BluePrintLoadConfiguration::class.java)
     }
@@ -53,7 +53,7 @@ open class ControllerBlueprintPropertyConfiguration {
 }
 
 @Service
-open class ControllerBlueprintProperties(var bluePrintPropertyBinder: Binder) {
+open class ControllerBlueprintProperties(private var bluePrintPropertyBinder: Binder) {
     fun <T> propertyBeanType(prefix: String, type: Class<T>): T {
         return bluePrintPropertyBinder.bind(prefix, Bindable.of(type)).get()
     }

@@ -27,7 +27,6 @@ import org.springframework.http.MediaType
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
-import reactor.core.publisher.Mono
 
 @RestController
 @RequestMapping("/api/v1/execution-service")
@@ -46,11 +45,8 @@ open class ExecutionServiceController {
     @ApiOperation(value = "Upload CBA", notes = "Takes a File and load it in the runtime database")
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
-    fun upload(@RequestPart("file") parts: Mono<FilePart>): Mono<String> {
-        return parts
-                .filter { it is FilePart }
-                .ofType(FilePart::class.java)
-                .flatMap(executionServiceHandler::upload)
+    fun upload(@RequestPart("file") filePart: FilePart): String = runBlocking {
+        executionServiceHandler.upload(filePart)
     }
 
     @RequestMapping(path = ["/process"], method = [RequestMethod.POST], produces = [MediaType.APPLICATION_JSON_VALUE])
