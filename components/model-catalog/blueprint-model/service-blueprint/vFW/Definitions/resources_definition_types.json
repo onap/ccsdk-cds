@@ -1,0 +1,1004 @@
+{
+  "aic-cloud-region" : {
+    "tags" : "aic-cloud-region",
+    "name" : "aic-cloud-region",
+    "property" : {
+      "description" : "aic-cloud-region",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      }
+    }
+  },
+  "image_name" : {
+    "tags" : "image_name",
+    "name" : "image_name",
+    "property" : {
+      "description" : "image_name",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "primary-config-data" : {
+        "type" : "source-rest",
+        "properties" : {
+          "type" : "JSON",
+          "url-path" : "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/image_name",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "image_name" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "key_name" : {
+    "tags" : "key_name",
+    "name" : "key_name",
+    "property" : {
+      "description" : "key_name",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "primary-config-data" : {
+        "type" : "source-rest",
+        "properties" : {
+          "type" : "JSON",
+          "url-path" : "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/key_name",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "key_name" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "nexus_artifact_repo" : {
+    "tags" : "nexus_artifact_repo",
+    "name" : "nexus_artifact_repo",
+    "property" : {
+      "description" : "nexus_artifact_repo",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      }
+    }
+  },
+  "nf-role" : {
+    "tags" : "nf-role",
+    "name" : "nf-role",
+    "property" : {
+      "description" : "vnf/nf-role",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "processor-db" : {
+        "type" : "source-processor-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select sdnctl.VF_MODEL.nf_role as vf_model_role from sdnctl.VF_MODEL where sdnctl.VF_MODEL.customization_uuid=:vnfmodelcustomizationuuid",
+          "input-key-mapping" : {
+            "vnfmodelcustomizationuuid" : "vnf-model-customization-uuid"
+          },
+          "output-key-mapping" : {
+            "nf-role" : "vf_model_role"
+          },
+          "key-dependencies" : [ "vnf-model-customization-uuid" ]
+        }
+      }
+    }
+  },
+  "nfc-naming-code" : {
+    "tags" : "nfc-naming-code",
+    "name" : "nfc-naming-code",
+    "property" : {
+      "description" : "nfc-naming-code",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "processor-db" : {
+        "type" : "source-processor-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select nfc_naming_code as nfc_naming_code from sdnctl.VFC_MODEL where customization_uuid=:vfccustomizationuuid",
+          "input-key-mapping" : {
+            "vfccustomizationuuid" : "vfccustomizationuuid"
+          },
+          "output-key-mapping" : {
+            "nfc-naming-code" : "nfc_naming_code"
+          },
+          "key-dependencies" : [ "vfccustomizationuuid" ]
+        }
+      }
+    }
+  },
+  "onap_private_net_cidr" : {
+    "tags" : "onap_private_net_cidr",
+    "name" : "onap_private_net_cidr",
+    "property" : {
+      "description" : "onap_private_net_cidr",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "processor-db" : {
+        "type" : "source-processor-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select sdnctl.IPAM_IP_POOL.prefix as prefix from sdnctl.IPAM_IP_POOL where description = \"private\"",
+          "output-key-mapping" : {
+            "onap_private_net_cidr" : "prefix"
+          }
+        }
+      }
+    }
+  },
+  "onap_private_net_id" : {
+    "tags" : "onap_private_net_id",
+    "name" : "onap_private_net_id",
+    "property" : {
+      "description" : "onap_private_net_id",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "primary-config-data" : {
+        "type" : "source-rest",
+        "properties" : {
+          "type" : "JSON",
+          "url-path" : "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/onap_private_net_id",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "onap_private_net_id" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "onap_private_subnet_id" : {
+    "tags" : "onap_private_subnet_id",
+    "name" : "onap_private_subnet_id",
+    "property" : {
+      "description" : "onap_private_subnet_id",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "primary-config-data" : {
+        "type" : "source-rest",
+        "properties" : {
+          "type" : "JSON",
+          "url-path" : "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/onap_private_subnet_id",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "onap_private_subnet_id" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "private-prefix-id" : {
+    "tags" : "private-prefix-id",
+    "name" : "private-prefix-id",
+    "property" : {
+      "description" : "private-prefix-id",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "processor-db" : {
+        "type" : "source-processor-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select sdnctl.IPAM_IP_POOL.prefix_id as prefix_id from sdnctl.IPAM_IP_POOL where description = \"private\"",
+          "output-key-mapping" : {
+            "private-prefix-id" : "prefix_id"
+          }
+        }
+      }
+    }
+  },
+  "protected-prefix-id" : {
+    "tags" : "protected-prefix-id",
+    "name" : "protected-prefix-id",
+    "property" : {
+      "description" : "protected-prefix-id",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "processor-db" : {
+        "type" : "source-processor-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select sdnctl.IPAM_IP_POOL.prefix_id as prefix_id from sdnctl.IPAM_IP_POOL where description = \"protected\"",
+          "output-key-mapping" : {
+            "protected-prefix-id" : "prefix_id"
+          }
+        }
+      }
+    }
+  },
+  "protected_private_net_cidr" : {
+    "tags" : "protected_private_net_cidr",
+    "name" : "protected_private_net_cidr",
+    "property" : {
+      "description" : "protected_private_net_cidr",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "processor-db" : {
+        "type" : "source-processor-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select sdnctl.IPAM_IP_POOL.prefix as prefix from sdnctl.IPAM_IP_POOL where description = \"protected\"",
+          "output-key-mapping" : {
+            "protected_private_net_cidr" : "prefix"
+          }
+        }
+      }
+    }
+  },
+  "pub_key" : {
+    "tags" : "pub_key",
+    "name" : "pub_key",
+    "property" : {
+      "description" : "pub_key",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "primary-config-data" : {
+        "type" : "source-rest",
+        "properties" : {
+          "type" : "JSON",
+          "url-path" : "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/pub_key",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "pub_key" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "public_net_id" : {
+    "tags" : "public_net_id",
+    "name" : "public_net_id",
+    "property" : {
+      "description" : "public_net_id",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "input" : {
+        "type" : "source-input"
+      }
+    }
+  },
+  "sec_group" : {
+    "tags" : "sec_group",
+    "name" : "sec_group",
+    "property" : {
+      "description" : "sec_group",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      }
+    }
+  },
+  "service-instance-id" : {
+    "tags" : "service-instance-id, tosca.datatypes.Root, data_type",
+    "name" : "service-instance-id",
+    "property" : {
+      "description" : "To be provided",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      },
+      "any-db" : {
+        "type" : "source-processor-db",
+        "properties" : {
+          "query" : "SELECT artifact_name FROM BLUEPRINT_RUNTIME where artifact_version=\"1.0.0\"",
+          "input-key-mapping" : { },
+          "output-key-mapping" : {
+            "service-instance-id" : "artifact_name"
+          }
+        }
+      },
+      "processor-db" : {
+        "type" : "source-processor-db",
+        "properties" : {
+          "query" : "SELECT artifact_name FROM BLUEPRINT_RUNTIME where artifact_version=\"1.0.0\"",
+          "input-key-mapping" : { },
+          "output-key-mapping" : {
+            "service-instance-id" : "artifact_name"
+          }
+        }
+      },
+      "capability" : {
+        "type" : "source-capability",
+        "properties" : {
+          "script-type" : "jython",
+          "script-class-reference" : "SampleRAProcessor",
+          "instance-dependencies" : [ ]
+        }
+      }
+    }
+  },
+  "unprotected-prefix-id" : {
+    "tags" : "unprotected-prefix-id",
+    "name" : "unprotected-prefix-id",
+    "property" : {
+      "description" : "unprotected-prefix-id",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "processor-db" : {
+        "type" : "source-processor-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select sdnctl.IPAM_IP_POOL.prefix_id as prefix_id from sdnctl.IPAM_IP_POOL where description = \"unprotected\"",
+          "output-key-mapping" : {
+            "unprotected-prefix-id" : "prefix_id"
+          }
+        }
+      }
+    }
+  },
+  "unprotected_private_net_cidr" : {
+    "tags" : "unprotected_private_net_cidr",
+    "name" : "unprotected_private_net_cidr",
+    "property" : {
+      "description" : "unprotected_private_net_cidr",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "processor-db" : {
+        "type" : "source-processor-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select sdnctl.IPAM_IP_POOL.prefix as prefix from sdnctl.IPAM_IP_POOL where description = \"unprotected\"",
+          "output-key-mapping" : {
+            "unprotected_private_net_cidr" : "prefix"
+          }
+        }
+      }
+    }
+  },
+  "vf-module-id" : {
+    "tags" : "vf-module-id",
+    "name" : "vf-module-id",
+    "property" : {
+      "description" : "vf-module-id",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      }
+    }
+  },
+  "vf-module-label" : {
+    "tags" : "vf-module-label",
+    "name" : "vf-module-label",
+    "property" : {
+      "description" : "vf-module-label",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "processor-db" : {
+        "type" : "source-processor-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select sdnctl.VF_MODULE_MODEL.vf_module_label as vf_module_label from sdnctl.VF_MODULE_MODEL where sdnctl.VF_MODULE_MODEL.customization_uuid=:customizationid",
+          "input-key-mapping" : {
+            "customizationid" : "vf-module-model-customization-uuid"
+          },
+          "output-key-mapping" : {
+            "vf-module-label" : "vf_module_label"
+          },
+          "key-dependencies" : [ "vf-module-model-customization-uuid" ]
+        }
+      }
+    }
+  },
+  "vf-module-model-customization-uuid" : {
+    "tags" : "vf-module-model-customization-uuid",
+    "name" : "vf-module-model-customization-uuid",
+    "property" : {
+      "description" : "vf-module-model-customization-uuid",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      }
+    }
+  },
+  "vf-module-type" : {
+    "tags" : "vf-module-type",
+    "name" : "vf-module-type",
+    "property" : {
+      "description" : "vf-module-type",
+      "type" : "string"
+    },
+    "updated-by" : "adetalhouet",
+    "sources" : {
+      "processor-db" : {
+        "type" : "source-processor-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select sdnctl.demo.value as value from sdnctl.demo where sdnctl.demo.id=:vfmoduleid",
+          "input-key-mapping" : {
+            "vfmoduleid" : "vf-module-number"
+          },
+          "output-key-mapping" : {
+            "vf-module-type" : "value"
+          },
+          "key-dependencies" : [ "vf-module-number" ]
+        }
+      }
+    }
+  },
+  "vf-naming-policy" : {
+    "tags" : "vf-naming-policy",
+    "name" : "vf-naming-policy",
+    "property" : {
+      "description" : "vf-naming-policy",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "processor-db" : {
+        "type" : "source-processor-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select sdnctl.VF_MODEL.naming_policy as vf_naming_policy from sdnctl.VF_MODEL where sdnctl.VF_MODEL.customization_uuid=:vnf_model_customization_uuid",
+          "input-key-mapping" : {
+            "vnf_model_customization_uuid" : "vnf-model-customization-uuid"
+          },
+          "output-key-mapping" : {
+            "vf-naming-policy" : "vf_naming_policy"
+          },
+          "key-dependencies" : [ "vnf-model-customization-uuid" ]
+        }
+      }
+    }
+  },
+  "vf-nf-code" : {
+    "tags" : "vf-nf-code",
+    "name" : "vf-nf-code",
+    "property" : {
+      "description" : "vf-nf-code",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "processor-db" : {
+        "type" : "source-processor-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select sdnctl.VF_MODEL.nf_code as vf_nf_code from sdnctl.VF_MODEL where sdnctl.VF_MODEL.customization_uuid=:customizationid",
+          "input-key-mapping" : {
+            "customizationid" : "vnf-model-customization-uuid"
+          },
+          "output-key-mapping" : {
+            "vf-nf-code" : "vf_nf_code"
+          },
+          "key-dependencies" : [ "vnf-model-customization-uuid" ]
+        }
+      }
+    }
+  },
+  "vf_module_name" : {
+    "tags" : "vf_module_name",
+    "name" : "vf_module_name",
+    "property" : {
+      "description" : "vf_module_name",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      }
+    }
+  },
+  "vfccustomizationuuid" : {
+    "tags" : "vfccustomizationuuid, tosca.datatypes.Root, data_type",
+    "name" : "vfccustomizationuuid",
+    "property" : {
+      "description" : "vfccustomizationuuid",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "processor-db" : {
+        "type" : "source-processor-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select sdnctl.VF_MODULE_TO_VFC_MAPPING.vfc_customization_uuid as vnf_customid from sdnctl.VF_MODULE_TO_VFC_MAPPING where vm_count = 1 and sdnctl.VF_MODULE_TO_VFC_MAPPING.vf_module_customization_uuid=:vfmodulecustomizationuuid",
+          "input-key-mapping" : {
+            "vfmodulecustomizationuuid" : "vf-module-model-customization-uuid"
+          },
+          "output-key-mapping" : {
+            "vfccustomizationuuid" : "vnf_customid"
+          },
+          "key-dependencies" : [ "vf-module-model-customization-uuid" ]
+        }
+      }
+    }
+  },
+  "vfw_name_0" : {
+    "tags" : "vfw_name_0",
+    "name" : "vfw_name_0",
+    "property" : {
+      "description" : "vfw_name_0",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      }
+    }
+  },
+  "vfw_private_ip_0" : {
+    "tags" : "vfw_private_ip_0",
+    "name" : "vfw_private_ip_0",
+    "property" : {
+      "description" : "vfw_private_ip_0",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      },
+      "primary-config-data" : {
+        "type" : "source-rest",
+        "properties" : {
+          "type" : "JSON",
+          "url-path" : "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vfw_private_ip_0",
+          "path" : "/param/0/value",
+          "expression-type" : "JSON_POINTER",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vfw_private_ip_0" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "vfw_private_ip_1" : {
+    "tags" : "vfw_private_ip_1",
+    "name" : "vfw_private_ip_1",
+    "property" : {
+      "description" : "vfw_private_ip_1",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      },
+      "primary-config-data" : {
+        "type" : "source-rest",
+        "properties" : {
+          "type" : "JSON",
+          "url-path" : "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vfw_private_ip_1",
+          "path" : "/param/0/value",
+          "expression-type" : "JSON_POINTER",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vfw_private_ip_1" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "vfw_private_ip_2" : {
+    "tags" : "vfw_private_ip_2",
+    "name" : "vfw_private_ip_2",
+    "property" : {
+      "description" : "vfw_private_ip_2",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      }
+    }
+  },
+  "vm-type" : {
+    "tags" : "vm-type",
+    "name" : "vm-type",
+    "property" : {
+      "description" : "vm-type",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "processor-db" : {
+        "type" : "source-processor-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select VFC_MODEL.vm_type as vm_type from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
+          "input-key-mapping" : {
+            "vfccustomizationuuid" : "vfccustomizationuuid"
+          },
+          "output-key-mapping" : {
+            "vm-type" : "vm_type"
+          },
+          "key-dependencies" : [ "vfccustomizationuuid" ]
+        }
+      }
+    }
+  },
+  "vnf-id" : {
+    "tags" : "vnf-id",
+    "name" : "vnf-id",
+    "property" : {
+      "description" : "vnf-id",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      }
+    }
+  },
+  "vnf-model-customization-uuid" : {
+    "tags" : "vnf-model-customization-uuid",
+    "name" : "vnf-model-customization-uuid",
+    "property" : {
+      "description" : "vnf-model-customization-uuid",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      }
+    }
+  },
+  "vnf-name" : {
+    "tags" : "vnf-name, tosca.datatypes.Root, data_type",
+    "name" : "vnf-name",
+    "property" : {
+      "description" : "vnf-name",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "primary-config-data" : {
+        "type" : "source-rest",
+        "properties" : {
+          "type" : "JSON",
+          "url-path" : "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vnf_name",
+          "path" : "/param/0/value",
+          "expression-type" : "JSON_POINTER",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vnf-name" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "vnf_name" : {
+    "tags" : "vnf_name",
+    "name" : "vnf_name",
+    "property" : {
+      "description" : "vnf_name",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      },
+      "primary-config-data" : {
+        "type" : "source-rest",
+        "properties" : {
+          "type" : "JSON",
+          "url-path" : "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vnf_name",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vnf_name" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "vnfc-model-invariant-uuid" : {
+    "tags" : "vnfc-model-invariant-uuid",
+    "name" : "vnfc-model-invariant-uuid",
+    "property" : {
+      "description" : "vnfc-model-invariant-uuid for SRIOV VPE template",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "processor-db" : {
+        "type" : "source-processor-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select VFC_MODEL.invariant_uuid as vfc_invariant_uuid from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
+          "input-key-mapping" : {
+            "vfccustomizationuuid" : "vfccustomizationuuid"
+          },
+          "output-key-mapping" : {
+            "vnfc-model-invariant-uuid" : "vfc_invariant_uuid"
+          },
+          "key-dependencies" : [ "vfccustomizationuuid" ]
+        }
+      }
+    }
+  },
+  "vnfc-model-version" : {
+    "tags" : "vnfc-model-version",
+    "name" : "vnfc-model-version",
+    "property" : {
+      "description" : "vnfc-model-version for  SRIOV VPE template",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "processor-db" : {
+        "type" : "source-processor-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select VFC_MODEL.version as vnfc_model_version from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
+          "input-key-mapping" : {
+            "vfccustomizationuuid" : "vfccustomizationuuid"
+          },
+          "output-key-mapping" : {
+            "vnfc-model-version" : "vnfc_model_version"
+          },
+          "key-dependencies" : [ "vfccustomizationuuid" ]
+        }
+      }
+    }
+  },
+  "vpg_name_0" : {
+    "tags" : "vpg_name_0",
+    "name" : "vpg_name_0",
+    "property" : {
+      "description" : "vpg_name_0",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      }
+    }
+  },
+  "vpg_private_ip_0" : {
+    "tags" : "vpg_private_ip_0",
+    "name" : "vpg_private_ip_0",
+    "property" : {
+      "description" : "vpg_private_ip_0",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      },
+      "primary-config-data" : {
+        "type" : "source-rest",
+        "properties" : {
+          "type" : "JSON",
+          "url-path" : "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vpg_private_ip_0",
+          "path" : "/param/0/value",
+          "expression-type" : "JSON_POINTER",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vpg_private_ip_0" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "vpg_private_ip_1" : {
+    "tags" : "vpg_private_ip_1",
+    "name" : "vpg_private_ip_1",
+    "property" : {
+      "description" : "vpg_private_ip_1",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      }
+    }
+  },
+  "vsn_name_0" : {
+    "tags" : "vsn_name_0",
+    "name" : "vsn_name_0",
+    "property" : {
+      "description" : "vsn_name_0",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      }
+    }
+  },
+  "vsn_private_ip_0" : {
+    "tags" : "vsn_private_ip_0",
+    "name" : "vsn_private_ip_0",
+    "property" : {
+      "description" : "vsn_private_ip_0",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      },
+      "primary-config-data" : {
+        "type" : "source-rest",
+        "properties" : {
+          "type" : "JSON",
+          "url-path" : "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vsn_private_ip_0",
+          "path" : "/param/0/value",
+          "expression-type" : "JSON_POINTER",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vsn_private_ip_0" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "vsn_private_ip_1" : {
+    "tags" : "vsn_private_ip_1",
+    "name" : "vsn_private_ip_1",
+    "property" : {
+      "description" : "vsn_private_ip_1",
+      "type" : "string"
+    },
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      }
+    }
+  }
+}

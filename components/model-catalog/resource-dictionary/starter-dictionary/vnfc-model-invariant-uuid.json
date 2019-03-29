@@ -7,8 +7,8 @@
     "type" : "string"
   },
   "sources" : {
-    "primary-db" : {
-      "type" : "source-primary-db",
+    "processor-db" : {
+      "type" : "source-processor-db",
       "properties" : {
         "type" : "SQL",
         "query" : "select VFC_MODEL.invariant_uuid as vfc_invariant_uuid from VFC_MODEL where customization_uuid=:vfccustomizationuuid",

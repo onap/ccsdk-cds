@@ -54,18 +54,24 @@ class BluePrintEnhancerServiceImplTest {
     @Before
     fun init() {
         runBlocking {
-            modelTypeLoadService.loadPathModelType("./../../../../components/model-catalog/definition-type/starter-type")
-            resourceDictionaryLoadService.loadPathResourceDictionary("./../../../../components/model-catalog/resource-dictionary/starter-dictionary")
-            resourceDictionaryLoadService.loadPathResourceDictionary("./../../../../components/model-catalog/resource-dictionary/test-dictionary")
+            modelTypeLoadService.loadPathModelType("/Users/adetalhouet/onap/master/cds/components/model-catalog/definition-type/starter-type")
+            resourceDictionaryLoadService.loadPathResourceDictionary("/Users/adetalhouet/onap/master/cds/components/model-catalog/resource-dictionary/starter-dictionary")
+            resourceDictionaryLoadService.loadPathResourceDictionary("/Users/adetalhouet/onap/master/cds/components/model-catalog/resource-dictionary/test-dictionary")
         }
     }
 
     @Test
     @Throws(Exception::class)
     fun testEnhancementAndValidation() {
-
         val basePath = "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
         testComponentInvokeEnhancementAndValidation(basePath, "base-enhance")
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun testVFWEnhancementAndValidation() {
+        val basePath = "/Users/adetalhouet/onap/master/cds/components/model-catalog/blueprint-model/service-blueprint/vFW"
+        testComponentInvokeEnhancementAndValidation(basePath, "vFW-enhance")
     }
 
     @Test
@@ -96,7 +102,7 @@ class BluePrintEnhancerServiceImplTest {
             val valid = bluePrintValidatorService.validateBluePrints(targetPath)
             Assert.assertTrue("blueprint($basePath) validation failed ", valid)
 
-            deleteDir(targetPath)
+//            deleteDir(targetPath)
         }
     }
 
