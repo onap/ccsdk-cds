@@ -14,7 +14,6 @@
 
 import netconf_constant
 from common import ResolutionHelper
-from java.lang import Exception as JavaException
 from netconfclient import NetconfClient
 from org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor import \
   NetconfComponentFunction
@@ -23,7 +22,6 @@ from org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor import \
 class NetconfRpcExample(NetconfComponentFunction):
 
   def process(self, execution_request):
-    try:
       log = globals()[netconf_constant.SERVICE_LOG]
       print(globals())
 
@@ -51,11 +49,7 @@ class NetconfRpcExample(NetconfComponentFunction):
       nc.unlock()
       nc.disconnect()
 
-    except JavaException, err:
-      log.error("Java Exception in the script {}", err)
-    except Exception, err:
-      log.error("Python Exception in the script {}", err)
-
   def recover(self, runtime_exception, execution_request):
-    print self.addError(runtime_exception.getMessage())
-    return None
+        log.error("Exception in the script {}", runtime_exception)
+        print self.addError(runtime_exception.cause.message)
+        return None
