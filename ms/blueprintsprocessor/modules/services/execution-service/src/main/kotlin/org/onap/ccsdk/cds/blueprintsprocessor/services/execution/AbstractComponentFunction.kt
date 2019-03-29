@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.Status
+import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asObjectNode
@@ -97,7 +98,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         log.info("Preparing Response...")
         executionServiceOutput.commonHeader = executionServiceInput.commonHeader
         executionServiceOutput.actionIdentifiers = executionServiceInput.actionIdentifiers
-        var status: Status?
+        var status = Status()
         try {
             // Resolve the Output Expression
             val stepOutputs = bluePrintRuntimeService
@@ -105,12 +106,12 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
 
             bluePrintRuntimeService.put("$stepName-step-outputs", stepOutputs.asObjectNode())
             // Set the Default Step Status
-            status = Status()
+            status.eventType = EventType.EVENT_COMPONENT_EXECUTED.name
         } catch (e: Exception) {
-            status = Status()
             status.message = BluePrintConstants.STATUS_FAILURE
+            status.eventType = EventType.EVENT_COMPONENT_FAILURE.name
         }
-        executionServiceOutput.status = status!!
+        executionServiceOutput.status = status
         return this.executionServiceOutput
     }
 
