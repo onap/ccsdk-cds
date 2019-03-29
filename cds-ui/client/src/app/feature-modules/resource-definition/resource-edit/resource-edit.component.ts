@@ -18,7 +18,15 @@
 * ============LICENSE_END=========================================================
 */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { IResources } from 'src/app/common/core/store/models/resources.model';
+import { IResourcesState } from 'src/app/common/core/store/models/resourcesState.model';
+import { LoadResourcesSuccess,UpdateResources,SetResourcesState } from 'src/app/common/core/store/actions/resources.action';
+import { Store } from '@ngrx/store';
+import { IAppState } from '../../../common/core/store/state/app.state';
+import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
+import { Observable } from 'rxjs';
+import { A11yModule } from '@angular/cdk/a11y';
 
 @Component({
   selector: 'app-resource-edit',
@@ -27,9 +35,62 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ResourceEditComponent implements OnInit {
 
-  constructor() { }
-
-  ngOnInit() {
+    resources:IResources;
+    data:IResources;
+    rdState: Observable<IResourcesState>;
+    designerMode: boolean = true;
+    editorMode: boolean = false;
+    viewText: string = "Open in Editor Mode";
+    @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
+    options = new JsonEditorOptions();
+  
+  constructor(private store: Store<IAppState>) {
+  	this.rdState = this.store.select('resources');
+    this.options.mode = 'text';
+    this.options.modes = [ 'text', 'tree', 'view'];
+    this.options.statusBar = false;    
   }
 
+  ngOnInit() {
+    this.rdState.subscribe(
+      resourcesdata => {
+        var resourcesState: IResourcesState = { resources: resourcesdata.resources, isLoadSuccess: resourcesdata.isLoadSuccess, isSaveSuccess: resourcesdata.isSaveSuccess, isUpdateSuccess: resourcesdata.isUpdateSuccess };
+          this.resources=resourcesState.resources;
+    })     
+  }
+
+ metaDataDetail(data: IResources) {
+    this.data=data;       
+  }
+    
+ sourcesDetails(data: IResources) {
+    this.data=data; 
+ }
+    
+ onChange($event) {
+      this.data=JSON.parse($event.srcElement.value);
+  };
+  
+ updateResourcesState(){
+      console.log(this.data);
+      let resourcesState = {
+      resources: this.data,
+      isLoadSuccess: true,
+      isUpdateSuccess:true,
+      isSaveSuccess:true
+    }  
+   this.store.dispatch(new SetResourcesState(resourcesState));   
+  }
+    
+ changeView() {
+    if(this.viewText == 'Open in Editor Mode') {
+      this.editorMode =  true;
+      this.designerMode = false;
+      this.viewText = 'Open in Form Mode'
+    } else {
+      this.editorMode =  false;
+      this.designerMode = true;
+      this.viewText = 'Open in Editor Mode'
+    }
+  }  
 }
