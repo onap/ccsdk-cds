@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2019 Bell Canada.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +16,8 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
@@ -26,8 +29,8 @@ import java.util.*
 @Service
 class ResourceResolutionResultService(private val resourceResolutionRepository: ResourceResolutionRepository) {
 
-    fun write(properties: Map<String, Any>, result: String, bluePrintRuntimeService: BluePrintRuntimeService<*>,
-              artifactPrefix: String) {
+    suspend fun write(properties: Map<String, Any>, result: String, bluePrintRuntimeService: BluePrintRuntimeService<*>,
+                      artifactPrefix: String) = withContext(Dispatchers.IO) {
 
         val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
 
@@ -37,7 +40,7 @@ class ResourceResolutionResultService(private val resourceResolutionRepository: 
         resourceResolutionResult.blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]
         resourceResolutionResult.blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]
         resourceResolutionResult.resolutionKey =
-            properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY].toString()
+                properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY].toString()
         resourceResolutionResult.result = result
 
         try {
@@ -47,18 +50,18 @@ class ResourceResolutionResultService(private val resourceResolutionRepository: 
         }
     }
 
-    fun read(bluePrintRuntimeService: BluePrintRuntimeService<*>, artifactPrefix: String,
-             resolutionKey: String): String {
+    suspend fun read(bluePrintRuntimeService: BluePrintRuntimeService<*>, artifactPrefix: String,
+                     resolutionKey: String): String = withContext(Dispatchers.IO) {
 
         val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
 
         val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]
         val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]
 
-        return resourceResolutionRepository.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
-            resolutionKey,
-            blueprintName,
-            blueprintVersion,
-            artifactPrefix).result!!
+        resourceResolutionRepository.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
+                resolutionKey,
+                blueprintName,
+                blueprintVersion,
+                artifactPrefix).result!!
     }
 }

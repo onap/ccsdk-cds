@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2018-2019 IBM, Bell Canada.
+ *  Modifications Copyright © 2019 IBM.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,6 +18,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor
 
 import com.fasterxml.jackson.databind.JsonNode
+import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionService
@@ -38,17 +40,17 @@ abstract class NetconfComponentFunction : AbstractScriptComponentFunction() {
         return bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactName)
     }
 
-    fun resolveFromDatabase(resolutionKey: String, artifactName: String): String {
-        return resourceResolutionService().resolveFromDatabase(bluePrintRuntimeService, artifactName, resolutionKey)
+    fun resolveFromDatabase(resolutionKey: String, artifactName: String): String = runBlocking {
+        resourceResolutionService().resolveFromDatabase(bluePrintRuntimeService, artifactName, resolutionKey)
     }
 
-    fun resolveAndGenerateMessage(artifactMapping: String, artifactTemplate: String): String {
-        return resourceResolutionService().resolveResources(bluePrintRuntimeService, nodeTemplateName,
+    fun resolveAndGenerateMessage(artifactMapping: String, artifactTemplate: String): String = runBlocking {
+        resourceResolutionService().resolveResources(bluePrintRuntimeService, nodeTemplateName,
                 artifactMapping, artifactTemplate)
     }
 
-    fun resolveAndGenerateMessage(artifactPrefix: String): String {
-        return resourceResolutionService().resolveResources(bluePrintRuntimeService, nodeTemplateName,
+    fun resolveAndGenerateMessage(artifactPrefix: String): String = runBlocking {
+        resourceResolutionService().resolveResources(bluePrintRuntimeService, nodeTemplateName,
                 artifactPrefix, mapOf())
     }
 
