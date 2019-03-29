@@ -20,8 +20,8 @@
 import {IEntrySchema} from './entrySchema.model';
 
 export interface IPropertyData{  
-    discription:string;
-    _type:string;
+    description:string;
+    type:string;
     required:boolean;
     entry_schema:IEntrySchema;
 }
