@@ -17,6 +17,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor
 
+import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestLibConstants
@@ -38,21 +39,21 @@ abstract class RestconfComponentFunction : AbstractScriptComponentFunction() {
         return bluePrintRestLibPropertyService().blueprintWebClientService(selector)
     }
 
-    fun resolveFromDatabase(resolutionKey: String, artifactName: String): String {
-        return resourceResolutionService().resolveFromDatabase(bluePrintRuntimeService, artifactName, resolutionKey)
+    fun resolveFromDatabase(resolutionKey: String, artifactName: String): String = runBlocking {
+        resourceResolutionService().resolveFromDatabase(bluePrintRuntimeService, artifactName, resolutionKey)
     }
 
     fun generateMessage(artifactName: String): String {
         return bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactName)
     }
 
-    fun resolveAndGenerateMessage(artifactMapping: String, artifactTemplate: String): String {
-        return resourceResolutionService().resolveResources(bluePrintRuntimeService, nodeTemplateName,
+    fun resolveAndGenerateMessage(artifactMapping: String, artifactTemplate: String): String = runBlocking {
+        resourceResolutionService().resolveResources(bluePrintRuntimeService, nodeTemplateName,
                 artifactMapping, artifactTemplate)
     }
 
-    fun resolveAndGenerateMessage(artifactPrefix: String): String {
-        return resourceResolutionService().resolveResources(bluePrintRuntimeService, nodeTemplateName,
+    fun resolveAndGenerateMessage(artifactPrefix: String): String = runBlocking {
+        resourceResolutionService().resolveResources(bluePrintRuntimeService, nodeTemplateName,
                 artifactPrefix, mapOf())
     }
 }

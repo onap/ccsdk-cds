@@ -17,20 +17,22 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
 import org.junit.Test
+import org.slf4j.LoggerFactory
 
 class TopologicalSortingUtilsTest {
-    
+
+    private val log = LoggerFactory.getLogger(TopologicalSortingUtilsTest::class.java)
     @Test
-    fun testSorting(): Unit {
+    fun testSorting() {
         val graph: TopologicalSortingUtils<String> = TopologicalSortingUtils()
         graph.add("bundle-id", "bundle-mac")
         graph.add("bundle-id", "bundle-ip")
         graph.add("bundle-mac", "bundle-ip")
         graph.add("bundle-ip", "bundle-mac")
 
-        println("The current graph: " + graph)
-        println("In-degrees: " + graph.inDegree())
-        println("Out-degrees: " + graph.outDegree())
-        println("A topological sort of the vertices: " + graph.topSort())
+        log.debug("The current graph: $graph")
+        log.debug("In-degrees: " + graph.inDegree())
+        log.debug("Out-degrees: " + graph.outDegree())
+        log.debug("A topological sort of the vertices: " + graph.topSort())
     }
 }

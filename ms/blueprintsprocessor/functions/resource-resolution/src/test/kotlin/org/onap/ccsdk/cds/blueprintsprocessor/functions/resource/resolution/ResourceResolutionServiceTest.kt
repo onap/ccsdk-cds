@@ -17,6 +17,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -72,20 +73,22 @@ class ResourceResolutionServiceTest {
     @Test
     @Throws(Exception::class)
     fun testResolveResource() {
+        runBlocking {
 
-        Assert.assertNotNull("failed to create ResourceResolutionService", resourceResolutionService)
+            Assert.assertNotNull("failed to create ResourceResolutionService", resourceResolutionService)
 
-        val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
+                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
-        val executionServiceInput = JacksonUtils.readValueFromClassPathFile("payload/requests/sample-resourceresolution-request.json",
-                ExecutionServiceInput::class.java)!!
+            val executionServiceInput = JacksonUtils.readValueFromClassPathFile("payload/requests/sample-resourceresolution-request.json",
+                    ExecutionServiceInput::class.java)!!
 
-        // Prepare Inputs
-        PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService, executionServiceInput.payload, "resource-assignment")
+            // Prepare Inputs
+            PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService, executionServiceInput.payload, "resource-assignment")
 
-        resourceResolutionService.resolveResources(bluePrintRuntimeService, "resource-assignment", "baseconfig", mapOf())
+            resourceResolutionService.resolveResources(bluePrintRuntimeService, "resource-assignment", "baseconfig", mapOf())
 
+        }
     }
 
 }

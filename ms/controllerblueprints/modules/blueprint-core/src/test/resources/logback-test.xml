@@ -1,6 +1,5 @@
 <!--
-  ~  Copyright © 2018 IBM.
-  ~  Modifications Copyright © 2017-2018 AT&T Intellectual Property.
+  ~  Copyright © 2019 IBM.
   ~
   ~  Licensed under the Apache License, Version 2.0 (the "License");
   ~  you may not use this file except in compliance with the License.
@@ -16,24 +15,16 @@
   -->
 
 <configuration>
-
-    <property name="localPattern" value="[%-8thread] %d{HH:mm:ss.SSS} %-5level %logger{50} - %msg%n" />
-
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- encoders are assigned the type
              ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
         <encoder>
-            <pattern>${localPattern}</pattern>
+            <pattern>%d{HH:mm:ss.SSS} %-5level [%thread] %logger{50} - %msg%n</pattern>
         </encoder>
     </appender>
 
-
-    <logger name="org.springframework" level="warn"/>
-    <logger name="org.springframework.web" level="warn"/>
-    <logger name="org.hibernate" level="error"/>
-    <logger name="org.onap.ccsdk.cds" level="info"/>
-
-    <root level="warn">
+    <logger name="org.onap.ccsdk.cds.controllerblueprints" level="info"/>
+    <root level="info">
         <appender-ref ref="STDOUT"/>
     </root>
 

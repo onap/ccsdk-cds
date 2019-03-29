@@ -1,6 +1,6 @@
 /*
  *  Copyright © 2017-2018 AT&T Intellectual Property.
- *  Modifications Copyright © 2018 IBM.
+ *  Modifications Copyright © 2018-2019 IBM.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,7 +17,9 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolutionResultService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.ResourceAssignmentProcessor
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
@@ -39,22 +41,22 @@ interface ResourceResolutionService {
 
     fun registeredResourceSources(): List<String>
 
-    fun resolveFromDatabase(bluePrintRuntimeService: BluePrintRuntimeService<*>, artifactTemplate: String,
-                            resolutionKey: String): String
+    suspend fun resolveFromDatabase(bluePrintRuntimeService: BluePrintRuntimeService<*>, artifactTemplate: String,
+                                    resolutionKey: String): String
 
-    fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
-                         artifactNames: List<String>, properties: Map<String, Any>): MutableMap<String, String>
+    suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
+                                 artifactNames: List<String>, properties: Map<String, Any>): MutableMap<String, String>
 
-    fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
-                         artifactPrefix: String, properties: Map<String, Any>): String
+    suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
+                                 artifactPrefix: String, properties: Map<String, Any>): String
 
-    fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
-                         artifactMapping: String, artifactTemplate: String?): String
+    suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
+                                 artifactMapping: String, artifactTemplate: String?): String
 
-    fun resolveResourceAssignments(blueprintRuntimeService: BluePrintRuntimeService<*>,
-                                   resourceDictionaries: MutableMap<String, ResourceDefinition>,
-                                   resourceAssignments: MutableList<ResourceAssignment>,
-                                   identifierName: String)
+    suspend fun resolveResourceAssignments(blueprintRuntimeService: BluePrintRuntimeService<*>,
+                                           resourceDictionaries: MutableMap<String, ResourceDefinition>,
+                                           resourceAssignments: MutableList<ResourceAssignment>,
+                                           identifierName: String)
 }
 
 @Service(ResourceResolutionConstants.SERVICE_RESOURCE_RESOLUTION)
@@ -70,9 +72,15 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                 .map { it.substringAfter(ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR) }
     }
 
-    override fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
-                                  artifactNames: List<String>,
-                                  properties: Map<String, Any>): MutableMap<String, String> {
+    override suspend fun resolveFromDatabase(bluePrintRuntimeService: BluePrintRuntimeService<*>,
+                                             artifactTemplate: String,
+                                             resolutionKey: String): String {
+        return resolutionResultService.read(bluePrintRuntimeService, artifactTemplate, resolutionKey)
+    }
+
+    override suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
+                                          artifactNames: List<String>,
+                                          properties: Map<String, Any>): MutableMap<String, String> {
 
         val resolvedParams: MutableMap<String, String> = hashMapOf()
         artifactNames.forEach { artifactName ->
@@ -82,8 +90,8 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
         return resolvedParams
     }
 
-    override fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
-                                  artifactPrefix: String, properties: Map<String, Any>): String {
+    override suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
+                                          artifactPrefix: String, properties: Map<String, Any>): String {
 
         // Velocity Artifact Definition Name
         val artifactTemplate = "$artifactPrefix-template"
@@ -95,20 +103,17 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
         if (properties.containsKey(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT)
                 && properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] as Boolean) {
             resolutionResultService.write(properties, result, bluePrintRuntimeService, artifactPrefix)
+            log.info("resolution saved into database successfully : ($properties)")
         }
 
         return result
     }
 
-    override fun resolveFromDatabase(bluePrintRuntimeService: BluePrintRuntimeService<*>, artifactTemplate: String,
-                                     resolutionKey: String): String {
-        return resolutionResultService.read(bluePrintRuntimeService, artifactTemplate, resolutionKey)
-    }
 
-    override fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
-                                  artifactMapping: String, artifactTemplate: String?): String {
+    override suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
+                                          artifactMapping: String, artifactTemplate: String?): String {
 
-        var resolvedContent = ""
+        val resolvedContent: String
         log.info("Resolving resource for template artifact($artifactTemplate) with resource assignment artifact($artifactMapping)")
 
         val identifierName = artifactTemplate ?: "no-template"
@@ -128,7 +133,6 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
 
         val resourceDictionaries: MutableMap<String, ResourceDefinition> =
                 JacksonUtils.getMapFromFile(dictionaryFile, ResourceDefinition::class.java)
-                        ?: throw BluePrintProcessorException("couldn't get Dictionary Definitions")
 
         // Resolve resources
         resolveResourceAssignments(bluePrintRuntimeService, resourceDictionaries, resourceAssignments, identifierName)
@@ -153,46 +157,51 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
      * name, then get the type of the Resource Definition, Get the instance for the Resource Type and process the
      * request.
      */
-    override fun resolveResourceAssignments(blueprintRuntimeService: BluePrintRuntimeService<*>,
-                                            resourceDictionaries: MutableMap<String, ResourceDefinition>,
-                                            resourceAssignments: MutableList<ResourceAssignment>,
-                                            identifierName: String) {
+    override suspend fun resolveResourceAssignments(blueprintRuntimeService: BluePrintRuntimeService<*>,
+                                                    resourceDictionaries: MutableMap<String, ResourceDefinition>,
+                                                    resourceAssignments: MutableList<ResourceAssignment>,
+                                                    identifierName: String) {
 
         val bulkSequenced = BulkResourceSequencingUtils.process(resourceAssignments)
         val resourceAssignmentRuntimeService =
                 ResourceAssignmentUtils.transformToRARuntimeService(blueprintRuntimeService, identifierName)
 
-        bulkSequenced.map { batchResourceAssignments ->
-            batchResourceAssignments.filter { it.name != "*" && it.name != "start" }
-                    .forEach { resourceAssignment ->
-                        val dictionaryName = resourceAssignment.dictionaryName
-                        val dictionarySource = resourceAssignment.dictionarySource
-                        /**
-                         * Get the Processor name
-                         */
-                        val processorName = processorName(dictionaryName!!, dictionarySource!!, resourceDictionaries)
+        coroutineScope {
+            bulkSequenced.forEach { batchResourceAssignments ->
+                // Execute Non Dependent Assignments in parallel ( ie asynchronously )
+                val deferred = batchResourceAssignments.filter { it.name != "*" && it.name != "start" }
+                        .map { resourceAssignment ->
+                            async {
+                                val dictionaryName = resourceAssignment.dictionaryName
+                                val dictionarySource = resourceAssignment.dictionarySource
+                                /**
+                                 * Get the Processor name
+                                 */
+                                val processorName = processorName(dictionaryName!!, dictionarySource!!, resourceDictionaries)
 
-                        val resourceAssignmentProcessor =
-                                applicationContext.getBean(processorName) as? ResourceAssignmentProcessor
-                                        ?: throw BluePrintProcessorException("failed to get resource processor for name($processorName) " +
-                                                "for resource assignment(${resourceAssignment.name})")
-                        try {
-                            // Set BluePrint Runtime Service
-                            resourceAssignmentProcessor.raRuntimeService = resourceAssignmentRuntimeService
-                            // Set Resource Dictionaries
-                            resourceAssignmentProcessor.resourceDictionaries = resourceDictionaries
-                            // TODO ("Implement suspend function")
-                            runBlocking {
-                                // Invoke Apply Method
-                                resourceAssignmentProcessor.applyNB(resourceAssignment)
+                                val resourceAssignmentProcessor =
+                                        applicationContext.getBean(processorName) as? ResourceAssignmentProcessor
+                                                ?: throw BluePrintProcessorException("failed to get resource processor ($processorName) " +
+                                                        "for resource assignment(${resourceAssignment.name})")
+                                try {
+                                    // Set BluePrint Runtime Service
+                                    resourceAssignmentProcessor.raRuntimeService = resourceAssignmentRuntimeService
+                                    // Set Resource Dictionaries
+                                    resourceAssignmentProcessor.resourceDictionaries = resourceDictionaries
+                                    // Invoke Apply Method
+                                    resourceAssignmentProcessor.applyNB(resourceAssignment)
+                                    // Set errors from RA
+                                    blueprintRuntimeService.setBluePrintError(resourceAssignmentRuntimeService.getBluePrintError())
+                                } catch (e: RuntimeException) {
+                                    throw BluePrintProcessorException(e)
+                                }
                             }
-                            // Set errors from RA
-                            blueprintRuntimeService.setBluePrintError(resourceAssignmentRuntimeService.getBluePrintError())
-                        } catch (e: RuntimeException) {
-                            throw BluePrintProcessorException(e)
                         }
-                    }
+                log.debug("Resolving (${deferred.size})resources parallel.")
+                deferred.awaitAll()
+            }
         }
+
     }
 
 
@@ -202,13 +211,12 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
      */
     private fun processorName(dictionaryName: String, dictionarySource: String,
                               resourceDictionaries: MutableMap<String, ResourceDefinition>): String {
-        var processorName: String? = null
-        when (dictionarySource) {
+        val processorName: String = when (dictionarySource) {
             "input" -> {
-                processorName = "${ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-input"
+                "${ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-input"
             }
             "default" -> {
-                processorName = "${ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-default"
+                "${ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-default"
             }
             else -> {
                 val resourceDefinition = resourceDictionaries[dictionaryName]
@@ -217,8 +225,7 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                 val resourceSource = resourceDefinition.sources[dictionarySource]
                         ?: throw BluePrintProcessorException("couldn't get resource definition $dictionaryName source($dictionarySource)")
 
-                processorName = ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
-                        .plus(resourceSource.type)
+                ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR.plus(resourceSource.type)
             }
         }
         checkNotEmptyOrThrow(processorName,
