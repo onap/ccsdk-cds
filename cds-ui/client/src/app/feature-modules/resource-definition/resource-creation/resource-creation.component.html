@@ -36,10 +36,13 @@
     <ng-template matStepLabel>Browse or Search Resources</ng-template>
   <app-upload-resource (fileData)=upload($event)></app-upload-resource><br><br>
   <app-existing-model></app-existing-model>
-    <div>
-      <button mat-button matStepperNext (click)="updateResourcesState()" class="matStepNextBtn">Upload</button>
+   <div>      
+   	<button mat-button matStepperNext (click)="updateResourcesState()" class="matStepNextBtn">Upload</button>
+   </div><br><br>
+   <div *ngIf="showMsg">
+    <p class="success"><strong>File Upload Success!</strong> Please click Proceed to continue!</p>
     </div>
-  </mat-step>
+   </mat-step>
  </mat-vertical-stepper>
  </mat-card-content>
 </mat-card>
