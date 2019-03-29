@@ -18,7 +18,7 @@
 * ============LICENSE_END=========================================================
 */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, EventEmitter, Output  } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 @Component({
   selector: 'app-search-resource',
@@ -27,17 +27,18 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 })
 export class SearchResourceComponent implements OnInit  {
 
-   myControl: FormGroup;
-
+  myControl: FormGroup;
+  @Output() resourcesData = new EventEmitter();  
+  options: string[] = ['One','One1', 'Two', 'Three'];
   constructor(private _formBuilder: FormBuilder)  { }
   
-  options: string[] = ['One','One1', 'Two', 'Three'];
-    
-    ngOnInit() {
+ ngOnInit() {
     this.myControl = this._formBuilder.group({
       search_input: ['', Validators.required]
     });
   }
-    
+ selected(value){
+   this.resourcesData.emit(value);
+   } 
 }
 

@@ -23,7 +23,7 @@
     <input type="text" [(ngModel)]="searchText" placeholder="Search Resources" matInput [matAutocomplete]="auto" formControlName="search_input">
     <button matSuffix mat-icon-button><mat-icon>search</mat-icon></button>
     <mat-autocomplete #auto="matAutocomplete">
-      <mat-option *ngFor="let option of options | search : searchText" [value]="option">
+      <mat-option (click)="selected(option)" *ngFor="let option of options | search : searchText" [value]="option">
         {{option}}
       </mat-option>
     </mat-autocomplete>
