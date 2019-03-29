@@ -50,7 +50,7 @@ open class ModelTypeLoadService(private val modelTypeHandler: ModelTypeHandler) 
      * Load the Model Type file content from the defined path, Load of sequencing should be maintained.
      */
     open suspend fun loadPathModelType(modelTypePath: String) {
-        log.info(" *************************** loadModelType **********************")
+        log.info(" ****** loadModelType($modelTypePath) ********")
         try {
             val errorBuilder = StrBuilder()
 

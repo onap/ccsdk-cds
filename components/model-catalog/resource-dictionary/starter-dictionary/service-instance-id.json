@@ -12,7 +12,7 @@
       "properties" : { }
     },
     "any-db": {
-      "type": "source-primary-db",
+      "type": "source-processor-db",
       "properties": {
         "query": "SELECT artifact_name FROM BLUEPRINT_RUNTIME where artifact_version=\"1.0.0\"",
         "input-key-mapping": {
@@ -22,8 +22,8 @@
         }
       }
     },
-    "primary-db": {
-      "type": "source-primary-db",
+    "processor-db": {
+      "type": "source-processor-db",
       "properties": {
         "query": "SELECT artifact_name FROM BLUEPRINT_RUNTIME where artifact_version=\"1.0.0\"",
         "input-key-mapping": {
