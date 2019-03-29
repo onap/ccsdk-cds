@@ -1,0 +1,267 @@
+[
+  {
+    "name": "service-instance-id",
+    "property": {
+      "description": "",
+      "required": true,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {
+          
+        }
+      ],
+      "entry_schema": {
+        "type": ""
+      }
+    },
+    "input-param": false,
+    "dictionary-name": "service-instance-id",
+    "dictionary-source": "input",
+    "dependencies": [
+      
+    ],
+    "version": 0
+  },
+  {
+    "name": "vf-module-type",
+    "property": {
+      "description": "",
+      "required": true,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {
+          
+        }
+      ],
+      "entry_schema": {
+        "type": ""
+      }
+    },
+    "input-param": false,
+    "dictionary-name": "vf-module-type",
+    "dictionary-source": "primary-db",
+    "dependencies": [
+      "vf-module-model-customization-uuid"
+    ],
+    "version": 0
+  },
+  {
+    "name": "vf-module-model-customization-uuid",
+    "property": {
+      "description": "",
+      "required": true,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {
+          
+        }
+      ],
+      "entry_schema": {
+        "type": ""
+      }
+    },
+    "input-param": false,
+    "dictionary-name": "vf-module-model-customization-uuid",
+    "dictionary-source": "input",
+    "dependencies": [
+      
+    ],
+    "version": 0
+  },
+  {
+    "name": "vnf-id",
+    "property": {
+      "description": "",
+      "required": true,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {
+          
+        }
+      ],
+      "entry_schema": {
+        "type": ""
+      }
+    },
+    "input-param": false,
+    "dictionary-name": "vnf-id",
+    "dictionary-source": "input",
+    "dependencies": [
+      
+    ],
+    "version": 0
+  },
+  {
+    "name": "vf-module-id",
+    "property": {
+      "description": "",
+      "required": true,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {
+          
+        }
+      ],
+      "entry_schema": {
+        "type": ""
+      }
+    },
+    "input-param": false,
+    "dictionary-name": "vf-module-id",
+    "dictionary-source": "input",
+    "dependencies": [
+      
+    ],
+    "version": 0
+  },
+  {
+    "name": "vnf-model-customization-uuid",
+    "property": {
+      "description": "",
+      "required": true,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {
+          
+        }
+      ],
+      "entry_schema": {
+        "type": ""
+      }
+    },
+    "input-param": false,
+    "dictionary-name": "vnf-model-customization-uuid",
+    "dictionary-source": "input",
+    "dependencies": [
+      
+    ],
+    "version": 0
+  },
+  {
+    "name": "aic-cloud-region",
+    "property": {
+      "description": "",
+      "required": true,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {
+          
+        }
+      ],
+      "entry_schema": {
+        "type": ""
+      }
+    },
+    "input-param": false,
+    "dictionary-name": "aic-cloud-region",
+    "dictionary-source": "input",
+    "dependencies": [
+      
+    ],
+    "version": 0
+  },
+  {
+    "name": "nf-role",
+    "property": {
+      "description": "",
+      "required": true,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {
+          
+        }
+      ],
+      "entry_schema": {
+        "type": ""
+      }
+    },
+    "input-param": false,
+    "dictionary-name": "nf-role",
+    "dictionary-source": "primary-db",
+    "dependencies": [
+      "vnf-model-customization-uuid"
+    ],
+    "version": 0
+  },
+  {
+    "name": "vnf-name",
+    "property": {
+      "description": "",
+      "required": true,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {
+          
+        }
+      ],
+      "entry_schema": {
+        "type": ""
+      }
+    },
+    "input-param": false,
+    "dictionary-name": "vnf-name",
+    "dictionary-source": "primary-config-data",
+    "dependencies": [
+      "service-instance-id",
+      "vnf-id"
+    ],
+    "version": 0
+  },
+  {
+    "name": "unprotected_private_net_cidr",
+    "property": {
+      "description": "",
+      "required": true,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {
+          
+        }
+      ],
+      "entry_schema": {
+        "type": ""
+      }
+    },
+    "input-param": false,
+    "dictionary-name": "unprotected_private_net_cidr",
+    "dictionary-source": "primary-db",
+    "dependencies": [
+      
+    ],
+    "version": 0
+  },
+  {
+    "name": "protected_private_net_cidr",
+    "property": {
+      "description": "",
+      "required": true,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {
+          
+        }
+      ],
+      "entry_schema": {
+        "type": ""
+      }
+    },
+    "input-param": false,
+    "dictionary-name": "protected_private_net_cidr",
+    "dictionary-source": "primary-db",
+    "dependencies": [
+      
+    ],
+    "version": 0
+  }
+]
