@@ -7,8 +7,8 @@
     "type" : "string"
   },
   "sources" : {
-    "primary-db" : {
-      "type" : "source-primary-db",
+    "processor-db" : {
+      "type" : "source-processor-db",
       "properties" : {
         "type" : "SQL",
         "query" : "select nfc_naming_code as nfc_naming_code from sdnctl.VFC_MODEL where customization_uuid=:vfccustomizationuuid",
