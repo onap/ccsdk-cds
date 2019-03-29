@@ -278,6 +278,29 @@
           }
         }
       },
+      "activate-restconf": {
+        "type": "component-restconf-executor",
+        "interfaces": {
+          "ComponentRestconfExecutor": {
+            "operations": {
+              "process": {
+                "implementation": {
+                  "primary": "component-script"
+                },
+                "inputs": {
+                  "script-type": "kotlin",
+                  "script-class-reference": "DefaultRestconf_cba$MountNEditConfigure",
+                  "instance-dependencies": []
+                },
+                "outputs": {
+                  "response-data": "",
+                  "status": "success"
+                }
+              }
+            }
+          }
+        }
+      },
       "sample-netconf-device": {
         "type": "vnf-netconf-device",
         "capabilities": {
@@ -361,6 +384,19 @@
             "activities": [
               {
                 "call_operation": "CONFIG.ActivateProcess"
+              }
+            ]
+          }
+        }
+      },
+      "activate-restconf": {
+        "steps": {
+          "activate-process": {
+            "description": "Activate Restconf flow",
+            "target": "activate-restconf",
+            "activities": [
+              {
+                "call_operation": "ComponentRestconfExecutor.process"
               }
             ]
           }
