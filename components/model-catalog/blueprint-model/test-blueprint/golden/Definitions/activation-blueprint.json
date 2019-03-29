@@ -22,7 +22,7 @@
   "dsl_definitions" : {
     "ipam-1" : {
       "type" : "token-auth",
-      "url" : "http://localhost:32778",
+      "url" : "http://localhost:32768",
       "token" : "Token 0123456789abcdef0123456789abcdef01234567"
     },
     "config-deploy-properties" : {
@@ -37,7 +37,7 @@
         "steps" : {
           "resource-assignment-process" : {
             "description" : "Resource Assign Workflow",
-            "target" : "resource-assignment-process",
+            "target" : "resource-assignment",
             "activities" : [ {
               "call_operation" : ""
             } ]
@@ -64,13 +64,24 @@
             "required" : true,
             "type" : "dt-resource-assignment-properties"
           }
+        },
+        "outputs": {
+          "dry-run": {
+            "type": "json",
+            "value": {
+              "get_attribute": [
+                "resource-assignment",
+                "assignment-params"
+              ]
+            }
+          }
         }
       },
       "config-deploy" : {
         "steps" : {
           "config-deploy" : {
             "description" : "Resource Assign and Python Netconf Activation Workflow",
-            "target" : "config-deploy-process",
+            "target" : "config-deploy",
             "activities" : [ {
               "call_operation" : ""
             } ]
@@ -98,13 +109,15 @@
             "required" : true,
             "type" : "dt-config-deploy-properties"
           }
+        },
+        "outputs": {
         }
       },
       "rollback" : {
         "steps" : {
           "rollback" : {
-            "description" : "Roolback Workflow",
-            "target" : "rollback-process",
+            "description" : "Rollback Workflow",
+            "target" : "rollback",
             "activities" : [ {
               "call_operation" : ""
             } ]
@@ -141,21 +154,6 @@
       }
     },
     "node_templates" : {
-      "resource-assignment-process" : {
-        "type" : "dg-generic",
-        "properties" : {
-          "content" : {
-            "get_artifact" : [ "SELF", "dg-resource-assignment-process" ]
-          },
-          "dependency-node-templates" : [ "resource-assignment" ]
-        },
-        "artifacts" : {
-          "dg-resource-assignment-process" : {
-            "type" : "artifact-directed-graph",
-            "file" : "Plans/ResourceAssignment.xml"
-          }
-        }
-      },
       "resource-assignment" : {
         "type" : "component-resource-resolution",
         "interfaces" : {
@@ -172,12 +170,6 @@
                   "artifact-prefix-names" : {
                     "get_input" : "artifact-name"
                   }
-                },
-                "outputs" : {
-                  "resource-assignment-params" : {
-                    "get_attribute" : [ "SELF", "assignment-params" ]
-                  },
-                  "status" : "success"
                 }
               }
             }
@@ -199,21 +191,6 @@
           "vf-module-1-mapping" : {
             "type" : "artifact-mapping-resource",
             "file" : "Templates/vf-module-1-mapping.json"
-          }
-        }
-      },
-      "config-deploy-process" : {
-        "type" : "dg-generic",
-        "properties" : {
-          "content" : {
-            "get_artifact" : [ "SELF", "dg-config-deploy-process" ]
-          },
-          "dependency-node-templates" : [ "config-deploy" ]
-        },
-        "artifacts" : {
-          "dg-config-deploy-process" : {
-            "type" : "artifact-directed-graph",
-            "file" : "Plans/ConfigDeploy.xml"
           }
         }
       },
@@ -252,21 +229,6 @@
           "vfw-interface-mapping" : {
             "type" : "artifact-mapping-resource",
             "file" : "Templates/vfw-interface-mapping.json"
-          }
-        }
-      },
-      "rollback-process" : {
-        "type" : "dg-generic",
-        "properties" : {
-          "content" : {
-            "get_artifact" : [ "SELF", "dg-rollback-process" ]
-          },
-          "dependency-node-templates" : [ "config-deploy" ]
-        },
-        "artifacts" : {
-          "dg-rollback-process" : {
-            "type" : "artifact-directed-graph",
-            "file" : "Plans/Rollback.xml"
           }
         }
       },

@@ -19,28 +19,24 @@ from java.lang import Exception as JavaException
 class DescriptionExample(AbstractRAProcessor):
 
     def process(self, resource_assignment):
-        try:
-            # get dependencies result
-            value = self.raRuntimeService.getStringFromResolutionStore("vf-module-type")
-            
-            # logic based on dependency outcome
-            result = ""
-            if value == "vfw":
-                result = "This is the Virtual Firewall entity"
-            elif value == "vsn":
-                result = "This is the Virtual Sink entity"
-            elif value == "vpg":
-                result = "This is the Virtual Packet Generator"
+        # get dependencies result
+        value = self.raRuntimeService.getStringFromResolutionStore("vf-module-type")
+        
+        # logic based on dependency outcome
+        result = ""
+        if value == "vfw":
+            result = "This is the Virtual Firewall entity"
+        elif value == "vsn":
+            result = "This is the Virtual Sink entity"
+        elif value == "vpg":
+            result = "This is the Virtual Packet Generator"
 
-            # set value for resource getting currently resolved
-            self.set_resource_data_value(resource_assignment, result)
+        # set value for resource getting currently resolved
+        self.set_resource_data_value(resource_assignment, result)
 
-        except JavaException, err:
-          log.error("Java Exception in the script {}", err)
-        except Exception, err:
-          log.error("Python Exception in the script {}", err)
         return None
 
     def recover(self, runtime_exception, resource_assignment):
-        print self.addError(runtime_exception.getMessage())
+        log.error("Exception in the script {}", runtime_exception)
+        print self.addError(runtime_exception.cause.message)
         return None
