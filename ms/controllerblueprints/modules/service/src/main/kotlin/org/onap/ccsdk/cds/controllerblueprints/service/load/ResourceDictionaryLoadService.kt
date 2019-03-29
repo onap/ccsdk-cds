@@ -45,7 +45,7 @@ open class ResourceDictionaryLoadService(private val resourceDictionaryHandler: 
     }
 
     open suspend fun loadPathResourceDictionary(path: String) {
-        log.info(" *************************** loadResourceDictionary **********************")
+        log.info(" ******* loadResourceDictionary($path) ********")
         val files = normalizedFile(path).listFiles()
         val errorBuilder = StrBuilder()
 

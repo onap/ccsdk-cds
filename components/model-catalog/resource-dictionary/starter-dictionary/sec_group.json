@@ -7,6 +7,11 @@
     "type" : "string"
   },
   "sources" : {
+    "default": {
+      "type": "source-default",
+      "properties": {
+      }
+    },
     "input" : {
       "type" : "source-input",
       "properties" : {

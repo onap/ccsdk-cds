@@ -63,9 +63,15 @@ class BluePrintEnhancerServiceImplTest {
     @Test
     @Throws(Exception::class)
     fun testEnhancementAndValidation() {
-
         val basePath = "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
         testComponentInvokeEnhancementAndValidation(basePath, "base-enhance")
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun testVFWEnhancementAndValidation() {
+        val basePath = "./../../../../components/model-catalog/blueprint-model/service-blueprint/vFW"
+        testComponentInvokeEnhancementAndValidation(basePath, "vFW-enhance")
     }
 
     @Test
@@ -96,7 +102,7 @@ class BluePrintEnhancerServiceImplTest {
             val valid = bluePrintValidatorService.validateBluePrints(targetPath)
             Assert.assertTrue("blueprint($basePath) validation failed ", valid)
 
-            deleteDir(targetPath)
+//            deleteDir(targetPath)
         }
     }
 
