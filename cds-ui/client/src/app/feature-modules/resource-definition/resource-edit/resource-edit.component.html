@@ -19,27 +19,36 @@
 */-->
 
 
-<mat-card class="metadata-card">
+<button (click) ="changeView()" class="toggle-view-btn">{{viewText}}</button>
+<br><br>
+<div *ngIf="designerMode">
+   <mat-card class="metadata-card">
         <mat-card-header>
             <mat-card-title>Resource Metadata</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            <app-resource-metadata></app-resource-metadata>
+            <app-resource-metadata (resourcesData)="metaDataDetail($event)"></app-resource-metadata>
         </mat-card-content>
-</mat-card>
+    </mat-card>
 
-<mat-card class="sources-card">
-     <mat-card-header>
+	<mat-card class="sources-card">
+    	<mat-card-header>
           <mat-card-title>
                 Sources
           </mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-          <app-sources-template></app-sources-template>
-    </mat-card-content>
-</mat-card>
+    	</mat-card-header>
+    	<mat-card-content>
+        	<app-sources-template (resourcesData)="sourcesDetails($event)"></app-sources-template>
+    	</mat-card-content>
+    </mat-card>
+</div>
 
-<mat-card class="submit">
-   <button mat-raised-button>Save</button>
-</mat-card>
-<!-- <router-outlet></router-outlet> -->
+<div *ngIf="editorMode">
+	<json-editor  class="jsoneditor" *ngIf="editorMode" [options]="options" [data]="resources" on-change="onChange($event)"></json-editor>
+</div>
+ 
+<div class="btn"> 
+	<button mat-button matStepperPrevious>Back</button></div>
+<div class="btn">
+	<button mat-button matStepperNext type="submit" (click)="updateResourcesState()">Upload</button>
+</div> 
