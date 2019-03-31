@@ -18,7 +18,7 @@
 * ============LICENSE_END=========================================================
 */-->
 
-<form [formGroup]="ResourceMetadata">
+<form [formGroup]="ResourceMetadata" (ngSubmit)="UploadMetadata()">
    	<mat-form-field class="form-field">
       <input matInput placeholder="Name" formControlName="Resource_Name">
     </mat-form-field><mat-form-field class="form-field">
@@ -42,4 +42,8 @@
     <mat-form-field class="form-field" >
       <textarea matInput placeholder="Description" formControlName="_description"></textarea>
     </mat-form-field>
+    <br>
+    <div>
+    	<button mat-button class="matStepNextBtn" type="submit">Save Metadata</button>
+    </div>  
 </form>

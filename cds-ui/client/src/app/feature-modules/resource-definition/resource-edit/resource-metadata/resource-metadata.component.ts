@@ -18,7 +18,7 @@
 * ============LICENSE_END=========================================================
 */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output  } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { IResources } from 'src/app/common/core/store/models/resources.model';
 import { IResourcesState } from 'src/app/common/core/store/models/resourcesState.model';
@@ -45,7 +45,8 @@ export class ResourceMetadataComponent implements OnInit {
     resources: IResources;
     propertyValues = [];
     property = [];   
-  
+    @Output() resourcesData = new EventEmitter();
+     
  constructor(private formBuilder: FormBuilder, private store: Store<IAppState>) { 
     this.rdState = this.store.select('resources');
     this.ResourceMetadata = this.formBuilder.group({
@@ -68,16 +69,27 @@ export class ResourceMetadataComponent implements OnInit {
         this.properties= resourcesState.resources.property;
         this.propertyValues=  this.checkNested(this.properties);
         this.ResourceMetadata = this.formBuilder.group({
-       Resource_Name: [this.resource_name, Validators.required],
-        _tags: [this.tags, Validators.required],
-        _description : [ this.propertyValues[0], Validators.required],
-        _type: [ this.propertyValues[1], Validators.required],
-        required: [ this.propertyValues[2], Validators.required],
-        entry_schema: [this.propertyValues[3]]
+        Resource_Name: [this.resource_name, Validators.required],
+         _tags: [this.tags, Validators.required],
+         _description : [ this.propertyValues[0], Validators.required],
+         _type: [ this.propertyValues[1], Validators.required],
+         required: [ JSON.stringify(this.propertyValues[2]), Validators.required],
+         entry_schema: [this.propertyValues[3]]
       });   
     })
  }
-    
+  
+ UploadMetadata() {
+  
+    this.resources.name = this.ResourceMetadata.value.Resource_Name;
+    this.resources.tags = this.ResourceMetadata.value._tags;
+    this.resources.property.description = this.ResourceMetadata.value._description;
+    this.resources.property.type = this.ResourceMetadata.value._type;
+ 	this.resources.property.required = this.ResourceMetadata.value.required;
+ 	this.resources.property.entry_schema = this.ResourceMetadata.value.entry_schema;
+ 	this.resourcesData.emit(this.resources); 
+ }
+   
  checkNested(obj) {
   for (let key in obj) {
     if (obj.hasOwnProperty(key)) {
