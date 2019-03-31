@@ -34,6 +34,8 @@ export class ResourceCreationComponent implements OnInit {
 
   myFile: any;
   selectedValue: any;
+  showMsg:boolean=false;
+  
   constructor(private store: Store<IAppState>) {
   }
 
@@ -53,6 +55,7 @@ export class ResourceCreationComponent implements OnInit {
     me.store.dispatch(new LoadResourcesSuccess(data));
     console.log(data);
     }
+    this.showMsg= true;
  }
 
  selectedOption(value){
