@@ -17,8 +17,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
+import org.slf4j.LoggerFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
 import java.io.File
@@ -30,7 +29,7 @@ import java.net.URL
  * @author Brinda Santh
  */
 object ResourceResolverUtils {
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(this::class.toString())
+    private val log= LoggerFactory.getLogger(this::class.toString())
 
     fun getFileContent(filename: String, basePath: String?): String {
         log.trace("file ({}), basePath ({}) ", filename, basePath)

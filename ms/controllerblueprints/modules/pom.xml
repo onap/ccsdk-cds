@@ -38,6 +38,10 @@
     </modules>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
         <!-- Test Dependencies -->
         <dependency>
             <groupId>io.mockk</groupId>

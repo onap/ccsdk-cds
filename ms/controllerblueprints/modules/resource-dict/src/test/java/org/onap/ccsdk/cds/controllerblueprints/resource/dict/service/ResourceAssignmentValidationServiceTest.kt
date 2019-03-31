@@ -16,15 +16,14 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.resource.dict.service
 
-import com.att.eelf.configuration.EELFLogger
 import org.junit.Assert
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
-import com.att.eelf.configuration.EELFManager
 import org.junit.Before
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.utils.ResourceDictionaryTestUtils
+import org.slf4j.LoggerFactory
 
 /**
  * ResourceAssignmentValidationServiceTest.
@@ -32,7 +31,7 @@ import org.onap.ccsdk.cds.controllerblueprints.resource.dict.utils.ResourceDicti
  * @author Brinda Santh
  */
 class ResourceAssignmentValidationServiceTest {
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(ResourceAssignmentValidationServiceTest::class.java)
+    private val log = LoggerFactory.getLogger(ResourceAssignmentValidationServiceTest::class.java)
     @Before
     fun setUp() {
         // Setup dummy Source Instance Mapping

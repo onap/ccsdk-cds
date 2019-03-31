@@ -16,8 +16,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.service.enhancer
 
-import com.att.eelf.configuration.EELFLogger
-import com.att.eelf.configuration.EELFManager
+import org.slf4j.LoggerFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
@@ -53,7 +52,7 @@ interface ResourceAssignmentEnhancerService {
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class ResourceAssignmentEnhancerServiceImpl(private val resourceDefinitionRepoService: ResourceDefinitionRepoService)
     : ResourceAssignmentEnhancerService {
-    private val log: EELFLogger = EELFManager.getInstance().getLogger(ResourceAssignmentEnhancerServiceImpl::class.java)
+    private val log= LoggerFactory.getLogger(ResourceAssignmentEnhancerServiceImpl::class.java)
 
     /**
      * Get the defined source instance from the ResourceAssignment,
