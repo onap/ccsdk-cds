@@ -4,8 +4,19 @@ Example
     Pre-requisite
 
         Netbox running: https://github.com/netbox-community/netbox-docker
+
         NETCONF capable device (JUNOS use in this example, but templates could be changed for another OS)
-        Blueprint processor
+
+        Blueprint processor micro-service runnint
+
+        CDS SQL database, populated with reference data as bellow:
+
+          CREATE TABLE `demo` (
+            `id` text DEFAULT NULL,
+            `value` text DEFAULT NULL
+          )
+
+          INSERT INTO `demo` VALUES ('1','vsn'),('2','vpg'),('3','vfw');
 
     resources
 
@@ -25,61 +36,74 @@ Example
           interface-name         |   input
           interface-description  |   capability (python script)
 
-    3 workflow
+    4 workflows
 
-        resource-assignment (dry-run)
+        resource-assignment
 
-            Ability to resolve multiple templates and mappings at the same time,
-            based on the request 'artifact-name', and provide the result as output.
-            Example provide two templates: hostname and vf-module-1
+            Ability to resolve templates with their mappings and provide the result as output.
+            Example provide one templates: vf-module-1
 
-            In order to perform dry-run, we need to store the template and have
-            the ability to retrieve the stored result later point in time. For this
-            we have to specify that we want to store the result, and we need to provide
-            a resolution-key.
+            Input:
 
-            Here is the request payload:
-
-                artifact name:    template(s) to resolve
-                store-result:     whether to save the generated configlet in DB
-                resolution-key:   To identify the configlet saved in the DB
-                hostname:         Value defined to be result trough input in the hostname mapping file
-
-                {
-                  "resource-assignment-request": {
-                    "artifact-name": [ "hostname", "vf-module-1" ],
-                    "resolution-key": "hostname-demo-123",
-                    "store-result": true,
-                    "resource-assignment-properties": {
-                      "hostname": "demo123"
-                    }
-                  }
-                }
+              Nothing specific to pass as input to the request. The resolution will use SQL and script to
+              resolve all the parameters.
 
             Output:
 
-                {
-                  "resource-assignment-params": {
-                      "hostname": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<configuration xmlns:junos=\"http://xml.juniper.net/junos/17.4R1/junos\">\n   <system xmlns=\"http://yang.juniper.net/junos-qfx/conf/system\">\n      <host-name operation=\"delete\" />\n      <host-name operation=\"create\">demo123</host-name>\n   </system>\n</configuration>\n",
-                      "vf-module-1": "<interface>\n    <description>This is the Virtual Firewall entity</description>\n    <vfw>10.10.10.39/24</vfw>\n</interface>"
-                  },
-                  "status": "success"
+              {
+                "resource-assignment-response": {
+                    "meshed-template": {
+                        "vf-module-1": "<interface>\n    <description>This is the Virtual Firewall entity</description>\n    <vfw>10.10.10.69/24</vfw>\n</interface>"
+                    }
                 }
+              }
+
+        config-assign (dry-run)
+
+            Ability to resolve templates with their mappings and provide the result as output.
+            Example provide one templates: hostname
+
+            This action uses the same functionality as resource-assignment, and in addition,
+            store the resulting meshed-template to be used later.
+
+            Input
+
+                resolution-key:   To identify the configlet saved in the DB
+                hostname:         Value defined to be result trough input in the hostname mapping file
+
+              {
+                  "config-assign-request": {
+                    "resolution-key": "config-assign-demo-123",
+                    "config-assign-properties": {
+                      "hostname": "demo-config-assign"
+                    }
+                  }
+              }
+
+            Output:
+
+              {
+                  "config-assign-response": {
+                      "dry-run": {
+                          "hostname": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<configuration xmlns:junos=\"http://xml.juniper.net/junos/17.4R1/junos\">\n   <system xmlns=\"http://yang.juniper.net/junos-qfx/conf/system\">\n      <host-name operation=\"delete\" />\n      <host-name operation=\"create\">demo-config-assign</host-name>\n   </system>\n</configuration>\n"
+                      }
+                  }
+              }
 
         config-deploy
 
             This action will run a python script that will retrieved the resolved template
-            from previous step using the resolution-key and the artifact-name.
+            from previous step using the resolution-key.
             The script will also resolve another template during its execution: the Interface Template.
             Finally, this action will push these resolved templates into a device (JUNOS) using NETCONF.
             The python script will make use of utilities classes provided by the platform:
             resolution helper and netconf client.
 
             Information about the device is modelled as a requirement of this action, specifying that
-            username, password and ip of the device should be provided as input. Note: you could resolve
-            those information using the resource resolution framework, if need be.
+            username, password and ip of the device should be provided as input.
+            Note: you could resolve those information using the resource resolution framework, if need be.
 
-            Here is the request payload:
+            Input:
 
                 resolution-key:   To identify the configlet saved in the DB in previous step
                 username:         NETCONF device user
@@ -88,16 +112,18 @@ Example
                 interface-name:   Name of the interface to configure
                 unit-number:      Unit to configure for the interface
 
-                {
-                  "resolution-key": "hostname-demo-123",
-                  "username": "user",
-                  "password": "pass",
+              {
+                "config-deploy-request": {
+                  "resolution-key": "config-assign-demo-123",
+                  "username": "admin",
+                  "password": "passwd",
                   "ip": "10.198.1.35",
                   "config-deploy-properties": {
                     "interface-name": "ge-0/0/7",
-                    unit-number": "0"
+                    "unit-number": "0"
                   }
                 }
+              }
 
             Output:
 
@@ -109,26 +135,30 @@ Example
             specific RPC. To do so, a python script will be used, similar as in previous action, to dynamically
             resolve the rollback template payload, and send the RPC to the device.
 
-            Information about the NETCONF device is provided in a similar fashion as previous step. Actually, the
-            same model is used.
+            Information about the NETCONF device is provided in a similar fashion as previous step.
 
-            Here is the request payload:
+            Input:
 
                 username:         NETCONF device user
                 password:         NETCONF device password
                 ip:               NETCONF device ip
 
-                 {
-                    "username": "pass",
-                    "password": "user",
-                    "ip": "10.10.10.10"
-                 }
+              {
+                "rollback-request": {
+                  "username": "admin",
+                  "password": "passwd",
+                  "ip": "10.198.1.35",
+                  "rollback-properties": {
+
+                  }
+                }
+              }
 
             Output:
 
                 No specific output beside success or failure.
 
 
-Postman collection used for this example. 4 requests are provided one per workflow to execute, and 1 to load the CBA in the runtime environment.
+Postman collection used for this example. 5 requests are provided one per workflow to execute, and 1 to load the CBA in the runtime environment.
 
-    https://www.getpostman.com/collections/4d199ff02a735bd3e680
+    hhttps://www.getpostman.com/collections/4d199ff02a735bd3e680
