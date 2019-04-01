@@ -29,7 +29,6 @@ class RestconfConfigDeploy(RestconfComponentFunction):
     restconf_server_identifier = "sdncodl"
 
     def process(self, execution_request):
-
         self.log.info("Started execution of process method")
         try:
             restconf_client = RestconfClient(self.log, self)

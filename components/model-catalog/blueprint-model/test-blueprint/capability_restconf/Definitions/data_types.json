@@ -3,7 +3,11 @@
     "dt-config-assign-properties" : {
       "description" : "Dynamic DataType definition for workflow(config-assign).",
       "version" : "1.0.0",
-      "properties" : { },
+      "properties" : {
+        "blueprint-name" : {
+          "type" : "string"
+        }
+      },
       "derived_from" : "tosca.datatypes.Dynamic"
     },
     "dt-config-deploy-properties" : {
