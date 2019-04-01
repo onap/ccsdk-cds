@@ -24,12 +24,14 @@ from restconf_client import RestconfClient
 class RestconfConfigDeploy(RestconfComponentFunction):
 
     log = globals()["log"]
+
+    print "RODRIGO", globals()
     configlet_template_name = "config-assign"
     configlet_resource_path = "/yang-ext:mount/mynetconf:netconflist"
     restconf_server_identifier = "sdncodl"
 
     def process(self, execution_request):
-
+        self.log.trace("trace?")
         self.log.info("Started execution of process method")
         try:
             restconf_client = RestconfClient(self.log, self)

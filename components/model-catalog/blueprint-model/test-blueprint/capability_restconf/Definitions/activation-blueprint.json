@@ -136,7 +136,7 @@
           "dependency-node-templates" : [ "config-deploy" ]
         },
         "artifacts" : {
-          "dg-config-assign-process" : {
+          "dg-config-deploy-process" : {
             "type" : "artifact-directed-graph",
             "file" : "Plans/CONFIG_configDeploy.xml"
           }

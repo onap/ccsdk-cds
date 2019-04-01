@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "name": "blueprint-name",
+    "input-param": true,
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "blueprint-name",
+    "dictionary-source": "capability",
+    "dependencies": [
+
+    ]
+  }
+]
