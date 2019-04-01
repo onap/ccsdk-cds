@@ -1,0 +1,43 @@
+{
+    "name": "blueprint",
+    "connector": "rest",
+    "baseURL": "http://localhost:8080/api/v1",
+    "crud": false,
+    "operations": [{
+            "template": {
+                "method": "GET",
+                "url": "http://localhost:8080/api/v1/blueprint-model/",
+                "headers": {
+                    "accepts": "application/json",
+                    "content-type": "application/json",
+                    "authorization": "Basic Y2NzZGthcHBzOmNjc2RrYXBwcw=="
+                },
+                "responsePath": "$.*"
+            },
+            "functions": {
+                "getAllbleuprints": []
+
+            }
+        },
+        {
+            "template": {
+                "method": "POST",
+                "url": "http://localhost:8080/api/v1/blueprint-model/",
+                "headers": {
+                    "accepts": "multipart/form-data",
+                    "access-control-allow-origin": "*",
+                    "content-type": "{contentType}",
+                    "authorization": "{authtoken}"
+                },
+
+                "formData": "{cbazipfile}",
+                "responsePath": "$.*"
+            },
+
+            "functions": {
+                "saveblueprint": ["contentType", "authtoken", "cbazipfile"]
+
+            }
+        }
+    ]
+}

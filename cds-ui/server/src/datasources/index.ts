@@ -19,5 +19,5 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-
 export * from './db.datasource';
+export * from './blueprint.datasource';
