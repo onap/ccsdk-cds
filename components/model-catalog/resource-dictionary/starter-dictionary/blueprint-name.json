@@ -1,0 +1,21 @@
+{
+	"name": "blueprint-name",
+	"tags": "blueprint-name",
+	"property": {
+		"description": "blueprint-name",
+		"type": "string"
+	},
+	"updated-by": "Rodrigo Ottero",
+	"sources": {
+		"capability": {
+			"type": "source-capability",
+			"properties": {
+				"script-type": "jython",
+				"script-class-reference": "BlueprintNameResolution",
+				"instance-dependencies": [
+
+				]
+			}
+		}
+	}
+}
