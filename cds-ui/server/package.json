@@ -53,6 +53,7 @@
     "@loopback/rest": "^1.5.1",
     "@loopback/rest-explorer": "^1.1.4",
     "@loopback/service-proxy": "^1.0.8",
+    "form-data": "^2.3.3",
     "loopback-connector-rest": "^3.4.1"
   },
   "devDependencies": {

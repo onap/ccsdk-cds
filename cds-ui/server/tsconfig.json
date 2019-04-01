@@ -12,6 +12,8 @@
     "**/*.d.ts"
   ],
   "compilerOptions": {
+      "baseUrl": ".",
+      "paths": { "*": ["types/*"] },
     "experimentalDecorators": true
   }
 }
