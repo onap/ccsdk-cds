@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bee75634_71a8fef7",
+        "filename": "components/model-catalog/blueprint-model/test-blueprint/capability_restconf/Scripts/python/BlueprintNameResolution.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-02T16:46:56Z",
+      "side": 1,
+      "message": "you should use AbstractPythonComponentFunction",
+      "range": {
+        "startLine": 21,
+        "startChar": 30,
+        "endLine": 21,
+        "endChar": 49
+      },
+      "revId": "87419a93ad18ead042d802cbbcfb71810953f22c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
