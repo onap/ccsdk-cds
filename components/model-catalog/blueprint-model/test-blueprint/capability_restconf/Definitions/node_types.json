@@ -157,15 +157,33 @@
       },
       "derived_from" : "tosca.nodes.Workflow"
     },
-    "source-input" : {
-      "description" : "This is Input Resource Source Node Type",
+    "source-capability" : {
+      "description" : "This is Component Resource Source Node Type",
       "version" : "1.0.0",
       "properties" : {
-        "key" : {
-          "required" : false,
+        "script-type" : {
+          "required" : true,
+          "type" : "string",
+          "constraints" : [ {
+            "valid_values" : [ "kotlin", "internal", "jython" ]
+          } ],
+          "default" : "kotlin"
+        },
+        "script-class-reference" : {
+          "description" : "Capability reference name for internal and kotlin, for jython script file path",
+          "required" : true,
           "type" : "string"
         },
+        "instance-dependencies" : {
+          "description" : "Instance dependency Names to Inject to Kotlin / Jython Script.",
+          "required" : false,
+          "type" : "list",
+          "entry_schema" : {
+            "type" : "string"
+          }
+        },
         "key-dependencies" : {
+          "description" : "Resource Resolution dependency dictionary names.",
           "required" : true,
           "type" : "list",
           "entry_schema" : {
@@ -175,18 +193,24 @@
       },
       "derived_from" : "tosca.nodes.ResourceSource"
     },
+    "source-input" : {
+      "description" : "This is Input Resource Source Node Type",
+      "version" : "1.0.0",
+      "properties" : { },
+      "derived_from" : "tosca.nodes.ResourceSource"
+    },
     "tosca.nodes.Component" : {
       "description" : "This is default Component Node",
       "version" : "1.0.0",
       "derived_from" : "tosca.nodes.Root"
     },
-    "tosca.nodes.Workflow" : {
-      "description" : "This is Directed Graph Node Type",
+    "tosca.nodes.ResourceSource" : {
+      "description" : "TOSCA base type for Resource Sources",
       "version" : "1.0.0",
       "derived_from" : "tosca.nodes.Root"
     },
-    "tosca.nodes.ResourceSource" : {
-      "description" : "TOSCA base type for Resource Sources",
+    "tosca.nodes.Workflow" : {
+      "description" : "This is Directed Graph Node Type",
       "version" : "1.0.0",
       "derived_from" : "tosca.nodes.Root"
     }

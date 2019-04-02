@@ -1,4 +1,23 @@
 {
+  "blueprint-name" : {
+    "tags" : "blueprint-name",
+    "name" : "blueprint-name",
+    "property" : {
+      "description" : "blueprint-name",
+      "type" : "string"
+    },
+    "updated-by" : "Rodrigo Ottero",
+    "sources" : {
+      "capability" : {
+        "type" : "source-capability",
+        "properties" : {
+          "script-type" : "jython",
+          "script-class-reference" : "Scripts/python/BlueprintNameResolution.py",
+          "instance-dependencies" : [ ]
+        }
+      }
+    }
+  },
   "pnf-id" : {
     "tags" : "pnf-id",
     "name" : "pnf-id",
