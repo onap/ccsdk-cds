@@ -171,6 +171,14 @@
           "baseconfig-mapping": {
             "type": "artifact-mapping-resource",
             "file": "Definitions/baseconfig-mapping.json"
+          },
+          "another-template": {
+            "type": "artifact-template-velocity",
+            "file": "Templates/another-template.vtl"
+          },
+          "another-mapping": {
+            "type": "artifact-mapping-resource",
+            "file": "Definitions/another-mapping.json"
           }
         }
       },
