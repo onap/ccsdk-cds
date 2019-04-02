@@ -8,6 +8,9 @@
 
 package org.onap.ccsdk.cds.cdssdclistener.service;
 
+import static junit.framework.TestCase.assertTrue;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.junit.Rule;
@@ -34,11 +37,25 @@ public class ListenerServiceImplTest {
     private ListenerServiceImpl listenerService;
 
     @Test
-    public void extractBluePrintSuccessfully() {
+    public void extractBluePrintSuccessfully() throws IOException {
         // Arrange
-        tempDirectoryPath = Paths.get(folder.getRoot().toString(), "cds-sdc-listener-test");
+        String csarArchivePath = folder.getRoot().toString();
+        tempDirectoryPath = Paths.get(csarArchivePath, "cds-sdc-listener-test");
 
         // Act
         listenerService.extractBluePrint(CSAR_SAMPLE, tempDirectoryPath.toString());
+
+        // Verify
+        boolean zipFileExists = getFilesFromDirectory();
+        assertTrue(zipFileExists);
+    }
+
+    private boolean getFilesFromDirectory() throws IOException {
+        return Files.walk(tempDirectoryPath)
+            .filter(Files::isRegularFile)
+            .map(Path::toFile)
+            .findAny()
+            .get()
+            .getName().contains(".zip");
     }
 }

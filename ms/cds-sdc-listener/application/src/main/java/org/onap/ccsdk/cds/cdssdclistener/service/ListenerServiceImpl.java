@@ -23,19 +23,12 @@ import java.util.zip.ZipFile;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
 @ConfigurationProperties("listenerservice")
 public class ListenerServiceImpl implements ListenerService {
-
-    @Value("${listenerservice.config.csarArchive}")
-    private String csarArchivePath;
-
-    @Value("${listenerservice.config.cbaArchive}")
-    private String cbaArchivePath;
 
     private static final String CBA_ZIP_PATH = "Artifacts/Resources/[a-zA-Z0-9-_]+/Deployment/CONTROLLER_BLUEPRINT_ARCHIVE/[a-zA-Z0-9-_]+[.]zip";
     private static final Logger LOGGER = LoggerFactory.getLogger(ListenerServiceImpl.class);
@@ -50,6 +43,7 @@ public class ListenerServiceImpl implements ListenerService {
                 String fileName = entry.getName();
                 if (Pattern.matches(CBA_ZIP_PATH, fileName)) {
                     final String cbaArchiveName = Paths.get(fileName).getFileName().toString();
+                    LOGGER.info("Storing the CBA archive {}", cbaArchiveName);
                     storeBluePrint(zipFile, cbaArchiveName, cbaStorageDir, entry);
                 }
             }
@@ -59,8 +53,8 @@ public class ListenerServiceImpl implements ListenerService {
     }
 
     private void storeBluePrint(ZipFile zipFile, String fileName, Path cbaArchivePath, ZipEntry entry) {
-        final String changedFileName = fileName + ".zip";
-        Path targetLocation = cbaArchivePath.resolve(changedFileName);
+        Path targetLocation = cbaArchivePath.resolve(fileName);
+        LOGGER.info("The target location is {}", targetLocation);
         File targetZipFile = new File(targetLocation.toString());
 
         try {
@@ -73,6 +67,7 @@ public class ListenerServiceImpl implements ListenerService {
         try (InputStream inputStream = zipFile.getInputStream(entry); OutputStream out = new FileOutputStream(
             targetZipFile)) {
             IOUtils.copy(inputStream, out);
+            LOGGER.info("Succesfully store the CBA archive {} at this location", targetZipFile);
         } catch (Exception e) {
             LOGGER.error("Failed to put zip file into target location {}", targetLocation, e);
         }
@@ -81,7 +76,7 @@ public class ListenerServiceImpl implements ListenerService {
     private Path getStorageDirectory(String path) {
         Path fileStorageLocation = Paths.get(path).toAbsolutePath().normalize();
 
-        if (!Files.exists(fileStorageLocation)) {
+        if (!fileStorageLocation.toFile().exists()) {
             try {
                 return Files.createDirectories(fileStorageLocation);
             } catch (IOException e) {
