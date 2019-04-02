@@ -1,6 +1,7 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
  * Modifications Copyright © 2019 IBM.
+ * Modifications Copyright © 2019 Huawei.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +34,8 @@ class RestLibConstants {
         const val TYPE_TOKEN_AUTH = "token-auth"
         const val TYPE_BASIC_AUTH = "basic-auth"
         const val TYPE_SSL_BASIC_AUTH = "ssl-basic-auth"
+        const val TYPE_SSL_TOKEN_AUTH = "ssl-token-auth"
+        const val TYPE_SSL_NO_AUTH = "ssl-no-auth"
         const val TYPE_DME2_PROXY = "dme2-proxy"
         const val TYPE_POLICY_MANAGER = "policy-manager"
     }

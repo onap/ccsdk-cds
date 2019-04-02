@@ -23,11 +23,14 @@ import org.springframework.http.MediaType
 import java.nio.charset.Charset
 import java.util.*
 
-class BasicAuthRestClientService(private val restClientProperties: BasicAuthRestClientProperties) :
-    BlueprintWebClientService {
+class BasicAuthRestClientService(private val restClientProperties:
+                                 BasicAuthRestClientProperties) :
+        BlueprintWebClientService {
 
     override fun defaultHeaders(): Map<String, String> {
-        val encodedCredentials = setBasicAuth(restClientProperties.username, restClientProperties.password)
+
+        val encodedCredentials = setBasicAuth(restClientProperties.username,
+                restClientProperties.password)
         return mapOf(
                 HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE,
                 HttpHeaders.ACCEPT to MediaType.APPLICATION_JSON_VALUE,
@@ -38,18 +41,25 @@ class BasicAuthRestClientService(private val restClientProperties: BasicAuthRest
         return restClientProperties.url + uri
     }
 
-    override fun convertToBasicHeaders(headers: Map<String, String>): Array<BasicHeader> {
+    override fun convertToBasicHeaders(headers: Map<String, String>):
+            Array<BasicHeader> {
+
         val customHeaders: MutableMap<String, String> = headers.toMutableMap()
         if (!headers.containsKey(HttpHeaders.AUTHORIZATION)) {
-            val encodedCredentials = setBasicAuth(restClientProperties.username, restClientProperties.password)
-            customHeaders[HttpHeaders.AUTHORIZATION] = "Basic $encodedCredentials"
+            val encodedCredentials = setBasicAuth(
+                    restClientProperties.username,
+                    restClientProperties.password)
+            customHeaders[HttpHeaders.AUTHORIZATION] =
+                    "Basic $encodedCredentials"
         }
         return super.convertToBasicHeaders(customHeaders)
     }
 
     private fun setBasicAuth(username: String, password: String): String {
+
         val credentialsString = "$username:$password"
-        return Base64.getEncoder().encodeToString(credentialsString.toByteArray(Charset.defaultCharset()))
+        return Base64.getEncoder().encodeToString(
+                credentialsString.toByteArray(Charset.defaultCharset()))
     }
 
 
