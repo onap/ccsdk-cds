@@ -5,9 +5,12 @@
  * proprietary to Bell Canada and are protected by trade secret or copyright law.
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  */
-package org.onap.ccsdk.cds.cdssdclistener;
+package org.onap.ccsdk.cds.cdssdclistener.client;
 
 import java.util.Optional;
+import org.onap.ccsdk.cds.cdssdclistener.CdsSdcListenerConfiguration;
+import org.onap.ccsdk.cds.cdssdclistener.CdsSdcListenerDto;
+import org.onap.ccsdk.cds.cdssdclistener.CdsSdcListenerNotificationCallback;
 import org.onap.ccsdk.cds.cdssdclistener.exceptions.CdsSdcListenerException;
 import org.onap.sdc.api.IDistributionClient;
 import org.onap.sdc.api.results.IDistributionClientResult;
