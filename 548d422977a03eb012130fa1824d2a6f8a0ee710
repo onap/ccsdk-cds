@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d7425362_a9721ce3",
+        "filename": "components/model-catalog/blueprint-model/test-blueprint/capability_restconf/Definitions/data_types.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-02T16:46:56Z",
+      "side": 1,
+      "message": "useless",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 9
+      },
+      "revId": "548d422977a03eb012130fa1824d2a6f8a0ee710",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
