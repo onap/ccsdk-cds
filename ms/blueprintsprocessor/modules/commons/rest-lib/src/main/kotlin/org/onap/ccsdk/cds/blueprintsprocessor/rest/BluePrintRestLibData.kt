@@ -21,6 +21,22 @@ open class RestClientProperties {
     lateinit var url: String
 }
 
+open class SSLRestClientProperties : RestClientProperties() {
+    lateinit var keyStoreInstance: String // JKS, PKCS12
+    lateinit var sslTrust: String
+    lateinit var sslTrustPassword: String
+    var sslKey: String? = null
+    var sslKeyPassword: String? = null
+}
+
+open class SSLBasicAuthRestClientProperties : SSLRestClientProperties() {
+    var basicAuth: BasicAuthRestClientProperties? = null
+}
+
+open class SSLTokenAuthRestClientProperties : SSLRestClientProperties() {
+    var tokenAuth: TokenAuthRestClientProperties? = null
+}
+
 open class BasicAuthRestClientProperties : RestClientProperties() {
     lateinit var password: String
     lateinit var username: String
@@ -28,14 +44,6 @@ open class BasicAuthRestClientProperties : RestClientProperties() {
 
 open class TokenAuthRestClientProperties : RestClientProperties() {
     var token: String? = null
-}
-
-open class SSLBasicAuthRestClientProperties : RestClientProperties() {
-    lateinit var keyStoreInstance: String // JKS, PKCS12
-    lateinit var sslTrust: String
-    lateinit var sslTrustPassword: String
-    lateinit var sslKey: String
-    lateinit var sslKeyPassword: String
 }
 
 open class DME2RestClientProperties : RestClientProperties() {

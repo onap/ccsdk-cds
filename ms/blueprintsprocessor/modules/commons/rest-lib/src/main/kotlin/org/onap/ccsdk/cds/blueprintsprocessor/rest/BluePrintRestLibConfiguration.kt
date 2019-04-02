@@ -33,6 +33,8 @@ class RestLibConstants {
         const val TYPE_TOKEN_AUTH = "token-auth"
         const val TYPE_BASIC_AUTH = "basic-auth"
         const val TYPE_SSL_BASIC_AUTH = "ssl-basic-auth"
+        const val TYPE_SSL_TOKEN_AUTH = "ssl-token-auth"
+        const val TYPE_SSL_NO_AUTH = "ssl-no-auth"
         const val TYPE_DME2_PROXY = "dme2-proxy"
         const val TYPE_POLICY_MANAGER = "policy-manager"
     }
