@@ -17,6 +17,7 @@ import mockit.VerificationsInOrder;
 import mockit.integration.junit4.JMockit;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.onap.ccsdk.cds.cdssdclistener.client.CdsSdcListenerClient;
 import org.onap.ccsdk.cds.cdssdclistener.exceptions.CdsSdcListenerException;
 import org.onap.sdc.api.IDistributionClient;
 import org.onap.sdc.api.results.IDistributionClientResult;
