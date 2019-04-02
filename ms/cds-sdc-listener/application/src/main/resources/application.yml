@@ -16,4 +16,6 @@ listenerservice:
       isUseHttpsWithDmaap: false
       csarArchive: /opt/app/onap/cds-sdc-listener/csar-archive
       cbaArchive: /opt/app/onap/cds/sdc-listener/cba-archive
+      grpcAddress: localhost
+      grpcPort: 9111
 
