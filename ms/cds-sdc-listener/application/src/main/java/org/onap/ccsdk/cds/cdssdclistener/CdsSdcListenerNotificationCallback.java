@@ -9,7 +9,13 @@
 package org.onap.ccsdk.cds.cdssdclistener;
 
 import static org.onap.sdc.utils.DistributionActionResultEnum.SUCCESS;
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import org.onap.ccsdk.cds.cdssdclistener.dto.CdsSdcListenerDto;
 import org.onap.ccsdk.cds.cdssdclistener.service.ListenerServiceImpl;
 import org.onap.sdc.api.IDistributionClient;
 import org.onap.sdc.api.consumer.INotificationCallback;
@@ -19,9 +25,14 @@ import org.onap.sdc.api.results.IDistributionClientDownloadResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
+@ConfigurationProperties("listenerservice")
 @Component
+@ComponentScan("org.onap.ccsdk.cds.cdssdclistener.dto")
 public class CdsSdcListenerNotificationCallback implements INotificationCallback {
 
     @Autowired
@@ -29,6 +40,9 @@ public class CdsSdcListenerNotificationCallback implements INotificationCallback
 
     @Autowired
     private ListenerServiceImpl listenerService;
+
+    @Value("${listenerservice.config.archivePath}")
+    private String pathToStoreArchives;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CdsSdcListenerNotificationCallback.class);
 
@@ -45,7 +59,7 @@ public class CdsSdcListenerNotificationCallback implements INotificationCallback
     }
 
     /**
-     * Download the TOSCA CSAR artifact.
+     * Download the TOSCA CSAR artifact and process it.
      *
      * @param info - Artifact information
      * @param distributionClient - SDC distribution client
@@ -53,6 +67,7 @@ public class CdsSdcListenerNotificationCallback implements INotificationCallback
     private void downloadCsarArtifacts(IArtifactInfo info, IDistributionClient distributionClient) {
         final String url = info.getArtifactURL();
         final String id = info.getArtifactUUID();
+
         if (Objects.equals(info.getArtifactType(), CdsSdcListenerConfiguration.TOSCA_CSAR)) {
             LOGGER.info("Trying to download the artifact from : {} and UUID is {} ", url, id);
 
@@ -63,8 +78,30 @@ public class CdsSdcListenerNotificationCallback implements INotificationCallback
                 LOGGER.error("Failed to download the artifact from : {} due to {} ", url,
                     result.getDistributionActionResult());
             } else {
-                // TODO Store the CSAR into CSARArchive path and extract the Blueprint using ListenerServiceImpl.extractBluePrint
+                LOGGER.info("Trying to write CSAR artifact to file  with URL {} and UUID {}", url, id);
+                processCsarArtifact(result);
             }
+        }
+    }
+
+    public void processCsarArtifact(IDistributionClientDownloadResult result) {
+        Path cbaArchivePath = Paths.get(pathToStoreArchives, "cba-archive");
+        Path csarArchivePath = Paths.get(pathToStoreArchives, "csar-archive");
+
+        // extract and store the CSAR archive into local disk.
+        listenerService.extractCsarAndStore(result, csarArchivePath.toString());
+
+        Optional<List<File>> csarFiles = listenerService.getFilesFromDisk(csarArchivePath);
+
+        if (csarFiles.isPresent()) {
+
+            //Extract CBA archive from CSAR package and and store it into CDS Database.
+            csarFiles.get()
+                .forEach(file -> listenerService.extractBluePrint(file.getAbsolutePath(), cbaArchivePath.toString()));
+
+            listenerService.saveBluePrintToCdsDatabase(cbaArchivePath);
+        } else {
+            LOGGER.error("The CSAR file is not present at this location {}", csarArchivePath);
         }
     }
 }
