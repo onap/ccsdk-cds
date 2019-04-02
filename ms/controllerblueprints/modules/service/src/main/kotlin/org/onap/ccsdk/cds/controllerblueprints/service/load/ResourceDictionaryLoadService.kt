@@ -39,13 +39,18 @@ open class ResourceDictionaryLoadService(private val resourceDictionaryHandler: 
     private val log = LoggerFactory.getLogger(ResourceDictionaryLoadService::class.java)
 
     open suspend fun loadPathsResourceDictionary(paths: List<String>) {
-        paths.forEach {
-            loadPathResourceDictionary(it)
+        coroutineScope {
+            val deferred = paths.map {
+                async {
+                    loadPathResourceDictionary(it)
+                }
+            }
+            deferred.awaitAll()
         }
     }
 
     open suspend fun loadPathResourceDictionary(path: String) {
-        log.info(" *************************** loadResourceDictionary **********************")
+        log.info(" ******* loadResourceDictionary($path) ********")
         val files = normalizedFile(path).listFiles()
         val errorBuilder = StrBuilder()
 
