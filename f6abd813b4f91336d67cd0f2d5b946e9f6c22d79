@@ -22,6 +22,30 @@
       "revId": "f6abd813b4f91336d67cd0f2d5b946e9f6c22d79",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b223c213_c8fc3a99",
+        "filename": "ms/blueprintsprocessor/modules/services/execution-service/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/services/execution/AbstractComponentFunction.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-02T16:14:01Z",
+      "side": 1,
+      "message": "this is fine, isn\u0027t it?",
+      "parentUuid": "4170f89b_f1fcfa54",
+      "range": {
+        "startLine": 101,
+        "startChar": 8,
+        "endLine": 101,
+        "endChar": 29
+      },
+      "revId": "f6abd813b4f91336d67cd0f2d5b946e9f6c22d79",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
