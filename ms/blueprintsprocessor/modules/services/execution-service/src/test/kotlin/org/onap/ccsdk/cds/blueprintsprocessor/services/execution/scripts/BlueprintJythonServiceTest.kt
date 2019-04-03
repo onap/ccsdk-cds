@@ -18,7 +18,6 @@ package org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts
 
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
@@ -60,7 +59,7 @@ class BlueprintJythonServiceTest {
 
         assertNotNull(abstractPythonPlugin, "failed to get python component")
     }
-    
+
     @Test
     fun testGetAbstractJythonComponent() {
         val scriptInstance = "test-classes/scripts/SamplePythonComponentNode.py"

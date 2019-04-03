@@ -1,6 +1,8 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
  *
+ * Modifications Copyright © 2019 IBM, Bell Canada.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,18 +19,35 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.assertNotNull
 
+@RunWith(SpringRunner::class)
 class BluePrintTemplateServiceTest {
 
     @Test
-    fun testGenerateContent() {
+    fun testVelocityGeneratedContent() {
 
-        val template = JacksonUtils.getClassPathFileContent("templates/base-config-template.vtl")
-        val json = JacksonUtils.getClassPathFileContent("templates/base-config-data.json")
+        val template = JacksonUtils.getClassPathFileContent("templates/base-config-velocity-template.vtl")
+        val json = JacksonUtils.getClassPathFileContent("templates/base-config-data-velocity.json")
 
-        val content = BluePrintTemplateService.generateContent(template, json)
+        val content = BluePrintVelocityTemplateService.generateContent(template, json)
+        assertNotNull(content, "failed to generate content for velocity template")
+
+    }
+
+    @Test
+    fun testJinjaGeneratedContent() {
+
+        val template = JacksonUtils.getClassPathFileContent("templates/base-config-jinja-template.jinja")
+        val json = JacksonUtils.getClassPathFileContent("templates/base-config-data-jinja.json")
+
+        val element: MutableMap<String, Any> = mutableMapOf()
+        element["additional_array"] = arrayListOf(hashMapOf("name" to "Element1", "location" to "Region0"), hashMapOf("name" to "Element2", "location" to "Region1"))
+
+        val content = BluePrintJinjaTemplateService.generateContent(template, json, false, element)
         assertNotNull(content, "failed to generate content for velocity template")
 
     }

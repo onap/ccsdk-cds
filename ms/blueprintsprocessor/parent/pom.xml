@@ -3,6 +3,7 @@
   ~  Copyright © 2017-2018 AT&T Intellectual Property.
   ~
   ~  Modifications Copyright © 2018 IBM.
+  ~
   ~  Modifications Copyright © 2019 Bell Canada.
   ~
   ~  Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,6 +51,7 @@
         <powermock.version>1.7.4</powermock.version>
         <mockk.version>1.9</mockk.version>
         <dmaap.client.version>1.1.5</dmaap.client.version>
+        <jinja.version>2.5.0</jinja.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -111,6 +113,11 @@
                         <artifactId>slf4j-api</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.hubspot.jinjava</groupId>
+                <artifactId>jinjava</artifactId>
+                <version>${jinja.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
