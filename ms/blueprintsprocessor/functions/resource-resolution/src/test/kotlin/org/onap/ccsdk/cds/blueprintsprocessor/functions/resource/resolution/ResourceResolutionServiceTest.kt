@@ -97,47 +97,48 @@ class ResourceResolutionServiceTest {
     @Test
     @Throws(Exception::class)
     fun testResolveResources() {
+        runBlocking {
+            Assert.assertNotNull("failed to create ResourceResolutionService", resourceResolutionService)
 
-        Assert.assertNotNull("failed to create ResourceResolutionService", resourceResolutionService)
+            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
+                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
-        val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+            val executionServiceInput = JacksonUtils.readValueFromClassPathFile("payload/requests/sample-resourceresolution-request.json",
+                    ExecutionServiceInput::class.java)!!
 
-        val executionServiceInput = JacksonUtils.readValueFromClassPathFile("payload/requests/sample-resourceresolution-request.json",
-                ExecutionServiceInput::class.java)!!
+            val artefactNames = listOf("baseconfig", "another")
 
-        val artefactNames = listOf("baseconfig", "another")
+            // Prepare Inputs
+            PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService, executionServiceInput.payload, "resource-assignment")
 
-        // Prepare Inputs
-        PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService, executionServiceInput.payload, "resource-assignment")
-
-        resourceResolutionService.resolveResources(bluePrintRuntimeService, "resource-assignment", artefactNames, mapOf())
+            resourceResolutionService.resolveResources(bluePrintRuntimeService, "resource-assignment", artefactNames, mapOf())
+        }
 
     }
 
     @Test
     @Throws(Exception::class)
     fun testResolveResourcesWithMappingAndTemplate() {
+        runBlocking {
+            Assert.assertNotNull("failed to create ResourceResolutionService", resourceResolutionService)
 
-        Assert.assertNotNull("failed to create ResourceResolutionService", resourceResolutionService)
+            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
+                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
-        val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+            val executionServiceInput = JacksonUtils.readValueFromClassPathFile("payload/requests/sample-resourceresolution-request.json",
+                    ExecutionServiceInput::class.java)!!
 
-        val executionServiceInput = JacksonUtils.readValueFromClassPathFile("payload/requests/sample-resourceresolution-request.json",
-                ExecutionServiceInput::class.java)!!
+            val artifactPrefix = "another"
 
-        val artifactPrefix = "another"
+            // Velocity Artifact Definition Name
+            val artifactTemplate = "$artifactPrefix-template"
+            // Resource Assignment Artifact Definition Name
+            val artifactMapping = "$artifactPrefix-mapping"
 
-        // Velocity Artifact Definition Name
-        val artifactTemplate = "$artifactPrefix-template"
-        // Resource Assignment Artifact Definition Name
-        val artifactMapping = "$artifactPrefix-mapping"
+            // Prepare Inputs
+            PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService, executionServiceInput.payload, "resource-assignment")
 
-        // Prepare Inputs
-        PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService, executionServiceInput.payload, "resource-assignment")
-
-        resourceResolutionService.resolveResources(bluePrintRuntimeService, "resource-assignment", artifactMapping, artifactTemplate)
-
+            resourceResolutionService.resolveResources(bluePrintRuntimeService, "resource-assignment", artifactMapping, artifactTemplate)
+        }
     }
 }

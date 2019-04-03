@@ -18,9 +18,9 @@ package org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts
 
 import io.mockk.every
 import io.mockk.mockk
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
@@ -51,7 +51,6 @@ class BlueprintJythonServiceTest {
 
     @Test
     fun testGetAbstractPythonPlugin() {
-
         val content = JacksonUtils.getClassPathFileContent("scripts/SamplePythonComponentNode.py")
         val dependencies: MutableMap<String, Any> = hashMapOf()
 
@@ -60,18 +59,15 @@ class BlueprintJythonServiceTest {
                         content, dependencies)
 
         assertNotNull(abstractPythonPlugin, "failed to get python component")
-
-        abstractPythonPlugin.process(ExecutionServiceInput())
-
     }
-
+    
     @Test
     fun testGetAbstractJythonComponent() {
-
         val scriptInstance = "test-classes/scripts/SamplePythonComponentNode.py"
 
         val abstractJythonComponent = blueprintJythonService.jythonComponentInstance(blueprintContext, scriptInstance)
 
         assertNotNull(abstractJythonComponent, "failed to get Jython component")
+
     }
 }
