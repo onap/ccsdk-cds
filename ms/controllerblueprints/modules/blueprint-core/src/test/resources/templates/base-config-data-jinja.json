@@ -1,0 +1,16 @@
+{
+  "node_hostname": "sdnc-host",
+  "node_backup_router_address": "2001:1890:1253::192:168:100:1",
+  "node_backup_router_d_address": "2011:1090:1253::112:158:100:1",
+  "servers": [
+    "Server1",
+    "Server2",
+    "Server3"
+  ],
+  "classes": [
+    "superuser-class",
+    "tacacs-adv-class",
+    "tacacs-base-class"
+  ],
+  "system_password": "teamops-system-password"
+}

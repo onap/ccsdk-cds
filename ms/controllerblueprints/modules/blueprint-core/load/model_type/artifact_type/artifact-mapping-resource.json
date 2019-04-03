@@ -1,5 +1,5 @@
 {
-  "description": " Velocity Template Resource Mapping File used along with Configuration template",
+  "description": " Velocity and jinja Templates Resource Mapping File used along with Configuration template",
   "version": "1.0.0",
   "file_ext": [
     "json"
