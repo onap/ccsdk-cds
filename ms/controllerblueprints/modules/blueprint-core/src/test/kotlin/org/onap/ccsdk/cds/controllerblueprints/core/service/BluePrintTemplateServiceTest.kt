@@ -1,6 +1,8 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
  *
+ * Modifications Copyright © 2019 IBM, Bell Canada.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,20 +18,78 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
+import org.junit.Ignore
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.springframework.test.context.junit4.SpringRunner
+import kotlin.test.BeforeTest
 import kotlin.test.assertNotNull
 
+@RunWith(SpringRunner::class)
 class BluePrintTemplateServiceTest {
 
+    lateinit var blueprintRuntime: BluePrintRuntimeService<*>
+
+    @BeforeTest
+    fun setup() {
+        val blueprintBasePath: String = ("./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+        blueprintRuntime = BluePrintMetadataUtils.getBluePrintRuntime("1234", blueprintBasePath)
+    }
+
     @Test
-    fun testGenerateContent() {
+    fun testVelocityGeneratedContent() {
 
-        val template = JacksonUtils.getClassPathFileContent("templates/base-config-template.vtl")
-        val json = JacksonUtils.getClassPathFileContent("templates/base-config-data.json")
+        val template = JacksonUtils.getClassPathFileContent("templates/base-config-velocity-template.vtl")
+        val json = JacksonUtils.getClassPathFileContent("templates/base-config-data-velocity.json")
 
-        val content = BluePrintTemplateService.generateContent(template, json)
+        val content = BluePrintVelocityTemplateService.generateContent(template, json)
+        assertNotNull(content, "failed to generate content for velocity template")
+
+    }
+
+    @Test
+    fun testJinjaGeneratedContent() {
+
+        val template = JacksonUtils.getClassPathFileContent("templates/base-config-jinja-template.jinja")
+        val json = JacksonUtils.getClassPathFileContent("templates/base-config-data-jinja.json")
+
+        var element: MutableMap<String, Any> = mutableMapOf()
+        element["additional_array"] = arrayListOf(hashMapOf("name" to "Element1", "location" to "Region0"), hashMapOf("name" to "Element2", "location" to "Region1"))
+
+        val content = BluePrintJinjaTemplateService.generateContent(template, json, false, element)
+        assertNotNull(content, "failed to generate content for velocity template")
+
+    }
+
+    @Ignore
+    @Test
+    fun testVelocityGeneratedContentFromFiles() {
+
+        val bluePrintTemplateService = BluePrintTemplateService(blueprintRuntime,
+                "component-resource-assignment", "artifact-template-velocity")
+        val content = bluePrintTemplateService.generateContentFromFiles(
+                "resources/templates/templates/base-config-velocity-template.vtl",
+                "resources/templates/templates/base-config-data-velocity.json", false, mutableMapOf())
+        assertNotNull(content, "failed to generate content for velocity template")
+
+    }
+
+    @Ignore
+    @Test
+    fun testJinjaGeneratedContentFromFiles() {
+
+        var element: MutableMap<String, Any> = mutableMapOf()
+        element["additional_array"] = arrayListOf(hashMapOf("name" to "Element1", "location" to "Region0"), hashMapOf("name" to "Element2", "location" to "Region1"))
+
+        val bluePrintTemplateService = BluePrintTemplateService(blueprintRuntime,
+                "component-resource-assignment", "artifact-template-jinja")
+        val content = bluePrintTemplateService.generateContentFromFiles(
+                "templates/base-config-velocity-template.vtl",
+                "templates/base-config-data-velocity.json", false, element)
         assertNotNull(content, "failed to generate content for velocity template")
 
     }
 }
+
