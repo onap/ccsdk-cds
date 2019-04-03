@@ -2,6 +2,8 @@
  *  Copyright © 2017-2018 AT&T Intellectual Property.
  *  Modifications Copyright © 2018-2019 IBM.
  *
+ *  Modifications Copyright © 2019 IBM, Bell Canada
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -26,8 +28,9 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.util
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmptyOrThrow
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintJinjaTemplateService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintTemplateService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintVelocityTemplateService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
@@ -45,13 +48,16 @@ interface ResourceResolutionService {
                                     resolutionKey: String): String
 
     suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
-                                 artifactNames: List<String>, properties: Map<String, Any>): MutableMap<String, String>
+                                 artifactNames: List<String>, properties: Map<String, Any>,
+                                 templateType: String = BluePrintConstants.TEMPLATE_VELOCITY_TYPE): MutableMap<String, String>
 
-    suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
-                                 artifactPrefix: String, properties: Map<String, Any>): String
+    suspend fun resolveResourcesByArtifactName(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
+                                               artifactPrefix: String, properties: Map<String, Any>,
+                                               templateType: String = BluePrintConstants.TEMPLATE_VELOCITY_TYPE): String
 
-    suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
-                                 artifactMapping: String, artifactTemplate: String?): String
+    suspend fun resolveResourcesByArtifactMapping(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
+                                                  artifactMapping: String, artifactTemplate: String?,
+                                                  templateType: String = BluePrintConstants.TEMPLATE_VELOCITY_TYPE): String
 
     suspend fun resolveResourceAssignments(blueprintRuntimeService: BluePrintRuntimeService<*>,
                                            resourceDictionaries: MutableMap<String, ResourceDefinition>,
@@ -79,26 +85,28 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
     }
 
     override suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
-                                          artifactNames: List<String>,
-                                          properties: Map<String, Any>): MutableMap<String, String> {
+                                          artifactNames: List<String>, properties: Map<String, Any>,
+                                          templateType: String): MutableMap<String, String> {
 
         val resolvedParams: MutableMap<String, String> = hashMapOf()
         artifactNames.forEach { artifactName ->
-            val resolvedContent = resolveResources(bluePrintRuntimeService, nodeTemplateName, artifactName, properties)
+            val resolvedContent = resolveResourcesByArtifactName(bluePrintRuntimeService, nodeTemplateName,
+                    artifactName, properties, templateType)
             resolvedParams[artifactName] = resolvedContent
         }
         return resolvedParams
     }
 
-    override suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
-                                          artifactPrefix: String, properties: Map<String, Any>): String {
+    override suspend fun resolveResourcesByArtifactName(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
+                                                        artifactPrefix: String, properties: Map<String, Any>, templateType: String): String {
 
         // Velocity Artifact Definition Name
         val artifactTemplate = "$artifactPrefix-template"
         // Resource Assignment Artifact Definition Name
         val artifactMapping = "$artifactPrefix-mapping"
 
-        val result = resolveResources(bluePrintRuntimeService, nodeTemplateName, artifactMapping, artifactTemplate)
+        val result = resolveResourcesByArtifactMapping(bluePrintRuntimeService, nodeTemplateName,
+                artifactMapping, artifactTemplate, templateType)
 
         if (properties.containsKey(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT)
                 && properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] as Boolean) {
@@ -110,8 +118,8 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
     }
 
 
-    override suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
-                                          artifactMapping: String, artifactTemplate: String?): String {
+    override suspend fun resolveResourcesByArtifactMapping(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
+                                                           artifactMapping: String, artifactTemplate: String?, templateType: String): String {
 
         val resolvedContent: String
         log.info("Resolving resource for template artifact($artifactTemplate) with resource assignment artifact($artifactMapping)")
@@ -144,7 +152,17 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
         if (artifactTemplate != null) {
             val templateContent =
                     bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactTemplate)
-            resolvedContent = BluePrintTemplateService.generateContent(templateContent, resolvedParamJsonContent)
+            resolvedContent = when (templateType) {
+                BluePrintConstants.TEMPLATE_JINJA_TYPE -> {
+                    BluePrintJinjaTemplateService.generateContent(templateContent, resolvedParamJsonContent)
+                }
+                BluePrintConstants.TEMPLATE_VELOCITY_TYPE -> {
+                    BluePrintVelocityTemplateService.generateContent(templateContent, resolvedParamJsonContent)
+                }
+                else -> {
+                    BluePrintVelocityTemplateService.generateContent(templateContent, resolvedParamJsonContent)
+                }
+            }
         } else {
             resolvedContent = resolvedParamJsonContent
         }

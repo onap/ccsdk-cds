@@ -1,0 +1,42 @@
+<configuration xmlns="http://xml.juniper.net/xnm/1.1/xnm"
+xmlns:a="http://xml.juniper.net/junos/15.1X49/junos">
+	<version>15.1X49-D50.3</version>
+	<groups>
+		<name>node0</name>
+		<system>
+        {%- for server in servers %}
+            <server-host-name>{{ server }}</server-host-name>
+        {%- endfor %}
+        </system>
+		<system>
+			<host-name>{{ node_hostname }}</host-name>
+			<backup-router>
+				<address>{{ node_backup_router_address }}</address>
+				<destination>{{ node_backup_router_d_address }}</destination>
+			</backup-router>
+			<login>
+				<message>ONAP information assets</message>
+				{%- for class in classes %}
+                <class>
+                    {{ class }}
+                </class>
+				{%- endfor %}
+				<user>
+					<name>readwrite</name>
+					<full-name>Read - Write Account Access</full-name>
+					<uid>1002</uid>
+					<class>tacacs-adv-class</class>
+					<authentication>
+						<encrypted-password>{{ system_password }}</encrypted-password>
+					</authentication>
+				</user>
+			</login>
+			{%- for element in additional_array %}
+			<additionalArray>
+                <name>{{ element.name }}</name>
+                <location>{{ element.location }}</location>
+            </additionalArray>
+            {%- endfor %}
+		</system>
+	</groups>
+</configuration>

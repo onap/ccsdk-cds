@@ -2,6 +2,8 @@
  *  Copyright © 2018-2019 IBM, Bell Canada.
  *  Modifications Copyright © 2019 IBM.
  *
+ *  Modifications Copyright © 2019 IBM, Bell Canada.
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -45,12 +47,12 @@ abstract class NetconfComponentFunction : AbstractScriptComponentFunction() {
     }
 
     fun resolveAndGenerateMessage(artifactMapping: String, artifactTemplate: String): String = runBlocking {
-        resourceResolutionService().resolveResources(bluePrintRuntimeService, nodeTemplateName,
+        resourceResolutionService().resolveResourcesByArtifactMapping(bluePrintRuntimeService, nodeTemplateName,
                 artifactMapping, artifactTemplate)
     }
 
     fun resolveAndGenerateMessage(artifactPrefix: String): String = runBlocking {
-        resourceResolutionService().resolveResources(bluePrintRuntimeService, nodeTemplateName,
+        resourceResolutionService().resolveResourcesByArtifactName(bluePrintRuntimeService, nodeTemplateName,
                 artifactPrefix, mapOf())
     }
 

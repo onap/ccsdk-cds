@@ -3,7 +3,7 @@
  *
  * Modifications Copyright © 2018 IBM.
  *
- *  Modifications Copyright © 2019 IBM, Bell Canada.
+ * Modifications Copyright © 2019 IBM, Bell Canada.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -89,7 +89,7 @@ class ResourceResolutionServiceTest {
             // Prepare Inputs
             PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService, executionServiceInput.payload, "resource-assignment")
 
-            resourceResolutionService.resolveResources(bluePrintRuntimeService, "resource-assignment", "baseconfig", mapOf())
+            resourceResolutionService.resolveResourcesByArtifactName(bluePrintRuntimeService, "resource-assignment", "baseconfig", mapOf())
 
         }
     }
@@ -138,7 +138,7 @@ class ResourceResolutionServiceTest {
             // Prepare Inputs
             PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService, executionServiceInput.payload, "resource-assignment")
 
-            resourceResolutionService.resolveResources(bluePrintRuntimeService, "resource-assignment", artifactMapping, artifactTemplate)
+            resourceResolutionService.resolveResourcesByArtifactMapping(bluePrintRuntimeService, "resource-assignment", artifactMapping, artifactTemplate)
         }
     }
 }
