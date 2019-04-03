@@ -173,8 +173,8 @@
             "file": "Definitions/baseconfig-mapping.json"
           },
           "another-template": {
-            "type": "artifact-template-velocity",
-            "file": "Templates/another-template.vtl"
+            "type": "artifact-template-jinja",
+            "file": "Templates/another-template.jinja"
           },
           "another-mapping": {
             "type": "artifact-mapping-resource",

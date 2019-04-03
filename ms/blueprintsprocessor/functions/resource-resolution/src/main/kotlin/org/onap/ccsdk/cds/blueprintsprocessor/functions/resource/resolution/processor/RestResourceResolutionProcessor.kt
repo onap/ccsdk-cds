@@ -1,6 +1,6 @@
 /*
  *  Copyright © 2018 IBM.
- *  Modifications Copyright © 2017-2018 AT&T Intellectual Property.
+ *  Modifications Copyright © 2017-2019 AT&T, Bell Canada
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -71,10 +71,9 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                         JacksonUtils.getInstanceFromMap(resourceSourceProperties, RestResourceSource::class.java)
 
                 val path = nullToEmpty(sourceProperties.path)
-                val inputKeyMapping = checkNotNull(sourceProperties.inputKeyMapping) {
-                    "failed to get input-key-mappings for $dName under $dSource properties"
-                }
-                val resolvedInputKeyMapping = resolveInputKeyMappingVariables(inputKeyMapping)
+                val inputKeyMapping =
+                    checkNotNull(sourceProperties.inputKeyMapping) { "failed to get input-key-mappings for $dName under $dSource properties" }
+                val resolvedInputKeyMapping = resolveInputKeyMappingVariables(inputKeyMapping).toMutableMap()
 
                 // Resolving content Variables
                 val payload = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.payload), resolvedInputKeyMapping)
