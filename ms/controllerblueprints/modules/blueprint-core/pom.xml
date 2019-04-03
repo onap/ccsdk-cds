@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright © 2017-2018 AT&T Intellectual Property.
-  ~ Modifications Copyright © 2018 IBM.
+  ~ Modifications Copyright © 2018 - 2019 IBM, Bell Canada
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -49,6 +49,10 @@
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.hubspot.jinjava</groupId>
+            <artifactId>jinjava</artifactId>
         </dependency>
         <!--Testing dependencies-->
         <dependency>
