@@ -4,6 +4,8 @@
   ~
   ~ Modifications Copyright © 2018 IBM.
   ~
+  ~ Modifications Copyright © 2019 IBM, Bell Canada
+  ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
   ~ You may obtain a copy of the License at
@@ -43,6 +45,7 @@
         <onap.logger.slf4j>1.2.2</onap.logger.slf4j>
         <powermock.version>1.7.4</powermock.version>
         <mockk.version>1.9</mockk.version>
+        <jinja.version>2.5.0</jinja.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -103,6 +106,11 @@
                 <groupId>org.apache.velocity</groupId>
                 <artifactId>velocity</artifactId>
                 <version>1.7</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hubspot.jinjava</groupId>
+                <artifactId>jinjava</artifactId>
+                <version>${jinja.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
