@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c0ec2213_74938828",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-04-03T20:11:47Z",
+      "side": 1,
+      "message": "No need to get the Template Type, Get the Artifact type from Artifact Definitions. Define New Artificat type mode for Jinja template and assign valid extensions.",
+      "range": {
+        "startLine": 118,
+        "startChar": 92,
+        "endLine": 118,
+        "endChar": 115
+      },
+      "revId": "f8274ecf1689faa19d871a7aeaf492ec3723c372",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e1814c16_b2fc9b2e",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-04-03T20:11:47Z",
+      "side": 1,
+      "message": "Remove this duplicate block",
+      "range": {
+        "startLine": 155,
+        "startChar": 16,
+        "endLine": 157,
+        "endChar": 17
+      },
+      "revId": "f8274ecf1689faa19d871a7aeaf492ec3723c372",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "66f53860_9770373c",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/processor/ResourceAssignmentProcessor.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-04-03T20:11:47Z",
+      "side": 1,
+      "message": "Please validat this, If not velocity template, it return as it is.",
+      "range": {
+        "startLine": 87,
+        "startChar": 7,
+        "endLine": 90,
+        "endChar": 9
+      },
+      "revId": "f8274ecf1689faa19d871a7aeaf492ec3723c372",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "61720bcd_61f6f609",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/processor/ResourceAssignmentProcessor.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-04-03T20:11:47Z",
+      "side": 1,
+      "message": "Duplicate block",
+      "range": {
+        "startLine": 95,
+        "startChar": 10,
+        "endLine": 97,
+        "endChar": 13
+      },
+      "revId": "f8274ecf1689faa19d871a7aeaf492ec3723c372",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b86f13f0_fb725880",
+        "filename": "ms/blueprintsprocessor/parent/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-04-03T20:11:47Z",
+      "side": 1,
+      "message": "Please put version as parent property field.",
+      "range": {
+        "startLine": 119,
+        "startChar": 15,
+        "endLine": 119,
+        "endChar": 40
+      },
+      "revId": "f8274ecf1689faa19d871a7aeaf492ec3723c372",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
