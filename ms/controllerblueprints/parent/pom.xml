@@ -4,6 +4,8 @@
   ~
   ~ Modifications Copyright © 2018 IBM.
   ~
+  ~ Modifications Copyright © 2019 IBM, Bell Canada
+  ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
   ~ You may obtain a copy of the License at
@@ -103,6 +105,11 @@
                 <groupId>org.apache.velocity</groupId>
                 <artifactId>velocity</artifactId>
                 <version>1.7</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hubspot.jinjava</groupId>
+                <artifactId>jinjava</artifactId>
+                <version>2.5.0</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>

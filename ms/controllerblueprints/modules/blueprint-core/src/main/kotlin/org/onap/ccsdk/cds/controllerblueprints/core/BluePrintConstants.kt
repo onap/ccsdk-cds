@@ -1,6 +1,7 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
  * Modifications Copyright © 2018 IBM.
+ * Modifications Copyright © 2019 IBM, Bell Canada.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -180,5 +181,6 @@ object BluePrintConstants {
     const val PROPERTY_CURRENT_IMPLEMENTATION = "current-implementation"
     const val PROPERTY_EXECUTION_REQUEST = "execution-request"
 
-
+    const val TEMPLATE_VELOCITY_TYPE = "velocity"
+    const val TEMPLATE_JINJA_TYPE = "jinja"
 }

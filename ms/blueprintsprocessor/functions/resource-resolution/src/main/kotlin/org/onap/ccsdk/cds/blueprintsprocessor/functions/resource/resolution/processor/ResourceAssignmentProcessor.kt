@@ -2,6 +2,8 @@
  *  Copyright © 2018 IBM.
  *  Modifications Copyright © 2017-2018 AT&T Intellectual Property.
  *
+ *  Modifications Copyright © 2019 IBM, Bell Canada
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -25,7 +27,8 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintFunctionNode
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintTemplateService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintJinjaTemplateService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintVelocityTemplateService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
@@ -79,11 +82,23 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
         return resolvedInputKeyMapping
     }
 
-    open fun resolveFromInputKeyMapping(valueToResolve: String, keyMapping: Map<String, Any>): String {
+    open fun resolveFromInputKeyMapping(valueToResolve: String, keyMapping: MutableMap<String, Any>,
+                                        templateType: String = BluePrintConstants.TEMPLATE_VELOCITY_TYPE):
+            String {
         if (valueToResolve.isEmpty() || !valueToResolve.contains("$")) {
             return valueToResolve
         }
-        return BluePrintTemplateService.generateContent(valueToResolve, additionalContext = keyMapping)
+        return when (templateType) {
+            BluePrintConstants.TEMPLATE_JINJA_TYPE -> {
+                BluePrintJinjaTemplateService.generateContent(valueToResolve, additionalContext = keyMapping)
+            }
+            BluePrintConstants.TEMPLATE_VELOCITY_TYPE -> {
+                BluePrintVelocityTemplateService.generateContent(valueToResolve, additionalContext = keyMapping)
+            }
+            else -> {
+                BluePrintVelocityTemplateService.generateContent(valueToResolve, additionalContext = keyMapping)
+            }
+        }
     }
 
     final override suspend fun applyNB(resourceAssignment: ResourceAssignment): Boolean {
