@@ -38,123 +38,190 @@ import {
   put,
   del,
   requestBody,
+  Request,
+  Response,
+  RestBindings,
 } from '@loopback/rest';
 import {Blueprint} from '../models';
-import {BlueprintRepository} from '../repositories';
+//import {BlueprintRepository} from '../repositories';
+import { inject } from '@loopback/core';
+//import { BlueprintService } from '../services';
+import * as fs from 'fs';
+import * as multiparty from 'multiparty';
+import * as request_lib from 'request';
+
+const REST_BLUEPRINT_CONTROLLER_BASE_URL = process.env.REST_BLUEPRINT_CONTROLLER_BASE_URL || "http://localhost:8080/api/v1";
+const REST_BLUEPRINT_CONTROLLER_BASIC_AUTH_HEADER = process.env.REST_BLUEPRINT_CONTROLLER_BASIC_AUTH_HEADER || "Basic Y2NzZGthcHBzOmNjc2RrYXBwcw==";
 
 export class BlueprintRestController {
   constructor(
-    @repository(BlueprintRepository)
+   /* @repository(BlueprintRepository)
     public blueprintRepository : BlueprintRepository,
+    @inject('services.BlueprintService') 
+    public bpservice: BlueprintService,*/
   ) {}
 
-  @post('/blueprints', {
+  /*@get('/blueprints', {
     responses: {
       '200': {
         description: 'Blueprint model instance',
-        content: {'application/json': {schema: {'x-ts-type': Blueprint}}},
+        content: { 'application/json': { schema: { 'x-ts-type': Blueprint } } },
       },
     },
   })
-  async create(@requestBody() blueprint: Blueprint): Promise<Blueprint> {
-    return await this.blueprintRepository.create(blueprint);
-  }
+  async getall() {
+    //return await this.bpservice.getAllbleuprints();
 
-  @get('/blueprints/count', {
-    responses: {
-      '200': {
-        description: 'Blueprint model count',
-        content: {'application/json': {schema: CountSchema}},
-      },
-    },
-  })
-  async count(
-    @param.query.object('where', getWhereSchemaFor(Blueprint)) where?: Where,
-  ): Promise<Count> {
-    return await this.blueprintRepository.count(where);
-  }
+  }*/
 
-  @get('/blueprints', {
-    responses: {
-      '200': {
-        description: 'Array of Blueprint model instances',
-        content: {
-          'application/json': {
-            schema: {type: 'array', items: {'x-ts-type': Blueprint}},
-          },
+  @post('/create-blueprint')
+  async upload(
+    @requestBody({
+      description: 'multipart/form-data value.',
+      required: true,
+      content: {
+        'multipart/form-data': {
+          // Skip body parsing
+          'x-parser': 'stream',
+          schema: {type: 'object'},
         },
       },
-    },
-  })
-  async find(
-    @param.query.object('filter', getFilterSchemaFor(Blueprint)) filter?: Filter,
-  ): Promise<Blueprint[]> {
-    return await this.blueprintRepository.find(filter);
+    })
+    request: Request,
+    @inject(RestBindings.Http.RESPONSE) response: Response,
+  ): Promise<object> {
+    return new Promise((resolve, reject) => { 
+       this.getFileFromMultiPartForm(request).then(file=>{
+         this.uploadFileToBlueprintController(file, "/blueprint-model/").then(resp=>{
+          response.setHeader("X-ONAP-RequestID", resp.headers['x-onap-requestid']);
+          resolve(JSON.parse(resp.body));
+         }, err=>{
+           reject(err);
+         });
+      }, err=>{
+        reject(err);
+      });
+    });
   }
 
-  @patch('/blueprints', {
-    responses: {
-      '200': {
-        description: 'Blueprint PATCH success count',
-        content: {'application/json': {schema: CountSchema}},
+  @post('/enrich-blueprint')
+  async enrich(
+    @requestBody({
+      description: 'multipart/form-data value.',
+      required: true,
+      content: {
+        'multipart/form-data': {
+          // Skip body parsing
+          'x-parser': 'stream',
+          schema: {type: 'object'},
+        },
       },
-    },
-  })
-  async updateAll(
-    @requestBody() blueprint: Blueprint,
-    @param.query.object('where', getWhereSchemaFor(Blueprint)) where?: Where,
-  ): Promise<Count> {
-    return await this.blueprintRepository.updateAll(blueprint, where);
+    })
+    request: Request,
+    @inject(RestBindings.Http.RESPONSE) response: Response,
+  ): Promise<any> {
+    return new Promise((resolve, reject) => { 
+       this.getFileFromMultiPartForm(request).then(file=>{
+         this.uploadFileToBlueprintController(file, "/blueprint-model/enrich/").then(resp=>{
+           response.setHeader("X-ONAP-RequestID", resp.headers['x-onap-requestid']);
+           response.setHeader("Content-Disposition", resp.headers['content-disposition']);
+           resolve(resp.body);
+         }, err=>{
+           reject(err);
+         });
+      }, err=>{
+        reject(err);
+      });
+    });
   }
 
-  @get('/blueprints/{id}', {
-    responses: {
-      '200': {
-        description: 'Blueprint model instance',
-        content: {'application/json': {schema: {'x-ts-type': Blueprint}}},
-      },
-    },
-  })
-  async findById(@param.path.number('id') id: number): Promise<Blueprint> {
-    return await this.blueprintRepository.findById(id);
+  @get('/download-blueprint/{id}')
+  async download(
+    @param.path.string('id') id: string,
+    @inject(RestBindings.Http.REQUEST) request: Request,
+    @inject(RestBindings.Http.RESPONSE) response: Response,
+  ): Promise<any> {
+    return new Promise((resolve, reject) => { 
+      this.downloadFileFromBlueprintController("/blueprint-model/download/" + id).then(resp=>{
+        response.setHeader("X-ONAP-RequestID", resp.headers['x-onap-requestid']);
+        response.setHeader("Content-Disposition", resp.headers['content-disposition']);
+        resolve(resp.body);
+      }, err=>{
+        reject(err);
+      });
+    });
   }
 
-  @patch('/blueprints/{id}', {
-    responses: {
-      '204': {
-        description: 'Blueprint PATCH success',
-      },
-    },
-  })
-  async updateById(
-    @param.path.number('id') id: number,
-    @requestBody() blueprint: Blueprint,
-  ): Promise<void> {
-    await this.blueprintRepository.updateById(id, blueprint);
+  async getFileFromMultiPartForm(request: Request): Promise<any>{
+    return new Promise((resolve, reject) => {
+      // let options = {
+      //   uploadDir: MULTIPART_FORM_UPLOAD_DIR
+      // }
+      let form = new multiparty.Form();
+      form.parse(request, (err: any, fields: any, files: { [x: string]: any[]; }) => {
+        if (err) reject(err);
+        let file = files['file'][0]; // get the file from the returned files object
+        if(!file){
+          reject('File was not found in form data.');
+        }else{
+          resolve(file);
+        }
+      });
+    })
   }
 
-  @put('/blueprints/{id}', {
-    responses: {
-      '204': {
-        description: 'Blueprint PUT success',
+  async uploadFileToBlueprintController(file: any, uri: string): Promise<any>{
+    let options = {
+      url: REST_BLUEPRINT_CONTROLLER_BASE_URL + uri,
+      headers: {
+        Authorization: REST_BLUEPRINT_CONTROLLER_BASIC_AUTH_HEADER,
+        'content-type': 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW'
       },
-    },
-  })
-  async replaceById(
-    @param.path.number('id') id: number,
-    @requestBody() blueprint: Blueprint,
-  ): Promise<void> {
-    await this.blueprintRepository.replaceById(id, blueprint);
+      formData: {
+        file: {
+          value: fs.createReadStream(file.path),
+          options: {
+            filename: 'cba.zip',
+            contentType: 'application/zip'
+          }
+        }
+      }
+    };
+
+    return new Promise((resolve, reject) => {
+      request_lib.post(options, (err: any, resp: any, body: any) => {
+        if (err) {
+          //delete tmp file
+          fs.unlink(file.path, (err: any) => {
+            if (err) {
+              console.error(err);
+              return
+            }
+          })
+          reject(err);
+        }else{
+          resolve(resp);
+        }
+      })
+    })
   }
 
-  @del('/blueprints/{id}', {
-    responses: {
-      '204': {
-        description: 'Blueprint DELETE success',
-      },
-    },
-  })
-  async deleteById(@param.path.number('id') id: number): Promise<void> {
-    await this.blueprintRepository.deleteById(id);
-  }
+  async downloadFileFromBlueprintController(uri: string): Promise<any> {
+    let options = {
+      url: REST_BLUEPRINT_CONTROLLER_BASE_URL + uri,
+      headers: {
+        Authorization: REST_BLUEPRINT_CONTROLLER_BASIC_AUTH_HEADER,
+      }
+    };
+
+    return new Promise((resolve, reject) => {
+      request_lib.get(options, (err: any, resp: any, body: any) => {
+        if (err) {
+          reject(err);
+        }else{
+          resolve(resp);
+        }
+      })
+    })
+}
 }
