@@ -62,7 +62,7 @@ open class BluePrintManagementGRPCHandler(private val bluePrintPathConfiguration
                 responseObserver.onNext(successStatus("Successfully uploaded CBA($blueprintId)...", request.commonHeader))
                 responseObserver.onCompleted()
             } catch (e: Exception) {
-                failStatus("request(${request.commonHeader.requestId}): Failed to upload CBA", e)
+                responseObserver.onError(failStatus("request(${request.commonHeader.requestId}): Failed to upload CBA", e))
             } finally {
                 deleteDir(bluePrintPathConfiguration.blueprintArchivePath, uploadId)
                 deleteDir(bluePrintPathConfiguration.blueprintWorkingPath, uploadId)
@@ -87,7 +87,7 @@ open class BluePrintManagementGRPCHandler(private val bluePrintPathConfiguration
                 responseObserver.onNext(successStatus("Successfully deleted $blueprint", request.commonHeader))
                 responseObserver.onCompleted()
             } catch (e: Exception) {
-                failStatus("request(${request.commonHeader.requestId}): Failed to delete $blueprint", e)
+                responseObserver.onError(failStatus("request(${request.commonHeader.requestId}): Failed to delete $blueprint", e))
             }
         }
     }
