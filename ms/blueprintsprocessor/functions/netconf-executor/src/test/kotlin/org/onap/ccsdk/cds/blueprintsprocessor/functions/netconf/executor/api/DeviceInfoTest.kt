@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2019 AT&T, Bell Canada
+ * Copyright © 2019 Bell Canada
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,8 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api
 
-interface NetconfSessionListener {
-    fun accept(event: NetconfReceivedEvent)
+
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
+import org.junit.Test
+import kotlin.test.assertEquals
+
+class DeviceInfoTest {
+    @Test
+    fun testToString() {
+
+       val di: DeviceInfo = DeviceInfo().apply {
+           username = "username"
+           password = "password"
+           ipAddress = "localhost"
+           port = 2224
+           connectTimeout = 10
+       }
+        assertEquals("localhost:2224", di.toString())
+    }
 }

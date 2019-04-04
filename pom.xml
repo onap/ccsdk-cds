@@ -36,8 +36,8 @@ limitations under the License.
     <description>CCSDK Controller Design Studio</description>
 
     <modules>
-        <module>cds-ui</module>
-        <module>components</module>
+<!--        <module>cds-ui</module>
+        <module>components</module>-->
         <module>ms</module>
     </modules>
 
@@ -104,6 +104,14 @@ limitations under the License.
                                 </goals>
                             </execution>
                         </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.2</version>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
