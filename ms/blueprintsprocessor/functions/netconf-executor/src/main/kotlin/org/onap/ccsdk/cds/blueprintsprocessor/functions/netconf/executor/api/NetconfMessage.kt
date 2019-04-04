@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2019 AT&T, Bell Canada
+ * Copyright © 2019 Bell Canada
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,14 +33,18 @@ class DeviceResponse {
     }
 
     fun isSuccess(): Boolean {
-        if (this.status != RpcStatus.SUCCESS && !this.errorMessage.isNullOrEmpty()) {
-            return false
-        }
-        return true
+        return this.status == RpcStatus.SUCCESS && this.errorMessage.isNullOrEmpty()
     }
 }
 
-
+/**
+ * Creates an event of a given type and for the specified subject and the current time.
+ *
+ * @param type event type
+ * @param messagePayload message from the device
+ * @param messageId id of the message related to the event
+ * @param deviceInfo device of event
+ */
 /**
  * Creates an event of a given type and for the specified subject and the current time.
  *
@@ -50,8 +54,8 @@ class DeviceResponse {
  * @param deviceInfo device of event
  */
 class NetconfReceivedEvent
-    (private var type: Type, private var payload: String = "", private var messageId: String = "",
-     private var deviceInfo: DeviceInfo) {
+(private var type: Type, private var payload: String = "", private var messageId: String = "",
+ private var deviceInfo: DeviceInfo) {
 
     enum class Type {
         DEVICE_REPLY,
