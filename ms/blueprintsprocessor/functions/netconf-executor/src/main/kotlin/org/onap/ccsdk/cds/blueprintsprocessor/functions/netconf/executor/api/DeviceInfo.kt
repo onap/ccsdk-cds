@@ -40,4 +40,15 @@ class DeviceInfo {
     override fun toString(): String {
         return "$ipAddress:$port"
     }
+
+    //TODO verify if this can be rewritten as data class which would give equals/hashCode for free
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return javaClass.hashCode()
+    }
 }
