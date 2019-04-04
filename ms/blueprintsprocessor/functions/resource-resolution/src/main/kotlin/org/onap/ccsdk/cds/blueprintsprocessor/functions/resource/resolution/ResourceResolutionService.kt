@@ -23,9 +23,8 @@ import kotlinx.coroutines.coroutineScope
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolutionResultService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.ResourceAssignmentProcessor
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmptyOrThrow
+import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintTemplateService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -35,7 +34,6 @@ import org.onap.ccsdk.cds.controllerblueprints.resource.dict.utils.BulkResourceS
 import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Service
-import java.io.File
 
 interface ResourceResolutionService {
 
@@ -54,7 +52,7 @@ interface ResourceResolutionService {
                                  artifactMapping: String, artifactTemplate: String?): String
 
     suspend fun resolveResourceAssignments(blueprintRuntimeService: BluePrintRuntimeService<*>,
-                                           resourceDictionaries: MutableMap<String, ResourceDefinition>,
+                                           resourceDefinitions: MutableMap<String, ResourceDefinition>,
                                            resourceAssignments: MutableList<ResourceAssignment>,
                                            identifierName: String)
 }
@@ -127,15 +125,11 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                         ?: throw BluePrintProcessorException("couldn't get Dictionary Definitions")
 
         // Get the Resource Dictionary Name
-        val dictionaryFile = bluePrintRuntimeService.bluePrintContext().rootPath.plus(File.separator)
-                .plus(BluePrintConstants.TOSCA_DEFINITIONS_DIR).plus(File.separator)
-                .plus(ResourceResolutionConstants.FILE_NAME_RESOURCE_DEFINITION_TYPES)
-
-        val resourceDictionaries: MutableMap<String, ResourceDefinition> =
-                JacksonUtils.getMapFromFile(dictionaryFile, ResourceDefinition::class.java)
+        val resourceDefinitions: MutableMap<String, ResourceDefinition> = ResourceAssignmentUtils
+                .resourceDefinitions(bluePrintRuntimeService.bluePrintContext().rootPath)
 
         // Resolve resources
-        resolveResourceAssignments(bluePrintRuntimeService, resourceDictionaries, resourceAssignments, identifierName)
+        resolveResourceAssignments(bluePrintRuntimeService, resourceDefinitions, resourceAssignments, identifierName)
 
         val resolvedParamJsonContent =
                 ResourceAssignmentUtils.generateResourceDataForAssignments(resourceAssignments.toList())
@@ -158,7 +152,7 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
      * request.
      */
     override suspend fun resolveResourceAssignments(blueprintRuntimeService: BluePrintRuntimeService<*>,
-                                                    resourceDictionaries: MutableMap<String, ResourceDefinition>,
+                                                    resourceDefinitions: MutableMap<String, ResourceDefinition>,
                                                     resourceAssignments: MutableList<ResourceAssignment>,
                                                     identifierName: String) {
 
@@ -177,7 +171,7 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                                 /**
                                  * Get the Processor name
                                  */
-                                val processorName = processorName(dictionaryName!!, dictionarySource!!, resourceDictionaries)
+                                val processorName = processorName(dictionaryName!!, dictionarySource!!, resourceDefinitions)
 
                                 val resourceAssignmentProcessor =
                                         applicationContext.getBean(processorName) as? ResourceAssignmentProcessor
@@ -187,7 +181,7 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                                     // Set BluePrint Runtime Service
                                     resourceAssignmentProcessor.raRuntimeService = resourceAssignmentRuntimeService
                                     // Set Resource Dictionaries
-                                    resourceAssignmentProcessor.resourceDictionaries = resourceDictionaries
+                                    resourceAssignmentProcessor.resourceDictionaries = resourceDefinitions
                                     // Invoke Apply Method
                                     resourceAssignmentProcessor.applyNB(resourceAssignment)
                                     // Set errors from RA
@@ -210,7 +204,7 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
      *  derive the default input processor.
      */
     private fun processorName(dictionaryName: String, dictionarySource: String,
-                              resourceDictionaries: MutableMap<String, ResourceDefinition>): String {
+                              resourceDefinitions: MutableMap<String, ResourceDefinition>): String {
         val processorName: String = when (dictionarySource) {
             "input" -> {
                 "${ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-input"
@@ -219,7 +213,7 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                 "${ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-default"
             }
             else -> {
-                val resourceDefinition = resourceDictionaries[dictionaryName]
+                val resourceDefinition = resourceDefinitions[dictionaryName]
                         ?: throw BluePrintProcessorException("couldn't get resource dictionary definition for $dictionaryName")
 
                 val resourceSource = resourceDefinition.sources[dictionarySource]
@@ -228,9 +222,9 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                 ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR.plus(resourceSource.type)
             }
         }
-        checkNotEmptyOrThrow(processorName,
-                "couldn't get processor name for resource dictionary definition($dictionaryName) source" +
-                        "($dictionarySource)")
+        checkNotEmpty(processorName) {
+            "couldn't get processor name for resource dictionary definition($dictionaryName) source($dictionarySource)"
+        }
 
         return processorName
 

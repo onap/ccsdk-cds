@@ -19,9 +19,9 @@ package org.onap.ccsdk.cds.blueprintsprocessor.services.workflow
 import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.putJsonElement
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.slf4j.LoggerFactory
@@ -53,16 +53,26 @@ open class NodeTemplateExecutionService(private val applicationContext: Applicat
         plugin.bluePrintRuntimeService = bluePrintRuntimeService
         plugin.stepName = nodeTemplateName
 
+        // Parent request shouldn't tamper, so need to clone the request and send to the actual component.
+        val clonedExecutionServiceInput = ExecutionServiceInput().apply {
+            commonHeader = executionServiceInput.commonHeader
+            actionIdentifiers = executionServiceInput.actionIdentifiers
+            payload = executionServiceInput.payload
+        }
+
         // Populate Step Meta Data
         val stepInputs: MutableMap<String, JsonNode> = hashMapOf()
         stepInputs.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, nodeTemplateName)
         stepInputs.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, interfaceName)
         stepInputs.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, operationName)
-
-        plugin.bluePrintRuntimeService.put("$nodeTemplateName-step-inputs", stepInputs.asJsonNode())
+        val stepInputData = StepData().apply {
+            name = nodeTemplateName
+            properties = stepInputs
+        }
+        clonedExecutionServiceInput.stepData = stepInputData
 
         // Get the Request from the Context and Set to the Function Input and Invoke the function
-        return plugin.apply(executionServiceInput)
+       return plugin.applyNB(clonedExecutionServiceInput)
     }
 
 }

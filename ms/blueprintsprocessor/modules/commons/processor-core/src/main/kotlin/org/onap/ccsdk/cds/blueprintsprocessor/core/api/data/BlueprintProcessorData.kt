@@ -18,6 +18,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.core.api.data
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import io.swagger.annotations.ApiModelProperty
 import java.util.*
@@ -35,6 +36,7 @@ open class ExecutionServiceInput {
     lateinit var actionIdentifiers: ActionIdentifiers
     @get:ApiModelProperty(required = true)
     lateinit var payload: ObjectNode
+    var stepData: StepData? = null
 }
 
 open class ExecutionServiceOutput {
@@ -46,6 +48,7 @@ open class ExecutionServiceOutput {
     lateinit var status: Status
     @get:ApiModelProperty(required = true)
     lateinit var payload: ObjectNode
+    var stepData: StepData? = null
 }
 
 const val ACTION_MODE_ASYNC = "async"
@@ -96,28 +99,9 @@ open class Status {
     var message: String = "success"
 }
 
-open class BluePrintManagementInput {
-    @get:ApiModelProperty(required = true)
-    lateinit var commonHeader: CommonHeader
-    @get:ApiModelProperty(required = false)
-    lateinit var blueprintName: String
-    @get:ApiModelProperty(required = false)
-    lateinit var blueprintVersion: String
-    @get:ApiModelProperty(required = true)
-    lateinit var fileChunk: FileChunk
+open class StepData {
+    lateinit var name: String
+    var properties: MutableMap<String, JsonNode> = mutableMapOf()
 }
-
-open class FileChunk {
-    @get:ApiModelProperty(required = true)
-    lateinit var chunk: ByteArray
-}
-
-open class BluePrintManagementOutput {
-    @get:ApiModelProperty(required = true)
-    lateinit var commonHeader: CommonHeader
-    @get:ApiModelProperty(required = true)
-    var status: Status = Status()
-}
-
 
 

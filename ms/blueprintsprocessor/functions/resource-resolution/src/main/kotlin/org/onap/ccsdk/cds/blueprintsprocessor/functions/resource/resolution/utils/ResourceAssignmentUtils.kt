@@ -17,28 +17,32 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils
 
-import org.slf4j.LoggerFactory
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
-import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
-import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmptyOrThrow
-import org.onap.ccsdk.cds.controllerblueprints.core.nullToEmpty
-import org.onap.ccsdk.cds.controllerblueprints.core.returnNotEmptyOrThrow
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonReactorUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
+import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
+import org.slf4j.LoggerFactory
 import java.util.*
 
 class ResourceAssignmentUtils {
     companion object {
 
-        private val logger= LoggerFactory.getLogger(ResourceAssignmentUtils::class.toString())
+        private val logger = LoggerFactory.getLogger(ResourceAssignmentUtils::class.toString())
+
+        suspend fun resourceDefinitions(blueprintBasePath: String): MutableMap<String, ResourceDefinition> {
+            val dictionaryFile = normalizedFile(blueprintBasePath, BluePrintConstants.TOSCA_DEFINITIONS_DIR,
+                    ResourceResolutionConstants.FILE_NAME_RESOURCE_DEFINITION_TYPES)
+            checkFileExists(dictionaryFile) { "resource definition file(${dictionaryFile.absolutePath}) is missing" }
+            return JacksonReactorUtils.getMapFromFile(dictionaryFile, ResourceDefinition::class.java)
+        }
 
         // TODO("Modify Value type from Any to JsonNode")
         @Throws(BluePrintProcessorException::class)
@@ -46,7 +50,9 @@ class ResourceAssignmentUtils {
                                  raRuntimeService: ResourceAssignmentRuntimeService, value: Any?) {
 
             val resourceProp = checkNotNull(resourceAssignment.property) { "Failed in setting resource value for resource mapping $resourceAssignment" }
-            checkNotEmptyOrThrow(resourceAssignment.name, "Failed in setting resource value for resource mapping $resourceAssignment")
+            checkNotEmpty(resourceAssignment.name) {
+                "Failed in setting resource value for resource mapping $resourceAssignment"
+            }
 
             if (resourceAssignment.dictionaryName.isNullOrEmpty()) {
                 resourceAssignment.dictionaryName = resourceAssignment.name
@@ -90,7 +96,7 @@ class ResourceAssignmentUtils {
         }
 
         fun setFailedResourceDataValue(resourceAssignment: ResourceAssignment, message: String?) {
-            if (checkNotEmpty(resourceAssignment.name)) {
+            if (isNotEmpty(resourceAssignment.name)) {
                 resourceAssignment.updatedDate = Date()
                 resourceAssignment.updatedBy = BluePrintConstants.USER_SYSTEM
                 resourceAssignment.status = BluePrintConstants.STATUS_FAILURE
@@ -115,7 +121,7 @@ class ResourceAssignmentUtils {
                 val root: ObjectNode = mapper.createObjectNode()
 
                 assignments.forEach {
-                    if (checkNotEmpty(it.name) && it.property != null) {
+                    if (isNotEmpty(it.name) && it.property != null) {
                         val rName = it.name
                         val type = nullToEmpty(it.property?.type).toLowerCase()
                         val value = it.property?.value
@@ -146,7 +152,7 @@ class ResourceAssignmentUtils {
             try {
                 val dataTypeProps = checkNotNull(raRuntimeService.bluePrintContext().dataTypeByName(dataTypeName)?.properties)
                 val propertyDefinition = checkNotNull(dataTypeProps[propertyName])
-                type = returnNotEmptyOrThrow(propertyDefinition.type) { "Couldn't get data type ($dataTypeName)" }
+                type = checkNotEmpty(propertyDefinition.type) { "Couldn't get data type ($dataTypeName)" }
                 logger.trace("Data type({})'s property ({}) is ({})", dataTypeName, propertyName, type)
             } catch (e: Exception) {
                 logger.error("couldn't get data type($dataTypeName)'s property ($propertyName), error message $e")

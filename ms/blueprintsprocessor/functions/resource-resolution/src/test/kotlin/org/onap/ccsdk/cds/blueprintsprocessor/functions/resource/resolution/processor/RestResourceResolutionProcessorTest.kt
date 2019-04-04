@@ -16,11 +16,13 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor
 
 import kotlinx.coroutines.runBlocking
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
@@ -40,6 +42,7 @@ class RestResourceResolutionProcessorTest {
     @Autowired
     lateinit var restResourceResolutionProcessor: RestResourceResolutionProcessor
 
+    @Ignore
     @Test
     fun `test rest resource resolution`() {
         runBlocking {
@@ -49,11 +52,14 @@ class RestResourceResolutionProcessorTest {
             val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)
 
             restResourceResolutionProcessor.raRuntimeService = resourceAssignmentRuntimeService
-            restResourceResolutionProcessor.resourceDictionaries = hashMapOf()
+            restResourceResolutionProcessor.resourceDictionaries = ResourceAssignmentUtils
+                    .resourceDefinitions(bluePrintContext.rootPath)
+
+            //TODO ("Mock the dependency values and rest service.")
 
             val resourceAssignment = ResourceAssignment().apply {
                 name = "rr-name"
-                dictionaryName = "rr-dict-name"
+                dictionaryName = "vnf_name"
                 dictionarySource = "primary-config-data"
                 property = PropertyDefinition().apply {
                     type = "string"

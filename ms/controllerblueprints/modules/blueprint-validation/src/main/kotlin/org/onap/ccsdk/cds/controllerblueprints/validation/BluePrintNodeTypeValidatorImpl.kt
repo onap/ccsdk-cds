@@ -20,7 +20,7 @@ package org.onap.ccsdk.cds.controllerblueprints.validation
 import org.slf4j.LoggerFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
-import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmptyOrThrow
+import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.data.*
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintNodeTypeValidator
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
@@ -35,7 +35,7 @@ import org.springframework.stereotype.Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class BluePrintNodeTypeValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintNodeTypeValidator {
 
-    private val log= LoggerFactory.getLogger(BluePrintServiceTemplateValidatorImpl::class.toString())
+    private val log = LoggerFactory.getLogger(BluePrintServiceTemplateValidatorImpl::class.toString())
 
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
     lateinit var bluePrintContext: BluePrintContext
@@ -161,7 +161,7 @@ open class BluePrintNodeTypeValidatorImpl(private val bluePrintTypeValidatorServ
     }
 
     open fun validateImplementation(implementation: Implementation) {
-        checkNotEmptyOrThrow(implementation.primary)
+        checkNotEmpty(implementation.primary) { "couldn't get implementation" }
     }
 
 }

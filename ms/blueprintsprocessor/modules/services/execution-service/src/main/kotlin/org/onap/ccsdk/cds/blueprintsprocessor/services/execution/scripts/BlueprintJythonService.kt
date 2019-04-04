@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode
 import org.apache.commons.io.FilenameUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmptyOrThrow
+import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.data.OperationAssignment
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintFunctionNode
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
@@ -100,7 +100,7 @@ class BlueprintJythonService(val pythonExecutorProperty: PythonExecutorProperty,
 
         val content: String? = bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactName)
 
-        checkNotEmptyOrThrow(content, "artifact ($artifactName) content is empty")
+        checkNotEmpty(content){ "artifact ($artifactName) content is empty"}
 
         val pythonPath: MutableList<String> = operationAssignment.implementation?.dependencies ?: arrayListOf()
         pythonPath.add(blueprintBasePath)

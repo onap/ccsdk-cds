@@ -2,6 +2,7 @@
  * Copyright © 2017-2018 AT&T Intellectual Property.
  *
  * Modifications Copyright © 2019 IBM, Bell Canada.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +20,11 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor
 
 import com.fasterxml.jackson.databind.JsonNode
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.putJsonElement
@@ -41,7 +44,7 @@ import org.springframework.test.context.junit4.SpringRunner
 @TestPropertySource(properties =
 ["blueprints.processor.functions.python.executor.modulePaths=./../../../../components/scripts/python/ccsdk_netconf,./../../../../components/scripts/python/ccsdk_blueprints",
     "blueprints.processor.functions.python.executor.executionPath=./../../../../components/scripts/python/ccsdk_netconf"],
-    locations = ["classpath:application-test.properties"])
+        locations = ["classpath:application-test.properties"])
 class ComponentNetconfExecutorTest {
 
     @Autowired
@@ -51,28 +54,32 @@ class ComponentNetconfExecutorTest {
     @Test
     fun testComponentNetconfExecutor() {
 
-        val executionServiceInput = JacksonUtils.readValueFromClassPathFile("requests/sample-activate-request.json",
-            ExecutionServiceInput::class.java)!!
+        runBlocking {
+            val executionServiceInput = JacksonUtils.readValueFromClassPathFile("requests/sample-activate-request.json",
+                    ExecutionServiceInput::class.java)!!
 
-        val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-            "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
+                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
-        val executionContext = bluePrintRuntimeService.getExecutionContext()
+            val executionContext = bluePrintRuntimeService.getExecutionContext()
 
 
-        componentNetconfExecutor.bluePrintRuntimeService = bluePrintRuntimeService
+            componentNetconfExecutor.bluePrintRuntimeService = bluePrintRuntimeService
 
-        //TODO("Set Attribute properties")
-        val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
-        stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "activate-netconf")
-        stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "ComponentNetconfExecutor")
-        stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
-        // Set Step Inputs in Blueprint Runtime Service
-        bluePrintRuntimeService.put("activate-netconf-step-inputs", stepMetaData.asJsonNode())
-
-        componentNetconfExecutor.bluePrintRuntimeService = bluePrintRuntimeService
-        componentNetconfExecutor.stepName = "activate-netconf"
-        componentNetconfExecutor.apply(executionServiceInput)
+            //TODO("Set Attribute properties")
+            val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
+            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "activate-netconf")
+            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "ComponentNetconfExecutor")
+            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
+            // Set Step Inputs in Blueprint Runtime Service
+            componentNetconfExecutor.bluePrintRuntimeService = bluePrintRuntimeService
+            val stepInputData = StepData().apply {
+                name = "activate-netconf"
+                properties = stepMetaData
+            }
+            executionServiceInput.stepData = stepInputData
+            componentNetconfExecutor.applyNB(executionServiceInput)
+        }
 
     }
 }
