@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "085fd70b_a5d83270",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionService.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-04-04T20:29:17Z",
+      "side": 1,
+      "message": "It was a little bit confusing for me to understand these methods.\nAnd they are exposed to and used in different way. So when I did test cases on these method I found it necessary to change the naming.\nBut if not relevant, will leave it like it is.",
+      "parentUuid": "84e188e4_4b927b9f",
+      "range": {
+        "startLine": 54,
+        "startChar": 16,
+        "endLine": 54,
+        "endChar": 46
+      },
+      "revId": "e139ce5cb6e2fcc3eade5255d2ff977ce8b3679d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a2626841_2509eaf9",
         "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionService.kt",
         "patchSetId": 2
@@ -59,6 +83,30 @@
       "writtenOn": "2019-04-04T14:47:07Z",
       "side": 1,
       "message": "don\u0027t default to something, if tempalteType is unknow throw blueprintProcessingException",
+      "range": {
+        "startLine": 163,
+        "startChar": 20,
+        "endLine": 163,
+        "endChar": 111
+      },
+      "revId": "e139ce5cb6e2fcc3eade5255d2ff977ce8b3679d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "85c8bc6e_e219fc1c",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionService.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-04-04T20:29:17Z",
+      "side": 1,
+      "message": "Good idea for blueprintProcessingException exception.",
+      "parentUuid": "40960e80_66a99006",
       "range": {
         "startLine": 163,
         "startChar": 20,
