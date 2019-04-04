@@ -26,5 +26,6 @@ object ResourceDictionaryTestUtils {
         ResourceSourceMappingFactory.registerSourceMapping("input", "source-input")
         ResourceSourceMappingFactory.registerSourceMapping("default", "source-default")
         ResourceSourceMappingFactory.registerSourceMapping("primary-config-data", "source-rest")
+        ResourceSourceMappingFactory.registerSourceMapping("primary-aai-data", "source-rest")
     }
 }
