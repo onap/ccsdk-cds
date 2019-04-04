@@ -21,7 +21,7 @@ limitations under the License.
 
 
 import { juggler } from '@loopback/service-proxy';
-import * as config from './rest.config.json';
+import * as config from './rest.datasource.json';
 
 
 export class RestDataSource extends juggler.DataSource {
