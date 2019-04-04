@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "84e188e4_4b927b9f",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionService.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-04T14:47:07Z",
+      "side": 1,
+      "message": "the name change has nothing to do with this patch. Ideally, should be done separately.\nAlso, don\u0027t know the purpose of changing the name, as these methods are internal method, not exposed to user.\n(but this is a minor thing)",
+      "range": {
+        "startLine": 54,
+        "startChar": 16,
+        "endLine": 54,
+        "endChar": 46
+      },
+      "revId": "e139ce5cb6e2fcc3eade5255d2ff977ce8b3679d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a2626841_2509eaf9",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionService.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-04T14:47:07Z",
+      "side": 1,
+      "message": "you should be able to retrieve the artifact type from the bluePrintRuntimeService based on the artifactTemplate name - \nYou don\u0027t need to add this type parameters.\n\nSame above",
+      "range": {
+        "startLine": 60,
+        "startChar": 50,
+        "endLine": 60,
+        "endChar": 114
+      },
+      "revId": "e139ce5cb6e2fcc3eade5255d2ff977ce8b3679d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "40960e80_66a99006",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionService.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-04T14:47:07Z",
+      "side": 1,
+      "message": "don\u0027t default to something, if tempalteType is unknow throw blueprintProcessingException",
+      "range": {
+        "startLine": 163,
+        "startChar": 20,
+        "endLine": 163,
+        "endChar": 111
+      },
+      "revId": "e139ce5cb6e2fcc3eade5255d2ff977ce8b3679d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b78504ca_023eb472",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/processor/ResourceAssignmentProcessor.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-04T14:47:07Z",
+      "side": 1,
+      "message": "User doesn\u0027t have the opportunity to choose in this case, we should always use one meshing technology - let\u0027s pick the better one.\n\nThe function is made to use the input key mapping, and mesh them with the SQL query, or REST URI,Payload,etc...",
+      "range": {
+        "startLine": 85,
+        "startChar": 13,
+        "endLine": 85,
+        "endChar": 39
+      },
+      "revId": "e139ce5cb6e2fcc3eade5255d2ff977ce8b3679d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2890bab1_d662e8b5",
+        "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/BluePrintConstants.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-04T14:47:07Z",
+      "side": 1,
+      "message": "you should define as artifact type",
+      "range": {
+        "startLine": 184,
+        "startChar": 0,
+        "endLine": 185,
+        "endChar": 43
+      },
+      "revId": "e139ce5cb6e2fcc3eade5255d2ff977ce8b3679d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3aa2fddc_cd7e0e62",
+        "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/interfaces/BlueprintTemplateService.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-04T14:47:07Z",
+      "side": 1,
+      "message": "and - typo",
+      "range": {
+        "startLine": 53,
+        "startChar": 29,
+        "endLine": 53,
+        "endChar": 32
+      },
+      "revId": "e139ce5cb6e2fcc3eade5255d2ff977ce8b3679d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "eeb94a64_41fa934b",
+        "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/service/BluePrintJinjaTemplateService.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-04T14:47:07Z",
+      "side": 1,
+      "message": "any exception that can be thrown by this method?",
+      "range": {
+        "startLine": 31,
+        "startChar": 17,
+        "endLine": 31,
+        "endChar": 32
+      },
+      "revId": "e139ce5cb6e2fcc3eade5255d2ff977ce8b3679d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
