@@ -189,9 +189,7 @@ class NetconfMessageUtils {
         }
 
         fun discardChanges(messageId: String): String {
-            val request = StringBuilder()
-            request.append("<discard-changes/>").append(NEW_LINE)
-            return doWrappedRpc(messageId, request.toString())
+            return doWrappedRpc(messageId, "<discard-changes/>$NEW_LINE")
         }
 
         fun lock(messageId: String, configType: String): String {
@@ -208,14 +206,7 @@ class NetconfMessageUtils {
         }
 
         fun closeSession(messageId: String, force: Boolean): String {
-            val request = StringBuilder()
-
-            if (force) {
-                request.append("<kill-session/>").append(NEW_LINE)
-            } else {
-                request.append("<close-session/>").append(NEW_LINE)
-            }
-
+            val request = if(force) "<kill-session/>$NEW_LINE" else "<close-session/>$NEW_LINE"
             return doWrappedRpc(messageId, request.toString())
         }
 
@@ -234,7 +225,6 @@ class NetconfMessageUtils {
             } catch (e: Exception) {
                 return false
             }
-
         }
 
         fun getMsgId(message: String): String {
@@ -242,9 +232,10 @@ class NetconfMessageUtils {
             if (matcher.find()) {
                 return matcher.group(1)
             }
-            return if (message.contains(RpcMessageUtils.HELLO)) {
-                (-1).toString()
-            } else ""
+            return when {
+                message.contains(RpcMessageUtils.HELLO) -> "-1"
+                else -> ""
+            }
         }
 
         fun validateChunkedFraming(reply: String): Boolean {
@@ -278,15 +269,14 @@ class NetconfMessageUtils {
         }
 
         fun createHelloString(capabilities: List<String>): String {
+            //TODO rewrite as templates
             val helloMessage = StringBuilder()
             helloMessage.append(RpcMessageUtils.XML_HEADER).append(NEW_LINE)
             helloMessage.append("<hello xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">").append(NEW_LINE)
             helloMessage.append("  <capabilities>").append(NEW_LINE)
-            if (capabilities.isNotEmpty()) {
                 capabilities.forEach { cap ->
                     helloMessage.append("    <capability>").append(cap).append("</capability>").append(NEW_LINE)
                 }
-            }
             helloMessage.append("  </capabilities>").append(NEW_LINE)
             helloMessage.append("</hello>").append(NEW_LINE)
             helloMessage.append(RpcMessageUtils.END_PATTERN)
@@ -294,12 +284,11 @@ class NetconfMessageUtils {
         }
 
         fun formatRPCRequest(request: String, messageId: String, deviceCapabilities: Set<String>): String {
-            var request = request
-            request = NetconfMessageUtils.formatNetconfMessage(deviceCapabilities, request)
-            request = NetconfMessageUtils.formatXmlHeader(request)
-            request = NetconfMessageUtils.formatRequestMessageId(request, messageId)
+            var formattedRequest = formatNetconfMessage(deviceCapabilities, request)
+            formattedRequest = formatXmlHeader(formattedRequest)
+            formattedRequest = formatRequestMessageId(formattedRequest, messageId)
 
-            return request
+            return formattedRequest
         }
 
         /**
@@ -308,16 +297,14 @@ class NetconfMessageUtils {
          *
          * @param deviceCapabilities Set containing Device Capabilities
          * @param message to format
-         * @return formated message
+         * @return formatted message
          */
         fun formatNetconfMessage(deviceCapabilities: Set<String>, message: String): String {
-            var message = message
-            if (deviceCapabilities.contains(RpcMessageUtils.NETCONF_11_CAPABILITY)) {
-                message = formatChunkedMessage(message)
-            } else if (!message.endsWith(RpcMessageUtils.END_PATTERN)) {
-                message = message + NEW_LINE + RpcMessageUtils.END_PATTERN
+            return when {
+                deviceCapabilities.contains(RpcMessageUtils.NETCONF_1_1_CAPABILITY) -> formatChunkedMessage(message)
+                !message.endsWith(RpcMessageUtils.END_PATTERN) ->  message + NEW_LINE + RpcMessageUtils.END_PATTERN
+                else -> message
             }
-            return message
         }
 
         /**
@@ -327,18 +314,19 @@ class NetconfMessageUtils {
          * @return formated message
          */
         fun formatChunkedMessage(message: String): String {
-            var message = message
-            if (message.endsWith(RpcMessageUtils.END_PATTERN)) {
+            var formattedMessage = message
+            if (formattedMessage.endsWith(RpcMessageUtils.END_PATTERN)) {
                 // message given had Netconf 1.0 EOM pattern -> remove
-                message = message.substring(0, message.length - RpcMessageUtils.END_PATTERN.length)
+                formattedMessage = formattedMessage.substring(0, formattedMessage.length - RpcMessageUtils.END_PATTERN.length)
             }
-            if (!message.startsWith(RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH)) {
+            if (!formattedMessage.startsWith(RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH)) {
                 // chunk encode message
-                message =
-                    (RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH + message.toByteArray(UTF_8).size + RpcMessageUtils.NEW_LINE + message + RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH + RpcMessageUtils.HASH
-                            + RpcMessageUtils.NEW_LINE)
+                formattedMessage = RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH +
+                    formattedMessage.toByteArray(UTF_8).size + RpcMessageUtils.NEW_LINE +
+                    formattedMessage + RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH +
+                    RpcMessageUtils.HASH + RpcMessageUtils.NEW_LINE
             }
-            return message
+            return formattedMessage
         }
 
         /**
@@ -348,31 +336,28 @@ class NetconfMessageUtils {
          * @return XML RPC message
          */
         fun formatXmlHeader(request: String): String {
-            var request = request
-            if (!request.contains(RpcMessageUtils.XML_HEADER)) {
-                if (request.startsWith(RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH)) {
-                    request =
-                        request.split("<".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0] + RpcMessageUtils.XML_HEADER + request.substring(
-                            request.split("<".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0].length)
-                } else {
-                    request = RpcMessageUtils.XML_HEADER + "\n" + request
+            return if (!request.contains(RpcMessageUtils.XML_HEADER)) {
+                when {
+                    request.startsWith(RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH) -> {
+                        val blah = request.split("<".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
+                        blah + RpcMessageUtils.XML_HEADER + request.substring(blah.length)
+                    }
+                    else -> RpcMessageUtils.XML_HEADER + "\n" + request
                 }
-            }
-            return request
+            } else request
         }
 
         fun formatRequestMessageId(request: String, messageId: String): String {
-            var request = request
-            if (request.contains(RpcMessageUtils.MESSAGE_ID_STRING)) {
-                request =
+            val formattedRequest = when {
+                request.contains(RpcMessageUtils.MESSAGE_ID_STRING) ->
                     request.replaceFirst((RpcMessageUtils.MESSAGE_ID_STRING + RpcMessageUtils.EQUAL + RpcMessageUtils.NUMBER_BETWEEN_QUOTES_MATCHER).toRegex(),
                         RpcMessageUtils.MESSAGE_ID_STRING + RpcMessageUtils.EQUAL + RpcMessageUtils.QUOTE + messageId + RpcMessageUtils.QUOTE)
-            } else if (!request.contains(RpcMessageUtils.MESSAGE_ID_STRING) && !request.contains(
-                    RpcMessageUtils.HELLO)) {
-                request = request.replaceFirst(RpcMessageUtils.END_OF_RPC_OPEN_TAG.toRegex(),
+                !request.contains(RpcMessageUtils.HELLO) -> request.replaceFirst(
+                    RpcMessageUtils.END_OF_RPC_OPEN_TAG.toRegex(),
                     RpcMessageUtils.QUOTE_SPACE + RpcMessageUtils.MESSAGE_ID_STRING + RpcMessageUtils.EQUAL + RpcMessageUtils.QUOTE + messageId + RpcMessageUtils.QUOTE + ">")
+                else -> request
             }
-            return updateRequestLength(request)
+            return updateRequestLength(formattedRequest)
         }
 
         fun updateRequestLength(request: String): String {
@@ -396,8 +381,22 @@ class NetconfMessageUtils {
 
         fun checkReply(reply: String?): Boolean {
             return if (reply != null) {
+                //TODO: this is really not rpc-error function. maybe !rpc-error && (warning || ok) ?
                 !reply.contains("rpc-error>") || reply.contains("warning") || reply.contains("ok/>")
             } else false
+        }
+
+        /**
+         * Extract the Netconf Session ID from the server HELLO message.
+         * used by exchangeHelloMessage
+         * @return SessionID as {@link String} or null on error.
+         */
+        fun extractNetconfSessionIdFromHelloResponse(response: String) :String? {
+            val sessionIDMatcher = SESSION_ID_REGEX_PATTERN.matcher(response)
+            return when {
+                sessionIDMatcher.find() -> sessionIDMatcher.group(1)
+                else -> null
+            }
         }
     }
 
