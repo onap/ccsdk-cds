@@ -43,7 +43,8 @@ import java.util.*
  */
 @Service("${PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-processor-db")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-open class DatabaseResourceAssignmentProcessor(private val bluePrintDBLibPropertySevice: BluePrintDBLibPropertySevice, private val primaryDBLibGenericService: PrimaryDBLibGenericService)
+open class DatabaseResourceAssignmentProcessor(private val bluePrintDBLibPropertySevice: BluePrintDBLibPropertySevice,
+                                               private val primaryDBLibGenericService: PrimaryDBLibGenericService)
     : ResourceAssignmentProcessor() {
 
     private val logger = LoggerFactory.getLogger(DatabaseResourceAssignmentProcessor::class.java)
@@ -84,11 +85,17 @@ open class DatabaseResourceAssignmentProcessor(private val bluePrintDBLibPropert
                 ?: throw BluePrintProcessorException("couldn't get resource dictionary definition for $dName")
         val resourceSource = resourceDefinition.sources[dSource]
                 ?: throw BluePrintProcessorException("couldn't get resource definition $dName source($dSource)")
-        val resourceSourceProperties = checkNotNull(resourceSource.properties) { "failed to get source properties for $dName " }
+        val resourceSourceProperties = checkNotNull(resourceSource.properties) {
+            "failed to get source properties for $dName "
+        }
         val sourceProperties = JacksonUtils.getInstanceFromMap(resourceSourceProperties, DatabaseResourceSource::class.java)
 
-        val sql = checkNotNull(sourceProperties.query) { "failed to get request query for $dName under $dSource properties" }
-        val inputKeyMapping = checkNotNull(sourceProperties.inputKeyMapping) { "failed to get input-key-mappings for $dName under $dSource properties" }
+        val sql = checkNotNull(sourceProperties.query) {
+            "failed to get request query for $dName under $dSource properties"
+        }
+        val inputKeyMapping = checkNotNull(sourceProperties.inputKeyMapping) {
+            "failed to get input-key-mappings for $dName under $dSource properties"
+        }
 
         logger.info("$dSource dictionary information : ($sql), ($inputKeyMapping), (${sourceProperties.outputKeyMapping})")
         val jdbcTemplate = blueprintDBLibService(sourceProperties)
@@ -129,7 +136,7 @@ open class DatabaseResourceAssignmentProcessor(private val bluePrintDBLibPropert
             logger.trace("Reference dictionary key (${it.key}) resulted in value ($expressionValue)")
             namedParameters[it.key] = expressionValue
         }
-        logger.info("Parameter information : ({})", namedParameters)
+        logger.info("Parameter information : ($namedParameters)")
         return namedParameters
     }
 
@@ -139,7 +146,9 @@ open class DatabaseResourceAssignmentProcessor(private val bluePrintDBLibPropert
         val dSource = resourceAssignment.dictionarySource
         val type = nullToEmpty(resourceAssignment.property?.type)
 
-        val outputKeyMapping = checkNotNull(sourceProperties.outputKeyMapping) { "failed to get output-key-mappings for $dName under $dSource properties" }
+        val outputKeyMapping = checkNotNull(sourceProperties.outputKeyMapping) {
+            "failed to get output-key-mappings for $dName under $dSource properties"
+        }
         logger.info("Response processing type($type)")
 
         // Primitive Types
@@ -150,8 +159,10 @@ open class DatabaseResourceAssignmentProcessor(private val bluePrintDBLibPropert
                 ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, dbColumnValue)
             }
             in BluePrintTypes.validCollectionTypes() -> {
-                val entrySchemaType = checkNotEmpty(resourceAssignment.property?.entrySchema?.type) { "Entry schema is not defined for dictionary ($dName) info" }
-                val arrayNode = JsonNodeFactory.instance.arrayNode()
+                val entrySchemaType = checkNotEmpty(resourceAssignment.property?.entrySchema?.type) {
+                    "Entry schema is not defined for dictionary ($dName) info"
+                }
+                val arrayNode = JacksonUtils.objectMapper.createArrayNode()
                 rows.forEach {
                     if (entrySchemaType in BluePrintTypes.validPrimitiveTypes()) {
                         val dbColumnValue = it[outputKeyMapping[dName]]
@@ -172,9 +183,9 @@ open class DatabaseResourceAssignmentProcessor(private val bluePrintDBLibPropert
                 ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, arrayNode)
             }
             else -> {
-                // Complex Types
+                // Custom Simple Complex Types
                 val row = rows[0]
-                val objectNode = JsonNodeFactory.instance.objectNode()
+                val objectNode = JacksonUtils.objectMapper.createObjectNode()
                 for (mapping in outputKeyMapping.entries) {
                     val dbColumnValue = checkNotNull(row[mapping.key])
                     val propertyTypeForDataType = ResourceAssignmentUtils.getPropertyType(raRuntimeService, type, mapping.key)
