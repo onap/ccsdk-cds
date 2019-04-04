@@ -25,7 +25,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.proc
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmptyOrThrow
+import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintTemplateService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -228,9 +228,9 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                 ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR.plus(resourceSource.type)
             }
         }
-        checkNotEmptyOrThrow(processorName,
-                "couldn't get processor name for resource dictionary definition($dictionaryName) source" +
-                        "($dictionarySource)")
+        checkNotEmpty(processorName) {
+            "couldn't get processor name for resource dictionary definition($dictionaryName) source($dictionarySource)"
+        }
 
         return processorName
 

@@ -21,7 +21,7 @@ import com.google.common.base.Preconditions
 import org.apache.commons.collections.CollectionUtils
 import org.apache.commons.lang3.StringUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmptyOrThrow
+import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceSourceMapping
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.factory.ResourceSourceMappingFactory
 import org.onap.ccsdk.cds.controllerblueprints.service.domain.ResourceDictionary
@@ -137,12 +137,11 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
     }
 
     private fun validateResourceDictionary(resourceDictionary: ResourceDictionary): Boolean {
-        checkNotEmptyOrThrow(resourceDictionary.name, "DataDictionary Definition name is missing.")
+        checkNotEmpty(resourceDictionary.name){ "DataDictionary Definition name is missing."}
         checkNotNull(resourceDictionary.definition) { "DataDictionary Definition Information is missing." }
-        checkNotEmptyOrThrow(resourceDictionary.description, "DataDictionary Definition Information is missing.")
-        checkNotEmptyOrThrow(resourceDictionary.tags, "DataDictionary Definition tags is missing.")
-        checkNotEmptyOrThrow(resourceDictionary.updatedBy, "DataDictionary Definition updatedBy is missing.")
+        checkNotEmpty(resourceDictionary.description){ "DataDictionary Definition Information is missing."}
+        checkNotEmpty(resourceDictionary.tags){ "DataDictionary Definition tags is missing."}
+        checkNotEmpty(resourceDictionary.updatedBy){ "DataDictionary Definition updatedBy is missing."}
         return true
-
     }
 }

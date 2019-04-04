@@ -127,19 +127,7 @@ fun MutableMap<String, JsonNode>.getAsDouble(key: String): Double {
 
 // Checks
 
-fun checkNotEmpty(value: String?): Boolean {
-    return value != null && value.isNotBlank()
-}
-
-fun checkNotEmptyOrThrow(value: String?, message: String? = value.plus(" is null/empty ")): Boolean {
-    val notEmpty = checkNotEmpty(value)
-    if (!notEmpty) {
-        throw BluePrintException(message!!)
-    }
-    return notEmpty
-}
-
-fun checkEqualsOrThrow(value1: String?, value2: String?, lazyMessage: () -> Any): Boolean {
+inline fun checkEquals(value1: String?, value2: String?, lazyMessage: () -> Any): Boolean {
     if (value1.equals(value2, ignoreCase = true)) {
         return true
     } else {
@@ -147,12 +135,39 @@ fun checkEqualsOrThrow(value1: String?, value2: String?, lazyMessage: () -> Any)
     }
 }
 
+inline fun checkNotEmpty(value: String?, lazyMessage: () -> Any): String {
+    if (value == null || value.isEmpty()) {
+        val message = lazyMessage()
+        throw IllegalStateException(message.toString())
+    } else {
+        return value
+    }
+}
+
+inline fun checkNotBlank(value: String?, lazyMessage: () -> Any): String {
+    if (value == null || value.isBlank()) {
+        val message = lazyMessage()
+        throw IllegalStateException(message.toString())
+    } else {
+        return value
+    }
+}
+
+fun isNotEmpty(value: String?): Boolean {
+    return value != null && value.isNotEmpty()
+}
+
+fun isNotBlank(value: String?): Boolean {
+    return value != null && value.isNotBlank()
+}
+
+
 fun nullToEmpty(value: String?): String {
-    return if (checkNotEmpty(value)) value!! else ""
+    return if (isNotEmpty(value)) value!! else ""
 }
 
 fun returnNotEmptyOrThrow(value: String?, lazyMessage: () -> Any): String {
-    if (checkNotEmpty(value)) {
+    if (isNotEmpty(value)) {
         return value!!
     } else {
         throw IllegalStateException(lazyMessage().toString())

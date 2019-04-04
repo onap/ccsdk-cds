@@ -26,7 +26,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.Bluepri
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.PythonExecutorConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmptyOrThrow
+import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.data.OperationAssignment
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
@@ -77,7 +77,7 @@ open class ComponentJythonExecutor(private var applicationContext: ApplicationCo
 
         val content: String? = bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactName)
 
-        checkNotEmptyOrThrow(content, "artifact ($artifactName) content is empty")
+        checkNotEmpty(content) { "artifact ($artifactName) content is empty" }
 
         val instanceDependenciesNode: ArrayNode = operationInputs[PythonExecutorConstants.INPUT_INSTANCE_DEPENDENCIES] as? ArrayNode
                 ?: throw BluePrintProcessorException("Failed to get property(${PythonExecutorConstants.INPUT_INSTANCE_DEPENDENCIES})")

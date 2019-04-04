@@ -102,7 +102,7 @@ open class DatabaseResourceAssignmentProcessor(private val bluePrintDBLibPropert
     }
 
     private fun blueprintDBLibService(sourceProperties: DatabaseResourceSource): BluePrintDBLibGenericService {
-        return if (checkNotEmpty(sourceProperties.endpointSelector)) {
+        return if (isNotEmpty(sourceProperties.endpointSelector)) {
             val dbPropertiesJson = raRuntimeService.resolveDSLExpression(sourceProperties.endpointSelector!!)
             bluePrintDBLibPropertySevice.JdbcTemplate(dbPropertiesJson)
         } else {
@@ -113,9 +113,11 @@ open class DatabaseResourceAssignmentProcessor(private val bluePrintDBLibPropert
 
     @Throws(BluePrintProcessorException::class)
     private fun validate(resourceAssignment: ResourceAssignment) {
-        checkNotEmptyOrThrow(resourceAssignment.name, "resource assignment template key is not defined")
-        checkNotEmptyOrThrow(resourceAssignment.dictionaryName, "resource assignment dictionary name is not defined for template key (${resourceAssignment.name})")
-        checkEqualsOrThrow(ResourceDictionaryConstants.SOURCE_PROCESSOR_DB, resourceAssignment.dictionarySource) {
+        checkNotEmpty(resourceAssignment.name) { "resource assignment template key is not defined" }
+        checkNotEmpty(resourceAssignment.dictionaryName) {
+            "resource assignment dictionary name is not defined for template key (${resourceAssignment.name})"
+        }
+        checkEquals(ResourceDictionaryConstants.SOURCE_PROCESSOR_DB, resourceAssignment.dictionarySource) {
             "resource assignment source is not ${ResourceDictionaryConstants.SOURCE_PROCESSOR_DB} but it is ${resourceAssignment.dictionarySource}"
         }
     }

@@ -60,22 +60,22 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                 val dName = resourceAssignment.dictionaryName
                 val dSource = resourceAssignment.dictionarySource
                 val resourceDefinition = resourceDictionaries[dName]
-                    ?: throw BluePrintProcessorException("couldn't get resource dictionary definition for $dName")
+                        ?: throw BluePrintProcessorException("couldn't get resource dictionary definition for $dName")
                 val resourceSource = resourceDefinition.sources[dSource]
-                    ?: throw BluePrintProcessorException("couldn't get resource definition $dName source($dSource)")
+                        ?: throw BluePrintProcessorException("couldn't get resource definition $dName source($dSource)")
                 val resourceSourceProperties =
-                    checkNotNull(resourceSource.properties) { "failed to get source properties for $dName " }
+                        checkNotNull(resourceSource.properties) { "failed to get source properties for $dName " }
                 val sourceProperties =
-                    JacksonUtils.getInstanceFromMap(resourceSourceProperties, RestResourceSource::class.java)
+                        JacksonUtils.getInstanceFromMap(resourceSourceProperties, RestResourceSource::class.java)
                 val path = nullToEmpty(sourceProperties.path)
                 val inputKeyMapping =
-                    checkNotNull(sourceProperties.inputKeyMapping) { "failed to get input-key-mappings for $dName under $dSource properties" }
+                        checkNotNull(sourceProperties.inputKeyMapping) { "failed to get input-key-mappings for $dName under $dSource properties" }
                 val resolvedInputKeyMapping = resolveInputKeyMappingVariables(inputKeyMapping)
 
                 // Resolving content Variables
                 val payload = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.payload), resolvedInputKeyMapping)
                 val urlPath =
-                    resolveFromInputKeyMapping(checkNotNull(sourceProperties.urlPath), resolvedInputKeyMapping)
+                        resolveFromInputKeyMapping(checkNotNull(sourceProperties.urlPath), resolvedInputKeyMapping)
                 val verb = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.verb), resolvedInputKeyMapping)
 
                 logger.info("$dSource dictionary information : ($urlPath), ($inputKeyMapping), (${sourceProperties.outputKeyMapping})")
@@ -94,13 +94,13 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
         } catch (e: Exception) {
             ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, e.message)
             throw BluePrintProcessorException("Failed in template key ($resourceAssignment) assignments with: ${e.message}",
-                e)
+                    e)
         }
     }
 
     private fun blueprintWebClientService(resourceAssignment: ResourceAssignment,
                                           restResourceSource: RestResourceSource): BlueprintWebClientService {
-        return if (checkNotEmpty(restResourceSource.endpointSelector)) {
+        return if (isNotEmpty(restResourceSource.endpointSelector)) {
             val restPropertiesJson = raRuntimeService.resolveDSLExpression(restResourceSource.endpointSelector!!)
             blueprintRestLibPropertyService.blueprintWebClientService(restPropertiesJson)
         } else {
@@ -117,11 +117,11 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
         lateinit var entrySchemaType: String
 
         val outputKeyMapping =
-            checkNotNull(sourceProperties.outputKeyMapping) { "failed to get output-key-mappings for $dName under $dSource properties" }
+                checkNotNull(sourceProperties.outputKeyMapping) { "failed to get output-key-mappings for $dName under $dSource properties" }
         logger.info("Response processing type($type)")
 
         val responseNode =
-            checkNotNull(JacksonUtils.jsonNode(restResponse).at(path)) { "Failed to find path ($path) in response ($restResponse)" }
+                checkNotNull(JacksonUtils.jsonNode(restResponse).at(path)) { "Failed to find path ($path) in response ($restResponse)" }
         logger.info("populating value for output mapping ($outputKeyMapping), from json ($responseNode)")
 
 
@@ -133,7 +133,7 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
             in BluePrintTypes.validCollectionTypes() -> {
                 // Array Types
                 entrySchemaType =
-                    returnNotEmptyOrThrow(resourceAssignment.property?.entrySchema?.type) { "Entry schema is not defined for dictionary ($dName) info" }
+                        returnNotEmptyOrThrow(resourceAssignment.property?.entrySchema?.type) { "Entry schema is not defined for dictionary ($dName) info" }
                 val arrayNode = responseNode as ArrayNode
 
                 if (entrySchemaType !in BluePrintTypes.validPrimitiveTypes()) {
@@ -143,12 +143,12 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                         outputKeyMapping.map {
                             val responseKeyValue = responseSingleJsonNode.get(it.key)
                             val propertyTypeForDataType =
-                                ResourceAssignmentUtils.getPropertyType(raRuntimeService, entrySchemaType, it.key)
+                                    ResourceAssignmentUtils.getPropertyType(raRuntimeService, entrySchemaType, it.key)
                             logger.info("For List Type Resource: key (${it.key}), value ($responseKeyValue), type  ({$propertyTypeForDataType})")
                             JacksonUtils.populateJsonNodeValues(it.value,
-                                responseKeyValue,
-                                propertyTypeForDataType,
-                                arrayChildNode)
+                                    responseKeyValue,
+                                    propertyTypeForDataType,
+                                    arrayChildNode)
                         }
                         arrayNode.add(arrayChildNode)
                     }
@@ -160,12 +160,12 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
             else -> {
                 // Complex Types
                 entrySchemaType =
-                    returnNotEmptyOrThrow(resourceAssignment.property?.type) { "Entry schema is not defined for dictionary ($dName) info" }
+                        returnNotEmptyOrThrow(resourceAssignment.property?.type) { "Entry schema is not defined for dictionary ($dName) info" }
                 val objectNode = JsonNodeFactory.instance.objectNode()
                 outputKeyMapping.map {
                     val responseKeyValue = responseNode.get(it.key)
                     val propertyTypeForDataType =
-                        ResourceAssignmentUtils.getPropertyType(raRuntimeService, entrySchemaType, it.key)
+                            ResourceAssignmentUtils.getPropertyType(raRuntimeService, entrySchemaType, it.key)
                     logger.info("For List Type Resource: key (${it.key}), value ($responseKeyValue), type  ({$propertyTypeForDataType})")
                     JacksonUtils.populateJsonNodeValues(it.value, responseKeyValue, propertyTypeForDataType, objectNode)
                 }
@@ -179,15 +179,17 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
 
     @Throws(BluePrintProcessorException::class)
     private fun validate(resourceAssignment: ResourceAssignment) {
-        checkNotEmptyOrThrow(resourceAssignment.name, "resource assignment template key is not defined")
-        checkNotEmptyOrThrow(resourceAssignment.dictionaryName,
-            "resource assignment dictionary name is not defined for template key (${resourceAssignment.name})")
-        checkEqualsOrThrow(ResourceDictionaryConstants.SOURCE_PRIMARY_CONFIG_DATA,
-            resourceAssignment.dictionarySource) {
-            "resource assignment source is not ${ResourceDictionaryConstants.SOURCE_PRIMARY_CONFIG_DATA} but it is ${resourceAssignment.dictionarySource}"
+        checkNotEmpty(resourceAssignment.name) { "resource assignment template key is not defined" }
+        checkNotEmpty(resourceAssignment.dictionaryName) {
+            "resource assignment dictionary name is not defined for template key (${resourceAssignment.name})"
         }
-        checkNotEmptyOrThrow(resourceAssignment.dictionaryName,
-            "resource assignment dictionary name is not defined for template key (${resourceAssignment.name})")
+        checkEquals(ResourceDictionaryConstants.SOURCE_PRIMARY_CONFIG_DATA, resourceAssignment.dictionarySource) {
+            "resource assignment source is not ${ResourceDictionaryConstants.SOURCE_PRIMARY_CONFIG_DATA} but it is " +
+                    "${resourceAssignment.dictionarySource}"
+        }
+        checkNotEmpty(resourceAssignment.dictionaryName) {
+            "resource assignment dictionary name is not defined for template key (${resourceAssignment.name})"
+        }
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
