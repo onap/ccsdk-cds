@@ -22,14 +22,14 @@ import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.Status
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.asObjectNode
+import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.getAsString
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintFunctionNode
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 
 /**
@@ -57,8 +57,13 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
 
     override suspend fun prepareRequestNB(executionRequest: ExecutionServiceInput): ExecutionServiceInput {
         checkNotNull(bluePrintRuntimeService) { "failed to prepare blueprint runtime" }
+        checkNotNull(executionRequest.stepData) { "failed to get step info" }
 
-        check(stepName.isNotEmpty()) { "failed to assign step name" }
+        // Get the Step Name and Step Inputs
+        this.stepName = executionRequest.stepData!!.name
+        this.operationInputs = executionRequest.stepData!!.properties
+
+        checkNotEmpty(stepName) { "failed to get step name from step data" }
 
         this.executionServiceInput = executionRequest
 
@@ -69,13 +74,6 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         check(workflowName.isNotEmpty()) { "couldn't get action name for step($stepName)" }
 
         log.info("preparing request id($processId) for workflow($workflowName) step($stepName)")
-
-        val stepInputs = bluePrintRuntimeService.get("$stepName-step-inputs")
-                ?: JacksonUtils.objectMapper.createObjectNode()
-
-        stepInputs.fields().forEach {
-            this.operationInputs[it.key] = it.value
-        }
 
         nodeTemplateName = this.operationInputs.getAsString(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE)
         check(nodeTemplateName.isNotEmpty()) { "couldn't get NodeTemplate name for step($stepName)" }
@@ -104,7 +102,11 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
             val stepOutputs = bluePrintRuntimeService
                     .resolveNodeTemplateInterfaceOperationOutputs(nodeTemplateName, interfaceName, operationName)
 
-            bluePrintRuntimeService.put("$stepName-step-outputs", stepOutputs.asObjectNode())
+            val stepOutputData = StepData().apply {
+                name = stepName
+                properties = stepOutputs
+            }
+            executionServiceOutput.stepData = stepOutputData
             // Set the Default Step Status
             status.eventType = EventType.EVENT_COMPONENT_EXECUTED.name
         } catch (e: Exception) {

@@ -27,6 +27,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.BluePrintDBLibPropertyS
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock.MockBlueprintProcessorCatalogServiceImpl
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock.MockDatabaseConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
@@ -56,12 +57,13 @@ class DatabaseResourceResolutionProcessorTest {
             val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)
 
             databaseResourceAssignmentProcessor.raRuntimeService = resourceAssignmentRuntimeService
-            databaseResourceAssignmentProcessor.resourceDictionaries = hashMapOf()
+            databaseResourceAssignmentProcessor.resourceDictionaries = ResourceAssignmentUtils
+                    .resourceDefinitions(bluePrintContext.rootPath)
 
             val resourceAssignment = ResourceAssignment().apply {
-                name = "rr-name"
-                dictionaryName = "rr-dict-name"
-                dictionarySource = "primary-db"
+                name = "service-instance-id"
+                dictionaryName = "service-instance-id"
+                dictionarySource = "processor-db"
                 property = PropertyDefinition().apply {
                     type = "string"
                 }

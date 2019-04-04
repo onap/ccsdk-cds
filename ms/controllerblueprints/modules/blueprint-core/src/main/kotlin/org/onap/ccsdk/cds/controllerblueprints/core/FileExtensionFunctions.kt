@@ -72,6 +72,13 @@ fun deleteDir(path: String, vararg more: String?) {
     normalizedFile(path, *more).deleteRecursively()
 }
 
+fun checkFileExists(file: File, lazyMessage: () -> Any) {
+    if (!file.exists()) {
+        val message = lazyMessage()
+        throw IllegalStateException(message.toString())
+    }
+}
+
 fun normalizedFile(path: String, vararg more: String?): File {
     return Paths.get(path, *more).toFile().normalize()
 }

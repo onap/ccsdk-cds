@@ -27,6 +27,7 @@ import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
 import org.onap.ccsdk.cds.blueprintsprocessor.core.utils.PayloadUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.*
@@ -78,7 +79,11 @@ class ResourceResolutionComponentTest {
             bluePrintRuntimeService.put("resource-assignment-step-inputs", stepMetaData.asJsonNode())
 
             resourceResolutionComponent.bluePrintRuntimeService = bluePrintRuntimeService
-            resourceResolutionComponent.stepName = "resource-assignment"
+            val stepInputData = StepData().apply {
+                name = "resource-assignment"
+                properties = stepMetaData
+            }
+            executionServiceInput.stepData = stepInputData
             resourceResolutionComponent.applyNB(executionServiceInput)
         }
     }
@@ -102,7 +107,11 @@ class ResourceResolutionComponentTest {
             bluePrintRuntimeService.put("resource-assignment-step-inputs", stepMetaData.asJsonNode())
 
             resourceResolutionComponent.bluePrintRuntimeService = bluePrintRuntimeService
-            resourceResolutionComponent.stepName = "resource-assignment"
+            val stepInputData = StepData().apply {
+                name = "resource-assignment"
+                properties = stepMetaData
+            }
+            executionServiceInput.stepData = stepInputData
             resourceResolutionComponent.recoverNB(RuntimeException("TEST PASSED"), executionServiceInput)
         }
     }

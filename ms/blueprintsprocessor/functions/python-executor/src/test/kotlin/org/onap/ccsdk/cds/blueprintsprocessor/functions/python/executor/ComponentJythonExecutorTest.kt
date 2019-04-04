@@ -22,11 +22,11 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor.mock.MockInstanceConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.PythonExecutorConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.PythonExecutorProperty
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.putJsonElement
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -60,12 +60,12 @@ class ComponentJythonExecutorTest {
             stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "activate-jython")
             stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "ComponentJythonExecutor")
             stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
-            bluePrintRuntimeService.put("activate-jython-step-inputs", stepMetaData.asJsonNode())
-
             componentJythonExecutor.bluePrintRuntimeService = bluePrintRuntimeService
-            componentJythonExecutor.stepName = "activate-jython"
-
-
+            val stepInputData = StepData().apply {
+                name = "activate-jython"
+                properties = stepMetaData
+            }
+            executionServiceInput.stepData = stepInputData
             componentJythonExecutor.applyNB(executionServiceInput)
         }
 

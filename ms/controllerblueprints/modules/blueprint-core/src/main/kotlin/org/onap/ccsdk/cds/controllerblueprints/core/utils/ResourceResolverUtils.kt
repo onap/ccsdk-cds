@@ -17,9 +17,9 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
-import org.slf4j.LoggerFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
+import org.onap.ccsdk.cds.controllerblueprints.core.isNotEmpty
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.net.URL
 
@@ -45,7 +45,7 @@ object ResourceResolverUtils {
                 }
             } else {
                 if (!filename.startsWith("/")) {
-                    if (checkNotEmpty(basePath)) {
+                    if (isNotEmpty(basePath)) {
                         resolvedFileName = basePath.plus(File.separator).plus(filename)
                     } else {
                         resolvedFileName = javaClass.classLoader.getResource(".").path.plus(filename)
