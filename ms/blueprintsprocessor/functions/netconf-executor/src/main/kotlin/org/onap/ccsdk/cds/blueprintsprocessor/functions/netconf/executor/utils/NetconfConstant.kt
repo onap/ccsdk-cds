@@ -85,6 +85,6 @@ object RpcMessageUtils {
 
     const val MESSAGE_ID_STRING = "message-id"
 
-    const val NETCONF_10_CAPABILITY = "urn:ietf:params:netconf:base:1.0"
-    const val NETCONF_11_CAPABILITY = "urn:ietf:params:netconf:base:1.1"
+    const val NETCONF_1_0_CAPABILITY = "urn:ietf:params:netconf:base:1.0"
+    const val NETCONF_1_1_CAPABILITY = "urn:ietf:params:netconf:base:1.1"
 }
