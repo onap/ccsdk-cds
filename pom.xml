@@ -36,8 +36,8 @@ limitations under the License.
     <description>CCSDK Controller Design Studio</description>
 
     <modules>
-        <module>cds-ui</module>
-        <module>components</module>
+<!--        <module>cds-ui</module>
+        <module>components</module>-->
         <module>ms</module>
     </modules>
 
