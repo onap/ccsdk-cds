@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "16e9a2a0_dde77ae6",
+        "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/service/BlueprintTemplateService.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-05T16:47:17Z",
+      "side": 1,
+      "message": "seem redundant with above method. Can we modularize a bit?",
+      "range": {
+        "startLine": 41,
+        "startChar": 17,
+        "endLine": 41,
+        "endChar": 41
+      },
+      "revId": "23e58c7ca5c8a50056aaaac5f5e515dae6176007",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "23a042bb_aabb0a2a",
+        "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/service/BlueprintTemplateService.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-05T16:47:17Z",
+      "side": 1,
+      "message": "I would say unknown artifact type, and I would print the one that is getting resolved, so user knows what\u0027s wrong.",
+      "range": {
+        "startLine": 51,
+        "startChar": 51,
+        "endLine": 51,
+        "endChar": 78
+      },
+      "revId": "23e58c7ca5c8a50056aaaac5f5e515dae6176007",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0a8ceb3d_de6fbae0",
+        "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/service/BlueprintTemplateService.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-05T16:47:17Z",
+      "side": 1,
+      "message": "inline return",
+      "revId": "23e58c7ca5c8a50056aaaac5f5e515dae6176007",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
