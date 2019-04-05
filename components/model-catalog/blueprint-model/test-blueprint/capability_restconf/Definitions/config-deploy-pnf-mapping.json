@@ -11,12 +11,12 @@
     ]
   },
   {
-    "name": "pnf-name",
+    "name": "pnf-ipv4-address",
     "input-param": true,
     "property": {
       "type": "string"
     },
-    "dictionary-name": "pnf-name",
+    "dictionary-name": "pnf-ipv4-address",
     "dictionary-source": "input",
     "dependencies": [
     ]

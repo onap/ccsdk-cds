@@ -14,11 +14,11 @@
       }
     }
   },
-  "pnf-name" : {
-    "tags" : "pnf-name",
-    "name" : "pnf-name",
+  "pnf-ipv4-address" : {
+    "tags" : "pnf-ipv4-address",
+    "name" : "pnf-ipv4-address",
     "property" : {
-      "description" : "pnf-name",
+      "description" : "pnf-ipv4-address",
       "type" : "string"
     },
     "updated-by" : "Rodrigo Ottero <rodrigo.ottero@est.tech>",

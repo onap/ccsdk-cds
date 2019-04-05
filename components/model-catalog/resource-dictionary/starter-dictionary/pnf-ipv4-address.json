@@ -1,0 +1,15 @@
+{
+  "name" : "pnf-ipv4-address",
+  "tags" : "pnf-ipv4-address",
+  "updated-by" : "Rodrigo Ottero <rodrigo.ottero@est.tech>",
+  "property" : {
+    "description" : "pnf-ipv4-address",
+    "type" : "string"
+  },
+  "sources" : {
+    "input" : {
+      "type" : "source-input",
+      "properties" : { }
+    }
+  }
+}

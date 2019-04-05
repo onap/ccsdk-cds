@@ -10,10 +10,10 @@
       "description" : "Dynamic DataType definition for workflow(config-deploy).",
       "version" : "1.0.0",
       "properties" : {
-        "pnf-id" : {
+        "pnf-ipv4-address" : {
           "type" : "string"
         },
-        "pnf-name" : {
+        "pnf-id" : {
           "type" : "string"
         }
       },
