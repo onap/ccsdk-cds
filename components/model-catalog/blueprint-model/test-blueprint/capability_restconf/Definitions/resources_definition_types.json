@@ -1,9 +1,9 @@
 {
-  "pnf-id" : {
-    "tags" : "pnf-id",
-    "name" : "pnf-id",
+  "nf-id" : {
+    "tags" : "nf-id",
+    "name" : "nf-id",
     "property" : {
-      "description" : "pnf-id",
+      "description" : "nf-id",
       "type" : "string"
     },
     "updated-by" : "Rodrigo Ottero <rodrigo.ottero@est.tech>",
@@ -14,11 +14,11 @@
       }
     }
   },
-  "pnf-name" : {
-    "tags" : "pnf-name",
-    "name" : "pnf-name",
+  "pnf-ipv4-address" : {
+    "tags" : "pnf-ipv4-address",
+    "name" : "pnf-ipv4-address",
     "property" : {
-      "description" : "pnf-name",
+      "description" : "pnf-ipv4-address",
       "type" : "string"
     },
     "updated-by" : "Rodrigo Ottero <rodrigo.ottero@est.tech>",

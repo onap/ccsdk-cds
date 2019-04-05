@@ -1,22 +1,22 @@
 [
   {
-    "name": "pnf-id",
+    "name": "nf-id",
     "input-param": true,
     "property": {
       "type": "string"
     },
-    "dictionary-name": "pnf-id",
+    "dictionary-name": "nf-id",
     "dictionary-source": "input",
     "dependencies": [
     ]
   },
   {
-    "name": "pnf-name",
+    "name": "pnf-ipv4-address",
     "input-param": true,
     "property": {
       "type": "string"
     },
-    "dictionary-name": "pnf-name",
+    "dictionary-name": "pnf-ipv4-address",
     "dictionary-source": "input",
     "dependencies": [
     ]
