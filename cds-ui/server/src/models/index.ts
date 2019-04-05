@@ -21,3 +21,4 @@ limitations under the License.
 
 
 export * from './blueprint.model';
+export * from './resource-dictionary.model';
