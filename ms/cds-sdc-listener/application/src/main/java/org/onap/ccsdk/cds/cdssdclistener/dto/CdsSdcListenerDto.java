@@ -5,10 +5,12 @@
  * proprietary to Bell Canada and are protected by trade secret or copyright law.
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  */
-package org.onap.ccsdk.cds.cdssdclistener;
+package org.onap.ccsdk.cds.cdssdclistener.dto;
 
 import org.onap.sdc.api.IDistributionClient;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CdsSdcListenerDto {
 
     private IDistributionClient distributionClient;

@@ -8,7 +8,8 @@
 
 package org.onap.ccsdk.cds.cdssdclistener.service;
 
-import java.util.zip.ZipFile;
+import java.nio.file.Path;
+import org.onap.sdc.api.results.IDistributionClientDownloadResult;
 
 public interface ListenerService {
 
@@ -23,7 +24,15 @@ public interface ListenerService {
     /**
      * Store the Zip file into CDS database.
      *
-     * @param file The file to be stored.
+     * @param path path where zip file exists.
      */
-    void saveBluePrintToCdsDatabase(ZipFile file);
+    void saveBluePrintToCdsDatabase(Path path);
+
+    /**
+     * Extract and store CSAR to file.
+     *
+     * @param result - IDistributionClientDownloadResult contains payload.
+     * @param csarArchivePath The destination path where CSAR will be stored.
+     */
+    void extractCsarAndStore(IDistributionClientDownloadResult result, String csarArchivePath);
 }

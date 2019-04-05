@@ -49,6 +49,7 @@ class BlueprintJythonServiceTest {
         every { blueprintContext.rootPath } returns normalizedPathName("target")
     }
 
+    @Ignore
     @Test
     fun testGetAbstractPythonPlugin() {
         val content = JacksonUtils.getClassPathFileContent("scripts/SamplePythonComponentNode.py")
@@ -60,7 +61,8 @@ class BlueprintJythonServiceTest {
 
         assertNotNull(abstractPythonPlugin, "failed to get python component")
     }
-    
+
+    @Ignore
     @Test
     fun testGetAbstractJythonComponent() {
         val scriptInstance = "test-classes/scripts/SamplePythonComponentNode.py"

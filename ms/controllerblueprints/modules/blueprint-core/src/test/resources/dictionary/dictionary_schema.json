@@ -51,8 +51,38 @@
 				"default": {
 					"type": "any"
 				},
-				"aai": {
-					"type": "any"
+				"primary-aai-data": {
+					"type": "object",
+					"properties": {
+						"path": {
+							"type": "string",
+							"required": true
+						},
+						"url-path": {
+							"type": "string",
+							"required": true
+						},
+						"input-key-mapping": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "string"
+							}
+						},
+						"type": {
+							"type": "string",
+							"required": true
+						},
+						"output-key-mapping": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "string"
+							}
+						},
+						"base": {
+							"type": "string",
+							"required": true
+						}
+					}
 				},
 				"primary-config-data": {
 					"type": "object",
