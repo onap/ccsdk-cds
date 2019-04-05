@@ -5,9 +5,12 @@
  * proprietary to Bell Canada and are protected by trade secret or copyright law.
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  */
-package org.onap.ccsdk.cds.cdssdclistener;
+package org.onap.ccsdk.cds.cdssdclistener.client;
 
 import java.util.Optional;
+import org.onap.ccsdk.cds.cdssdclistener.CdsSdcListenerConfiguration;
+import org.onap.ccsdk.cds.cdssdclistener.dto.CdsSdcListenerDto;
+import org.onap.ccsdk.cds.cdssdclistener.CdsSdcListenerNotificationCallback;
 import org.onap.ccsdk.cds.cdssdclistener.exceptions.CdsSdcListenerException;
 import org.onap.sdc.api.IDistributionClient;
 import org.onap.sdc.api.results.IDistributionClientResult;
@@ -17,10 +20,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
+@ComponentScan("org.onap.ccsdk.cds.cdssdclistener.dto")
 public class CdsSdcListenerClient {
 
     private static Logger LOG = LoggerFactory.getLogger(CdsSdcListenerClient.class);
