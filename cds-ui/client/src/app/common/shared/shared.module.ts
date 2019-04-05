@@ -20,26 +20,33 @@ limitations under the License.
 */
 
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HomeComponent } from './components/home/home.component';
 import { CBAWizardComponent } from './components/cbawizard/cbawizard.component';
 import { MatToolbarModule,MatIconModule, MatButtonModule, MatSidenavModule,  MatListModule, MatGridListModule, MatCardModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatFormFieldModule, MatStepperModule} from '@angular/material';
 import { RouterModule } from "@angular/router";
 import { SearchPipe } from './pipes/search.pipe';
+import { SearchDialog } from './components/search-dialog/search-dialog.component';
+import { AppMaterialModule }  from '../modules/app-material.module';
 
 @NgModule({
   declarations: [
     HomeComponent,
     CBAWizardComponent,
-    SearchPipe
-    
+    SearchPipe,
+    SearchDialog
+
   ],
   exports: [
     HomeComponent,
     CBAWizardComponent,
-    SearchPipe
+    SearchPipe,
+    SearchDialog
   ],
   imports: [
+    AppMaterialModule,
+    FormsModule,
     CommonModule,
     MatToolbarModule,
     MatButtonModule,
@@ -58,6 +65,7 @@ import { SearchPipe } from './pipes/search.pipe';
     MatFormFieldModule, 
     MatStepperModule,
     RouterModule
-  ]
+  ],
+  entryComponents: [SearchDialog]
 })
 export class SharedModule { }

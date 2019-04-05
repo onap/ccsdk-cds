@@ -21,6 +21,7 @@ limitations under the License.
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CdkTableModule } from '@angular/cdk/table';
+import { FormsModule } from '@angular/forms';
 
 import { ModifyTemplateComponent } from './modify-template.component';
 import { ModifyTemplateRoutingModule } from './modify-template-routing.module';
@@ -28,12 +29,15 @@ import { AppMaterialModule } from '../../../common/modules/app-material.module';
 import { DesignerComponent } from './designer/designer.component';
 import { EditorComponent } from './editor/editor.component';
 import { AceEditorModule } from 'ng2-ace-editor';
+import { ResourceMappingComponent } from './resource-mapping/resource-mapping.component';
+import { ResourceMappingService } from './resource-mapping/resource-mapping.service';
 
 @NgModule({
   declarations: [
     ModifyTemplateComponent,
     DesignerComponent,
-    EditorComponent
+    EditorComponent,
+    ResourceMappingComponent
   ],
   exports: [
     ModifyTemplateComponent,
@@ -45,7 +49,9 @@ import { AceEditorModule } from 'ng2-ace-editor';
     CdkTableModule,
     AppMaterialModule,
     ModifyTemplateRoutingModule,
-    AceEditorModule
-  ]
+    AceEditorModule,
+    FormsModule
+  ],
+  providers: [ ResourceMappingService ]
 })
 export class ModifyTemplateModule { }

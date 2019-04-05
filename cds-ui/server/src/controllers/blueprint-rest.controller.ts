@@ -51,6 +51,7 @@ import * as request_lib from 'request';
 
 const REST_BLUEPRINT_CONTROLLER_BASE_URL = process.env.REST_BLUEPRINT_CONTROLLER_BASE_URL || "http://localhost:8080/api/v1";
 const REST_BLUEPRINT_CONTROLLER_BASIC_AUTH_HEADER = process.env.REST_BLUEPRINT_CONTROLLER_BASIC_AUTH_HEADER || "Basic Y2NzZGthcHBzOmNjc2RrYXBwcw==";
+const REST_BLUEPRINT_PROCESSOR_BASE_URL= "http://localhost:8081/api/v1";
 
 export class BlueprintRestController {
   constructor(
