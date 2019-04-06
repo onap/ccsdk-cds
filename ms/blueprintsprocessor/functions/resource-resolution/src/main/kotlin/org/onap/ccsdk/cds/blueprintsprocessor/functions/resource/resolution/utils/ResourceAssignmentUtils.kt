@@ -26,7 +26,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.Reso
 import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonReactorUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.slf4j.LoggerFactory
@@ -44,55 +43,51 @@ class ResourceAssignmentUtils {
             return JacksonReactorUtils.getMapFromFile(dictionaryFile, ResourceDefinition::class.java)
         }
 
-        // TODO("Modify Value type from Any to JsonNode")
         @Throws(BluePrintProcessorException::class)
         fun setResourceDataValue(resourceAssignment: ResourceAssignment,
                                  raRuntimeService: ResourceAssignmentRuntimeService, value: Any?) {
+            // TODO("See if Validation is needed in future with respect to conversion and Types")
+            return setResourceDataValue(resourceAssignment, raRuntimeService, value.asJsonType())
+        }
 
-            val resourceProp = checkNotNull(resourceAssignment.property) { "Failed in setting resource value for resource mapping $resourceAssignment" }
+        @Throws(BluePrintProcessorException::class)
+        fun setResourceDataValue(resourceAssignment: ResourceAssignment,
+                                 raRuntimeService: ResourceAssignmentRuntimeService, value: JsonNode) {
+            val resourceProp = checkNotNull(resourceAssignment.property) {
+                "Failed in setting resource value for resource mapping $resourceAssignment"
+            }
             checkNotEmpty(resourceAssignment.name) {
                 "Failed in setting resource value for resource mapping $resourceAssignment"
             }
 
             if (resourceAssignment.dictionaryName.isNullOrEmpty()) {
                 resourceAssignment.dictionaryName = resourceAssignment.name
-                logger.warn("Missing dictionary key, setting with template key (${resourceAssignment.name}) as dictionary key (${resourceAssignment.dictionaryName})")
+                logger.warn("Missing dictionary key, setting with template key (${resourceAssignment.name}) " +
+                        "as dictionary key (${resourceAssignment.dictionaryName})")
             }
 
             try {
                 if (resourceProp.type.isNotEmpty()) {
-                    val convertedValue = convertResourceValue(resourceProp.type, value)
-                    logger.info("Setting Resource Value ($convertedValue) for Resource Name (${resourceAssignment.dictionaryName}) of type (${resourceProp.type})")
-                    setResourceValue(resourceAssignment, raRuntimeService, convertedValue)
+                    logger.info("Setting Resource Value ($value) for Resource Name " +
+                            "(${resourceAssignment.dictionaryName}) of type (${resourceProp.type})")
+                    setResourceValue(resourceAssignment, raRuntimeService, value)
                     resourceAssignment.updatedDate = Date()
                     resourceAssignment.updatedBy = BluePrintConstants.USER_SYSTEM
                     resourceAssignment.status = BluePrintConstants.STATUS_SUCCESS
                 }
             } catch (e: Exception) {
-                throw BluePrintProcessorException("Failed in setting value for template key (${resourceAssignment.name}) and " +
-                        "dictionary key (${resourceAssignment.dictionaryName}) of type (${resourceProp.type}) with error message (${e.message})", e)
+                throw BluePrintProcessorException("Failed in setting value for template key " +
+                        "(${resourceAssignment.name}) and dictionary key (${resourceAssignment.dictionaryName}) of " +
+                        "type (${resourceProp.type}) with error message (${e.message})", e)
             }
         }
 
-        private fun setResourceValue(resourceAssignment: ResourceAssignment, raRuntimeService: ResourceAssignmentRuntimeService, value: JsonNode) {
+        private fun setResourceValue(resourceAssignment: ResourceAssignment,
+                                     raRuntimeService: ResourceAssignmentRuntimeService, value: JsonNode) {
+            // TODO("See if Validation is needed wrt to type before storing")
             raRuntimeService.putResolutionStore(resourceAssignment.name, value)
             raRuntimeService.putDictionaryStore(resourceAssignment.dictionaryName!!, value)
             resourceAssignment.property!!.value = value
-        }
-
-        private fun convertResourceValue(type: String, value: Any?): JsonNode {
-
-            return if (value == null || value is NullNode) {
-                logger.info("Returning {} value from convertResourceValue", value)
-                NullNode.instance
-            } else if (BluePrintTypes.validPrimitiveTypes().contains(type) && value is String) {
-                JacksonUtils.convertPrimitiveResourceValue(type, value)
-            } else if (value is String) {
-                JacksonUtils.jsonNode(value)
-            } else {
-                JacksonUtils.getJsonNode(value)
-            }
-
         }
 
         fun setFailedResourceDataValue(resourceAssignment: ResourceAssignment, message: String?) {
@@ -106,8 +101,11 @@ class ResourceAssignmentUtils {
 
         @Throws(BluePrintProcessorException::class)
         fun assertTemplateKeyValueNotNull(resourceAssignment: ResourceAssignment) {
-            val resourceProp = checkNotNull(resourceAssignment.property) { "Failed to populate mandatory resource resource mapping $resourceAssignment" }
-            if (resourceProp.required != null && resourceProp.required!! && (resourceProp.value == null || resourceProp.value !is NullNode)) {
+            val resourceProp = checkNotNull(resourceAssignment.property) {
+                "Failed to populate mandatory resource resource mapping $resourceAssignment"
+            }
+            if (resourceProp.required != null && resourceProp.required!!
+                    && (resourceProp.value == null || resourceProp.value !is NullNode)) {
                 logger.error("failed to populate mandatory resource mapping ($resourceAssignment)")
                 throw BluePrintProcessorException("failed to populate mandatory resource mapping ($resourceAssignment)")
             }
@@ -138,8 +136,11 @@ class ResourceAssignmentUtils {
             return result
         }
 
-        fun transformToRARuntimeService(blueprintRuntimeService: BluePrintRuntimeService<*>, templateArtifactName: String): ResourceAssignmentRuntimeService {
-            val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService(blueprintRuntimeService.id(), blueprintRuntimeService.bluePrintContext())
+        fun transformToRARuntimeService(blueprintRuntimeService: BluePrintRuntimeService<*>,
+                                        templateArtifactName: String): ResourceAssignmentRuntimeService {
+
+            val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService(blueprintRuntimeService.id(),
+                    blueprintRuntimeService.bluePrintContext())
             resourceAssignmentRuntimeService.createUniqueId(templateArtifactName)
             resourceAssignmentRuntimeService.setExecutionContext(blueprintRuntimeService.getExecutionContext() as MutableMap<String, JsonNode>)
 
@@ -147,10 +148,12 @@ class ResourceAssignmentUtils {
         }
 
         @Throws(BluePrintProcessorException::class)
-        fun getPropertyType(raRuntimeService: ResourceAssignmentRuntimeService, dataTypeName: String, propertyName: String): String {
+        fun getPropertyType(raRuntimeService: ResourceAssignmentRuntimeService, dataTypeName: String,
+                            propertyName: String): String {
             lateinit var type: String
             try {
                 val dataTypeProps = checkNotNull(raRuntimeService.bluePrintContext().dataTypeByName(dataTypeName)?.properties)
+
                 val propertyDefinition = checkNotNull(dataTypeProps[propertyName])
                 type = checkNotEmpty(propertyDefinition.type) { "Couldn't get data type ($dataTypeName)" }
                 logger.trace("Data type({})'s property ({}) is ({})", dataTypeName, propertyName, type)

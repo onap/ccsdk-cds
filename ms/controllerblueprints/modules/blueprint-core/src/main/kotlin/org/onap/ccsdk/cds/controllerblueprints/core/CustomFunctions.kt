@@ -45,11 +45,32 @@ fun Double.asJsonPrimitive(): DoubleNode {
     return DoubleNode.valueOf(this)
 }
 
-fun MutableMap<String, *>.asJsonNode(): JsonNode {
+fun <T : Any?> T.asJsonType(): JsonNode {
+    return if (this == null) {
+        NullNode.instance
+    } else {
+        when (this) {
+            is JsonNode ->
+                this
+            is String ->
+                TextNode(this)
+            is Boolean ->
+                BooleanNode.valueOf(this)
+            is Int ->
+                IntNode.valueOf(this.toInt())
+            is Double ->
+                DoubleNode.valueOf(this.toDouble())
+            else ->
+                JacksonUtils.jsonNodeFromObject(this)
+        }
+    }
+}
+
+fun Map<String, *>.asJsonNode(): JsonNode {
     return JacksonUtils.jsonNodeFromObject(this)
 }
 
-fun MutableMap<String, *>.asObjectNode(): ObjectNode {
+fun Map<String, *>.asObjectNode(): ObjectNode {
     return JacksonUtils.objectNodeFromObject(this)
 }
 
@@ -60,7 +81,7 @@ fun format(message: String, vararg args: Any?): String {
     return message
 }
 
-fun <T : Any> MutableMap<String, *>.castOptionalValue(key: String, valueType: KClass<T>): T? {
+fun <T : Any> Map<String, *>.castOptionalValue(key: String, valueType: KClass<T>): T? {
     if (containsKey(key)) {
         return get(key) as? T
     } else {
@@ -68,7 +89,7 @@ fun <T : Any> MutableMap<String, *>.castOptionalValue(key: String, valueType: KC
     }
 }
 
-fun <T : Any> MutableMap<String, *>.castValue(key: String, valueType: KClass<T>): T {
+fun <T : Any> Map<String, *>.castValue(key: String, valueType: KClass<T>): T {
     if (containsKey(key)) {
         return get(key) as T
     } else {
@@ -93,35 +114,23 @@ fun JsonNode.rootFieldsToMap(): MutableMap<String, JsonNode> {
 
 
 fun MutableMap<String, JsonNode>.putJsonElement(key: String, value: Any) {
-    when (value) {
-        is JsonNode ->
-            this[key] = value
-        is String ->
-            this[key] = TextNode(value)
-        is Boolean ->
-            this[key] = BooleanNode.valueOf(value)
-        is Int ->
-            this[key] = IntNode.valueOf(value.toInt())
-        is Double ->
-            this[key] = DoubleNode.valueOf(value.toDouble())
-        else ->
-            this[key] = JacksonUtils.jsonNodeFromObject(value)
-    }
+    val convertedValue = value.asJsonType()
+    this[key] = convertedValue
 }
 
-fun MutableMap<String, JsonNode>.getAsString(key: String): String {
+fun Map<String, JsonNode>.getAsString(key: String): String {
     return this[key]?.asText() ?: throw BluePrintException("couldn't find value for key($key)")
 }
 
-fun MutableMap<String, JsonNode>.getAsBoolean(key: String): Boolean {
+fun Map<String, JsonNode>.getAsBoolean(key: String): Boolean {
     return this[key]?.asBoolean() ?: throw BluePrintException("couldn't find value for key($key)")
 }
 
-fun MutableMap<String, JsonNode>.getAsInt(key: String): Int {
+fun Map<String, JsonNode>.getAsInt(key: String): Int {
     return this[key]?.asInt() ?: throw BluePrintException("couldn't find value for key($key)")
 }
 
-fun MutableMap<String, JsonNode>.getAsDouble(key: String): Double {
+fun Map<String, JsonNode>.getAsDouble(key: String): Double {
     return this[key]?.asDouble() ?: throw BluePrintException("couldn't find value for key($key)")
 }
 
