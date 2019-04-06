@@ -1,0 +1,166 @@
+<!--
+============LICENSE_START==========================================
+===================================================================
+Copyright (C) 2018-19 IBM Intellectual Property. All rights reserved.
+===================================================================
+
+Unless otherwise specified, all software contained herein is licensed
+under the Apache License, Version 2.0 (the License);
+you may not use this software except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+============LICENSE_END============================================
+-->
+<div>
+    <table class="table table-bordered table-condensed" style="margin: 1em; background: white">
+        <thead style="background-color: #3f51b5; color: white;line-height: 26px;font: 400 13.3333px Arial;">
+            <tr class="success">
+                <th>Required</th>
+                <th>Template Input</th>
+                <th>Parameter Name</th>
+                <th>Dictionary Name</th>
+                <th>Dictionary Source</th>
+                <th>Default</th>
+                <th>Data Type</th>
+                <th>Entry Schema</th>
+                <th>Dependency Mapping</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let param of paramData.resourceAccumulatorResolvedData">
+                <td>
+                    <input type="checkbox" />
+                </td>
+                <td>
+                    <input type="text" />
+                </td>
+                <td>{{param["param-value"]}}</td>
+                <td>
+                    <input type="text" style="width: 80%" [(ngModel)]="resorceDictionaryName" />
+                    <i class="fa fa-search" style="margin-left: 1em" aria-hidden="true"></i>
+                </td>
+                <td>
+                    <select>
+            <option value="volvo">Input</option>
+            <option value="saab">Output</option>
+          </select>
+                </td>
+                <td>
+                    <input type="text" />
+                </td>
+                <td>
+                    <input type="text" />
+                </td>
+                <td>
+                    <input type="text" />
+                </td>
+                <td>
+                    <input type="text" />
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <input type="checkbox" />
+                </td>
+                <td>
+                    <input type="text" />
+                </td>
+                <td>Name</td>
+                <td>
+                    <input type="text" />
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </td>
+                <td>
+                    <select>
+            <option value="volvo">Input</option>
+            <option value="saab">Output</option>
+          </select>
+                </td>
+                <td>
+                    <input type="text" />
+                </td>
+                <td>
+                    <input type="text" />
+                </td>
+                <td>
+                    <input type="text" />
+                </td>
+                <td>
+                    <input type="text" />
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <input type="checkbox" />
+                </td>
+                <td>
+                    <input type="text" />
+                </td>
+                <td>Name</td>
+                <td>
+                    <input type="text" />
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </td>
+                <td>
+                    <select>
+            <option value="volvo">Input</option>
+            <option value="saab">Output</option>
+          </select>
+                </td>
+                <td>
+                    <input type="text" />
+                </td>
+                <td>
+                    <input type="text" />
+                </td>
+                <td>
+                    <input type="text" />
+                </td>
+                <td>
+                    <input type="text" />
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <input type="checkbox" />
+                </td>
+                <td>
+                    <input type="text" />
+                </td>
+                <td>Name</td>
+                <td>
+                    <input type="text" />
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </td>
+                <td>
+                    <select>
+            <option value="volvo">Input</option>
+            <option value="saab">Output</option>
+          </select>
+                </td>
+                <td>
+                    <input type="text" />
+                </td>
+                <td>
+                    <input type="text" />
+                </td>
+                <td>
+                    <input type="text" />
+                </td>
+                <td>
+                    <input type="text" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -20,33 +20,55 @@ limitations under the License.
 */
 
 
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 
-//import { IBlueprintHttp } from '../store/models/blueprint-http.model';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpResponse, HttpHeaderResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { LoopbackConfig } from '../../constants/app-constants';
 
 @Injectable()
 export class ApiService {
-  // blueprintUrl = '../../constants/blueprint.json';
-
+  
   constructor(private _http: HttpClient) {
   }
+  enrich(uri: string, body: FormData): Observable<any> {
+    
+    var HTTPOptions = {
+      headers: new HttpHeaders({ 'Accept': 'application/zip', }),
+      observe: "response" as 'body',// to display the full response & as 'body' for type cast
+      'responseType': 'blob' as 'json'
+    }
+    return this._http.post(LoopbackConfig.url + uri, body, HTTPOptions);
 
-  get(url: string, params?: any): Observable<any> {
-            return this._http.get(url);
+  }
+  downloadCBA(uri: string, params?: any): Observable<Blob> {
+    // return this._http.get<Blob>(LoopbackConfig.url+uri);
+    var HTTPOptions = {
+      headers: new HttpHeaders({ 'Accept': 'application/zip; charset=UTF-8', }),
+      observe: "response" as 'body',// to display the full response & as 'body' for type cast
+      'responseType': 'blob' as 'json'
+    }
+    return this._http.get<Blob>(LoopbackConfig.url + uri, HTTPOptions);
+
   }
 
-  post() {
+  post(uri: string, body: FormData): Observable<any> {
     // to do
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': LoopbackConfig.authtoken,
+
+      })
+    };
+    return this._http.post(LoopbackConfig.url + uri, body, httpOptions);
   }
 
   put() {
-      // to do
+    // to do
   }
 
   delete() {
-      // to do
+    // to do
   }
 
 }

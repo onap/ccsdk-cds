@@ -31,7 +31,7 @@ export const GlobalContants = {
     //                     }
     // }
     cbawizard: {
-        stepsRequired: 
+        stepsRequired:
         {
             stepCount: 4,
             steps: [{
@@ -69,26 +69,30 @@ export const GlobalContants = {
         }
     },
     datadictionary: {
-        stepsRequired: 
+        stepsRequired:
         {
             stepCount: 3,
             steps: [{
-                      name: 'Resource Creation', componentURL: '/dataDictionary/selectTemplate',
-                      label: 'Resource Creation',
-                      component: 'ResourceCreationComponent'
+                name: 'Resource Creation', componentURL: '/dataDictionary/selectTemplate',
+                label: 'Resource Creation',
+                component: 'ResourceCreationComponent'
 
-                    },
-                   {
-                      name: 'Edit/Validate', componentURL: '/dataDictionary/modifyTemplate',
-                      label: 'Edit/Validate',
-                      component: 'ResourceEditComponent'
-                   },
-                   {
-                      name: 'Save', componentURL: '/dataDictionary/saveTemplate',
-                      label: 'Save Resource',
-                      component: 'SaveResourceComponent'
-                   }]
-       }
+            },
+            {
+                name: 'Edit/Validate', componentURL: '/dataDictionary/modifyTemplate',
+                label: 'Edit/Validate',
+                component: 'ResourceEditComponent'
+            },
+            {
+                name: 'Save', componentURL: '/dataDictionary/saveTemplate',
+                label: 'Save Resource',
+                component: 'SaveResourceComponent'
+            }]
+        }
 
     }
 };
+export const LoopbackConfig = {
+    url: "http://127.0.0.1:3000",
+    authtoken: "ccsdkapps"
+}

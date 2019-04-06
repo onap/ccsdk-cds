@@ -58,6 +58,25 @@ export class ModifyTemplateComponent implements OnInit {
     }
   }
 
+  getEnriched() {
+    this.editorComp.getEnriched();
+  }
+
+  saveToControllerBlueprint() {
+    this.editorComp.saveToBackend();
+  }
+
+  publishToControllerBlueprint() {
+    this.editorComp.publish();
+  }
+
+  saveToBlueprintProcessor() {
+    this.editorComp.deploy();
+  }
+
+  processBlueprint(){
+    
+  }
   downloadCBA() {
     this.editorComp.download();
   }

@@ -18,17 +18,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================ -->
 
-<div class="container">
+<div class="containerDiv">
     <div class="fileViewContainer">
         <!-- <div style="width:inherit; height: inherit; position: fixed;z-index: 1; background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.4);"></div> -->
         <div style="display: flex;">
             <div>
-                <i class="fa fa-folder delete-add-file" aria-hidden="true" [ngClass] ="{'fa-disabled': selectedFileObj.type == 'file' || selectedFileObj.type == ''}" (click)="enableNameInputEl('createFolder')"></i>
-                <i class="fa fa-file add-file" aria-hidden="true" [ngClass] ="{'fa-disabled' : selectedFileObj.type == 'file' ||selectedFileObj.type == ''}" (click)="enableNameInputEl('createFile')"></i>
-                <i class="fa fa-trash delete-add-file" aria-hidden="true" [ngClass] ="{'fa-disabled' : selectedFileObj.type == ''}"  (click)="deleteFolderOrFile('deleteFile')"></i>
+                <i class="fa fa-folder delete-add-file" aria-hidden="true" [ngClass]="{'fa-disabled': selectedFileObj.type == 'file' || selectedFileObj.type == ''}" (click)="enableNameInputEl('createFolder')"></i>
+                <i class="fa fa-file add-file" aria-hidden="true" [ngClass]="{'fa-disabled' : selectedFileObj.type == 'file' ||selectedFileObj.type == ''}" (click)="enableNameInputEl('createFile')"></i>
+                <i class="fa fa-trash delete-add-file" aria-hidden="true" [ngClass]="{'fa-disabled' : selectedFileObj.type == ''}" (click)="deleteFolderOrFile('deleteFile')"></i>
             </div>
             <div>
-                <input *ngIf="isNameTextboxEnablled" type="text" (focusout)="createFolderOrFile($event)"/>
+                <input *ngIf="isNameTextboxEnablled" type="text" (focusout)="createFolderOrFile($event)" />
             </div>
         </div>
         <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" style="background-color: #ebebeb">
@@ -47,7 +47,17 @@ limitations under the License.
         </mat-tree>
     </div>
     <div class="editorConatiner">
-        <i class="fa fa-save save-icon" style="font-size:24px" (click)="updateBlueprint()"></i>
-        <ace-editor [(text)]="text" [(mode)]="mode" #editor class="aceEditor"></ace-editor>
+        <!-- <i class="fa fa-save save-icon" style="font-size:24px" (click)="updateBlueprint()"></i>
+        <ace-editor [(text)]="text" [(mode)]="mode" #editor class="aceEditor"></ace-editor> -->
+        <div class="normal-editor-mode" [ngClass]="{ 'resource-mapping-mode': viewTemplateMode}">
+            <i class="fa fa-save save-icon" style="font-size:24px" (click)="updateBlueprint()"></i>
+            <ace-editor [(text)]="text" [(mode)]="mode" #editor class="aceEditor"></ace-editor>
+        </div>
+        <button *ngIf="viewTemplateMode" class="btn-active" (click)="loadConfigParams()">Load Config Parameters</button>
+        <button *ngIf="viewTemplateMode" class="btn-active">Auto Map to Data dictionary</button>
+        <div style="height: 50%;overflow: scroll" *ngIf="viewTemplateMode">
+            <app-resource-mapping [paramData]="paramData"></app-resource-mapping>
+        </div>
     </div>
+
 </div>

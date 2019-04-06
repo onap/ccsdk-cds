@@ -35,6 +35,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { IBlueprintState } from 'src/app/common/core/store/models/blueprintState.model';
 import { LoadBlueprintSuccess, SetBlueprintState } from '../../../../common/core/store/actions/blueprint.action'
+import { ApiService } from 'src/app/common/core/services/api.service';
 
 
 interface Node {
@@ -90,6 +91,18 @@ export class EditorComponent implements OnInit {
   filetoDelete: string;
   currentFilePath: string = '';
   selectedFileObj = { name: '', type: '' };
+  viewTemplateMode: boolean = false;
+  paramData : any = {
+    'capability-data': [],
+    'resourceAccumulatorResolvedData' : []
+  };
+  validfile: boolean = false;
+  @ViewChild('fileInput') fileInput;
+  result: string = '';
+  private paths = [];
+  private tree;
+  private fileObject: any;
+  private tocsaMetadaData: any;
 
   private transformer = (node: Node, level: number) => {
     return {
@@ -107,7 +120,7 @@ export class EditorComponent implements OnInit {
 
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
-  constructor(private store: Store<IAppState>) {
+  constructor(private store: Store<IAppState>, private apiservice: ApiService) {
     this.dataSource.data = TREE_DATA;
     this.bpState = this.store.select('blueprint');
     // this.dataSource.data = TREE_DATA;
@@ -184,6 +197,7 @@ export class EditorComponent implements OnInit {
   }
 
   selectFileToView(file) {
+    if(file.name.includes('.vtl')) { this.viewTemplateMode = true;} else { this.viewTemplateMode = false;}
     this.currentFilePath = '';
     this.expandParents(file);
     this.selectedFileObj.name = file.name;
@@ -201,15 +215,115 @@ export class EditorComponent implements OnInit {
     this.setEditorMode();
   }
 
-  SaveToBackend() {
+  getEnriched() {
+    this.create();
     this.zipFile.generateAsync({ type: "blob" })
       .then(blob => {
+        const formData = new FormData();
+        formData.append("file", blob);
+        this.apiservice.enrich("/enrich-blueprint/", formData)
+          .subscribe(
+            (response) => {
+              console.log("Inside blob");
+              var blob = new Blob([response.data], { type: 'application/zip' });
+              const fileName = 'CBA.zip';
+              saveAs(blob, fileName);
+              this.zipFile.files = {};
+              this.zipFile.loadAsync(blob)
+                .then((zip) => {
+                  if (zip) {
+                    this.buildFileViewData(zip);
+                  }
+                });
+              
+            });
+
+      });
+
+  }
+  async buildFileViewData(zip) {
+    this.validfile = false;
+    this.paths = [];
+    for (var file in zip.files) {
+      this.fileObject = {
+        name: zip.files[file].name,
+        data: ''
+      };
+      const value = <any>await  zip.files[file].async('string');
+      this.fileObject.data = value;
+      this.paths.push(this.fileObject); 
+    }
+
+    if(this.paths) {
+      this.paths.forEach(path =>{
+        if(path.name.includes("TOSCA.meta")) {
+          this.validfile = true
+        }
+      });
+    } else {
+      alert('Please update proper file');
+    }
+
+    if(this.validfile) {      
+      this.fetchTOSACAMetadata();
+      this.tree = this.arrangeTreeData(this.paths);
+    } else {
+      alert('Please update proper file with TOSCA metadata');
+    }
+  }
+
+  fetchTOSACAMetadata() {
+    let toscaData = {};
+    this.paths.forEach(file =>{
+      if(file.name.includes('TOSCA.meta')) {
+        let keys = file.data.split("\n");
+        keys.forEach((key)=>{
+          let propertyData = key.split(':');
+          toscaData[propertyData[0]] = propertyData[1];
+        });
+      }
+    });
+    this.blueprintName = (((toscaData['Entry-Definitions']).split('/'))[1]).toString();;
+    console.log(toscaData);
+  }
+
+  
+  saveToBackend() {
+    this.create();
+    this.zipFile.generateAsync({ type: "blob" })
+      .then(blob => {
+        const formData = new FormData();
+        formData.append("file", blob);
+        this.apiservice.post("/create-blueprint/", formData)
+          .subscribe(data => console.log(data));
 
       });
   }
 
   deploy() {
     // to do
+    this.create();
+    this.zipFile.generateAsync({ type: "blob" })
+      .then(blob => {
+        const formData = new FormData();
+        formData.append("file", blob);
+        this.apiservice.post("/deploy-blueprint/", formData)
+          .subscribe(data => console.log(data));
+
+      });
+  }
+
+  publish() {
+    this.create();
+    this.zipFile.generateAsync({ type: "blob" })
+      .then(blob => {
+        const formData = new FormData();
+        formData.append("file", blob);
+        this.apiservice.post("/publish/", formData)
+          .subscribe(data => console.log(data));
+
+      });
+
   }
 
   create() {
@@ -219,12 +333,17 @@ export class EditorComponent implements OnInit {
   }
 
   download() {
-    this.create();
-    var zipFilename = "baseconfiguration.zip";
-    this.zipFile.generateAsync({ type: "blob" })
-      .then(blob => {
-        saveAs(blob, zipFilename);
-      });
+    this.apiservice.downloadCBA("/download-blueprint/baseconfiguration/1.0.0")
+      .subscribe(response => {
+        console.log(response);
+        var blob = new Blob([response], { type: 'application/zip' });
+        const fileName = 'CBA';
+        saveAs(blob, fileName);
+      },
+        error => {
+          console.log(error);
+        }
+      );
   }
   setEditorMode() {
     switch (this.fileExtension) {
@@ -382,6 +501,40 @@ export class EditorComponent implements OnInit {
         this.currentFilePath = currentNode.name + '/' + this.currentFilePath;
         return currentNode;
       }
+    }
+  }
+  loadConfigParams() {
+    console.log(this.currentFilePath);
+   console.log(this.selectedFile);
+   console.log(this.selectedFileObj);
+   console.log(this.selectedFolder);
+   console.log(this.text);
+
+   let parsedData = JSON.parse(this.text);
+   this.paramData.resourceAccumulatorResolvedData = parsedData['resource-accumulator-resolved-data'];
+  let i=0;
+
+   this.paramData.resourceAccumulatorResolvedData.forEach(element => {
+        element.id = i;
+        let tempElement = element['param-value'];
+        let indexLength = tempElement.length;
+        tempElement = tempElement.slice(2,indexLength);
+        let index = tempElement.indexOf('}');
+        tempElement = this.removeItemByIndex(tempElement, index);
+        element['param-value'] = tempElement;
+        i++;
+   });
+
+  }
+
+  removeItemByIndex(paramValue, index) {
+    if(index == 0) {
+      return  paramValue.slice(1)
+    } else if(index > 0) {
+      let indexLength = paramValue.length;
+      return paramValue.slice(0,index) + paramValue.slice(index+1, indexLength);
+    } else {
+      return paramValue;
     }
   }
 }

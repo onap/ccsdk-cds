@@ -20,28 +20,28 @@ limitations under the License.
 -->
 
 <div class="modifyTemp">
-  <app-designer *ngIf="designerMode" (onNodeSelect)="on = !on; viewNodeDetails($event)"></app-designer>
-  <app-editor class="editor-selector" *ngIf="editorMode"></app-editor>
+    <app-designer *ngIf="designerMode" (onNodeSelect)="on = !on; viewNodeDetails($event)"></app-designer>
+    <app-editor class="editor-selector" *ngIf="editorMode"></app-editor>
 </div>
 
 <div style="display: flex;flex-direction: row">
     <div style="width: 30em;">
-    <button class="btn-active" (click) ="changeView()">{{viewText}}</button>
+        <button class="btn-active" (click)="changeView()">{{viewText}}</button>
     </div>
-    <div style="width: 16em">        
+    <div style="width: 16em">
     </div>
     <div style="width: 100%;height: 3em;">
-        <div style="display: flex;flex-direction: row-reverse">        
-        <button class="btn-active" (click)="downloadCBA()">Download</button>
-        <button class="mat-button-active" mat-button [matMenuTriggerFor]="menu">Deploy</button>
-         <mat-menu #menu="matMenu">
-                  <button mat-menu-item>Deploy</button>
-                  <button mat-menu-item>Test</button>
-          </mat-menu>
-        <button [disabled]="!isEnriched" class="btn-active">Publish</button>        
-        <button class="btn-active">Save</button>
-        <button class="btn-active">Enrich</button>
-  
+        <div style="display: flex;flex-direction: row-reverse">
+            <button class="btn-active" (click)="downloadCBA()">Download</button>
+            <button class="mat-button-active" mat-button [matMenuTriggerFor]="menu">Deploy</button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="saveToBlueprintProcessor()">Deploy</button>
+                <button mat-menu-item (click)="processBlueprint()">Test</button>
+            </mat-menu>
+            <button [disabled]="!isEnriched" class="btn-active" (click)="publishToControllerBlueprint()">Publish</button>
+            <button class="btn-active" (click)="saveToControllerBlueprint()">Save</button>
+            <button class="btn-active" (click)="getEnriched()">Enrich</button>
+
         </div>
     </div>
-  </div>
+</div>
