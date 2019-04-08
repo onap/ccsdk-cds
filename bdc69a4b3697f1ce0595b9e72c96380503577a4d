@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "24f79a5d_044e39ef",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/processor/RestResourceResolutionProcessor.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-04-08T14:45:15Z",
+      "side": 1,
+      "message": "Please validate this, This will break the dynamic naming of resource sources.",
+      "range": {
+        "startLine": 199,
+        "startChar": 0,
+        "endLine": 203,
+        "endChar": 9
+      },
+      "revId": "bdc69a4b3697f1ce0595b9e72c96380503577a4d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
