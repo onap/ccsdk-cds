@@ -135,14 +135,15 @@ export class BlueprintRestController {
     });
   }
 
-  @get('/download-blueprint/{id}')
+  @get('/download-blueprint/{name}/{version}')
   async download(
-    @param.path.string('id') id: string,
-    @inject(RestBindings.Http.REQUEST) request: Request,
+    @param.path.string('name') name: string,
+    @param.path.string('version') version:string,
+    // @inject(RestBindings.Http.REQUEST) request: Request,
     @inject(RestBindings.Http.RESPONSE) response: Response,
   ): Promise<any> {
     return new Promise((resolve, reject) => { 
-      this.downloadFileFromBlueprintController("/blueprint-model/download/" + id).then(resp=>{
+      this.downloadFileFromBlueprintController("/blueprint-model/download/by-name/"+name+"/version/"+version).then(resp=>{
         response.setHeader("X-ONAP-RequestID", resp.headers['x-onap-requestid']);
         response.setHeader("Content-Disposition", resp.headers['content-disposition']);
         resolve(resp.body);
