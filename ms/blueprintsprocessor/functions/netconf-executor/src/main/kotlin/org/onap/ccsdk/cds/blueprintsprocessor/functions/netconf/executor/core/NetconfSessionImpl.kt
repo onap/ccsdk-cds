@@ -263,7 +263,7 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
     }
 
     inner class NetconfSessionListenerImpl : NetconfSessionListener {
-        override fun notify(event: NetconfReceivedEvent) {
+        override fun accept(event: NetconfReceivedEvent) {
             val messageId = event.messageId
 
             when (event.type) {
