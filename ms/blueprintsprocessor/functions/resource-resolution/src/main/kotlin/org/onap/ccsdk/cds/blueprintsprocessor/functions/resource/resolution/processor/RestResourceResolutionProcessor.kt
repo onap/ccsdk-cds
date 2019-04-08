@@ -196,7 +196,8 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
         checkNotEmpty(resourceAssignment.dictionaryName) {
             "resource assignment dictionary name is not defined for template key (${resourceAssignment.name})"
         }
-        checkEquals(ResourceDictionaryConstants.SOURCE_PRIMARY_CONFIG_DATA, resourceAssignment.dictionarySource) {
+        check(ResourceDictionaryConstants.SOURCE_PRIMARY_CONFIG_DATA==resourceAssignment.dictionarySource ||
+                ResourceDictionaryConstants.SOURCE_PRIMARY_AAI_DATA==resourceAssignment.dictionarySource) {
             "resource assignment source is not ${ResourceDictionaryConstants.SOURCE_PRIMARY_CONFIG_DATA} but it is " +
                     "${resourceAssignment.dictionarySource}"
         }

@@ -85,5 +85,31 @@
         }
       }
     }
+  },
+  "aai": {
+    "tags": "aai",
+    "name": "aai",
+    "property": {
+      "description": "primary aai data resource",
+      "type": "string"
+    },
+    "updated-by": "Steve, Siani <steve.djissitchi@bell.ca>",
+    "sources": {
+      "primary-aai-data": {
+        "type": "source-rest",
+        "properties": {
+          "type": "JSON",
+          "url-path": "/sample/aai/v14/business/customers",
+          "path": "",
+          "input-key-mapping": {
+          },
+          "output-key-mapping": {
+          },
+          "key-dependencies": [
+            "vnf-id"
+          ]
+        }
+      }
+    }
   }
 }

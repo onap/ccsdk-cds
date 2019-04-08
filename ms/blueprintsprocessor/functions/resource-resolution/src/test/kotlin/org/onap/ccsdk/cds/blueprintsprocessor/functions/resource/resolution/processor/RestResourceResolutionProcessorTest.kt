@@ -56,6 +56,11 @@ class RestResourceResolutionProcessorTest {
                     .resourceDefinitions(bluePrintContext.rootPath)
 
             //TODO ("Mock the dependency values and rest service.")
+            val scriptPropertyInstances: MutableMap<String, Any> = mutableMapOf()
+            scriptPropertyInstances["mock-service1"] = MockCapabilityService()
+            scriptPropertyInstances["mock-service2"] = MockCapabilityService()
+
+            restResourceResolutionProcessor.scriptPropertyInstances = scriptPropertyInstances
 
             val resourceAssignment = ResourceAssignment().apply {
                 name = "rr-name"
@@ -63,6 +68,41 @@ class RestResourceResolutionProcessorTest {
                 dictionarySource = "primary-config-data"
                 property = PropertyDefinition().apply {
                     type = "string"
+                }
+            }
+
+            val processorName = restResourceResolutionProcessor.applyNB(resourceAssignment)
+            assertNotNull(processorName, "couldn't get Rest resource assignment processor name")
+            println(processorName)
+        }
+    }
+
+    @Ignore
+    @Test
+    fun `test rest aai resource resolution`() {
+        runBlocking {
+            val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
+                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+
+            val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)
+
+            restResourceResolutionProcessor.raRuntimeService = resourceAssignmentRuntimeService
+            restResourceResolutionProcessor.resourceDictionaries = ResourceAssignmentUtils
+                    .resourceDefinitions(bluePrintContext.rootPath)
+
+            //TODO ("Mock the dependency values and rest service.")
+            val scriptPropertyInstances: MutableMap<String, Any> = mutableMapOf()
+            scriptPropertyInstances["mock-service1"] = MockCapabilityService()
+            scriptPropertyInstances["mock-service2"] = MockCapabilityService()
+
+            restResourceResolutionProcessor.scriptPropertyInstances = scriptPropertyInstances
+
+            val resourceAssignment = ResourceAssignment().apply {
+                name = "rr-aai"
+                dictionaryName = "primary-aai-data"
+                dictionarySource = "primary-aai-data"
+                property = PropertyDefinition().apply {
+                    type = "JSON"
                 }
             }
 

@@ -1,0 +1,34 @@
+{
+  "name" : "primary-aai-data",
+  "tags" : "primary-aai-data",
+  "updated-by" : "Steve, Siani <steve.djissitchi@bell.ca>",
+  "property" : {
+    "description" : "primary-aai-data",
+    "type" : "string"
+  },
+  "sources" : {
+    "default": {
+      "type": "source-default",
+      "properties": {
+      }
+    },
+    "input": {
+      "type": "source-input",
+      "properties": {
+      }
+    },
+    "primary-aai-data" : {
+      "type" : "source-rest",
+      "properties" : {
+        "type" : "JSON",
+        "url-path" : "/sample/aai/v14/business/customers",
+        "path" : "",
+        "input-key-mapping" : {
+        },
+        "output-key-mapping" : {
+        },
+        "key-dependencies" : []
+      }
+    }
+  }
+}
