@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9192780c_421eefee",
+        "filename": "components/model-catalog/blueprint-model/test-blueprint/baseconfiguration/Definitions/artifact_types.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-08T18:49:50Z",
+      "side": 1,
+      "message": "needs to be added as part of the starter-type package.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 6
+      },
+      "revId": "4592268005e69d8752615cf3ac62e605123721aa",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
