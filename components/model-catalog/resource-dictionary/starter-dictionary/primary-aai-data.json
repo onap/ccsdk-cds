@@ -1,0 +1,39 @@
+{
+  "name" : "primary-aai-data",
+  "tags" : "primary-aai-data",
+  "updated-by" : "Steve, Siani <steve.djissitchi@bell.ca>",
+  "property" : {
+    "description" : "primary-aai-data",
+    "type" : "string"
+  },
+  "sources" : {
+    "default": {
+      "type": "source-default",
+      "properties": {
+      }
+    },
+    "input": {
+      "type": "source-input",
+      "properties": {
+      }
+    },
+    "primary-aai-data" : {
+      "type" : "source-rest",
+      "properties": {
+        "type": "JSON",
+        "url-path": "$aai-port/aai/v14/network/generic-vnfs/generic-vnf/$vnf-id",
+        "path": "",
+        "input-key-mapping": {
+          "aai-port": "port",
+          "vnf-id": "vnf-id"
+        },
+        "output-key-mapping": {
+        },
+        "key-dependencies": [
+          "port",
+          "vnf-id"
+        ]
+      }
+    }
+  }
+}

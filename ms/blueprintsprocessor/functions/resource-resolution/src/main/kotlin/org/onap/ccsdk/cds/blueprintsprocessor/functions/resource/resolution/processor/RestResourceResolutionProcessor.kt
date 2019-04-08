@@ -101,7 +101,7 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
         }
     }
 
-    private fun blueprintWebClientService(resourceAssignment: ResourceAssignment,
+    fun blueprintWebClientService(resourceAssignment: ResourceAssignment,
                                           restResourceSource: RestResourceSource): BlueprintWebClientService {
         return if (isNotEmpty(restResourceSource.endpointSelector)) {
             val restPropertiesJson = raRuntimeService.resolveDSLExpression(restResourceSource.endpointSelector!!)
@@ -195,18 +195,13 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
         checkNotEmpty(resourceAssignment.dictionaryName) {
             "resource assignment dictionary name is not defined for template key (${resourceAssignment.name})"
         }
-        checkEquals(ResourceDictionaryConstants.SOURCE_PRIMARY_CONFIG_DATA, resourceAssignment.dictionarySource) {
-            "resource assignment source is not ${ResourceDictionaryConstants.SOURCE_PRIMARY_CONFIG_DATA} but it is " +
-                    "${resourceAssignment.dictionarySource}"
-        }
-        checkNotEmpty(resourceAssignment.dictionaryName) {
-            "resource assignment dictionary name is not defined for template key (${resourceAssignment.name})"
+        checkNotEmpty(resourceAssignment.dictionarySource) {
+            "resource assignment dictionary source is not defined for template key (${resourceAssignment.name})"
         }
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
         raRuntimeService.getBluePrintError().addError(runtimeException.message!!)
     }
-
 
 }

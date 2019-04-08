@@ -1,0 +1,22 @@
+{
+  "name" : "port_name",
+  "tags" : "port_name",
+  "updated-by" : "Steve, Siani <steve.djissitchi@bell.ca>",
+  "property" : {
+    "description" : "Resource port name",
+    "type" : "string"
+  },
+  "sources" : {
+    "default": {
+      "type": "source-default",
+      "properties": {
+      }
+    },
+    "input": {
+      "type": "source-input",
+      "properties": {
+        "key" : "port_name"
+      }
+    }
+  }
+}
