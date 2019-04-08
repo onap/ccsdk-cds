@@ -50,6 +50,7 @@
         <mockk.version>1.9</mockk.version>
         <dmaap.client.version>1.1.5</dmaap.client.version>
         <jinja.version>2.5.0</jinja.version>
+        <mockkserver.version>5.5.1</mockkserver.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -398,6 +399,12 @@
                 <groupId>io.mockk</groupId>
                 <artifactId>mockk</artifactId>
                 <version>${mockk.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mock-server</groupId>
+                <artifactId>mockserver-netty</artifactId>
+                <version>${mockkserver.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
