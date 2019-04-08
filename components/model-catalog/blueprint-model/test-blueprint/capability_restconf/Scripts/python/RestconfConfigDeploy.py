@@ -67,9 +67,9 @@ class RestconfConfigDeploy(RestconfComponentFunction):
     def retrieve_parameters(self, execution_request):
         resolution_key = self.getDynamicProperties("resolution-key").asText()
         self.log.info("resolution_key: {}", resolution_key)
-        pnf_id = execution_request.payload.get("config-deploy-request").get("config-deploy-properties").get("nf-id")
+        pnf_id = execution_request.payload.get("config-deploy-request").get("config-deploy-properties").get("pnf-id")
         pnf_id = str(pnf_id).strip('\"')
-        self.log.info("nf-id: {}", pnf_id)
+        self.log.info("pnf-id: {}", pnf_id)
         return pnf_id, resolution_key
 
     def recover(self, runtime_exception, execution_request):

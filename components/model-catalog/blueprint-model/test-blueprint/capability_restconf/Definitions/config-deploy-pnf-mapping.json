@@ -1,11 +1,11 @@
 [
   {
-    "name": "nf-id",
+    "name": "pnf-id",
     "input-param": true,
     "property": {
       "type": "string"
     },
-    "dictionary-name": "nf-id",
+    "dictionary-name": "pnf-id",
     "dictionary-source": "input",
     "dependencies": [
     ]

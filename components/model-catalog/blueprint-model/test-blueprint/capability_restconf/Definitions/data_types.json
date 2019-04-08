@@ -13,7 +13,7 @@
         "pnf-ipv4-address" : {
           "type" : "string"
         },
-        "nf-id" : {
+        "pnf-id" : {
           "type" : "string"
         }
       },

@@ -1,9 +1,9 @@
 {
-  "nf-id" : {
-    "tags" : "nf-id",
-    "name" : "nf-id",
+  "pnf-id" : {
+    "tags" : "pnf-id",
+    "name" : "pnf-id",
     "property" : {
-      "description" : "nf-id",
+      "description" : "pnf-id",
       "type" : "string"
     },
     "updated-by" : "Rodrigo Ottero <rodrigo.ottero@est.tech>",
