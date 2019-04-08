@@ -85,5 +85,34 @@
         }
       }
     }
+  },
+  "aai": {
+    "tags": "aai",
+    "name": "aai",
+    "property": {
+      "description": "primary aai data resource",
+      "type": "string"
+    },
+    "updated-by": "Steve, Siani <steve.djissitchi@bell.ca>",
+    "sources": {
+      "primary-aai-data": {
+        "type": "source-rest",
+        "properties": {
+          "type": "JSON",
+          "url-path": "$aai-port/aai/v14/network/generic-vnfs/generic-vnf/$vnf-id",
+          "path": "",
+          "input-key-mapping": {
+            "aai-port": "aai-port",
+            "vnf-id": "vnf-id"
+          },
+          "output-key-mapping": {
+          },
+          "key-dependencies": [
+            "aai-port",
+            "vnf-id"
+          ]
+        }
+      }
+    }
   }
 }

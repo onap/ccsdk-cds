@@ -22,6 +22,7 @@ import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock.MockRestResourceResolutionProcessor
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
@@ -34,13 +35,12 @@ import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [RestResourceResolutionProcessor::class, BluePrintRestLibPropertyService::class,
+@ContextConfiguration(classes = [MockRestResourceResolutionProcessor::class, BluePrintRestLibPropertyService::class,
     BlueprintPropertyConfiguration::class, BluePrintProperties::class])
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class RestResourceResolutionProcessorTest {
-
     @Autowired
-    lateinit var restResourceResolutionProcessor: RestResourceResolutionProcessor
+    lateinit var restResourceResolutionProcessor: MockRestResourceResolutionProcessor
 
     @Ignore
     @Test
@@ -56,6 +56,11 @@ class RestResourceResolutionProcessorTest {
                     .resourceDefinitions(bluePrintContext.rootPath)
 
             //TODO ("Mock the dependency values and rest service.")
+            val scriptPropertyInstances: MutableMap<String, Any> = mutableMapOf()
+            scriptPropertyInstances["mock-service1"] = MockCapabilityService()
+            scriptPropertyInstances["mock-service2"] = MockCapabilityService()
+
+            restResourceResolutionProcessor.scriptPropertyInstances = scriptPropertyInstances
 
             val resourceAssignment = ResourceAssignment().apply {
                 name = "rr-name"
@@ -68,6 +73,41 @@ class RestResourceResolutionProcessorTest {
 
             val processorName = restResourceResolutionProcessor.applyNB(resourceAssignment)
             assertNotNull(processorName, "couldn't get Rest resource assignment processor name")
+            println(processorName)
+        }
+    }
+
+    @Ignore
+    @Test
+    fun `test rest aai resource resolution`() {
+        runBlocking {
+            val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
+                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+
+            val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)
+
+            restResourceResolutionProcessor.raRuntimeService = resourceAssignmentRuntimeService
+            restResourceResolutionProcessor.resourceDictionaries = ResourceAssignmentUtils
+                    .resourceDefinitions(bluePrintContext.rootPath)
+
+            //TODO ("Mock the dependency values and rest service.")
+            val scriptPropertyInstances: MutableMap<String, Any> = mutableMapOf()
+            scriptPropertyInstances["mock-service1"] = MockCapabilityService()
+            scriptPropertyInstances["mock-service2"] = MockCapabilityService()
+
+            restResourceResolutionProcessor.scriptPropertyInstances = scriptPropertyInstances
+
+            val resourceAssignment = ResourceAssignment().apply {
+                name = "rr-aai"
+                dictionaryName = "aai"
+                dictionarySource = "primary-aai-data"
+                property = PropertyDefinition().apply {
+                    type = "string"
+                }
+            }
+
+            val processorName = restResourceResolutionProcessor.applyNB(resourceAssignment)
+            assertNotNull(processorName, "couldn't get AAI Rest resource assignment processor name")
             println(processorName)
         }
     }
