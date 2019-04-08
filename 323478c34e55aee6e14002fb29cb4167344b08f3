@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c606f6bb_1335f897",
+        "filename": "cds-ui/server/src/controllers/resource-dictionary-rest.controller.ts",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 4699
+      },
+      "writtenOn": "2019-04-08T14:55:10Z",
+      "side": 1,
+      "message": "Check post method for Json type content. Request is not multipart",
+      "revId": "323478c34e55aee6e14002fb29cb4167344b08f3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "719ec31a_77c40daa",
+        "filename": "cds-ui/server/src/controllers/resource-dictionary-rest.controller.ts",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 4699
+      },
+      "writtenOn": "2019-04-08T14:55:10Z",
+      "side": 1,
+      "message": "Rename the end point for post method. Also backend consumes application/json. No need of multipart request body. Recheck.",
+      "range": {
+        "startLine": 103,
+        "startChar": 3,
+        "endLine": 103,
+        "endChar": 7
+      },
+      "revId": "323478c34e55aee6e14002fb29cb4167344b08f3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
