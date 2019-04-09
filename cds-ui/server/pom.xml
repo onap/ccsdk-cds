@@ -39,6 +39,8 @@ limitations under the License.
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <npm.executable>npm</npm.executable>
         <onap.nexus.url>https://nexus.onap.org</onap.nexus.url>
+        <image.name>onap/ccsdk-cds-ui-server</image.name>
+        <docker.push.phase>deploy</docker.push.phase>
     </properties>
 
     <build>
@@ -91,6 +93,73 @@ limitations under the License.
 
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.groovy.maven</groupId>
+                <artifactId>gmaven-plugin</artifactId>
+                <version>1.0</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <source>${basedir}/../../TagVersion.groovy</source>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
+    
+        <profiles>
+        <profile>
+            <id>docker</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <version>0.26.1</version>
+                        <inherited>false</inherited>
+                        <configuration>
+                            <images>
+                                <image>
+                                    <name>${image.name}</name>
+                                    <build>
+                                        <cleanup>try</cleanup>
+                                        <dockerFileDir>${basedir}</dockerFileDir>
+                                        <tags>
+                                            <tag>${project.docker.latestminortag.version}</tag>
+                                            <tag>${project.docker.latestfulltag.version}</tag>
+                                            <tag>${project.docker.latesttagtimestamp.version}</tag>
+                                        </tags>
+                                    </build>
+                                </image>
+                            </images>
+                            <verbose>true</verbose>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>generate-images</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>push-images</id>
+                                <phase>${docker.push.phase}</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                    <goal>push</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
 </project>

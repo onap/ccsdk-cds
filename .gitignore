@@ -144,3 +144,4 @@ MacOS
 
 # To Remove Kotlin Script Generated Jars
 **/*cba-kts.jar
+/target/
