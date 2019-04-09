@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e04489f_96d0a022",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/processor/ResourceAssignmentProcessor.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-09T14:21:24Z",
+      "side": 1,
+      "message": "unused import",
+      "range": {
+        "startLine": 30,
+        "startChar": 60,
+        "endLine": 30,
+        "endChar": 89
+      },
+      "revId": "dceb0a9451d3fe0ce55debb403199f54384146a9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f9792c9f_5f674d46",
+        "filename": "ms/controllerblueprints/modules/blueprint-core/pom.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-09T14:21:24Z",
+      "side": 1,
+      "message": "already there line 4",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 52
+      },
+      "revId": "dceb0a9451d3fe0ce55debb403199f54384146a9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f5fc584e_0a2efd68",
+        "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/BluePrintConstants.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-09T14:21:24Z",
+      "side": 1,
+      "message": "already there line 3",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 51
+      },
+      "revId": "dceb0a9451d3fe0ce55debb403199f54384146a9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ae480623_7e2385cf",
+        "filename": "ms/controllerblueprints/modules/service/pom.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-09T14:21:24Z",
+      "side": 1,
+      "message": "no need for this, already line 5",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 51
+      },
+      "revId": "dceb0a9451d3fe0ce55debb403199f54384146a9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "34b69e55_9d9e8d77",
+        "filename": "ms/controllerblueprints/parent/pom.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-09T14:21:24Z",
+      "side": 1,
+      "message": "already line 5",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 51
+      },
+      "revId": "dceb0a9451d3fe0ce55debb403199f54384146a9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
