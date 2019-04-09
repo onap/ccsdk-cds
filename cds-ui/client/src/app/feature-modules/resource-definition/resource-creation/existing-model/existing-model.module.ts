@@ -20,18 +20,16 @@
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SearchResourceComponent } from './search-resource/search-resource.component';
+// import { SearchResourceComponent } from './search-resource/search-resource.component';
 import { ExistingModelRoutingModule } from './existing-model-routing.module';
-import { ExistingModelComponent } from './existing-model.component';
+//import { ExistingModelComponent } from './existing-model.component';
 
 @NgModule({
-  declarations: [ExistingModelComponent,SearchResourceComponent],
+  declarations: [],
   imports: [
     CommonModule,
-    ExistingModelRoutingModule,
-    SearchResourceComponent,
+    ExistingModelRoutingModule
   ],
-  exports:[ExistingModelComponent,
-    SearchResourceComponent]
+  exports:[]
 })
 export class ExistingModelModule { }

@@ -22,6 +22,7 @@ limitations under the License.
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HomeComponent } from './components/home/home.component';
+import { HeaderComponent} from './components/header/header.component';
 import { CBAWizardComponent } from './components/cbawizard/cbawizard.component';
 import { MatToolbarModule,MatIconModule, MatButtonModule, MatSidenavModule,  MatListModule, MatGridListModule, MatCardModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatFormFieldModule, MatStepperModule} from '@angular/material';
 import { RouterModule } from "@angular/router";
@@ -31,13 +32,15 @@ import { SearchPipe } from './pipes/search.pipe';
   declarations: [
     HomeComponent,
     CBAWizardComponent,
-    SearchPipe
+    SearchPipe,
+    HeaderComponent
     
   ],
   exports: [
     HomeComponent,
     CBAWizardComponent,
-    SearchPipe
+    SearchPipe,
+    HeaderComponent
   ],
   imports: [
     CommonModule,
