@@ -264,12 +264,12 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
 
     inner class NetconfSessionListenerImpl : NetconfSessionListener {
         override fun notify(event: NetconfReceivedEvent) {
-            val messageId = event.getMessageID()
+            val messageId = event.messageId
 
-            when (event.getType()) {
+            when (event.type) {
                 NetconfReceivedEvent.Type.DEVICE_UNREGISTERED -> disconnect()
-                NetconfReceivedEvent.Type.DEVICE_ERROR -> errorReplies.add(event.getMessagePayload())
-                NetconfReceivedEvent.Type.DEVICE_REPLY -> replies[messageId]?.complete(event.getMessagePayload())
+                NetconfReceivedEvent.Type.DEVICE_ERROR -> errorReplies.add(event.messagePayload)
+                NetconfReceivedEvent.Type.DEVICE_REPLY -> replies[messageId]?.complete(event.messagePayload)
                 NetconfReceivedEvent.Type.SESSION_CLOSED -> disconnect()
             }
         }
