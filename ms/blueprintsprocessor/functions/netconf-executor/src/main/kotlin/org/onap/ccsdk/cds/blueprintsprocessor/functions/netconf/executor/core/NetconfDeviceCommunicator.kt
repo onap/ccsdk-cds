@@ -57,11 +57,7 @@ class NetconfDeviceCommunicator(private var inputStream: InputStream,
                 val cInt = bufferReader.read()
                 if (cInt == -1) {
                     log.error("$deviceInfo: Received cInt = -1")
-//                    bufferReader.close()
                     socketClosed = true
-//                    sessionListener.notify(NetconfReceivedEvent(
-//                        NetconfReceivedEvent.Type.SESSION_CLOSED,
-//                        deviceInfo = deviceInfo))
                 }
                 val c = cInt.toChar()
                 state = state.evaluateChar(c)
@@ -71,7 +67,7 @@ class NetconfDeviceCommunicator(private var inputStream: InputStream,
                     if (deviceReply == RpcMessageUtils.END_PATTERN) {
                         socketClosed = true
                         bufferReader.close()
-                        sessionListener.notify(NetconfReceivedEvent(
+                        sessionListener.accept(NetconfReceivedEvent(
                             NetconfReceivedEvent.Type.DEVICE_UNREGISTERED,
                             deviceInfo = deviceInfo))
                     } else {
@@ -84,7 +80,7 @@ class NetconfDeviceCommunicator(private var inputStream: InputStream,
                     if (!NetconfMessageUtils.validateChunkedFraming(deviceReply)) {
                         log.debug("$deviceInfo: Received badly framed message $deviceReply")
                         socketClosed = true
-                        sessionListener.notify(NetconfReceivedEvent(
+                        sessionListener.accept(NetconfReceivedEvent(
                             NetconfReceivedEvent.Type.DEVICE_ERROR,
                             deviceInfo = deviceInfo))
                     } else {
@@ -98,98 +94,89 @@ class NetconfDeviceCommunicator(private var inputStream: InputStream,
 
         } catch (e: IOException) {
             log.warn("$deviceInfo: Fail while reading from channel", e)
-            sessionListener.notify(NetconfReceivedEvent(
+            sessionListener.accept(NetconfReceivedEvent(
                 NetconfReceivedEvent.Type.DEVICE_ERROR,
                 deviceInfo = deviceInfo))
         }
 
     }
 
-    private enum class NetconfMessageState {
+    /**
+     * State machine for the Netconf message parser
+     */
+    internal enum class NetconfMessageState {
         NO_MATCHING_PATTERN {
             override fun evaluateChar(c: Char): NetconfMessageState {
-                return if (c == ']') {
-                    FIRST_BRACKET
-                } else if (c == '\n') {
-                    FIRST_LF
-                } else {
-                    this
+                return when (c) {
+                    ']' -> FIRST_BRACKET
+                    '\n' -> FIRST_LF
+                    else -> this
                 }
             }
         },
         FIRST_BRACKET {
             override fun evaluateChar(c: Char): NetconfMessageState {
-                return if (c == ']') {
-                    SECOND_BRACKET
-                } else {
-                    NO_MATCHING_PATTERN
+                return when (c) {
+                    ']' -> SECOND_BRACKET
+                    else -> NO_MATCHING_PATTERN
                 }
             }
         },
         SECOND_BRACKET {
             override fun evaluateChar(c: Char): NetconfMessageState {
-                return if (c == '>') {
-                    FIRST_BIGGER
-                } else {
-                    NO_MATCHING_PATTERN
+                return when (c) {
+                    '>' -> FIRST_BIGGER
+                    else -> NO_MATCHING_PATTERN
                 }
             }
         },
         FIRST_BIGGER {
             override fun evaluateChar(c: Char): NetconfMessageState {
-                return if (c == ']') {
-                    THIRD_BRACKET
-                } else {
-                    NO_MATCHING_PATTERN
+                return when (c) {
+                    ']' -> THIRD_BRACKET
+                    else -> NO_MATCHING_PATTERN
                 }
             }
         },
         THIRD_BRACKET {
             override fun evaluateChar(c: Char): NetconfMessageState {
-                return if (c == ']') {
-                    ENDING_BIGGER
-                } else {
-                    NO_MATCHING_PATTERN
+                return when (c) {
+                    ']' -> ENDING_BIGGER
+                    else -> NO_MATCHING_PATTERN
                 }
             }
         },
         ENDING_BIGGER {
             override fun evaluateChar(c: Char): NetconfMessageState {
-                return if (c == '>') {
-                    END_PATTERN
-                } else {
-                    NO_MATCHING_PATTERN
+                return when (c) {
+                    '>' -> END_PATTERN
+                    else -> NO_MATCHING_PATTERN
                 }
             }
         },
         FIRST_LF {
             override fun evaluateChar(c: Char): NetconfMessageState {
-                return if (c == '#') {
-                    FIRST_HASH
-                } else if (c == ']') {
-                    FIRST_BRACKET
-                } else if (c == '\n') {
-                    this
-                } else {
-                    NO_MATCHING_PATTERN
+                return when (c) {
+                    '#' -> FIRST_HASH
+                    ']' -> FIRST_BRACKET
+                    '\n' -> this
+                    else -> NO_MATCHING_PATTERN
                 }
             }
         },
         FIRST_HASH {
             override fun evaluateChar(c: Char): NetconfMessageState {
-                return if (c == '#') {
-                    SECOND_HASH
-                } else {
-                    NO_MATCHING_PATTERN
+                return when (c) {
+                    '#' -> SECOND_HASH
+                    else -> NO_MATCHING_PATTERN
                 }
             }
         },
         SECOND_HASH {
             override fun evaluateChar(c: Char): NetconfMessageState {
-                return if (c == '\n') {
-                    END_CHUNKED_PATTERN
-                } else {
-                    NO_MATCHING_PATTERN
+                return when (c) {
+                    '\n' -> END_CHUNKED_PATTERN
+                    else -> NO_MATCHING_PATTERN
                 }
             }
         },
@@ -204,6 +191,11 @@ class NetconfDeviceCommunicator(private var inputStream: InputStream,
             }
         };
 
+        /**
+         * Evaluate next transition state based on current state and the character read
+         * @param c character read in
+         * @return result of lookup of transition to the next {@link NetconfMessageState}
+         */
         internal abstract fun evaluateChar(c: Char): NetconfMessageState
     }
 
@@ -234,7 +226,7 @@ class NetconfDeviceCommunicator(private var inputStream: InputStream,
         } else {
             log.error("$deviceInfo: Invalid message received: \n $deviceReply")
         }
-        sessionListener.notify(NetconfReceivedEvent(
+        sessionListener.accept(NetconfReceivedEvent(
             NetconfReceivedEvent.Type.DEVICE_REPLY,
             deviceReply,
             NetconfMessageUtils.getMsgId(deviceReply),
