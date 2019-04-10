@@ -1,5 +1,5 @@
 {
-	"description": "This is Configuration Velocity Template",
+	"description": "This is Configuration Velocity and Jinja Template",
 	"version": "1.0.0",
 	"properties": {
 		"action-names": {

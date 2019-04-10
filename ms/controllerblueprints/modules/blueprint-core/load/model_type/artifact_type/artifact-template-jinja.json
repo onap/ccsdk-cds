@@ -1,0 +1,8 @@
+{
+  "description": "Jinja Template used for Configuration",
+  "version": "1.0.0",
+  "file_ext": [
+    "jinja"
+  ],
+  "derived_from": "tosca.artifacts.Implementation"
+}

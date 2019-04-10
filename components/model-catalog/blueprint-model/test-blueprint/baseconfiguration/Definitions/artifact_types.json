@@ -8,6 +8,14 @@
       ],
       "derived_from": "tosca.artifacts.Implementation"
     },
+    "artifact-template-jinja": {
+      "description": "Jinja Template used for Configuration",
+      "version": "1.0.0",
+      "file_ext": [
+        "jinja"
+      ],
+      "derived_from": "tosca.artifacts.Implementation"
+    },
     "artifact-mapping-resource": {
       "description": "Velocity Template Resource Mapping File used along with Configuration template",
       "version": "1.0.0",
