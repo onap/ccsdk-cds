@@ -35,6 +35,7 @@
         <module>db-lib</module>
         <module>rest-lib</module>
         <module>dmaap-lib</module>
+        <module>grpc-lib</module>
     </modules>
     <dependencies>
         <dependency>
