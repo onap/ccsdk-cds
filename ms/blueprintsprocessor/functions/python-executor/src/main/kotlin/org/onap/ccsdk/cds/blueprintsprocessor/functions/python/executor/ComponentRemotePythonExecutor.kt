@@ -68,7 +68,7 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
         val dynamicProperties = getOperationInput(INPUT_DYNAMIC_PROPERTIES)
 
         // TODO("Python execution command and Resolve some expressions with dynamic properties")
-        val scriptCommand: String = pythonScript.absolutePath
+        val scriptCommand: String = "python ${pythonScript.absolutePath}"
 
         val packages = operationAssignment.implementation?.dependencies
         // If dependencies are defined, then install in remote server
