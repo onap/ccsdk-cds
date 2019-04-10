@@ -1,0 +1,44 @@
+syntax = "proto3";
+import "google/protobuf/struct.proto";
+option java_multiple_files = true;
+package org.onap.ccsdk.cds.controllerblueprints.command.api;
+
+message ExecutionInput {
+    Identifiers identifiers = 1;
+    ScriptType scriptType = 2;
+    string command = 3;
+    int32 timeOut = 4;
+    google.protobuf.Struct properties = 5;
+}
+
+message PrepareEnvInput {
+    string requestId = 1;
+    ScriptType scriptType = 2;
+    repeated string packages = 3;
+    int32 timeOut = 4;
+    google.protobuf.Struct properties = 5;
+}
+
+message Identifiers {
+    string requestId = 1;
+    string blueprintName = 2;
+    string blueprintVersion = 3;
+}
+
+message ExecutionOutput {
+    string requestId = 1;
+    string response = 2;
+}
+
+enum ScriptType {
+    PYTHON = 0;
+    ANSIBLE = 1;
+    KOTLIN = 2;
+    SH = 3;
+}
+
+service CommandExecutorService {
+    rpc prepareEnv (PrepareEnvInput) returns (ExecutionOutput);
+    rpc executeCommand (ExecutionInput) returns (ExecutionOutput);
+}
+
