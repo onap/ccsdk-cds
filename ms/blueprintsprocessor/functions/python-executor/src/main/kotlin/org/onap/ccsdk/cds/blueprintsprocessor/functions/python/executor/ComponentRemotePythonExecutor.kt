@@ -18,6 +18,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor
 
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.*
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ExecutionServiceConstant
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.RemoteScriptExecutionService
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.checkFileExists
@@ -26,16 +27,17 @@ import org.onap.ccsdk.cds.controllerblueprints.core.data.OperationAssignment
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
 
-
+@ConditionalOnBean(name = [ExecutionServiceConstant.SERVICE_GRPC_REMOTE_SCRIPT_EXECUTION])
 @Component("component-remote-python-executor")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class ComponentRemotePythonExecutor(private val remoteScriptExecutionService: RemoteScriptExecutionService)
     : AbstractComponentFunction() {
 
-    private val log = LoggerFactory.getLogger(ComponentRemotePythonExecutor::class.java)
+    private val log = LoggerFactory.getLogger(ComponentRemotePythonExecutor::class.java)!!
 
     companion object {
         const val INPUT_ENDPOINT_SELECTOR = "endpoint-selector"
@@ -63,34 +65,42 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
         val pythonScript = normalizedFile(bluePrintContext.rootPath, artifactDefinition.file)
 
         checkFileExists(pythonScript) { "python script(${pythonScript.absolutePath}) doesn't exists" }
-        //TODO ("Get the ENDPOINT SELECTOR and resolve the Remote Server")
+
         val endPointSelector = getOperationInput(INPUT_ENDPOINT_SELECTOR)
         val dynamicProperties = getOperationInput(INPUT_DYNAMIC_PROPERTIES)
 
         // TODO("Python execution command and Resolve some expressions with dynamic properties")
         val scriptCommand: String = "python ${pythonScript.absolutePath}"
 
-        val packages = operationAssignment.implementation?.dependencies
-        // If dependencies are defined, then install in remote server
-        if (packages != null && !packages.isEmpty()) {
-            val prepareEnvInput = PrepareRemoteEnvInput(requestId = processId,
-                    remoteScriptType = RemoteScriptType.PYTHON,
-                    packages = arrayListOf()
-            )
-            val prepareEnvOutput = remoteScriptExecutionService.prepareEnv(prepareEnvInput)
-            checkNotNull(prepareEnvOutput) {
-                "failed to get prepare remote env response for requestId(${prepareEnvInput.requestId})"
-            }
-        }
+        val dependencies = operationAssignment.implementation?.dependencies
 
-        val remoteExecutionInput = RemoteScriptExecutionInput(
-                requestId = processId,
-                remoteIdentifier = RemoteIdentifier(blueprintName = blueprintName, blueprintVersion = blueprintVersion),
-                remoteScriptType = RemoteScriptType.PYTHON,
-                command = scriptCommand)
-        val remoteExecutionOutput = remoteScriptExecutionService.executeCommand(remoteExecutionInput)
-        checkNotNull(remoteExecutionOutput) {
-            "failed to get prepare remote command response for requestId(${remoteExecutionOutput.requestId})"
+        try {
+            // Open GRPC Connection
+            remoteScriptExecutionService.init(endPointSelector.asText())
+
+            // If dependencies are defined, then install in remote server
+            if (dependencies != null && !dependencies.isEmpty()) {
+                val prepareEnvInput = PrepareRemoteEnvInput(requestId = processId,
+                        remoteScriptType = RemoteScriptType.PYTHON,
+                        packages = dependencies
+                )
+                val prepareEnvOutput = remoteScriptExecutionService.prepareEnv(prepareEnvInput)
+                checkNotNull(prepareEnvOutput) {
+                    "failed to get prepare remote env response for requestId(${prepareEnvInput.requestId})"
+                }
+            }
+
+            val remoteExecutionInput = RemoteScriptExecutionInput(
+                    requestId = processId,
+                    remoteIdentifier = RemoteIdentifier(blueprintName = blueprintName, blueprintVersion = blueprintVersion),
+                    remoteScriptType = RemoteScriptType.PYTHON,
+                    command = scriptCommand)
+            val remoteExecutionOutput = remoteScriptExecutionService.executeCommand(remoteExecutionInput)
+            checkNotNull(remoteExecutionOutput) {
+                "failed to get prepare remote command response for requestId(${remoteExecutionOutput.requestId})"
+            }
+        } finally {
+            remoteScriptExecutionService.close()
         }
     }
 
