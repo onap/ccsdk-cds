@@ -396,7 +396,7 @@ class NetconfMessageUtils {
 
         fun checkReply(reply: String?): Boolean {
             return if (reply != null) {
-                !reply.contains("rpc-error>") || reply.contains("warning") || reply.contains("ok/>")
+                !reply.contains("rpc-error>") || reply.contains("ok/>")
             } else false
         }
     }
