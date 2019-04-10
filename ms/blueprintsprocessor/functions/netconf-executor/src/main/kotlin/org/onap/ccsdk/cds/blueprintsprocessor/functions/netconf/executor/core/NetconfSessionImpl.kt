@@ -34,22 +34,21 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.utils.R
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.utils.RpcStatus
 import org.slf4j.LoggerFactory
 import java.io.IOException
-import java.util.*
+import java.util.Collections
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
-import java.util.concurrent.atomic.AtomicReference
 
 class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcService: NetconfRpcService) :
     NetconfSession {
 
     private val log = LoggerFactory.getLogger(NetconfSessionImpl::class.java)
 
-    private val errorReplies: MutableList<String> = Collections.synchronizedList(listOf())
+    private val errorReplies: MutableList<String> = Collections.synchronizedList(mutableListOf())
     private val replies: MutableMap<String, CompletableFuture<String>> = ConcurrentHashMap()
-    private val deviceCapabilities = setOf<String>()
+    private val deviceCapabilities = mutableSetOf<String>()
 
     private var connectionTimeout: Long = 0
     private var replyTimeout: Int = 0
@@ -117,11 +116,8 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
             } catch (ioe: IOException) {
                 log.warn("$deviceInfo: Error closing session($sessionId) for host($deviceInfo)", ioe)
             }
-
-//            NetconfReceivedEvent(NetconfReceivedEvent.Type.SESSION_CLOSED, "",
-//                "Closed due to unexpected error " + e.cause, "-1", deviceInfo)
-            errorReplies.clear() // move to cleanUp()?
-            replies.clear()
+            clearErrorReplies()
+            clearReplies()
 
             throw NetconfException("$deviceInfo: Closing session $sessionId for request $formattedRequest", e)
         }
@@ -144,27 +140,26 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
         try {
             if (client.isClosed) {
                 log.info("Trying to restart the whole SSH connection with {}", deviceInfo)
-                replies.clear()
+                clearReplies()
                 startConnection()
             } else if (session.isClosed) {
                 log.info("Trying to restart the session with {}", deviceInfo)
-                replies.clear()
+                clearReplies()
                 startSession()
             } else if (channel.isClosed) {
                 log.info("Trying to reopen the channel with {}", deviceInfo)
-                replies.clear()
+                clearReplies()
                 openChannel()
             } else {
                 return
             }
         } catch (e: IOException) {
-            log.error("Can't reopen connection for device {}", e.message)
+            log.error("Can't reopen connection for device {} error: {}", deviceInfo, e.message)
             throw NetconfException(String.format("Cannot re-open the connection with device (%s)", deviceInfo), e)
         } catch (e: IllegalStateException) {
-            log.error("Can't reopen connection for device {}", e.message)
+            log.error("Can't reopen connection for device {} error: {}", deviceInfo, e.message)
             throw NetconfException(String.format("Cannot re-open the connection with device (%s)", deviceInfo), e)
         }
-
     }
 
     override fun getDeviceInfo(): DeviceInfo {
@@ -191,8 +186,13 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
 
     }
 
-    private fun startClient() {
+    //Needed to unit test connect method interacting with client.start in startClient() below
+    private fun setupNewSSHClient() {
         client = SshClient.setUpDefaultClient()
+    }
+
+    private fun startClient() {
+        setupNewSSHClient()
 
         client.properties.putIfAbsent(FactoryManager.IDLE_TIMEOUT, TimeUnit.SECONDS.toMillis(idleTimeout.toLong()))
         client.properties.putIfAbsent(FactoryManager.NIO2_READ_TIMEOUT, TimeUnit.SECONDS.toMillis(idleTimeout + 15L))
@@ -304,4 +304,7 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
 
     internal fun clearErrorReplies() = errorReplies.clear()
     internal fun clearReplies() = replies.clear()
+    internal fun setClient(client: SshClient) { this.client = client }
+    internal fun setSession(session: ClientSession) { this.session = session }
+    internal fun setChannel(channel: ClientChannel) { this.channel = channel }
 }

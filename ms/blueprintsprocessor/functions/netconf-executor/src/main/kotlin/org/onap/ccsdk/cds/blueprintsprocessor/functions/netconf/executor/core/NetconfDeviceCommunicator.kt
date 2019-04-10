@@ -30,6 +30,7 @@ import java.io.OutputStream
 import java.io.OutputStreamWriter
 import java.nio.charset.StandardCharsets
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.TimeUnit
 
 class NetconfDeviceCommunicator(private var inputStream: InputStream,
                                 private var out: OutputStream,
@@ -231,5 +232,22 @@ class NetconfDeviceCommunicator(private var inputStream: InputStream,
             deviceReply,
             NetconfMessageUtils.getMsgId(deviceReply),
             deviceInfo))
+    }
+
+    /**
+     * Gets the value of the {@link CompletableFuture} from {@link NetconfDeviceCommunicator#sendMessage}
+     * This function is used by NetconfSessionImpl. Needed to wrap exception testing in NetconfSessionImpl.
+     * @param fut {@link CompletableFuture} object
+     * @param timeout the maximum time to wait
+     * @param timeUnit the time unit of the timeout argument
+     * @return the result value
+     * @throws CancellationException if this future was cancelled
+     * @throws ExecutionException if this future completed exceptionally
+     * @throws InterruptedException if the current thread was interrupted while waiting
+     * @throws TimeoutException if the wait timed outStream
+     */
+    internal fun getFutureFromSendMessage(
+        fut: CompletableFuture<String>, timeout: Long, timeUnit: TimeUnit): String {
+        return fut.get(timeout, timeUnit)
     }
 }
