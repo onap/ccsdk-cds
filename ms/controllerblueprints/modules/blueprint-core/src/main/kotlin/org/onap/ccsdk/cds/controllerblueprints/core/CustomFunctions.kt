@@ -97,6 +97,10 @@ fun <T : Any> Map<String, *>.castValue(key: String, valueType: KClass<T>): T {
     }
 }
 
+fun ArrayNode.asListOfString(): List<String> {
+    return JacksonUtils.getListFromJsonNode(this, String::class.java)
+}
+
 /**
  * Convert Json to map of json node, the root fields will be map keys
  */
