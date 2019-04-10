@@ -236,7 +236,7 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
     }
 
     private fun setupHandler() {
-        val sessionListener: NetconfSessionListener = NetconfSessionListenerImpl()
+        val sessionListener: NetconfSessionListener = NetconfSessionListenerImpl(this)
         streamHandler = NetconfDeviceCommunicator(channel.invertedOut, channel.invertedIn, deviceInfo,
             sessionListener, replies)
 
@@ -262,19 +262,6 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
         }
     }
 
-    inner class NetconfSessionListenerImpl : NetconfSessionListener {
-        override fun accept(event: NetconfReceivedEvent) {
-            val messageId = event.messageId
-
-            when (event.type) {
-                NetconfReceivedEvent.Type.DEVICE_UNREGISTERED -> disconnect()
-                NetconfReceivedEvent.Type.DEVICE_ERROR -> errorReplies.add(event.messagePayload)
-                NetconfReceivedEvent.Type.DEVICE_REPLY -> replies[messageId]?.complete(event.messagePayload)
-                NetconfReceivedEvent.Type.SESSION_CLOSED -> disconnect()
-            }
-        }
-    }
-
     fun sessionstatus(state:String): Boolean{
         return when (state){
             "Close" -> channel.isClosed
@@ -282,4 +269,39 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
             else -> false
         }
     }
+
+    internal fun setStreamHandler(streamHandler: NetconfDeviceCommunicator) {
+        this.streamHandler = streamHandler
+    }
+
+    /**
+     * Add an error reply
+     * Used by {@link NetconfSessionListenerImpl}
+     */
+    internal fun addDeviceErrorReply(errReply: String) {
+        println("addDeviceErrorReply (errReply: $errReply") //TODO : get rid of this.
+        errorReplies.add(errReply)
+    }
+
+    /**
+     * Add a reply from the device
+     * Used by {@link NetconfSessionListenerImpl}
+     */
+    internal fun addDeviceReply(messageId: String, replyMsg: String) {
+        println("addDeviceReply (messageId: $messageId replyMsg: $replyMsg") //TODO : get rid of this.
+        replies[messageId]?.complete(replyMsg)
+    }
+
+    /**
+     * Internal function for accessing replies for testing.
+     */
+    internal fun getReplies() = replies
+
+    /**
+     * internal function for accessing errorReplies for testing.
+     */
+    internal fun getErrorReplies() = errorReplies
+
+    internal fun clearErrorReplies() = errorReplies.clear()
+    internal fun clearReplies() = replies.clear()
 }
