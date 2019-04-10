@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c3b8825a_d408e77a",
+        "filename": "ms/blueprintsprocessor/functions/netconf-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/netconf/executor/core/NetconfDeviceCommunicator.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-10T19:46:50Z",
+      "side": 1,
+      "message": "I don\u0027t understand the purpose of this wrapper function",
+      "range": {
+        "startLine": 237,
+        "startChar": 0,
+        "endLine": 252,
+        "endChar": 5
+      },
+      "revId": "771c12a1226eed4fed174161e068a5e7181ef7e0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
