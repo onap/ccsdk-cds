@@ -1,0 +1,60 @@
+syntax = "proto3";
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+option java_multiple_files = true;
+package org.onap.ccsdk.cds.controllerblueprints.command.api;
+
+message ExecutionInput {
+    string requestId = 1;
+    // Optional Blueprint Information used to identify CBA content information in shared file structure environment.
+    Identifiers identifiers = 2;
+    ScriptType scriptType = 3;
+    // Actual Command to Execute in Scripting Environment
+    string command = 4;
+    int32 timeOut = 5;
+    // Extra Dynamic Properties for Command processing in JSON format
+    google.protobuf.Struct properties = 6;
+    // Request Time Stamp
+    google.protobuf.Timestamp timestamp = 7;
+}
+
+message PrepareEnvInput {
+    Identifiers identifiers = 1;
+    // Optional Id used to correlate multiple requests so that it can identify previous request information.
+    string correlationId = 2;
+    ScriptType scriptType = 3;
+    repeated string packages = 4;
+    int32 timeOut = 5;
+    google.protobuf.Struct properties = 6;
+    google.protobuf.Timestamp timestamp = 7;
+}
+
+message Identifiers {
+    string blueprintName = 1;
+    string blueprintVersion = 2;
+}
+
+message ExecutionOutput {
+    string requestId = 1;
+    string response = 2;
+    ResponseStatus status = 3;
+    google.protobuf.Timestamp timestamp = 4;
+}
+
+enum ResponseStatus {
+    SUCCESS = 0;
+    FAILURE = 1;
+}
+
+enum ScriptType {
+    PYTHON = 0;
+    ANSIBLE = 1;
+    KOTLIN = 2;
+    SH = 3;
+}
+
+service CommandExecutorService {
+    rpc prepareEnv (PrepareEnvInput) returns (ExecutionOutput);
+    rpc executeCommand (ExecutionInput) returns (ExecutionOutput);
+}
+
