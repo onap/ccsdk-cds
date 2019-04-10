@@ -54,6 +54,10 @@
             <artifactId>rest-lib</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <artifactId>grpc-lib</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
             <artifactId>resource-dict</artifactId>
         </dependency>
