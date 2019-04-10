@@ -18,6 +18,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.onap.ccsdk.cds</groupId>
   <artifactId>cds-sdc-listener-application</artifactId>
+  <version>0.4.2-SNAPSHOT</version>
   <name>CDS-SDC Listener Application </name>
 
   <properties>
