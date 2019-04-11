@@ -168,7 +168,6 @@ class NetconfSessionImplTest {
 
     }
 
-    @Ignore //TODO undo close method removal
     @Test
     fun `disconnect wraps exception from ssh closing error`() {
         val netconfSessionSpy = spyk(netconfSession, recordPrivateCalls = true)
@@ -525,7 +524,6 @@ class NetconfSessionImplTest {
         verify { mockSshClient.close() }
     }
 
-    @Ignore
     @Test
     fun `disconnect wraps IOException if channel doesn't close`() { //this test is equivalent to others
         every { rpcService.closeSession(false) } returns SUCCESSFUL_DEVICE_RESPONSE
