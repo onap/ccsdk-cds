@@ -1,34 +1,48 @@
 /*
- * Copyright (C) 2019 Bell Canada. All rights reserved.
+ * Copyright © 2019 Bell Canada
  *
- * NOTICE:  All the intellectual and technical concepts contained herein are
- * proprietary to Bell Canada and are protected by trade secret or copyright law.
- * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-
 package org.onap.ccsdk.cds.cdssdclistener.service;
 
 import static junit.framework.TestCase.assertTrue;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
+import org.onap.ccsdk.cds.cdssdclistener.CdsSdcListenerConfiguration;
 import org.onap.ccsdk.cds.cdssdclistener.client.CdsSdcListenerAuthClientInterceptor;
+import org.onap.ccsdk.cds.cdssdclistener.dto.CdsSdcListenerDto;
 import org.onap.ccsdk.cds.cdssdclistener.handler.BluePrintProcesssorHandler;
-import org.onap.sdc.impl.mock.DistributionClientDownloadResultStubImpl;
+import org.onap.ccsdk.cds.cdssdclistener.status.CdsSdcListenerStatus;
+import org.onap.sdc.api.results.IDistributionClientDownloadResult;
+import org.onap.sdc.impl.mock.DistributionClientResultStubImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@EnableConfigurationProperties({ListenerServiceImpl.class, CdsSdcListenerAuthClientInterceptor.class,
-    BluePrintProcesssorHandler.class})
+@EnableConfigurationProperties({CdsSdcListenerAuthClientInterceptor.class,
+    BluePrintProcesssorHandler.class, CdsSdcListenerDto.class, ListenerServiceImpl.class, CdsSdcListenerStatus.class,
+    CdsSdcListenerConfiguration.class})
 @SpringBootTest(classes = {ListenerServiceImplTest.class})
 public class ListenerServiceImplTest {
 
@@ -79,5 +93,34 @@ public class ListenerServiceImplTest {
             .findAny()
             .get()
             .getName();
+    }
+
+    public byte[] convertFileToByteArray(File file) {
+        try {
+            return FileUtils.readFileToByteArray(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public class DistributionClientDownloadResultStubImpl extends DistributionClientResultStubImpl implements
+        IDistributionClientDownloadResult {
+
+        public DistributionClientDownloadResultStubImpl() {
+        }
+
+        public byte[] getArtifactPayload() {
+            File file = Paths.get(CSAR_SAMPLE).toFile();
+            return convertFileToByteArray(file);
+        }
+
+        public String getArtifactName() {
+            return "MackArtifactName";
+        }
+
+        public String getArtifactFilename() {
+            return "MackArtifactName.csar";
+        }
     }
 }
