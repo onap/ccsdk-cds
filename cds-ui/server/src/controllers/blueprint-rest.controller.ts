@@ -51,12 +51,11 @@ import * as request_lib from 'request';
 
 const REST_BLUEPRINT_CONTROLLER_BASE_URL = process.env.REST_BLUEPRINT_CONTROLLER_BASE_URL || "http://localhost:8080/api/v1";
 const REST_BLUEPRINT_CONTROLLER_BASIC_AUTH_HEADER = process.env.REST_BLUEPRINT_CONTROLLER_BASIC_AUTH_HEADER || "Basic Y2NzZGthcHBzOmNjc2RrYXBwcw==";
-const REST_BLUEPRINT_PROCESSOR_BASE_URL= "http://localhost:8081/api/v1";
+const REST_BLUEPRINT_PROCESSOR_BASE_URL= process.env.REST_BLUEPRINT_PROCESSOR_BASE_URL ||"http://localhost:8081/api/v1";
+const MULTIPART_FORM_UPLOAD_DIR = process.env.MULTIPART_FORM_UPLOAD_DIR || "/tmp";
 
 export class BlueprintRestController {
   constructor(
-  //  @repository(BlueprintRepository)
-  //   public blueprintRepository : BlueprintRepository,
     @inject('services.BlueprintService') 
     public bpservice: BlueprintService,
   ) {}
@@ -71,7 +70,6 @@ export class BlueprintRestController {
   })
   async getall() {
     return await this.bpservice.getAllblueprints(REST_BLUEPRINT_CONTROLLER_BASIC_AUTH_HEADER);
-
   }
 
   @post('/create-blueprint')
@@ -89,12 +87,11 @@ export class BlueprintRestController {
     })
     request: Request,
     @inject(RestBindings.Http.RESPONSE) response: Response,
-  ): Promise<object> {
+  ): Promise<Response> {
     return new Promise((resolve, reject) => { 
        this.getFileFromMultiPartForm(request).then(file=>{
-         this.uploadFileToBlueprintController(file, "/blueprint-model/").then(resp=>{
-          response.setHeader("X-ONAP-RequestID", resp.headers['x-onap-requestid']);
-          resolve(JSON.parse(resp.body));
+         this.uploadFileToBlueprintController(file, REST_BLUEPRINT_CONTROLLER_BASE_URL+"/blueprint-model/", response).then(resp=>{
+          resolve(resp);
          }, err=>{
            reject(err);
          });
@@ -103,7 +100,34 @@ export class BlueprintRestController {
       });
     });
   }
-
+  @post('/publish')
+  async publish(
+    @requestBody({
+      description: 'multipart/form-data value.',
+      required: true,
+      content: {
+        'multipart/form-data': {
+          // Skip body parsing
+          'x-parser': 'stream',
+          schema: {type: 'object'},
+        },
+      },
+    })
+    request: Request,
+    @inject(RestBindings.Http.RESPONSE) response: Response,
+  ): Promise<Response> {
+    return new Promise((resolve, reject) => { 
+       this.getFileFromMultiPartForm(request).then(file=>{
+         this.uploadFileToBlueprintController(file, REST_BLUEPRINT_CONTROLLER_BASE_URL+"/blueprint-model/publish/", response).then(resp=>{
+          resolve(resp);
+         }, err=>{
+           reject(err);
+         });
+      }, err=>{
+        reject(err);
+      });
+    });
+  }
   @post('/enrich-blueprint')
   async enrich(
     @requestBody({
@@ -119,13 +143,11 @@ export class BlueprintRestController {
     })
     request: Request,
     @inject(RestBindings.Http.RESPONSE) response: Response,
-  ): Promise<any> {
+  ): Promise<Response> {
     return new Promise((resolve, reject) => { 
        this.getFileFromMultiPartForm(request).then(file=>{
-         this.uploadFileToBlueprintController(file, "/blueprint-model/enrich/").then(resp=>{
-           response.setHeader("X-ONAP-RequestID", resp.headers['x-onap-requestid']);
-           response.setHeader("Content-Disposition", resp.headers['content-disposition']);
-           resolve(resp.body);
+         this.uploadFileToBlueprintController(file, REST_BLUEPRINT_CONTROLLER_BASE_URL+"/blueprint-model/enrich/", response).then(resp=>{
+           resolve(resp);
          }, err=>{
            reject(err);
          });
@@ -139,25 +161,13 @@ export class BlueprintRestController {
   async download(
     @param.path.string('name') name: string,
     @param.path.string('version') version:string,
-    // @inject(RestBindings.Http.REQUEST) request: Request,
     @inject(RestBindings.Http.RESPONSE) response: Response,
-  ): Promise<any> {
-    return new Promise((resolve, reject) => { 
-      this.downloadFileFromBlueprintController("/blueprint-model/download/by-name/"+name+"/version/"+version).then(resp=>{
-        response.setHeader("X-ONAP-RequestID", resp.headers['x-onap-requestid']);
-        response.setHeader("Content-Disposition", resp.headers['content-disposition']);
-        resolve(resp.body);
-      }, err=>{
-        reject(err);
-      });
-    });
+  ): Promise<Response> {
+    return this.downloadFileFromBlueprintController(REST_BLUEPRINT_CONTROLLER_BASE_URL+"/blueprint-model/download/by-name/"+name+"/version/"+version, response);
   }
 
-  async getFileFromMultiPartForm(request: Request): Promise<any>{
+  async getFileFromMultiPartForm(request: Request): Promise<multiparty.File>{
     return new Promise((resolve, reject) => {
-      // let options = {
-      //   uploadDir: MULTIPART_FORM_UPLOAD_DIR
-      // }
       let form = new multiparty.Form();
       form.parse(request, (err: any, fields: any, files: { [x: string]: any[]; }) => {
         if (err) reject(err);
@@ -171,9 +181,38 @@ export class BlueprintRestController {
     })
   }
 
-  async uploadFileToBlueprintController(file: any, uri: string): Promise<any>{
+  @post('/deploy-blueprint')
+  async deploy(
+    @requestBody({
+      description: 'multipart/form-data value.',
+      required: true,
+      content: {
+        'multipart/form-data': {
+          // Skip body parsing
+          'x-parser': 'stream',
+          schema: {type: 'object'},
+        },
+      },
+    })
+    request: Request,
+    @inject(RestBindings.Http.RESPONSE) response: Response,
+  ): Promise<Response> {
+    return new Promise((resolve, reject) => { 
+       this.getFileFromMultiPartForm(request).then(file=>{
+         this.uploadFileToBlueprintController(file, REST_BLUEPRINT_PROCESSOR_BASE_URL+"/execution-service/upload/", response).then(resp=>{
+          resolve(resp);
+         }, err=>{
+           reject(err);
+         });
+      }, err=>{
+        reject(err);
+      });
+    });
+  }
+  async uploadFileToBlueprintController(file: multiparty.File, uri: string, response: Response): Promise<Response>{
     let options = {
-      url: REST_BLUEPRINT_CONTROLLER_BASE_URL + uri,
+      // url: REST_BLUEPRINT_CONTROLLER_BASE_URL + uri,
+      url:uri,
       headers: {
         Authorization: REST_BLUEPRINT_CONTROLLER_BASIC_AUTH_HEADER,
         'content-type': 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW'
@@ -189,40 +228,43 @@ export class BlueprintRestController {
       }
     };
 
-    return new Promise((resolve, reject) => {
-      request_lib.post(options, (err: any, resp: any, body: any) => {
+    var removeTempFile = () => {
+      fs.unlink(file.path, (err: any) => {
         if (err) {
-          //delete tmp file
-          fs.unlink(file.path, (err: any) => {
-            if (err) {
-              console.error(err);
-              return
-            }
-          })
+          console.error(err);
+        } 
+      });
+    }
+
+    return new Promise((resolve, reject) => {
+      request_lib.post(options)
+        .on("error", err => {
           reject(err);
-        }else{
-          resolve(resp);
-        }
-      })
+        })
+        .pipe(response)
+        .once("finish", () => {
+          removeTempFile();
+          resolve(response);
+        });
     })
   }
-
-  async downloadFileFromBlueprintController(uri: string): Promise<any> {
+  async downloadFileFromBlueprintController(uri: string, response: Response): Promise<Response> {
     let options = {
-      url: REST_BLUEPRINT_CONTROLLER_BASE_URL + uri,
+      url: uri,
+      // REST_BLUEPRINT_CONTROLLER_BASE_URL + uri,
       headers: {
         Authorization: REST_BLUEPRINT_CONTROLLER_BASIC_AUTH_HEADER,
       }
     };
-
     return new Promise((resolve, reject) => {
-      request_lib.get(options, (err: any, resp: any, body: any) => {
-        if (err) {
+      request_lib.get(options)
+        .on("error", err => {
           reject(err);
-        }else{
-          resolve(resp);
-        }
-      })
+        })
+        .pipe(response)
+        .once("finish", () => {
+          resolve(response);
+        });
     })
-}
+  }
 }
