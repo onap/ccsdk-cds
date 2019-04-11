@@ -80,11 +80,11 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
                 RpcStatus.FAILURE, true)) {
             rpcService.closeSession(true)
         }
-
-        session.close()
-        // Closes the socket which should interrupt the streamHandler
-        channel.close()
-        client.close()
+        try {
+            close()
+        } catch (ioe: IOException) {
+            log.warn("$deviceInfo: Error closing session($sessionId) for host($deviceInfo)", ioe)
+        }
     }
 
     override fun reconnect() {
@@ -98,8 +98,8 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
         checkAndReestablish()
 
         try {
-            return streamHandler.sendMessage(formattedRequest, messageId).get(replyTimeout.toLong(), TimeUnit.SECONDS)
-//            replies.remove(messageId)
+            return streamHandler.getFutureFromSendMessage(streamHandler.sendMessage(formattedRequest, messageId),
+                replyTimeout.toLong(), TimeUnit.SECONDS)
         } catch (e: InterruptedException) {
             Thread.currentThread().interrupt()
             throw NetconfException("$deviceInfo: Interrupted while waiting for reply for request: $formattedRequest", e)
@@ -109,10 +109,7 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
         } catch (e: ExecutionException) {
             log.warn("$deviceInfo: Closing session($sessionId) due to unexpected Error", e)
             try {
-                session.close()
-                // Closes the socket which should interrupt the streamHandler
-                channel.close()
-                client.close()
+                close()
             } catch (ioe: IOException) {
                 log.warn("$deviceInfo: Error closing session($sessionId) for host($deviceInfo)", ioe)
             }
@@ -138,20 +135,23 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
 
     override fun checkAndReestablish() {
         try {
-            if (client.isClosed) {
-                log.info("Trying to restart the whole SSH connection with {}", deviceInfo)
-                clearReplies()
-                startConnection()
-            } else if (session.isClosed) {
-                log.info("Trying to restart the session with {}", deviceInfo)
-                clearReplies()
-                startSession()
-            } else if (channel.isClosed) {
-                log.info("Trying to reopen the channel with {}", deviceInfo)
-                clearReplies()
-                openChannel()
-            } else {
-                return
+            when {
+                client.isClosed -> {
+                    log.info("Trying to restart the whole SSH connection with {}", deviceInfo)
+                    clearReplies()
+                    startConnection()
+                }
+                session.isClosed -> {
+                    log.info("Trying to restart the session with {}", deviceInfo)
+                    clearReplies()
+                    startSession()
+                }
+                channel.isClosed -> {
+                    log.info("Trying to reopen the channel with {}", deviceInfo)
+                    clearReplies()
+                    openChannel()
+                }
+                else -> return
             }
         } catch (e: IOException) {
             log.error("Can't reopen connection for device {} error: {}", deviceInfo, e.message)
@@ -290,6 +290,17 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
     internal fun addDeviceReply(messageId: String, replyMsg: String) {
         println("addDeviceReply (messageId: $messageId replyMsg: $replyMsg") //TODO : get rid of this.
         replies[messageId]?.complete(replyMsg)
+    }
+
+    /**
+     * Closes the session/channel/client
+     */
+    @Throws(IOException::class)
+    private fun close() {
+        session.close()
+        // Closes the socket which should interrupt the streamHandler
+        channel.close()
+        client.close()
     }
 
     /**
