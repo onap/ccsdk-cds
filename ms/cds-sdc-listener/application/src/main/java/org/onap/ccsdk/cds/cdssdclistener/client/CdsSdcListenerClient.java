@@ -1,9 +1,17 @@
 /*
- * Copyright (C) 2019 Bell Canada. All rights reserved.
+ * Copyright © 2019 Bell Canada
  *
- * NOTICE:  All the intellectual and technical concepts contained herein are
- * proprietary to Bell Canada and are protected by trade secret or copyright law.
- * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.onap.ccsdk.cds.cdssdclistener.client;
 
@@ -51,10 +59,11 @@ public class CdsSdcListenerClient {
         distributionClient = Optional.of(DistributionClientFactory.createDistributionClient())
             .orElseThrow(() -> new CdsSdcListenerException("Could not able to create SDC Distribution client"));
 
+        listenerDto.setManagedChannelForGrpc();
+
         listenerDto.setDistributionClient(distributionClient);
 
         IDistributionClientResult result = distributionClient.init(configuration, notification);
-
         startSdcClientBasedOnTheResult(result);
     }
 
@@ -63,6 +72,8 @@ public class CdsSdcListenerClient {
             throw new CdsSdcListenerException(
                 "SDC distribution client init failed with reason:" + result.getDistributionMessageResult());
         }
+
+        LOG.info("Initialization of the SDC distribution client is complete");
 
         // Start the client.
         result = this.distributionClient.start();
@@ -74,10 +85,8 @@ public class CdsSdcListenerClient {
     }
 
     private void closeSdcDistributionclient() throws CdsSdcListenerException {
-
-        IDistributionClientResult status = this.distributionClient.stop();
-
         LOG.info("Closing SDC distribution client");
+        IDistributionClientResult status = this.distributionClient.stop();
         if (status.getDistributionActionResult().equals(DistributionActionResultEnum.SUCCESS)) {
             throw new CdsSdcListenerException(
                 "Failed to close the SDC distribution client due to : " + status.getDistributionMessageResult());
