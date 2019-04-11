@@ -18,9 +18,15 @@
 
 if [ -z "${APP_PORT}" ]
 then
-  echo "APP_PORT environment variable is not set, please set it."
-else
-  cd /opt/onap/app/python/
-  python command_executor_server.py ${APP_PORT}
+  echo "APP_PORT environment variable is not set, using default."
+  export APP_PORT=50051
 fi
 
+if [ -z "${BASIC_AUTH}" ]
+then
+  echo "BASIC_AUTH environment variable is not set, using default."
+  export BASIC_AUTH="Basic Y2NzZGthcHBzOmNjc2RrYXBwcw=="
+fi
+
+cd /opt/onap/app/python/
+python command_executor_server.py ${APP_PORT} ${BASIC_AUTH}
