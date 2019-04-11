@@ -168,7 +168,6 @@ class NetconfSessionImplTest {
 
     }
 
-    @Ignore //TODO undo close method removal
     @Test
     fun `disconnect wraps exception from ssh closing error`() {
         val netconfSessionSpy = spyk(netconfSession, recordPrivateCalls = true)
@@ -295,7 +294,6 @@ class NetconfSessionImplTest {
         }
     }
 
-    @Ignore //TODO revert back on getFutureFromSendMessage
     @Test
     fun `syncRpc throws NetconfException if TimeoutException is caught`() {
         val expectedExceptionMsg = "$deviceInfo: Timed out while waiting for reply for request $formattedRequest after ${deviceInfo.replyTimeout} sec."
@@ -310,23 +308,23 @@ class NetconfSessionImplTest {
         }
     }
 
-    @Ignore
     @Test
     fun `syncRpc throws NetconfException if ExecutionException is caught`() {
         val expectedExceptionMsg = "$deviceInfo: Closing session $sessionId for request $formattedRequest"
         assertFailsWith(exceptionClass = NetconfException::class, message = expectedExceptionMsg) {
-            val netconfSessionSpy = spyk(netconfSession)
+            val netconfSessionSpy = spyk(netconfSession, recordPrivateCalls = false)
             val futureRet: CompletableFuture<String> = CompletableFuture.completedFuture(futureMsg)
             every { netconfCommunicator.sendMessage(any(), any()) } returns futureRet
             every { netconfCommunicator.getFutureFromSendMessage(any(), any(), any()) } throws
-                ExecutionException("exec exception", Exception("nested exception")) //TODO revert getFutureFromSendMessage back
+                ExecutionException("exec exception", Exception("nested exception"))
+            every { netconfSessionSpy["close"]() as Unit } just Runs
             every { netconfSessionSpy.checkAndReestablish() } just Runs
+            netconfSessionSpy.setSession(mockClientSession)
             //call the method
             netconfSessionSpy.syncRpc("0", "0")
         }
     }
 
-    @Ignore //TODO revert back on getFutureFromSendMessage
     @Test
     fun `syncRpc throws NetconfException if caught ExecutionException and failed to close SSH session`() {
         val expectedExceptionMsg = "$deviceInfo: Closing session $sessionId for request $formattedRequest"
@@ -525,7 +523,6 @@ class NetconfSessionImplTest {
         verify { mockSshClient.close() }
     }
 
-    @Ignore
     @Test
     fun `disconnect wraps IOException if channel doesn't close`() { //this test is equivalent to others
         every { rpcService.closeSession(false) } returns SUCCESSFUL_DEVICE_RESPONSE

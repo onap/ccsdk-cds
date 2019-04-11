@@ -57,7 +57,7 @@ class NetconfDeviceCommunicator(private var inputStream: InputStream,
             while (!socketClosed) {
                 val cInt = bufferReader.read()
                 if (cInt == -1) {
-                    log.error("$deviceInfo: Received cInt = -1")
+                    log.debug("$deviceInfo: Received end of stream, closing socket.")
                     socketClosed = true
                 }
                 val c = cInt.toChar()
