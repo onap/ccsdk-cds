@@ -257,16 +257,8 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
         }
 
         val capabilityMatcher = NetconfMessageUtils.CAPABILITY_REGEX_PATTERN.matcher(serverHelloResponse)
-        while (capabilityMatcher.find()) {
+        while (capabilityMatcher.find()) { //TODO: refactor to add unit test easily for device capability accumulation.
             deviceCapabilities.add(capabilityMatcher.group(1))
-        }
-    }
-
-    fun sessionstatus(state:String): Boolean{
-        return when (state){
-            "Close" -> channel.isClosed
-            "Open" -> channel.isOpen
-            else -> false
         }
     }
 
@@ -279,7 +271,6 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
      * Used by {@link NetconfSessionListenerImpl}
      */
     internal fun addDeviceErrorReply(errReply: String) {
-        println("addDeviceErrorReply (errReply: $errReply") //TODO : get rid of this.
         errorReplies.add(errReply)
     }
 
@@ -288,7 +279,6 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
      * Used by {@link NetconfSessionListenerImpl}
      */
     internal fun addDeviceReply(messageId: String, replyMsg: String) {
-        println("addDeviceReply (messageId: $messageId replyMsg: $replyMsg") //TODO : get rid of this.
         replies[messageId]?.complete(replyMsg)
     }
 
@@ -312,7 +302,6 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
      * internal function for accessing errorReplies for testing.
      */
     internal fun getErrorReplies() = errorReplies
-
     internal fun clearErrorReplies() = errorReplies.clear()
     internal fun clearReplies() = replies.clear()
     internal fun setClient(client: SshClient) { this.client = client }
