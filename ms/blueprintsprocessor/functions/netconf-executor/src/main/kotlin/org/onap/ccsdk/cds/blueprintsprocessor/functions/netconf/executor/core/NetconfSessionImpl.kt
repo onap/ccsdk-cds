@@ -80,11 +80,11 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
                 RpcStatus.FAILURE, true)) {
             rpcService.closeSession(true)
         }
-
-        session.close()
-        // Closes the socket which should interrupt the streamHandler
-        channel.close()
-        client.close()
+        try {
+            close()
+        } catch (ioe: IOException) {
+            log.warn("$deviceInfo: Error closing session($sessionId) for host($deviceInfo)", ioe)
+        }
     }
 
     override fun reconnect() {
@@ -99,7 +99,6 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
 
         try {
             return streamHandler.sendMessage(formattedRequest, messageId).get(replyTimeout.toLong(), TimeUnit.SECONDS)
-//            replies.remove(messageId)
         } catch (e: InterruptedException) {
             Thread.currentThread().interrupt()
             throw NetconfException("$deviceInfo: Interrupted while waiting for reply for request: $formattedRequest", e)
@@ -108,14 +107,7 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
                 e)
         } catch (e: ExecutionException) {
             log.warn("$deviceInfo: Closing session($sessionId) due to unexpected Error", e)
-            try {
-                session.close()
-                // Closes the socket which should interrupt the streamHandler
-                channel.close()
-                client.close()
-            } catch (ioe: IOException) {
-                log.warn("$deviceInfo: Error closing session($sessionId) for host($deviceInfo)", ioe)
-            }
+            close()
             clearErrorReplies()
             clearReplies()
 
@@ -290,6 +282,17 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
     internal fun addDeviceReply(messageId: String, replyMsg: String) {
         println("addDeviceReply (messageId: $messageId replyMsg: $replyMsg") //TODO : get rid of this.
         replies[messageId]?.complete(replyMsg)
+    }
+
+    /**
+     * Closes the session/channel/client
+     */
+    @Throws(IOException::class)
+    private fun close() {
+        session.close()
+        // Closes the socket which should interrupt the streamHandler
+        channel.close()
+        client.close()
     }
 
     /**
