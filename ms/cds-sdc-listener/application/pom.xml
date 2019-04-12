@@ -6,7 +6,8 @@
   ~ proprietary to Bell Canada and are protected by trade secret or copyright law.
   ~ Unauthorized copying of this file, via any medium is strictly prohibited.
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <parent>
     <groupId>org.onap.ccsdk.parent</groupId>
@@ -19,24 +20,27 @@
   <groupId>org.onap.ccsdk.cds</groupId>
   <artifactId>cds-sdc-listener-application</artifactId>
   <version>0.4.2-SNAPSHOT</version>
-  <name>CDS-SDC Listener Application </name>
+  <name>CDS-SDC Listener Application</name>
 
   <properties>
     <grpc.version>1.17.1</grpc.version>
     <protobuf.version>3.6.1</protobuf.version>
+    <image.name>cds-sdc-listener</image.name>
+    <docker.push.phase>deploy</docker.push.phase>
+    <project.version>${parent.version}</project.version>
   </properties>
 
   <dependencies>
     <!-- Spring boot -->
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-web</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-test</artifactId>
-        <scope>test</scope>
-      </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
@@ -113,7 +117,122 @@
           </execution>
         </executions>
       </plugin>
+      <!--<plugin>-->
+        <!--<artifactId>maven-resources-plugin</artifactId>-->
+        <!--<version>2.6</version>-->
+        <!--<executions>-->
+          <!--<execution>-->
+            <!--<id>copy-dockerfile</id>-->
+            <!--<goals>-->
+              <!--<goal>copy-resources</goal>-->
+            <!--</goals>&lt;!&ndash; here the phase you need &ndash;&gt;-->
+            <!--<phase>package</phase>-->
+            <!--<configuration>-->
+              <!--<outputDirectory>${basedir}/target/docker-stage</outputDirectory>-->
+              <!--<resources>-->
+                <!--<resource>-->
+                  <!--<directory>${basedir}/src/main/docker</directory>-->
+                  <!--<includes>-->
+                    <!--<include>*</include>-->
+                  <!--</includes>-->
+                  <!--<filtering>true</filtering>-->
+                <!--</resource>-->
+                <!--<resource>-->
+                  <!--<directory>${basedir}/target/</directory>-->
+                  <!--<includes>-->
+                    <!--<include>cds-sdc-listener-application-${project.version}.jar</include>-->
+                  <!--</includes>-->
+                  <!--<filtering>false</filtering>-->
+                <!--</resource>-->
+              <!--</resources>-->
+            <!--</configuration>-->
+          <!--</execution>-->
+        <!--</executions>-->
+      <!--</plugin>-->
+      <!--<plugin>-->
+        <!--<groupId>org.apache.maven.plugins</groupId>-->
+        <!--<artifactId>maven-antrun-plugin</artifactId>-->
+        <!--<executions>-->
+          <!--<execution>-->
+            <!--<id>ant-test</id>-->
+            <!--<phase>package</phase>-->
+            <!--<configuration>-->
+              <!--<tasks>-->
+                <!--<fixcrlf srcdir="${basedir}" eol="unix" includes="**/*.sh, **/*.source"/>-->
+              <!--</tasks>-->
+            <!--</configuration>-->
+            <!--<goals>-->
+              <!--<goal>run</goal>-->
+            <!--</goals>-->
+          <!--</execution>-->
+        <!--</executions>-->
+      <!--</plugin>-->
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>docker</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>io.fabric8</groupId>
+            <artifactId>docker-maven-plugin</artifactId>
+            <version>0.26.1</version>
+            <inherited>false</inherited>
+            <configuration>
+              <images>
+                <image>
+                  <name>${image.name}</name>
+                  <build>
+                    <cleanup>try</cleanup>
+                    <dockerFileDir>${basedir}/src/main/docker</dockerFileDir>
+                    <assembly>
+                      <inline>
+                        <fileSets>
+                          <fileSet>
+                            <directory>${basedir}/src/main/docker</directory>
+                            <outputDirectory>${basedir}/target/docker-stage</outputDirectory>
+                          </fileSet>
+                          <fileSet>
+                            <directory>${basedir}/target/</directory>
+                            <includes>
+                              <include> *.jar </include>
+                            </includes>
+                            <outputDirectory>${basedir}/target/docker-stage</outputDirectory>
+                          </fileSet>
+                        </fileSets>
+                      </inline>
+                    </assembly>
+                    <tags>
+                      <tag>${project.version}</tag>
+                    </tags>
+                  </build>
+                </image>
+              </images>
+              <verbose>true</verbose>
+            </configuration>
+            <executions>
+              <execution>
+                <id>generate-images</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>build</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>push-images</id>
+                <phase>${docker.push.phase}</phase>
+                <goals>
+                  <goal>build</goal>
+                  <goal>push</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>
