@@ -24,6 +24,10 @@
   <properties>
     <grpc.version>1.17.1</grpc.version>
     <protobuf.version>3.6.1</protobuf.version>
+    <image.name>cds-sdc-listener</image.name>
+    <docker.push.phase>deploy</docker.push.phase>
+    <project.version>${parent.version}</project.version>
+
   </properties>
 
   <dependencies>
@@ -99,21 +103,138 @@
 
   </dependencies>
 
+  <!-- ORIGINAL CHANGE -->
+  <!--<build>-->
+    <!--<plugins>-->
+      <!--<plugin>-->
+        <!--<groupId>org.springframework.boot</groupId>-->
+        <!--<artifactId>spring-boot-maven-plugin</artifactId>-->
+        <!--<executions>-->
+          <!--<execution>-->
+            <!--<id>repackage</id>-->
+            <!--<goals>-->
+              <!--<goal>repackage</goal>-->
+            <!--</goals>-->
+          <!--</execution>-->
+        <!--</executions>-->
+      <!--</plugin>-->
+    <!--</plugins>-->
+  <!--</build>-->
+
+  <!-- New Changes -->
   <build>
     <plugins>
       <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>2.6</version>
         <executions>
           <execution>
-            <id>repackage</id>
+            <id>copy-dockerfile</id>
             <goals>
-              <goal>repackage</goal>
+              <goal>copy-resources</goal>
+            </goals><!-- here the phase you need -->
+            <phase>validate</phase>
+            <configuration>
+              <outputDirectory>${basedir}/target/docker-stage</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${basedir}/src/main/docker</directory>
+                  <includes>
+                    <include>*</include>
+                  </includes>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>ant-test</id>
+            <phase>package</phase>
+            <configuration>
+              <tasks>
+                <fixcrlf srcdir="${basedir}" eol="unix" includes="**/*.sh, **/*.source"/>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
             </goals>
           </execution>
         </executions>
       </plugin>
+      <!--<plugin>-->
+      <!--&lt;!&ndash;build the final artifact for docker deployment &ndash;&gt;-->
+      <!--<artifactId>maven-assembly-plugin</artifactId>-->
+      <!--<version>3.1.0</version>-->
+      <!--<configuration>-->
+      <!--&lt;!&ndash; <skipAssembly>${skip.assembly}</skipAssembly> &ndash;&gt;-->
+      <!--<outputDirectory>${basedir}/target/docker-stage</outputDirectory>-->
+      <!--<tarLongFileMode>posix</tarLongFileMode>-->
+      <!--</configuration>-->
+      <!--<executions>-->
+      <!--<execution>-->
+      <!--<id>${assembly.id}</id>-->
+      <!--<phase>package</phase>-->
+      <!--<goals>-->
+      <!--<goal>single</goal>-->
+      <!--</goals>-->
+      <!--</execution>-->
+      <!--</executions>-->
+      <!--</plugin>-->
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>docker</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>io.fabric8</groupId>
+            <artifactId>docker-maven-plugin</artifactId>
+            <version>0.26.1</version>
+            <inherited>false</inherited>
+            <configuration>
+              <images>
+                <image>
+                  <name>${image.name}</name>
+                  <build>
+                    <cleanup>try</cleanup>
+                    <dockerFileDir>${basedir}/src//main/docker</dockerFileDir>
+                    <tags>
+                      <tag>${project.version}</tag>
+                    </tags>
+                  </build>
+                </image>
+              </images>
+              <verbose>true</verbose>
+            </configuration>
+            <executions>
+              <execution>
+                <id>generate-images</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>build</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>push-images</id>
+                <phase>${docker.push.phase}</phase>
+                <goals>
+                  <goal>build</goal>
+                  <goal>push</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>
