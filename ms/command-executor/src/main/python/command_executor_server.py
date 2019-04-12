@@ -25,6 +25,8 @@ import grpc
 import proto.CommandExecutor_pb2_grpc as CommandExecutor_pb2_grpc
 
 from request_header_validator_interceptor import RequestHeaderValidatorInterceptor
+from command_executor_handler import CommandExecutorHandler
+import utils
 
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 
@@ -32,10 +34,30 @@ _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 class CommandExecutorServer(CommandExecutor_pb2_grpc.CommandExecutorServiceServicer):
 
     def prepareEnv(self, request, context):
-        return
+        blueprint_id = utils.get_blueprint_id(request)
+        print("{} - Received prepareEnv request".format(blueprint_id))
+        print (request)
+
+        results = []
+        handler = CommandExecutorHandler(request)
+        if not handler.prepare_env(request, results):
+            print("{} - Failed to prepare python environment. {}".format(blueprint_id, results))
+            return utils.build_response(request, results, False)
+        print("{} - Package installation logs {}".format(blueprint_id, results))
+        return utils.build_response(request, results)
 
     def executeCommand(self, request, context):
-        return
+        blueprint_id = utils.get_blueprint_id(request)
+        print("{} - Received executeCommand request".format(blueprint_id))
+        print(request)
+
+        results = []
+        handler = CommandExecutorHandler(request)
+        if not handler.execute_command(request, results):
+            print("{} - Failed to executeCommand. {}".format(blueprint_id, results))
+            return utils.build_response(request, results, False)
+        print("{} - Execute command logs: {}".format(blueprint_id, results))
+        return utils.build_response(request, results)
 
 
 def serve():
