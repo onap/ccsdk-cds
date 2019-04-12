@@ -31,7 +31,7 @@ public class CdsSdcListenerConfigurationTest {
         assertEquals(listenerConfiguration.getUser(), "vid");
         assertEquals(listenerConfiguration.getPassword(), "Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U");
         assertEquals(listenerConfiguration.getPollingInterval(), 15);
-        assertEquals(listenerConfiguration.getPollingTimeout(), 15);
+        assertEquals(listenerConfiguration.getPollingTimeout(), 60);
         assertEquals(listenerConfiguration.getRelevantArtifactTypes().stream().findFirst().get(), "TOSCA_CSAR");
         assertEquals(listenerConfiguration.getConsumerGroup(), "cds-id-local");
         assertEquals(listenerConfiguration.getEnvironmentName(), "AUTO");
