@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "668cd0df_60a8f1a8",
+        "filename": "docs/index.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2019-04-12T14:21:45Z",
+      "side": 1,
+      "message": "Type - Modeling",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 8
+      },
+      "revId": "e226ab30d8760efd6d36596a494ea80721b33fb1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
