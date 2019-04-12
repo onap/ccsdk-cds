@@ -31,38 +31,14 @@ export class ApiService {
   
   constructor(private _http: HttpClient) {
   }
-  enrich(uri: string, body: FormData): Observable<any> {
-    
-    var HTTPOptions = {
-      headers: new HttpHeaders({ 'Accept': 'application/zip', }),
-      observe: "response" as 'body',// to display the full response & as 'body' for type cast
-      'responseType': 'blob' as 'json'
-    }
-    return this._http.post(LoopbackConfig.url + uri, body, HTTPOptions);
-
-  }
-  downloadCBA(uri: string, params?: any): Observable<Blob> {
-    // return this._http.get<Blob>(LoopbackConfig.url+uri);
-    var HTTPOptions = {
-      headers: new HttpHeaders({ 'Accept': 'application/zip; charset=UTF-8', }),
-      observe: "response" as 'body',// to display the full response & as 'body' for type cast
-      'responseType': 'blob' as 'json'
-    }
-    return this._http.get<Blob>(LoopbackConfig.url + uri, HTTPOptions);
-
+  get(url: string, params?: any): Observable<any> {
+    return this._http.get(url,params);
   }
 
-  post(uri: string, body: FormData): Observable<any> {
-    // to do
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': LoopbackConfig.authtoken,
+  post(url: string, body: any | null, options?:any): Observable<any> {
 
-      })
-    };
-    return this._http.post(LoopbackConfig.url + uri, body, httpOptions);
+    return this._http.post(url, body,options);
   }
-
   put() {
     // to do
   }

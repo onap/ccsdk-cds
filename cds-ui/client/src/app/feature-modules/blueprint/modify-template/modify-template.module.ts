@@ -31,6 +31,7 @@ import { EditorComponent } from './editor/editor.component';
 import { AceEditorModule } from 'ng2-ace-editor';
 import { ResourceMappingComponent } from './resource-mapping/resource-mapping.component';
 import { ResourceMappingService } from './resource-mapping/resource-mapping.service';
+import { EditorService } from './editor/editor.service';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,6 @@ import { ResourceMappingService } from './resource-mapping/resource-mapping.serv
     AceEditorModule,
     FormsModule
   ],
-  providers: [ ResourceMappingService ]
+  providers: [ ResourceMappingService , EditorService ]
 })
 export class ModifyTemplateModule { }
