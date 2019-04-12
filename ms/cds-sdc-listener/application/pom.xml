@@ -22,6 +22,17 @@
   <properties>
     <grpc.version>1.17.1</grpc.version>
     <protobuf.version>3.6.1</protobuf.version>
+    <image.name>cds-sdc-listener</image.name>
+    <docker.push.phase>deploy</docker.push.phase>
+    <project.version>${parent.version}</project.version>
+    <!-- Start of Docker Related Properties -->
+    <docker.fabric.version>0.26.1</docker.fabric.version>
+    <!-- Default docker registry that maven fabric plugin will try to pull from -->
+    <docker.registry>docker.io</docker.registry>
+    <!-- Specifying the docker push registry where the image should be pushed -->
+    <!-- This value should be overwritten at runtime to wherever need to be pushed to -->
+    <docker.push.registry>localhost:5000</docker.push.registry>
+    <aai.docker.namespace>nso-images</aai.docker.namespace>
   </properties>
 
   <dependencies>
@@ -105,7 +116,85 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.8</version>
+        <executions>
+          <execution>
+            <id>copy</id>
+            <phase>package</phase>
+            <configuration>
+              <target>
+                <echo>ANT TASK - copying Docker files</echo>
+                <copy todir="${basedir}/target/docker-stage" overwrite="true" flatten="true">
+                  <fileset dir="${basedir}/src/main/docker" >
+                    <include name="Dockerfile" />
+                    <include name="start.sh" />
+                  </fileset>
+                  <fileset dir="${basedir}/target" >
+                    <include name="*.jar" />
+                  </fileset>
+                  <fileset dir="${basedir}/src/main/resources/" >
+                    <include name="application.yml" />
+                  </fileset>
+                </copy>
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>docker</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>io.fabric8</groupId>
+            <artifactId>docker-maven-plugin</artifactId>
+            <version>${docker.fabric.version}</version>
+            <inherited>false</inherited>
+            <configuration>
+              <images>
+                <image>
+                  <name>${docker.push.registry}/${aai.docker.namespace}/${project.artifactId}:%v</name>
+                  <build>
+                    <cleanup>try</cleanup>
+                    <dockerFileDir>${basedir}/target/docker-stage</dockerFileDir>
+                    <tags>
+                      <tag>${project.version}</tag>
+                    </tags>
+                  </build>
+                </image>
+              </images>
+              <verbose>true</verbose>
+            </configuration>
+            <executions>
+              <execution>
+                <id>generate-images</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>build</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>push-images</id>
+                <phase>${docker.push.phase}</phase>
+                <goals>
+                  <goal>build</goal>
+                  <goal>push</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>
