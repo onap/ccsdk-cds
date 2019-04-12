@@ -31,9 +31,6 @@
 
     <modules>
         <module>application</module>
-        <!--  Module is not currently working
-        <module>distribution</module>
-        -->
     </modules>
 
 </project>

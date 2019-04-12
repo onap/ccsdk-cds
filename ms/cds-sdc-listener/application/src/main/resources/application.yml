@@ -1,21 +1,20 @@
 listenerservice:
-    config:
-      asdcAddress: localhost:8443
-      messageBusAddress: localhost
-      user: vid
-      password: Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U
-      pollingInterval: 15
-      pollingTimeout: 15
-      relevantArtifactTypes: TOSCA_CSAR
-      consumerGroup: cds-id-local
-      environmentName: AUTO
-      consumerId: cds-id-local
-      keyStorePassword:
-      keyStorePath:
-      activateServerTLSAuth : false
-      isUseHttpsWithDmaap: false
-      archivePath: opt/app/onap/cds-sdc-listener/
-      grpcAddress: localhost
-      grpcPort: 9111
-      authHeader: Basic Y2NzZGthcHBzOmNjc2RrYXBwcw==
-
+  config:
+    asdcAddress: ${asdcAddress:localhost:8443}
+    messageBusAddress: ${messageBusAddress:localhost}
+    user: ${sdcusername:vid}
+    password: ${password:Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U}
+    pollingInterval: ${pollingInterval:15}
+    pollingTimeout: ${pollingTimeout:60}
+    relevantArtifactTypes: ${relevantArtifactTypes:TOSCA_CSAR}
+    consumerGroup: ${consumerGroup:cds-id-local}
+    environmentName: ${environmentName:AUTO}
+    consumerId: ${consumerId:cds-id-local}
+    keyStorePassword: ${keyStorePassword}
+    keyStorePath: ${keyStorePath}
+    activateServerTLSAuth : ${activateServerTLSAuth:false}
+    isUseHttpsWithDmaap: ${isUseHttpsWithDmaap:false}
+    archivePath: ${archivePath:/opt/app/onap/cds-sdc-listener/}
+    grpcAddress: ${grpcAddress:localhost}
+    grpcPort: ${grpcPort:9111}
+    authHeader: ${authHeader:Basic Y2NzZGthcHBzOmNjc2RrYXBwcw==}
