@@ -1,0 +1,89 @@
+{
+    "name": "resourceDictionary",
+    "connector": "rest",
+    "baseURL": "http://localhost:8080/api/v1/dictionary",
+    "crud": false,
+    "operations": [{
+            "template": {
+                "method": "GET",
+                "url": "http://localhost:8080/api/v1/dictionary/{name}",
+                "headers": {
+                    "accepts": "application/json",
+                    "content-type": "application/json",
+                    "authorization": "{authtoken}"
+                },
+                "responsePath": "$.*"
+            },
+            "functions": {
+                "getByName": ["name", "authtoken"]
+
+            }
+        },
+        {
+            "template": {
+                "method": "GET",
+                "url": "http://localhost:8080/api/v1/dictionary/source-mapping",
+                "headers": {
+                    "accepts": "application/json",
+                    "content-type": "application/json",
+                    "authorization": "{authtoken}"
+                },
+                "responsePath": "$.*"
+            },
+            "functions": {
+                "getSourceMapping": ["authtoken"]
+
+            }
+        },
+        {
+            "template": {
+                "method": "GET",
+                "url": "http://localhost:8080/api/v1/dictionary/search/{tags}",
+                "headers": {
+                    "accepts": "application/json",
+                    "content-type": "application/json",
+                    "authorization": "{authtoken}"
+                },
+                "responsePath": "$.*"
+            },
+            "functions": {
+                "getByTags": ["tags", "authtoken"]
+
+            }
+        },
+        {
+            "template": {
+                "method": "POST",
+                "url": "http://localhost:8080/api/v1/dictionary",
+                "headers": {
+                    "accepts": "application/json",
+                    "content-type": "application/json",
+                    "authorization": "{authtoken}"
+                },
+                "body": "{resourceDictionary}",
+                "responsePath": "$.*"
+            },
+            "functions": {
+                "save": ["authtoken", "resourceDictionary"]
+
+            }
+        },
+        {
+            "template": {
+                "method": "POST",
+                "url": "http://localhost:8080/api/v1/dictionary/by-names",
+                "headers": {
+                    "accepts": "application/json",
+                    "content-type": "application/json",
+                    "authorization": "{authtoken}"
+                },
+                "body": "{resourceDictionaryList}",
+                "responsePath": "$.*"
+            },
+            "functions": {
+                "searchbyNames": ["authtoken", "resourceDictionaryList"]
+
+            }
+        }
+    ]
+}

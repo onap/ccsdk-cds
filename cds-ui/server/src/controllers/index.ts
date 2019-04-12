@@ -20,3 +20,4 @@ limitations under the License.
 */
 
 export * from './ping.controller';
+export * from './data-dictionary.controller';
