@@ -13,6 +13,24 @@ The system is designed to be self service, which means that users, not just prog
 Self service is a completely new way of delivering services.  It removes the dependence on code releases and the delays they cause and puts the control of services into the hands of the service providers.  They can change a model and its parameters and create a new service without writing a single line of code.  
 This makes SERVICE PROVIDER(S) more responsive to its customers and able to deliver products that more closely match the needs of its customers.
 
+Modleing Concept:
+=================
+In Dublin release, the CDS community has contributed a framework to automate the resolution of resources for instantiation and any config provisioning operation, such as day0, day1 or day2 configuration.
+
+The content of the CBA Package is driven from a catalog of reusable data dictionary, component and workflow, delivering a reusable and simplified self service experience.
+
+TOSCA based JSON formatted model following standard: http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.2/csd01/TOSCA-Simple-Profile-YAML-v1.2-csd01.html
+
+Most of the TOSCA modeled entity presented in the bellow documentation can be found here: https://github.com/onap/ccsdk-cds/tree/master/components/model-catalog/definition-type/starter-type
+
+Tosca Model Reference: 
+
+|image0|
+
+.. |image0| image:: media/image0.jpg
+   :width: 7.88889in 
+   :height: 4.43750in
+
 Design tools:
 =============
 .. toctree::
