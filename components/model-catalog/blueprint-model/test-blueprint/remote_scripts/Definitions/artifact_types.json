@@ -1,0 +1,12 @@
+{
+  "artifact_types": {
+    "artifact-script-python": {
+      "description": "Python Script file",
+      "version": "1.0.0",
+      "derived_from": "tosca.artifacts.Implementation",
+      "file_ext": [
+        "py"
+      ]
+    }
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "description": "This is Jython Execution Component.",
+  "description": "This is Remote Python Execution Component.",
   "version": "1.0.0",
   "capabilities": {
     "component-node": {
@@ -14,7 +14,8 @@
             "endpoint-selector": {
               "description": "Remote Container or Server selector name.",
               "required": false,
-              "type": "string"
+              "type": "string",
+              "default": "default"
             },
             "dynamic-properties": {
               "description": "Dynamic Json Content or DSL Json reference.",
