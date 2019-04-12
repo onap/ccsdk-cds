@@ -70,7 +70,7 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
         val dynamicProperties = getOperationInput(INPUT_DYNAMIC_PROPERTIES)
 
         // TODO("Python execution command and Resolve some expressions with dynamic properties")
-        val scriptCommand: String = "python ${pythonScript.absolutePath}"
+        val scriptCommand = "${pythonScript.absolutePath}"
 
         val dependencies = operationAssignment.implementation?.dependencies
 
@@ -79,16 +79,14 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
             remoteScriptExecutionService.init(endPointSelector.asText())
 
             // If dependencies are defined, then install in remote server
-            if (dependencies != null && !dependencies.isEmpty()) {
-                val prepareEnvInput = PrepareRemoteEnvInput(
-                    requestId = processId,
-                    remoteIdentifier = RemoteIdentifier(blueprintName = blueprintName, blueprintVersion = blueprintVersion),
-                    remoteScriptType = RemoteScriptType.PYTHON,
-                    packages = dependencies
+            if (dependencies != null && dependencies.isNotEmpty()) {
+                val prepareEnvInput = PrepareRemoteEnvInput(requestId = processId,
+                        remoteScriptType = RemoteScriptType.PYTHON,
+                        packages = dependencies
                 )
                 val prepareEnvOutput = remoteScriptExecutionService.prepareEnv(prepareEnvInput)
-                checkNotNull(prepareEnvOutput) {
-                    "failed to get prepare remote env response for requestId(${prepareEnvInput.requestId})"
+                checkNotNull(prepareEnvOutput.status) {
+                    "failed to get prepare remote env response status for requestId(${prepareEnvInput.requestId})"
                 }
             }
 
@@ -98,8 +96,8 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
                     remoteScriptType = RemoteScriptType.PYTHON,
                     command = scriptCommand)
             val remoteExecutionOutput = remoteScriptExecutionService.executeCommand(remoteExecutionInput)
-            checkNotNull(remoteExecutionOutput) {
-                "failed to get prepare remote command response for requestId(${remoteExecutionOutput.requestId})"
+            checkNotNull(remoteExecutionOutput.status) {
+                "failed to get prepare remote command response status for requestId(${remoteExecutionOutput.requestId})"
             }
         } finally {
             remoteScriptExecutionService.close()
