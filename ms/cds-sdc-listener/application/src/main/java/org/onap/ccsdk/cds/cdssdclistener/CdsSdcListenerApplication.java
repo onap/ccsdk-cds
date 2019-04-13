@@ -9,11 +9,13 @@
 package org.onap.ccsdk.cds.cdssdclistener;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @SpringBootApplication
 @EnableConfigurationProperties(CdsSdcListenerConfiguration.class)
+@EnableAutoConfiguration(exclude = {org.springframework.boot.autoconfigure.gson.GsonAutoConfiguration.class})
 public class CdsSdcListenerApplication {
     public static void main(String[] args) {
         SpringApplication.run(CdsSdcListenerApplication.class, args);
