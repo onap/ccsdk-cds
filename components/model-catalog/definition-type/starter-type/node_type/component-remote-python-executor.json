@@ -1,6 +1,12 @@
 {
   "description": "This is Remote Python Execution Component.",
   "version": "1.0.0",
+  "attributes": {
+    "execution-logs": {
+      "required": true,
+      "type": "string"
+    }
+  },
   "capabilities": {
     "component-node": {
       "type": "tosca.capabilities.Node"
@@ -15,24 +21,12 @@
               "description": "Remote Container or Server selector name.",
               "required": false,
               "type": "string",
-              "default": "default"
+              "default": "remote-python"
             },
             "dynamic-properties": {
               "description": "Dynamic Json Content or DSL Json reference.",
               "required": false,
               "type": "json"
-            }
-          },
-          "outputs": {
-            "response-data": {
-              "description": "Execution Response Data in JSON format.",
-              "required": false,
-              "type": "json"
-            },
-            "status": {
-              "description": "Status of the Component Execution ( success or failure )",
-              "required": true,
-              "type": "string"
             }
           }
         }

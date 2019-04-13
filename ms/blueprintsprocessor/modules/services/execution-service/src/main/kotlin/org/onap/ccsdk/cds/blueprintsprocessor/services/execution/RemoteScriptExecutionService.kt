@@ -48,8 +48,8 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
 
     private val log = LoggerFactory.getLogger(GrpcRemoteScriptExecutionService::class.java)!!
 
-    lateinit var channel: ManagedChannel
-    lateinit var commandExecutorServiceGrpc: CommandExecutorServiceGrpc.CommandExecutorServiceFutureStub
+    private var channel: ManagedChannel? = null
+    private lateinit var commandExecutorServiceGrpc: CommandExecutorServiceGrpc.CommandExecutorServiceFutureStub
 
     override suspend fun init(selector: String) {
         // Get the GRPC Client Service based on selector
@@ -94,10 +94,7 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
     }
 
     override suspend fun close() {
-        // TODO('Verify the correct way to close the client conncetion")
-        if (channel != null) {
-            channel.shutdownNow()
-        }
+        channel?.shutdownNow()
     }
 
 
@@ -105,7 +102,7 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
         val correlationId = this.correlationId ?: this.requestId
 
         return PrepareEnvInput.newBuilder()
-            .setIdentifiers(this.remoteIdentifier.asGrpcData())
+            .setIdentifiers(this.remoteIdentifier!!.asGrpcData())
             .setRequestId(this.requestId)
             .setCorrelationId(correlationId)
             .setScriptType(ScriptType.valueOf(this.remoteScriptType.name))
@@ -120,7 +117,7 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
         return ExecutionInput.newBuilder()
             .setRequestId(this.requestId)
             .setCorrelationId(correlationId)
-            .setIdentifiers(this.remoteIdentifier.asGrpcData())
+            .setIdentifiers(this.remoteIdentifier!!.asGrpcData())
             .setScriptType(ScriptType.valueOf(this.remoteScriptType.name))
             .setCommand(this.command)
             .setTimeOut(this.timeOut.toInt())
@@ -129,15 +126,11 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
             .build()
     }
 
-    fun RemoteIdentifier?.asGrpcData(): Identifiers? {
-        return if (this != null) {
-            Identifiers.newBuilder()
-                .setBlueprintName(this.blueprintName)
-                .setBlueprintVersion(this.blueprintVersion)
-                .build()
-        } else {
-            null
-        }
+    fun RemoteIdentifier.asGrpcData(): Identifiers? {
+        return Identifiers.newBuilder()
+            .setBlueprintName(this.blueprintName)
+            .setBlueprintVersion(this.blueprintVersion)
+            .build()
     }
 
     fun Map<String, JsonNode>.asGrpcData(): Struct {
