@@ -28,5 +28,5 @@ then
   export BASIC_AUTH="Basic Y2NzZGthcHBzOmNjc2RrYXBwcw=="
 fi
 
-cd /opt/onap/app/python/
+cd /opt/app/onap/python/
 python command_executor_server.py ${APP_PORT} ${BASIC_AUTH}

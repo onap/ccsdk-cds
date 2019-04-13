@@ -5,10 +5,8 @@ RUN python -m pip install --upgrade pip
 RUN pip install grpcio==${GRPC_PYTHON_VERSION} grpcio-tools==${GRPC_PYTHON_VERSION}
 RUN pip install virtualenv
 
-RUN mkdir -p /opt/onap/blueprints && mkdir -p /opt/onap/app/python && chmod -R 777 /opt/onap
-
-COPY start.sh /opt/onap/app/start.sh
-RUN chmod u+x /opt/onap/app/start.sh
+COPY start.sh /opt/app/onap/start.sh
+RUN chmod u+x /opt/app/onap/start.sh
 
 COPY @project.build.finalName@-@assembly.id@.tar.gz /source.tar.gz
 RUN tar -xzf /source.tar.gz -C /tmp \
@@ -16,4 +14,7 @@ RUN tar -xzf /source.tar.gz -C /tmp \
  && rm -rf /source.tar.gz \
  && rm -rf /tmp/@project.build.finalName@
 
-ENTRYPOINT /opt/onap/app/start.sh
+
+VOLUME /opt/app/onap/blueprints/deploy/
+
+ENTRYPOINT /opt/app/onap/start.sh
