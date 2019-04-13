@@ -46,6 +46,30 @@
       "revId": "43aec72268bc2ebc83cfd664c7688d8d45a8ed6e",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e23efec4_b95adf50",
+        "filename": "components/model-catalog/blueprint-model/test-blueprint/remote_scripts/Definitions/node_types.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-04-13T18:19:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "417dffee_073260b4",
+      "range": {
+        "startLine": 26,
+        "startChar": 29,
+        "endLine": 26,
+        "endChar": 44
+      },
+      "revId": "43aec72268bc2ebc83cfd664c7688d8d45a8ed6e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
