@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e04c6e44_67941bf5",
+        "filename": "ms/cds-sdc-listener/application/pom.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2019-04-15T16:58:32Z",
+      "side": 1,
+      "message": "Sorry, I guess I wasn\u0027t clear.  This should be:\n\u003cgroupId\u003eorg.onap.ccsdk.parent\u003c/groupId\u003e\n\u003cartifactId\u003espring-boot-starter-parent\u003c/artifactId\u003e\n\u003cversion\u003e1.2.2-SNAPSHOT\u003c/version\u003e\n\nThat parent is a child of org.springwork.boot:spring-boot-starter-parent, version 2.1.4.RELEASE (latest release of springboot 2), as of this morning.  We want all projects using springboot to use the ccsdk parent so that we can enforce consistency, mainly to make sure we\u0027re keeping all projects up to date on security patches",
+      "range": {
+        "startLine": 12,
+        "startChar": 2,
+        "endLine": 14,
+        "endChar": 36
+      },
+      "revId": "902e4e16faaf6a71161b6b9e7139a362f5888ae9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
