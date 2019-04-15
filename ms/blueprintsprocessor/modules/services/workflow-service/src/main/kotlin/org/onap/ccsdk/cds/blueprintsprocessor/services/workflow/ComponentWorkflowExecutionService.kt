@@ -39,7 +39,7 @@ open class ComponentWorkflowExecutionService(private val nodeTemplateExecutionSe
         val nodeTemplateName = bluePrintContext.workflowFirstStepNodeTemplate(workflowName)
 
         return nodeTemplateExecutionService.executeNodeTemplate(bluePrintRuntimeService,
-                nodeTemplateName, executionServiceInput)
+            nodeTemplateName, executionServiceInput)
     }
 
 }

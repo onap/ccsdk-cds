@@ -72,7 +72,7 @@ open class NodeTemplateExecutionService(private val applicationContext: Applicat
         clonedExecutionServiceInput.stepData = stepInputData
 
         // Get the Request from the Context and Set to the Function Input and Invoke the function
-       return plugin.applyNB(clonedExecutionServiceInput)
+        return plugin.applyNB(clonedExecutionServiceInput)
     }
 
 }
