@@ -9,37 +9,74 @@ Resource Definition
 
 Introduction:
 =============
-A Resource Definition defines a specifc resource that can be resolved using the bellow supported sources.
+A data dictionary models the how a specific resource can be resolved.
 
-A Resource Definition can support multiple sources.
+A resource is a variable/parameter in the context of the service. It can be anything, but it should not be confused with SDC or Openstack resources.
 
-The main goal of Resource Definition is to define generic entity that could be shared accross services.
+A data dictionary can have multiple sources to handle resolution in different ways.
+
+The main goal of data dictionary is to define re-usable entity that could be shared.
+
+Creation of data dictionaries is a standalone activity, separated from the blueprint design.
 
 
-Resolution sources:
-===================
+As part of modelling a data dictionary entry, the following generic information should be provided:
 
-   * Input
-   * Default
-   * DB
-   * REST
-   * Capability
+|image0|
 
-Artifacts:
-==========
+.. |image0| image:: media/image0.jpg
+   :width: 7.88889in 
+   :height: 4.43750in
 
-   * artifact-mapping-resource
-   * artifact-template-velocity
-   * artifact-directed-graph
+Bellow are properties that all the resource source have will have
 
-Node type:
-==========
-	
-   * component-resource-resolution
-   * component-jython-executor
-   * component-netconf-executor
-   * component-restconf-executor
+The modeling does allow for data translation between external capability and CDS for both input and output key mapping.
 
-Data type:
-==========
-   * vnf-netconf-device
+|image1|
+
+.. |image1| image:: media/image0.jpg
+   :width: 7.88889in 
+   :height: 4.43750in
+
+Example:
+========
+
+vf-module-model-customization-uuid and vf-module-label are two data dictionaries. A SQL table, VF_MODULE_MODEL, exist to correlate them.
+
+Here is how input-key-mapping, output-key-mapping and key-dependencies can be used:
+
+vf-module-label data dictionary  
+
+{
+  "name" : "vf-module-label",
+  "tags" : "vf-module-label",
+  "updated-by" : "adetalhouet",
+  "property" : {
+    "description" : "vf-module-label",
+    "type" : "string"
+  },
+  "sources" : {
+    "primary-db" : {
+      "type" : "source-primary-db",
+      "properties" : {
+        "type" : "SQL",
+        "query" : "select sdnctl.VF_MODULE_MODEL.vf_module_label as vf_module_label from sdnctl.VF_MODULE_MODEL where sdnctl.VF_MODULE_MODEL.customization_uuid=:customizationid",
+        "input-key-mapping" : {
+          "customizationid" : "vf-module-model-customization-uuid"
+        },
+        "output-key-mapping" : {
+          "vf-module-label" : "vf_module_label"
+        },
+        "key-dependencies" : [ "vf-module-model-customization-uuid" ]
+      }
+    }
+  }
+}
+
+
+Resource source:
+================
+
+Defines the contract to resolve a resource.
+
+A resource source is modeled, following http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/csprd01/TOSCA-Simple-Profile-YAML-v1.0-csprd01.html#DEFN_ENTITY_NODE_TYPE, and derives from the https://wiki.onap.org/display/DW/Modeling+Concepts#ModelingConcepts-NodeResourceSource
