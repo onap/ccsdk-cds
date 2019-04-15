@@ -30,6 +30,7 @@ import { IBlueprintState } from 'src/app/common/core/store/models/blueprintState
 import { IBlueprint } from 'src/app/common/core/store/models/blueprint.model';
 import { IMetaData } from '../../../common/core/store/models/metadata.model';
 import { LoadBlueprintSuccess } from 'src/app/common/core/store/actions/blueprint.action';
+import { TestTemplateService } from './test-template.service'
 
 import "ace-builds/webpack-resolver";
 import 'brace';
@@ -47,8 +48,10 @@ export class TestTemplateComponent implements OnInit {
   private workflows = [];
   @ViewChild('editor') editor;
   options: any = { fontSize: "100%", printMargin: false, tabSize: 2 };
+  requestText: string;
+  responseText: string;
 
-  constructor(private store: Store<IAppState>) {
+  constructor(private store: Store<IAppState>, private testTemplateService: TestTemplateService) {
     this.blueprintpState = this.store.select('blueprint')
       .subscribe((data: any) => {
         console.log(data);
@@ -79,6 +82,17 @@ export class TestTemplateComponent implements OnInit {
   createRequest(workflow) {
     this.request = JSON.stringify(workflow, undefined, 4);
 
+  }
+
+  submitRequest() {
+    this.testTemplateService.submitRequest(this.requestText)
+    .subscribe((response) =>{
+      this.responseText = response;
+      window.alert('Success');
+    },
+    (error)=>{
+      this.responseText = "Error in processing request";
+    })
   }
 
 }

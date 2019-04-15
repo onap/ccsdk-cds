@@ -1,7 +1,7 @@
 /*
 ============LICENSE_START==========================================
 ===================================================================
-Copyright (C) 2018 IBM Intellectual Property. All rights reserved.
+Copyright (C) 2018-19 IBM Intellectual Property. All rights reserved.
 ===================================================================
 
 Unless otherwise specified, all software contained herein is licensed
@@ -19,26 +19,21 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { TestTemplateComponent } from './test-template.component';
-import { TestTemplateRoutingModule } from './test-template-routing.module';
-import { AppMaterialModule } from '../../../common/modules/app-material.module';
-import { AceEditorModule } from 'ng2-ace-editor';
-import { TestTemplateService } from './test-template.service';
-@NgModule({
-  declarations: [
-    TestTemplateComponent
-  ],
-  exports: [
-    TestTemplateComponent
-  ],
-  imports: [
-    CommonModule,
-    AppMaterialModule,
-    TestTemplateRoutingModule,
-    AceEditorModule
-  ],
-  providers: [TestTemplateService]
-})
-export class TestTemplateModule { }
+
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, observable } from 'rxjs';
+import { ApiService } from '../../../common/core/services/api.service';
+import { LoopbackConfig } from '../../../common/constants/app-constants';
+
+@Injectable()
+export class TestTemplateService {
+    // blueprintUrl = '../../constants/blueprint.json';
+
+    constructor(private _http: HttpClient, private api: ApiService) {
+    }
+
+    submitRequest(request) {
+       return this.api.get('', request);
+    }
+}
