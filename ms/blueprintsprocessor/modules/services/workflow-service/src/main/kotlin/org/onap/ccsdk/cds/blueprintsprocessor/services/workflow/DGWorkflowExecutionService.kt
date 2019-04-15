@@ -48,7 +48,7 @@ open class DGWorkflowExecutionService(private val blueprintSvcLogicService: Blue
 
         // Get the DG file info
         val artifactDefinition = bluePrintContext.nodeTemplateArtifactForArtifactType(nodeTemplateName,
-                WorkflowServiceConstants.ARTIFACT_TYPE_DIRECTED_GRAPH)
+            WorkflowServiceConstants.ARTIFACT_TYPE_DIRECTED_GRAPH)
 
         // Populate the DG Path
         val dgFilePath = normalizedPathName(bluePrintContext.rootPath, artifactDefinition.file)
@@ -59,7 +59,9 @@ open class DGWorkflowExecutionService(private val blueprintSvcLogicService: Blue
         val graph = SvcGraphUtils.getSvcGraphFromFile(dgFilePath)
 
         // Execute the DG
-        return blueprintSvcLogicService.execute(graph, bluePrintRuntimeService, executionServiceInput) as ExecutionServiceOutput
+        return blueprintSvcLogicService.execute(graph,
+            bluePrintRuntimeService,
+            executionServiceInput) as ExecutionServiceOutput
 
     }
 
