@@ -18,4 +18,10 @@ listenerservice:
       grpcAddress: localhost
       grpcPort: 9111
       authHeader: Basic Y2NzZGthcHBzOmNjc2RrYXBwcw==
-
+#port needed by Liveness probe
+server:
+  port: 9000
+#set spring.main.web-environment=false if you want to NOT to open a port for healthcheck.
+#spring:
+#  main:
+#    web-environment: false
