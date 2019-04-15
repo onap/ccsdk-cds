@@ -165,7 +165,7 @@ export class EditorComponent implements OnInit {
             blueprint.push(this.blueprintdata[key]);
           }
         }
-        this.metadata=blueprintState.blueprint.metadata;
+        this.metadata = blueprintState.blueprint.metadata;
         let metadatavalues = [];
         for (let key in this.metadata) {
           if (this.metadata.hasOwnProperty(key)) {
@@ -181,21 +181,21 @@ export class EditorComponent implements OnInit {
   }
 
   updateBlueprint() {
-    console.log(this.blueprint);
-    this.filesData.forEach(fileNode => {
-      if (this.selectedFile && fileNode.name.includes(this.blueprintName.trim()) && fileNode.name.includes(this.selectedFile.trim())) {
-        fileNode.data = this.text;
-      } else if (this.selectedFile && fileNode.name.includes(this.currentFilePath)) {
-        // this.selectedFile && fileNode.name.includes(this.selectedFile.trim())) {
-        fileNode.data = this.text;
-      }
-    });
+    // console.log(this.blueprint);
+    // this.filesData.forEach(fileNode => {
+    //   if (this.selectedFile && fileNode.name.includes(this.blueprintName.trim()) && fileNode.name.includes(this.selectedFile.trim())) {
+    //     fileNode.data = this.text;
+    //   } else if (this.selectedFile && fileNode.name.includes(this.currentFilePath)) {
+    //     // this.selectedFile && fileNode.name.includes(this.selectedFile.trim())) {
+    //     fileNode.data = this.text;
+    //   }
+    // });
 
-    if (this.selectedFile && this.selectedFile == this.blueprintName.trim()) {
-      this.blueprint = JSON.parse(this.text);
-    } else {
-      this.blueprint = this.blueprintdata;
-    }
+    // if (this.selectedFile && this.selectedFile == this.blueprintName.trim()) {
+    //   this.blueprint = JSON.parse(this.text);
+    // } else {
+    //   this.blueprint = this.blueprintdata;
+    // }
 
     let blueprintState = {
       blueprint: this.blueprint,
@@ -243,11 +243,11 @@ export class EditorComponent implements OnInit {
                     console.log("processed");
                   }
                 });
-                window.alert('Blueprint enriched successfully' );
+              window.alert('Blueprint enriched successfully');
             });
       });
   }
-  
+
 
 
   saveToBackend() {
@@ -300,7 +300,9 @@ export class EditorComponent implements OnInit {
 
   create() {
     this.filesData.forEach((path) => {
-      this.zipFile.file(path.name, path.data);
+      let index = path.name.indexOf("/");
+      let name = path.name.slice(index + 1, path.name.length);
+      this.zipFile.file(name, path.data);
     });
   }
 
@@ -318,6 +320,13 @@ export class EditorComponent implements OnInit {
     //     console.log(error);
     //   }
     // );
+
+    // this.create();
+    // var zipFilename = "baseconfiguration.zip";
+    // this.zipFile.generateAsync({ type: "blob" })
+    //   .then(blob => {
+    //     saveAs(blob, zipFilename);
+    //   });
   }
   setEditorMode() {
     switch (this.fileExtension) {
@@ -436,7 +445,7 @@ export class EditorComponent implements OnInit {
     this.blueprintName = (((toscaData['Entry-Definitions']).split('/'))[1]).toString();;
     console.log(toscaData);
   }
-  
+
   arrangeTreeData(paths) {
     const tree = [];
 
@@ -556,5 +565,24 @@ export class EditorComponent implements OnInit {
     } else {
       return paramValue;
     }
+  }
+
+  saveEditedChanges() {
+    this.filesData.forEach(fileNode => {
+      if (this.selectedFile && fileNode.name.includes(this.blueprintName.trim()) && fileNode.name.includes(this.selectedFile.trim())) {
+        fileNode.data = this.text;
+      } else if (this.selectedFile && fileNode.name.includes(this.currentFilePath)) {
+        // this.selectedFile && fileNode.name.includes(this.selectedFile.trim())) {
+        fileNode.data = this.text;
+      }
+    });
+
+    if (this.selectedFile && this.selectedFile == this.blueprintName.trim()) {
+      this.blueprint = JSON.parse(this.text);
+    } else {
+      this.blueprint = this.blueprintdata;
+    }
+
+    this.updateBlueprint();
   }
 }
