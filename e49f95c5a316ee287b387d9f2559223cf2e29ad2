@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a4e83637_49651859",
+        "filename": "ms/cds-sdc-listener/application/pom.xml",
+        "patchSetId": 7
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-04-15T13:38:38Z",
+      "side": 1,
+      "message": "I will recommend you to keep consistent with ControllerBlueprint and BlueprintProcessor to containerize CDS-SDC-listener. No need to add another maven library.\nKeep all in distribution folder.",
+      "range": {
+        "startLine": 120,
+        "startChar": 0,
+        "endLine": 146,
+        "endChar": 15
+      },
+      "revId": "e49f95c5a316ee287b387d9f2559223cf2e29ad2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
