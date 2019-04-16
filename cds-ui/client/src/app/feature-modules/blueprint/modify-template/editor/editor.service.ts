@@ -42,6 +42,7 @@ export class EditorService {
             .subscribe(response => {
                 let blob = new Blob([response], { 'type': "application/octet-stream" });
                 saveAs(blob, "CBA.zip");
+                window.alert('Blueprint download successfull' );
             });
         return "Download Success";
 
