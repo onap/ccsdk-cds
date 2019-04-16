@@ -56,6 +56,13 @@ The Controller Design Studio is composed of two major components:
 	* The Run Time (or backend)  
 The GUI handles direct user input and allows for displaying both design time and run time activities.  For design time, it allows for the creation of controller blueprint, from selecting the DGs to be included, to incorporating the artifact templates, to adding necessary components.  For run time, it allows the user to direct the system to resolve the unresolved elements of the controller blueprint and download the resulting configuration into a VNF.  At a more basic level, it allows for creation of data dictionaries, capabilities catalogs, and controller blueprint, the basic elements that are used to generate a configuration. The essential function of the Controller Design Studio is to create and populate a controller blueprint, create a configuration file from this Controller blueprint, and download this configuration file (configlet) to a VNF/PNF.
 
+|image0|
+
+.. |image0| image:: media/CDS_architecture.jpg
+   :height: 4.43750in
+   :width: 7.88889in
+
+
 Resource assignment:
 =====================
 .. toctree::
