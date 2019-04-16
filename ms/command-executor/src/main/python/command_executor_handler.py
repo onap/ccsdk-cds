@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
+import logging
 import os
 import subprocess
 import virtualenv
@@ -27,6 +27,8 @@ import utils
 class CommandExecutorHandler:
 
     def __init__(self, request):
+        self.logger = logging.getLogger(self.__class__.__name__)
+
         self.blueprint_id = utils.get_blueprint_id(request)
         self.venv_home = '/opt/app/onap/blueprints/deploy/' + self.blueprint_id
 
@@ -49,7 +51,7 @@ class CommandExecutorHandler:
         try:
             results.append(os.popen(request.command).read())
         except Exception as e:
-            print("{} - Failed to execute command. Error: {}".format(self.blueprint_id, e))
+            self.logger.info("{} - Failed to execute command. Error: {}".format(self.blueprint_id, e))
             results.append(e)
             return False
 
@@ -57,11 +59,11 @@ class CommandExecutorHandler:
         return True
 
     def install(self, package, results):
-        print("{} - Install package({}) in Python Virtual Environment".format(self.blueprint_id, package))
+        self.logger.info("{} - Install package({}) in Python Virtual Environment".format(self.blueprint_id, package))
         command = ["pip", "install", package]
 
         env = dict(os.environ)
-        # env['https_proxy'] = "https://fastweb.int.bell.ca:8083"
+        env['https_proxy'] = "https://fastweb.int.bell.ca:8083"
 
         try:
             results.append(subprocess.run(command, check=True, stdout=PIPE, stderr=PIPE, env=env).stdout.decode())
@@ -71,30 +73,30 @@ class CommandExecutorHandler:
             return False
 
     def create_venv(self):
-        print("{} - Create Python Virtual Environment".format(self.blueprint_id))
+        self.logger.info("{} - Create Python Virtual Environment".format(self.blueprint_id))
         try:
             bin_dir = self.venv_home + "/bin"
             # venv doesn't populate the activate_this.py script, hence we use from virtualenv
             venv.create(self.venv_home, with_pip=True, system_site_packages=True)
             virtualenv.writefile(os.path.join(bin_dir, "activate_this.py"), virtualenv.ACTIVATE_THIS)
         except Exception as err:
-            print("{} - Failed to provision Python Virtual Environment. Error: {}".format(self.blueprint_id, err))
+            self.logger.info("{} - Failed to provision Python Virtual Environment. Error: {}".format(self.blueprint_id, err))
 
     def activate_venv(self):
-        print("{} - Activate Python Virtual Environment".format(self.blueprint_id))
+        self.logger.info("{} - Activate Python Virtual Environment".format(self.blueprint_id))
 
         path = "%s/bin/activate_this.py" % self.venv_home
         try:
             exec (open(path).read(), {'__file__': path})
             return True
         except Exception as err:
-            print("{} - Failed to activate Python Virtual Environment. Error: {}".format(self.blueprint_id, err))
+            self.logger.info("{} - Failed to activate Python Virtual Environment. Error: {}".format(self.blueprint_id, err))
             return False
 
     def deactivate_venv(self):
-        print("{} - Deactivate Python Virtual Environment".format(self.blueprint_id))
+        self.logger.info("{} - Deactivate Python Virtual Environment".format(self.blueprint_id))
         command = ["deactivate"]
         try:
             subprocess.run(command, check=True)
         except Exception as err:
-            print("{} - Failed to deactivate Python Virtual Environment. Error: {}".format(self.blueprint_id, err))
+            self.logger.info("{} - Failed to deactivate Python Virtual Environment. Error: {}".format(self.blueprint_id, err))
