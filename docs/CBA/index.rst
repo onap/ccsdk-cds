@@ -2,8 +2,8 @@
 .. http://creativecommons.org/licenses/by/4.0
 .. Copyright (C) 2019 IBM.
 
-Controller Blueprint Archived Tool(CBA)
-----------------------------------------
+Controller Blueprint Archived Designer Tool(CBA)
+------------------------------------------------
 .. toctree::
    :maxdepth: 1
    
