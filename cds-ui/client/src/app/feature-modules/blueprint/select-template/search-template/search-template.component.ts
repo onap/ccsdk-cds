@@ -42,7 +42,7 @@ export class SearchTemplateComponent implements OnInit {
   blueprintState: IBlueprintState;
   bpState: Observable<IBlueprintState>;
   validfile: boolean = false;
-
+  uploadedFileName: string;
   @ViewChild('fileInput') fileInput;
   result: string = '';
 
@@ -62,6 +62,7 @@ export class SearchTemplateComponent implements OnInit {
   fileChanged(e: any) {
     this.paths = [];
     this.file = e.target.files[0];
+    this.uploadedFileName = (this.file.name.split('.'))[0];
     this.zipFile.files = {};
     this.zipFile.loadAsync(this.file)
       .then((zip) => {
@@ -88,7 +89,9 @@ export class SearchTemplateComponent implements OnInit {
     this.paths = [];
     for (var file in zip.files) {
       this.fileObject = {
-        name: zip.files[file].name,
+        // nameForUIDisplay: this.uploadedFileName + '/' + zip.files[file].name,
+        // name: zip.files[file].name,
+        name: this.uploadedFileName + '/' + zip.files[file].name,
         data: ''
       };
       const value = <any>await  zip.files[file].async('string');
