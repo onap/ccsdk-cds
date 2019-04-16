@@ -29,4 +29,4 @@ then
 fi
 
 cd /opt/app/onap/python/
-python command_executor_server.py ${APP_PORT} ${BASIC_AUTH}
+python server.py ${APP_PORT} ${BASIC_AUTH}
