@@ -29,8 +29,8 @@ import org.springframework.stereotype.Service
 
 @Service("bluePrintWorkflowExecutionService")
 open class BluePrintWorkflowExecutionServiceImpl(
-        private val componentWorkflowExecutionService: ComponentWorkflowExecutionService,
-        private val dgWorkflowExecutionService: DGWorkflowExecutionService
+    private val componentWorkflowExecutionService: ComponentWorkflowExecutionService,
+    private val dgWorkflowExecutionService: DGWorkflowExecutionService
 ) : BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput> {
 
     private val log = LoggerFactory.getLogger(BluePrintWorkflowExecutionServiceImpl::class.java)!!
@@ -57,11 +57,11 @@ open class BluePrintWorkflowExecutionServiceImpl(
         val executionServiceOutput: ExecutionServiceOutput = when {
             derivedFrom.startsWith(BluePrintConstants.MODEL_TYPE_NODE_COMPONENT, true) -> {
                 componentWorkflowExecutionService
-                        .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, properties)
+                    .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, properties)
             }
             derivedFrom.startsWith(BluePrintConstants.MODEL_TYPE_NODE_WORKFLOW, true) -> {
                 dgWorkflowExecutionService
-                        .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, properties)
+                    .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, properties)
             }
             else -> {
                 throw BluePrintProcessorException("couldn't execute workflow($workflowName) step mapped " +
