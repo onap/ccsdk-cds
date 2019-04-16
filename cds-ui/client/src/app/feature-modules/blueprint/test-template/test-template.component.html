@@ -18,21 +18,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
 -->
-<div class="testTemplateContainer">
 
+<div style="border: 1px solid #3f51b5; padding: 1em;">
+    <i class="fa fa-exclamation-circle" style="color: #3f51b5"  aria-hidden="true"></i>
+    
+</div>
+<div class="testTemplateContainer">
     <div class="editorContainer">
         <div class="editorDiv">
             <p>Request</p>
-            <ace-editor [(text)]="text" mode="json" [theme]="eclipse" [options]="options" #editor class="aceEditor"></ace-editor>
+            <ace-editor [(text)]="requestText" mode="json" [theme]="eclipse" [options]="options" #editor class="aceEditor"></ace-editor>
             <div class="btnContainer">
-                <button class="button">Submit</button>
+                <button class="button" (click)="submitRequest()">Submit</button>
                 <button class="button">Clear</button>
             </div>
         </div>
 
         <div class="editorDiv">
             <p>Response</p>
-            <ace-editor [(text)]="text" mode="json" [theme]="eclipse" [options]="options" #editor class="aceEditor"></ace-editor>
+            <ace-editor [(text)]="responseText" mode="json" [theme]="eclipse" [options]="options" #editor class="aceEditor"></ace-editor>
         </div>
     </div>
 
