@@ -22,6 +22,30 @@
       "revId": "896f4f9c0676d09dc34f244c96d83449fa2b71a7",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "79d344d1_b912c103",
+        "filename": "ms/cds-sdc-listener/application/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-04-16T15:19:06Z",
+      "side": 1,
+      "message": "Updated",
+      "parentUuid": "7ba8e736_c54a7194",
+      "range": {
+        "startLine": 90,
+        "startChar": 17,
+        "endLine": 90,
+        "endChar": 24
+      },
+      "revId": "896f4f9c0676d09dc34f244c96d83449fa2b71a7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
