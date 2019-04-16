@@ -4,9 +4,6 @@
 
 Resource Assignment 
 ===================
-.. toctree::
-   :maxdepth: 1
-   
    
 Component executor:
 ===================
