@@ -5,7 +5,7 @@ listenerservice:
       user: vid
       password: Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U
       pollingInterval: 15
-      pollingTimeout: 15
+      pollingTimeout: 60
       relevantArtifactTypes: TOSCA_CSAR
       consumerGroup: cds-id-local
       environmentName: AUTO
@@ -14,7 +14,7 @@ listenerservice:
       keyStorePath:
       activateServerTLSAuth : false
       isUseHttpsWithDmaap: false
-      archivePath: opt/app/onap/cds-sdc-listener/
+      archivePath: /opt/app/onap/cds-sdc-listener/
       grpcAddress: localhost
       grpcPort: 9111
       authHeader: Basic Y2NzZGthcHBzOmNjc2RrYXBwcw==
