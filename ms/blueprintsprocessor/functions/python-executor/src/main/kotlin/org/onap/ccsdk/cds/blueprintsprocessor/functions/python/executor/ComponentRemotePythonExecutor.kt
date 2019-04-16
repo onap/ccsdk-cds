@@ -46,6 +46,7 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
     companion object {
         const val INPUT_ENDPOINT_SELECTOR = "endpoint-selector"
         const val INPUT_DYNAMIC_PROPERTIES = "dynamic-properties"
+        const val INPUT_COMMAND = "command"
     }
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
@@ -73,9 +74,10 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
 
         val endPointSelector = getOperationInput(INPUT_ENDPOINT_SELECTOR)
         val dynamicProperties = getOperationInput(INPUT_DYNAMIC_PROPERTIES)
+        val command = getOperationInput(INPUT_COMMAND).asText()
 
         // TODO("Python execution command and Resolve some expressions with dynamic properties")
-        val scriptCommand = pythonScript.absolutePath
+        val scriptCommand = command.replace(pythonScript.name, pythonScript.absolutePath)
 
         val dependencies = operationAssignment.implementation?.dependencies
 

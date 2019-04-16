@@ -65,6 +65,9 @@
                   "dependencies": [
                     "pyaml"
                   ]
+                },
+                "inputs": {
+                  "command": "python SamplePython.py blah"
                 }
               }
             }
