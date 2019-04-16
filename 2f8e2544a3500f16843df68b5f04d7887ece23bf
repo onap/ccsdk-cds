@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb382408_9b5f07b3",
+        "filename": "ms/cds-sdc-listener/application/pom.xml",
+        "patchSetId": 7
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-16T20:21:49Z",
+      "side": 1,
+      "message": "will use parent groupId, which will fail deployment of jar to Nexus",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 44
+      },
+      "revId": "2f8e2544a3500f16843df68b5f04d7887ece23bf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
