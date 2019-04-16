@@ -140,4 +140,3 @@ public class CdsSdcListenerConfiguration implements IConfiguration {
         return isUseHttpsWithDmaap;
     }
 }
-
