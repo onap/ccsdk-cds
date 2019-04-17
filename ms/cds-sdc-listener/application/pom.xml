@@ -7,6 +7,7 @@
   ~ Unauthorized copying of this file, via any medium is strictly prohibited.
   -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.onap.ccsdk.parent</groupId>
@@ -14,10 +15,10 @@
     <version>1.2.2-SNAPSHOT</version>
   </parent>
 
-  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.onap.ccsdk.cds.cdssdclistener</groupId>
   <artifactId>cds-sdc-listener-application</artifactId>
   <version>0.4.2-SNAPSHOT</version>
-  <name>CDS-SDC Listener Application </name>
+  <name>CDS-SDC Listener Application</name>
 
   <properties>
     <grpc.version>1.17.1</grpc.version>
