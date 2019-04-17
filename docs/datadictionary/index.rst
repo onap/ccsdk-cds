@@ -9,22 +9,22 @@ Resource Definition
 
 Introduction:
 =============
-A data dictionary models the how a specific resource can be resolved.
+A Resource definition models the how a specific resource can be resolved.
 
 A resource is a variable/parameter in the context of the service. It can be anything, but it should not be confused with SDC or Openstack resources.
 
-A data dictionary can have multiple sources to handle resolution in different ways.
+A Resource definition can have multiple sources to handle resolution in different ways.
 
-The main goal of data dictionary is to define re-usable entity that could be shared.
+The main goal of Resource definition is to define re-usable entity that could be shared.
 
 Creation of data dictionaries is a standalone activity, separated from the blueprint design.
 
 
-As part of modelling a data dictionary entry, the following generic information should be provided:
+As part of modelling a Resource definition entry, the following generic information should be provided:
 
 |image0|
 
-.. |image0| image:: media/image0.jpg
+.. |image0| image:: image0.jpg
    :width: 7.88889in 
    :height: 4.43750in
 
@@ -34,7 +34,7 @@ The modeling does allow for data translation between external capability and CDS
 
 |image1|
 
-.. |image1| image:: media/image0.jpg
+.. |image1| image:: image1.jpg
    :width: 7.88889in 
    :height: 4.43750in
 
@@ -45,7 +45,7 @@ vf-module-model-customization-uuid and vf-module-label are two data dictionaries
 
 Here is how input-key-mapping, output-key-mapping and key-dependencies can be used:
 
-vf-module-label data dictionary  
+vf-module-label Resource definition  
 
 {
   "name" : "vf-module-label",
@@ -79,4 +79,14 @@ Resource source:
 
 Defines the contract to resolve a resource.
 
-A resource source is modeled, following http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/csprd01/TOSCA-Simple-Profile-YAML-v1.0-csprd01.html#DEFN_ENTITY_NODE_TYPE, and derives from the https://wiki.onap.org/display/DW/Modeling+Concepts#ModelingConcepts-NodeResourceSource
+A resource source is modeled, following TOSCA_ node type definition and derives from the Resource_ source.
+
+Also please click below for detailed resource source details
+
+.. toctree::
+   :maxdepth: 1
+   
+   resourcesource
+
+.. _TOSCA: http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/csprd01/TOSCA-Simple-Profile-YAML-v1.0-csprd01.html#DEFN_ENTITY_NODE_TYPE
+.. _Resource_: https://wiki.onap.org/display/DW/Modeling+Concepts#ModelingConcepts-NodeResourceSource
