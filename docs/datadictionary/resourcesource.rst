@@ -42,21 +42,21 @@ CDS is currently deployed along the side of SDNC, hence the primary database con
 
 |image0|
 
-.. |image0| image:: image0.jpg
+.. |image0| image:: sqltable.jpg
    :width: 7.88889in 
    :height: 4.43750in
 
 .. toctree::
    :maxdepth: 1  
 
-	sourceprimarydb
+	sourceprimarydbcode
 	
 Connection to a specific database can be expressed through the endpoint-selector property, which refers to a macro defining the information about the database the connect to. Understand TOSCA Macro in the context of CDS.
 
 .. toctree::
    :maxdepth: 1 
 
-	dbsystem
+	dbsystemcode
 
 
 REST:
@@ -68,14 +68,14 @@ CDS is currently deployed along the side of SDNC, hence the default rest connect
 
 |image1|
 
-.. |image1| image:: image1.jpg
+.. |image1| image:: resttable.jpg
    :width: 7.88889in 
    :height: 4.43750in
 
 .. toctree::
    :maxdepth: 1
    
-   rest
+   restsourcecode
 
 Connection to a specific REST system can be expressed through the endpoint-selector property, which refers to a macro defining the information about the REST system the connect to. Understand TOSCA Macro in the context of CDS.
 
@@ -90,7 +90,7 @@ For source code of Authentication click below link:
 .. toctree::
    :maxdepth: 1
    
-   auth
+   restauth
 
 Capability:
 ===========
@@ -99,7 +99,7 @@ Expects a script to be provided.
 
 |image2|
 
-.. |image2| image:: image2.jpg
+.. |image2| image:: capabilitytable.jpg
    :width: 7.88889in 
    :height: 4.43750in
    
@@ -107,4 +107,4 @@ Expects a script to be provided.
 .. toctree::
    :maxdepth: 1   
 
-	source-capability   
+	sourcecapabilitycode
