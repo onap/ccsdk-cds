@@ -128,7 +128,7 @@ class ResourceResolutionServiceTest {
 
             val artifactPrefix = "another"
 
-            // Velocity Artifact Definition Name
+            // Templating Artifact Definition Name
             val artifactTemplate = "$artifactPrefix-template"
             // Resource Assignment Artifact Definition Name
             val artifactMapping = "$artifactPrefix-mapping"

@@ -123,7 +123,6 @@ class CapabilityResourceResolutionProcessorTest {
             println(processorName)
         }
     }
-
 }
 
 open class MockCapabilityService {
