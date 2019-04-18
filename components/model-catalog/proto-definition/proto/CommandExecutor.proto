@@ -10,14 +10,13 @@ message ExecutionInput {
     string correlationId = 2;
     // Optional Blueprint Information used to identify CBA content information in shared file structure environment.
     Identifiers identifiers = 3;
-    ScriptType scriptType = 4;
     // Actual Command to Execute in Scripting Environment
-    string command = 5;
-    int32 timeOut = 6;
+    string command = 4;
+    int32 timeOut = 5;
     // Extra Dynamic Properties for Command processing in JSON format
-    google.protobuf.Struct properties = 7;
+    google.protobuf.Struct properties = 6;
     // Request Time Stamp
-    google.protobuf.Timestamp timestamp = 8;
+    google.protobuf.Timestamp timestamp = 7;
 }
 
 message PrepareEnvInput {
@@ -25,11 +24,10 @@ message PrepareEnvInput {
     string requestId = 2;
     // Optional Id used to correlate multiple requests so that it can identify previous request information.
     string correlationId = 3;
-    ScriptType scriptType = 4;
-    repeated string packages = 5;
-    int32 timeOut = 6;
-    google.protobuf.Struct properties = 7;
-    google.protobuf.Timestamp timestamp = 8;
+    repeated Packages packages = 4;
+    int32 timeOut = 5;
+    google.protobuf.Struct properties = 6;
+    google.protobuf.Timestamp timestamp = 7;
 }
 
 message Identifiers {
@@ -49,11 +47,14 @@ enum ResponseStatus {
     FAILURE = 1;
 }
 
-enum ScriptType {
+message Packages {
+    PackageType type = 1;
+    repeated string package = 2;
+}
+
+enum PackageType {
     PYTHON = 0;
     ANSIBLE = 1;
-    KOTLIN = 2;
-    SH = 3;
 }
 
 service CommandExecutorService {

@@ -49,7 +49,7 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
     private val log = LoggerFactory.getLogger(GrpcRemoteScriptExecutionService::class.java)!!
 
     private var channel: ManagedChannel? = null
-    private lateinit var commandExecutorServiceGrpc: CommandExecutorServiceGrpc.CommandExecutorServiceFutureStub
+    private lateinit var commandExecutorServiceGrpc: CommandExecutorServiceGrpc.CommandExecutorServiceBlockingStub
 
     override suspend fun init(selector: String) {
         // Get the GRPC Client Service based on selector
@@ -57,7 +57,7 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
         // Get the GRPC Channel
         channel = grpcClientService.channel()
         // Create Non Blocking Stub
-        commandExecutorServiceGrpc = CommandExecutorServiceGrpc.newFutureStub(channel)
+        commandExecutorServiceGrpc = CommandExecutorServiceGrpc.newBlockingStub(channel)
 
         checkNotNull(commandExecutorServiceGrpc) {
             "failed to create command executor grpc client for selector($selector)"
@@ -66,7 +66,7 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
 
     override suspend fun prepareEnv(prepareEnvInput: PrepareRemoteEnvInput)
             : RemoteScriptExecutionOutput {
-        val grpResponse = commandExecutorServiceGrpc.prepareEnv(prepareEnvInput.asGrpcData()).get()
+        val grpResponse = commandExecutorServiceGrpc.prepareEnv(prepareEnvInput.asGrpcData())
 
         checkNotNull(grpResponse.status) {
             "failed to get GRPC prepare env response status for requestId($prepareEnvInput.requestId)"
@@ -81,7 +81,7 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
     override suspend fun executeCommand(remoteExecutionInput: RemoteScriptExecutionInput)
             : RemoteScriptExecutionOutput {
 
-        val grpResponse = commandExecutorServiceGrpc.executeCommand(remoteExecutionInput.asGrpcData()).get()
+        val grpResponse = commandExecutorServiceGrpc.executeCommand(remoteExecutionInput.asGrpcData())
 
         checkNotNull(grpResponse.status) {
             "failed to get GRPC response status for requestId($remoteExecutionInput.requestId)"
@@ -101,13 +101,20 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
     fun PrepareRemoteEnvInput.asGrpcData(): PrepareEnvInput {
         val correlationId = this.correlationId ?: this.requestId
 
+        val packageList = mutableListOf<Packages>()
+
+        this.packages.toList().forEach {
+            val pckage = Packages.newBuilder()
+            JsonFormat.parser().merge(it.toString(), pckage)
+            packageList.add(pckage.build())
+            }
+
         return PrepareEnvInput.newBuilder()
             .setIdentifiers(this.remoteIdentifier!!.asGrpcData())
             .setRequestId(this.requestId)
             .setCorrelationId(correlationId)
-            .setScriptType(ScriptType.valueOf(this.remoteScriptType.name))
             .setTimeOut(this.timeOut.toInt())
-            .addAllPackages(this.packages)
+            .addAllPackages(packageList)
             .setProperties(this.properties.asGrpcData())
             .build()
     }
@@ -118,7 +125,6 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
             .setRequestId(this.requestId)
             .setCorrelationId(correlationId)
             .setIdentifiers(this.remoteIdentifier!!.asGrpcData())
-            .setScriptType(ScriptType.valueOf(this.remoteScriptType.name))
             .setCommand(this.command)
             .setTimeOut(this.timeOut.toInt())
             .setProperties(this.properties.asGrpcData())

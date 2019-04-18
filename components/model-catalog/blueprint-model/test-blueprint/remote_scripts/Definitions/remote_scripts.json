@@ -51,6 +51,31 @@
             }
           }
         }
+      },
+      "execute-remote-ansible": {
+        "steps": {
+          "execute-script": {
+            "description": "Execute Remote Ansible Script",
+            "target": "execute-remote-ansible",
+            "activities": [
+              {
+                "call_operation": ""
+              }
+            ]
+          }
+        },
+        "inputs": {},
+        "outputs": {
+          "logs": {
+            "type": "json",
+            "value": {
+              "get_attribute": [
+                "execute-remote-ansible",
+                "execution-logs"
+              ]
+            }
+          }
+        }
       }
     },
     "node_templates": {
@@ -77,6 +102,43 @@
           "component-script": {
             "type": "artifact-script-python",
             "file": "Scripts/python/SamplePython.py"
+          }
+        }
+      },
+      "execute-remote-ansible": {
+        "type": "component-remote-python-executor",
+        "interfaces": {
+          "ComponentRemotePythonExecutor": {
+            "operations": {
+              "process": {
+                "implementation": {
+                  "primary": "component-script"
+                },
+                "inputs": {
+                  "command": "ansible-playbook first.yaml",
+                  "packages": [
+                    {
+                      "type": "PYTHON",
+                      "package": [
+                        "ansible"
+                      ]
+                    },
+                    {
+                      "type": "ANSIBLE",
+                      "package": [
+                        "juniper.junos"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "artifacts": {
+          "component-script": {
+            "type": "artifact-script-ansible",
+            "file": "Scripts/ansible/first.yaml"
           }
         }
       }
