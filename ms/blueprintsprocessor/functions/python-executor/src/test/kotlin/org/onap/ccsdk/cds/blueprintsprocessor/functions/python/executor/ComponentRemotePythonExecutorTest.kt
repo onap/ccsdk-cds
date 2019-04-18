@@ -68,7 +68,6 @@ class MockRemoteScriptExecutionService : RemoteScriptExecutionService {
 
     override suspend fun prepareEnv(prepareEnvInput: PrepareRemoteEnvInput): RemoteScriptExecutionOutput {
         assertEquals(prepareEnvInput.requestId, "123456-1000", "failed to match request id")
-        assertEquals(prepareEnvInput.remoteScriptType, RemoteScriptType.PYTHON, "failed to match script type")
         assertNotNull(prepareEnvInput.packages, "failed to get packages")
 
         val remoteScriptExecutionOutput = mockk<RemoteScriptExecutionOutput>()
@@ -78,7 +77,6 @@ class MockRemoteScriptExecutionService : RemoteScriptExecutionService {
 
     override suspend fun executeCommand(remoteExecutionInput: RemoteScriptExecutionInput): RemoteScriptExecutionOutput {
         assertEquals(remoteExecutionInput.requestId, "123456-1000", "failed to match request id")
-        assertEquals(remoteExecutionInput.remoteScriptType, RemoteScriptType.PYTHON, "failed to match script type")
 
         val remoteScriptExecutionOutput = mockk<RemoteScriptExecutionOutput>()
         every { remoteScriptExecutionOutput.status } returns StatusType.SUCCESS

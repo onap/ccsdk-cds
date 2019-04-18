@@ -32,6 +32,14 @@
               "description": "Command to execute.",
               "required": true,
               "type": "string"
+            },
+            "packages": {
+              "description": "Packages to install based on type.",
+              "required": true,
+              "type" : "list",
+              "entry_schema" : {
+                "type" : "dt-system-packages"
+              }
             }
           }
         }

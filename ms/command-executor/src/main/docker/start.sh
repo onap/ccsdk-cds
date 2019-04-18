@@ -28,5 +28,15 @@ then
   export BASIC_AUTH="Basic Y2NzZGthcHBzOmNjc2RrYXBwcw=="
 fi
 
+if [ "${http_proxy}" ]
+then
+  echo "Setting http_proxy: ${http_proxy}"
+fi
+
+if [ "${https_proxy}" ]
+then
+  echo "Setting https_proxy: ${https_proxy}"
+fi
+
 cd /opt/app/onap/python/
 python server.py ${APP_PORT} ${BASIC_AUTH}

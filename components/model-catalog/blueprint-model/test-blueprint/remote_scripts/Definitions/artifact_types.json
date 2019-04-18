@@ -7,6 +7,14 @@
       "file_ext": [
         "py"
       ]
+    },
+    "artifact-script-ansible": {
+      "description": "Ansible Script file",
+      "version": "1.0.0",
+      "file_ext": [
+        "yaml"
+      ],
+      "derived_from": "tosca.artifacts.Implementation"
     }
   }
 }

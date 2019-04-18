@@ -1,0 +1,12 @@
+To create python bindings,
+
+Prerequisites:
+  https://developers.google.com/protocol-buffers/docs/downloads
+  https://github.com/dropbox/mypy-protobuf
+
+
+Command:
+  protoc -I=. --python_out=. --mypy_out=. CommandExecutor.proto
+
+
+
