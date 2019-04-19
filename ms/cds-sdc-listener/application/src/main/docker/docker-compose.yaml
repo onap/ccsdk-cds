@@ -1,0 +1,29 @@
+version: '3.3'
+
+services:
+  cds-sdc-listener:
+    image: onap/cdssdclistener:latest
+    container_name: cdssdclistener
+    restart: always
+    environment:
+      asdcAddress: localhost:8443
+      messageBusAddress: localhost
+      sdcusername: vid
+      password: Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U
+      pollingInterval: 15
+      pollingTimeout: 15
+      relevantArtifactTypes: TOSCA_CSAR
+      consumerGroup: cds-id-local
+      environmentName: AUTO
+      consumerId: cds-id-local
+      keyStorePassword:
+      keyStorePath:
+      activateServerTLSAuth: "false"
+      isUseHttpsWithDmaap: "false"
+      archivePath: /opt/app/onap/cds-sdc-listener/
+      grpcAddress: localhost
+      grpcPort: 9111
+      authHeader: Basic Y2NzZGthcHBzOmNjc2RrYXBwcw==
+      #port needed by Liveness probe
+      healthcheckPort: "9000"
+      sprintWebListenerEnabled: "true"
