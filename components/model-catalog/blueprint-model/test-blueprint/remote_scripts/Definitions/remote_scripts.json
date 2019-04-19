@@ -25,6 +25,13 @@
       "file": "Definitions/policy_types.json"
     }
   ],
+  "dsl_definitions": {
+    "execute-argument-properties": {
+      "input": {
+        "get_input": "input"
+      }
+    }
+  },
   "topology_template": {
     "workflows": {
       "execute-remote-python": {
@@ -39,7 +46,12 @@
             ]
           }
         },
-        "inputs": {},
+        "inputs": {
+          "input": {
+            "required": false,
+            "type": "string"
+          }
+        },
         "outputs": {
           "prepare-environment-logs": {
             "type": "string",
@@ -107,7 +119,7 @@
                   "primary": "component-script"
                 },
                 "inputs": {
-                  "command": "python SamplePython.py blah",
+                  "command": "python SamplePython.py $input",
                   "packages": [
                     {
                       "type": "pip",
@@ -115,7 +127,8 @@
                         "pyaml"
                       ]
                     }
-                  ]
+                  ],
+                  "dynamic-properties": "*execute-argument-properties"
                 }
               }
             }

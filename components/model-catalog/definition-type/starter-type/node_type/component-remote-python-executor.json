@@ -32,6 +32,11 @@
               "required": false,
               "type": "json"
             },
+            "argument-properties": {
+              "description": "Argument Json Content or DSL Json reference.",
+              "required": false,
+              "type": "json"
+            },
             "command": {
               "description": "Command to execute.",
               "required": true,
