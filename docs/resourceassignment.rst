@@ -3,7 +3,7 @@
 .. Copyright (C) 2019 IBM.
 
 Resource Assignment 
-===================
+-------------------
 .. toctree::
    :maxdepth: 1
    
