@@ -107,7 +107,7 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
             val pckage = Packages.newBuilder()
             JsonFormat.parser().merge(it.toString(), pckage)
             packageList.add(pckage.build())
-            }
+        }
 
         return PrepareEnvInput.newBuilder()
             .setIdentifiers(this.remoteIdentifier!!.asGrpcData())

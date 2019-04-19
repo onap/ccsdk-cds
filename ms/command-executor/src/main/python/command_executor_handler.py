@@ -31,7 +31,7 @@ class CommandExecutorHandler():
         self.request = request
         self.logger = logging.getLogger(self.__class__.__name__)
         self.blueprint_id = utils.get_blueprint_id(request)
-        self.venv_home = '/opt/app/onap/blueprints/deploy/' + self.blueprint_id
+        self.venv_home = '/Users/adetalhouet/onap/master/cds/ms/deploy/' + self.blueprint_id
         self.installed = self.venv_home + '/.installed'
 
     def is_installed(self):
@@ -47,11 +47,11 @@ class CommandExecutorHandler():
                 return False
 
             f = open(self.installed, "w+")
-            if not self.install_packages(request, CommandExecutor_pb2.PYTHON, f, results):
+            if not self.install_packages(request, CommandExecutor_pb2.pip, f, results):
                 return False
             f.write("\r\n")
             results.append("\n")
-            if not self.install_packages(request, CommandExecutor_pb2.ANSIBLE, f, results):
+            if not self.install_packages(request, CommandExecutor_pb2.ansible_galaxy, f, results):
                 return False
             f.close()
         else:
@@ -63,8 +63,8 @@ class CommandExecutorHandler():
         return True
 
     def execute_command(self, request, results):
-        if not self.activate_venv():
-            return False
+        # if not self.activate_venv():
+        #     return False
 
         try:
             results.append(os.popen(request.command).read())
@@ -82,7 +82,7 @@ class CommandExecutorHandler():
                 f.write("Installed %s packages:\r\n" % CommandExecutor_pb2.PackageType.Name(type))
                 for python_package in package.package:
                     f.write("   %s\r\n" % python_package)
-                    if package.type == CommandExecutor_pb2.PYTHON:
+                    if package.type == CommandExecutor_pb2.pip:
                         success = self.install_python_packages(python_package, results)
                     else:
                         success = self.install_ansible_packages(python_package, results)
@@ -98,7 +98,8 @@ class CommandExecutorHandler():
         command = ["pip", "install", package]
 
         env = dict(os.environ)
-        env['https_proxy'] = os.environ['https_proxy']
+        if "https_proxy" in os.environ:
+            env['https_proxy'] = os.environ['https_proxy']
 
         try:
             results.append(subprocess.run(command, check=True, stdout=PIPE, stderr=PIPE, env=env).stdout.decode())
@@ -111,11 +112,12 @@ class CommandExecutorHandler():
     def install_ansible_packages(self, package, results):
         self.logger.info(
             "{} - Install Ansible Role package({}) in Python Virtual Environment".format(self.blueprint_id, package))
-        command = ["ansible-galaxy", "install", package, "-p", "Scripts/ansible/roles"]
+        command = ["ansible-galaxy", "install", package, "-p", self.venv_home + "/Scripts/ansible/roles"]
 
         env = dict(os.environ)
-        # ansible galaxy uses https_proxy environment variable, but requires it to be set with http proxy value.
-        env['https_proxy'] = os.environ['http_proxy']
+        if "http_proxy" in os.environ:
+            # ansible galaxy uses https_proxy environment variable, but requires it to be set with http proxy value.
+            env['https_proxy'] = os.environ['http_proxy']
 
         try:
             results.append(subprocess.run(command, check=True, stdout=PIPE, stderr=PIPE, env=env).stdout.decode())

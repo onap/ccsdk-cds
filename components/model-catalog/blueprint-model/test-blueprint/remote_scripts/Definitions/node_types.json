@@ -4,7 +4,11 @@
       "description": "This is Remote Python Execution Component.",
       "version": "1.0.0",
       "attributes": {
-        "execution-logs": {
+        "prepare-environment-logs": {
+          "required": true,
+          "type": "string"
+        },
+        "execute-command-logs": {
           "required": true,
           "type": "string"
         }

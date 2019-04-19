@@ -10,7 +10,7 @@
           "constraints": [
             {
               "valid_values": [
-                "ANSIBLE", "PYTHON"
+                "ansible_galaxy", "pip"
               ]
             }
           ]
