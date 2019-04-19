@@ -25,7 +25,7 @@
     <fileSets>
         <fileSet>
             <directory>${project.basedir}/src/main/python</directory>
-            <outputDirectory>/opt/onap/app/python</outputDirectory>
+            <outputDirectory>/opt/app/onap/python</outputDirectory>
         </fileSet>
     </fileSets>
 </assembly>

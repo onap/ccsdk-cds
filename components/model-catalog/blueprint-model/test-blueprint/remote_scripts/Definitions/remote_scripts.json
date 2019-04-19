@@ -39,7 +39,18 @@
             ]
           }
         },
-        "inputs": {}
+        "inputs": {},
+        "outputs": {
+          "logs": {
+            "type": "json",
+            "value": {
+              "get_attribute": [
+                "execute-remote-python",
+                "execution-logs"
+              ]
+            }
+          }
+        }
       }
     },
     "node_templates": {
@@ -52,15 +63,8 @@
                 "implementation": {
                   "primary": "component-script",
                   "dependencies": [
-                    "ncclient"
+                    "pyaml"
                   ]
-                },
-                "inputs": {
-                  "endpoint-selector": "default"
-                },
-                "outputs": {
-                  "response-data": "",
-                  "status": "success"
                 }
               }
             }
