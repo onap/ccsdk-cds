@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='org.onap.ccsdk.cds.controllerblueprints.command.api',
   syntax='proto3',
   serialized_options=_b('P\001'),
-  serialized_pb=_b('\n\x15\x43ommandExecutor.proto\x12\x33org.onap.ccsdk.cds.controllerblueprints.command.api\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x8f\x02\n\x0e\x45xecutionInput\x12\x11\n\trequestId\x18\x01 \x01(\t\x12\x15\n\rcorrelationId\x18\x02 \x01(\t\x12U\n\x0bidentifiers\x18\x03 \x01(\x0b\x32@.org.onap.ccsdk.cds.controllerblueprints.command.api.Identifiers\x12\x0f\n\x07\x63ommand\x18\x04 \x01(\t\x12\x0f\n\x07timeOut\x18\x05 \x01(\x05\x12+\n\nproperties\x18\x06 \x01(\x0b\x32\x17.google.protobuf.Struct\x12-\n\ttimestamp\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\xd0\x02\n\x0fPrepareEnvInput\x12U\n\x0bidentifiers\x18\x01 \x01(\x0b\x32@.org.onap.ccsdk.cds.controllerblueprints.command.api.Identifiers\x12\x11\n\trequestId\x18\x02 \x01(\t\x12\x15\n\rcorrelationId\x18\x03 \x01(\t\x12O\n\x08packages\x18\x04 \x03(\x0b\x32=.org.onap.ccsdk.cds.controllerblueprints.command.api.Packages\x12\x0f\n\x07timeOut\x18\x05 \x01(\x05\x12+\n\nproperties\x18\x06 \x01(\x0b\x32\x17.google.protobuf.Struct\x12-\n\ttimestamp\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\">\n\x0bIdentifiers\x12\x15\n\rblueprintName\x18\x01 \x01(\t\x12\x18\n\x10\x62lueprintVersion\x18\x02 \x01(\t\"\xba\x01\n\x0f\x45xecutionOutput\x12\x11\n\trequestId\x18\x01 \x01(\t\x12\x10\n\x08response\x18\x02 \x01(\t\x12S\n\x06status\x18\x03 \x01(\x0e\x32\x43.org.onap.ccsdk.cds.controllerblueprints.command.api.ResponseStatus\x12-\n\ttimestamp\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"k\n\x08Packages\x12N\n\x04type\x18\x01 \x01(\x0e\x32@.org.onap.ccsdk.cds.controllerblueprints.command.api.PackageType\x12\x0f\n\x07package\x18\x02 \x03(\t**\n\x0eResponseStatus\x12\x0b\n\x07SUCCESS\x10\x00\x12\x0b\n\x07\x46\x41ILURE\x10\x01*&\n\x0bPackageType\x12\n\n\x06PYTHON\x10\x00\x12\x0b\n\x07\x41NSIBLE\x10\x01\x32\xd1\x02\n\x16\x43ommandExecutorService\x12\x98\x01\n\nprepareEnv\x12\x44.org.onap.ccsdk.cds.controllerblueprints.command.api.PrepareEnvInput\x1a\x44.org.onap.ccsdk.cds.controllerblueprints.command.api.ExecutionOutput\x12\x9b\x01\n\x0e\x65xecuteCommand\x12\x43.org.onap.ccsdk.cds.controllerblueprints.command.api.ExecutionInput\x1a\x44.org.onap.ccsdk.cds.controllerblueprints.command.api.ExecutionOutputB\x02P\x01\x62\x06proto3')
+  serialized_pb=_b('\n\x15\x43ommandExecutor.proto\x12\x33org.onap.ccsdk.cds.controllerblueprints.command.api\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x8f\x02\n\x0e\x45xecutionInput\x12\x11\n\trequestId\x18\x01 \x01(\t\x12\x15\n\rcorrelationId\x18\x02 \x01(\t\x12U\n\x0bidentifiers\x18\x03 \x01(\x0b\x32@.org.onap.ccsdk.cds.controllerblueprints.command.api.Identifiers\x12\x0f\n\x07\x63ommand\x18\x04 \x01(\t\x12\x0f\n\x07timeOut\x18\x05 \x01(\x05\x12+\n\nproperties\x18\x06 \x01(\x0b\x32\x17.google.protobuf.Struct\x12-\n\ttimestamp\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\xd0\x02\n\x0fPrepareEnvInput\x12U\n\x0bidentifiers\x18\x01 \x01(\x0b\x32@.org.onap.ccsdk.cds.controllerblueprints.command.api.Identifiers\x12\x11\n\trequestId\x18\x02 \x01(\t\x12\x15\n\rcorrelationId\x18\x03 \x01(\t\x12O\n\x08packages\x18\x04 \x03(\x0b\x32=.org.onap.ccsdk.cds.controllerblueprints.command.api.Packages\x12\x0f\n\x07timeOut\x18\x05 \x01(\x05\x12+\n\nproperties\x18\x06 \x01(\x0b\x32\x17.google.protobuf.Struct\x12-\n\ttimestamp\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\">\n\x0bIdentifiers\x12\x15\n\rblueprintName\x18\x01 \x01(\t\x12\x18\n\x10\x62lueprintVersion\x18\x02 \x01(\t\"\xba\x01\n\x0f\x45xecutionOutput\x12\x11\n\trequestId\x18\x01 \x01(\t\x12\x10\n\x08response\x18\x02 \x01(\t\x12S\n\x06status\x18\x03 \x01(\x0e\x32\x43.org.onap.ccsdk.cds.controllerblueprints.command.api.ResponseStatus\x12-\n\ttimestamp\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"k\n\x08Packages\x12N\n\x04type\x18\x01 \x01(\x0e\x32@.org.onap.ccsdk.cds.controllerblueprints.command.api.PackageType\x12\x0f\n\x07package\x18\x02 \x03(\t**\n\x0eResponseStatus\x12\x0b\n\x07SUCCESS\x10\x00\x12\x0b\n\x07\x46\x41ILURE\x10\x01**\n\x0bPackageType\x12\x07\n\x03pip\x10\x00\x12\x12\n\x0e\x61nsible_galaxy\x10\x01\x32\xd1\x02\n\x16\x43ommandExecutorService\x12\x98\x01\n\nprepareEnv\x12\x44.org.onap.ccsdk.cds.controllerblueprints.command.api.PrepareEnvInput\x1a\x44.org.onap.ccsdk.cds.controllerblueprints.command.api.ExecutionOutput\x12\x9b\x01\n\x0e\x65xecuteCommand\x12\x43.org.onap.ccsdk.cds.controllerblueprints.command.api.ExecutionInput\x1a\x44.org.onap.ccsdk.cds.controllerblueprints.command.api.ExecutionOutputB\x02P\x01\x62\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_struct__pb2.DESCRIPTOR,google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,])
 
@@ -56,26 +56,26 @@ _PACKAGETYPE = _descriptor.EnumDescriptor(
   file=DESCRIPTOR,
   values=[
     _descriptor.EnumValueDescriptor(
-      name='PYTHON', index=0, number=0,
+      name='pip', index=0, number=0,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='ANSIBLE', index=1, number=1,
+      name='ansible_galaxy', index=1, number=1,
       serialized_options=None,
       type=None),
   ],
   containing_type=None,
   serialized_options=None,
   serialized_start=1160,
-  serialized_end=1198,
+  serialized_end=1202,
 )
 _sym_db.RegisterEnumDescriptor(_PACKAGETYPE)
 
 PackageType = enum_type_wrapper.EnumTypeWrapper(_PACKAGETYPE)
 SUCCESS = 0
 FAILURE = 1
-PYTHON = 0
-ANSIBLE = 1
+pip = 0
+ansible_galaxy = 1
 
 
 
@@ -415,8 +415,8 @@ _COMMANDEXECUTORSERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=1201,
-  serialized_end=1538,
+  serialized_start=1205,
+  serialized_end=1542,
   methods=[
   _descriptor.MethodDescriptor(
     name='prepareEnv',
