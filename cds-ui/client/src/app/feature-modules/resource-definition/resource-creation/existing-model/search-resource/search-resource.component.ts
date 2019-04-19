@@ -20,6 +20,8 @@
 
 import { Component, OnInit, ViewChild, EventEmitter, Output  } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { ExsistingModelService } from '../exsisting-model.service';
+
 @Component({
   selector: 'app-search-resource',
   templateUrl: './search-resource.component.html',
@@ -29,8 +31,12 @@ export class SearchResourceComponent implements OnInit  {
 
   myControl: FormGroup;
   @Output() resourcesData = new EventEmitter();  
-  options: string[] = ['One','One1', 'Two', 'Three'];
-  constructor(private _formBuilder: FormBuilder)  { }
+  options: any[] = [] ;
+  // = ['One','One1', 'Two', 'Three'];
+
+  searchText: string = '';
+  constructor(private _formBuilder: FormBuilder,
+              private exsistingModelService: ExsistingModelService)  { }
   
  ngOnInit() {
     this.myControl = this._formBuilder.group({
@@ -39,6 +45,19 @@ export class SearchResourceComponent implements OnInit  {
   }
  selected(value){
    this.resourcesData.emit(value);
-   } 
+   }
+
+   fetchResourceByName() {
+      this.exsistingModelService.searchByTags(this.searchText)
+      .subscribe(data=>{
+          console.log(data);
+          data.forEach(element => {
+            this.options.push(element)
+          });
+          // this.options = data.
+      }, error=>{
+        window.alert('error' + error);
+      })
+   }
 }
 

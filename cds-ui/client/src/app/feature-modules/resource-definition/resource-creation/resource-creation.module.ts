@@ -32,6 +32,8 @@ import { SearchResourceComponent } from './existing-model/search-resource/search
 import { SharedModule } from '../../../../app/common/shared/shared.module';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 
+import { ExsistingModelService } from './existing-model/exsisting-model.service';
+
 @NgModule({
     
  declarations: [
@@ -76,6 +78,7 @@ import { FormsModule,ReactiveFormsModule } from '@angular/forms';
     MatFormFieldModule, 
     MatStepperModule,
     MatAutocompleteModule
-    ]
+    ],
+  providers: [ ExsistingModelService ]
 })
 export class ResourceCreationModule { }

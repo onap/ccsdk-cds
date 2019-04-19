@@ -26,7 +26,7 @@
   <mat-step [stepControl]="step1FormGroup">
     <ng-template matStepLabel>Choose Resource file</ng-template>
     <br>
-    <app-resource-template-options (options)="selectedOption($event)"></app-resource-template-options>
+    <app-resource-template-options (option)="selectedOption($event)"></app-resource-template-options>
     <br>
     <div>
       <button mat-button matStepperNext class="matStepNextBtn">Proceed</button>
@@ -34,10 +34,10 @@
   </mat-step>
   <mat-step [stepControl]="step2FormGroup">
     <ng-template matStepLabel>Browse or Search Resources</ng-template>
-  <app-upload-resource (fileData)=upload($event)></app-upload-resource><br><br>
-  <app-existing-model></app-existing-model>
+  <app-upload-resource (fileData)=upload($event) *ngIf="selectedValue == 1"></app-upload-resource><br><br>
+  <app-existing-model *ngIf="selectedValue == 3"></app-existing-model>
    <div>      
-   	<button mat-button matStepperNext (click)="updateResourcesState()" class="matStepNextBtn">Upload</button>
+   	<button mat-button matStepperNext (click)="updateResourcesState()" class="matStepNextBtn" *ngIf="selectedValue == 1">Upload</button>
    </div><br><br>
    <div *ngIf="showMsg">
     <p class="success"><strong>File Upload Success!</strong> Please click Proceed to continue!</p>

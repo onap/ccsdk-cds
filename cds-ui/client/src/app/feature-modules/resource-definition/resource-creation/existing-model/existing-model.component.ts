@@ -31,7 +31,7 @@ import { LoadResourcesSuccess } from 'src/app/common/core/store/actions/resource
 })
 export class ExistingModelComponent implements OnInit {
 
-  resourceName:string;
+  resource:any;
   
  constructor(private store: Store<IAppState>) { }
 
@@ -40,7 +40,8 @@ export class ExistingModelComponent implements OnInit {
  
  selectedResource(value){
   console.log(value);
-  this.resourceName=value;
+  this.resource=value;
+  this.updateResourcesState();
  }
 
  getDataUsingResouceName(){
@@ -50,7 +51,7 @@ export class ExistingModelComponent implements OnInit {
  updateResourcesState() {
     var me = this; 
     var data:IResources;
-    me.store.dispatch(new LoadResourcesSuccess(data));   
+    me.store.dispatch(new LoadResourcesSuccess(this.resource));   
  }
 
 

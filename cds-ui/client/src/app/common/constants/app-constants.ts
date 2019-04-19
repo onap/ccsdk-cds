@@ -96,3 +96,9 @@ export const LoopbackConfig = {
     url: "http://127.0.0.1:3000",
     authtoken: "ccsdkapps"
 }
+
+export const ResourceDictionaryURLs = {
+    saveResourceDictionary: '/resourcedictionary/save',
+    searchResourceDictionaryByTags: '/resourcedictionary/search',
+    searchResourceDictionaryByName: ''
+}
