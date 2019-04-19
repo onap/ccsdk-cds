@@ -16,6 +16,8 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor
 
+import com.fasterxml.jackson.databind.node.MissingNode
+import com.fasterxml.jackson.databind.node.NullNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.*
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ExecutionServiceConstant
@@ -47,6 +49,7 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
         const val INPUT_ENDPOINT_SELECTOR = "endpoint-selector"
         const val INPUT_DYNAMIC_PROPERTIES = "dynamic-properties"
         const val INPUT_COMMAND = "command"
+        const val INPUT_PACKAGES = "packages"
     }
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
@@ -75,11 +78,12 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
         val endPointSelector = getOperationInput(INPUT_ENDPOINT_SELECTOR)
         val dynamicProperties = getOperationInput(INPUT_DYNAMIC_PROPERTIES)
         val command = getOperationInput(INPUT_COMMAND).asText()
+        val packages = getOperationInput(INPUT_PACKAGES)
 
         // TODO("Python execution command and Resolve some expressions with dynamic properties")
         val scriptCommand = command.replace(pythonScript.name, pythonScript.absolutePath)
 
-        val dependencies = operationAssignment.implementation?.dependencies
+//        val dependencies = operationAssignment.implementation?.dependencies
 
         try {
             // Open GRPC Connection
@@ -87,13 +91,12 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
 
             var executionLogs = ""
 
-            // If dependencies are defined, then install in remote server
-            if (dependencies != null && dependencies.isNotEmpty()) {
+            // If packages are defined, then install in remote server
+            if (packages !is MissingNode && packages !is NullNode) {
                 val prepareEnvInput = PrepareRemoteEnvInput(requestId = processId,
                     remoteIdentifier = RemoteIdentifier(blueprintName = blueprintName,
                         blueprintVersion = blueprintVersion),
-                    remoteScriptType = RemoteScriptType.PYTHON,
-                    packages = dependencies
+                    packages = packages
                 )
                 val prepareEnvOutput = remoteScriptExecutionService.prepareEnv(prepareEnvInput)
                 executionLogs = prepareEnvOutput.response
@@ -106,7 +109,6 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
             val remoteExecutionInput = RemoteScriptExecutionInput(
                 requestId = processId,
                 remoteIdentifier = RemoteIdentifier(blueprintName = blueprintName, blueprintVersion = blueprintVersion),
-                remoteScriptType = RemoteScriptType.PYTHON,
                 command = scriptCommand)
             val remoteExecutionOutput = remoteScriptExecutionService.executeCommand(remoteExecutionInput)
             executionLogs += remoteExecutionOutput.response

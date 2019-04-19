@@ -1,3 +1,29 @@
 {
-  "data_types": {}
+  "data_types": {
+    "dt-system-packages": {
+      "description": "This represent System Package Data Type",
+      "version": "1.0.0",
+      "properties": {
+        "type": {
+          "required": true,
+          "type": "string",
+          "constraints": [
+            {
+              "valid_values": [
+                "ANSIBLE", "PYTHON"
+              ]
+            }
+          ]
+        },
+        "package": {
+          "required": true,
+          "type": "list",
+          "entry_schema" : {
+            "type" : "string"
+          }
+        }
+      },
+      "derived_from": "tosca.datatypes.Root"
+    }
+  }
 }
