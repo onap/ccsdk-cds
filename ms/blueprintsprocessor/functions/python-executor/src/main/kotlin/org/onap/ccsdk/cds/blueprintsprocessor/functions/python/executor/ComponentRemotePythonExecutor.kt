@@ -22,9 +22,8 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.*
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ExecutionServiceConstant
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.RemoteScriptExecutionService
-import org.onap.ccsdk.cds.controllerblueprints.command.api.ResponseStatus
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.checkFileExists
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotBlank
 import org.onap.ccsdk.cds.controllerblueprints.core.data.OperationAssignment
@@ -50,6 +49,9 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
         const val INPUT_DYNAMIC_PROPERTIES = "dynamic-properties"
         const val INPUT_COMMAND = "command"
         const val INPUT_PACKAGES = "packages"
+
+        const val ATTRIBUTE_PREPARE_ENV_LOG = "prepare-environment-logs"
+        const val ATTRIBUTE_EXEC_CMD_LOG = "execute-command-logs"
     }
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
@@ -83,13 +85,9 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
         // TODO("Python execution command and Resolve some expressions with dynamic properties")
         val scriptCommand = command.replace(pythonScript.name, pythonScript.absolutePath)
 
-//        val dependencies = operationAssignment.implementation?.dependencies
-
         try {
             // Open GRPC Connection
             remoteScriptExecutionService.init(endPointSelector.asText())
-
-            var executionLogs = ""
 
             // If packages are defined, then install in remote server
             if (packages !is MissingNode && packages !is NullNode) {
@@ -99,8 +97,7 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
                     packages = packages
                 )
                 val prepareEnvOutput = remoteScriptExecutionService.prepareEnv(prepareEnvInput)
-                executionLogs = prepareEnvOutput.response
-                setOutput(executionLogs)
+                setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, prepareEnvOutput.response.asJsonPrimitive())
                 check(prepareEnvOutput.status == StatusType.SUCCESS) {
                     "failed to get prepare remote env response status for requestId(${prepareEnvInput.requestId})"
                 }
@@ -111,22 +108,16 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
                 remoteIdentifier = RemoteIdentifier(blueprintName = blueprintName, blueprintVersion = blueprintVersion),
                 command = scriptCommand)
             val remoteExecutionOutput = remoteScriptExecutionService.executeCommand(remoteExecutionInput)
-            executionLogs += remoteExecutionOutput.response
-            setOutput(executionLogs)
+            setAttribute(ATTRIBUTE_EXEC_CMD_LOG, remoteExecutionOutput.response.asJsonPrimitive())
             check(remoteExecutionOutput.status == StatusType.SUCCESS) {
                 "failed to get prepare remote command response status for requestId(${remoteExecutionOutput.requestId})"
             }
 
         } catch (e: Exception) {
-            log.error("", e)
+            log.error("Failed to process on remote executor", e)
         } finally {
             remoteScriptExecutionService.close()
         }
-    }
-
-    private fun setOutput(executionLogs: String) {
-        bluePrintRuntimeService.setNodeTemplateAttributeValue(nodeTemplateName,
-            "execution-logs", JacksonUtils.jsonNodeFromObject(executionLogs))
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
