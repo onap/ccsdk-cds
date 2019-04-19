@@ -92,6 +92,14 @@ class BluePrintEnhancerServiceImplTest {
 
     }
 
+    @Test
+    @Throws(Exception::class)
+    fun testRemoteScriptsEnhancementAndValidation() {
+        val basePath = "./../../../../components/model-catalog/blueprint-model/test-blueprint/remote_scripts"
+        testComponentInvokeEnhancementAndValidation(basePath, "remote_scripts-enhance")
+
+    }
+
     private fun testComponentInvokeEnhancementAndValidation(basePath: String, targetDirName: String) {
         runBlocking {
             val targetPath = normalizedPathName("target/blueprints/enrichment", targetDirName)
@@ -105,7 +113,7 @@ class BluePrintEnhancerServiceImplTest {
             val valid = bluePrintValidatorService.validateBluePrints(targetPath)
             Assert.assertTrue("blueprint($basePath) validation failed ", valid)
 
-//            deleteDir(targetPath)
+            deleteDir(targetPath)
         }
     }
 

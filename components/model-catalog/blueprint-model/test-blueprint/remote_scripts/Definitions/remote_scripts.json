@@ -1,0 +1,78 @@
+{
+  "tosca_definitions_version": "controller_blueprint_1_0_0",
+  "metadata": {
+    "template_author": "Brinda Santh Muthuramalingam",
+    "author-email": "brindasanth@in.ibm.com",
+    "user-groups": "ADMIN, OPERATION",
+    "template_name": "remote_scripts",
+    "template_version": "1.0.0",
+    "template_tags": "brinda, tosca"
+  },
+  "imports": [
+    {
+      "file": "Definitions/data_types.json"
+    },
+    {
+      "file": "Definitions/relationship_types.json"
+    },
+    {
+      "file": "Definitions/artifact_types.json"
+    },
+    {
+      "file": "Definitions/node_types.json"
+    },
+    {
+      "file": "Definitions/policy_types.json"
+    }
+  ],
+  "topology_template": {
+    "workflows": {
+      "execute-remote-python": {
+        "steps": {
+          "execute-script": {
+            "description": "Execute Remote Python Script",
+            "target": "execute-remote-python",
+            "activities": [
+              {
+                "call_operation": ""
+              }
+            ]
+          }
+        },
+        "inputs": {}
+      }
+    },
+    "node_templates": {
+      "execute-remote-python": {
+        "type": "component-remote-python-executor",
+        "interfaces": {
+          "ComponentRemotePythonExecutor": {
+            "operations": {
+              "process": {
+                "implementation": {
+                  "primary": "component-script",
+                  "dependencies": [
+                    "ncclient"
+                  ]
+                },
+                "inputs": {
+                  "endpoint-selector": "default"
+                },
+                "outputs": {
+                  "response-data": "",
+                  "status": "success"
+                }
+              }
+            }
+          }
+        },
+        "artifacts": {
+          "component-script": {
+            "type": "artifact-script-python",
+            "file": "Scripts/python/SamplePython.py"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "node_types": {
+    "component-remote-python-executor": {
+      "description": "This is Remote Python Execution Component.",
+      "version": "1.0.0",
+      "capabilities": {
+        "component-node": {
+          "type": "tosca.capabilities.Node"
+        }
+      },
+      "interfaces": {
+        "ComponentRemotePythonExecutor": {
+          "operations": {
+            "process": {
+              "inputs": {
+                "endpoint-selector": {
+                  "description": "Remote Container or Server selector name.",
+                  "required": false,
+                  "type": "string",
+                  "default": "default"
+                },
+                "dynamic-properties": {
+                  "description": "Dynamic Json Content or DSL Json reference.",
+                  "required": false,
+                  "type": "json"
+                }
+              },
+              "outputs": {
+                "response-data": {
+                  "description": "Execution Response Data in JSON format.",
+                  "required": false,
+                  "type": "json"
+                },
+                "status": {
+                  "description": "Status of the Component Execution ( success or failure )",
+                  "required": true,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.Component"
+    },
+    "tosca.nodes.Component": {
+      "description": "This is default Component Node",
+      "version": "1.0.0",
+      "derived_from": "tosca.nodes.Root"
+    }
+  }
+}
