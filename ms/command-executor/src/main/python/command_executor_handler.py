@@ -24,6 +24,8 @@ import venv
 import utils
 import proto.CommandExecutor_pb2 as CommandExecutor_pb2
 
+REQUIREMENTS_TXT = "requirements.txt"
+
 
 class CommandExecutorHandler():
 
@@ -80,12 +82,12 @@ class CommandExecutorHandler():
         for package in request.packages:
             if package.type == type:
                 f.write("Installed %s packages:\r\n" % CommandExecutor_pb2.PackageType.Name(type))
-                for python_package in package.package:
-                    f.write("   %s\r\n" % python_package)
+                for p in package.package:
+                    f.write("   %s\r\n" % p)
                     if package.type == CommandExecutor_pb2.pip:
-                        success = self.install_python_packages(python_package, results)
+                        success = self.install_python_packages(p, results)
                     else:
-                        success = self.install_ansible_packages(python_package, results)
+                        success = self.install_ansible_packages(p, results)
                     if not success:
                         f.close()
                         os.remove(self.installed)
@@ -95,7 +97,11 @@ class CommandExecutorHandler():
     def install_python_packages(self, package, results):
         self.logger.info(
             "{} - Install Python package({}) in Python Virtual Environment".format(self.blueprint_id, package))
-        command = ["pip", "install", package]
+
+        if REQUIREMENTS_TXT == package:
+            command = ["pip", "install", "-r", self.venv_home + "/Environments/" + REQUIREMENTS_TXT]
+        else:
+            command = ["pip", "install", package]
 
         env = dict(os.environ)
         if "https_proxy" in os.environ:
