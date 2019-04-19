@@ -1,6 +1,9 @@
 FROM python:3.6-slim
 
-ENV GRPC_PYTHON_VERSION 1.19.0
+ENV HTTP_PROXY  ${HTTP_PROXY}
+ENV HTTPS_PROXY ${HTTPS_PROXY}
+
+ENV GRPC_PYTHON_VERSION 1.20.0
 RUN python -m pip install --upgrade pip
 RUN pip install grpcio==${GRPC_PYTHON_VERSION} grpcio-tools==${GRPC_PYTHON_VERSION}
 RUN pip install virtualenv
