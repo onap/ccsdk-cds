@@ -14,19 +14,16 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.grpc
+package org.onap.ccsdk.cds.blueprintsprocessor.services.execution
 
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 
 @Configuration
 @ComponentScan
-open class BluePrintGrpcLibConfiguration
+open class ExecutionServiceConfiguration
 
-class GRPCLibConstants {
-    companion object {
-        const val SERVICE_BLUEPRINT_GRPC_LIB_PROPERTY = "blueprint-grpc-lib-property-service"
-        const val TYPE_TOKEN_AUTH = "token-auth"
-        const val TYPE_BASIC_AUTH = "basic-auth"
-    }
+
+object ExecutionServiceConstant {
+    const val SERVICE_GRPC_REMOTE_SCRIPT_EXECUTION = "grpc-remote-script-execution-service"
 }

@@ -6,27 +6,30 @@ package org.onap.ccsdk.cds.controllerblueprints.command.api;
 
 message ExecutionInput {
     string requestId = 1;
+    // Optional Id used to correlate multiple requests so that it can identify previous request information.
+    string correlationId = 2;
     // Optional Blueprint Information used to identify CBA content information in shared file structure environment.
-    Identifiers identifiers = 2;
-    ScriptType scriptType = 3;
+    Identifiers identifiers = 3;
+    ScriptType scriptType = 4;
     // Actual Command to Execute in Scripting Environment
-    string command = 4;
-    int32 timeOut = 5;
+    string command = 5;
+    int32 timeOut = 6;
     // Extra Dynamic Properties for Command processing in JSON format
-    google.protobuf.Struct properties = 6;
+    google.protobuf.Struct properties = 7;
     // Request Time Stamp
-    google.protobuf.Timestamp timestamp = 7;
+    google.protobuf.Timestamp timestamp = 8;
 }
 
 message PrepareEnvInput {
     Identifiers identifiers = 1;
+    string requestId = 2;
     // Optional Id used to correlate multiple requests so that it can identify previous request information.
-    string correlationId = 2;
-    ScriptType scriptType = 3;
-    repeated string packages = 4;
-    int32 timeOut = 5;
-    google.protobuf.Struct properties = 6;
-    google.protobuf.Timestamp timestamp = 7;
+    string correlationId = 3;
+    ScriptType scriptType = 4;
+    repeated string packages = 5;
+    int32 timeOut = 6;
+    google.protobuf.Struct properties = 7;
+    google.protobuf.Timestamp timestamp = 8;
 }
 
 message Identifiers {

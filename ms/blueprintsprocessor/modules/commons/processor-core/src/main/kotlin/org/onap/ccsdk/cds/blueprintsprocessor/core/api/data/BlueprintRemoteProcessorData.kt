@@ -17,16 +17,22 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.core.api.data
 
 import com.fasterxml.jackson.databind.JsonNode
+import java.util.*
 
 enum class RemoteScriptType {
     PYTHON, ANSIBLE, KOTLIN, SH
 }
 
-data class RemoteIdentifier(var blueprintName: String? = null,
-                            var blueprintVersion: String? = null)
+enum class StatusType {
+    SUCCESS, FAILURE
+}
+
+data class RemoteIdentifier(var blueprintName: String,
+                            var blueprintVersion: String)
 
 
 data class RemoteScriptExecutionInput(var requestId: String,
+                                      var correlationId: String? = null,
                                       var remoteIdentifier: RemoteIdentifier? = null,
                                       var remoteScriptType: RemoteScriptType,
                                       var command: String,
@@ -35,9 +41,14 @@ data class RemoteScriptExecutionInput(var requestId: String,
 )
 
 
-data class RemoteScriptExecutionOutput(var requestId: String, var response: String)
+data class RemoteScriptExecutionOutput(var requestId: String,
+                                       var response: String,
+                                       var status: StatusType = StatusType.SUCCESS,
+                                       var timestamp: Date = Date())
 
 data class PrepareRemoteEnvInput(var requestId: String,
+                                 var correlationId: String? = null,
+                                 var remoteIdentifier: RemoteIdentifier? = null,
                                  var remoteScriptType: RemoteScriptType,
                                  var packages: MutableList<String>?,
                                  var timeOut: Long = 120,

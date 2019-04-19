@@ -22,6 +22,10 @@ open class GrpcClientProperties {
     var port: Int = -1
 }
 
+open class TokenAuthGrpcClientProperties : GrpcClientProperties() {
+    lateinit var token: String
+}
+
 open class BasicAuthGrpcClientProperties : GrpcClientProperties() {
     lateinit var username: String
     lateinit var password: String
