@@ -27,6 +27,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.checkFileExists
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotBlank
 import org.onap.ccsdk.cds.controllerblueprints.core.data.OperationAssignment
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintVelocityTemplateService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
@@ -78,11 +79,11 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
 
         val endPointSelector = getOperationInput(INPUT_ENDPOINT_SELECTOR)
         val dynamicProperties = getOperationInput(INPUT_DYNAMIC_PROPERTIES)
-        val command = getOperationInput(INPUT_COMMAND).asText()
         val packages = getOperationInput(INPUT_PACKAGES)
 
-        // TODO("Python execution command and Resolve some expressions with dynamic properties")
-        val scriptCommand = command.replace(pythonScript.name, pythonScript.absolutePath)
+        var command = getOperationInput(INPUT_COMMAND).asText()
+        command = command.replace(pythonScript.name, pythonScript.absolutePath)
+        val scriptCommand = BluePrintVelocityTemplateService.generateContent(command, json = JacksonUtils.getJson(dynamicProperties))
 
         try {
             // Open GRPC Connection
