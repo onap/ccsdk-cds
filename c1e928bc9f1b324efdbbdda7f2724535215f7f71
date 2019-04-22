@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "58b0c8f4_ceca94d4",
+        "filename": "components/model-catalog/blueprint-model/test-blueprint/remote_scripts/Definitions/remote_scripts.json",
+        "patchSetId": 6
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-22T12:18:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "474c87c0_a72c1af9",
+      "range": {
+        "startLine": 131,
+        "startChar": 18,
+        "endLine": 131,
+        "endChar": 68
+      },
+      "revId": "c1e928bc9f1b324efdbbdda7f2724535215f7f71",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cca04b3a_6f802c09",
         "filename": "ms/blueprintsprocessor/functions/python-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/python/executor/ComponentRemotePythonExecutor.kt",
         "patchSetId": 6
@@ -59,6 +83,30 @@
       "writtenOn": "2019-04-20T02:25:58Z",
       "side": 1,
       "message": "Read from Argument properties and pass to properties parameter to server.",
+      "range": {
+        "startLine": 86,
+        "startChar": 8,
+        "endLine": 86,
+        "endChar": 133
+      },
+      "revId": "c1e928bc9f1b324efdbbdda7f2724535215f7f71",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e3676322_af713d90",
+        "filename": "ms/blueprintsprocessor/functions/python-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/python/executor/ComponentRemotePythonExecutor.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-22T12:18:06Z",
+      "side": 1,
+      "message": "I think we should mesh the argument property with the command itself, so when the server received the command, it just has to execute it.",
+      "parentUuid": "cca04b3a_6f802c09",
       "range": {
         "startLine": 86,
         "startChar": 8,
