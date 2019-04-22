@@ -27,6 +27,7 @@ import { IAppState } from '../../../common/core/store/state/app.state';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import { Observable } from 'rxjs';
 import { A11yModule } from '@angular/cdk/a11y';
+import { ResourceEditService } from './resource-edit.service';
 
 @Component({
   selector: 'app-resource-edit',
@@ -38,13 +39,13 @@ export class ResourceEditComponent implements OnInit {
     resources:IResources;
     data:IResources;
     rdState: Observable<IResourcesState>;
-    designerMode: boolean = true;
-    editorMode: boolean = false;
+    designerMode: boolean = false;
+    editorMode: boolean = true;
     viewText: string = "Open in Editor Mode";
     @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
     options = new JsonEditorOptions();
   
-  constructor(private store: Store<IAppState>) {
+  constructor(private store: Store<IAppState>, private resourceEditService: ResourceEditService) {
   	this.rdState = this.store.select('resources');
     this.options.mode = 'text';
     this.options.modes = [ 'text', 'tree', 'view'];
@@ -92,5 +93,15 @@ export class ResourceEditComponent implements OnInit {
       this.designerMode = true;
       this.viewText = 'Open in Editor Mode'
     }
-  }  
+  } 
+
+  saveToBackend() {
+    this.resourceEditService.saveResource(this.data)
+    .subscribe(response=>{
+      window.alert("save success");
+    },
+    error=>{
+      window.alert('Error saving resources');
+    })
+  }
 }
