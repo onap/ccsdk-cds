@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "305d8752_0b10fbee",
+        "filename": "components/model-catalog/blueprint-model/test-blueprint/remote_scripts/Definitions/node_types.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-22T12:12:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa036a79_2ec311d4",
+      "range": {
+        "startLine": 8,
+        "startChar": 22,
+        "endLine": 8,
+        "endChar": 27
+      },
+      "revId": "42b0a32a2bd6d06f6d83fc4b583499ee5c1a39d7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3c7132a7_7e3fda2a",
         "filename": "components/model-catalog/blueprint-model/test-blueprint/remote_scripts/Definitions/remote_scripts.json",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2019-04-20T02:43:15Z",
       "side": 1,
       "message": "required : false",
+      "range": {
+        "startLine": 45,
+        "startChar": 11,
+        "endLine": 45,
+        "endChar": 29
+      },
+      "revId": "42b0a32a2bd6d06f6d83fc4b583499ee5c1a39d7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "560b4997_3754f9a6",
+        "filename": "components/model-catalog/blueprint-model/test-blueprint/remote_scripts/Definitions/remote_scripts.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-22T12:12:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c7132a7_7e3fda2a",
       "range": {
         "startLine": 45,
         "startChar": 11,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "78aadfaf_fd44f0bb",
+        "filename": "ms/blueprintsprocessor/functions/python-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/python/executor/ComponentRemotePythonExecutor.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-22T12:12:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4fddb55_8fd6b85b",
+      "range": {
+        "startLine": 122,
+        "startChar": 29,
+        "endLine": 122,
+        "endChar": 74
+      },
+      "revId": "42b0a32a2bd6d06f6d83fc4b583499ee5c1a39d7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97d5e0b4_c15abbf0",
         "filename": "ms/blueprintsprocessor/functions/python-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/python/executor/ComponentRemotePythonExecutor.kt",
         "patchSetId": 3
@@ -82,6 +154,30 @@
       "writtenOn": "2019-04-20T02:43:15Z",
       "side": 1,
       "message": "shall use executionLogs.asJsonPrimitive() extension functtion",
+      "range": {
+        "startLine": 124,
+        "startChar": 27,
+        "endLine": 124,
+        "endChar": 73
+      },
+      "revId": "42b0a32a2bd6d06f6d83fc4b583499ee5c1a39d7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3dd2d5d8_3c3b75e2",
+        "filename": "ms/blueprintsprocessor/functions/python-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/python/executor/ComponentRemotePythonExecutor.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-04-22T12:12:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97d5e0b4_c15abbf0",
       "range": {
         "startLine": 124,
         "startChar": 27,
