@@ -27,7 +27,7 @@ Tosca Model Reference:
 
 |image0|
 
-.. |image0| image:: media/image0.jpg
+.. |image0| image:: image0.jpg
    :width: 7.88889in 
    :height: 4.43750in
 
@@ -46,8 +46,8 @@ MicroServices:
    :maxdepth: 1
    :glob:
     
-	controllerBlueprintStudioProcessor
-	bluePrintsProcessor
+	controllerBlueprintStudioProcessorMS
+	bluePrintsProcessorMS
 
 Architecture:
 =============
@@ -58,7 +58,7 @@ The GUI handles direct user input and allows for displaying both design time and
 
 |image0|
 
-.. |image0| image:: media/CDS_architecture.jpg
+.. |image0| image:: CDS_architecture.jpg
    :height: 4.43750in
    :width: 7.88889in
 
