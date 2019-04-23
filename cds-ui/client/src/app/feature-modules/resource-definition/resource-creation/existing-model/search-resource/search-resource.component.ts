@@ -21,6 +21,7 @@
 import { Component, OnInit, ViewChild, EventEmitter, Output  } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { ExsistingModelService } from '../exsisting-model.service';
+import { MatAutocompleteTrigger } from '@angular/material'
 
 @Component({
   selector: 'app-search-resource',
@@ -31,8 +32,9 @@ export class SearchResourceComponent implements OnInit  {
 
   myControl: FormGroup;
   @Output() resourcesData = new EventEmitter();  
-  options: any[] = [] ;
-  // = ['One','One1', 'Two', 'Three'];
+  options: any[]   = ['One','One1', 'Two', 'Three'];
+  // @ViewChild('resourceSelect') resourceSelect;
+  @ViewChild('resourceSelect', { read: MatAutocompleteTrigger }) resourceSelect: MatAutocompleteTrigger;
 
   searchText: string = '';
   constructor(private _formBuilder: FormBuilder,
@@ -53,8 +55,8 @@ export class SearchResourceComponent implements OnInit  {
           console.log(data);
           data.forEach(element => {
             this.options.push(element)
-          });
-          // this.options = data.
+          });          
+        this.resourceSelect.openPanel();
       }, error=>{
         window.alert('error' + error);
       })
