@@ -46,7 +46,7 @@
                 },
                 "packages": {
                   "description": "Packages to install based on type.",
-                  "required": true,
+                  "required": false,
                   "type" : "list",
                   "entry_schema" : {
                     "type" : "dt-system-packages"

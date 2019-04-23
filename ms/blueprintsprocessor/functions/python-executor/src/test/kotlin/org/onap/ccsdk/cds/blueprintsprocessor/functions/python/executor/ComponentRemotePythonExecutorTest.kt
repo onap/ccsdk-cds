@@ -71,6 +71,7 @@ class MockRemoteScriptExecutionService : RemoteScriptExecutionService {
         assertNotNull(prepareEnvInput.packages, "failed to get packages")
 
         val remoteScriptExecutionOutput = mockk<RemoteScriptExecutionOutput>()
+        every { remoteScriptExecutionOutput.response } returns "prepared successfully"
         every { remoteScriptExecutionOutput.status } returns StatusType.SUCCESS
         return remoteScriptExecutionOutput
     }
@@ -79,6 +80,7 @@ class MockRemoteScriptExecutionService : RemoteScriptExecutionService {
         assertEquals(remoteExecutionInput.requestId, "123456-1000", "failed to match request id")
 
         val remoteScriptExecutionOutput = mockk<RemoteScriptExecutionOutput>()
+        every { remoteScriptExecutionOutput.response } returns "processed successfully"
         every { remoteScriptExecutionOutput.status } returns StatusType.SUCCESS
         return remoteScriptExecutionOutput
     }
