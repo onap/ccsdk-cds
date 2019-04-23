@@ -46,6 +46,30 @@
       "revId": "f73d1a5c5ecd22877f1177d6645e45b9ca90abf3",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c3f511f6_cf7bbf8b",
+        "filename": "ms/blueprintsprocessor/functions/python-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/python/executor/ComponentRemotePythonExecutor.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-04-23T13:39:56Z",
+      "side": 1,
+      "message": "Please let me know, how to pass the constructor to the server, Client side can recreate the arguments or server can recreate. Let me put the patch for client side population. that will be more simple, so that we can use properties for other properties.",
+      "parentUuid": "2d352fa7_7e19ef30",
+      "range": {
+        "startLine": 101,
+        "startChar": 29,
+        "endLine": 101,
+        "endChar": 81
+      },
+      "revId": "f73d1a5c5ecd22877f1177d6645e45b9ca90abf3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
