@@ -22,6 +22,30 @@
       "revId": "f73d1a5c5ecd22877f1177d6645e45b9ca90abf3",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2d352fa7_7e19ef30",
+        "filename": "ms/blueprintsprocessor/functions/python-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/python/executor/ComponentRemotePythonExecutor.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-04-23T13:29:16Z",
+      "side": 1,
+      "message": "We shall order using filtering args prefix and key sequences  args-0, args-1, args-2.",
+      "parentUuid": "fe8e4c86_f934ac28",
+      "range": {
+        "startLine": 101,
+        "startChar": 29,
+        "endLine": 101,
+        "endChar": 81
+      },
+      "revId": "f73d1a5c5ecd22877f1177d6645e45b9ca90abf3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
