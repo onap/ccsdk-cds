@@ -22,6 +22,30 @@
       "revId": "49c72314a5d0de4179f1e19fe86ef6e4d2284887",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bdf0db45_34c763b7",
+        "filename": "components/model-catalog/blueprint-model/test-blueprint/remote_scripts/Definitions/remote_scripts.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-04-23T13:18:09Z",
+      "side": 0,
+      "message": "\"remote-argument-properties\": {\n      \"arg-0\": \"-a\",\n      \"arg-1\": \"data 1\",\n      \"arg-2\": \"-b\",\n      \"arg-3\": \"data 2\",\n      \"arg-4\": \"data 3\"\n    }",
+      "parentUuid": "27c580e4_fd4d5e18",
+      "range": {
+        "startLine": 122,
+        "startChar": 30,
+        "endLine": 122,
+        "endChar": 59
+      },
+      "revId": "49c72314a5d0de4179f1e19fe86ef6e4d2284887",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
