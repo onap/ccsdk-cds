@@ -24,10 +24,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutp
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.Status
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
-import org.onap.ccsdk.cds.controllerblueprints.core.getAsString
+import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintFunctionNode
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.slf4j.LoggerFactory
@@ -131,6 +128,10 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     fun getOperationInput(key: String): JsonNode {
         return operationInputs[key]
                 ?: throw BluePrintProcessorException("couldn't get the operation input($key) value.")
+    }
+
+    fun getOptionalOperationInput(key: String): JsonNode? {
+        return operationInputs[key]
     }
 
     fun setAttribute(key: String, value: JsonNode) {

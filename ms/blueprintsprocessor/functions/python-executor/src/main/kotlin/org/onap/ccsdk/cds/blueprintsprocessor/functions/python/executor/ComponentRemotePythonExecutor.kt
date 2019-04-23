@@ -22,20 +22,13 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.*
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ExecutionServiceConstant
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.RemoteScriptExecutionService
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
-import org.onap.ccsdk.cds.controllerblueprints.core.checkFileExists
-import org.onap.ccsdk.cds.controllerblueprints.core.checkNotBlank
+import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.data.OperationAssignment
-import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintVelocityTemplateService
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
-import java.lang.Exception
 
 @ConditionalOnBean(name = [ExecutionServiceConstant.SERVICE_GRPC_REMOTE_SCRIPT_EXECUTION])
 @Component("component-remote-python-executor")
@@ -65,13 +58,13 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
         val blueprintVersion = bluePrintContext.version()
 
         val operationAssignment: OperationAssignment = bluePrintContext
-            .nodeTemplateInterfaceOperation(nodeTemplateName, interfaceName, operationName)
+                .nodeTemplateInterfaceOperation(nodeTemplateName, interfaceName, operationName)
 
         val artifactName: String = operationAssignment.implementation?.primary
-            ?: throw BluePrintProcessorException("missing primary field to get artifact name for node template ($nodeTemplateName)")
+                ?: throw BluePrintProcessorException("missing primary field to get artifact name for node template ($nodeTemplateName)")
 
         val artifactDefinition =
-            bluePrintRuntimeService.resolveNodeTemplateArtifactDefinition(nodeTemplateName, artifactName)
+                bluePrintRuntimeService.resolveNodeTemplateArtifactDefinition(nodeTemplateName, artifactName)
 
         checkNotBlank(artifactDefinition.file) { "couldn't get python script path($artifactName)" }
 
@@ -80,13 +73,17 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
         checkFileExists(pythonScript) { "python script(${pythonScript.absolutePath}) doesn't exists" }
 
         val endPointSelector = getOperationInput(INPUT_ENDPOINT_SELECTOR)
-        val dynamicProperties = getOperationInput(INPUT_DYNAMIC_PROPERTIES)
+        val dynamicProperties = getOptionalOperationInput(INPUT_DYNAMIC_PROPERTIES)
         val packages = getOperationInput(INPUT_PACKAGES)
-        val argumentProperties = getOperationInput(INPUT_ARGUMENT_PROPERTIES)
 
-        var command = getOperationInput(INPUT_COMMAND).asText()
-        command = command.replace(pythonScript.name, pythonScript.absolutePath)
-        val scriptCommand = BluePrintVelocityTemplateService.generateContent(command, json = JacksonUtils.getJson(argumentProperties))
+        val args = getOptionalOperationInput(INPUT_ARGUMENT_PROPERTIES)?.returnNullIfMissing()
+                ?.rootFieldsToMap()?.toSortedMap()?.values?.map { it.textValue() }?.joinToString(" ")
+
+        val command = getOperationInput(INPUT_COMMAND).asText()
+        var scriptCommand = command.replace(pythonScript.name, pythonScript.absolutePath)
+        if (args != null && args.isNotEmpty()) {
+            scriptCommand = scriptCommand.plus(" ").plus(args)
+        }
 
         try {
             // Open GRPC Connection
@@ -95,9 +92,9 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
             // If packages are defined, then install in remote server
             if (packages !is MissingNode && packages !is NullNode) {
                 val prepareEnvInput = PrepareRemoteEnvInput(requestId = processId,
-                    remoteIdentifier = RemoteIdentifier(blueprintName = blueprintName,
-                        blueprintVersion = blueprintVersion),
-                    packages = packages
+                        remoteIdentifier = RemoteIdentifier(blueprintName = blueprintName,
+                                blueprintVersion = blueprintVersion),
+                        packages = packages
                 )
                 val prepareEnvOutput = remoteScriptExecutionService.prepareEnv(prepareEnvInput)
                 setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, prepareEnvOutput.response.asJsonPrimitive())
@@ -105,11 +102,14 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
                     "failed to get prepare remote env response status for requestId(${prepareEnvInput.requestId})"
                 }
             }
+            // Populate command execution properties and pass it to the remote server
+            val properties = dynamicProperties?.returnNullIfMissing()?.rootFieldsToMap() ?: hashMapOf()
 
             val remoteExecutionInput = RemoteScriptExecutionInput(
-                requestId = processId,
-                remoteIdentifier = RemoteIdentifier(blueprintName = blueprintName, blueprintVersion = blueprintVersion),
-                command = scriptCommand)
+                    requestId = processId,
+                    remoteIdentifier = RemoteIdentifier(blueprintName = blueprintName, blueprintVersion = blueprintVersion),
+                    command = scriptCommand,
+                    properties = properties)
             val remoteExecutionOutput = remoteScriptExecutionService.executeCommand(remoteExecutionInput)
             setAttribute(ATTRIBUTE_EXEC_CMD_LOG, remoteExecutionOutput.response.asJsonPrimitive())
             check(remoteExecutionOutput.status == StatusType.SUCCESS) {
@@ -125,6 +125,6 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         bluePrintRuntimeService.getBluePrintError()
-            .addError("Failed in ComponentJythonExecutor : ${runtimeException.message}")
+                .addError("Failed in ComponentJythonExecutor : ${runtimeException.message}")
     }
 }

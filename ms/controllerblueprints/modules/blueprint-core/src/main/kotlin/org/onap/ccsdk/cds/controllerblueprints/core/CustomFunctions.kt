@@ -101,6 +101,12 @@ fun ArrayNode.asListOfString(): List<String> {
     return JacksonUtils.getListFromJsonNode(this, String::class.java)
 }
 
+fun JsonNode.returnNullIfMissing(): JsonNode? {
+    return if (this is NullNode || this is MissingNode) {
+        null
+    } else this
+}
+
 /**
  * Convert Json to map of json node, the root fields will be map keys
  */
