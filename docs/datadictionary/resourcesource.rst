@@ -108,3 +108,37 @@ Expects a script to be provided.
    :maxdepth: 1   
 
 	sourcecapabilitycode
+	
+Complex Type:
+=============
+
+Value will be resolved through REST., and output will be a complex type.
+
+Modeling reference: Modeling Concepts#rest
+
+In this example, we're making a POST request to an IPAM system with no payload.
+
+Some ingredients are required to perform the query, in this case, $prefixId. Hence It is provided as an input-key-mapping and defined as a key-dependencies. Please refer to the modeling guideline for more in depth understanding.
+
+As part of this request, the expected response will be as below.
+
+.. toctree::
+   :maxdepth: 1   
+
+	complexResponse
+
+What is of interest is the address and id fields. For the process to return these two values, we need to create a custom data-type, as bellow
+
+.. toctree::
+   :maxdepth: 1 
+   
+	dt-netbox-ip
+
+The type of the data dictionary will be dt-netbox-ip.
+
+To tell the resolution framework what is of interest in the response, the output-key-mapping section is used. The process will map the output-key-mapping to the defined data-type.
+
+.. toctree::
+   :maxdepth: 1 
+   
+create_netbox_ip_address
