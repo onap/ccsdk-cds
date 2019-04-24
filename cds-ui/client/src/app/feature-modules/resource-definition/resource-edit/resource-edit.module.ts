@@ -30,6 +30,7 @@ import { SourcesTemplateComponent } from './sources-template/sources-template.co
 import { ResourceMetadataComponent } from './resource-metadata/resource-metadata.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NgJsonEditorModule } from 'ang-jsoneditor';
+import { ResourceEditService } from './resource-edit.service';
 
 @NgModule({
   declarations: [ ResourceEditComponent,SourcesTemplateComponent,ResourceMetadataComponent ],
@@ -42,6 +43,7 @@ import { NgJsonEditorModule } from 'ang-jsoneditor';
    MatExpansionModule,MatToolbarModule,MatIconModule, MatButtonModule, MatSidenavModule,  MatCheckboxModule, MatListModule, MatGridListModule, MatCardModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatFormFieldModule, MatStepperModule,
    NgJsonEditorModule
   ],
-  exports: [ ResourceEditComponent,SharedModule ]
+  exports: [ ResourceEditComponent,SharedModule ],
+  providers: [ ResourceEditService ]
 })
 export class ResourceEditModule { }
