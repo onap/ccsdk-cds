@@ -96,6 +96,7 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
                 )
                 val prepareEnvOutput = remoteScriptExecutionService.prepareEnv(prepareEnvInput)
                 setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, prepareEnvOutput.response.asJsonPrimitive())
+                setAttribute(ATTRIBUTE_EXEC_CMD_LOG, "N/A".asJsonPrimitive())
                 check(prepareEnvOutput.status == StatusType.SUCCESS) {
                     "failed to get prepare remote env response status for requestId(${prepareEnvInput.requestId})"
                 }

@@ -40,7 +40,7 @@
     "input-param": true,
     "property": {
       "type": "string",
-      "default": "11"
+      "default": "6"
     },
     "dictionary-name": "prefix-id",
     "dictionary-source": "default",
