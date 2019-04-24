@@ -114,6 +114,8 @@ class BlueprintProcessorCatalogServiceImpl(bluePrintRuntimeValidatorService: Blu
         blueprintModelRepository.findByArtifactNameAndArtifactVersion(artifactName!!, artifactVersion!!)?.let {
             log.info("Overwriting blueprint model :$artifactName::$artifactVersion")
             blueprintModelRepository.deleteByArtifactNameAndArtifactVersion(artifactName, artifactVersion)
+            val deployFile = normalizedPathName(bluePrintPathConfiguration.blueprintDeployPath, artifactName, artifactVersion)
+            deleteNBDir(deployFile)
         }
 
         val blueprintModel = BlueprintProcessorModel()
