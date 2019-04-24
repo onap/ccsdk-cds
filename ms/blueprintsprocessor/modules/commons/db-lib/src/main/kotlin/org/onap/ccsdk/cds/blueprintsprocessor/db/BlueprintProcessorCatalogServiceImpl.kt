@@ -56,7 +56,7 @@ class BlueprintProcessorCatalogServiceImpl(bluePrintRuntimeValidatorService: Blu
         log.info("removed cba file name($name), version($version) from deploy location")
         // Cleaning Data Base
         blueprintModelRepository
-                .deleteByArtifactNameAndArtifactVersion(name, version)
+            .deleteByArtifactNameAndArtifactVersion(name, version)
         log.info("removed cba file name($name), version($version) from database")
     }
 
@@ -65,7 +65,7 @@ class BlueprintProcessorCatalogServiceImpl(bluePrintRuntimeValidatorService: Blu
 
         val deployFile = normalizedFile(bluePrintPathConfiguration.blueprintDeployPath, name, version)
         val cbaFile = normalizedFile(bluePrintPathConfiguration.blueprintArchivePath,
-                UUID.randomUUID().toString(), "cba.zip")
+            UUID.randomUUID().toString(), "cba.zip")
 
         if (extract && deployFile.exists()) {
             log.info("cba file name($name), version($version) already present(${deployFile.absolutePath})")
@@ -114,6 +114,12 @@ class BlueprintProcessorCatalogServiceImpl(bluePrintRuntimeValidatorService: Blu
         blueprintModelRepository.findByArtifactNameAndArtifactVersion(artifactName!!, artifactVersion!!)?.let {
             log.info("Overwriting blueprint model :$artifactName::$artifactVersion")
             blueprintModelRepository.deleteByArtifactNameAndArtifactVersion(artifactName, artifactVersion)
+            val deployFile =
+                normalizedPathName(bluePrintPathConfiguration.blueprintDeployPath, artifactName, artifactVersion)
+            deleteNBDir(deployFile).let {
+                if (it) log.info("Deleted deployed blueprint model :$artifactName::$artifactVersion")
+                else log.info("Fail to delete deployed blueprint model :$artifactName::$artifactVersion")
+            }
         }
 
         val blueprintModel = BlueprintProcessorModel()
