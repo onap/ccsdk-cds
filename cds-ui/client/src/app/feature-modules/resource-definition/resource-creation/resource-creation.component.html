@@ -29,10 +29,10 @@
     <app-resource-template-options (option)="selectedOption($event)"></app-resource-template-options>
     <br>
     <div>
-      <button mat-button matStepperNext class="matStepNextBtn">Proceed</button>
+      <button mat-button matStepperNext class="matStepNextBtn" *ngIf="selectedValue == 1 || selectedValue == 3">Proceed</button>
     </div>
   </mat-step>
-  <mat-step [stepControl]="step2FormGroup">
+  <mat-step [stepControl]="step2FormGroup" *ngIf="selectedValue == 1 || selectedValue == 3">
     <ng-template matStepLabel>Browse or Search Resources</ng-template>
   <app-upload-resource (fileData)=upload($event) *ngIf="selectedValue == 1"></app-upload-resource><br><br>
   <app-existing-model *ngIf="selectedValue == 3"></app-existing-model>
