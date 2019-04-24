@@ -22,7 +22,7 @@
     background:#3f51b5; 
     margin-top: 10px; 
     position: absolute;
-    border-radius: 1em;
+    border-radius: 4px;
 }
 .ver-card {
   width: 100%;  
@@ -46,4 +46,7 @@
 }
 .success{
 color:green;
+}
+.comp-disabled {
+    display: none;
 }
