@@ -36,6 +36,6 @@
         <module>controllerblueprints</module>
         <module>blueprintsprocessor</module>
         <module>command-executor</module>
-        <module>cds-sdc-listener</module>
+        <module>sdclistener</module>
     </modules>
 </project>
