@@ -100,10 +100,10 @@ open class BluePrintWorkflowEnhancerImpl(private val bluePrintRepoService: BlueP
 
         when {
             derivedFrom.startsWith(BluePrintConstants.MODEL_TYPE_NODE_COMPONENT, true) -> {
-                // DO Nothing
+                enhanceStepTargets(name, workflow, firstNodeTemplateName, false)
             }
             derivedFrom.startsWith(BluePrintConstants.MODEL_TYPE_NODE_WORKFLOW, true) -> {
-                enhanceDGStepTargets(name, workflow, firstNodeTemplateName)
+                enhanceStepTargets(name, workflow, firstNodeTemplateName, true)
             }
             else -> {
                 throw BluePrintProcessorException("couldn't execute workflow($name) step mapped " +
@@ -113,15 +113,21 @@ open class BluePrintWorkflowEnhancerImpl(private val bluePrintRepoService: BlueP
 
     }
 
-    private fun enhanceDGStepTargets(name: String, workflow: Workflow, dgNodeTemplateName: String) {
+    private fun enhanceStepTargets(name: String, workflow: Workflow, nodeTemplateName: String, isDG: Boolean) {
 
-        val dgNodeTemplate = bluePrintContext.nodeTemplateByName(dgNodeTemplateName)
+        val dependencyNodeTemplates: List<String>
+        if (isDG) {
+            val dgNodeTemplate = bluePrintContext.nodeTemplateByName(nodeTemplateName)
 
-        // Get the Dependent Component Node Template Names
-        val dependencyNodeTemplateNodes = dgNodeTemplate.properties?.get(PROPERTY_DEPENDENCY_NODE_TEMPLATES)
+            // Get the Dependent Component Node Template Names
+            val dependencyNodeTemplateNodes = dgNodeTemplate.properties?.get(PROPERTY_DEPENDENCY_NODE_TEMPLATES)
                 ?: throw BluePrintException("couldn't get property($PROPERTY_DEPENDENCY_NODE_TEMPLATES) ")
 
-        val dependencyNodeTemplates = JacksonUtils.getListFromJsonNode(dependencyNodeTemplateNodes, String::class.java)
+            dependencyNodeTemplates =
+                JacksonUtils.getListFromJsonNode(dependencyNodeTemplateNodes, String::class.java)
+        } else {
+            dependencyNodeTemplates = listOf(nodeTemplateName)
+        }
 
         log.info("workflow($name) dependent component NodeTemplates($dependencyNodeTemplates)")
 
