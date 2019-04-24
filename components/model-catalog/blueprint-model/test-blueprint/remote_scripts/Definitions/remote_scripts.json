@@ -27,9 +27,14 @@
   ],
   "dsl_definitions": {
     "execute-argument-properties": {
-      "input": {
-        "get_input": "input"
-      }
+      "input": "data"
+    },
+    "remote-argument-properties": {
+      "arg-0": "-a",
+      "arg-1": "sample-data 1",
+      "arg-4": "sample-data 4",
+      "arg-3": "sample-data 3",
+      "arg-2": "-b"
     }
   },
   "topology_template": {
@@ -119,7 +124,7 @@
                   "primary": "component-script"
                 },
                 "inputs": {
-                  "command": "python SamplePython.py $input",
+                  "command": "python SamplePython.py",
                   "packages": [
                     {
                       "type": "pip",
@@ -128,7 +133,8 @@
                       ]
                     }
                   ],
-                  "argument-properties": "*execute-argument-properties"
+                  "argument-properties": "*remote-argument-properties",
+                  "dynamic-properties": "*execute-argument-properties"
                 }
               }
             }
