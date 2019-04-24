@@ -93,13 +93,6 @@ Steps
    3. cd cds ; mvn clean install ; cd ..
    4. Open the cds-ui/client code for development
    
-Data Flow:
-==========
-|image1|
-
-.. |image1| image:: media/image1.jpg
-   :width: 7.88889in 
-   :height: 4.43750in
    
 Functional Decomposition:
 =========================
@@ -109,8 +102,3 @@ Functional Decomposition:
    :width: 7.88889in 
    :height: 4.43750in
    
-Controller design Studio Presentation:
-======================================
-
-Details about CDS Architecture and Design detail, Please click the link.
-:download:`CDS_Architecture_Design.pptx`
