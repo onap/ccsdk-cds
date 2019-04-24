@@ -3,7 +3,7 @@
     "template_author": "Alexis de Talhouët",
     "author-email": "adetalhouet89@gmail.com",
     "user-groups": "ADMIN, OPERATION",
-    "template_name": "test",
+    "template_name": "golden",
     "template_version": "1.0.0",
     "template_tags": "test"
   },
@@ -27,7 +27,7 @@
   "dsl_definitions": {
     "ipam-1": {
       "type": "token-auth",
-      "url": "http://localhost:32768",
+      "url": "http://netbox-nginx:8080",
       "token": "Token 0123456789abcdef0123456789abcdef01234567"
     },
     "config-deploy-properties": {
@@ -132,11 +132,6 @@
           "ip": {
             "required": true,
             "type": "string"
-          },
-          "config-deploy-properties": {
-            "description": "Dynamic PropertyDefinition for workflow(config-deploy).",
-            "required": true,
-            "type": "dt-config-deploy-properties"
           }
         }
       },
@@ -216,7 +211,7 @@
                   },
                   "store-result": true,
                   "artifact-prefix-names": [
-                    "hostname"
+                    "hostname", "vfw-interface"
                   ]
                 }
               }
@@ -231,6 +226,14 @@
           "hostname-mapping": {
             "type": "artifact-mapping-resource",
             "file": "Templates/hostname-mapping.json"
+          },
+          "vfw-interface-template": {
+            "type": "artifact-template-velocity",
+            "file": "Templates/vfw-interface-template.vtl"
+          },
+          "vfw-interface-mapping": {
+            "type": "artifact-mapping-resource",
+            "file": "Templates/vfw-interface-mapping.json"
           }
         }
       },
@@ -255,16 +258,6 @@
                 }
               }
             }
-          }
-        },
-        "artifacts": {
-          "vfw-interface-template": {
-            "type": "artifact-template-velocity",
-            "file": "Templates/vfw-interface-template.vtl"
-          },
-          "vfw-interface-mapping": {
-            "type": "artifact-mapping-resource",
-            "file": "Templates/vfw-interface-mapping.json"
           }
         }
       },

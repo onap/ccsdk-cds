@@ -24,6 +24,7 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import org.apache.catalina.connector.Connector
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
@@ -86,6 +87,7 @@ import kotlin.test.assertNotNull
     "blueprintsprocessor.restclient.test.sslTrust=src/test/resources/keystore.p12",
     "blueprintsprocessor.restclient.test.sslTrustPassword=changeit"
 ])
+@Ignore
 class RestClientServiceTest {
 
     @Autowired
