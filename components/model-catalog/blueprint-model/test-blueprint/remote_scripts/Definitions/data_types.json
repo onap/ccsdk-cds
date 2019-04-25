@@ -1,29 +1,41 @@
 {
-  "data_types": {
-    "dt-system-packages": {
-      "description": "This represent System Package Data Type",
-      "version": "1.0.0",
-      "properties": {
-        "type": {
-          "required": true,
-          "type": "string",
-          "constraints": [
-            {
-              "valid_values": [
-                "ansible_galaxy", "pip"
-              ]
-            }
-          ]
+  "data_types" : {
+    "dt-execute-remote-ansible-properties" : {
+      "description" : "Dynamic DataType definition for workflow(execute-remote-ansible).",
+      "version" : "1.0.0",
+      "properties" : {
+        "password" : {
+          "type" : "string"
         },
-        "package": {
-          "required": true,
-          "type": "list",
+        "ip" : {
+          "type" : "string"
+        },
+        "username" : {
+          "type" : "string"
+        }
+      },
+      "derived_from" : "tosca.datatypes.Dynamic"
+    },
+    "dt-system-packages" : {
+      "description" : "This represent System Package Data Type",
+      "version" : "1.0.0",
+      "properties" : {
+        "type" : {
+          "required" : true,
+          "type" : "string",
+          "constraints" : [ {
+            "valid_values" : [ "ansible_galaxy", "pip" ]
+          } ]
+        },
+        "package" : {
+          "required" : true,
+          "type" : "list",
           "entry_schema" : {
             "type" : "string"
           }
         }
       },
-      "derived_from": "tosca.datatypes.Root"
+      "derived_from" : "tosca.datatypes.Root"
     }
   }
 }

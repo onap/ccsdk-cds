@@ -1,22 +1,20 @@
 ---
-- name: Get Device Facts
-  hosts: dc1
-  roles:
-    - juniper.junos
-  connection: local
+- name: Get Device Running Config
+  hosts: all
   gather_facts: no
+  connection: local
+  any_errors_fatal: True
+  serial: 5
 
   tasks:
-    - name: Checking NETCONF connectivity
-      wait_for: 
-        host: "{{ inventory_hostname }}"
-        port: 830 
-        timeout: 5
+    - name: Get Running Config
+      netconf_rpc:
+        rpc: get-config
+        content: |
+          <source><running/></source>
+      register: netconf_output
 
-    - name: Retrieving information from devices running Junos OS
-      juniper_junos_facts:
-        host: "{{ inventory_hostname }}"
 
-    - name: Print version
+    - name: Print Running Config
       debug:
-        var: junos.version
+        var: netconf_output

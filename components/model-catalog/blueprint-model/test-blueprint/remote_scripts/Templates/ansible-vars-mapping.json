@@ -1,0 +1,35 @@
+[
+  {
+    "name": "ip",
+    "input-param": true,
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "hostname",
+    "dictionary-source": "input",
+    "dependencies": [
+    ]
+  },
+  {
+    "name": "username",
+    "input-param": true,
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "hostname",
+    "dictionary-source": "input",
+    "dependencies": [
+    ]
+  },
+  {
+    "name": "password",
+    "input-param": true,
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "hostname",
+    "dictionary-source": "input",
+    "dependencies": [
+    ]
+  }
+]

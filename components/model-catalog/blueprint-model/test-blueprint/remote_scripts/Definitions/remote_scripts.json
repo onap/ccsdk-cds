@@ -26,15 +26,23 @@
     }
   ],
   "dsl_definitions": {
-    "execute-argument-properties": {
-      "input": "data"
-    },
     "remote-argument-properties": {
-      "arg-0": "-a",
-      "arg-1": "sample-data 1",
-      "arg-4": "sample-data 4",
-      "arg-3": "sample-data 3",
-      "arg-2": "-b"
+      "input": {
+        "get_input": "input"
+      }
+    },
+    "ansible-argument-properties": {
+      "arg0": "-i",
+      "arg1": "Scripts/ansible/inventory.yaml",
+      "arg2": "--extra-vars",
+      "arg3": {
+        "get_attribute": [
+          "resolve-ansible-vars",
+          "",
+          "assignment-params",
+          "ansible-vars"
+        ]
+      }
     }
   },
   "topology_template": {
@@ -82,7 +90,7 @@
         "steps": {
           "execute-script": {
             "description": "Execute Remote Ansible Script",
-            "target": "execute-remote-ansible",
+            "target": "execute-remote-ansible-process",
             "activities": [
               {
                 "call_operation": ""
@@ -90,8 +98,35 @@
             ]
           }
         },
-        "inputs": {},
+        "inputs": {
+          "ip": {
+            "required": false,
+            "type": "string"
+          },
+          "username": {
+            "required": false,
+            "type": "string"
+          },
+          "password": {
+            "required": false,
+            "type": "string"
+          },
+          "execute-remote-ansible-properties": {
+            "description": "Dynamic PropertyDefinition for workflow(execute-remote-ansible).",
+            "required": true,
+            "type": "dt-execute-remote-ansible-properties"
+          }
+        },
         "outputs": {
+          "ansible-variable-resolution": {
+            "type": "json",
+            "value": {
+              "get_attribute": [
+                "resolve-ansible-vars",
+                "assignment-params"
+              ]
+            }
+          },
           "prepare-environment-logs": {
             "type": "string",
             "value": {
@@ -133,8 +168,7 @@
                       ]
                     }
                   ],
-                  "argument-properties": "*remote-argument-properties",
-                  "dynamic-properties": "*execute-argument-properties"
+                  "argument-properties": "*remote-argument-properties"
                 }
               }
             }
@@ -144,6 +178,53 @@
           "component-script": {
             "type": "artifact-script-python",
             "file": "Scripts/python/SamplePython.py"
+          }
+        }
+      },
+      "execute-remote-ansible-process": {
+        "type": "dg-generic",
+        "properties": {
+          "content": {
+            "get_artifact": [
+              "SELF",
+              "dg-execute-remote-ansible-process"
+            ]
+          },
+          "dependency-node-templates": [
+            "resolve-ansible-vars",
+            "execute-remote-ansible"
+          ]
+        },
+        "artifacts": {
+          "dg-execute-remote-ansible-process": {
+            "type": "artifact-directed-graph",
+            "file": "Plans/CONFIG_ExecAnsiblePlaybook.xml"
+          }
+        }
+      },
+      "resolve-ansible-vars": {
+        "type": "component-resource-resolution",
+        "interfaces": {
+          "ResourceResolutionComponent": {
+            "operations": {
+              "process": {
+                "inputs": {
+                  "artifact-prefix-names": [
+                    "ansible-vars"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "artifacts": {
+          "ansible-vars-template": {
+            "type": "artifact-template-velocity",
+            "file": "Templates/ansible-vars-template.vtl"
+          },
+          "ansible-vars-mapping": {
+            "type": "artifact-mapping-resource",
+            "file": "Templates/ansible-vars-mapping.json"
           }
         }
       },
@@ -157,7 +238,8 @@
                   "primary": "component-script"
                 },
                 "inputs": {
-                  "command": "ansible-playbook first.yaml",
+                  "command": "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook first.yaml",
+                  "argument-properties": "*ansible-argument-properties",
                   "packages": [
                     {
                       "type": "pip",
