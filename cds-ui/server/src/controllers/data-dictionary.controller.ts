@@ -35,7 +35,7 @@ export class DataDictionaryController {
   async getByName(@param.path.string('name') name: string) {
     return await this.rdservice.getByName(name, REST_RESOURCE_DICTIONARY_BASIC_AUTH_HEADER);
   }
-  @get('/resourcedictionary/{tags}', {
+  @get('/resourcedictionary/search/{tags}', {
     responses: {
       '200': {
         content: { 'application/json': {} },
