@@ -44,8 +44,7 @@ MicroServices:
 ==============
 .. toctree::
    :maxdepth: 1
-   :glob:
-    
+       
 	controllerBlueprintStudioProcessorMS
 	bluePrintsProcessorMS
 
@@ -62,14 +61,27 @@ The GUI handles direct user input and allows for displaying both design time and
    :height: 4.43750in
    :width: 7.88889in
 
+User Guide:
+===========
 
-Resource assignment:
-=====================
 .. toctree::
    :maxdepth: 1
-   :glob:
    
-   resourceassignment
+   userguide
+   
+Dynamic API:
+============
+
+.. toctree::
+   :maxdepth: 1
+   
+   dynamicapi
+   
+Controller design Studio Presentation:
+======================================
+
+Details about CDS Architecture and Design detail, Please click the link.
+:download:`CDS_Architecture_Design.pptx`
 
 ResolutionHelper:
 =================
