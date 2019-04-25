@@ -65,11 +65,20 @@ class CommandExecutorHandler():
         return True
 
     def execute_command(self, request, results):
-        # if not self.activate_venv():
-        #     return False
 
+        if not self.activate_venv():
+            return False
+
+        cmd = "cd " + self.venv_home
+
+        if "ansible-playbook" in request.command:
+            cmd = cmd + "; " + request.command + " -e 'ansible_python_interpreter=" + self.venv_home + "/bin/python'"
+        else:
+            cmd = cmd + "; " + request.command
+
+        self.logger.info("Command: {}".format(cmd))
         try:
-            results.append(os.popen(request.command).read())
+            results.append(os.popen(cmd).read())
         except Exception as e:
             self.logger.info("{} - Failed to execute command. Error: {}".format(self.blueprint_id, e))
             results.append(e)
