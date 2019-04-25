@@ -30,8 +30,11 @@ class ConfigDeploy(NetconfComponentFunction):
 
       # Get meshed template from DB
       resolution_key = self.getDynamicProperties("resolution-key").asText()
-      payloadHostname = rr.retrieve_resolved_template_from_database(resolution_key, "hostname")
-      payloadInterface = rr.retrieve_resolved_template_from_database(resolution_key, "vfw-interface")
+      artifact_name = "hostname"
+      payloadHostname = rr.retrieve_resolved_template_from_database(resolution_key, artifact_name)
+
+      # resolve param and mesh template
+      payloadInterface = rr.resolve_and_generate_message_from_template_prefix("vfw-interface")
 
       nc.connect()
       nc.lock()

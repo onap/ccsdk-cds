@@ -41,7 +41,7 @@
     "input-param": true,
     "property": {
       "type": "integer",
-      "default": 6
+      "default": 11
     },
     "dictionary-name": "prefix-id",
     "dictionary-source": "default",

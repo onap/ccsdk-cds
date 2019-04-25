@@ -122,9 +122,7 @@
                                         <cleanup>try</cleanup>
                                         <dockerFileDir>${basedir}/target/docker-stage</dockerFileDir>
                                         <tags>
-                                            <tag>${project.docker.latestminortag.version}</tag>
                                             <tag>${project.docker.latestfulltag.version}</tag>
-                                            <tag>${project.docker.latesttagtimestamp.version}</tag>
                                         </tags>
                                     </build>
                                 </image>

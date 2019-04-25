@@ -14,7 +14,7 @@ Example
           CREATE TABLE `demo` (
             `id` text DEFAULT NULL,
             `value` text DEFAULT NULL
-          );
+          )
 
           INSERT INTO `demo` VALUES ('1','vsn'),('2','vpg'),('3','vfw');
 
@@ -70,24 +70,23 @@ Example
 
                 resolution-key:   To identify the configlet saved in the DB
                 hostname:         Value defined to be result trough input in the hostname mapping file
-                interface-name:   Name of the interface to configure
-                unit-number:      Unit to configure for the interface
 
               {
                   "config-assign-request": {
                     "resolution-key": "config-assign-demo-123",
                     "config-assign-properties": {
-                      "hostname": "blah"
+                      "hostname": "demo-config-assign"
                     }
                   }
               }
 
             Output:
 
-              "config-assign-response": {
-                  "dry-run": {
-                      "hostname": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<configuration xmlns:junos=\"http://xml.juniper.net/junos/17.4R1/junos\">\n   <system xmlns=\"http://yang.juniper.net/junos-qfx/conf/system\">\n      <host-name operation=\"delete\" />\n      <host-name operation=\"create\">blah</host-name>\n   </system>\n</configuration>\n",
-                      "vfw-interface": "<configuration>\n        <interfaces>\n            <interface>\n                <name>ge-0/0/7</name>\n                <unit operation=\"create\">\n                    <name>0</name>\n                    <description>This is the Virtual Firewall entity</description>\n                    <family>\n                        <inet>\n                            <address>\n                                <name>10.0.101.17/24</name>\n                            </address>\n                        </inet>\n                    </family>\n                </unit>\n            </interface>\n        </interfaces>\n</configuration>"
+              {
+                  "config-assign-response": {
+                      "dry-run": {
+                          "hostname": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<configuration xmlns:junos=\"http://xml.juniper.net/junos/17.4R1/junos\">\n   <system xmlns=\"http://yang.juniper.net/junos-qfx/conf/system\">\n      <host-name operation=\"delete\" />\n      <host-name operation=\"create\">demo-config-assign</host-name>\n   </system>\n</configuration>\n"
+                      }
                   }
               }
 
@@ -95,7 +94,8 @@ Example
 
             This action will run a python script that will retrieved the resolved template
             from previous step using the resolution-key.
-            This action will push these resolved templates into a device (JUNOS) using NETCONF.
+            The script will also resolve another template during its execution: the Interface Template.
+            Finally, this action will push these resolved templates into a device (JUNOS) using NETCONF.
             The python script will make use of utilities classes provided by the platform:
             resolution helper and netconf client.
 
@@ -109,14 +109,19 @@ Example
                 username:         NETCONF device user
                 password:         NETCONF device password
                 ip:               NETCONF device ip
-
+                interface-name:   Name of the interface to configure
+                unit-number:      Unit to configure for the interface
 
               {
                 "config-deploy-request": {
                   "resolution-key": "config-assign-demo-123",
                   "username": "admin",
                   "password": "passwd",
-                  "ip": "10.198.1.35"
+                  "ip": "10.198.1.35",
+                  "config-deploy-properties": {
+                    "interface-name": "ge-0/0/7",
+                    "unit-number": "0"
+                  }
                 }
               }
 
@@ -156,4 +161,4 @@ Example
 
 Postman collection used for this example. 5 requests are provided one per workflow to execute, and 1 to load the CBA in the runtime environment.
 
-    https://www.getpostman.com/collections/d68b12a60fd6ed336059
+    hhttps://www.getpostman.com/collections/4d199ff02a735bd3e680

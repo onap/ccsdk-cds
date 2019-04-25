@@ -95,7 +95,7 @@ suspend fun File.reCreateNBDirs(): File = withContext(Dispatchers.IO) {
     reCreateDirs()
 }
 
-suspend fun deleteNBDir(path: String, vararg more: String?): Boolean = withContext(Dispatchers.IO) {
+suspend fun deleteNBDir(path: String, vararg more: String?) = withContext(Dispatchers.IO) {
     normalizedFile(path, *more).deleteRecursively()
 }
 

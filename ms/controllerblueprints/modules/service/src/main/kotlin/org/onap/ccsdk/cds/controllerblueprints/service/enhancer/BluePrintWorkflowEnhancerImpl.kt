@@ -100,10 +100,10 @@ open class BluePrintWorkflowEnhancerImpl(private val bluePrintRepoService: BlueP
 
         when {
             derivedFrom.startsWith(BluePrintConstants.MODEL_TYPE_NODE_COMPONENT, true) -> {
-                enhanceStepTargets(name, workflow, firstNodeTemplateName, false)
+                // DO Nothing
             }
             derivedFrom.startsWith(BluePrintConstants.MODEL_TYPE_NODE_WORKFLOW, true) -> {
-                enhanceStepTargets(name, workflow, firstNodeTemplateName, true)
+                enhanceDGStepTargets(name, workflow, firstNodeTemplateName)
             }
             else -> {
                 throw BluePrintProcessorException("couldn't execute workflow($name) step mapped " +
@@ -113,21 +113,15 @@ open class BluePrintWorkflowEnhancerImpl(private val bluePrintRepoService: BlueP
 
     }
 
-    private fun enhanceStepTargets(name: String, workflow: Workflow, nodeTemplateName: String, isDG: Boolean) {
+    private fun enhanceDGStepTargets(name: String, workflow: Workflow, dgNodeTemplateName: String) {
 
-        val dependencyNodeTemplates: List<String>
-        if (isDG) {
-            val dgNodeTemplate = bluePrintContext.nodeTemplateByName(nodeTemplateName)
+        val dgNodeTemplate = bluePrintContext.nodeTemplateByName(dgNodeTemplateName)
 
-            // Get the Dependent Component Node Template Names
-            val dependencyNodeTemplateNodes = dgNodeTemplate.properties?.get(PROPERTY_DEPENDENCY_NODE_TEMPLATES)
+        // Get the Dependent Component Node Template Names
+        val dependencyNodeTemplateNodes = dgNodeTemplate.properties?.get(PROPERTY_DEPENDENCY_NODE_TEMPLATES)
                 ?: throw BluePrintException("couldn't get property($PROPERTY_DEPENDENCY_NODE_TEMPLATES) ")
 
-            dependencyNodeTemplates =
-                JacksonUtils.getListFromJsonNode(dependencyNodeTemplateNodes, String::class.java)
-        } else {
-            dependencyNodeTemplates = listOf(nodeTemplateName)
-        }
+        val dependencyNodeTemplates = JacksonUtils.getListFromJsonNode(dependencyNodeTemplateNodes, String::class.java)
 
         log.info("workflow($name) dependent component NodeTemplates($dependencyNodeTemplates)")
 
