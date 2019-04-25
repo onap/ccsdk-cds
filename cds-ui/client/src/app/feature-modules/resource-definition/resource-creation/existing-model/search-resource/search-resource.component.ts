@@ -32,7 +32,8 @@ export class SearchResourceComponent implements OnInit  {
 
   myControl: FormGroup;
   @Output() resourcesData = new EventEmitter();  
-  options: any[]   = ['One','One1', 'Two', 'Three'];
+  options: any[]   = [];
+  //['One','One1', 'Two', 'Three'];
   // @ViewChild('resourceSelect') resourceSelect;
   @ViewChild('resourceSelect', { read: MatAutocompleteTrigger }) resourceSelect: MatAutocompleteTrigger;
 
