@@ -35,6 +35,7 @@
         <docker.verbose>true</docker.verbose>
         <ccsdk.project.version>${project.version}</ccsdk.project.version>
         <ccsdk.build.timestamp>${maven.build.timestamp}</ccsdk.build.timestamp>
+		<maven.build.timestamp.format>yyyyMMdd'T'HHmmss'Z'</maven.build.timestamp.format>
     </properties>
 
     <build>
