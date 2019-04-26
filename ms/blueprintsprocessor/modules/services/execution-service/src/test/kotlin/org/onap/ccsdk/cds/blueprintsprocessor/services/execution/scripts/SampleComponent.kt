@@ -23,6 +23,9 @@ package org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts
 
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
+
 import org.slf4j.LoggerFactory
 
 open class SampleComponent : AbstractComponentFunction() {
@@ -37,12 +40,34 @@ open class SampleComponent : AbstractComponentFunction() {
     }
 }
 
-open class SampleScriptComponent : AbstractComponentFunction() {
+open class SampleRestconfComponent (private var componentFunctionScriptingService: ComponentFunctionScriptingService)
+    : AbstractComponentFunction() {
 
     val log = LoggerFactory.getLogger(SampleScriptComponent::class.java)!!
 
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
+        var scriptComponent: AbstractScriptComponentFunction
+        scriptComponent = componentFunctionScriptingService
+                .scriptInstance<AbstractScriptComponentFunction>(this,
+                        "internal",
+                        "org.onap.ccsdk.cds.blueprintsprocessor.services" +
+                                ".execution.scripts.SampleTest",
+                        mutableListOf())
+        scriptComponent.executeScript(executionServiceInput)
+    }
+
+    override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
+    }
+}
+
+open class SampleScriptComponent : AbstractScriptComponentFunction() {
+
+    val log = LoggerFactory.getLogger(SampleScriptComponent::class.java)!!
+
+
+    override suspend fun processNB(executionRequest: ExecutionServiceInput) {
+
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
