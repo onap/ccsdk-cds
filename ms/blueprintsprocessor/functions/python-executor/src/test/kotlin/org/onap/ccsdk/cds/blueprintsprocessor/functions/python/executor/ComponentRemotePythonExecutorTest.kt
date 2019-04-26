@@ -17,14 +17,22 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
-import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.*
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.PrepareRemoteEnvInput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteScriptExecutionInput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteScriptExecutionOutput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StatusType
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.RemoteScriptExecutionService
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.putJsonElement
+import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import kotlin.test.assertEquals
@@ -58,7 +66,117 @@ class ComponentRemotePythonExecutorTest {
             executionServiceInput.stepData = stepInputData
             componentRemotePythonExecutor.applyNB(executionServiceInput)
         }
+    }
 
+    /**
+     * Test cases for python executor to work with the process NB of remote
+     * executor.
+     */
+    @Test
+    fun testComponentRemotePythonExecutorProcessNB() {
+        runBlocking {
+            val remoteScriptExecutionService =
+                    MockRemoteScriptExecutionService()
+            val componentRemotePythonExecutor = ComponentRemotePythonExecutor(
+                    remoteScriptExecutionService)
+            val bluePrintRuntime = mockk<DefaultBluePrintRuntimeService>(
+                    "123456-1000")
+            val input  = getMockedOutput(bluePrintRuntime)
+            componentRemotePythonExecutor.bluePrintRuntimeService =
+                    bluePrintRuntime
+            componentRemotePythonExecutor.applyNB(input)
+        }
+    }
+
+    /**
+     * Mocked input information for remote python executor.
+     */
+    fun getMockedOutput(svc: DefaultBluePrintRuntimeService):
+            ExecutionServiceInput {
+        val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
+
+        stepMetaData.putJsonElement(
+                BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE,
+                "execute-remote-python")
+        stepMetaData.putJsonElement(
+                BluePrintConstants.PROPERTY_CURRENT_INTERFACE,
+                "ComponentRemotePythonExecutor")
+        stepMetaData.putJsonElement(
+                BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
+
+        val mapper = ObjectMapper()
+        val rootNode = mapper.createObjectNode()
+        rootNode.put("ip-address", "0.0.0.0")
+        rootNode.put("type", "rest")
+
+        val operationalInputs: MutableMap<String, JsonNode> = hashMapOf()
+        operationalInputs.putJsonElement(
+                BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE,
+                "execute-remote-python")
+        operationalInputs.putJsonElement(
+                BluePrintConstants.PROPERTY_CURRENT_INTERFACE,
+                "ComponentRemotePythonExecutor")
+        operationalInputs.putJsonElement(
+                BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
+        operationalInputs.putJsonElement("endpoint-selector", "aai")
+        operationalInputs.putJsonElement("dynamic-properties", rootNode)
+        operationalInputs.putJsonElement("command", "./run.sh")
+        operationalInputs.putJsonElement("packages", "py")
+
+        every {
+            svc.resolveNodeTemplateInterfaceOperationInputs(
+                    "execute-remote-python",
+                    "ComponentRemotePythonExecutor", "process")
+        } returns operationalInputs
+
+        val stepInputData = StepData().apply {
+            name = "execute-remote-python"
+            properties = stepMetaData
+        }
+
+        val executionServiceInput = JacksonUtils
+                .readValueFromClassPathFile(
+                        "payload/requests/sample-remote-python-request.json",
+                        ExecutionServiceInput::class.java)!!
+        executionServiceInput.stepData = stepInputData
+
+        val operationOutputs = hashMapOf<String, JsonNode>()
+        every {
+            svc.resolveNodeTemplateInterfaceOperationOutputs(
+                    "execute-remote-python",
+                    "ComponentRemotePythonExecutor", "process")
+        } returns operationOutputs
+        val bluePrintRuntimeService = BluePrintMetadataUtils
+                .getBluePrintRuntime("123456-1000",
+                        "./../../../../components/model-" +
+                                "catalog/blueprint-model/test-blueprint/" +
+                                "remote_scripts")
+        every {
+            svc.resolveNodeTemplateArtifactDefinition(
+                    "execute-remote-python", "component-script")
+        } returns bluePrintRuntimeService.resolveNodeTemplateArtifactDefinition(
+                "execute-remote-python", "component-script")
+        every {
+            svc.setNodeTemplateAttributeValue(
+                    "execute-remote-python", "prepare-environment-logs",
+                    "prepared successfully".asJsonPrimitive())
+        } returns Unit
+        every {
+            svc.setNodeTemplateAttributeValue(
+                    "execute-remote-python",
+                    "execute-command-logs", "N/A".asJsonPrimitive())
+        } returns Unit
+        every {
+            svc.setNodeTemplateAttributeValue(
+                    "execute-remote-python",
+                    "execute-command-logs",
+                    "processed successfully".asJsonPrimitive())
+        } returns Unit
+
+        every {
+            svc.bluePrintContext()
+        } returns bluePrintRuntimeService.bluePrintContext()
+        return executionServiceInput
     }
 }
 
