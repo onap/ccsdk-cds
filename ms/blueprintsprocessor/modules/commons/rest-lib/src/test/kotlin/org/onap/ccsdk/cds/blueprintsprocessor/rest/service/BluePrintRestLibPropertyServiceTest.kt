@@ -20,7 +20,6 @@ package org.onap.ccsdk.cds.blueprintsprocessor.rest.service
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
@@ -63,7 +62,6 @@ import kotlin.test.assertNotNull
     "blueprintsprocessor.restclient.ssl.sslKey=src/test/resources/keystore.p12",
     "blueprintsprocessor.restclient.ssl.sslKeyPassword=changeit"
 ])
-@Ignore
 class BluePrintRestLibPropertyServiceTest {
 
     @Autowired
