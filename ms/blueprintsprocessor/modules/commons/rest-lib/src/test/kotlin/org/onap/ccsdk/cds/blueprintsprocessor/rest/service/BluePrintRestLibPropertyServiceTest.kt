@@ -20,7 +20,6 @@ package org.onap.ccsdk.cds.blueprintsprocessor.rest.service
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
@@ -63,7 +62,6 @@ import kotlin.test.assertNotNull
     "blueprintsprocessor.restclient.ssl.sslKey=src/test/resources/keystore.p12",
     "blueprintsprocessor.restclient.ssl.sslKeyPassword=changeit"
 ])
-@Ignore
 class BluePrintRestLibPropertyServiceTest {
 
     @Autowired
@@ -215,5 +213,25 @@ class BluePrintRestLibPropertyServiceTest {
                 "eprintWebClientService")
     }
 
+    @Test
+    fun testBlueprintWebClientServiceWithJsonNode() {
+        val json: String = "{\n" +
+                "  \"type\" : \"ssl-basic-auth\",\n" +
+                "  \"url\" : \"https://localhost:8443\",\n" +
+                "  \"keyStoreInstance\" : \"PKCS12\",\n" +
+                "  \"sslTrust\" : \"src/test/resources/keystore.p12\",\n" +
+                "  \"sslTrustPassword\" : \"changeit\",\n" +
+                "  \"basicAuth\" : {\n" +
+                "    \"username\" : \"admin\",\n" +
+                "    \"password\" : \"cds\"\n" +
+                "  }\n" +
+                "}"
+        val mapper = ObjectMapper()
+        val actualObj: JsonNode = mapper.readTree(json)
+        val blueprintWebClientService = bluePrintRestLibPropertyService
+                .blueprintWebClientService(actualObj)
+        assertNotNull(blueprintWebClientService, "failed to create blu" +
+                "eprintWebClientService")
+    }
 }
 
