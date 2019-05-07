@@ -1,22 +1,24 @@
-{
+import {controllerApiConfig} from '../../config/app-config';
+
+export default {
     "name": "blueprint",
     "connector": "rest",
-    "baseURL": "http://localhost:8080/api/v1/",
+    "baseURL": controllerApiConfig.url,
     "crud": false,
     "operations": [{
         "template": {
             "method": "GET",
-            "url": "http://localhost:8080/api/v1/blueprint-model/",
+            "url": controllerApiConfig.url + "/blueprint-model/",
             "headers": {
                 "accepts": "application/json",
                 "content-type": "application/json",
-                "authorization": "{authtoken}"
+                "authorization": controllerApiConfig.authToken
             },
             "responsePath": "$.*"
         },
         "functions": {
-            "getAllblueprints": ["authtoken"]
+            "getAllblueprints": []
 
         }
     }]
-}
+};

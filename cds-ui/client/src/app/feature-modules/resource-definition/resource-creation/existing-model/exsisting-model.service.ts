@@ -24,7 +24,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, observable } from 'rxjs';
 import { ApiService } from  '../../../../common/core/services/api.service';
-import { LoopbackConfig, ResourceDictionaryURLs } from '../../../../common/constants/app-constants';
+import { ResourceDictionaryURLs } from '../../../../common/constants/app-constants';
 
 @Injectable()
 export class ExsistingModelService {
@@ -34,6 +34,6 @@ export class ExsistingModelService {
     }
 
     searchByTags(tag) {
-       return this.api.get(LoopbackConfig.url+ ResourceDictionaryURLs.searchResourceDictionaryByTags + '/' + tag);
+       return this.api.get(ResourceDictionaryURLs.searchResourceDictionaryByTags + '/' + tag);
     }
 }

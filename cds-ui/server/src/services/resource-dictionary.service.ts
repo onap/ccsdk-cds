@@ -3,11 +3,11 @@ import {inject, Provider} from '@loopback/core';
 import {ResourceDictionaryDataSource} from '../datasources';
 
 export interface ResourceDictionaryService {
-  getByName(name: string, authtoken: string): Promise<JSON>;
-  getSourceMapping(authtoken: string): Promise<JSON>;
-  getByTags(tags: string, authtoken: string): Promise<JSON>;
-  save(authtoken: string, resourceDictionary: JSON): Promise<JSON>;
-  searchbyNames(authtoken: string, resourceDictionaryList: JSON): Promise<JSON>;
+  getByName(name: string): Promise<JSON>;
+  getSourceMapping(): Promise<JSON>;
+  getByTags(tags: string): Promise<JSON>;
+  save(resourceDictionary: JSON): Promise<JSON>;
+  searchbyNames(resourceDictionaryList: JSON): Promise<JSON>;
 }
 
 export class ResourceDictionaryServiceProvider implements Provider<ResourceDictionaryService> {
