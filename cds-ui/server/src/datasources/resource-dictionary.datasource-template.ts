@@ -1,89 +1,91 @@
-{
+import {controllerApiConfig} from '../../config/app-config';
+
+export default {
     "name": "resourceDictionary",
     "connector": "rest",
-    "baseURL": "http://localhost:8080/api/v1/dictionary",
+    "baseURL": controllerApiConfig.url + "/dictionary",
     "crud": false,
     "operations": [{
             "template": {
                 "method": "GET",
-                "url": "http://localhost:8080/api/v1/dictionary/{name}",
+                "url": controllerApiConfig.url + "/dictionary/{name}",
                 "headers": {
                     "accepts": "application/json",
                     "content-type": "application/json",
-                    "authorization": "{authtoken}"
+                    "authorization": controllerApiConfig.authToken
                 },
                 "responsePath": "$.*"
             },
             "functions": {
-                "getByName": ["name", "authtoken"]
+                "getByName": ["name"]
 
             }
         },
         {
             "template": {
                 "method": "GET",
-                "url": "http://localhost:8080/api/v1/dictionary/source-mapping",
+                "url": controllerApiConfig.url + "/dictionary/source-mapping",
                 "headers": {
                     "accepts": "application/json",
                     "content-type": "application/json",
-                    "authorization": "{authtoken}"
+                    "authorization": controllerApiConfig.authToken
                 },
                 "responsePath": "$.*"
             },
             "functions": {
-                "getSourceMapping": ["authtoken"]
+                "getSourceMapping": []
 
             }
         },
         {
             "template": {
                 "method": "GET",
-                "url": "http://localhost:8080/api/v1/dictionary/search/{tags}",
+                "url": controllerApiConfig.url + "/dictionary/search/{tags}",
                 "headers": {
                     "accepts": "application/json",
                     "content-type": "application/json",
-                    "authorization": "{authtoken}"
+                    "authorization": controllerApiConfig.authToken
                 },
                 "responsePath": "$.*"
             },
             "functions": {
-                "getByTags": ["tags", "authtoken"]
+                "getByTags": ["tags"]
 
             }
         },
         {
             "template": {
                 "method": "POST",
-                "url": "http://localhost:8080/api/v1/dictionary",
+                "url": controllerApiConfig.url + "/dictionary",
                 "headers": {
                     "accepts": "application/json",
                     "content-type": "application/json",
-                    "authorization": "{authtoken}"
+                    "authorization": controllerApiConfig.authToken
                 },
                 "body": "{resourceDictionary}",
                 "responsePath": "$.*"
             },
             "functions": {
-                "save": ["authtoken", "resourceDictionary"]
+                "save": ["resourceDictionary"]
 
             }
         },
         {
             "template": {
                 "method": "POST",
-                "url": "http://localhost:8080/api/v1/dictionary/by-names",
+                "url": controllerApiConfig.url + "/dictionary/by-names",
                 "headers": {
                     "accepts": "application/json",
                     "content-type": "application/json",
-                    "authorization": "{authtoken}"
+                    "authorization": controllerApiConfig.authToken
                 },
                 "body": "{resourceDictionaryList}",
                 "responsePath": "$.*"
             },
             "functions": {
-                "searchbyNames": ["authtoken", "resourceDictionaryList"]
+                "searchbyNames": ["resourceDictionaryList"]
 
             }
         }
     ]
-}
+};

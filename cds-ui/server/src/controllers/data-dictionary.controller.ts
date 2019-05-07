@@ -18,7 +18,6 @@ import {
 import { inject } from '@loopback/core';
 import { ResourceDictionaryService } from '../services';
 
-const REST_RESOURCE_DICTIONARY_BASIC_AUTH_HEADER = process.env.REST_BLUEPRINT_CONTROLLER_BASIC_AUTH_HEADER || "Basic Y2NzZGthcHBzOmNjc2RrYXBwcw==";
 export class DataDictionaryController {
   constructor(
     @inject('services.ResourceDictionaryService')
@@ -33,8 +32,9 @@ export class DataDictionaryController {
     },
   })
   async getByName(@param.path.string('name') name: string) {
-    return await this.rdservice.getByName(name, REST_RESOURCE_DICTIONARY_BASIC_AUTH_HEADER);
+    return await this.rdservice.getByName(name);
   }
+
   @get('/resourcedictionary/search/{tags}', {
     responses: {
       '200': {
@@ -43,7 +43,7 @@ export class DataDictionaryController {
     },
   })
   async getByTags(@param.path.string('tags') tags: string) {
-    return await this.rdservice.getByTags(tags, REST_RESOURCE_DICTIONARY_BASIC_AUTH_HEADER);
+    return await this.rdservice.getByTags(tags);
   }
 
   @get('/resourcedictionary/source-mapping', {
@@ -54,8 +54,9 @@ export class DataDictionaryController {
     },
   })
   async getSourceMapping() {
-    return await this.rdservice.getSourceMapping(REST_RESOURCE_DICTIONARY_BASIC_AUTH_HEADER);
+    return await this.rdservice.getSourceMapping();
   }
+
   @post('/resourcedictionary/save', {
     responses: {
       '200': {
@@ -67,8 +68,9 @@ export class DataDictionaryController {
     content: { 'application/json': { schema: { 'x-ts-type': JSON } } },
     accepts: { 'application/json': { schema: { 'x-ts-type': JSON } } }
   }) resourceDictionary: JSON): Promise<any> {
-    return await this.rdservice.save(REST_RESOURCE_DICTIONARY_BASIC_AUTH_HEADER, resourceDictionary);
+    return await this.rdservice.save(resourceDictionary);
   }
+  
   @post('/resourcedictionary/search/by-names', {
     responses: {
       '200': {
@@ -80,6 +82,6 @@ export class DataDictionaryController {
     content: { 'application/json': { schema: { 'x-ts-type': JSON } } },
     accepts: { 'application/json': { schema: { 'x-ts-type': JSON } } }
   }) resourceDictionaryList: JSON): Promise<any> {
-    return await this.rdservice.searchbyNames(REST_RESOURCE_DICTIONARY_BASIC_AUTH_HEADER, resourceDictionaryList);
+    return await this.rdservice.searchbyNames(resourceDictionaryList);
   }
 }

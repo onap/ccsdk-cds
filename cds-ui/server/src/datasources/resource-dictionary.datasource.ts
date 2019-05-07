@@ -1,6 +1,6 @@
 import {inject} from '@loopback/core';
 import {juggler} from '@loopback/repository';
-import * as config from './resource-dictionary.datasource.json';
+import config from './resource-dictionary.datasource-template';
 
 export class ResourceDictionaryDataSource extends juggler.DataSource {
   static dataSourceName = 'resourceDictionary';
