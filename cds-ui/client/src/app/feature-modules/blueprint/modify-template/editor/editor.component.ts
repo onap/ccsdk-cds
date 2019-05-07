@@ -176,6 +176,7 @@ export class EditorComponent implements OnInit {
         this.artifactVersion = metadatavalues[4];
         this.editor.getEditor().getSession().setTabSize(2);
         this.editor.getEditor().getSession().setUseWrapMode(true);
+        this.editor.getEditor().getSession().setValue("");
         this.setEditorMode();
       })
   }
