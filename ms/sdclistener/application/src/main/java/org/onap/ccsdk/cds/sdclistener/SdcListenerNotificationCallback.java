@@ -21,7 +21,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import org.onap.ccsdk.cds.sdclistener.dto.SdcListenerDto;
 import org.onap.ccsdk.cds.sdclistener.service.ListenerService;
 import org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus;
@@ -107,21 +106,18 @@ public class SdcListenerNotificationCallback implements INotificationCallback {
         Path csarArchivePath = Paths.get(pathToStoreArchives, "csar-archive");
 
         // Extract and store the CSAR archive into local disk.
-        listenerService.extractCsarAndStore(result, csarArchivePath.toString());
+        listenerService.extractCsarAndStore(result, csarArchivePath);
 
-        Optional<List<File>> csarFiles = FileUtil.getFilesFromDisk(csarArchivePath);
+        List<File> csarFiles = FileUtil.getFilesFromDisk(csarArchivePath);
 
-        if (csarFiles.isPresent()) {
-            //Extract CBA archive from CSAR package and store it into local disk.
-            List<File> files = csarFiles.get();
+        if (!csarFiles.isEmpty()) {
+            final String archivePath = cbaArchivePath.toString();
 
-            if (!files.isEmpty()) {
-                final String archivePath = cbaArchivePath.toString();
-                files.forEach(file -> listenerService.extractBluePrint(file.getAbsolutePath(), archivePath));
-                files.forEach(file -> FileUtil.deleteFile(file, archivePath));
-            } else {
-                LOGGER.error("The CSAR file is not present at this location {}", csarArchivePath);
-            }
+            //Extract CBA archive from CSAR package and store it into local disk
+            csarFiles.forEach(file -> listenerService.extractBluePrint(file.getAbsolutePath(), archivePath));
+            csarFiles.forEach(file -> FileUtil.deleteFile(file, csarArchivePath.toString()));
+        } else {
+            LOGGER.error("Could not able to read CSAR files from this location {}", csarArchivePath);
         }
 
         listenerService.saveBluePrintToCdsDatabase(cbaArchivePath, sdcListenerDto.getManagedChannelForGrpc());

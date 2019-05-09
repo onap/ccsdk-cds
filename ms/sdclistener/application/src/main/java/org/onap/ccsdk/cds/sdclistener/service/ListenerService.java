@@ -43,5 +43,5 @@ public interface ListenerService {
      * @param result - IDistributionClientDownloadResult contains payload.
      * @param csarArchivePath The destination path where CSAR will be stored.
      */
-    void extractCsarAndStore(IDistributionClientDownloadResult result, String csarArchivePath);
+    void extractCsarAndStore(IDistributionClientDownloadResult result, Path csarArchivePath);
 }
