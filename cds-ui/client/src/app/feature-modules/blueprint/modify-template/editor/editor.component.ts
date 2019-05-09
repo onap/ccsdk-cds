@@ -426,6 +426,7 @@ export class EditorComponent implements OnInit {
 
     if (this.validfile) {
       this.fetchTOSACAMetadata();
+      this.filesData = this.paths;
       this.tree = this.arrangeTreeData(this.paths);
     } else {
       alert('Please update proper file with TOSCA metadata');
