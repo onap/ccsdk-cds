@@ -16,17 +16,25 @@
 package org.onap.ccsdk.cds.sdclistener.service;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.onap.sdc.utils.DistributionStatusEnum.COMPONENT_DONE_ERROR;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import mockit.Mock;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.mockito.internal.junit.JUnitRule;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.MockitoRule;
 import org.onap.ccsdk.cds.sdclistener.SdcListenerConfiguration;
 import org.onap.ccsdk.cds.sdclistener.client.SdcListenerAuthClientInterceptor;
 import org.onap.ccsdk.cds.sdclistener.dto.SdcListenerDto;
@@ -34,9 +42,11 @@ import org.onap.ccsdk.cds.sdclistener.handler.BluePrintProcesssorHandler;
 import org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus;
 import org.onap.sdc.api.results.IDistributionClientDownloadResult;
 import org.onap.sdc.impl.mock.DistributionClientResultStubImpl;
+import org.onap.sdc.utils.DistributionStatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
@@ -46,23 +56,39 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(classes = {ListenerServiceImplTest.class})
 public class ListenerServiceImplTest {
 
-    private static final String CSAR_SAMPLE = "src/test/resources/service-Testsvc140.csar";
+    private static final String CSAR_SAMPLE = "src/test/resources/service-ServicePnfTest-csar.csar";
+    private static final String WRONG_CSAR_SAMPLE = "src/test/resources/wrong_csar_pattern.csar";
+    private static final String CBA_ZIP_PATH = "Artifacts/[a-zA-Z0-9-_.]+/Deployment/CONTROLLER_BLUEPRINT_ARCHIVE/[a-zA-Z0-9-_.()]+[.]zip";
     private static final String ZIP_FILE = ".zip";
     private static final String CSAR_FILE = ".csar";
+    private static final String DISTRIBUTION_ID = "1";
+
+
     private String csarArchivePath;
     private Path tempDirectoryPath;
 
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
 
+    @Rule
+    public MockitoRule mockitoRule = MockitoJUnit.rule();
+
     @Autowired
     private ListenerServiceImpl listenerService;
 
+    @MockBean
+    SdcListenerStatus status;
+
+    @MockBean
+    SdcListenerDto listenerDto;
+
     @Before
     public void setup() {
+        MockitoAnnotations.initMocks(this);
         csarArchivePath = folder.getRoot().toString();
         tempDirectoryPath = Paths.get(csarArchivePath, "cds-sdc-listener-test");
     }
+
     @Test
     public void extractBluePrintSuccessfully() throws IOException {
         // Act
@@ -74,12 +100,28 @@ public class ListenerServiceImplTest {
     }
 
     @Test
+    public void extractBluePrintFailure() {
+        // Arrange
+        final String errorMessage = String
+            .format("The CBA Archive doesn't exist as per this given regex %s", CBA_ZIP_PATH);
+        Mockito.when(listenerDto.getDistributionId()).thenReturn(DISTRIBUTION_ID);
+        Mockito.doCallRealMethod().when(status)
+            .sendResponseStatusBackToSDC(DISTRIBUTION_ID, COMPONENT_DONE_ERROR, errorMessage);
+
+        // Act
+        listenerService.extractBluePrint(WRONG_CSAR_SAMPLE, tempDirectoryPath.toString());
+
+        // Verify
+        Mockito.verify(status).sendResponseStatusBackToSDC(DISTRIBUTION_ID, COMPONENT_DONE_ERROR, errorMessage);
+    }
+
+    @Test
     public void storeCsarArtifactToFileSuccessfully() throws  IOException {
         // Arrange
         DistributionClientDownloadResultStubImpl resultStub = new DistributionClientDownloadResultStubImpl();
 
         // Act
-        listenerService.extractCsarAndStore(resultStub, tempDirectoryPath.toString());
+        listenerService.extractCsarAndStore(resultStub, tempDirectoryPath);
 
         // Verify
         String result = checkFileExists(tempDirectoryPath);
