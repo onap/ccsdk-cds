@@ -46,7 +46,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(classes = {ListenerServiceImplTest.class})
 public class ListenerServiceImplTest {
 
-    private static final String CSAR_SAMPLE = "src/test/resources/service-Testsvc140.csar";
+    private static final String CSAR_SAMPLE = "src/test/resources/service-ServicePnfTest-csar.csar";
     private static final String ZIP_FILE = ".zip";
     private static final String CSAR_FILE = ".csar";
     private String csarArchivePath;
