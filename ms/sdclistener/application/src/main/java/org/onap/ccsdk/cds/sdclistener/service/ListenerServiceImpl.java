@@ -35,14 +35,14 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import org.apache.commons.io.FileUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.onap.ccsdk.cds.controllerblueprints.common.api.Status;
+import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintUploadInput;
+import org.onap.ccsdk.cds.controllerblueprints.management.api.FileChunk;
 import org.onap.ccsdk.cds.sdclistener.client.SdcListenerAuthClientInterceptor;
 import org.onap.ccsdk.cds.sdclistener.dto.SdcListenerDto;
 import org.onap.ccsdk.cds.sdclistener.handler.BluePrintProcesssorHandler;
 import org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus;
 import org.onap.ccsdk.cds.sdclistener.util.FileUtil;
-import org.onap.ccsdk.cds.controllerblueprints.common.api.Status;
-import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintUploadInput;
-import org.onap.ccsdk.cds.controllerblueprints.management.api.FileChunk;
 import org.onap.sdc.api.results.IDistributionClientDownloadResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,12 +73,14 @@ public class ListenerServiceImpl implements ListenerService {
     @Value("${listenerservice.config.grpcPort}")
     private int grpcPort;
 
-    private static final String CBA_ZIP_PATH = "Artifacts/Resources/[a-zA-Z0-9-_]+/Deployment/CONTROLLER_BLUEPRINT_ARCHIVE/[a-zA-Z0-9-_]+[.]zip";
+    private static final String CBA_ZIP_PATH = "Artifacts/[a-zA-Z0-9-_.]+/Deployment/CONTROLLER_BLUEPRINT_ARCHIVE/[a-zA-Z0-9-_.()]+[.]zip";
     private static final int SUCCESS_CODE = 200;
     private static final Logger LOGGER = LoggerFactory.getLogger(ListenerServiceImpl.class);
 
     @Override
     public void extractBluePrint(String csarArchivePath, String cbaArchivePath) {
+        int validPathCount = 0;
+        final String distributionId = sdcListenerDto.getDistributionId();
         Path cbaStorageDir = getStorageDirectory(cbaArchivePath);
         try (ZipFile zipFile = new ZipFile(csarArchivePath)) {
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
@@ -86,14 +88,22 @@ public class ListenerServiceImpl implements ListenerService {
                 ZipEntry entry = entries.nextElement();
                 String fileName = entry.getName();
                 if (Pattern.matches(CBA_ZIP_PATH, fileName)) {
+                    validPathCount++;
                     final String cbaArchiveName = Paths.get(fileName).getFileName().toString();
                     LOGGER.info("Storing the CBA archive {}", cbaArchiveName);
                     storeBluePrint(zipFile, cbaArchiveName, cbaStorageDir, entry);
                 }
             }
 
+            if (validPathCount == 0) {
+                final String errorMessage = String
+                    .format("The CBA Archive doesn't exist as per this given regex %s", CBA_ZIP_PATH);
+                listenerStatus.sendResponseStatusBackToSDC(distributionId, COMPONENT_DONE_ERROR, errorMessage);
+            }
+
         } catch (Exception e) {
-            LOGGER.error("Failed to extract blueprint {}", e);
+            final String errorMessage = String.format("Failed to extract blueprint %s", e.getMessage());
+            listenerStatus.sendResponseStatusBackToSDC(distributionId, COMPONENT_DONE_ERROR, errorMessage);
         }
     }
 
@@ -169,20 +179,17 @@ public class ListenerServiceImpl implements ListenerService {
                 if (responseStatus.getCode() != SUCCESS_CODE) {
                     final String errorMessage = String.format("Failed to store the CBA archive into CDS DB due to %s",
                         responseStatus.getErrorMessage());
-                    listenerStatus.sendResponseStatusBackToSDC(distributionId,
-                        COMPONENT_DONE_ERROR, errorMessage);
+                    listenerStatus.sendResponseStatusBackToSDC(distributionId, COMPONENT_DONE_ERROR, errorMessage);
                     LOGGER.error(errorMessage);
-
                 } else {
                     LOGGER.info(responseStatus.getMessage());
-                    listenerStatus.sendResponseStatusBackToSDC(distributionId,
-                        COMPONENT_DONE_OK, null);
+                    listenerStatus.sendResponseStatusBackToSDC(distributionId, COMPONENT_DONE_OK, null);
                 }
 
             } catch (Exception e) {
                 final String errorMessage = String.format("Failure due to %s", e.getMessage());
                 listenerStatus.sendResponseStatusBackToSDC(distributionId, COMPONENT_DONE_ERROR, errorMessage);
-                LOGGER.error("Failure due to {}", e);
+                LOGGER.error(errorMessage);
             } finally {
                 FileUtil.deleteFile(zipFile, path);
             }
