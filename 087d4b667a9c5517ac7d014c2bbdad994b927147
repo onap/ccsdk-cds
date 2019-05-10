@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5bee63a4_fb1de1c3",
+        "filename": "cds-ui/client/src/app/feature-modules/resource-definition/resource-edit/resource-edit.service.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4251
+      },
+      "writtenOn": "2019-05-10T10:02:33Z",
+      "side": 1,
+      "message": "Where are we setting base url/path for all the loopback calls??",
+      "revId": "087d4b667a9c5517ac7d014c2bbdad994b927147",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b3e3f15f_a2a95930",
+        "filename": "cds-ui/client/src/app/feature-modules/resource-definition/resource-edit/resource-edit.service.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 4251
+      },
+      "writtenOn": "2019-05-10T10:02:33Z",
+      "side": 1,
+      "message": "Where are we setting the base url for all the loopback calls??",
+      "revId": "087d4b667a9c5517ac7d014c2bbdad994b927147",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
