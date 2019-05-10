@@ -33,6 +33,24 @@
       "revId": "087d4b667a9c5517ac7d014c2bbdad994b927147",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fc2a0551_3509dc66",
+        "filename": "cds-ui/client/src/app/feature-modules/resource-definition/resource-edit/resource-edit.service.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 4939
+      },
+      "writtenOn": "2019-05-10T14:26:19Z",
+      "side": 1,
+      "message": "We don\u0027t need to set the Loopback url (and should not).  Reason: the frontend artifacts (html,css,js) are being served from the Loopback server; i.e. the static files are being served from same IP and port as the Loopback server. As a result of not specifying the url, the static files will send request automatically to same IP and port.",
+      "parentUuid": "b3e3f15f_a2a95930",
+      "revId": "087d4b667a9c5517ac7d014c2bbdad994b927147",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
