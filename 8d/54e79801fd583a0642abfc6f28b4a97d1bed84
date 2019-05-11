@@ -1,0 +1,9 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+1: Yuriy Malakov <Yuriy.Malakov@att.com>
+Code-Review+1: Nirvan Ramjuttun <nirvan.ramjuttun@amdocs.com>
+Code-Review+2: Dan Timoney <dtimoney@att.com>
+Submitted-by: Dan Timoney <dtimoney@att.com>
+Submitted-at: Sat, 11 May 2019 19:43:22 +0000
+Reviewed-on: https://gerrit.onap.org/r/87360
+Project: ccsdk/cds
+Branch: refs/heads/master
