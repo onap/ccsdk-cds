@@ -20,8 +20,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.io.FileUtils;
@@ -54,15 +54,16 @@ public final class FileUtil {
      * @param path where files reside.
      * @return list of files.
      */
-    public static Optional<List<File>> getFilesFromDisk(Path path) {
+    public static List<File> getFilesFromDisk(Path path) {
+
         try (Stream<Path> fileTree = walk(path)) {
             // Get the list of files from the path
-            return Optional.of(fileTree.filter(Files::isRegularFile)
-                .map(Path::toFile)
-                .collect(Collectors.toList()));
+            return fileTree.filter(Files::isRegularFile)
+                           .map(Path::toFile)
+                           .collect(Collectors.toList());
         } catch (IOException e) {
             LOGGER.error("Failed to find the file due to", e);
         }
-        return Optional.empty();
+        return new ArrayList<>();
     }
 }
