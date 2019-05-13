@@ -20,7 +20,8 @@ import java.util.Objects;
 import org.onap.ccsdk.cds.sdclistener.dto.SdcListenerDto;
 import org.onap.ccsdk.cds.sdclistener.util.BuilderUtil;
 import org.onap.sdc.api.IDistributionClient;
-import org.onap.sdc.api.consumer.IFinalDistrStatusMessage;
+import org.onap.sdc.api.consumer.IComponentDoneStatusMessage;
+import org.onap.sdc.api.consumer.IDistributionStatusMessage;
 import org.onap.sdc.api.results.IDistributionClientResult;
 import org.onap.sdc.utils.DistributionStatusEnum;
 import org.slf4j.Logger;
@@ -45,30 +46,60 @@ public class SdcListenerStatus {
     @Autowired
     private SdcListenerDto sdcListenerDto;
 
+    public enum NotificationType {
+        DOWNLOAD, SDC_LISTENER_COMPONENT;
+    }
+
     /**
-     * Send the response back to SDC.
-     *
+     * Send the component status back to SDC.
      * @param distributionID SDC Distribution ID
      * @param status Distribution status
-     * @param errorReason Reason of failure
+     * @param errorReason Reason of failure if present
+     * @param url Artifact URL
+     * @param type - NotificationType(Download or Component)
      */
-    public void sendResponseStatusBackToSDC(String distributionID, DistributionStatusEnum status, String errorReason) {
-
+    public void sendResponseBackToSdc(String distributionID, DistributionStatusEnum status, String errorReason,
+        String url, NotificationType type) {
         final IDistributionClient distributionClient = sdcListenerDto.getDistributionClient();
 
-        IFinalDistrStatusMessage finalDistribution = new BuilderUtil<>(new DistributionStatusMessage())
-            .build(builder -> {
-                builder.distributionID = distributionID;
-                builder.status = status;
-                builder.consumerID = consumerId;
-                builder.componentName = COMPONENT_NAME;
-            }).create();
+        switch (type) {
+            case SDC_LISTENER_COMPONENT:
+                IComponentDoneStatusMessage componentStatusMessage = buildStatusMessage(distributionID, status, url,
+                    COMPONENT_NAME);
 
-        if (errorReason == null) {
-            checkResponseStatusFromSdc(distributionClient.sendFinalDistrStatus(finalDistribution));
-        } else {
-            checkResponseStatusFromSdc(distributionClient.sendFinalDistrStatus(finalDistribution, errorReason));
+                if (errorReason == null) {
+                    checkResponseStatusFromSdc(distributionClient.sendComponentDoneStatus(componentStatusMessage));
+                } else {
+                    checkResponseStatusFromSdc(
+                        distributionClient.sendComponentDoneStatus(componentStatusMessage, errorReason));
+                }
+                break;
+
+            case DOWNLOAD:
+                IDistributionStatusMessage downloadStatusMessage = buildStatusMessage(distributionID, status, url,
+                    null);
+
+                if (errorReason == null) {
+                    checkResponseStatusFromSdc(distributionClient.sendDownloadStatus(downloadStatusMessage));
+                } else {
+                    checkResponseStatusFromSdc(
+                        distributionClient.sendDownloadStatus(downloadStatusMessage, errorReason));
+                }
+            default:
+                break;
         }
+    }
+
+    private ComponentStatusMessage buildStatusMessage(String distributionId, DistributionStatusEnum status, String url,
+        String componentName) {
+        return new BuilderUtil<>(new ComponentStatusMessage()).build(builder -> {
+            builder.distributionID = distributionId;
+            builder.status = status;
+            builder.consumerID = consumerId;
+            builder.componentName = componentName;
+            builder.timeStamp = System.currentTimeMillis();
+            builder.artifactUrl = url;
+        }).create();
     }
 
     private void checkResponseStatusFromSdc(IDistributionClientResult result) {

@@ -15,6 +15,8 @@
  */
 package org.onap.ccsdk.cds.sdclistener.service;
 
+import static java.lang.String.format;
+import static org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus.NotificationType.SDC_LISTENER_COMPONENT;
 import static org.onap.sdc.utils.DistributionStatusEnum.COMPONENT_DONE_ERROR;
 import static org.onap.sdc.utils.DistributionStatusEnum.COMPONENT_DONE_OK;
 import com.google.protobuf.ByteString;
@@ -80,7 +82,8 @@ public class ListenerServiceImpl implements ListenerService {
     @Override
     public void extractBluePrint(String csarArchivePath, String cbaArchivePath) {
         int validPathCount = 0;
-        final String distributionId = sdcListenerDto.getDistributionId();
+        final String distributionId = getDistributionId();
+        final String artifactUrl = getArtifactUrl();
         Path cbaStorageDir = getStorageDirectory(cbaArchivePath);
         try (ZipFile zipFile = new ZipFile(csarArchivePath)) {
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
@@ -96,15 +99,17 @@ public class ListenerServiceImpl implements ListenerService {
             }
 
             if (validPathCount == 0) {
-                final String errorMessage = String
-                    .format("The CBA Archive doesn't exist as per this given regex %s", CBA_ZIP_PATH);
-                listenerStatus.sendResponseStatusBackToSDC(distributionId, COMPONENT_DONE_ERROR, errorMessage);
-                LOGGER.error(errorMessage);
+                LOGGER
+                    .info("CBA archive doesn't exist in the CSAR Package or it doesn't exist as per the given path {}",
+                        CBA_ZIP_PATH);
+                listenerStatus.sendResponseBackToSdc(distributionId, COMPONENT_DONE_OK, null,
+                    artifactUrl, SDC_LISTENER_COMPONENT);
             }
 
         } catch (Exception e) {
-            final String errorMessage = String.format("Failed to extract blueprint %s", e.getMessage());
-            listenerStatus.sendResponseStatusBackToSDC(distributionId, COMPONENT_DONE_ERROR, errorMessage);
+            final String errorMessage = format("Failed to extract blueprint %s", e.getMessage());
+            listenerStatus.sendResponseBackToSdc(distributionId, COMPONENT_DONE_ERROR, errorMessage,
+                artifactUrl, SDC_LISTENER_COMPONENT);
             LOGGER.error(errorMessage);
         }
     }
@@ -177,7 +182,8 @@ public class ListenerServiceImpl implements ListenerService {
     }
 
     private void prepareRequestForCdsBackend(List<File> files, ManagedChannel managedChannel, String path) {
-        final String distributionId = sdcListenerDto.getDistributionId();
+        final String distributionId = getDistributionId();
+        final String artifactUrl = getArtifactUrl();
 
         files.forEach(zipFile -> {
             try {
@@ -187,18 +193,21 @@ public class ListenerServiceImpl implements ListenerService {
                 final Status responseStatus = bluePrintProcesssorHandler.sendRequest(request, managedChannel);
 
                 if (responseStatus.getCode() != SUCCESS_CODE) {
-                    final String errorMessage = String.format("Failed to store the CBA archive into CDS DB due to %s",
+                    final String errorMessage = format("Failed to store the CBA archive into CDS DB due to %s",
                         responseStatus.getErrorMessage());
-                    listenerStatus.sendResponseStatusBackToSDC(distributionId, COMPONENT_DONE_ERROR, errorMessage);
+                    listenerStatus.sendResponseBackToSdc(distributionId, COMPONENT_DONE_ERROR, errorMessage, artifactUrl,
+                        SDC_LISTENER_COMPONENT);
                     LOGGER.error(errorMessage);
                 } else {
                     LOGGER.info(responseStatus.getMessage());
-                    listenerStatus.sendResponseStatusBackToSDC(distributionId, COMPONENT_DONE_OK, null);
+                    listenerStatus.sendResponseBackToSdc(distributionId, COMPONENT_DONE_OK, null, artifactUrl,
+                        SDC_LISTENER_COMPONENT);
                 }
 
             } catch (Exception e) {
-                final String errorMessage = String.format("Failure due to %s", e.getMessage());
-                listenerStatus.sendResponseStatusBackToSDC(distributionId, COMPONENT_DONE_ERROR, errorMessage);
+                final String errorMessage = format("Failure due to %s", e.getMessage());
+                listenerStatus.sendResponseBackToSdc(distributionId, COMPONENT_DONE_ERROR, errorMessage, artifactUrl,
+                   SDC_LISTENER_COMPONENT);
                 LOGGER.error(errorMessage);
             } finally {
                 FileUtil.deleteFile(zipFile, path);
@@ -213,5 +222,13 @@ public class ListenerServiceImpl implements ListenerService {
         return BluePrintUploadInput.newBuilder()
                 .setFileChunk(fileChunk)
                 .build();
+    }
+
+    private String getDistributionId() {
+        return sdcListenerDto.getDistributionId();
+    }
+
+    private String getArtifactUrl() {
+        return sdcListenerDto.getArtifactUrl();
     }
 }
