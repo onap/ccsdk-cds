@@ -22,11 +22,13 @@ import com.fasterxml.jackson.databind.JsonNode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.apache.commons.io.IOUtils
+import org.apache.http.client.ClientProtocolException
 import org.apache.http.client.methods.HttpDelete
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.methods.HttpPatch
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.client.methods.HttpPut
+import org.apache.http.client.methods.HttpUriRequest
 import org.apache.http.entity.StringEntity
 import org.apache.http.impl.client.CloseableHttpClient
 import org.apache.http.impl.client.HttpClients
@@ -35,6 +37,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.rest.utils.WebClientUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.http.HttpMethod
+import java.io.IOException
 import java.io.InputStream
 import java.nio.charset.Charset
 
@@ -46,206 +49,183 @@ interface BlueprintWebClientService {
 
     fun httpClient(): CloseableHttpClient {
         return HttpClients.custom()
-                .addInterceptorFirst(WebClientUtils.logRequest())
-                .addInterceptorLast(WebClientUtils.logResponse())
-                .build()
+            .addInterceptorFirst(WebClientUtils.logRequest())
+            .addInterceptorLast(WebClientUtils.logResponse())
+            .build()
     }
 
-    fun exchangeResource(methodType: String, path: String, request: String):
-            String {
-        return this.exchangeResource(methodType, path, request,
-                defaultHeaders())
+    fun exchangeResource(methodType: String, path: String, request: String): WebClientResponse<String> {
+        return this.exchangeResource(methodType, path, request, defaultHeaders())
     }
 
     fun exchangeResource(methodType: String, path: String, request: String,
-                         headers: Map<String, String>): String {
-        val convertedHeaders: Array<BasicHeader> = convertToBasicHeaders(
-                headers)
+                         headers: Map<String, String>): WebClientResponse<String> {
+        /**
+         * TODO: Basic headers in the implementations of this client do not get added
+         * in blocking version, whereas in NB version defaultHeaders get added.
+         * the difference is in convertToBasicHeaders vs basicHeaders
+         */
+        val convertedHeaders: Array<BasicHeader> = convertToBasicHeaders(headers)
         return when (HttpMethod.resolve(methodType)) {
-            HttpMethod.DELETE -> delete(path, convertedHeaders)
-            HttpMethod.GET -> get(path, convertedHeaders)
-            HttpMethod.POST -> post(path, request, convertedHeaders)
-            HttpMethod.PUT -> put(path, request, convertedHeaders)
-            HttpMethod.PATCH -> patch(path, request, convertedHeaders)
+            HttpMethod.DELETE -> delete(path, convertedHeaders, String::class.java)
+            HttpMethod.GET -> get(path, convertedHeaders, String::class.java)
+            HttpMethod.POST -> post(path, request, convertedHeaders, String::class.java)
+            HttpMethod.PUT -> put(path, request, convertedHeaders, String::class.java)
+            HttpMethod.PATCH -> patch(path, request, convertedHeaders, String::class.java)
             else -> throw BluePrintProcessorException("Unsupported met" +
-                    "hodType($methodType)")
+                "hodType($methodType)")
         }
     }
 
     fun convertToBasicHeaders(headers: Map<String, String>): Array<BasicHeader> {
-        return headers.map{ BasicHeader(it.key, it.value)}.toTypedArray()
+        return headers.map { BasicHeader(it.key, it.value) }.toTypedArray()
     }
 
-    fun delete(path: String, headers: Array<BasicHeader>): String {
+    fun <T> delete(path: String, headers: Array<BasicHeader>, responseType: Class<T>): WebClientResponse<T> {
         val httpDelete = HttpDelete(host(path))
         httpDelete.setHeaders(headers)
-        httpClient().execute(httpDelete).entity.content.use {
-            return IOUtils.toString(it, Charset.defaultCharset())
-        }
+        return performCallAndExtractTypedWebClientResponse(httpDelete, responseType)
     }
 
-    fun get(path: String, headers: Array<BasicHeader>): String {
+    fun <T> get(path: String, headers: Array<BasicHeader>, responseType: Class<T>): WebClientResponse<T> {
         val httpGet = HttpGet(host(path))
         httpGet.setHeaders(headers)
-        httpClient().execute(httpGet).entity.content.use {
-            return IOUtils.toString(it, Charset.defaultCharset())
-        }
+        return performCallAndExtractTypedWebClientResponse(httpGet, responseType)
     }
 
-    fun post(path: String, request: String, headers: Array<BasicHeader>):
-            String {
+    fun <T> post(path: String, request: Any, headers: Array<BasicHeader>, responseType: Class<T>): WebClientResponse<T> {
         val httpPost = HttpPost(host(path))
-        val entity = StringEntity(request)
+        val entity = StringEntity(strRequest(request))
         httpPost.entity = entity
         httpPost.setHeaders(headers)
-        httpClient().execute(httpPost).entity.content.use {
-            return IOUtils.toString(it, Charset.defaultCharset())
-        }
+        return performCallAndExtractTypedWebClientResponse(httpPost, responseType)
     }
 
-    fun put(path: String, request: String, headers: Array<BasicHeader>):
-            String {
+    fun <T> put(path: String, request: Any, headers: Array<BasicHeader>, responseType: Class<T>): WebClientResponse<T> {
         val httpPut = HttpPut(host(path))
-        val entity = StringEntity(request)
+        val entity = StringEntity(strRequest(request))
         httpPut.entity = entity
         httpPut.setHeaders(headers)
-        httpClient().execute(httpPut).entity.content.use {
-            return IOUtils.toString(it, Charset.defaultCharset())
-        }
+        return performCallAndExtractTypedWebClientResponse(httpPut, responseType)
     }
 
-    fun patch(path: String, request: String, headers: Array<BasicHeader>):
-            String {
+    fun <T> patch(path: String, request: Any, headers: Array<BasicHeader>, responseType: Class<T>): WebClientResponse<T> {
         val httpPatch = HttpPatch(host(path))
-        val entity = StringEntity(request)
+        val entity = StringEntity(strRequest(request))
         httpPatch.entity = entity
         httpPatch.setHeaders(headers)
-        httpClient().execute(httpPatch).entity.content.use {
-            return IOUtils.toString(it, Charset.defaultCharset())
+        return performCallAndExtractTypedWebClientResponse(httpPatch, responseType)
+    }
+
+    /**
+     * Perform the HTTP call and return HTTP status code and body.
+     * @param httpUriRequest {@link HttpUriRequest} object
+     * @return {@link WebClientResponse} object
+     * http client may throw IOException and ClientProtocolException on error
+     */
+
+    @Throws(IOException::class, ClientProtocolException::class)
+    private fun <T> performCallAndExtractTypedWebClientResponse(
+        httpUriRequest: HttpUriRequest, responseType: Class<T>):
+        WebClientResponse<T> {
+        val httpResponse = httpClient().execute(httpUriRequest)
+        val statusCode = httpResponse.statusLine.statusCode
+        httpResponse.entity.content.use {
+            val body = getResponse(it, responseType)
+            return WebClientResponse(statusCode, body)
         }
     }
 
-
-    suspend fun getNB(path: String): String {
+    suspend fun getNB(path: String): WebClientResponse<String> {
         return getNB(path, null, String::class.java)
     }
 
-    suspend fun getNB(path: String, additionalHeaders: Map<String, String>?):
-            String {
+    suspend fun getNB(path: String, additionalHeaders: Array<BasicHeader>?): WebClientResponse<String> {
         return getNB(path, additionalHeaders, String::class.java)
     }
 
-    suspend fun <T> getNB(path: String, additionalHeaders: Map<String, String>?,
-                          responseType: Class<T>): T =
-            withContext(Dispatchers.IO) {
-        val httpGet = HttpGet(host(path))
-        httpGet.setHeaders(basicHeaders(additionalHeaders))
-        httpClientNB().execute(httpGet).entity.content.use {
-            getResponse(it, responseType)
+    suspend fun <T> getNB(path: String, additionalHeaders: Array<BasicHeader>?, responseType: Class<T>):
+        WebClientResponse<T> =
+        withContext(Dispatchers.IO) {
+            get(path, additionalHeaders!!, responseType)
         }
-    }
 
-    suspend fun postNB(path: String, request: Any): String {
+    suspend fun postNB(path: String, request: Any): WebClientResponse<String> {
         return postNB(path, request, null, String::class.java)
     }
 
-    suspend fun postNB(path: String, request: Any,
-                       additionalHeaders: Map<String, String>?): String {
+    suspend fun postNB(path: String, request: Any, additionalHeaders: Array<BasicHeader>?): WebClientResponse<String> {
         return postNB(path, request, additionalHeaders, String::class.java)
     }
 
-    suspend fun <T> postNB(path: String, request: Any,
-                           additionalHeaders: Map<String, String>?,
-                           responseType: Class<T>): T =
-            withContext(Dispatchers.IO) {
-                val httpPost = HttpPost(host(path))
-                httpPost.entity = StringEntity(strRequest(request))
-                httpPost.setHeaders(basicHeaders(additionalHeaders))
-                httpClientNB().execute(httpPost).entity.content.use {
-                    getResponse(it, responseType)
-                }
-            }
+    suspend fun <T> postNB(path: String, request: Any, additionalHeaders: Array<BasicHeader>?,
+                           responseType: Class<T>): WebClientResponse<T> =
+        withContext(Dispatchers.IO) {
+            post(path, request, additionalHeaders!!, responseType)
+        }
 
-    suspend fun putNB(path: String, request: Any): String {
+    suspend fun putNB(path: String, request: Any): WebClientResponse<String> {
         return putNB(path, request, null, String::class.java)
     }
 
     suspend fun putNB(path: String, request: Any,
-                      additionalHeaders: Map<String, String>?): String {
+                      additionalHeaders: Array<BasicHeader>?): WebClientResponse<String> {
         return putNB(path, request, additionalHeaders, String::class.java)
     }
 
     suspend fun <T> putNB(path: String, request: Any,
-                          additionalHeaders: Map<String, String>?,
-                          responseType: Class<T>): T =
-            withContext(Dispatchers.IO) {
-        val httpPut = HttpPut(host(path))
-        httpPut.entity = StringEntity(strRequest(request))
-        httpPut.setHeaders(basicHeaders(additionalHeaders))
-        httpClientNB().execute(httpPut).entity.content.use {
-            getResponse(it, responseType)
+                          additionalHeaders: Array<BasicHeader>?,
+                          responseType: Class<T>): WebClientResponse<T> =
+        withContext(Dispatchers.IO) {
+            put(path, request, additionalHeaders!!, responseType)
         }
-    }
 
-    suspend fun <T> deleteNB(path: String): String {
+    suspend fun <T> deleteNB(path: String): WebClientResponse<String> {
         return deleteNB(path, null, String::class.java)
     }
 
-    suspend fun <T> deleteNB(path: String,
-                             additionalHeaders: Map<String, String>?): String {
+    suspend fun <T> deleteNB(path: String, additionalHeaders: Array<BasicHeader>?):
+        WebClientResponse<String> {
         return deleteNB(path, additionalHeaders, String::class.java)
     }
 
-    suspend fun <T> deleteNB(path: String,
-                             additionalHeaders: Map<String, String>?,
-                             responseType: Class<T>): T =
-            withContext(Dispatchers.IO) {
-        val httpDelete = HttpDelete(host(path))
-        httpDelete.setHeaders(basicHeaders(additionalHeaders))
-        httpClient().execute(httpDelete).entity.content.use {
-            getResponse(it, responseType)
+    suspend fun <T> deleteNB(path: String, additionalHeaders: Array<BasicHeader>?, responseType: Class<T>):
+        WebClientResponse<T> =
+        withContext(Dispatchers.IO) {
+            delete(path, additionalHeaders!!, responseType)
         }
-    }
 
-    suspend fun <T> patchNB(path: String, request: Any,
-                            additionalHeaders: Map<String, String>?,
-                            responseType: Class<T>): T =
-            withContext(Dispatchers.IO) {
-        val httpPatch = HttpPatch(host(path))
-        httpPatch.entity = StringEntity(strRequest(request))
-        httpPatch.setHeaders(basicHeaders(additionalHeaders))
-        httpClient().execute(httpPatch).entity.content.use {
-            getResponse(it, responseType)
+    suspend fun <T> patchNB(path: String, request: Any, additionalHeaders: Array<BasicHeader>?, responseType: Class<T>):
+        WebClientResponse<T> =
+        withContext(Dispatchers.IO) {
+            patch(path, request, additionalHeaders!!, responseType)
         }
-    }
 
-    suspend fun exchangeNB(methodType: String, path: String, request: Any):
-            String {
+    suspend fun exchangeNB(methodType: String, path: String, request: Any): WebClientResponse<String> {
         return exchangeNB(methodType, path, request, hashMapOf(),
-                String::class.java)
+            String::class.java)
     }
 
-    suspend fun exchangeNB(methodType: String, path: String, request: Any,
-                           additionalHeaders: Map<String, String>?): String {
-        return exchangeNB(methodType, path, request, additionalHeaders,
-                String::class.java)
+    suspend fun exchangeNB(methodType: String, path: String, request: Any, additionalHeaders: Map<String, String>?):
+        WebClientResponse<String> {
+        return exchangeNB(methodType, path, request, additionalHeaders, String::class.java)
     }
 
     suspend fun <T> exchangeNB(methodType: String, path: String, request: Any,
                                additionalHeaders: Map<String, String>?,
-                               responseType: Class<T>): T {
+                               responseType: Class<T>): WebClientResponse<T> {
 
+        //TODO: possible inconsistency
+        //NOTE: this basic headers function is different from non-blocking
+        val convertedHeaders: Array<BasicHeader> = basicHeaders(additionalHeaders!!)
         return when (HttpMethod.resolve(methodType)) {
-            HttpMethod.GET -> getNB(path, additionalHeaders, responseType)
-            HttpMethod.POST -> postNB(path, request, additionalHeaders,
-                    responseType)
-            HttpMethod.DELETE -> deleteNB(path, additionalHeaders, responseType)
-            HttpMethod.PUT -> putNB(path, request, additionalHeaders,
-                    responseType)
-            HttpMethod.PATCH -> patchNB(path, request, additionalHeaders,
-                    responseType)
+            HttpMethod.GET -> getNB(path, convertedHeaders, responseType)
+            HttpMethod.POST -> postNB(path, request, convertedHeaders, responseType)
+            HttpMethod.DELETE -> deleteNB(path, convertedHeaders, responseType)
+            HttpMethod.PUT -> putNB(path, request, convertedHeaders, responseType)
+            HttpMethod.PATCH -> patchNB(path, request, convertedHeaders, responseType)
             else -> throw BluePrintProcessorException("Unsupported method" +
-                    "Type($methodType)")
+                "Type($methodType)")
         }
     }
 
@@ -266,10 +246,9 @@ interface BlueprintWebClientService {
     }
 
     private fun basicHeaders(headers: Map<String, String>?):
-            Array<BasicHeader> {
-
+        Array<BasicHeader> {
         val basicHeaders = mutableListOf<BasicHeader>()
-        defaultHeaders().forEach { name, value ->
+        defaultHeaders().forEach { (name, value) ->
             basicHeaders.add(BasicHeader(name, value))
         }
         headers?.forEach { name, value ->
@@ -281,8 +260,11 @@ interface BlueprintWebClientService {
     // Non Blocking Rest Implementation
     suspend fun httpClientNB(): CloseableHttpClient {
         return HttpClients.custom()
-                .addInterceptorFirst(WebClientUtils.logRequest())
-                .addInterceptorLast(WebClientUtils.logResponse())
-                .build()
+            .addInterceptorFirst(WebClientUtils.logRequest())
+            .addInterceptorLast(WebClientUtils.logResponse())
+            .build()
     }
+
+    //TODO maybe there could be cases where we care about return headers?
+    data class WebClientResponse<T>(val status: Int, val body: T)
 }
