@@ -16,13 +16,13 @@
 package org.onap.ccsdk.cds.sdclistener.service;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus.NotificationType.SDC_LISTENER_COMPONENT;
 import static org.onap.sdc.utils.DistributionStatusEnum.COMPONENT_DONE_ERROR;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import mockit.Mock;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Rule;
@@ -31,18 +31,16 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.internal.junit.JUnitRule;
 import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.MockitoRule;
 import org.onap.ccsdk.cds.sdclistener.SdcListenerConfiguration;
 import org.onap.ccsdk.cds.sdclistener.client.SdcListenerAuthClientInterceptor;
 import org.onap.ccsdk.cds.sdclistener.dto.SdcListenerDto;
 import org.onap.ccsdk.cds.sdclistener.handler.BluePrintProcesssorHandler;
 import org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus;
+import org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus.NotificationType;
 import org.onap.sdc.api.results.IDistributionClientDownloadResult;
 import org.onap.sdc.impl.mock.DistributionClientResultStubImpl;
-import org.onap.sdc.utils.DistributionStatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -62,6 +60,7 @@ public class ListenerServiceImplTest {
     private static final String ZIP_FILE = ".zip";
     private static final String CSAR_FILE = ".csar";
     private static final String DISTRIBUTION_ID = "1";
+    private static final String URL = "/sdc/v1/artifact";
 
 
     private String csarArchivePath;
@@ -94,7 +93,7 @@ public class ListenerServiceImplTest {
         // Act
         listenerService.extractBluePrint(CSAR_SAMPLE, tempDirectoryPath.toString());
 
-        // Verify
+        // Verify.
         String result = checkFileExists(tempDirectoryPath);
         assertTrue(result.contains(ZIP_FILE));
     }
@@ -105,14 +104,16 @@ public class ListenerServiceImplTest {
         final String errorMessage = String
             .format("The CBA Archive doesn't exist as per this given regex %s", CBA_ZIP_PATH);
         Mockito.when(listenerDto.getDistributionId()).thenReturn(DISTRIBUTION_ID);
+        Mockito.when(listenerDto.getArtifactUrl()).thenReturn(URL);
         Mockito.doCallRealMethod().when(status)
-            .sendResponseStatusBackToSDC(DISTRIBUTION_ID, COMPONENT_DONE_ERROR, errorMessage);
+            .sendResponseBackToSdc(DISTRIBUTION_ID, COMPONENT_DONE_ERROR, errorMessage, URL, SDC_LISTENER_COMPONENT);
 
         // Act
         listenerService.extractBluePrint(WRONG_CSAR_SAMPLE, tempDirectoryPath.toString());
 
         // Verify
-        Mockito.verify(status).sendResponseStatusBackToSDC(DISTRIBUTION_ID, COMPONENT_DONE_ERROR, errorMessage);
+        Mockito.verify(status)
+            .sendResponseBackToSdc(DISTRIBUTION_ID, COMPONENT_DONE_ERROR, errorMessage, URL, SDC_LISTENER_COMPONENT);
     }
 
     @Test
