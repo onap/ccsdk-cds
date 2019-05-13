@@ -105,6 +105,7 @@ export class EditorComponent implements OnInit {
   private fileObject: any;
   private tocsaMetadaData: any;
   metadata: IMetaData;
+  uploadedFileName: string;
 
   private transformer = (node: Node, level: number) => {
     return {
@@ -159,6 +160,7 @@ export class EditorComponent implements OnInit {
         this.filesData = blueprintdata.filesData;
         this.dataSource.data = this.filesTree;
         this.blueprintName = blueprintdata.name;
+        this.uploadedFileName = blueprintdata.uploadedFileName;
         let blueprint = [];
         for (let key in this.blueprintdata) {
           if (this.blueprintdata.hasOwnProperty(key)) {
@@ -202,7 +204,8 @@ export class EditorComponent implements OnInit {
       blueprint: this.blueprint,
       name: this.blueprintName,
       files: this.filesTree,
-      filesData: this.filesData
+      filesData: this.filesData,
+      uploadedFileName: this.uploadedFileName
     }
     this.store.dispatch(new SetBlueprintState(blueprintState));
     // console.log(this.text);
@@ -218,7 +221,7 @@ export class EditorComponent implements OnInit {
     this.filetoDelete = file.name;
     this.currentFilePath = this.currentFilePath + this.selectedFile;
     this.filesData.forEach((fileNode) => {
-      if (fileNode.name.includes(file.name)) {
+      if (fileNode.name.includes(file.name) && fileNode.name == this.currentFilePath) {
         this.text = fileNode.data;
       }
     })
@@ -406,7 +409,9 @@ export class EditorComponent implements OnInit {
     this.paths = [];
     for (var file in zip.files) {
       this.fileObject = {
-        name: zip.files[file].name,
+        // name: zip.files[file].name,
+        // name: this.uploadedFileName + '/' + zip.files[file].name,
+        name: this.uploadedFileName + zip.files[file].name,
         data: ''
       };
       const value = <any>await zip.files[file].async('string');

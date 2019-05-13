@@ -78,7 +78,8 @@ export class SearchTemplateComponent implements OnInit {
       blueprint: data,
       name: this.blueprintName,
       files: this.tree,
-      filesData: this.paths
+      filesData: this.paths,
+      uploadedFileName: this.uploadedFileName
     }
     this.store.dispatch(new SetBlueprintState(blueprintState))
     // this.store.dispatch(new LoadBlueprintSuccess(data));
@@ -87,7 +88,9 @@ export class SearchTemplateComponent implements OnInit {
   async buildFileViewData(zip) {
     this.validfile = false;
     this.paths = [];
+    console.log(zip.files);
     for (var file in zip.files) {
+      console.log("name: " +zip.files[file].name);
       this.fileObject = {
         // nameForUIDisplay: this.uploadedFileName + '/' + zip.files[file].name,
         // name: zip.files[file].name,
