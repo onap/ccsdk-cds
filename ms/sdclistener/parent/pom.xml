@@ -34,7 +34,7 @@
         <grpc.version>1.18.0</grpc.version>
         <protobuff.java.utils.version>3.6.1</protobuff.java.utils.version>
         <eelf.version>1.0.0</eelf.version>
-        <sli.version>0.4.2-SNAPSHOT</sli.version>
+        <sli.version>0.5.0-SNAPSHOT</sli.version>
         <guava.version>27.0.1-jre</guava.version>
         <onap.logger.slf4j>1.2.2</onap.logger.slf4j>
         <powermock.version>1.7.4</powermock.version>
