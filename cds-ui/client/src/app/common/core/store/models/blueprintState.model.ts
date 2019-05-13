@@ -28,6 +28,7 @@ export interface IBlueprintState {
     name?: string;
     files?: any;
     filesData?: any;
+    uploadedFileName?: string;
     isLoadSuccess?: boolean;
     isUpdateSuccess?: boolean;
     isSaveSuccess?: boolean;
