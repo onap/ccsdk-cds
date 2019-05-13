@@ -17,7 +17,6 @@ package org.onap.ccsdk.cds.sdclistener.service;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus.NotificationType.SDC_LISTENER_COMPONENT;
-import static org.onap.sdc.utils.DistributionStatusEnum.COMPONENT_DONE_ERROR;
 import static org.onap.sdc.utils.DistributionStatusEnum.COMPONENT_DONE_OK;
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +38,6 @@ import org.onap.ccsdk.cds.sdclistener.client.SdcListenerAuthClientInterceptor;
 import org.onap.ccsdk.cds.sdclistener.dto.SdcListenerDto;
 import org.onap.ccsdk.cds.sdclistener.handler.BluePrintProcesssorHandler;
 import org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus;
-import org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus.NotificationType;
 import org.onap.sdc.api.results.IDistributionClientDownloadResult;
 import org.onap.sdc.impl.mock.DistributionClientResultStubImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,8 +100,6 @@ public class ListenerServiceImplTest {
     @Test
     public void extractBluePrintFailure() {
         // Arrange
-        final String errorMessage = String
-            .format("The CBA Archive doesn't exist as per this given regex %s", CBA_ZIP_PATH);
         Mockito.when(listenerDto.getDistributionId()).thenReturn(DISTRIBUTION_ID);
         Mockito.when(listenerDto.getArtifactUrl()).thenReturn(URL);
         Mockito.doCallRealMethod().when(status)
