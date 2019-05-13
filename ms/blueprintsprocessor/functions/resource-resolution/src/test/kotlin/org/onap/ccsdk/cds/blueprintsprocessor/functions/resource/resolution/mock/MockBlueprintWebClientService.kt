@@ -61,17 +61,17 @@ class MockBlueprintWebClientService(private var restClientProperties: RestClient
         mockServer.close()
     }
 
-    override fun exchangeResource(method: String, path: String, payload: String): String {
+    override fun exchangeResource(method: String, path: String, payload: String): BlueprintWebClientService.TypedWebClientResponse<String> {
         val header = arrayOf(BasicHeader(HttpHeaders.AUTHORIZATION, headers[HttpHeaders.AUTHORIZATION]))
         return when (method) {
             "POST" -> {
-                post(path, payload, header)
+                post(path, payload, header, String::class.java)
             }
             "PUT" -> {
-                put(path, payload, header)
+                put(path, payload, header, String::class.java)
             }
             else -> {
-                get(path, header)
+                get(path, header, String::class.java)
             }
         }
     }

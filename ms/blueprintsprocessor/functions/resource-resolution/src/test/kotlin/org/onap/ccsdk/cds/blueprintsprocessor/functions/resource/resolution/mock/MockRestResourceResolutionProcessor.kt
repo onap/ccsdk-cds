@@ -80,11 +80,15 @@ class MockRestResourceResolutionProcessor(private val blueprintRestLibPropertySe
                 val restClientService = blueprintWebClientService(executionRequest)
 
                 val response = restClientService.exchangeResource(verb, urlPath, payload)
-                if (response.isEmpty()) {
-                    logger.warn("Failed to get $dSource result for dictionary name ($dName) using urlPath ($urlPath)")
-                } else {
-                    populateResource(executionRequest, sourceProperties, response, path)
+                val responseStatusCode = response.status
+                val responseBody = response.body
+                if (responseStatusCode in 200..299 && !responseBody.isBlank()) {
+                    populateResource(executionRequest, sourceProperties, responseBody, path)
                     restClientService.tearDown()
+                } else {
+                    val errMsg = "Failed to get $dSource result for dictionary name ($dName) using urlPath ($urlPath) response_code: ($responseStatusCode)"
+                    logger.warn(errMsg)
+                    throw BluePrintProcessorException(errMsg)
                 }
             }
         } catch (e: Exception) {
