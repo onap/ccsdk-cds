@@ -15,10 +15,10 @@
  */
 package org.onap.ccsdk.cds.sdclistener.status;
 
-import org.onap.sdc.api.consumer.IFinalDistrStatusMessage;
+import org.onap.sdc.api.consumer.IComponentDoneStatusMessage;
 import org.onap.sdc.utils.DistributionStatusEnum;
 
-public class DistributionStatusMessage  implements IFinalDistrStatusMessage {
+public class ComponentStatusMessage  implements IComponentDoneStatusMessage {
 
     public String componentName;
 
@@ -28,14 +28,11 @@ public class DistributionStatusMessage  implements IFinalDistrStatusMessage {
 
     public DistributionStatusEnum status;
 
+    public long timeStamp;
+
     @Override
     public String getDistributionID() {
         return distributionID;
-    }
-
-    @Override
-    public long getTimestamp() {
-        return 0;
     }
 
     @Override
@@ -51,5 +48,10 @@ public class DistributionStatusMessage  implements IFinalDistrStatusMessage {
     @Override
     public String getComponentName() {
         return componentName;
+    }
+
+    @Override
+    public long getTimestamp() {
+        return timeStamp;
     }
 }

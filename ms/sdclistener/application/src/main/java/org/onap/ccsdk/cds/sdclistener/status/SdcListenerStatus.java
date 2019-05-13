@@ -20,6 +20,7 @@ import java.util.Objects;
 import org.onap.ccsdk.cds.sdclistener.dto.SdcListenerDto;
 import org.onap.ccsdk.cds.sdclistener.util.BuilderUtil;
 import org.onap.sdc.api.IDistributionClient;
+import org.onap.sdc.api.consumer.IComponentDoneStatusMessage;
 import org.onap.sdc.api.consumer.IFinalDistrStatusMessage;
 import org.onap.sdc.api.results.IDistributionClientResult;
 import org.onap.sdc.utils.DistributionStatusEnum;
@@ -56,18 +57,19 @@ public class SdcListenerStatus {
 
         final IDistributionClient distributionClient = sdcListenerDto.getDistributionClient();
 
-        IFinalDistrStatusMessage finalDistribution = new BuilderUtil<>(new DistributionStatusMessage())
+        IComponentDoneStatusMessage componentStatusInfo = new BuilderUtil<>(new ComponentStatusMessage())
             .build(builder -> {
                 builder.distributionID = distributionID;
                 builder.status = status;
                 builder.consumerID = consumerId;
                 builder.componentName = COMPONENT_NAME;
+                builder.timeStamp = System.currentTimeMillis();
             }).create();
 
         if (errorReason == null) {
-            checkResponseStatusFromSdc(distributionClient.sendFinalDistrStatus(finalDistribution));
+            checkResponseStatusFromSdc(distributionClient.sendComponentDoneStatus(componentStatusInfo));
         } else {
-            checkResponseStatusFromSdc(distributionClient.sendFinalDistrStatus(finalDistribution, errorReason));
+            checkResponseStatusFromSdc(distributionClient.sendComponentDoneStatus(componentStatusInfo, errorReason));
         }
     }
 
