@@ -99,7 +99,7 @@ class RestClientServiceTest {
                 .blueprintWebClientService("sample")
         val response = restClientService.exchangeResource(
                 HttpMethod.PATCH.name, "/sample/name", "")
-        assertEquals("Patch request successful", response,
+        assertEquals("Patch request successful", response.body,
                 "failed to get patch response")
     }
 
@@ -111,7 +111,7 @@ class RestClientServiceTest {
         headers["X-Transaction-Id"] = "1234"
         val response = restClientService.exchangeResource(HttpMethod.GET.name,
                 "/sample/name", "")
-        assertNotNull(response, "failed to get response")
+        assertNotNull(response.body, "failed to get response")
     }
 
     @Test
@@ -130,7 +130,7 @@ class RestClientServiceTest {
         runBlocking {
             val get = async(start = CoroutineStart.LAZY) {
                 restClientService.exchangeNB(HttpMethod.GET.name,
-                        "/sample/basic", "")}
+                        "/sample/basic", "").body}
             get.start()
             res = get.await()
         }
@@ -163,32 +163,32 @@ class RestClientServiceTest {
             val get1 = async(start = CoroutineStart.LAZY) {
                 restClientService.exchangeNB(HttpMethod.GET.name,
                         "/sample/aai/v14/business/customers", "", headers,
-                        Customer::class.java)}
+                        Customer::class.java).body}
 
             val get2 = async(start = CoroutineStart.LAZY) {
                 restClientService.exchangeNB(HttpMethod.GET.name,
                         "/sample/aai/v14/business/customers", "", headers,
-                        Customer::class.java)}
+                        Customer::class.java).body}
 
             val post = async(start = CoroutineStart.LAZY) {
                 restClientService.exchangeNB(HttpMethod.POST.name,
                         "/sample/aai/v14/business/customers", post1, headers,
-                        String::class.java)}
+                        String::class.java).body}
 
             val put = async(start = CoroutineStart.LAZY) {
                 restClientService.exchangeNB(HttpMethod.PUT.name,
                         "/sample/aai/v14/business/customers", post1, headers,
-                        String::class.java)}
+                        String::class.java).body}
 
             val patch = async(start = CoroutineStart.LAZY) {
                 restClientService.exchangeNB(HttpMethod.PATCH.name,
                         "/sample/aai/v14/business/customers", post1, headers,
-                        String::class.java)}
+                        String::class.java).body}
 
             val delete = async(start = CoroutineStart.LAZY) {
                 restClientService.exchangeNB(HttpMethod.DELETE.name,
                         "/sample/aai/v14/business/customers", "", headers,
-                        String::class.java)}
+                        String::class.java).body}
 
             get1.start()
             get2.start()
@@ -346,7 +346,7 @@ class HttpServer {
     fun servletContainer(): ServletWebServerFactory {
 
         val connector = Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL)
-        connector.setPort(8080)
+        connector.port = 8080
 
         val tomcat = TomcatServletWebServerFactory()
         tomcat.addAdditionalTomcatConnectors(connector)
