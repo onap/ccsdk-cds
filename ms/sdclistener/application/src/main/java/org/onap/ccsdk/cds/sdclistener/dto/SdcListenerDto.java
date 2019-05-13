@@ -34,6 +34,8 @@ public class SdcListenerDto {
     @Value("${listenerservice.config.grpcPort}")
     private int grpcPort;
 
+    private String artifactUrl;
+
     @Autowired
     private SdcListenerAuthClientInterceptor sdcListenerAuthClientInterceptor;
 
@@ -66,5 +68,13 @@ public class SdcListenerDto {
 
     public ManagedChannel getManagedChannelForGrpc() {
         return managedChannel;
+    }
+
+    public String getArtifactUrl() {
+        return artifactUrl;
+    }
+
+    public void setArtifactUrl(String artifactUrl) {
+        this.artifactUrl = artifactUrl;
     }
 }
