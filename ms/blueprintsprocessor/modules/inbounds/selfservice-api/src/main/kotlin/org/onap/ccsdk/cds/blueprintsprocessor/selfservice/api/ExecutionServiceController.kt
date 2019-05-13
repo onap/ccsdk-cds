@@ -24,7 +24,9 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInpu
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
@@ -63,10 +65,11 @@ open class ExecutionServiceController {
             notes = "Takes the blueprint information and process as per the payload")
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
-    fun process(@RequestBody executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput = runBlocking {
+    fun process(@RequestBody executionServiceInput: ExecutionServiceInput): ResponseEntity<ExecutionServiceOutput> = runBlocking {
         if (executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC) {
             throw IllegalStateException("Can't process async request through the REST endpoint. Use gRPC for async processing.")
         }
-        executionServiceHandler.doProcess(executionServiceInput)
+        val processResult = executionServiceHandler.doProcess(executionServiceInput)
+        ResponseEntity(processResult, HttpStatus.valueOf(processResult.status.code))
     }
 }
