@@ -27,7 +27,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientSer
 import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
-import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDictionaryConstants
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
@@ -86,10 +85,14 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                 val restClientService = blueprintWebClientService(resourceAssignment, sourceProperties)
 
                 val response = restClientService.exchangeResource(verb, urlPath, payload)
-                if (response.isBlank()) {
-                    logger.warn("Failed to get $dSource result for dictionary name ($dName) using urlPath ($urlPath)")
+                val responseStatusCode = response.status
+                val responseBody = response.body
+                if (responseStatusCode in 200..300 && !responseBody.isBlank()) {
+                    populateResource(resourceAssignment, sourceProperties, responseBody, path)
                 } else {
-                    populateResource(resourceAssignment, sourceProperties, response, path)
+                    val errMsg = "Failed to get $dSource result for dictionary name ($dName) using urlPath ($urlPath) response_code: ($responseStatusCode)"
+                    logger.warn(errMsg)
+                    throw BluePrintProcessorException(errMsg)
                 }
             }
             // Check the value has populated for mandatory case
