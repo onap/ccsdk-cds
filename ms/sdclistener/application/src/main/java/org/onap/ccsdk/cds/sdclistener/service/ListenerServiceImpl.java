@@ -29,7 +29,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -200,8 +199,6 @@ public class ListenerServiceImpl implements ListenerService {
                 final String errorMessage = String.format("Failure due to %s", e.getMessage());
                 listenerStatus.sendResponseStatusBackToSDC(distributionId, COMPONENT_DONE_ERROR, errorMessage);
                 LOGGER.error(errorMessage);
-            } finally {
-                FileUtil.deleteFile(zipFile, path);
             }
         });
     }
