@@ -24,7 +24,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, observable } from 'rxjs';
 import { ApiService } from '../../../../common/core/services/api.service';
-import { LoopbackConfig } from '../../../../common/constants/app-constants';
 import { saveAs } from 'file-saver';
 
 @Injectable()
@@ -35,10 +34,10 @@ export class EditorService {
     }
 
     enrich(uri: string, body: FormData): Observable<any> {
-        return this.api.post(LoopbackConfig.url + uri, body, { responseType: 'blob' });
+        return this.api.post(uri, body, { responseType: 'blob' });
     }
     downloadCBA(uri: string): string {
-        this.api.get(LoopbackConfig.url + uri, { responseType: 'blob' })
+        this.api.get(uri, { responseType: 'blob' })
             .subscribe(response => {
                 let blob = new Blob([response], { 'type': "application/octet-stream" });
                 saveAs(blob, "CBA.zip");
@@ -49,11 +48,11 @@ export class EditorService {
     }
     post(uri: string, body: any | null, options?: any): Observable<any> {
 
-        return this.api.post(LoopbackConfig.url + uri, body, options);
+        return this.api.post(uri, body, options);
     }
 
     deployPost(uri: string, body: any | null, options?: any): Observable<any> {
 
-        return this.api.post(LoopbackConfig.url + uri, body, { responseType: 'text' });
+        return this.api.post(uri, body, { responseType: 'text' });
     }
 }

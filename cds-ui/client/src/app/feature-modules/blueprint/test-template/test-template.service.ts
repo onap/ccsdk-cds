@@ -24,7 +24,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, observable } from 'rxjs';
 import { ApiService } from '../../../common/core/services/api.service';
-import { LoopbackConfig } from '../../../common/constants/app-constants';
 
 @Injectable()
 export class TestTemplateService {

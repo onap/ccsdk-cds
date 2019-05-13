@@ -1,6 +1,6 @@
 import {inject} from '@loopback/core';
 import {juggler} from '@loopback/repository';
-import * as config from './blueprint.datasource.json';
+import config from './blueprint.datasource-template';
 
 export class BlueprintDataSource extends juggler.DataSource {
   static dataSourceName = 'blueprint';

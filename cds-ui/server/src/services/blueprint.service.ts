@@ -3,7 +3,7 @@ import {inject, Provider} from '@loopback/core';
 import {BlueprintDataSource} from '../datasources';
 
 export interface BlueprintService {
-   getAllblueprints(authtoken: string): Promise<any>;
+   getAllblueprints(): Promise<any>;
 }
 
 export class BlueprintServiceProvider implements Provider<BlueprintService> {

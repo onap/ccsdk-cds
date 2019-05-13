@@ -24,7 +24,6 @@ limitations under the License.
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse, HttpHeaderResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { LoopbackConfig } from '../../constants/app-constants';
 
 @Injectable()
 export class ApiService {

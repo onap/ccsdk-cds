@@ -48,11 +48,7 @@ import { BlueprintService } from '../services';
 import * as fs from 'fs';
 import * as multiparty from 'multiparty';
 import * as request_lib from 'request';
-
-const REST_BLUEPRINT_CONTROLLER_BASE_URL = process.env.REST_BLUEPRINT_CONTROLLER_BASE_URL || "http://localhost:8080/api/v1";
-const REST_BLUEPRINT_CONTROLLER_BASIC_AUTH_HEADER = process.env.REST_BLUEPRINT_CONTROLLER_BASIC_AUTH_HEADER || "Basic Y2NzZGthcHBzOmNjc2RrYXBwcw==";
-const REST_BLUEPRINT_PROCESSOR_BASE_URL= process.env.REST_BLUEPRINT_PROCESSOR_BASE_URL ||"http://localhost:8081/api/v1";
-const MULTIPART_FORM_UPLOAD_DIR = process.env.MULTIPART_FORM_UPLOAD_DIR || "/tmp";
+import {controllerApiConfig, processorApiConfig} from '../../config/app-config';
 
 export class BlueprintRestController {
   constructor(
@@ -69,7 +65,7 @@ export class BlueprintRestController {
     },
   })
   async getall() {
-    return await this.bpservice.getAllblueprints(REST_BLUEPRINT_CONTROLLER_BASIC_AUTH_HEADER);
+    return await this.bpservice.getAllblueprints();
   }
 
   @post('/create-blueprint')
@@ -90,7 +86,7 @@ export class BlueprintRestController {
   ): Promise<Response> {
     return new Promise((resolve, reject) => { 
        this.getFileFromMultiPartForm(request).then(file=>{
-         this.uploadFileToBlueprintController(file, REST_BLUEPRINT_CONTROLLER_BASE_URL+"/blueprint-model/", response).then(resp=>{
+         this.uploadFileToBlueprintController(file, "/blueprint-model/", response).then(resp=>{
           resolve(resp);
          }, err=>{
            reject(err);
@@ -100,6 +96,7 @@ export class BlueprintRestController {
       });
     });
   }
+
   @post('/publish')
   async publish(
     @requestBody({
@@ -118,7 +115,7 @@ export class BlueprintRestController {
   ): Promise<Response> {
     return new Promise((resolve, reject) => { 
        this.getFileFromMultiPartForm(request).then(file=>{
-         this.uploadFileToBlueprintController(file, REST_BLUEPRINT_CONTROLLER_BASE_URL+"/blueprint-model/publish/", response).then(resp=>{
+         this.uploadFileToBlueprintController(file, "/blueprint-model/publish/", response).then(resp=>{
           resolve(resp);
          }, err=>{
            reject(err);
@@ -128,6 +125,7 @@ export class BlueprintRestController {
       });
     });
   }
+
   @post('/enrich-blueprint')
   async enrich(
     @requestBody({
@@ -146,7 +144,7 @@ export class BlueprintRestController {
   ): Promise<Response> {
     return new Promise((resolve, reject) => { 
        this.getFileFromMultiPartForm(request).then(file=>{
-         this.uploadFileToBlueprintController(file, REST_BLUEPRINT_CONTROLLER_BASE_URL+"/blueprint-model/enrich/", response).then(resp=>{
+         this.uploadFileToBlueprintController(file, "/blueprint-model/enrich/", response).then(resp=>{
            resolve(resp);
          }, err=>{
            reject(err);
@@ -163,7 +161,7 @@ export class BlueprintRestController {
     @param.path.string('version') version:string,
     @inject(RestBindings.Http.RESPONSE) response: Response,
   ): Promise<Response> {
-    return this.downloadFileFromBlueprintController(REST_BLUEPRINT_CONTROLLER_BASE_URL+"/blueprint-model/download/by-name/"+name+"/version/"+version, response);
+    return this.downloadFileFromBlueprintController("/blueprint-model/download/by-name/"+name+"/version/"+version, response);
   }
 
   async getFileFromMultiPartForm(request: Request): Promise<multiparty.File>{
@@ -199,7 +197,7 @@ export class BlueprintRestController {
   ): Promise<Response> {
     return new Promise((resolve, reject) => { 
        this.getFileFromMultiPartForm(request).then(file=>{
-         this.uploadFileToBlueprintController(file, REST_BLUEPRINT_PROCESSOR_BASE_URL+"/execution-service/upload/", response).then(resp=>{
+         this.uploadFileToBlueprintProcessor(file, "/execution-service/upload/", response).then(resp=>{
           resolve(resp);
          }, err=>{
            reject(err);
@@ -209,12 +207,20 @@ export class BlueprintRestController {
       });
     });
   }
+
   async uploadFileToBlueprintController(file: multiparty.File, uri: string, response: Response): Promise<Response>{
+    return this.uploadFileToBlueprintService(file, controllerApiConfig.url + uri, controllerApiConfig.authToken, response);
+  }
+
+  async uploadFileToBlueprintProcessor(file: multiparty.File, uri: string, response: Response): Promise<Response>{
+    return this.uploadFileToBlueprintService(file, processorApiConfig.url + uri, processorApiConfig.authToken, response);
+  }
+
+  async uploadFileToBlueprintService(file: multiparty.File, url: string, authToken: string, response: Response): Promise<Response>{
     let options = {
-      // url: REST_BLUEPRINT_CONTROLLER_BASE_URL + uri,
-      url:uri,
+      url: url,
       headers: {
-        Authorization: REST_BLUEPRINT_CONTROLLER_BASIC_AUTH_HEADER,
+        Authorization: authToken,
         'content-type': 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW'
       },
       formData: {
@@ -248,12 +254,16 @@ export class BlueprintRestController {
         });
     })
   }
+
   async downloadFileFromBlueprintController(uri: string, response: Response): Promise<Response> {
+    return this.downloadFileFromBlueprintService(controllerApiConfig.url + uri, controllerApiConfig.authToken, response);
+  }
+
+  async downloadFileFromBlueprintService(url: string, authToken: string, response: Response): Promise<Response> {
     let options = {
-      url: uri,
-      // REST_BLUEPRINT_CONTROLLER_BASE_URL + uri,
+      url: url,
       headers: {
-        Authorization: REST_BLUEPRINT_CONTROLLER_BASIC_AUTH_HEADER,
+        Authorization: authToken,
       }
     };
     return new Promise((resolve, reject) => {
