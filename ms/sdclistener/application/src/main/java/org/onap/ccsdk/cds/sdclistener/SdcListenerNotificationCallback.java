@@ -24,6 +24,7 @@ import java.util.Objects;
 import org.onap.ccsdk.cds.sdclistener.dto.SdcListenerDto;
 import org.onap.ccsdk.cds.sdclistener.service.ListenerService;
 import org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus;
+import org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus.NotificationType;
 import org.onap.ccsdk.cds.sdclistener.util.FileUtil;
 import org.onap.sdc.api.IDistributionClient;
 import org.onap.sdc.api.consumer.INotificationCallback;
@@ -80,7 +81,9 @@ public class SdcListenerNotificationCallback implements INotificationCallback {
      */
     private void downloadCsarArtifacts(IArtifactInfo info, IDistributionClient distributionClient) {
         final String url = info.getArtifactURL();
+        sdcListenerDto.setArtifactUrl(url);
         final String id = info.getArtifactUUID();
+        final String distributionId = sdcListenerDto.getDistributionId();
 
         if (Objects.equals(info.getArtifactType(), SdcListenerConfiguration.TOSCA_CSAR)) {
             LOGGER.info("Trying to download the artifact from : {} and UUID is {} ", url, id);
@@ -89,12 +92,15 @@ public class SdcListenerNotificationCallback implements INotificationCallback {
             IDistributionClientDownloadResult result = distributionClient.download(info);
 
             if (!Objects.equals(result.getDistributionActionResult(), SUCCESS)) {
-                String errorMessage = String.format("Failed to download the artifact from : %s due to %s ", url,
+                final String errorMessage = String.format("Failed to download the artifact from : %s due to %s ", url,
                     result.getDistributionActionResult());
-                listenerStatus.sendResponseStatusBackToSDC(sdcListenerDto.getDistributionId(),
-                    DistributionStatusEnum.COMPONENT_DONE_ERROR, errorMessage);
+                listenerStatus
+                    .sendResponseBackToSdc(distributionId, DistributionStatusEnum.DOWNLOAD_ERROR, errorMessage,
+                        url, NotificationType.DOWNLOAD);
                 LOGGER.error(errorMessage);
             } else {
+                listenerStatus.sendResponseBackToSdc(distributionId, DistributionStatusEnum.DOWNLOAD_OK, null, url,
+                    NotificationType.DOWNLOAD);
                 LOGGER.info("Trying to write CSAR artifact to file  with URL {} and UUID {}", url, id);
                 processCsarArtifact(result);
             }
