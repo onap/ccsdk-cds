@@ -38,6 +38,7 @@ import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.returnResult
 import org.springframework.web.reactive.function.BodyInserters
+import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.*
@@ -71,11 +72,8 @@ class ExecutionServiceHandlerTest {
     @Test
     fun `test rest upload blueprint`() {
         runBlocking {
-            val file = Paths.get("./src/test/resources/test-cba.zip").toFile()
-            assertTrue(file.exists(), "couldn't get file ${file.absolutePath}")
-
             val body = MultipartBodyBuilder().apply {
-                part("file", object : ByteArrayResource(Files.readAllBytes(Paths.get("./src/test/resources/test-cba.zip"))) {
+                part("file", object : ByteArrayResource(Files.readAllBytes(loadTestCbaFile().toPath())) {
                     override fun getFilename(): String {
                         return "test-cba.zip"
                     }
@@ -98,9 +96,7 @@ class ExecutionServiceHandlerTest {
     @Test
     fun `test rest process`() {
         runBlocking {
-            val file = Paths.get("./src/test/resources/test-cba.zip").toFile()
-            assertTrue(file.exists(), "couldnt get file ${file.absolutePath}")
-            blueprintCatalog.saveToDatabase(UUID.randomUUID().toString(), file)
+            blueprintCatalog.saveToDatabase(UUID.randomUUID().toString(), loadTestCbaFile())
 
             val executionServiceInput = JacksonUtils
                     .readValueFromClassPathFile("execution-input/default-input.json",
@@ -113,5 +109,29 @@ class ExecutionServiceHandlerTest {
                     .exchange()
                     .expectStatus().isOk
         }
+    }
+
+    @Test
+    fun `rest resource process should return status code 500 in case of server-side exception`() {
+        runBlocking {
+            blueprintCatalog.saveToDatabase(UUID.randomUUID().toString(), loadTestCbaFile())
+
+            val executionServiceInput = JacksonUtils
+                    .readValueFromClassPathFile("execution-input/faulty-input.json",
+                            ExecutionServiceInput::class.java)!!
+
+            webTestClient
+                    .post()
+                    .uri("/api/v1/execution-service/process")
+                    .body(BodyInserters.fromObject(executionServiceInput))
+                    .exchange()
+                    .expectStatus().is5xxServerError
+        }
+    }
+
+    private fun loadTestCbaFile(): File {
+        val testCbaFile = Paths.get("./src/test/resources/test-cba.zip").toFile()
+        assertTrue(testCbaFile.exists(), "couldn't get file ${testCbaFile.absolutePath}")
+        return testCbaFile
     }
 }

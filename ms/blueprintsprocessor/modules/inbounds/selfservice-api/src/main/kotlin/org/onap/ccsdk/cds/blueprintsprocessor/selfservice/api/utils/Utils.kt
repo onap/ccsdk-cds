@@ -16,6 +16,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.utils
 
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.springframework.http.HttpStatus
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.util.StringUtils
 import java.io.File
@@ -26,6 +27,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 
+const val INTERNAL_SERVER_ERROR_HTTP_STATUS_CODE = 500
 
 fun currentTimestamp(): String {
     val now = LocalDateTime.now(ZoneId.systemDefault())
@@ -56,4 +58,15 @@ fun saveCBAFile(filePart: FilePart, targetDirectory: Path): Path {
     filePart.transferTo(file)
 
     return targetLocation
+}
+
+fun determineHttpStatusCode(statusCode: Int): HttpStatus {
+
+    try {
+        return HttpStatus.valueOf(statusCode)
+    } catch (exception: Exception) {
+        //if statusCode cannot be converted to a proper HttpStatus, the resource still needs to assign a HTTP status
+        // code to the response. In this case, a 500 Internal Server Error will be returned as default.
+        return HttpStatus.valueOf(INTERNAL_SERVER_ERROR_HTTP_STATUS_CODE)
+    }
 }
