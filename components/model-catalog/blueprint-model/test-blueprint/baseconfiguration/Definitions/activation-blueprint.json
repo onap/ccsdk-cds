@@ -309,6 +309,29 @@
           }
         }
       },
+      "activate-cli": {
+        "type": "component-cli-executor",
+        "interfaces": {
+          "ComponentCliExecutor": {
+            "operations": {
+              "process": {
+                "implementation": {
+                  "primary": "component-script"
+                },
+                "inputs": {
+                  "script-type": "kotlin",
+                  "script-class-reference": "InternalSimpleCli_cba$TestCliScriptFunction",
+                  "instance-dependencies": []
+                },
+                "outputs": {
+                  "response-data": "",
+                  "status": "success"
+                }
+              }
+            }
+          }
+        }
+      },
       "sample-netconf-device": {
         "type": "vnf-netconf-device",
         "capabilities": {
@@ -405,6 +428,19 @@
             "activities": [
               {
                 "call_operation": "ComponentRestconfExecutor.process"
+              }
+            ]
+          }
+        }
+      },
+      "activate-cli": {
+        "steps": {
+          "activate-process": {
+            "description": "Activate CLI flow",
+            "target": "activate-cli",
+            "activities": [
+              {
+                "call_operation": "ComponentCliExecutor.process"
               }
             ]
           }
