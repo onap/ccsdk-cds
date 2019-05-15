@@ -16,7 +16,13 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.cli.executor
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.boot.context.properties.EnableConfigurationProperties
+import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 
 @Configuration
+@ComponentScan
+@EnableConfigurationProperties
+@ConditionalOnProperty(name = ["blueprintsprocessor.cliExecutor.enabled"], havingValue = "true")
 open class CliExecutorConfiguration
