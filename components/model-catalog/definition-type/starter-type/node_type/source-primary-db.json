@@ -9,7 +9,8 @@
       "constraints": [
         {
           "valid_values": [
-            "SQL"
+            "SQL",
+            "PLSQL"
           ]
         }
       ]

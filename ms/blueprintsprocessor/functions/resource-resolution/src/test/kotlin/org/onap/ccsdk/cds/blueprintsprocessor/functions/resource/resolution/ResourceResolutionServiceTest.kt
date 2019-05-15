@@ -67,7 +67,7 @@ class ResourceResolutionServiceTest {
     fun testRegisteredSource() {
         val sources = resourceResolutionService.registeredResourceSources()
         assertNotNull(sources, "failed to get registered sources")
-        assertTrue(sources.containsAll(arrayListOf("source-input", "source-default", "source-processor-db",
+        assertTrue(sources.containsAll(arrayListOf("source-input", "source-default", "source-primary-db",
                 "source-rest")), "failed to get registered sources : $sources")
     }
 

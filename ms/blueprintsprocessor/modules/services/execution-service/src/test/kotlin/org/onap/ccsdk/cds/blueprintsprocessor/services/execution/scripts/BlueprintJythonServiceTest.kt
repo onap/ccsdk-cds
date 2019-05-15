@@ -29,6 +29,7 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.BeforeTest
+import kotlin.test.Ignore
 import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
@@ -49,24 +50,26 @@ class BlueprintJythonServiceTest {
     }
     
     @Test
+    @Ignore
     fun testGetAbstractPythonPlugin() {
-        val content = JacksonUtils.getClassPathFileContent("scripts/SamplePythonComponentNode.py")
-        val dependencies: MutableMap<String, Any> = hashMapOf()
+            val content = JacksonUtils.getClassPathFileContent("scripts/SamplePythonComponentNode.py")
+            val dependencies: MutableMap<String, Any> = hashMapOf()
 
-        val abstractPythonPlugin = blueprintJythonService
-                .jythonInstance<AbstractComponentFunction>(blueprintContext, "SamplePythonComponentNode",
-                        content, dependencies)
+            val abstractPythonPlugin = blueprintJythonService
+                    .jythonInstance<AbstractComponentFunction>(blueprintContext, "SamplePythonComponentNode",
+                            content, dependencies)
 
-        assertNotNull(abstractPythonPlugin, "failed to get python component")
+            assertNotNull(abstractPythonPlugin, "failed to get python component")
     }
 
     @Test
+    @Ignore
     fun testGetAbstractJythonComponent() {
-        val scriptInstance = "test-classes/scripts/SamplePythonComponentNode.py"
+            val scriptInstance = "test-classes/scripts/SamplePythonComponentNode.py"
 
-        val abstractJythonComponent = blueprintJythonService.jythonComponentInstance(blueprintContext, scriptInstance)
+            val abstractJythonComponent = blueprintJythonService.jythonComponentInstance(blueprintContext, scriptInstance)
 
-        assertNotNull(abstractJythonComponent, "failed to get Jython component")
+            assertNotNull(abstractJythonComponent, "failed to get Jython component")
 
     }
 }

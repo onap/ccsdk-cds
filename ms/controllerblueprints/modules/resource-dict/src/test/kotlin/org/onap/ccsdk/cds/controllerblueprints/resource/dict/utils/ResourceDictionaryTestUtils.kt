@@ -23,6 +23,7 @@ object ResourceDictionaryTestUtils {
     @JvmStatic
     fun setUpResourceSourceMapping() {
         ResourceSourceMappingFactory.registerSourceMapping("primary-db", "source-primary-db")
+        ResourceSourceMappingFactory.registerSourceMapping("processor-db", "source-primary-db")
         ResourceSourceMappingFactory.registerSourceMapping("input", "source-input")
         ResourceSourceMappingFactory.registerSourceMapping("default", "source-default")
         ResourceSourceMappingFactory.registerSourceMapping("primary-config-data", "source-rest")

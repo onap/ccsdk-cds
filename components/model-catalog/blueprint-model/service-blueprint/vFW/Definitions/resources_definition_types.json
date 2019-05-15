@@ -107,7 +107,7 @@
         "properties" : { }
       },
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-primary-db",
         "properties" : {
           "type" : "SQL",
           "query" : "select sdnctl.VF_MODEL.nf_role as vf_model_role from sdnctl.VF_MODEL where sdnctl.VF_MODEL.customization_uuid=:vnfmodelcustomizationuuid",
@@ -132,7 +132,7 @@
     "updated-by" : "Singal, Kapil <ks220y@att.com>",
     "sources" : {
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-primary-db",
         "properties" : {
           "type" : "SQL",
           "query" : "select nfc_naming_code as nfc_naming_code from sdnctl.VFC_MODEL where customization_uuid=:vfccustomizationuuid",
@@ -157,7 +157,7 @@
     "updated-by" : "Singal, Kapil <ks220y@att.com>",
     "sources" : {
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-primary-db",
         "properties" : {
           "type" : "SQL",
           "query" : "select sdnctl.IPAM_IP_POOL.prefix as prefix from sdnctl.IPAM_IP_POOL where description = \"private\"",
@@ -238,7 +238,7 @@
     "updated-by" : "Singal, Kapil <ks220y@att.com>",
     "sources" : {
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-primary-db",
         "properties" : {
           "type" : "SQL",
           "query" : "select sdnctl.IPAM_IP_POOL.prefix_id as prefix_id from sdnctl.IPAM_IP_POOL where description = \"private\"",
@@ -259,7 +259,7 @@
     "updated-by" : "Singal, Kapil <ks220y@att.com>",
     "sources" : {
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-primary-db",
         "properties" : {
           "type" : "SQL",
           "query" : "select sdnctl.IPAM_IP_POOL.prefix_id as prefix_id from sdnctl.IPAM_IP_POOL where description = \"protected\"",
@@ -280,7 +280,7 @@
     "updated-by" : "Singal, Kapil <ks220y@att.com>",
     "sources" : {
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-primary-db",
         "properties" : {
           "type" : "SQL",
           "query" : "select sdnctl.IPAM_IP_POOL.prefix as prefix from sdnctl.IPAM_IP_POOL where description = \"protected\"",
@@ -372,7 +372,7 @@
         "properties" : { }
       },
       "any-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-primary-db",
         "properties" : {
           "query" : "SELECT artifact_name FROM BLUEPRINT_RUNTIME where artifact_version=\"1.0.0\"",
           "input-key-mapping" : { },
@@ -382,7 +382,7 @@
         }
       },
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-primary-db",
         "properties" : {
           "query" : "SELECT artifact_name FROM BLUEPRINT_RUNTIME where artifact_version=\"1.0.0\"",
           "input-key-mapping" : { },
@@ -411,7 +411,7 @@
     "updated-by" : "Singal, Kapil <ks220y@att.com>",
     "sources" : {
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-primary-db",
         "properties" : {
           "type" : "SQL",
           "query" : "select sdnctl.IPAM_IP_POOL.prefix_id as prefix_id from sdnctl.IPAM_IP_POOL where description = \"unprotected\"",
@@ -432,7 +432,7 @@
     "updated-by" : "Singal, Kapil <ks220y@att.com>",
     "sources" : {
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-primary-db",
         "properties" : {
           "type" : "SQL",
           "query" : "select sdnctl.IPAM_IP_POOL.prefix as prefix from sdnctl.IPAM_IP_POOL where description = \"unprotected\"",
@@ -468,7 +468,7 @@
     "updated-by" : "Singal, Kapil <ks220y@att.com>",
     "sources" : {
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-primary-db",
         "properties" : {
           "type" : "SQL",
           "query" : "select sdnctl.VF_MODULE_MODEL.vf_module_label as vf_module_label from sdnctl.VF_MODULE_MODEL where sdnctl.VF_MODULE_MODEL.customization_uuid=:customizationid",
@@ -508,7 +508,7 @@
     "updated-by" : "adetalhouet",
     "sources" : {
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-primary-db",
         "properties" : {
           "type" : "SQL",
           "query" : "select sdnctl.demo.value as value from sdnctl.demo where sdnctl.demo.id=:vfmoduleid",
@@ -537,7 +537,7 @@
         "properties" : { }
       },
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-primary-db",
         "properties" : {
           "type" : "SQL",
           "query" : "select sdnctl.VF_MODEL.naming_policy as vf_naming_policy from sdnctl.VF_MODEL where sdnctl.VF_MODEL.customization_uuid=:vnf_model_customization_uuid",
@@ -562,7 +562,7 @@
     "updated-by" : "Singal, Kapil <ks220y@att.com>",
     "sources" : {
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-primary-db",
         "properties" : {
           "type" : "SQL",
           "query" : "select sdnctl.VF_MODEL.nf_code as vf_nf_code from sdnctl.VF_MODEL where sdnctl.VF_MODEL.customization_uuid=:customizationid",
@@ -602,7 +602,7 @@
     "updated-by" : "Singal, Kapil <ks220y@att.com>",
     "sources" : {
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-primary-db",
         "properties" : {
           "type" : "SQL",
           "query" : "select sdnctl.VF_MODULE_TO_VFC_MAPPING.vfc_customization_uuid as vnf_customid from sdnctl.VF_MODULE_TO_VFC_MAPPING where vm_count = 1 and sdnctl.VF_MODULE_TO_VFC_MAPPING.vf_module_customization_uuid=:vfmodulecustomizationuuid",
@@ -720,7 +720,7 @@
     "updated-by" : "Singal, Kapil <ks220y@att.com>",
     "sources" : {
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-primary-db",
         "properties" : {
           "type" : "SQL",
           "query" : "select VFC_MODEL.vm_type as vm_type from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
@@ -838,7 +838,7 @@
     "updated-by" : "Singal, Kapil <ks220y@att.com>",
     "sources" : {
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-primary-db",
         "properties" : {
           "type" : "SQL",
           "query" : "select VFC_MODEL.invariant_uuid as vfc_invariant_uuid from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
@@ -863,7 +863,7 @@
     "updated-by" : "Singal, Kapil <ks220y@att.com>",
     "sources" : {
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-primary-db",
         "properties" : {
           "type" : "SQL",
           "query" : "select VFC_MODEL.version as vnfc_model_version from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
