@@ -1,5 +1,70 @@
 {
   "node_types": {
+    "component-cli-executor": {
+      "description": "This is CLI Transaction Configuration Component API",
+      "version": "1.0.0",
+      "capabilities": {
+        "component-node": {
+          "type": "tosca.capabilities.Node"
+        }
+      },
+      "interfaces": {
+        "ComponentCliExecutor": {
+          "operations": {
+            "process": {
+              "inputs": {
+                "script-type": {
+                  "description": "Script type, kotlin type is supported",
+                  "required": true,
+                  "type": "string",
+                  "constraints": [
+                    {
+                      "valid_values": [
+                        "kotlin",
+                        "jython",
+                        "internal"
+                      ]
+                    }
+                  ],
+                  "default": "internal"
+                },
+                "script-class-reference": {
+                  "description": "Kotlin Script class name or jython script name.",
+                  "required": true,
+                  "type": "string"
+                },
+                "instance-dependencies": {
+                  "description": "Instance names to inject to Jython or Kotlin Script.",
+                  "required": true,
+                  "type": "list",
+                  "entry_schema": {
+                    "type": "string"
+                  }
+                },
+                "dynamic-properties": {
+                  "description": "Dynamic Json Content or DSL Json reference.",
+                  "required": false,
+                  "type": "json"
+                }
+              },
+              "outputs": {
+                "response-data": {
+                  "description": "Execution Response Data.",
+                  "required": false,
+                  "type": "string"
+                },
+                "status": {
+                  "description": "Status of the Component Execution ( success or failure )",
+                  "required": true,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.Component"
+    },
     "component-jython-executor": {
       "description": "This is Jython Execution Component.",
       "version": "1.0.0",
@@ -43,7 +108,7 @@
           }
         }
       },
-      "derived_from": "tosca.nodes.component.Jython"
+      "derived_from": "tosca.nodes.Component"
     },
     "component-netconf-executor": {
       "description": "This is Netconf Transaction Configuration Component API",
@@ -322,22 +387,16 @@
       },
       "derived_from": "tosca.nodes.ResourceSource"
     },
+    "source-default": {
+      "description": "This is Default Resource Source Node Type",
+      "version": "1.0.0",
+      "properties": {},
+      "derived_from": "tosca.nodes.ResourceSource"
+    },
     "source-input": {
       "description": "This is Input Resource Source Node Type",
       "version": "1.0.0",
-      "properties": {
-        "key": {
-          "required": false,
-          "type": "string"
-        },
-        "key-dependencies": {
-          "required": true,
-          "type": "list",
-          "entry_schema": {
-            "type": "string"
-          }
-        }
-      },
+      "properties": {},
       "derived_from": "tosca.nodes.ResourceSource"
     },
     "source-primary-db": {
@@ -393,7 +452,7 @@
       "version": "1.0.0",
       "properties": {
         "type": {
-          "required": false,
+          "required": true,
           "type": "string",
           "constraints": [
             {
@@ -405,7 +464,7 @@
           "default": "JSON"
         },
         "verb": {
-          "required": false,
+          "required": true,
           "type": "string",
           "constraints": [
             {
@@ -478,11 +537,6 @@
       "version": "1.0.0",
       "derived_from": "tosca.nodes.Root"
     },
-    "tosca.nodes.Workflow": {
-      "description": "This is Directed Graph Node Type",
-      "version": "1.0.0",
-      "derived_from": "tosca.nodes.Root"
-    },
     "tosca.nodes.ResourceSource": {
       "description": "TOSCA base type for Resource Sources",
       "version": "1.0.0",
@@ -493,8 +547,8 @@
       "version": "1.0.0",
       "derived_from": "tosca.nodes.Root"
     },
-    "tosca.nodes.component.Jython": {
-      "description": "This is Jython Component",
+    "tosca.nodes.Workflow": {
+      "description": "This is Directed Graph Node Type",
       "version": "1.0.0",
       "derived_from": "tosca.nodes.Root"
     },
