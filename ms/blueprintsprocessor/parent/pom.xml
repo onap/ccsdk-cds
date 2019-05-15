@@ -40,6 +40,7 @@
         <jsch.version>0.1.55</jsch.version>
         <protobuff.java.utils.version>3.6.1</protobuff.java.utils.version>
         <eelf.version>1.0.0</eelf.version>
+        <sli.version>${ccsdk.sli.core.version}</sli.version>
         <guava.version>27.0.1-jre</guava.version>
         <jython.version>2.7.1</jython.version>
         <springfox.swagger2.version>2.9.2</springfox.swagger2.version>
@@ -247,7 +248,7 @@
             <dependency>
                 <groupId>org.onap.ccsdk.sli.core</groupId>
                 <artifactId>sli-provider</artifactId>
-                <version>${ccsdk.sli.core.version}</version>
+                <version>${sli.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>commons-lang</groupId>
