@@ -41,6 +41,9 @@ import java.io.IOException
 import java.io.InputStream
 import java.nio.charset.Charset
 
+/**
+ * Note: User supplied headers will overwrite #defaultHeaders() if they have the same key.
+ */
 interface BlueprintWebClientService {
 
     fun defaultHeaders(): Map<String, String>
@@ -60,12 +63,8 @@ interface BlueprintWebClientService {
 
     fun exchangeResource(methodType: String, path: String, request: String,
                          headers: Map<String, String>): WebClientResponse<String> {
-        /**
-         * TODO: Basic headers in the implementations of this client do not get added
-         * in blocking version, whereas in NB version defaultHeaders get added.
-         * the difference is in convertToBasicHeaders vs basicHeaders
-         */
-        val convertedHeaders: Array<BasicHeader> = convertToBasicHeaders(headers)
+        //merge the supplied headers with the default headers
+        val convertedHeaders: Array<BasicHeader> = mergeBasicHeadersWithUserSuppliedHeaders(headers)
         return when (HttpMethod.resolve(methodType)) {
             HttpMethod.DELETE -> delete(path, convertedHeaders, String::class.java)
             HttpMethod.GET -> get(path, convertedHeaders, String::class.java)
@@ -75,10 +74,6 @@ interface BlueprintWebClientService {
             else -> throw BluePrintProcessorException("Unsupported met" +
                 "hodType($methodType)")
         }
-    }
-
-    fun convertToBasicHeaders(headers: Map<String, String>): Array<BasicHeader> {
-        return headers.map { BasicHeader(it.key, it.value) }.toTypedArray()
     }
 
     fun <T> delete(path: String, headers: Array<BasicHeader>, responseType: Class<T>): WebClientResponse<T> {
@@ -215,9 +210,7 @@ interface BlueprintWebClientService {
                                additionalHeaders: Map<String, String>?,
                                responseType: Class<T>): WebClientResponse<T> {
 
-        //TODO: possible inconsistency
-        //NOTE: this basic headers function is different from non-blocking
-        val convertedHeaders: Array<BasicHeader> = basicHeaders(additionalHeaders!!)
+        val convertedHeaders: Array<BasicHeader> = mergeBasicHeadersWithUserSuppliedHeaders(additionalHeaders!!)
         return when (HttpMethod.resolve(methodType)) {
             HttpMethod.GET -> getNB(path, convertedHeaders, responseType)
             HttpMethod.POST -> postNB(path, request, convertedHeaders, responseType)
@@ -245,16 +238,30 @@ interface BlueprintWebClientService {
         }
     }
 
-    private fun basicHeaders(headers: Map<String, String>?):
+
+    private fun mergeBasicHeadersWithUserSuppliedHeaders(headers: Map<String, String>?):
         Array<BasicHeader> {
-        val basicHeaders = mutableListOf<BasicHeader>()
-        defaultHeaders().forEach { (name, value) ->
-            basicHeaders.add(BasicHeader(name, value))
+        val mergedHeaders = mutableMapOf<String, String>()
+        mergedHeaders.putAll(defaultHeaders())
+        /*
+         * TODO: PLEASE COMMENT if it's preferred, as according to RFC7230 Section 3.2.2,
+         * that repeated headers are merged into a list.
+         *
+         * Currently, headers are overwritten.
+         * May need to rethink Map input type as "Set-Cookie"
+         * can't be accommodated this way easily. But at the same time, it may not be
+         * an ideal solution to store cookie in blueprint in the first place.
+         */
+        headers?.forEach { k, v -> {
+            if(mergedHeaders.containsKey(k)) {
+                WebClientUtils.logDefaultHeaderOverwrittenByUserHeaders(k, mergedHeaders[k]!!, v)
+            }
+            mergedHeaders[k] = v
+          }
         }
-        headers?.forEach { name, value ->
-            basicHeaders.add(BasicHeader(name, value))
-        }
-        return basicHeaders.toTypedArray()
+        return mergedHeaders
+            .map { entry -> BasicHeader(entry.key, entry.value) }
+            .toTypedArray()
     }
 
     // Non Blocking Rest Implementation

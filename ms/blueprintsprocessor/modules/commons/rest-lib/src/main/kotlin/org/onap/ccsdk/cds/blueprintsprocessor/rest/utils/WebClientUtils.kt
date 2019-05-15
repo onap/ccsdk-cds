@@ -31,5 +31,9 @@ class WebClientUtils {
 
         fun logResponse(): HttpResponseInterceptor =
             HttpResponseInterceptor { response, _ -> log.info("Response status(${response.statusLine.statusCode} - ${response.statusLine.reasonPhrase})") }
+
+        fun logDefaultHeaderOverwrittenByUserHeaders(key:String, oldValue:String, newValue:String){
+            log.warn("User supplied headers with key $key will overwrite default value ($oldValue) with ($newValue)")
+        }
     }
 }
