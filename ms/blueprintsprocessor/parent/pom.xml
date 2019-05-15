@@ -308,6 +308,11 @@
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>ssh-lib</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>dmaap-lib</artifactId>
                 <version>${project.version}</version>
             </dependency>
