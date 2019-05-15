@@ -1,0 +1,15 @@
+{
+  "commonHeader": {
+    "originatorId": "System",
+    "requestId": "1234",
+    "subRequestId": "1234-12234"
+  },
+  "actionIdentifiers": {
+    "blueprintName": "baseconfiguration",
+    "blueprintVersion": "1.0.0",
+    "actionName": "activate",
+    "mode": "sync"
+  },
+  "payload": {
+  }
+}
