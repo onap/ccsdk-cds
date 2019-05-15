@@ -41,7 +41,7 @@ import java.util.*
  *
  * @author Kapil Singal
  */
-@Service("${PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-processor-db")
+@Service("${PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-primary-db")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class DatabaseResourceAssignmentProcessor(private val bluePrintDBLibPropertySevice: BluePrintDBLibPropertySevice,
                                                private val primaryDBLibGenericService: PrimaryDBLibGenericService)
@@ -50,7 +50,7 @@ open class DatabaseResourceAssignmentProcessor(private val bluePrintDBLibPropert
     private val logger = LoggerFactory.getLogger(DatabaseResourceAssignmentProcessor::class.java)
 
     override fun getName(): String {
-        return "${PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-processor-db"
+        return "${PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-primary-db"
     }
 
     override suspend fun processNB(resourceAssignment: ResourceAssignment) {

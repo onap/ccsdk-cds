@@ -26,9 +26,11 @@ public class ResourceSourceMappingFactoryTest {
     public void testRegisterResourceMapping() {
 
         ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("primary-db", "source-primary-db");
+        ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("processor-db", "source-primary-db");
         ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("input", "source-input");
         ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("default", "source-default");
         ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("primary-config-data", "source-rest");
+        ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("primary-aai-data", "source-rest");
 
         String nodeTypeName = ResourceSourceMappingFactory.INSTANCE.getRegisterSourceMapping("primary-db");
         Assert.notNull(nodeTypeName, "Failed to get primary-db mapping");
