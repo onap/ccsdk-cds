@@ -37,6 +37,7 @@
         <module>dmaap-lib</module>
         <module>grpc-lib</module>
         <module>message-lib</module>
+        <module>ssh-lib</module>
     </modules>
     <dependencies>
         <dependency>
