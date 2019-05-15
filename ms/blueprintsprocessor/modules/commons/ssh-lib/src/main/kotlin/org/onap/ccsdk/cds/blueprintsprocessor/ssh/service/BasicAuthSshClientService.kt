@@ -83,7 +83,7 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
             }
             val exitStatus = channel.exitStatus
             ClientChannel.validateCommandExitStatusCode(command, exitStatus!!)
-            return outputStream!!.toString()
+            return outputStream.toString()
         } finally {
             if (channel != null)
                 channel.close()
