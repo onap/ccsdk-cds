@@ -27,10 +27,13 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.sshd</groupId>
-            <artifactId>sshd-core</artifactId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
+            <artifactId>resource-resolution</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <artifactId>ssh-lib</artifactId>
+        </dependency>
     </dependencies>
 
 
