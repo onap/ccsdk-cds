@@ -113,6 +113,10 @@ class BluePrintEnhancerServiceImplTest {
             val valid = bluePrintValidatorService.validateBluePrints(targetPath)
             Assert.assertTrue("blueprint($basePath) validation failed ", valid)
 
+            // Enable this to get the enhanced zip file
+//            val compressFile = normalizedFile("target/blueprints/enrichment", "$targetDirName.zip")
+//            normalizedFile(targetPath).compress(compressFile)
+
             deleteDir(targetPath)
         }
     }
