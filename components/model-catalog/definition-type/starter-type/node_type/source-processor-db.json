@@ -4,6 +4,7 @@
   "properties": {
     "type": {
       "required": true,
+      "default": "SQL",
       "type": "string",
       "constraints": [
         {
