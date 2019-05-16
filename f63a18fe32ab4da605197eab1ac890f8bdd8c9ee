@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7d143511_20d5e98f",
+        "filename": "ms/blueprintsprocessor/functions/cli-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/cli/executor/CliExecutorConfiguration.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-05-16T17:47:17Z",
+      "side": 1,
+      "message": "please add the blueprintprocessor application property file",
+      "range": {
+        "startLine": 27,
+        "startChar": 32,
+        "endLine": 27,
+        "endChar": 62
+      },
+      "revId": "f63a18fe32ab4da605197eab1ac890f8bdd8c9ee",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
