@@ -31,7 +31,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -138,10 +137,7 @@ public class ListenerServiceImpl implements ListenerService {
     public void saveBluePrintToCdsDatabase(Path cbaArchivePath, ManagedChannel channel) {
         List<File> zipFiles = FileUtil.getFilesFromDisk(cbaArchivePath);
         if (!zipFiles.isEmpty()) {
-            zipFiles.forEach(file -> FileUtil.deleteFile(file, cbaArchivePath.toString()));
             prepareRequestForCdsBackend(zipFiles, channel, cbaArchivePath.toString());
-        } else {
-            LOGGER.error("Could not able to read CBA archives from this location {}", cbaArchivePath);
         }
     }
 
@@ -187,7 +183,7 @@ public class ListenerServiceImpl implements ListenerService {
 
         files.forEach(zipFile -> {
             try {
-                final BluePrintUploadInput request = generateBluePrintUploadInputBuilder(zipFile);
+                final BluePrintUploadInput request = generateBluePrintUploadInputBuilder(zipFile, path);
 
                 // Send request to CDS Backend.
                 final Status responseStatus = bluePrintProcesssorHandler.sendRequest(request, managedChannel);
@@ -209,16 +205,14 @@ public class ListenerServiceImpl implements ListenerService {
                 listenerStatus.sendResponseBackToSdc(distributionId, COMPONENT_DONE_ERROR, errorMessage, artifactUrl,
                    SDC_LISTENER_COMPONENT);
                 LOGGER.error(errorMessage);
-            } finally {
-                FileUtil.deleteFile(zipFile, path);
             }
         });
     }
 
-    private BluePrintUploadInput generateBluePrintUploadInputBuilder(File file) throws IOException {
+    private BluePrintUploadInput generateBluePrintUploadInputBuilder(File file, String path) throws IOException {
         byte[] bytes = FileUtils.readFileToByteArray(file);
         FileChunk fileChunk = FileChunk.newBuilder().setChunk(ByteString.copyFrom(bytes)).build();
-
+        FileUtil.deleteFile(file, path);
         return BluePrintUploadInput.newBuilder()
                 .setFileChunk(fileChunk)
                 .build();
