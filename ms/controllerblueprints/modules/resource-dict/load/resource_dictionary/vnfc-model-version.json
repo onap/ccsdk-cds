@@ -8,7 +8,7 @@
   },
   "sources" : {
     "primary-db" : {
-      "type" : "source-primary-db",
+      "type" : "source-processor-db",
       "properties" : {
         "type" : "SQL",
         "query" : "select vfc_model.version as vnfc_model_version from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
