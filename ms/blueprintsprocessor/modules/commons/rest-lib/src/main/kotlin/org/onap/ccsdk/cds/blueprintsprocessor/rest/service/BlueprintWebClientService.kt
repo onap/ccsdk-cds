@@ -28,11 +28,14 @@ import org.apache.http.entity.StringEntity
 import org.apache.http.impl.client.CloseableHttpClient
 import org.apache.http.impl.client.HttpClients
 import org.apache.http.message.BasicHeader
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestLibConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.utils.WebClientUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintRetryException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintIOUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import java.io.IOException
 import java.io.InputStream
@@ -46,9 +49,9 @@ interface BlueprintWebClientService {
 
     fun httpClient(): CloseableHttpClient {
         return HttpClients.custom()
-                .addInterceptorFirst(WebClientUtils.logRequest())
-                .addInterceptorLast(WebClientUtils.logResponse())
-                .build()
+            .addInterceptorFirst(WebClientUtils.logRequest())
+            .addInterceptorLast(WebClientUtils.logResponse())
+            .build()
     }
 
     /** High performance non blocking Retry function, If execution block [block] throws BluePrintRetryException
@@ -82,10 +85,12 @@ interface BlueprintWebClientService {
             HttpMethod.POST -> post(path, request, convertedHeaders, String::class.java)
             HttpMethod.PUT -> put(path, request, convertedHeaders, String::class.java)
             HttpMethod.PATCH -> patch(path, request, convertedHeaders, String::class.java)
-            else -> throw BluePrintProcessorException("Unsupported methodType($methodType)")
+            else -> throw BluePrintProcessorException(
+                "Unsupported methodType($methodType) attempted on path($path)")
         }
     }
 
+    //TODO: convert to multi-map
     fun convertToBasicHeaders(headers: Map<String, String>): Array<BasicHeader> {
         return headers.map { BasicHeader(it.key, it.value) }.toTypedArray()
     }
@@ -135,8 +140,8 @@ interface BlueprintWebClientService {
 
     @Throws(IOException::class, ClientProtocolException::class)
     private fun <T> performCallAndExtractTypedWebClientResponse(
-            httpUriRequest: HttpUriRequest, responseType: Class<T>):
-            WebClientResponse<T> {
+        httpUriRequest: HttpUriRequest, responseType: Class<T>):
+        WebClientResponse<T> {
         val httpResponse = httpClient().execute(httpUriRequest)
         val statusCode = httpResponse.statusLine.statusCode
         httpResponse.entity.content.use {
@@ -154,7 +159,7 @@ interface BlueprintWebClientService {
     }
 
     suspend fun <T> getNB(path: String, additionalHeaders: Array<BasicHeader>?, responseType: Class<T>):
-            WebClientResponse<T> = withContext(Dispatchers.IO) {
+        WebClientResponse<T> = withContext(Dispatchers.IO) {
         get(path, additionalHeaders!!, responseType)
     }
 
@@ -191,27 +196,27 @@ interface BlueprintWebClientService {
     }
 
     suspend fun <T> deleteNB(path: String, additionalHeaders: Array<BasicHeader>?):
-            WebClientResponse<String> {
+        WebClientResponse<String> {
         return deleteNB(path, additionalHeaders, String::class.java)
     }
 
     suspend fun <T> deleteNB(path: String, additionalHeaders: Array<BasicHeader>?, responseType: Class<T>):
-            WebClientResponse<T> = withContext(Dispatchers.IO) {
+        WebClientResponse<T> = withContext(Dispatchers.IO) {
         delete(path, additionalHeaders!!, responseType)
     }
 
     suspend fun <T> patchNB(path: String, request: Any, additionalHeaders: Array<BasicHeader>?, responseType: Class<T>):
-            WebClientResponse<T> = withContext(Dispatchers.IO) {
+        WebClientResponse<T> = withContext(Dispatchers.IO) {
         patch(path, request, additionalHeaders!!, responseType)
     }
 
     suspend fun exchangeNB(methodType: String, path: String, request: Any): WebClientResponse<String> {
         return exchangeNB(methodType, path, request, hashMapOf(),
-                String::class.java)
+            String::class.java)
     }
 
     suspend fun exchangeNB(methodType: String, path: String, request: Any, additionalHeaders: Map<String, String>?):
-            WebClientResponse<String> {
+        WebClientResponse<String> {
         return exchangeNB(methodType, path, request, additionalHeaders, String::class.java)
     }
 
@@ -249,7 +254,7 @@ interface BlueprintWebClientService {
     }
 
     private fun basicHeaders(headers: Map<String, String>?):
-            Array<BasicHeader> {
+        Array<BasicHeader> {
         val basicHeaders = mutableListOf<BasicHeader>()
         defaultHeaders().forEach { (name, value) ->
             basicHeaders.add(BasicHeader(name, value))
@@ -263,11 +268,29 @@ interface BlueprintWebClientService {
     // Non Blocking Rest Implementation
     suspend fun httpClientNB(): CloseableHttpClient {
         return HttpClients.custom()
-                .addInterceptorFirst(WebClientUtils.logRequest())
-                .addInterceptorLast(WebClientUtils.logResponse())
-                .build()
+            .addInterceptorFirst(WebClientUtils.logRequest())
+            .addInterceptorLast(WebClientUtils.logResponse())
+            .build()
     }
 
     //TODO maybe there could be cases where we care about return headers?
     data class WebClientResponse<T>(val status: Int, val body: T)
+
+    fun verifyAdditionalHeaders(restClientProperties: RestClientProperties): Map<String, String> {
+        val customHeaders: MutableMap<String, String> = mutableMapOf()
+        //Extract additionalHeaders from the requestProperties and
+        //throw an error if HttpHeaders.AUTHORIZATION key (headers are case-insensitive)
+        restClientProperties.additionalHeaders?.let {
+            if (it.keys.map { k -> k.toLowerCase().trim() }.contains(HttpHeaders.AUTHORIZATION.toLowerCase())) {
+                val errMsg = "Error in definition of endpoint ${restClientProperties.url}." +
+                    " User-supplied \"additionalHeaders\" cannot contain AUTHORIZATION header with" +
+                    " auth-type \"${RestLibConstants.TYPE_BASIC_AUTH}\""
+                WebClientUtils.log.error(errMsg)
+                throw BluePrintProcessorException(errMsg)
+            } else {
+                customHeaders.putAll(it)
+            }
+        }
+        return customHeaders
+    }
 }

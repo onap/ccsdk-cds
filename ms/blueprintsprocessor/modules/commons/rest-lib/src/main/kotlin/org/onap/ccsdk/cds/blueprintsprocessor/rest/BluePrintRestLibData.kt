@@ -1,6 +1,7 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
  * Modifications Copyright © 2019 Huawei.
+ * Modifications Copyright © 2019 Bell Canada.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +21,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.rest
 open class RestClientProperties {
     lateinit var type: String
     lateinit var url: String
+    var additionalHeaders: Map<String, String>? = null
 }
 
 open class SSLRestClientProperties : RestClientProperties() {
