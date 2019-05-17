@@ -35,6 +35,7 @@ open class ComponentCliExecutor(private var componentFunctionScriptingService: C
         const val SCRIPT_TYPE = "script-type"
         const val SCRIPT_CLASS_REFERENCE = "script-class-reference"
         const val INSTANCE_DEPENDENCIES = "instance-dependencies"
+        const val RESPONSE_DATA = "response-data"
     }
 
     private lateinit var scriptComponent: CliComponentFunction

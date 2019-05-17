@@ -26,17 +26,16 @@ import org.apache.velocity.VelocityContext
 import org.apache.velocity.app.Velocity
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintJsonNodeFactory
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintTemplateService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import java.io.StringWriter
 
-object BluePrintVelocityTemplateService: BlueprintTemplateService {
+object BluePrintVelocityTemplateService {
 
     /**
      * Generate Content from Velocity Template and JSON Content or property map.
      */
-    override suspend fun generateContent(template: String, json: String, ignoreJsonNull: Boolean, additionalContext:
-    MutableMap<String, Any>): String {
+    fun generateContent(template: String, json: String, ignoreJsonNull: Boolean = false,
+                                additionalContext: MutableMap<String, Any> = mutableMapOf()): String {
         Velocity.init()
         val mapper = ObjectMapper()
         val nodeFactory = BluePrintJsonNodeFactory()

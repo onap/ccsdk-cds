@@ -18,6 +18,8 @@
 
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.cli.executor.CliComponentFunction
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.cli.executor.ComponentCliExecutor
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.slf4j.LoggerFactory
 
 open class TestCliScriptFunction : CliComponentFunction() {
@@ -29,6 +31,44 @@ open class TestCliScriptFunction : CliComponentFunction() {
     }
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
+        log.info("Executing process")
+    }
+
+    override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
+        log.info("Executing Recovery")
+    }
+}
+
+
+open class Check : CliComponentFunction() {
+
+    private val log = LoggerFactory.getLogger(CliComponentFunction::class.java)!!
+
+    override fun getName(): String {
+        return "Check"
+    }
+
+    override suspend fun processNB(executionRequest: ExecutionServiceInput) {
+        // Get the Device Information from the DSL Model
+        val deviceInformation = bluePrintRuntimeService.resolveDSLExpression("device-properties")
+
+        // Get the Client Service
+        val sshClientService = bluePrintSshLibPropertyService().blueprintSshClientService(deviceInformation)
+
+        sshClientService.startSessionNB()
+
+        // Read Commands
+        val commands = readCommandLinesFromArtifact("command-template")
+
+        // Execute multiple Commands
+        val responseLog = sshClientService.executeCommandsNB(commands, 5000)
+
+        // Close Session
+        sshClientService.closeSessionNB()
+
+        // Set the Response Data
+        setAttribute(ComponentCliExecutor.RESPONSE_DATA, responseLog.asJsonPrimitive())
+
         log.info("Executing process")
     }
 
