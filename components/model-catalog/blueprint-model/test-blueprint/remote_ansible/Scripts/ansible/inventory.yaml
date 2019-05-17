@@ -1,0 +1,13 @@
+all:
+  children:
+    lab:
+      hosts:
+        nfx1:
+          ansible_ssh_host: "{{ ip }}"
+          ansible_network_os: junos
+
+  vars:
+    ansible_ssh_user: "{{ username }}"
+    ansible_ssh_pass: "{{ password }}"
+    ansible_connection: netconf
+    host_key_checking: False

@@ -1,0 +1,5 @@
+TOSCA-Meta-File-Version: 1.0.0
+CSAR-Version: 1.0
+Created-By: Serge Simard <serge@agilitae.com>
+Entry-Definitions: Definitions/remote_ansible.json
+Template-Tags: Serge Simard, remote_ansible

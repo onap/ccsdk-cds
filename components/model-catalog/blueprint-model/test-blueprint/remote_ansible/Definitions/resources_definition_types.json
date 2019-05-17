@@ -1,0 +1,16 @@
+{
+  "hostname" : {
+    "tags" : "hostname",
+    "name" : "hostname",
+    "property" : {
+      "description" : "hostname",
+      "type" : "string"
+    },
+    "updated-by" : "Simard, Serge <serge@agilitae.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      }
+    }
+  }
+}
