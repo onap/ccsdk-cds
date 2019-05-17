@@ -22,6 +22,9 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.Reso
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.ssh.SshLibConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.ssh.service.BluePrintSshLibPropertyService
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
+import org.onap.ccsdk.cds.controllerblueprints.core.readNBLines
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintTemplateService
 
 abstract class CliComponentFunction : AbstractScriptComponentFunction() {
 
@@ -30,6 +33,18 @@ abstract class CliComponentFunction : AbstractScriptComponentFunction() {
 
     open fun resourceResolutionService(): ResourceResolutionService =
             functionDependencyInstanceAsType(ResourceResolutionConstants.SERVICE_RESOURCE_RESOLUTION)
+
+
+    open suspend fun readCommandLinesFromArtifact(artifactName: String): List<String> {
+        val artifactDefinition = bluePrintRuntimeService.resolveNodeTemplateArtifactDefinition(nodeTemplateName, artifactName)
+        val file = normalizedFile(bluePrintRuntimeService.bluePrintContext().rootPath, artifactDefinition.file)
+        return file.readNBLines()
+    }
+
+    suspend fun generateMessage(artifactName: String, json: String): String {
+        val templateService = BluePrintTemplateService()
+        return templateService.generateContent(bluePrintRuntimeService, nodeTemplateName, artifactName, json, true)
+    }
 
 
     fun generateMessage(artifactName: String): String {

@@ -25,6 +25,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.util
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintFunctionNode
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintVelocityTemplateService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -85,7 +86,7 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
         if (valueToResolve.isEmpty() || !valueToResolve.contains("$")) {
             return valueToResolve
         }
-        return BluePrintVelocityTemplateService.generateContent(valueToResolve, additionalContext = keyMapping)
+        return BluePrintVelocityTemplateService.generateContent(valueToResolve, keyMapping.asJsonNode().toString())
     }
 
     final override suspend fun applyNB(resourceAssignment: ResourceAssignment): Boolean {

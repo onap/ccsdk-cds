@@ -23,9 +23,11 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.controllerblueprints.TestApplication
+import org.onap.ccsdk.cds.controllerblueprints.core.compress
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintEnhancerService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidatorService
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.cds.controllerblueprints.service.load.ModelTypeLoadService
 import org.onap.ccsdk.cds.controllerblueprints.service.load.ResourceDictionaryLoadService
