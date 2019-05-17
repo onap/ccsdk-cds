@@ -1,0 +1,118 @@
+{
+  "tosca_definitions_version": "controller_blueprint_1_0_0",
+  "metadata": {
+    "template_author": "Serge Simard",
+    "author-email": "serge@agilitae.com",
+    "user-groups": "ADMIN, OPERATION",
+    "template_name": "remote_ansible",
+    "template_version": "1.0.0",
+    "template_tags": "tosca"
+  },
+  "imports": [
+    {
+      "file": "Definitions/data_types.json"
+    },
+    {
+      "file": "Definitions/relationship_types.json"
+    },
+    {
+      "file": "Definitions/artifact_types.json"
+    },
+    {
+      "file": "Definitions/node_types.json"
+    },
+    {
+      "file": "Definitions/policy_types.json"
+    }
+  ],
+  "dsl_definitions": {
+    "remote-argument-properties": {
+      "input": {
+        "get_input": "input"
+      }
+    },
+    "ansible-argument-properties": {
+      "arg0": "-i",
+      "arg1": "Scripts/ansible/inventory.yaml",
+      "arg2": "--extra-vars"
+    }
+  },
+  "topology_template": {
+    "workflows": {
+      "execute-remote-ansible": {
+        "steps": {
+          "execute-script": {
+            "description": "Execute Remote Ansible Script",
+            "target": "execute-remote-ansible-process",
+            "activities": [
+              {
+                "call_operation": ""
+              }
+            ]
+          }
+        },
+        "inputs": {
+          "ip": {
+            "required": false,
+            "type": "string"
+          },
+          "username": {
+            "required": false,
+            "type": "string"
+          },
+          "password": {
+            "required": false,
+            "type": "string"
+          },
+          "execute-remote-ansible-properties": {
+            "description": "Dynamic PropertyDefinition for workflow(execute-remote-ansible).",
+            "required": true,
+            "type": "dt-execute-remote-ansible-properties"
+          }
+        },
+        "outputs": {
+          "execute-command-status": {
+            "type": "string",
+            "value": {
+              "get_attribute": [
+                "execute-remote-ansible",
+                "execute-command-status"
+              ]
+            }
+          },
+          "execute-command-logs": {
+            "type": "string",
+            "value": {
+              "get_attribute": [
+                "execute-remote-ansible",
+                "execute-command-logs"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "node_templates": {
+      "execute-remote-ansible": {
+        "type": "component-remote-ansible-executor",
+        "interfaces": {
+          "ComponentRemoteAnsibleExecutor": {
+            "operations": {
+              "process": {
+                "inputs": {
+                  "endpoint-selector": "awx",
+                  "job-template-name": "CDS_job_template",
+                  "limit": "",
+                  "inventory": "1",
+                  "extra-vars": [],
+                  "tags": "",
+                  "skip-tags": ""
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
