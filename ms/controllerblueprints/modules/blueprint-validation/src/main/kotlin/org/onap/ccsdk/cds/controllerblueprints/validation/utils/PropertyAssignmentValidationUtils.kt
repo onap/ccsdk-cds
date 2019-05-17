@@ -51,7 +51,7 @@ open class PropertyAssignmentValidationUtils(private val bluePrintContext: BlueP
                                          properties: MutableMap<String, JsonNode>) {
         properties.forEach { propertyName, propertyAssignment ->
             val propertyDefinition: PropertyDefinition = nodeTypeProperties[propertyName]
-                    ?: throw BluePrintException("failed to get definition for the property ($propertyName)")
+                    ?: throw BluePrintException("validatePropertyAssignments failed to get definition for the property ($propertyName)")
 
             validatePropertyAssignment(propertyName, propertyDefinition, propertyAssignment)
 
@@ -91,7 +91,7 @@ open class PropertyAssignmentValidationUtils(private val bluePrintContext: BlueP
         }
 
         check(isValid) {
-            throw BluePrintException("property($propertyName) defined of type($propertyType) is not comptable with the value ($propertyAssignment)")
+            throw BluePrintException("property($propertyName) defined of type($propertyType) is not compatible with the value ($propertyAssignment)")
         }
     }
 

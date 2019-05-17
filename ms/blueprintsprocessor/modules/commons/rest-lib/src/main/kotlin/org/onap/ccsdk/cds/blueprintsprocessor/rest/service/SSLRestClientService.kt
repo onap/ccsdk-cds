@@ -33,25 +33,31 @@ import java.io.FileInputStream
 import java.security.KeyStore
 import java.security.cert.X509Certificate
 
-class SSLRestClientService(private val restClientProperties:
-                           SSLRestClientProperties) :
-        BlueprintWebClientService {
+class SSLRestClientService(private val restClientProperties: SSLRestClientProperties) :
+    BlueprintWebClientService {
 
     var auth: BlueprintWebClientService? = null
 
     init {
-         auth = getAuthService()
+        auth = getAuthService()
     }
 
-    private fun getAuthService() : BlueprintWebClientService? {
-
-        return when(restClientProperties) {
+    private fun getAuthService(): BlueprintWebClientService? {
+        //type,url and additional headers don't get carried over to TokenAuthRestClientProperties from SSLTokenAuthRestClientProperties
+        //set them in auth obj to be consistent. TODO: refactor
+        return when (restClientProperties) {
             is SSLBasicAuthRestClientProperties -> {
-                val basic =  restClientProperties.basicAuth!!
-                BasicAuthRestClientService(basic)
+                val basicAuthProps = restClientProperties.basicAuth!!
+                basicAuthProps.additionalHeaders = restClientProperties.additionalHeaders
+                basicAuthProps.url = restClientProperties.url
+                basicAuthProps.type = restClientProperties.type
+                BasicAuthRestClientService(basicAuthProps)
             }
             is SSLTokenAuthRestClientProperties -> {
-                val token =  restClientProperties.tokenAuth!!
+                val token = restClientProperties.tokenAuth!!
+                token.additionalHeaders = restClientProperties.additionalHeaders
+                token.url = restClientProperties.url
+                token.type = restClientProperties.type
                 TokenAuthRestClientService(token)
             }
             else -> {
@@ -61,19 +67,16 @@ class SSLRestClientService(private val restClientProperties:
         }
     }
 
-
     override fun defaultHeaders(): Map<String, String> {
-
         if (auth != null) {
             return auth!!.defaultHeaders()
         }
         return mapOf(
-                HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE,
-                HttpHeaders.ACCEPT to MediaType.APPLICATION_JSON_VALUE)
+            HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE,
+            HttpHeaders.ACCEPT to MediaType.APPLICATION_JSON_VALUE)
     }
 
     override fun host(uri: String): String {
-
         return restClientProperties.url + uri
     }
 
@@ -85,8 +88,9 @@ class SSLRestClientService(private val restClientProperties:
         val sslTrust = restClientProperties.sslTrust
         val sslTrustPwd = restClientProperties.sslTrustPassword
 
-        val acceptingTrustStrategy = { chain: Array<X509Certificate>,
-                                       authType: String -> true }
+        val acceptingTrustStrategy = {
+            _: Array<X509Certificate>, _: String -> true
+        }
         val sslContext = SSLContextBuilder.create()
 
         if (sslKey != null && sslKeyPwd != null) {
@@ -98,13 +102,12 @@ class SSLRestClientService(private val restClientProperties:
         }
 
         sslContext.loadTrustMaterial(File(sslTrust), sslTrustPwd.toCharArray(),
-                acceptingTrustStrategy)
+            acceptingTrustStrategy)
         val csf = SSLConnectionSocketFactory(sslContext.build())
         return HttpClients.custom()
-                .addInterceptorFirst(WebClientUtils.logRequest())
-                .addInterceptorLast(WebClientUtils.logResponse())
-                .setSSLSocketFactory(csf).build()
-
+            .addInterceptorFirst(WebClientUtils.logRequest())
+            .addInterceptorLast(WebClientUtils.logResponse())
+            .setSSLSocketFactory(csf).build()
     }
 
     // Non Blocking Rest Implementation
@@ -113,13 +116,13 @@ class SSLRestClientService(private val restClientProperties:
     }
 
     override fun convertToBasicHeaders(headers: Map<String, String>): Array<BasicHeader> {
-        var head1: Map<String, String> = defaultHeaders()
-        var head2: MutableMap<String, String> = head1.toMutableMap()
-        head2.putAll(headers)
+        val mergedDefaultAndSuppliedHeaders = defaultHeaders().plus(headers)
         if (auth != null) {
-            return auth!!.convertToBasicHeaders(head2)
+            return auth!!.convertToBasicHeaders(mergedDefaultAndSuppliedHeaders)
         }
-        return super.convertToBasicHeaders(head2)
+        //inject additionalHeaders
+        return super.convertToBasicHeaders(mergedDefaultAndSuppliedHeaders
+            .plus(verifyAdditionalHeaders(restClientProperties)))
     }
 
 }

@@ -86,42 +86,34 @@ open class BluePrintRestLibPropertyService(private var bluePrintProperties:
         val type = jsonNode.get("type").textValue()
         return when (type) {
             RestLibConstants.TYPE_TOKEN_AUTH -> {
-                JacksonUtils.readValue(jsonNode,
-                        TokenAuthRestClientProperties::class.java)!!
+                JacksonUtils.readValue(jsonNode, TokenAuthRestClientProperties::class.java)!!
             }
             RestLibConstants.TYPE_BASIC_AUTH -> {
-                JacksonUtils.readValue(jsonNode,
-                        BasicAuthRestClientProperties::class.java)!!
+                JacksonUtils.readValue(jsonNode, BasicAuthRestClientProperties::class.java)!!
             }
             RestLibConstants.TYPE_DME2_PROXY -> {
-                JacksonUtils.readValue(jsonNode,
-                        DME2RestClientProperties::class.java)!!
+                JacksonUtils.readValue(jsonNode, DME2RestClientProperties::class.java)!!
             }
             RestLibConstants.TYPE_POLICY_MANAGER -> {
-                JacksonUtils.readValue(jsonNode,
-                        PolicyManagerRestClientProperties::class.java)!!
+                JacksonUtils.readValue(jsonNode, PolicyManagerRestClientProperties::class.java)!!
             }
             RestLibConstants.TYPE_SSL_BASIC_AUTH -> {
-                JacksonUtils.readValue(jsonNode,
-                        SSLBasicAuthRestClientProperties::class.java)!!
+                JacksonUtils.readValue(jsonNode, SSLBasicAuthRestClientProperties::class.java)!!
             }
             RestLibConstants.TYPE_SSL_TOKEN_AUTH -> {
-                JacksonUtils.readValue(jsonNode,
-                        SSLTokenAuthRestClientProperties::class.java)!!
+                JacksonUtils.readValue(jsonNode, SSLTokenAuthRestClientProperties::class.java)!!
             }
             RestLibConstants.TYPE_SSL_NO_AUTH -> {
-                JacksonUtils.readValue(
-                        jsonNode, SSLRestClientProperties::class.java)!!
+                JacksonUtils.readValue(jsonNode, SSLRestClientProperties::class.java)!!
             }
             else -> {
-                throw BluePrintProcessorException("Rest adaptor($type) is" +
-                        " not supported")
+                throw BluePrintProcessorException(
+                    "Rest adaptor($type) is not supported")
             }
         }
     }
     
-    private fun blueprintWebClientService(
-            restClientProperties: RestClientProperties):
+    private fun blueprintWebClientService(restClientProperties: RestClientProperties):
             BlueprintWebClientService {
 
         when (restClientProperties) {

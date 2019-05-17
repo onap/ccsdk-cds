@@ -28,11 +28,14 @@ import org.apache.http.entity.StringEntity
 import org.apache.http.impl.client.CloseableHttpClient
 import org.apache.http.impl.client.HttpClients
 import org.apache.http.message.BasicHeader
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestLibConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.utils.WebClientUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintRetryException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintIOUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import java.io.IOException
 import java.io.InputStream
@@ -82,10 +85,12 @@ interface BlueprintWebClientService {
             HttpMethod.POST -> post(path, request, convertedHeaders, String::class.java)
             HttpMethod.PUT -> put(path, request, convertedHeaders, String::class.java)
             HttpMethod.PATCH -> patch(path, request, convertedHeaders, String::class.java)
-            else -> throw BluePrintProcessorException("Unsupported methodType($methodType)")
+            else -> throw BluePrintProcessorException(
+                "Unsupported methodType($methodType) attempted on path($path)")
         }
     }
 
+    //TODO: convert to multi-map
     fun convertToBasicHeaders(headers: Map<String, String>): Array<BasicHeader> {
         return headers.map { BasicHeader(it.key, it.value) }.toTypedArray()
     }
@@ -270,4 +275,22 @@ interface BlueprintWebClientService {
 
     //TODO maybe there could be cases where we care about return headers?
     data class WebClientResponse<T>(val status: Int, val body: T)
+
+    fun verifyAdditionalHeaders(restClientProperties: RestClientProperties): Map<String, String> {
+        val customHeaders: MutableMap<String, String> = mutableMapOf()
+        //Extract additionalHeaders from the requestProperties and
+        //throw an error if HttpHeaders.AUTHORIZATION key (headers are case-insensitive)
+        restClientProperties.additionalHeaders?.let {
+            if (it.keys.map { k -> k.toLowerCase().trim() }.contains(HttpHeaders.AUTHORIZATION.toLowerCase())) {
+                val errMsg = "Error in definition of endpoint ${restClientProperties.url}." +
+                    " User-supplied \"additionalHeaders\" cannot contain AUTHORIZATION header with" +
+                    " auth-type \"${RestLibConstants.TYPE_BASIC_AUTH}\""
+                WebClientUtils.log.error(errMsg)
+                throw BluePrintProcessorException(errMsg)
+            } else {
+                customHeaders.putAll(it)
+            }
+        }
+        return customHeaders
+    }
 }
