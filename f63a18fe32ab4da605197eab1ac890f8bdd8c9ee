@@ -22,6 +22,30 @@
       "revId": "f63a18fe32ab4da605197eab1ac890f8bdd8c9ee",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf7a09dd_8866452a",
+        "filename": "ms/blueprintsprocessor/functions/cli-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/cli/executor/CliExecutorConfiguration.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-05-17T17:35:39Z",
+      "side": 1,
+      "message": "Alexi, Global enablement is in next commits, which has dependency management and application property options.\nPlease let me know, if i need to have that functionality in this commit.",
+      "parentUuid": "7d143511_20d5e98f",
+      "range": {
+        "startLine": 27,
+        "startChar": 32,
+        "endLine": 27,
+        "endChar": 62
+      },
+      "revId": "f63a18fe32ab4da605197eab1ac890f8bdd8c9ee",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
