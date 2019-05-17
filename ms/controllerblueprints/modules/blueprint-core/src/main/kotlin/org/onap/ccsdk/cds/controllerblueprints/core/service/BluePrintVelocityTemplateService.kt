@@ -26,35 +26,50 @@ import org.apache.velocity.VelocityContext
 import org.apache.velocity.app.Velocity
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintJsonNodeFactory
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintTemplateService
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.removeNullNode
 import java.io.StringWriter
 
-object BluePrintVelocityTemplateService: BlueprintTemplateService {
+object BluePrintVelocityTemplateService {
 
     /**
-     * Generate Content from Velocity Template and JSON Content or property map.
+     * Generate Content from Velocity Template and JSON Content with injected API
      */
-    override suspend fun generateContent(template: String, json: String, ignoreJsonNull: Boolean, additionalContext:
-    MutableMap<String, Any>): String {
-        Velocity.init()
+    fun generateContent(template: String, json: String, ignoreJsonNull: Boolean = false,
+                        additionalContext: MutableMap<String, Any> = mutableMapOf()): String {
+
+        // Customized Object Mapper to remove String double quotes
         val mapper = ObjectMapper()
         val nodeFactory = BluePrintJsonNodeFactory()
         mapper.nodeFactory = nodeFactory
+
+        val jsonNode: JsonNode? = if (json.isNotEmpty()) {
+            mapper.readValue(json, JsonNode::class.java)
+                    ?: throw BluePrintProcessorException("couldn't get json node from json")
+        } else {
+            null
+        }
+        return generateContent(template, jsonNode, ignoreJsonNull, additionalContext)
+    }
+
+    /**
+     * Generate Content from Velocity Template and JSON Node with injected API
+     */
+    fun generateContent(template: String, jsonNode: JsonNode?, ignoreJsonNull: Boolean = false,
+                        additionalContext: MutableMap<String, Any> = mutableMapOf()): String {
+
+        Velocity.init()
 
         val velocityContext = VelocityContext()
         velocityContext.put("StringUtils", StringUtils::class.java)
         velocityContext.put("BooleanUtils", BooleanUtils::class.java)
 
         // Add the Custom Velocity Context API
-        additionalContext.forEach { name, value -> velocityContext.put(name, value) }
+        additionalContext.forEach { (name, value) -> velocityContext.put(name, value) }
 
         // Add the JSON Data to the context
-        if (json.isNotEmpty()) {
-            val jsonNode = mapper.readValue<JsonNode>(json, JsonNode::class.java)
-                    ?: throw BluePrintProcessorException("couldn't get json node from json")
+        if (jsonNode != null) {
             if (ignoreJsonNull)
-                JacksonUtils.removeJsonNullNode(jsonNode)
+                jsonNode.removeNullNode()
             jsonNode.fields().forEach { entry ->
                 velocityContext.put(entry.key, entry.value)
             }
@@ -64,6 +79,7 @@ object BluePrintVelocityTemplateService: BlueprintTemplateService {
         Velocity.evaluate(velocityContext, stringWriter, "TemplateData", template)
         stringWriter.flush()
         return stringWriter.toString()
+
     }
 }
 

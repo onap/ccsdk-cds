@@ -21,6 +21,7 @@ package org.onap.ccsdk.cds.controllerblueprints.core.service
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.test.context.junit4.SpringRunner
@@ -40,13 +41,13 @@ class BluePrintTemplateServiceTest {
 
     @Test
     fun testVelocityGeneratedContent() {
-       runBlocking {
-           val template = JacksonUtils.getClassPathFileContent("templates/base-config-velocity-template.vtl")
-           val json = JacksonUtils.getClassPathFileContent("templates/base-config-data-velocity.json")
+        runBlocking {
+            val template = JacksonUtils.getClassPathFileContent("templates/base-config-velocity-template.vtl")
+            val json = JacksonUtils.getClassPathFileContent("templates/base-config-data-velocity.json")
 
-           val content = BluePrintVelocityTemplateService.generateContent(template, json)
-           assertNotNull(content, "failed to generate content for velocity template")
-       }
+            val content = BluePrintVelocityTemplateService.generateContent(template, json)
+            assertNotNull(content, "failed to generate content for velocity template")
+        }
 
     }
 
@@ -68,13 +69,12 @@ class BluePrintTemplateServiceTest {
     @Test
     fun testVelocityGeneratedContentFromFiles() {
         runBlocking {
-            val bluePrintTemplateService = BluePrintTemplateService(blueprintRuntime,
-                    "resource-assignment", "baseconfig-template")
+            val bluePrintTemplateService = BluePrintTemplateService()
             val templateFile = "templates/base-config-velocity-template.vtl"
             val jsonFile = "templates/base-config-data-velocity.json"
 
             val content = bluePrintTemplateService.generateContentFromFiles(
-                    templateFile, jsonFile, false, mutableMapOf())
+                    templateFile, BluePrintConstants.ARTIFACT_VELOCITY_TYPE_NAME, jsonFile, false, mutableMapOf())
             assertNotNull(content, "failed to generate content for velocity template")
         }
 
@@ -86,14 +86,13 @@ class BluePrintTemplateServiceTest {
             var element: MutableMap<String, Any> = mutableMapOf()
             element["additional_array"] = arrayListOf(hashMapOf("name" to "Element1", "location" to "Region0"), hashMapOf("name" to "Element2", "location" to "Region1"))
 
-            val bluePrintTemplateService = BluePrintTemplateService(blueprintRuntime,
-                    "resource-assignment", "another-template")
+            val bluePrintTemplateService = BluePrintTemplateService()
 
             val templateFile = "templates/base-config-jinja-template.jinja"
             val jsonFile = "templates/base-config-data-jinja.json"
 
             val content = bluePrintTemplateService.generateContentFromFiles(
-                    templateFile,
+                    templateFile, BluePrintConstants.ARTIFACT_JINJA_TYPE_NAME,
                     jsonFile, false, element)
             assertNotNull(content, "failed to generate content for velocity template")
         }

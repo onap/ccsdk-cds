@@ -16,15 +16,22 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.ssh.service
 
+import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.ssh.BasicAuthSshClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.ssh.SshClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.ssh.SshLibConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.stereotype.Service
 
 @Service(SshLibConstants.SERVICE_BLUEPRINT_SSH_LIB_PROPERTY)
 open class BluePrintSshLibPropertyService(private var bluePrintProperties: BluePrintProperties) {
+
+    fun blueprintSshClientService(jsonNode: JsonNode): BlueprintSshClientService {
+        val restClientProperties = sshClientProperties(jsonNode)
+        return blueprintSshClientService(restClientProperties)
+    }
 
     fun blueprintSshClientService(selector: String): BlueprintSshClientService {
         val prefix = "${SshLibConstants.PROPERTY_SSH_CLIENT_PREFIX}$selector"
@@ -37,6 +44,19 @@ open class BluePrintSshLibPropertyService(private var bluePrintProperties: BlueP
         return when (type) {
             SshLibConstants.TYPE_BASIC_AUTH -> {
                 basicAuthSshClientProperties(prefix)
+            }
+            else -> {
+                throw BluePrintProcessorException("SSH adaptor($type) is not supported")
+            }
+        }
+    }
+
+    fun sshClientProperties(jsonNode: JsonNode): SshClientProperties {
+        val type = jsonNode.get("type").textValue()
+        return when (type) {
+            SshLibConstants.TYPE_BASIC_AUTH -> {
+                JacksonUtils.readValue(jsonNode,
+                        BasicAuthSshClientProperties::class.java)!!
             }
             else -> {
                 throw BluePrintProcessorException("SSH adaptor($type) is not supported")

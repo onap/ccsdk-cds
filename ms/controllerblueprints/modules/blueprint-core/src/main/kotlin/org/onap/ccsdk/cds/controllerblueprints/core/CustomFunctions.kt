@@ -122,6 +122,18 @@ fun JsonNode.rootFieldsToMap(): MutableMap<String, JsonNode> {
     }
 }
 
+fun JsonNode.removeNullNode() {
+    val it = this.iterator()
+    while (it.hasNext()) {
+        val child = it.next()
+        if (child.isNull) {
+            it.remove()
+        } else {
+            child.removeNullNode()
+        }
+    }
+}
+
 
 fun MutableMap<String, JsonNode>.putJsonElement(key: String, value: Any) {
     val convertedValue = value.asJsonType()
