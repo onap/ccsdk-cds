@@ -1,0 +1,86 @@
+{
+  "node_types" : {
+    "component-remote-ansible-executor" : {
+      "description" : "Remote Ansible (AWX) Execution Component.",
+      "version" : "1.0.0",
+      "attributes" : {
+        "ansible-command-status" : {
+          "required" : false,
+          "type" : "string"
+        },
+        "ansible-command-logs" : {
+          "required" : false,
+          "type" : "string"
+        }
+      },
+      "capabilities" : {
+        "component-node" : {
+          "type" : "tosca.capabilities.Node"
+        }
+      },
+      "interfaces" : {
+        "ComponentRemoteAnsibleExecutor" : {
+          "operations" : {
+            "process" : {
+              "inputs" : {
+                "job-template-name" : {
+                  "description" : "Job template to execute in AWX",
+                  "required" : true,
+                  "type" : "string"
+                },
+                "limit" : {
+                  "description" : "Limit to this comma-separated list of hosts.",
+                  "required" : false,
+                  "type" : "string"
+                },
+                "inventory" : {
+                  "description" : "Use this hosts inventory ID for this run.",
+                  "required" : false,
+                  "type" : "string"
+                },
+                "tags" : {
+                  "description" : "Limit this run to comma-separated list of tags.",
+                  "required" : false,
+                  "type" : "string"
+                },
+                "skip-tags" : {
+                  "description" : "Skip this comma-separated list of tags for this run.",
+                  "required" : false,
+                  "type" : "string"
+                },
+                "extra-vars" : {
+                  "description" : "Specify extra args for this run.",
+                  "required" : false,
+                  "type" : "json"
+                },
+                "endpoint-selector" : {
+                  "description" : "Remote AWX Server selector name.",
+                  "required" : false,
+                  "type" : "string",
+                  "default" : "awx-remote-server"
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from" : "tosca.nodes.Component"
+    },
+
+    "tosca.nodes.Component" : {
+      "description" : "This is default Component Node",
+      "version" : "1.0.0",
+      "derived_from" : "tosca.nodes.Root"
+    },
+    "tosca.nodes.ResourceSource" : {
+      "description" : "TOSCA base type for Resource Sources",
+      "version" : "1.0.0",
+      "derived_from" : "tosca.nodes.Root"
+    },
+    "tosca.nodes.Workflow" : {
+      "description" : "This is Directed Graph Node Type",
+      "version" : "1.0.0",
+      "derived_from" : "tosca.nodes.Root"
+    }
+  }
+}

@@ -56,6 +56,9 @@ open class BluePrintRestLibPropertyService(private var bluePrintProperties:
             RestLibConstants.TYPE_BASIC_AUTH -> {
                 basicAuthRestClientProperties(prefix)
             }
+            RestLibConstants.TYPE_TOKEN_AUTH -> {
+                tokenRestClientProperties(prefix)
+            }
             RestLibConstants.TYPE_SSL_BASIC_AUTH -> {
                 sslBasicAuthRestClientProperties(prefix)
             }
@@ -139,6 +142,12 @@ open class BluePrintRestLibPropertyService(private var bluePrintProperties:
                         "service for")
             }
         }
+    }
+
+    private fun tokenRestClientProperties(prefix: String):
+            TokenAuthRestClientProperties {
+        return bluePrintProperties.propertyBeanType(
+                prefix, TokenAuthRestClientProperties::class.java)
     }
 
     private fun basicAuthRestClientProperties(prefix: String):
