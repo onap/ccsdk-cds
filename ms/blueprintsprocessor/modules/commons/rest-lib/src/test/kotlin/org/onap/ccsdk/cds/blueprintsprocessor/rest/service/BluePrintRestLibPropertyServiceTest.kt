@@ -28,11 +28,15 @@ import org.onap.ccsdk.cds.blueprintsprocessor.rest.BluePrintRestLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLBasicAuthRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLTokenAuthRestClientProperties
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
@@ -232,6 +236,121 @@ class BluePrintRestLibPropertyServiceTest {
                 .blueprintWebClientService(actualObj)
         assertNotNull(blueprintWebClientService, "failed to create blu" +
                 "eprintWebClientService")
+    }
+
+    //Don't forget to supply "," as the first char to make valid JSON
+    private fun basicAuthEndpointWithHeadersField(headers:String ):String =
+        """{
+          "type": "basic-auth",
+          "url": "http://127.0.0.1:8000",
+          "username": "user",
+          "password": "pass"$headers
+        }"""
+
+
+    @Test
+    fun `BasicAuth WebClientService with empty additionalHeaders do not modify headers`() {
+        val endPointJson = basicAuthEndpointWithHeadersField("")
+        val endPointWithHeadersJson = basicAuthEndpointWithHeadersField(""",
+          "additionalHeaders" : {
+          }""")
+
+        val parsedObj: JsonNode = defaultMapper.readTree(endPointJson)
+        val bpWebClientService =
+            bluePrintRestLibPropertyService.blueprintWebClientService(parsedObj)
+        val extractedHeaders = bpWebClientService.convertToBasicHeaders(mapOf())
+
+        val parsedObjWithHeaders: JsonNode = defaultMapper.readTree(endPointWithHeadersJson)
+        val bpWebClientServiceWithHeaders =
+            bluePrintRestLibPropertyService.blueprintWebClientService(parsedObjWithHeaders)
+        val extractedHeadersWithAdditionalHeaders = bpWebClientServiceWithHeaders.convertToBasicHeaders(mapOf())
+        //Array<BasicHeader<>> -> Map<String,String>
+        val headersMap = extractedHeaders.map { it.name to it.value }.toMap()
+        val additionalHeadersMap = extractedHeadersWithAdditionalHeaders.map { it.name to it.value }.toMap()
+        assertEquals(headersMap, additionalHeadersMap)
+    }
+
+    @Test
+    fun `BasicAuth WebClientService accepts additionalHeaders`() {
+        val keyname = "key1"
+        val endPointWithHeadersJson = basicAuthEndpointWithHeadersField(""",
+          "additionalHeaders" : {
+            "$keyname": "value1"
+          }""")
+
+        val parsedObj: JsonNode = defaultMapper.readTree(endPointWithHeadersJson)
+        val bpWebClientService =
+            bluePrintRestLibPropertyService.blueprintWebClientService(parsedObj)
+        val extractedHeaders = bpWebClientService.convertToBasicHeaders(mapOf())
+        assertEquals(extractedHeaders.filter { it.name == keyname }.count(), 1)
+    }
+
+
+    @Test
+    fun `BasicAuth WebClientService accepts multiple additionalHeaders`() {
+        val endPointWithHeadersJson = basicAuthEndpointWithHeadersField(""",
+          "additionalHeaders" : {
+            "key1": "value1",
+            "key2": "value2",
+            "key3": "value3"
+          }""")
+
+        val parsedObj: JsonNode = defaultMapper.readTree(endPointWithHeadersJson)
+        val bpWebClientService =
+            bluePrintRestLibPropertyService.blueprintWebClientService(parsedObj)
+        val extractedHeaders = bpWebClientService.convertToBasicHeaders(mapOf())
+        assertEquals(extractedHeaders.filter { it.name == "key1"}.count(), 1)
+        assertEquals(extractedHeaders.filter { it.name == "key2"}.count(), 1)
+        assertEquals(extractedHeaders.filter { it.name == "key3"}.count(), 1)
+    }
+
+    @Test
+    fun `BasicAuth WebClientService additionalHeaders can overwrite default Content-Type`() {
+        val endPointWithHeadersJson = basicAuthEndpointWithHeadersField(""",
+          "additionalHeaders" : {
+            "${HttpHeaders.CONTENT_TYPE}": "${MediaType.APPLICATION_XML}"
+          }""")
+
+        val parsedObj: JsonNode = defaultMapper.readTree(endPointWithHeadersJson)
+        val bpWebClientService =
+            bluePrintRestLibPropertyService.blueprintWebClientService(parsedObj)
+        val extractedHeaders = bpWebClientService.convertToBasicHeaders(mapOf())
+        assertEquals(MediaType.APPLICATION_XML.toString(),
+            extractedHeaders.filter { it.name == HttpHeaders.CONTENT_TYPE }[0].value!!)
+    }
+
+    @Test
+    fun `BasicAuth WebClientService throws BlueprintProcessorException if additionalHeaders contain Authorization`() {
+        assertFailsWith(exceptionClass = BluePrintProcessorException::class) {
+            val endPointWithHeadersJson = basicAuthEndpointWithHeadersField(""",
+              "additionalHeaders" : {
+                 "Authorization": "Basic aGF2ZTphbmljZWRheQo="
+              }""")
+
+            val parsedObj: JsonNode = defaultMapper.readTree(endPointWithHeadersJson)
+            val bpWebClientService =
+                bluePrintRestLibPropertyService.blueprintWebClientService(parsedObj)
+            bpWebClientService.convertToBasicHeaders(mapOf())
+        }
+    }
+
+    @Test
+    fun `BasicAuth WebClientService throws BlueprintProcessorException if additionalHeaders contain lowercase auth`() {
+        assertFailsWith(exceptionClass = BluePrintProcessorException::class) {
+            val endPointWithHeadersJson = basicAuthEndpointWithHeadersField(""",
+              "additionalHeaders" : {
+                 "authorization": "Basic aGF2ZTphbmljZWRheQo="
+              }""")
+
+            val parsedObj: JsonNode = defaultMapper.readTree(endPointWithHeadersJson)
+            val bpWebClientService =
+                bluePrintRestLibPropertyService.blueprintWebClientService(parsedObj)
+            bpWebClientService.convertToBasicHeaders(mapOf())
+        }
+    }
+
+    companion object BluePRintRestLibPropertyServiceTest {
+        val defaultMapper = ObjectMapper()
     }
 }
 

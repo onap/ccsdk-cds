@@ -17,7 +17,10 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.rest.service
 
 import org.apache.http.message.BasicHeader
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestLibConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.TokenAuthRestClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.utils.WebClientUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 
@@ -37,6 +40,17 @@ class TokenAuthRestClientService(private val restClientProperties:
             Array<BasicHeader> {
 
         val customHeaders: MutableMap<String, String> = headers.toMutableMap()
+        restClientProperties.additionalHeaders?.let {
+            if (it.keys.map { k -> k.toLowerCase().trim() }.contains(HttpHeaders.AUTHORIZATION.toLowerCase())) {
+                val errMsg = "Error in definition of endpoint ${restClientProperties.url}." +
+                    " User-supplied \"additionalHeaders\" cannot contain AUTHORIZATION header with" +
+                    " auth-type \"${RestLibConstants.TYPE_TOKEN_AUTH}\""
+                WebClientUtils.log.error(errMsg)
+                throw BluePrintProcessorException(errMsg)
+            } else {
+                customHeaders.putAll(it)
+            }
+        }
         if (!headers.containsKey(HttpHeaders.AUTHORIZATION)) {
             customHeaders[HttpHeaders.AUTHORIZATION] = restClientProperties.token!!
         }
