@@ -18,6 +18,9 @@ package org.onap.ccsdk.cds.blueprintsprocessor.rest.service
 
 import org.apache.http.message.BasicHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestLibConstants
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.utils.WebClientUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import java.nio.charset.Charset
@@ -25,16 +28,22 @@ import java.util.*
 
 class BasicAuthRestClientService(private val restClientProperties:
                                  BasicAuthRestClientProperties) :
-        BlueprintWebClientService {
+    BlueprintWebClientService {
+    //TODO: maybe fail-fast in constructor is preferable?
+    /* init {
+         if(restClientProperties.additionalHeaders!!.containsKey(HttpHeaders.AUTHORIZATION))
+             throw BluePrintProcessorException("additionalHeaders cannot contain Authorization header")
+     }*/
+
 
     override fun defaultHeaders(): Map<String, String> {
 
         val encodedCredentials = setBasicAuth(restClientProperties.username,
-                restClientProperties.password)
+            restClientProperties.password)
         return mapOf(
-                HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE,
-                HttpHeaders.ACCEPT to MediaType.APPLICATION_JSON_VALUE,
-                HttpHeaders.AUTHORIZATION to "Basic $encodedCredentials")
+            HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE,
+            HttpHeaders.ACCEPT to MediaType.APPLICATION_JSON_VALUE,
+            HttpHeaders.AUTHORIZATION to "Basic $encodedCredentials")
     }
 
     override fun host(uri: String): String {
@@ -42,15 +51,28 @@ class BasicAuthRestClientService(private val restClientProperties:
     }
 
     override fun convertToBasicHeaders(headers: Map<String, String>):
-            Array<BasicHeader> {
-
+        Array<BasicHeader> {
         val customHeaders: MutableMap<String, String> = headers.toMutableMap()
+        //Extract additionalHeaders from the requestProperties and
+        //throw an error if HttpHeaders.AUTHORIZATION key (headers are case-insensitive)
+        restClientProperties.additionalHeaders?.let {
+            if (it.keys.map { k -> k.toLowerCase().trim() }.contains(HttpHeaders.AUTHORIZATION.toLowerCase())) {
+                val errMsg = "Error in definition of endpoint ${restClientProperties.url}." +
+                    " User-supplied \"additionalHeaders\" cannot contain AUTHORIZATION header with" +
+                    " auth-type \"${RestLibConstants.TYPE_BASIC_AUTH}\""
+                WebClientUtils.log.error(errMsg)
+                throw BluePrintProcessorException(errMsg)
+            } else {
+                customHeaders.putAll(it)
+            }
+        }
+
         if (!headers.containsKey(HttpHeaders.AUTHORIZATION)) {
             val encodedCredentials = setBasicAuth(
-                    restClientProperties.username,
-                    restClientProperties.password)
+                restClientProperties.username,
+                restClientProperties.password)
             customHeaders[HttpHeaders.AUTHORIZATION] =
-                    "Basic $encodedCredentials"
+                "Basic $encodedCredentials"
         }
         return super.convertToBasicHeaders(customHeaders)
     }
@@ -59,7 +81,7 @@ class BasicAuthRestClientService(private val restClientProperties:
 
         val credentialsString = "$username:$password"
         return Base64.getEncoder().encodeToString(
-                credentialsString.toByteArray(Charset.defaultCharset()))
+            credentialsString.toByteArray(Charset.defaultCharset()))
     }
 
 
