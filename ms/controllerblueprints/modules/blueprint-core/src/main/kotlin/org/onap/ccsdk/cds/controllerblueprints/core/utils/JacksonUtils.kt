@@ -58,19 +58,6 @@ class JacksonUtils {
             return objectMapper.treeToValue(node, valueType)
         }
 
-        fun removeJsonNullNode(node: JsonNode) {
-            val it = node.iterator()
-            while (it.hasNext()) {
-                val child = it.next()
-                if (child.isNull) {
-                    it.remove()
-                } else {
-                    removeJsonNullNode(child)
-                }
-            }
-        }
-
-
         fun getContent(fileName: String): String = runBlocking {
             try {
                 normalizedFile(fileName).readNBText()

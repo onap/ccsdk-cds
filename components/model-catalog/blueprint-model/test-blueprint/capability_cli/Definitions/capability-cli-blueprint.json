@@ -1,0 +1,83 @@
+{
+  "tosca_definitions_version": "controller_blueprint_1_0_0",
+  "metadata": {
+    "template_author": "Brinda Santh Muthuramalingam",
+    "author-email": "brindasanth@in.ibm.com",
+    "user-groups": "ADMIN, OPERATION",
+    "template_name": "capability-cli",
+    "template_version": "1.0.0",
+    "template_tags": "brinda, tosca"
+  },
+  "imports": [
+    {
+      "file": "Definitions/data_types.json"
+    },
+    {
+      "file": "Definitions/relationship_types.json"
+    },
+    {
+      "file": "Definitions/artifact_types.json"
+    },
+    {
+      "file": "Definitions/node_types.json"
+    },
+    {
+      "file": "Definitions/policy_types.json"
+    }
+  ],
+  "dsl_definitions": {
+    "config-deploy-properties": {
+      "resolution-key": {
+        "get_input": "resolution-key"
+      }
+    }
+  },
+  "topology_template": {
+    "workflows": {
+      "check": {
+        "steps": {
+          "activate-process": {
+            "description": "Check CLI",
+            "target": "check",
+            "activities": [
+              {
+                "call_operation": "ComponentCliExecutor.process"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "node_templates": {
+      "check": {
+        "type": "component-cli-executor",
+        "interfaces": {
+          "ComponentCliExecutor": {
+            "operations": {
+              "process": {
+                "implementation": {
+                  "primary": "component-script"
+                },
+                "inputs": {
+                  "script-type": "kotlin",
+                  "script-class-reference": "InternalSimpleCli_cba$TestCliScriptFunction",
+                  "instance-dependencies": []
+                },
+                "outputs": {
+                  "response-data": "",
+                  "status": "success"
+                }
+              }
+            }
+          }
+        },
+        "artifacts": {
+          "command-template": {
+            "type": "artifact-template-velocity",
+            "file": "Templates/check-command-template.vtl"
+          }
+        }
+      }
+    }
+  }
+}

@@ -25,6 +25,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.util
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintFunctionNode
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintVelocityTemplateService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -67,6 +68,7 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
                 ?: throw BluePrintProcessorException("couldn't get resource definition for ($name)")
     }
 
+    //TODO("Convert return Map<String, JsonNode>")
     open fun resolveInputKeyMappingVariables(inputKeyMapping: Map<String, String>): Map<String, Any> {
         val resolvedInputKeyMapping = HashMap<String, Any>()
         if (MapUtils.isNotEmpty(inputKeyMapping)) {
@@ -80,12 +82,14 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
         return resolvedInputKeyMapping
     }
 
+    //TODO("Convert keyMapping =  MutableMap<String, JsonNode>")
     open suspend fun resolveFromInputKeyMapping(valueToResolve: String, keyMapping: MutableMap<String, Any>):
             String {
         if (valueToResolve.isEmpty() || !valueToResolve.contains("$")) {
             return valueToResolve
         }
-        return BluePrintVelocityTemplateService.generateContent(valueToResolve, additionalContext = keyMapping)
+        //TODO("Optimize to JSON Node directly")
+        return BluePrintVelocityTemplateService.generateContent(valueToResolve, keyMapping.asJsonNode().toString())
     }
 
     final override suspend fun applyNB(resourceAssignment: ResourceAssignment): Boolean {

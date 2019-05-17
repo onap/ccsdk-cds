@@ -36,6 +36,7 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
 
     private lateinit var sshClient: SshClient
     private lateinit var clientSession: ClientSession
+    var channel: ChannelExec? = null
 
     override suspend fun startSessionNB(): ClientSession {
         sshClient = SshClient.setUpDefaultClient()
@@ -69,31 +70,29 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
     override suspend fun executeCommandNB(command: String, timeOut: Long): String {
         log.debug("Executing host($clientSession) command($command)")
 
-        var channel: ChannelExec? = null
-        try {
-            channel = clientSession.createExecChannel(command)
-            //TODO("Convert to streaming ")
-            val outputStream = ByteArrayOutputStream()
-            channel.out = outputStream
-            channel.err = outputStream
-            channel.open().await()
-            val waitMask = channel.waitFor(Collections.unmodifiableSet(EnumSet.of(ClientChannelEvent.CLOSED)), timeOut)
-            if (waitMask.contains(ClientChannelEvent.TIMEOUT)) {
-                throw BluePrintProcessorException("Failed to retrieve command result in time: $command")
-            }
-            val exitStatus = channel.exitStatus
-            ClientChannel.validateCommandExitStatusCode(command, exitStatus!!)
-            return outputStream.toString()
-        } finally {
-            if (channel != null)
-                channel.close()
+        channel = clientSession.createExecChannel(command)
+        checkNotNull(channel) { "failed to create Channel for the command : $command" }
+
+        //TODO("Convert to streaming ")
+        val outputStream = ByteArrayOutputStream()
+        channel!!.out = outputStream
+        channel!!.err = outputStream
+        channel!!.open().await()
+        val waitMask = channel!!.waitFor(Collections.unmodifiableSet(EnumSet.of(ClientChannelEvent.CLOSED)), timeOut)
+        if (waitMask.contains(ClientChannelEvent.TIMEOUT)) {
+            throw BluePrintProcessorException("Failed to retrieve command result in time: $command")
         }
+        val exitStatus = channel!!.exitStatus
+        ClientChannel.validateCommandExitStatusCode(command, exitStatus!!)
+        return outputStream.toString()
     }
 
     override suspend fun closeSessionNB() {
+        if (channel != null)
+            channel!!.close()
         if (sshClient.isStarted) {
             sshClient.stop()
-            log.debug("SSH Client Service stopped successfully")
         }
+        log.debug("SSH Client Service stopped successfully")
     }
 }
