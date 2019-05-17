@@ -1,0 +1,65 @@
+{
+  "description": "This is Remote Ansible Playbook (AWX) Execution Component.",
+  "version": "1.0.0",
+  "attributes": {
+    "ansible-command-status": {
+      "required": true,
+      "type": "string"
+    },
+    "ansible-command-logs": {
+      "required": true,
+      "type": "string"
+    }
+  },
+  "capabilities": {
+    "component-node": {
+      "type": "tosca.capabilities.Node"
+    }
+  },
+  "interfaces": {
+    "ComponentRemoteAnsibleExecutor": {
+      "operations": {
+        "process": {
+          "inputs": {
+            "job-template-name": {
+              "description": "Primary key or name of the job template to launch new job.",
+              "required": true,
+              "type": "string"
+            },
+            "limit": {
+              "description": "Specify host limit for job template to run.",
+              "required": false,
+              "type": "string"
+            },
+            "inventory": {
+              "description": "Specify inventory for job template to run.",
+              "required": false,
+              "type": "string"
+            },
+            "extra-vars" : {
+              "required" : false,
+              "type" : "json",
+              "description": "json formatted text that contains extra variables to pass on."
+            },
+            "tags": {
+              "description": "Specify tagged actions in the playbook to run.",
+              "required": false,
+              "type": "string"
+            },
+            "skip-tags": {
+              "description": "Specify tagged actions in the playbook to omit.",
+              "required": false,
+              "type": "string"
+            },
+            "endpoint-selector": {
+              "description": "Remote AWX Server selector name.",
+              "required": true,
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "derived_from": "tosca.nodes.Component"
+}

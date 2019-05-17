@@ -1,0 +1,20 @@
+---
+- name: Get Device Running Config
+  hosts: all
+  gather_facts: no
+  connection: local
+  any_errors_fatal: True
+  serial: 5
+
+  tasks:
+    - name: Get Running Config
+      netconf_rpc:
+        rpc: get-config
+        content: |
+          <source><running/></source>
+      register: netconf_output
+
+
+    - name: Print Running Config
+      debug:
+        var: netconf_output
