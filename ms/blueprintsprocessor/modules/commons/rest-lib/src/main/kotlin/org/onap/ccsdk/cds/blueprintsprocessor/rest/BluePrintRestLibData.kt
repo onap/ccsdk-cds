@@ -20,6 +20,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.rest
 open class RestClientProperties {
     lateinit var type: String
     lateinit var url: String
+    var additionalHeaders: Map<String, String>? = null
 }
 
 open class SSLRestClientProperties : RestClientProperties() {

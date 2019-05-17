@@ -77,6 +77,7 @@ interface BlueprintWebClientService {
         }
     }
 
+    //TODO: convert to multi-map
     fun convertToBasicHeaders(headers: Map<String, String>): Array<BasicHeader> {
         return headers.map { BasicHeader(it.key, it.value) }.toTypedArray()
     }
