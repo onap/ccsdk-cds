@@ -18,21 +18,43 @@ package org.onap.ccsdk.cds.controllerblueprints.core.interfaces
 import com.fasterxml.jackson.core.io.CharTypes
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import com.fasterxml.jackson.databind.node.TextNode
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 
 interface BlueprintTemplateService {
 
     /**
      * Generate dynamique content using Velocity Template or Jinja template
      *
-     * @param template template string content
-     * @param json json string content
+     * @param bluePrintRuntimeService blueprint runtime
+     * @param nodeTemplateName node template
+     * @param artifactName Artifact Name
+     * @param jsonData json string data content to mash
      * @param ignoreJsonNull Ignore Null value in the JSON content
      * @param additionalContext (Key, value) mutable map for additional variables
      * @return Content result
      *
      **/
-    suspend fun generateContent(template: String, json: String = "", ignoreJsonNull: Boolean = false,
-                        additionalContext: MutableMap<String, Any> = mutableMapOf()): String
+    suspend fun generateContent(bluePrintRuntimeService: BluePrintRuntimeService<*>,
+                                nodeTemplateName: String,
+                                artifactName: String,
+                                jsonData: String = "",
+                                ignoreJsonNull: Boolean = false,
+                                additionalContext: MutableMap<String, Any> = mutableMapOf()): String
+
+
+    /**
+     * Generate dynamique content using Velocity Template or Jinja template
+     *
+     * @param template template string content
+     * @param templateType template type
+     * @param jsonData json string data content to mash
+     * @param ignoreJsonNull Ignore Null value in the JSON content
+     * @param additionalContext (Key, value) mutable map for additional variables
+     * @return Content result
+     *
+     **/
+    suspend fun generateContent(template: String, templateType: String, jsonData: String = "", ignoreJsonNull: Boolean = false,
+                                additionalContext: MutableMap<String, Any> = mutableMapOf()): String
 }
 
 /**

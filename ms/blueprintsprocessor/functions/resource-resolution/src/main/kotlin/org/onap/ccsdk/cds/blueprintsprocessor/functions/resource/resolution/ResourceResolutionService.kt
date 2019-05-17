@@ -46,10 +46,10 @@ interface ResourceResolutionService {
                                  artifactNames: List<String>, properties: Map<String, Any>): MutableMap<String, String>
 
     suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
-                                               artifactPrefix: String, properties: Map<String, Any>): String
+                                 artifactPrefix: String, properties: Map<String, Any>): String
 
     suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
-                                                  artifactMapping: String, artifactTemplate: String?): String
+                                 artifactMapping: String, artifactTemplate: String?): String
 
     suspend fun resolveResourceAssignments(blueprintRuntimeService: BluePrintRuntimeService<*>,
                                            resourceDefinitions: MutableMap<String, ResourceDefinition>,
@@ -89,7 +89,7 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
     }
 
     override suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
-                                                        artifactPrefix: String, properties: Map<String, Any>): String {
+                                          artifactPrefix: String, properties: Map<String, Any>): String {
 
         // Velocity Artifact Definition Name
         val artifactTemplate = "$artifactPrefix-template"
@@ -110,7 +110,7 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
 
 
     override suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
-                                                           artifactMapping: String, artifactTemplate: String?): String {
+                                          artifactMapping: String, artifactTemplate: String?): String {
 
         val resolvedContent: String
         log.info("Resolving resource for template artifact($artifactTemplate) with resource assignment artifact($artifactMapping)")
@@ -137,11 +137,9 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
 
         // Check Template is there
         if (artifactTemplate != null) {
-            val blueprintTemplateService = BluePrintTemplateService(bluePrintRuntimeService, nodeTemplateName, artifactTemplate)
-            val templateContent =
-                    bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactTemplate)
-
-            resolvedContent = blueprintTemplateService.generateContent(templateContent, resolvedParamJsonContent)
+            val blueprintTemplateService = BluePrintTemplateService()
+            resolvedContent = blueprintTemplateService.generateContent(bluePrintRuntimeService, nodeTemplateName,
+                    artifactTemplate, resolvedParamJsonContent)
 
         } else {
             resolvedContent = resolvedParamJsonContent

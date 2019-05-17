@@ -21,14 +21,13 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.hubspot.jinjava.Jinjava
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintJsonNodeFactory
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintTemplateService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 
 
-object BluePrintJinjaTemplateService: BlueprintTemplateService {
+object BluePrintJinjaTemplateService {
 
-    override suspend fun generateContent(template: String, json: String, ignoreJsonNull: Boolean,
-                                 additionalContext: MutableMap<String, Any>): String {
+    fun generateContent(template: String, json: String, ignoreJsonNull: Boolean,
+                                additionalContext: MutableMap<String, Any>): String {
         // Load template
         val jinJava = Jinjava()
         val mapper = ObjectMapper()
