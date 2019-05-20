@@ -36,6 +36,7 @@
         <module>rest-lib</module>
         <module>dmaap-lib</module>
         <module>grpc-lib</module>
+        <module>message-lib</module>
     </modules>
     <dependencies>
         <dependency>
