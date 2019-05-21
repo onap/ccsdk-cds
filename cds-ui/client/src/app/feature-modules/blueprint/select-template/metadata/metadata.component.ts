@@ -23,13 +23,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { A11yModule } from '@angular/cdk/a11y';
 
 import { IAppState } from '../../../../common/core/store/state/app.state';
 import { IBlueprintState } from 'src/app/common/core/store/models/blueprintState.model';
 import { IBlueprint } from 'src/app/common/core/store/models/blueprint.model';
 import { IMetaData } from '../../../../common/core/store/models/metadata.model';
-import { LoadBlueprintSuccess } from 'src/app/common/core/store/actions/blueprint.action';
+import { SetBlueprintState } from 'src/app/common/core/store/actions/blueprint.action';
 
 @Component({
   selector: 'app-metadata',
@@ -41,6 +40,13 @@ export class MetadataComponent implements OnInit {
   metadata: IMetaData;
   bpState: Observable<IBlueprintState>;
   blueprint: IBlueprint;
+  filesTree: any = [];
+  filesData: any = [];
+  selectedFile: string;
+  zipFolder: any;
+  blueprintName: string;
+  uploadedFileName: string;
+  entryDefinition: string;
   
   constructor(private formBuilder: FormBuilder, private store: Store<IAppState>) {
     this.bpState = this.store.select('blueprint');
@@ -57,6 +63,16 @@ export class MetadataComponent implements OnInit {
   ngOnInit() {
     this.bpState.subscribe(
       blueprintdata => {
+        var blueprintState: IBlueprintState = { blueprint: blueprintdata.blueprint, isLoadSuccess: blueprintdata.isLoadSuccess, isSaveSuccess: blueprintdata.isSaveSuccess, isUpdateSuccess: blueprintdata.isUpdateSuccess };
+        this.blueprint = blueprintState.blueprint;
+        this.filesTree = blueprintdata.files;
+        this.filesData = blueprintdata.filesData;
+        this.blueprintName = blueprintdata.name;
+        this.uploadedFileName = blueprintdata.uploadedFileName;
+        this.entryDefinition = blueprintdata.entryDefinition;
+
+
+
         var blueprintState: IBlueprintState = { blueprint: blueprintdata.blueprint, isLoadSuccess: blueprintdata.isLoadSuccess, isSaveSuccess: blueprintdata.isSaveSuccess, isUpdateSuccess: blueprintdata.isUpdateSuccess };
         this.metadata = blueprintState.blueprint.metadata;
         this.blueprint = blueprintState.blueprint;
@@ -82,7 +98,21 @@ export class MetadataComponent implements OnInit {
   UploadMetadata() {
     this.metadata = Object.assign({}, this.CBAMetadataForm.value);
     this.blueprint.metadata = this.metadata;
-    this.store.dispatch(new LoadBlueprintSuccess(this.blueprint));
+
+    this.filesData.forEach((fileNode) => {
+      if (fileNode.name.includes(this.blueprintName) && fileNode.name == this.entryDefinition) {
+        fileNode.data = JSON.stringify(this.blueprint, null, "\t");
+      }
+    });
+    let blueprintState = {
+      blueprint: this.blueprint,
+      name: this.blueprintName,
+      files: this.filesTree,
+      filesData: this.filesData,
+      uploadedFileName: this.uploadedFileName,
+      entryDefinition: this.entryDefinition
+    }
+    this.store.dispatch(new SetBlueprintState(blueprintState));
   }
 
 }

@@ -53,6 +53,7 @@ export class SearchTemplateComponent implements OnInit {
   private activationBlueprint: any;
   private tocsaMetadaData: any;
   private blueprintName: string;
+  private entryDefinition: string;
 
   constructor(private store: Store<IAppState>) { }
 
@@ -79,7 +80,8 @@ export class SearchTemplateComponent implements OnInit {
       name: this.blueprintName,
       files: this.tree,
       filesData: this.paths,
-      uploadedFileName: this.uploadedFileName
+      uploadedFileName: this.uploadedFileName,
+      entryDefinition: this.entryDefinition
     }
     this.store.dispatch(new SetBlueprintState(blueprintState))
     // this.store.dispatch(new LoadBlueprintSuccess(data));
@@ -145,6 +147,7 @@ export class SearchTemplateComponent implements OnInit {
             this.activationBlueprint = path.data; 
             newPart.data = JSON.parse(this.activationBlueprint.toString());            
             console.log('newpart', newPart);
+            this.entryDefinition = path.name.trim();
           }
           if(newPart.name !== '') {            
               currentLevel.push(newPart);
