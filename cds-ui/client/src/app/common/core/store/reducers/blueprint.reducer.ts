@@ -55,7 +55,9 @@ export function blueprintReducer(state: IBlueprintState = initialBlueprintState,
                     blueprint: action.payload.blueprint,
                     name: action.payload.name,
                     files: action.payload.files,
-                    filesData: action.payload.filesData
+                    filesData: action.payload.filesData,
+                    uploadedFileName: action.payload.uploadedFileName,
+                    entryDefinition: action.payload.entryDefinition
                     }
         default:
             return state;
