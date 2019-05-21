@@ -1,0 +1,19 @@
+  {
+      "tags": "vf_module_id",
+      "name": "vf_module_id",
+      "property": {
+        "description": "vf_module_id",
+        "type": "string"
+      },
+      "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+      "sources": {
+        "input": {
+          "type": "source-input"
+        },
+        "default": {
+          "type": "source-default",
+          "properties": {}
+        }
+      }
+    
+  }

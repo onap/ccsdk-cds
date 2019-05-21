@@ -1,0 +1,19 @@
+ {
+      "tags": "vnf_id",
+      "name": "vnf_id",
+      "property": {
+        "description": "vnf_id",
+        "type": "string"
+      },
+      "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+      "sources": {
+        "input": {
+          "type": "source-input"
+        },
+        "default": {
+          "type": "source-default",
+          "properties": {}
+        }
+      }
+    
+  }
