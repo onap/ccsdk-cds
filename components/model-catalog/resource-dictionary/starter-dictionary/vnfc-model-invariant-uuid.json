@@ -1,24 +1,34 @@
 {
-  "name" : "vnfc-model-invariant-uuid",
-  "tags" : "vnfc-model-invariant-uuid",
-  "updated-by" : "Singal, Kapil <ks220y@att.com>",
-  "property" : {
-    "description" : "vnfc-model-invariant-uuid for SRIOV VPE template",
-    "type" : "string"
+  "tags": "vnfc-model-invariant-uuid",
+  "name": "vnfc-model-invariant-uuid",
+  "property": {
+    "description": "vnfc-model-invariant-uuid",
+    "type": "string"
   },
-  "sources" : {
-    "processor-db" : {
-      "type" : "source-processor-db",
-      "properties" : {
-        "type" : "SQL",
-        "query" : "select VFC_MODEL.invariant_uuid as vfc_invariant_uuid from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
-        "input-key-mapping" : {
-          "vfccustomizationuuid" : "vfccustomizationuuid"
+  "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+  "sources": {
+    "input": {
+      "type": "source-input"
+    },
+    "default": {
+      "type": "source-default",
+      "properties": {}
+    },
+    "processor-db": {
+      "type": "source-processor-db",
+      "properties": {
+        "endpoint-selector": "dynamic-db-source",
+        "type": "SQL",
+        "query": "select VFC_MODEL.invariant_uuid as vfc_invariant_uuid from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
+        "input-key-mapping": {
+          "vfccustomizationuuid": "vfccustomizationuuid"
         },
-        "output-key-mapping" : {
-          "vnfc-model-invariant-uuid" : "vfc_invariant_uuid"
+        "output-key-mapping": {
+          "vnfc-model-invariant-uuid": "vfc_invariant_uuid"
         },
-        "key-dependencies" : [ "vfccustomizationuuid" ]
+        "key-dependencies": [
+          "vfccustomizationuuid"
+        ]
       }
     }
   }
