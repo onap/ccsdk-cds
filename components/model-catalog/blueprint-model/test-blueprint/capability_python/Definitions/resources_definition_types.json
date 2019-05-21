@@ -15,12 +15,14 @@
       "primary-db": {
         "type": "source-processor-db",
         "properties": {
-          "query": "SELECT artifact_name FROM BLUEPRINT_RUNTIME where artifact_version=\"1.0.0\"",
+          "endpoint-selector": "dynamic-db-source",
+          "query": "SELECT artifact_name FROM sdnctl.BLUEPRINT_RUNTIME where artifact_version=\"1.0.0\"",
           "input-key-mapping": {
           },
           "output-key-mapping": {
             "service-instance-id": "artifact_name"
-          }
+          },
+          "key-dependencies" : []
         }
       },
       "capability": {
