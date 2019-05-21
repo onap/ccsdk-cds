@@ -1,8 +1,8 @@
 {
-  "tags": "onap_private_net_cidr",
-  "name": "onap_private_net_cidr",
+  "tags": "private1-prefix-id",
+  "name": "private1-prefix-id",
   "property": {
-    "description": "onap_private_net_cidr",
+    "description": "private1-prefix-id",
     "type": "string"
   },
   "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
@@ -18,14 +18,14 @@
       "type": "source-rest",
       "properties": {
         "type": "JSON",
-        "url-path": "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/onap_private_net_cidr",
+        "url-path": "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/private1-prefix-id",
         "path": "/param/0/value",
         "input-key-mapping": {
           "service-instance-id": "service-instance-id",
           "vnf-id": "vnf-id"
         },
         "output-key-mapping": {
-          "onap_private_net_cidr": "value"
+          "private1-prefix-id": "value"
         },
         "key-dependencies": [
           "service-instance-id",
@@ -38,10 +38,10 @@
       "properties": {
         "endpoint-selector": "dynamic-db-source",
         "type": "SQL",
-        "query": "select sdnctl.IPAM_IP_POOL.prefix as prefix from sdnctl.IPAM_IP_POOL where description = \"management\"",
+        "query": "select sdnctl.IPAM_IP_POOL.prefix_id as prefix_id from sdnctl.IPAM_IP_POOL where description = \"private1\"",
         "input-key-mapping": {},
         "output-key-mapping": {
-          "onap_private_net_cidr": "prefix"
+          "private1-prefix-id": "prefix_id"
         }
       }
     }

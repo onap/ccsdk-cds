@@ -1,15 +1,18 @@
 {
-  "name" : "vf-module-model-customization-uuid",
-  "tags" : "vf-module-model-customization-uuid",
-  "updated-by" : "Singal, Kapil <ks220y@att.com>",
-  "property" : {
-    "description" : "vf-module-model-customization-uuid",
-    "type" : "string"
+  "tags": "vf-module-model-customization-uuid",
+  "name": "vf-module-model-customization-uuid",
+  "property": {
+    "description": "vf-module-model-customization-uuid",
+    "type": "string"
   },
-  "sources" : {
-    "input" : {
-      "type" : "source-input",
-      "properties" : { }
+  "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+  "sources": {
+    "input": {
+      "type": "source-input"
+    },
+    "default": {
+      "type": "source-default",
+      "properties": {}
     }
   }
 }

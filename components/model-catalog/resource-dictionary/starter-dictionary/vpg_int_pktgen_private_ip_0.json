@@ -1,11 +1,11 @@
 {
-  "tags": "vnf-name",
-  "name": "vnf-name",
+  "tags": "vpg_int_pktgen_private_ip_0",
+  "name": "vpg_int_pktgen_private_ip_0",
   "property": {
-    "description": "vnf-name",
+    "description": "vpg_int_pktgen_private_ip_0",
     "type": "string"
   },
-  "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+  "updated-by": "Singal, Kapil <ks220y@att.com>",
   "sources": {
     "input": {
       "type": "source-input"
@@ -18,18 +18,18 @@
       "type": "source-rest",
       "properties": {
         "type": "JSON",
-        "url-path": "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-name/vnf-data/vnf-topology/vnf-parameters-data/param/vnf-name",
+        "url-path": "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vpg_int_pktgen_private_ip_0",
         "path": "/param/0/value",
         "input-key-mapping": {
           "service-instance-id": "service-instance-id",
-          "vnf-name": "vnf-name"
+          "vnf-id": "vnf-id"
         },
         "output-key-mapping": {
-          "vnf-name": "value"
+          "vpg_int_pktgen_private_ip_0": "value"
         },
         "key-dependencies": [
           "service-instance-id",
-          "vnf-name"
+          "vnf-id"
         ]
       }
     }

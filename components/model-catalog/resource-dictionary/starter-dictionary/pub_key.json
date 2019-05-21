@@ -1,14 +1,18 @@
 {
-  "name": "pub_key",
   "tags": "pub_key",
-  "updated-by": "Singal, Kapil <ks220y@att.com>",
+  "name": "pub_key",
   "property": {
-    "type": "string",
-    "description": "pub_key"
+    "description": "pub_key",
+    "type": "string"
   },
+  "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
   "sources": {
     "input": {
       "type": "source-input"
+    },
+    "default": {
+      "type": "source-default",
+      "properties": {}
     },
     "primary-config-data": {
       "type": "source-rest",
@@ -31,4 +35,3 @@
     }
   }
 }
-

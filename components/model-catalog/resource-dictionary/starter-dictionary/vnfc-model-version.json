@@ -1,24 +1,34 @@
 {
-  "name" : "vnfc-model-version",
-  "tags" : "vnfc-model-version",
-  "updated-by" : "Singal, Kapil <ks220y@att.com>",
-  "property" : {
-    "description" : "vnfc-model-version for  SRIOV VPE template",
-    "type" : "string"
+  "tags": "vnfc-model-version",
+  "name": "vnfc-model-version",
+  "property": {
+    "description": "vnfc-model-version",
+    "type": "string"
   },
-  "sources" : {
-    "processor-db" : {
-      "type" : "source-processor-db",
-      "properties" : {
-        "type" : "SQL",
-        "query" : "select VFC_MODEL.version as vnfc_model_version from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
-        "input-key-mapping" : {
-          "vfccustomizationuuid" : "vfccustomizationuuid"
+  "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+  "sources": {
+    "input": {
+      "type": "source-input"
+    },
+    "default": {
+      "type": "source-default",
+      "properties": {}
+    },
+    "processor-db": {
+      "type": "source-processor-db",
+      "properties": {
+        "endpoint-selector": "dynamic-db-source",
+        "type": "SQL",
+        "query": "select VFC_MODEL.version as vnfc_model_version from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
+        "input-key-mapping": {
+          "vfccustomizationuuid": "vfccustomizationuuid"
         },
-        "output-key-mapping" : {
-          "vnfc-model-version" : "vnfc_model_version"
+        "output-key-mapping": {
+          "vnfc-model-version": "vnfc_model_version"
         },
-        "key-dependencies" : [ "vfccustomizationuuid" ]
+        "key-dependencies": [
+          "vfccustomizationuuid"
+        ]
       }
     }
   }
