@@ -1,24 +1,34 @@
 {
-  "name" : "vf-module-type",
-  "tags" : "vf-module-type",
-  "updated-by" : "Singal, Kapil <ks220y@att.com>",
-  "property" : {
-    "description" : "vf-module-type",
-    "type" : "string"
+  "tags": "vf-module-type",
+  "name": "vf-module-type",
+  "property": {
+    "description": "vf-module-type",
+    "type": "string"
   },
-  "sources" : {
-    "processor-db" : {
-      "type" : "source-processor-db",
-      "properties" : {
-        "type" : "SQL",
-        "query" : "select vf_module_type as vf_module_type from sdnctl.VF_MODULE_MODEL where customization_uuid=:customizationid",
-        "input-key-mapping" : {
-          "customizationid" : "vf-module-model-customization-uuid"
+  "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+  "sources": {
+    "input": {
+      "type": "source-input"
+    },
+    "default": {
+      "type": "source-default",
+      "properties": {}
+    },
+    "processor-db": {
+      "type": "source-processor-db",
+      "properties": {
+        "endpoint-selector": "dynamic-db-source",
+        "type": "SQL",
+        "query": "select vf_module_type as vf_module_type from sdnctl.VF_MODULE_MODEL where customization_uuid=:customizationid",
+        "input-key-mapping": {
+          "customizationid": "vf-module-model-customization-uuid"
         },
-        "output-key-mapping" : {
-          "vf-module-type" : "vf_module_type"
+        "output-key-mapping": {
+          "vf-module-type": "vf_module_type"
         },
-        "key-dependencies" : [ "vf-module-model-customization-uuid" ]
+        "key-dependencies": [
+          "vf-module-model-customization-uuid"
+        ]
       }
     }
   }

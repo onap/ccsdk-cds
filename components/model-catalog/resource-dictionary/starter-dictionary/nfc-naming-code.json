@@ -1,24 +1,34 @@
 {
-  "name" : "nfc-naming-code",
-  "tags" : "nfc-naming-code",
-  "updated-by" : "Singal, Kapil <ks220y@att.com>",
-  "property" : {
-    "description" : "nfc-naming-code",
-    "type" : "string"
+  "tags": "nfc-naming-code",
+  "name": "nfc-naming-code",
+  "property": {
+    "description": "nfc-naming-code",
+    "type": "string"
   },
-  "sources" : {
-    "processor-db" : {
-      "type" : "source-processor-db",
-      "properties" : {
-        "type" : "SQL",
-        "query" : "select nfc_naming_code as nfc_naming_code from sdnctl.VFC_MODEL where customization_uuid=:vfccustomizationuuid",
-        "input-key-mapping" : {
-          "vfccustomizationuuid" : "vfccustomizationuuid"
+  "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+  "sources": {
+    "input": {
+      "type": "source-input"
+    },
+    "default": {
+      "type": "source-default",
+      "properties": {}
+    },
+    "processor-db": {
+      "type": "source-processor-db",
+      "properties": {
+        "endpoint-selector": "dynamic-db-source",
+        "type": "SQL",
+        "query": "select nfc_naming_code as nfc_naming_code from sdnctl.VFC_MODEL where customization_uuid=:vfccustomizationuuid",
+        "input-key-mapping": {
+          "vfccustomizationuuid": "vfccustomizationuuid"
         },
-        "output-key-mapping" : {
-          "nfc-naming-code" : "nfc_naming_code"
+        "output-key-mapping": {
+          "nfc-naming-code": "nfc_naming_code"
         },
-        "key-dependencies" : [ "vfccustomizationuuid" ]
+        "key-dependencies": [
+          "vfccustomizationuuid"
+        ]
       }
     }
   }
