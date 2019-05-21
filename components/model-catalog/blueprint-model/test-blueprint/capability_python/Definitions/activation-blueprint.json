@@ -19,6 +19,19 @@
   }, {
     "file" : "Definitions/policy_types.json"
   } ],
+  "dsl_definitions": {
+    "dynamic-db-source": {
+      "type": "maria-db",
+      "url": "jdbc:mysql://localhost:3306/sdnctl",
+      "username": "sdnctl",
+      "password": {
+        "get_attribute": [
+          "BPP",
+          "dynamic-db-source.password"
+        ]
+      }
+    }
+  },
   "topology_template" : {
     "inputs" : {
       "request-id" : {

@@ -1,24 +1,34 @@
 {
-  "name" : "vm-type",
-  "tags" : "vm-type",
-  "updated-by" : "Singal, Kapil <ks220y@att.com>",
-  "property" : {
-    "description" : "vm-type",
-    "type" : "string"
+  "tags": "vm-type",
+  "name": "vm-type",
+  "property": {
+    "description": "vm-type",
+    "type": "string"
   },
-  "sources" : {
-    "processor-db" : {
-      "type" : "source-processor-db",
-      "properties" : {
-        "type" : "SQL",
-        "query" : "select VFC_MODEL.vm_type as vm_type from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
-        "input-key-mapping" : {
-          "vfccustomizationuuid" : "vfccustomizationuuid"
+  "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+  "sources": {
+    "input": {
+      "type": "source-input"
+    },
+    "default": {
+      "type": "source-default",
+      "properties": {}
+    },
+    "processor-db": {
+      "type": "source-processor-db",
+      "properties": {
+        "endpoint-selector": "dynamic-db-source",
+        "type": "SQL",
+        "query": "select VFC_MODEL.vm_type as vm_type from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
+        "input-key-mapping": {
+          "vfccustomizationuuid": "vfccustomizationuuid"
         },
-        "output-key-mapping" : {
-          "vm-type" : "vm_type"
+        "output-key-mapping": {
+          "vm-type": "vm_type"
         },
-        "key-dependencies" : [ "vfccustomizationuuid" ]
+        "key-dependencies": [
+          "vfccustomizationuuid"
+        ]
       }
     }
   }

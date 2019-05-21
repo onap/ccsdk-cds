@@ -1,14 +1,18 @@
 {
-  "name": "onap_private_subnet_id",
   "tags": "onap_private_subnet_id",
-  "updated-by": "Singal, Kapil <ks220y@att.com>",
+  "name": "onap_private_subnet_id",
   "property": {
-    "type": "string",
-    "description": "onap_private_subnet_id"
+    "description": "onap_private_subnet_id",
+    "type": "string"
   },
+  "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
   "sources": {
     "input": {
       "type": "source-input"
+    },
+    "default": {
+      "type": "source-default",
+      "properties": {}
     },
     "primary-config-data": {
       "type": "source-rest",

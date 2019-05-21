@@ -1,19 +1,38 @@
-{
-		"name": "public_net_id",
-		"tags": "public_net_id",
-		"updated-by" : "Singal, Kapil <ks220y@att.com>",
-		"property": {
-			"type": "string",
-			"description" : "public_net_id"
-		},
-		"sources": {
-			"default": {
-				"type": "source-default",
-				"properties": {
-				}
-			},
-			"input": {
-				"type": "source-input"
-			}
-		}
-}
+  {
+      "tags": "public_net_id",
+      "name": "public_net_id",
+      "property": {
+        "description": "public_net_id",
+        "type": "string"
+      },
+      "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+      "sources": {
+        "input": {
+          "type": "source-input"
+        },
+        "default": {
+          "type": "source-default",
+          "properties": {}
+        },
+        "primary-config-data": {
+          "type": "source-rest",
+          "properties": {
+            "type": "JSON",
+            "url-path": "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/public_net_id",
+            "path": "/param/0/value",
+            "input-key-mapping": {
+              "service-instance-id": "service-instance-id",
+              "vnf-id": "vnf-id"
+            },
+            "output-key-mapping": {
+              "public_net_id": "value"
+            },
+            "key-dependencies": [
+              "service-instance-id",
+              "vnf-id"
+            ]
+          }
+        }
+      }
+    
+  }
