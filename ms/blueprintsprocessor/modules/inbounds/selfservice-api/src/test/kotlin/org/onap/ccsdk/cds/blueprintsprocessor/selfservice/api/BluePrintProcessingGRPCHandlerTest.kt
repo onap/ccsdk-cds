@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.context.annotation.ComponentScan
+import org.springframework.context.annotation.FilterType
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
@@ -45,7 +46,8 @@ import kotlin.test.BeforeTest
 @RunWith(SpringRunner::class)
 @DirtiesContext
 @EnableAutoConfiguration
-@ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
+@ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"],
+        excludeFilters =arrayOf(ComponentScan.Filter(value = [(MessagingController::class)], type = FilterType.ASSIGNABLE_TYPE)))
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class BluePrintProcessingGRPCHandlerTest {
     private val log = LoggerFactory.getLogger(BluePrintProcessingGRPCHandlerTest::class.java)
