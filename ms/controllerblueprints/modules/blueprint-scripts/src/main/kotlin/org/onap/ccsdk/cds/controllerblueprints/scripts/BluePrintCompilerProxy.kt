@@ -1,6 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
- * Modifications Copyright © 2018 IBM.
+ * Modifications Copyright © 2018-2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,9 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinToJVMBytecodeCompiler
 import org.jetbrains.kotlin.cli.jvm.config.JvmClasspathRoot
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
+import org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar
 import org.jetbrains.kotlin.config.*
+import org.jetbrains.kotlin.scripting.compiler.plugin.ScriptingCompilerConfigurationComponentRegistrar
 import org.slf4j.LoggerFactory
 import java.io.File
 import kotlin.script.experimental.api.*
@@ -84,12 +86,14 @@ open class BluePrintsCompilerProxy(private val hostConfiguration: ScriptingHostC
                         // Add all Kotlin Sources
                         addKotlinSourceRoots(blueprintSourceCode.blueprintKotlinSources)
 
+                        add(ComponentRegistrar.PLUGIN_COMPONENT_REGISTRARS, ScriptingCompilerConfigurationComponentRegistrar())
+
                         languageVersionSettings = LanguageVersionSettingsImpl(
                                 LanguageVersion.LATEST_STABLE, ApiVersion.LATEST_STABLE, mapOf(AnalysisFlags.skipMetadataVersionCheck to true)
                         )
                     }
 
-                    //log.info("Executing with compiler configuration : $compilerConfiguration")
+                    log.info("Executing with compiler configuration : $compilerConfiguration")
 
                     environment = KotlinCoreEnvironment.createForProduction(rootDisposable, compilerConfiguration,
                             EnvironmentConfigFiles.JVM_CONFIG_FILES)

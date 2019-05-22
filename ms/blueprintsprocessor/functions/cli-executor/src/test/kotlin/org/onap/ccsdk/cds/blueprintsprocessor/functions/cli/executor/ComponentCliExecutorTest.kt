@@ -80,7 +80,7 @@ class ComponentCliExecutorTest {
             operationInputs[BluePrintConstants.PROPERTY_CURRENT_OPERATION] = "operationName".asJsonPrimitive()
             operationInputs[ComponentCliExecutor.SCRIPT_TYPE] = BluePrintConstants.SCRIPT_INTERNAL.asJsonPrimitive()
             operationInputs[ComponentCliExecutor.SCRIPT_CLASS_REFERENCE] =
-                    "InternalSimpleCli_cba\$TestCliScriptFunction".asJsonPrimitive()
+                    "TestCliScriptFunction".asJsonPrimitive()
             operationInputs[ComponentCliExecutor.INSTANCE_DEPENDENCIES] = JacksonUtils.jsonNode("[]") as ArrayNode
 
             val stepInputData = StepData().apply {

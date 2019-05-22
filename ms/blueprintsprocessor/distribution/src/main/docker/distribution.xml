@@ -29,6 +29,8 @@
             <outputFileNameMapping>${artifact.groupId}-${artifact.artifactId}-${artifact.version}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
             <excludes>
                 <exclude>org.slf4j:slf4j-simple</exclude>
+                <exclude>org.slf4j:jcl-over-slf4j</exclude>
+                <exclude>org.apache.tomcat:tomcat-jdbc</exclude>
             </excludes>
         </dependencySet>
     </dependencySets>

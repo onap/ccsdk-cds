@@ -18,9 +18,7 @@
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ServiceTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintFunctionNode
-import org.springframework.stereotype.Service
 
-@Service
 open class SampleComponentFunction : BlueprintFunctionNode<String, String> {
 
     override fun getName(): String {
