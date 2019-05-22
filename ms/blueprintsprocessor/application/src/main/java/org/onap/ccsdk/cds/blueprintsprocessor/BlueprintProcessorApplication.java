@@ -16,11 +16,13 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor;
 
+import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.MessagingController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 
 /**
  * BlueprintProcessorApplication
@@ -29,8 +31,8 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
-@ComponentScan(basePackages = {"org.onap.ccsdk.cds.controllerblueprints",
-    "org.onap.ccsdk.cds.blueprintsprocessor"})
+@ComponentScan(basePackages = {"org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"},excludeFilters={
+    @ComponentScan.Filter(type= FilterType.ASSIGNABLE_TYPE, value= MessagingController.class)})
 public class BlueprintProcessorApplication {
 
     public static void main(String[] args) {
