@@ -1,3 +1,6 @@
+# Run the Docker Compose file : docoker-compose -up
+# Enter into blueprint processor container : docker exec -it cds-bp /bin/bash
+
 FROM omahoco1/alpine-java-python
 
 ENV HTTP_PROXY  ${HTTP_PROXY}

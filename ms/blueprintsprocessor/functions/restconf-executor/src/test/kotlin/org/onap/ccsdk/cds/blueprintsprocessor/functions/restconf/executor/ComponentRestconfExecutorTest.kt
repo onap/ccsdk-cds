@@ -1,5 +1,5 @@
 /*
- *  Copyright © 2018 IBM.
+ *  Copyright © 2018-2019 IBM.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -81,7 +81,7 @@ class ComponentRestconfExecutorTest {
             operationInputs[BluePrintConstants.PROPERTY_CURRENT_OPERATION] = "operationName".asJsonPrimitive()
             operationInputs[ComponentRestconfExecutor.SCRIPT_TYPE] = BluePrintConstants.SCRIPT_INTERNAL.asJsonPrimitive()
             operationInputs[ComponentRestconfExecutor.SCRIPT_CLASS_REFERENCE] =
-                    "InternalSimpleRestconf_cba\$TestRestconfConfigure".asJsonPrimitive()
+                    "TestRestconfConfigure".asJsonPrimitive()
             operationInputs[ComponentRestconfExecutor.INSTANCE_DEPENDENCIES] = JacksonUtils.jsonNode("[]") as ArrayNode
 
             val stepInputData = StepData().apply {

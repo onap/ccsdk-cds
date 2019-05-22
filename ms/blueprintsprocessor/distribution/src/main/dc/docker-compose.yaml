@@ -18,9 +18,10 @@ services:
     depends_on:
     - db
     image: onap/ccsdk-blueprintsprocessor:latest
-    container_name: bp-rest
+    container_name: cds-bp
     ports:
-    - "8000:8080"
+    - "18080:8080"
+    - "19111:9111"
     restart: always
     environment:
       APPLICATIONNAME: BlueprintsProcessor

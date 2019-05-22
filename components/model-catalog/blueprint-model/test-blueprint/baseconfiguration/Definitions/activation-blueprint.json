@@ -319,8 +319,8 @@
                   "primary": "component-script"
                 },
                 "inputs": {
-                  "script-type": "kotlin",
-                  "script-class-reference": "InternalSimpleCli_cba$TestCliScriptFunction",
+                  "script-type": "internal",
+                  "script-class-reference": "TestCliScriptFunction",
                   "instance-dependencies": []
                 },
                 "outputs": {

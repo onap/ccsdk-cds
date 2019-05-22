@@ -35,7 +35,7 @@ object BluePrintScripCompilationConfiguration : ScriptCompilationConfiguration(
                 //classpathFromClassloader(BluePrintScripCompilationConfiguration::class.java.classLoader)
                 classpathFromClasspathProperty()
             }
-            ide{
+            ide {
                 acceptedLocations(ScriptAcceptedLocation.Everywhere)
             }
 

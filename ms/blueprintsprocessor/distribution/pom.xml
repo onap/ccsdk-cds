@@ -42,6 +42,8 @@
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
             <artifactId>application</artifactId>
         </dependency>
+
+        <!-- Placeholder for application runtime dependencies, it may be custom function executor dependencies -->
     </dependencies>
     <build>
         <plugins>
