@@ -140,10 +140,10 @@ class ExecutionServiceHandler(private val bluePrintPathConfiguration: BluePrintP
         val executionServiceOutput = ExecutionServiceOutput()
         executionServiceOutput.commonHeader = executionServiceInput.commonHeader
         executionServiceOutput.actionIdentifiers = executionServiceInput.actionIdentifiers
+        executionServiceOutput.payload = executionServiceInput.payload
 
         val status = Status()
         if (failure) {
-            executionServiceOutput.payload = JsonNodeFactory.instance.objectNode()
             setErrorStatus(errorMessage, status)
         } else {
             status.eventType = EventType.EVENT_COMPONENT_PROCESSING.name
