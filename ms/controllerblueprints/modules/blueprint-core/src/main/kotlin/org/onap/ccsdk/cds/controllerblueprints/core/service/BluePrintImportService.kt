@@ -85,7 +85,7 @@ class BluePrintImportService(private val parentServiceTemplate: ServiceTemplate,
                 serviceTemplate = ServiceTemplateUtils.getServiceTemplate(importDefinition.file)
             }
         } catch (e: Exception) {
-            throw BluePrintException("failed to populate service template for ${importDefinition.file}", e)
+            throw BluePrintException("failed to populate service template for ${importDefinition.file} original error: ${e.message}", e)
         }
         if (serviceTemplate == null) {
             throw BluePrintException("failed to populate service template for :  ${importDefinition.file}")
