@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "57b2cfa1_1bddd390",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/selfservice-api/pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-05-23T12:56:38Z",
+      "side": 1,
+      "message": "please add in the parent dependencyManagement section, so you don\u0027t need to deal with version here. Also scope compile is the default, hence not require to specifcy",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 19
+      },
+      "revId": "467de67c02e0bacfe2141178e1443ebaf225f8fa",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b6b30be6_a7de4d0e",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/selfservice-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/selfservice/api/KafkaMessageListener.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-05-23T12:56:38Z",
+      "side": 1,
+      "message": "you don\u0027t need/want this, this is to trigger something when the application start.\nYou should autowire the bean in the overall blueprintprocessor/application",
+      "range": {
+        "startLine": 30,
+        "startChar": 33,
+        "endLine": 30,
+        "endChar": 74
+      },
+      "revId": "467de67c02e0bacfe2141178e1443ebaf225f8fa",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d85ac7e8_ec6a516c",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/selfservice-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/selfservice/api/KafkaMessageListener.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-05-23T12:56:38Z",
+      "side": 1,
+      "message": "I would say MessagingController",
+      "range": {
+        "startLine": 30,
+        "startChar": 11,
+        "endLine": 30,
+        "endChar": 31
+      },
+      "revId": "467de67c02e0bacfe2141178e1443ebaf225f8fa",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
