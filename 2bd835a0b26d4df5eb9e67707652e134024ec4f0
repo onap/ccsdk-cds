@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfa75984_8ad25a38",
+        "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/interfaces/BlueprintTemplateService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-05-23T16:04:10Z",
+      "side": 1,
+      "message": "No Need of changes in BlueprintTemplateService and their child classes.",
+      "range": {
+        "startLine": 43,
+        "startChar": 32,
+        "endLine": 43,
+        "endChar": 98
+      },
+      "revId": "2bd835a0b26d4df5eb9e67707652e134024ec4f0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
