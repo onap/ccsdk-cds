@@ -20,7 +20,7 @@ limitations under the License.
     <parent>
         <groupId>org.onap.ccsdk.parent</groupId>
         <artifactId>odlparent-lite</artifactId>
-        <version>1.2.3-SNAPSHOT</version>
+        <version>1.2.3</version>
         <relativePath/>
     </parent>
 
