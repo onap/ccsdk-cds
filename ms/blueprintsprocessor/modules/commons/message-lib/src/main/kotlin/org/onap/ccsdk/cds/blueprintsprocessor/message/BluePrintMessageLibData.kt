@@ -18,10 +18,18 @@ package org.onap.ccsdk.cds.blueprintsprocessor.message
 
 
 open class MessageProducerProperties
-
+open class MessageConsumerProperties
 
 open class KafkaBasicAuthMessageProducerProperties : MessageProducerProperties() {
     lateinit var bootstrapServers: String
     var topic: String? = null
     var clientId: String? = null
+}
+
+open class KafkaBasicAuthMessageConsumerProperties : MessageConsumerProperties() {
+    lateinit var bootstrapServers: String
+    var topic: String? = null
+    var groupId: String? = null
+    // TODO May need to add max.poll.records to increase number of messages
+    //  read by kafka consumer, partition or consumer offsets.
 }
