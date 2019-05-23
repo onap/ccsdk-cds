@@ -15,6 +15,7 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.MissingNode
 import org.apache.commons.collections.MapUtils
@@ -22,23 +23,27 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.Reso
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.RestResourceSource
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.ResourceAssignmentProcessor
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.*
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.nullToEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory
-import java.util.HashMap
+import java.util.*
 
 class MockRestResourceResolutionProcessor(private val blueprintRestLibPropertyService:
-                                          MockBluePrintRestLibPropertyService): ResourceAssignmentProcessor() {
+                                          MockBluePrintRestLibPropertyService) : ResourceAssignmentProcessor() {
 
     private val logger = LoggerFactory.getLogger(MockRestResourceResolutionProcessor::class.java)
 
-    override fun resolveInputKeyMappingVariables(inputKeyMapping: Map<String, String>): Map<String, Any> {
-        val resolvedInputKeyMapping = HashMap<String, Any>()
+    override fun resolveInputKeyMappingVariables(inputKeyMapping: Map<String, String>): Map<String, JsonNode> {
+        val resolvedInputKeyMapping = HashMap<String, JsonNode>()
         if (MapUtils.isNotEmpty(inputKeyMapping)) {
-            resolvedInputKeyMapping["service-instance-id"] = "10"
-            resolvedInputKeyMapping["vnf_name"] = "vnf1"
-            resolvedInputKeyMapping["vnf-id"] = "123456"
+
+            resolvedInputKeyMapping["service-instance-id"] = "10".asJsonPrimitive()
+            resolvedInputKeyMapping["vnf_name"] = "vnf1".asJsonPrimitive()
+            resolvedInputKeyMapping["vnf-id"] = "123456".asJsonPrimitive()
         }
         return resolvedInputKeyMapping
     }
