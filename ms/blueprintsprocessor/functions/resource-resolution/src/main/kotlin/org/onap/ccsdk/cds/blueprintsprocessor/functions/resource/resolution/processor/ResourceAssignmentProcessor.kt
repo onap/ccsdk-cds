@@ -69,27 +69,25 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
     }
 
     //TODO("Convert return Map<String, JsonNode>")
-    open fun resolveInputKeyMappingVariables(inputKeyMapping: Map<String, String>): Map<String, Any> {
-        val resolvedInputKeyMapping = HashMap<String, Any>()
+    open fun resolveInputKeyMappingVariables(inputKeyMapping: Map<String, String>): Map<String, JsonNode> {
+        val resolvedInputKeyMapping = HashMap<String, JsonNode>()
         if (MapUtils.isNotEmpty(inputKeyMapping)) {
             for ((key, value) in inputKeyMapping) {
                 val resultValue = raRuntimeService.getResolutionStore(value)
-                val expressionValue = JacksonUtils.getValue(resultValue)
-                log.trace("Reference dictionary key ({}), value ({})", key, expressionValue)
-                resolvedInputKeyMapping[key] = expressionValue
+                resolvedInputKeyMapping[key] = resultValue
             }
         }
         return resolvedInputKeyMapping
     }
 
     //TODO("Convert keyMapping =  MutableMap<String, JsonNode>")
-    open suspend fun resolveFromInputKeyMapping(valueToResolve: String, keyMapping: MutableMap<String, Any>):
+    open suspend fun resolveFromInputKeyMapping(valueToResolve: String, keyMapping: MutableMap<String, JsonNode>):
             String {
         if (valueToResolve.isEmpty() || !valueToResolve.contains("$")) {
             return valueToResolve
         }
         //TODO("Optimize to JSON Node directly")
-        return BluePrintVelocityTemplateService.generateContent(valueToResolve, keyMapping.asJsonNode().toString())
+        return BluePrintVelocityTemplateService.generateContent(valueToResolve, null, false, keyMapping)
     }
 
     final override suspend fun applyNB(resourceAssignment: ResourceAssignment): Boolean {

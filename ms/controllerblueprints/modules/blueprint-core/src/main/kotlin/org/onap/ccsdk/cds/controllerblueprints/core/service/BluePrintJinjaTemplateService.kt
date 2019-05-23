@@ -27,7 +27,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.removeNullNode
 object BluePrintJinjaTemplateService {
 
     fun generateContent(template: String, json: String, ignoreJsonNull: Boolean,
-                                additionalContext: MutableMap<String, Any>): String {
+                                additionalContext: MutableMap<String, JsonNode>): String {
         // Load template
         val jinJava = Jinjava()
         val mapper = ObjectMapper()

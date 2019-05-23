@@ -15,6 +15,7 @@
  */
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
+import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintTemplateService
@@ -24,7 +25,7 @@ class BluePrintTemplateService : BlueprintTemplateService {
 
     override suspend fun generateContent(bluePrintRuntimeService: BluePrintRuntimeService<*>,
                                          nodeTemplateName: String, artifactName: String, jsonData: String,
-                                         ignoreJsonNull: Boolean, additionalContext: MutableMap<String, Any>): String {
+                                         ignoreJsonNull: Boolean, additionalContext: MutableMap<String, JsonNode>): String {
 
         val artifactDefinition = bluePrintRuntimeService.resolveNodeTemplateArtifactDefinition(nodeTemplateName, artifactName)
         val templateType = artifactDefinition.type
@@ -33,7 +34,7 @@ class BluePrintTemplateService : BlueprintTemplateService {
     }
 
     override suspend fun generateContent(template: String, templateType: String, jsonData: String, ignoreJsonNull: Boolean,
-                                         additionalContext: MutableMap<String, Any>): String {
+                                         additionalContext: MutableMap<String, JsonNode>): String {
         return when (templateType) {
             BluePrintConstants.ARTIFACT_JINJA_TYPE_NAME -> {
                 BluePrintJinjaTemplateService.generateContent(template, jsonData, ignoreJsonNull, additionalContext)
@@ -50,7 +51,7 @@ class BluePrintTemplateService : BlueprintTemplateService {
 
     suspend fun generateContentFromFiles(templatePath: String, templateType: String, jsonPath: String,
                                          ignoreJsonNull: Boolean,
-                                         additionalContext: MutableMap<String, Any>): String {
+                                         additionalContext: MutableMap<String, JsonNode>): String {
         val json = JacksonUtils.getClassPathFileContent(jsonPath)
         val template = JacksonUtils.getClassPathFileContent(templatePath)
         return generateContent(template, templateType, json, ignoreJsonNull, additionalContext)

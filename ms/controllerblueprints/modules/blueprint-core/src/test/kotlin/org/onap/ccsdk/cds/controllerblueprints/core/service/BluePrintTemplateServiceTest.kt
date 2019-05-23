@@ -18,6 +18,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
+import com.fasterxml.jackson.databind.JsonNode
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -57,8 +58,9 @@ class BluePrintTemplateServiceTest {
             val template = JacksonUtils.getClassPathFileContent("templates/base-config-jinja-template.jinja")
             val json = JacksonUtils.getClassPathFileContent("templates/base-config-data-jinja.json")
 
-            var element: MutableMap<String, Any> = mutableMapOf()
-            element["additional_array"] = arrayListOf(hashMapOf("name" to "Element1", "location" to "Region0"), hashMapOf("name" to "Element2", "location" to "Region1"))
+            var element: MutableMap<String, JsonNode> = mutableMapOf()
+            val jsonNode = JacksonUtils.getJsonNode(arrayListOf(hashMapOf("name" to "Element1", "location" to "Region0"), hashMapOf("name" to "Element2", "location" to "Region1")))
+            element["additional_array"] = jsonNode
 
             val content = BluePrintJinjaTemplateService.generateContent(template, json, false, element)
             assertNotNull(content, "failed to generate content for velocity template")
@@ -83,8 +85,9 @@ class BluePrintTemplateServiceTest {
     @Test
     fun testJinjaGeneratedContentFromFiles() {
         runBlocking {
-            var element: MutableMap<String, Any> = mutableMapOf()
-            element["additional_array"] = arrayListOf(hashMapOf("name" to "Element1", "location" to "Region0"), hashMapOf("name" to "Element2", "location" to "Region1"))
+            var element: MutableMap<String, JsonNode> = mutableMapOf()
+            val jsonNode = JacksonUtils.getJsonNode(arrayListOf(hashMapOf("name" to "Element1", "location" to "Region0"), hashMapOf("name" to "Element2", "location" to "Region1")))
+            element["additional_array"] = jsonNode
 
             val bluePrintTemplateService = BluePrintTemplateService()
 

@@ -15,6 +15,7 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.MissingNode
 import org.apache.commons.collections.MapUtils
@@ -33,12 +34,13 @@ class MockRestResourceResolutionProcessor(private val blueprintRestLibPropertySe
 
     private val logger = LoggerFactory.getLogger(MockRestResourceResolutionProcessor::class.java)
 
-    override fun resolveInputKeyMappingVariables(inputKeyMapping: Map<String, String>): Map<String, Any> {
-        val resolvedInputKeyMapping = HashMap<String, Any>()
+    override fun resolveInputKeyMappingVariables(inputKeyMapping: Map<String, String>): Map<String, JsonNode> {
+        val resolvedInputKeyMapping = HashMap<String, JsonNode>()
         if (MapUtils.isNotEmpty(inputKeyMapping)) {
-            resolvedInputKeyMapping["service-instance-id"] = "10"
-            resolvedInputKeyMapping["vnf_name"] = "vnf1"
-            resolvedInputKeyMapping["vnf-id"] = "123456"
+
+            resolvedInputKeyMapping["service-instance-id"] = JacksonUtils.jsonNodeFromObject("10")
+            resolvedInputKeyMapping["vnf_name"] = JacksonUtils.jsonNodeFromObject("vnf1")
+            resolvedInputKeyMapping["vnf-id"] = JacksonUtils.jsonNodeFromObject("123456")
         }
         return resolvedInputKeyMapping
     }

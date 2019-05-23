@@ -16,6 +16,7 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.interfaces
 
 import com.fasterxml.jackson.core.io.CharTypes
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import com.fasterxml.jackson.databind.node.TextNode
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
@@ -39,7 +40,7 @@ interface BlueprintTemplateService {
                                 artifactName: String,
                                 jsonData: String = "",
                                 ignoreJsonNull: Boolean = false,
-                                additionalContext: MutableMap<String, Any> = mutableMapOf()): String
+                                additionalContext: MutableMap<String, JsonNode> = mutableMapOf()): String
 
 
     /**
@@ -54,7 +55,7 @@ interface BlueprintTemplateService {
      *
      **/
     suspend fun generateContent(template: String, templateType: String, jsonData: String = "", ignoreJsonNull: Boolean = false,
-                                additionalContext: MutableMap<String, Any> = mutableMapOf()): String
+                                additionalContext: MutableMap<String, JsonNode> = mutableMapOf()): String
 }
 
 /**
