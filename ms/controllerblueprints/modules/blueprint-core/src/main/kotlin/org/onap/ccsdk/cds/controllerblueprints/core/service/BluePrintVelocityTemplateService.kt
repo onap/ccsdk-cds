@@ -53,8 +53,9 @@ object BluePrintVelocityTemplateService: BlueprintTemplateService {
         if (json.isNotEmpty()) {
             val jsonNode = mapper.readValue<JsonNode>(json, JsonNode::class.java)
                     ?: throw BluePrintProcessorException("couldn't get json node from json")
-            if (ignoreJsonNull)
+            if (ignoreJsonNull) {
                 JacksonUtils.removeJsonNullNode(jsonNode)
+            }
             jsonNode.fields().forEach { entry ->
                 velocityContext.put(entry.key, entry.value)
             }
