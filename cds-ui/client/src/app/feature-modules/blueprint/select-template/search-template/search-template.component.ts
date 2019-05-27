@@ -29,6 +29,7 @@ import { IBlueprintState } from '../../../../common/core/store/models/blueprintS
 import { IAppState } from '../../../../common/core/store/state/app.state';
 import { LoadBlueprintSuccess, SET_BLUEPRINT_STATE, SetBlueprintState } from '../../../../common/core/store/actions/blueprint.action';
 import { json } from 'd3';
+import { SortPipe } from '../../../../common/shared/pipes/sort.pipe';
 
 @Component({
   selector: 'app-search-template',
@@ -116,6 +117,7 @@ export class SearchTemplateComponent implements OnInit {
 
     if(this.validfile) {      
       this.fetchTOSACAMetadata();
+      this.paths = new SortPipe().transform(this.paths, 'asc', 'name');
       this.tree = this.arrangeTreeData(this.paths);
     } else {
       alert('Please update proper file with TOSCA metadata');

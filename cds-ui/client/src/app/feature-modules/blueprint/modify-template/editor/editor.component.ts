@@ -38,6 +38,7 @@ import { LoadBlueprintSuccess, SetBlueprintState } from '../../../../common/core
 import { ApiService } from 'src/app/common/core/services/api.service';
 import { IMetaData } from 'src/app/common/core/store/models/metadata.model';
 import { EditorService } from './editor.service';
+import { SortPipe } from '../../../../common/shared/pipes/sort.pipe';
 
 interface Node {
   name: string;
@@ -390,6 +391,7 @@ export class EditorComponent implements OnInit {
         newFileNode.data = '';
         this.filesData.push(newFileNode);
       }
+      this.filesData = new SortPipe().transform(this.filesData, 'asc', 'name');
       this.arrangeTreeData(this.filesData);
     }
   }
@@ -431,7 +433,9 @@ export class EditorComponent implements OnInit {
 
     if (this.validfile) {
       this.fetchTOSACAMetadata();
+      this.paths = new SortPipe().transform(this.paths, 'asc', 'name');
       this.filesData = this.paths;
+      this.paths = new SortPipe().transform(this.paths, 'asc', 'name');
       this.tree = this.arrangeTreeData(this.paths);
     } else {
       alert('Please update proper file with TOSCA metadata');
@@ -505,6 +509,7 @@ export class EditorComponent implements OnInit {
         i = i - 1;
       }
     }
+    this.filesData = new SortPipe().transform(this.filesData, 'asc', 'name');
     this.arrangeTreeData(this.filesData);
   }
 
