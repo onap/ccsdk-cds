@@ -5,6 +5,7 @@ export default {
     "connector": "rest",
     "baseURL": controllerApiConfig.url,
     "crud": false,
+    "debug": true,
     "operations": [{
         "template": {
             "method": "GET",

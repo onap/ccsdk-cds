@@ -19,9 +19,9 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { CdsUiServerApplication } from './application';
 import { ApplicationConfig } from '@loopback/core';
-
+import { CdsUiServerApplication } from './application';
+import { logger } from './logger/logger';
 export { CdsUiServerApplication };
 
 export async function main(options: ApplicationConfig = {}) {
@@ -30,8 +30,8 @@ export async function main(options: ApplicationConfig = {}) {
   await app.start();
 
   const url = app.restServer.url;
-  console.log(`Server is running at ${url}`);
-  console.log(`Try ${url}/ping`);
+  logger.info(`Server is running at ${url}`);
+  logger.info(`Try ${url}/ping`);
 
   return app;
 }
