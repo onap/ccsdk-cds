@@ -19,8 +19,10 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Request, RestBindings, get, ResponseObject } from '@loopback/rest';
-import { inject } from '@loopback/context';
+import { inject, intercept } from '@loopback/context';
+import { get, Request, ResponseObject, RestBindings } from '@loopback/rest';
+import { logInterceptor } from '../interceptors/logInterceptor';
+import { logger } from '../logger/logger';
 
 /**
  * OpenAPI response for ping()
@@ -51,6 +53,7 @@ const PING_RESPONSE: ResponseObject = {
 /**
  * A simple controller to bounce back http requests
  */
+@intercept(logInterceptor)
 export class PingController {
   constructor(@inject(RestBindings.Http.REQUEST) private req: Request) { }
 
@@ -61,6 +64,7 @@ export class PingController {
     },
   })
   ping(): object {
+    logger.warn('Calling ping from %s', this.req.url)
     // Reply with a greeting, the current time, the url, and request headers
     return {
       greeting: 'Hello from LoopBack',
