@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
+import com.fasterxml.jackson.databind.node.TextNode
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.*
@@ -122,7 +123,7 @@ class ResourceAssignmentUtils {
                     if (isNotEmpty(it.name) && it.property != null) {
                         val rName = it.name
                         val type = nullToEmpty(it.property?.type).toLowerCase()
-                        val value = it.property?.value
+                        val value = useDefaultValueIfNull(it, rName)
                         logger.info("Generating Resource name ($rName), type ($type), value ($value)")
                         root.set(rName, value)
                     }
@@ -134,6 +135,15 @@ class ResourceAssignmentUtils {
             }
 
             return result
+        }
+
+        private fun useDefaultValueIfNull(resourceAssignment: ResourceAssignment, resourceAssignmentName: String): JsonNode {
+            if (resourceAssignment.property?.value == null) {
+                val defaultValue = "\${$resourceAssignmentName}"
+                return TextNode(defaultValue)
+            } else {
+                return resourceAssignment.property!!.value!!
+            }
         }
 
         fun transformToRARuntimeService(blueprintRuntimeService: BluePrintRuntimeService<*>,
