@@ -25,6 +25,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.BeforeTest
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
@@ -98,5 +99,39 @@ class BluePrintTemplateServiceTest {
             assertNotNull(content, "failed to generate content for velocity template")
         }
     }
+
+    @Test
+    fun `no value variable should evaluate to default value - standalone template mesh test`() {
+        runBlocking {
+            val template = JacksonUtils.getClassPathFileContent("templates/default-variable-value-velocity-template.vtl")
+            val json = JacksonUtils.getClassPathFileContent("templates/default-variable-value-data.json")
+
+            val content = BluePrintVelocityTemplateService.generateContent(template, json)
+            //first line represents a variable whose value was successfully retrieved, second line contains a variable
+            // whose value could not be evaluated
+            val expected = "sample-hostname\n\${node0_backup_router_address}"
+            assertEquals(expected, content, "No value variable should use default value")
+        }
+    }
+
+    @Test
+    fun `no value variable should evaluate to default value - blueprint processing test`() {
+        runBlocking {
+            val bluePrintTemplateService = BluePrintTemplateService()
+
+            val templateFile = "templates/default-variable-value-velocity-template.vtl"
+            val jsonFile = "templates/default-variable-value-data.json"
+
+            val content = bluePrintTemplateService.generateContentFromFiles(templateFile,
+                    BluePrintConstants.ARTIFACT_VELOCITY_TYPE_NAME, jsonFile, false, mutableMapOf())
+
+            //first line represents a variable whose value was successfully retrieved, second line contains a variable
+            // whose value could not be evaluated
+            val expected = "sample-hostname\n\${node0_backup_router_address}"
+            assertEquals(expected, content, "No value variable should use default value")
+        }
+
+    }
+
 }
 

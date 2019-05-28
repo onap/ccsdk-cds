@@ -66,4 +66,3 @@ object BluePrintVelocityTemplateService: BlueprintTemplateService {
         return stringWriter.toString()
     }
 }
-
