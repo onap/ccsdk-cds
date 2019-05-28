@@ -1,8 +1,8 @@
 {
-  "tags": "nexus_artifact_repo",
-  "name": "nexus_artifact_repo",
+  "tags": "dcae_collector_port",
+  "name": "dcae_collector_port",
   "property": {
-    "description": "nexus_artifact_repo",
+    "description": "dcae_collector_port",
     "type": "string"
   },
   "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
@@ -18,14 +18,14 @@
       "type": "source-rest",
       "properties": {
         "type": "JSON",
-        "url-path": "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/nexus_artifact_repo",
+        "url-path": "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/dcae_collector_port",
         "path": "/param/0/value",
         "input-key-mapping": {
           "service-instance-id": "service-instance-id",
           "vnf-id": "vnf-id"
         },
         "output-key-mapping": {
-          "nexus_artifact_repo": "value"
+          "dcae_collector_port": "value"
         },
         "key-dependencies": [
           "service-instance-id",

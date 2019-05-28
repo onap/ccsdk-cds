@@ -124,7 +124,8 @@ open class DatabaseResourceAssignmentProcessor(private val bluePrintDBLibPropert
         checkNotEmpty(resourceAssignment.dictionaryName) {
             "resource assignment dictionary name is not defined for template key (${resourceAssignment.name})"
         }
-        checkEquals(ResourceDictionaryConstants.SOURCE_PROCESSOR_DB, resourceAssignment.dictionarySource) {
+        check(resourceAssignment.dictionarySource in arrayOf(ResourceDictionaryConstants.SOURCE_PROCESSOR_DB, ResourceDictionaryConstants.SOURCE_PRIMARY_DB))
+        {
             "resource assignment source is not ${ResourceDictionaryConstants.SOURCE_PROCESSOR_DB} but it is ${resourceAssignment.dictionarySource}"
         }
     }
