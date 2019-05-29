@@ -29,20 +29,22 @@ import { RouterModule } from "@angular/router";
 import { SearchPipe } from './pipes/search.pipe';
 import { SearchDialog } from './components/search-dialog/search-dialog.component';
 import { AppMaterialModule }  from '../modules/app-material.module';
+import { SortPipe } from './pipes/sort.pipe';
 
 @NgModule({
   declarations: [
     HomeComponent,
     CBAWizardComponent,
     SearchPipe,
-    SearchDialog
-
+    SearchDialog,
+    SortPipe
   ],
   exports: [
     HomeComponent,
     CBAWizardComponent,
     SearchPipe,
-    SearchDialog
+    SearchDialog,
+    SortPipe
   ],
   imports: [
     AppMaterialModule,
