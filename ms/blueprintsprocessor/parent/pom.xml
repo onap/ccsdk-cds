@@ -379,6 +379,11 @@
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
+                <artifactId>ansible-awx-executor</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
                 <artifactId>netconf-executor</artifactId>
                 <version>${project.version}</version>
             </dependency>

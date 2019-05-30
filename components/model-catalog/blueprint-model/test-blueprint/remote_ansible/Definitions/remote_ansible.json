@@ -1,0 +1,124 @@
+{
+  "tosca_definitions_version": "controller_blueprint_1_0_0",
+  "metadata": {
+    "template_author": "Serge Simard",
+    "author-email": "serge@agilitae.com",
+    "user-groups": "ADMIN, OPERATION",
+    "template_name": "remote_ansible",
+    "template_version": "1.0.0",
+    "template_tags": "tosca"
+  },
+  "imports": [
+    {
+      "file": "Definitions/data_types.json"
+    },
+    {
+      "file": "Definitions/relationship_types.json"
+    },
+    {
+      "file": "Definitions/artifact_types.json"
+    },
+    {
+      "file": "Definitions/node_types.json"
+    },
+    {
+      "file": "Definitions/policy_types.json"
+    }
+  ],
+  "dsl_definitions": {
+    "ansible-remote-endpoint": {
+      "type": "token-auth",
+      "url": "http://142.44.184.236",
+      "token": "Bearer J9gEtMDqf7P4YsJ74fioY9VAhLDIs1"
+    }
+  },
+  "topology_template": {
+    "workflows": {
+      "execute-remote-ansible": {
+        "steps": {
+          "process": {
+            "description": "Execute Remote Ansible Script",
+            "target": "execute-remote-ansible",
+            "activities": [
+              {
+                "call_operation": ""
+              }
+            ]
+          }
+        },
+        "inputs": {
+          "endpoint-selector": {
+            "required": true,
+            "type": "string"
+          },
+          "job-template-name": {
+            "required": true,
+            "type": "string"
+          },
+          "limit": {
+            "required": false,
+            "type": "string"
+          },
+          "inventory": {
+            "required": false,
+            "type": "string"
+          },
+          "tags": {
+            "required": false,
+            "type": "string"
+          },
+          "skip-tags": {
+            "required": false,
+            "type": "string"
+          },
+          "extra-vars" : {
+            "required" : false,
+            "type" : "json"
+          }
+        },
+        "outputs": {
+          "ansible-command-status": {
+            "type": "string",
+            "value": {
+              "get_attribute": [
+                "execute-remote-ansible",
+                "ansible-command-status"
+              ]
+            }
+          },
+          "ansible-command-logs": {
+            "type": "string",
+            "value": {
+              "get_attribute": [
+                "execute-remote-ansible",
+                "ansible-command-logs"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "node_templates": {
+      "execute-remote-ansible": {
+        "type": "component-remote-ansible-executor",
+        "interfaces": {
+          "ComponentRemoteAnsibleExecutor": {
+            "operations": {
+              "process": {
+                "inputs": {
+                  "endpoint-selector": { "get_input": "endpoint-selector" },
+                  "job-template-name": { "get_input": "job-template-name" },
+                  "limit": { "get_input": "limit" },
+                  "inventory": { "get_input": "inventory" },
+                  "extra-vars": { "get_input": "extra-vars" },
+                  "tags": { "get_input": "tags" },
+                  "skip-tags": { "get_input": "skip-tags" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
