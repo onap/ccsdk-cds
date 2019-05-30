@@ -1,18 +1,18 @@
-import {controllerApiConfig} from '../../config/app-config';
+import {controllerApiConfig} from '../config/app-config';
 
 export default {
     "name": "blueprint",
     "connector": "rest",
-    "baseURL": controllerApiConfig.url,
+    "baseURL": controllerApiConfig.http.url,
     "crud": false,
     "operations": [{
         "template": {
             "method": "GET",
-            "url": controllerApiConfig.url + "/blueprint-model/",
+            "url": controllerApiConfig.http.url + "/blueprint-model/",
             "headers": {
                 "accepts": "application/json",
                 "content-type": "application/json",
-                "authorization": controllerApiConfig.authToken
+                "authorization": controllerApiConfig.http.authToken
             },
             "responsePath": "$.*"
         },

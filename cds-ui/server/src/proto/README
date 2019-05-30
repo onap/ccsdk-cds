@@ -1,0 +1,11 @@
+To create python bindings,
+
+Prerequisites:
+  https://developers.google.com/protocol-buffers/docs/downloads
+  or
+  https://grpc.io/docs/quickstart/python.html
+
+Command:
+  protoc -I=. --python_out=. --grpc_python_out=. CommandExecutor.proto
+  or
+  python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. CommandExecutor.proto

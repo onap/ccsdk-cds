@@ -1,18 +1,18 @@
-import {controllerApiConfig} from '../../config/app-config';
+import {controllerApiConfig} from '../config/app-config';
 
 export default {
     "name": "resourceDictionary",
     "connector": "rest",
-    "baseURL": controllerApiConfig.url + "/dictionary",
+    "baseURL": controllerApiConfig.http.url + "/dictionary",
     "crud": false,
     "operations": [{
             "template": {
                 "method": "GET",
-                "url": controllerApiConfig.url + "/dictionary/{name}",
+                "url": controllerApiConfig.http.url + "/dictionary/{name}",
                 "headers": {
                     "accepts": "application/json",
                     "content-type": "application/json",
-                    "authorization": controllerApiConfig.authToken
+                    "authorization": controllerApiConfig.http.authToken
                 },
                 "responsePath": "$.*"
             },
@@ -24,11 +24,11 @@ export default {
         {
             "template": {
                 "method": "GET",
-                "url": controllerApiConfig.url + "/dictionary/source-mapping",
+                "url": controllerApiConfig.http.url + "/dictionary/source-mapping",
                 "headers": {
                     "accepts": "application/json",
                     "content-type": "application/json",
-                    "authorization": controllerApiConfig.authToken
+                    "authorization": controllerApiConfig.http.authToken
                 },
                 "responsePath": "$.*"
             },
@@ -40,11 +40,11 @@ export default {
         {
             "template": {
                 "method": "GET",
-                "url": controllerApiConfig.url + "/dictionary/search/{tags}",
+                "url": controllerApiConfig.http.url + "/dictionary/search/{tags}",
                 "headers": {
                     "accepts": "application/json",
                     "content-type": "application/json",
-                    "authorization": controllerApiConfig.authToken
+                    "authorization": controllerApiConfig.http.authToken
                 },
                 "responsePath": "$.*"
             },
@@ -56,11 +56,11 @@ export default {
         {
             "template": {
                 "method": "POST",
-                "url": controllerApiConfig.url + "/dictionary",
+                "url": controllerApiConfig.http.url + "/dictionary",
                 "headers": {
                     "accepts": "application/json",
                     "content-type": "application/json",
-                    "authorization": controllerApiConfig.authToken
+                    "authorization": controllerApiConfig.http.authToken
                 },
                 "body": "{resourceDictionary}",
                 "responsePath": "$.*"
@@ -73,11 +73,11 @@ export default {
         {
             "template": {
                 "method": "POST",
-                "url": controllerApiConfig.url + "/dictionary/by-names",
+                "url": controllerApiConfig.http.url + "/dictionary/by-names",
                 "headers": {
                     "accepts": "application/json",
                     "content-type": "application/json",
-                    "authorization": controllerApiConfig.authToken
+                    "authorization": controllerApiConfig.http.authToken
                 },
                 "body": "{resourceDictionaryList}",
                 "responsePath": "$.*"

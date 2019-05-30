@@ -1,0 +1,29 @@
+syntax = "proto3";
+import "BluePrintCommon.proto";
+option java_multiple_files = true;
+package org.onap.ccsdk.cds.controllerblueprints.management.api;
+
+message BluePrintUploadInput {
+  org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader commonHeader = 1;
+  FileChunk fileChunk = 2;
+}
+
+message BluePrintRemoveInput {
+  org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader commonHeader = 1;
+  string blueprintName = 2;
+  string blueprintVersion = 3;
+}
+
+message BluePrintManagementOutput {
+  org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader commonHeader = 1;
+  org.onap.ccsdk.cds.controllerblueprints.common.api.Status status = 3;
+}
+
+message FileChunk {
+  bytes chunk = 1;
+}
+
+service BluePrintManagementService {
+  rpc uploadBlueprint (BluePrintUploadInput) returns (BluePrintManagementOutput);
+  rpc removeBlueprint (BluePrintRemoveInput) returns (BluePrintManagementOutput);
+}
