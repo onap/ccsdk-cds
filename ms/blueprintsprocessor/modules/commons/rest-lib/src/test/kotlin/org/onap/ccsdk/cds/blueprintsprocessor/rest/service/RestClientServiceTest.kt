@@ -23,8 +23,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
-import org.apache.catalina.connector.Connector
-import org.junit.Ignore
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
@@ -34,18 +34,17 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory
-import org.springframework.boot.web.servlet.server.ServletWebServerFactory
+import org.springframework.boot.web.embedded.netty.NettyReactiveWebServerFactory
+import org.springframework.boot.web.reactive.server.ReactiveWebServerFactory
+import org.springframework.boot.web.server.WebServer
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
-import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.stereotype.Component
+import org.springframework.http.server.reactive.HttpHandler
+import org.springframework.security.config.web.server.ServerHttpSecurity
+import org.springframework.security.core.userdetails.MapReactiveUserDetailsService
+import org.springframework.security.core.userdetails.User
+import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
@@ -63,10 +62,9 @@ import kotlin.test.assertNotNull
 @RunWith(SpringRunner::class)
 @EnableAutoConfiguration(exclude = [DataSourceAutoConfiguration::class])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@ContextConfiguration(classes = [BluePrintRestLibConfiguration::class,
-    BlueprintPropertyConfiguration::class,
-    SampleController::class, BluePrintProperties::class,
-    BluePrintProperties::class])
+@ContextConfiguration(classes = [BluePrintRestLibConfiguration::class, SampleController::class,
+    SecurityConfiguration::class,
+    BlueprintPropertyConfiguration::class, BluePrintProperties::class])
 @TestPropertySource(properties =
 [
     "server.port=8443",
@@ -76,7 +74,7 @@ import kotlin.test.assertNotNull
     "server.ssl.keyStoreType=PKCS12",
     "server.ssl.keyAlias=tomcat",
     "blueprintsprocessor.restclient.sample.type=basic-auth",
-    "blueprintsprocessor.restclient.sample.url=http://127.0.0.1:8080",
+    "blueprintsprocessor.restclient.sample.url=http://127.0.0.1:8081",
     "blueprintsprocessor.restclient.sample.username=admin",
     "blueprintsprocessor.restclient.sample.password=jans",
     "blueprintsprocessor.restclient.test.type=ssl-basic-auth",
@@ -87,11 +85,30 @@ import kotlin.test.assertNotNull
     "blueprintsprocessor.restclient.test.sslTrust=src/test/resources/keystore.p12",
     "blueprintsprocessor.restclient.test.sslTrustPassword=changeit"
 ])
-@Ignore
 class RestClientServiceTest {
 
     @Autowired
     lateinit var bluePrintRestLibPropertyService: BluePrintRestLibPropertyService
+
+    @Autowired
+    lateinit var httpHandler : HttpHandler
+
+    lateinit var http : WebServer
+
+    fun localPort() = http.port
+
+    @Before
+    fun start() {
+        // Second Http server required for non-SSL requests to be processed along with the https server.
+        val factory: ReactiveWebServerFactory = NettyReactiveWebServerFactory(8081)
+        this.http = factory.getWebServer(this.httpHandler)
+        this.http.start()
+    }
+
+    @After
+    fun stop() {
+        this.http.stop()
+    }
 
     @Test
     fun testPatch() {
@@ -118,7 +135,7 @@ class RestClientServiceTest {
     fun testSimpleBasicAuth() {
         val json: String = "{\n" +
                 "  \"type\" : \"basic-auth\",\n" +
-                "  \"url\" : \"http://localhost:8080\",\n" +
+                "  \"url\" : \"http://localhost:8081\",\n" +
                 "  \"username\" : \"admin\",\n" +
                 "  \"password\" : \"jans\"\n" +
                 "}"
@@ -308,49 +325,25 @@ open class SampleController {
  * Security configuration required for basic authentication with username and
  * password for any request in the server.
  */
-@Configuration
-@EnableWebSecurity
-open class SecurityConfig : WebSecurityConfigurerAdapter() {
+open class SecurityConfiguration {
 
-    @Throws(Exception::class)
-    override fun configure(http: HttpSecurity) {
-        http
-                .csrf().disable()
-                .authorizeRequests().anyRequest().authenticated()
-                .and()
-                .httpBasic()
-    }
-
-    @Autowired
-    @Throws(Exception::class)
-    open fun configureGlobal(auth: AuthenticationManagerBuilder) {
-        auth.inMemoryAuthentication()
-                .withUser("admin")
-                .password(passwordEncoder().encode("jans"))
+    @Bean
+    open fun userDetailsService(): MapReactiveUserDetailsService {
+        val user: UserDetails = User.withDefaultPasswordEncoder()
+                .username("admin")
+                .password("jans")
                 .roles("USER")
+                .build()
+        return MapReactiveUserDetailsService(user)
     }
 
     @Bean
-    open fun passwordEncoder(): PasswordEncoder {
-        return BCryptPasswordEncoder()
-    }
-}
-
-/**
- * Http server required for http request to be processed along with the https
- * server.
- */
-@Component
-class HttpServer {
-    @Bean
-    fun servletContainer(): ServletWebServerFactory {
-
-        val connector = Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL)
-        connector.port = 8080
-
-        val tomcat = TomcatServletWebServerFactory()
-        tomcat.addAdditionalTomcatConnectors(connector)
-        return tomcat
+    open fun springSecurityFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain {
+        return http
+                .csrf().disable()
+                .authorizeExchange().anyExchange().authenticated()
+                .and().httpBasic()
+                .and().build()
     }
 }
 
