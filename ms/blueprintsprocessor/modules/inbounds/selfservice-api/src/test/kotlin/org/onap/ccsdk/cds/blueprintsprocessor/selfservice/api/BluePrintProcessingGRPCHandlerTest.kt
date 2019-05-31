@@ -22,7 +22,6 @@ import com.google.protobuf.util.JsonFormat
 import io.grpc.stub.StreamObserver
 import io.grpc.testing.GrpcServerRule
 import org.junit.Assert
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -41,7 +40,6 @@ import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.BeforeTest
 
-@Ignore
 @RunWith(SpringRunner::class)
 @DirtiesContext
 @EnableAutoConfiguration
