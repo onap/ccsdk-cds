@@ -19,8 +19,9 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Request, RestBindings, get, ResponseObject } from '@loopback/rest';
 import { inject } from '@loopback/context';
+import { get, Request, ResponseObject, RestBindings } from '@loopback/rest';
+import { logger } from '../logger/logger';
 
 /**
  * OpenAPI response for ping()
@@ -61,6 +62,7 @@ export class PingController {
     },
   })
   ping(): object {
+    logger.warn('Calling ping from %s', this.req.url)
     // Reply with a greeting, the current time, the url, and request headers
     return {
       greeting: 'Hello from LoopBack',

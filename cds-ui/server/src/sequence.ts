@@ -30,6 +30,7 @@ import {
   Send,
   SequenceHandler,
 } from '@loopback/rest';
+import { logger } from './logger/logger';
 
 const SequenceActions = RestBindings.SequenceActions;
 
@@ -45,6 +46,8 @@ export class MySequence implements SequenceHandler {
   async handle(context: RequestContext) {
     try {
       const { request, response } = context;
+      logger.info("Incoming request from %s %s and with header %s query %s params %s",
+        request.method, request.url, JSON.stringify(request.headers), JSON.stringify(request.query), JSON.stringify(request.params))
       const route = this.findRoute(request);
       const args = await this.parseParams(request, route);
       const result = await this.invoke(route, args);
