@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "470de02d_e5f2cac8",
+        "filename": "ms/blueprintsprocessor/application/src/main/resources/application.properties",
+        "patchSetId": 14
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-05-31T13:21:41Z",
+      "side": 1,
+      "message": "selector name should be self-service-api",
+      "range": {
+        "startLine": 63,
+        "startChar": 34,
+        "endLine": 63,
+        "endChar": 45
+      },
+      "revId": "d34d64561c199eef8803ee2763e8f3989195b8d3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d35dff6e_f5da0216",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/selfservice-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/selfservice/api/MessagingController.kt",
+        "patchSetId": 14
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-05-31T13:21:41Z",
+      "side": 1,
+      "message": "Please provide the comment, Atpresent, It may be hardcoded, but in future, it should be retrieved from model or from request.",
+      "range": {
+        "startLine": 52,
+        "startChar": 7,
+        "endLine": 52,
+        "endChar": 48
+      },
+      "revId": "d34d64561c199eef8803ee2763e8f3989195b8d3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "845fa518_18654a39",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/selfservice-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/selfservice/api/MessagingController.kt",
+        "patchSetId": 14
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-05-31T13:21:41Z",
+      "side": 1,
+      "message": "Please avoid Autowired spring annotation, instead define it in constructor",
+      "range": {
+        "startLine": 64,
+        "startChar": 3,
+        "endLine": 64,
+        "endChar": 14
+      },
+      "revId": "d34d64561c199eef8803ee2763e8f3989195b8d3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e127a875_7ea6bf9d",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/selfservice-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/selfservice/api/MessagingController.kt",
+        "patchSetId": 14
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-05-31T13:21:41Z",
+      "side": 1,
+      "message": "Value can be JsonSerializer and Object maybe Execution Service Input",
+      "range": {
+        "startLine": 97,
+        "startChar": 60,
+        "endLine": 97,
+        "endChar": 92
+      },
+      "revId": "d34d64561c199eef8803ee2763e8f3989195b8d3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
