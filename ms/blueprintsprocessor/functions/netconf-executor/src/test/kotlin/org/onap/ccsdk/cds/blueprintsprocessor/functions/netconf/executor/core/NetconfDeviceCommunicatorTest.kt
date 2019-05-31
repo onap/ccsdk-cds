@@ -24,19 +24,15 @@ import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfReceivedEvent
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfSession
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfSessionListener
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.utils.RpcMessageUtils
-import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
-import java.io.Reader
-import java.io.Writer
 import java.nio.charset.StandardCharsets
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
@@ -62,13 +58,12 @@ class NetconfDeviceCommunicatorTest {
             |
             |#4
             |<rpc
-            |
             |#18
             | message-id="102"
             |
             |#79
-            |  xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
-            | <close-session/>
+            |     xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+            |  <close-session/>
             |</rpc>
             |##
             |""".trimMargin()
@@ -176,7 +171,6 @@ class NetconfDeviceCommunicatorTest {
         assertEquals("", eventSlot.captured.messagePayload)
     }
 
-    @Ignore //TODO: Not clear on validateChunkedFraming, the size validation part could be discarding valid msg..
     @Test
     fun `NetconfDeviceCommunicator in END_CHUNKED_PATTERN passing validation generates DEVICE_REPLY`() {
         val eventSlot = CapturingSlot<NetconfReceivedEvent>()
@@ -190,7 +184,12 @@ class NetconfDeviceCommunicatorTest {
         assertTrue { eventSlot.isCaptured }
         //eventually, sessionListener is called with message type DEVICE_REPLY
         assertEquals(NetconfReceivedEvent.Type.DEVICE_REPLY, eventSlot.captured.type)
-        assertEquals("", eventSlot.captured.messagePayload)
+        assertEquals("""
+<rpc message-id="102"
+     xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+  <close-session/>
+</rpc>
+        """.trimIndent(), eventSlot.captured.messagePayload)
     }
 
     @Test
@@ -199,7 +198,7 @@ class NetconfDeviceCommunicatorTest {
     fun `chunked sample is validated by the chunked response regex`() {
         val test1 = "\n#10\nblah\n##\n"
         val chunkedFramingPattern = Pattern.compile("(\\n#([1-9][0-9]*)\\n(.+))+\\n##\\n", Pattern.DOTALL)
-        val matcher = chunkedFramingPattern.matcher(validChunkedEncodedMsg)
+        val matcher = chunkedFramingPattern.matcher(test1)
         assertTrue { matcher.matches() }
     }
 
