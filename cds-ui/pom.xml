@@ -24,7 +24,7 @@ limitations under the License.
     <parent>
         <groupId>org.onap.ccsdk.parent</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.2.4-SNAPSHOT</version>
+        <version>1.2.4</version>
         <relativePath/>
     </parent>
 
