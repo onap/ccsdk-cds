@@ -106,7 +106,7 @@
             "operations": {
               "process": {
                 "inputs": {
-                  "endpoint-selector": { "get_input": "endpoint-selector" },
+                  "endpoint-selector" : "*ansible-remote-endpoint",
                   "job-template-name": { "get_input": "job-template-name" },
                   "limit": { "get_input": "limit" },
                   "inventory": { "get_input": "inventory" },

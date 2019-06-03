@@ -91,7 +91,7 @@ open class PropertyAssignmentValidationUtils(private val bluePrintContext: BlueP
         }
 
         check(isValid) {
-            throw BluePrintException("property(propertyName) defined of type(propertyType) is not comptable with the value (propertyAssignment)")
+            throw BluePrintException("property($propertyName) defined of type($propertyType) is not comptable with the value ($propertyAssignment)")
         }
     }
 
