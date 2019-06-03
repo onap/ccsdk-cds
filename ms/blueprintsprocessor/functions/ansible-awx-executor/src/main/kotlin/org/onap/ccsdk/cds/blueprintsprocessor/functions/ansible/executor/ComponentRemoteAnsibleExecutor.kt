@@ -1,5 +1,5 @@
 /*
- *  Copyright © 2019 IBM.
+ *  Copyright © 2019 Bell Canada.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -66,9 +66,10 @@ open class ComponentRemoteAnsibleExecutor(private val blueprintRestLibPropertySe
         const val INPUT_TAGS = "tags"
         const val INPUT_SKIP_TAGS = "skip-tags"
 
-        // output fields names populated by this executor
+        // output fields names (and values) populated by this executor; aligned with job details status field values.
         const val ATTRIBUTE_EXEC_CMD_STATUS = "ansible-command-status"
         const val ATTRIBUTE_EXEC_CMD_LOG = "ansible-command-logs"
+        const val ATTRIBUTE_EXEC_CMD_STATUS_ERROR = "error"
 
         const val CHECKDELAY: Long = 10000
     }
@@ -85,11 +86,11 @@ open class ComponentRemoteAnsibleExecutor(private val blueprintRestLibPropertySe
             } else {
                 val message = "Job template ${jobTemplateName} does not exists"
                 log.error(message)
-                setNodeOutputErrors("Failed", message)
+                setNodeOutputErrors(ATTRIBUTE_EXEC_CMD_STATUS_ERROR, message)
             }
         } catch (e: Exception) {
             log.error("Failed to process on remote executor (${e.message})", e)
-            setNodeOutputErrors("Failed", "Failed to process on remote executor (${e.message})")
+            setNodeOutputErrors(ATTRIBUTE_EXEC_CMD_STATUS_ERROR, "Failed to process on remote executor (${e.message})")
         }
     }
 
@@ -97,19 +98,26 @@ open class ComponentRemoteAnsibleExecutor(private val blueprintRestLibPropertySe
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         val message = "Error in ComponentRemoteAnsibleExecutor : ${runtimeException.message}"
         log.error(message,runtimeException)
-        setNodeOutputErrors("Failed", message)
+        setNodeOutputErrors(ATTRIBUTE_EXEC_CMD_STATUS_ERROR, message)
     }
 
     /** Creates a TokenAuthRestClientService, since this executor expect type property to be "token-auth" and the
      * token to be an OAuth token (access_token response field) generated via the AWX /api/o/token rest endpoint
      * The token field is of the form "Bearer access_token_from_response", for example :
      *  "blueprintsprocessor.restclient.awx.type=token-auth"
-     *  "blueprintsprocessor.restclient.awx.url=http://ipaddress"
-     *  "blueprintsprocessor.restclient.awx.token=Bearer J9gEtMDqf7P4YsJ74fioY9VAhLDIs1"
+     *  "blueprintsprocessor.restclient.awx.url=http://awx-endpoint"
+     *  "blueprintsprocessor.restclient.awx.token=Bearer J9gEtMDzxcqw25574fioY9VAhLDIs1"
+     *
+     * Also supports json endpoint definition via DSL entry, e.g.:
+     *     "ansible-remote-endpoint": {
+     *        "type": "token-auth",
+     *        "url": "http://awx-endpoint",
+     *        "token": "Bearer J9gEtMDzxcqw25574fioY9VAhLDIs1"
+     *     }
      */
     private fun getAWXRestClient(): BlueprintWebClientService {
 
-        val endpointSelector = getOperationInput(INPUT_ENDPOINT_SELECTOR).asText()// TODO not asText
+        val endpointSelector = getOperationInput(INPUT_ENDPOINT_SELECTOR)
 
         try {
             return blueprintRestLibPropertyService.blueprintWebClientService(endpointSelector)
@@ -187,7 +195,7 @@ open class ComponentRemoteAnsibleExecutor(private val blueprintRestLibPropertySe
             val message = "Execution of job template $job_template_name could not be started for requestId $processId." +
                     " (Response: ${response.body}) "
             log.error(message)
-            setNodeOutputErrors( response.status.toString(), message)
+            setNodeOutputErrors( ATTRIBUTE_EXEC_CMD_STATUS_ERROR, message)
         }
     }
 
@@ -241,7 +249,6 @@ open class ComponentRemoteAnsibleExecutor(private val blueprintRestLibPropertySe
         // Get Inventory by name
         val encoded = URLEncoder.encode(inventoryProp)
         val response = awxClient.exchangeResource(GET,"/api/v2/inventories/?name=$encoded","")
-                //, getRequestHeaders("awx"))
         if (response.status in HTTP_SUCCESS) {
             val mapper = ObjectMapper()
 
@@ -250,13 +257,16 @@ open class ComponentRemoteAnsibleExecutor(private val blueprintRestLibPropertySe
             val nbInvFound = invDetails.at("/count").asInt()
             if (nbInvFound == 1) {
                 invId = invDetails["results"][0]["id"].asInt()
-            }
-            if (invId == null) {
-                log.error("Could not resolve inventory $inventoryProp by name...")
-            } else {
                 log.info("Resolved inventory $inventoryProp to ID #: $invId")
             }
         }
+
+        if (invId == null) {
+            val message = "Could not resolve inventory $inventoryProp by name..."
+            log.error(message)
+            throw IllegalArgumentException(message)
+        }
+
         return invId
     }
 
@@ -277,6 +287,6 @@ open class ComponentRemoteAnsibleExecutor(private val blueprintRestLibPropertySe
         setAttribute(ATTRIBUTE_EXEC_CMD_STATUS, status.asJsonPrimitive())
         setAttribute(ATTRIBUTE_EXEC_CMD_LOG, message.asJsonPrimitive())
 
-        addError("error", ATTRIBUTE_EXEC_CMD_LOG, "$status : $message")
+        addError(status, ATTRIBUTE_EXEC_CMD_LOG, message)
     }
 }
