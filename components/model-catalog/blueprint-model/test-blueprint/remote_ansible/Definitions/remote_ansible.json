@@ -29,7 +29,7 @@
     "ansible-remote-endpoint": {
       "type": "token-auth",
       "url": "http://142.44.184.236",
-      "token": "Bearer J9gEtMDqf7P4YsJ74fioY9VAhLDIs1"
+      "token": "Bearer J9gEtMDqf7P4YsJ7444fioY9VAhLDIs1"
     }
   },
   "topology_template": {
@@ -106,7 +106,7 @@
             "operations": {
               "process": {
                 "inputs": {
-                  "endpoint-selector": { "get_input": "endpoint-selector" },
+                  "endpoint-selector" : "*ansible-remote-endpoint",
                   "job-template-name": { "get_input": "job-template-name" },
                   "limit": { "get_input": "limit" },
                   "inventory": { "get_input": "inventory" },
