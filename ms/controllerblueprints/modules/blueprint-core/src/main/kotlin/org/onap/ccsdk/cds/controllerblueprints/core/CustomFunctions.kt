@@ -29,8 +29,18 @@ import kotlin.reflect.KClass
  * @author Brinda Santh
  */
 
+fun String.isJson(): Boolean {
+    return ((this.startsWith("{") && this.endsWith("}"))
+            || (this.startsWith("[") && this.endsWith("]")))
+}
+
 fun String.asJsonPrimitive(): TextNode {
     return TextNode(this)
+}
+
+// If you know the string is json content, then use the function directly
+fun String.jsonAsJsonType(): JsonNode {
+    return JacksonUtils.jsonNode(this.trim())
 }
 
 fun Boolean.asJsonPrimitive(): BooleanNode {
@@ -52,8 +62,12 @@ fun <T : Any?> T.asJsonType(): JsonNode {
         when (this) {
             is JsonNode ->
                 this
-            is String ->
-                TextNode(this)
+            is String -> {
+                if (this.isJson())
+                    this.jsonAsJsonType()
+                else
+                    TextNode(this)
+            }
             is Boolean ->
                 BooleanNode.valueOf(this)
             is Int ->
