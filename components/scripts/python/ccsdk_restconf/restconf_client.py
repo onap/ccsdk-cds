@@ -47,7 +47,7 @@ class RestconfClient:
         expected_result = '"netconf-node-topology:connection-status":"connected"'
         while counter < self.__odl_status_check_limit:
             result = web_client_service.exchangeResource("GET", url, "")
-            if expected_result in result:
+            if expected_result in result.body:
                 self.__log.info("NF was mounted successfully on ODL")
                 return None
             sleep(self.__odl_status_check_pause)
