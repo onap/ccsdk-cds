@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import com.fasterxml.jackson.databind.JsonNode
 import io.swagger.annotations.ApiModelProperty
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 
 /**
  *
@@ -207,8 +208,12 @@ class OperationDefinition {
 }
 
 class Implementation {
-    lateinit var primary: String
+    var primary: String? = null
     var dependencies: MutableList<String>? = null
+    @get:JsonProperty("operation_host")
+    var operationHost: String = BluePrintConstants.PROPERTY_SELF
+    //Timeout value in seconds
+    var timeout: Int = 180
 }
 
 /*
@@ -369,7 +374,10 @@ class NodeType : EntityType() {
 
 /*
 3.6.8 Requirement Type
-A Requirement Type is a reusable entity that describes a kind of requirement that a Node Type can declare to expose.  The TOSCA Simple Profile seeks to simplify the need for declaring specific Requirement Types from nodes and instead rely upon nodes declaring their features sets using TOSCA Capability Types along with a named Feature notation.
+A Requirement Type is a reusable entity that describes a kind of requirement that a Node Type can declare to expose.
+The TOSCA Simple Profile seeks to simplify the need for declaring specific Requirement Types
+from nodes and instead rely upon nodes declaring their features sets using TOSCA Capability Types
+along with a named Feature notation.
  */
 
 class RequirementType : EntityType() {

@@ -29,11 +29,12 @@ class ServiceTemplateBuilder(private val name: String,
     private lateinit var topologyTemplate: TopologyTemplate
     private var metadata: MutableMap<String, String> = hashMapOf()
     private var dslDefinitions: MutableMap<String, JsonNode>? = null
-    private var imports: MutableList<ImportDefinition>? = null
+    private var imports: MutableList<ImportDefinition> = mutableListOf()
     private var nodeTypes: MutableMap<String, NodeType>? = null
     private var artifactTypes: MutableMap<String, ArtifactType>? = null
     private var dataTypes: MutableMap<String, DataType>? = null
     private var relationshipTypes: MutableMap<String, RelationshipType>? = null
+    private var policyTypes: MutableMap<String, PolicyType>? = null
 
     private fun initMetaData() {
         metadata[BluePrintConstants.METADATA_TEMPLATE_NAME] = name
@@ -46,8 +47,15 @@ class ServiceTemplateBuilder(private val name: String,
         metadata[id] = value
     }
 
+    fun import(file: String) {
+        val importDefinition = ImportDefinition().apply {
+            this.file = file
+        }
+        imports.add(importDefinition)
+    }
+
     fun dsl(id: String, json: String) {
-       dsl(id, json.asJsonType())
+        dsl(id, json.asJsonType())
     }
 
     fun dsl(id: String, json: JsonNode) {
@@ -56,30 +64,105 @@ class ServiceTemplateBuilder(private val name: String,
         dslDefinitions!![id] = json.asJsonType()
     }
 
-    // TODO("Imports")
+    fun dataTypes(dataTypes: MutableMap<String, DataType>) {
+        if (this.dataTypes == null)
+            this.dataTypes = hashMapOf()
 
-    fun dataType(id: String, version: String, description: String, block: DataTypeBuilder.() -> Unit) {
+        this.dataTypes!!.putAll(dataTypes)
+    }
+
+    fun artifactTypes(artifactTypes: MutableMap<String, ArtifactType>) {
+        if (this.artifactTypes == null)
+            this.artifactTypes = hashMapOf()
+
+        this.artifactTypes!!.putAll(artifactTypes)
+    }
+
+    fun relationshipTypes(relationshipTypes: MutableMap<String, RelationshipType>) {
+        if (this.relationshipTypes == null)
+            this.relationshipTypes = hashMapOf()
+
+        this.relationshipTypes!!.putAll(relationshipTypes)
+    }
+
+    fun policyTypes(policyTypes: MutableMap<String, PolicyType>) {
+        if (this.policyTypes == null)
+            this.policyTypes = hashMapOf()
+
+        this.policyTypes!!.putAll(policyTypes)
+    }
+
+    fun nodeType(nodeTypes: MutableMap<String, NodeType>) {
+        if (this.nodeTypes == null)
+            this.nodeTypes = hashMapOf()
+
+        this.nodeTypes!!.putAll(nodeTypes)
+    }
+
+    fun dataType(dataType: DataType) {
         if (dataTypes == null)
             dataTypes = hashMapOf()
-        dataTypes!![id] = DataTypeBuilder(id, version, description).apply(block).build()
+        dataTypes!![dataType.id!!] = dataType
     }
 
-    fun artifactType(id: String, version: String, description: String, block: ArtifactTypeBuilder.() -> Unit) {
+    fun artifactType(artifactType: ArtifactType) {
         if (artifactTypes == null)
             artifactTypes = hashMapOf()
-        artifactTypes!![id] = ArtifactTypeBuilder(id, version, description).apply(block).build()
+        artifactTypes!![artifactType.id!!] = artifactType
     }
 
-    fun relationshipType(id: String, version: String, description: String, block: RelationshipTypeBuilder.() -> Unit) {
+    fun relationshipType(relationshipType: RelationshipType) {
         if (relationshipTypes == null)
             relationshipTypes = hashMapOf()
-        relationshipTypes!![id] = RelationshipTypeBuilder(id, version, description).apply(block).build()
+        relationshipTypes!![relationshipType.id!!] = relationshipType
     }
 
-    fun nodeType(id: String, version: String, description: String, block: NodeTypeBuilder.() -> Unit) {
+    fun policyType(policyType: PolicyType) {
+        if (policyTypes == null)
+            policyTypes = hashMapOf()
+
+        policyTypes!![policyType.id!!] = policyType
+    }
+
+    fun nodeType(nodeType: NodeType) {
         if (nodeTypes == null)
             nodeTypes = hashMapOf()
-        nodeTypes!![id] = NodeTypeBuilder(id, version, description).apply(block).build()
+        nodeTypes!![nodeType.id!!] = nodeType
+    }
+
+    fun dataType(id: String, version: String, derivedFrom: String, description: String,
+                 block: DataTypeBuilder.() -> Unit) {
+        if (dataTypes == null)
+            dataTypes = hashMapOf()
+        dataTypes!![id] = DataTypeBuilder(id, version, derivedFrom, description).apply(block).build()
+    }
+
+    fun artifactType(id: String, version: String, derivedFrom: String, description: String,
+                     block: ArtifactTypeBuilder.() -> Unit) {
+        if (artifactTypes == null)
+            artifactTypes = hashMapOf()
+        artifactTypes!![id] = ArtifactTypeBuilder(id, version, derivedFrom, description).apply(block).build()
+    }
+
+    fun relationshipType(id: String, version: String, derivedFrom: String, description: String,
+                         block: RelationshipTypeBuilder.() -> Unit) {
+        if (relationshipTypes == null)
+            relationshipTypes = hashMapOf()
+        relationshipTypes!![id] = RelationshipTypeBuilder(id, version, derivedFrom, description).apply(block).build()
+    }
+
+    fun policyType(id: String, version: String, derivedFrom: String, description: String,
+                   block: PolicyTypeBuilder.() -> Unit) {
+        if (policyTypes == null)
+            policyTypes = hashMapOf()
+        policyTypes!![id] = PolicyTypeBuilder(id, version, derivedFrom, description).apply(block).build()
+    }
+
+    fun nodeType(id: String, version: String, derivedFrom: String, description: String,
+                 block: NodeTypeBuilder.() -> Unit) {
+        if (nodeTypes == null)
+            nodeTypes = hashMapOf()
+        nodeTypes!![id] = NodeTypeBuilder(id, version, derivedFrom, description).apply(block).build()
     }
 
     fun topologyTemplate(block: TopologyTemplateBuilder.() -> Unit) {
@@ -95,6 +178,7 @@ class ServiceTemplateBuilder(private val name: String,
         serviceTemplate.artifactTypes = artifactTypes
         serviceTemplate.dataTypes = dataTypes
         serviceTemplate.relationshipTypes = relationshipTypes
+        serviceTemplate.policyTypes = policyTypes
         serviceTemplate.topologyTemplate = topologyTemplate
         return serviceTemplate
     }

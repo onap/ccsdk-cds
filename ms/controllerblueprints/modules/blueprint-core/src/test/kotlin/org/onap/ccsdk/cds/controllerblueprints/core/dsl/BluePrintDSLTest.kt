@@ -17,17 +17,21 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.dsl
 
 import org.junit.Test
+import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 import kotlin.test.assertNotNull
 
 class BluePrintDSLTest {
     @Test
     fun testServiceTemplate() {
         val serviceTemplate = serviceTemplate("sample-bp", "1.0.0",
-                "brindasanth@onap.com", "sample") {
+                "brindasanth@onap.com", "sample, blueprints") {
             metadata("release", "1806")
+            import("Definition/data_types.json")
+            dsl("rest-endpoint", """{ "selector" : "odl-selector"}""")
+            dsl("db-endpoint", """{ "selector" : "db-selector"}""")
             topologyTemplate {
                 nodeTemplateOperation(nodeTemplateName = "activate", type = "sample-node-type", interfaceName = "RestconfExecutor",
-                        operationName = "process", description = "sample activation") {
+                        description = "sample activation") {
                     inputs {
                         property("json-content", """{ "name" : "cds"}""")
                         property("array-content", """["controller", "blueprints"]""")
@@ -36,9 +40,46 @@ class BluePrintDSLTest {
                         property("string-value", "sample")
                         property("input-expression", getInput("key-1"))
                         property("self-property-expression", getProperty("key-1"))
-                        property("self-attribute-expression", getAttribute("key-1"))
                         property("self-artifact-expression", getArtifact("key-1"))
                         property("other-artifact-expression", getNodeTemplateArtifact("node-1", "key-1"))
+                    }
+                    outputs {
+                        property("self-attribute-expression", getAttribute("key-1"))
+                    }
+                }
+                // Other way of defining Node Template with artifacts, implementation
+                nodeTemplate("resolve", "sample-resolve-type", "Resource Resolution") {
+                    operation("ResourceResolutionExecutor", "") {
+                        implementation(180)
+                        inputs {
+                            property("boolean-value", true)
+                            property("string-value", "sample")
+                        }
+                        outputs {
+                            property("resolve-expression", getAttribute("key-1"))
+                        }
+                    }
+                    artifact("sample-template", "artifact-velocity", "Templates/sample-template.vtl")
+                }
+
+                workflow("resource-resolution", "to resolve resources") {
+                    step("resource-resolution-call", "resolve", "Resource Resolution component invoke")
+                }
+                // Alternate way to define workflow
+                workflow("activate", "to resolve resources") {
+                    // Alternate step definition
+                    step("netconf-activate-call", "activate", "call activation component") {
+                        success("END")
+                        failure("END")
+                    }
+                    inputs {
+                        property("request-content", "json", true)
+                    }
+                    outputs {
+                        property("response-content", "json", true) {
+                            value(getAttribute("key-1"))
+                            defaultValue("""{ "status" : "success"}""".jsonAsJsonType())
+                        }
                     }
                 }
             }
@@ -49,4 +90,24 @@ class BluePrintDSLTest {
         assertNotNull(serviceTemplate.topologyTemplate?.nodeTemplates!!["activate"], "failed to get nodeTypes(activate)")
         //println(JacksonUtils.getJson(serviceTemplate, true))
     }
+
+    @Test
+    fun testServiceTemplateWorkflow() {
+        val serviceTemplate = serviceTemplate("sample-bp", "1.0.0",
+                "brindasanth@onap.com", "sample, blueprints") {
+            topologyTemplate {
+                workflowNodeTemplate("activate", "component-resource-resolution", "") {
+                    operation("ResourceResolutionExecutor", "") {
+                        inputs {
+                            property("string-value", "sample")
+                        }
+                    }
+                }
+            }
+        }
+        assertNotNull(serviceTemplate.topologyTemplate, "failed to get topology template")
+        assertNotNull(serviceTemplate.topologyTemplate?.workflows?.get("activate"), "failed to get workflow(activate)")
+        //println(JacksonUtils.getJson(serviceTemplate, true))
+    }
+
 }
