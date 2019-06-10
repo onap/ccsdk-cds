@@ -21,6 +21,44 @@ import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 import kotlin.test.assertNotNull
 
 class BluePrintDSLTest {
+
+    @Test
+    fun testOperationDSLWorkflow() {
+
+        val blueprint = blueprint("sample-bp", "1.0.0",
+                "brindasanth@onap.com", "sample, blueprints") {
+
+            // For New Component Definition
+            component("resource-resolution", "component-resource-resolution", "1.0.0",
+                    "Resource Resolution Call") {
+                implementation(180)
+                // Attributes ( Properties which will be set during execution)
+                attribute("template1-data", "string", true, "")
+
+                // Properties
+                property("string-value1", "string", true, "sample")
+                property("string-value2", "string", true, getInput("key-1"))
+                // Inputs
+                input("json-content", "json", true, """{ "name" : "cds"}""")
+                input("template-content", "string", true, getArtifact("template1"))
+                // Outputs
+                output("self-attribute-expression", "json", true, getAttribute("template1-data"))
+                // Artifacts
+                artifacts("template1", "artifact-velocity", "Templates/template1.vtl")
+            }
+
+            workflow("resource-resolution-process", "") {
+                input("json-content", "json", true, "")
+                input("key-1", "string", true, "")
+                output("status", "string", true, "success")
+                step("resource-resolution-call", "resource-resolution", "Resource Resolution component invoke")
+            }
+        }
+        assertNotNull(blueprint.components, "failed to get components")
+        assertNotNull(blueprint.workflows, "failed to get workflows")
+        //println(blueprint.asJsonString(true))
+    }
+
     @Test
     fun testServiceTemplate() {
         val serviceTemplate = serviceTemplate("sample-bp", "1.0.0",
@@ -88,7 +126,7 @@ class BluePrintDSLTest {
         assertNotNull(serviceTemplate.topologyTemplate, "failed to get topology template")
         assertNotNull(serviceTemplate.topologyTemplate?.nodeTemplates, "failed to get nodeTypes")
         assertNotNull(serviceTemplate.topologyTemplate?.nodeTemplates!!["activate"], "failed to get nodeTypes(activate)")
-        //println(JacksonUtils.getJson(serviceTemplate, true))
+        //println(serviceTemplate.asJsonString(true))
     }
 
     @Test
@@ -107,7 +145,7 @@ class BluePrintDSLTest {
         }
         assertNotNull(serviceTemplate.topologyTemplate, "failed to get topology template")
         assertNotNull(serviceTemplate.topologyTemplate?.workflows?.get("activate"), "failed to get workflow(activate)")
-        //println(JacksonUtils.getJson(serviceTemplate, true))
+        //println(serviceTemplate.asJsonString(true))
     }
 
 }
