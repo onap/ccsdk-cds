@@ -180,6 +180,8 @@ object BluePrintConstants {
     const val PROPERTY_CURRENT_IMPLEMENTATION = "current-implementation"
     const val PROPERTY_EXECUTION_REQUEST = "execution-request"
 
+    const val DEFAULT_STEP_OPERATION = "process"
+
     const val ARTIFACT_VELOCITY_TYPE_NAME = "artifact-template-velocity"
     const val ARTIFACT_JINJA_TYPE_NAME = "artifact-template-jinja"
 }

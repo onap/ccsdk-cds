@@ -16,6 +16,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.dsl
 
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Activity
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Step
@@ -30,7 +31,7 @@ class WorkflowBuilder(private val id: String, private val description: String) {
 
     // Used Internally
     fun nodeTemplateStep(nodeTemplateName: String, description: String) {
-        step(nodeTemplateName, nodeTemplateName, "")
+        step(nodeTemplateName, nodeTemplateName, "$description step")
     }
 
     fun step(id: String, target: String, description: String) {
@@ -98,7 +99,7 @@ class StepBuilder(private val id: String, private val target: String,
         step.id = id
         step.target = target
         // Add Default Activity, Assumption is only one Operation
-        activity(".process")
+        activity(".${BluePrintConstants.DEFAULT_STEP_OPERATION}")
         step.description = description
         step.activities = activities
         step.onSuccess = onSuccess
