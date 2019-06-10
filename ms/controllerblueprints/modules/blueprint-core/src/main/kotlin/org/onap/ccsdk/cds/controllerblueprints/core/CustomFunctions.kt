@@ -34,6 +34,10 @@ fun String.isJson(): Boolean {
             || (this.startsWith("[") && this.endsWith("]")))
 }
 
+fun Any.asJsonString(intend: Boolean? = false): String {
+    return JacksonUtils.getJson(this, true)
+}
+
 fun String.asJsonPrimitive(): TextNode {
     return TextNode(this)
 }

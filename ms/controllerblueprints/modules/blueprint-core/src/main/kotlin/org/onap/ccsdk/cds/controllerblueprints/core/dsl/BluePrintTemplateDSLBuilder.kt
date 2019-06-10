@@ -87,7 +87,7 @@ class NodeTemplateBuilder(private val id: String,
             interfaces = hashMapOf()
 
         val interfaceAssignment = InterfaceAssignment()
-        val defaultOperationName = "process"
+        val defaultOperationName = BluePrintConstants.DEFAULT_STEP_OPERATION
         interfaceAssignment.operations = hashMapOf()
         interfaceAssignment.operations!![defaultOperationName] =
                 OperationAssignmentBuilder(defaultOperationName, description).apply(block).build()

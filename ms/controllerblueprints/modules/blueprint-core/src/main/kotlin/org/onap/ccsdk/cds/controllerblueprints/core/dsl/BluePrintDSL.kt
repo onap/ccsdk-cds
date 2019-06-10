@@ -17,12 +17,43 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.dsl
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.onap.ccsdk.cds.controllerblueprints.core.data.ServiceTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.data.*
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 
+// CDS DSLs
+fun blueprint(name: String, version: String, author: String, tags: String,
+              block: DSLBluePrintBuilder.() -> Unit): DSLBluePrint {
+    return DSLBluePrintBuilder(name, version, author, tags).apply(block).build()
+}
+
+// TOSCA DSLs
 fun serviceTemplate(name: String, version: String, author: String, tags: String,
                     block: ServiceTemplateBuilder.() -> Unit): ServiceTemplate {
     return ServiceTemplateBuilder(name, version, author, tags).apply(block).build()
+}
+
+fun workflow(id: String, description: String, block: WorkflowBuilder.() -> Unit): Workflow {
+    return WorkflowBuilder(id, description).apply(block).build()
+}
+
+fun nodeTemplate(id: String, type: String, description: String,
+                 block: NodeTemplateBuilder.() -> Unit): NodeTemplate {
+    return NodeTemplateBuilder(id, type, description).apply(block).build()
+}
+
+fun nodeType(id: String, version: String, derivedFrom: String, description: String,
+             block: NodeTypeBuilder.() -> Unit): NodeType {
+    return NodeTypeBuilder(id, version, derivedFrom, description).apply(block).build()
+}
+
+fun dataType(id: String, version: String, derivedFrom: String, description: String,
+             block: DataTypeBuilder.() -> Unit): DataType {
+    return DataTypeBuilder(id, version, derivedFrom, description).apply(block).build()
+}
+
+fun artifactType(id: String, version: String, derivedFrom: String, description: String,
+                 block: ArtifactTypeBuilder.() -> Unit): ArtifactType {
+    return ArtifactTypeBuilder(id, version, derivedFrom, description).apply(block).build()
 }
 
 // Input Function
@@ -31,46 +62,46 @@ fun getInput(inputKey: String): JsonNode {
     return """{"get_input": "$inputKey"}""".jsonAsJsonType()
 }
 
-fun getAttribute(attributeName: String): JsonNode {
-    return """{"get_attribute": ["SELF", "$attributeName"]}""".jsonAsJsonType()
+fun getAttribute(attributeId: String): JsonNode {
+    return """{"get_attribute": ["SELF", "$attributeId"]}""".jsonAsJsonType()
 }
 
-fun getAttribute(attributeName: String, jsonPath: String): JsonNode {
-    return """{"get_attribute": ["SELF", "$attributeName", "$jsonPath"]}""".jsonAsJsonType()
+fun getAttribute(attributeId: String, jsonPath: String): JsonNode {
+    return """{"get_attribute": ["SELF", "$attributeId", "$jsonPath"]}""".jsonAsJsonType()
 }
 
-fun getNodeTemplateAttribute(nodeTemplateName: String, attributeName: String): JsonNode {
-    return """{"get_attribute": ["$nodeTemplateName", "$attributeName"]}""".jsonAsJsonType()
+fun getNodeTemplateAttribute(nodeTemplateId: String, attributeId: String): JsonNode {
+    return """{"get_attribute": ["$nodeTemplateId", "$attributeId"]}""".jsonAsJsonType()
 }
 
-fun getNodeTemplateAttribute(nodeTemplateName: String, attributeName: String, jsonPath: String): JsonNode {
-    return """{"get_attribute": ["$nodeTemplateName", "$attributeName", "$jsonPath]}""".jsonAsJsonType()
+fun getNodeTemplateAttribute(nodeTemplateId: String, attributeId: String, jsonPath: String): JsonNode {
+    return """{"get_attribute": ["$nodeTemplateId", "$attributeId", "$jsonPath]}""".jsonAsJsonType()
 }
 
 // Property Function
 
-fun getProperty(propertyName: String): JsonNode {
-    return """{"get_property": ["SELF", "$propertyName"]}""".jsonAsJsonType()
+fun getProperty(propertyId: String): JsonNode {
+    return """{"get_property": ["SELF", "$propertyId"]}""".jsonAsJsonType()
 }
 
-fun getProperty(propertyName: String, jsonPath: String): JsonNode {
-    return """{"get_property": ["SELF", "$propertyName", "$jsonPath"]}""".jsonAsJsonType()
+fun getProperty(propertyId: String, jsonPath: String): JsonNode {
+    return """{"get_property": ["SELF", "$propertyId", "$jsonPath"]}""".jsonAsJsonType()
 }
 
-fun getNodeTemplateProperty(nodeTemplateName: String, propertyName: String): JsonNode {
-    return """{"get_property": ["$nodeTemplateName", "$propertyName"]}""".jsonAsJsonType()
+fun getNodeTemplateProperty(nodeTemplateName: String, propertyId: String): JsonNode {
+    return """{"get_property": ["$nodeTemplateName", "$propertyId"]}""".jsonAsJsonType()
 }
 
-fun getNodeTemplateProperty(nodeTemplateName: String, propertyName: String, jsonPath: String): JsonNode {
-    return """{"get_property": ["$nodeTemplateName", "$propertyName", "$jsonPath]}""".jsonAsJsonType()
+fun getNodeTemplateProperty(nodeTemplateName: String, propertyId: String, jsonPath: String): JsonNode {
+    return """{"get_property": ["$nodeTemplateName", "$propertyId", "$jsonPath]}""".jsonAsJsonType()
 }
 
 // Artifact Function
 
-fun getArtifact(artifactName: String): JsonNode {
-    return """{"get_artifact": ["SELF", "$artifactName"]}""".jsonAsJsonType()
+fun getArtifact(artifactId: String): JsonNode {
+    return """{"get_artifact": ["SELF", "$artifactId"]}""".jsonAsJsonType()
 }
 
-fun getNodeTemplateArtifact(nodeTemplateName: String, artifactName: String): JsonNode {
-    return """{"get_artifact": ["$nodeTemplateName", "$artifactName"]}""".jsonAsJsonType()
+fun getNodeTemplateArtifact(nodeTemplateName: String, artifactId: String): JsonNode {
+    return """{"get_artifact": ["$nodeTemplateName", "$artifactId"]}""".jsonAsJsonType()
 }
