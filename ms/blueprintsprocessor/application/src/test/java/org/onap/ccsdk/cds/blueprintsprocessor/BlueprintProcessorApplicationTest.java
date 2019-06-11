@@ -16,15 +16,19 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor;
 
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.MessagingConfig;
+import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.MessagingController;
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -34,8 +38,8 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @author Brinda Santh
  * DATE : 8/14/2018
  */
-
 @RunWith(SpringRunner.class)
+@Profile("test")
 @ContextConfiguration(classes = {BlueprintProcessorApplication.class, BluePrintLoadConfiguration.class})
 @SpringBootTest(classes = BlueprintProcessorApplication.class,
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

@@ -29,8 +29,7 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
-@ComponentScan(basePackages = {"org.onap.ccsdk.cds.controllerblueprints",
-    "org.onap.ccsdk.cds.blueprintsprocessor"})
+@ComponentScan(basePackages = {"org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"})
 public class BlueprintProcessorApplication {
 
     public static void main(String[] args) {
