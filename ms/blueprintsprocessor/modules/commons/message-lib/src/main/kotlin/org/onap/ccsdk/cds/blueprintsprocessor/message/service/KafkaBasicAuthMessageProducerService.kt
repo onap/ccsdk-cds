@@ -16,6 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.message.service
 
+import org.apache.commons.lang.builder.ToStringBuilder
 import org.apache.kafka.clients.producer.ProducerConfig.*
 import org.apache.kafka.common.serialization.StringSerializer
 import org.onap.ccsdk.cds.blueprintsprocessor.message.KafkaBasicAuthMessageProducerProperties
@@ -26,7 +27,6 @@ import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.kafka.core.ProducerFactory
 import org.springframework.kafka.support.SendResult
 import org.springframework.util.concurrent.ListenableFutureCallback
-
 
 class KafkaBasicAuthMessageProducerService(
         private val messageProducerProperties: KafkaBasicAuthMessageProducerProperties)
@@ -64,9 +64,8 @@ class KafkaBasicAuthMessageProducerService(
         return true
     }
 
-
     private fun producerFactory(additionalConfig: Map<String, Any>? = null): ProducerFactory<String, Any> {
-        log.info("Client Properties : $messageProducerProperties")
+        log.info("Client Properties : ${ToStringBuilder.reflectionToString(messageProducerProperties)}")
         val configProps = hashMapOf<String, Any>()
         configProps[BOOTSTRAP_SERVERS_CONFIG] = messageProducerProperties.bootstrapServers
         configProps[KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java

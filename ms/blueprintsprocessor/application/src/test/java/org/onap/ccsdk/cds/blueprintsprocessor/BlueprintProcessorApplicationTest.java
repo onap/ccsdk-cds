@@ -16,7 +16,6 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor;
 
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +33,6 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @author Brinda Santh
  * DATE : 8/14/2018
  */
-
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {BlueprintProcessorApplication.class, BluePrintLoadConfiguration.class})
 @SpringBootTest(classes = BlueprintProcessorApplication.class,
