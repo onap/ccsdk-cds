@@ -16,7 +16,6 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor;
 
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
