@@ -479,6 +479,13 @@
                 <scope>test</scope>
             </dependency>
 
+            <!-- message-lib dependency -->
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>message-lib</artifactId>
+                <version>0.5.0-SNAPSHOT</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
