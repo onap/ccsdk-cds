@@ -19,6 +19,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.ansible.executor
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
+import java.net.URI
 import java.net.URLEncoder
 import java.util.NoSuchElementException
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.*
@@ -132,8 +133,12 @@ open class ComponentRemoteAnsibleExecutor(private val blueprintRestLibPropertySe
     private fun lookupJobTemplateIDByName(awxClient : BlueprintWebClientService, job_template_name: String?): String {
         val mapper = ObjectMapper()
 
+        val encodedJTName = URI(null,null,
+                "/api/v2/job_templates/${job_template_name}/",
+                null,null).rawPath
+
         // Get Job Template details by name
-        var response = awxClient.exchangeResource(GET, "/api/v2/job_templates/${job_template_name}/", "")
+        var response = awxClient.exchangeResource(GET, encodedJTName,"")
         val jtDetails: JsonNode = mapper.readTree(response.body)
         return jtDetails.at("/id").asText()
     }

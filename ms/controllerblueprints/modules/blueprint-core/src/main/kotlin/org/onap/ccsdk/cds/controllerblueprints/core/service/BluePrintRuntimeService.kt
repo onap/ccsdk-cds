@@ -547,7 +547,8 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
 
         workflowDynamicInputs?.let {
             bluePrintContext.dataTypeByName("dt-$dynamicInputPropertiesName")?.properties?.forEach { propertyName, property ->
-                val valueNode: JsonNode = workflowDynamicInputs.at(BluePrintConstants.PATH_DIVIDER + propertyName)
+                val valueNode: JsonNode = workflowDynamicInputs.at(BluePrintConstants.PATH_DIVIDER + propertyName).returnNullIfMissing()
+                        ?: property.defaultValue
                         ?: NullNode.getInstance()
                 setInputValue(propertyName, property, valueNode)
 
