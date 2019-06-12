@@ -121,7 +121,7 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
         try {
             process(resourceAssignment)
         } catch (runtimeException: RuntimeException) {
-            log.error("failed in ${getName()} : ${runtimeException.message}", runtimeException)
+            log.error("failed in ResourceAssignmentProcessor : ${runtimeException.message}", runtimeException)
             recover(runtimeException, resourceAssignment)
         }
     }

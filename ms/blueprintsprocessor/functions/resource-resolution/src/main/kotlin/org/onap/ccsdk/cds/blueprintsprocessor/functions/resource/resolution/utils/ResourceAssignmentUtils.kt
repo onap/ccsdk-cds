@@ -70,7 +70,7 @@ class ResourceAssignmentUtils {
             try {
                 if (resourceProp.type.isNotEmpty()) {
                     logger.info("Setting Resource Value ($value) for Resource Name " +
-                            "(${resourceAssignment.dictionaryName}) of type (${resourceProp.type})")
+                            "(${resourceAssignment.name}) of type (${resourceProp.type})")
                     setResourceValue(resourceAssignment, raRuntimeService, value)
                     resourceAssignment.updatedDate = Date()
                     resourceAssignment.updatedBy = BluePrintConstants.USER_SYSTEM

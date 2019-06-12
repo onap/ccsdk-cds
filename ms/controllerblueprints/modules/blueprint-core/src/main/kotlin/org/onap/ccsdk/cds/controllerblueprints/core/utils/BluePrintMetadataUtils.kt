@@ -65,7 +65,9 @@ class BluePrintMetadataUtils {
                 envDir.listFiles()
                         .filter { it.name.endsWith(".properties") }
                         .forEach {
-                            properties.load(it.inputStream())
+                            val istream = it.inputStream()
+                            properties.load(istream)
+                            istream.close()
                         }
             }
             return properties

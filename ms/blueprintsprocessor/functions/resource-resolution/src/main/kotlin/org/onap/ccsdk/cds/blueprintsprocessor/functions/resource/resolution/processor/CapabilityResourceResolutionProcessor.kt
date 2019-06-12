@@ -81,7 +81,7 @@ open class CapabilityResourceResolutionProcessor(private val applicationContext:
 
     override suspend fun recoverNB(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
         raRuntimeService.getBluePrintError()
-                .addError("Failed in ComponentNetconfExecutor : ${runtimeException.message}")
+                .addError("Failed in CapabilityResourceResolutionProcessor : ${runtimeException.message}")
     }
 
     suspend fun scriptInstance(scriptType: String, scriptClassReference: String, instanceDependencies: List<String>)
