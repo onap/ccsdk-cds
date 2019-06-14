@@ -1,0 +1,26 @@
+{
+  "name": "properties-capability-source",
+  "updated-by": "Steve Alphonse Siani, alphonse.steve.siani.djissitchi@ibm.com",
+  "tags": "properties-capability-source",
+  "property" :{
+    "description": "Data dictionary used to define a capability data type.",
+    "type": "string"
+  },
+  "sources": {
+    "input": {
+      "type": "source-input"
+    },
+    "default": {
+      "type": "source-default",
+      "properties": {}
+    },
+    "capability": {
+      "type": "source-capability",
+      "properties" : {
+        "script-type" : "jython",
+        "script-class-reference" : "Scripts/python/ResolvProperties.py",
+        "instance-dependencies" : []
+      }
+    }
+  }
+}
