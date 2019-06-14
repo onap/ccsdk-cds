@@ -55,6 +55,9 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
         val blueprintName = bluePrintContext.name()
         val blueprintVersion = bluePrintContext.version()
 
+        val prepareEnvMsg = "Init prepare environment log..."
+        val executeCommandMsg = "Init execute command log..."
+
         val operationAssignment: OperationAssignment = bluePrintContext
                 .nodeTemplateInterfaceOperation(nodeTemplateName, interfaceName, operationName)
 
@@ -95,6 +98,7 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
                         packages = packages
                 )
                 val prepareEnvOutput = remoteScriptExecutionService.prepareEnv(prepareEnvInput)
+                log.info("$ATTRIBUTE_PREPARE_ENV_LOG - ${prepareEnvOutput.response}")
                 setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, prepareEnvOutput.response.asJsonPrimitive())
                 setAttribute(ATTRIBUTE_EXEC_CMD_LOG, "N/A".asJsonPrimitive())
                 check(prepareEnvOutput.status == StatusType.SUCCESS) {
@@ -110,6 +114,7 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
                     command = scriptCommand,
                     properties = properties)
             val remoteExecutionOutput = remoteScriptExecutionService.executeCommand(remoteExecutionInput)
+            log.info("$ATTRIBUTE_EXEC_CMD_LOG  - ${remoteExecutionOutput.response}")
             setAttribute(ATTRIBUTE_EXEC_CMD_LOG, remoteExecutionOutput.response.asJsonPrimitive())
             check(remoteExecutionOutput.status == StatusType.SUCCESS) {
                 "failed to get prepare remote command response status for requestId(${remoteExecutionOutput.requestId})"
