@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "427aa363_989882f2",
+        "filename": "components/model-catalog/resource-dictionary/starter-dictionary/properties-capability-source.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2019-06-14T18:18:33Z",
+      "side": 1,
+      "message": "Seems recursive... What does this do?",
+      "range": {
+        "startLine": 6,
+        "startChar": 20,
+        "endLine": 6,
+        "endChar": 74
+      },
+      "revId": "b4dc50eb72a5f913dbccbcea259118751e9b7712",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39f78194_be9a38e1",
+        "filename": "components/model-catalog/resource-dictionary/starter-dictionary/properties-capability-source.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2019-06-14T18:18:33Z",
+      "side": 1,
+      "message": "This seems to be missing...",
+      "range": {
+        "startLine": 21,
+        "startChar": 36,
+        "endLine": 21,
+        "endChar": 70
+      },
+      "revId": "b4dc50eb72a5f913dbccbcea259118751e9b7712",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0add5b03_4f636de7",
+        "filename": "components/model-catalog/resource-dictionary/test-dictionary/properties-capability-source.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2019-06-14T18:18:33Z",
+      "side": 1,
+      "message": "Why does it need to be in 2 places...",
+      "range": {
+        "startLine": 2,
+        "startChar": 11,
+        "endLine": 2,
+        "endChar": 39
+      },
+      "revId": "b4dc50eb72a5f913dbccbcea259118751e9b7712",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f71b24ad_5123839b",
+        "filename": "components/model-catalog/resource-dictionary/test-dictionary/properties-capability-source.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2019-06-14T18:18:33Z",
+      "side": 1,
+      "message": "Same as previous file",
+      "range": {
+        "startLine": 6,
+        "startChar": 20,
+        "endLine": 6,
+        "endChar": 73
+      },
+      "revId": "b4dc50eb72a5f913dbccbcea259118751e9b7712",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f94ae9f_9cd21333",
+        "filename": "components/model-catalog/resource-dictionary/test-dictionary/properties-capability-source.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2019-06-14T18:18:33Z",
+      "side": 1,
+      "message": "Not same as previous file ?",
+      "range": {
+        "startLine": 21,
+        "startChar": 36,
+        "endLine": 21,
+        "endChar": 52
+      },
+      "revId": "b4dc50eb72a5f913dbccbcea259118751e9b7712",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
