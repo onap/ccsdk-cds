@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "96b03b84_62caf53b",
+        "filename": "components/model-catalog/resource-dictionary/starter-dictionary/properties-capability-source.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-06-14T19:57:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "427aa363_989882f2",
+      "range": {
+        "startLine": 6,
+        "startChar": 20,
+        "endLine": 6,
+        "endChar": 74
+      },
+      "revId": "b4dc50eb72a5f913dbccbcea259118751e9b7712",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "39f78194_be9a38e1",
         "filename": "components/model-catalog/resource-dictionary/starter-dictionary/properties-capability-source.json",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "b4dc50eb72a5f913dbccbcea259118751e9b7712",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b272872_390c61be",
+        "filename": "components/model-catalog/resource-dictionary/starter-dictionary/properties-capability-source.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-06-14T19:57:13Z",
+      "side": 1,
+      "message": "This is only located in the CBA.",
+      "parentUuid": "39f78194_be9a38e1",
+      "range": {
+        "startLine": 21,
+        "startChar": 36,
+        "endLine": 21,
+        "endChar": 70
+      },
+      "revId": "b4dc50eb72a5f913dbccbcea259118751e9b7712",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,54 @@
     },
     {
       "key": {
+        "uuid": "11f732f7_4cdb8ccb",
+        "filename": "components/model-catalog/resource-dictionary/test-dictionary/properties-capability-source.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-06-14T19:57:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0add5b03_4f636de7",
+      "range": {
+        "startLine": 2,
+        "startChar": 11,
+        "endLine": 2,
+        "endChar": 39
+      },
+      "revId": "b4dc50eb72a5f913dbccbcea259118751e9b7712",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a5c6956f_4a9225df",
+        "filename": "components/model-catalog/resource-dictionary/test-dictionary/properties-capability-source.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-06-14T19:57:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0add5b03_4f636de7",
+      "range": {
+        "startLine": 2,
+        "startChar": 11,
+        "endLine": 2,
+        "endChar": 39
+      },
+      "revId": "b4dc50eb72a5f913dbccbcea259118751e9b7712",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f71b24ad_5123839b",
         "filename": "components/model-catalog/resource-dictionary/test-dictionary/properties-capability-source.json",
         "patchSetId": 1
@@ -94,6 +190,54 @@
     },
     {
       "key": {
+        "uuid": "7e827d93_64c48bbf",
+        "filename": "components/model-catalog/resource-dictionary/test-dictionary/properties-capability-source.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-06-14T19:57:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f71b24ad_5123839b",
+      "range": {
+        "startLine": 6,
+        "startChar": 20,
+        "endLine": 6,
+        "endChar": 73
+      },
+      "revId": "b4dc50eb72a5f913dbccbcea259118751e9b7712",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "27be3f28_e37f5292",
+        "filename": "components/model-catalog/resource-dictionary/test-dictionary/properties-capability-source.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-06-14T19:57:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f71b24ad_5123839b",
+      "range": {
+        "startLine": 6,
+        "startChar": 20,
+        "endLine": 6,
+        "endChar": 73
+      },
+      "revId": "b4dc50eb72a5f913dbccbcea259118751e9b7712",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8f94ae9f_9cd21333",
         "filename": "components/model-catalog/resource-dictionary/test-dictionary/properties-capability-source.json",
         "patchSetId": 1
@@ -114,6 +258,30 @@
       "revId": "b4dc50eb72a5f913dbccbcea259118751e9b7712",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "262a64a0_11c74b6f",
+        "filename": "components/model-catalog/resource-dictionary/test-dictionary/properties-capability-source.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-06-14T19:57:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f94ae9f_9cd21333",
+      "range": {
+        "startLine": 21,
+        "startChar": 36,
+        "endLine": 21,
+        "endChar": 52
+      },
+      "revId": "b4dc50eb72a5f913dbccbcea259118751e9b7712",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
