@@ -17,26 +17,33 @@ package org.onap.ccsdk.cds.controllerblueprints.core.service
 
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintPathConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintTemplateService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.springframework.stereotype.Service
 
-class BluePrintTemplateService : BlueprintTemplateService {
+@Service
+class BluePrintTemplateService(private val bluePrintPathConfiguration: BluePrintPathConfiguration) :
+    BlueprintTemplateService {
 
     override suspend fun generateContent(bluePrintRuntimeService: BluePrintRuntimeService<*>,
                                          nodeTemplateName: String, artifactName: String, jsonData: String,
                                          ignoreJsonNull: Boolean, additionalContext: MutableMap<String, Any>): String {
 
-        val artifactDefinition = bluePrintRuntimeService.resolveNodeTemplateArtifactDefinition(nodeTemplateName, artifactName)
+        val artifactDefinition =
+            bluePrintRuntimeService.resolveNodeTemplateArtifactDefinition(nodeTemplateName, artifactName)
         val templateType = artifactDefinition.type
         val template = bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactName)
-        return generateContent(template, templateType, jsonData, ignoreJsonNull, additionalContext)
-    }
 
-    override suspend fun generateContent(template: String, templateType: String, jsonData: String, ignoreJsonNull: Boolean,
-                                         additionalContext: MutableMap<String, Any>): String {
         return when (templateType) {
             BluePrintConstants.ARTIFACT_JINJA_TYPE_NAME -> {
-                BluePrintJinjaTemplateService.generateContent(template, jsonData, ignoreJsonNull, additionalContext)
+                BluePrintJinjaTemplateService.generateContent(template,
+                    jsonData,
+                    ignoreJsonNull,
+                    additionalContext,
+                    bluePrintPathConfiguration,
+                    bluePrintRuntimeService.bluePrintContext().name(),
+                    bluePrintRuntimeService.bluePrintContext().version())
             }
             BluePrintConstants.ARTIFACT_VELOCITY_TYPE_NAME -> {
                 BluePrintVelocityTemplateService.generateContent(template, jsonData, ignoreJsonNull, additionalContext)
@@ -46,13 +53,5 @@ class BluePrintTemplateService : BlueprintTemplateService {
                         "or ${BluePrintConstants.ARTIFACT_VELOCITY_TYPE_NAME}")
             }
         }
-    }
-
-    suspend fun generateContentFromFiles(templatePath: String, templateType: String, jsonPath: String,
-                                         ignoreJsonNull: Boolean,
-                                         additionalContext: MutableMap<String, Any>): String {
-        val json = JacksonUtils.getClassPathFileContent(jsonPath)
-        val template = JacksonUtils.getClassPathFileContent(templatePath)
-        return generateContent(template, templateType, json, ignoreJsonNull, additionalContext)
     }
 }
