@@ -16,6 +16,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
+import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.hubspot.jinjava.Jinjava
@@ -23,11 +24,11 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintJsonNodeFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.removeNullNode
 
-
 object BluePrintJinjaTemplateService {
 
     fun generateContent(template: String, json: String, ignoreJsonNull: Boolean,
-                                additionalContext: MutableMap<String, Any>): String {
+                        additionalContext: MutableMap<String, Any>): String {
+
         // Load template
         val jinJava = Jinjava()
         val mapper = ObjectMapper()
@@ -37,15 +38,16 @@ object BluePrintJinjaTemplateService {
         // Add the JSON Data to the context
         if (json.isNotEmpty()) {
             val jsonNode = mapper.readValue<JsonNode>(json, JsonNode::class.java)
-                    ?: throw BluePrintProcessorException("couldn't get json node from json")
-            if (ignoreJsonNull)
+                ?: throw BluePrintProcessorException("couldn't get json node from json")
+            if (ignoreJsonNull) {
                 jsonNode.removeNullNode()
-            jsonNode.fields().forEach { entry ->
-                additionalContext[entry.key] = entry.value
             }
+
+            val jsonMap: Map<String, Any> = mapper.readValue(json, object : TypeReference<Map<String, Any>>() {})
+            additionalContext.putAll(jsonMap)
         }
 
-        return jinJava.render(template, additionalContext.toMap())
+        return jinJava.render(template, additionalContext)
     }
 }
 
