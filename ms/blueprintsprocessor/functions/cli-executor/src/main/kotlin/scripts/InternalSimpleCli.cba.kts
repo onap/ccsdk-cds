@@ -20,9 +20,10 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInpu
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.cli.executor.CliComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.cli.executor.ComponentCliExecutor
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintTemplateService
 import org.slf4j.LoggerFactory
 
-open class TestCliScriptFunction : CliComponentFunction() {
+open class TestCliScriptFunction(bluePrintTemplateService: BluePrintTemplateService) : CliComponentFunction(bluePrintTemplateService) {
 
     private val log = LoggerFactory.getLogger(CliComponentFunction::class.java)!!
 
@@ -40,7 +41,7 @@ open class TestCliScriptFunction : CliComponentFunction() {
 }
 
 
-open class Check : CliComponentFunction() {
+open class Check(bluePrintTemplateService: BluePrintTemplateService) : CliComponentFunction(bluePrintTemplateService) {
 
     private val log = LoggerFactory.getLogger(CliComponentFunction::class.java)!!
 
