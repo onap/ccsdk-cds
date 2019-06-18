@@ -26,7 +26,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.readNBLines
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintTemplateService
 
-abstract class CliComponentFunction : AbstractScriptComponentFunction() {
+abstract class CliComponentFunction(private val bluePrintTemplateService: BluePrintTemplateService) : AbstractScriptComponentFunction() {
 
     open fun bluePrintSshLibPropertyService(): BluePrintSshLibPropertyService =
             functionDependencyInstanceAsType(SshLibConstants.SERVICE_BLUEPRINT_SSH_LIB_PROPERTY)
@@ -42,8 +42,7 @@ abstract class CliComponentFunction : AbstractScriptComponentFunction() {
     }
 
     suspend fun generateMessage(artifactName: String, json: String): String {
-        val templateService = BluePrintTemplateService()
-        return templateService.generateContent(bluePrintRuntimeService, nodeTemplateName, artifactName, json, true)
+        return bluePrintTemplateService.generateContent(bluePrintRuntimeService, nodeTemplateName, artifactName, json, true)
     }
 
 

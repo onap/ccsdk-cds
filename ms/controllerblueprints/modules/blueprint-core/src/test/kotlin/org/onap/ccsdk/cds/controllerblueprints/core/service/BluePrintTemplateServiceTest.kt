@@ -36,7 +36,8 @@ class BluePrintTemplateServiceTest {
 
     @BeforeTest
     fun setup() {
-        val blueprintBasePath: String = ("./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+        val blueprintBasePath: String =
+            ("./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
         blueprintRuntime = BluePrintMetadataUtils.getBluePrintRuntime("1234", blueprintBasePath)
     }
 
@@ -47,6 +48,7 @@ class BluePrintTemplateServiceTest {
             val json = JacksonUtils.getClassPathFileContent("templates/base-config-data-velocity.json")
 
             val content = BluePrintVelocityTemplateService.generateContent(template, json)
+            System.out.println(content)
             assertNotNull(content, "failed to generate content for velocity template")
         }
 
@@ -55,54 +57,26 @@ class BluePrintTemplateServiceTest {
     @Test
     fun testJinjaGeneratedContent() {
         runBlocking {
-            val template = JacksonUtils.getClassPathFileContent("templates/base-config-jinja-template.jinja")
+            val template = JacksonUtils.getClassPathFileContent("templates/master.jinja")
             val json = JacksonUtils.getClassPathFileContent("templates/base-config-data-jinja.json")
 
             var element: MutableMap<String, Any> = mutableMapOf()
-            element["additional_array"] = arrayListOf(hashMapOf("name" to "Element1", "location" to "Region0"), hashMapOf("name" to "Element2", "location" to "Region1"))
+            element["additional_array"] = arrayListOf(hashMapOf("name" to "Element1", "location" to "Region0"),
+                hashMapOf("name" to "Element2", "location" to "Region1"))
 
             val content = BluePrintJinjaTemplateService.generateContent(template, json, false, element)
+            System.out.println(content)
             assertNotNull(content, "failed to generate content for velocity template")
         }
 
     }
 
-    @Test
-    fun testVelocityGeneratedContentFromFiles() {
-        runBlocking {
-            val bluePrintTemplateService = BluePrintTemplateService()
-            val templateFile = "templates/base-config-velocity-template.vtl"
-            val jsonFile = "templates/base-config-data-velocity.json"
-
-            val content = bluePrintTemplateService.generateContentFromFiles(
-                    templateFile, BluePrintConstants.ARTIFACT_VELOCITY_TYPE_NAME, jsonFile, false, mutableMapOf())
-            assertNotNull(content, "failed to generate content for velocity template")
-        }
-
-    }
-
-    @Test
-    fun testJinjaGeneratedContentFromFiles() {
-        runBlocking {
-            var element: MutableMap<String, Any> = mutableMapOf()
-            element["additional_array"] = arrayListOf(hashMapOf("name" to "Element1", "location" to "Region0"), hashMapOf("name" to "Element2", "location" to "Region1"))
-
-            val bluePrintTemplateService = BluePrintTemplateService()
-
-            val templateFile = "templates/base-config-jinja-template.jinja"
-            val jsonFile = "templates/base-config-data-jinja.json"
-
-            val content = bluePrintTemplateService.generateContentFromFiles(
-                    templateFile, BluePrintConstants.ARTIFACT_JINJA_TYPE_NAME,
-                    jsonFile, false, element)
-            assertNotNull(content, "failed to generate content for velocity template")
-        }
-    }
 
     @Test
     fun `no value variable should evaluate to default value - standalone template mesh test`() {
         runBlocking {
-            val template = JacksonUtils.getClassPathFileContent("templates/default-variable-value-velocity-template.vtl")
+            val template =
+                JacksonUtils.getClassPathFileContent("templates/default-variable-value-velocity-template.vtl")
             val json = JacksonUtils.getClassPathFileContent("templates/default-variable-value-data.json")
 
             val content = BluePrintVelocityTemplateService.generateContent(template, json)
@@ -111,25 +85,6 @@ class BluePrintTemplateServiceTest {
             val expected = "sample-hostname\n\${node0_backup_router_address}"
             assertEquals(expected, content, "No value variable should use default value")
         }
-    }
-
-    @Test
-    fun `no value variable should evaluate to default value - blueprint processing test`() {
-        runBlocking {
-            val bluePrintTemplateService = BluePrintTemplateService()
-
-            val templateFile = "templates/default-variable-value-velocity-template.vtl"
-            val jsonFile = "templates/default-variable-value-data.json"
-
-            val content = bluePrintTemplateService.generateContentFromFiles(templateFile,
-                    BluePrintConstants.ARTIFACT_VELOCITY_TYPE_NAME, jsonFile, false, mutableMapOf())
-
-            //first line represents a variable whose value was successfully retrieved, second line contains a variable
-            // whose value could not be evaluated
-            val expected = "sample-hostname\n\${node0_backup_router_address}"
-            assertEquals(expected, content, "No value variable should use default value")
-        }
-
     }
 
 }
