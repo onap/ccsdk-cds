@@ -20,6 +20,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInpu
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.cli.executor.CliComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.cli.executor.ComponentCliExecutor
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintTemplateService
 import org.slf4j.LoggerFactory
 
 open class TestCliScriptFunction : CliComponentFunction() {

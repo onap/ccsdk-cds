@@ -1,0 +1,7 @@
+{%- for i in range(occurrence) %}
+<config>
+{% include "templates/isis.jinja" %}
+{% include "templates/interface.jinja" %}
+</config>
+{{ "]]>]]" if not loop.last }}
+{%- endfor  %}

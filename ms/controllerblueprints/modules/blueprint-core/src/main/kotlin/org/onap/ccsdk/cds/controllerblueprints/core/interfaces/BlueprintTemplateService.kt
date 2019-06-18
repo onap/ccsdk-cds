@@ -40,21 +40,6 @@ interface BlueprintTemplateService {
                                 jsonData: String = "",
                                 ignoreJsonNull: Boolean = false,
                                 additionalContext: MutableMap<String, Any> = mutableMapOf()): String
-
-
-    /**
-     * Generate dynamique content using Velocity Template or Jinja template
-     *
-     * @param template template string content
-     * @param templateType template type
-     * @param jsonData json string data content to mash
-     * @param ignoreJsonNull Ignore Null value in the JSON content
-     * @param additionalContext (Key, value) mutable map for additional variables
-     * @return Content result
-     *
-     **/
-    suspend fun generateContent(template: String, templateType: String, jsonData: String = "", ignoreJsonNull: Boolean = false,
-                                additionalContext: MutableMap<String, Any> = mutableMapOf()): String
 }
 
 /**

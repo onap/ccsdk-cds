@@ -41,12 +41,6 @@ abstract class CliComponentFunction : AbstractScriptComponentFunction() {
         return file.readNBLines()
     }
 
-    suspend fun generateMessage(artifactName: String, json: String): String {
-        val templateService = BluePrintTemplateService()
-        return templateService.generateContent(bluePrintRuntimeService, nodeTemplateName, artifactName, json, true)
-    }
-
-
     fun generateMessage(artifactName: String): String {
         return bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactName)
     }
