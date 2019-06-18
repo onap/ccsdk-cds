@@ -19,18 +19,73 @@ package org.onap.ccsdk.cds.controllerblueprints.core.service
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.common.io.Resources
 import com.hubspot.jinjava.Jinjava
+import com.hubspot.jinjava.interpret.Context
+import com.hubspot.jinjava.interpret.JinjavaInterpreter
+import com.hubspot.jinjava.loader.ClasspathResourceLocator
+import com.hubspot.jinjava.loader.ResourceLocator
+import com.hubspot.jinjava.loader.ResourceNotFoundException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
+import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintPathConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintJsonNodeFactory
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.cds.controllerblueprints.core.removeNullNode
+import org.springframework.context.annotation.Scope
+import org.springframework.stereotype.Service
+import java.io.IOException
+import java.nio.charset.Charset
+import java.nio.file.Files.readAllBytes
+import java.nio.file.Paths
 
 object BluePrintJinjaTemplateService {
 
-    fun generateContent(template: String, json: String, ignoreJsonNull: Boolean,
-                        additionalContext: MutableMap<String, Any>): String {
+    /**
+     * To enable inheritance within CBA, we need Jinja runtime to know where to load the templates.
+     */
+    class BlueprintRelatedTemplateLocator(private val bluePrintPathConfiguration: BluePrintPathConfiguration,
+                                          private val artifactName: String,
+                                          private val artifactVersion: String) : ResourceLocator {
 
-        // Load template
+        @Throws(IOException::class)
+        override fun getString(fullName: String, encoding: Charset, interpreter: JinjavaInterpreter): String {
+            try {
+                val deployFile =
+                    normalizedPathName(bluePrintPathConfiguration.blueprintDeployPath,
+                        artifactName,
+                        artifactVersion,
+                        fullName)
+
+                return String(readAllBytes(Paths.get(deployFile)))
+            } catch (var5: IllegalArgumentException) {
+                throw ResourceNotFoundException("Couldn't find resource: $fullName")
+            }
+
+        }
+    }
+
+    fun generateContent(template: String, json: String, ignoreJsonNull: Boolean,
+                        additionalContext: MutableMap<String, Any>,
+                        bluePrintPathConfiguration: BluePrintPathConfiguration, artifactName: String,
+                        artifactVersion: String): String {
+
+
+        return generateContent(template,
+            json,
+            ignoreJsonNull,
+            additionalContext,
+            BlueprintRelatedTemplateLocator(bluePrintPathConfiguration, artifactName, artifactVersion))
+    }
+
+    fun generateContent(template: String, json: String, ignoreJsonNull: Boolean,
+                        additionalContext: MutableMap<String, Any>, resourceLocator: ResourceLocator? = null): String {
         val jinJava = Jinjava()
+        if (resourceLocator != null) {
+            jinJava.resourceLocator = resourceLocator
+        }
+
         val mapper = ObjectMapper()
         val nodeFactory = BluePrintJsonNodeFactory()
         mapper.nodeFactory = nodeFactory
