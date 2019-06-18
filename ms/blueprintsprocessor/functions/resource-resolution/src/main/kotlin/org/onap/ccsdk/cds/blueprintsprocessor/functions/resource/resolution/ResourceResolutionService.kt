@@ -59,7 +59,8 @@ interface ResourceResolutionService {
 
 @Service(ResourceResolutionConstants.SERVICE_RESOURCE_RESOLUTION)
 open class ResourceResolutionServiceImpl(private var applicationContext: ApplicationContext,
-                                         private var resolutionResultService: ResourceResolutionResultService) :
+                                         private var resolutionResultService: ResourceResolutionResultService,
+                                         private var blueprintTemplateService: BluePrintTemplateService) :
         ResourceResolutionService {
 
     private val log = LoggerFactory.getLogger(ResourceResolutionService::class.java)
@@ -137,7 +138,6 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
 
         // Check Template is there
         if (artifactTemplate != null) {
-            val blueprintTemplateService = BluePrintTemplateService()
             resolvedContent = blueprintTemplateService.generateContent(bluePrintRuntimeService, nodeTemplateName,
                     artifactTemplate, resolvedParamJsonContent)
 
