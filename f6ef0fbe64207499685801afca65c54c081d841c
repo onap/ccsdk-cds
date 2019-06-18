@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0555fe39_b1056319",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/selfservice-api/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/selfservice/api/messaginglib/ProducerConfiguration.kt",
+        "patchSetId": 19
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-06-18T16:21:21Z",
+      "side": 1,
+      "message": "Please check, if we could achieve without Spring Bean Injection annotation and Enable Kafka.",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 37,
+        "endChar": 9
+      },
+      "revId": "f6ef0fbe64207499685801afca65c54c081d841c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
