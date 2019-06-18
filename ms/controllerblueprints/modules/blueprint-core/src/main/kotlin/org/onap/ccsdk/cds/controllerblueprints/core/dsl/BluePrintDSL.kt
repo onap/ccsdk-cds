@@ -40,11 +40,11 @@ fun getAttribute(attributeName: String, jsonPath: String): JsonNode {
 }
 
 fun getNodeTemplateAttribute(nodeTemplateName: String, attributeName: String): JsonNode {
-    return """{"get_attribute": ["${nodeTemplateName}", "$attributeName"]}""".jsonAsJsonType()
+    return """{"get_attribute": ["$nodeTemplateName", "$attributeName"]}""".jsonAsJsonType()
 }
 
 fun getNodeTemplateAttribute(nodeTemplateName: String, attributeName: String, jsonPath: String): JsonNode {
-    return """{"get_attribute": ["${nodeTemplateName}", "$attributeName", "$jsonPath]}""".jsonAsJsonType()
+    return """{"get_attribute": ["$nodeTemplateName", "$attributeName", "$jsonPath]}""".jsonAsJsonType()
 }
 
 // Property Function
@@ -58,11 +58,11 @@ fun getProperty(propertyName: String, jsonPath: String): JsonNode {
 }
 
 fun getNodeTemplateProperty(nodeTemplateName: String, propertyName: String): JsonNode {
-    return """{"get_property": ["${nodeTemplateName}", "$propertyName"]}""".jsonAsJsonType()
+    return """{"get_property": ["$nodeTemplateName", "$propertyName"]}""".jsonAsJsonType()
 }
 
 fun getNodeTemplateProperty(nodeTemplateName: String, propertyName: String, jsonPath: String): JsonNode {
-    return """{"get_property": ["${nodeTemplateName}", "$propertyName", "$jsonPath]}""".jsonAsJsonType()
+    return """{"get_property": ["$nodeTemplateName", "$propertyName", "$jsonPath]}""".jsonAsJsonType()
 }
 
 // Artifact Function

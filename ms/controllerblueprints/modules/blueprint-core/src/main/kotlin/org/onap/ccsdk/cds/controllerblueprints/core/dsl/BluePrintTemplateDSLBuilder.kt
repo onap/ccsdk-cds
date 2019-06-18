@@ -17,10 +17,11 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.dsl
 
 import com.fasterxml.jackson.databind.JsonNode
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.*
 
-class TopologyTemplateBuilder() {
+class TopologyTemplateBuilder {
     private var topologyTemplate = TopologyTemplate()
     private var nodeTemplates: MutableMap<String, NodeTemplate>? = null
     private var workflows: MutableMap<String, Workflow>? = null
@@ -31,17 +32,38 @@ class TopologyTemplateBuilder() {
         nodeTemplates!![id] = NodeTemplateBuilder(id, type, description).apply(block).build()
     }
 
-    fun nodeTemplateOperation(nodeTemplateName: String, type: String,
-                              interfaceName: String, operationName: String,
-                              description: String, operationBlock: OperationAssignmentBuilder.() -> Unit) {
+    fun nodeTemplateOperation(nodeTemplateName: String, type: String, interfaceName: String, description: String,
+                              operationBlock: OperationAssignmentBuilder.() -> Unit) {
         if (nodeTemplates == null)
             nodeTemplates = hashMapOf()
 
         val nodeTemplateBuilder = NodeTemplateBuilder(nodeTemplateName, type, description)
-        nodeTemplateBuilder.operation(interfaceName, operationName, "$description operation", operationBlock)
+        nodeTemplateBuilder.operation(interfaceName, "$description operation", operationBlock)
         nodeTemplates!![nodeTemplateName] = nodeTemplateBuilder.build()
     }
-    //TODO("workflow")
+
+    fun workflow(id: String, description: String, block: WorkflowBuilder.() -> Unit) {
+        if (workflows == null)
+            workflows = hashMapOf()
+        workflows!![id] = WorkflowBuilder(id, description).apply(block).build()
+    }
+
+    //TODO("populate inputs, outputs")
+    fun workflowNodeTemplate(actionName: String,
+                             nodeTemplateType: String, description: String, block: NodeTemplateBuilder.() -> Unit) {
+        if (nodeTemplates == null)
+            nodeTemplates = hashMapOf()
+
+        if (workflows == null)
+            workflows = hashMapOf()
+
+        val workflowBuilder = WorkflowBuilder(actionName, description)
+        workflowBuilder.nodeTemplateStep(actionName, description)
+        // Workflow name is NodeTemplate name
+        workflows!![actionName] = workflowBuilder.build()
+
+        nodeTemplates!![actionName] = NodeTemplateBuilder(actionName, nodeTemplateType, description).apply(block).build()
+    }
 
     fun build(): TopologyTemplate {
         topologyTemplate.nodeTemplates = nodeTemplates
@@ -59,14 +81,16 @@ class NodeTemplateBuilder(private val id: String,
     private var capabilities: MutableMap<String, CapabilityAssignment>? = null
     private var requirements: MutableMap<String, RequirementAssignment>? = null
 
-    fun operation(interfaceName: String, operationName: String, description: String? = "",
+    fun operation(interfaceName: String, description: String? = "",
                   block: OperationAssignmentBuilder.() -> Unit) {
         if (interfaces == null)
             interfaces = hashMapOf()
 
         val interfaceAssignment = InterfaceAssignment()
+        val defaultOperationName = "process"
         interfaceAssignment.operations = hashMapOf()
-        interfaceAssignment.operations!![operationName] = OperationAssignmentBuilder(operationName, description).apply(block).build()
+        interfaceAssignment.operations!![defaultOperationName] =
+                OperationAssignmentBuilder(defaultOperationName, description).apply(block).build()
         interfaces!![interfaceName] = interfaceAssignment
     }
 
@@ -180,8 +204,20 @@ class OperationAssignmentBuilder(private val id: String,
 
     private var operationAssignment: OperationAssignment = OperationAssignment()
 
+    fun implementation(timeout: Int, operationHost: String? = BluePrintConstants.PROPERTY_SELF) {
+        val implementation = Implementation().apply {
+            this.operationHost = operationHost!!
+            this.timeout = timeout
+        }
+        operationAssignment.implementation = implementation
+    }
+
     fun inputs(block: PropertiesAssignmentBuilder.() -> Unit) {
         operationAssignment.inputs = PropertiesAssignmentBuilder().apply(block).build()
+    }
+
+    fun outputs(block: PropertiesAssignmentBuilder.() -> Unit) {
+        operationAssignment.outputs = PropertiesAssignmentBuilder().apply(block).build()
     }
 
     fun build(): OperationAssignment {
