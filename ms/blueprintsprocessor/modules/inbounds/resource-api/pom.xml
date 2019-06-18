@@ -27,4 +27,31 @@
     <name>Blueprints Processor Resource API</name>
     <description>Blueprints Processor Resource API</description>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
+            <artifactId>blueprint-core</artifactId>
+        </dependency>
+        <!--dependency>
+            <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
+            <artifactId>db-resources</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
+            <artifactId>blueprint-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
+            <artifactId>blueprint-scripts</artifactId>
+        </dependency-->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

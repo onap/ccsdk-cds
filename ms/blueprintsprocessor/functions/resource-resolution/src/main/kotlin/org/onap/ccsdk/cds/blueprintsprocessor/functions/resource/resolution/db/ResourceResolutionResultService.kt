@@ -29,6 +29,21 @@ import java.util.*
 @Service
 class ResourceResolutionResultService(private val resourceResolutionRepository: ResourceResolutionRepository) {
 
+    suspend fun read(bluePrintRuntimeService: BluePrintRuntimeService<*>, artifactPrefix: String,
+                     resolutionKey: String): String = withContext(Dispatchers.IO) {
+
+        val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
+
+        val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]
+        val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]
+
+        resourceResolutionRepository.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
+                resolutionKey,
+                blueprintName,
+                blueprintVersion,
+                artifactPrefix).result!!
+    }
+
     suspend fun write(properties: Map<String, Any>, result: String, bluePrintRuntimeService: BluePrintRuntimeService<*>,
                       artifactPrefix: String) = withContext(Dispatchers.IO) {
 
@@ -50,18 +65,15 @@ class ResourceResolutionResultService(private val resourceResolutionRepository: 
         }
     }
 
-    suspend fun read(bluePrintRuntimeService: BluePrintRuntimeService<*>, artifactPrefix: String,
-                     resolutionKey: String): String = withContext(Dispatchers.IO) {
+    suspend fun readByKey(resolutionResultId: String): String = withContext(Dispatchers.IO) {
 
-        val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
+        resourceResolutionRepository.getOne(resolutionResultId).result!!
+    }
 
-        val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]
-        val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]
+    suspend fun deleteByKey(resolutionResultId: String): Unit = withContext(Dispatchers.IO) {
 
-        resourceResolutionRepository.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
-                resolutionKey,
-                blueprintName,
-                blueprintVersion,
-                artifactPrefix).result!!
+        val row = resourceResolutionRepository.getOne(resolutionResultId)
+        resourceResolutionRepository.delete(row)
+        resourceResolutionRepository.flush()
     }
 }
