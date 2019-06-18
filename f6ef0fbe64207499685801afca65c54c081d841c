@@ -22,6 +22,30 @@
       "revId": "f6ef0fbe64207499685801afca65c54c081d841c",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35687480_9881be41",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/selfservice-api/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/selfservice/api/messaginglib/ProducerConfiguration.kt",
+        "patchSetId": 19
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2019-06-18T17:33:22Z",
+      "side": 1,
+      "message": "Just now checked. It works even if I removed the Enable Kafka and Bean annotation.\nPushing a new patch soon.",
+      "parentUuid": "0555fe39_b1056319",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 37,
+        "endChar": 9
+      },
+      "revId": "f6ef0fbe64207499685801afca65c54c081d841c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
