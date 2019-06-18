@@ -79,7 +79,7 @@ object RpcMessageUtils {
 
     const val INTERLEAVE_CAPABILITY_STRING = "urn:ietf:params:netconf:capability:interleave:1.0"
 
-    const val CAPABILITY_REGEX = "capability>\\s*(.*?)\\s*capability>"
+    const val CAPABILITY_REGEX = "capability>\\s*(.*?)\\s*</capability>"
 
     const val SESSION_ID_REGEX = "session-id>\\s*(.*?)\\s*session-id>"
 
