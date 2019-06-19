@@ -29,6 +29,7 @@
             <outputFileNameMapping>${artifact.groupId}-${artifact.artifactId}-${artifact.version}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
             <excludes>
                 <exclude>org.slf4j:slf4j-simple</exclude>
+                <exclude>org.apache.karaf.*</exclude>
             </excludes>
         </dependencySet>
     </dependencySets>
