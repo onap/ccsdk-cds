@@ -58,16 +58,16 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                 val dName = resourceAssignment.dictionaryName
                 val dSource = resourceAssignment.dictionarySource
                 val resourceDefinition = resourceDictionaries[dName]
-                        ?: throw BluePrintProcessorException("couldn't get resource dictionary definition for $dName")
+                    ?: throw BluePrintProcessorException("couldn't get resource dictionary definition for $dName")
 
                 val resourceSource = resourceDefinition.sources[dSource]
-                        ?: throw BluePrintProcessorException("couldn't get resource definition $dName source($dSource)")
+                    ?: throw BluePrintProcessorException("couldn't get resource definition $dName source($dSource)")
 
                 val resourceSourceProperties =
-                        checkNotNull(resourceSource.properties) { "failed to get source properties for $dName " }
+                    checkNotNull(resourceSource.properties) { "failed to get source properties for $dName " }
 
                 val sourceProperties =
-                        JacksonUtils.getInstanceFromMap(resourceSourceProperties, RestResourceSource::class.java)
+                    JacksonUtils.getInstanceFromMap(resourceSourceProperties, RestResourceSource::class.java)
 
                 val path = nullToEmpty(sourceProperties.path)
                 val inputKeyMapping =
@@ -77,7 +77,7 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                 // Resolving content Variables
                 val payload = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.payload), resolvedInputKeyMapping)
                 val urlPath =
-                        resolveFromInputKeyMapping(checkNotNull(sourceProperties.urlPath), resolvedInputKeyMapping)
+                    resolveFromInputKeyMapping(checkNotNull(sourceProperties.urlPath), resolvedInputKeyMapping)
                 val verb = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.verb), resolvedInputKeyMapping)
 
                 logger.info("$dSource dictionary information : ($urlPath), ($inputKeyMapping), (${sourceProperties.outputKeyMapping})")
@@ -90,7 +90,8 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                 if (responseStatusCode in 200..299 && !responseBody.isBlank()) {
                     populateResource(resourceAssignment, sourceProperties, responseBody, path)
                 } else {
-                    val errMsg = "Failed to get $dSource result for dictionary name ($dName) using urlPath ($urlPath) response_code: ($responseStatusCode)"
+                    val errMsg =
+                        "Failed to get $dSource result for dictionary name ($dName) using urlPath ($urlPath) response_code: ($responseStatusCode)"
                     logger.warn(errMsg)
                     throw BluePrintProcessorException(errMsg)
                 }
@@ -100,12 +101,12 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
         } catch (e: Exception) {
             ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, e.message)
             throw BluePrintProcessorException("Failed in template key ($resourceAssignment) assignments with: ${e.message}",
-                    e)
+                e)
         }
     }
 
     fun blueprintWebClientService(resourceAssignment: ResourceAssignment,
-                                          restResourceSource: RestResourceSource): BlueprintWebClientService {
+                                  restResourceSource: RestResourceSource): BlueprintWebClientService {
         return if (isNotEmpty(restResourceSource.endpointSelector)) {
             val restPropertiesJson = raRuntimeService.resolveDSLExpression(restResourceSource.endpointSelector!!)
             blueprintRestLibPropertyService.blueprintWebClientService(restPropertiesJson)
@@ -143,7 +144,7 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                 entrySchemaType = checkNotEmpty(resourceAssignment.property?.entrySchema?.type) {
                     "Entry schema is not defined for dictionary ($dName) info"
                 }
-                val arrayNode = responseNode as ArrayNode
+                val arrayNode = JacksonUtils.objectMapper.createArrayNode()
 
                 if (entrySchemaType !in BluePrintTypes.validPrimitiveTypes()) {
 
@@ -155,13 +156,13 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                         outputKeyMapping.map {
                             val responseKeyValue = responseSingleJsonNode.get(it.key)
                             val propertyTypeForDataType = ResourceAssignmentUtils
-                                    .getPropertyType(raRuntimeService, entrySchemaType, it.key)
+                                .getPropertyType(raRuntimeService, entrySchemaType, it.key)
 
                             logger.info("For List Type Resource: key (${it.key}), value ($responseKeyValue), " +
                                     "type  ({$propertyTypeForDataType})")
 
                             JacksonUtils.populateJsonNodeValues(it.value,
-                                    responseKeyValue, propertyTypeForDataType, arrayChildNode)
+                                responseKeyValue, propertyTypeForDataType, arrayChildNode)
                         }
                         arrayNode.add(arrayChildNode)
                     }
@@ -179,7 +180,7 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                 outputKeyMapping.map {
                     val responseKeyValue = responseNode.get(it.key)
                     val propertyTypeForDataType = ResourceAssignmentUtils
-                            .getPropertyType(raRuntimeService, entrySchemaType, it.key)
+                        .getPropertyType(raRuntimeService, entrySchemaType, it.key)
 
                     logger.info("For List Type Resource: key (${it.key}), value ($responseKeyValue), type  ({$propertyTypeForDataType})")
                     JacksonUtils.populateJsonNodeValues(it.value, responseKeyValue, propertyTypeForDataType, objectNode)

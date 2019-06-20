@@ -24,8 +24,9 @@ object ResourceResolutionConstants {
         const val INPUT_ARTIFACT_PREFIX_NAMES = "artifact-prefix-names"
         const val OUTPUT_ASSIGNMENT_PARAMS = "assignment-params"
         const val FILE_NAME_RESOURCE_DEFINITION_TYPES = "resources_definition_types.json"
-        const val RESOURCE_RESOLUTION_INPUT_KEY = "resolution-key";
-        const val RESOURCE_RESOLUTION_INPUT_STORE_RESULT = "store-result";
+        const val RESOURCE_RESOLUTION_INPUT_KEY = "resolution-key"
+        const val RESOURCE_RESOLUTION_INPUT_STORE_RESULT = "store-result"
+        const val RESOURCE_RESOLUTION_INPUT_OCCURRENCE = "occurrence";
 
 
 }
