@@ -15,8 +15,11 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor
 
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.TextNode
+import io.mockk.every
+import io.mockk.spyk
 import kotlinx.coroutines.runBlocking
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
@@ -28,7 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [InputResourceResolutionProcessor::class])
@@ -38,20 +41,21 @@ class InputResourceResolutionProcessorTest {
     @Autowired
     lateinit var inputResourceResolutionProcessor: InputResourceResolutionProcessor
 
-    @Ignore
     @Test
-    fun `test input resource resolution`() {
+    fun `InputResourceResolutionProcessor should be able to resolve a value for an input parameter`() {
         runBlocking {
+
             val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
                     "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
-            val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)
+            val resourceAssignmentRuntimeService = spyk(ResourceAssignmentRuntimeService("1234", bluePrintContext))
+
+            // mocking input for resource resolution
+            val textNode: JsonNode = TextNode("any value")
+            every {resourceAssignmentRuntimeService.getInputValue("rr-name") } returns textNode
 
             inputResourceResolutionProcessor.raRuntimeService = resourceAssignmentRuntimeService
-            inputResourceResolutionProcessor.resourceDictionaries = ResourceAssignmentUtils
-                    .resourceDefinitions(bluePrintContext.rootPath)
-
-            //TODO ("Mock the input Values")
+            inputResourceResolutionProcessor.resourceDictionaries = ResourceAssignmentUtils.resourceDefinitions(bluePrintContext.rootPath)
 
             val resourceAssignment = ResourceAssignment().apply {
                 name = "rr-name"
@@ -62,9 +66,8 @@ class InputResourceResolutionProcessorTest {
                 }
             }
 
-            val processorName = inputResourceResolutionProcessor.applyNB(resourceAssignment)
-            assertNotNull(processorName, "couldn't get Input resource assignment processor name")
-            println(processorName)
+            val operationOutcome = inputResourceResolutionProcessor.applyNB(resourceAssignment)
+            assertTrue(operationOutcome, "An error occurred while trying to test the InputResourceResolutionProcessor")
         }
     }
 }
