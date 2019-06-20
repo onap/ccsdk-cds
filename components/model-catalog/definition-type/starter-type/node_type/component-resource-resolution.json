@@ -22,6 +22,12 @@
               "required": false,
               "type": "string"
             },
+            "occurrence": {
+              "description": "Number of time to perform the resolution.",
+              "required": false,
+              "default": 1,
+              "type": "int"
+            },
             "store-result": {
               "description": "Whether or not to store the output.",
               "required": false,

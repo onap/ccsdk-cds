@@ -17,11 +17,15 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.JsonNodeFactory
+import jdk.nashorn.internal.ir.ObjectNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JsonParserUtils
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
@@ -34,12 +38,9 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
 
         val properties: MutableMap<String, Any> = mutableMapOf()
-
+        var occurrence = 1
         try {
-            val key = getOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY)
-            val storeResult = getOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT)
-            properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY] = key.asText()
-            properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] = storeResult.asBoolean()
+            occurrence = getOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE).asInt()
         } catch (e: BluePrintProcessorException) {
             // NoOp - these property aren't mandatory, so don't fail the process if not provided.
         }
@@ -47,14 +48,28 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
         val artifactPrefixNamesNode = getOperationInput(ResourceResolutionConstants.INPUT_ARTIFACT_PREFIX_NAMES)
         val artifactPrefixNames = JacksonUtils.getListFromJsonNode(artifactPrefixNamesNode, String::class.java)
 
-        val resolvedParamContents = resourceResolutionService.resolveResources(bluePrintRuntimeService,
-            nodeTemplateName,
-            artifactPrefixNames,
-            properties)
+        val jsonResponse = JsonNodeFactory.instance.objectNode()
+        val j = 0
+        if (j in 1..occurrence) {
+
+            try {
+                val key = getOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY)
+                val storeResult = getOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT)
+                properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY] = key.asText() + "-" + j
+                properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] = storeResult.asBoolean()
+            } catch (e: BluePrintProcessorException) {
+                // NoOp - these property aren't mandatory, so don't fail the process if not provided.
+            }
+
+            jsonResponse.set("0", resourceResolutionService.resolveResources(bluePrintRuntimeService,
+                nodeTemplateName,
+                artifactPrefixNames,
+                properties).asJsonNode())
+        }
 
         // Set Output Attributes
         bluePrintRuntimeService.setNodeTemplateAttributeValue(nodeTemplateName,
-            ResourceResolutionConstants.OUTPUT_ASSIGNMENT_PARAMS, resolvedParamContents.asJsonNode())
+            ResourceResolutionConstants.OUTPUT_ASSIGNMENT_PARAMS, jsonResponse)
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
