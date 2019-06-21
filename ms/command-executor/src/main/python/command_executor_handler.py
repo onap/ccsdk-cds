@@ -19,6 +19,7 @@ from subprocess import CalledProcessError, PIPE
 import logging
 import os
 import subprocess
+import sys
 import virtualenv
 import venv
 import utils
@@ -37,10 +38,7 @@ class CommandExecutorHandler():
         self.installed = self.venv_home + '/.installed'
 
     def is_installed(self):
-        if os.path.exists(self.installed):
-            return True
-        else:
-            return False
+        return os.path.exists(self.installed)
 
     def prepare_env(self, request, results):
         if not self.is_installed():
@@ -78,7 +76,16 @@ class CommandExecutorHandler():
 
         self.logger.info("Command: {}".format(cmd))
         try:
-            results.append(os.popen(cmd).read())
+            with subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                                  shell=True, bufsize=1, universal_newlines=True) as newProcess:
+                while True:
+                    output = newProcess.stdout.readline()
+                    if output == '' and newProcess.poll() is not None:
+                        break
+                    if output:
+                        self.logger.info(output.strip())
+                        results.append(output.strip())
+                    rc = newProcess.poll()
         except Exception as e:
             self.logger.info("{} - Failed to execute command. Error: {}".format(self.blueprint_id, e))
             results.append(e)
