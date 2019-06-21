@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.resolutionresults.api
+package org.onap.ccsdk.cds.blueprintsprocessor.resource.api
 
 import io.swagger.annotations.ApiOperation
 import kotlinx.coroutines.runBlocking
