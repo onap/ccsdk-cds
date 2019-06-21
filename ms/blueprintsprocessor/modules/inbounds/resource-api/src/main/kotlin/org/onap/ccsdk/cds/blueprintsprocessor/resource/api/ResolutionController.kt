@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018-2019 Bell Canada Intellectual Property.
+ * Copyright © 2019 Bell Canada
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.resolutionresults.api
+package org.onap.ccsdk.cds.blueprintsprocessor.resource.api
 
 import io.swagger.annotations.ApiOperation
 import kotlinx.coroutines.runBlocking
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/resolution")
-open class ResolutionServiceController {
+open class ResolutionController {
 
     @Autowired
     lateinit var resourceResolutionDBService: ResourceResolutionDBService
@@ -39,8 +39,8 @@ open class ResolutionServiceController {
     }
 
     @RequestMapping(path = [""], method = [RequestMethod.GET], produces = [MediaType.TEXT_PLAIN_VALUE])
-    @ApiOperation(value = "Fetch a resolution result ",
-        notes = "Retrieve a stored resolution value using the blueprint metadata, artifact name, resolution-key along with the name of the resource value to retrieve.")
+    @ApiOperation(value = "Fetch a resource resolution result ",
+        notes = "Retrieve a stored resource value using the blueprint metadata, artifact name, resolution-key along with the name of the resource value to retrieve.")
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     fun get(@RequestParam(value = "bpName") bpName: String,
