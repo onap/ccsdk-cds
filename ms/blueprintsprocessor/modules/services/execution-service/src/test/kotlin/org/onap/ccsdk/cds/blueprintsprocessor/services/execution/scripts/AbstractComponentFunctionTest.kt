@@ -34,7 +34,9 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInpu
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.componentScriptExecutor
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
@@ -53,7 +55,7 @@ import kotlin.test.assertNotNull
  */
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [ComponentFunctionScriptingService::class,
-    BluePrintScriptsServiceImpl::class,PythonExecutorProperty::class,
+    BluePrintScriptsServiceImpl::class, PythonExecutorProperty::class,
     BlueprintJythonService::class])
 class AbstractComponentFunctionTest {
 
@@ -183,5 +185,10 @@ class AbstractComponentFunctionTest {
         return executionServiceInput
     }
 
+    @Test
+    fun testComponentScriptExecutorNodeType() {
+        val componentScriptExecutor = BluePrintTypes.componentScriptExecutor()
+        assertNotNull(componentScriptExecutor.interfaces, "failed to get interface operations")
+    }
 }
 

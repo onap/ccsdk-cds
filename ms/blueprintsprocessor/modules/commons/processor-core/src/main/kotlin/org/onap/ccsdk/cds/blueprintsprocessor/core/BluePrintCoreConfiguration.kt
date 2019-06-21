@@ -17,15 +17,18 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.core
 
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintPathConfiguration
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.properties.bind.Bindable
 import org.springframework.boot.context.properties.bind.Binder
 import org.springframework.boot.context.properties.source.ConfigurationPropertySources
+import org.springframework.context.ApplicationContext
+import org.springframework.context.ApplicationContextAware
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.env.Environment
 import org.springframework.stereotype.Service
-
 
 @Configuration
 open class BluePrintCoreConfiguration(private val bluePrintProperties: BlueprintProcessorProperties) {
@@ -59,4 +62,17 @@ open class BlueprintProcessorProperties(private var bluePrintPropertyBinder: Bin
     fun <T> propertyBeanType(prefix: String, type: Class<T>): T {
         return bluePrintPropertyBinder.bind(prefix, Bindable.of(type)).get()
     }
+}
+
+@Configuration
+// Add Conditional property , If we try to manage on Application level
+open class BlueprintDependencyConfiguration : ApplicationContextAware {
+
+    private val log = LoggerFactory.getLogger(BlueprintDependencyConfiguration::class.java)!!
+
+    override fun setApplicationContext(applicationContext: ApplicationContext) {
+        BluePrintDependencyService.inject(applicationContext)
+        log.info("Dependency Management module created...")
+    }
+
 }

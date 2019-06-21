@@ -16,7 +16,9 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.db
 
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.BluePrintDBLibPropertySevice
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
@@ -34,8 +36,18 @@ open class BluePrintDBLibConfiguration(private var bluePrintProperties: BluePrin
     }
 }
 
+/**
+ * Exposed Dependency Service by this SSH Lib Module
+ */
+//TODO("right now not wired with name ")
+fun BluePrintDependencyService.dbLibPropertyService(): BluePrintDBLibPropertySevice =
+        instance(DBLibConstants.SERVICE_BLUEPRINT_DB_LIB_PROPERTY)
+
+
 class DBLibConstants {
     companion object {
+        //TODO("right now not wired with name ")
+        const val SERVICE_BLUEPRINT_DB_LIB_PROPERTY = "blueprint-db-lib-property-service"
         const val PREFIX_DB_PRIMARY: String = "blueprintsprocessor.db.primary"
 
         //list of database

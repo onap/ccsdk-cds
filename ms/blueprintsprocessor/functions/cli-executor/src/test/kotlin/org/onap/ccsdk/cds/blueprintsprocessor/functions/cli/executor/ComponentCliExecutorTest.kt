@@ -17,7 +17,6 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.cli.executor
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import io.mockk.every
 import io.mockk.mockk
@@ -30,11 +29,13 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ActionIdentifiers
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.CommonHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentScriptExecutor
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ExecutionServiceConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.ssh.BluePrintSshLibConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.scripts.BluePrintScriptsServiceImpl
@@ -49,7 +50,7 @@ import kotlin.test.assertNotNull
 @ContextConfiguration(classes = [CliExecutorConfiguration::class,
     ExecutionServiceConfiguration::class,
     BluePrintSshLibConfiguration::class, BluePrintScriptsServiceImpl::class,
-    BlueprintPropertyConfiguration::class, BluePrintProperties::class])
+    BlueprintPropertyConfiguration::class, BluePrintProperties::class, BluePrintDependencyService::class])
 @DirtiesContext
 @TestPropertySource(properties = [], locations = ["classpath:application-test.properties"])
 class ComponentCliExecutorTest {
@@ -78,10 +79,9 @@ class ComponentCliExecutorTest {
             operationInputs[BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE] = "activate-cli".asJsonPrimitive()
             operationInputs[BluePrintConstants.PROPERTY_CURRENT_INTERFACE] = "interfaceName".asJsonPrimitive()
             operationInputs[BluePrintConstants.PROPERTY_CURRENT_OPERATION] = "operationName".asJsonPrimitive()
-            operationInputs[ComponentCliExecutor.SCRIPT_TYPE] = BluePrintConstants.SCRIPT_INTERNAL.asJsonPrimitive()
-            operationInputs[ComponentCliExecutor.SCRIPT_CLASS_REFERENCE] =
+            operationInputs[ComponentScriptExecutor.SCRIPT_TYPE] = BluePrintConstants.SCRIPT_INTERNAL.asJsonPrimitive()
+            operationInputs[ComponentScriptExecutor.SCRIPT_CLASS_REFERENCE] =
                     "InternalSimpleCli_cba\$TestCliScriptFunction".asJsonPrimitive()
-            operationInputs[ComponentCliExecutor.INSTANCE_DEPENDENCIES] = JacksonUtils.jsonNode("[]") as ArrayNode
 
             val stepInputData = StepData().apply {
                 name = "activate-cli"

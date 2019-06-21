@@ -17,22 +17,23 @@
 @file:Suppress("unused")
 
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.cli.executor.CliComponentFunction
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.cli.executor.ComponentCliExecutor
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentScriptExecutor
+import org.onap.ccsdk.cds.blueprintsprocessor.ssh.sshClientService
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintTemplateService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.slf4j.LoggerFactory
 
-open class TestCliScriptFunction : CliComponentFunction() {
+open class TestCliScriptFunction : AbstractScriptComponentFunction() {
 
-    private val log = LoggerFactory.getLogger(CliComponentFunction::class.java)!!
+    private val log = LoggerFactory.getLogger(TestCliScriptFunction::class.java.canonicalName)!!
 
     override fun getName(): String {
         return "SimpleCliConfigure"
     }
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
-        log.info("Executing process")
+        log.info("Executing process ...")
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
@@ -41,9 +42,9 @@ open class TestCliScriptFunction : CliComponentFunction() {
 }
 
 
-open class Check : CliComponentFunction() {
+open class Check : AbstractScriptComponentFunction() {
 
-    private val log = LoggerFactory.getLogger(CliComponentFunction::class.java)!!
+    private val log = LoggerFactory.getLogger(AbstractScriptComponentFunction::class.java)!!
 
     override fun getName(): String {
         return "Check"
@@ -54,12 +55,12 @@ open class Check : CliComponentFunction() {
         val deviceInformation = bluePrintRuntimeService.resolveDSLExpression("device-properties")
 
         // Get the Client Service
-        val sshClientService = bluePrintSshLibPropertyService().blueprintSshClientService(deviceInformation)
+        val sshClientService = BluePrintDependencyService.sshClientService(deviceInformation)
 
         sshClientService.startSessionNB()
 
         // Read Commands
-        val commands = readCommandLinesFromArtifact("command-template")
+        val commands = readLinesFromArtifact("command-template")
 
         // Execute multiple Commands
         val responseLog = sshClientService.executeCommandsNB(commands, 5000)
@@ -68,7 +69,7 @@ open class Check : CliComponentFunction() {
         sshClientService.closeSessionNB()
 
         // Set the Response Data
-        setAttribute(ComponentCliExecutor.RESPONSE_DATA, responseLog.asJsonPrimitive())
+        setAttribute(ComponentScriptExecutor.RESPONSE_DATA, responseLog.asJsonPrimitive())
 
         log.info("Executing process")
     }

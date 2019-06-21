@@ -18,6 +18,7 @@ package org.onap.ccsdk.cds.controllerblueprints.core.dsl
 
 import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.*
 
 
@@ -266,16 +267,16 @@ class OperationDefinitionBuilder(private val id: String,
 class AttributesDefinitionBuilder {
     private val attributes: MutableMap<String, AttributeDefinition> = hashMapOf()
 
-    fun property(id: String, attribute: AttributeDefinition) {
+    fun attribute(id: String, attribute: AttributeDefinition) {
         attributes[id] = attribute
     }
 
-    fun property(id: String, type: String?, required: Boolean?, description: String?) {
+    fun attribute(id: String, type: String?, required: Boolean?, description: String?) {
         val attribute = AttributeDefinitionBuilder(id, type, required, description).build()
         attributes[id] = attribute
     }
 
-    fun property(id: String, type: String?, required: Boolean?, description: String?,
+    fun attribute(id: String, type: String?, required: Boolean?, description: String?,
                  block: AttributeDefinitionBuilder.() -> Unit) {
         val attribute = AttributeDefinitionBuilder(id, type, required, description).apply(block).build()
         attributes[id] = attribute
@@ -353,7 +354,14 @@ class PropertyDefinitionBuilder(private val id: String,
     fun entrySchema(entrySchemaType: String, block: EntrySchemaBuilder.() -> Unit) {
         propertyDefinition.entrySchema = EntrySchemaBuilder(entrySchemaType).apply(block).build()
     }
-    // TODO("Constrains")
+
+    fun constrains(block: ConstraintClauseBuilder.() -> Unit) {
+        propertyDefinition.constraints = ConstraintClauseBuilder().apply(block).build()
+    }
+
+    fun defaultValue(defaultValue: Any) {
+        defaultValue(defaultValue.asJsonType())
+    }
 
     fun defaultValue(defaultValue: JsonNode) {
         propertyDefinition.defaultValue = defaultValue
@@ -371,6 +379,22 @@ class PropertyDefinitionBuilder(private val id: String,
         return propertyDefinition
     }
 }
+
+class ConstraintClauseBuilder {
+    private val constraints: MutableList<ConstraintClause> = mutableListOf()
+    //TODO("Implementation")
+
+    fun validValues(values: List<JsonNode>) {
+        val constraintClause = ConstraintClause()
+        constraintClause.validValues = values.toMutableList()
+        constraints.add(constraintClause)
+    }
+
+    fun build(): MutableList<ConstraintClause> {
+        return constraints
+    }
+}
+
 
 class EntrySchemaBuilder(private val type: String) {
     private var entrySchema: EntrySchema = EntrySchema()

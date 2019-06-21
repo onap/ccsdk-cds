@@ -16,13 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.cli.executor
 
-import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
-import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentScriptExecutor
-import org.springframework.beans.factory.config.ConfigurableBeanFactory
-import org.springframework.context.annotation.Scope
-import org.springframework.stereotype.Component
+/**
+ * Register the CLI module exposed dependency
+ */
 
-@Component("component-cli-executor")
-@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-open class ComponentCliExecutor(private var componentFunctionScriptingService: ComponentFunctionScriptingService)
-    : ComponentScriptExecutor(componentFunctionScriptingService)

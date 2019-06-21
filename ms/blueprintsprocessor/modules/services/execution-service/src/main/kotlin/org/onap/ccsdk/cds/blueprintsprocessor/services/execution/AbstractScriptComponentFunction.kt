@@ -36,11 +36,13 @@ abstract class AbstractScriptComponentFunction : AbstractComponentFunction() {
     /**
      * Store Dynamic Script Dependency Instances, Objects present inside won't be persisted or state maintained.
      */
+    @Deprecated("Dependencies will be resolved dynamically")
     var functionDependencyInstances: MutableMap<String, Any> = hashMapOf()
 
     /**
      * This will be called from the scripts to serve instance from runtime to scripts.
      */
+    @Deprecated("Dependencies will be resolved dynamically")
     open fun <T> functionDependencyInstanceAsType(name: String): T {
         return functionDependencyInstances[name] as? T
                 ?: throw BluePrintProcessorException("couldn't get script property instance ($name)")

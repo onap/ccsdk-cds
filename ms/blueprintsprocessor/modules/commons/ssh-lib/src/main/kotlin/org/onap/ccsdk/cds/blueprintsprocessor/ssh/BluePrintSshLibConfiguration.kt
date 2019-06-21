@@ -16,6 +16,10 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.ssh
 
+import com.fasterxml.jackson.databind.JsonNode
+import org.onap.ccsdk.cds.blueprintsprocessor.ssh.service.BluePrintSshLibPropertyService
+import org.onap.ccsdk.cds.blueprintsprocessor.ssh.service.BlueprintSshClientService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
@@ -24,6 +28,21 @@ import org.springframework.context.annotation.Configuration
 @ComponentScan
 @EnableConfigurationProperties
 open class BluePrintSshLibConfiguration
+
+/**
+ * Exposed Dependency Service by this SSH Lib Module
+ */
+fun BluePrintDependencyService.sshLibPropertyService(): BluePrintSshLibPropertyService =
+        instance(SshLibConstants.SERVICE_BLUEPRINT_SSH_LIB_PROPERTY)
+
+
+fun BluePrintDependencyService.sshClientService(selector: String): BlueprintSshClientService =
+        sshLibPropertyService().blueprintSshClientService(selector)
+
+
+fun BluePrintDependencyService.sshClientService(jsonNode: JsonNode): BlueprintSshClientService =
+        sshLibPropertyService().blueprintSshClientService(jsonNode)
+
 
 class SshLibConstants {
     companion object {

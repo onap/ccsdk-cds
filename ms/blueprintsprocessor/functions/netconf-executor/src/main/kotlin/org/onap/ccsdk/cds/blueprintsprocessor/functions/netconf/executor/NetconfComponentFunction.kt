@@ -17,51 +17,48 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor
 
-import com.fasterxml.jackson.databind.JsonNode
 import kotlinx.coroutines.runBlocking
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 
+@Deprecated("Methods defined as extension function of AbstractComponentFunction")
 abstract class NetconfComponentFunction : AbstractScriptComponentFunction() {
 
+    @Deprecated(" Use resourceResolutionService method directly",
+            replaceWith = ReplaceWith("resourceResolutionService()",
+                    "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.resourceResolutionService"))
     open fun resourceResolutionService(): ResourceResolutionService =
             functionDependencyInstanceAsType(ResourceResolutionConstants.SERVICE_RESOURCE_RESOLUTION)
 
     // Called from python script
+    @Deprecated(" Use netconfDeviceInfo method directly",
+            replaceWith = ReplaceWith("netconfDeviceInfo(requirementName)",
+                    "org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.netconfDeviceInfo"))
     fun initializeNetconfConnection(requirementName: String): NetconfDevice {
-        val deviceInfo = deviceProperties(requirementName)
+        val deviceInfo = netconfDeviceInfo(requirementName)
         return NetconfDevice(deviceInfo)
     }
 
+    @Deprecated(" Use artifactContent method directly",
+            replaceWith = ReplaceWith("artifactContent(artifactName)",
+                    "org.onap.ccsdk.cds.blueprintsprocessor.services.execution.artifactContent"))
     fun generateMessage(artifactName: String): String {
         return bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactName)
     }
 
+    @Deprecated(" Use storedContentFromResolvedArtifact method directly",
+            replaceWith = ReplaceWith("storedContentFromResolvedArtifact(resolutionKey, artifactName)",
+                    "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.storedContentFromResolvedArtifact"))
     fun resolveFromDatabase(resolutionKey: String, artifactName: String): String = runBlocking {
         resourceResolutionService().resolveFromDatabase(bluePrintRuntimeService, artifactName, resolutionKey)
     }
 
+    @Deprecated(" Use contentFromResolvedArtifact method directly",
+            replaceWith = ReplaceWith("resolveAndGenerateMessage(artifactPrefix)",
+                    "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.resolveAndGenerateMessage"))
     fun resolveAndGenerateMessage(artifactPrefix: String): String = runBlocking {
         resourceResolutionService().resolveResources(bluePrintRuntimeService, nodeTemplateName,
                 artifactPrefix, mapOf())
-    }
-
-    private fun deviceProperties(requirementName: String): DeviceInfo {
-
-        val blueprintContext = bluePrintRuntimeService.bluePrintContext()
-
-        val requirement = blueprintContext.nodeTemplateRequirement(nodeTemplateName, requirementName)
-
-        val capabilityProperties = bluePrintRuntimeService.resolveNodeTemplateCapabilityProperties(requirement
-                .node!!, requirement.capability!!)
-
-        return deviceProperties(capabilityProperties)
-    }
-
-    private fun deviceProperties(capabilityProperty: MutableMap<String, JsonNode>): DeviceInfo {
-        return JacksonUtils.getInstanceFromMap(capabilityProperty, DeviceInfo::class.java)
     }
 }
