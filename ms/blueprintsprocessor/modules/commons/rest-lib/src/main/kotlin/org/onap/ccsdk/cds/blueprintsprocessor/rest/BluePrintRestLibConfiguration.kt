@@ -18,6 +18,10 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.rest
 
+import com.fasterxml.jackson.databind.JsonNode
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
@@ -26,6 +30,22 @@ import org.springframework.context.annotation.Configuration
 @ComponentScan
 @EnableConfigurationProperties
 open class BluePrintRestLibConfiguration
+
+/**
+ * Exposed Dependency Service by this Rest Lib Module
+ */
+fun BluePrintDependencyService.restLibPropertyService(): BluePrintRestLibPropertyService =
+        instance(RestLibConstants.SERVICE_BLUEPRINT_REST_LIB_PROPERTY)
+
+
+fun BluePrintDependencyService.restClientService(selector: String): BlueprintWebClientService {
+    return restLibPropertyService().blueprintWebClientService(selector)
+}
+
+
+fun BluePrintDependencyService.restClientService(jsonNode: JsonNode): BlueprintWebClientService {
+    return restLibPropertyService().blueprintWebClientService(jsonNode)
+}
 
 
 class RestLibConstants {

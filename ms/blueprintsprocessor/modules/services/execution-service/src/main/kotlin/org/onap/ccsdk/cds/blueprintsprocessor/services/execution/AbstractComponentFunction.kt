@@ -27,6 +27,7 @@ import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintFunctionNode
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintTemplateService
 import org.slf4j.LoggerFactory
 
 /**
@@ -144,6 +145,22 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
 
     fun addError(error: String) {
         bluePrintRuntimeService.getBluePrintError().addError(error)
+    }
+
+    fun artifactContent(artifactName: String): String {
+        return bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactName)
+    }
+
+    suspend fun mashTemplateNData(artifactName: String, json: String): String {
+        val templateService = BluePrintTemplateService()
+        return templateService.generateContent(bluePrintRuntimeService, nodeTemplateName, artifactName,
+                json, true)
+    }
+
+    suspend fun readLinesFromArtifact(artifactName: String): List<String> {
+        val artifactDefinition = bluePrintRuntimeService.resolveNodeTemplateArtifactDefinition(nodeTemplateName, artifactName)
+        val file = normalizedFile(bluePrintRuntimeService.bluePrintContext().rootPath, artifactDefinition.file)
+        return file.readNBLines()
     }
 
 }

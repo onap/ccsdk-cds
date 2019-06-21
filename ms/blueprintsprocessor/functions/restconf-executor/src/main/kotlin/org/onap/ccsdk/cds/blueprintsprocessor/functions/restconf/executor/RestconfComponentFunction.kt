@@ -25,33 +25,50 @@ import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPrope
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
 
-
+@Deprecated("Methods defined as extension function of AbstractComponentFunction")
 abstract class RestconfComponentFunction : AbstractScriptComponentFunction() {
 
+    @Deprecated("Defined in AbstractScriptComponentFunction extension class")
     open fun bluePrintRestLibPropertyService(): BluePrintRestLibPropertyService =
             functionDependencyInstanceAsType(RestLibConstants.SERVICE_BLUEPRINT_REST_LIB_PROPERTY)
 
+    @Deprecated(" Use resourceResolutionService method directly",
+            replaceWith = ReplaceWith("resourceResolutionService()",
+                    "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.resourceResolutionService"))
     open fun resourceResolutionService(): ResourceResolutionService =
             functionDependencyInstanceAsType(ResourceResolutionConstants.SERVICE_RESOURCE_RESOLUTION)
 
 
+    @Deprecated("Defined in AbstractScriptComponentFunction extension class")
     fun restClientService(selector: String): BlueprintWebClientService {
         return bluePrintRestLibPropertyService().blueprintWebClientService(selector)
     }
 
+    @Deprecated(" Use storedContentFromResolvedArtifact method directly",
+            replaceWith = ReplaceWith("storedContentFromResolvedArtifact(resolutionKey, artifactName)",
+                    "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.storedContentFromResolvedArtifact"))
     fun resolveFromDatabase(resolutionKey: String, artifactName: String): String = runBlocking {
         resourceResolutionService().resolveFromDatabase(bluePrintRuntimeService, artifactName, resolutionKey)
     }
-
+    @Deprecated(" Use artifactContent method directly",
+            replaceWith = ReplaceWith("artifactContent(artifactName)",
+                    "org.onap.ccsdk.cds.blueprintsprocessor.services.execution.artifactContent"))
     fun generateMessage(artifactName: String): String {
         return bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactName)
     }
 
+
+    @Deprecated(" Use contentFromResolvedArtifact method directly",
+            replaceWith = ReplaceWith("contentFromResolvedArtifact(artifactMapping, artifactTemplate)",
+                    "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.contentFromResolvedArtifact"))
     fun resolveAndGenerateMessage(artifactMapping: String, artifactTemplate: String): String = runBlocking {
         resourceResolutionService().resolveResources(bluePrintRuntimeService, nodeTemplateName,
                 artifactMapping, artifactTemplate)
     }
 
+    @Deprecated(" Use contentFromResolvedArtifact method directly",
+            replaceWith = ReplaceWith("resolveAndGenerateMessage(artifactPrefix)",
+                    "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.resolveAndGenerateMessage"))
     fun resolveAndGenerateMessage(artifactPrefix: String): String = runBlocking {
         resourceResolutionService().resolveResources(bluePrintRuntimeService, nodeTemplateName,
                 artifactPrefix, mapOf())
