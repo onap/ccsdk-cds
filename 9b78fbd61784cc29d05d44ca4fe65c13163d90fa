@@ -22,6 +22,30 @@
       "revId": "9b78fbd61784cc29d05d44ca4fe65c13163d90fa",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a28bc96_5a7f9355",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/resource-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/resolutionresults/api/ResolutionServiceController.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-06-21T03:09:23Z",
+      "side": 1,
+      "message": "refactored in following patch",
+      "parentUuid": "d682d71e_44452531",
+      "range": {
+        "startLine": 17,
+        "startChar": 47,
+        "endLine": 17,
+        "endChar": 64
+      },
+      "revId": "9b78fbd61784cc29d05d44ca4fe65c13163d90fa",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
