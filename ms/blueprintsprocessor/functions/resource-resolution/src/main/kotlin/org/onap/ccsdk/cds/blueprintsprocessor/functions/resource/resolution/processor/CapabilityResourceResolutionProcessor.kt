@@ -87,7 +87,7 @@ open class CapabilityResourceResolutionProcessor(private val applicationContext:
     suspend fun scriptInstance(scriptType: String, scriptClassReference: String, instanceDependencies: List<String>)
             : ResourceAssignmentProcessor {
 
-        log.info("creating resource resolution of script type($scriptType), reference name($scriptClassReference) and" +
+        log.info("creating resource api of script type($scriptType), reference name($scriptClassReference) and" +
                 "instanceDependencies($instanceDependencies)")
 
         val scriptComponent = componentFunctionScriptingService

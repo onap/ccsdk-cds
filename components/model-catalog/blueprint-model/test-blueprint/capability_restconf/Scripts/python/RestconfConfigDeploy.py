@@ -65,7 +65,7 @@ class RestconfConfigDeploy(RestconfComponentFunction):
         self.log.info("Ended execution of process method")
 
     def retrieve_parameters(self, execution_request):
-        resolution_key = self.getDynamicProperties("resolution-key").asText()
+        resolution_key = self.getDynamicProperties("api-key").asText()
         self.log.info("resolution_key: {}", resolution_key)
         pnf_id = execution_request.payload.get("config-deploy-request").get("config-deploy-properties").get("pnf-id")
         pnf_id = str(pnf_id).strip('\"')

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018-2019 Bell Canada Intellectual Property.
+ * Copyright © 2019 Bell Canada
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.resolutionresults.api
+package org.onap.ccsdk.cds.blueprintsprocessor.resource.api
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonInclude
@@ -34,57 +34,55 @@ import java.io.Serializable
 import java.util.*
 
 /**
- * Handle exceptions in Resolution Results API and provide relevant HTTP status codes and messages
+ * Handle exceptions in Resolution API and provide relevant HTTP status codes and messages
  *
  * @author Serge Simard
  * @version 1.0
  */
 @RestControllerAdvice("org.onap.ccsdk.cds.blueprintsprocessor.resolutionresults")
-open class ResolutionResultsServiceExceptionHandler {
+open class ResourceExceptionHandler {
 
-    private val log = LoggerFactory.getLogger(ResolutionResultsServiceExceptionHandler::class.toString())
+    private val log = LoggerFactory.getLogger(ExceptionHandler::class.toString())
 
-    private val debugMsg = "ResolutionResultsService_Error_Message"
+    private val debugMsg = "Resolution_Service_Error_Message"
 
     @ExceptionHandler
-    fun ResolutionResultsServiceExceptionHandler(e: BluePrintProcessorException): ResponseEntity<ErrorMessage> {
-        log.error(e.message)
+    fun resolutionResultsServiceExceptionHandler(e: BluePrintProcessorException): ResponseEntity<ErrorMessage> {
         val errorCode = ErrorCode.BLUEPRINT_PATH_MISSING
-        val errorMessage = ErrorMessage(errorCode.message(e.message!!), errorCode.value, debugMsg)
-        return ResponseEntity(errorMessage, HttpStatus.resolve(errorCode.httpCode))
+        return returnError(e, errorCode)
     }
 
     @ExceptionHandler
-    fun ResolutionResultsServiceExceptionHandler(e: ServerWebInputException): ResponseEntity<ErrorMessage> {
-        log.error(e.message)
+    fun resolutionResultsServiceExceptionHandler(e: ServerWebInputException): ResponseEntity<ErrorMessage> {
         val errorCode = ErrorCode.INVALID_REQUEST_FORMAT
-        val errorMessage = ErrorMessage(errorCode.message(e.message!!), errorCode.value, debugMsg)
-        return ResponseEntity(errorMessage, HttpStatus.resolve(errorCode.httpCode))
+        return returnError(e, errorCode)
     }
 
     @ExceptionHandler
-    fun ResolutionResultsServiceExceptionHandler(e: EmptyResultDataAccessException): ResponseEntity<ErrorMessage> {
-        log.error(e.message)
-        var errorCode = ErrorCode.RESOURCE_NOT_FOUND
-        val errorMessage = ErrorMessage(errorCode.message(e.message!!), errorCode.value, debugMsg)
-        return ResponseEntity(errorMessage, HttpStatus.resolve(errorCode.httpCode))
+    fun resolutionResultsServiceExceptionHandler(e: EmptyResultDataAccessException): ResponseEntity<ErrorMessage> {
+        val errorCode = ErrorCode.RESOURCE_NOT_FOUND
+        return returnError(e, errorCode)
     }
 
     @ExceptionHandler
-    fun ResolutionResultsServiceExceptionHandler(e: JpaObjectRetrievalFailureException): ResponseEntity<ErrorMessage> {
-        log.error(e.message)
-
-        var errorCode = ErrorCode.RESOURCE_NOT_FOUND
-        val errorMessage = ErrorMessage(errorCode.message(e.message!!), errorCode.value, debugMsg)
-        return ResponseEntity(errorMessage, HttpStatus.resolve(errorCode.httpCode))
+    fun resolutionResultsServiceExceptionHandler(e: JpaObjectRetrievalFailureException): ResponseEntity<ErrorMessage> {
+        val errorCode = ErrorCode.RESOURCE_NOT_FOUND
+        return returnError(e, errorCode)
     }
 
     @ExceptionHandler
-    fun ResolutionResultsServiceExceptionHandler(e: Exception): ResponseEntity<ErrorMessage> {
+    fun resolutionResultsServiceExceptionHandler(e: Exception): ResponseEntity<ErrorMessage> {
+        val errorCode = ErrorCode.GENERIC_FAILURE
+        return returnError(e, errorCode)
+    }
+
+    fun returnError(e: Exception, errorCode: ErrorCode): ResponseEntity<ErrorMessage> {
         log.error(e.message, e)
-        var errorCode = ErrorCode.GENERIC_FAILURE
-        val errorMessage = ErrorMessage(errorCode.message(e.message!!), errorCode.value, debugMsg)
-        return ResponseEntity(errorMessage, HttpStatus.resolve(errorCode.httpCode))
+        val errorMessage =
+            ErrorMessage(errorCode.message(e.message!!),
+                errorCode.value,
+                debugMsg)
+        return ResponseEntity(errorMessage, HttpStatus.resolve(errorCode.httpCode)!!)
     }
 }
 

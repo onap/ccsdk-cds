@@ -29,7 +29,7 @@ class ConfigDeploy(NetconfComponentFunction):
       rr = ResolutionHelper(self)
 
       # Get meshed template from DB
-      resolution_key = self.getDynamicProperties("resolution-key").asText()
+      resolution_key = self.getDynamicProperties("api-key").asText()
       payloadHostname = rr.retrieve_resolved_template_from_database(resolution_key, "hostname")
       payloadInterface = rr.retrieve_resolved_template_from_database(resolution_key, "vfw-interface")
 

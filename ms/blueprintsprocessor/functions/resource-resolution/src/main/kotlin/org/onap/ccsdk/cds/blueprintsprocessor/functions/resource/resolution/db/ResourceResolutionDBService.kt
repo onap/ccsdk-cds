@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2019 Bell Canada.
- * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +46,7 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
     suspend fun write(properties: Map<String, Any>,
                       bluePrintRuntimeService: BluePrintRuntimeService<*>,
                       artifactPrefix: String,
-                      resourceAssignment: ResourceAssignment) = withContext(Dispatchers.IO) {
+                      resourceAssignment: ResourceAssignment): ResourceResolution = withContext(Dispatchers.IO) {
 
         val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
 
@@ -68,7 +67,7 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
         try {
             resourceResolutionRepository.saveAndFlush(resourceResolution)
         } catch (ex: DataIntegrityViolationException) {
-            throw BluePrintException("Failed to store resource resolution result.", ex)
+            throw BluePrintException("Failed to store resource api result.", ex)
         }
     }
 }
