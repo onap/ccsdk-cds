@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a982af39_9013c709",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionComponent.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2019-06-21T02:44:00Z",
+      "side": 1,
+      "message": "Is there any way to keep a backward compatible response when occurence is not specified ?\nParsing the key-1 when only one response is returned will be cumbersome...",
+      "range": {
+        "startLine": 47,
+        "startChar": 6,
+        "endLine": 61,
+        "endChar": 79
+      },
+      "revId": "a1e10c6191a7185b96d41c8b320bd04a5ae73787",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b741b0c6_af2b87cf",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionConstants.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2019-06-21T02:44:00Z",
+      "side": 1,
+      "message": "extra ;",
+      "range": {
+        "startLine": 29,
+        "startChar": 69,
+        "endLine": 29,
+        "endChar": 70
+      },
+      "revId": "a1e10c6191a7185b96d41c8b320bd04a5ae73787",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
