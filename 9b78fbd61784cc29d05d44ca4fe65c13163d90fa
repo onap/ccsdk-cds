@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d682d71e_44452531",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/resource-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/resolutionresults/api/ResolutionServiceController.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2019-06-21T02:49:08Z",
+      "side": 1,
+      "message": "wrong package, no ? Shouldnèt it be resolution only ?",
+      "range": {
+        "startLine": 17,
+        "startChar": 47,
+        "endLine": 17,
+        "endChar": 64
+      },
+      "revId": "9b78fbd61784cc29d05d44ca4fe65c13163d90fa",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
