@@ -21,7 +21,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolutionDBService
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolutionResultService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.TemplateResolutionResultService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.ResourceAssignmentProcessor
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
@@ -58,7 +58,7 @@ interface ResourceResolutionService {
 
 @Service(ResourceResolutionConstants.SERVICE_RESOURCE_RESOLUTION)
 open class ResourceResolutionServiceImpl(private var applicationContext: ApplicationContext,
-                                         private var resolutionResultService: ResourceResolutionResultService,
+                                         private var resolutionResultService: TemplateResolutionResultService,
                                          private var blueprintTemplateService: BluePrintTemplateService,
                                          private var resourceResolutionDBService: ResourceResolutionDBService) :
     ResourceResolutionService {
@@ -181,7 +181,7 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                                         blueprintRuntimeService,
                                         artifactPrefix,
                                         resourceAssignment)
-                                    log.info("resolution saved into database successfully : ($resourceAssignment)")
+                                    log.info("Resource resolution saved into database successfully : ($resourceAssignment)")
                                 }
 
                                 // Set errors from RA
