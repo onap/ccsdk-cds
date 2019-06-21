@@ -17,9 +17,21 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db
 
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface ResourceResolutionRepository : JpaRepository<ResourceResolutionResult, String> {
+interface ResourceResolutionRepository : JpaRepository<ResourceResolution, String> {
 
-    fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(key: String, blueprintName: String?,
-                                                                              blueprintVersion: String?,
-                                                                              artifactName: String): ResourceResolutionResult
+    fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndName(key: String,
+                                                                                     blueprintName: String?,
+                                                                                     blueprintVersion: String?,
+                                                                                     artifactName: String,
+                                                                                     name: String): ResourceResolution
+
+    fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(resolutionKey: String,
+                                                                              blueprintName: String,
+                                                                              blueprintVersion: String,
+                                                                              artifactPrefix: String): List<ResourceResolution>
+
+    fun findByBlueprintNameAndBlueprintVersionAndResourceIdAndResourceType(blueprintName: String,
+                                                                           blueprintVersion: String,
+                                                                           resourceId: String,
+                                                                           resourceType: String): List<ResourceResolution>
 }

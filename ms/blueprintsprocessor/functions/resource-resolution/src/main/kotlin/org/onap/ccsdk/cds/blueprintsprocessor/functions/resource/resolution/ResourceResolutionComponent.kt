@@ -37,10 +37,15 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
         val occurrence = getOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE)
         val key = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY)
         val storeResult = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT)
+        val resourceId = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID)
+        val resourceType = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE)
+
 
         val properties: MutableMap<String, Any> = mutableMapOf()
-        properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] =
-            storeResult?.asBoolean() ?: false
+        properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] = storeResult?.asBoolean() ?: false
+        properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY] = key?.asText() ?: ""
+        properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] = resourceId?.asText() ?: ""
+        properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] = resourceType?.asText() ?: ""
 
         val artifactPrefixNamesNode = getOperationInput(ResourceResolutionConstants.INPUT_ARTIFACT_PREFIX_NAMES)
         val artifactPrefixNames = JacksonUtils.getListFromJsonNode(artifactPrefixNamesNode, String::class.java)
