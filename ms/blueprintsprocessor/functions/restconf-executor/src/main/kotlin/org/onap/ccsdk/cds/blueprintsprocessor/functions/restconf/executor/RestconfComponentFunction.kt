@@ -47,11 +47,6 @@ abstract class RestconfComponentFunction : AbstractScriptComponentFunction() {
         return bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactName)
     }
 
-    fun resolveAndGenerateMessage(artifactMapping: String, artifactTemplate: String): String = runBlocking {
-        resourceResolutionService().resolveResources(bluePrintRuntimeService, nodeTemplateName,
-                artifactMapping, artifactTemplate)
-    }
-
     fun resolveAndGenerateMessage(artifactPrefix: String): String = runBlocking {
         resourceResolutionService().resolveResources(bluePrintRuntimeService, nodeTemplateName,
                 artifactPrefix, mapOf())
