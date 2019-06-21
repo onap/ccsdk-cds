@@ -37,7 +37,7 @@ data class RemoteScriptExecutionInput(var requestId: String,
 
 
 data class RemoteScriptExecutionOutput(var requestId: String,
-                                       var response: String,
+                                       var response: List<String>,
                                        var status: StatusType = StatusType.SUCCESS,
                                        var timestamp: Date = Date())
 

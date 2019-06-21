@@ -37,7 +37,7 @@ message Identifiers {
 
 message ExecutionOutput {
     string requestId = 1;
-    string response = 2;
+    repeated string response = 2; //TODO: do we have to change the field ID?
     ResponseStatus status = 3;
     google.protobuf.Timestamp timestamp = 4;
 }
