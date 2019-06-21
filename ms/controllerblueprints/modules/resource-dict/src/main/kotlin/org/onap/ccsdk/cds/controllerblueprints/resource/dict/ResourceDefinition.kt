@@ -79,12 +79,14 @@ open class ResourceAssignment {
 
     override fun toString(): String {
         return StringBuilder()
-                .append("[")
-                .append("name=", name)
-                .append(", dictionaryName=", dictionaryName)
-                .append(", dictionarySource=", dictionarySource)
-                .append("]")
-                .toString()
+            .append("[")
+            .append("name=", name)
+            .append(", status=", status)
+            .append(", property=", property?.value ?: "")
+            .append(", dictionaryName=", dictionaryName)
+            .append(", dictionarySource=", dictionarySource)
+            .append("]")
+            .toString()
     }
 }
 

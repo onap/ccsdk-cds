@@ -48,7 +48,7 @@ open class ResolutionResultsServiceExceptionHandler {
 
     @ExceptionHandler
     fun ResolutionResultsServiceExceptionHandler(e: BluePrintProcessorException): ResponseEntity<ErrorMessage> {
-        log.error(e.message)
+        log.error(e.message, e)
         val errorCode = ErrorCode.BLUEPRINT_PATH_MISSING
         val errorMessage = ErrorMessage(errorCode.message(e.message!!), errorCode.value, debugMsg)
         return ResponseEntity(errorMessage, HttpStatus.resolve(errorCode.httpCode))
@@ -56,7 +56,7 @@ open class ResolutionResultsServiceExceptionHandler {
 
     @ExceptionHandler
     fun ResolutionResultsServiceExceptionHandler(e: ServerWebInputException): ResponseEntity<ErrorMessage> {
-        log.error(e.message)
+        log.error(e.message, e)
         val errorCode = ErrorCode.INVALID_REQUEST_FORMAT
         val errorMessage = ErrorMessage(errorCode.message(e.message!!), errorCode.value, debugMsg)
         return ResponseEntity(errorMessage, HttpStatus.resolve(errorCode.httpCode))
@@ -64,7 +64,7 @@ open class ResolutionResultsServiceExceptionHandler {
 
     @ExceptionHandler
     fun ResolutionResultsServiceExceptionHandler(e: EmptyResultDataAccessException): ResponseEntity<ErrorMessage> {
-        log.error(e.message)
+        log.error(e.message, e)
         var errorCode = ErrorCode.RESOURCE_NOT_FOUND
         val errorMessage = ErrorMessage(errorCode.message(e.message!!), errorCode.value, debugMsg)
         return ResponseEntity(errorMessage, HttpStatus.resolve(errorCode.httpCode))
@@ -72,7 +72,7 @@ open class ResolutionResultsServiceExceptionHandler {
 
     @ExceptionHandler
     fun ResolutionResultsServiceExceptionHandler(e: JpaObjectRetrievalFailureException): ResponseEntity<ErrorMessage> {
-        log.error(e.message)
+        log.error(e.message, e)
 
         var errorCode = ErrorCode.RESOURCE_NOT_FOUND
         val errorMessage = ErrorMessage(errorCode.message(e.message!!), errorCode.value, debugMsg)
@@ -85,6 +85,12 @@ open class ResolutionResultsServiceExceptionHandler {
         var errorCode = ErrorCode.GENERIC_FAILURE
         val errorMessage = ErrorMessage(errorCode.message(e.message!!), errorCode.value, debugMsg)
         return ResponseEntity(errorMessage, HttpStatus.resolve(errorCode.httpCode))
+    }
+
+    @ExceptionHandler
+    fun ResolutionResultsServiceExceptionHandler(e: ResourceException): ResponseEntity<ErrorMessage> {
+        log.error(e.message, e)
+        return ResponseEntity(ErrorMessage(e.message, e.code, debugMsg), HttpStatus.resolve(e.code))
     }
 }
 
