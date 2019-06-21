@@ -33,12 +33,12 @@ import javax.persistence.TemporalType
 
 @EntityListeners(AuditingEntityListener::class)
 @Entity
-@Table(name = "RESOURCE_RESOLUTION_RESULT")
+@Table(name = "TEMPLATE_RESOLUTION")
 @Proxy(lazy = false)
-class ResourceResolutionResult : Serializable {
+class TemplateResolution : Serializable {
 
     @Id
-    @Column(name = "resource_resolution_result_id")
+    @Column(name = "template_resolution_id")
     var id: String? = null
 
     @Column(name = "resolution_key", nullable = false)
