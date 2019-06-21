@@ -39,6 +39,9 @@ import { ApiService } from 'src/app/common/core/services/api.service';
 import { IMetaData } from 'src/app/common/core/store/models/metadata.model';
 import { EditorService } from './editor.service';
 import { SortPipe } from '../../../../common/shared/pipes/sort.pipe';
+import { NotificationHandlerService } from 'src/app/common/core/services/notification-handler.service';
+import { LoaderService } from 'src/app/common/core/services/loader.service';
+
 
 interface Node {
   name: string;
@@ -107,6 +110,7 @@ export class EditorComponent implements OnInit {
   private tocsaMetadaData: any;
   metadata: IMetaData;
   uploadedFileName: string;
+  entryDefinition: string;
 
   private transformer = (node: Node, level: number) => {
     return {
@@ -126,7 +130,10 @@ export class EditorComponent implements OnInit {
   artifactName: any;
   artifactVersion: any;
 
-  constructor(private store: Store<IAppState>, private apiservice: EditorService) {
+  constructor(private store: Store<IAppState>, private apiservice: EditorService,
+    private alertService: NotificationHandlerService, private loader: LoaderService
+    ) 
+    {
     this.dataSource.data = TREE_DATA;
     this.bpState = this.store.select('blueprint');
     // this.dataSource.data = TREE_DATA;
@@ -162,6 +169,7 @@ export class EditorComponent implements OnInit {
         this.dataSource.data = this.filesTree;
         this.blueprintName = blueprintdata.name;
         this.uploadedFileName = blueprintdata.uploadedFileName;
+        this.entryDefinition = blueprintdata.entryDefinition;
         let blueprint = [];
         for (let key in this.blueprintdata) {
           if (this.blueprintdata.hasOwnProperty(key)) {
@@ -206,10 +214,10 @@ export class EditorComponent implements OnInit {
       name: this.blueprintName,
       files: this.filesTree,
       filesData: this.filesData,
-      uploadedFileName: this.uploadedFileName
+      uploadedFileName: this.uploadedFileName,
+      entryDefinition: this.entryDefinition
     }
     this.store.dispatch(new SetBlueprintState(blueprintState));
-    // console.log(this.text);
   }
 
   selectFileToView(file) {
@@ -227,7 +235,6 @@ export class EditorComponent implements OnInit {
       }
     })
     this.fileExtension = this.selectedFile.substr(this.selectedFile.lastIndexOf('.') + 1);
-    // console.log(this.fileExtension);
     this.setEditorMode();
   }
 
@@ -248,7 +255,10 @@ export class EditorComponent implements OnInit {
                     console.log("processed");
                   }
                 });
-              window.alert('Blueprint enriched successfully');
+              this.alertService.success('Blueprint enriched successfully');
+            },
+            (error)=>{
+              this.alertService.error('Enrich:' + error.message);
             });
       });
   }
@@ -264,8 +274,9 @@ export class EditorComponent implements OnInit {
         this.apiservice.post("/create-blueprint/", formData)
           .subscribe(
             data => {
-              // console.log(data);
-              window.alert('Success:' + JSON.stringify(data));
+              this.alertService.success('Success:' + JSON.stringify(data));
+            }, error=>{
+              this.alertService.error('Save -' +error.message);
             });
 
       });
@@ -280,8 +291,9 @@ export class EditorComponent implements OnInit {
         formData.append("file", blob);
         this.apiservice.deployPost("/deploy-blueprint/", formData)
           .subscribe(data => {
-            // console.log(data);
-            window.alert('Saved Successfully:' + JSON.stringify(data));
+            this.alertService.success('Saved Successfully:' + JSON.stringify(data));
+          }, error=>{
+            this.alertService.error('Deploy - ' + error.message);
           });
 
       });
@@ -295,8 +307,9 @@ export class EditorComponent implements OnInit {
         formData.append("file", blob);
         this.apiservice.post("/publish/", formData)
           .subscribe(data => {
-            // console.log(data);
-            window.alert('Published:' + JSON.stringify(data));
+            this.alertService.success('Published:' + JSON.stringify(data))
+          }, error=>{
+            this.alertService.error('Publish - ' + error.message);
           });
 
       });
@@ -580,6 +593,7 @@ export class EditorComponent implements OnInit {
   }
 
   saveEditedChanges() {
+    this.loader.showLoader();
     this.filesData.forEach(fileNode => {
       if (this.selectedFile && fileNode.name.includes(this.blueprintName.trim()) && fileNode.name.includes(this.selectedFile.trim())) {
         fileNode.data = this.text;
@@ -596,5 +610,6 @@ export class EditorComponent implements OnInit {
     }
 
     this.updateBlueprint();
+    this.loader.hideLoader();
   }
 }

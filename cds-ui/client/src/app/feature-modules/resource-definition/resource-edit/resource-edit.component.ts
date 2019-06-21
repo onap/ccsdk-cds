@@ -30,6 +30,7 @@ import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import { Observable } from 'rxjs';
 import { A11yModule } from '@angular/cdk/a11y';
 import { ResourceEditService } from './resource-edit.service';
+import { NotificationHandlerService } from 'src/app/common/core/services/notification-handler.service';
 
 @Component({
   selector: 'app-resource-edit',
@@ -47,7 +48,7 @@ export class ResourceEditComponent implements OnInit {
     @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
     options = new JsonEditorOptions();
   
-  constructor(private store: Store<IAppState>, private resourceEditService: ResourceEditService) {
+  constructor(private store: Store<IAppState>, private resourceEditService: ResourceEditService, private alertService: NotificationHandlerService) {
   	this.rdState = this.store.select('resources');
     this.options.mode = 'text';
     this.options.modes = [ 'text', 'tree', 'view'];
@@ -100,10 +101,10 @@ export class ResourceEditComponent implements OnInit {
   saveToBackend() {
     this.resourceEditService.saveResource(this.data)
     .subscribe(response=>{
-      window.alert("save success");
+      this.alertService.success("save success")
     },
     error=>{
-      window.alert('Error saving resources');
+      this.alertService.error('Error saving resources');
     })
   }
 }

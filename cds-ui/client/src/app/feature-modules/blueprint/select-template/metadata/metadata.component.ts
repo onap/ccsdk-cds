@@ -29,6 +29,7 @@ import { IBlueprintState } from 'src/app/common/core/store/models/blueprintState
 import { IBlueprint } from 'src/app/common/core/store/models/blueprint.model';
 import { IMetaData } from '../../../../common/core/store/models/metadata.model';
 import { SetBlueprintState } from 'src/app/common/core/store/actions/blueprint.action';
+import { LoaderService } from '../../../../common/core/services/loader.service';
 
 @Component({
   selector: 'app-metadata',
@@ -48,7 +49,7 @@ export class MetadataComponent implements OnInit {
   uploadedFileName: string;
   entryDefinition: string;
   
-  constructor(private formBuilder: FormBuilder, private store: Store<IAppState>) {
+  constructor(private formBuilder: FormBuilder, private store: Store<IAppState>, private loader: LoaderService) {
     this.bpState = this.store.select('blueprint');
     this.CBAMetadataForm = this.formBuilder.group({
       template_author: ['', Validators.required],
@@ -96,6 +97,7 @@ export class MetadataComponent implements OnInit {
   }
 
   UploadMetadata() {
+    this.loader.showLoader();
     this.metadata = Object.assign({}, this.CBAMetadataForm.value);
     this.blueprint.metadata = this.metadata;
 
@@ -113,6 +115,6 @@ export class MetadataComponent implements OnInit {
       entryDefinition: this.entryDefinition
     }
     this.store.dispatch(new SetBlueprintState(blueprintState));
+    this.loader.hideLoader();
   }
-
 }

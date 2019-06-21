@@ -30,6 +30,8 @@ import { SearchPipe } from './pipes/search.pipe';
 import { SearchDialog } from './components/search-dialog/search-dialog.component';
 import { AppMaterialModule }  from '../modules/app-material.module';
 import { SortPipe } from './pipes/sort.pipe';
+import { NotificationComponent } from './components/notification/notification.component';
+import { NotificationService } from './components/notification/notification.service';
 
 @NgModule({
   declarations: [
@@ -37,14 +39,16 @@ import { SortPipe } from './pipes/sort.pipe';
     CBAWizardComponent,
     SearchPipe,
     SearchDialog,
-    SortPipe
+    SortPipe,
+    NotificationComponent
   ],
   exports: [
     HomeComponent,
     CBAWizardComponent,
     SearchPipe,
     SearchDialog,
-    SortPipe
+    SortPipe,
+    NotificationComponent
   ],
   imports: [
     AppMaterialModule,
@@ -68,6 +72,7 @@ import { SortPipe } from './pipes/sort.pipe';
     MatStepperModule,
     RouterModule
   ],
+  providers: [NotificationService],
   entryComponents: [SearchDialog]
 })
 export class SharedModule { }
