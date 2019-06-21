@@ -30,6 +30,7 @@ import { IAppState } from '../../../../common/core/store/state/app.state';
 import { LoadBlueprintSuccess, SET_BLUEPRINT_STATE, SetBlueprintState } from '../../../../common/core/store/actions/blueprint.action';
 import { json } from 'd3';
 import { SortPipe } from '../../../../common/shared/pipes/sort.pipe';
+import { LoaderService } from '../../../../common/core/services/loader.service';
 
 @Component({
   selector: 'app-search-template',
@@ -56,7 +57,7 @@ export class SearchTemplateComponent implements OnInit {
   private blueprintName: string;
   private entryDefinition: string;
 
-  constructor(private store: Store<IAppState>) { }
+  constructor(private store: Store<IAppState>, private loader: LoaderService) { }
 
   ngOnInit() {
   }
@@ -68,7 +69,8 @@ export class SearchTemplateComponent implements OnInit {
     this.zipFile.files = {};
     this.zipFile.loadAsync(this.file)
       .then((zip) => {
-        if(zip) {            
+        if(zip) { 
+          this.loader.showLoader();           
           this.buildFileViewData(zip);
         }
       });
@@ -157,8 +159,8 @@ export class SearchTemplateComponent implements OnInit {
           }
         }
       });
-    });
-    console.log('tree', tree);
+    });    
+    this.loader.hideLoader();
     return tree;
   }
 

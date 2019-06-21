@@ -23,13 +23,22 @@ import { Router } from '@angular/router';
 import { Observable} from 'rxjs';
 import { Store } from '@ngrx/store';
 
+import { LoaderService } from './common/core/services/loader.service';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  loaderStatus: boolean = false;
+  constructor(private router: Router, 
+    private loaderService: LoaderService
+    ) {
 
-  constructor(private router: Router) {
+    this.loaderService.subject.subscribe(data=>{
+      console.log(data);
+      this.loaderStatus = data;
+    })
    }
 }

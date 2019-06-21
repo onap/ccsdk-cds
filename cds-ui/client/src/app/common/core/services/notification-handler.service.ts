@@ -23,22 +23,22 @@ limitations under the License.
 
 import { Injectable } from '@angular/core';
 
-// import { NotificationService } from '../../shared/components/notification/notification.service';
+import { NotificationService } from '../../shared/components/notification/notification.service';
 
 @Injectable()
 export class NotificationHandlerService {
 
   constructor(
-    //  private alert: NotificationService
+    private alert: NotificationService
   ) { }
 
 
   success(message: string) {
-    // this.alert.success(message);
+    this.alert.success(message);
   }
 
   error(message: string) {
-    // this.alert.error(message);
+    this.alert.error(message);
   }
 
   info(message: string) {
