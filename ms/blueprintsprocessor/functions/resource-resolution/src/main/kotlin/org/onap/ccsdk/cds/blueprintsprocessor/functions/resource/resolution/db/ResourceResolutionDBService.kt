@@ -71,7 +71,7 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
     suspend fun write(properties: Map<String, Any>,
                       bluePrintRuntimeService: BluePrintRuntimeService<*>,
                       artifactPrefix: String,
-                      resourceAssignment: ResourceAssignment) = withContext(Dispatchers.IO) {
+                      resourceAssignment: ResourceAssignment): ResourceResolution = withContext(Dispatchers.IO) {
 
         val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
 

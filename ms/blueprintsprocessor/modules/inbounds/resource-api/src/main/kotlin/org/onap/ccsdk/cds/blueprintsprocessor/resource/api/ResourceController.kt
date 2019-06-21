@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.resolutionresults.api
+package org.onap.ccsdk.cds.blueprintsprocessor.resource.api
 
 import io.swagger.annotations.ApiOperation
 import kotlinx.coroutines.runBlocking
@@ -27,8 +27,8 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/v1/resource")
-open class ResolutionServiceController(private var resourceResolutionDBService: ResourceResolutionDBService) {
+@RequestMapping("/api/v1/resources")
+open class ResourceController(private var resourceResolutionDBService: ResourceResolutionDBService) {
 
     @RequestMapping(path = ["/ping"], method = [RequestMethod.GET], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
@@ -36,13 +36,13 @@ open class ResolutionServiceController(private var resourceResolutionDBService: 
         "Success"
     }
 
-    @RequestMapping(path = ["/fromResolutionKey"],
+    @RequestMapping(path = [""],
         method = [RequestMethod.GET])
     @ApiOperation(value = "Fetch all resource values associated to a resolution key. ",
         notes = "Retrieve a stored resource value using the blueprint metadata, artifact name and the resolution-key.")
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
-    fun getFromKey(@RequestParam(value = "bpName") bpName: String,
+    fun getAllFromKey(@RequestParam(value = "bpName") bpName: String,
                    @RequestParam(value = "bpVersion") bpVersion: String,
                    @RequestParam(value = "artifactName") artifactName: String,
                    @RequestParam(value = "resolutionKey") resolutionKey: String)
@@ -52,7 +52,7 @@ open class ResolutionServiceController(private var resourceResolutionDBService: 
             .body(resourceResolutionDBService.readArtifact(bpName, bpVersion, artifactName, resolutionKey))
     }
 
-    @RequestMapping(path = ["/fromResolutionKey"],
+    @RequestMapping(path = ["/resource"],
         method = [RequestMethod.GET])
     @ApiOperation(value = "Fetch a resource value using resolution key.",
         notes = "Retrieve a stored resource value using the blueprint metadata, artifact name, resolution-key along with the name of the resource value to retrieve.")
@@ -68,6 +68,7 @@ open class ResolutionServiceController(private var resourceResolutionDBService: 
         ResponseEntity.ok()
             .body(resourceResolutionDBService.readValue(bpName, bpVersion, artifactName, resolutionKey, name))
     }
+
 
     @RequestMapping(path = ["/fromResourceId"], method = [RequestMethod.GET])
     @ApiOperation(value = "Fetch all resource result for a given resource id / type combination",
