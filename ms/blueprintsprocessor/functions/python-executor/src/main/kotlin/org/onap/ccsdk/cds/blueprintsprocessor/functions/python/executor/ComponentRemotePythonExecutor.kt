@@ -22,6 +22,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ExecutionServic
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.RemoteScriptExecutionService
 import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.data.OperationAssignment
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
@@ -96,7 +97,7 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
                 )
                 val prepareEnvOutput = remoteScriptExecutionService.prepareEnv(prepareEnvInput)
                 log.info("$ATTRIBUTE_PREPARE_ENV_LOG - ${prepareEnvOutput.response}")
-                setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, prepareEnvOutput.response.asJsonPrimitive())
+                setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, JacksonUtils.jsonNodeFromObject(prepareEnvOutput.response))
                 setAttribute(ATTRIBUTE_EXEC_CMD_LOG, "N/A".asJsonPrimitive())
                 check(prepareEnvOutput.status == StatusType.SUCCESS) {
                     "failed to get prepare remote env response status for requestId(${prepareEnvInput.requestId})"
@@ -112,7 +113,7 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
                     properties = properties)
             val remoteExecutionOutput = remoteScriptExecutionService.executeCommand(remoteExecutionInput)
             log.info("$ATTRIBUTE_EXEC_CMD_LOG  - ${remoteExecutionOutput.response}")
-            setAttribute(ATTRIBUTE_EXEC_CMD_LOG, remoteExecutionOutput.response.asJsonPrimitive())
+            setAttribute(ATTRIBUTE_EXEC_CMD_LOG, JacksonUtils.jsonNodeFromObject(remoteExecutionOutput.response))
             check(remoteExecutionOutput.status == StatusType.SUCCESS) {
                 "failed to get prepare remote command response status for requestId(${remoteExecutionOutput.requestId})"
             }

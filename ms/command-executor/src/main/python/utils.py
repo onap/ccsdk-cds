@@ -17,7 +17,6 @@ from google.protobuf.timestamp_pb2 import Timestamp
 
 import proto.CommandExecutor_pb2 as CommandExecutor_pb2
 
-
 def get_blueprint_id(request):
     blueprint_name = request.identifiers.blueprintName
     blueprint_version = request.identifiers.blueprintVersion
@@ -32,6 +31,5 @@ def build_response(request, results, is_success=True):
 
     timestamp = Timestamp()
     timestamp.GetCurrentTime()
-
-    return CommandExecutor_pb2.ExecutionOutput(requestId=request.requestId, response="".join(results), status=status,
+    return CommandExecutor_pb2.ExecutionOutput(requestId=request.requestId, response=results, status=status,
                                                timestamp=timestamp)
