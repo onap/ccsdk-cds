@@ -128,15 +128,10 @@ class ResourceResolutionServiceTest {
 
             val artifactPrefix = "another"
 
-            // Templating Artifact Definition Name
-            val artifactTemplate = "$artifactPrefix-template"
-            // Resource Assignment Artifact Definition Name
-            val artifactMapping = "$artifactPrefix-mapping"
-
             // Prepare Inputs
             PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService, executionServiceInput.payload, "resource-assignment")
 
-            resourceResolutionService.resolveResources(bluePrintRuntimeService, "resource-assignment", artifactMapping, artifactTemplate)
+            resourceResolutionService.resolveResources(bluePrintRuntimeService, "resource-assignment", artifactPrefix, mapOf<String, String>())
         }
     }
 }
