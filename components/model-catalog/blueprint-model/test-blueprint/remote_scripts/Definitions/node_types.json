@@ -8,9 +8,12 @@
           "required" : false,
           "type" : "string"
         },
-        "execute-command-logs" : {
-          "required" : false,
-          "type" : "string"
+        "execute-command-logs": {
+          "required": false,
+          "type": "list",
+          "entry_schema": {
+            "type": "string"
+          }
         }
       },
       "capabilities" : {

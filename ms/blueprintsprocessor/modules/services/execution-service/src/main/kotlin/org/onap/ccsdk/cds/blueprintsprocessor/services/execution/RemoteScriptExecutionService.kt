@@ -148,7 +148,7 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
     fun ExecutionOutput.asJavaData(): RemoteScriptExecutionOutput {
         return RemoteScriptExecutionOutput(
             requestId = this.requestId,
-            response = this.response,
+            response = this.responseList,
             status = StatusType.valueOf(this.status.name)
         )
     }
