@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class ResourceResolutionResultService(private val resourceResolutionRepository: ResourceResolutionRepository) {
+class ResourceResolutionResultService(private val resourceResolutionRepository: ResourceResolutionResultRepository) {
 
     suspend fun read(bluePrintRuntimeService: BluePrintRuntimeService<*>, artifactPrefix: String,
                      resolutionKey: String): String = withContext(Dispatchers.IO) {

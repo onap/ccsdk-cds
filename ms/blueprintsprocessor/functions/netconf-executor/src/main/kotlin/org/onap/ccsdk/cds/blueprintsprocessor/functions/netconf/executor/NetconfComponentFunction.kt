@@ -44,11 +44,6 @@ abstract class NetconfComponentFunction : AbstractScriptComponentFunction() {
         resourceResolutionService().resolveFromDatabase(bluePrintRuntimeService, artifactName, resolutionKey)
     }
 
-    fun resolveAndGenerateMessage(artifactMapping: String, artifactTemplate: String): String = runBlocking {
-        resourceResolutionService().resolveResources(bluePrintRuntimeService, nodeTemplateName,
-                artifactMapping, artifactTemplate)
-    }
-
     fun resolveAndGenerateMessage(artifactPrefix: String): String = runBlocking {
         resourceResolutionService().resolveResources(bluePrintRuntimeService, nodeTemplateName,
                 artifactPrefix, mapOf())
