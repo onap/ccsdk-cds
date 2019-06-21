@@ -76,6 +76,11 @@ enum class ErrorCode (val value: Int, val httpCode: Int) {
         override fun message(detailMsg: String): String {
             return "Duplicated entry while saving Blueprint. Details : {$detailMsg}"
         }
+    },
+    DUPLICATE_DATA(11, 409) {
+        override fun message(detailMsg: String): String {
+            return "Duplicated data - was expecting one result, got more than one. Details : {$detailMsg}"
+        }
     };
 
     abstract fun message(detailMsg: String): String
