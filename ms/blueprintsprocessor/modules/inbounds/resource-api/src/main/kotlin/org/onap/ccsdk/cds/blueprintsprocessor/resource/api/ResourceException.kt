@@ -13,13 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db
+package org.onap.ccsdk.cds.blueprintsprocessor.resource.api
 
-import org.springframework.data.jpa.repository.JpaRepository
-
-interface ResourceResolutionResultRepository : JpaRepository<ResourceResolutionResult, String> {
-
-    fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(key: String, blueprintName: String?,
-                                                                              blueprintVersion: String?,
-                                                                              artifactName: String): ResourceResolutionResult
+class ResourceException(message: String) : RuntimeException(message) {
+    var code: Int = 404
 }
+
