@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.resolutionresults.api
+package org.onap.ccsdk.cds.blueprintsprocessor.resource.api
 
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
@@ -43,7 +43,7 @@ import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
 @WebFluxTest
-@ContextConfiguration(classes = [ResolutionResultsServiceHandler::class, BluePrintCoreConfiguration::class,
+@ContextConfiguration(classes = [BluePrintCoreConfiguration::class,
     BluePrintCatalogService::class, SecurityProperties::class])
 @ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
 @TestPropertySource(locations = ["classpath:application-test.properties"])
@@ -57,7 +57,7 @@ class ResolutionResultsServiceHandlerTest {
     lateinit var webTestClient: WebTestClient
 
     var resolutionKey = "7cafa9f3-bbc8-49ec-8f25-fcaa6ac3ff08"
-    val blueprintName =  "baseconfiguration"
+    val blueprintName = "baseconfiguration"
     val blueprintVersion = "1.0.0"
     val templatePrefix = "activate"
     val payloadDummyTemplateData = "PAYLOAD DATA"
@@ -79,10 +79,10 @@ class ResolutionResultsServiceHandlerTest {
     fun `ping return Success`() {
         runBlocking {
 
-            webTestClient.get().uri("/api/v1/resolution-results/ping")
-                    .exchange()
-                        .expectStatus().isOk
-                        .expectBody().equals("Success")
+            webTestClient.get().uri("/api/v1/api-results/ping")
+                .exchange()
+                .expectStatus().isOk
+                .expectBody().equals("Success")
         }
     }
 
@@ -107,48 +107,48 @@ class ResolutionResultsServiceHandlerTest {
         }
     }
 
-    private fun createRetrieveDelete(expectedType : String? = null): WebTestClient.ResponseSpec {
+    private fun createRetrieveDelete(expectedType: String? = null): WebTestClient.ResponseSpec {
         var uuid = "MISSING"
 
         // Store new result for blueprint/artifact/resolutionkey
         webTestClient
-                .post()
-                .uri("/api/v1/resolution-results/$blueprintName/$blueprintVersion/$templatePrefix/$resolutionKey/")
-                .body(BodyInserters.fromObject(payloadDummyTemplateData))
-                .exchange()
-                .expectStatus().is2xxSuccessful
-                .expectBody()
-                .consumeWith {
-                    uuid = String(it.responseBody)
-                    log.info("Stored result under UUID $uuid")
-                }
+            .post()
+            .uri("/api/v1/api-results/$blueprintName/$blueprintVersion/$templatePrefix/$resolutionKey/")
+            .body(BodyInserters.fromObject(payloadDummyTemplateData))
+            .exchange()
+            .expectStatus().is2xxSuccessful
+            .expectBody()
+            .consumeWith {
+                uuid = String(it.responseBody)
+                log.info("Stored result under UUID $uuid")
+            }
         // Retrieve same payload
         var requestArguments = "bpName=$blueprintName&bpVersion=$blueprintVersion" +
                 "&artifactName=$templatePrefix&resolutionKey=$resolutionKey"
         if (expectedType != null) {
             requestArguments = "$requestArguments&format=$expectedType"
             webTestClient
-                    .get()
-                    .uri("/api/v1/resolution-results/?$requestArguments")
-                    .exchange()
-                    .expectStatus().is2xxSuccessful
-                    .expectHeader().contentType(MediaType.valueOf("application/$expectedType"))
-                    .expectBody().equals(payloadDummyTemplateData)
+                .get()
+                .uri("/api/v1/api-results/?$requestArguments")
+                .exchange()
+                .expectStatus().is2xxSuccessful
+                .expectHeader().contentType(MediaType.valueOf("application/$expectedType"))
+                .expectBody().equals(payloadDummyTemplateData)
         } else {
             webTestClient
-                    .get()
-                    .uri("/api/v1/resolution-results/?$requestArguments")
-                    .exchange()
-                    .expectStatus().is2xxSuccessful
-                    .expectHeader().contentType(MediaType.TEXT_PLAIN)
-                    .expectBody().equals(payloadDummyTemplateData)
+                .get()
+                .uri("/api/v1/api-results/?$requestArguments")
+                .exchange()
+                .expectStatus().is2xxSuccessful
+                .expectHeader().contentType(MediaType.TEXT_PLAIN)
+                .expectBody().equals(payloadDummyTemplateData)
         }
         // And delete by UUID
         return webTestClient
-                .delete()
-                .uri("/api/v1/resolution-results/$uuid/")
-                .exchange()
-                .expectStatus().is2xxSuccessful
+            .delete()
+            .uri("/api/v1/api-results/$uuid/")
+            .exchange()
+            .expectStatus().is2xxSuccessful
     }
 
     /*
@@ -162,9 +162,9 @@ class ResolutionResultsServiceHandlerTest {
                     "&artifactName=$templatePrefix" +
                     "&resolutionKey=$resolutionKey"
 
-            webTestClient.get().uri("/api/v1/resolution-results/?$arguments")
-                    .exchange()
-                        .expectStatus().isBadRequest
+            webTestClient.get().uri("/api/v1/api-results/?$arguments")
+                .exchange()
+                .expectStatus().isBadRequest
         }
     }
 
@@ -176,9 +176,9 @@ class ResolutionResultsServiceHandlerTest {
                     "&artifactName=$templatePrefix" +
                     "&resolutionKey=$resolutionKey"
 
-            webTestClient.get().uri("/api/v1/resolution-results/?$arguments")
-                    .exchange()
-                    .expectStatus().isEqualTo(HttpStatus.SERVICE_UNAVAILABLE)
+            webTestClient.get().uri("/api/v1/api-results/?$arguments")
+                .exchange()
+                .expectStatus().isEqualTo(HttpStatus.SERVICE_UNAVAILABLE)
         }
     }
 
@@ -187,11 +187,11 @@ class ResolutionResultsServiceHandlerTest {
         runBlocking {
 
             webTestClient
-                    .get()
-                    .uri("/api/v1/resolution-results/?bpName=$blueprintName&bpVersion=$blueprintVersion" +
-                            "&artifactName=$templatePrefix&resolutionKey=$resolutionKey")
-                    .exchange()
-                    .expectStatus().isNotFound
+                .get()
+                .uri("/api/v1/api-results/?bpName=$blueprintName&bpVersion=$blueprintVersion" +
+                        "&artifactName=$templatePrefix&resolutionKey=$resolutionKey")
+                .exchange()
+                .expectStatus().isNotFound
         }
     }
 
@@ -200,10 +200,10 @@ class ResolutionResultsServiceHandlerTest {
         runBlocking {
 
             webTestClient
-                    .get()
-                    .uri("/api/v1/resolution-results/234234234234/")
-                    .exchange()
-                    .expectStatus().isNotFound
+                .get()
+                .uri("/api/v1/api-results/234234234234/")
+                .exchange()
+                .expectStatus().isNotFound
         }
     }
 

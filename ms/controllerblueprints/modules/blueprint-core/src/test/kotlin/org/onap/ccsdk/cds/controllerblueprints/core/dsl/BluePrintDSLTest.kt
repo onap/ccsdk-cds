@@ -62,8 +62,8 @@ class BluePrintDSLTest {
                     artifact("sample-template", "artifact-velocity", "Templates/sample-template.vtl")
                 }
 
-                workflow("resource-resolution", "to resolve resources") {
-                    step("resource-resolution-call", "resolve", "Resource Resolution component invoke")
+                workflow("resource-api", "to resolve resources") {
+                    step("resource-api-call", "resolve", "Resource Resolution component invoke")
                 }
                 // Alternate way to define workflow
                 workflow("activate", "to resolve resources") {
@@ -96,7 +96,7 @@ class BluePrintDSLTest {
         val serviceTemplate = serviceTemplate("sample-bp", "1.0.0",
                 "brindasanth@onap.com", "sample, blueprints") {
             topologyTemplate {
-                workflowNodeTemplate("activate", "component-resource-resolution", "") {
+                workflowNodeTemplate("activate", "component-resource-api", "") {
                     operation("ResourceResolutionExecutor", "") {
                         inputs {
                             property("string-value", "sample")

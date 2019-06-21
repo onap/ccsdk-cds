@@ -51,7 +51,7 @@ class BluePrintContextTest {
     @Test
     fun testChainedProperty() {
         val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(blueprintBasePath)
-        val nodeType = bluePrintContext.nodeTypeChained("component-resource-resolution")
+        val nodeType = bluePrintContext.nodeTypeChained("component-resource-api")
         assertNotNull(nodeType, "Failed to get chained node type")
         log.trace("Properties {}", JacksonUtils.getJson(nodeType, true))
     }
