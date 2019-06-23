@@ -16,10 +16,14 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.resource.api
 
+import com.fasterxml.jackson.databind.JsonNode
+import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.ApiParam
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolution
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolutionDBService
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -27,23 +31,36 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/resources")
+@Api(value = "/api/v1/resources",
+    description = "Interaction with resolved resources.")
 open class ResourceController(private var resourceResolutionDBService: ResourceResolutionDBService) {
 
-    @RequestMapping(path = ["/ping"], method = [RequestMethod.GET], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @RequestMapping(path = ["/health-check"],
+        method = [RequestMethod.GET],
+        produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
-    fun ping(): String = runBlocking {
-        "Success"
+    @ApiOperation(value = "Health Check", hidden = true)
+    fun resourceControllerHealthCheck(): JsonNode = runBlocking {
+        JacksonUtils.getJsonNode("Success")
     }
 
     @RequestMapping(path = [""],
         method = [RequestMethod.GET])
-    @ApiOperation(value = "Fetch all resource values associated to a resolution key. ",
-        notes = "Retrieve a stored resource value using the blueprint metadata, artifact name and the resolution-key.")
+    @ApiOperation(value = "Get all resolved resources using the resolution key. ",
+        notes = "Retrieve all stored resolved resources using the blueprint name, blueprint version, " +
+                "artifact name and the resolution-key.",
+        response = ResourceResolution::class,
+        responseContainer = "List",
+        produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
-    fun getAllFromKey(@RequestParam(value = "bpName") bpName: String,
+    fun getAllFromKey(@ApiParam(value = "Name of the CBA.", required = true)
+                      @RequestParam(value = "bpName") bpName: String,
+                      @ApiParam(value = "Version of the CBA.", required = true)
                       @RequestParam(value = "bpVersion") bpVersion: String,
+                      @ApiParam(value = "Artifact name for which to retrieve a resolved resource.", required = true)
                       @RequestParam(value = "artifactName") artifactName: String,
+                      @ApiParam(value = "Resolution Key associated with the resolution.", required = true)
                       @RequestParam(value = "resolutionKey") resolutionKey: String)
             : ResponseEntity<List<ResourceResolution>> = runBlocking {
 
@@ -53,14 +70,22 @@ open class ResourceController(private var resourceResolutionDBService: ResourceR
 
     @RequestMapping(path = ["/resource"],
         method = [RequestMethod.GET])
-    @ApiOperation(value = "Fetch a resource value using resolution key.",
-        notes = "Retrieve a stored resource value using the blueprint metadata, artifact name, resolution-key along with the name of the resource value to retrieve.")
+    @ApiOperation(value = "Get a resolved resource using resolution the key along with the name of the resource.",
+        notes = "Retrieve a stored resolved resource value using the blueprint name, blueprint version, artifact name," +
+                " resolution-key along with the name of the resource value to retrieve.",
+        response = ResourceResolution::class,
+        produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
-    fun getFromKey(@RequestParam(value = "bpName") bpName: String,
+    fun getFromKey(@ApiParam(value = "Name of the CBA.", required = true)
+                   @RequestParam(value = "bpName") bpName: String,
+                   @ApiParam(value = "Version of the CBA.", required = true)
                    @RequestParam(value = "bpVersion") bpVersion: String,
+                   @ApiParam(value = "Artifact name for which to retrieve a resolved resource.", required = true)
                    @RequestParam(value = "artifactName") artifactName: String,
+                   @ApiParam(value = "Resolution Key associated with the resolution.", required = true)
                    @RequestParam(value = "resolutionKey") resolutionKey: String,
+                   @ApiParam(value = "Name of the resource to retrieve.", required = true)
                    @RequestParam(value = "name") name: String)
             : ResponseEntity<ResourceResolution> = runBlocking {
 
@@ -69,14 +94,24 @@ open class ResourceController(private var resourceResolutionDBService: ResourceR
     }
 
 
-    @RequestMapping(path = ["/fromResourceId"], method = [RequestMethod.GET])
-    @ApiOperation(value = "Fetch all resource result for a given resource id / type combination",
-        notes = "Retrieve all stored resource values using the blueprint metadata, artifact name, resource id and resource type.")
+    @RequestMapping(path = ["/fromResourceId"],
+        method = [RequestMethod.GET],
+        produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ApiOperation(value = "Get all resolved resources using the combination of resource id / resource type.",
+        notes = "Retrieve all stored resolved resource using the blueprint name, blueprint version, artifact name," +
+                "resource id and resource type.",
+        response = ResourceResolution::class,
+        responseContainer = "List",
+        produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
-    fun getFromResourceId(@RequestParam(value = "bpName") bpName: String,
+    fun getFromResourceId(@ApiParam(value = "Name of the CBA.", required = true)
+                          @RequestParam(value = "bpName") bpName: String,
+                          @ApiParam(value = "Version of the CBA.", required = true)
                           @RequestParam(value = "bpVersion") bpVersion: String,
+                          @ApiParam(value = "Resource ID associated with the resolution.", required = true)
                           @RequestParam(value = "resourceId") resourceId: String,
+                          @ApiParam(value = "Resource Type associated with the resolution.", required = true)
                           @RequestParam(value = "resourceType") resourceType: String)
             : ResponseEntity<List<ResourceResolution>> = runBlocking {
 
