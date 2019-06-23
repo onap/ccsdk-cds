@@ -31,6 +31,7 @@
     <description>Blueprints Processor Application</description>
 
     <dependencies>
+
         <dependency>
             <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
             <artifactId>blueprint-core</artifactId>
