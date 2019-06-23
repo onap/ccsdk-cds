@@ -35,7 +35,7 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
 
         val occurrence = getOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE)
-        val key = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY)
+        val resolutionKey = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY)
         val storeResult = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT)
         val resourceId = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID)
         val resourceType = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE)
@@ -43,7 +43,7 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
 
         val properties: MutableMap<String, Any> = mutableMapOf()
         properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] = storeResult?.asBoolean() ?: false
-        properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY] = key?.asText() ?: ""
+        properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY] = resolutionKey?.asText() ?: ""
         properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] = resourceId?.asText() ?: ""
         properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] = resourceType?.asText() ?: ""
 
@@ -52,6 +52,8 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
 
         val jsonResponse = JsonNodeFactory.instance.objectNode()
         for (j in 1..occurrence.asInt()) {
+            val key = resolutionKey?.asText() + "-" + j
+            properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY] = key
 
             val response = resourceResolutionService.resolveResources(bluePrintRuntimeService,
                 nodeTemplateName,
@@ -60,7 +62,7 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
 
             // provide indexed result in output if we have multiple resolution
             if (occurrence.asInt() != 1) {
-                jsonResponse.set(key?.asText() + "-" + j, response.asJsonNode())
+                jsonResponse.set(key, response.asJsonNode())
             } else {
                 jsonResponse.setAll(response.asObjectNode())
             }

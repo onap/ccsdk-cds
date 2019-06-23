@@ -72,7 +72,7 @@ class TemplateControllerTest {
     @Test
     fun `ping return Success`() {
         runBlocking {
-            webTestClient.get().uri("/api/v1/template/ping")
+            webTestClient.get().uri("/api/v1/template/health-check")
                 .exchange()
                 .expectStatus().isOk
                 .expectBody()
