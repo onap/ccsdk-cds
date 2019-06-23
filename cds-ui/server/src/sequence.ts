@@ -31,6 +31,7 @@ import {
   SequenceHandler,
 } from '@loopback/rest';
 import { logger } from './logger/logger';
+import { v4 as uuid } from 'uuid';
 
 const SequenceActions = RestBindings.SequenceActions;
 
@@ -44,16 +45,22 @@ export class MySequence implements SequenceHandler {
   ) { }
 
   async handle(context: RequestContext) {
+    const { request, response } = context;
     try {
-      const { request, response } = context;
-      logger.info("Incoming request from %s %s and with header %s query %s params %s",
-        request.method, request.url, JSON.stringify(request.headers), JSON.stringify(request.query), JSON.stringify(request.params))
+      if (!('X-ONAP-RequestID' in request.headers || 'x-onap-requestid' in request.headers)) {
+        request.headers = { 'X-ONAP-RequestID': uuid(), ...request.headers}
+        logger.info(JSON.stringify(request.headers))
+      }
       const route = this.findRoute(request);
       const args = await this.parseParams(request, route);
       const result = await this.invoke(route, args);
       this.send(response, result);
     } catch (err) {
       this.reject(context, err);
+    } finally {
+      const { authorization, ...headers} = request.headers;
+      logger.info("Incoming request from %s %s and with header %s query %s params %s and response code: %s",
+        request.method, request.url, JSON.stringify(headers), JSON.stringify(request.query), JSON.stringify(request.params), JSON.stringify(response.statusCode))
     }
   }
 }
