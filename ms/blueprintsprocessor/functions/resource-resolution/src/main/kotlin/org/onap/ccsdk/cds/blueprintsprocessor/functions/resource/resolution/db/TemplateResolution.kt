@@ -17,6 +17,8 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import io.swagger.annotations.ApiModelProperty
+import io.swagger.annotations.ApiParam
 import org.hibernate.annotations.Proxy
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
@@ -41,22 +43,29 @@ class TemplateResolution : Serializable {
     @Column(name = "template_resolution_id")
     var id: String? = null
 
+    @get:ApiModelProperty(value = "Resolution Key uniquely identifying the resolution of a given artifact within a CBA.",
+        required = true)
     @Column(name = "resolution_key", nullable = false)
     var resolutionKey: String? = null
 
+    @get:ApiModelProperty(value = "Name of the CBA.", required = true)
     @Column(name = "blueprint_name", nullable = false)
     var blueprintName: String? = null
 
+    @get:ApiModelProperty(value = "Version of the CBA.", required = true)
     @Column(name = "blueprint_version", nullable = false)
     var blueprintVersion: String? = null
 
+    @get:ApiModelProperty(value = "Artifact name for which to retrieve a resolved resource.", required = true)
     @Column(name = "artifact_name", nullable = false)
     var artifactName: String? = null
 
+    @get:ApiModelProperty(value = "Rendered template.", required = true)
     @Lob
     @Column(name = "result", nullable = false)
     var result: String? = null
 
+    @get:ApiModelProperty(value = "Creation date of the resolution.", required = true)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)

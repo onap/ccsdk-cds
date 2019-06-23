@@ -45,7 +45,7 @@
         <sli.version>${ccsdk.sli.core.version}</sli.version>
         <guava.version>27.0.1-jre</guava.version>
         <jython.version>2.7.1</jython.version>
-        <springfox.swagger2.version>2.9.2</springfox.swagger2.version>
+        <springfox.swagger2.version>3.0.0-SNAPSHOT</springfox.swagger2.version>
         <h2database.version>1.4.197</h2database.version>
         <onap.logger.slf4j>1.2.2</onap.logger.slf4j>
         <powermock.version>1.7.4</powermock.version>
@@ -86,6 +86,11 @@
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger-ui</artifactId>
+                <version>${springfox.swagger2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-spring-webflux</artifactId>
                 <version>${springfox.swagger2.version}</version>
             </dependency>
 
@@ -525,6 +530,10 @@
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
+            <artifactId>springfox-spring-webflux</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
         </dependency>
         <dependency>
@@ -585,6 +594,14 @@
             <artifactId>protobuf-java-util</artifactId>
         </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>spring-libs-milestone</id>
+            <name>Spring Milestone Maven Repository</name>
+            <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
+        </repository>
+    </repositories>
 
     <build>
         <plugins>

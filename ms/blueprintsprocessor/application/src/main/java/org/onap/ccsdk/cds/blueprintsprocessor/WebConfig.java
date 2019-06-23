@@ -20,6 +20,8 @@ package org.onap.ccsdk.cds.blueprintsprocessor;
 import org.onap.ccsdk.cds.blueprintsprocessor.security.AuthenticationManager;
 import org.onap.ccsdk.cds.blueprintsprocessor.security.SecurityContextRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -27,7 +29,7 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.reactive.config.CorsRegistry;
 import org.springframework.web.reactive.config.ResourceHandlerRegistry;
-import org.springframework.web.reactive.config.WebFluxConfigurationSupport;
+import org.springframework.web.reactive.config.WebFluxConfigurer;
 
 /**
  * WebConfig
@@ -35,7 +37,7 @@ import org.springframework.web.reactive.config.WebFluxConfigurationSupport;
  * @author Brinda Santh 8/13/2018
  */
 @Configuration
-public class WebConfig extends WebFluxConfigurationSupport {
+public class WebConfig implements WebFluxConfigurer {
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -45,7 +47,8 @@ public class WebConfig extends WebFluxConfigurationSupport {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("swagger-ui.html")
+
+        registry.addResourceHandler("/swagger-ui.html**")
             .addResourceLocations("classpath:/META-INF/resources/");
 
         registry.addResourceHandler("/webjars/**")
