@@ -77,7 +77,7 @@ class ResourceControllerTest {
     @Test
     fun `ping return Success`() {
         runBlocking {
-            webTestClient.get().uri("/api/v1/resources/ping")
+            webTestClient.get().uri("/api/v1/resources/health-check")
                 .exchange()
                 .expectStatus().isOk
                 .expectBody()
