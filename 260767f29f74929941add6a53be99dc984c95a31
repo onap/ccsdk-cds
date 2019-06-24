@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "87acdbea_db05298e",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/selfservice-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/selfservice/api/MessagingConfig.kt",
+        "patchSetId": 22
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-06-24T16:33:12Z",
+      "side": 1,
+      "message": "We want to use Message Consumber Propertylib service,Avoid Spring Bean and Enable Kafka, which will restrict of having one one type.",
+      "range": {
+        "startLine": 26,
+        "startChar": 3,
+        "endLine": 26,
+        "endChar": 9
+      },
+      "revId": "260767f29f74929941add6a53be99dc984c95a31",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
