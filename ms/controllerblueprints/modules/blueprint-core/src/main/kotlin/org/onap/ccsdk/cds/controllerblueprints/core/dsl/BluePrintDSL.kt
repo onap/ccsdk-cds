@@ -17,6 +17,8 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.dsl
 
 import com.fasterxml.jackson.databind.JsonNode
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.data.*
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 
@@ -54,6 +56,11 @@ fun dataType(id: String, version: String, derivedFrom: String, description: Stri
 fun artifactType(id: String, version: String, derivedFrom: String, description: String,
                  block: ArtifactTypeBuilder.() -> Unit): ArtifactType {
     return ArtifactTypeBuilder(id, version, derivedFrom, description).apply(block).build()
+}
+
+fun relationshipType(id: String, version: String, derivedFrom: String, description: String,
+                     block: RelationshipTypeBuilder.() -> Unit): RelationshipType {
+    return RelationshipTypeBuilder(id, version, derivedFrom, description).apply(block).build()
 }
 
 // Input Function
@@ -104,4 +111,122 @@ fun getArtifact(artifactId: String): JsonNode {
 
 fun getNodeTemplateArtifact(nodeTemplateName: String, artifactId: String): JsonNode {
     return """{"get_artifact": ["$nodeTemplateName", "$artifactId"]}""".jsonAsJsonType()
+}
+
+
+/** Blueprint Type Extensions */
+
+fun BluePrintTypes.nodeTypeComponent(): NodeType {
+    return nodeType(id = BluePrintConstants.MODEL_TYPE_NODE_COMPONENT,
+            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+            derivedFrom = BluePrintConstants.MODEL_TYPE_NODES_ROOT,
+            description = "This is default Component Node") {
+    }
+}
+
+fun BluePrintTypes.nodeTypeWorkflow(): NodeType {
+    return nodeType(id = BluePrintConstants.MODEL_TYPE_NODE_WORKFLOW,
+            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+            derivedFrom = BluePrintConstants.MODEL_TYPE_NODES_ROOT,
+            description = "This is default Workflow Node") {
+    }
+}
+
+fun BluePrintTypes.nodeTypeVnf(): NodeType {
+    return nodeType(id = BluePrintConstants.MODEL_TYPE_NODE_VNF,
+            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+            derivedFrom = BluePrintConstants.MODEL_TYPE_NODES_ROOT,
+            description = "This is default VNF Node") {
+    }
+}
+
+fun BluePrintTypes.nodeTypeResourceSource(): NodeType {
+    return nodeType(id = BluePrintConstants.MODEL_TYPE_NODE_RESOURCE_SOURCE,
+            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+            derivedFrom = BluePrintConstants.MODEL_TYPE_NODES_ROOT,
+            description = "This is default Resource Source Node") {
+    }
+}
+
+/** Artifacts */
+
+fun BluePrintTypes.artifactTypeTemplateVelocity(): ArtifactType {
+    return artifactType(id = BluePrintConstants.MODEL_TYPE_ARTIFACT_TEMPLATE_VELOCITY,
+            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+            derivedFrom = BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION,
+            description = "Velocity Artifact") {
+        fileExt("vtl")
+    }
+}
+
+fun BluePrintTypes.artifactTypeTempleJinja(): ArtifactType {
+    return artifactType(id = BluePrintConstants.MODEL_TYPE_ARTIFACT_TEMPLATE_JINJA,
+            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+            derivedFrom = BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION,
+            description = "Jinja Artifact") {
+        fileExt("jinja")
+    }
+}
+
+fun BluePrintTypes.artifactTypeMappingResource(): ArtifactType {
+    return artifactType(id = BluePrintConstants.MODEL_TYPE_ARTIFACT_MAPPING_RESOURCE,
+            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+            derivedFrom = BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION,
+            description = "Mapping Resource Artifact") {
+        fileExt("json")
+    }
+}
+
+fun BluePrintTypes.artifactTypeScriptJython(): ArtifactType {
+    return artifactType(id = BluePrintConstants.MODEL_TYPE_ARTIFACT_SCRIPT_JYTHON,
+            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+            derivedFrom = BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION,
+            description = "Jython Script Artifact") {
+        fileExt("py")
+    }
+}
+
+fun BluePrintTypes.artifactTypeScriptKotlin(): ArtifactType {
+    return artifactType(id = BluePrintConstants.MODEL_TYPE_ARTIFACT_SCRIPT_KOTLIN,
+            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+            derivedFrom = BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION,
+            description = "Kotlin Script Artifact") {
+        fileExt("kts")
+    }
+}
+
+fun BluePrintTypes.artifactTypeDirectedGraph(): ArtifactType {
+    return artifactType(id = BluePrintConstants.MODEL_TYPE_ARTIFACT_DIRECTED_GRAPH,
+            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+            derivedFrom = BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION,
+            description = "Directed Graph Artifact") {
+        fileExt("xml", "json")
+    }
+}
+
+fun BluePrintTypes.artifactTypeComponentJar(): ArtifactType {
+    return artifactType(id = BluePrintConstants.MODEL_TYPE_ARTIFACT_COMPONENT_JAR,
+            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+            derivedFrom = BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION,
+            description = "Component Artifact") {
+        fileExt("jar")
+    }
+}
+
+/** Relationship Types */
+
+fun BluePrintTypes.relationshipTypeConnectsTo(): RelationshipType {
+    return relationshipType(id = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO,
+            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+            derivedFrom = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_ROOT,
+            description = "Relationship connects to") {
+    }
+}
+
+fun BluePrintTypes.relationshipTypeDependsOn(): RelationshipType {
+    return relationshipType(id = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_DEPENDS_ON,
+            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+            derivedFrom = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_ROOT,
+            description = "Relationship depends on") {
+    }
 }

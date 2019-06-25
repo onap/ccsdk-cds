@@ -32,9 +32,10 @@ class DSLBluePrintBuilder(private val name: String,
     private var dslBluePrint = DSLBluePrint()
     private var metadata: MutableMap<String, String> = hashMapOf()
     var properties: MutableMap<String, JsonNode>? = null
-    var dataType: MutableMap<String, DataType> = hashMapOf()
-    var artifacts: MutableMap<String, ArtifactDefinition> = hashMapOf()
+    var dataTypes: MutableMap<String, DataType> = hashMapOf()
+    var artifactTypes: MutableMap<String, ArtifactType> = hashMapOf()
     var components: MutableMap<String, DSLComponent> = hashMapOf()
+    private var registryComponents: MutableMap<String, DSLRegistryComponent> = hashMapOf()
     var workflows: MutableMap<String, DSLWorkflow> = hashMapOf()
 
     private fun initMetaData() {
@@ -54,13 +55,33 @@ class DSLBluePrintBuilder(private val name: String,
         properties!![id] = expression.asJsonType()
     }
 
-    fun dataType(id: String, version: String, derivedFrom: String, description: String,
-                 block: DataTypeBuilder.() -> Unit) {
-        dataType[id] = DataTypeBuilder(id, version, derivedFrom, description).apply(block).build()
+    fun dataType(dataType: DataType) {
+        dataTypes[dataType.id!!] = dataType
     }
 
-    fun component(id: String, type: String, version: String, description: String, block: DSLComponentBuilder.() -> Unit) {
+    fun dataType(id: String, version: String, derivedFrom: String, description: String,
+                 block: DataTypeBuilder.() -> Unit) {
+        dataTypes[id] = DataTypeBuilder(id, version, derivedFrom, description).apply(block).build()
+    }
+
+    fun artifactType(artifactType: ArtifactType) {
+        artifactTypes[artifactType.id!!] = artifactType
+    }
+
+    fun artifactType(id: String, version: String, derivedFrom: String, description: String,
+                     block: ArtifactTypeBuilder.() -> Unit) {
+        artifactTypes[id] = ArtifactTypeBuilder(id, version, derivedFrom, description).apply(block).build()
+    }
+
+    fun component(id: String, type: String, version: String, description: String,
+                  block: DSLComponentBuilder.() -> Unit) {
         components[id] = DSLComponentBuilder(id, type, version, description).apply(block).build()
+    }
+
+    fun registryComponent(id: String, type: String, version: String, interfaceName: String, description: String,
+                          block: DSLRegistryComponentBuilder.() -> Unit) {
+        registryComponents[id] = DSLRegistryComponentBuilder(id, type, version, interfaceName, description)
+                .apply(block).build()
     }
 
     fun workflow(id: String, description: String, block: DSLWorkflowBuilder.() -> Unit) {
@@ -71,8 +92,10 @@ class DSLBluePrintBuilder(private val name: String,
         initMetaData()
         dslBluePrint.metadata = metadata
         dslBluePrint.properties = properties
-        dslBluePrint.dataType = dataType
+        dslBluePrint.dataTypes = dataTypes
+        dslBluePrint.artifactTypes = artifactTypes
         dslBluePrint.components = components
+        dslBluePrint.registryComponents = registryComponents
         dslBluePrint.workflows = workflows
         return dslBluePrint
     }
@@ -84,17 +107,10 @@ class DSLComponentBuilder(private val id: String, private val type: String,
     var properties: MutableMap<String, PropertyDefinition>? = null
     var attributes: MutableMap<String, AttributeDefinition>? = null
 
-    // For already registered components
-    private var assignProperties: MutableMap<String, JsonNode>? = null
-
     var artifacts: MutableMap<String, ArtifactDefinition>? = null
     var implementation: Implementation? = null
     var inputs: MutableMap<String, PropertyDefinition>? = null
     var outputs: MutableMap<String, PropertyDefinition>? = null
-
-    // For already registered components
-    private var assignInputs: MutableMap<String, JsonNode>? = null
-    private var assignOutputs: MutableMap<String, JsonNode>? = null
 
     fun attribute(id: String, type: String, required: Boolean, expression: Any, description: String? = "") {
         if (attributes == null)
@@ -128,12 +144,6 @@ class DSLComponentBuilder(private val id: String, private val type: String,
         properties!![id] = property
     }
 
-    fun assignProperty(id: String, expression: Any) {
-        if (assignProperties == null)
-            assignProperties = hashMapOf()
-        assignProperties!![id] = expression.asJsonType()
-    }
-
     fun implementation(timeout: Int, operationHost: String? = BluePrintConstants.PROPERTY_SELF) {
         implementation = Implementation().apply {
             this.operationHost = operationHost!!
@@ -141,13 +151,13 @@ class DSLComponentBuilder(private val id: String, private val type: String,
         }
     }
 
-    fun artifacts(id: String, type: String, file: String) {
+    fun artifact(id: String, type: String, file: String) {
         if (artifacts == null)
             artifacts = hashMapOf()
         artifacts!![id] = ArtifactDefinitionBuilder(id, type, file).build()
     }
 
-    fun artifacts(id: String, type: String, file: String, block: ArtifactDefinitionBuilder.() -> Unit) {
+    fun artifact(id: String, type: String, file: String, block: ArtifactDefinitionBuilder.() -> Unit) {
         if (artifacts == null)
             artifacts = hashMapOf()
         artifacts!![id] = ArtifactDefinitionBuilder(id, type, file).apply(block).build()
@@ -170,12 +180,6 @@ class DSLComponentBuilder(private val id: String, private val type: String,
         inputs!![id] = property
     }
 
-    fun assignInput(id: String, expression: Any) {
-        if (assignInputs == null)
-            assignInputs = hashMapOf()
-        assignInputs!![id] = expression.asJsonType()
-    }
-
     fun output(id: String, type: String, required: Boolean, expression: Any, description: String? = "") {
         if (outputs == null)
             outputs = hashMapOf()
@@ -192,12 +196,6 @@ class DSLComponentBuilder(private val id: String, private val type: String,
         outputs!![id] = property
     }
 
-    fun assignOutput(id: String, expression: Any) {
-        if (assignOutputs == null)
-            assignOutputs = hashMapOf()
-        assignOutputs!![id] = expression.asJsonType()
-    }
-
     fun build(): DSLComponent {
         dslComponent.id = id
         dslComponent.type = type
@@ -205,15 +203,75 @@ class DSLComponentBuilder(private val id: String, private val type: String,
         dslComponent.description = description
         dslComponent.attributes = attributes
         dslComponent.properties = properties
-        dslComponent.assignProperties = assignProperties
         dslComponent.implementation = implementation
         dslComponent.artifacts = artifacts
         dslComponent.inputs = inputs
         dslComponent.outputs = outputs
-        dslComponent.assignInputs = assignInputs
-        dslComponent.assignOutputs = assignOutputs
-        dslComponent.outputs = outputs
 
+        return dslComponent
+    }
+}
+
+class DSLRegistryComponentBuilder(private val id: String, private val type: String,
+                                  private val version: String,
+                                  private val interfaceName: String,
+                                  private val description: String) {
+    private val dslComponent = DSLRegistryComponent()
+    var properties: MutableMap<String, JsonNode>? = null
+
+    var artifacts: MutableMap<String, ArtifactDefinition>? = null
+    var implementation: Implementation? = null
+    var inputs: MutableMap<String, JsonNode>? = null
+    var outputs: MutableMap<String, JsonNode>? = null
+
+    fun property(id: String, expression: Any) {
+        if (properties == null)
+            properties = hashMapOf()
+        properties!![id] = expression.asJsonType()
+    }
+
+    fun implementation(timeout: Int, operationHost: String? = BluePrintConstants.PROPERTY_SELF) {
+        implementation = Implementation().apply {
+            this.operationHost = operationHost!!
+            this.timeout = timeout
+        }
+    }
+
+    fun artifact(id: String, type: String, file: String) {
+        if (artifacts == null)
+            artifacts = hashMapOf()
+        artifacts!![id] = ArtifactDefinitionBuilder(id, type, file).build()
+    }
+
+    fun artifact(id: String, type: String, file: String, block: ArtifactDefinitionBuilder.() -> Unit) {
+        if (artifacts == null)
+            artifacts = hashMapOf()
+        artifacts!![id] = ArtifactDefinitionBuilder(id, type, file).apply(block).build()
+    }
+
+    fun input(id: String, expression: Any) {
+        if (inputs == null)
+            inputs = hashMapOf()
+        inputs!![id] = expression.asJsonType()
+    }
+
+    fun output(id: String, expression: Any) {
+        if (outputs == null)
+            outputs = hashMapOf()
+        outputs!![id] = expression.asJsonType()
+    }
+
+    fun build(): DSLRegistryComponent {
+        dslComponent.id = id
+        dslComponent.type = type
+        dslComponent.version = version
+        dslComponent.interfaceName = interfaceName
+        dslComponent.description = description
+        dslComponent.properties = properties
+        dslComponent.implementation = implementation
+        dslComponent.artifacts = artifacts
+        dslComponent.inputs = inputs
+        dslComponent.outputs = outputs
         return dslComponent
     }
 }
