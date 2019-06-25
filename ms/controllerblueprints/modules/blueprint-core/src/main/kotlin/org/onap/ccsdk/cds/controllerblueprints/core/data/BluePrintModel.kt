@@ -192,6 +192,9 @@ class AttributeDefinition {
     var constraints: MutableList<ConstraintClause>? = null
     @JsonProperty("entry_schema")
     var entrySchema: EntrySchema? = null
+    // Mainly used in DSL definitions
+    @get:ApiModelProperty(notes = "Attribute Value, It may be Expression or Json type values")
+    var value: JsonNode? = null
 }
 
 /*
