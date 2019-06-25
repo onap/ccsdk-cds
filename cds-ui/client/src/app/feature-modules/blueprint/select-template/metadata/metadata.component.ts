@@ -98,7 +98,13 @@ export class MetadataComponent implements OnInit {
   UploadMetadata() {
     this.metadata = Object.assign({}, this.CBAMetadataForm.value);
     this.blueprint.metadata = this.metadata;
-
+    if( this.blueprint && 
+        this.blueprint['topology_template'] && 
+        this.blueprint['topology_template'].workflows && 
+        this.blueprint['topology_template'].workflows['resource-assignment'] &&
+        this.blueprint['topology_template'].workflows['resource-assignment'].name) {
+          delete this.blueprint['topology_template'].workflows['resource-assignment'].name;
+      }
     this.filesData.forEach((fileNode) => {
       if (fileNode.name.includes(this.blueprintName) && fileNode.name == this.entryDefinition) {
         fileNode.data = JSON.stringify(this.blueprint, null, "\t");
