@@ -20,4 +20,10 @@ limitations under the License.
 -->
 
 
+<mat-progress-bar mode="indeterminate" *ngIf="loaderStatus === true"></mat-progress-bar>
+<div [ngClass]="{'overlay': loaderStatus === true}">
 <router-outlet></router-outlet>
+<div class="notification-container">
+    <app-notification></app-notification>
+</div>
+</div>
