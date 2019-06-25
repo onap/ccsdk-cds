@@ -163,9 +163,16 @@ class CommandExecutorHandler():
     def activate_venv(self):
         self.logger.info("{} - Activate Python Virtual Environment".format(self.blueprint_id))
 
+        # Fix: The python generated activate_this.py script concatenates the env bin dir to PATH on every call
+        #      eventually this process PATH variable was so big (128Kb) that no child process could be spawn
+        #      This script will remove all duplicates; while keeping the order of the PATH folders
+        fixpathenvvar = "os.environ['PATH']=os.pathsep.join(list(dict.fromkeys(os.environ['PATH'].split(':'))))"
+
         path = "%s/bin/activate_this.py" % self.venv_home
         try:
             exec (open(path).read(), {'__file__': path})
+            exec (fixpathenvvar)
+            self.logger.info("Running with PATH : {}".format(os.environ['PATH']))
             return True
         except Exception as err:
             self.logger.info(
