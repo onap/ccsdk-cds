@@ -28,8 +28,10 @@ import org.onap.ccsdk.cds.controllerblueprints.core.data.*
 class DSLBluePrint {
     var metadata: MutableMap<String, String> = hashMapOf()
     var properties: MutableMap<String, JsonNode>? = null
-    var dataType: MutableMap<String, DataType> = hashMapOf()
+    var dataTypes: MutableMap<String, DataType> = hashMapOf()
+    var artifactTypes: MutableMap<String, ArtifactType> = hashMapOf()
     var components: MutableMap<String, DSLComponent> = hashMapOf()
+    var registryComponents: MutableMap<String, DSLRegistryComponent> = hashMapOf()
     var workflows: MutableMap<String, DSLWorkflow> = hashMapOf()
 }
 
@@ -52,10 +54,21 @@ class DSLComponent {
     var implementation: Implementation? = null
     var attributes: MutableMap<String, AttributeDefinition>? = null
     var properties: MutableMap<String, PropertyDefinition>? = null
-    var assignProperties: MutableMap<String, JsonNode>? = null
     var artifacts: MutableMap<String, ArtifactDefinition>? = null
     var inputs: MutableMap<String, PropertyDefinition>? = null
     var outputs: MutableMap<String, PropertyDefinition>? = null
-    var assignInputs: MutableMap<String, JsonNode>? = null
-    var assignOutputs: MutableMap<String, JsonNode>? = null
+}
+
+
+class DSLRegistryComponent {
+    lateinit var id: String
+    lateinit var type: String
+    lateinit var version: String
+    lateinit var interfaceName: String
+    lateinit var description: String
+    var implementation: Implementation? = null
+    var properties: MutableMap<String, JsonNode>? = null
+    var artifacts: MutableMap<String, ArtifactDefinition>? = null
+    var inputs: MutableMap<String, JsonNode>? = null
+    var outputs: MutableMap<String, JsonNode>? = null
 }
