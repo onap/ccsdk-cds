@@ -17,6 +17,7 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.dsl
 
 import org.junit.Test
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 import kotlin.test.assertNotNull
 
@@ -28,9 +29,11 @@ class BluePrintDSLTest {
         val blueprint = blueprint("sample-bp", "1.0.0",
                 "brindasanth@onap.com", "sample, blueprints") {
 
+            artifactType(BluePrintTypes.artifactTypeTemplateVelocity())
+
             // For New Component Definition
-            component("resource-resolution", "component-resource-resolution", "1.0.0",
-                    "Resource Resolution Call") {
+            component("resource-resolution", "component-script-executor", "1.0.0",
+                    "Resource Resolution component.") {
                 implementation(180)
                 // Attributes ( Properties which will be set during execution)
                 attribute("template1-data", "string", true, "")
@@ -44,10 +47,25 @@ class BluePrintDSLTest {
                 // Outputs
                 output("self-attribute-expression", "json", true, getAttribute("template1-data"))
                 // Artifacts
-                artifacts("template1", "artifact-velocity", "Templates/template1.vtl")
+                artifact("template1", "artifact-template-velocity", "Templates/template1.vtl")
             }
 
-            workflow("resource-resolution-process", "") {
+            // Already definitions Registered Components
+            registryComponent("activate-restconf", "component-resource-resolution", "1.0.0",
+                    "RestconfExecutor", "Resource Resolution component.") {
+                implementation(180)
+                // Properties
+                property("string-value1", "data")
+                // Inputs
+                input("json-content", """{ "name" : "cds"}""")
+                // Outputs
+                output("self-attribute-expression", getAttribute("template1-data"))
+                // Artifacts
+                artifact("template2", "artifact-template-velocity", "Templates/template1.vtl")
+
+            }
+
+            workflow("resource-resolution-process", "Resource Resolution wf") {
                 input("json-content", "json", true, "")
                 input("key-1", "string", true, "")
                 output("status", "string", true, "success")
@@ -57,6 +75,11 @@ class BluePrintDSLTest {
         assertNotNull(blueprint.components, "failed to get components")
         assertNotNull(blueprint.workflows, "failed to get workflows")
         //println(blueprint.asJsonString(true))
+
+        val serviceTemplateGenerator = BluePrintServiceTemplateGenerator(blueprint)
+        val serviceTemplate = serviceTemplateGenerator.serviceTemplate()
+        assertNotNull(serviceTemplate.topologyTemplate, "failed to get service topology template")
+        //println(serviceTemplate.asJsonString(true))
     }
 
     @Test

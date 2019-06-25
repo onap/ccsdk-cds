@@ -19,6 +19,7 @@ package org.onap.ccsdk.cds.controllerblueprints.core
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.*
+import org.apache.commons.lang3.ObjectUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.helpers.MessageFormatter
 import kotlin.reflect.KClass
@@ -28,6 +29,10 @@ import kotlin.reflect.KClass
  *
  * @author Brinda Santh
  */
+
+fun <T : Any> T.bpClone(): T {
+    return ObjectUtils.clone(this)
+}
 
 fun String.isJson(): Boolean {
     return ((this.startsWith("{") && this.endsWith("}"))
@@ -100,10 +105,10 @@ fun format(message: String, vararg args: Any?): String {
 }
 
 fun <T : Any> Map<String, *>.castOptionalValue(key: String, valueType: KClass<T>): T? {
-    if (containsKey(key)) {
-        return get(key) as? T
+    return if (containsKey(key)) {
+        get(key) as? T
     } else {
-        return null
+        null
     }
 }
 
