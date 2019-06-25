@@ -29,7 +29,6 @@ import kotlin.test.BeforeTest
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-@RunWith(SpringRunner::class)
 class BluePrintTemplateServiceTest {
 
     lateinit var blueprintRuntime: BluePrintRuntimeService<*>
