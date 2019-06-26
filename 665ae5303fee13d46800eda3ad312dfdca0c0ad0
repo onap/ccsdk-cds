@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "193f6838_2ce46044",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/resource-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/resource/api/TemplateController.kt",
+        "patchSetId": 12
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2019-06-26T14:16:49Z",
+      "side": 1,
+      "message": "Meshed template?  First time iI have heard of such a thing.",
+      "range": {
+        "startLine": 45,
+        "startChar": 38,
+        "endLine": 45,
+        "endChar": 53
+      },
+      "revId": "665ae5303fee13d46800eda3ad312dfdca0c0ad0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
