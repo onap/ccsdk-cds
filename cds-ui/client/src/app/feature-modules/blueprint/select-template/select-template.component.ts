@@ -38,6 +38,7 @@ export class SelectTemplateComponent implements OnInit {
   metaData: IMetaData;
   blueprintState: IBlueprintState;
   importModel: IImportModel;
+  templateOption: any;
 
   constructor(private store: Store<IBlueprintState>) {
     // this.importModel.file = '';
@@ -45,6 +46,12 @@ export class SelectTemplateComponent implements OnInit {
 
   ngOnInit() {
   }
+
+  templateSelected(option: any) {
+    this.templateOption = option;
+    console.log(this.templateOption);
+  }
+  
   fileChange(topologyTemp: ITopologyTemplate) {
     this.topologyTemplate = topologyTemp;
     console.log(topologyTemp);
@@ -57,6 +64,7 @@ export class SelectTemplateComponent implements OnInit {
   upload() {
 
   }
+  
   // saveBlueprintModel(){
   //   this.blueprint.toplogyTemplates=this.topologyTemplate;
   //   this.blueprint.metadata= this.metaData;
