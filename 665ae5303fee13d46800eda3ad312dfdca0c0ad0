@@ -22,6 +22,30 @@
       "revId": "665ae5303fee13d46800eda3ad312dfdca0c0ad0",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc0d7564_ae08187d",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/resource-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/resource/api/TemplateController.kt",
+        "patchSetId": 12
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-06-26T15:17:59Z",
+      "side": 1,
+      "message": "yes,I changed this to resolved template in the following patch (work on the swagger)",
+      "parentUuid": "193f6838_2ce46044",
+      "range": {
+        "startLine": 45,
+        "startChar": 38,
+        "endLine": 45,
+        "endChar": 53
+      },
+      "revId": "665ae5303fee13d46800eda3ad312dfdca0c0ad0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
