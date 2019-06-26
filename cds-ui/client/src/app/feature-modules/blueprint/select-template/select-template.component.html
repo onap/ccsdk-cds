@@ -22,7 +22,7 @@ limitations under the License.
     <mat-step [stepControl]="step1FormGroup">
         <ng-template matStepLabel>Choose CBA Template file</ng-template>
         <div class="matStepContent">
-            <app-template-options></app-template-options>
+            <app-template-options (option)="templateSelected($event)"></app-template-options>
             <br>
             <div>
                 <button mat-button matStepperNext class="matStepNextBtn">Proceed</button>
@@ -30,10 +30,10 @@ limitations under the License.
         </div>
     </mat-step>
 
-    <mat-step [stepControl]="step2FormGroup">
+    <mat-step [stepControl]="step2FormGroup" *ngIf="templateOption==1 || templateOption == 2">
         <ng-template matStepLabel>Browse CBA Template file</ng-template>
         <div class="matStepContent">
-            <app-search-template (cbaFile)="fileChange($event)"></app-search-template>
+            <app-search-template [optionSelected]="templateOption" (cbaFile)="fileChange($event)"></app-search-template>
             <!-- <div>
                 <button mat-button matStepperNext class="matStepNextBtn">Upload</button>
             </div>-->
