@@ -26,6 +26,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.proc
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintTemplateService
@@ -148,8 +149,7 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                                                     properties: Map<String, Any>) {
 
         val bulkSequenced = BulkResourceSequencingUtils.process(resourceAssignments)
-        val resourceAssignmentRuntimeService =
-            ResourceAssignmentUtils.transformToRARuntimeService(blueprintRuntimeService, artifactPrefix)
+        val resourceAssignmentRuntimeService = blueprintRuntimeService as ResourceAssignmentRuntimeService
 
         coroutineScope {
             bulkSequenced.forEach { batchResourceAssignments ->
@@ -159,9 +159,7 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                         async {
                             val dictionaryName = resourceAssignment.dictionaryName
                             val dictionarySource = resourceAssignment.dictionarySource
-                            /**
-                             * Get the Processor name
-                             */
+
                             val processorName = processorName(dictionaryName!!, dictionarySource!!, resourceDefinitions)
 
                             val resourceAssignmentProcessor =
@@ -176,9 +174,7 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                                 // Invoke Apply Method
                                 resourceAssignmentProcessor.applyNB(resourceAssignment)
 
-                                if (BluePrintConstants.STATUS_FAILURE != resourceAssignment.status
-                                    && properties.containsKey(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT)
-                                    && properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] as Boolean) {
+                                if (isToStore(properties)) {
                                     resourceResolutionDBService.write(properties,
                                         blueprintRuntimeService,
                                         artifactPrefix,
@@ -199,6 +195,11 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
             }
         }
 
+    }
+
+    private fun isToStore(properties: Map<String, Any>): Boolean {
+        return properties.containsKey(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT)
+                && properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] as Boolean
     }
 
 
