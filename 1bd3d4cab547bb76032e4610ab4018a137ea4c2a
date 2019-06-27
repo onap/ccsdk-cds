@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc6a2dc0_633334cb",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/db/TemplateResolution.kt",
+        "patchSetId": 13
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-06-27T18:58:52Z",
+      "side": 1,
+      "message": "There is a bug if the resolution-key is not UNIQUE. This will cause the service fail when trying to retrieve more than one stored keys with the same resolution-key name.\n\nBetter to put a constraint here.",
+      "range": {
+        "startLine": 44,
+        "startChar": 4,
+        "endLine": 46,
+        "endChar": 0
+      },
+      "revId": "1bd3d4cab547bb76032e4610ab4018a137ea4c2a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6826c6e_ccf63372",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/db/TemplateResolutionService.kt",
+        "patchSetId": 13
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-06-27T18:58:52Z",
+      "side": 1,
+      "message": "Exception if try to store an existing resolution-key.",
+      "range": {
+        "startLine": 69,
+        "startChar": 2,
+        "endLine": 73,
+        "endChar": 91
+      },
+      "revId": "1bd3d4cab547bb76032e4610ab4018a137ea4c2a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
