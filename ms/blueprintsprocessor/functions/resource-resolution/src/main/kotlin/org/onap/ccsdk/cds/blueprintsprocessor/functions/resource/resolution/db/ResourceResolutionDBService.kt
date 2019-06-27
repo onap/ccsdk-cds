@@ -62,14 +62,15 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
     suspend fun readWithResourceIdAndResourceType(blueprintName: String,
                                                   blueprintVersion: String,
                                                   resourceId: String,
-                                                  resourceType: String): List<ResourceResolution> = withContext(Dispatchers.IO) {
+                                                  resourceType: String): List<ResourceResolution> =
+        withContext(Dispatchers.IO) {
 
-        resourceResolutionRepository.findByBlueprintNameAndBlueprintVersionAndResourceIdAndResourceType(
-            blueprintName,
-            blueprintVersion,
-            resourceId,
-            resourceType)
-    }
+            resourceResolutionRepository.findByBlueprintNameAndBlueprintVersionAndResourceIdAndResourceType(
+                blueprintName,
+                blueprintVersion,
+                resourceId,
+                resourceType)
+        }
 
     suspend fun write(properties: Map<String, Any>,
                       bluePrintRuntimeService: BluePrintRuntimeService<*>,
@@ -112,7 +113,11 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
         resourceResolution.resolutionKey = resolutionKey
         resourceResolution.resourceType = resourceType
         resourceResolution.resourceId = resourceId
-        resourceResolution.value = JacksonUtils.getValue(resourceAssignment.property?.value!!).toString()
+        if (BluePrintConstants.STATUS_FAILURE == resourceAssignment.status) {
+            resourceResolution.value = ""
+        } else {
+            resourceResolution.value = JacksonUtils.getValue(resourceAssignment.property?.value!!).toString()
+        }
         resourceResolution.name = resourceAssignment.name
         resourceResolution.dictionaryName = resourceAssignment.dictionaryName
         resourceResolution.dictionaryVersion = resourceAssignment.version
