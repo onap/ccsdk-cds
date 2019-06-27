@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
+import com.fasterxml.jackson.databind.node.TextNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactDefinition
@@ -172,7 +173,7 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
     }
 
     override fun get(key: String): JsonNode {
-        return store[key] ?: throw BluePrintProcessorException("failed to get execution property($key)")
+        return store[key] ?: "".asJsonPrimitive()
     }
 
     override fun check(key: String): Boolean {
