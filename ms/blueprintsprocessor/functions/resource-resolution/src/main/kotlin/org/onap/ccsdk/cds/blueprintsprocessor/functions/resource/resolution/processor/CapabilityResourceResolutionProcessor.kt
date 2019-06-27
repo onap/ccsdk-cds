@@ -20,6 +20,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.pro
 
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.CapabilityResourceSource
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -82,6 +83,7 @@ open class CapabilityResourceResolutionProcessor(private val applicationContext:
     override suspend fun recoverNB(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
         raRuntimeService.getBluePrintError()
                 .addError("Failed in CapabilityResourceResolutionProcessor : ${runtimeException.message}")
+        ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, runtimeException.message)
     }
 
     suspend fun scriptInstance(scriptType: String, scriptClassReference: String, instanceDependencies: List<String>)
