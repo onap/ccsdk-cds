@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "cf4e6b96_fe0d4c02",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/db/TemplateResolution.kt",
+        "patchSetId": 13
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-06-27T19:27:58Z",
+      "side": 1,
+      "message": "Or a UNIQUE resolution-key on a composite (resolution_key, blueprint_name, blueprint_version)",
+      "range": {
+        "startLine": 47,
+        "startChar": 2,
+        "endLine": 47,
+        "endChar": 3
+      },
+      "revId": "1bd3d4cab547bb76032e4610ab4018a137ea4c2a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d6826c6e_ccf63372",
         "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/db/TemplateResolutionService.kt",
         "patchSetId": 13
