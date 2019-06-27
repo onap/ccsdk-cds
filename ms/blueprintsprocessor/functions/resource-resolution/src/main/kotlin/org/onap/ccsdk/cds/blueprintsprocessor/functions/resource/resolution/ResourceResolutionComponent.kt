@@ -19,6 +19,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.asObjectNode
@@ -50,12 +51,15 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
         val artifactPrefixNamesNode = getOperationInput(ResourceResolutionConstants.INPUT_ARTIFACT_PREFIX_NAMES)
         val artifactPrefixNames = JacksonUtils.getListFromJsonNode(artifactPrefixNamesNode, String::class.java)
 
+        val resourceAssignmentRuntimeService =
+            ResourceAssignmentUtils.transformToRARuntimeService(bluePrintRuntimeService, artifactPrefixNames.toString())
+
         val jsonResponse = JsonNodeFactory.instance.objectNode()
         for (j in 1..occurrence.asInt()) {
             val key = resolutionKey?.asText() + "-" + j
             properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY] = key
 
-            val response = resourceResolutionService.resolveResources(bluePrintRuntimeService,
+            val response = resourceResolutionService.resolveResources(resourceAssignmentRuntimeService,
                 nodeTemplateName,
                 artifactPrefixNames,
                 properties)
