@@ -28,6 +28,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInpu
 import org.onap.ccsdk.cds.blueprintsprocessor.core.utils.PayloadUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.*
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -81,13 +82,16 @@ class ResourceResolutionServiceTest {
             val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
                     "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
+            val resourceAssignmentRuntimeService =
+                ResourceAssignmentUtils.transformToRARuntimeService(bluePrintRuntimeService, "test")
+
             val executionServiceInput = JacksonUtils.readValueFromClassPathFile("payload/requests/sample-resourceresolution-request.json",
                     ExecutionServiceInput::class.java)!!
 
             // Prepare Inputs
             PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService, executionServiceInput.payload, "resource-assignment")
 
-            resourceResolutionService.resolveResources(bluePrintRuntimeService, "resource-assignment", "baseconfig", mapOf())
+            resourceResolutionService.resolveResources(resourceAssignmentRuntimeService, "resource-assignment", "baseconfig", mapOf())
 
         }
     }
@@ -101,6 +105,9 @@ class ResourceResolutionServiceTest {
             val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
                     "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
+            val resourceAssignmentRuntimeService =
+                ResourceAssignmentUtils.transformToRARuntimeService(bluePrintRuntimeService, "test")
+
             val executionServiceInput = JacksonUtils.readValueFromClassPathFile("payload/requests/sample-resourceresolution-request.json",
                     ExecutionServiceInput::class.java)!!
 
@@ -109,7 +116,7 @@ class ResourceResolutionServiceTest {
             // Prepare Inputs
             PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService, executionServiceInput.payload, "resource-assignment")
 
-            resourceResolutionService.resolveResources(bluePrintRuntimeService, "resource-assignment", artefactNames, mapOf())
+            resourceResolutionService.resolveResources(resourceAssignmentRuntimeService, "resource-assignment", artefactNames, mapOf())
         }
 
     }
@@ -123,6 +130,9 @@ class ResourceResolutionServiceTest {
             val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
                     "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
+            val resourceAssignmentRuntimeService =
+                ResourceAssignmentUtils.transformToRARuntimeService(bluePrintRuntimeService, "test")
+
             val executionServiceInput = JacksonUtils.readValueFromClassPathFile("payload/requests/sample-resourceresolution-request.json",
                     ExecutionServiceInput::class.java)!!
 
@@ -131,7 +141,7 @@ class ResourceResolutionServiceTest {
             // Prepare Inputs
             PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService, executionServiceInput.payload, "resource-assignment")
 
-            resourceResolutionService.resolveResources(bluePrintRuntimeService, "resource-assignment", artifactPrefix, mapOf<String, String>())
+            resourceResolutionService.resolveResources(resourceAssignmentRuntimeService, "resource-assignment", artifactPrefix, mapOf<String, String>())
         }
     }
 }
