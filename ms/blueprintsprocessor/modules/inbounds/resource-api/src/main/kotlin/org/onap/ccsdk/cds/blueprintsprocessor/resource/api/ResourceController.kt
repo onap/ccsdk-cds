@@ -70,7 +70,7 @@ open class ResourceController(private var resourceResolutionDBService: ResourceR
             : ResponseEntity<List<ResourceResolution>> = runBlocking {
 
         if ((resolutionKey.isNotEmpty() || artifactName.isNotEmpty()) && (resourceId.isNotEmpty() || resourceType.isNotEmpty())) {
-            throw ResourceException("Either retrieve resolved value using artifact name and resolution-key OR using resource-id and resource-type.")
+            throw ResolutionException("Either retrieve resolved value using artifact name and resolution-key OR using resource-id and resource-type.")
         } else if (resolutionKey.isNotEmpty() && artifactName.isNotEmpty()) {
             ResponseEntity.ok()
                 .body(resourceResolutionDBService.readWithResolutionKey(bpName, bpVersion, artifactName, resolutionKey))
@@ -81,7 +81,7 @@ open class ResourceController(private var resourceResolutionDBService: ResourceR
                     resourceId,
                     resourceType))
         } else {
-            throw ResourceException("Missing param. Either retrieve resolved value using artifact name and resolution-key OR using resource-id and resource-type.")
+            throw ResolutionException("Missing param. Either retrieve resolved value using artifact name and resolution-key OR using resource-id and resource-type.")
         }
     }
 

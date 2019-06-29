@@ -68,13 +68,38 @@ open class TemplateController(private val templateResolutionService: TemplateRes
         @RequestParam(value = "artifactName") artifactName: String,
         @ApiParam(value = "Resolution Key associated with the resolution.", required = true)
         @RequestParam(value = "resolutionKey") resolutionKey: String,
+        @ApiParam(value = "Resource Type associated with the resolution.", required = false)
+        @RequestParam(value = "resourceType", required = false, defaultValue = "") resourceType: String,
+        @ApiParam(value = "Resource Id associated with the resolution.", required = false)
+        @RequestParam(value = "resourceId", required = false, defaultValue = "") resourceId: String,
         @ApiParam(value = "Expected format of the template being retrieved.",
             defaultValue = MediaType.TEXT_PLAIN_VALUE,
             required = true)
         @RequestParam(value = "format", required = false, defaultValue = MediaType.TEXT_PLAIN_VALUE) format: String)
             : ResponseEntity<String> = runBlocking {
 
-        val result = templateResolutionService.read(bpName, bpVersion, artifactName, resolutionKey)
+        var result = ""
+
+        if ((resolutionKey.isNotEmpty() || artifactName.isNotEmpty()) && (resourceId.isNotEmpty() || resourceType.isNotEmpty())) {
+            throw ResolutionException("Either retrieve resolved template using artifact name and resolution-key OR using resource-id and resource-type.")
+        } else if (resolutionKey.isNotEmpty() && artifactName.isNotEmpty()) {
+            result = templateResolutionService.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
+                bpName,
+                bpVersion,
+                artifactName,
+                resolutionKey)
+        } else if (resourceType.isNotEmpty() && resourceId.isNotEmpty()) {
+            result =
+                templateResolutionService.findByResoureIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactName(
+                    bpName,
+                    bpVersion,
+                    artifactName,
+                    resourceId,
+                    resourceType)
+        } else {
+            throw ResolutionException("Missing param. Either retrieve resolved template using artifact name and resolution-key OR using resource-id and resource-type.")
+        }
+
 
         var expectedContentType = format
         if (expectedContentType.indexOf('/') < 0) {
@@ -87,26 +112,56 @@ open class TemplateController(private val templateResolutionService: TemplateRes
 
 
     @PostMapping("/{bpName}/{bpVersion}/{artifactName}/{resolutionKey}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    @ApiOperation(value = "Store a resolved template",
+    @ApiOperation(value = "Store a resolved template w/ resolution-key",
         notes = "Store a template for a given CBA's action, identified by its blueprint name, blueprint version, " +
                 "artifact name and resolution key.",
         response = TemplateResolution::class,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
-    fun post(@ApiParam(value = "Name of the CBA.", required = true)
-             @PathVariable(value = "bpName") bpName: String,
-             @ApiParam(value = "Version of the CBA.", required = true)
-             @PathVariable(value = "bpVersion") bpVersion: String,
-             @ApiParam(value = "Artifact name for which to retrieve a resolved resource.", required = true)
-             @PathVariable(value = "artifactName") artifactName: String,
-             @ApiParam(value = "Resolution Key associated with the resolution.", required = true)
-             @PathVariable(value = "resolutionKey") resolutionKey: String,
-             @ApiParam(value = "Template to store.", required = true)
-             @RequestBody result: String): ResponseEntity<TemplateResolution> = runBlocking {
+    fun postWithResolutionKey(
+        @ApiParam(value = "Name of the CBA.", required = true)
+        @PathVariable(value = "bpName") bpName: String,
+        @ApiParam(value = "Version of the CBA.", required = true)
+        @PathVariable(value = "bpVersion") bpVersion: String,
+        @ApiParam(value = "Artifact name for which to retrieve a resolved resource.", required = true)
+        @PathVariable(value = "artifactName") artifactName: String,
+        @ApiParam(value = "Resolution Key associated with the resolution.", required = true)
+        @PathVariable(value = "resolutionKey") resolutionKey: String,
+        @ApiParam(value = "Template to store.", required = true)
+        @RequestBody result: String): ResponseEntity<TemplateResolution> = runBlocking {
 
         val resultStored =
-            templateResolutionService.write(bpName, bpVersion, resolutionKey, artifactName, result)
+            templateResolutionService.write(bpName, bpVersion, artifactName, result, resolutionKey = resolutionKey)
+
+        ResponseEntity.ok().body(resultStored)
+    }
+
+    @PostMapping("/{bpName}/{bpVersion}/{artifactName}/{resourceType}/{resourceId}",
+        produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ApiOperation(value = "Store a resolved template w/ resourceId and resourceType",
+        notes = "Store a template for a given CBA's action, identified by its blueprint name, blueprint version, " +
+                "artifact name, resourceId and resourceType.",
+        response = TemplateResolution::class,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @PreAuthorize("hasRole('USER')")
+    fun postWithResourceIdAndResourceType(
+        @ApiParam(value = "Name of the CBA.", required = true)
+        @PathVariable(value = "bpName") bpName: String,
+        @ApiParam(value = "Version of the CBA.", required = true)
+        @PathVariable(value = "bpVersion") bpVersion: String,
+        @ApiParam(value = "Artifact name for which to retrieve a resolved resource.", required = true)
+        @PathVariable(value = "artifactName") artifactName: String,
+        @ApiParam(value = "Resource Type associated with the resolution.", required = false)
+        @PathVariable(value = "resourceType", required = true) resourceType: String,
+        @ApiParam(value = "Resource Id associated with the resolution.", required = false)
+        @PathVariable(value = "resourceId", required = true) resourceId: String,
+        @ApiParam(value = "Template to store.", required = true)
+        @RequestBody result: String): ResponseEntity<TemplateResolution> = runBlocking {
+
+        val resultStored =
+            templateResolutionService.write(bpName, bpVersion, artifactName, result, resourceId = resourceId, resourceType = resourceType)
 
         ResponseEntity.ok().body(resultStored)
     }

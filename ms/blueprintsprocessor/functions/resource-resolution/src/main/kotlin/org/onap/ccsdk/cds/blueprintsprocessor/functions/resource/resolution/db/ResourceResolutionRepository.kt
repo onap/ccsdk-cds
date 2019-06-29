@@ -34,4 +34,19 @@ interface ResourceResolutionRepository : JpaRepository<ResourceResolution, Strin
                                                                            blueprintVersion: String,
                                                                            resourceId: String,
                                                                            resourceType: String): List<ResourceResolution>
+
+    fun findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKeyAndOccurrence(
+        blueprintName: String?,
+        blueprintVersion: String?,
+        artifactName: String,
+        resolutionKey: String,
+        occurrence: Int): List<ResourceResolution>
+
+    fun findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResourceIdAndResourceTypeAndOccurrence(
+        blueprintName: String?,
+        blueprintVersion: String?,
+        artifactName: String,
+        resourceId: String,
+        resourceType: String,
+        occurrence: Int): List<ResourceResolution>
 }

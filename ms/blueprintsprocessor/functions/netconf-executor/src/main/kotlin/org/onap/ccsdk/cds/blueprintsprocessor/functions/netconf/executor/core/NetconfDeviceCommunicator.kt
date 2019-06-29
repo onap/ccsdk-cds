@@ -193,8 +193,8 @@ class NetconfDeviceCommunicator(private var inputStream: InputStream,
         };
 
         /**
-         * Evaluate next transition state based on current state and the character read
-         * @param c character read in
+         * Evaluate next transition state based on current state and the character findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName
+         * @param c character findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName in
          * @return result of lookup of transition to the next {@link NetconfMessageState}
          */
         internal abstract fun evaluateChar(c: Char): NetconfMessageState
