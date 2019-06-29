@@ -45,10 +45,6 @@ abstract class CliComponentFunction : AbstractScriptComponentFunction() {
         return bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactName)
     }
 
-    fun resolveFromDatabase(resolutionKey: String, artifactName: String): String = runBlocking {
-        resourceResolutionService().resolveFromDatabase(bluePrintRuntimeService, artifactName, resolutionKey)
-    }
-
     fun resolveAndGenerateMessage(artifactPrefix: String): String = runBlocking {
         resourceResolutionService().resolveResources(bluePrintRuntimeService, nodeTemplateName,
                 artifactPrefix, mapOf())

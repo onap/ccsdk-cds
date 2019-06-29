@@ -45,11 +45,6 @@ class BlueprintProcessorCatalogServiceImpl(bluePrintRuntimeValidatorService: Blu
 
     private val log = LoggerFactory.getLogger(BlueprintProcessorCatalogServiceImpl::class.toString())
 
-    init {
-
-        log.info("BlueprintProcessorCatalogServiceImpl initialized")
-    }
-
     override suspend fun delete(name: String, version: String) {
         // Cleaning Deployed Blueprint
         deleteNBDir(bluePrintPathConfiguration.blueprintDeployPath, name, version)
