@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.resolutionresults.api
+package org.onap.ccsdk.cds.blueprintsprocessor.resource.api
 
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
@@ -35,8 +35,6 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.reactive.server.WebTestClient
-import org.onap.ccsdk.cds.blueprintsprocessor.resource.api.ErrorMessage
-import org.onap.ccsdk.cds.blueprintsprocessor.resource.api.ResourceController
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 
 
