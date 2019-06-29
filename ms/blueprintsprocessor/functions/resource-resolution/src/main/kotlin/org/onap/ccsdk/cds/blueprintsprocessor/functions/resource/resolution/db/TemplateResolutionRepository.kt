@@ -16,10 +16,39 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db
 
 import org.springframework.data.jpa.repository.JpaRepository
+import javax.transaction.Transactional
 
 interface TemplateResolutionRepository : JpaRepository<TemplateResolution, String> {
 
-    fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(key: String, blueprintName: String?,
-                                                                              blueprintVersion: String?,
-                                                                              artifactName: String): TemplateResolution
+    fun findByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
+        resourceId: String,
+        resourceType: String,
+        blueprintName: String?,
+        blueprintVersion: String?,
+        artifactName: String,
+        occurrence: Int): TemplateResolution?
+
+    fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
+        key: String,
+        blueprintName: String?,
+        blueprintVersion: String?,
+        artifactName: String,
+        occurrence: Int): TemplateResolution?
+
+    @Transactional
+    fun deleteByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
+        resourceId: String,
+        resourceType: String,
+        blueprintName: String?,
+        blueprintVersion: String?,
+        artifactName: String,
+        occurrence: Int)
+
+    @Transactional
+    fun deleteByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
+        key: String,
+        blueprintName: String?,
+        blueprintVersion: String?,
+        artifactName: String,
+        occurrence: Int)
 }
