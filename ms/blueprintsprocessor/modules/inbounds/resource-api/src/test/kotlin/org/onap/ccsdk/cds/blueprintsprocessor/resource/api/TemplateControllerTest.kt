@@ -17,11 +17,9 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.resource.api
 
 import kotlinx.coroutines.runBlocking
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.TemplateResolutionService
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.slf4j.LoggerFactory
@@ -29,18 +27,13 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.security.SecurityProperties
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.context.annotation.ComponentScan
-import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.BodyInserters
-import java.io.File
-import java.nio.file.Paths
 import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
-import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
 @WebFluxTest
@@ -137,7 +130,7 @@ class TemplateControllerTest {
             webTestClient
                 .get()
                 .uri("/api/v1/template?bpName=$blueprintName&bpVersion=$blueprintVersion" +
-                        "&artifactName=$templatePrefix&resolutionKey=bob")
+                        "&artifactName=$templatePrefix&resolutionKey=notFound")
                 .exchange()
                 .expectStatus().isNotFound
         }
