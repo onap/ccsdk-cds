@@ -70,7 +70,7 @@ open class ResourceController(private var resourceResolutionDBService: ResourceR
             : ResponseEntity<List<ResourceResolution>> = runBlocking {
 
         if ((resolutionKey.isNotEmpty() || artifactName.isNotEmpty()) && (resourceId.isNotEmpty() || resourceType.isNotEmpty())) {
-            throw ResourceException("Either retrieve resolved value using artifact name and resolution-key OR using resource-id and resource-type.")
+            throw ResolutionException("Either retrieve resolved value using artifact name and resolution-key OR using resource-id and resource-type.")
         } else if (resolutionKey.isNotEmpty() && artifactName.isNotEmpty()) {
             ResponseEntity.ok()
                 .body(resourceResolutionDBService.readWithResolutionKey(bpName, bpVersion, artifactName, resolutionKey))
@@ -81,7 +81,7 @@ open class ResourceController(private var resourceResolutionDBService: ResourceR
                     resourceId,
                     resourceType))
         } else {
-            throw ResourceException("Missing param. Either retrieve resolved value using artifact name and resolution-key OR using resource-id and resource-type.")
+            throw ResolutionException("Missing param. Either retrieve resolved value using artifact name and resolution-key OR using resource-id and resource-type.")
         }
     }
 
@@ -97,8 +97,7 @@ open class ResourceController(private var resourceResolutionDBService: ResourceR
                                 @RequestParam(value = "bpName", required = true) bpName: String,
                                 @ApiParam(value = "Version of the CBA.", required = true)
                                 @RequestParam(value = "bpVersion", required = true) bpVersion: String,
-                                @ApiParam(value = "Artifact name for which to retrieve a resolved resource.",
-                                    required = true)
+                                @ApiParam(value = "Artifact name for which to retrieve a resolved resource.", required = true)
                                 @RequestParam(value = "artifactName", required = true) artifactName: String,
                                 @ApiParam(value = "Resolution Key associated with the resolution.", required = true)
                                 @RequestParam(value = "resolutionKey", required = true) resolutionKey: String,

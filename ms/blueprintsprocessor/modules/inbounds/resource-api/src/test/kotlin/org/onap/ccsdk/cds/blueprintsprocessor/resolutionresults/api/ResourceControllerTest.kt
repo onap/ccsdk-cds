@@ -16,44 +16,28 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.resolutionresults.api
 
-import com.fasterxml.jackson.core.type.TypeReference
-import com.fasterxml.jackson.module.kotlin.readValue
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolution
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolutionDBService
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
-import org.python.jline.console.internal.ConsoleRunner.property
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.security.SecurityProperties
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.context.annotation.ComponentScan
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.reactive.server.WebTestClient
-import org.springframework.web.reactive.function.BodyInserters
-import java.util.function.Consumer
-import kotlin.test.BeforeTest
-import org.h2.value.DataType.readValue
-import java.util.*
-import org.h2.value.DataType.readValue
-import org.python.bouncycastle.asn1.x500.style.RFC4519Style.l
-import org.h2.value.DataType.readValue
 import org.onap.ccsdk.cds.blueprintsprocessor.resource.api.ErrorMessage
 import org.onap.ccsdk.cds.blueprintsprocessor.resource.api.ResourceController
-import java.lang.reflect.Array
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 
 
 @RunWith(SpringRunner::class)
@@ -233,7 +217,7 @@ class ResourceControllerTest {
         resourceAssignment.dictionaryName = "dd$prefix"
         resourceAssignment.dictionarySource = "source$prefix"
         resourceAssignment.version = 2
-        resourceAssignment.status = "SUCCESS"
+        resourceAssignment.status = BluePrintConstants.STATUS_SUCCESS
         resourceAssignment.property = property
         return resourceAssignment
     }
