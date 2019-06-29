@@ -25,6 +25,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory
 import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -32,6 +33,47 @@ import java.util.*
 class ResourceResolutionDBService(private val resourceResolutionRepository: ResourceResolutionRepository) {
 
     private val log = LoggerFactory.getLogger(ResourceResolutionDBService::class.toString())
+
+    suspend fun findByResolutionKeyAndOccurrence(bluePrintRuntimeService: BluePrintRuntimeService<*>, key: String,
+                                                 occurrence: Int, artifactPrefix: String): List<ResourceResolution> {
+        return try {
+            val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
+
+            val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
+            val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
+
+            resourceResolutionRepository.findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKeyAndOccurrence(
+                blueprintName,
+                blueprintVersion,
+                artifactPrefix,
+                key,
+                occurrence)
+        } catch (e: EmptyResultDataAccessException) {
+            emptyList()
+        }
+    }
+
+    suspend fun findByResourceIdAndResourceType(bluePrintRuntimeService: BluePrintRuntimeService<*>, resourceId: String,
+                                                resourceType: String, occurrence: Int,
+                                                artifactPrefix: String): List<ResourceResolution> {
+        return try {
+
+            val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
+
+            val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
+            val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
+
+            resourceResolutionRepository.findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResourceIdAndResourceTypeAndOccurrence(
+                blueprintName,
+                blueprintVersion,
+                artifactPrefix,
+                resourceId,
+                resourceType,
+                occurrence)
+        } catch (e: EmptyResultDataAccessException) {
+            emptyList()
+        }
+    }
 
     suspend fun readValue(blueprintName: String,
                           blueprintVersion: String,
@@ -81,12 +123,11 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
 
         val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
         val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
-        val resolutionKey =
-            properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY].toString()
-        val resourceType =
-            properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE].toString()
-        val resourceId =
-            properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID].toString()
+
+        val resolutionKey = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY] as String
+        val resourceId = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] as String
+        val resourceType = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] as String
+        val occurrence = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] as Int
 
         write(blueprintName,
             blueprintVersion,
@@ -94,7 +135,8 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
             resourceId,
             resourceType,
             artifactPrefix,
-            resourceAssignment)
+            resourceAssignment,
+            occurrence)
     }
 
     suspend fun write(blueprintName: String,
@@ -103,20 +145,22 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
                       resourceId: String,
                       resourceType: String,
                       artifactPrefix: String,
-                      resourceAssignment: ResourceAssignment): ResourceResolution = withContext(Dispatchers.IO) {
+                      resourceAssignment: ResourceAssignment,
+                      occurrence: Int = 0): ResourceResolution = withContext(Dispatchers.IO) {
 
         val resourceResolution = ResourceResolution()
         resourceResolution.id = UUID.randomUUID().toString()
         resourceResolution.artifactName = artifactPrefix
+        resourceResolution.occurrence = occurrence
         resourceResolution.blueprintVersion = blueprintVersion
         resourceResolution.blueprintName = blueprintName
         resourceResolution.resolutionKey = resolutionKey
         resourceResolution.resourceType = resourceType
         resourceResolution.resourceId = resourceId
-        if (BluePrintConstants.STATUS_FAILURE == resourceAssignment.status) {
-            resourceResolution.value = ""
-        } else {
+        if (BluePrintConstants.STATUS_SUCCESS == resourceAssignment.status) {
             resourceResolution.value = JacksonUtils.getValue(resourceAssignment.property?.value!!).toString()
+        } else {
+            resourceResolution.value = ""
         }
         resourceResolution.name = resourceAssignment.name
         resourceResolution.dictionaryName = resourceAssignment.dictionaryName
