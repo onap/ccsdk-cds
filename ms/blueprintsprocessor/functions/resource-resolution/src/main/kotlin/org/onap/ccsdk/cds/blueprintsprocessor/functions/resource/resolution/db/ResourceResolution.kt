@@ -24,6 +24,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.io.Serializable
 import java.util.*
 import javax.persistence.Column
+import javax.persistence.ElementCollection
 import javax.persistence.Entity
 import javax.persistence.EntityListeners
 import javax.persistence.Id
@@ -38,9 +39,30 @@ import javax.persistence.TemporalType
 @Proxy(lazy = false)
 class ResourceResolution : Serializable {
 
-    @Id
-    @Column(name = "resource_resolution_id")
-    var id: String? = null
+    @get:ApiModelProperty(value = "Name of the CBA.", required = true)
+    @Column(name = "blueprint_name", nullable = false)
+    var blueprintName: String? = null
+
+    @get:ApiModelProperty(value = "Version of the CBA.", required = true)
+    @Column(name = "blueprint_version", nullable = false)
+    var blueprintVersion: String? = null
+
+    @get:ApiModelProperty(value = "Artifact name for which to retrieve a resolved resource.", required = true)
+    @Column(name = "artifact_name", nullable = false)
+    var artifactName: String? = null
+
+    @get:ApiModelProperty(value = "Name of the resource.", required = true)
+    @Column(name = "name", nullable = false)
+    var name: String? = null
+
+    @get:ApiModelProperty(value = "Value of the resolution.", required = true)
+    @Lob
+    @Column(name = "value", nullable = false)
+    var value: String? = null
+
+    @get:ApiModelProperty(value = "Whether success of failure.", required = true)
+    @Column(name = "status", nullable = false)
+    var status: String? = null
 
     @get:ApiModelProperty(value = "Resolution Key uniquely identifying the resolution of a given artifact within a CBA.",
         required = true)
@@ -55,31 +77,17 @@ class ResourceResolution : Serializable {
     @Column(name = "resource_id", nullable = false)
     var resourceId: String? = null
 
-    @get:ApiModelProperty(value = "Name of the CBA.", required = true)
-    @Column(name = "blueprint_name", nullable = false)
-    var blueprintName: String? = null
-
-    @get:ApiModelProperty(value = "Version of the CBA.", required = true)
-    @Column(name = "blueprint_version", nullable = false)
-    var blueprintVersion: String? = null
-
-    @get:ApiModelProperty(value = "Artifact name for which to retrieve a resolved resource.", required = true)
-    @Column(name = "artifact_name", nullable = false)
-    var artifactName: String? = null
-
-    @get:ApiModelProperty(value = "Whether success of failure.", required = true)
-    @Column(name = "status", nullable = false)
-    var status: String? = null
-
-    @get:ApiModelProperty(value = "Name of the resource.", required = true)
-    @Column(name = "name", nullable = false)
-    var name: String? = null
+    @get:ApiModelProperty(value = "If resolution occurred multiple time, this field provides the index.",
+        required = true)
+    @Column(name = "occurrence", nullable = false)
+    var occurrence: Int = 0
 
     @get:ApiModelProperty(value = "Name of the data dictionary used for the resolution.", required = true)
     @Column(name = "dictionary_name", nullable = false)
     var dictionaryName: String? = null
 
-    @get:ApiModelProperty(value = "Source associated with the data dictionary used for the resolution.", required = true)
+    @get:ApiModelProperty(value = "Source associated with the data dictionary used for the resolution.",
+        required = true)
     @Column(name = "dictionary_status", nullable = false)
     var dictionarySource: String? = null
 
@@ -87,10 +95,9 @@ class ResourceResolution : Serializable {
     @Column(name = "dictionary_version", nullable = false)
     var dictionaryVersion: Int = 0
 
-    @get:ApiModelProperty(value = "Value of the resolution.", required = true)
-    @Lob
-    @Column(name = "value", nullable = false)
-    var value: String? = null
+    @Id
+    @Column(name = "resource_resolution_id")
+    var id: String? = null
 
     @get:ApiModelProperty(value = "Creation date of the resolution.", required = true)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
