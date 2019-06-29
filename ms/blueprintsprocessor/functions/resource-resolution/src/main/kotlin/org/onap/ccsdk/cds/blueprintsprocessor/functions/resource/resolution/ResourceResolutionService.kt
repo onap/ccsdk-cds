@@ -20,13 +20,14 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolution
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolutionDBService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.TemplateResolutionService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.ResourceAssignmentProcessor
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintTemplateService
@@ -60,7 +61,7 @@ interface ResourceResolutionService {
 
 @Service(ResourceResolutionConstants.SERVICE_RESOURCE_RESOLUTION)
 open class ResourceResolutionServiceImpl(private var applicationContext: ApplicationContext,
-                                         private var resolutionResultService: TemplateResolutionService,
+                                         private var templateResolutionDBService: TemplateResolutionService,
                                          private var blueprintTemplateService: BluePrintTemplateService,
                                          private var resourceResolutionDBService: ResourceResolutionDBService) :
     ResourceResolutionService {
@@ -76,21 +77,29 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
     override suspend fun resolveFromDatabase(bluePrintRuntimeService: BluePrintRuntimeService<*>,
                                              artifactTemplate: String,
                                              resolutionKey: String): String {
-        return resolutionResultService.read(bluePrintRuntimeService, artifactTemplate, resolutionKey)
+        return templateResolutionDBService.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
+            bluePrintRuntimeService,
+            artifactTemplate,
+            resolutionKey)
     }
 
     override suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
                                           artifactNames: List<String>,
                                           properties: Map<String, Any>): MutableMap<String, String> {
 
+
+        val resourceAssignmentRuntimeService =
+            ResourceAssignmentUtils.transformToRARuntimeService(bluePrintRuntimeService, artifactNames.toString())
+
         val resolvedParams: MutableMap<String, String> = hashMapOf()
         artifactNames.forEach { artifactName ->
-            val resolvedContent = resolveResources(bluePrintRuntimeService, nodeTemplateName,
+            val resolvedContent = resolveResources(resourceAssignmentRuntimeService, nodeTemplateName,
                 artifactName, properties)
             resolvedParams[artifactName] = resolvedContent
         }
         return resolvedParams
     }
+
 
     override suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
                                           artifactPrefix: String, properties: Map<String, Any>): String {
@@ -111,6 +120,13 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                     as? MutableList<ResourceAssignment>
                 ?: throw BluePrintProcessorException("couldn't get Dictionary Definitions")
 
+        if (isToStore(properties)) {
+            val existingResourceResolution = isNewResolution(bluePrintRuntimeService, properties, artifactPrefix)
+            if (existingResourceResolution.isNotEmpty()) {
+                updateResourceAssignmentWithExisting(existingResourceResolution, resourceAssignments)
+            }
+        }
+
         // Get the Resource Dictionary Name
         val resourceDefinitions: MutableMap<String, ResourceDefinition> = ResourceAssignmentUtils
             .resourceDefinitions(bluePrintRuntimeService.bluePrintContext().rootPath)
@@ -128,10 +144,9 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
         resolvedContent = blueprintTemplateService.generateContent(bluePrintRuntimeService, nodeTemplateName,
             artifactTemplate, resolvedParamJsonContent)
 
-        if (properties.containsKey(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT)
-            && properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] as Boolean) {
-            resolutionResultService.write(properties, resolvedContent, bluePrintRuntimeService, artifactPrefix)
-            log.info("template resolution saved into database successfully : ($properties)")
+        if (isToStore(properties)) {
+            templateResolutionDBService.write(properties, resolvedContent, bluePrintRuntimeService, artifactPrefix)
+            log.info("Template resolution saved into database successfully : ($properties)")
         }
 
         return resolvedContent
@@ -154,7 +169,9 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
         coroutineScope {
             bulkSequenced.forEach { batchResourceAssignments ->
                 // Execute Non Dependent Assignments in parallel ( ie asynchronously )
-                val deferred = batchResourceAssignments.filter { it.name != "*" && it.name != "start" }
+                val deferred = batchResourceAssignments
+                    .filter { it.name != "*" && it.name != "start" }
+                    .filter { it.status != BluePrintConstants.STATUS_SUCCESS }
                     .map { resourceAssignment ->
                         async {
                             val dictionaryName = resourceAssignment.dictionaryName
@@ -197,12 +214,6 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
 
     }
 
-    private fun isToStore(properties: Map<String, Any>): Boolean {
-        return properties.containsKey(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT)
-                && properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] as Boolean
-    }
-
-
     /**
      * If the Source instance is "input", then it is not mandatory to have source Resource Definition, So it can
      *  derive the default input processor.
@@ -233,4 +244,74 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
         return processorName
 
     }
+
+    // Check whether to store or not the resolution of resource and template
+    private fun isToStore(properties: Map<String, Any>): Boolean {
+        return properties.containsKey(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT)
+                && properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] as Boolean
+    }
+
+    // Check whether resolution already exist in the database for the specified resolution-key or resourceId/resourceType
+    private suspend fun isNewResolution(bluePrintRuntimeService: BluePrintRuntimeService<*>,
+                                        properties: Map<String, Any>,
+                                        artifactPrefix: String): List<ResourceResolution> {
+        val occurrence = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] as Int
+        val resolutionKey = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY] as String
+        val resourceId = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] as String
+        val resourceType = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] as String
+
+        if (resolutionKey.isNotEmpty()) {
+            val existingResourceAssignments =
+                resourceResolutionDBService.findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKeyAndOccurrence(
+                    bluePrintRuntimeService,
+                    resolutionKey,
+                    occurrence,
+                    artifactPrefix)
+            if (existingResourceAssignments.isNotEmpty()) {
+                log.info("Resolution with resolutionKey=($resolutionKey) already exist - will resolve all resources not already resolved.",
+                    resolutionKey)
+            }
+            return existingResourceAssignments
+        } else if (resourceId.isNotEmpty() && resourceType.isNotEmpty()) {
+            val existingResourceAssignments =
+                resourceResolutionDBService.findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResourceIdAndResourceTypeAndOccurrence(
+                    bluePrintRuntimeService,
+                    resourceId,
+                    resourceType,
+
+                    occurrence,
+                    artifactPrefix)
+            if (existingResourceAssignments.isNotEmpty()) {
+                log.info("Resolution with resourceId=($resourceId) and resourceType=($resourceType) already exist - will resolve " +
+                        "all resources not already resolved.")
+            }
+            return existingResourceAssignments
+        }
+        return emptyList()
+    }
+
+    // Update the resource assignment list with the status of the resource that have already been resolved
+    private fun updateResourceAssignmentWithExisting(resourceResolutionList: List<ResourceResolution>,
+                                                     resourceAssignmentList: MutableList<ResourceAssignment>) {
+        resourceResolutionList.forEach { resourceResolution ->
+            if (resourceResolution.status == BluePrintConstants.STATUS_SUCCESS) {
+                resourceAssignmentList.forEach {
+                    if (compareOne(resourceResolution, it)) {
+                        log.info("Resource ({}) already resolve: value=({})", it.name, resourceResolution.value)
+                        it.property!!.value = resourceResolution.value!!.asJsonPrimitive()
+                        it.status = resourceResolution.status
+                    }
+                }
+            }
+        }
+    }
+
+    // Comparision between what we have in the database vs what we have to assign.
+    private fun compareOne(resourceResolution: ResourceResolution, resourceAssignment: ResourceAssignment): Boolean {
+        return (resourceResolution.name == resourceAssignment.name
+                && resourceResolution.dictionaryName == resourceAssignment.dictionaryName
+                && resourceResolution.dictionarySource == resourceAssignment.dictionarySource
+                && resourceResolution.dictionaryVersion == resourceAssignment.version)
+    }
+
 }
