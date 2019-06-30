@@ -53,7 +53,7 @@ open class ResourceResolutionDBServiceTest {
         metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION] = blueprintVersion
         metadata[BluePrintConstants.METADATA_TEMPLATE_NAME] = blueprintName
 
-        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY] = resolutionKey
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] = resolutionKey
         props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] = resourceId
         props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] = resourceType
         props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] = occurrence

@@ -1,9 +1,5 @@
 /*
- * Copyright © 2017-2018 AT&T Intellectual Property.
- *
- * Modifications Copyright © 2018 IBM.
- *
- *  Modifications Copyright © 2019 IBM, Bell Canada.
+ * Copyright © 2018 Bell Canada
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,98 +17,150 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 
 import com.fasterxml.jackson.databind.JsonNode
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
+import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
-import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
-import org.onap.ccsdk.cds.blueprintsprocessor.core.utils.PayloadUtils
-import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.*
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
-import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
-import org.onap.ccsdk.cds.controllerblueprints.core.putJsonElement
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintError
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration
-import org.springframework.context.annotation.ComponentScan
-import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.TestPropertySource
-import org.springframework.test.context.junit4.SpringRunner
+import java.lang.RuntimeException
+import kotlin.test.assertEquals
+import kotlin.test.fail
 
-@RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [ResourceResolutionServiceImpl::class,
-    InputResourceResolutionProcessor::class, DefaultResourceResolutionProcessor::class,
-    DatabaseResourceAssignmentProcessor::class, RestResourceResolutionProcessor::class,
-    CapabilityResourceResolutionProcessor::class,
-    BlueprintPropertyConfiguration::class, BluePrintProperties::class,
-    BluePrintDBLibConfiguration::class, BluePrintLoadConfiguration::class])
-@TestPropertySource(locations = ["classpath:application-test.properties"])
-@ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
-@EnableAutoConfiguration
 class ResourceResolutionComponentTest {
 
-    @Autowired
-    lateinit var resourceResolutionComponent: ResourceResolutionComponent
+    private val resourceResolutionService = mockk<ResourceResolutionService>()
+    private val resourceResolutionComponent = ResourceResolutionComponent(resourceResolutionService)
+
+    private val resolutionKey = "resolutionKey"
+    private val resourceId = "1"
+    private val resourceType = "ServiceInstance"
+    private val occurrence = 1
+    private val props = mutableMapOf<String, JsonNode>()
+    private val bluePrintRuntimeService = mockk<BluePrintRuntimeService<*>>()
+    private val artifactNames = listOf("template")
+    private val nodeTemplateName = "nodeTemplateName"
+
+    private val executionRequest = ExecutionServiceInput()
+
+
+    @Before
+    fun setup() {
+
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] = true.asJsonPrimitive()
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] = resolutionKey.asJsonPrimitive()
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] = resourceId.asJsonPrimitive()
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] = resourceType.asJsonPrimitive()
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] = occurrence.asJsonPrimitive()
+        props[ResourceResolutionConstants.INPUT_ARTIFACT_PREFIX_NAMES] = JacksonUtils.jsonNodeFromObject(artifactNames)
+
+        resourceResolutionComponent.operationInputs = props
+        resourceResolutionComponent.bluePrintRuntimeService = bluePrintRuntimeService
+        resourceResolutionComponent.nodeTemplateName = nodeTemplateName
+
+        resourceResolutionComponent.executionServiceInput = executionRequest
+        resourceResolutionComponent.processId = "12"
+        resourceResolutionComponent.workflowName = "workflow"
+        resourceResolutionComponent.stepName = "step"
+        resourceResolutionComponent.interfaceName = "interfaceName"
+        resourceResolutionComponent.operationName = "operationName"
+    }
 
     @Test
-    fun testProcess() {
+    fun processNBWithResolutionKeyAndResourceIdAndResourceTypeTestException() {
         runBlocking {
-
-            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
-
-            val executionServiceInput = JacksonUtils.readValueFromClassPathFile("payload/requests/sample-resourceresolution-request.json",
-                    ExecutionServiceInput::class.java)!!
-
-            // Prepare Inputs
-            PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService, executionServiceInput.payload, "resource-assignment")
-
-            val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
-            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "resource-assignment")
-            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "ResourceResolutionComponent")
-            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
-            bluePrintRuntimeService.put("resource-assignment-step-inputs", stepMetaData.asJsonNode())
-
-            resourceResolutionComponent.bluePrintRuntimeService = bluePrintRuntimeService
-            val stepInputData = StepData().apply {
-                name = "resource-assignment"
-                properties = stepMetaData
+            try {
+                resourceResolutionComponent.processNB(executionRequest)
+            } catch (e: BluePrintProcessorException) {
+                assertEquals("Can't proceed with the resolution: either provide resolution-key OR combination of resource-id and resource-type.",
+                    e.message)
+                return@runBlocking
             }
-            executionServiceInput.stepData = stepInputData
-            resourceResolutionComponent.applyNB(executionServiceInput)
+            fail()
         }
+    }
+
+    @Test
+    fun processNBWithResourceIdTestException() {
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] = "".asJsonPrimitive()
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] = "".asJsonPrimitive()
+
+        runBlocking {
+            try {
+                resourceResolutionComponent.processNB(executionRequest)
+            } catch (e: BluePrintProcessorException) {
+                assertEquals("Can't proceed with the resolution: both resource-id and resource-type should be provided, one of them is missing.",
+                    e.message)
+                return@runBlocking
+            }
+            fail()
+        }
+    }
+
+    @Test
+    fun processNBWithEmptyResourceTypeResourceIdResolutionKeyTestException() {
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] = "".asJsonPrimitive()
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] = "".asJsonPrimitive()
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] = "".asJsonPrimitive()
+
+        runBlocking {
+            try {
+                resourceResolutionComponent.processNB(executionRequest)
+            } catch (e: BluePrintProcessorException) {
+                assertEquals("Can't proceed with the resolution: can't persist resolution without a correlation key. " +
+                        "Either provide a resolution-key OR combination of resource-id and resource-type OR set `storeResult` to false.",
+                    e.message)
+                return@runBlocking
+            }
+            fail()
+        }
+    }
+
+    @Test
+    fun processNBTest() {
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] = "".asJsonPrimitive()
+
+        val properties = mutableMapOf<String, Any>()
+        properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] = true
+        properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] = resourceId
+        properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] = resourceType
+        properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] = occurrence
+
+        coEvery {
+            resourceResolutionService.resolveResources(any<BluePrintRuntimeService<*>>(),
+                any<String>(),
+                any<List<String>>(),
+                any<MutableMap<String, Any>>())
+        } returns mutableMapOf()
+        every { bluePrintRuntimeService.setNodeTemplateAttributeValue(any(), any(), any()) } returns Unit
+
+
+        runBlocking {
+            resourceResolutionComponent.processNB(executionRequest)
+        }
+
+// FIXME add verification
+//        coVerify {
+//            resourceResolutionService.resolveResources(eq(bluePrintRuntimeService),
+//                eq(nodeTemplateName), eq(artifactNames), eq(properties))
+//        }
     }
 
     @Test
     fun testRecover() {
         runBlocking {
-            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+            val blueprintError = BluePrintError()
+            val exception = RuntimeException("message")
+            every { bluePrintRuntimeService.getBluePrintError() } returns blueprintError
+            resourceResolutionComponent.recoverNB(exception, executionRequest)
 
-            val executionServiceInput = JacksonUtils.readValueFromClassPathFile("payload/requests/sample-resourceresolution-request.json",
-                    ExecutionServiceInput::class.java)!!
-
-            // Prepare Inputs
-            PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService, executionServiceInput.payload, "resource-assignment")
-
-            val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
-            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "resource-assignment")
-            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "ResourceResolutionComponent")
-            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
-            bluePrintRuntimeService.put("resource-assignment-step-inputs", stepMetaData.asJsonNode())
-
-            resourceResolutionComponent.bluePrintRuntimeService = bluePrintRuntimeService
-            val stepInputData = StepData().apply {
-                name = "resource-assignment"
-                properties = stepMetaData
-            }
-            executionServiceInput.stepData = stepInputData
-            resourceResolutionComponent.recoverNB(RuntimeException("TEST PASSED"), executionServiceInput)
+            assertEquals(1, blueprintError.errors.size)
         }
     }
 }
