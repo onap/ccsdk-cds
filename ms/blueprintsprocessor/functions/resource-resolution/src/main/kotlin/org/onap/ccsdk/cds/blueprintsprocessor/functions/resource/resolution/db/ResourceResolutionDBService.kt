@@ -24,7 +24,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeServ
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory
-import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Service
 import java.util.*
@@ -126,7 +125,7 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
         val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
         val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
 
-        val resolutionKey = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY] as String
+        val resolutionKey = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] as String
         val resourceId = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] as String
         val resourceType = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] as String
         val occurrence = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] as Int

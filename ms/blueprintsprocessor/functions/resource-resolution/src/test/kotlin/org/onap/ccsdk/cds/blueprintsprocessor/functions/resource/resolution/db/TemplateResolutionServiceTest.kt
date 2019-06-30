@@ -1,6 +1,5 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db
 
-import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -9,10 +8,8 @@ import org.junit.Before
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRuntimeService
-import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.springframework.dao.EmptyResultDataAccessException
 import kotlin.test.assertEquals
 
@@ -40,7 +37,7 @@ class TemplateResolutionServiceTest {
         metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION] = blueprintVersion
         metadata[BluePrintConstants.METADATA_TEMPLATE_NAME] = blueprintName
 
-        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY] = resolutionKey
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] = resolutionKey
         props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] = resourceId
         props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] = resourceType
         props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] = occurrence
@@ -117,7 +114,7 @@ class TemplateResolutionServiceTest {
 
     @Test
     fun writeWithResourceIdResourceTypeExistingTest() {
-        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY] = ""
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] = ""
         val tr = TemplateResolution()
         runBlocking {
             every { templateResolutionRepository.saveAndFlush(any<TemplateResolution>()) } returns tr
