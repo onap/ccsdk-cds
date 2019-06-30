@@ -256,7 +256,7 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                                         properties: Map<String, Any>,
                                         artifactPrefix: String): List<ResourceResolution> {
         val occurrence = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] as Int
-        val resolutionKey = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY] as String
+        val resolutionKey = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] as String
         val resourceId = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] as String
         val resourceType = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] as String
 

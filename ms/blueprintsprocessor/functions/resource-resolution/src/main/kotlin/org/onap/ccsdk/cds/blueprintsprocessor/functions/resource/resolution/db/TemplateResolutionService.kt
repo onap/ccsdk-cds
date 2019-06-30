@@ -89,7 +89,7 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
 
         val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
         val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
-        val resolutionKey = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY] as String
+        val resolutionKey = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] as String
         val resourceId = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] as String
         val resourceType = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] as String
         val occurrence = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] as Int

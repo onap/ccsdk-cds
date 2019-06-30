@@ -20,6 +20,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
@@ -64,12 +65,27 @@ class ResourceResolutionServiceTest {
     @Autowired
     lateinit var resourceResolutionService: ResourceResolutionService
 
+    private val props = hashMapOf<String, Any>()
+    private val resolutionKey = "resolutionKey"
+    private val resourceId = "1"
+    private val resourceType = "ServiceInstance"
+    private val occurrence = 0
+
+    @Before
+    fun setup() {
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] = true
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] = resolutionKey
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] = resourceId
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] = resourceType
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] = occurrence
+    }
+
     @Test
     fun testRegisteredSource() {
         val sources = resourceResolutionService.registeredResourceSources()
         assertNotNull(sources, "failed to get registered sources")
         assertTrue(sources.containsAll(arrayListOf("source-input", "source-default", "source-processor-db",
-                "source-rest")), "failed to get registered sources : $sources")
+            "source-rest")), "failed to get registered sources : $sources")
     }
 
     @Test
@@ -80,18 +96,27 @@ class ResourceResolutionServiceTest {
             Assert.assertNotNull("failed to create ResourceResolutionService", resourceResolutionService)
 
             val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
-            val resourceAssignmentRuntimeService =
-                ResourceAssignmentUtils.transformToRARuntimeService(bluePrintRuntimeService, "test")
-
-            val executionServiceInput = JacksonUtils.readValueFromClassPathFile("payload/requests/sample-resourceresolution-request.json",
+            val executionServiceInput =
+                JacksonUtils.readValueFromClassPathFile("payload/requests/sample-resourceresolution-request.json",
                     ExecutionServiceInput::class.java)!!
 
-            // Prepare Inputs
-            PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService, executionServiceInput.payload, "resource-assignment")
 
-            resourceResolutionService.resolveResources(resourceAssignmentRuntimeService, "resource-assignment", "baseconfig", mapOf())
+            val resourceAssignmentRuntimeService =
+                ResourceAssignmentUtils.transformToRARuntimeService(bluePrintRuntimeService,
+                    "testResolveResource")
+
+
+            // Prepare Inputs
+            PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService,
+                executionServiceInput.payload,
+                "resource-assignment")
+
+            resourceResolutionService.resolveResources(resourceAssignmentRuntimeService,
+                "resource-assignment",
+                "baseconfig",
+                props)
 
         }
     }
@@ -103,20 +128,23 @@ class ResourceResolutionServiceTest {
             Assert.assertNotNull("failed to create ResourceResolutionService", resourceResolutionService)
 
             val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
-            val resourceAssignmentRuntimeService =
-                ResourceAssignmentUtils.transformToRARuntimeService(bluePrintRuntimeService, "test")
-
-            val executionServiceInput = JacksonUtils.readValueFromClassPathFile("payload/requests/sample-resourceresolution-request.json",
+            val executionServiceInput =
+                JacksonUtils.readValueFromClassPathFile("payload/requests/sample-resourceresolution-request.json",
                     ExecutionServiceInput::class.java)!!
 
             val artefactNames = listOf("baseconfig", "another")
 
             // Prepare Inputs
-            PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService, executionServiceInput.payload, "resource-assignment")
+            PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService,
+                executionServiceInput.payload,
+                "resource-assignment")
 
-            resourceResolutionService.resolveResources(resourceAssignmentRuntimeService, "resource-assignment", artefactNames, mapOf())
+            resourceResolutionService.resolveResources(bluePrintRuntimeService,
+                "resource-assignment",
+                artefactNames,
+                props)
         }
 
     }
@@ -128,20 +156,61 @@ class ResourceResolutionServiceTest {
             Assert.assertNotNull("failed to create ResourceResolutionService", resourceResolutionService)
 
             val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+
+            val executionServiceInput =
+                JacksonUtils.readValueFromClassPathFile("payload/requests/sample-resourceresolution-request.json",
+                    ExecutionServiceInput::class.java)!!
 
             val resourceAssignmentRuntimeService =
-                ResourceAssignmentUtils.transformToRARuntimeService(bluePrintRuntimeService, "test")
-
-            val executionServiceInput = JacksonUtils.readValueFromClassPathFile("payload/requests/sample-resourceresolution-request.json",
-                    ExecutionServiceInput::class.java)!!
+                ResourceAssignmentUtils.transformToRARuntimeService(bluePrintRuntimeService,
+                    "testResolveResourcesWithMappingAndTemplate")
 
             val artifactPrefix = "another"
 
             // Prepare Inputs
-            PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService, executionServiceInput.payload, "resource-assignment")
+            PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService,
+                executionServiceInput.payload,
+                "resource-assignment")
 
-            resourceResolutionService.resolveResources(resourceAssignmentRuntimeService, "resource-assignment", artifactPrefix, mapOf<String, String>())
+            resourceResolutionService.resolveResources(resourceAssignmentRuntimeService,
+                "resource-assignment",
+                artifactPrefix,
+                props)
+        }
+    }
+
+
+    @Test
+    fun testResolveResourcesWithResourceIdAndResourceType() {
+
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] = ""
+
+        runBlocking {
+            Assert.assertNotNull("failed to create ResourceResolutionService", resourceResolutionService)
+
+            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+
+            val executionServiceInput =
+                JacksonUtils.readValueFromClassPathFile("payload/requests/sample-resourceresolution-request.json",
+                    ExecutionServiceInput::class.java)!!
+
+            val resourceAssignmentRuntimeService =
+                ResourceAssignmentUtils.transformToRARuntimeService(bluePrintRuntimeService,
+                    "testResolveResourcesWithMappingAndTemplate")
+
+            val artifactPrefix = "another"
+
+            // Prepare Inputs
+            PayloadUtils.prepareInputsFromWorkflowPayload(bluePrintRuntimeService,
+                executionServiceInput.payload,
+                "resource-assignment")
+
+            resourceResolutionService.resolveResources(resourceAssignmentRuntimeService,
+                "resource-assignment",
+                artifactPrefix,
+                props)
         }
     }
 }
