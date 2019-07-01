@@ -15,12 +15,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
-        <groupId>org.onap.ccsdk.parent</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.3.0-SNAPSHOT</version>
+        <groupId>org.onap.oparent</groupId>
+        <artifactId>oparent</artifactId>
+        <version>2.0.0</version>
         <relativePath/>
     </parent>
 
@@ -54,15 +55,14 @@ limitations under the License.
         <sonar.tests>src/test</sonar.tests>
         <!--Only include java and kt files to the scan-->
         <sonar.inclusions>**/*.java,**/*.kt</sonar.inclusions>
-        <!--Specify path to load jacoco XLM report, as Sonar can't load Kotlin coverage from binary report.
-        Note: coverage for now is invalid and is failing to load because of:
-        "Cannot import coverage information for file '{file}', coverage data is invalid."
-        see https://github.com/jacoco/jacoco/issues/763
-        That issue has been fixed in 0.8.3 , so we override the default ONAP
-        version here to pick up that fix -->
+        <!--Specify path to load jacoco XLM report, as Sonar can't load Kotlin coverage from binary report-->
         <sonar.coverage.jacoco.xmlReportPaths>${project.reporting.outputDirectory}/jacoco-ut/jacoco.xml
         </sonar.coverage.jacoco.xmlReportPaths>
         <jacoco.version>0.8.3</jacoco.version>
+
+        <ccsdk.sli.core.version>${project.version}</ccsdk.sli.core.version>
+        <apache.httpcomponents.client.version>4.5.2</apache.httpcomponents.client.version>
+        <jettison.version>1.3.8</jettison.version>
     </properties>
 
     <build>
