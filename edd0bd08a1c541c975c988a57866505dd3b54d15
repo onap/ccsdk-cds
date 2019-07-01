@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3678c0ca_65c10750",
+        "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/service/BluePrintRuntimeService.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-07-01T17:17:47Z",
+      "side": 1,
+      "message": "This may create some confusion, Better we can use some optional return API for that or modify check operation to return nullable value.",
+      "range": {
+        "startLine": 176,
+        "startChar": 29,
+        "endLine": 176,
+        "endChar": 49
+      },
+      "revId": "edd0bd08a1c541c975c988a57866505dd3b54d15",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
