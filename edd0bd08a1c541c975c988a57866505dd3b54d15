@@ -22,6 +22,30 @@
       "revId": "edd0bd08a1c541c975c988a57866505dd3b54d15",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f206232_272ee2e1",
+        "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/service/BluePrintRuntimeService.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-07-02T02:38:58Z",
+      "side": 1,
+      "message": "Back to what it was. I\u0027ve done this during testing, not intended to be pushed. Thank you Brinda.",
+      "parentUuid": "3678c0ca_65c10750",
+      "range": {
+        "startLine": 176,
+        "startChar": 29,
+        "endLine": 176,
+        "endChar": 49
+      },
+      "revId": "edd0bd08a1c541c975c988a57866505dd3b54d15",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
