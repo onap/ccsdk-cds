@@ -26,22 +26,41 @@ limitations under the License.
 //     left: 0;
 //     right: 0;
 //   }
-  
 //   .example-events {
 //     width: 300px;
 //     height: 200px;
 //     overflow: auto;
 //     border: 1px solid #555;
 //   }
-.mat-sidenav-container{
+.mat-sidenav-container {
     height: 652px;
 }
-.mat-button.mat-primary, .mat-icon-button.mat-primary, .mat-stroked-button.mat-primary {
+
+.mat-button.mat-primary,
+.mat-icon-button.mat-primary,
+.mat-stroked-button.mat-primary {
     color: white !important;
 }
-.menuBar{
+
+.menuBar {
     cursor: pointer;
 }
-.title{
+
+.title {
     margin: 1em;
+}
+
+.docs-component-viewer-nav .docs-component-viewer-nav-content button {
+    padding: 10px 15px;
+    font-weight: 700;
+    line-height: 16px;
+    margin: 0;
+    font-size: 13px;
+    cursor: pointer;
+    position: relative;
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: 0 0;
+    border: none;
 }
