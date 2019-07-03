@@ -18,9 +18,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
 -->
-<div>
-    <input type="file" accept=".zip" (change)="fileChanged($event)">
+<div *ngIf="optionSelected==1">
+    <div>
+        <input type="file" accept=".zip" (change)="fileChanged($event)">
+    </div>
+    <div>
+        <button mat-button matStepperNext (click)="updateBlueprintState()" [ngClass]="{'mat-upload-btn-disabled': !validfile, 'matStepNextBtn': validfile}" [disabled]="!validfile">Upload</button>
+    </div>
 </div>
-<div>
-    <button mat-button matStepperNext (click)="updateBlueprintState()" [ngClass] = "{'mat-upload-btn-disabled': !validfile, 'matStepNextBtn': validfile}" [disabled]="!validfile">Upload</button>
+<div *ngIf="optionSelected==2">
+    <form class="search-form" [formGroup]="myControl">
+        <mat-form-field class="search-full-width">
+            <input #resourceSelect type="text" [(ngModel)]="searchText" placeholder="Search Resources" matInput [matAutocomplete]="auto" formControlName="search_input">
+            <button matSuffix mat-icon-button (click)="fetchResourceByName()"><mat-icon>search</mat-icon></button>
+            <!-- <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option (click)="selected(option)" *ngFor="let option of options | search : searchText" [value]="option.tags">
+                        {{option.tags}}
+                    </mat-option>
+                </mat-autocomplete> -->
+        </mat-form-field>
+    </form>
 </div>

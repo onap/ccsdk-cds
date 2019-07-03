@@ -19,7 +19,7 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Component, OnInit, EventEmitter, Output, ViewChild } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, ViewChild, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as JSZip from 'jszip';
 import { Observable } from 'rxjs';
@@ -31,6 +31,8 @@ import { LoadBlueprintSuccess, SET_BLUEPRINT_STATE, SetBlueprintState } from '..
 import { json } from 'd3';
 import { SortPipe } from '../../../../common/shared/pipes/sort.pipe';
 import { LoaderService } from '../../../../common/core/services/loader.service';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { MatAutocompleteTrigger } from '@angular/material';
 
 @Component({
   selector: 'app-search-template',
@@ -47,6 +49,12 @@ export class SearchTemplateComponent implements OnInit {
   uploadedFileName: string;
   @ViewChild('fileInput') fileInput;
   result: string = '';
+  @Input() optionSelected: string;
+  myControl: FormGroup;
+  @ViewChild('resourceSelect', { read: MatAutocompleteTrigger }) resourceSelect: MatAutocompleteTrigger;
+  @Output() resourcesData = new EventEmitter();
+  options: any[]   = [];
+  searchText: string = '';
 
   private paths = [];
   private tree;
@@ -57,11 +65,30 @@ export class SearchTemplateComponent implements OnInit {
   private blueprintName: string;
   private entryDefinition: string;
 
-  constructor(private store: Store<IAppState>, private loader: LoaderService) { }
+  constructor(private store: Store<IAppState>, private loader: LoaderService,private formBuilder: FormBuilder) { }
 
   ngOnInit() {
+    this.myControl = this.formBuilder.group({
+      search_input: ['', Validators.required]
+    });
   }
 
+  selected(value) {
+    this.resourcesData.emit(value);
+  }
+
+  fetchResourceByName() {
+    // this.exsistingModelService.searchByTags(this.searchText)
+    //   .subscribe(data => {
+    //     console.log(data);
+    //     data.forEach(element => {
+    //       this.options.push(element)
+    //     });
+    //     this.resourceSelect.openPanel();
+    //   }, error => {
+    //     window.alert('error' + error);
+    //   })
+  }
   fileChanged(e: any) {
     this.paths = [];
     this.file = e.target.files[0];
