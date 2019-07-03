@@ -19,7 +19,7 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Component, OnInit, EventEmitter, Output, ViewChild } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, ViewChild, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as JSZip from 'jszip';
 import { Observable } from 'rxjs';
@@ -30,6 +30,10 @@ import { IAppState } from '../../../../common/core/store/state/app.state';
 import { LoadBlueprintSuccess, SET_BLUEPRINT_STATE, SetBlueprintState } from '../../../../common/core/store/actions/blueprint.action';
 import { json } from 'd3';
 import { SortPipe } from '../../../../common/shared/pipes/sort.pipe';
+import { SearchPipe } from '../../../../common/shared/pipes/search.pipe';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { MatAutocompleteTrigger } from '@angular/material';
+import { ExsistingModelService } from '../../../resource-definition/resource-creation/existing-model/exsisting-model.service';
 
 @Component({
   selector: 'app-search-template',
@@ -46,7 +50,12 @@ export class SearchTemplateComponent implements OnInit {
   uploadedFileName: string;
   @ViewChild('fileInput') fileInput;
   result: string = '';
-
+  @Input() optionSelected: string;
+  myControl: FormGroup;
+  @ViewChild('resourceSelect', { read: MatAutocompleteTrigger }) resourceSelect: MatAutocompleteTrigger;
+  @Output() resourcesData = new EventEmitter();
+  options: any[]   = [];
+  searchText: string = '';
   private paths = [];
   private tree;
   private zipFile: JSZip = new JSZip();
@@ -56,9 +65,12 @@ export class SearchTemplateComponent implements OnInit {
   private blueprintName: string;
   private entryDefinition: string;
 
-  constructor(private store: Store<IAppState>) { }
+  constructor(private store: Store<IAppState>, private _formBuilder: FormBuilder, private exsistingModelService: ExsistingModelService) { }
 
   ngOnInit() {
+    this.myControl = this._formBuilder.group({
+      search_input: ['', Validators.required]
+    });
   }
 
   fileChanged(e: any) {
@@ -68,12 +80,27 @@ export class SearchTemplateComponent implements OnInit {
     this.zipFile.files = {};
     this.zipFile.loadAsync(this.file)
       .then((zip) => {
-        if(zip) {            
+        if (zip) {
           this.buildFileViewData(zip);
         }
       });
   }
+  selected(value) {
+    this.resourcesData.emit(value);
+  }
 
+  fetchResourceByName() {
+    this.exsistingModelService.searchByTags(this.searchText)
+      .subscribe(data => {
+        console.log(data);
+        data.forEach(element => {
+          this.options.push(element)
+        });
+        this.resourceSelect.openPanel();
+      }, error => {
+        window.alert('error' + error);
+      })
+  }
   updateBlueprintState() {
     let data: IBlueprint = this.activationBlueprint ? JSON.parse(this.activationBlueprint.toString()) : this.activationBlueprint;
     let blueprintState = {
@@ -93,21 +120,21 @@ export class SearchTemplateComponent implements OnInit {
     this.paths = [];
     console.log(zip.files);
     for (var file in zip.files) {
-      console.log("name: " +zip.files[file].name);
+      console.log("name: " + zip.files[file].name);
       this.fileObject = {
         // nameForUIDisplay: this.uploadedFileName + '/' + zip.files[file].name,
         // name: zip.files[file].name,
         name: this.uploadedFileName + '/' + zip.files[file].name,
         data: ''
       };
-      const value = <any>await  zip.files[file].async('string');
+      const value = <any>await zip.files[file].async('string');
       this.fileObject.data = value;
-      this.paths.push(this.fileObject); 
+      this.paths.push(this.fileObject);
     }
 
-    if(this.paths) {
-      this.paths.forEach(path =>{
-        if(path.name.includes("TOSCA.meta")) {
+    if (this.paths) {
+      this.paths.forEach(path => {
+        if (path.name.includes("TOSCA.meta")) {
           this.validfile = true
         }
       });
@@ -115,7 +142,7 @@ export class SearchTemplateComponent implements OnInit {
       alert('Please update proper file');
     }
 
-    if(this.validfile) {      
+    if (this.validfile) {
       this.fetchTOSACAMetadata();
       this.paths = new SortPipe().transform(this.paths, 'asc', 'name');
       this.tree = this.arrangeTreeData(this.paths);
@@ -143,17 +170,17 @@ export class SearchTemplateComponent implements OnInit {
             name: part,
             children: [],
             data: path.data,
-            path : path.name
+            path: path.name
           };
-          if(part.trim() == this.blueprintName.trim()) { 
-            this.activationBlueprint = path.data; 
-            newPart.data = JSON.parse(this.activationBlueprint.toString());            
+          if (part.trim() == this.blueprintName.trim()) {
+            this.activationBlueprint = path.data;
+            newPart.data = JSON.parse(this.activationBlueprint.toString());
             console.log('newpart', newPart);
             this.entryDefinition = path.name.trim();
           }
-          if(newPart.name !== '') {            
-              currentLevel.push(newPart);
-              currentLevel = newPart.children;
+          if (newPart.name !== '') {
+            currentLevel.push(newPart);
+            currentLevel = newPart.children;
           }
         }
       });
@@ -164,10 +191,10 @@ export class SearchTemplateComponent implements OnInit {
 
   fetchTOSACAMetadata() {
     let toscaData = {};
-    this.paths.forEach(file =>{
-      if(file.name.includes('TOSCA.meta')) {
+    this.paths.forEach(file => {
+      if (file.name.includes('TOSCA.meta')) {
         let keys = file.data.split("\n");
-        keys.forEach((key)=>{
+        keys.forEach((key) => {
           let propertyData = key.split(':');
           toscaData[propertyData[0]] = propertyData[1];
         });
