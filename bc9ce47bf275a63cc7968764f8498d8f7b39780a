@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79c25c1a_97ce1ef5",
+        "filename": "pom.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2019-07-05T00:17:45Z",
+      "side": 1,
+      "message": "This version of oparent is missing distributionManagement section.  It would be preferable to use the standard CCSDK springboot parent pom and update that to address whatever the issue is, but it\u0027s okay to use oparent 2.0.0 for now if you add distributionManagement section to this pom.xml",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 32
+      },
+      "revId": "bc9ce47bf275a63cc7968764f8498d8f7b39780a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
