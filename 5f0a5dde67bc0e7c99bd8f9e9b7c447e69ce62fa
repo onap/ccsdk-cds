@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c5c13a0_43b377e9",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionComponent.kt",
+        "patchSetId": 10
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-07-05T13:54:33Z",
+      "side": 1,
+      "message": "The default value is not working here.\n\nPlace a default value in case the function doesn\u0027t return a result.",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 116
+      },
+      "revId": "5f0a5dde67bc0e7c99bd8f9e9b7c447e69ce62fa",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
