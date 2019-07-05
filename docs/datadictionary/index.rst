@@ -21,9 +21,7 @@ As part of modelling a Resource definition entry, the following generic informat
 
 |image0|
 
-.. |image0| image:: image0.jpg
-   :width: 7.88889in 
-   :height: 4.43750in
+
 
 Below are properties that all the resource source have will have
 
@@ -31,9 +29,6 @@ The modeling does allow for data translation between external capability and CDS
 
 |image1|
 
-.. |image1| image:: image1.jpg
-   :width: 7.88889in 
-   :height: 4.43750in
 
 Example:
 ========
@@ -46,8 +41,6 @@ Here is how input-key-mapping, output-key-mapping and key-dependencies can be us
    :maxdepth: 1
    
 resourceDefintionCode 
-
-
 
 
 Resource source:
@@ -66,3 +59,12 @@ Also please click below for resource source available details
 
 .. _TOSCA: http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/csprd01/TOSCA-Simple-Profile-YAML-v1.0-csprd01.html#DEFN_ENTITY_NODE_TYPE
 .. _Resource: https://wiki.onap.org/display/DW/Modeling+Concepts#ModelingConcepts-NodeResourceSource
+
+
+.. |image0| image:: media/image0.jpg
+   :width: 7.88889in 
+   :height: 4.43750in
+   
+.. |image1| image:: media/image1.jpg
+   :width: 7.88889in 
+   :height: 4.43750in
