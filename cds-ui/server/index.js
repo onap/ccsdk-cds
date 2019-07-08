@@ -20,6 +20,7 @@ limitations under the License.
 */
 
 const application = require('./dist');
+const fs = require('fs')
 
 module.exports = application;
 
@@ -27,6 +28,9 @@ if (require.main === module) {
   // Run the application
   const config = {
     rest: {
+      protocol: 'https',
+      key: fs.readFileSync('server.key'),
+      cert: fs.readFileSync('server.cert'),
       port: +process.env.PORT || 3000,
       host: process.env.HOST || 'localhost',
       openApiSpec: {
