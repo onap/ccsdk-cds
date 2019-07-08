@@ -93,7 +93,7 @@ open class ResourceExceptionHandler {
     }
 
     @ExceptionHandler
-    fun ResolutionResultsServiceExceptionHandler(e: ResourceException): ResponseEntity<ErrorMessage> {
+    fun ResolutionResultsServiceExceptionHandler(e: ResolutionException): ResponseEntity<ErrorMessage> {
         log.error(e.message, e)
         return ResponseEntity(ErrorMessage(e.message, e.code, debugMsg), HttpStatus.resolve(e.code))
     }

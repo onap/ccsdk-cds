@@ -21,36 +21,65 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.Reso
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.slf4j.LoggerFactory
 import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
 class TemplateResolutionService(private val templateResolutionRepository: TemplateResolutionRepository) {
 
-    suspend fun read(bluePrintRuntimeService: BluePrintRuntimeService<*>,
-                     artifactPrefix: String,
-                     resolutionKey: String): String = withContext(Dispatchers.IO) {
+    private val log = LoggerFactory.getLogger(TemplateResolutionService::class.toString())
 
-        val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
+    suspend fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        artifactPrefix: String,
+        resolutionKey: String): String =
+        withContext(Dispatchers.IO) {
 
-        val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
-        val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
+            val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
 
-        read(blueprintName, blueprintVersion, artifactPrefix, resolutionKey)
-    }
+            val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
+            val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
 
-    suspend fun read(blueprintName: String,
-                     blueprintVersion: String,
-                     artifactPrefix: String,
-                     resolutionKey: String): String = withContext(Dispatchers.IO) {
+            findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(blueprintName,
+                blueprintVersion,
+                artifactPrefix,
+                resolutionKey)
+        }
 
-        templateResolutionRepository.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
-            resolutionKey,
-            blueprintName,
-            blueprintVersion,
-            artifactPrefix).result!!
-    }
+    suspend fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(blueprintName: String,
+                                                                                      blueprintVersion: String,
+                                                                                      artifactPrefix: String,
+                                                                                      resolutionKey: String,
+                                                                                      occurrence: Int = 0): String =
+        withContext(Dispatchers.IO) {
+
+            templateResolutionRepository.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
+                resolutionKey,
+                blueprintName,
+                blueprintVersion,
+                artifactPrefix,
+                occurrence)?.result ?: throw EmptyResultDataAccessException(1)
+        }
+
+    suspend fun findByResoureIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactName(blueprintName: String,
+                                                                                                 blueprintVersion: String,
+                                                                                                 artifactPrefix: String,
+                                                                                                 resourceId: String,
+                                                                                                 resourceType: String,
+                                                                                                 occurrence: Int = 0): String =
+        withContext(Dispatchers.IO) {
+
+            templateResolutionRepository.findByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
+                resourceId,
+                resourceType,
+                blueprintName,
+                blueprintVersion,
+                artifactPrefix,
+                occurrence)?.result!!
+        }
 
     suspend fun write(properties: Map<String, Any>,
                       result: String, bluePrintRuntimeService: BluePrintRuntimeService<*>,
@@ -60,30 +89,68 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
 
         val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
         val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
-        val resolutionKey =
-            properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY].toString()
+        val resolutionKey = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_KEY] as String
+        val resourceId = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] as String
+        val resourceType = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] as String
+        val occurrence = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] as Int
 
-        write(blueprintName, blueprintVersion, resolutionKey, artifactPrefix, result)
+        write(blueprintName,
+            blueprintVersion,
+            artifactPrefix,
+            result,
+            occurrence,
+            resolutionKey,
+            resourceId,
+            resourceType)
     }
 
-    suspend fun write(blueprintName: String,
-                      blueprintVersion: String,
-                      resolutionKey: String,
-                      artifactPrefix: String,
-                      template: String): TemplateResolution = withContext(Dispatchers.IO) {
+    suspend fun write(blueprintName: String, blueprintVersion: String, artifactPrefix: String,
+                      template: String, occurrence: Int = 0, resolutionKey: String = "", resourceId: String = "",
+                      resourceType: String = ""): TemplateResolution =
+        withContext(Dispatchers.IO) {
 
-        val resourceResolutionResult = TemplateResolution()
-        resourceResolutionResult.id = UUID.randomUUID().toString()
-        resourceResolutionResult.artifactName = artifactPrefix
-        resourceResolutionResult.blueprintVersion = blueprintVersion
-        resourceResolutionResult.blueprintName = blueprintName
-        resourceResolutionResult.resolutionKey = resolutionKey
-        resourceResolutionResult.result = template
+            val resourceResolutionResult = TemplateResolution()
+            resourceResolutionResult.id = UUID.randomUUID().toString()
+            resourceResolutionResult.artifactName = artifactPrefix
+            resourceResolutionResult.blueprintVersion = blueprintVersion
+            resourceResolutionResult.blueprintName = blueprintName
+            resourceResolutionResult.resolutionKey = resolutionKey
+            resourceResolutionResult.resourceId = resourceId
+            resourceResolutionResult.resourceType = resourceType
+            resourceResolutionResult.result = template
+            resourceResolutionResult.occurrence = occurrence
 
-        try {
-            templateResolutionRepository.saveAndFlush(resourceResolutionResult)
-        } catch (ex: DataIntegrityViolationException) {
-            throw BluePrintException("Failed to store resource api result.", ex)
+            // Overwrite template resolution-key of resourceId/resourceType already existant
+            if (resolutionKey.isNotEmpty()) {
+                templateResolutionRepository.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
+                    resolutionKey, blueprintName, blueprintVersion, artifactPrefix, occurrence)?.let {
+                    log.info("Overwriting template resolution for blueprintName=($blueprintVersion), blueprintVersion=($blueprintName), " +
+                            "artifactName=($artifactPrefix) and resolutionKey=($resolutionKey)")
+                    templateResolutionRepository.deleteByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
+                        resolutionKey,
+                        blueprintName,
+                        blueprintVersion,
+                        artifactPrefix,
+                        occurrence)
+                }
+            } else if (resourceId.isNotEmpty() && resourceType.isNotEmpty()) {
+                templateResolutionRepository.findByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
+                    resourceId, resourceType, blueprintName, blueprintVersion, artifactPrefix, occurrence)?.let {
+                    log.info("Overwriting template resolution for blueprintName=($blueprintVersion), blueprintVersion=($blueprintName), " +
+                            "artifactName=($artifactPrefix), resourceId=($resourceId) and resourceType=($resourceType)")
+                    templateResolutionRepository.deleteByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
+                        resourceId,
+                        resourceType,
+                        blueprintName,
+                        blueprintVersion,
+                        artifactPrefix,
+                        occurrence)
+                }
+            }
+            try {
+                templateResolutionRepository.saveAndFlush(resourceResolutionResult)
+            } catch (ex: DataIntegrityViolationException) {
+                throw BluePrintException("Failed to store resource api result.", ex)
+            }
         }
-    }
 }

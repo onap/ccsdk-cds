@@ -38,15 +38,6 @@ import javax.persistence.TemporalType
 @Proxy(lazy = false)
 class TemplateResolution : Serializable {
 
-    @Id
-    @Column(name = "template_resolution_id")
-    var id: String? = null
-
-    @get:ApiModelProperty(value = "Resolution Key uniquely identifying the resolution of a given artifact within a CBA.",
-        required = true)
-    @Column(name = "resolution_key", nullable = false)
-    var resolutionKey: String? = null
-
     @get:ApiModelProperty(value = "Name of the CBA.", required = true)
     @Column(name = "blueprint_name", nullable = false)
     var blueprintName: String? = null
@@ -63,6 +54,28 @@ class TemplateResolution : Serializable {
     @Lob
     @Column(name = "result", nullable = false)
     var result: String? = null
+
+    @get:ApiModelProperty(value = "Resolution Key uniquely identifying the resolution of a given artifact within a CBA.",
+        required = true)
+    @Column(name = "resolution_key", nullable = false)
+    var resolutionKey: String? = null
+
+    @get:ApiModelProperty(value = "Resolution type.", required = true, example = "ServiceInstance, VfModule, VNF")
+    @Column(name = "resource_type", nullable = false)
+    var resourceType: String? = null
+
+    @get:ApiModelProperty(value = "ID associated with the resolution type in the inventory system.", required = true)
+    @Column(name = "resource_id", nullable = false)
+    var resourceId: String? = null
+
+    @get:ApiModelProperty(value = "If resolution occurred multiple time, this field provides the index.",
+        required = true)
+    @Column(name = "occurrence", nullable = false)
+    var occurrence: Int = 0
+
+    @Id
+    @Column(name = "template_resolution_id")
+    var id: String? = null
 
     @get:ApiModelProperty(value = "Creation date of the resolution.", required = true)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")

@@ -15,6 +15,6 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.resource.api
 
-class ResourceException(message: String) : RuntimeException(message) {
+class ResolutionException(message: String) : RuntimeException(message) {
     var code: Int = 404
 }
