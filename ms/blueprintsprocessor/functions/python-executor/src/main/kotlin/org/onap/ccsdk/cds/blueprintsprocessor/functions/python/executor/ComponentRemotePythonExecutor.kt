@@ -16,6 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor
 
+import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.*
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ExecutionServiceConstant
@@ -75,8 +76,19 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
         val dynamicProperties = getOptionalOperationInput(INPUT_DYNAMIC_PROPERTIES)
         val packages = getOptionalOperationInput(INPUT_PACKAGES)?.returnNullIfMissing()
 
-        val args = getOptionalOperationInput(INPUT_ARGUMENT_PROPERTIES)?.returnNullIfMissing()
-                ?.rootFieldsToMap()?.toSortedMap()?.values?.map { it.textValue() }?.joinToString(" ")
+        val argsNode = getOptionalOperationInput(INPUT_ARGUMENT_PROPERTIES)?.returnNullIfMissing()
+
+        // This prevents unescaping values, as well as quoting the each parameter, in order to allow for spaces in values
+        var args = ""
+        argsNode?.fields()?.forEach {
+            if (it.value.isValueNode) {
+                args = "$args ${it.value}"
+            } else {
+                it.value.fields().forEach { item ->
+                    args = "$args ${item.value}"
+                }
+            }
+        }
 
         val command = getOperationInput(INPUT_COMMAND).asText()
         var scriptCommand = command.replace(pythonScript.name, pythonScript.absolutePath)
