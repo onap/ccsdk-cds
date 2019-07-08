@@ -19,22 +19,16 @@ package org.onap.ccsdk.cds.controllerblueprints.core.service
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.common.io.Resources
 import com.hubspot.jinjava.Jinjava
-import com.hubspot.jinjava.interpret.Context
+import com.hubspot.jinjava.JinjavaConfig
 import com.hubspot.jinjava.interpret.JinjavaInterpreter
-import com.hubspot.jinjava.loader.ClasspathResourceLocator
 import com.hubspot.jinjava.loader.ResourceLocator
 import com.hubspot.jinjava.loader.ResourceNotFoundException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintPathConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintJsonNodeFactory
-import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.cds.controllerblueprints.core.removeNullNode
-import org.springframework.context.annotation.Scope
-import org.springframework.stereotype.Service
 import java.io.IOException
 import java.nio.charset.Charset
 import java.nio.file.Files.readAllBytes
@@ -70,8 +64,7 @@ object BluePrintJinjaTemplateService {
                         additionalContext: MutableMap<String, Any>,
                         bluePrintPathConfiguration: BluePrintPathConfiguration, artifactName: String,
                         artifactVersion: String): String {
-
-
+        
         return generateContent(template,
             json,
             ignoreJsonNull,
@@ -81,7 +74,7 @@ object BluePrintJinjaTemplateService {
 
     fun generateContent(template: String, json: String, ignoreJsonNull: Boolean,
                         additionalContext: MutableMap<String, Any>, resourceLocator: ResourceLocator? = null): String {
-        val jinJava = Jinjava()
+        val jinJava = Jinjava(JinjavaConfig())
         if (resourceLocator != null) {
             jinJava.resourceLocator = resourceLocator
         }
