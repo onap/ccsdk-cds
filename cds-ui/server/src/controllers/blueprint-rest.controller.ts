@@ -48,7 +48,8 @@ import { BlueprintService } from '../services';
 import * as fs from 'fs';
 import * as multiparty from 'multiparty';
 import * as request_lib from 'request';
-import {controllerApiConfig, processorApiConfig} from '../../config/app-config';
+import {controllerApiConfig, processorApiConfig, appConfig} from '../config/app-config';
+import {bluePrintManagementServiceGrpcClient} from '../clients/blueprint-management-service-grpc-client';
 
 export class BlueprintRestController {
   constructor(
@@ -197,11 +198,10 @@ export class BlueprintRestController {
   ): Promise<Response> {
     return new Promise((resolve, reject) => { 
        this.getFileFromMultiPartForm(request).then(file=>{
-         this.uploadFileToBlueprintProcessor(file, "/execution-service/upload/", response).then(resp=>{
-          resolve(resp);
-         }, err=>{
-           reject(err);
-         });
+         if(appConfig.action.deployBlueprint.grpcEnabled)
+          return this.uploadFileToBlueprintProcessorGrpc(file, response); 
+         else
+          return this.uploadFileToBlueprintProcessor(file, "/execution-service/upload/", response);
       }, err=>{
         reject(err);
       });
@@ -209,11 +209,11 @@ export class BlueprintRestController {
   }
 
   async uploadFileToBlueprintController(file: multiparty.File, uri: string, response: Response): Promise<Response>{
-    return this.uploadFileToBlueprintService(file, controllerApiConfig.url + uri, controllerApiConfig.authToken, response);
+    return this.uploadFileToBlueprintService(file, controllerApiConfig.http.url + uri, controllerApiConfig.http.authToken, response);
   }
 
   async uploadFileToBlueprintProcessor(file: multiparty.File, uri: string, response: Response): Promise<Response>{
-    return this.uploadFileToBlueprintService(file, processorApiConfig.url + uri, processorApiConfig.authToken, response);
+    return this.uploadFileToBlueprintService(file, processorApiConfig.http.url + uri, processorApiConfig.http.authToken, response);
   }
 
   async uploadFileToBlueprintService(file: multiparty.File, url: string, authToken: string, response: Response): Promise<Response>{
@@ -256,7 +256,7 @@ export class BlueprintRestController {
   }
 
   async downloadFileFromBlueprintController(uri: string, response: Response): Promise<Response> {
-    return this.downloadFileFromBlueprintService(controllerApiConfig.url + uri, controllerApiConfig.authToken, response);
+    return this.downloadFileFromBlueprintService(controllerApiConfig.http.url + uri, controllerApiConfig.http.authToken, response);
   }
 
   async downloadFileFromBlueprintService(url: string, authToken: string, response: Response): Promise<Response> {
@@ -276,5 +276,17 @@ export class BlueprintRestController {
           resolve(response);
         });
     })
+  }
+
+  async uploadFileToBlueprintProcessorGrpc(file: multiparty.File, response: Response): Promise<Response> {
+    return new Promise<Response>((resolve, reject) => {
+      bluePrintManagementServiceGrpcClient.uploadBlueprint(file.path).then(output=>{
+        response.send(output.status.message);
+        resolve(response);
+      }, err=>{
+        response.status(500).send(err);
+        resolve(response);
+      });
+    });
   }
 }
