@@ -37,7 +37,18 @@ limitations under the License.
     <mat-sidenav #drawer mode="side" [(opened)]="opened" (opened)="events.push('open!')" (closed)="events.push('close!')">
         <mat-toolbar color="" primary>Menu</mat-toolbar>
         <mat-nav-list>
-            <a mat-list-item [routerLink]="['/blueprint']">Controller Blueprint</a>
+            <!-- <a mat-list-item [routerLink]="['/blueprint']">Controller Blueprint</a> -->
+            <nav class="ng-tns-c12-2 ng-star-inserted">
+                <!-- <button class="docs-nav-content-btn" cdkaccordionitem="" expanded="true"
+          aria-label="Form Controls, section toggle" aria-controls="panel-forms" aria-expanded="false">-->
+                <label>Controller Blueprint</label>
+                <!-- <mat-icon class="mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">
+            keyboard_arrow_down</mat-icon></button> -->
+                <ul>
+                    <a mat-list-item [routerLink]="['/blueprint']">Create Blueprint</a>
+                    <a mat-list-item [routerLink]="['/']">Search Blueprint</a>
+                </ul>
+            </nav>
             <a mat-list-item [routerLink]="['/resource-definition']">Resource Definition</a>
         </mat-nav-list>
     </mat-sidenav>
