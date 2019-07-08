@@ -34,7 +34,7 @@ public class BlueprintProcessorApplication {
 
     public static void main(String[] args) {
 
-        // This is required for ResolutionResultsServiceController.getStoredResult to accept a content-type value
+        // This is required for TemplateController.getStoredResult to accept a content-type value
         // as a request parameter, e.g. &format=application%2Fxml is accepted
         System.setProperty("org.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH", "true");
 
