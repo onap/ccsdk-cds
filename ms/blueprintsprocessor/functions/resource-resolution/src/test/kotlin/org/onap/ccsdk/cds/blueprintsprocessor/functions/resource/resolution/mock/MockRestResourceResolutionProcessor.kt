@@ -98,7 +98,7 @@ class MockRestResourceResolutionProcessor(private val blueprintRestLibPropertySe
             }
         } catch (e: Exception) {
             ResourceAssignmentUtils.setFailedResourceDataValue(executionRequest, e.message)
-            throw BluePrintProcessorException("Failed in template key ($executionRequest) assignments with: ${e.message}",
+            throw BluePrintProcessorException("Failed in template resolutionKey ($executionRequest) assignments with: ${e.message}",
                     e)
         }
     }
