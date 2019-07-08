@@ -10,7 +10,7 @@ The Controller Blueprint Archive is the overall service design, fully model-driv
 The CBA is .zip file which is saved in Controller Blueprint Database.
 
 Dynamic API:
-===========
+------------
 
 The nature of the API request and response is meant to be model driven and dynamic. They both share the same definition.
 
@@ -24,7 +24,7 @@ Then the content within this element is fully based on the workflow input and ou
 
 
 Enrichment:
-===========
+-----------
 
 Helps to generate complete valid CBA file.
 
