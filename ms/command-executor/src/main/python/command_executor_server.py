@@ -53,5 +53,5 @@ class CommandExecutorServer(CommandExecutor_pb2_grpc.CommandExecutorServiceServi
         if not handler.execute_command(request, results):
             self.logger.info("{} - Failed to executeCommand. {}".format(blueprint_id, results))
             return utils.build_response(request, results, False)
-        self.logger.info("{} - Execute command logs: {}".format(blueprint_id, results))
+        self.logger.info("{} - Execution finished successfully.".format(blueprint_id))
         return utils.build_response(request, results)
