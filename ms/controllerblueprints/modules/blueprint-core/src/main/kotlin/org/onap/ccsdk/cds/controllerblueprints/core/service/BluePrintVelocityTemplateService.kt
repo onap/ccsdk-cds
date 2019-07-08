@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.commons.lang3.BooleanUtils
 import org.apache.commons.lang3.StringUtils
 import org.apache.velocity.VelocityContext
-import org.apache.velocity.app.Velocity
+import org.apache.velocity.app.VelocityEngine
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintJsonNodeFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.removeNullNode
@@ -57,7 +57,15 @@ object BluePrintVelocityTemplateService {
     fun generateContent(template: String, jsonNode: JsonNode?, ignoreJsonNull: Boolean = false,
                         additionalContext: MutableMap<String, Any> = mutableMapOf()): String {
 
-        Velocity.init()
+        /*
+         *  create a new instance of the velocity engine
+         */
+        val velocity = VelocityEngine()
+
+        /*
+         *  initialize the engine
+         */
+        velocity.init()
 
         val velocityContext = VelocityContext()
         velocityContext.put("StringUtils", StringUtils::class.java)
@@ -76,9 +84,8 @@ object BluePrintVelocityTemplateService {
         }
 
         val stringWriter = StringWriter()
-        Velocity.evaluate(velocityContext, stringWriter, "TemplateData", template)
+        velocity.evaluate(velocityContext, stringWriter, "TemplateData", template)
         stringWriter.flush()
         return stringWriter.toString()
-
     }
 }
