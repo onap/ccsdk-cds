@@ -1,0 +1,9 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+1: Rodrigo Ottero <rodrigo.ottero@est.tech>
+Code-Review+1: Oleg Mitsura <omitsura@gmail.com>
+Code-Review+2: Dan Timoney <dtimoney@att.com>
+Submitted-by: Dan Timoney <dtimoney@att.com>
+Submitted-at: Tue, 09 Jul 2019 17:45:54 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/ccsdk/cds/+/90963
+Project: ccsdk/cds
+Branch: refs/heads/master
