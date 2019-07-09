@@ -101,7 +101,6 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
             return streamHandler.getFutureFromSendMessage(streamHandler.sendMessage(formattedRequest, messageId),
                 replyTimeout.toLong(), TimeUnit.SECONDS)
         } catch (e: InterruptedException) {
-            Thread.currentThread().interrupt()
             throw NetconfException("$deviceInfo: Interrupted while waiting for reply for request: $formattedRequest", e)
         } catch (e: TimeoutException) {
             throw NetconfException("$deviceInfo: Timed out while waiting for reply for request $formattedRequest after $replyTimeout sec.",
