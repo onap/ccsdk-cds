@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rpc message-id="customMessageId" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+<edit-config>
+<target>
+<customConfigType/>
+</target>
+<default-operation>customDefaultOperation</default-operation>
+<config xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0">
+customNewConfiguration
+</config>
+</edit-config>
+</rpc>
