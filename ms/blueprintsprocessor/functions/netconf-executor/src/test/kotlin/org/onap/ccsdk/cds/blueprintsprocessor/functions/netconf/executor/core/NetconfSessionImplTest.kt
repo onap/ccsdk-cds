@@ -32,7 +32,6 @@ import org.apache.sshd.client.future.DefaultOpenFuture
 import org.apache.sshd.client.session.ClientSession
 import org.apache.sshd.common.FactoryManager
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceResponse
@@ -278,7 +277,6 @@ class NetconfSessionImplTest {
         verify(exactly = 1) { netconfSessionSpy.clearReplies() }
     }
 
-    @Ignore //TODO
     //Test for handling CompletableFuture.get returns InterruptedException inside NetconfDeviceCommunicator
     @Test
     fun `syncRpc throws NetconfException if InterruptedException is caught`() {
@@ -360,19 +358,21 @@ class NetconfSessionImplTest {
     }
 
     @Test
-    @Ignore
-    //TODO: get 't' inside asyncRpc to be a Throwable
     fun `asyncRpc wraps exception`() {
-        assertFailsWith(exceptionClass = NetconfException::class, message = futureMsg) {
-            val netconfSessionSpy = spyk(netconfSession)
-            val futureRet: CompletableFuture<String> = CompletableFuture.supplyAsync {
-                throw Exception("blah")
-            }
-            futureRet.completeExceptionally(IOException("something is wrong"))
-            every { netconfCommunicator.sendMessage(any(), any()) } returns futureRet
-            //RUN
-            val rpcResultFuture = netconfSessionSpy.asyncRpc("0", "0")
+        val netconfSessionSpy = spyk(netconfSession)
+        every { netconfSessionSpy.checkAndReestablish() } just Runs
+        val futureRet: CompletableFuture<String> = CompletableFuture.supplyAsync {
+            throw Exception("blah")
         }
+        every { netconfCommunicator.sendMessage(any(), any()) } returns futureRet
+        //run the method
+        val rpcResultFuture = netconfSessionSpy.asyncRpc("0", "0")
+        every { netconfSessionSpy.checkAndReestablish() } just Runs
+        val e = assertFailsWith(exceptionClass = ExecutionException::class, message = futureMsg) {
+            rpcResultFuture.get()
+        }
+        val cause = e.cause
+        assertTrue { cause is NetconfException }
     }
 
     @Test
