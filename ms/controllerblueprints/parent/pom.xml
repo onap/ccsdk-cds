@@ -43,7 +43,8 @@
         <onap.logger.slf4j>1.2.2</onap.logger.slf4j>
         <powermock.version>1.7.4</powermock.version>
         <mockk.version>1.9</mockk.version>
-        <jinja.version>2.5.0</jinja.version>
+        <jinja.version>2.5.1</jinja.version>
+        <velocity.version>1.7</velocity.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -103,7 +104,7 @@
             <dependency>
                 <groupId>org.apache.velocity</groupId>
                 <artifactId>velocity</artifactId>
-                <version>1.7</version>
+                <version>${velocity.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.hubspot.jinjava</groupId>
