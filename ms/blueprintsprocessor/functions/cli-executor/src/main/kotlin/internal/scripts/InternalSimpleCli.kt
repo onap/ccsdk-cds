@@ -16,6 +16,8 @@
 
 @file:Suppress("unused")
 
+package internal.scripts
+
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentScriptExecutor
@@ -26,10 +28,10 @@ import org.slf4j.LoggerFactory
 
 open class TestCliScriptFunction : AbstractScriptComponentFunction() {
 
-    private val log = LoggerFactory.getLogger(TestCliScriptFunction::class.java.canonicalName)!!
+    private val log = LoggerFactory.getLogger(TestCliScriptFunction::class.java)!!
 
     override fun getName(): String {
-        return "SimpleCliConfigure"
+        return "TestCliScriptFunction"
     }
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {

@@ -1,6 +1,6 @@
 {
   "node_types": {
-    "component-cli-executor": {
+    "component-script-executor": {
       "description": "This is CLI Transaction Configuration Component API",
       "version": "1.0.0",
       "capabilities": {
@@ -9,7 +9,7 @@
         }
       },
       "interfaces": {
-        "ComponentCliExecutor": {
+        "ComponentScriptExecutor": {
           "operations": {
             "process": {
               "inputs": {
@@ -32,14 +32,6 @@
                   "description": "Kotlin Script class name or jython script name.",
                   "required": true,
                   "type": "string"
-                },
-                "instance-dependencies": {
-                  "description": "Instance names to inject to Jython or Kotlin Script.",
-                  "required": true,
-                  "type": "list",
-                  "entry_schema": {
-                    "type": "string"
-                  }
                 },
                 "dynamic-properties": {
                   "description": "Dynamic Json Content or DSL Json reference.",
