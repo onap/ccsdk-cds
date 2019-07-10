@@ -19,20 +19,21 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.ansible.executor
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
-import java.net.URI
-import java.net.URLEncoder
-import java.util.NoSuchElementException
-import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.*
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.*
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.rootFieldsToMap
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Component
+import java.net.URI
+import java.net.URLEncoder
+import java.util.*
 
 /**
  * ComponentRemoteAnsibleExecutor
@@ -155,11 +156,11 @@ open class ComponentRemoteAnsibleExecutor(private val blueprintRestLibPropertySe
         var response = awxClient.exchangeResource(GET, "/api/v2/job_templates/${jtId}/launch/","")
         // FIXME: handle non-successful SC
         val jtLaunchReqs: JsonNode = mapper.readTree(response.body)
-        var payload = prepareLaunchPayload(awxClient, jtLaunchReqs)
+        val payload = prepareLaunchPayload(awxClient, jtLaunchReqs)
         log.info("Running job with $payload, for requestId $processId.")
 
         // Launch the job for the targeted template
-        var jtLaunched : JsonNode = JacksonUtils.jsonNode("{}") as ObjectNode
+        var jtLaunched : JsonNode = JacksonUtils.objectMapper.createObjectNode()
         response = awxClient.exchangeResource(POST, "/api/v2/job_templates/${jtId}/launch/", payload)
         if (response.status in HTTP_SUCCESS) {
             jtLaunched = mapper.readTree(response.body)

@@ -18,8 +18,8 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
 
-import org.slf4j.LoggerFactory
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.MissingNode
 import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -28,6 +28,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.slf4j.LoggerFactory
 import java.io.File
 
 interface BluePrintRuntimeService<T> {
@@ -542,8 +543,10 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
 
         bluePrintContext.workflowByName(workflowName).inputs?.forEach { propertyName, property ->
             if (propertyName != dynamicInputPropertiesName) {
-                val valueNode: JsonNode = jsonNode.at(BluePrintConstants.PATH_DIVIDER + propertyName)
-                    ?: NullNode.getInstance()
+                val valueNode: JsonNode = jsonNode
+                        .at(BluePrintConstants.PATH_DIVIDER + propertyName).returnNullIfMissing()
+                        ?: property.defaultValue
+                        ?: MissingNode.getInstance()
                 setInputValue(propertyName, property, valueNode)
             }
         }
@@ -552,11 +555,12 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
 
         workflowDynamicInputs?.let {
             bluePrintContext.dataTypeByName("dt-$dynamicInputPropertiesName")
-                ?.properties?.forEach { propertyName, property ->
+                    ?.properties?.forEach { propertyName, property ->
                 val valueNode: JsonNode =
-                    workflowDynamicInputs.at(BluePrintConstants.PATH_DIVIDER + propertyName).returnNullIfMissing()
-                        ?: property.defaultValue
-                        ?: NullNode.getInstance()
+                        workflowDynamicInputs
+                                .at(BluePrintConstants.PATH_DIVIDER + propertyName).returnNullIfMissing()
+                                ?: property.defaultValue
+                                ?: MissingNode.getInstance()
                 setInputValue(propertyName, property, valueNode)
 
             }
