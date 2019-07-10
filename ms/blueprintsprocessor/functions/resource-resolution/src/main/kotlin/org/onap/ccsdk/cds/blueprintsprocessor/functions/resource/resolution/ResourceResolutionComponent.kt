@@ -36,10 +36,10 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
 
         val occurrence = getOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE).asInt()
-        val resolutionKey = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY)?.asText() ?: ""
+        val resolutionKey = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY)?.textValue() ?: ""
         val storeResult = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT)?.asBoolean() ?: false
-        val resourceId = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID)?.asText() ?: ""
-        val resourceType = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE)?.asText() ?: ""
+        val resourceId = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID)?.textValue() ?: ""
+        val resourceType = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE)?.textValue() ?: ""
 
         val properties: MutableMap<String, Any> = mutableMapOf()
         properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] = storeResult
