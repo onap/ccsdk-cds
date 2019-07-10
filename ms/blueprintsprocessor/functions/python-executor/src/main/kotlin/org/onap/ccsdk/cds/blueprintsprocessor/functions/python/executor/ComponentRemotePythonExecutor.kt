@@ -79,16 +79,8 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
         val argsNode = getOptionalOperationInput(INPUT_ARGUMENT_PROPERTIES)?.returnNullIfMissing()
 
         // This prevents unescaping values, as well as quoting the each parameter, in order to allow for spaces in values
-        var args = ""
-        argsNode?.fields()?.forEach {
-            if (it.value.isValueNode) {
-                args = "$args ${it.value}"
-            } else {
-                it.value.fields().forEach { item ->
-                    args = "$args ${item.value}"
-                }
-            }
-        }
+        val args = getOptionalOperationInput(INPUT_ARGUMENT_PROPERTIES)?.returnNullIfMissing()
+            ?.rootFieldsToMap()?.toSortedMap()?.values?.joinToString(" ") { formatNestedJsonNode(it) }
 
         val command = getOperationInput(INPUT_COMMAND).asText()
         var scriptCommand = command.replace(pythonScript.name, pythonScript.absolutePath)
@@ -140,5 +132,15 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         bluePrintRuntimeService.getBluePrintError()
                 .addError("Failed in ComponentJythonExecutor : ${runtimeException.message}")
+    }
+
+    private fun formatNestedJsonNode(node: JsonNode): String {
+        val sb = StringBuilder()
+        if (node.isValueNode) {
+            sb.append(" $node")
+        } else {
+            node.forEach { sb.append(" $it") }
+        }
+        return sb.toString()
     }
 }

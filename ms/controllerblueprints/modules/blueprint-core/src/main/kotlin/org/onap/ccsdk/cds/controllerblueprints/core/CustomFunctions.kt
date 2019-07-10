@@ -135,7 +135,7 @@ fun JsonNode.returnNullIfMissing(): JsonNode? {
  */
 fun JsonNode.rootFieldsToMap(): MutableMap<String, JsonNode> {
     if (this is ObjectNode) {
-        val propertyMap: MutableMap<String, JsonNode> = hashMapOf()
+        val propertyMap: MutableMap<String, JsonNode> = linkedMapOf()
         this.fields().forEach {
             propertyMap[it.key] = it.value
         }
