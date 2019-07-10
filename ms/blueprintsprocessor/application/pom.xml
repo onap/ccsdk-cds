@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
         <artifactId>parent</artifactId>
-        <version>0.5.2-SNAPSHOT</version>
+        <version>0.6.0-SNAPSHOT</version>
         <relativePath>../parent</relativePath>
     </parent>
     <artifactId>application</artifactId>
@@ -56,18 +56,8 @@
         <!-- North Bound -->
         <dependency>
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-            <artifactId>designer-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
             <artifactId>resource-api</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-            <artifactId>selfservice-api</artifactId>
-        </dependency>
-
-        <!-- Functions -->
         <dependency>
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
             <artifactId>python-executor</artifactId>
@@ -88,7 +78,10 @@
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
             <artifactId>cli-executor</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <artifactId>selfservice-api</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
@@ -111,22 +104,6 @@
         <dependency>
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.nhaarman.mockitokotlin2</groupId>
-            <artifactId>mockito-kotlin</artifactId>
-            <version>2.1.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

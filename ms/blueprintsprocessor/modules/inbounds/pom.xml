@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
         <artifactId>modules</artifactId>
-        <version>0.5.2-SNAPSHOT</version>
+        <version>0.6.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>inbounds</artifactId>
@@ -29,7 +29,6 @@
     <description>Blueprints Processor Inbounds</description>
 
     <modules>
-        <module>designer-api</module>
         <module>resource-api</module>
         <module>selfservice-api</module>
     </modules>

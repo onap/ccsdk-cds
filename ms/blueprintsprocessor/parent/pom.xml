@@ -19,7 +19,7 @@
     <parent>
         <groupId>org.onap.ccsdk.cds</groupId>
         <artifactId>blueprintsprocessor</artifactId>
-        <version>0.5.2-SNAPSHOT</version>
+        <version>0.6.0-SNAPSHOT</version>
     </parent>
     <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
     <artifactId>parent</artifactId>
@@ -27,8 +27,11 @@
     <name>Blueprints Processor Parent</name>
     <description>Blueprints Processor Parent</description>
     <properties>
+        <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
+        <grpc.version>1.18.0</grpc.version>
         <sshd.version>2.2.0</sshd.version>
         <jsch.version>0.1.55</jsch.version>
+        <protobuff.java.utils.version>3.6.1</protobuff.java.utils.version>
         <spring.kafka.version>2.2.6.RELEASE</spring.kafka.version>
         <kafka.version>2.2.0</kafka.version>
         <eelf.version>1.0.0</eelf.version>
@@ -41,10 +44,10 @@
         <h2database.version>1.4.197</h2database.version>
         <onap.logger.slf4j>1.2.2</onap.logger.slf4j>
         <powermock.version>1.7.4</powermock.version>
+        <mockk.version>1.9</mockk.version>
         <dmaap.client.version>1.1.5</dmaap.client.version>
         <jinja.version>2.5.1</jinja.version>
         <velocity.version>1.7</velocity.version>
-        <json.unit.version>2.8.0</json.unit.version>
         <mockkserver.version>5.5.1</mockkserver.version>
         <jsoup.version>1.10.3</jsoup.version>
     </properties>
@@ -123,6 +126,11 @@
                 <version>2.6</version>
             </dependency>
             <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-compress</artifactId>
+                <version>1.15</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.velocity</groupId>
                 <artifactId>velocity</artifactId>
                 <version>${velocity.version}</version>
@@ -142,12 +150,6 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.javacrumbs.json-unit</groupId>
-                <artifactId>json-unit-json-path</artifactId>
-                <version>${json.unit.version}</version>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.python</groupId>
@@ -368,13 +370,6 @@
                 <artifactId>workflow-service</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
-            <!-- North Bound -->
-            <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-                <artifactId>designer-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>resource-api</artifactId>
@@ -447,11 +442,6 @@
             <dependency>
                 <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
                 <artifactId>blueprint-validation</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
-                <artifactId>service</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -533,6 +523,10 @@
             <artifactId>commons-io</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
             <exclusions>
@@ -541,10 +535,6 @@
                     <artifactId>slf4j-api</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>net.javacrumbs.json-unit</groupId>
-            <artifactId>json-unit-json-path</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
