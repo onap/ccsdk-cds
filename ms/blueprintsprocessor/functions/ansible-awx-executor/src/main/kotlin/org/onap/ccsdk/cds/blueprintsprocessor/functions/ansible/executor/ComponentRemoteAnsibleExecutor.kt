@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2019 Bell Canada.
+ *  Modifications Copyright © 2018-2019 IBM.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,21 +19,24 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.ansible.executor
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.node.ObjectNode
-import java.net.URI
-import java.net.URLEncoder
-import java.util.NoSuchElementException
-import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.*
+import com.fasterxml.jackson.databind.node.TextNode
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.*
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
+import org.onap.ccsdk.cds.controllerblueprints.core.isNotNull
+import org.onap.ccsdk.cds.controllerblueprints.core.rootFieldsToMap
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Component
+import java.net.URI
+import java.net.URLEncoder
+import java.util.*
 
 /**
  * ComponentRemoteAnsibleExecutor
@@ -99,7 +103,7 @@ open class ComponentRemoteAnsibleExecutor(private val blueprintRestLibPropertySe
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         val message = "Error in ComponentRemoteAnsibleExecutor : ${runtimeException.message}"
-        log.error(message,runtimeException)
+        log.error(message, runtimeException)
         setNodeOutputErrors(ATTRIBUTE_EXEC_CMD_STATUS_ERROR, message)
     }
 
@@ -123,7 +127,7 @@ open class ComponentRemoteAnsibleExecutor(private val blueprintRestLibPropertySe
 
         try {
             return blueprintRestLibPropertyService.blueprintWebClientService(endpointSelector)
-        } catch (e : NoSuchElementException) {
+        } catch (e: NoSuchElementException) {
             throw IllegalArgumentException("No value provided for input selector $endpointSelector", e)
         }
     }
@@ -131,13 +135,13 @@ open class ComponentRemoteAnsibleExecutor(private val blueprintRestLibPropertySe
     /**
      * Finds the job template ID based on the job template name provided in the request
      */
-    private fun lookupJobTemplateIDByName(awxClient : BlueprintWebClientService, job_template_name: String?): String {
-        val encodedJTName = URI(null,null,
+    private fun lookupJobTemplateIDByName(awxClient: BlueprintWebClientService, job_template_name: String?): String {
+        val encodedJTName = URI(null, null,
                 "/api/v2/job_templates/${job_template_name}/",
-                null,null).rawPath
+                null, null).rawPath
 
         // Get Job Template details by name
-        var response = awxClient.exchangeResource(GET, encodedJTName,"")
+        var response = awxClient.exchangeResource(GET, encodedJTName, "")
         val jtDetails: JsonNode = mapper.readTree(response.body)
         return jtDetails.at("/id").asText()
     }
@@ -148,18 +152,18 @@ open class ComponentRemoteAnsibleExecutor(private val blueprintRestLibPropertySe
      * its execution. Finally, it retrieves the job results via the stdout api.
      * The status and output attributes are populated in the process.
      */
-    private fun runJobTemplateOnAWX(awxClient : BlueprintWebClientService, job_template_name: String?, jtId: String) {
-        setNodeOutputProperties( "preparing".asJsonPrimitive(), "".asJsonPrimitive())
+    private fun runJobTemplateOnAWX(awxClient: BlueprintWebClientService, job_template_name: String?, jtId: String) {
+        setNodeOutputProperties("preparing".asJsonPrimitive(), "".asJsonPrimitive())
 
         // Get Job Template requirements
-        var response = awxClient.exchangeResource(GET, "/api/v2/job_templates/${jtId}/launch/","")
+        var response = awxClient.exchangeResource(GET, "/api/v2/job_templates/${jtId}/launch/", "")
         // FIXME: handle non-successful SC
         val jtLaunchReqs: JsonNode = mapper.readTree(response.body)
-        var payload = prepareLaunchPayload(awxClient, jtLaunchReqs)
+        val payload = prepareLaunchPayload(awxClient, jtLaunchReqs)
         log.info("Running job with $payload, for requestId $processId.")
 
         // Launch the job for the targeted template
-        var jtLaunched : JsonNode = JacksonUtils.jsonNode("{}") as ObjectNode
+        var jtLaunched: JsonNode = JacksonUtils.objectMapper.createObjectNode()
         response = awxClient.exchangeResource(POST, "/api/v2/job_templates/${jtId}/launch/", payload)
         if (response.status in HTTP_SUCCESS) {
             jtLaunched = mapper.readTree(response.body)
@@ -188,9 +192,9 @@ open class ComponentRemoteAnsibleExecutor(private val blueprintRestLibPropertySe
             // Get job execution results (stdout)
             val plainTextHeaders = mutableMapOf<String, String>()
             plainTextHeaders["Content-Type"] = "text/plain ;utf-8"
-            response = awxClient.exchangeResource(GET, "/api/v2/jobs/${jobId}/stdout/?format=txt","", plainTextHeaders)
+            response = awxClient.exchangeResource(GET, "/api/v2/jobs/${jobId}/stdout/?format=txt", "", plainTextHeaders)
 
-            setNodeOutputProperties( jobStatus.asJsonPrimitive(), response.body.asJsonPrimitive())
+            setNodeOutputProperties(jobStatus.asJsonPrimitive(), response.body.asJsonPrimitive())
         } else {
             // The job template requirements were not fulfilled with the values passed in. The message below will
             // provide more information via the response, like the ignored_fields, or variables_needed_to_start,
@@ -198,7 +202,7 @@ open class ComponentRemoteAnsibleExecutor(private val blueprintRestLibPropertySe
             val message = "Execution of job template $job_template_name could not be started for requestId $processId." +
                     " (Response: ${response.body}) "
             log.error(message)
-            setNodeOutputErrors( ATTRIBUTE_EXEC_CMD_STATUS_ERROR, message)
+            setNodeOutputErrors(ATTRIBUTE_EXEC_CMD_STATUS_ERROR, message)
         }
     }
 
@@ -207,51 +211,49 @@ open class ComponentRemoteAnsibleExecutor(private val blueprintRestLibPropertySe
      * by applying the overrides that were provided
      * and allowed by the template definition flags in jtLaunchReqs
      */
-    private fun prepareLaunchPayload(awxClient : BlueprintWebClientService, jtLaunchReqs: JsonNode): String {
-        val payload = JacksonUtils.jsonNode("{}") as ObjectNode
+    private fun prepareLaunchPayload(awxClient: BlueprintWebClientService, jtLaunchReqs: JsonNode): String {
+        val payload = JacksonUtils.objectMapper.createObjectNode()
 
         // Parameter defaults
-        val limitProp = getOptionalOperationInput(INPUT_LIMIT_TO_HOST)?.asText()
-        val tagsProp = getOptionalOperationInput(INPUT_TAGS)?.asText()
-        val skipTagsProp = getOptionalOperationInput(INPUT_SKIP_TAGS)?.asText()
-        val inventoryProp : String? = getOptionalOperationInput(INPUT_INVENTORY)?.asText()
-        val extraArgs : JsonNode = getOperationInput(INPUT_EXTRA_VARS)
+        val limitProp = getOptionalOperationInput(INPUT_LIMIT_TO_HOST)
+        val tagsProp = getOptionalOperationInput(INPUT_TAGS)
+        val skipTagsProp = getOptionalOperationInput(INPUT_SKIP_TAGS)
+        val inventoryProp = getOptionalOperationInput(INPUT_INVENTORY)
+        val extraArgs = getOperationInput(INPUT_EXTRA_VARS)
 
-        val askLimitOnLaunch = jtLaunchReqs.at( "/ask_limit_on_launch").asBoolean()
-        if (askLimitOnLaunch && limitProp!!.isNotEmpty()) {
-            payload.put(INPUT_LIMIT_TO_HOST, limitProp)
+        val askLimitOnLaunch = jtLaunchReqs.at("/ask_limit_on_launch").asBoolean()
+        if (askLimitOnLaunch && limitProp.isNotNull()) {
+            payload.set(INPUT_LIMIT_TO_HOST, limitProp)
         }
         val askTagsOnLaunch = jtLaunchReqs.at("/ask_tags_on_launch").asBoolean()
-        if (askTagsOnLaunch && tagsProp!!.isNotEmpty()) {
-            payload.put(INPUT_TAGS, tagsProp)
+        if (askTagsOnLaunch && tagsProp.isNotNull()) {
+            payload.set(INPUT_TAGS, tagsProp)
         }
-        if (askTagsOnLaunch && skipTagsProp!!.isNotEmpty()) {
-            payload.put("skip_tags", skipTagsProp)
+        if (askTagsOnLaunch && skipTagsProp.isNotNull()) {
+            payload.set("skip_tags", skipTagsProp)
         }
         val askInventoryOnLaunch = jtLaunchReqs.at("/ask_inventory_on_launch").asBoolean()
-        if (askInventoryOnLaunch && inventoryProp != null) {
-            var inventoryKeyId = inventoryProp.toIntOrNull()
-            if (inventoryKeyId == null) {
-                inventoryKeyId = resolveInventoryIdByName(awxClient, inventoryProp)
+        if (askInventoryOnLaunch && inventoryProp.isNotNull()) {
+            var inventoryKeyId = if (inventoryProp is TextNode) {
+                resolveInventoryIdByName(awxClient, inventoryProp!!.textValue())?.asJsonPrimitive()
+            } else {
+                inventoryProp
             }
-            payload.put(INPUT_INVENTORY, inventoryKeyId)
+            payload.set(INPUT_INVENTORY, inventoryKeyId)
         }
         val askVariablesOnLaunch = jtLaunchReqs.at("/ask_variables_on_launch").asBoolean()
         if (askVariablesOnLaunch && extraArgs != null) {
-            payload.put("extra_vars", extraArgs)
+            payload.set("extra_vars", extraArgs)
         }
-
-        val strPayload = "$payload"
-
-        return strPayload
+        return payload.asJsonString(false)
     }
 
-    private fun resolveInventoryIdByName(awxClient : BlueprintWebClientService, inventoryProp: String): Int? {
-        var invId : Int? = null
+    private fun resolveInventoryIdByName(awxClient: BlueprintWebClientService, inventoryProp: String): Int? {
+        var invId: Int? = null
 
         // Get Inventory by name
         val encoded = URLEncoder.encode(inventoryProp)
-        val response = awxClient.exchangeResource(GET,"/api/v2/inventories/?name=$encoded","")
+        val response = awxClient.exchangeResource(GET, "/api/v2/inventories/?name=$encoded", "")
         if (response.status in HTTP_SUCCESS) {
             // Extract the inventory ID from response
             val invDetails = mapper.readTree(response.body)

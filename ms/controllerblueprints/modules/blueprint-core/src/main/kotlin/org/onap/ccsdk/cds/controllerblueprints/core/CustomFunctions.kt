@@ -40,7 +40,7 @@ fun String.isJson(): Boolean {
 }
 
 fun Any.asJsonString(intend: Boolean? = false): String {
-    return JacksonUtils.getJson(this, true)
+    return JacksonUtils.getJson(this, intend!!)
 }
 
 fun String.asJsonPrimitive(): TextNode {
@@ -128,6 +128,18 @@ fun JsonNode.returnNullIfMissing(): JsonNode? {
     return if (this is NullNode || this is MissingNode) {
         null
     } else this
+}
+
+fun <T : JsonNode> T?.isNull(): Boolean {
+    return if (this == null || this is NullNode || this is MissingNode) {
+        true
+    } else false
+}
+
+fun <T : JsonNode> T?.isNotNull(): Boolean {
+    return if (this == null || this is NullNode || this is MissingNode) {
+        false
+    } else true
 }
 
 /**
