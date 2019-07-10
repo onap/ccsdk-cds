@@ -18,24 +18,21 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
 
-import org.slf4j.LoggerFactory
 import com.fasterxml.jackson.databind.JsonNode
 import kotlinx.coroutines.runBlocking
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ToscaMetaData
-import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
-import org.onap.ccsdk.cds.controllerblueprints.core.readNBLines
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintImportService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRuntimeService
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.util.*
 
 class BluePrintMetadataUtils {
     companion object {
-        private val log= LoggerFactory.getLogger(this::class.toString())
+        private val log = LoggerFactory.getLogger(this::class.toString())
 
 
         suspend fun toscaMetaData(basePath: String): ToscaMetaData {

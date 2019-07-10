@@ -21,6 +21,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintScriptsService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintFunctionNode
+import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintScriptsServiceImpl
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationContext
@@ -28,15 +29,14 @@ import org.springframework.stereotype.Service
 
 @Service
 class ComponentFunctionScriptingService(private val applicationContext: ApplicationContext,
-                                        private val bluePrintScriptsService: BluePrintScriptsService,
                                         private val blueprintJythonService: BlueprintJythonService) {
 
     private val log = LoggerFactory.getLogger(ComponentFunctionScriptingService::class.java)
 
     suspend fun <T : AbstractScriptComponentFunction> scriptInstance(componentFunction: AbstractComponentFunction,
-    scriptType: String,
-                                                             scriptClassReference: String,
-                                                             instanceDependencies: List<String>): T {
+                                                                     scriptType: String,
+                                                                     scriptClassReference: String,
+                                                                     instanceDependencies: List<String>): T {
 
         log.info("creating component function of script type($scriptType), reference name($scriptClassReference) and " +
                 "instanceDependencies($instanceDependencies)")
@@ -66,14 +66,16 @@ class ComponentFunctionScriptingService(private val applicationContext: Applicat
 
 
     suspend fun <T : BlueprintFunctionNode<*, *>> scriptInstance(bluePrintContext: BluePrintContext, scriptType: String,
-                                                         scriptClassReference: String): T {
+                                                                 scriptClassReference: String): T {
         var scriptComponent: T? = null
 
         when (scriptType) {
             BluePrintConstants.SCRIPT_INTERNAL -> {
+                val bluePrintScriptsService: BluePrintScriptsService = BluePrintScriptsServiceImpl()
                 scriptComponent = bluePrintScriptsService.scriptInstance<T>(scriptClassReference)
             }
             BluePrintConstants.SCRIPT_KOTLIN -> {
+                val bluePrintScriptsService: BluePrintScriptsService = BluePrintScriptsServiceImpl()
                 scriptComponent = bluePrintScriptsService.scriptInstance<T>(bluePrintContext, scriptClassReference, false)
             }
             BluePrintConstants.SCRIPT_JYTHON -> {

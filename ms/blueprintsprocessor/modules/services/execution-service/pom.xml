@@ -38,10 +38,6 @@
             <artifactId>blueprint-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
-            <artifactId>blueprint-scripts</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
             <artifactId>processor-core</artifactId>
         </dependency>

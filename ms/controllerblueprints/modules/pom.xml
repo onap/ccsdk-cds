@@ -31,7 +31,6 @@
         <module>blueprint-core</module>
         <module>resource-dict</module>
         <module>db-resources</module>
-        <module>blueprint-scripts</module>
         <module>blueprint-validation</module>
         <module>service</module>
     </modules>
