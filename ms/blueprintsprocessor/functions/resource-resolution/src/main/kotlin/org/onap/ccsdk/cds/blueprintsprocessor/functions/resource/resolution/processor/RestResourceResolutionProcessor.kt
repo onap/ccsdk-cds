@@ -88,7 +88,11 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                 val response = restClientService.exchangeResource(verb, urlPath, payload)
                 val responseStatusCode = response.status
                 val responseBody = response.body
-                if (responseStatusCode in 200..299 && !responseBody.isBlank()) {
+                val outputKeyMapping = sourceProperties.outputKeyMapping
+                if (responseStatusCode in 200..299 && outputKeyMapping.isNullOrEmpty()) {
+                    logger.info("AS>> outputKeyMapping==null, will not populateResource")
+                }
+                else if (responseStatusCode in 200..299 && !responseBody.isBlank()) {
                     populateResource(resourceAssignment, sourceProperties, responseBody, path)
                 } else {
                     val errMsg =
