@@ -25,6 +25,7 @@
         <artifactId>parent</artifactId>
         <version>0.5.0-SNAPSHOT</version>
         <relativePath>../parent</relativePath>
+
     </parent>
     <artifactId>application</artifactId>
     <packaging>jar</packaging>
@@ -184,7 +185,6 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
                 <configuration>
-                    <!-- <skip>${skip.compile}</skip>-->
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
