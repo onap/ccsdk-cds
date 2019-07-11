@@ -55,6 +55,7 @@
         <jinja.version>2.5.1</jinja.version>
         <velocity.version>1.7</velocity.version>
         <mockkserver.version>5.5.1</mockkserver.version>
+        <jsoup.version>1.10.3</jsoup.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -65,6 +66,12 @@
                 <version>${spring.boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jsoup</groupId>
+                <artifactId>jsoup</artifactId>
+                <version>${jsoup.version}</version>
             </dependency>
 
             <dependency>
