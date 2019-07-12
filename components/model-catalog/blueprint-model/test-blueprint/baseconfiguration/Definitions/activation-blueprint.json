@@ -310,18 +310,17 @@
         }
       },
       "activate-cli": {
-        "type": "component-cli-executor",
+        "type": "component-script-executor",
         "interfaces": {
-          "ComponentCliExecutor": {
+          "ComponentScriptExecutor": {
             "operations": {
               "process": {
                 "implementation": {
                   "primary": "component-script"
                 },
                 "inputs": {
-                  "script-type": "kotlin",
-                  "script-class-reference": "InternalSimpleCli_cba$TestCliScriptFunction",
-                  "instance-dependencies": []
+                  "script-type": "internal",
+                  "script-class-reference": "internal.scripts.TestCliScriptFunction"
                 },
                 "outputs": {
                   "response-data": "",
@@ -440,7 +439,7 @@
             "target": "activate-cli",
             "activities": [
               {
-                "call_operation": "ComponentCliExecutor.process"
+                "call_operation": "ComponentScriptExecutor.process"
               }
             ]
           }

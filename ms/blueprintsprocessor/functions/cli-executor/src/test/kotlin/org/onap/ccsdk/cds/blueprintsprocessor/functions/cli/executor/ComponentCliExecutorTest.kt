@@ -56,12 +56,12 @@ import kotlin.test.assertNotNull
 class ComponentCliExecutorTest {
 
     @Autowired
-    lateinit var componentCliExecutor: ComponentCliExecutor
+    lateinit var componentScriptExecutor: ComponentScriptExecutor
 
     @Test
     fun `test CLI Component Instance`() {
         runBlocking {
-            assertNotNull(componentCliExecutor, "failed to get ComponentCliExecutor instance")
+            assertNotNull(componentScriptExecutor, "failed to get ComponentCliExecutor instance")
             val executionServiceInput = ExecutionServiceInput().apply {
                 commonHeader = CommonHeader().apply {
                     requestId = "1234"
@@ -72,8 +72,8 @@ class ComponentCliExecutorTest {
                 payload = JacksonUtils.jsonNode("{}") as ObjectNode
             }
             val bluePrintRuntime = mockk<DefaultBluePrintRuntimeService>("1234")
-            componentCliExecutor.bluePrintRuntimeService = bluePrintRuntime
-            componentCliExecutor.stepName = "sample-step"
+            componentScriptExecutor.bluePrintRuntimeService = bluePrintRuntime
+            componentScriptExecutor.stepName = "sample-step"
 
             val operationInputs = hashMapOf<String, JsonNode>()
             operationInputs[BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE] = "activate-cli".asJsonPrimitive()
@@ -81,7 +81,7 @@ class ComponentCliExecutorTest {
             operationInputs[BluePrintConstants.PROPERTY_CURRENT_OPERATION] = "operationName".asJsonPrimitive()
             operationInputs[ComponentScriptExecutor.SCRIPT_TYPE] = BluePrintConstants.SCRIPT_INTERNAL.asJsonPrimitive()
             operationInputs[ComponentScriptExecutor.SCRIPT_CLASS_REFERENCE] =
-                    "InternalSimpleCli_cba\$TestCliScriptFunction".asJsonPrimitive()
+                    "internal.scripts.TestCliScriptFunction".asJsonPrimitive()
 
             val stepInputData = StepData().apply {
                 name = "activate-cli"
@@ -102,7 +102,7 @@ class ComponentCliExecutorTest {
                         "interfaceName", "operationName")
             } returns operationOutputs
 
-            componentCliExecutor.applyNB(executionServiceInput)
+            componentScriptExecutor.applyNB(executionServiceInput)
         }
     }
 }

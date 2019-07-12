@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-
+package cba.scripts.capability.cli
 
 open class Check : CliComponentFunction() {
 
