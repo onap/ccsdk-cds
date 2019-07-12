@@ -44,6 +44,11 @@ committers:
       company: 'Huawei'
       id: 'agrawalgaurav'
       timezone: 'Asia/Kolkata'
+    - name: 'Brinda Santh Muthuramalingam'
+      email: 'brindasanth@in.ibm.com'
+      company: 'IBM'
+      id: 'brindasanthm'
+      timezone: 'America/New York''
 repositories:
     - ccsdk-apps
     - ccsdk-cds
