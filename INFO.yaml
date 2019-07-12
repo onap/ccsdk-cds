@@ -22,7 +22,7 @@ realtime_discussion: ''
 meetings:
     - type: 'zoom'
       agenda: 'https://wiki.onap.org/display/DW/Common+Controller+SDK+Project'
-      url: 'https://wiki.onap.org/display/DW/Common+Controller+SDK+Project#CommonControllerSDKProject-MeetingMinutes'
+      url: 'https://wiki.onap.org/display/DW/Common+Controller+SDK+Project'
       server: 'n/a'
       channel: 'n/a'
       repeats: 'weekly'
@@ -44,6 +44,11 @@ committers:
       company: 'Huawei'
       id: 'agrawalgaurav'
       timezone: 'Asia/Kolkata'
+    - name: 'Brinda Santh Muthuramalingam'
+      email: 'brindasanth@in.ibm.com'
+      company: 'IBM'
+      id: 'brindasanthm'
+      timezone: 'America/New York'
 repositories:
     - ccsdk-apps
     - ccsdk-cds
@@ -64,8 +69,9 @@ tsc:
         - type: 'Deletion'
           name: 'Ryan Goulding'
           link: 'https://lists.onap.org/g/onap-tsc/message/4261'
-    changes:
         - type: 'Addition'
           name: 'Gaurav Agrawal'
           link: 'https://lists.onap.org/g/onap-tsc/message/4324'
-
+        - type: 'Addition'
+          name: 'Brinda Santh Muthuramalingam'
+          link: 'https://lists.onap.org/g/onap-tsc/message/5208'
