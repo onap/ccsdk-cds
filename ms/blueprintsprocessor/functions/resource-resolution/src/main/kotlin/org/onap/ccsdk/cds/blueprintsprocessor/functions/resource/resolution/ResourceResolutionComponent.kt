@@ -23,6 +23,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractCompone
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.asObjectNode
+import org.onap.ccsdk.cds.controllerblueprints.core.returnNullIfMissing
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
@@ -31,32 +32,33 @@ import org.springframework.stereotype.Component
 @Component("component-resource-resolution")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class ResourceResolutionComponent(private val resourceResolutionService: ResourceResolutionService) :
-    AbstractComponentFunction() {
+        AbstractComponentFunction() {
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
 
         val occurrence = getOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE).asInt()
-        val resolutionKey = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY)?.textValue() ?: ""
+        val resolutionKey = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY)?.returnNullIfMissing() ?: ""
         val storeResult = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT)?.asBoolean() ?: false
-        val resourceId = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID)?.textValue() ?: ""
-        val resourceType = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE)?.textValue() ?: ""
+        val resourceId = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID)?.returnNullIfMissing() ?: ""
+
+        val resourceType = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE)?.returnNullIfMissing() ?: ""
 
         val properties: MutableMap<String, Any> = mutableMapOf()
         properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] = storeResult
-        properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] = resolutionKey
-        properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] = resourceId
-        properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] = resourceType
+        properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] = resolutionKey.toString()
+        properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] = resourceId.toString()
+        properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] = resourceType.toString()
         properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] = occurrence
 
         val jsonResponse = JsonNodeFactory.instance.objectNode()
 
         // validate inputs if we need to store the resource and template resolution.
         if (storeResult) {
-            if (resolutionKey.isNotEmpty() && (resourceId.isNotEmpty() || resourceType.isNotEmpty())) {
+            if (resolutionKey.toString().isNotEmpty() && (resourceId.toString().isNotEmpty() || resourceType.toString().isNotEmpty())) {
                 throw BluePrintProcessorException("Can't proceed with the resolution: either provide resolution-key OR combination of resource-id and resource-type.")
-            } else if ((resourceType.isNotEmpty() && resourceId.isEmpty()) || (resourceType.isEmpty() && resourceId.isNotEmpty())) {
+            } else if ((resourceType.toString().isNotEmpty() && resourceId.toString().isEmpty()) || (resourceType.toString().isEmpty() && resourceId.toString().isNotEmpty())) {
                 throw BluePrintProcessorException("Can't proceed with the resolution: both resource-id and resource-type should be provided, one of them is missing.")
-            } else if (resourceType.isEmpty() && resourceId.isEmpty() && resolutionKey.isEmpty()) {
+            } else if (resourceType.toString().isEmpty() && resourceId.toString().isEmpty() && resolutionKey.toString().isEmpty()) {
                 throw BluePrintProcessorException("Can't proceed with the resolution: can't persist resolution without a correlation key. " +
                         "Either provide a resolution-key OR combination of resource-id and resource-type OR set `storeResult` to false.")
             }
@@ -69,9 +71,9 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
             properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] = j
 
             val response = resourceResolutionService.resolveResources(bluePrintRuntimeService,
-                nodeTemplateName,
-                artifactPrefixNames,
-                properties)
+                    nodeTemplateName,
+                    artifactPrefixNames,
+                    properties)
 
             // provide indexed result in output if we have multiple resolution
             if (occurrence != 1) {
@@ -84,7 +86,7 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
 
         // Set Output Attributes
         bluePrintRuntimeService.setNodeTemplateAttributeValue(nodeTemplateName,
-            ResourceResolutionConstants.OUTPUT_ASSIGNMENT_PARAMS, jsonResponse)
+                ResourceResolutionConstants.OUTPUT_ASSIGNMENT_PARAMS, jsonResponse)
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
