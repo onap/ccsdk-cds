@@ -17,6 +17,8 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.MissingNode
+import com.fasterxml.jackson.databind.node.NullNode
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -29,7 +31,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-import java.lang.RuntimeException
 import kotlin.test.assertEquals
 import kotlin.test.fail
 
@@ -79,7 +80,7 @@ class ResourceResolutionComponentTest {
                 resourceResolutionComponent.processNB(executionRequest)
             } catch (e: BluePrintProcessorException) {
                 assertEquals("Can't proceed with the resolution: either provide resolution-key OR combination of resource-id and resource-type.",
-                    e.message)
+                        e.message)
                 return@runBlocking
             }
             fail()
@@ -88,15 +89,15 @@ class ResourceResolutionComponentTest {
 
     @Test
     fun processNBWithResourceIdTestException() {
-        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] = "".asJsonPrimitive()
-        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] = "".asJsonPrimitive()
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] = NullNode.getInstance()
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] = NullNode.getInstance()
 
         runBlocking {
             try {
                 resourceResolutionComponent.processNB(executionRequest)
             } catch (e: BluePrintProcessorException) {
                 assertEquals("Can't proceed with the resolution: both resource-id and resource-type should be provided, one of them is missing.",
-                    e.message)
+                        e.message)
                 return@runBlocking
             }
             fail()
@@ -105,9 +106,9 @@ class ResourceResolutionComponentTest {
 
     @Test
     fun processNBWithEmptyResourceTypeResourceIdResolutionKeyTestException() {
-        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] = "".asJsonPrimitive()
-        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] = "".asJsonPrimitive()
-        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] = "".asJsonPrimitive()
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] = MissingNode.getInstance()
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] = NullNode.getInstance()
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] = NullNode.getInstance()
 
         runBlocking {
             try {
@@ -115,7 +116,7 @@ class ResourceResolutionComponentTest {
             } catch (e: BluePrintProcessorException) {
                 assertEquals("Can't proceed with the resolution: can't persist resolution without a correlation key. " +
                         "Either provide a resolution-key OR combination of resource-id and resource-type OR set `storeResult` to false.",
-                    e.message)
+                        e.message)
                 return@runBlocking
             }
             fail()
@@ -124,7 +125,7 @@ class ResourceResolutionComponentTest {
 
     @Test
     fun processNBTest() {
-        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] = "".asJsonPrimitive()
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] = NullNode.getInstance()
 
         val properties = mutableMapOf<String, Any>()
         properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] = true
@@ -133,10 +134,10 @@ class ResourceResolutionComponentTest {
         properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] = occurrence
 
         coEvery {
-            resourceResolutionService.resolveResources(any<BluePrintRuntimeService<*>>(),
-                any<String>(),
-                any<List<String>>(),
-                any<MutableMap<String, Any>>())
+            resourceResolutionService.resolveResources(any(),
+                    any(),
+                    any<List<String>>(),
+                    any<MutableMap<String, Any>>())
         } returns mutableMapOf()
         every { bluePrintRuntimeService.setNodeTemplateAttributeValue(any(), any(), any()) } returns Unit
 
