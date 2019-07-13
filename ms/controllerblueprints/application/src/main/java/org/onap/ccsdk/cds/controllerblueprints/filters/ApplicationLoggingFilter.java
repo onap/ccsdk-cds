@@ -79,7 +79,7 @@ public class ApplicationLoggingFilter implements WebFilter {
             header.add(BluePrintConstants.RESPONSE_HEADER_PATCH_VERSION, tokens[2]);
             header.add(BluePrintConstants.RESPONSE_HEADER_LATEST_VERSION, appVersion);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("*** Error ***", e);
         }
 
         return webFilterChain.filter(serverWebExchange);

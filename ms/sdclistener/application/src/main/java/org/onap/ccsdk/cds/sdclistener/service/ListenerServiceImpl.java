@@ -119,7 +119,9 @@ public class ListenerServiceImpl implements ListenerService {
         File targetZipFile = new File(targetLocation.toString());
 
         try {
-            targetZipFile.createNewFile();
+            if (! targetZipFile.createNewFile()) {
+                LOGGER.warn("Overwriting zip file {}", targetLocation);
+            }
         } catch (IOException e) {
             LOGGER.error("Could not able to create file {}", targetZipFile, e);
         }
