@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e18a494_a4ad88a9",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionComponent.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-07-14T02:34:50Z",
+      "side": 1,
+      "message": "Why it is optional, If model is defined with mandatory ?",
+      "range": {
+        "startLine": 40,
+        "startChar": 28,
+        "endLine": 40,
+        "endChar": 53
+      },
+      "revId": "631adb1e2542b3fe22b7d080072a7c6d9cfbdc72",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "328a3828_8bc58411",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionComponent.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-07-14T02:34:50Z",
+      "side": 1,
+      "message": "Possibility of Exception",
+      "range": {
+        "startLine": 41,
+        "startChar": 120,
+        "endLine": 41,
+        "endChar": 132
+      },
+      "revId": "631adb1e2542b3fe22b7d080072a7c6d9cfbdc72",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38e6922c_3a399f2e",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionComponent.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-07-14T02:34:50Z",
+      "side": 1,
+      "message": "Manipulate this value as nullable property, if it is optional, During storing you can manage the default value behavior.",
+      "range": {
+        "startLine": 42,
+        "startChar": 157,
+        "endLine": 42,
+        "endChar": 159
+      },
+      "revId": "631adb1e2542b3fe22b7d080072a7c6d9cfbdc72",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
