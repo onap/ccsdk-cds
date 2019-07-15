@@ -61,10 +61,10 @@ Also please click below for resource source available details
 .. _Resource: https://wiki.onap.org/display/DW/Modeling+Concepts#ModelingConcepts-NodeResourceSource
 
 
-.. |image0| image:: media/image0.jpg
+.. |image0| image:: media/mandatory.jpg
    :width: 7.88889in 
    :height: 4.43750in
    
-.. |image1| image:: media/image1.jpg
+.. |image1| image:: media/optional.jpg
    :width: 7.88889in 
    :height: 4.43750in
