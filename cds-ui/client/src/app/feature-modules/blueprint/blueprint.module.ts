@@ -32,10 +32,15 @@ import { DeployTemplateModule } from './deploy-template/deploy-template.module';
 import { TestTemplateModule } from './test-template/test-template.module';
 import { SearchEditCBAComponent } from './search-edit-cba/search-edit-cba.component';
 import { AppMaterialModule } from '../../../app/common/modules/app-material.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
-    BlueprintComponent 
+    BlueprintComponent,
+    SearchEditCBAComponent
+  ],
+  exports:[
+    SearchEditCBAComponent
   ],
   imports: [
     CommonModule,
@@ -46,7 +51,7 @@ import { AppMaterialModule } from '../../../app/common/modules/app-material.modu
     ModifyTemplateModule,
     DeployTemplateModule,
     TestTemplateModule,
-    SearchEditCBAComponent
+    ReactiveFormsModule
   ]
 })
 export class BlueprintModule { }
