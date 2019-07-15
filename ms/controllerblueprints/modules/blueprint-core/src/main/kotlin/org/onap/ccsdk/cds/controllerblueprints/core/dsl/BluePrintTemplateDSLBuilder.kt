@@ -76,10 +76,17 @@ class NodeTemplateBuilder(private val id: String,
                           private val type: String,
                           private val description: String? = "") {
     private var nodeTemplate: NodeTemplate = NodeTemplate()
+    private var properties: MutableMap<String, JsonNode>? = null
     private var interfaces: MutableMap<String, InterfaceAssignment>? = null
     private var artifacts: MutableMap<String, ArtifactDefinition>? = null
     private var capabilities: MutableMap<String, CapabilityAssignment>? = null
     private var requirements: MutableMap<String, RequirementAssignment>? = null
+
+    fun properties(block: PropertiesAssignmentBuilder.() -> Unit) {
+        if (properties == null)
+            properties = hashMapOf()
+        properties = PropertiesAssignmentBuilder().apply(block).build()
+    }
 
     fun operation(interfaceName: String, description: String? = "",
                   block: OperationAssignmentBuilder.() -> Unit) {
@@ -122,6 +129,7 @@ class NodeTemplateBuilder(private val id: String,
         nodeTemplate.id = id
         nodeTemplate.type = type
         nodeTemplate.description = description
+        nodeTemplate.properties = properties
         nodeTemplate.interfaces = interfaces
         nodeTemplate.artifacts = artifacts
         nodeTemplate.capabilities = capabilities
@@ -133,12 +141,27 @@ class NodeTemplateBuilder(private val id: String,
 class ArtifactDefinitionBuilder(private val id: String, private val type: String, private val file: String) {
 
     private var artifactDefinition: ArtifactDefinition = ArtifactDefinition()
-    // TODO()
+    private var properties: MutableMap<String, JsonNode>? = null
+
+    fun repository(repository: String) {
+        artifactDefinition.repository = repository
+    }
+
+    fun deployPath(deployPath: String) {
+        artifactDefinition.deployPath = deployPath
+    }
+
+    fun properties(block: PropertiesAssignmentBuilder.() -> Unit) {
+        if (properties == null)
+            properties = hashMapOf()
+        properties = PropertiesAssignmentBuilder().apply(block).build()
+    }
 
     fun build(): ArtifactDefinition {
         artifactDefinition.id = id
         artifactDefinition.type = type
         artifactDefinition.file = file
+        artifactDefinition.properties = properties
         return artifactDefinition
     }
 }
