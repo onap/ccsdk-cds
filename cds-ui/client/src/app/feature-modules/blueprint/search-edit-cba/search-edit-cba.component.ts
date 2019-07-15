@@ -21,7 +21,7 @@
 */
 
 import { Component, OnInit, ViewChild, EventEmitter, Output  } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MatAutocompleteTrigger } from '@angular/material'
 @Component({
