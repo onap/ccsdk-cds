@@ -44,6 +44,10 @@ open class BluePrintWorkflowExecutionServiceImpl(
         val workflowName = executionServiceInput.actionIdentifiers.actionName
 
         // Assign Workflow inputs
+        //check if request structure exists
+        if (!executionServiceInput.payload.has("$workflowName-request")) {
+            throw BluePrintProcessorException("Input request missing the expected '$workflowName-request' block!")
+        }
         val input = executionServiceInput.payload.get("$workflowName-request")
         bluePrintRuntimeService.assignWorkflowInputs(workflowName, input)
 
