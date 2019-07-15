@@ -38,7 +38,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-import org.onap.ccsdk.cds.controllerblueprints.scripts.BluePrintScriptsServiceImpl
+import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintScriptsServiceImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ContextConfiguration

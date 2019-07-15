@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.controllerblueprints.scripts
+package org.onap.ccsdk.cds.controllerblueprints.core.scripts
 
 
 import org.apache.commons.io.FileUtils

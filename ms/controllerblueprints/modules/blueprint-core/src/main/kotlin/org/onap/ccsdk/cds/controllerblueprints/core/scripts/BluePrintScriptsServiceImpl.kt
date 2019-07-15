@@ -15,19 +15,17 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.controllerblueprints.scripts
+package org.onap.ccsdk.cds.controllerblueprints.core.scripts
 
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintScriptsService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
-import org.springframework.stereotype.Service
 import java.io.File
 import java.util.*
 import kotlin.script.experimental.api.ResultValue
 import kotlin.script.experimental.api.resultOrNull
 import kotlin.script.experimental.jvmhost.createJvmCompilationConfigurationFromTemplate
 
-@Service
 open class BluePrintScriptsServiceImpl : BluePrintScriptsService {
 
     override suspend fun <T> scriptInstance(blueprintContext: BluePrintContext, scriptClassName: String,

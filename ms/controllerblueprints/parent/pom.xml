@@ -246,11 +246,6 @@
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
-                <artifactId>blueprint-scripts</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
                 <artifactId>service</artifactId>
                 <version>${project.version}</version>
             </dependency>

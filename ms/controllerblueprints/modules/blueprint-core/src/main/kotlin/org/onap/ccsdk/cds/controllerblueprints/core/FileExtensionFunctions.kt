@@ -84,7 +84,7 @@ fun normalizedFile(path: String, vararg more: String?): File {
 }
 
 fun normalizedPath(path: String, vararg more: String?): Path {
-    return Paths.get(path, *more).normalize().toAbsolutePath()
+    return Paths.get(path, *more).toAbsolutePath().normalize()
 }
 
 fun normalizedPathName(path: String, vararg more: String?): String {
