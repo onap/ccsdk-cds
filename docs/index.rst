@@ -58,8 +58,8 @@ MicroServices
 .. toctree::
    :maxdepth: 1
 
-   controllerBlueprintStudioProcessorMS
-   bluePrintsProcessorMS
+   microservices/controllerBlueprintStudioProcessorMS
+   microservices/bluePrintsProcessorMS
 
 Architecture
 ------------
@@ -96,7 +96,7 @@ Dynamic API
 .. toctree::
    :maxdepth: 1
 
-   dynamicapi
+   microservices/dynamicapi
 
 Controller Design Studio Presentation
 -------------------------------------
