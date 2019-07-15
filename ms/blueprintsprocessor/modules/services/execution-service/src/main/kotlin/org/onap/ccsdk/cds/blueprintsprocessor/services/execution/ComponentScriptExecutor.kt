@@ -86,7 +86,7 @@ fun BluePrintTypes.componentScriptExecutor(): NodeType {
                 property(ComponentScriptExecutor.SCRIPT_TYPE, BluePrintConstants.DATA_TYPE_STRING, true,
                         "Script Type") {
                     defaultValue(BluePrintConstants.SCRIPT_INTERNAL)
-                    constrains {
+                    constrain {
                         validValues(listOf(BluePrintConstants.SCRIPT_INTERNAL.asJsonPrimitive(),
                                 BluePrintConstants.SCRIPT_JYTHON.asJsonPrimitive(),
                                 BluePrintConstants.SCRIPT_KOTLIN.asJsonPrimitive()))

@@ -63,26 +63,24 @@ class Credential {
 A constraint clause defines an operation along with one or more compatible values that can be used to define a constraint on a property or parameter’s allowed values when it is defined in a TOSCA Service Template or one of its entities.
  */
 class ConstraintClause {
-    @get:JsonProperty("equal")
     var equal: JsonNode? = null
     @get:JsonProperty("greater_than")
-    var greaterThan: Any? = null
+    var greaterThan: JsonNode? = null
     @get:JsonProperty("greater_or_equal")
-    var greaterOrEqual: Any? = null
+    var greaterOrEqual: JsonNode? = null
     @get:JsonProperty("less_than")
-    var lessThan: Any? = null
+    var lessThan: JsonNode? = null
     @get:JsonProperty("less_or_equal")
-    var lessOrEqual: Any? = null
+    var lessOrEqual: JsonNode? = null
     @get:JsonProperty("in_range")
-    var inRange: Any? = null
+    var inRange: MutableList<JsonNode>? = null
     @get:JsonProperty("valid_values")
     var validValues: MutableList<JsonNode>? = null
-    @get:JsonProperty("length")
-    var length: Any? = null
+    var length: JsonNode? = null
     @get:JsonProperty("min_length")
-    var minLength: Any? = null
+    var minLength: JsonNode? = null
     @get:JsonProperty("max_length")
-    var maxLength: Any? = null
+    var maxLength: JsonNode? = null
     var pattern: String? = null
     var schema: String? = null
 }
@@ -164,6 +162,9 @@ class PropertyDefinition {
     var constraints: MutableList<ConstraintClause>? = null
     @get:JsonProperty("entry_schema")
     var entrySchema: EntrySchema? = null
+    @get:JsonProperty("external-schema")
+    var externalSchema: String? = null
+    var metadata: MutableMap<String, String>? = null
     // Mainly used in Workflow Outputs
     @get:ApiModelProperty(notes = "Property Value, It may be Expression or Json type values")
     var value: JsonNode? = null
@@ -398,7 +399,7 @@ A Relationship Type is a reusable entity that defines the type of one or more re
 class RelationshipType : EntityType() {
     var interfaces: MutableMap<String, InterfaceDefinition>? = null
     @get:JsonProperty("valid_target_types")
-    var validTargetTypes: ArrayList<String>? = null
+    var validTargetTypes: MutableList<String>? = null
 }
 
 /*
