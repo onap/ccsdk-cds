@@ -155,19 +155,16 @@ public class SwaggerGenerator {
                 defProperty = new StringProperty();
             }
         } else if (BluePrintTypes.validCollectionTypes().contains(propertyDefinition.getType())) {
-            ArrayProperty arrayProperty = new ArrayProperty();
+            Optional<Property> innerType = Optional.empty();
             if (propertyDefinition.getEntrySchema() != null) {
                 String entrySchema = propertyDefinition.getEntrySchema().getType();
                 if (!BluePrintTypes.validPrimitiveTypes().contains(entrySchema)) {
-                    Property innerType = new RefProperty("#/definitions/" + entrySchema);
-                    arrayProperty.setItems(innerType);
-                } else {
-                    Property innerType = new StringProperty();
-                    arrayProperty.setItems(innerType);
+                    innerType = Optional.of(new RefProperty("#/definitions/" + entrySchema));
                 }
-                defProperty = arrayProperty;
             }
-
+            ArrayProperty arrayProperty = new ArrayProperty();
+            arrayProperty.setItems(innerType.orElseGet(StringProperty::new));
+            defProperty = arrayProperty;
         } else {
             defProperty = new RefProperty("#/definitions/" + propertyDefinition.getType());
         }

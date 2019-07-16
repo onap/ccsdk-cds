@@ -21,17 +21,17 @@ import org.onap.sdc.utils.DistributionStatusEnum;
 
 public class ComponentStatusMessage  implements IComponentDoneStatusMessage, IDistributionStatusMessage {
 
-    public String componentName;
+    private String componentName;
 
-    public String consumerID;
+    private String consumerID;
 
-    public String distributionID;
+    private String distributionID;
 
-    public DistributionStatusEnum status;
+    private DistributionStatusEnum status;
 
-    public long timeStamp;
+    private long timeStamp;
 
-    public String artifactUrl;
+    private String artifactUrl;
 
     @Override
     public String getDistributionID() {
@@ -55,11 +55,43 @@ public class ComponentStatusMessage  implements IComponentDoneStatusMessage, IDi
 
     @Override
     public String getArtifactURL() {
-        return artifactUrl;
+        return getArtifactUrl();
     }
 
     @Override
     public long getTimestamp() {
+        return getTimeStamp();
+    }
+
+    public void setComponentName(String componentName) {
+        this.componentName = componentName;
+    }
+
+    public void setConsumerID(String consumerID) {
+        this.consumerID = consumerID;
+    }
+
+    public void setDistributionID(String distributionID) {
+        this.distributionID = distributionID;
+    }
+
+    public void setStatus(DistributionStatusEnum status) {
+        this.status = status;
+    }
+
+    public long getTimeStamp() {
         return timeStamp;
+    }
+
+    public void setTimeStamp(long timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
+    public String getArtifactUrl() {
+        return artifactUrl;
+    }
+
+    public void setArtifactUrl(String artifactUrl) {
+        this.artifactUrl = artifactUrl;
     }
 }

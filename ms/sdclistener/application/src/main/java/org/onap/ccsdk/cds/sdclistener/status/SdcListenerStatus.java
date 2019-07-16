@@ -93,12 +93,12 @@ public class SdcListenerStatus {
     private ComponentStatusMessage buildStatusMessage(String distributionId, DistributionStatusEnum status, String url,
         String componentName) {
         return new BuilderUtil<>(new ComponentStatusMessage()).build(builder -> {
-            builder.distributionID = distributionId;
-            builder.status = status;
-            builder.consumerID = consumerId;
-            builder.componentName = componentName;
-            builder.timeStamp = System.currentTimeMillis();
-            builder.artifactUrl = url;
+            builder.setDistributionID(distributionId);
+            builder.setStatus(status);
+            builder.setConsumerID(consumerId);
+            builder.setComponentName(componentName);
+            builder.setTimeStamp(System.currentTimeMillis());
+            builder.setArtifactUrl(url);
         }).create();
     }
 
