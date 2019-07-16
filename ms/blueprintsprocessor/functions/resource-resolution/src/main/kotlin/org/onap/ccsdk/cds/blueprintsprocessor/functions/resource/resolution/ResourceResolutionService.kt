@@ -17,6 +17,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 
+import com.fasterxml.jackson.databind.JsonNode
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -25,10 +26,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.R
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.TemplateResolutionService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.ResourceAssignmentProcessor
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
-import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
+import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintTemplateService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -47,7 +45,7 @@ interface ResourceResolutionService {
                                     resolutionKey: String): String
 
     suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
-                                 artifactNames: List<String>, properties: Map<String, Any>): MutableMap<String, String>
+                                 artifactNames: List<String>, properties: Map<String, Any>): MutableMap<String, JsonNode>
 
     suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
                                  artifactPrefix: String, properties: Map<String, Any>): String
@@ -85,17 +83,19 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
 
     override suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
                                           artifactNames: List<String>,
-                                          properties: Map<String, Any>): MutableMap<String, String> {
+                                          properties: Map<String, Any>): MutableMap<String, JsonNode> {
 
 
         val resourceAssignmentRuntimeService =
             ResourceAssignmentUtils.transformToRARuntimeService(bluePrintRuntimeService, artifactNames.toString())
 
-        val resolvedParams: MutableMap<String, String> = hashMapOf()
+        val resolvedParams: MutableMap<String, JsonNode> = hashMapOf()
         artifactNames.forEach { artifactName ->
             val resolvedContent = resolveResources(resourceAssignmentRuntimeService, nodeTemplateName,
                 artifactName, properties)
-            resolvedParams[artifactName] = resolvedContent
+
+            resolvedParams[artifactName] = resolvedContent.asJsonType()
+
         }
         return resolvedParams
     }

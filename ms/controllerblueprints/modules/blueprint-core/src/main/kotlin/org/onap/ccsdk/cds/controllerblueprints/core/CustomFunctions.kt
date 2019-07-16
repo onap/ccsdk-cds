@@ -253,4 +253,8 @@ fun nullToEmpty(value: String?): String {
     return if (isNotEmpty(value)) value!! else ""
 }
 
+inline fun <reified T : JsonNode> T.isComplexType(): Boolean {
+    return this is ObjectNode || this is ArrayNode
+}
+
 
