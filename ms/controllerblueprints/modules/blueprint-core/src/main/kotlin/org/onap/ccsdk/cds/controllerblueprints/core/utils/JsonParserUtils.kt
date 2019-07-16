@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2018 IBM.
+ *  Modifications Copyright © 2018 - 2019 IBM, Bell Canada.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,6 +24,7 @@ import com.jayway.jsonpath.JsonPath
 import com.jayway.jsonpath.Option
 import com.jayway.jsonpath.spi.json.JacksonJsonNodeJsonProvider
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
 
 class JsonParserUtils {
     companion object {
@@ -38,7 +40,7 @@ class JsonParserUtils {
         }
 
         fun paths(jsonNode: JsonNode, expression: String): List<String> {
-            return paths(jsonNode.toString(), expression)
+            return paths(jsonNode, expression)
         }
 
         fun parse(jsonContent: String, expression: String): JsonNode {
@@ -46,7 +48,7 @@ class JsonParserUtils {
         }
 
         fun parse(jsonNode: JsonNode, expression: String): JsonNode {
-            return parse(jsonNode.toString(), expression)
+            return parse(getJsonTextValue(jsonNode), expression)
         }
 
         fun parseNSet(jsonContent: String, expression: String, value: JsonNode): JsonNode {
@@ -54,7 +56,12 @@ class JsonParserUtils {
         }
 
         fun parseNSet(jsonNode: JsonNode, expression: String, valueNode: JsonNode): JsonNode {
-            return parseNSet(jsonNode.toString(), expression, valueNode)
+
+            return parseNSet(getJsonTextValue(jsonNode), expression, valueNode)
+        }
+
+        fun getJsonTextValue(jsonNode: Any): String {
+            return jsonNode.asJsonString()
         }
     }
 }

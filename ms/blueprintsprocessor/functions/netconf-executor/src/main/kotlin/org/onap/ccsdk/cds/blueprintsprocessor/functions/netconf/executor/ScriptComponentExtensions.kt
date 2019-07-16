@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2019 IBM.
+ *  Modifications Copyright © 2018 - 2019 IBM, Bell Canada.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,9 +18,12 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor
 
 import com.fasterxml.jackson.databind.JsonNode
+import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.contentFromResolvedArtifact
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.storedContentFromResolvedArtifact
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -50,4 +54,16 @@ fun AbstractComponentFunction.netconfDeviceInfo(requirementName: String): Device
 
 private fun AbstractComponentFunction.netconfDeviceInfo(capabilityProperty: MutableMap<String, JsonNode>): DeviceInfo {
     return JacksonUtils.getInstanceFromMap(capabilityProperty, DeviceInfo::class.java)
+}
+
+/**
+ * Blocking Methods called from Jython Scripts
+ */
+fun AbstractComponentFunction.storedContentFromResolvedArtifact(resolutionKey: String, artifactName: String)
+        : String = runBlocking {
+    storedContentFromResolvedArtifact(resolutionKey, artifactName)
+}
+
+fun AbstractComponentFunction.contentFromResolvedArtifact(artifactPrefix: String): String = runBlocking {
+    contentFromResolvedArtifact(artifactPrefix)
 }

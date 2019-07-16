@@ -1,6 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
- * Modifications Copyright © 2018 IBM.
+ * Modifications Copyright © 2018 - 2019 IBM, Bell Canada.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -170,10 +170,16 @@ object BluePrintExpressionService {
             throw BluePrintException(String.format("missing operation output expression, " +
                     "it should be (<modelable_entity_name>, <interface_name>, <operation_name>, <output_variable_name>) , but present {}", jsonNode))
         }
+
+        var subPropertyName: String? = null
+        if (arrayNode.size() == 5)
+            subPropertyName = arrayNode[4].asText()
+
         return OperationOutputExpression(modelableEntityName = arrayNode[0].asText(),
                 interfaceName = arrayNode[1].asText(),
                 operationName = arrayNode[2].asText(),
-                propertyName = arrayNode[3].asText()
+                propertyName = arrayNode[3].asText(),
+                subPropertyName = subPropertyName
         )
     }
 

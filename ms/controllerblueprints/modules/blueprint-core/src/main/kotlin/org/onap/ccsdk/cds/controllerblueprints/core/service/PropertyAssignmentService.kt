@@ -1,6 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
- * Modifications Copyright © 2018 IBM.
+ * Modifications Copyright © 2018 - 2019 IBM, Bell Canada.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -143,7 +143,7 @@ If Property Assignment is Expression.
 
         }
         if (subAttributeName != null) {
-            if (valueNode.isObject || valueNode.isArray)
+            if (JacksonUtils.isJsonCompleType(valueNode))
                 valueNode = JsonParserUtils.parse(valueNode, subAttributeName)
         }
         return valueNode
@@ -176,7 +176,7 @@ If Property Assignment is Expression.
         valueNode = resolveAssignmentExpression(propertyNodeTemplateName, propertyName, nodeTemplatePropertyExpression)
 
         if (subPropertyName != null) {
-            if (valueNode.isObject || valueNode.isArray)
+            if (JacksonUtils.isJsonCompleType(valueNode))
                 valueNode = JsonParserUtils.parse(valueNode, subPropertyName)
         }
         return valueNode
@@ -190,9 +190,17 @@ If Property Assignment is Expression.
         if (!operationOutputExpression.modelableEntityName.equals("SELF", true)) {
             outputNodeTemplateName = operationOutputExpression.modelableEntityName
         }
-        return bluePrintRuntimeService.getNodeTemplateOperationOutputValue(outputNodeTemplateName,
+
+        var valueNode = bluePrintRuntimeService.getNodeTemplateOperationOutputValue(outputNodeTemplateName,
                 operationOutputExpression.interfaceName, operationOutputExpression.operationName,
                 operationOutputExpression.propertyName)
+
+        val subPropertyName: String? = operationOutputExpression.subPropertyName
+        if (subPropertyName != null) {
+            if (JacksonUtils.isJsonCompleType(valueNode))
+                valueNode = JsonParserUtils.parse(valueNode, subPropertyName)
+        }
+        return valueNode
     }
 
     /*
