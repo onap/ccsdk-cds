@@ -15,6 +15,7 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts
 
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.python.core.PyObject
 import org.python.util.PythonInterpreter
 
@@ -38,8 +39,11 @@ open class BlueprintPythonHost(private val bluePrintPython: BluePrintPython){
         bluePrintPython.content = content!!
         bluePrintPython.pythonClassName = interfaceName
         bluePrintPython.moduleName = "Blueprint Python Script [Class Name = $interfaceName]"
-
-        return blueprintPythonInterpreterProxy.getPythonInstance(properties)
+        try {
+            return blueprintPythonInterpreterProxy.getPythonInstance(properties)
+        } catch (e: Exception) {
+            throw BluePrintProcessorException("Failed to execute Jython component ${e.toString()}", e)
+        }
     }
 
     //TODO Check potential errors in python scripts

@@ -15,12 +15,14 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts
 
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.python.core.PyObject
+import org.python.core.PySyntaxError
 import org.python.util.PythonInterpreter
 
-open class BlueprintPythonInterpreterProxy(private val bluePrintPython: BluePrintPython): PythonInterpreter(){
+open class BlueprintPythonInterpreterProxy(private val bluePrintPython: BluePrintPython) : PythonInterpreter() {
 
-    fun getPythonInstance(properties: MutableMap<String, Any>?): PyObject{
+    fun getPythonInstance(properties: MutableMap<String, Any>?): PyObject {
         properties?.forEach { (name, value) ->
             this.set(name, value)
         }
@@ -28,11 +30,15 @@ open class BlueprintPythonInterpreterProxy(private val bluePrintPython: BluePrin
         this.exec("import sys")
 
         bluePrintPython.content.let {
-            this.exec(bluePrintPython.content)
+            try {
+                this.exec(bluePrintPython.content)
+            } catch (e: PySyntaxError) {
+                throw BluePrintProcessorException("Error executing Jython code! Python error: '${e.toString()}'", e)
+            }
         }
 
         val initCommand = bluePrintPython.pythonClassName.plus(" = ").plus(
-                                                        bluePrintPython.pythonClassName).plus("()")
+            bluePrintPython.pythonClassName).plus("()")
         this.exec(initCommand)
 
         return this.get(bluePrintPython.pythonClassName)
