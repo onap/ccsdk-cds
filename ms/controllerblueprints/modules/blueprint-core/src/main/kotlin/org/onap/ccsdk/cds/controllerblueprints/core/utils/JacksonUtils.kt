@@ -17,6 +17,7 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.node.*
@@ -297,5 +298,13 @@ class JacksonUtils {
             }
         }
 
+        fun isAValidJsonNode(content: String): Boolean {
+            try {
+                jsonNode(content)
+            } catch (ex: JsonParseException) {
+                return false
+            }
+            return true
+        }
     }
 }

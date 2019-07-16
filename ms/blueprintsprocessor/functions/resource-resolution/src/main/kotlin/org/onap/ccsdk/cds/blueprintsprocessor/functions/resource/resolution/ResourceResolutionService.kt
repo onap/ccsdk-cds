@@ -17,6 +17,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 
+import com.fasterxml.jackson.databind.JsonNode
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -47,7 +48,7 @@ interface ResourceResolutionService {
                                     resolutionKey: String): String
 
     suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
-                                 artifactNames: List<String>, properties: Map<String, Any>): MutableMap<String, String>
+                                 artifactNames: List<String>, properties: Map<String, Any>): MutableMap<String, Any>
 
     suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
                                  artifactPrefix: String, properties: Map<String, Any>): String
@@ -85,17 +86,25 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
 
     override suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
                                           artifactNames: List<String>,
-                                          properties: Map<String, Any>): MutableMap<String, String> {
+                                          properties: Map<String, Any>): MutableMap<String, Any> {
 
 
         val resourceAssignmentRuntimeService =
             ResourceAssignmentUtils.transformToRARuntimeService(bluePrintRuntimeService, artifactNames.toString())
 
-        val resolvedParams: MutableMap<String, String> = hashMapOf()
+        val resolvedParams: MutableMap<String, Any> = hashMapOf()
         artifactNames.forEach { artifactName ->
             val resolvedContent = resolveResources(resourceAssignmentRuntimeService, nodeTemplateName,
                 artifactName, properties)
-            resolvedParams[artifactName] = resolvedContent
+
+            val resolvedResult: JsonNode
+            resolvedResult = if (JacksonUtils.isAValidJsonNode(resolvedContent))
+                JacksonUtils.readValue(resolvedContent)
+            else
+                resolvedContent.asJsonPrimitive()
+
+            resolvedParams[artifactName] = resolvedResult
+
         }
         return resolvedParams
     }
