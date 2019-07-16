@@ -297,5 +297,12 @@ class JacksonUtils {
             }
         }
 
+        fun isJsonCompleType(jsonNode: JsonNode): Boolean {
+            return jsonNode.isComplexType()
+        }
+
+        inline fun <reified T : JsonNode> T.isComplexType(): Boolean {
+            return this is ObjectNode || this is ArrayNode
+        }
     }
 }
