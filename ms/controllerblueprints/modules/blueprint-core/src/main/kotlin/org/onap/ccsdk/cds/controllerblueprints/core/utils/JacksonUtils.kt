@@ -296,6 +296,5 @@ class JacksonUtils {
                 else -> getJsonNode(value)
             }
         }
-
     }
 }

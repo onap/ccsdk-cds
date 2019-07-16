@@ -1,6 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
- * Modifications Copyright © 2018 IBM.
+ * Modifications Copyright © 2018 - 2019 IBM, Bell Canada.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,7 +67,8 @@ data class OperationOutputExpression(
         val modelableEntityName: String = "SELF",
         val interfaceName: String,
         val operationName: String,
-        val propertyName: String
+        val propertyName: String,
+        var subPropertyName: String? = null
 )
 
 data class DSLExpression(
