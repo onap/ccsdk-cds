@@ -30,7 +30,7 @@
         "prestart": "npm run build",
         "start": "node .",
         "prepublishOnly": "npm run test",
-        "copy:proto": "mkdir -p dist; cp -R target/generated/proto-definition/proto/ dist/proto"
+        "copy:proto": "mkdir -p dist && cp -R target/generated/proto-definition/proto/ dist/proto"
     },
     "repository": {
         "type": "git"
