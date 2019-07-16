@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "be6c07ad_2983acd1",
+        "filename": "cds-ui/server/package.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2019-07-16T18:41:03Z",
+      "side": 1,
+      "message": "Shouldn\u0027t these be single forward slashes (/) instead of double backslashes (\\\\)?  Or are they interchangeable?",
+      "range": {
+        "startLine": 33,
+        "startChar": 48,
+        "endLine": 33,
+        "endChar": 50
+      },
+      "revId": "ed0c7d7eef464e99a82ddb8dd411bacc123d0a15",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ddc054e_9745662c",
+        "filename": "cds-ui/server/package.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2019-07-16T18:41:03Z",
+      "side": 1,
+      "message": "This should be cp, not copy",
+      "range": {
+        "startLine": 33,
+        "startChar": 59,
+        "endLine": 33,
+        "endChar": 63
+      },
+      "revId": "ed0c7d7eef464e99a82ddb8dd411bacc123d0a15",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
