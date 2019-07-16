@@ -382,7 +382,7 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
         val nodeTemplate = bluePrintContext.nodeTemplateByName(nodeTemplateName)
 
         return nodeTemplate.artifacts?.get(artifactName)
-                ?: throw BluePrintProcessorException("failed to get artifat definition($artifactName) from the node " +
+                ?: throw BluePrintProcessorException("failed to get artifact definition($artifactName) from the node " +
                         "template")
 
     }
