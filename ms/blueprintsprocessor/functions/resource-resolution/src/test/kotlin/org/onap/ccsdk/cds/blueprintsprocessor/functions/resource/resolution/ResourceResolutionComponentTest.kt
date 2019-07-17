@@ -71,6 +71,8 @@ class ResourceResolutionComponentTest {
         resourceResolutionComponent.stepName = "step"
         resourceResolutionComponent.interfaceName = "interfaceName"
         resourceResolutionComponent.operationName = "operationName"
+
+        every { bluePrintRuntimeService.setNodeTemplateAttributeValue(any(), any(), any()) } returns Unit
     }
 
     @Test
@@ -139,7 +141,6 @@ class ResourceResolutionComponentTest {
                     any<List<String>>(),
                     any<MutableMap<String, Any>>())
         } returns mutableMapOf()
-        every { bluePrintRuntimeService.setNodeTemplateAttributeValue(any(), any(), any()) } returns Unit
 
 
         runBlocking {
