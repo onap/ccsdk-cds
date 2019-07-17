@@ -96,5 +96,7 @@ export const GlobalContants = {
 export const ResourceDictionaryURLs = {
     saveResourceDictionary: '/resourcedictionary/save',
     searchResourceDictionaryByTags: '/resourcedictionary/search',
-    searchResourceDictionaryByName: ''
+    searchResourceDictionaryByName: '',
+    getSources: '/resourcedictionary/source-mapping',
+    getModelType: '/resourcedictionary/model-type'
 }
