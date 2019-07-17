@@ -21,9 +21,10 @@
 */-->
 
 
-<button disabled style="opacity: 0.5;" (click) ="changeView()" class="toggle-view-btn">{{viewText}}</button>
+<button (click) ="changeView()" class="toggle-view-btn">{{viewText}}</button>
 <br><br>
-<div *ngIf="designerMode">
+<!-- <div *ngIf="designerMode"> -->
+<div [hidden] = "!designerMode">
    <mat-card class="metadata-card">
         <mat-card-header>
             <mat-card-title>Resource Metadata</mat-card-title>
@@ -45,7 +46,8 @@
     </mat-card>
 </div>
 
-<div *ngIf="editorMode">
+<!-- <div *ngIf="editorMode"> -->
+<div [hidden] = "!editorMode">
 	<json-editor  class="jsoneditor" *ngIf="editorMode" [options]="options" [data]="resources" on-change="onChange($event)"></json-editor>
 </div>
  
