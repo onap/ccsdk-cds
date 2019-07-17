@@ -185,7 +185,7 @@ class ComponentRemotePythonExecutorTest {
 }
 
 class MockRemoteScriptExecutionService : RemoteScriptExecutionService {
-    override suspend fun init(selector: String) {
+    override suspend fun init(selector: Any) {
     }
 
     override suspend fun prepareEnv(prepareEnvInput: PrepareRemoteEnvInput): RemoteScriptExecutionOutput {

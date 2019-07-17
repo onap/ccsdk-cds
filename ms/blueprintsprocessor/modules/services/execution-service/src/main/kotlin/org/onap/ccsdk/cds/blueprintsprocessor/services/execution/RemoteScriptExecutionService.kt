@@ -22,6 +22,7 @@ import com.google.protobuf.Timestamp
 import com.google.protobuf.util.JsonFormat
 import io.grpc.ManagedChannel
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.*
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.BluePrintGrpcClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.BluePrintGrpcLibPropertyService
 import org.onap.ccsdk.cds.controllerblueprints.command.api.*
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -31,9 +32,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
 
-
 interface RemoteScriptExecutionService {
-    suspend fun init(selector: String)
+    suspend fun init(selector: Any)
     suspend fun prepareEnv(prepareEnvInput: PrepareRemoteEnvInput): RemoteScriptExecutionOutput
     suspend fun executeCommand(remoteExecutionInput: RemoteScriptExecutionInput): RemoteScriptExecutionOutput
     suspend fun close()
@@ -51,9 +51,14 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
     private var channel: ManagedChannel? = null
     private lateinit var commandExecutorServiceGrpc: CommandExecutorServiceGrpc.CommandExecutorServiceBlockingStub
 
-    override suspend fun init(selector: String) {
+    override suspend fun init(selector: Any) {
         // Get the GRPC Client Service based on selector
-        val grpcClientService = bluePrintGrpcLibPropertyService.blueprintGrpcClientService(selector)
+        val grpcClientService: BluePrintGrpcClientService
+        if (selector is JsonNode) {
+            grpcClientService = bluePrintGrpcLibPropertyService.blueprintGrpcClientService(selector)
+        } else {
+            grpcClientService = bluePrintGrpcLibPropertyService.blueprintGrpcClientService(selector.toString())
+        }
         // Get the GRPC Channel
         channel = grpcClientService.channel()
         // Create Non Blocking Stub
