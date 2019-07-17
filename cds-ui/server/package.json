@@ -86,5 +86,4 @@
         "@types/node": "^10.11.2",
         "@types/request": "^2.48.1"
     }
-
 }

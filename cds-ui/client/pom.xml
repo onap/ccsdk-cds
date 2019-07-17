@@ -50,8 +50,8 @@ limitations under the License.
         <version>1.3</version>
         <configuration>
           <nodeVersion>v8.12.0</nodeVersion>
+          <npmVersion>6.4.1</npmVersion>
           <nodeDownloadRoot>https://nodejs.org/dist/</nodeDownloadRoot>
-          <npmDownloadRoot>https://nodejs.org/dist/npm/</npmDownloadRoot>
           <installDirectory>./</installDirectory>
         </configuration>
         <executions>
