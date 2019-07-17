@@ -87,6 +87,23 @@ export default {
                 "searchbyNames": ["resourceDictionaryList"]
 
             }
+        },
+        ,
+        {
+            "template": {
+                "method": "GET",
+                "url": controllerApiConfig.http.url + "/model-type/{source}",
+                "headers": {
+                    "accepts": "application/json",
+                    "content-type": "application/json",
+                    "authorization": controllerApiConfig.http.authToken
+                },
+                "responsePath": "$.*"
+            },
+            "functions": {
+                "getModelType": ["source"]
+
+            }
         }
     ]
 };
