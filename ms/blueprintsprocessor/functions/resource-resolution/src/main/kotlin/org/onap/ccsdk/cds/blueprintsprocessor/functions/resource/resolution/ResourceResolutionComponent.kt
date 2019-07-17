@@ -51,6 +51,9 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
         properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] = occurrence
 
         val jsonResponse = JsonNodeFactory.instance.objectNode()
+        // Initialize Output Attribute to empty JSON
+        bluePrintRuntimeService.setNodeTemplateAttributeValue(nodeTemplateName,
+            ResourceResolutionConstants.OUTPUT_ASSIGNMENT_PARAMS, jsonResponse)
 
         // validate inputs if we need to store the resource and template resolution.
         if (storeResult) {
@@ -84,7 +87,7 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
 
         }
 
-        // Set Output Attributes
+        // Set Output Attributes with resolved value
         bluePrintRuntimeService.setNodeTemplateAttributeValue(nodeTemplateName,
                 ResourceResolutionConstants.OUTPUT_ASSIGNMENT_PARAMS, jsonResponse)
     }
