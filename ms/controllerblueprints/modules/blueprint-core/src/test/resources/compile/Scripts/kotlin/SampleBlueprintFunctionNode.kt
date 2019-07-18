@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
+package cba.scripts
+
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintFunctionNode
 
-open class SampleBlueprintFunctionNode : BlueprintFunctionNode<String, String>{
+open class SampleBlueprintFunctionNode : BlueprintFunctionNode<String, String> {
 
     override fun getName(): String {
         return "Kotlin-Script-Function-Node"
@@ -40,5 +42,25 @@ open class SampleBlueprintFunctionNode : BlueprintFunctionNode<String, String>{
 
     override fun apply(t: String): String {
         return "$t-status"
+    }
+
+    override suspend fun prepareRequestNB(executionRequest: String): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override suspend fun processNB(executionRequest: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override suspend fun prepareResponseNB(): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override suspend fun applyNB(t: String): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

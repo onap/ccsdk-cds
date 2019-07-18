@@ -19,6 +19,7 @@ package org.onap.ccsdk.cds.controllerblueprints.core.scripts
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.slf4j.LoggerFactory
 import java.util.*
+import kotlin.reflect.full.createInstance
 import kotlin.script.experimental.api.*
 import kotlin.script.experimental.host.BasicScriptingHost
 import kotlin.script.experimental.jvm.defaultJvmScriptingHostConfiguration
@@ -30,19 +31,16 @@ val blueprintScriptCompiler = JvmScriptCompiler(defaultJvmScriptingHostConfigura
 
 open class BlueprintScriptingHost(evaluator: ScriptEvaluator) : BasicScriptingHost(blueprintScriptCompiler, evaluator) {
 
-    override fun eval(
-            script: SourceCode,
-            scriptCompilationConfiguration: ScriptCompilationConfiguration,
-            configuration: ScriptEvaluationConfiguration?
-    ): ResultWithDiagnostics<EvaluationResult> =
+    override fun eval(script: SourceCode, scriptCompilationConfiguration: ScriptCompilationConfiguration,
+                      configuration: ScriptEvaluationConfiguration?): ResultWithDiagnostics<EvaluationResult> =
 
             runInCoroutineContext {
 
-                compiler(script, scriptCompilationConfiguration)
+                blueprintScriptCompiler(script, scriptCompilationConfiguration)
                         .onSuccess {
                             evaluator(it, configuration)
                         }.onFailure { failedResult ->
-                            val messages = failedResult.reports?.joinToString("\n")
+                            val messages = failedResult.reports.joinToString("\n")
                             throw BluePrintProcessorException(messages)
                         }
             }
@@ -52,21 +50,21 @@ open class BluePrintScriptEvaluator(private val scriptClassName: String) : Scrip
 
     private val log = LoggerFactory.getLogger(BluePrintScriptEvaluator::class.java)!!
 
-    override suspend operator fun invoke(
-            compiledScript: CompiledScript<*>,
-            scriptEvaluationConfiguration: ScriptEvaluationConfiguration?
+    override suspend operator fun invoke(compiledScript: CompiledScript<*>,
+                                         scriptEvaluationConfiguration: ScriptEvaluationConfiguration?
     ): ResultWithDiagnostics<EvaluationResult> =
             try {
                 log.debug("Getting script class name($scriptClassName) from the compiled sources ")
+
                 val bluePrintCompiledScript = compiledScript as BluePrintCompiledScript
                 bluePrintCompiledScript.scriptClassFQName = scriptClassName
 
-                val res = compiledScript.getClass(scriptEvaluationConfiguration)
-                when (res) {
-                    is ResultWithDiagnostics.Failure -> res
+                val classResult = compiledScript.getClass(scriptEvaluationConfiguration)
+                when (classResult) {
+                    is ResultWithDiagnostics.Failure -> classResult
                     is ResultWithDiagnostics.Success -> {
 
-                        val scriptClass = res.value
+                        val scriptClass = classResult.value
                         val args = ArrayList<Any?>()
                         scriptEvaluationConfiguration?.get(ScriptEvaluationConfiguration.providedProperties)?.forEach {
                             args.add(it.value)
@@ -78,10 +76,14 @@ open class BluePrintScriptEvaluator(private val scriptClassName: String) : Scrip
                             args.addAll(it)
                         }
 
-                        val instance = scriptClass.java.constructors.single().newInstance(*args.toArray())
-                                ?: throw BluePrintProcessorException("failed to create instance from the script")
+                        val instance = if (args.isNotEmpty()) {
+                            scriptClass.java.constructors.single().newInstance(*args.toArray())
+                                    ?: throw BluePrintProcessorException("failed to create instance from the script")
+                        } else {
+                            scriptClass.createInstance()
+                        }
 
-                        log.info("Created script instance of type ${instance.javaClass}")
+                        log.debug("Created script instance of type ${instance.javaClass}")
 
                         ResultWithDiagnostics.Success(EvaluationResult(ResultValue.Value(scriptClass.qualifiedName!!,
                                 instance, "", instance),

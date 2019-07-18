@@ -16,30 +16,25 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.scripts
 
-import java.io.File
 import java.io.Serializable
-import java.net.URL
-import java.net.URLClassLoader
 import kotlin.reflect.KClass
 import kotlin.script.experimental.api.*
 
-open class BluePrintCompiledScript<out JarFile : File>(
-        private val scriptCompilationConfiguration: ScriptCompilationConfiguration,
-        private val compiledJar: File) :
-        CompiledScript<JarFile>, Serializable {
+open class BluePrintCompiledScript<out BCS : String>(
+        val cacheKey: String,
+        val scriptCompilationConfiguration: ScriptCompilationConfiguration) :
+        CompiledScript<BCS>, Serializable {
 
     lateinit var scriptClassFQName: String
 
     override val compilationConfiguration: ScriptCompilationConfiguration
         get() = scriptCompilationConfiguration
 
-    override suspend fun getClass(scriptEvaluationConfiguration: ScriptEvaluationConfiguration?): ResultWithDiagnostics<KClass<*>> = try {
+    override suspend fun getClass(scriptEvaluationConfiguration: ScriptEvaluationConfiguration?)
+            : ResultWithDiagnostics<KClass<*>> = try {
 
-        val baseClassLoader = Thread.currentThread().contextClassLoader
-
-        val urls = arrayListOf<URL>()
-        urls.add(compiledJar.toURI().toURL())
-        val classLoaderWithDependencies = URLClassLoader(urls.toTypedArray(), baseClassLoader)
+        /** Get the class loader from the cache */
+        val classLoaderWithDependencies = BluePrintCompileCache.classLoader(cacheKey)
 
         val clazz = classLoaderWithDependencies.loadClass(scriptClassFQName).kotlin
         clazz.asSuccess()
