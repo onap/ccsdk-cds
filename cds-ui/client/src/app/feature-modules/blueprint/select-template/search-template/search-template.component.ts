@@ -34,6 +34,7 @@ import { LoaderService } from '../../../../common/core/services/loader.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatAutocompleteTrigger } from '@angular/material';
 
+
 @Component({
   selector: 'app-search-template',
   templateUrl: './search-template.component.html',

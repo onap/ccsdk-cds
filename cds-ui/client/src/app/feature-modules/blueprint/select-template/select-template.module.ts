@@ -27,13 +27,13 @@ import { MetadataComponent } from './metadata/metadata.component';
 import { SelectTemplateComponent } from './select-template.component';
 import { SelectTemplateRoutingModule } from './select-template-routing.module';
 import { AppMaterialModule } from 'src/app/common/modules/app-material.module';
+import { SearchTemplateModule} from './search-template/search-template.module';
 
 @NgModule({
   declarations: [
     TemplateOptionsComponent,
-    SearchTemplateComponent,
-    MetadataComponent,
-    SelectTemplateComponent
+     MetadataComponent,
+     SelectTemplateComponent
   ],
    exports: [
     TemplateOptionsComponent,
@@ -45,7 +45,8 @@ import { AppMaterialModule } from 'src/app/common/modules/app-material.module';
     CommonModule,
     SelectTemplateRoutingModule,
     ReactiveFormsModule,
-    AppMaterialModule
+    AppMaterialModule,
+    SearchTemplateModule
   ]
 })
 export class SelectTemplateModule { }
