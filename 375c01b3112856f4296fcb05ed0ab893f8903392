@@ -48,6 +48,29 @@
     },
     {
       "key": {
+        "uuid": "42c45ff8_0c9b6e70",
+        "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/service/BluePrintExpressionService.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-07-18T02:40:27Z",
+      "side": 1,
+      "message": "maybe call this jsonPath for clarity",
+      "range": {
+        "startLine": 174,
+        "startChar": 12,
+        "endLine": 174,
+        "endChar": 27
+      },
+      "revId": "375c01b3112856f4296fcb05ed0ab893f8903392",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a366726a_3e718ed4",
         "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/utils/JacksonUtils.kt",
         "patchSetId": 3
