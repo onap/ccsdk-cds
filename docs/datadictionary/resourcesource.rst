@@ -11,12 +11,10 @@ Expects the value to be provided as input to the request.
 
 source-input:
 
-{
   "description": "This is Input Resource Source Node Type",
   "version": "1.0.0",
   "properties": {},
   "derived_from": "tosca.nodes.ResourceSource"
-}
 
 
 Default:
@@ -25,12 +23,11 @@ Expects the value to be defaulted in the model itself.
 
 source-default:
 
-{
   "description": "This is Default Resource Source Node Type",
   "version": "1.0.0",
   "properties": {},
   "derived_from": "tosca.nodes.ResourceSource"
-}
+
 
 
 sql:
@@ -42,7 +39,7 @@ CDS is currently deployed along the side of SDNC, hence the primary database con
 
 |image0|
 
-.. |image0| image:: sqltable.jpg
+.. |image0| image:: media/sqltable.jpg
    :width: 7.88889in 
    :height: 4.43750in
 
@@ -68,7 +65,7 @@ CDS is currently deployed along the side of SDNC, hence the default rest connect
 
 |image1|
 
-.. |image1| image:: resttable.jpg
+.. |image1| image:: media/resttable.jpg
    :width: 7.88889in 
    :height: 4.43750in
 
@@ -99,7 +96,7 @@ Expects a script to be provided.
 
 |image2|
 
-.. |image2| image:: capabilitytable.jpg
+.. |image2| image:: media/capabilitytable.jpg
    :width: 7.88889in 
    :height: 4.43750in
    
