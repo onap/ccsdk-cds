@@ -18,14 +18,13 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
 
-import org.slf4j.LoggerFactory
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.NullNode
 import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.data.*
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.JsonParserUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.ResourceResolverUtils
+import org.slf4j.LoggerFactory
 
 /**
  *
@@ -33,7 +32,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.ResourceResolverUtils
  * @author Brinda Santh
  */
 class PropertyAssignmentService(var bluePrintRuntimeService: BluePrintRuntimeService<MutableMap<String, JsonNode>>) {
-    private val log= LoggerFactory.getLogger(this::class.toString())
+    private val log = LoggerFactory.getLogger(this::class.toString())
 
     private var bluePrintContext: BluePrintContext = bluePrintRuntimeService.bluePrintContext()
 
@@ -141,7 +140,7 @@ If Property Assignment is Expression.
         }
         if (subAttributeName != null) {
             if (valueNode.isComplexType())
-                valueNode = JsonParserUtils.parse(valueNode.asJsonString(), subAttributeName)
+                valueNode = valueNode.jsonPathParse(subAttributeName)
         }
         return valueNode
     }
@@ -174,7 +173,7 @@ If Property Assignment is Expression.
 
         if (subPropertyName != null) {
             if (valueNode.isComplexType())
-                valueNode = JsonParserUtils.parse(valueNode.asJsonString(), subPropertyName)
+                valueNode = valueNode.jsonPathParse(subPropertyName)
         }
         return valueNode
     }
@@ -195,7 +194,7 @@ If Property Assignment is Expression.
         val subPropertyName: String? = operationOutputExpression.subPropertyName
         if (subPropertyName != null) {
             if (valueNode.isComplexType())
-                valueNode = JsonParserUtils.parse(valueNode.asJsonString(), subPropertyName)
+                valueNode = valueNode.jsonPathParse(subPropertyName)
         }
         return valueNode
     }

@@ -18,6 +18,9 @@ package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
+import org.onap.ccsdk.cds.controllerblueprints.core.jsonPathParse
+import org.onap.ccsdk.cds.controllerblueprints.core.jsonPaths
 import kotlin.test.assertEquals
 
 class JsonParserUtilsTest {
@@ -26,8 +29,29 @@ class JsonParserUtilsTest {
     fun `test parse Node`() {
         val dataNode = JacksonUtils.jsonNodeFromClassPathFile("data/default-context.json")
 
-        val parsedNode = JsonParserUtils.parse(dataNode, "$.request-id")
+        val parsedNode = dataNode.jsonPathParse("$.request-id")
 
         assertEquals(parsedNode, "12345".asJsonPrimitive(), "failed to parse json request-id")
+    }
+
+    @Test
+    fun testPaths() {
+        val json: String = """
+            {
+                "data" : {
+                "prop1" : "1234"
+                },
+                 "data2" : {
+                "prop1" : "12345"
+                },
+                "data3" : [{
+                "prop1" : "12345"
+                }
+                ]
+            }            
+        """.trimIndent()
+        val jsonNode = json.jsonAsJsonType()
+        val parsedPath = jsonNode.jsonPaths("$..prop1")
+        println(parsedPath)
     }
 }

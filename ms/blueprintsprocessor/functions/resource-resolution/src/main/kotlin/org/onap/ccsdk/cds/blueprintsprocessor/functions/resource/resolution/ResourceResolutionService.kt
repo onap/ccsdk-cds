@@ -85,17 +85,11 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                                           artifactNames: List<String>,
                                           properties: Map<String, Any>): MutableMap<String, JsonNode> {
 
-
-        val resourceAssignmentRuntimeService =
-            ResourceAssignmentUtils.transformToRARuntimeService(bluePrintRuntimeService, artifactNames.toString())
-
         val resolvedParams: MutableMap<String, JsonNode> = hashMapOf()
         artifactNames.forEach { artifactName ->
-            val resolvedContent = resolveResources(resourceAssignmentRuntimeService, nodeTemplateName,
-                artifactName, properties)
-
+            val resolvedContent = resolveResources(bluePrintRuntimeService, nodeTemplateName,
+                    artifactName, properties)
             resolvedParams[artifactName] = resolvedContent.asJsonType()
-
         }
         return resolvedParams
     }
@@ -164,7 +158,14 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                                                     properties: Map<String, Any>) {
 
         val bulkSequenced = BulkResourceSequencingUtils.process(resourceAssignments)
-        val resourceAssignmentRuntimeService = blueprintRuntimeService as ResourceAssignmentRuntimeService
+
+        // Check the BlueprintRuntime Service Should be ResourceAssignmentRuntimeService
+        val resourceAssignmentRuntimeService = if (!(blueprintRuntimeService is ResourceAssignmentRuntimeService)) {
+            ResourceAssignmentUtils.transformToRARuntimeService(blueprintRuntimeService, artifactPrefix)
+        } else {
+            blueprintRuntimeService
+        }
+
 
         coroutineScope {
             bulkSequenced.forEach { batchResourceAssignments ->
