@@ -24,7 +24,6 @@ import com.fasterxml.jackson.databind.node.NullNode
 import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.data.*
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.JsonParserUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.ResourceResolverUtils
 
 /**
@@ -141,7 +140,7 @@ If Property Assignment is Expression.
         }
         if (subAttributeName != null) {
             if (valueNode.isComplexType())
-                valueNode = JsonParserUtils.parse(valueNode.asJsonString(), subAttributeName)
+                valueNode = valueNode.jsonPathParse(subAttributeName)
         }
         return valueNode
     }
@@ -174,7 +173,7 @@ If Property Assignment is Expression.
 
         if (subPropertyName != null) {
             if (valueNode.isComplexType())
-                valueNode = JsonParserUtils.parse(valueNode.asJsonString(), subPropertyName)
+                valueNode = valueNode.jsonPathParse(subPropertyName)
         }
         return valueNode
     }
@@ -195,7 +194,7 @@ If Property Assignment is Expression.
         val subPropertyName: String? = operationOutputExpression.subPropertyName
         if (subPropertyName != null) {
             if (valueNode.isComplexType())
-                valueNode = JsonParserUtils.parse(valueNode.asJsonString(), subPropertyName)
+                valueNode = valueNode.jsonPathParse(subPropertyName)
         }
         return valueNode
     }

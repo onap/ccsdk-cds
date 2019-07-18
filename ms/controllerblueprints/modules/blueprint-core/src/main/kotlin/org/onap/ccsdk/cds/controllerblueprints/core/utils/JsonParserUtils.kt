@@ -24,6 +24,7 @@ import com.jayway.jsonpath.JsonPath
 import com.jayway.jsonpath.Option
 import com.jayway.jsonpath.spi.json.JacksonJsonNodeJsonProvider
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
 
 class JsonParserUtils {
     companion object {
@@ -39,7 +40,7 @@ class JsonParserUtils {
         }
 
         fun paths(jsonNode: JsonNode, expression: String): List<String> {
-            return paths(jsonNode, expression)
+            return paths(jsonNode.asJsonString(), expression)
         }
 
         fun parse(jsonContent: String, expression: String): JsonNode {
@@ -47,7 +48,7 @@ class JsonParserUtils {
         }
 
         fun parse(jsonNode: JsonNode, expression: String): JsonNode {
-            return parse(jsonNode.toString(), expression)
+            return parse(jsonNode.asJsonString(), expression)
         }
 
         fun parseNSet(jsonContent: String, expression: String, value: JsonNode): JsonNode {
@@ -56,7 +57,7 @@ class JsonParserUtils {
 
         fun parseNSet(jsonNode: JsonNode, expression: String, valueNode: JsonNode): JsonNode {
 
-            return parseNSet(jsonNode, expression, valueNode)
+            return parseNSet(jsonNode.asJsonString(), expression, valueNode)
         }
     }
 }

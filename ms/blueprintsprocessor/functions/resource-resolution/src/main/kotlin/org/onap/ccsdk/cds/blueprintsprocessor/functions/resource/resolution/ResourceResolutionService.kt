@@ -62,29 +62,28 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                                          private var templateResolutionDBService: TemplateResolutionService,
                                          private var blueprintTemplateService: BluePrintTemplateService,
                                          private var resourceResolutionDBService: ResourceResolutionDBService) :
-    ResourceResolutionService {
+        ResourceResolutionService {
 
     private val log = LoggerFactory.getLogger(ResourceResolutionService::class.java)
 
     override fun registeredResourceSources(): List<String> {
         return applicationContext.getBeanNamesForType(ResourceAssignmentProcessor::class.java)
-            .filter { it.startsWith(ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR) }
-            .map { it.substringAfter(ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR) }
+                .filter { it.startsWith(ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR) }
+                .map { it.substringAfter(ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR) }
     }
 
     override suspend fun resolveFromDatabase(bluePrintRuntimeService: BluePrintRuntimeService<*>,
                                              artifactTemplate: String,
                                              resolutionKey: String): String {
         return templateResolutionDBService.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
-            bluePrintRuntimeService,
-            artifactTemplate,
-            resolutionKey)
+                bluePrintRuntimeService,
+                artifactTemplate,
+                resolutionKey)
     }
 
     override suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
                                           artifactNames: List<String>,
                                           properties: Map<String, Any>): MutableMap<String, JsonNode> {
-
 
         val resourceAssignmentRuntimeService =
             ResourceAssignmentUtils.transformToRARuntimeService(bluePrintRuntimeService, artifactNames.toString())
@@ -95,7 +94,6 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                 artifactName, properties)
 
             resolvedParams[artifactName] = resolvedContent.asJsonType()
-
         }
         return resolvedParams
     }
@@ -113,12 +111,12 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
         log.info("Resolving resource for template artifact($artifactTemplate) with resource assignment artifact($artifactMapping)")
 
         val resourceAssignmentContent =
-            bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactMapping)
+                bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactMapping)
 
         val resourceAssignments: MutableList<ResourceAssignment> =
-            JacksonUtils.getListFromJson(resourceAssignmentContent, ResourceAssignment::class.java)
-                    as? MutableList<ResourceAssignment>
-                ?: throw BluePrintProcessorException("couldn't get Dictionary Definitions")
+                JacksonUtils.getListFromJson(resourceAssignmentContent, ResourceAssignment::class.java)
+                        as? MutableList<ResourceAssignment>
+                        ?: throw BluePrintProcessorException("couldn't get Dictionary Definitions")
 
         if (isToStore(properties)) {
             val existingResourceResolution = isNewResolution(bluePrintRuntimeService, properties, artifactPrefix)
@@ -129,20 +127,20 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
 
         // Get the Resource Dictionary Name
         val resourceDefinitions: MutableMap<String, ResourceDefinition> = ResourceAssignmentUtils
-            .resourceDefinitions(bluePrintRuntimeService.bluePrintContext().rootPath)
+                .resourceDefinitions(bluePrintRuntimeService.bluePrintContext().rootPath)
 
         // Resolve resources
         resolveResourceAssignments(bluePrintRuntimeService,
-            resourceDefinitions,
-            resourceAssignments,
-            artifactPrefix,
-            properties)
+                resourceDefinitions,
+                resourceAssignments,
+                artifactPrefix,
+                properties)
 
         val resolvedParamJsonContent =
-            ResourceAssignmentUtils.generateResourceDataForAssignments(resourceAssignments.toList())
+                ResourceAssignmentUtils.generateResourceDataForAssignments(resourceAssignments.toList())
 
         resolvedContent = blueprintTemplateService.generateContent(bluePrintRuntimeService, nodeTemplateName,
-            artifactTemplate, resolvedParamJsonContent)
+                artifactTemplate, resolvedParamJsonContent)
 
         if (isToStore(properties)) {
             templateResolutionDBService.write(properties, resolvedContent, bluePrintRuntimeService, artifactPrefix)
@@ -164,49 +162,56 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                                                     properties: Map<String, Any>) {
 
         val bulkSequenced = BulkResourceSequencingUtils.process(resourceAssignments)
-        val resourceAssignmentRuntimeService = blueprintRuntimeService as ResourceAssignmentRuntimeService
+
+        // Check the BlueprintRuntime Service Should be ResourceAssignmentRuntimeService
+        val resourceAssignmentRuntimeService = if (!(blueprintRuntimeService is ResourceAssignmentRuntimeService)) {
+            ResourceAssignmentUtils.transformToRARuntimeService(blueprintRuntimeService, artifactPrefix)
+        } else {
+            blueprintRuntimeService
+        }
+
 
         coroutineScope {
             bulkSequenced.forEach { batchResourceAssignments ->
                 // Execute Non Dependent Assignments in parallel ( ie asynchronously )
                 val deferred = batchResourceAssignments
-                    .filter { it.name != "*" && it.name != "start" }
-                    .filter { it.status != BluePrintConstants.STATUS_SUCCESS }
-                    .map { resourceAssignment ->
-                        async {
-                            val dictionaryName = resourceAssignment.dictionaryName
-                            val dictionarySource = resourceAssignment.dictionarySource
+                        .filter { it.name != "*" && it.name != "start" }
+                        .filter { it.status != BluePrintConstants.STATUS_SUCCESS }
+                        .map { resourceAssignment ->
+                            async {
+                                val dictionaryName = resourceAssignment.dictionaryName
+                                val dictionarySource = resourceAssignment.dictionarySource
 
-                            val processorName = processorName(dictionaryName!!, dictionarySource!!, resourceDefinitions)
+                                val processorName = processorName(dictionaryName!!, dictionarySource!!, resourceDefinitions)
 
-                            val resourceAssignmentProcessor =
-                                applicationContext.getBean(processorName) as? ResourceAssignmentProcessor
-                                    ?: throw BluePrintProcessorException("failed to get resource processor ($processorName) " +
-                                            "for resource assignment(${resourceAssignment.name})")
-                            try {
-                                // Set BluePrint Runtime Service
-                                resourceAssignmentProcessor.raRuntimeService = resourceAssignmentRuntimeService
-                                // Set Resource Dictionaries
-                                resourceAssignmentProcessor.resourceDictionaries = resourceDefinitions
-                                // Invoke Apply Method
-                                resourceAssignmentProcessor.applyNB(resourceAssignment)
+                                val resourceAssignmentProcessor =
+                                        applicationContext.getBean(processorName) as? ResourceAssignmentProcessor
+                                                ?: throw BluePrintProcessorException("failed to get resource processor ($processorName) " +
+                                                        "for resource assignment(${resourceAssignment.name})")
+                                try {
+                                    // Set BluePrint Runtime Service
+                                    resourceAssignmentProcessor.raRuntimeService = resourceAssignmentRuntimeService
+                                    // Set Resource Dictionaries
+                                    resourceAssignmentProcessor.resourceDictionaries = resourceDefinitions
+                                    // Invoke Apply Method
+                                    resourceAssignmentProcessor.applyNB(resourceAssignment)
 
-                                if (isToStore(properties)) {
-                                    resourceResolutionDBService.write(properties,
-                                        blueprintRuntimeService,
-                                        artifactPrefix,
-                                        resourceAssignment)
-                                    log.info("Resource resolution saved into database successfully : ($resourceAssignment)")
+                                    if (isToStore(properties)) {
+                                        resourceResolutionDBService.write(properties,
+                                                blueprintRuntimeService,
+                                                artifactPrefix,
+                                                resourceAssignment)
+                                        log.info("Resource resolution saved into database successfully : ($resourceAssignment)")
+                                    }
+
+                                    // Set errors from RA
+                                    blueprintRuntimeService.setBluePrintError(resourceAssignmentRuntimeService.getBluePrintError())
+                                } catch (e: RuntimeException) {
+                                    log.error("Fail in processing ${resourceAssignment.name}", e)
+                                    throw BluePrintProcessorException(e)
                                 }
-
-                                // Set errors from RA
-                                blueprintRuntimeService.setBluePrintError(resourceAssignmentRuntimeService.getBluePrintError())
-                            } catch (e: RuntimeException) {
-                                log.error("Fail in processing ${resourceAssignment.name}", e)
-                                throw BluePrintProcessorException(e)
                             }
                         }
-                    }
                 log.debug("Resolving (${deferred.size})resources parallel.")
                 deferred.awaitAll()
             }
@@ -229,10 +234,10 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
             }
             else -> {
                 val resourceDefinition = resourceDefinitions[dictionaryName]
-                    ?: throw BluePrintProcessorException("couldn't get resource dictionary definition for $dictionaryName")
+                        ?: throw BluePrintProcessorException("couldn't get resource dictionary definition for $dictionaryName")
 
                 val resourceSource = resourceDefinition.sources[dictionarySource]
-                    ?: throw BluePrintProcessorException("couldn't get resource definition $dictionaryName source($dictionarySource)")
+                        ?: throw BluePrintProcessorException("couldn't get resource definition $dictionaryName source($dictionarySource)")
 
                 ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR.plus(resourceSource.type)
             }
@@ -262,25 +267,25 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
 
         if (resolutionKey.isNotEmpty()) {
             val existingResourceAssignments =
-                resourceResolutionDBService.findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKeyAndOccurrence(
-                    bluePrintRuntimeService,
-                    resolutionKey,
-                    occurrence,
-                    artifactPrefix)
+                    resourceResolutionDBService.findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKeyAndOccurrence(
+                            bluePrintRuntimeService,
+                            resolutionKey,
+                            occurrence,
+                            artifactPrefix)
             if (existingResourceAssignments.isNotEmpty()) {
                 log.info("Resolution with resolutionKey=($resolutionKey) already exist - will resolve all resources not already resolved.",
-                    resolutionKey)
+                        resolutionKey)
             }
             return existingResourceAssignments
         } else if (resourceId.isNotEmpty() && resourceType.isNotEmpty()) {
             val existingResourceAssignments =
-                resourceResolutionDBService.findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResourceIdAndResourceTypeAndOccurrence(
-                    bluePrintRuntimeService,
-                    resourceId,
-                    resourceType,
+                    resourceResolutionDBService.findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResourceIdAndResourceTypeAndOccurrence(
+                            bluePrintRuntimeService,
+                            resourceId,
+                            resourceType,
 
-                    occurrence,
-                    artifactPrefix)
+                            occurrence,
+                            artifactPrefix)
             if (existingResourceAssignments.isNotEmpty()) {
                 log.info("Resolution with resourceId=($resourceId) and resourceType=($resourceType) already exist - will resolve " +
                         "all resources not already resolved.")

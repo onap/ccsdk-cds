@@ -16,39 +16,37 @@ import netconf_constant
 from common import ResolutionHelper
 from java.lang import Exception as JavaException
 from netconfclient import NetconfClient
-from org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor import \
-  NetconfComponentFunction
+from org.onap.ccsdk.cds.blueprintsprocessor.services.execution import AbstractScriptComponentFunction
 
+class NetconfRpcExample(AbstractScriptComponentFunction):
 
-class NetconfRpcExample(NetconfComponentFunction):
+    def process(self, execution_request):
+        try:
+            log = globals()[netconf_constant.SERVICE_LOG]
+            print(globals())
+            nc = NetconfClient(log, self, "netconf-connection")
+            rr = ResolutionHelper(self)
 
-  def process(self, execution_request):
-    try:
-      log = globals()[netconf_constant.SERVICE_LOG]
-      print(globals())
-      nc = NetconfClient(log, self, "netconf-connection")
-      rr = ResolutionHelper(self)
+            payload = rr.resolve_and_generate_message_from_template_prefix("hostname")
 
-      payload = rr.resolve_and_generate_message_from_template_prefix("hostname")
+            nc.connect()
+            response = nc.lock()
+            if not response.isSuccess():
+                log.error(response.errorMessage)
 
-      nc.connect()
-      response = nc.lock()
-      if not response.isSuccess():
-        log.error(response.errorMessage)
+            nc.edit_config(message_content=payload, edit_default_peration="none")
+            nc.validate()
+            nc.discard_change()
+            nc.validate()
+            nc.commit()
+            nc.unlock()
+            nc.disconnect()
 
-      nc.edit_config(message_content=payload, edit_default_peration="none")
-      nc.validate()
-      nc.discard_change()
-      nc.validate()
-      nc.commit()
-      nc.unlock()
-      nc.disconnect()
+        except JavaException, err:
+            log.error("Java Exception in the script {}", err)
+        except Exception, err:
+            log.error("Python Exception in the script {}", err)
 
-    except JavaException, err:
-      log.error("Java Exception in the script {}", err)
-    except Exception, err:
-      log.error("Python Exception in the script {}", err)
-
-  def recover(self, runtime_exception, execution_request):
-    print "Recovering calling.." + PROPERTY_BLUEPRINT_BASE_PATH
-    return None
+    def recover(self, runtime_exception, execution_request):
+        print "Recovering calling.." + PROPERTY_BLUEPRINT_BASE_PATH
+        return None

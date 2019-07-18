@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.node.*
 import org.apache.commons.lang3.ObjectUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JsonParserUtils
 import org.slf4j.helpers.MessageFormatter
 import kotlin.reflect.KClass
 
@@ -41,8 +42,8 @@ fun <T : Any> T.bpClone(): T {
 }
 
 fun String.isJson(): Boolean {
-    return ((this.startsWith("{") && this.endsWith("}"))
-            || (this.startsWith("[") && this.endsWith("]")))
+    return ((this.trim().startsWith("{") && this.trim().endsWith("}"))
+            || (this.trim().startsWith("[") && this.trim().endsWith("]")))
 }
 
 fun Any.asJsonString(intend: Boolean? = false): String {
@@ -261,6 +262,18 @@ fun nullToEmpty(value: String?): String {
 
 inline fun <reified T : JsonNode> T.isComplexType(): Boolean {
     return this is ObjectNode || this is ArrayNode
+}
+
+// Json Parsing Extensions
+fun JsonNode.jsonPathParse(expression: String): JsonNode {
+    check(this.isComplexType()) { "$this is not complex or array node to apply expression" }
+    return JsonParserUtils.parse(this, expression)
+}
+
+// Json Path Extensions
+fun JsonNode.jsonPaths(expression: String): List<String> {
+    check(this.isComplexType()) { "$this is not complex or array node to apply expression" }
+    return JsonParserUtils.paths(this, expression)
 }
 
 
