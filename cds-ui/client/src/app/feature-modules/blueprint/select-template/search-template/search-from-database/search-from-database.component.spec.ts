@@ -1,7 +1,7 @@
-<!--
+/*
 ============LICENSE_START==========================================
 ===================================================================
-Copyright (C) 2018 IBM Intellectual Property. All rights reserved.
+Copyright (C) 2019 IBM Intellectual Property. All rights reserved.
 ===================================================================
 
 Unless otherwise specified, all software contained herein is licensed
@@ -17,15 +17,29 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
--->
-<div *ngIf="optionSelected==1">
-    <div>
-        <input type="file" accept=".zip" (change)="fileChanged($event)">
-    </div>
-    <div>
-        <button mat-button matStepperNext (click)="updateBlueprintState()" [ngClass]="{'mat-upload-btn-disabled': !validfile, 'matStepNextBtn': validfile}" [disabled]="!validfile">Upload</button>
-    </div>
-</div>
-<div *ngIf="optionSelected==2">
-    <app-search-from-database></app-search-from-database>
-</div>
+*/
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { SearchFromDatabaseComponent } from './search-from-database.component';
+
+describe('SearchFromDatabaseComponent', () => {
+  let component: SearchFromDatabaseComponent;
+  let fixture: ComponentFixture<SearchFromDatabaseComponent>;
+
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [ SearchFromDatabaseComponent ]
+    })
+    .compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(SearchFromDatabaseComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
