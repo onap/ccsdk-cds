@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "726557fe_0a818428",
+        "filename": "ms/blueprintsprocessor/functions/netconf-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/netconf/executor/ScriptComponentExtensions.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-07-18T14:44:50Z",
+      "side": 1,
+      "message": "This was removed in another patch.\n\nI will redo this.\n\nThanks!",
+      "parentUuid": "fc423ea0_6dcda7dc",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 68,
+        "endChar": 47
+      },
+      "revId": "375c01b3112856f4296fcb05ed0ab893f8903392",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b5f91c01_c9ee6dec",
         "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionService.kt",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2019-07-18T01:30:04Z",
       "side": 1,
       "message": "Pls remove this code.",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 51
+      },
+      "revId": "375c01b3112856f4296fcb05ed0ab893f8903392",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "509c7d35_4fd73768",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionService.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-07-18T14:44:50Z",
+      "side": 1,
+      "message": "Sure!",
+      "parentUuid": "b5f91c01_c9ee6dec",
       "range": {
         "startLine": 96,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "e13cd4a1_f541f2b5",
+        "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/service/BluePrintExpressionService.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-07-18T14:44:50Z",
+      "side": 1,
+      "message": "I see your point.\n\nbut It is more a subProperty. Here is how it is call in CBA:\n\"login-key\" : {\n \"get_property\" : [ \"nodeTemplate\", \"\", \"propertyName\", \"subPropertyName\" ]\n},",
+      "parentUuid": "42c45ff8_0c9b6e70",
+      "range": {
+        "startLine": 174,
+        "startChar": 12,
+        "endLine": 174,
+        "endChar": 27
+      },
+      "revId": "375c01b3112856f4296fcb05ed0ab893f8903392",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a366726a_3e718ed4",
         "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/utils/JacksonUtils.kt",
         "patchSetId": 3
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "e8eb94c9_45a0d3fb",
+        "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/utils/JacksonUtils.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-07-18T14:44:50Z",
+      "side": 1,
+      "message": "Sure!",
+      "parentUuid": "a366726a_3e718ed4",
+      "range": {
+        "startLine": 301,
+        "startChar": 0,
+        "endLine": 302,
+        "endChar": 9
+      },
+      "revId": "375c01b3112856f4296fcb05ed0ab893f8903392",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "71678a5c_7588b824",
         "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/utils/JacksonUtils.kt",
         "patchSetId": 3
@@ -105,6 +201,30 @@
       "writtenOn": "2019-07-18T01:30:04Z",
       "side": 1,
       "message": "Define in CustomFunction.kt",
+      "range": {
+        "startLine": 304,
+        "startChar": 0,
+        "endLine": 306,
+        "endChar": 9
+      },
+      "revId": "375c01b3112856f4296fcb05ed0ab893f8903392",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6797fc06_f616d5ed",
+        "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/utils/JacksonUtils.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-07-18T14:44:50Z",
+      "side": 1,
+      "message": "Sure!",
+      "parentUuid": "71678a5c_7588b824",
       "range": {
         "startLine": 304,
         "startChar": 0,
