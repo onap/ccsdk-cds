@@ -18,15 +18,37 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor
 
 import com.fasterxml.jackson.databind.JsonNode
-import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.contentFromResolvedArtifact
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.storedContentFromResolvedArtifact
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+
+abstract class NetconfScriptComponentFunction: AbstractScriptComponentFunction() {
+    fun getNetconfDeviceServce(): ResourceResolutionService{
+        return BluePrintDependencyService.netconfClientService()
+    }
+
+    fun getNetconfDevice(requirementName: String): NetconfDevice{
+        return netconfDevice(requirementName)
+    }
+
+    fun getNetconfDeviceInfo(requirementName: String): DeviceInfo{
+        return netconfDeviceInfo(requirementName)
+    }
+
+    fun getStoredContentFromResolvedArtifact(resolutionKey: String, artifactName: String): String{
+        return storedContentFromResolvedArtifact(resolutionKey, artifactName)
+    }
+
+    fun getContentFromResolvedArtifact(artifactPrefix: String): String{
+        return contentFromResolvedArtifact(artifactPrefix)
+    }
+}
 
 /**
  * Register the Netconf module exposed dependency
@@ -59,11 +81,3 @@ private fun AbstractComponentFunction.netconfDeviceInfo(capabilityProperty: Muta
 /**
  * Blocking Methods called from Jython Scripts
  */
-fun AbstractComponentFunction.storedContentFromResolvedArtifact(resolutionKey: String, artifactName: String)
-        : String = runBlocking {
-    storedContentFromResolvedArtifact(resolutionKey, artifactName)
-}
-
-fun AbstractComponentFunction.contentFromResolvedArtifact(artifactPrefix: String): String = runBlocking {
-    contentFromResolvedArtifact(artifactPrefix)
-}

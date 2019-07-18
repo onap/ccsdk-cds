@@ -39,7 +39,7 @@ open class ComponentNetconfExecutor(private var componentFunctionScriptingServic
         const val INSTANCE_DEPENDENCIES = "instance-dependencies"
     }
 
-    lateinit var scriptComponent: NetconfComponentFunction
+    lateinit var scriptComponent: NetconfScriptComponentFunction
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
 
@@ -54,7 +54,7 @@ open class ComponentNetconfExecutor(private var componentFunctionScriptingServic
             scriptDependencies.add(instanceName.textValue())
         }
 
-        scriptComponent = componentFunctionScriptingService.scriptInstance<NetconfComponentFunction>(this, scriptType,
+        scriptComponent = componentFunctionScriptingService.scriptInstance<NetconfScriptComponentFunction>(this, scriptType,
                 scriptClassReference, scriptDependencies)
 
 

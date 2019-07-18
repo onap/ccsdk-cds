@@ -19,11 +19,7 @@ class ResolutionHelper:
     self.component_function = component_function
 
   def resolve_and_generate_message_from_template_prefix(self, artifact_prefix):
-    return self.component_function.contentFromResolvedArtifact(artifact_prefix)
-
-  def resolve_and_generate_message(self, artifact_mapping, artifact_template):
-    return self.component_function.resolveAndGenerateMessage(artifact_mapping,
-                                                             artifact_template)
+    return self.component_function.getContentFromResolvedArtifact(artifact_prefix)
 
   def retrieve_resolved_template_from_database(self, key, artifact_template):
-    return self.component_function.storedContentFromResolvedArtifact(key, artifact_template)
+    return self.component_function.getStoredContentFromResolvedArtifact(key, artifact_template)

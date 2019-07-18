@@ -1,14 +1,12 @@
 from netconf_constant import CONFIG_TARGET_RUNNING, CONFIG_TARGET_CANDIDATE, \
   CONFIG_DEFAULT_OPERATION_REPLACE
 
-
 class NetconfClient:
 
   def __init__(self, log, component_function, requirement_name):
     self.log = log
     self.component_function = component_function
-    netconf_device = self.component_function.initializeNetconfConnection(
-        requirement_name)
+    netconf_device = self.component_function.getNetconfDevice(requirement_name)
     self.netconf_rpc_client = netconf_device.netconfRpcService
     self.netconf_session = netconf_device.netconfSession
 

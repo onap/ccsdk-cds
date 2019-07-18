@@ -16,7 +16,11 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.cli.executor
 
-/**
- * Register the CLI module exposed dependency
- */
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
 
+abstract class CliScriptComponentFunction: AbstractScriptComponentFunction() {
+    
+}
+    /**
+     * Register the CLI module exposed dependency
+     */

@@ -1,5 +1,5 @@
 /*
- *  Copyright © 2018 IBM.
+ *  Copyright © 2018 - 2019 IBM, Bell Canada.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component
 open class ComponentRestconfExecutor(private var componentFunctionScriptingService: ComponentFunctionScriptingService) :
         AbstractComponentFunction() {
 
-    lateinit var scriptComponent: RestconfComponentFunction
+    lateinit var scriptComponent: RestconfScriptComponentFunction
 
     companion object {
         const val SCRIPT_TYPE = "script-type"
@@ -57,7 +57,7 @@ open class ComponentRestconfExecutor(private var componentFunctionScriptingServi
          * Populate the Script Instance based on the Type
          */
         scriptComponent = componentFunctionScriptingService
-                .scriptInstance<RestconfComponentFunction>(this, scriptType,
+                .scriptInstance<RestconfScriptComponentFunction>(this, scriptType,
                         scriptClassReference, scriptDependencies)
 
         checkNotNull(scriptComponent) { "failed to get restconf script component" }

@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2018 IBM.
+ *  Modifications Copyright © 2018 - 2019 IBM, Bell Canada.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,10 +17,10 @@
 @file:Suppress("unused")
 
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor.RestconfComponentFunction
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor.RestconfScriptComponentFunction
 import org.slf4j.LoggerFactory
 
-open class EditConfigure : RestconfComponentFunction() {
+open class EditConfigure : RestconfScriptComponentFunction() {
 
     val log = LoggerFactory.getLogger(EditConfigure::class.java)!!
 
@@ -37,7 +38,7 @@ open class EditConfigure : RestconfComponentFunction() {
     }
 }
 
-open class MountNEditConfigure : RestconfComponentFunction() {
+open class MountNEditConfigure : RestconfScriptComponentFunction() {
 
     val log = LoggerFactory.getLogger(MountNEditConfigure::class.java)!!
 
@@ -58,7 +59,7 @@ open class MountNEditConfigure : RestconfComponentFunction() {
 /**
  * This is for used for Testing only
  */
-open class TestRestconfConfigure : RestconfComponentFunction() {
+open class TestRestconfConfigure : RestconfScriptComponentFunction() {
 
     val log = LoggerFactory.getLogger(TestRestconfConfigure::class.java)!!
 
