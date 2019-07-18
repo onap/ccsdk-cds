@@ -64,8 +64,33 @@ fun Double.asJsonPrimitive(): DoubleNode {
     return DoubleNode.valueOf(this)
 }
 
+/**
+ * Utility to convert Primitive object to Json Type Primitive.
+ */
+fun <T : Any?> T.asJsonPrimitive(): JsonNode {
+    return if (this == null || this is MissingNode || this is NullNode) {
+        NullNode.instance
+    } else {
+        when (this) {
+            is String ->
+                this.asJsonPrimitive()
+            is Boolean ->
+                this.asJsonPrimitive()
+            is Int ->
+                this.asJsonPrimitive()
+            is Double ->
+                this.asJsonPrimitive()
+            else ->
+                throw BluePrintException("$this type is not supported")
+        }
+    }
+}
+
+/**
+ * Utility to convert Complex or Primitive object to Json Type.
+ */
 fun <T : Any?> T.asJsonType(): JsonNode {
-    return if (this == null) {
+    return if (this == null || this is MissingNode || this is NullNode) {
         NullNode.instance
     } else {
         when (this) {
@@ -131,15 +156,11 @@ fun JsonNode.returnNullIfMissing(): JsonNode? {
 }
 
 fun <T : JsonNode> T?.isNull(): Boolean {
-    return if (this == null || this is NullNode || this is MissingNode) {
-        true
-    } else false
+    return this == null || this is NullNode || this is MissingNode
 }
 
 fun <T : JsonNode> T?.isNotNull(): Boolean {
-    return if (this == null || this is NullNode || this is MissingNode) {
-        false
-    } else true
+    return !(this == null || this is NullNode || this is MissingNode)
 }
 
 /**

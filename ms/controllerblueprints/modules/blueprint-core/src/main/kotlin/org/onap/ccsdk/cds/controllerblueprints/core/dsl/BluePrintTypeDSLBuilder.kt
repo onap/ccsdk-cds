@@ -17,8 +17,8 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.dsl
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
+import com.fasterxml.jackson.databind.node.ArrayNode
+import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.data.*
 
 
@@ -162,7 +162,16 @@ class ArtifactTypeBuilder(id: String, version: String, derivedFrom: String,
 class PolicyTypeBuilder(id: String, version: String, derivedFrom: String,
                         description: String?) : EntityTypeBuilder(id, version, derivedFrom, description) {
     private var policyType = PolicyType()
-    // TODO()
+
+    fun targets(targetsStr: String) {
+        val arrayNode = targetsStr.jsonAsJsonType() as ArrayNode
+        targets(arrayNode.asListOfString())
+    }
+
+    fun targets(target: List<String>) {
+        policyType.targets = target.toMutableList()
+    }
+
     fun build(): PolicyType {
         buildEntityType(policyType)
         return policyType
@@ -174,7 +183,16 @@ class RelationshipTypeBuilder(private val id: String, private val version: Strin
     : EntityTypeBuilder(id, version, derivedFrom, description) {
 
     private var relationshipType = RelationshipType()
-    // TODO()
+
+    fun validTargetTypes(validTargetTypesStr: String) {
+        val arrayNode = validTargetTypesStr.jsonAsJsonType() as ArrayNode
+        validTargetTypes(arrayNode.asListOfString())
+    }
+
+    fun validTargetTypes(validTargetTypes: List<String>) {
+        relationshipType.validTargetTypes = validTargetTypes.toMutableList()
+    }
+
     fun build(): RelationshipType {
         buildEntityType(relationshipType)
         relationshipType.id = id
@@ -187,7 +205,15 @@ class RelationshipTypeBuilder(private val id: String, private val version: Strin
 class DataTypeBuilder(id: String, version: String, derivedFrom: String,
                       description: String?) : EntityTypeBuilder(id, version, derivedFrom, description) {
     private var dataType = DataType()
-    // TODO()
+
+    fun constrain(block: ConstraintClauseBuilder.() -> Unit) {
+        if (dataType.constraints == null) {
+            dataType.constraints = mutableListOf()
+        }
+        val constraintClause = ConstraintClauseBuilder().apply(block).build()
+        dataType.constraints!!.add(constraintClause)
+    }
+
     fun build(): DataType {
         buildEntityType(dataType)
         return dataType
@@ -264,29 +290,6 @@ class OperationDefinitionBuilder(private val id: String,
     }
 }
 
-class AttributesDefinitionBuilder {
-    private val attributes: MutableMap<String, AttributeDefinition> = hashMapOf()
-
-    fun attribute(id: String, attribute: AttributeDefinition) {
-        attributes[id] = attribute
-    }
-
-    fun attribute(id: String, type: String?, required: Boolean?, description: String?) {
-        val attribute = AttributeDefinitionBuilder(id, type, required, description).build()
-        attributes[id] = attribute
-    }
-
-    fun attribute(id: String, type: String?, required: Boolean?, description: String?,
-                 block: AttributeDefinitionBuilder.() -> Unit) {
-        val attribute = AttributeDefinitionBuilder(id, type, required, description).apply(block).build()
-        attributes[id] = attribute
-    }
-
-    fun build(): MutableMap<String, AttributeDefinition> {
-        return attributes
-    }
-}
-
 class AttributeDefinitionBuilder(private val id: String,
                                  private val type: String? = BluePrintConstants.DATA_TYPE_STRING,
                                  private val required: Boolean? = false,
@@ -302,7 +305,17 @@ class AttributeDefinitionBuilder(private val id: String,
         attributeDefinition.entrySchema = EntrySchemaBuilder(entrySchemaType).apply(block).build()
     }
 
-    // TODO("Constrains")
+    fun constrain(block: ConstraintClauseBuilder.() -> Unit) {
+        if (attributeDefinition.constraints == null) {
+            attributeDefinition.constraints = mutableListOf()
+        }
+        val constraintClause = ConstraintClauseBuilder().apply(block).build()
+        attributeDefinition.constraints!!.add(constraintClause)
+    }
+
+    fun defaultValue(defaultValue: Any) {
+        defaultValue(defaultValue.asJsonType())
+    }
 
     fun defaultValue(defaultValue: JsonNode) {
         attributeDefinition.defaultValue = defaultValue
@@ -355,8 +368,12 @@ class PropertyDefinitionBuilder(private val id: String,
         propertyDefinition.entrySchema = EntrySchemaBuilder(entrySchemaType).apply(block).build()
     }
 
-    fun constrains(block: ConstraintClauseBuilder.() -> Unit) {
-        propertyDefinition.constraints = ConstraintClauseBuilder().apply(block).build()
+    fun constrain(block: ConstraintClauseBuilder.() -> Unit) {
+        if (propertyDefinition.constraints == null) {
+            propertyDefinition.constraints = mutableListOf()
+        }
+        val constraintClause = ConstraintClauseBuilder().apply(block).build()
+        propertyDefinition.constraints!!.add(constraintClause)
     }
 
     fun defaultValue(defaultValue: Any) {
@@ -380,13 +397,11 @@ class PropertyDefinitionBuilder(private val id: String,
     }
 }
 
-class ConstraintClauseBuilder {
-    private val constraints: MutableList<ConstraintClause> = mutableListOf()
-    //TODO("Implementation")
+class ConstraintsClauseBuilder {
+    val constraints: MutableList<ConstraintClause> = mutableListOf()
 
-    fun validValues(values: List<JsonNode>) {
-        val constraintClause = ConstraintClause()
-        constraintClause.validValues = values.toMutableList()
+    fun constrain(block: ConstraintClauseBuilder.() -> Unit) {
+        val constraintClause = ConstraintClauseBuilder().apply(block).build()
         constraints.add(constraintClause)
     }
 
@@ -395,9 +410,81 @@ class ConstraintClauseBuilder {
     }
 }
 
+class ConstraintClauseBuilder {
+    private val constraintClause = ConstraintClause()
+
+    fun equal(equal: Any) = equal(equal.asJsonType())
+
+    fun equal(equal: JsonNode) {
+        constraintClause.equal = equal
+    }
+
+    fun greaterOrEqual(greaterOrEqual: Any) {
+        constraintClause.greaterOrEqual = greaterOrEqual.asJsonPrimitive()
+    }
+
+    fun greaterThan(greaterThan: Any) {
+        constraintClause.greaterThan = greaterThan.asJsonPrimitive()
+    }
+
+    fun lessOrEqual(lessOrEqual: Any) {
+        constraintClause.lessOrEqual = lessOrEqual.asJsonPrimitive()
+    }
+
+    fun lessThan(lessThan: Any) {
+        constraintClause.lessThan = lessThan.asJsonPrimitive()
+    }
+
+    fun inRange(inRangeStr: String) = inRange(inRangeStr.jsonAsJsonType() as ArrayNode)
+
+    fun inRange(inRangeNode: ArrayNode) {
+        constraintClause.inRange = inRangeNode.toMutableList()
+    }
+
+    fun validValues(validValuesStr: String) = validValues(validValuesStr.jsonAsJsonType() as ArrayNode)
+
+    fun validValues(validValuesNode: ArrayNode) = validValues(validValuesNode.toMutableList())
+
+    fun validValues(validValues: List<JsonNode>) {
+        constraintClause.validValues = validValues.toMutableList()
+    }
+
+    fun length(length: Any) {
+        constraintClause.length = length.asJsonPrimitive()
+    }
+
+    fun minLength(minLength: Any) {
+        constraintClause.minLength = minLength.asJsonPrimitive()
+    }
+
+    fun maxLength(maxLength: Any) {
+        constraintClause.maxLength = maxLength.asJsonPrimitive()
+    }
+
+    fun pattern(pattern: String) {
+        constraintClause.pattern = pattern
+    }
+
+    fun schema(schema: String) {
+        constraintClause.schema = schema
+    }
+
+    fun build(): ConstraintClause {
+        return constraintClause
+    }
+}
+
 
 class EntrySchemaBuilder(private val type: String) {
     private var entrySchema: EntrySchema = EntrySchema()
+
+    fun constrain(block: ConstraintClauseBuilder.() -> Unit) {
+        if (entrySchema.constraints == null) {
+            entrySchema.constraints = mutableListOf()
+        }
+        val constraintClause = ConstraintClauseBuilder().apply(block).build()
+        entrySchema.constraints!!.add(constraintClause)
+    }
 
     fun build(): EntrySchema {
         entrySchema.type = type

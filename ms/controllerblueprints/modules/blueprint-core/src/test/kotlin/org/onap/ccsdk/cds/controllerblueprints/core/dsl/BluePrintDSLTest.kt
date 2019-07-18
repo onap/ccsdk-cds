@@ -18,6 +18,7 @@ package org.onap.ccsdk.cds.controllerblueprints.core.dsl
 
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 import kotlin.test.assertNotNull
 
@@ -150,6 +151,41 @@ class BluePrintDSLTest {
         assertNotNull(serviceTemplate.topologyTemplate?.nodeTemplates, "failed to get nodeTypes")
         assertNotNull(serviceTemplate.topologyTemplate?.nodeTemplates!!["activate"], "failed to get nodeTypes(activate)")
         //println(serviceTemplate.asJsonString(true))
+    }
+
+    @Test
+    fun testNodeTypePropertyConstrains() {
+        val nodeType = nodeType("data-node", "1.0.0", "tosca.Nodes.root", "") {
+            property("ip-address", "string", true, "") {
+                defaultValue("127.0.0.1")
+                constrain {
+                    validValues(arrayListOf("""127.0.0.1""".asJsonPrimitive()))
+                    length(10)
+                    maxLength(20)
+                    minLength(10)
+                }
+
+            }
+            property("disk-space", "string", true, "") {
+                defaultValue(10)
+                constrain {
+                    validValues("""["200KB", "400KB"]""")
+                    equal("200KB")
+                    inRange("""["100KB", "500KB" ]""")
+                    maxLength("10MB")
+                    minLength("10KB")
+                }
+                constrain {
+                    validValues("""[ 200, 400]""")
+                    greaterOrEqual("10KB")
+                    greaterThan("20KB")
+                    lessOrEqual("200KB")
+                    lessThan("190KB")
+                }
+            }
+        }
+        assertNotNull(nodeType, "failed to get nodeType")
+       // println(nodeType.asJsonString(true))
     }
 
     @Test
