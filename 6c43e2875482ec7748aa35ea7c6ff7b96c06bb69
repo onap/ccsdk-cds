@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb06d35b_129d4750",
+        "filename": "ms/blueprintsprocessor/functions/netconf-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/netconf/executor/ScriptComponentExtensions.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-07-18T01:30:04Z",
+      "side": 1,
+      "message": "o need to define, it is duplicate it is already defined in Resource Resolution.",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 1
+      },
+      "revId": "6c43e2875482ec7748aa35ea7c6ff7b96c06bb69",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
