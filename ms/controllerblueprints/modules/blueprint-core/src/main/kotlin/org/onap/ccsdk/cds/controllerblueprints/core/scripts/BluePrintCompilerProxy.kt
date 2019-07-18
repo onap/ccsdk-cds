@@ -60,13 +60,22 @@ open class BluePrintsCompilerProxy(private val hostConfiguration: ScriptingHostC
 
             val compiledJarFile = blueprintSourceCode.targetJarFile
 
-            if (!compiledJarFile.exists() || blueprintSourceCode.regenerate) {
+            /** Check cache is present for the blueprint scripts */
+            val hasCompiledCache = BluePrintCompileCache.hasClassLoader(blueprintSourceCode.cacheKey)
+
+            if (!compiledJarFile.exists() || blueprintSourceCode.regenerate || !hasCompiledCache) {
+                log.info("compiling for cachekey(${blueprintSourceCode.cacheKey})")
 
                 var environment: KotlinCoreEnvironment? = null
 
                 val rootDisposable = Disposer.newDisposable()
 
                 try {
+
+                    // Clean the cache, if present
+                    if (hasCompiledCache) {
+                        BluePrintCompileCache.cleanClassLoader(blueprintSourceCode.cacheKey)
+                    }
 
                     val compilerConfiguration = CompilerConfiguration().apply {
 
@@ -83,6 +92,8 @@ open class BluePrintsCompilerProxy(private val hostConfiguration: ScriptingHostC
 
                         // Add all Kotlin Sources
                         addKotlinSourceRoots(blueprintSourceCode.blueprintKotlinSources)
+                        // for Kotlin 1.3.30 greater
+                        //add(ComponentRegistrar.PLUGIN_COMPONENT_REGISTRARS, ScriptingCompilerConfigurationComponentRegistrar())
 
                         languageVersionSettings = LanguageVersionSettingsImpl(
                                 LanguageVersion.LATEST_STABLE, ApiVersion.LATEST_STABLE, mapOf(AnalysisFlags.skipMetadataVersionCheck to true)
@@ -108,9 +119,9 @@ open class BluePrintsCompilerProxy(private val hostConfiguration: ScriptingHostC
                 }
             }
 
-            val res = BluePrintCompiledScript<File>(scriptCompilationConfiguration, compiledJarFile)
+            val compiledScript = BluePrintCompiledScript<File>(scriptCompilationConfiguration, compiledJarFile)
 
-            return ResultWithDiagnostics.Success(res, messageCollector.diagnostics)
+            return compiledScript.asSuccess()
 
         } catch (ex: Throwable) {
             return failure(ex.asDiagnostics())

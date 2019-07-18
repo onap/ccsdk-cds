@@ -17,10 +17,11 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.scripts
 
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintScriptsService
+import org.onap.ccsdk.cds.controllerblueprints.core.logger
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
-import java.io.File
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
 import java.util.*
 import kotlin.script.experimental.api.ResultValue
 import kotlin.script.experimental.api.resultOrNull
@@ -28,29 +29,26 @@ import kotlin.script.experimental.jvmhost.createJvmCompilationConfigurationFromT
 
 open class BluePrintScriptsServiceImpl : BluePrintScriptsService {
 
+    val log = logger(BluePrintScriptsServiceImpl::class)
+
     override suspend fun <T> scriptInstance(blueprintContext: BluePrintContext, scriptClassName: String,
                                             reCompile: Boolean): T {
-
-        val kotlinScriptPath = blueprintContext.rootPath.plus(File.separator)
-                .plus(BluePrintConstants.TOSCA_SCRIPTS_KOTLIN_DIR)
-
-        val compiledJar = kotlinScriptPath.plus(File.separator)
-                .plus(bluePrintScriptsJarName(blueprintContext))
 
         val scriptSource = BluePrintSourceCode()
 
         val sources: MutableList<String> = arrayListOf()
-        sources.add(kotlinScriptPath)
+        sources.add(BluePrintFileUtils.scriptPath(blueprintContext))
         scriptSource.blueprintKotlinSources = sources
         scriptSource.moduleName = "${blueprintContext.name()}-${blueprintContext.version()}-cba-kts"
-        scriptSource.targetJarFile = File(compiledJar)
+        scriptSource.cacheKey = BluePrintFileUtils.compileJarFilePath(blueprintContext)
+        scriptSource.targetJarFile = normalizedFile(scriptSource.cacheKey)
         scriptSource.regenerate = reCompile
 
         val compilationConfiguration = createJvmCompilationConfigurationFromTemplate<BluePrintKotlinScript>()
-        val scriptEvaluator = BluePrintScriptEvaluator(scriptClassName)
+        val scriptEvaluator = BluePrintScriptEvaluator(scriptSource.cacheKey, scriptClassName)
 
-        val compiledResponse = BlueprintScriptingHost(scriptEvaluator).eval(scriptSource, compilationConfiguration,
-                null)
+        val compiledResponse = BlueprintScriptingHost(scriptEvaluator)
+                .eval(scriptSource, compilationConfiguration, null)
 
         val returnValue = compiledResponse.resultOrNull()?.returnValue as? ResultValue.Value
 
@@ -61,9 +59,5 @@ open class BluePrintScriptsServiceImpl : BluePrintScriptsService {
         val args = ArrayList<Any?>()
         return Thread.currentThread().contextClassLoader.loadClass(scriptClassName).constructors
                 .single().newInstance(*args.toArray()) as T
-    }
-
-    private fun bluePrintScriptsJarName(blueprintContext: BluePrintContext): String {
-        return "${blueprintContext.name()}-${blueprintContext.version()}-cba-kts.jar"
     }
 }
