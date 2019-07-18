@@ -12,17 +12,22 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution import ResourceResolutionExtensionsKt
+
+
 class ResolutionHelper:
 
-  def __init__(self, component_function):
-    self.component_function = component_function
+    def __init__(self, component_function):
+        self.component_function = component_function
 
-  def resolve_and_generate_message_from_template_prefix(self, artifact_prefix):
-    return self.component_function.resolveAndGenerateMessage(artifact_prefix)
+    def resolve_and_generate_message_from_template_prefix(self, artifact_prefix):
+        return ResourceResolutionExtensionsKt.contentFromResolvedArtifact(self.component_function, artifact_prefix)
 
-  def resolve_and_generate_message(self, artifact_mapping, artifact_template):
-    return self.component_function.resolveAndGenerateMessage(artifact_mapping,
-                                                             artifact_template)
+    # No Implementation found, To be removed
+    def resolve_and_generate_message(self, artifact_mapping, artifact_template):
+        return ResourceResolutionExtensionsKt.contentFromResolvedArtifact(artifact_mapping,
+                                                                        artifact_template)
 
-  def retrieve_resolved_template_from_database(self, key, artifact_template):
-    return self.component_function.resolveFromDatabase(key, artifact_template)
+    def retrieve_resolved_template_from_database(self, key, artifact_template):
+        return ResourceResolutionExtensionsKt.storedContentFromResolvedArtifact(self.component_function, key,
+                                                                                artifact_template)
