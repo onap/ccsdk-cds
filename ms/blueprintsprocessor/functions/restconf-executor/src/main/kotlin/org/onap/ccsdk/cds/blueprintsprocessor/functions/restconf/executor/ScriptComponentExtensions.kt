@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2019 IBM.
+ *  Modifications Copyright © 2018 - 2019 IBM, Bell Canada.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,21 +17,26 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor
 
-/**
- * Register the Restconf module exposed dependency
- */
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
+
+abstract class RestconfScriptComponentFunction: AbstractScriptComponentFunction() {
+
+}
+    /**
+     * Register the Restconf module exposed dependency
+     */
 
 
-/**
- * Generic Mount function
- */
+    /**
+     * Generic Mount function
+     */
 
 
-/**
- * Generic Configure function
- */
+    /**
+     * Generic Configure function
+     */
 
 
-/**
- * Generic Unmount function
- */
+    /**
+     * Generic Unmount function
+     */

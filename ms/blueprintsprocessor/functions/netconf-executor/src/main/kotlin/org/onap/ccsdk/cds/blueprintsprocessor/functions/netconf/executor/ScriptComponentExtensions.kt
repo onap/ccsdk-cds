@@ -22,8 +22,31 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.Dev
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+
+abstract class NetconfScriptComponentFunction: AbstractScriptComponentFunction() {
+    fun getNetconfDeviceServce(): ResourceResolutionService{
+        return BluePrintDependencyService.netconfClientService()
+    }
+
+    fun getNetconfDevice(requirementName: String): NetconfDevice{
+        return netconfDevice(requirementName)
+    }
+
+    fun getNetconfDeviceInfo(requirementName: String): DeviceInfo{
+        return netconfDeviceInfo(requirementName)
+    }
+
+    fun getStoredContentFromResolvedArtifact(resolutionKey: String, artifactName: String): String{
+        return storedContentFromResolvedArtifact(resolutionKey, artifactName)
+    }
+
+    fun getContentFromResolvedArtifact(artifactPrefix: String): String{
+        return contentFromResolvedArtifact(artifactPrefix)
+    }
+}
 
 /**
  * Register the Netconf module exposed dependency

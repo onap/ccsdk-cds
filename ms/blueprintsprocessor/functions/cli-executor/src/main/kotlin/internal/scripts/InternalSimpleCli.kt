@@ -1,5 +1,6 @@
 /*
- *  Copyright © 2019 IBM.
+ *  Copyright © 2019 IBM
+ *  Modifications Copyright © 2019 IBM, Bell Canada.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,6 +20,7 @@
 package internal.scripts
 
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.cli.executor.CliScriptComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentScriptExecutor
 import org.onap.ccsdk.cds.blueprintsprocessor.ssh.sshClientService
@@ -26,7 +28,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.slf4j.LoggerFactory
 
-open class TestCliScriptFunction : AbstractScriptComponentFunction() {
+open class TestCliScriptFunction : CliScriptComponentFunction() {
 
     private val log = LoggerFactory.getLogger(TestCliScriptFunction::class.java)!!
 
@@ -44,7 +46,7 @@ open class TestCliScriptFunction : AbstractScriptComponentFunction() {
 }
 
 
-open class Check : AbstractScriptComponentFunction() {
+open class Check : CliScriptComponentFunction() {
 
     private val log = LoggerFactory.getLogger(AbstractScriptComponentFunction::class.java)!!
 
