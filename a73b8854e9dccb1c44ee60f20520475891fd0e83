@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db8b01db_43104b90",
+        "filename": "ms/blueprintsprocessor/functions/cli-executor/src/main/kotlin/internal/scripts/InternalSimpleCli.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-07-18T01:25:34Z",
+      "side": 1,
+      "message": "All Script function should extend AbstractScriptComponentFunction, No checnge in this file needed.",
+      "range": {
+        "startLine": 31,
+        "startChar": 35,
+        "endLine": 31,
+        "endChar": 61
+      },
+      "revId": "a73b8854e9dccb1c44ee60f20520475891fd0e83",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c999ca6f_ba980fb6",
+        "filename": "ms/blueprintsprocessor/functions/cli-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/cli/executor/ScriptComponentExtensions.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-07-18T01:25:34Z",
+      "side": 1,
+      "message": "No checnge in this file expected.",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 1
+      },
+      "revId": "a73b8854e9dccb1c44ee60f20520475891fd0e83",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b993b09e_a45a4fe8",
+        "filename": "ms/blueprintsprocessor/functions/netconf-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/netconf/executor/ComponentNetconfExecutor.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-07-18T01:25:34Z",
+      "side": 1,
+      "message": "Should be AbstractScriptComponentFunction",
+      "range": {
+        "startLine": 57,
+        "startChar": 75,
+        "endLine": 57,
+        "endChar": 105
+      },
+      "revId": "a73b8854e9dccb1c44ee60f20520475891fd0e83",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
