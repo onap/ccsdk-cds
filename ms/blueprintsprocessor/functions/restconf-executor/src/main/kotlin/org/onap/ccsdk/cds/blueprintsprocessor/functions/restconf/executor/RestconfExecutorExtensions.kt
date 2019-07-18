@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2019 IBM.
+ *  Modifications Copyright © 2018-2019 IBM, Bell Canada
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,9 +15,23 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.functions.cli.executor
+package org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor
 
 /**
- * Register the CLI module exposed dependency
+ * Register the Restconf module exposed dependency
  */
 
+
+/**
+ * Generic Mount function
+ */
+
+
+/**
+ * Generic Configure function
+ */
+
+
+/**
+ * Generic Unmount function
+ */
