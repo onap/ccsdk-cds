@@ -26,7 +26,7 @@ import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.putJsonElement
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -61,8 +61,21 @@ class ComponentNetconfExecutorTest {
             val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
                     "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
-            val executionContext = bluePrintRuntimeService.getExecutionContext()
+            val assignmentParams = "{\n" +
+                    "            \"ipAddress\": \"127.0.0.1\",\n" +
+                    "            \"hostName\": \"vnf-host\"\n" +
+                    "          }"
 
+            val json = """{
+                "hostname" : "127.0.0.1"
+                }                
+            """.trimIndent()
+
+            bluePrintRuntimeService.assignInputs(json.asJsonType())
+            bluePrintRuntimeService.setNodeTemplateAttributeValue("resource-assignment", "assignment-params",
+                    JacksonUtils.jsonNode(assignmentParams))
+
+            val executionContext = bluePrintRuntimeService.getExecutionContext()
 
             componentNetconfExecutor.bluePrintRuntimeService = bluePrintRuntimeService
 

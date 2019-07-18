@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
 import org.onap.ccsdk.cds.controllerblueprints.core.getAsString
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
@@ -39,7 +40,7 @@ open class ComponentNetconfExecutor(private var componentFunctionScriptingServic
         const val INSTANCE_DEPENDENCIES = "instance-dependencies"
     }
 
-    lateinit var scriptComponent: NetconfComponentFunction
+    lateinit var scriptComponent: AbstractScriptComponentFunction
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
 
@@ -54,8 +55,9 @@ open class ComponentNetconfExecutor(private var componentFunctionScriptingServic
             scriptDependencies.add(instanceName.textValue())
         }
 
-        scriptComponent = componentFunctionScriptingService.scriptInstance<NetconfComponentFunction>(this, scriptType,
-                scriptClassReference, scriptDependencies)
+        scriptComponent = componentFunctionScriptingService
+                .scriptInstance<AbstractScriptComponentFunction>(this, scriptType,
+                        scriptClassReference, scriptDependencies)
 
 
         checkNotNull(scriptComponent) { "failed to get netconf script component" }
