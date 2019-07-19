@@ -84,4 +84,15 @@ export class DataDictionaryController {
   }) resourceDictionaryList: JSON): Promise<any> {
     return await this.rdservice.searchbyNames(resourceDictionaryList);
   }
+
+  @get('/resourcedictionary/model-type/{source}', {
+    responses: {
+      '200': {
+        content: { 'application/json': {} },
+      },
+    },
+  })
+  async getmodelType(@param.path.string('source') source: string) {
+    return await this.rdservice.getModelType(source);
+  }
 }
