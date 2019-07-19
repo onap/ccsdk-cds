@@ -21,9 +21,12 @@ package org.onap.ccsdk.cds.controllerblueprints.core.utils
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ToscaMetaData
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
+import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintCompileCache
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class BluePrintMetadataUtilsTest {
 
@@ -42,6 +45,24 @@ class BluePrintMetadataUtilsTest {
             assertNotNull(toscaMetaData.templateTags, "Missing Template Tags")
         }
 
+    }
+
+    @Test
+    fun testKotlinBluePrintContext() {
+        val path = normalizedPathName("src/test/resources/compile")
+        val blueprintContext = BluePrintMetadataUtils.getBluePrintContext(path)
+        assertNotNull(blueprintContext, "failed to get blueprint context")
+        assertNotNull(blueprintContext.serviceTemplate, "failed to get blueprint context service template")
+        assertNotNull(blueprintContext.serviceTemplate, "failed to get blueprint context service template")
+        assertNotNull(blueprintContext.otherDefinitions, "failed to get blueprint contextother definitions")
+
+        var cachePresent = BluePrintCompileCache.hasClassLoader(path)
+        assertTrue(cachePresent, "failed to generate cache key ($path)")
+
+        /** Cleaning Cache */
+        BluePrintCompileCache.cleanClassLoader(path)
+        cachePresent = BluePrintCompileCache.hasClassLoader(path)
+        assertTrue(!cachePresent, "failed to remove cache key ($path)")
     }
 
     @Test

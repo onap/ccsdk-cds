@@ -18,12 +18,12 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
-import org.slf4j.LoggerFactory
 import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.data.*
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.slf4j.LoggerFactory
 
 /**
  *
@@ -32,7 +32,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
  */
 class BluePrintContext(val serviceTemplate: ServiceTemplate) {
 
-    private val log= LoggerFactory.getLogger(this::class.toString())
+    private val log = LoggerFactory.getLogger(this::class.toString())
 
     /**
      * Blueprint CBA extracted file location
@@ -42,6 +42,13 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
      * Root Definition file path
      */
     var entryDefinition = ""
+
+    /** Other definitions along with model, It may Resource Definition, Resource Assignments, Configurations etc..*/
+    var otherDefinitions: MutableMap<String, Any> = hashMapOf()
+
+    fun <T> otherDefinition(key: String) = otherDefinitions[key] as T
+
+    fun checkOtherDefinition(key: String) = otherDefinitions.containsKey(key)
 
     fun imports(): List<ImportDefinition>? = serviceTemplate.imports
 

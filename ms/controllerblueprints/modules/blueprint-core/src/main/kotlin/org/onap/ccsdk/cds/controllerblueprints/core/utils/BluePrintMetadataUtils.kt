@@ -20,11 +20,10 @@ package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
 import com.fasterxml.jackson.databind.JsonNode
 import kotlinx.coroutines.runBlocking
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ToscaMetaData
-import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
-import org.onap.ccsdk.cds.controllerblueprints.core.readNBLines
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintDefinitions
+import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintScriptsServiceImpl
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintImportService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
@@ -138,7 +137,12 @@ class BluePrintMetadataUtils {
 
             log.info("Reading blueprint path($blueprintBasePath) and entry definition file (${toscaMetaData.entityDefinitions})")
 
-            readBlueprintFile(toscaMetaData.entityDefinitions, blueprintBasePath)
+            // If the EntryDefinition is Kotlin file, compile and get Service Template
+            if (toscaMetaData.entityDefinitions.endsWith("kt")) {
+                readBlueprintKotlinFile(toscaMetaData, blueprintBasePath)
+            } else {
+                readBlueprintFile(toscaMetaData.entityDefinitions, blueprintBasePath)
+            }
         }
 
         private suspend fun getBaseEnhancementBluePrintContext(blueprintBasePath: String): BluePrintContext {
@@ -158,14 +162,41 @@ class BluePrintMetadataUtils {
         }
 
         private suspend fun readBlueprintFile(entityDefinitions: String, basePath: String): BluePrintContext {
-            val rootFilePath: String = basePath.plus(File.separator).plus(entityDefinitions)
+            val normalizedBasePath = normalizedPathName(basePath)
+            val rootFilePath = normalizedPathName(normalizedBasePath, entityDefinitions)
             val rootServiceTemplate = ServiceTemplateUtils.getServiceTemplate(rootFilePath)
             // Recursively Import Template files
-            val schemaImportResolverUtils = BluePrintImportService(rootServiceTemplate, basePath)
+            val schemaImportResolverUtils = BluePrintImportService(rootServiceTemplate, normalizedBasePath)
             val completeServiceTemplate = schemaImportResolverUtils.getImportResolvedServiceTemplate()
             val blueprintContext = BluePrintContext(completeServiceTemplate)
-            blueprintContext.rootPath = basePath
+            blueprintContext.rootPath = normalizedBasePath
             blueprintContext.entryDefinition = entityDefinitions
+            return blueprintContext
+        }
+
+        /** Reade the Service Template Definitions from the Kotlin file */
+        private suspend fun readBlueprintKotlinFile(toscaMetaData: ToscaMetaData, basePath: String): BluePrintContext {
+
+            checkNotNull(toscaMetaData.templateName) { "couldn't find 'Template-Name' key in TOSCA.meta" }
+            checkNotNull(toscaMetaData.templateVersion) { "couldn't find 'Template-Version' key in TOSCA.meta" }
+
+            val definitionClassName = toscaMetaData.entityDefinitions.removeSuffix(".kt")
+            val normalizedBasePath = normalizedPathName(basePath)
+
+            val bluePrintScriptsService = BluePrintScriptsServiceImpl()
+            val bluePrintDefinitions = bluePrintScriptsService
+                    .scriptInstance<BluePrintDefinitions>(normalizedBasePath, toscaMetaData.templateName!!,
+                            toscaMetaData.templateVersion!!, definitionClassName, true)
+            // Get the Service Template
+            val serviceTemplate = bluePrintDefinitions.serviceTemplate()
+
+            // Clean the Default type import Definitions
+            BluePrintFileUtils.cleanImportTypes(serviceTemplate)
+
+            val blueprintContext = BluePrintContext(serviceTemplate)
+            blueprintContext.rootPath = normalizedBasePath
+            blueprintContext.entryDefinition = toscaMetaData.entityDefinitions
+            blueprintContext.otherDefinitions = bluePrintDefinitions.otherDefinitions()
             return blueprintContext
         }
     }
