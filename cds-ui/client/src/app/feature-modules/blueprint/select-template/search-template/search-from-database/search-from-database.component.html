@@ -1,7 +1,7 @@
 <!--
 ============LICENSE_START==========================================
 ===================================================================
-Copyright (C) 2018 IBM Intellectual Property. All rights reserved.
+Copyright (C) 2019 IBM Intellectual Property. All rights reserved.
 ===================================================================
 
 Unless otherwise specified, all software contained herein is licensed
@@ -18,14 +18,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
 -->
-<div *ngIf="optionSelected==1">
-    <div>
-        <input type="file" accept=".zip" (change)="fileChanged($event)">
-    </div>
-    <div>
-        <button mat-button matStepperNext (click)="updateBlueprintState()" [ngClass]="{'mat-upload-btn-disabled': !validfile, 'matStepNextBtn': validfile}" [disabled]="!validfile">Upload</button>
-    </div>
-</div>
-<div *ngIf="optionSelected==2">
-    <app-search-from-database></app-search-from-database>
-</div>
+<form class="search-form" [formGroup]="myControl">
+    <mat-form-field class="search-full-width">
+        <input #resourceSelect type="text" [(ngModel)]="searchText" placeholder="Search Resources" matInput [matAutocomplete]="auto" formControlName="search_input">
+        <button matSuffix mat-icon-button (click)="fetchResourceByName()"><mat-icon>search</mat-icon></button>
+        <mat-autocomplete #auto="matAutocomplete">
+            <mat-option (click)="selected(option)" *ngFor="let option of options" [value]="option.tags">
+                {{option.tags}}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+</form>

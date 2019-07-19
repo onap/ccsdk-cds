@@ -1,7 +1,7 @@
-<!--
+/*
 ============LICENSE_START==========================================
 ===================================================================
-Copyright (C) 2018 IBM Intellectual Property. All rights reserved.
+Copyright (C) 2019 IBM Intellectual Property. All rights reserved.
 ===================================================================
 
 Unless otherwise specified, all software contained herein is licensed
@@ -17,15 +17,28 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
--->
-<div *ngIf="optionSelected==1">
-    <div>
-        <input type="file" accept=".zip" (change)="fileChanged($event)">
-    </div>
-    <div>
-        <button mat-button matStepperNext (click)="updateBlueprintState()" [ngClass]="{'mat-upload-btn-disabled': !validfile, 'matStepNextBtn': validfile}" [disabled]="!validfile">Upload</button>
-    </div>
-</div>
-<div *ngIf="optionSelected==2">
-    <app-search-from-database></app-search-from-database>
-</div>
+*/
+
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { SearchFromDatabaseComponent } from './search-from-database/search-from-database.component';
+import { SearchTemplateComponent } from './search-template.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { AppMaterialModule } from 'src/app/common/modules/app-material.module';
+import { SharedModule} from 'src/app/common/shared/shared.module';
+@NgModule({
+  declarations: [
+    SearchTemplateComponent,
+    SearchFromDatabaseComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    AppMaterialModule,
+    SharedModule   
+  ],
+  exports:[
+    SearchTemplateComponent,
+    SearchFromDatabaseComponent
+    ]
+})
+export class SearchTemplateModule { }
