@@ -40,7 +40,7 @@ Here is how input-key-mapping, output-key-mapping and key-dependencies can be us
 .. toctree::
    :maxdepth: 1
    
-resourceDefintionCode 
+	resourcedefinitioncodesnip 
 
 
 Resource source:
@@ -61,10 +61,10 @@ Also please click below for resource source available details
 .. _Resource: https://wiki.onap.org/display/DW/Modeling+Concepts#ModelingConcepts-NodeResourceSource
 
 
-.. |image0| image:: media/mandatory.jpg
+.. |image0| image:: media/mandatory.JPG
    :width: 7.88889in 
    :height: 4.43750in
    
-.. |image1| image:: media/optional.jpg
+.. |image1| image:: media/optional.JPG
    :width: 7.88889in 
    :height: 4.43750in
