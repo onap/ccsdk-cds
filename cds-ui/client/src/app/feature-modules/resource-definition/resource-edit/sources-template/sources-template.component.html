@@ -27,13 +27,13 @@
       class="sources-list"
       (cdkDropListDropped)="drop($event)">
       	<div class="sources-box" *ngFor="let item of sourcesOptions;let i = index" cdkDrag>
-      		<mat-expansion-panel class="expansion-panel">
+          <mat-expansion-panel class="expansion-panel" (opened)="selected(item)">
       			<mat-expansion-panel-header>
         			<mat-panel-title>
-          				{{item}}
+                  {{item.name}}
         			</mat-panel-title>
       			</mat-expansion-panel-header>
-     		 	<json-editor [options]="options" [data]="selected(item)" on-change="onChange(item,$event)"></json-editor>
+            <json-editor [options]="options" [data]="item.data" on-change="onChange(item,$event)"></json-editor>
    			 </mat-expansion-panel>
    			 <button matSuffix mat-icon-button (click)="delete(item,i)"><mat-icon class="icon">delete</mat-icon></button>
     	</div>
@@ -44,7 +44,7 @@
     <h3>Source Options</h3>
 	<mat-form-field>
     	<input [(ngModel)]="searchText" type="input" matInput placeholder="search sources">
-    	<button matSuffix mat-icon-button><mat-icon>search</mat-icon></button>
+      <button matSuffix mat-icon-button (click)="getResources()"><mat-icon>search</mat-icon></button>
     	<mat-hint>db,mdsal,input,default,..</mat-hint>
   	</mat-form-field>
   	<br><br>
@@ -53,7 +53,7 @@
       [cdkDropListData]="option"
       class="options-list"
       (cdkDropListDropped)="drop($event)">
-      <div class="options-box" *ngFor="let item of option | search :searchText" cdkDrag>{{item}}</div>
+      <div class="options-box" *ngFor="let item of option | search :searchText" cdkDrag>{{item.name}}</div>
     </div>
    </div>
    <div> 
