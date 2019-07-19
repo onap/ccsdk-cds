@@ -11,10 +11,13 @@ Expects the value to be provided as input to the request.
 
 source-input:
 
+.. code: json
+print("
   "description": "This is Input Resource Source Node Type",
   "version": "1.0.0",
   "properties": {},
   "derived_from": "tosca.nodes.ResourceSource"
+")
 
 
 Default:
@@ -39,21 +42,21 @@ CDS is currently deployed along the side of SDNC, hence the primary database con
 
 |image0|
 
-.. |image0| image:: media/sqltable.jpg
+.. |image0| image:: media/sqltable.JPG
    :width: 7.88889in 
    :height: 4.43750in
 
 .. toctree::
    :maxdepth: 1  
 
-sourceprimarydbcode
+   sourceprimarydbcode
 
 Connection to a specific database can be expressed through the endpoint-selector property, which refers to a macro defining the information about the database the connect to. Understand TOSCA Macro in the context of CDS.
 
 .. toctree::
    :maxdepth: 1 
 
-dbsystemcode
+   dbsystemcode
 
 
 REST:
@@ -65,7 +68,7 @@ CDS is currently deployed along the side of SDNC, hence the default rest connect
 
 |image1|
 
-.. |image1| image:: media/resttable.jpg
+.. |image1| image:: media/resttable.JPG
    :width: 7.88889in 
    :height: 4.43750in
 
@@ -96,7 +99,7 @@ Expects a script to be provided.
 
 |image2|
 
-.. |image2| image:: media/capabilitytable.jpg
+.. |image2| image:: media/capabilitytable.JPG
    :width: 7.88889in 
    :height: 4.43750in
    
@@ -104,7 +107,7 @@ Expects a script to be provided.
 .. toctree::
    :maxdepth: 1   
 
-	sourcecapabilitycode
+   sourcecapabilitycode
 	
 Complex Type:
 =============
@@ -122,14 +125,14 @@ As part of this request, the expected response will be as below.
 .. toctree::
    :maxdepth: 1   
 
-	complexResponse
+   complexResponse
 
 What is of interest is the address and id fields. For the process to return these two values, we need to create a custom data-type, as bellow
 
 .. toctree::
    :maxdepth: 1 
    
-	dt-netbox-ip
+   dt-netbox-ip
 
 The type of the data dictionary will be dt-netbox-ip.
 
@@ -138,4 +141,4 @@ To tell the resolution framework what is of interest in the response, the output
 .. toctree::
    :maxdepth: 1 
    
-create_netbox_ip_address
+   create_netbox_ip_address
