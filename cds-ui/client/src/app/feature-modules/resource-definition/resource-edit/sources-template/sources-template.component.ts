@@ -31,6 +31,7 @@ import { A11yModule } from '@angular/cdk/a11y';
 import { LoadResourcesSuccess } from 'src/app/common/core/store/actions/resources.action';
 import { ISourcesData } from 'src/app/common/core/store/models/sourcesData.model';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
+import { ResourceEditService } from '../resource-edit.service';
 
 @Component({
   selector: 'app-sources-template',
@@ -43,13 +44,13 @@ export class SourcesTemplateComponent implements OnInit {
     options = new JsonEditorOptions(); 
     rdState: Observable<IResourcesState>;
     resources: IResources;
-    option = ['mdsal','default'];
+    option = [];
     sources:ISourcesData; 
     sourcesOptions = [];
-    sourcesData = [];
+    sourcesData = {};
     @Output() resourcesData = new EventEmitter();  
  
- constructor(private store: Store<IAppState>) {
+    constructor(private store: Store<IAppState>, private apiService: ResourceEditService) {
     this.rdState = this.store.select('resources');
     this.options.mode = 'text';
     this.options.modes = [ 'text', 'tree', 'view'];
@@ -79,10 +80,35 @@ export class SourcesTemplateComponent implements OnInit {
      this.resources.sources = Object.assign({},originalSources);
  };
     
- selected(value){
- 	this.sourcesData=this.sources[value];
-    return this.sourcesData;    
- }    
+ selected(sourceValue){
+   this.sourcesData= [];//this.sources[value];
+   this.apiService.getModelType(sourceValue.value)
+   .subscribe(data=>{
+      console.log(data);
+      data.forEach(item =>{
+        if(typeof(item)== "object") {
+           for (let key1 in item) {
+              if(key1 == 'properties') {                  
+                 let newPropOnj = {}
+                 for (let key2 in item[key1]) {
+                    console.log(item[key1][key2]);
+                    let varType = item[key1][key2].type
+                    // let property :  varType = 
+                    newPropOnj[key2] = item[key1][key2];
+                 }
+              }
+           }
+        }
+      });
+      this.sourcesData = data;
+      this.sourcesOptions.forEach(item=>{
+         if(item.name == sourceValue.name) {
+            item.data = data;
+         }
+      })       
+     return this.sourcesData;
+   })    
+}    
 
  delete(item,i){
  	if(confirm("Are sure you want to delete this source ?")) {

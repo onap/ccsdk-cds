@@ -36,4 +36,14 @@ export class ResourceEditService {
     saveResource(resource) {
        return this.api.post(ResourceDictionaryURLs.saveResourceDictionary, resource);
     }
+
+    getSources() {
+        // to do
+        return this.api.get('ResourceDictionaryURLs.getSources');
+    }
+
+    getModelType(name) {
+        // to do
+        return this.api.get("ResourceDictionaryURLs.getModelType + '/' + name");
+    }
 }
