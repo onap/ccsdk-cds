@@ -34,9 +34,6 @@ limitations under the License.
         <ng-template matStepLabel>Browse CBA Template file</ng-template>
         <div class="matStepContent">
             <app-search-template [optionSelected]="templateOption" (cbaFile)="fileChange($event)"></app-search-template>
-            <!-- <div>
-                <button mat-button matStepperNext class="matStepNextBtn">Upload</button>
-            </div>-->
         </div>
     </mat-step>
     <mat-step [stepControl]="step3FormGroup">

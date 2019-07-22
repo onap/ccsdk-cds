@@ -19,8 +19,6 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Store } from '@ngrx/store';
 import { IBlueprint } from 'src/app/common/core/store/models/blueprint.model';
 import { IBlueprintState } from 'src/app/common/core/store/models/blueprintState.model';
 import { IMetaData } from 'src/app/common/core/store/models/metadata.model';
@@ -40,8 +38,7 @@ export class SelectTemplateComponent implements OnInit {
   importModel: IImportModel;
   templateOption: any;
 
-  constructor(private store: Store<IBlueprintState>) {
-    // this.importModel.file = '';
+  constructor() {
   }
 
   ngOnInit() {
@@ -51,23 +48,14 @@ export class SelectTemplateComponent implements OnInit {
     this.templateOption = option;
     console.log(this.templateOption);
   }
-  
+
   fileChange(topologyTemp: ITopologyTemplate) {
     this.topologyTemplate = topologyTemp;
     console.log(topologyTemp);
   }
   metaDataDetail(data: IMetaData) {
-    
+
     this.metaData = data;
     console.log("parent" + this.metaData.author_email);
   }
-  upload() {
-
-  }
-  
-  // saveBlueprintModel(){
-  //   this.blueprint.toplogyTemplates=this.topologyTemplate;
-  //   this.blueprint.metadata= this.metaData;
-  //  // this.store.dispatch(new CreateBlueprint(this.blueprint));
-  // }
 }
