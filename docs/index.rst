@@ -16,6 +16,7 @@ programmers, can reconfigure the software system as needed to meet customer
 requirements. To accomplish this goal, the system is built around models that
 provide for real-time changes in how the system operates.  Users merely need
 to change a model to change how a service operates.
+
 Self service is a completely new way of delivering services.  It removes the
 dependence on code releases and the delays they cause and puts the control of
 services into the hands of the service providers.  They can change a model and
@@ -37,8 +38,8 @@ TOSCA based JSON formatted model following standard:
 http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.2/csd01/TOSCA-Simple-Profile-YAML-v1.2-csd01.html
 
 Most of the TOSCA modeled entity presented in the bellow documentation can
-be found here:
-https://github.com/onap/ccsdk-cds/tree/master/components/model-catalog/definition-type/starter-type
+be found here: _TOSCA
+
 
 Tosca Model Reference:
 
@@ -120,4 +121,4 @@ The helper can be find here: https://github.com/onap/ccsdk-apps/blob/master/comp
    :height: 4.43750in
    :width: 7.88889in
 
-
+.. TOSCA_: https://github.com/onap/ccsdk-cds/tree/master/components/model-catalog/definition-type/starter-type
