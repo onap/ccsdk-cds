@@ -227,6 +227,10 @@ class OperationAssignmentBuilder(private val id: String,
 
     private var operationAssignment: OperationAssignment = OperationAssignment()
 
+    fun implementation(implementation: Implementation?) {
+        operationAssignment.implementation = implementation
+    }
+
     fun implementation(timeout: Int, operationHost: String? = BluePrintConstants.PROPERTY_SELF) {
         val implementation = Implementation().apply {
             this.operationHost = operationHost!!
@@ -235,8 +239,16 @@ class OperationAssignmentBuilder(private val id: String,
         operationAssignment.implementation = implementation
     }
 
+    fun inputs(inputs: MutableMap<String, JsonNode>?) {
+        operationAssignment.inputs = inputs
+    }
+
     fun inputs(block: PropertiesAssignmentBuilder.() -> Unit) {
         operationAssignment.inputs = PropertiesAssignmentBuilder().apply(block).build()
+    }
+
+    fun outputs(outputs: MutableMap<String, JsonNode>?) {
+        operationAssignment.outputs = outputs
     }
 
     fun outputs(block: PropertiesAssignmentBuilder.() -> Unit) {

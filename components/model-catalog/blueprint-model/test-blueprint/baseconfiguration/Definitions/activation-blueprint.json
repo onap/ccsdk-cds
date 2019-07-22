@@ -287,9 +287,9 @@
         }
       },
       "activate-restconf": {
-        "type": "component-restconf-executor",
+        "type": "component-script-executor",
         "interfaces": {
-          "ComponentRestconfExecutor": {
+          "ComponentScriptExecutor": {
             "operations": {
               "process": {
                 "implementation": {
@@ -297,8 +297,7 @@
                 },
                 "inputs": {
                   "script-type": "kotlin",
-                  "script-class-reference": "DefaultRestconf_cba$MountNEditConfigure",
-                  "instance-dependencies": []
+                  "script-class-reference": "DefaultRestconf_cba$MountNEditConfigure"
                 },
                 "outputs": {
                   "response-data": "",

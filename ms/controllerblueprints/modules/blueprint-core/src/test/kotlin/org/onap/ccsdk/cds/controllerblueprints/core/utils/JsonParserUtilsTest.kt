@@ -22,6 +22,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonPathParse
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonPaths
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class JsonParserUtilsTest {
 
@@ -52,6 +53,6 @@ class JsonParserUtilsTest {
         """.trimIndent()
         val jsonNode = json.jsonAsJsonType()
         val parsedPath = jsonNode.jsonPaths("$..prop1")
-        println(parsedPath)
+        assertNotNull(parsedPath, "failed to get parsed path")
     }
 }

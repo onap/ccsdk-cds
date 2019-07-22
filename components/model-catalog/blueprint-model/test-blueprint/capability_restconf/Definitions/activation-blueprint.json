@@ -143,9 +143,9 @@
         }
       },
       "config-deploy" : {
-        "type" : "component-restconf-executor",
+        "type" : "component-script-executor",
         "interfaces" : {
-          "ComponentRestconfExecutor" : {
+          "ComponentScriptExecutor" : {
             "operations" : {
               "process" : {
                 "implementation" : {
@@ -154,7 +154,6 @@
                 "inputs" : {
                   "script-type" : "jython",
                   "script-class-reference" : "Scripts/python/RestconfConfigDeploy.py",
-                  "instance-dependencies" : [ ],
                   "dynamic-properties" : "*config-deploy-properties"
                 },
                 "outputs" : {

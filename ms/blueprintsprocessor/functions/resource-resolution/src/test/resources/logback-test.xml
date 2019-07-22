@@ -26,6 +26,7 @@
 
     <logger name="org.springframework" level="warn"/>
     <logger name="org.hibernate" level="info"/>
+    <logger name="org.mockserver.mock" level="warn"/>
     <logger name="org.onap.ccsdk.cds.controllerblueprints" level="warn"/>
     <logger name="org.onap.ccsdk.cds.blueprintsprocessor" level="info"/>
 
