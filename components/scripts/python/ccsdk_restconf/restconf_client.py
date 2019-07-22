@@ -18,10 +18,11 @@
 # ============LICENSE_END=========================================================
 #
 from time import sleep
+from org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor import RestconfExecutorExtensionsKt
+from org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution import ResourceResolutionExtensionsKt
 
 
 class RestconfClient:
-
     __base_odl_url = "restconf/config/network-topology:network-topology/topology/topology-netconf/node/"
     __odl_status_check_limit = 10
     __odl_status_check_pause = 1
@@ -31,6 +32,16 @@ class RestconfClient:
     def __init__(self, log, restconf_component_function):
         self.__log = log
         self.__component_function = restconf_component_function
+
+    def web_client_service(self, identifier):
+        RestconfExecutorExtensionsKt.restconfClientService(self.__component_function, identifier)
+
+    def resolve_and_generate_message_from_template_prefix(self, artifact_prefix):
+            return ResourceResolutionExtensionsKt.contentFromResolvedArtifact(self.component_function, artifact_prefix)
+
+    def retrieve_resolved_template_from_database(self, key, artifact_template):
+        return ResourceResolutionExtensionsKt.storedContentFromResolvedArtifact(self.component_function, key,
+                                                                                artifact_template)
 
     def mount_device(self, web_client_service, nf_id, mount_payload):
         self.__log.debug("mounting device {}", nf_id)

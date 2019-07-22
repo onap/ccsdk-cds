@@ -17,7 +17,6 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import io.mockk.every
 import io.mockk.mockk
@@ -28,6 +27,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ActionIdentifiers
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.CommonHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentScriptExecutor
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
@@ -56,12 +56,12 @@ import kotlin.test.assertNotNull
 class ComponentRestconfExecutorTest {
 
     @Autowired
-    lateinit var componentRestconfExecutor: ComponentRestconfExecutor
+    lateinit var componentScriptExecutor: ComponentScriptExecutor
 
     @Test
     fun `test Restconf Component Instance`() {
         runBlocking {
-            assertNotNull(componentRestconfExecutor, "failed to get ComponentRestconfExecutor instance")
+            assertNotNull(componentScriptExecutor, "failed to get ComponentRestconfExecutor instance")
             val executionServiceInput = ExecutionServiceInput().apply {
                 commonHeader = CommonHeader().apply {
                     requestId = "1234"
@@ -72,17 +72,16 @@ class ComponentRestconfExecutorTest {
                 payload = JacksonUtils.jsonNode("{}") as ObjectNode
             }
             val bluePrintRuntime = mockk<DefaultBluePrintRuntimeService>("1234")
-            componentRestconfExecutor.bluePrintRuntimeService = bluePrintRuntime
-            componentRestconfExecutor.stepName = "sample-step"
+            componentScriptExecutor.bluePrintRuntimeService = bluePrintRuntime
+            componentScriptExecutor.stepName = "sample-step"
 
             val operationInputs = hashMapOf<String, JsonNode>()
             operationInputs[BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE] = "activate-restconf".asJsonPrimitive()
             operationInputs[BluePrintConstants.PROPERTY_CURRENT_INTERFACE] = "interfaceName".asJsonPrimitive()
             operationInputs[BluePrintConstants.PROPERTY_CURRENT_OPERATION] = "operationName".asJsonPrimitive()
-            operationInputs[ComponentRestconfExecutor.SCRIPT_TYPE] = BluePrintConstants.SCRIPT_INTERNAL.asJsonPrimitive()
-            operationInputs[ComponentRestconfExecutor.SCRIPT_CLASS_REFERENCE] =
-                    "InternalSimpleRestconf_cba\$TestRestconfConfigure".asJsonPrimitive()
-            operationInputs[ComponentRestconfExecutor.INSTANCE_DEPENDENCIES] = JacksonUtils.jsonNode("[]") as ArrayNode
+            operationInputs[ComponentScriptExecutor.SCRIPT_TYPE] = BluePrintConstants.SCRIPT_INTERNAL.asJsonPrimitive()
+            operationInputs[ComponentScriptExecutor.SCRIPT_CLASS_REFERENCE] =
+                    "internal.scripts.TestRestconfConfigure".asJsonPrimitive()
 
             val stepInputData = StepData().apply {
                 name = "activate-restconf"
@@ -103,7 +102,7 @@ class ComponentRestconfExecutorTest {
                         "interfaceName", "operationName")
             } returns operationOutputs
 
-            componentRestconfExecutor.applyNB(executionServiceInput)
+            componentScriptExecutor.applyNB(executionServiceInput)
         }
     }
 }

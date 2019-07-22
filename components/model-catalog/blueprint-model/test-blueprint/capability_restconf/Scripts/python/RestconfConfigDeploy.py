@@ -19,10 +19,10 @@ from org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor import \
 from java.lang import Exception as JavaException
 
 from restconf_client import RestconfClient
+from org.onap.ccsdk.cds.blueprintsprocessor.services.execution import AbstractScriptComponentFunction
 
 
-class RestconfConfigDeploy(RestconfComponentFunction):
-
+class RestconfConfigDeploy(AbstractScriptComponentFunction):
     log = globals()["log"]
     configlet_template_name = "config-assign"
     configlet_resource_path = "/yang-ext:mount/mynetconf:netconflist"
@@ -34,11 +34,11 @@ class RestconfConfigDeploy(RestconfComponentFunction):
         try:
             restconf_client = RestconfClient(self.log, self)
             pnf_id, resolution_key = self.retrieve_parameters(execution_request)
-            web_client_service = self.restClientService(self.restconf_server_identifier)
+            web_client_service = restconf_client.web_client_service(self.restconf_server_identifier)
 
             try:
                 # mount the device
-                mount_payload = self.resolveAndGenerateMessage("config-deploy-mapping", "config-deploy-template")
+                mount_payload = restconf_client.resolve_and_generate_message_from_template_prefix("config-deploy")
                 restconf_client.mount_device(web_client_service, pnf_id, mount_payload)
 
                 # log the current configuration subtree
@@ -47,7 +47,7 @@ class RestconfConfigDeploy(RestconfComponentFunction):
                 self.log.info("Current configuration subtree: {}", current_configuration)
 
                 # apply configuration
-                configlet = self.resolveFromDatabase(resolution_key, self.configlet_template_name)
+                configlet = restconf_client.retrieve_resolved_template_from_database(resolution_key, self.configlet_template_name)
                 restconf_client.configure_device_json_patch(
                     web_client_service, pnf_id, self.configlet_resource_path, configlet)
             except Exception, err:
