@@ -42,20 +42,20 @@ import {
   Response,
   RestBindings,
 } from '@loopback/rest';
-import {Blueprint} from '../models';
+import { Blueprint } from '../models';
 import { inject } from '@loopback/core';
 import { BlueprintService } from '../services';
 import * as fs from 'fs';
 import * as multiparty from 'multiparty';
 import * as request_lib from 'request';
-import {controllerApiConfig, processorApiConfig, appConfig} from '../config/app-config';
-import {bluePrintManagementServiceGrpcClient} from '../clients/blueprint-management-service-grpc-client';
+import { controllerApiConfig, processorApiConfig, appConfig } from '../config/app-config';
+import { bluePrintManagementServiceGrpcClient } from '../clients/blueprint-management-service-grpc-client';
 
 export class BlueprintRestController {
   constructor(
-    @inject('services.BlueprintService') 
+    @inject('services.BlueprintService')
     public bpservice: BlueprintService,
-  ) {}
+  ) { }
 
   @get('/blueprints', {
     responses: {
@@ -69,6 +69,17 @@ export class BlueprintRestController {
     return await this.bpservice.getAllblueprints();
   }
 
+  @get('/searchByTags/{tags}', {
+    responses: {
+      '200': {
+        content: { 'application/json': {} },
+      },
+    },
+  })
+  async getByTags(@param.path.string('tags') tags: string) {
+    return await this.bpservice.getByTags(tags);
+  }
+
   @post('/create-blueprint')
   async upload(
     @requestBody({
@@ -78,21 +89,21 @@ export class BlueprintRestController {
         'multipart/form-data': {
           // Skip body parsing
           'x-parser': 'stream',
-          schema: {type: 'object'},
+          schema: { type: 'object' },
         },
       },
     })
     request: Request,
     @inject(RestBindings.Http.RESPONSE) response: Response,
   ): Promise<Response> {
-    return new Promise((resolve, reject) => { 
-       this.getFileFromMultiPartForm(request).then(file=>{
-         this.uploadFileToBlueprintController(file, "/blueprint-model/", response).then(resp=>{
+    return new Promise((resolve, reject) => {
+      this.getFileFromMultiPartForm(request).then(file => {
+        this.uploadFileToBlueprintController(file, "/blueprint-model/", response).then(resp => {
           resolve(resp);
-         }, err=>{
-           reject(err);
-         });
-      }, err=>{
+        }, err => {
+          reject(err);
+        });
+      }, err => {
         reject(err);
       });
     });
@@ -107,21 +118,21 @@ export class BlueprintRestController {
         'multipart/form-data': {
           // Skip body parsing
           'x-parser': 'stream',
-          schema: {type: 'object'},
+          schema: { type: 'object' },
         },
       },
     })
     request: Request,
     @inject(RestBindings.Http.RESPONSE) response: Response,
   ): Promise<Response> {
-    return new Promise((resolve, reject) => { 
-       this.getFileFromMultiPartForm(request).then(file=>{
-         this.uploadFileToBlueprintController(file, "/blueprint-model/publish/", response).then(resp=>{
+    return new Promise((resolve, reject) => {
+      this.getFileFromMultiPartForm(request).then(file => {
+        this.uploadFileToBlueprintController(file, "/blueprint-model/publish/", response).then(resp => {
           resolve(resp);
-         }, err=>{
-           reject(err);
-         });
-      }, err=>{
+        }, err => {
+          reject(err);
+        });
+      }, err => {
         reject(err);
       });
     });
@@ -136,21 +147,21 @@ export class BlueprintRestController {
         'multipart/form-data': {
           // Skip body parsing
           'x-parser': 'stream',
-          schema: {type: 'object'},
+          schema: { type: 'object' },
         },
       },
     })
     request: Request,
     @inject(RestBindings.Http.RESPONSE) response: Response,
   ): Promise<Response> {
-    return new Promise((resolve, reject) => { 
-       this.getFileFromMultiPartForm(request).then(file=>{
-         this.uploadFileToBlueprintController(file, "/blueprint-model/enrich/", response).then(resp=>{
-           resolve(resp);
-         }, err=>{
-           reject(err);
-         });
-      }, err=>{
+    return new Promise((resolve, reject) => {
+      this.getFileFromMultiPartForm(request).then(file => {
+        this.uploadFileToBlueprintController(file, "/blueprint-model/enrich/", response).then(resp => {
+          resolve(resp);
+        }, err => {
+          reject(err);
+        });
+      }, err => {
         reject(err);
       });
     });
@@ -159,21 +170,21 @@ export class BlueprintRestController {
   @get('/download-blueprint/{name}/{version}')
   async download(
     @param.path.string('name') name: string,
-    @param.path.string('version') version:string,
+    @param.path.string('version') version: string,
     @inject(RestBindings.Http.RESPONSE) response: Response,
   ): Promise<Response> {
-    return this.downloadFileFromBlueprintController("/blueprint-model/download/by-name/"+name+"/version/"+version, response);
+    return this.downloadFileFromBlueprintController("/blueprint-model/download/by-name/" + name + "/version/" + version, response);
   }
 
-  async getFileFromMultiPartForm(request: Request): Promise<multiparty.File>{
+  async getFileFromMultiPartForm(request: Request): Promise<multiparty.File> {
     return new Promise((resolve, reject) => {
       let form = new multiparty.Form();
       form.parse(request, (err: any, fields: any, files: { [x: string]: any[]; }) => {
         if (err) reject(err);
         let file = files['file'][0]; // get the file from the returned files object
-        if(!file){
+        if (!file) {
           reject('File was not found in form data.');
-        }else{
+        } else {
           resolve(file);
         }
       });
@@ -189,34 +200,34 @@ export class BlueprintRestController {
         'multipart/form-data': {
           // Skip body parsing
           'x-parser': 'stream',
-          schema: {type: 'object'},
+          schema: { type: 'object' },
         },
       },
     })
     request: Request,
     @inject(RestBindings.Http.RESPONSE) response: Response,
   ): Promise<Response> {
-    return new Promise((resolve, reject) => { 
-       this.getFileFromMultiPartForm(request).then(file=>{
-         if(appConfig.action.deployBlueprint.grpcEnabled)
-          return this.uploadFileToBlueprintProcessorGrpc(file, response); 
-         else
+    return new Promise((resolve, reject) => {
+      this.getFileFromMultiPartForm(request).then(file => {
+        if (appConfig.action.deployBlueprint.grpcEnabled)
+          return this.uploadFileToBlueprintProcessorGrpc(file, response);
+        else
           return this.uploadFileToBlueprintProcessor(file, "/execution-service/upload/", response);
-      }, err=>{
+      }, err => {
         reject(err);
       });
     });
   }
 
-  async uploadFileToBlueprintController(file: multiparty.File, uri: string, response: Response): Promise<Response>{
+  async uploadFileToBlueprintController(file: multiparty.File, uri: string, response: Response): Promise<Response> {
     return this.uploadFileToBlueprintService(file, controllerApiConfig.http.url + uri, controllerApiConfig.http.authToken, response);
   }
 
-  async uploadFileToBlueprintProcessor(file: multiparty.File, uri: string, response: Response): Promise<Response>{
+  async uploadFileToBlueprintProcessor(file: multiparty.File, uri: string, response: Response): Promise<Response> {
     return this.uploadFileToBlueprintService(file, processorApiConfig.http.url + uri, processorApiConfig.http.authToken, response);
   }
 
-  async uploadFileToBlueprintService(file: multiparty.File, url: string, authToken: string, response: Response): Promise<Response>{
+  async uploadFileToBlueprintService(file: multiparty.File, url: string, authToken: string, response: Response): Promise<Response> {
     let options = {
       url: url,
       headers: {
@@ -238,7 +249,7 @@ export class BlueprintRestController {
       fs.unlink(file.path, (err: any) => {
         if (err) {
           console.error(err);
-        } 
+        }
       });
     }
 
@@ -280,10 +291,10 @@ export class BlueprintRestController {
 
   async uploadFileToBlueprintProcessorGrpc(file: multiparty.File, response: Response): Promise<Response> {
     return new Promise<Response>((resolve, reject) => {
-      bluePrintManagementServiceGrpcClient.uploadBlueprint(file.path).then(output=>{
+      bluePrintManagementServiceGrpcClient.uploadBlueprint(file.path).then(output => {
         response.send(output.status.message);
         resolve(response);
-      }, err=>{
+      }, err => {
         response.status(500).send(err);
         resolve(response);
       });

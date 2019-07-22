@@ -4,6 +4,7 @@ import {BlueprintDataSource} from '../datasources';
 
 export interface BlueprintService {
    getAllblueprints(): Promise<any>;
+   getByTags(tags: string): Promise<JSON>;
 }
 
 export class BlueprintServiceProvider implements Provider<BlueprintService> {
