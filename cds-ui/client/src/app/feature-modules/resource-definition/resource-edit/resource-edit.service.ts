@@ -38,12 +38,10 @@ export class ResourceEditService {
     }
 
     getSources() {
-        // to do
-        return this.api.get('ResourceDictionaryURLs.getSources');
+        return this.api.get(ResourceDictionaryURLs.getSources);
     }
 
     getModelType(name) {
-        // to do
-        return this.api.get("ResourceDictionaryURLs.getModelType + '/' + name");
+        return this.api.get(ResourceDictionaryURLs.getModelType + '/' + name);
     }
 }
