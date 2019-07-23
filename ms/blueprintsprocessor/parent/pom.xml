@@ -626,7 +626,24 @@
         <repository>
             <id>spring-libs-milestone</id>
             <name>Spring Milestone Maven Repository</name>
+            <url>http://oss.jfrog.org/artifactory/oss-release-local/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-libs-milestone-snapshot</id>
+            <name>Spring Milestone Maven Repository - snapshots</name>
             <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
     </repositories>
 
