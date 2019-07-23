@@ -20,7 +20,7 @@
 * ============LICENSE_END=========================================================
 */
 
-import { Component, OnInit, ViewChild, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, ViewChild, EventEmitter, Output, Input } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { IResources } from 'src/app/common/core/store/models/resources.model';
 import { IResourcesState } from 'src/app/common/core/store/models/resourcesState.model';
@@ -62,9 +62,17 @@ export class SourcesTemplateComponent implements OnInit {
       resourcesdata => {
         var resourcesState: IResourcesState = { resources: resourcesdata.resources, isLoadSuccess: resourcesdata.isLoadSuccess, isSaveSuccess: resourcesdata.isSaveSuccess, isUpdateSuccess: resourcesdata.isUpdateSuccess };
         this.resources=resourcesState.resources;
-        this.sources = resourcesState.resources.sources;
+      //   this.sources = resourcesState.resources.sources;
+         if(resourcesState.resources.definition && resourcesState.resources.definition.sources) {
+         this.sources = resourcesState.resources.definition.sources;
+         }
         for (let key in this.sources) {
-            this.sourcesOptions.push(key);  
+            // this.sourcesOptions.push(key);
+            let source = {
+               name : key,
+               data: this.sources[key]
+            }
+             this.sourcesOptions.push(source);    
         }
     })
  }
@@ -136,5 +144,19 @@ export class SourcesTemplateComponent implements OnInit {
                         event.previousIndex,
                         event.currentIndex);
     }
-  }    
+  }
+
+  getResources() {
+   this.apiService.getSources()
+   .subscribe(data=>{
+      console.log(data);
+      for (let key in data[0]) {
+         let sourceObj = { name: key, value: data[0][key] }
+         this.option.push(sourceObj);  
+     }
+      // this.sourcesOptions = data;
+   }, error=>{
+      console.log(error);
+   })
+  }
 }

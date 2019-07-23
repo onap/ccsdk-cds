@@ -27,4 +27,5 @@ export interface IResources {
     updated_bt:string;
     property: IPropertyData;
     sources: ISourcesData;
+    definition?: any;
 }
