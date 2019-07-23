@@ -23,44 +23,6 @@ its parameters and create a new service without writing a single line of code.
 This makes SERVICE PROVIDER(S) more responsive to its customers and able to
 deliver products that more closely match the needs of its customers.
 
-Modeling Concept
-----------------
-In Dublin release, the CDS community has contributed a framework to automate
-the resolution of resources for instantiation and any config provisioning
-operation, such as day0, day1 or day2 configuration.
-
-The content of the CBA Package is driven from a catalog of reusable data
-dictionary, component and workflow, delivering a reusable and simplified
-self service experience.
-
-TOSCA based JSON formatted model following standard:
-http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.2/csd01/TOSCA-Simple-Profile-YAML-v1.2-csd01.html
-
-Most of the TOSCA modeled entity presented in the bellow documentation can
-be found here:
-https://github.com/onap/ccsdk-cds/tree/master/components/model-catalog/definition-type/starter-type
-
-Tosca Model Reference:
-
-|image0|
-
-Design tools
-------------
-.. toctree::
-   :maxdepth: 1
-   :glob:
-
-   CBA/index
-   datadictionary/index
-
-MicroServices
--------------
-.. toctree::
-   :maxdepth: 1
-
-   microservices/controllerBlueprintStudioProcessorMS
-   microservices/bluePrintsProcessorMS
-
 Architecture
 ------------
 The Controller Design Studio is composed of two major components:
@@ -82,30 +44,69 @@ configuration file (configlet) to a VNF/PNF.
 
 |image1|
 
-User Guide
-----------
+
+
+Modeling Concept
+================
+
+In Dublin release, the CDS community has contributed a framework to automate
+the resolution of resources for instantiation and any config provisioning
+operation, such as day0, day1 or day2 configuration.
+
+The content of the CBA Package is driven from a catalog of reusable data
+dictionary, component and workflow, delivering a reusable and simplified
+self service experience.
+
+TOSCA based JSON formatted model following standard:
+http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.2/csd01/TOSCA-Simple-Profile-YAML-v1.2-csd01.html
+
+Most of the TOSCA modeled entity presented in the bellow documentation can
+be found here:
+https://github.com/onap/ccsdk-cds/tree/master/components/model-catalog/definition-type/starter-type
+
+Tosca Model Reference:
+
+|image0|
+
+Modeling Concept Links:
+-----------------------
 
 .. toctree::
    :maxdepth: 1
 
-   userguide
-
-Dynamic API
------------
-
-.. toctree::
-   :maxdepth: 1
-
+   microservices/controllerBlueprintStudioProcessorMS
+   microservices/bluePrintsProcessorMS
+   microservices/expression
    microservices/dynamicapi
+   microservices/flexibleplugin
 
-Controller Design Studio Presentation
--------------------------------------
 
-Details about CDS Architecture and Design detail, Please click the link.
-:download:`CDS_Architecture_Design.pptx`
+Design tools
+============
+.. toctree::
+   :maxdepth: 1
+   :glob:
 
-ResolutionHelper
-----------------
+   CBA/index
+   datadictionary/index
+
+
+
+
+Scripts
+=======
+
+Library
+-------
+
+*NetconfClient
+--------------
+In order to facilitate NETCONF interaction within scripts, a python NetconfClient binded to our Kotlin implementation is made available. This NetconfClient can be used when using the component-netconf-executor.
+
+The client can be find here: https://github.com/onap/ccsdk-cds/blob/master/components/scripts/python/ccsdk_netconf/netconfclient.py
+
+*ResolutionHelper
+-----------------
 When executing a component executor script, designer might want to perform
 resource resolution along with template meshing directly from the script
 itself.
@@ -120,4 +121,17 @@ The helper can be find here: https://github.com/onap/ccsdk-apps/blob/master/comp
    :height: 4.43750in
    :width: 7.88889in
 
+User Guide
+----------
 
+.. toctree::
+   :maxdepth: 1
+
+   userguide
+  
+
+Controller Design Studio Presentation
+-------------------------------------
+
+Details about CDS Architecture and Design detail, Please click the link.
+:download:`CDS_Architecture_Design.pptx`
