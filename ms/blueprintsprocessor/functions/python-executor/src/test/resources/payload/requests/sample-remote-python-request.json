@@ -16,7 +16,7 @@
     "timestamp": "2012-04-23T18:25:43.511Z"
   },
   "payload": {
-    "execute-remote-python": {
+    "execute-remote-python-request": {
         "input": "1234"
     }
   }
