@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +20,8 @@ package org.onap.ccsdk.cds.controllerblueprints.core.scripts
 
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
+import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintDefinitions
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintFunctionNode
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import kotlin.script.experimental.jvm.util.classpathFromClass
@@ -51,10 +54,21 @@ class BluePrintScriptsServiceImplTest {
             val bluePrintScriptsService = BluePrintScriptsServiceImpl()
 
             val basePath = normalizedPathName("src/test/resources/compile")
+            /** Load the Definitions */
+            val bluePrintDefinitions = bluePrintScriptsService
+                    .scriptInstance<BluePrintDefinitions>(basePath,
+                            "cba.scripts.ActivateBlueprintDefinitions", true)
+            assertNotNull(bluePrintDefinitions, "failed to get blueprint definitions")
+
+            val serviceTemplate = bluePrintDefinitions.serviceTemplate()
+            assertNotNull(serviceTemplate, "failed to get service template")
+
+            val customDataType = bluePrintDefinitions.otherDefinition<DataType>("datatype-custom-datatype")
+            assertNotNull(customDataType, "failed to get custom definitions")
 
             val instance = bluePrintScriptsService
                     .scriptInstance<BlueprintFunctionNode<String, String>>(basePath,
-                            "cba.scripts.SampleBlueprintFunctionNode", true)
+                            "cba.scripts.SampleBlueprintFunctionNode", false)
             assertNotNull(instance, "failed to get compiled instance")
 
             val cachedInstance = bluePrintScriptsService

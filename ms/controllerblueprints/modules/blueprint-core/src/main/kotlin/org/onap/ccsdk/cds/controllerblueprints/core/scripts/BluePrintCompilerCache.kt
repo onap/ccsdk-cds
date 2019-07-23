@@ -19,7 +19,6 @@ package org.onap.ccsdk.cds.controllerblueprints.core.scripts
 import com.google.common.cache.CacheBuilder
 import com.google.common.cache.CacheLoader
 import com.google.common.cache.LoadingCache
-import com.google.common.util.concurrent.ListenableFuture
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
@@ -51,10 +50,6 @@ object BluePrintCompileCache {
 object BluePrintClassLoader : CacheLoader<String, URLClassLoader>() {
 
     val log = logger(BluePrintClassLoader::class)
-
-    override fun reload(key: String, oldValue: URLClassLoader): ListenableFuture<URLClassLoader> {
-        return reload(key, oldValue)
-    }
 
     override fun load(key: String): URLClassLoader {
         log.info("loading cache key($key)")
