@@ -18,6 +18,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.lang3.builder.ToStringBuilder
+import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BluePrintMessageLibPropertyService
 import org.slf4j.LoggerFactory
@@ -39,17 +40,15 @@ open class MessagingController(private val propertyService: BluePrintMessageLibP
     }
 
     @KafkaListener(topics = ["\${blueprintsprocessor.messageclient.self-service-api.consumerTopic}"])
-    open fun receive(input: ExecutionServiceInput) {
-
-        log.info("Successfully received a message: {}", ToStringBuilder.reflectionToString(input))
+    open fun receive(record: ConsumerRecord<String, ExecutionServiceInput>) {
 
         runBlocking {
-            log.info("Successfully received a message: {}", ToStringBuilder.reflectionToString(input))
+            log.info("Successfully received a message: {}", ToStringBuilder.reflectionToString(record.value()))
 
             // Process the message.
             async {
-                processMessage(input)
-            }
+                processMessage(record.value())
+            }.await()
         }
     }
 

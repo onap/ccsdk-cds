@@ -90,7 +90,7 @@ class MessagingControllerTest {
     @Autowired
     lateinit var webTestClient: WebTestClient
 
-    var receivedEvent: String? = null
+    var event: ExecutionServiceInput? = null
 
     @Before
     fun setup() {
@@ -142,11 +142,13 @@ class MessagingControllerTest {
         log.info("test-sender sent message='{}'", ToStringBuilder.reflectionToString(input))
 
         Thread.sleep(1000)
+
+        assertNotNull(event)
     }
 
     @KafkaListener(topicPartitions = [TopicPartition(topic = "\${blueprintsprocessor.messageclient.self-service-api.topic}", partitionOffsets = [PartitionOffset(partition = "0", initialOffset = "0")])])
-    fun receivedEventFromBluePrintProducer(event: ExecutionServiceInput) {
-        assertNotNull(event)
+    fun receivedEventFromBluePrintProducer(receivedEvent: ExecutionServiceInput) {
+        event = receivedEvent
     }
 
     private fun uploadBluePrint() {
@@ -172,7 +174,7 @@ class MessagingControllerTest {
     }
 
     private fun loadCbaArchive():File {
-        return Paths.get("./src/test/resources/cba-for-kafka-integration.zip").toFile()
+        return Paths.get("./src/test/resources/cba-for-kafka-integration_enriched.zip").toFile()
     }
 
     @Configuration
