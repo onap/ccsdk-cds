@@ -12,12 +12,14 @@ Once the base CBA zip file is done, the enrichment process will complete the des
 
 The following shows 2 ways to run CBA enrichment
 
-*REST API request
+REST API request:
+----------------
 
 |image0|
 
-*CDS UI
 
+CDS UI:
+------
 |image1|
 
 
