@@ -47,6 +47,7 @@ export class ResourceEditComponent implements OnInit {
     viewText: string = "Open in Editor Mode";
     @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
     options = new JsonEditorOptions();
+    sourcesList = [];
   
   constructor(private store: Store<IAppState>, private resourceEditService: ResourceEditService, private alertService: NotificationHandlerService) {
   	this.rdState = this.store.select('resources');
@@ -60,6 +61,9 @@ export class ResourceEditComponent implements OnInit {
       resourcesdata => {
         var resourcesState: IResourcesState = { resources: resourcesdata.resources, isLoadSuccess: resourcesdata.isLoadSuccess, isSaveSuccess: resourcesdata.isSaveSuccess, isUpdateSuccess: resourcesdata.isUpdateSuccess };
           this.resources=resourcesState.resources;
+          if(resourcesdata.resources.definition && resourcesdata.resources.definition.sources) {
+            this.sourcesList = resourcesdata.resources.definition.sources;
+         }
     })     
   }
 
