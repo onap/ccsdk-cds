@@ -118,7 +118,7 @@ class ExecutionServiceHandler(private val bluePrintPathConfiguration: BluePrintP
             return output
         } catch (e: Exception) {
             log.error("fail processing request id $requestId", e)
-            return response(executionServiceInput, e.localizedMessage, true)
+            return response(executionServiceInput, e.localizedMessage ?: e.message ?: e.toString(), true)
         }
     }
 
