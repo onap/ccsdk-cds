@@ -76,7 +76,8 @@ class ComponentFunctionScriptingService(private val applicationContext: Applicat
             }
             BluePrintConstants.SCRIPT_KOTLIN -> {
                 val bluePrintScriptsService: BluePrintScriptsService = BluePrintScriptsServiceImpl()
-                scriptComponent = bluePrintScriptsService.scriptInstance<T>(bluePrintContext, scriptClassReference, false)
+                scriptComponent = bluePrintScriptsService.scriptInstance<T>(bluePrintContext.rootPath,
+                        bluePrintContext.name(), bluePrintContext.version(), scriptClassReference, false)
             }
             BluePrintConstants.SCRIPT_JYTHON -> {
                 scriptComponent = blueprintJythonService.jythonComponentInstance(bluePrintContext, scriptClassReference) as T

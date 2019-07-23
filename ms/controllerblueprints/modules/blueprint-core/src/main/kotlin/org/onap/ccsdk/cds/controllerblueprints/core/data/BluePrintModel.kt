@@ -630,6 +630,8 @@ class ToscaMetaData {
     lateinit var csarVersion: String
     lateinit var createdBy: String
     lateinit var entityDefinitions: String
+    var templateName: String? = null
+    var templateVersion: String? = null
     var templateTags: String? = null
 }
 

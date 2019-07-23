@@ -20,8 +20,11 @@ package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
 import com.fasterxml.jackson.databind.JsonNode
 import kotlinx.coroutines.runBlocking
-import org.onap.ccsdk.cds.controllerblueprints.core.*
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ToscaMetaData
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
+import org.onap.ccsdk.cds.controllerblueprints.core.readNBLines
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintImportService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
@@ -83,6 +86,8 @@ class BluePrintMetadataUtils {
                             "CSAR-Version" -> toscaMetaData.csarVersion = value
                             "Created-By" -> toscaMetaData.createdBy = value
                             "Entry-Definitions" -> toscaMetaData.entityDefinitions = value
+                            "Template-Name" -> toscaMetaData.templateName = value
+                            "Template-Version" -> toscaMetaData.templateVersion = value
                             "Template-Tags" -> toscaMetaData.templateTags = value
                         }
                     }

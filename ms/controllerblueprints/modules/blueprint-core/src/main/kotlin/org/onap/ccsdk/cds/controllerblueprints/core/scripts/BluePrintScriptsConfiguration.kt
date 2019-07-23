@@ -35,7 +35,7 @@ object BluePrintScripCompilationConfiguration : ScriptCompilationConfiguration(
                 //classpathFromClassloader(BluePrintScripCompilationConfiguration::class.java.classLoader)
                 classpathFromClasspathProperty()
             }
-            ide{
+            ide {
                 acceptedLocations(ScriptAcceptedLocation.Everywhere)
             }
 
@@ -46,6 +46,7 @@ open class BluePrintSourceCode : SourceCode {
     lateinit var blueprintKotlinSources: MutableList<String>
     lateinit var moduleName: String
     lateinit var targetJarFile: File
+    lateinit var cacheKey: String
     var regenerate: Boolean = false
 
     override val text: String

@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.*
 import org.apache.commons.lang3.ObjectUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.slf4j.LoggerFactory
 import org.slf4j.helpers.MessageFormatter
 import kotlin.reflect.KClass
 
@@ -29,6 +30,11 @@ import kotlin.reflect.KClass
  *
  * @author Brinda Santh
  */
+
+fun <T : Any> logger(clazz: T) = LoggerFactory.getLogger(clazz.javaClass)!!
+
+fun <T : KClass<*>> logger(clazz: T) = LoggerFactory.getLogger(clazz.java)!!
+
 
 fun <T : Any> T.bpClone(): T {
     return ObjectUtils.clone(this)

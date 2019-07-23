@@ -17,7 +17,6 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
-import org.slf4j.LoggerFactory
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
@@ -26,7 +25,10 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ErrorCode
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ImportDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ServiceTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.FileFilter
 import java.nio.file.Files
@@ -38,7 +40,7 @@ import java.nio.file.StandardOpenOption
 class BluePrintFileUtils {
     companion object {
 
-        private val log= LoggerFactory.getLogger(this::class.toString())
+        private val log = LoggerFactory.getLogger(this::class.toString())
 
         fun createEmptyBluePrint(basePath: String) {
 
@@ -216,8 +218,8 @@ class BluePrintFileUtils {
                     "\nTemplate-Tags: <TAGS>"
         }
 
-       
-        fun getBluePrintFile(fileName: String, targetPath: Path) : File {
+
+        fun getBluePrintFile(fileName: String, targetPath: Path): File {
             val filePath = targetPath.resolve(fileName).toString()
             val file = File(filePath)
             check(file.exists()) {
@@ -239,6 +241,24 @@ class BluePrintFileUtils {
                 Files.createDirectories(fileStorageLocation)
 
             return fileStorageLocation
+        }
+
+        fun compileCacheKey(basePath: String): String {
+            return normalizedPathName(basePath)
+        }
+
+        private fun compileJarFileName(artifactName: String, artifactVersion: String): String {
+            return "$artifactName-$artifactVersion-cba-kts.jar"
+        }
+
+        fun compileJarFilePathName(basePath: String, artifactName: String, artifactVersion: String): String {
+            return normalizedPathName(basePath, BluePrintConstants.TOSCA_SCRIPTS_KOTLIN_DIR,
+                    compileJarFileName(artifactName, artifactVersion))
+        }
+
+        fun compileJarFile(basePath: String, artifactName: String, artifactVersion: String): File {
+            return normalizedFile(compileJarFilePathName(basePath,
+                    artifactName, artifactVersion))
         }
 
         fun stripFileExtension(fileName: String): String {
