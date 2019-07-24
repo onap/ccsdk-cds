@@ -27,7 +27,7 @@
   ],
   "dsl_definitions": {
     "remote-argument-properties": {
-      "input": {
+      "data": {
         "get_input": "input"
       }
     },

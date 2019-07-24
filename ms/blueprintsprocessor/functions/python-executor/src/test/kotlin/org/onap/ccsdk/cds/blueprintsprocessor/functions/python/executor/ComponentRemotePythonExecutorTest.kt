@@ -22,15 +22,11 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
-import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
-import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.PrepareRemoteEnvInput
-import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteScriptExecutionInput
-import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteScriptExecutionOutput
-import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StatusType
-import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.*
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.RemoteScriptExecutionService
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.putJsonElement
 import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
@@ -49,11 +45,16 @@ class ComponentRemotePythonExecutorTest {
             val componentRemotePythonExecutor = ComponentRemotePythonExecutor(remoteScriptExecutionService)
 
             val executionServiceInput =
-                JacksonUtils.readValueFromClassPathFile("payload/requests/sample-activate-request.json",
-                    ExecutionServiceInput::class.java)!!
+                    JacksonUtils.readValueFromClassPathFile("payload/requests/sample-remote-python-request.json",
+                            ExecutionServiceInput::class.java)!!
+
 
             val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("123456-1000",
-                "./../../../../components/model-catalog/blueprint-model/test-blueprint/remote_scripts")
+                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/remote_scripts")
+
+            /** Load Workflow Inputs */
+            bluePrintRuntimeService.assignWorkflowInputs("execute-remote-python",
+                    executionServiceInput.payload.get("execute-remote-python-request"))
 
             val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
             stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "execute-remote-python")
@@ -76,18 +77,14 @@ class ComponentRemotePythonExecutorTest {
     @Test
     fun testComponentRemotePythonExecutorProcessNB() {
         runBlocking {
-            val remoteScriptExecutionService =
-                MockRemoteScriptExecutionService()
-            val componentRemotePythonExecutor = ComponentRemotePythonExecutor(
-                remoteScriptExecutionService)
-            val bluePrintRuntime = mockk<DefaultBluePrintRuntimeService>(
-                "123456-1000")
+            val remoteScriptExecutionService = MockRemoteScriptExecutionService()
+            val componentRemotePythonExecutor = ComponentRemotePythonExecutor(remoteScriptExecutionService)
+            val bluePrintRuntime = mockk<DefaultBluePrintRuntimeService>("123456-1000")
 
             every { bluePrintRuntime.setNodeTemplateAttributeValue(any(), any(), any()) } answers {}
 
             val input = getMockedOutput(bluePrintRuntime)
-            componentRemotePythonExecutor.bluePrintRuntimeService =
-                bluePrintRuntime
+            componentRemotePythonExecutor.bluePrintRuntimeService = bluePrintRuntime
             componentRemotePythonExecutor.applyNB(input)
         }
     }
@@ -100,13 +97,13 @@ class ComponentRemotePythonExecutorTest {
         val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
 
         stepMetaData.putJsonElement(
-            BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE,
-            "execute-remote-python")
+                BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE,
+                "execute-remote-python")
         stepMetaData.putJsonElement(
-            BluePrintConstants.PROPERTY_CURRENT_INTERFACE,
-            "ComponentRemotePythonExecutor")
+                BluePrintConstants.PROPERTY_CURRENT_INTERFACE,
+                "ComponentRemotePythonExecutor")
         stepMetaData.putJsonElement(
-            BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
+                BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
 
         val mapper = ObjectMapper()
         val rootNode = mapper.createObjectNode()
@@ -115,13 +112,13 @@ class ComponentRemotePythonExecutorTest {
 
         val operationalInputs: MutableMap<String, JsonNode> = hashMapOf()
         operationalInputs.putJsonElement(
-            BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE,
-            "execute-remote-python")
+                BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE,
+                "execute-remote-python")
         operationalInputs.putJsonElement(
-            BluePrintConstants.PROPERTY_CURRENT_INTERFACE,
-            "ComponentRemotePythonExecutor")
+                BluePrintConstants.PROPERTY_CURRENT_INTERFACE,
+                "ComponentRemotePythonExecutor")
         operationalInputs.putJsonElement(
-            BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
+                BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
         operationalInputs.putJsonElement("endpoint-selector", "aai")
         operationalInputs.putJsonElement("dynamic-properties", rootNode)
         operationalInputs.putJsonElement("command", "./run.sh")
@@ -129,8 +126,8 @@ class ComponentRemotePythonExecutorTest {
 
         every {
             svc.resolveNodeTemplateInterfaceOperationInputs(
-                "execute-remote-python",
-                "ComponentRemotePythonExecutor", "process")
+                    "execute-remote-python",
+                    "ComponentRemotePythonExecutor", "process")
         } returns operationalInputs
 
         val stepInputData = StepData().apply {
@@ -139,43 +136,47 @@ class ComponentRemotePythonExecutorTest {
         }
 
         val executionServiceInput = JacksonUtils
-            .readValueFromClassPathFile(
-                "payload/requests/sample-remote-python-request.json",
-                ExecutionServiceInput::class.java)!!
+                .readValueFromClassPathFile(
+                        "payload/requests/sample-remote-python-request.json",
+                        ExecutionServiceInput::class.java)!!
         executionServiceInput.stepData = stepInputData
 
         val operationOutputs = hashMapOf<String, JsonNode>()
         every {
             svc.resolveNodeTemplateInterfaceOperationOutputs(
-                "execute-remote-python",
-                "ComponentRemotePythonExecutor", "process")
+                    "execute-remote-python",
+                    "ComponentRemotePythonExecutor", "process")
         } returns operationOutputs
         val bluePrintRuntimeService = BluePrintMetadataUtils
-            .getBluePrintRuntime("123456-1000",
-                "./../../../../components/model-" +
-                        "catalog/blueprint-model/test-blueprint/" +
-                        "remote_scripts")
+                .getBluePrintRuntime("123456-1000",
+                        "./../../../../components/model-" +
+                                "catalog/blueprint-model/test-blueprint/" +
+                                "remote_scripts")
         every {
             svc.resolveNodeTemplateArtifactDefinition(
-                "execute-remote-python", "component-script")
+                    "execute-remote-python", "component-script")
         } returns bluePrintRuntimeService.resolveNodeTemplateArtifactDefinition(
-            "execute-remote-python", "component-script")
+                "execute-remote-python", "component-script")
         every {
             svc.setNodeTemplateAttributeValue(
-                "execute-remote-python", "prepare-environment-logs",
-                "prepared successfully".asJsonPrimitive())
+                    "execute-remote-python", "prepare-environment-logs",
+                    "prepared successfully".asJsonPrimitive())
         } returns Unit
         every {
             svc.setNodeTemplateAttributeValue(
-                "execute-remote-python",
-                "execute-command-logs", "N/A".asJsonPrimitive())
+                    "execute-remote-python",
+                    "execute-command-logs", "N/A".asJsonPrimitive())
         } returns Unit
         every {
             svc.setNodeTemplateAttributeValue(
-                "execute-remote-python",
-                "execute-command-logs",
-                "processed successfully".asJsonPrimitive())
+                    "execute-remote-python",
+                    "execute-command-logs",
+                    "processed successfully".asJsonPrimitive())
         } returns Unit
+
+        every {
+            svc.resolveDSLExpression("aai")
+        } returns """{"url" : "http://xxx.com"}""".asJsonType()
 
         every {
             svc.bluePrintContext()
