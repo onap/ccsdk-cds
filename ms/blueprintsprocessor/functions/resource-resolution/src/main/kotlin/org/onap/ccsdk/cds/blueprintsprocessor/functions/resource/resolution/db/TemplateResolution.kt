@@ -71,7 +71,7 @@ class TemplateResolution : Serializable {
     @get:ApiModelProperty(value = "If resolution occurred multiple time, this field provides the index.",
         required = true)
     @Column(name = "occurrence", nullable = false)
-    var occurrence: Int = 0
+    var occurrence: Int = 1
 
     @Id
     @Column(name = "template_resolution_id")
