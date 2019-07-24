@@ -23,18 +23,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.apache.commons.io.IOUtils
 import org.apache.http.client.ClientProtocolException
-import org.apache.http.client.methods.HttpDelete
-import org.apache.http.client.methods.HttpGet
-import org.apache.http.client.methods.HttpPatch
-import org.apache.http.client.methods.HttpPost
-import org.apache.http.client.methods.HttpPut
-import org.apache.http.client.methods.HttpUriRequest
+import org.apache.http.client.methods.*
 import org.apache.http.entity.StringEntity
 import org.apache.http.impl.client.CloseableHttpClient
 import org.apache.http.impl.client.HttpClients
 import org.apache.http.message.BasicHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.utils.WebClientUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintRetryException
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintIOUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.http.HttpMethod
 import java.io.IOException
@@ -49,9 +46,22 @@ interface BlueprintWebClientService {
 
     fun httpClient(): CloseableHttpClient {
         return HttpClients.custom()
-            .addInterceptorFirst(WebClientUtils.logRequest())
-            .addInterceptorLast(WebClientUtils.logResponse())
-            .build()
+                .addInterceptorFirst(WebClientUtils.logRequest())
+                .addInterceptorLast(WebClientUtils.logResponse())
+                .build()
+    }
+
+    /** High performance non blocking Retry function, If execution block [block] throws BluePrintRetryException
+     * exception then this will perform wait and retrigger accoring to times [times] with delay [delay]
+     */
+    suspend fun <T> retry(times: Int = 1, initialDelay: Long = 0, delay: Long = 1000,
+                          block: suspend (Int) -> T): T {
+        val exceptionBlock = { e: Exception ->
+            if (e !is BluePrintRetryException) {
+                throw e
+            }
+        }
+        return BluePrintIOUtils.retry(times, initialDelay, delay, block, exceptionBlock)
     }
 
     fun exchangeResource(methodType: String, path: String, request: String): WebClientResponse<String> {
@@ -72,8 +82,7 @@ interface BlueprintWebClientService {
             HttpMethod.POST -> post(path, request, convertedHeaders, String::class.java)
             HttpMethod.PUT -> put(path, request, convertedHeaders, String::class.java)
             HttpMethod.PATCH -> patch(path, request, convertedHeaders, String::class.java)
-            else -> throw BluePrintProcessorException("Unsupported met" +
-                "hodType($methodType)")
+            else -> throw BluePrintProcessorException("Unsupported methodType($methodType)")
         }
     }
 
@@ -126,8 +135,8 @@ interface BlueprintWebClientService {
 
     @Throws(IOException::class, ClientProtocolException::class)
     private fun <T> performCallAndExtractTypedWebClientResponse(
-        httpUriRequest: HttpUriRequest, responseType: Class<T>):
-        WebClientResponse<T> {
+            httpUriRequest: HttpUriRequest, responseType: Class<T>):
+            WebClientResponse<T> {
         val httpResponse = httpClient().execute(httpUriRequest)
         val statusCode = httpResponse.statusLine.statusCode
         httpResponse.entity.content.use {
@@ -145,10 +154,9 @@ interface BlueprintWebClientService {
     }
 
     suspend fun <T> getNB(path: String, additionalHeaders: Array<BasicHeader>?, responseType: Class<T>):
-        WebClientResponse<T> =
-        withContext(Dispatchers.IO) {
-            get(path, additionalHeaders!!, responseType)
-        }
+            WebClientResponse<T> = withContext(Dispatchers.IO) {
+        get(path, additionalHeaders!!, responseType)
+    }
 
     suspend fun postNB(path: String, request: Any): WebClientResponse<String> {
         return postNB(path, request, null, String::class.java)
@@ -159,10 +167,9 @@ interface BlueprintWebClientService {
     }
 
     suspend fun <T> postNB(path: String, request: Any, additionalHeaders: Array<BasicHeader>?,
-                           responseType: Class<T>): WebClientResponse<T> =
-        withContext(Dispatchers.IO) {
-            post(path, request, additionalHeaders!!, responseType)
-        }
+                           responseType: Class<T>): WebClientResponse<T> = withContext(Dispatchers.IO) {
+        post(path, request, additionalHeaders!!, responseType)
+    }
 
     suspend fun putNB(path: String, request: Any): WebClientResponse<String> {
         return putNB(path, request, null, String::class.java)
@@ -175,39 +182,36 @@ interface BlueprintWebClientService {
 
     suspend fun <T> putNB(path: String, request: Any,
                           additionalHeaders: Array<BasicHeader>?,
-                          responseType: Class<T>): WebClientResponse<T> =
-        withContext(Dispatchers.IO) {
-            put(path, request, additionalHeaders!!, responseType)
-        }
+                          responseType: Class<T>): WebClientResponse<T> = withContext(Dispatchers.IO) {
+        put(path, request, additionalHeaders!!, responseType)
+    }
 
     suspend fun <T> deleteNB(path: String): WebClientResponse<String> {
         return deleteNB(path, null, String::class.java)
     }
 
     suspend fun <T> deleteNB(path: String, additionalHeaders: Array<BasicHeader>?):
-        WebClientResponse<String> {
+            WebClientResponse<String> {
         return deleteNB(path, additionalHeaders, String::class.java)
     }
 
     suspend fun <T> deleteNB(path: String, additionalHeaders: Array<BasicHeader>?, responseType: Class<T>):
-        WebClientResponse<T> =
-        withContext(Dispatchers.IO) {
-            delete(path, additionalHeaders!!, responseType)
-        }
+            WebClientResponse<T> = withContext(Dispatchers.IO) {
+        delete(path, additionalHeaders!!, responseType)
+    }
 
     suspend fun <T> patchNB(path: String, request: Any, additionalHeaders: Array<BasicHeader>?, responseType: Class<T>):
-        WebClientResponse<T> =
-        withContext(Dispatchers.IO) {
-            patch(path, request, additionalHeaders!!, responseType)
-        }
+            WebClientResponse<T> = withContext(Dispatchers.IO) {
+        patch(path, request, additionalHeaders!!, responseType)
+    }
 
     suspend fun exchangeNB(methodType: String, path: String, request: Any): WebClientResponse<String> {
         return exchangeNB(methodType, path, request, hashMapOf(),
-            String::class.java)
+                String::class.java)
     }
 
     suspend fun exchangeNB(methodType: String, path: String, request: Any, additionalHeaders: Map<String, String>?):
-        WebClientResponse<String> {
+            WebClientResponse<String> {
         return exchangeNB(methodType, path, request, additionalHeaders, String::class.java)
     }
 
@@ -224,8 +228,7 @@ interface BlueprintWebClientService {
             HttpMethod.DELETE -> deleteNB(path, convertedHeaders, responseType)
             HttpMethod.PUT -> putNB(path, request, convertedHeaders, responseType)
             HttpMethod.PATCH -> patchNB(path, request, convertedHeaders, responseType)
-            else -> throw BluePrintProcessorException("Unsupported method" +
-                "Type($methodType)")
+            else -> throw BluePrintProcessorException("Unsupported methodType($methodType)")
         }
     }
 
@@ -246,7 +249,7 @@ interface BlueprintWebClientService {
     }
 
     private fun basicHeaders(headers: Map<String, String>?):
-        Array<BasicHeader> {
+            Array<BasicHeader> {
         val basicHeaders = mutableListOf<BasicHeader>()
         defaultHeaders().forEach { (name, value) ->
             basicHeaders.add(BasicHeader(name, value))
@@ -260,9 +263,9 @@ interface BlueprintWebClientService {
     // Non Blocking Rest Implementation
     suspend fun httpClientNB(): CloseableHttpClient {
         return HttpClients.custom()
-            .addInterceptorFirst(WebClientUtils.logRequest())
-            .addInterceptorLast(WebClientUtils.logResponse())
-            .build()
+                .addInterceptorFirst(WebClientUtils.logRequest())
+                .addInterceptorLast(WebClientUtils.logResponse())
+                .build()
     }
 
     //TODO maybe there could be cases where we care about return headers?

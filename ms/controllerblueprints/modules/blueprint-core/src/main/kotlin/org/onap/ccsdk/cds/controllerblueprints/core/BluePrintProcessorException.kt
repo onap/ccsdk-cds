@@ -48,3 +48,9 @@ class BluePrintProcessorException : RuntimeException {
     }
 }
 
+class BluePrintRetryException : RuntimeException {
+    constructor(message: String, cause: Throwable) : super(message, cause)
+    constructor(message: String) : super(message)
+    constructor(cause: Throwable) : super(cause)
+    constructor(cause: Throwable, message: String, vararg args: Any?) : super(format(message, *args), cause)
+}
