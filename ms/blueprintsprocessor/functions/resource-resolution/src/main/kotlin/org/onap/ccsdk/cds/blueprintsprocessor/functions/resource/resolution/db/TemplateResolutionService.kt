@@ -53,7 +53,7 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
                                                                                       blueprintVersion: String,
                                                                                       artifactPrefix: String,
                                                                                       resolutionKey: String,
-                                                                                      occurrence: Int = 0): String =
+                                                                                      occurrence: Int = 1): String =
         withContext(Dispatchers.IO) {
 
             templateResolutionRepository.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
@@ -64,12 +64,13 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
                 occurrence)?.result ?: throw EmptyResultDataAccessException(1)
         }
 
+    //TODO: ripple through the API to expose the occurrence to outside API as well... and change the name..
     suspend fun findByResoureIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactName(blueprintName: String,
                                                                                                  blueprintVersion: String,
                                                                                                  artifactPrefix: String,
                                                                                                  resourceId: String,
                                                                                                  resourceType: String,
-                                                                                                 occurrence: Int = 0): String =
+                                                                                                 occurrence: Int = 1): String =
         withContext(Dispatchers.IO) {
 
             templateResolutionRepository.findByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
@@ -93,7 +94,6 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
         val resourceId = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] as String
         val resourceType = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] as String
         val occurrence = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] as Int
-
         write(blueprintName,
             blueprintVersion,
             artifactPrefix,
@@ -148,8 +148,12 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
                 }
             }
             try {
+                log.info("Writing out template_resolution result: bpName: $blueprintName bpVer $blueprintVersion resKey:$resolutionKey" +
+                    " (resourceId: $resourceId resourceType: $resourceType) occurrence:$occurrence")
                 templateResolutionRepository.saveAndFlush(resourceResolutionResult)
             } catch (ex: DataIntegrityViolationException) {
+                log.error("Error writing out template_resolution result: bpName: $blueprintName bpVer $blueprintVersion resKey:$resolutionKey" +
+                    " (resourceId: $resourceId resourceType: $resourceType) occurrence:$occurrence error: {}", ex.message)
                 throw BluePrintException("Failed to store resource api result.", ex)
             }
         }
