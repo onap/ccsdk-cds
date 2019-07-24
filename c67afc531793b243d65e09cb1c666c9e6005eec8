@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cfbadc2d_9b379be3",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/db/TemplateResolutionService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2019-07-24T15:15:42Z",
+      "side": 1,
+      "message": "Would remove this.",
+      "range": {
+        "startLine": 96,
+        "startChar": 7,
+        "endLine": 99,
+        "endChar": 22
+      },
+      "revId": "c67afc531793b243d65e09cb1c666c9e6005eec8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1fd6d6c_916decb9",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/db/TemplateResolutionService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2019-07-24T15:15:42Z",
+      "side": 1,
+      "message": "And this.",
+      "range": {
+        "startLine": 101,
+        "startChar": 19,
+        "endLine": 102,
+        "endChar": 29
+      },
+      "revId": "c67afc531793b243d65e09cb1c666c9e6005eec8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
