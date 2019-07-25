@@ -37,14 +37,12 @@ fun CapabilityCliDefinitions.defaultServiceTemplate() =
                 author = "Brinda Santh Muthuramalingam",
                 tags = "brinda, tosca") {
 
-            dsl("device-properties", """"
-                 {
+            dsl("device-properties", """{
                   "type": "basic-auth",
                   "host": { "get_input": "hostname"  },
                   "username": { "get_input": "username" },
                   "password": { "get_input": "password" }
-                }                
-            """.trimIndent())
+                }""".trimIndent())
 
             topologyTemplate {
 
@@ -56,27 +54,26 @@ fun CapabilityCliDefinitions.defaultServiceTemplate() =
                         property(id = "data", type = "json", required = true, description = "")
                     }
                     outputs {
-                        property(id = "status", required = true, type = "string", description = "")
+                        property(id = "status", required = true, type = "string", description = "") {
+                            value("success")
+                        }
                     }
                     step(id = "check", target = "check", description = "Calling check script node")
-
                 }
 
-                nodeTemplate(id = "check",
-                        type = "component-script-executor",
-                        description = "") {
-                    operation(interfaceName = "process", description = "") {
-                        inputs {
-                            property(id = "script-type", value = "kotlin")
-                            property(id = "script-class-reference", value = "cba.scripts.capability.cli.Check")
-                        }
-                        outputs {
-                            property(id = "response-data", value = "")
-                            property(id = "status", value = "success")
-                        }
+                val checkComponent = componentScriptExecutor(id = "check", description = "") {
+                    inputs {
+                        type("kotlin")
+                        scriptClassReference("cba.scripts.capability.cli.Check")
                     }
-                    artifact(id = "command-template", type = "artifact-template-velocity", file = "Templates/check-command-template.vtl")
+                    outputs {
+                        status("success")
+                        responseData("""{ "data" : "Here I am "}""")
+                    }
+                    artifact(id = "command-template", type = "artifact-template-velocity",
+                            file = "Templates/check-command-template.vtl")
                 }
+                nodeTemplate(checkComponent)
             }
 
             artifactType(BluePrintTypes.artifactTypeTemplateVelocity())

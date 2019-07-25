@@ -32,6 +32,12 @@ class TopologyTemplateBuilder {
         nodeTemplates!![id] = NodeTemplateBuilder(id, type, description).apply(block).build()
     }
 
+    fun nodeTemplate(nodeTemplate: NodeTemplate) {
+        if (nodeTemplates == null)
+            nodeTemplates = hashMapOf()
+        nodeTemplates!![nodeTemplate.id!!] = nodeTemplate
+    }
+
     fun nodeTemplateOperation(nodeTemplateName: String, type: String, interfaceName: String, description: String,
                               operationBlock: OperationAssignmentBuilder.() -> Unit) {
         if (nodeTemplates == null)
@@ -46,6 +52,12 @@ class TopologyTemplateBuilder {
         if (workflows == null)
             workflows = hashMapOf()
         workflows!![id] = WorkflowBuilder(id, description).apply(block).build()
+    }
+
+    fun workflow(workflow: Workflow) {
+        if (workflows == null)
+            workflows = hashMapOf()
+        workflows!![workflow.id!!] = workflow
     }
 
     //TODO("populate inputs, outputs")
@@ -113,16 +125,28 @@ class NodeTemplateBuilder(private val id: String,
         artifacts!![id] = ArtifactDefinitionBuilder(id, type, file).apply(block).build()
     }
 
+    fun artifacts(artifacts: MutableMap<String, ArtifactDefinition>?) {
+        this.artifacts = artifacts
+    }
+
     fun capability(id: String, block: CapabilityAssignmentBuilder.() -> Unit) {
         if (capabilities == null)
             capabilities = hashMapOf()
         capabilities!![id] = CapabilityAssignmentBuilder(id).apply(block).build()
     }
 
+    fun capabilities(capabilities: MutableMap<String, CapabilityAssignment>?) {
+        this.capabilities = capabilities
+    }
+
     fun requirement(id: String, capability: String, node: String, relationship: String) {
         if (requirements == null)
             requirements = hashMapOf()
         requirements!![id] = RequirementAssignmentBuilder(id, capability, node, relationship).build()
+    }
+
+    fun requirements(requirements: MutableMap<String, RequirementAssignment>?) {
+        this.requirements = requirements
     }
 
     fun build(): NodeTemplate {

@@ -17,7 +17,6 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.validation
 
-import org.slf4j.LoggerFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.data.AttributeDefinition
@@ -25,6 +24,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.format
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintAttributeDefinitionValidator
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
@@ -48,6 +48,9 @@ open class BluePrintAttributeDefinitionValidatorImpl(private val bluePrintTypeVa
 
         when {
             BluePrintTypes.validPrimitiveTypes().contains(dataType) -> {
+                // Do Nothing
+            }
+            BluePrintTypes.validComplexTypes().contains(dataType) -> {
                 // Do Nothing
             }
             BluePrintTypes.validCollectionTypes().contains(dataType) -> {

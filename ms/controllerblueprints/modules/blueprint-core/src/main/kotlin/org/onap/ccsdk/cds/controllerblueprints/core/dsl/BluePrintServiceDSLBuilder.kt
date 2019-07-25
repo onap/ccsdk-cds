@@ -54,14 +54,14 @@ class ServiceTemplateBuilder(private val name: String,
         imports.add(importDefinition)
     }
 
-    fun dsl(id: String, json: String) {
-        dsl(id, json.asJsonType())
+    fun dsl(id: String, content: Any) {
+        dsl(id, content.asJsonType())
     }
 
     fun dsl(id: String, json: JsonNode) {
         if (dslDefinitions == null)
             dslDefinitions = hashMapOf()
-        dslDefinitions!![id] = json.asJsonType()
+        dslDefinitions!![id] = json
     }
 
     fun dataTypes(dataTypes: MutableMap<String, DataType>) {
