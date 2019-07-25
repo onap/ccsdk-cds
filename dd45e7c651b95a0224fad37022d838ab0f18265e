@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8526e397_1a1602b5",
+        "filename": "ms/blueprintsprocessor/distribution/src/main/docker/startService.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-07-25T19:24:18Z",
+      "side": 1,
+      "message": "this should be configurable, shouldn\u0027t load it if we don\u0027t enable AAF.",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 152
+      },
+      "revId": "dd45e7c651b95a0224fad37022d838ab0f18265e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
