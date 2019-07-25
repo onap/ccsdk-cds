@@ -22,6 +22,29 @@
       "revId": "dd45e7c651b95a0224fad37022d838ab0f18265e",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2a30acb3_42fbbe08",
+        "filename": "ms/blueprintsprocessor/distribution/src/main/docker/startService.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-07-25T20:35:09Z",
+      "side": 1,
+      "message": "ONAP?",
+      "range": {
+        "startLine": 8,
+        "startChar": 103,
+        "endLine": 8,
+        "endChar": 106
+      },
+      "revId": "dd45e7c651b95a0224fad37022d838ab0f18265e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
