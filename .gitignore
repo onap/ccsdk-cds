@@ -107,6 +107,7 @@ typings/
 **/*.iml
 **/*.project
 **/.springBeans
+**/.factorypath
 
 **/*versionsBackup
 **/blackDuckHub*
@@ -148,4 +149,5 @@ MacOS
 
 # To Remove Kotlin Script Generated Jars
 **/*cba-kts.jar
+**/application/blueprints
 /target/

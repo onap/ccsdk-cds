@@ -16,16 +16,43 @@
 
 package cba.scripts.capability.cli
 
-open class Check : CliComponentFunction() {
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentScriptExecutor
+import org.onap.ccsdk.cds.blueprintsprocessor.ssh.sshClientService
+import org.onap.ccsdk.cds.controllerblueprints.core.*
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 
-    private val log = LoggerFactory.getLogger(CliComponentFunction::class.java)!!
+
+open class Check : AbstractScriptComponentFunction() {
+
+    private val log = logger(Check::class)
 
     override fun getName(): String {
-        return "SimpleCliConfigure"
+        return "Check"
     }
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
-        log.info("Executing process")
+        log.info("Executing process : ${executionRequest.payload}")
+
+        val data = executionRequest.payload.at("/check-request/data")
+
+        log.info("Data : ${data.asJsonString()}")
+
+        val checkCommands = mashTemplateNData("command-template", data.asJsonString())
+
+        log.info("Check Commands :$checkCommands")
+
+        // Get the Device Information from the DSL Model
+        val deviceInformation = bluePrintRuntimeService.resolveDSLExpression("device-properties")
+
+        log.info("Device Info :$deviceInformation")
+
+        // Get the Client Service
+        val sshClientService = BluePrintDependencyService.sshClientService(deviceInformation)
+
+        log.info("Client service is ready")
+
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {

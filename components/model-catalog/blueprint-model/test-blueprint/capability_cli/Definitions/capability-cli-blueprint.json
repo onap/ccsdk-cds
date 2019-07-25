@@ -30,11 +30,41 @@
       "resolution-key": {
         "get_input": "resolution-key"
       }
+    },
+    "device-properties": {
+      "type": "basic-auth",
+      "host": {
+        "get_input": "hostname"
+      },
+      "username": {
+        "get_input": "username"
+      },
+      "password": {
+        "get_input": "password"
+      }
     }
   },
   "topology_template": {
     "workflows": {
       "check": {
+        "inputs": {
+          "hostname": {
+            "required": true,
+            "type": "string"
+          },
+          "username": {
+            "required": true,
+            "type": "string"
+          },
+          "password": {
+            "required": true,
+            "type": "string"
+          },
+          "data": {
+            "required": true,
+            "type": "json"
+          }
+        },
         "steps": {
           "activate-process": {
             "description": "Check CLI",

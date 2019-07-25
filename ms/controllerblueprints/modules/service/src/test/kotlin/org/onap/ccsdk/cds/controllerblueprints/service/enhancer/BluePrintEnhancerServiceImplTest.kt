@@ -19,15 +19,12 @@ package org.onap.ccsdk.cds.controllerblueprints.service.enhancer
 
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.controllerblueprints.TestApplication
-import org.onap.ccsdk.cds.controllerblueprints.core.compress
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintEnhancerService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidatorService
-import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.cds.controllerblueprints.service.load.ModelTypeLoadService
 import org.onap.ccsdk.cds.controllerblueprints.service.load.ResourceDictionaryLoadService
@@ -53,8 +50,11 @@ class BluePrintEnhancerServiceImplTest {
     @Autowired
     lateinit var bluePrintValidatorService: BluePrintValidatorService
 
-    @Before
-    fun init() {
+
+    @Test
+    @Throws(Exception::class)
+    fun testEnhancementAndValidation() {
+
         runBlocking {
             modelTypeLoadService.loadPathModelType("./../../../../components/model-catalog/definition-type/starter-type")
 
@@ -62,44 +62,46 @@ class BluePrintEnhancerServiceImplTest {
             dictPaths.add("./../../../../components/model-catalog/resource-dictionary/starter-dictionary")
             dictPaths.add("./../../../../components/model-catalog/resource-dictionary/test-dictionary")
             resourceDictionaryLoadService.loadPathsResourceDictionary(dictPaths)
+
+            testBaseConfigEnhancementAndValidation()
+            testVFWEnhancementAndValidation()
+            testGoldenEnhancementAndValidation()
+            testCapabilityRestconfEnhancementAndValidation()
+            testRemoteScriptsEnhancementAndValidation()
+            testCapabilityCliEnhancementAndValidation()
         }
     }
 
-    @Test
-    @Throws(Exception::class)
-    fun testEnhancementAndValidation() {
+    fun testBaseConfigEnhancementAndValidation() {
         val basePath = "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
         testComponentInvokeEnhancementAndValidation(basePath, "base-enhance")
     }
 
-    @Test
-    @Throws(Exception::class)
     fun testVFWEnhancementAndValidation() {
         val basePath = "./../../../../components/model-catalog/blueprint-model/service-blueprint/vFW"
         testComponentInvokeEnhancementAndValidation(basePath, "vFW-enhance")
     }
 
-    @Test
-    @Throws(Exception::class)
     fun testGoldenEnhancementAndValidation() {
         val basePath = "./../../../../components/model-catalog/blueprint-model/test-blueprint/golden"
         testComponentInvokeEnhancementAndValidation(basePath, "golden-enhance")
     }
 
-    @Test
-    @Throws(Exception::class)
     fun testCapabilityRestconfEnhancementAndValidation() {
         val basePath = "./../../../../components/model-catalog/blueprint-model/test-blueprint/capability_restconf"
         testComponentInvokeEnhancementAndValidation(basePath, "capability_restconf-enhance")
 
     }
 
-    @Test
-    @Throws(Exception::class)
     fun testRemoteScriptsEnhancementAndValidation() {
         val basePath = "./../../../../components/model-catalog/blueprint-model/test-blueprint/remote_scripts"
         testComponentInvokeEnhancementAndValidation(basePath, "remote_scripts-enhance")
 
+    }
+
+    fun testCapabilityCliEnhancementAndValidation() {
+        val basePath = "./../../../../components/model-catalog/blueprint-model/test-blueprint/capability_cli"
+        testComponentInvokeEnhancementAndValidation(basePath, "capability_cli-enhance")
     }
 
     private fun testComponentInvokeEnhancementAndValidation(basePath: String, targetDirName: String) {

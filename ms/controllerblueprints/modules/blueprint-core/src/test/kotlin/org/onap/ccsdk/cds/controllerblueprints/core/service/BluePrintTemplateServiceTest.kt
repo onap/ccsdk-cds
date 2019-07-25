@@ -20,11 +20,8 @@ package org.onap.ccsdk.cds.controllerblueprints.core.service
 
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.BeforeTest
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -58,7 +55,7 @@ class BluePrintTemplateServiceTest {
             val template = JacksonUtils.getClassPathFileContent("templates/master.jinja")
             val json = JacksonUtils.getClassPathFileContent("templates/base-config-data-jinja.json")
 
-            var element: MutableMap<String, Any> = mutableMapOf()
+            val element: MutableMap<String, Any> = mutableMapOf()
             element["additional_array"] = arrayListOf(hashMapOf("name" to "Element1", "location" to "Region0"),
                 hashMapOf("name" to "Element2", "location" to "Region1"))
 

@@ -1,0 +1,10 @@
+{
+  "artifact_types" : {
+    "artifact-template-velocity" : {
+      "description" : " Velocity Template used for Configuration",
+      "version" : "1.0.0",
+      "derived_from" : "tosca.artifacts.Implementation",
+      "file_ext" : [ "vtl" ]
+    }
+  }
+}
