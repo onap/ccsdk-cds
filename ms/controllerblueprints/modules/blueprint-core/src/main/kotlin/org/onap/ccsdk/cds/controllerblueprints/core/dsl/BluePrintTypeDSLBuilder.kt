@@ -384,6 +384,10 @@ class PropertyDefinitionBuilder(private val id: String,
         propertyDefinition.defaultValue = defaultValue
     }
 
+    fun value(value: Any) {
+        value(value.asJsonType())
+    }
+
     fun value(value: JsonNode) {
         propertyDefinition.value = value
     }

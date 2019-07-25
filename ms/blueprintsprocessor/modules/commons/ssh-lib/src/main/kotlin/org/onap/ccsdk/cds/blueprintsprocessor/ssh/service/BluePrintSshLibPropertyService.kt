@@ -52,7 +52,8 @@ open class BluePrintSshLibPropertyService(private var bluePrintProperties: BlueP
     }
 
     fun sshClientProperties(jsonNode: JsonNode): SshClientProperties {
-        val type = jsonNode.get("type").textValue()
+        val type = jsonNode.get("type")?.textValue()
+                ?: throw BluePrintProcessorException("missing type field in ssh client properties")
         return when (type) {
             SshLibConstants.TYPE_BASIC_AUTH -> {
                 JacksonUtils.readValue(jsonNode,
