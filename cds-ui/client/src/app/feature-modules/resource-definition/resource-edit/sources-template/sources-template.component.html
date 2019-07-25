@@ -27,7 +27,7 @@
       class="sources-list"
       (cdkDropListDropped)="drop($event)">
       	<div class="sources-box" *ngFor="let item of sourcesOptions;let i = index" cdkDrag>
-          <mat-expansion-panel class="expansion-panel" (opened)="selected(item)">
+          <mat-expansion-panel class="expansion-panel">
       			<mat-expansion-panel-header>
         			<mat-panel-title>
                   {{item.name}}

@@ -48,7 +48,8 @@ export class SourcesTemplateComponent implements OnInit {
     sources:ISourcesData; 
     sourcesOptions = [];
     sourcesData = {};
-    @Output() resourcesData = new EventEmitter();  
+    @Output() resourcesData = new EventEmitter();
+    tempOption = [];
  
     constructor(private store: Store<IAppState>, private apiService: ResourceEditService) {
     this.rdState = this.store.select('resources');
@@ -62,12 +63,10 @@ export class SourcesTemplateComponent implements OnInit {
       resourcesdata => {
         var resourcesState: IResourcesState = { resources: resourcesdata.resources, isLoadSuccess: resourcesdata.isLoadSuccess, isSaveSuccess: resourcesdata.isSaveSuccess, isUpdateSuccess: resourcesdata.isUpdateSuccess };
         this.resources=resourcesState.resources;
-      //   this.sources = resourcesState.resources.sources;
          if(resourcesState.resources.definition && resourcesState.resources.definition.sources) {
          this.sources = resourcesState.resources.definition.sources;
          }
         for (let key in this.sources) {
-            // this.sourcesOptions.push(key);
             let source = {
                name : key,
                data: this.sources[key]
@@ -136,14 +135,45 @@ export class SourcesTemplateComponent implements OnInit {
   }
     
  drop(event: CdkDragDrop<string[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(event.previousContainer.data,
-                        event.container.data,
-                        event.previousIndex,
-                        event.currentIndex);
-    }
+   if (!this.checkIfSourceExists(event.item.element.nativeElement.innerText)) {
+      if (event.previousContainer === event.container) {
+         moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      } else {
+         transferArrayItem(event.previousContainer.data,
+            event.container.data,
+            event.previousIndex,
+            event.currentIndex);
+      }
+      this.tempOption.forEach((item) => {
+         if (item.name == event.item.element.nativeElement.innerText) {
+            this.apiService.getModelType(item.value)
+               .subscribe(data => {
+                  console.log(data);
+                  data.forEach(dataitem => {
+                     if (typeof (dataitem) == "object") {
+                        for (let key1 in dataitem) {
+                           if (key1 == 'properties') {
+                              let newPropOnj = {}
+                              for (let key2 in dataitem[key1]) {
+                                 console.log(dataitem[key1][key2]);
+                                 let varType = dataitem[key1][key2].type
+                                 // let property :  varType = 
+                                 newPropOnj[key2] = dataitem[key1][key2];
+                              }
+                           }
+                        }
+                     }
+                  });
+                  this.sourcesData = data;
+                  this.sourcesOptions.forEach(sourcesOptionsitem => {
+                     if (sourcesOptionsitem.name == item.name) {
+                        sourcesOptionsitem.data = data;
+                     }
+                  })
+               })
+         }
+      });
+   }
   }
 
   getResources() {
@@ -152,11 +182,21 @@ export class SourcesTemplateComponent implements OnInit {
       console.log(data);
       for (let key in data[0]) {
          let sourceObj = { name: key, value: data[0][key] }
-         this.option.push(sourceObj);  
+         this.option.push(sourceObj);
+         this.tempOption.push(sourceObj); 
      }
-      // this.sourcesOptions = data;
    }, error=>{
       console.log(error);
    })
   }
+
+  checkIfSourceExists(sourceName) {
+   let sourceExists: boolean = false;
+   this.sourcesOptions.forEach(item => {
+      if (item.name == sourceName) {
+         sourceExists = true;
+      }
+   });
+   return sourceExists;
+}
 }
