@@ -50,16 +50,17 @@ export class SearchFromDatabaseComponent implements OnInit {
    }
 
    fetchResourceByName() {
-      this.existingModelService.searchByTags("/searchByTags/",this.searchText)
-      .subscribe(data=>{
-          console.log(data);
-          data.forEach(element => {
-            this.options.push(element)
-          });          
-        this.resourceSelect.openPanel();
-      }, error=>{
-        window.alert('error' + error);
-      })
+      // this.existingModelService.searchByTags("/searchByTags/",this.searchText)
+      // .subscribe(data=>{
+      //     console.log(data);
+      //     data.forEach(element => {
+      //       this.options.push(element)
+      //     });          
+      //   this.resourceSelect.openPanel();
+      // }, error=>{
+      //   window.alert('error' + error);
+      // })
+      this.options=['test','vns','capability','hello','hi','hoi','dfagfagshdgfashdf','adsfhksd'];
    }
 
 }

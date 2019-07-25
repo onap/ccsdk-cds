@@ -18,3 +18,39 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
 */
+
+.example-card {
+    min-width: 150px;
+    max-height: 150px;
+    background-color: #ebebeb;
+}
+
+button.mat-menu-item {
+    width: auto;
+    float: left;
+    // margin-top: 10px;
+    // margin-bottom: 5px;
+    border-radius: 4px;
+    // min-width: 6em;
+    background-color: #3f51b5;
+    margin: 1px;
+    // padding: 1px;
+    cursor: pointer;
+    color: white;
+}
+
+.card-deck-container {
+    position: relative;
+    border-radius: 1px;
+    padding: 2px;
+    margin: 2px;
+    // background-color: #f5f5f5;
+}
+
+.grid-container {
+    margin: 20px;
+}
+
+.card-content {
+    text-align: center;
+}

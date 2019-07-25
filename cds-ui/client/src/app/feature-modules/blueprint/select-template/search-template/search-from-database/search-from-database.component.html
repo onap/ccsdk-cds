@@ -21,11 +21,26 @@ limitations under the License.
 <form class="search-form" [formGroup]="myControl">
     <mat-form-field class="search-full-width">
         <input #resourceSelect type="text" [(ngModel)]="searchText" placeholder="Search Resources" matInput [matAutocomplete]="auto" formControlName="search_input">
-        <button matSuffix mat-icon-button (click)="fetchResourceByName()"><mat-icon>search</mat-icon></button>
-        <mat-autocomplete #auto="matAutocomplete">
-            <mat-option (click)="selected(option)" *ngFor="let option of options" [value]="option.tags">
-                {{option.tags}}
-            </mat-option>
-        </mat-autocomplete>
+        <button matSuffix mat-icon-button (click)="fetchResourceByName()">
+      <mat-icon>search</mat-icon>
+    </button>
+        <!-- <mat-autocomplete #auto="matAutocomplete">
+      <mat-option (click)="selected(option)" *ngFor="let option of options" [value]="option.tags">
+        {{option.tags}}
+      </mat-option>
+    </mat-autocomplete> -->
     </mat-form-field>
 </form>
+<mat-grid-list cols="8">
+    <mat-grid-tile *ngFor="let option of options">
+        <mat-card class="example-card">
+            <mat-card-content class="card-content">
+                {{option}}
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-menu-item>Edit</button>
+                <button mat-menu-item>Info</button>
+            </mat-card-actions>
+        </mat-card>
+    </mat-grid-tile>
+</mat-grid-list>
