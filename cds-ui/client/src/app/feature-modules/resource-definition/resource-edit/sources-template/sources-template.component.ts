@@ -87,6 +87,7 @@ export class SourcesTemplateComponent implements OnInit {
      this.resources.sources = Object.assign({},originalSources);
  };
     
+ // to remove this method
  selected(sourceValue){
    this.sourcesData= [];//this.sources[value];
    this.apiService.getModelType(sourceValue.value)
@@ -153,25 +154,25 @@ export class SourcesTemplateComponent implements OnInit {
                      if (typeof (dataitem) == "object") {
                         for (let key1 in dataitem) {
                            if (key1 == 'properties') {
-                              let newPropOnj = {}
+                              let newPropObj = {};
+                              newPropObj["name"] = event.item.element.nativeElement.innerText;
+                              newPropObj['data'] = {};
+                              let newSoruceObj = {};
                               for (let key2 in dataitem[key1]) {
-                                 console.log(dataitem[key1][key2]);
-                                 let varType = dataitem[key1][key2].type
-                                 // let property :  varType = 
-                                 newPropOnj[key2] = dataitem[key1][key2];
+                                 newSoruceObj[key2] = '';;
                               }
+                              newPropObj['data']['properties'] = newSoruceObj;
+                              this.sourcesOptions.forEach(sourcesOptionsitem => {
+                                 if (sourcesOptionsitem.name == item.name) {
+                                    sourcesOptionsitem.data = newPropObj['data'];
+                                 }
+                              });
                            }
                         }
                      }
                   });
-                  this.sourcesData = data;
-                  this.sourcesOptions.forEach(sourcesOptionsitem => {
-                     if (sourcesOptionsitem.name == item.name) {
-                        sourcesOptionsitem.data = data;
-                     }
-                  })
-               })
-         }
+            });
+         }  
       });
    }
   }
