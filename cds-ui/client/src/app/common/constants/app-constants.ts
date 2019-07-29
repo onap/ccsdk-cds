@@ -93,6 +93,16 @@ export const GlobalContants = {
     }
 };
 
+export const BlueprintURLs = {
+   getAllBlueprints: '/controllerblueprint/all',
+   searchByTag: '/controllerblueprint/searchByTags/{tags}',
+   save: '/controllerblueprint/create-blueprint',
+   publish: '/controllerblueprint/publish',
+   enrich: '/controllerblueprint/enrich-blueprint',
+   download: '/controllerblueprint/download-blueprint/{name}/{version}',
+   deploy:'/controllerblueprint/deploy-blueprint'
+}
+
 export const ResourceDictionaryURLs = {
     saveResourceDictionary: '/resourcedictionary/save',
     searchResourceDictionaryByTags: '/resourcedictionary/search',
