@@ -1,7 +1,7 @@
 /*
 ============LICENSE_START==========================================
 ===================================================================
-Copyright (C) 2018 IBM Intellectual Property. All rights reserved.
+Copyright (C) 2018-19 IBM Intellectual Property. All rights reserved.
 ===================================================================
 
 Unless otherwise specified, all software contained herein is licensed
@@ -30,17 +30,12 @@ import { SelectTemplateModule } from './select-template/select-template.module';
 import { ModifyTemplateModule } from './modify-template/modify-template.module';
 import { DeployTemplateModule } from './deploy-template/deploy-template.module';
 import { TestTemplateModule } from './test-template/test-template.module';
-import { SearchEditCBAComponent } from './search-edit-cba/search-edit-cba.component';
 import { AppMaterialModule } from '../../../app/common/modules/app-material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
-    BlueprintComponent,
-    SearchEditCBAComponent
-  ],
-  exports:[
-    SearchEditCBAComponent
+    BlueprintComponent
   ],
   imports: [
     CommonModule,
