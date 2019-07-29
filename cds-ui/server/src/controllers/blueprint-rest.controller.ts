@@ -57,7 +57,7 @@ export class BlueprintRestController {
     public bpservice: BlueprintService,
   ) { }
 
-  @get('/blueprints', {
+  @get('/controllerblueprint/all', {
     responses: {
       '200': {
         description: 'Blueprint model instance',
@@ -69,7 +69,7 @@ export class BlueprintRestController {
     return await this.bpservice.getAllblueprints();
   }
 
-  @get('/searchByTags/{tags}', {
+  @get('/controllerblueprint/searchByTags/{tags}', {
     responses: {
       '200': {
         content: { 'application/json': {} },
@@ -80,7 +80,7 @@ export class BlueprintRestController {
     return await this.bpservice.getByTags(tags);
   }
 
-  @post('/create-blueprint')
+  @post('/controllerblueprint/create-blueprint')
   async upload(
     @requestBody({
       description: 'multipart/form-data value.',
@@ -109,7 +109,7 @@ export class BlueprintRestController {
     });
   }
 
-  @post('/publish')
+  @post('/controllerblueprint/publish')
   async publish(
     @requestBody({
       description: 'multipart/form-data value.',
@@ -138,7 +138,7 @@ export class BlueprintRestController {
     });
   }
 
-  @post('/enrich-blueprint')
+  @post('/controllerblueprint/enrich-blueprint')
   async enrich(
     @requestBody({
       description: 'multipart/form-data value.',
@@ -167,7 +167,7 @@ export class BlueprintRestController {
     });
   }
 
-  @get('/download-blueprint/{name}/{version}')
+  @get('/controllerblueprint/download-blueprint/{name}/{version}')
   async download(
     @param.path.string('name') name: string,
     @param.path.string('version') version: string,
@@ -191,7 +191,7 @@ export class BlueprintRestController {
     })
   }
 
-  @post('/deploy-blueprint')
+  @post('/controllerblueprint/deploy-blueprint')
   async deploy(
     @requestBody({
       description: 'multipart/form-data value.',
