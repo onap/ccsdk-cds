@@ -33,6 +33,6 @@ export class SearchTemplateService {
   constructor(private _http: HttpClient, private api: ApiService) { }
 
   searchByTags(searchText: String): Observable<any>{
-    return this.api.post(BlueprintURLs.searchByTag, searchText);
+    return this.api.get(BlueprintURLs.searchByTag+'/'+searchText);
   }
 }

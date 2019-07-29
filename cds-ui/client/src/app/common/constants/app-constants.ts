@@ -95,7 +95,7 @@ export const GlobalContants = {
 
 export const BlueprintURLs = {
    getAllBlueprints: '/controllerblueprint/all',
-   searchByTag: '/controllerblueprint/searchByTags/{tags}',
+   searchByTag: '/controllerblueprint/searchByTags/',
    save: '/controllerblueprint/create-blueprint',
    publish: '/controllerblueprint/publish',
    enrich: '/controllerblueprint/enrich-blueprint',
