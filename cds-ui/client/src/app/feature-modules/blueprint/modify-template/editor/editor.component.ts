@@ -35,7 +35,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { IBlueprintState } from 'src/app/common/core/store/models/blueprintState.model';
 import { LoadBlueprintSuccess, SetBlueprintState } from '../../../../common/core/store/actions/blueprint.action'
-import { ApiService } from 'src/app/common/core/services/api.service';
+
 import { IMetaData } from 'src/app/common/core/store/models/metadata.model';
 import { EditorService } from './editor.service';
 import { SortPipe } from '../../../../common/shared/pipes/sort.pipe';
@@ -130,7 +130,7 @@ export class EditorComponent implements OnInit {
   artifactName: any;
   artifactVersion: any;
 
-  constructor(private store: Store<IAppState>, private apiservice: EditorService,
+  constructor(private store: Store<IAppState>, private editorService: EditorService,
     private alertService: NotificationHandlerService, private loader: LoaderService
     ) 
     {
@@ -244,7 +244,8 @@ export class EditorComponent implements OnInit {
       .then(blob => {
         const formData = new FormData();
         formData.append("file", blob);
-        this.apiservice.enrich("/enrich-blueprint/", formData)
+        // this.editorService.enrich("/enrich-blueprint/", formData)
+        this.editorService.enrich(formData)
           .subscribe(
             (response) => {
               this.zipFile.files = {};
@@ -271,7 +272,8 @@ export class EditorComponent implements OnInit {
       .then(blob => {
         const formData = new FormData();
         formData.append("file", blob);
-        this.apiservice.post("/create-blueprint/", formData)
+        // this.editorService.saveBlueprint("/create-blueprint/", formData)
+        this.editorService.saveBlueprint(formData)
           .subscribe(
             data => {
               this.alertService.success('Success:' + JSON.stringify(data));
@@ -289,7 +291,8 @@ export class EditorComponent implements OnInit {
       .then(blob => {
         const formData = new FormData();
         formData.append("file", blob);
-        this.apiservice.deployPost("/deploy-blueprint/", formData)
+        // this.editorService.deployPost("/deploy-blueprint/", formData)
+        this.editorService.deployPost(formData)
           .subscribe(data => {
             this.alertService.success('Saved Successfully:' + JSON.stringify(data));
           }, error=>{
@@ -305,7 +308,8 @@ export class EditorComponent implements OnInit {
       .then(blob => {
         const formData = new FormData();
         formData.append("file", blob);
-        this.apiservice.post("/publish/", formData)
+        // this.editorService.post("/publish/", formData)
+        this.editorService.publishBlueprint(formData)
           .subscribe(data => {
             this.alertService.success('Published:' + JSON.stringify(data))
           }, error=>{
@@ -326,7 +330,8 @@ export class EditorComponent implements OnInit {
 
   download() {
     console.log(this.artifactName);
-    status = this.apiservice.downloadCBA("/download-blueprint/" + this.artifactName + "/" + this.artifactVersion);
+    // status = this.editorService.downloadCBA("/download-blueprint/" + this.artifactName + "/" + this.artifactVersion);
+    status = this.editorService.downloadCBA("/"+this.artifactName + "/" + this.artifactVersion);
     window.alert(status);
     // .subscribe(response => {
     //   console.log(response);
@@ -338,14 +343,8 @@ export class EditorComponent implements OnInit {
     //     console.log(error);
     //   }
     // );
-
-    // this.create();
-    // var zipFilename = "baseconfiguration.zip";
-    // this.zipFile.generateAsync({ type: "blob" })
-    //   .then(blob => {
-    //     saveAs(blob, zipFilename);
-    //   });
   }
+  
   setEditorMode() {
     switch (this.fileExtension) {
       case "xml":

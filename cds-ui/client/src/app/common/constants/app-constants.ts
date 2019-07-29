@@ -99,7 +99,7 @@ export const BlueprintURLs = {
    save: '/controllerblueprint/create-blueprint',
    publish: '/controllerblueprint/publish',
    enrich: '/controllerblueprint/enrich-blueprint',
-   download: '/controllerblueprint/download-blueprint/{name}/{version}',
+   download: '/controllerblueprint/download-blueprint/',
    deploy:'/controllerblueprint/deploy-blueprint'
 }
 

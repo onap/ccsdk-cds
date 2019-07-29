@@ -25,19 +25,18 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, observable } from 'rxjs';
 import { ApiService } from '../../../../common/core/services/api.service';
 import { saveAs } from 'file-saver';
+import { BlueprintURLs } from '../../../../common/constants/app-constants';
 
 @Injectable()
 export class EditorService {
-    // blueprintUrl = '../../constants/blueprint.json';
-
     constructor(private _http: HttpClient, private api: ApiService) {
     }
 
-    enrich(uri: string, body: FormData): Observable<any> {
-        return this.api.post(uri, body, { responseType: 'blob' });
+    enrich(body: FormData): Observable<any> {
+        return this.api.post(BlueprintURLs.enrich, body, { responseType: 'blob' });
     }
-    downloadCBA(uri: string): string {
-        this.api.get(uri, { responseType: 'blob' })
+    downloadCBA(artifactDetails: string): string {
+        this.api.get(BlueprintURLs.download+artifactDetails, { responseType: 'blob' })
             .subscribe(response => {
                 let blob = new Blob([response], { 'type': "application/octet-stream" });
                 saveAs(blob, "CBA.zip");
@@ -46,13 +45,17 @@ export class EditorService {
         return "Download Success";
 
     }
-    post(uri: string, body: any | null, options?: any): Observable<any> {
+    saveBlueprint(body: any | null, options?: any): Observable<any> {
 
-        return this.api.post(uri, body, options);
+        return this.api.post(BlueprintURLs.save, body, options);
+    }
+    publishBlueprint(body: any | null, options?: any): Observable<any> {
+
+        return this.api.post(BlueprintURLs.publish, body, options);
     }
 
-    deployPost(uri: string, body: any | null, options?: any): Observable<any> {
+    deployPost(body: any | null, options?: any): Observable<any> {
 
-        return this.api.post(uri, body, { responseType: 'text' });
+        return this.api.post(BlueprintURLs.deploy, body, { responseType: 'text' });
     }
 }
