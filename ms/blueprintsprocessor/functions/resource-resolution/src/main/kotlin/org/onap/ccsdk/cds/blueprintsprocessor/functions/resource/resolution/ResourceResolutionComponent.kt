@@ -53,7 +53,7 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
 
-        val occurrence = getOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE).asInt()
+        val occurrence = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE)?.asInt() ?: 1
         val resolutionKey = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY)?.returnNullIfMissing()?.textValue() ?: ""
         val storeResult = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT)?.asBoolean() ?: false
         val resourceId = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID)?.returnNullIfMissing()?.textValue() ?: ""
