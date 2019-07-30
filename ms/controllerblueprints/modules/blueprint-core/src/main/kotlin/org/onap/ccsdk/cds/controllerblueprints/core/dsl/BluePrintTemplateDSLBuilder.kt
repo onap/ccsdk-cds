@@ -20,6 +20,9 @@ import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.*
+import kotlin.reflect.KClass
+import kotlin.reflect.full.createInstance
+import kotlin.reflect.jvm.reflect
 
 class TopologyTemplateBuilder {
     private var topologyTemplate = TopologyTemplate()
@@ -39,7 +42,8 @@ class TopologyTemplateBuilder {
     }
 
     fun nodeTemplateOperation(nodeTemplateName: String, type: String, interfaceName: String, description: String,
-                              operationBlock: OperationAssignmentBuilder.() -> Unit) {
+                              operationBlock: OperationAssignmentBuilder<PropertiesAssignmentBuilder,
+                                      PropertiesAssignmentBuilder>.() -> Unit) {
         if (nodeTemplates == null)
             nodeTemplates = hashMapOf()
 
@@ -84,9 +88,9 @@ class TopologyTemplateBuilder {
     }
 }
 
-class NodeTemplateBuilder(private val id: String,
-                          private val type: String,
-                          private val description: String? = "") {
+open class NodeTemplateBuilder(private val id: String,
+                               private val type: String,
+                               private val description: String? = "") {
     private var nodeTemplate: NodeTemplate = NodeTemplate()
     private var properties: MutableMap<String, JsonNode>? = null
     private var interfaces: MutableMap<String, InterfaceAssignment>? = null
@@ -94,14 +98,19 @@ class NodeTemplateBuilder(private val id: String,
     private var capabilities: MutableMap<String, CapabilityAssignment>? = null
     private var requirements: MutableMap<String, RequirementAssignment>? = null
 
+    fun properties(properties: MutableMap<String, JsonNode>?) {
+        this.properties = properties
+    }
+
     fun properties(block: PropertiesAssignmentBuilder.() -> Unit) {
         if (properties == null)
             properties = hashMapOf()
         properties = PropertiesAssignmentBuilder().apply(block).build()
     }
 
-    fun operation(interfaceName: String, description: String? = "",
-                  block: OperationAssignmentBuilder.() -> Unit) {
+    open fun <In : PropertiesAssignmentBuilder, Out : PropertiesAssignmentBuilder> typedOperation(
+            interfaceName: String, description: String = "",
+            block: OperationAssignmentBuilder<In, Out>.() -> Unit) {
         if (interfaces == null)
             interfaces = hashMapOf()
 
@@ -109,8 +118,13 @@ class NodeTemplateBuilder(private val id: String,
         val defaultOperationName = BluePrintConstants.DEFAULT_STEP_OPERATION
         interfaceAssignment.operations = hashMapOf()
         interfaceAssignment.operations!![defaultOperationName] =
-                OperationAssignmentBuilder(defaultOperationName, description).apply(block).build()
+                OperationAssignmentBuilder<In, Out>(defaultOperationName, description).apply(block).build()
         interfaces!![interfaceName] = interfaceAssignment
+    }
+
+    fun operation(interfaceName: String, description: String,
+                  block: OperationAssignmentBuilder<PropertiesAssignmentBuilder, PropertiesAssignmentBuilder>.() -> Unit) {
+        typedOperation<PropertiesAssignmentBuilder, PropertiesAssignmentBuilder>(interfaceName, description, block)
     }
 
     fun artifact(id: String, type: String, file: String) {
@@ -190,10 +204,10 @@ class ArtifactDefinitionBuilder(private val id: String, private val type: String
     }
 }
 
-class CapabilityAssignmentBuilder(private val id: String) {
-    private var capabilityAssignment: CapabilityAssignment = CapabilityAssignment()
-    private var attributes: MutableMap<String, JsonNode>? = null
-    private var properties: MutableMap<String, JsonNode>? = null
+open class CapabilityAssignmentBuilder(private val id: String) {
+    var capabilityAssignment: CapabilityAssignment = CapabilityAssignment()
+    var attributes: MutableMap<String, JsonNode>? = null
+    var properties: MutableMap<String, JsonNode>? = null
 
     fun attributes(block: AttributesAssignmentBuilder.() -> Unit) {
         if (attributes == null)
@@ -214,9 +228,9 @@ class CapabilityAssignmentBuilder(private val id: String) {
     }
 }
 
-class RequirementAssignmentBuilder(private val id: String, private val capability: String,
-                                   private val node: String,
-                                   private val relationship: String) {
+open class RequirementAssignmentBuilder(private val id: String, private val capability: String,
+                                        private val node: String,
+                                        private val relationship: String) {
     private var requirementAssignment: RequirementAssignment = RequirementAssignment()
 
     fun build(): RequirementAssignment {
@@ -233,10 +247,12 @@ class InterfaceAssignmentBuilder(private val id: String) {
     private var interfaceAssignment: InterfaceAssignment = InterfaceAssignment()
     private var operations: MutableMap<String, OperationAssignment>? = null
 
-    fun operation(id: String, description: String? = "", block: OperationAssignmentBuilder.() -> Unit) {
+    fun operation(id: String, description: String? = "",
+                  block: OperationAssignmentBuilder<PropertiesAssignmentBuilder, PropertiesAssignmentBuilder>.() -> Unit) {
         if (operations == null)
             operations = hashMapOf()
-        operations!![id] = OperationAssignmentBuilder(id, description).apply(block).build()
+        operations!![id] = OperationAssignmentBuilder<PropertiesAssignmentBuilder, PropertiesAssignmentBuilder>(
+                id, description).apply(block).build()
     }
 
     fun build(): InterfaceAssignment {
@@ -246,8 +262,9 @@ class InterfaceAssignmentBuilder(private val id: String) {
     }
 }
 
-class OperationAssignmentBuilder(private val id: String,
-                                 private val description: String? = "") {
+class OperationAssignmentBuilder<In : PropertiesAssignmentBuilder, Out : PropertiesAssignmentBuilder>(
+        private val id: String,
+        private val description: String? = "") {
 
     private var operationAssignment: OperationAssignment = OperationAssignment()
 
@@ -256,27 +273,33 @@ class OperationAssignmentBuilder(private val id: String,
     }
 
     fun implementation(timeout: Int, operationHost: String? = BluePrintConstants.PROPERTY_SELF) {
-        val implementation = Implementation().apply {
+        operationAssignment.implementation = Implementation().apply {
             this.operationHost = operationHost!!
             this.timeout = timeout
         }
-        operationAssignment.implementation = implementation
+    }
+
+    fun implementation(timeout: Int, operationHost: String? = BluePrintConstants.PROPERTY_SELF,
+                       block: ImplementationBuilder.() -> Unit) {
+        operationAssignment.implementation = ImplementationBuilder(timeout, operationHost!!).apply(block).build()
     }
 
     fun inputs(inputs: MutableMap<String, JsonNode>?) {
         operationAssignment.inputs = inputs
     }
 
-    fun inputs(block: PropertiesAssignmentBuilder.() -> Unit) {
-        operationAssignment.inputs = PropertiesAssignmentBuilder().apply(block).build()
+    fun inputs(block: In.() -> Unit) {
+        val instance: In = (block.reflect()?.parameters?.get(0)?.type?.classifier as KClass<In>).createInstance()
+        operationAssignment.inputs = instance.apply(block).build()
     }
 
     fun outputs(outputs: MutableMap<String, JsonNode>?) {
         operationAssignment.outputs = outputs
     }
 
-    fun outputs(block: PropertiesAssignmentBuilder.() -> Unit) {
-        operationAssignment.outputs = PropertiesAssignmentBuilder().apply(block).build()
+    fun outputs(block: Out.() -> Unit) {
+        val instance: Out = (block.reflect()?.parameters?.get(0)?.type?.classifier as KClass<Out>).createInstance()
+        operationAssignment.outputs = instance.apply(block).build()
     }
 
     fun build(): OperationAssignment {
@@ -286,8 +309,30 @@ class OperationAssignmentBuilder(private val id: String,
     }
 }
 
-class PropertiesAssignmentBuilder {
-    private var properties: MutableMap<String, JsonNode> = hashMapOf()
+class ImplementationBuilder(private val timeout: Int, private val operationHost: String) {
+    private val implementation = Implementation()
+
+    fun primary(primary: String) {
+        implementation.primary = primary
+    }
+
+    fun dependencies(vararg dependencies: String) {
+        if (implementation.dependencies == null)
+            implementation.dependencies = arrayListOf()
+        dependencies.forEach {
+            implementation.dependencies!!.add(it)
+        }
+    }
+
+    fun build(): Implementation {
+        implementation.timeout = timeout
+        implementation.operationHost = operationHost
+        return implementation
+    }
+}
+
+open class PropertiesAssignmentBuilder {
+    var properties: MutableMap<String, JsonNode> = hashMapOf()
 
     fun property(id: String, value: Any) {
         property(id, value.asJsonType())
@@ -302,8 +347,8 @@ class PropertiesAssignmentBuilder {
     }
 }
 
-class AttributesAssignmentBuilder {
-    private var attributes: MutableMap<String, JsonNode> = hashMapOf()
+open class AttributesAssignmentBuilder {
+    var attributes: MutableMap<String, JsonNode> = hashMapOf()
 
     fun attribute(id: String, value: String) {
         attribute(id, value.asJsonType())

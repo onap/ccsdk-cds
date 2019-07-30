@@ -19,12 +19,10 @@ package org.onap.ccsdk.cds.blueprintsprocessor.services.execution
 import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.controllerblueprints.core.*
-import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactDefinition
-import org.onap.ccsdk.cds.controllerblueprints.core.data.Implementation
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
-import org.onap.ccsdk.cds.controllerblueprints.core.dsl.ArtifactDefinitionBuilder
-import org.onap.ccsdk.cds.controllerblueprints.core.dsl.nodeTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.AbstractNodeTemplateImplBuilder
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.PropertiesAssignmentBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.nodeType
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
@@ -77,7 +75,7 @@ open class ComponentScriptExecutor(private var componentFunctionScriptingService
 
 /** Component Extensions **/
 
-fun BluePrintTypes.componentScriptExecutor(): NodeType {
+fun BluePrintTypes.nodeTemplateComponentScriptExecutor(): NodeType {
     return nodeType(id = "component-script-executor", version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
             derivedFrom = BluePrintConstants.MODEL_TYPE_NODE_COMPONENT,
             description = "Generic Script Component Executor") {
@@ -111,98 +109,61 @@ fun BluePrintTypes.componentScriptExecutor(): NodeType {
 }
 
 /** Component Builder */
-
-fun componentScriptExecutor(id: String, description: String,
-                            block: ComponentScriptExecutorBuilder.() -> Unit): NodeTemplate {
-    return ComponentScriptExecutorBuilder(id, description).apply(block).build()
+fun BluePrintTypes.nodeTemplateComponentScriptExecutor(id: String,
+                                                       description: String,
+                                                       block: ComponentScriptExecutorNodeTemplateImplBuilder.() -> Unit)
+        : NodeTemplate {
+    return ComponentScriptExecutorNodeTemplateImplBuilder(id, description).apply(block).build()
 }
 
-class ComponentScriptExecutorBuilder(private val id: String, private val description: String) {
-    private var implementation: Implementation? = null
-    private var inputs: MutableMap<String, JsonNode>? = null
-    private var outputs: MutableMap<String, JsonNode>? = null
-    private var artifacts: MutableMap<String, ArtifactDefinition>? = null
+class ComponentScriptExecutorNodeTemplateImplBuilder(id: String, description: String) :
+        AbstractNodeTemplateImplBuilder<ComponentScriptExecutorInputAssignmentBuilder,
+                ComponentScriptExecutorOutputAssignmentBuilder>(id, "component-script-executor",
+                "ComponentScriptExecutor",
+                description)
 
-    fun implementation(timeout: Int, operationHost: String? = BluePrintConstants.PROPERTY_SELF) {
-        val implementation = Implementation().apply {
-            this.operationHost = operationHost!!
-            this.timeout = timeout
-        }
-        this.implementation = implementation
+class ComponentScriptExecutorInputAssignmentBuilder : PropertiesAssignmentBuilder() {
+
+    fun type(type: String) {
+        type(type.asJsonPrimitive())
     }
 
-    fun inputs(block: InputAssignmentBuilder.() -> Unit) {
-        this.inputs = InputAssignmentBuilder().apply(block).build()
+    fun type(type: JsonNode) {
+        property(ComponentScriptExecutor.SCRIPT_TYPE, type)
     }
 
-    fun outputs(block: OutputAssignmentBuilder.() -> Unit) {
-        this.outputs = OutputAssignmentBuilder().apply(block).build()
+    fun scriptClassReference(scriptClassReference: String) {
+        scriptClassReference(scriptClassReference.asJsonPrimitive())
     }
 
-    fun artifact(id: String, type: String, file: String) {
-        if (artifacts == null)
-            artifacts = hashMapOf()
-        artifacts!![id] = ArtifactDefinitionBuilder(id, type, file).build()
+    fun scriptClassReference(scriptClassReference: JsonNode) {
+        property(ComponentScriptExecutor.SCRIPT_CLASS_REFERENCE, scriptClassReference)
     }
 
-    fun artifact(id: String, type: String, file: String, block: ArtifactDefinitionBuilder.() -> Unit) {
-        if (artifacts == null)
-            artifacts = hashMapOf()
-        artifacts!![id] = ArtifactDefinitionBuilder(id, type, file).apply(block).build()
+    fun dynamicProperty(dynamicProperty: String) {
+        dynamicProperty(dynamicProperty.asJsonType())
     }
 
-    fun build(): NodeTemplate {
-        return nodeTemplate(id, "component-script-executor", description) {
-            operation("ComponentScriptExecutor") {
-                implementation(implementation)
-                inputs(inputs)
-                outputs(outputs)
-            }
-            artifacts(artifacts)
-        }
+    fun dynamicProperty(dynamicProperty: JsonNode) {
+        property(ComponentScriptExecutor.DYNAMIC_PROPERTIES, dynamicProperty)
+    }
+}
+
+class ComponentScriptExecutorOutputAssignmentBuilder : PropertiesAssignmentBuilder() {
+
+    fun status(status: String) {
+        status(status.asJsonPrimitive())
     }
 
-    class InputAssignmentBuilder {
-        val properties: MutableMap<String, JsonNode> = hashMapOf()
-
-        fun type(type: String) {
-            properties[ComponentScriptExecutor.SCRIPT_TYPE] = type.asJsonPrimitive()
-        }
-
-        fun scriptClassReference(scriptClassReference: String) {
-            properties[ComponentScriptExecutor.SCRIPT_CLASS_REFERENCE] = scriptClassReference.asJsonPrimitive()
-        }
-
-        fun dynamicProperty(dynamicProperty: Any) {
-            dynamicProperty(dynamicProperty.asJsonType())
-        }
-
-        fun dynamicProperty(dynamicProperty: JsonNode) {
-            properties[ComponentScriptExecutor.DYNAMIC_PROPERTIES] = dynamicProperty
-        }
-
-        fun build(): MutableMap<String, JsonNode> {
-            return properties
-        }
+    fun status(status: JsonNode) {
+        property(ComponentScriptExecutor.STATUS, status)
     }
 
-    class OutputAssignmentBuilder {
-        val properties: MutableMap<String, JsonNode> = hashMapOf()
+    fun responseData(responseData: String) {
+        responseData(responseData.asJsonType())
+    }
 
-        fun status(status: String) {
-            properties[ComponentScriptExecutor.STATUS] = status.asJsonPrimitive()
-        }
-
-        fun responseData(responseData: Any) {
-            responseData(responseData.asJsonType())
-        }
-
-        fun responseData(responseData: JsonNode) {
-            properties[ComponentScriptExecutor.RESPONSE_DATA] = responseData
-        }
-
-        fun build(): MutableMap<String, JsonNode> {
-            return properties
-        }
+    fun responseData(responseData: JsonNode) {
+        property(ComponentScriptExecutor.RESPONSE_DATA, responseData)
     }
 }
