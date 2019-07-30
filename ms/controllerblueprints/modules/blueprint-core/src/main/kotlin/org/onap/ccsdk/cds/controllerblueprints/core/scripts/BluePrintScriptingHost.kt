@@ -31,14 +31,13 @@ val blueprintScriptCompiler = JvmScriptCompiler(defaultJvmScriptingHostConfigura
 
 open class BlueprintScriptingHost(evaluator: ScriptEvaluator) : BasicScriptingHost(blueprintScriptCompiler, evaluator) {
 
-    override fun eval(script: SourceCode, scriptCompilationConfiguration: ScriptCompilationConfiguration,
-                      configuration: ScriptEvaluationConfiguration?): ResultWithDiagnostics<EvaluationResult> =
+    override fun eval(script: SourceCode, compilationConfiguration: ScriptCompilationConfiguration,
+                      evaluationConfiguration: ScriptEvaluationConfiguration?): ResultWithDiagnostics<EvaluationResult> =
 
             runInCoroutineContext {
-
-                blueprintScriptCompiler(script, scriptCompilationConfiguration)
-                        .onSuccess {
-                            evaluator(it, configuration)
+                blueprintScriptCompiler(script, compilationConfiguration)
+                        .onSuccess { compiledScript ->
+                            evaluator(compiledScript, evaluationConfiguration ?: ScriptEvaluationConfiguration.Default)
                         }.onFailure { failedResult ->
                             val messages = failedResult.reports.joinToString("\n")
                             throw BluePrintProcessorException(messages)
@@ -51,7 +50,7 @@ open class BluePrintScriptEvaluator(private val scriptClassName: String) : Scrip
     private val log = LoggerFactory.getLogger(BluePrintScriptEvaluator::class.java)!!
 
     override suspend operator fun invoke(compiledScript: CompiledScript<*>,
-                                         scriptEvaluationConfiguration: ScriptEvaluationConfiguration?
+                                         scriptEvaluationConfiguration: ScriptEvaluationConfiguration
     ): ResultWithDiagnostics<EvaluationResult> =
             try {
                 log.debug("Getting script class name($scriptClassName) from the compiled sources ")
@@ -59,20 +58,19 @@ open class BluePrintScriptEvaluator(private val scriptClassName: String) : Scrip
                 val bluePrintCompiledScript = compiledScript as BluePrintCompiledScript
                 bluePrintCompiledScript.scriptClassFQName = scriptClassName
 
-                val classResult = compiledScript.getClass(scriptEvaluationConfiguration)
-                when (classResult) {
+                when (val classResult = compiledScript.getClass(scriptEvaluationConfiguration)) {
                     is ResultWithDiagnostics.Failure -> classResult
                     is ResultWithDiagnostics.Success -> {
 
                         val scriptClass = classResult.value
                         val args = ArrayList<Any?>()
-                        scriptEvaluationConfiguration?.get(ScriptEvaluationConfiguration.providedProperties)?.forEach {
+                        scriptEvaluationConfiguration.get(ScriptEvaluationConfiguration.providedProperties)?.forEach {
                             args.add(it.value)
                         }
-                        scriptEvaluationConfiguration?.get(ScriptEvaluationConfiguration.implicitReceivers)?.let {
+                        scriptEvaluationConfiguration.get(ScriptEvaluationConfiguration.implicitReceivers)?.let {
                             args.addAll(it)
                         }
-                        scriptEvaluationConfiguration?.get(ScriptEvaluationConfiguration.constructorArgs)?.let {
+                        scriptEvaluationConfiguration.get(ScriptEvaluationConfiguration.constructorArgs)?.let {
                             args.addAll(it)
                         }
 
