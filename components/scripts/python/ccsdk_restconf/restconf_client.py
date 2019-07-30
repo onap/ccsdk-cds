@@ -34,13 +34,13 @@ class RestconfClient:
         self.__component_function = restconf_component_function
 
     def web_client_service(self, identifier):
-        RestconfExecutorExtensionsKt.restconfClientService(self.__component_function, identifier)
+        return RestconfExecutorExtensionsKt.restconfClientService(self.__component_function, identifier)
 
     def resolve_and_generate_message_from_template_prefix(self, artifact_prefix):
-            return ResourceResolutionExtensionsKt.contentFromResolvedArtifact(self.component_function, artifact_prefix)
+        return ResourceResolutionExtensionsKt.contentFromResolvedArtifact(self.__component_function, artifact_prefix)
 
     def retrieve_resolved_template_from_database(self, key, artifact_template):
-        return ResourceResolutionExtensionsKt.storedContentFromResolvedArtifact(self.component_function, key,
+        return ResourceResolutionExtensionsKt.storedContentFromResolvedArtifact(self.__component_function, key,
                                                                                 artifact_template)
 
     def mount_device(self, web_client_service, nf_id, mount_payload):
@@ -55,6 +55,7 @@ class RestconfClient:
         counter = 0
         url = self.__odl_status_check_url + nf_id
         self.__log.info("url for ODL status check: {}", url)
+        # TODO: allow JSON format change
         expected_result = '"netconf-node-topology:connection-status":"connected"'
         while counter < self.__odl_status_check_limit:
             result = web_client_service.exchangeResource("GET", url, "")
