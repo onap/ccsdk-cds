@@ -29,6 +29,10 @@ export function resourcesReducer(state: IResourcesState = initialResourcesState,
             return {...state,
                     resources: action.payload
                     }
+        case ResourcesActions.SET_RESOURCES_STATE:
+            return {...state,
+                    resources: action.payload.resources
+                    }
         default:
             return state;
     }

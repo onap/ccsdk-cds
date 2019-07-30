@@ -77,6 +77,7 @@ export class ResourceEditComponent implements OnInit {
     
  onChange($event) {
       this.data=JSON.parse($event.srcElement.value);
+      this.updateResourcesState();
   };
   
  updateResourcesState(){

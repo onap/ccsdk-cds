@@ -22,7 +22,7 @@ import { IResources } from './resources.model';
 
 export interface IResourcesState {
     resources: IResources,
-    isLoadSuccess: boolean;
-    isUpdateSuccess: boolean;
-    isSaveSuccess: boolean;
+    isLoadSuccess?: boolean;
+    isUpdateSuccess?: boolean;
+    isSaveSuccess?: boolean;
 }
