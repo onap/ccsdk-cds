@@ -14,8 +14,6 @@
 # limitations under the License.
 # ============LICENSE_END=========================================================
 
-from org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor import \
-    RestconfComponentFunction
 from java.lang import Exception as JavaException
 
 from restconf_client import RestconfClient
