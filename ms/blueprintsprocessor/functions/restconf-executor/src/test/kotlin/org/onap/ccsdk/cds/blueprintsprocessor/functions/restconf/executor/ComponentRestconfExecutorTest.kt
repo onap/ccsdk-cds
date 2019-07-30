@@ -79,8 +79,8 @@ class ComponentRestconfExecutorTest {
             operationInputs[BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE] = "activate-restconf".asJsonPrimitive()
             operationInputs[BluePrintConstants.PROPERTY_CURRENT_INTERFACE] = "interfaceName".asJsonPrimitive()
             operationInputs[BluePrintConstants.PROPERTY_CURRENT_OPERATION] = "operationName".asJsonPrimitive()
-            operationInputs[ComponentScriptExecutor.SCRIPT_TYPE] = BluePrintConstants.SCRIPT_INTERNAL.asJsonPrimitive()
-            operationInputs[ComponentScriptExecutor.SCRIPT_CLASS_REFERENCE] =
+            operationInputs[ComponentScriptExecutor.INPUT_SCRIPT_TYPE] = BluePrintConstants.SCRIPT_INTERNAL.asJsonPrimitive()
+            operationInputs[ComponentScriptExecutor.INPUT_SCRIPT_CLASS_REFERENCE] =
                     "internal.scripts.TestRestconfConfigure".asJsonPrimitive()
 
             val stepInputData = StepData().apply {

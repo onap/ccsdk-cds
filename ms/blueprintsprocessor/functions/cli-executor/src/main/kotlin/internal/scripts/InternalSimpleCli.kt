@@ -71,7 +71,7 @@ open class Check : AbstractScriptComponentFunction() {
         sshClientService.closeSessionNB()
 
         // Set the Response Data
-        setAttribute(ComponentScriptExecutor.RESPONSE_DATA, responseLog.asJsonPrimitive())
+        setAttribute(ComponentScriptExecutor.ATTRIBUTE_RESPONSE_DATA, responseLog.asJsonPrimitive())
 
         log.info("Executing process")
     }

@@ -16,9 +16,12 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.dsl
 
+import com.fasterxml.jackson.databind.JsonNode
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
+import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 import kotlin.test.assertNotNull
 
@@ -94,6 +97,10 @@ class BluePrintDSLTest {
             topologyTemplate {
                 nodeTemplateOperation(nodeTemplateName = "activate", type = "sample-node-type", interfaceName = "RestconfExecutor",
                         description = "sample activation") {
+                    implementation(360, "SELF") {
+                        primary("Scripts/sample.py")
+                        dependencies("one", "two")
+                    }
                     inputs {
                         property("json-content", """{ "name" : "cds"}""")
                         property("array-content", """["controller", "blueprints"]""")
@@ -150,7 +157,7 @@ class BluePrintDSLTest {
         assertNotNull(serviceTemplate.topologyTemplate, "failed to get topology template")
         assertNotNull(serviceTemplate.topologyTemplate?.nodeTemplates, "failed to get nodeTypes")
         assertNotNull(serviceTemplate.topologyTemplate?.nodeTemplates!!["activate"], "failed to get nodeTypes(activate)")
-        //println(serviceTemplate.asJsonString(true))
+        println(serviceTemplate.asJsonString(true))
     }
 
     @Test
@@ -185,7 +192,7 @@ class BluePrintDSLTest {
             }
         }
         assertNotNull(nodeType, "failed to get nodeType")
-       // println(nodeType.asJsonString(true))
+        // println(nodeType.asJsonString(true))
     }
 
     @Test
@@ -207,4 +214,50 @@ class BluePrintDSLTest {
         //println(serviceTemplate.asJsonString(true))
     }
 
+    @Test
+    fun testNodeTemplateOperationTypes() {
+
+        val testNodeTemplateInstance = BluePrintTypes.nodeTemplateComponentTestExecutor(id = "test-node-template",
+                description = "") {
+            operation("") {
+                implementation(360)
+                inputs {
+                    request("i am request")
+                }
+                outputs {
+                    response(getAttribute("attribute1"))
+                }
+            }
+        }
+        assertNotNull(testNodeTemplateInstance, "failed to get test node template")
+        //println(testNodeTemplateInstance.asJsonString(true))
+    }
+}
+
+fun BluePrintTypes.nodeTemplateComponentTestExecutor(id: String,
+                                                     description: String,
+                                                     block: TestNodeTemplateImplBuilder.() -> Unit)
+        : NodeTemplate {
+    return TestNodeTemplateImplBuilder(id, description).apply(block).build()
+}
+
+class TestNodeTemplateImplBuilder(id: String, description: String) :
+        AbstractNodeTemplateImplBuilder<TestInput, TestOutput>(id, "component-test-executor",
+                "ComponentTestExecutor",
+                description)
+
+class TestInput : PropertiesAssignmentBuilder() {
+    fun request(request: String) {
+        property("request", request.asJsonPrimitive())
+    }
+}
+
+class TestOutput : PropertiesAssignmentBuilder() {
+    fun response(response: String) {
+        response(response.asJsonPrimitive())
+    }
+
+    fun response(response: JsonNode) {
+        property("response", response)
+    }
 }
