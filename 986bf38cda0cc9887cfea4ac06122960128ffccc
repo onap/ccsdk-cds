@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b395b10a_e54cc6be",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/db/TemplateResolutionService.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2019-07-30T14:13:26Z",
+      "side": 1,
+      "message": "Better to create a task and attach that number in the comment so we can track this TODO",
+      "revId": "986bf38cda0cc9887cfea4ac06122960128ffccc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
