@@ -1,0 +1,17 @@
+{
+  "echoed-message" : {
+    "tags" : "echoed-message",
+    "name" : "echoed-message",
+    "property" : {
+      "description" : "echoed-message",
+      "type" : "string"
+    },
+    "updated-by" : "Rodrigo Ottero <rodrigo.ottero@est.tech>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      }
+    }
+  }
+}
