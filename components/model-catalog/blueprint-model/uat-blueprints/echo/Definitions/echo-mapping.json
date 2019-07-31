@@ -1,0 +1,13 @@
+[
+  {
+    "name": "echoed-message",
+    "input-param": true,
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "echoed-message",
+    "dictionary-source": "input",
+    "dependencies": [
+    ]
+  }
+]

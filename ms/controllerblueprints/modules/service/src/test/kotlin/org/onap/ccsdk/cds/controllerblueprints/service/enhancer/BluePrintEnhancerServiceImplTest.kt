@@ -66,7 +66,6 @@ class BluePrintEnhancerServiceImplTest {
             testBaseConfigEnhancementAndValidation()
             testVFWEnhancementAndValidation()
             testGoldenEnhancementAndValidation()
-            testCapabilityRestconfEnhancementAndValidation()
             testRemoteScriptsEnhancementAndValidation()
             testCapabilityCliEnhancementAndValidation()
         }
@@ -85,12 +84,6 @@ class BluePrintEnhancerServiceImplTest {
     fun testGoldenEnhancementAndValidation() {
         val basePath = "./../../../../components/model-catalog/blueprint-model/test-blueprint/golden"
         testComponentInvokeEnhancementAndValidation(basePath, "golden-enhance")
-    }
-
-    fun testCapabilityRestconfEnhancementAndValidation() {
-        val basePath = "./../../../../components/model-catalog/blueprint-model/test-blueprint/capability_restconf"
-        testComponentInvokeEnhancementAndValidation(basePath, "capability_restconf-enhance")
-
     }
 
     fun testRemoteScriptsEnhancementAndValidation() {
