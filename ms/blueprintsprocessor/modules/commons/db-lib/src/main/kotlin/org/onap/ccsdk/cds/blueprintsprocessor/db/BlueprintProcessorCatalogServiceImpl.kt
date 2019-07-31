@@ -39,7 +39,7 @@ import java.util.*
 /**
  * Similar/Duplicate implementation in [org.onap.ccsdk.cds.controllerblueprints.service.load.ControllerBlueprintCatalogServiceImpl]
  */
-@Service
+@Service("blueprintsProcessorCatalogService")
 class BlueprintProcessorCatalogServiceImpl(bluePrintRuntimeValidatorService: BluePrintValidatorService,
                                            private val bluePrintPathConfiguration: BluePrintPathConfiguration,
                                            private val blueprintModelRepository: BlueprintProcessorModelRepository)

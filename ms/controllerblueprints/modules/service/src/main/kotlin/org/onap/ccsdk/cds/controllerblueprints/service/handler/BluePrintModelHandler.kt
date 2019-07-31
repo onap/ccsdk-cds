@@ -50,7 +50,7 @@ import java.util.*
  */
 
 @Service
-open class BluePrintModelHandler(private val bluePrintCatalogService: BluePrintCatalogService,
+open class BluePrintModelHandler(private val controllerBlueprintsCatalogService: BluePrintCatalogService,
                                  private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
                                  private val blueprintModelSearchRepository: ControllerBlueprintModelSearchRepository,
                                  private val blueprintModelRepository: ControllerBlueprintModelRepository,
@@ -86,7 +86,7 @@ open class BluePrintModelHandler(private val bluePrintCatalogService: BluePrintC
             // Copy the File Part to Local File
             BluePrintEnhancerUtils.copyFromFilePart(filePart, deCompressedFile)
             // Save the Copied file to Database
-            val blueprintId = bluePrintCatalogService.saveToDatabase(saveId, deCompressedFile, false)
+            val blueprintId = controllerBlueprintsCatalogService.saveToDatabase(saveId, deCompressedFile, false)
             // Check and Return the Saved File
             val blueprintModelSearch = blueprintModelSearchRepository.findById(blueprintId).get()
             log.info("Save($saveId) successful for blueprint(${blueprintModelSearch.artifactName}) " +
@@ -315,7 +315,7 @@ open class BluePrintModelHandler(private val bluePrintCatalogService: BluePrintC
             val compressedFilePart = BluePrintEnhancerUtils
                     .extractCompressFilePart(filePart, blueprintArchive, blueprintWorkingDir)
 
-            val blueprintId = bluePrintCatalogService.saveToDatabase(publishId, compressedFilePart, true)
+            val blueprintId = controllerBlueprintsCatalogService.saveToDatabase(publishId, compressedFilePart, true)
 
             return blueprintModelSearchRepository.findById(blueprintId).get()
 

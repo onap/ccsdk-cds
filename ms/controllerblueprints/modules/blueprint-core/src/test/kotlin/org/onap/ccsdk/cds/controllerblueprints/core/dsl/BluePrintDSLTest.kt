@@ -20,7 +20,6 @@ import com.fasterxml.jackson.databind.JsonNode
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
-import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 import kotlin.test.assertNotNull
@@ -157,7 +156,7 @@ class BluePrintDSLTest {
         assertNotNull(serviceTemplate.topologyTemplate, "failed to get topology template")
         assertNotNull(serviceTemplate.topologyTemplate?.nodeTemplates, "failed to get nodeTypes")
         assertNotNull(serviceTemplate.topologyTemplate?.nodeTemplates!!["activate"], "failed to get nodeTypes(activate)")
-        println(serviceTemplate.asJsonString(true))
+        //println(serviceTemplate.asJsonString(true))
     }
 
     @Test

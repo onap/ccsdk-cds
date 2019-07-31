@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.jdbc.datasource.DriverManagerDataSource
@@ -33,10 +34,12 @@ import javax.sql.DataSource
 
 @Configuration
 @EnableJpaRepositories(
-    basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor.*"],
-    entityManagerFactoryRef = "primaryEntityManager",
-    transactionManagerRef = "primaryTransactionManager"
+        basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor.*",
+            "org.onap.ccsdk.cds.controllerblueprints.*"],
+        entityManagerFactoryRef = "primaryEntityManager",
+        transactionManagerRef = "primaryTransactionManager"
 )
+@EnableJpaAuditing
 open class PrimaryDatabaseConfiguration(private val primaryDataSourceProperties: PrimaryDataSourceProperties) {
     val log = LoggerFactory.getLogger(PrimaryDatabaseConfiguration::class.java)!!
 
@@ -45,7 +48,8 @@ open class PrimaryDatabaseConfiguration(private val primaryDataSourceProperties:
     open fun primaryEntityManager(): LocalContainerEntityManagerFactoryBean {
         val em = LocalContainerEntityManagerFactoryBean()
         em.dataSource = primaryDataSource()
-        em.setPackagesToScan("org.onap.ccsdk.cds.blueprintsprocessor.*")
+        em.setPackagesToScan("org.onap.ccsdk.cds.blueprintsprocessor.*",
+                "org.onap.ccsdk.cds.controllerblueprints.*")
         em.jpaVendorAdapter = HibernateJpaVendorAdapter()
         val properties = HashMap<String, Any>()
         properties["hibernate.hbm2ddl.auto"] = primaryDataSourceProperties.hibernateHbm2ddlAuto

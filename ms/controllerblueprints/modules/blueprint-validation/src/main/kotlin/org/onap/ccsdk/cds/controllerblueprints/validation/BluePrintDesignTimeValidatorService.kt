@@ -17,7 +17,6 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.validation
 
-import org.slf4j.LoggerFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
@@ -28,12 +27,13 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDictionaryConstants
 import org.onap.ccsdk.cds.controllerblueprints.validation.extension.ResourceDefinitionValidator
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.File
 import java.util.*
 
 
-@Service
+@Service("bluePrintDesignTimeValidatorService")
 open class BluePrintDesignTimeValidatorService(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService,
                                                private val resourceDefinitionValidator: ResourceDefinitionValidator)
     : BluePrintValidatorService {
