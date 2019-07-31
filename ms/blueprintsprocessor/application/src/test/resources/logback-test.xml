@@ -1,5 +1,6 @@
 <!--
   ~ Copyright © 2017-2018 AT&T Intellectual Property.
+  ~ Modifications Copyright (C) 2019 Nordix Foundation.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -16,19 +17,24 @@
 
 <configuration>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <!-- encoders are assigned the type
-             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %-5level [%thread]  %logger{50} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} %-5level %-40.40logger{39} : %msg%n</pattern>
         </encoder>
     </appender>
 
+    <logger name="org.springframework.web.HttpLogging" level="trace"/>
+    <logger name="org.springframework.web.reactive.function.client.ExchangeFunctions" level="trace"/>
 
-    <logger name="org.springframework" level="warn"/>
-    <logger name="org.hibernate" level="info"/>
-    <logger name="org.onap.ccsdk.cds.blueprintsprocessor" level="info"/>
+    <!-- Helpful to optimize Spring Context caching to speed-up tests
+         and prevent resorting to @DirtiesContext as much as possible -->
+    <logger name="org.springframework.test.context.cache" level="debug"/>
 
-    <root level="warn">
+    <!-- Please refer to https://thoughts-on-java.org/hibernate-logging-guide/
+         for a lengthy discussion on good Hibernate logging practices -->
+    <logger name="org.hibernate.SQL" level="debug"/>
+    <logger name="org.hibernate.type.descriptor.sql" level="trace"/>
+
+    <root level="info">
         <appender-ref ref="STDOUT"/>
     </root>
 

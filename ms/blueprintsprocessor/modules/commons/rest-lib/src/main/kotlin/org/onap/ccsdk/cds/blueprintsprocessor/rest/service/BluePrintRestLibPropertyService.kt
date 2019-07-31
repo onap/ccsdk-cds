@@ -37,13 +37,13 @@ import org.springframework.stereotype.Service
 open class BluePrintRestLibPropertyService(private var bluePrintProperties:
                                            BluePrintProperties) {
 
-    fun blueprintWebClientService(jsonNode: JsonNode):
+    open fun blueprintWebClientService(jsonNode: JsonNode):
             BlueprintWebClientService {
         val restClientProperties = restClientProperties(jsonNode)
         return blueprintWebClientService(restClientProperties)
     }
 
-    fun blueprintWebClientService(selector: String): BlueprintWebClientService {
+    open fun blueprintWebClientService(selector: String): BlueprintWebClientService {
         val prefix = "blueprintsprocessor.restclient.$selector"
         val restClientProperties = restClientProperties(prefix)
         return blueprintWebClientService(restClientProperties)

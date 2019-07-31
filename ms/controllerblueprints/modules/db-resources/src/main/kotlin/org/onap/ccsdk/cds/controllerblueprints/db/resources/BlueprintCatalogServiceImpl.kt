@@ -46,7 +46,7 @@ abstract class BlueprintCatalogServiceImpl(
             workingDir = blueprintFile.absolutePath
             archiveFile = normalizedFile(bluePrintPathConfiguration.blueprintArchivePath, processingId, "cba.zip")
 
-            if (!BluePrintArchiveUtils.compress(blueprintFile, archiveFile, true)) {
+            if (!BluePrintArchiveUtils.compress(blueprintFile, archiveFile)) {
                 throw BluePrintException("Fail to compress blueprint")
             }
         } else {

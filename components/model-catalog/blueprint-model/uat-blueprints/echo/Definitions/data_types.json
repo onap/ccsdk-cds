@@ -1,0 +1,14 @@
+{
+  "data_types" : {
+    "dt-echo-properties" : {
+      "description" : "Dynamic DataType definition for workflow(echo).",
+      "version" : "1.0.0",
+      "properties" : {
+        "echoed-message" : {
+          "type" : "string"
+        }
+      },
+      "derived_from" : "tosca.datatypes.Dynamic"
+    }
+  }
+}

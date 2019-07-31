@@ -109,7 +109,7 @@ class BluePrintEnhancerUtils {
 
         suspend fun compressToFilePart(enhanceDir: String, archiveDir: String): ResponseEntity<Resource> {
             val compressedFile = normalizedFile(archiveDir, "enhanced-cba.zip")
-            BluePrintArchiveUtils.compress(Paths.get(enhanceDir).toFile(), compressedFile, true)
+            BluePrintArchiveUtils.compress(Paths.get(enhanceDir).toFile(), compressedFile)
             return prepareResourceEntity(compressedFile.name, compressedFile.readBytes())
         }
 
