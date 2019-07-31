@@ -1,0 +1,91 @@
+{
+  "tosca_definitions_version" : "controller_blueprint_1_0_0",
+  "metadata" : {
+    "template_author" : "Rodrigo Ottero",
+    "author-email" : "rodrigo.ottero@est.tech",
+    "user-groups" : "ADMIN, OPERATION",
+    "template_name" : "echo_test",
+    "template_version" : "1.0.0",
+    "template_tags" : "echo_test, echo, test, testing"
+  },
+  "imports" : [ {
+    "file" : "Definitions/data_types.json"
+  }, {
+    "file" : "Definitions/relationship_types.json"
+  }, {
+    "file" : "Definitions/artifact_types.json"
+  }, {
+    "file" : "Definitions/node_types.json"
+  }, {
+    "file" : "Definitions/policy_types.json"
+  } ],
+  "topology_template" : {
+    "workflows" : {
+      "echo" : {
+        "steps" : {
+          "activate-process" : {
+            "description" : "Echo a message",
+            "target" : "echo-process",
+            "activities" : [ {
+              "call_operation" : ""
+            } ]
+          }
+        },
+        "inputs" : {
+          "echo-properties" : {
+            "description" : "Dynamic PropertyDefinition for workflow(echo).",
+            "required" : true,
+            "type" : "dt-echo-properties"
+          }
+        }
+      }
+    },
+    "node_templates" : {
+      "echo-process" : {
+        "type" : "dg-generic",
+        "properties" : {
+          "content" : {
+            "get_artifact" : [ "SELF", "dg-echo-process" ]
+          },
+          "dependency-node-templates" : [ "echo" ]
+        },
+        "artifacts" : {
+          "dg-config-assign-process" : {
+            "type" : "artifact-directed-graph",
+            "file" : "Plans/TEST_echo.xml"
+          }
+        }
+      },
+      "echo" : {
+        "type" : "component-resource-resolution",
+        "interfaces" : {
+          "ResourceResolutionComponent" : {
+            "operations" : {
+              "process" : {
+                "inputs" : {
+                  "artifact-prefix-names" : [ "echo" ]
+                },
+                "outputs" : {
+                  "resource-assignment-params" : {
+                    "get_attribute" : [ "SELF", "assignment-params" ]
+                  },
+                  "status" : "success"
+                }
+              }
+            }
+          }
+        },
+        "artifacts" : {
+          "echo-template" : {
+            "type" : "artifact-template-velocity",
+            "file" : "Templates/echo-template.vtl"
+          },
+          "echo-mapping" : {
+            "type" : "artifact-mapping-resource",
+            "file" : "Definitions/echo-mapping.json"
+          }
+        }
+      }
+    }
+  }
+}
