@@ -43,9 +43,9 @@ class RestconfClient:
         return ResourceResolutionExtensionsKt.storedContentFromResolvedArtifact(self.__component_function, key,
                                                                                 artifact_template)
 
-    def mount_device(self, web_client_service, nf_id, mount_payload):
+    def mount_device(self, web_client_service, nf_id, mount_payload, content_type="application/xml"):
         self.__log.debug("mounting device {}", nf_id)
-        headers = {"Content-Type": "application/xml"}
+        headers = {"Content-Type": content_type}
         url = self.__base_odl_url + nf_id
         self.__log.debug("sending mount request, url: {}", url)
         web_client_service.exchangeResource("PUT", url, mount_payload, headers)
