@@ -28,7 +28,7 @@ import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { IAppState } from '../../../../common/core/store/state/app.state';
 import { A11yModule } from '@angular/cdk/a11y';
-import { LoadResourcesSuccess } from 'src/app/common/core/store/actions/resources.action';
+import { SetResourcesState } from 'src/app/common/core/store/actions/resources.action';
 import { ISourcesData } from 'src/app/common/core/store/models/sourcesData.model';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import { ResourceEditService } from '../resource-edit.service';
@@ -171,6 +171,20 @@ export class SourcesTemplateComponent implements OnInit {
                         }
                      }
                   });
+                  let newsources= {};
+                  this.sourcesOptions.forEach(sourceItem=>{
+                     console
+                     newsources[sourceItem.name] = {};
+                     newsources[sourceItem.name] = sourceItem.data;
+                  });
+                  this.resources.definition.sources = newsources;
+                  let resourcesState = {
+                     resources: this.resources,
+                     isLoadSuccess: true,
+                     isUpdateSuccess:true,
+                     isSaveSuccess:true
+                  }  
+                  this.store.dispatch(new SetResourcesState(resourcesState));
             });
          }  
       });
