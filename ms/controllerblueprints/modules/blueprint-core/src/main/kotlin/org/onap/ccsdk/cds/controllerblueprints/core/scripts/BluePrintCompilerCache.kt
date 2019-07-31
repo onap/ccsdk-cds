@@ -30,7 +30,7 @@ object BluePrintCompileCache {
     val log = logger(BluePrintCompileCache::class)
 
     private val classLoaderCache: LoadingCache<String, URLClassLoader> = CacheBuilder.newBuilder()
-            .maximumSize(10)
+            .maximumSize(50)
             .build(BluePrintClassLoader)
 
     fun classLoader(key: String): URLClassLoader {
@@ -38,8 +38,12 @@ object BluePrintCompileCache {
     }
 
     fun cleanClassLoader(key: String) {
-        classLoaderCache.invalidate(key)
-        log.info("Cleaned script cache($key)")
+        if(hasClassLoader(key)){
+            classLoaderCache.invalidate(key)
+            log.info("Cleaned compiled cache($key)")
+        }else{
+            log.warn("No compiled cache($key) present to clean.")
+        }
     }
 
     fun hasClassLoader(key: String): Boolean {
@@ -52,7 +56,7 @@ object BluePrintClassLoader : CacheLoader<String, URLClassLoader>() {
     val log = logger(BluePrintClassLoader::class)
 
     override fun load(key: String): URLClassLoader {
-        log.info("loading cache key($key)")
+        log.info("loading compiled cache($key)")
         val keyPath = normalizedFile(key)
         if (!keyPath.exists()) {
             throw BluePrintException("failed to load cache($key), missing files.")
@@ -61,7 +65,7 @@ object BluePrintClassLoader : CacheLoader<String, URLClassLoader>() {
         keyPath.walkTopDown()
                 .filter { it.name.endsWith("cba-kts.jar") }
                 .forEach {
-                    log.debug("Adding (${it.absolutePath}) to cache key($key)")
+                    log.debug("Adding (${it.absolutePath}) to cache($key)")
                     urls.add(it.toURI().toURL())
                 }
         return URLClassLoader(urls.toTypedArray(), this.javaClass.classLoader)

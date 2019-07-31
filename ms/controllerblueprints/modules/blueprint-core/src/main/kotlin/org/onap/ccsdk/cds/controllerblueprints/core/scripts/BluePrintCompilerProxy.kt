@@ -63,6 +63,9 @@ open class BluePrintsCompilerProxy(private val hostConfiguration: ScriptingHostC
             /** Check cache is present for the blueprint scripts */
             val hasCompiledCache = BluePrintCompileCache.hasClassLoader(blueprintSourceCode.cacheKey)
 
+            log.debug("Jar Exists : ${compiledJarFile.exists()}, Regenerate : ${blueprintSourceCode.regenerate}," +
+                    " Compiled hash(${blueprintSourceCode.cacheKey}) : $hasCompiledCache")
+
             if (!compiledJarFile.exists() || blueprintSourceCode.regenerate || !hasCompiledCache) {
                 log.info("compiling for cache key(${blueprintSourceCode.cacheKey})")
 
