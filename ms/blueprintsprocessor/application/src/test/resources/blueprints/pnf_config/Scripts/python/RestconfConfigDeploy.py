@@ -37,7 +37,7 @@ class RestconfConfigDeploy(AbstractScriptComponentFunction):
             try:
                 # mount the device
                 mount_payload = restconf_client.resolve_and_generate_message_from_template_prefix("config-deploy")
-                restconf_client.mount_device(web_client_service, pnf_id, mount_payload)
+                restconf_client.mount_device(web_client_service, pnf_id, mount_payload, "application/json")
 
                 # log the current configuration subtree
                 current_configuration = restconf_client.retrieve_device_configuration_subtree(
