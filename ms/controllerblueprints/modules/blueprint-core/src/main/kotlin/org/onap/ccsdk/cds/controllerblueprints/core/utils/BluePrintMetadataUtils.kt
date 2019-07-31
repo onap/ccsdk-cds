@@ -186,7 +186,7 @@ class BluePrintMetadataUtils {
             val bluePrintScriptsService = BluePrintScriptsServiceImpl()
             val bluePrintDefinitions = bluePrintScriptsService
                     .scriptInstance<BluePrintDefinitions>(normalizedBasePath, toscaMetaData.templateName!!,
-                            toscaMetaData.templateVersion!!, definitionClassName, true)
+                            toscaMetaData.templateVersion!!, definitionClassName, false)
             // Get the Service Template
             val serviceTemplate = bluePrintDefinitions.serviceTemplate()
 

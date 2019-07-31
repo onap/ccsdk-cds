@@ -30,6 +30,8 @@ import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintPathConfigur
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ErrorCode
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintWorkflowExecutionService
+import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintCompileCache
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.slf4j.LoggerFactory
 import org.springframework.http.codec.multipart.FilePart
@@ -63,6 +65,10 @@ class ExecutionServiceHandler(private val bluePrintPathConfiguration: BluePrintP
             throw BluePrintException(ErrorCode.IO_FILE_INTERRUPT.value,
                 "Error in Upload CBA: ${e.message}", e)
         } finally {
+            // Clean blueprint script cache
+            val cacheKey = BluePrintFileUtils
+                    .compileCacheKey(normalizedPathName(bluePrintPathConfiguration.blueprintWorkingPath,saveId))
+            BluePrintCompileCache.cleanClassLoader(cacheKey)
             deleteNBDir(blueprintArchive)
             deleteNBDir(blueprintWorking)
         }
