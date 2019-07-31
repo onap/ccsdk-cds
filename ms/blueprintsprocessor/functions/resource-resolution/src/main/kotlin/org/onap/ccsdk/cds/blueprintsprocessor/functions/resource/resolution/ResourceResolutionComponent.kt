@@ -33,6 +33,23 @@ import org.springframework.stereotype.Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class ResourceResolutionComponent(private val resourceResolutionService: ResourceResolutionService) :
         AbstractComponentFunction() {
+    companion object{
+        const val INPUT_REQUEST_ID = "request-id"
+        const val INPUT_RESOURCE_ID = "resource-id"
+        const val INPUT_ACTION_NAME = "action-name"
+        const val INPUT_DYNAMIC_PROPERTIES = "dynamic-properties"
+        const val INPUT_RESOURCE_TYPE = "resource-type"
+        const val INPUT_ARTIFACT_PREFIX_NAMES = "artifact-prefix-names"
+        const val INPUT_RESOLUTION_KEY = "resolution-key"
+        const val INPUT_STORE_RESULT = "store-result"
+        const val INPUT_OCCURRENCE = "occurrence"
+
+        const val ATTRIBUTE_ASSIGNMENT_PARAM = "assignment-params"
+        const val ATTRIBUTE_STATUS = "status"
+
+        const val OUTPUT_RESOURCE_ASSIGNMENT_PARAMS = "resource-assignment-params"
+        const val OUTPUT_STATUS = "status"
+    }
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
 
