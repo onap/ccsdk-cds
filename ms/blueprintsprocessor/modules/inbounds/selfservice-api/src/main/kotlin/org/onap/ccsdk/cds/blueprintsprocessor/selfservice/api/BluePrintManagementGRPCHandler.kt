@@ -41,7 +41,7 @@ import java.util.*
 
 @Service
 open class BluePrintManagementGRPCHandler(private val bluePrintPathConfiguration: BluePrintPathConfiguration,
-                                          private val bluePrintCatalogService: BluePrintCatalogService)
+                                          private val blueprintsProcessorCatalogService: BluePrintCatalogService)
     : BluePrintManagementServiceGrpc.BluePrintManagementServiceImplBase() {
 
     private val log = LoggerFactory.getLogger(BluePrintManagementGRPCHandler::class.java)
@@ -58,7 +58,7 @@ open class BluePrintManagementGRPCHandler(private val bluePrintPathConfiguration
 
                 saveToDisk(request, cbaFile)
 
-                val blueprintId = bluePrintCatalogService.saveToDatabase(uploadId, cbaFile)
+                val blueprintId = blueprintsProcessorCatalogService.saveToDatabase(uploadId, cbaFile)
                 responseObserver.onNext(successStatus("Successfully uploaded CBA($blueprintId)...", request.commonHeader))
                 responseObserver.onCompleted()
             } catch (e: Exception) {
@@ -83,7 +83,7 @@ open class BluePrintManagementGRPCHandler(private val bluePrintPathConfiguration
 
 
             try {
-                bluePrintCatalogService.deleteFromDatabase(blueprintName, blueprintVersion)
+                blueprintsProcessorCatalogService.deleteFromDatabase(blueprintName, blueprintVersion)
                 responseObserver.onNext(successStatus("Successfully deleted $blueprint", request.commonHeader))
                 responseObserver.onCompleted()
             } catch (e: Exception) {

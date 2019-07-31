@@ -22,14 +22,13 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.lang.text.StrBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
-import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.File
 import java.util.*
 
 @Service
-open class BluePrintCatalogLoadService(private val bluePrintCatalogService: BluePrintCatalogService) {
+open class BluePrintCatalogLoadService(private val controllerBlueprintsCatalogService: BluePrintCatalogService) {
 
     private val log = LoggerFactory.getLogger(BluePrintCatalogLoadService::class.java)
 
@@ -62,7 +61,7 @@ open class BluePrintCatalogLoadService(private val bluePrintCatalogService: Blue
 
     open suspend fun loadBluePrintModelCatalog(errorBuilder: StrBuilder, file: File) {
         try {
-            bluePrintCatalogService.saveToDatabase(UUID.randomUUID().toString(), file)
+            controllerBlueprintsCatalogService.saveToDatabase(UUID.randomUUID().toString(), file)
         } catch (e: Exception) {
             errorBuilder.appendln("Couldn't load BlueprintModel(${file.name}: ${e.message}")
         }

@@ -41,11 +41,11 @@ import java.util.*
 /**
  * Similar implementation in [org.onap.ccsdk.cds.blueprintsprocessor.db.BlueprintProcessorCatalogServiceImpl]
  */
-@Service
-class ControllerBlueprintCatalogServiceImpl(bluePrintValidatorService: BluePrintValidatorService,
+@Service("controllerBlueprintsCatalogService")
+class ControllerBlueprintCatalogServiceImpl(bluePrintDesignTimeValidatorService: BluePrintValidatorService,
                                             private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
                                             private val blueprintModelRepository: ControllerBlueprintModelRepository)
-    : BlueprintCatalogServiceImpl(bluePrintLoadConfiguration, bluePrintValidatorService) {
+    : BlueprintCatalogServiceImpl(bluePrintLoadConfiguration, bluePrintDesignTimeValidatorService) {
 
 
     private val log = LoggerFactory.getLogger(ControllerBlueprintCatalogServiceImpl::class.toString())

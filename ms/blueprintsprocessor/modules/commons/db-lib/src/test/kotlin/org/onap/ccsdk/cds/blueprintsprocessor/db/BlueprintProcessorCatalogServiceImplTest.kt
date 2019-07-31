@@ -20,14 +20,14 @@ package org.onap.ccsdk.cds.blueprintsprocessor.db
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
-import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.db.mock.MockBlueprintProcessorCatalogServiceImpl
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.cds.controllerblueprints.db.resources.BlueprintCatalogServiceImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.context.annotation.ComponentScan
@@ -41,17 +41,14 @@ import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
 @EnableAutoConfiguration
-@ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
+@ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor"])
 @ContextConfiguration(classes = [BlueprintProcessorCatalogServiceImpl::class, BluePrintCoreConfiguration::class,
     MockBlueprintProcessorCatalogServiceImpl::class])
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class BlueprintProcessorCatalogServiceImplTest {
 
     @Autowired
-    lateinit var blueprintCatalog: BluePrintCatalogService
-
-    @Autowired
-    lateinit var blueprintProcessorCatalogServiceImpl: BlueprintProcessorCatalogServiceImpl
+    lateinit var blueprintsProcessorCatalogService: BlueprintCatalogServiceImpl
 
     @Autowired
     lateinit var blueprintCoreConfiguration: BluePrintCoreConfiguration
@@ -64,7 +61,7 @@ class BlueprintProcessorCatalogServiceImplTest {
     fun setup() {
         deleteDir("target", "blueprints")
         bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(blueprintId,
-                    "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+                "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
     }
 
     @AfterTest
@@ -81,10 +78,10 @@ class BlueprintProcessorCatalogServiceImplTest {
             val file = normalizedFile("./src/test/resources/test-cba.zip")
             assertTrue(file.exists(), "couldn't get file ${file.absolutePath}")
 
-            blueprintCatalog.saveToDatabase("1234", file)
-            blueprintCatalog.getFromDatabase("baseconfiguration", "1.0.0")
+            blueprintsProcessorCatalogService.saveToDatabase("1234", file)
+            blueprintsProcessorCatalogService.getFromDatabase("baseconfiguration", "1.0.0")
 
-            blueprintCatalog.deleteFromDatabase("baseconfiguration", "1.0.0")
+            blueprintsProcessorCatalogService.deleteFromDatabase("baseconfiguration", "1.0.0")
         }
     }
 
@@ -96,7 +93,7 @@ class BlueprintProcessorCatalogServiceImplTest {
             val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
             metadata[BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID] = blueprintId
 
-            blueprintProcessorCatalogServiceImpl.save(metadata, file)
+            blueprintsProcessorCatalogService.save(metadata, file)
         }
     }
 
@@ -108,8 +105,8 @@ class BlueprintProcessorCatalogServiceImplTest {
             val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
             metadata[BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID] = blueprintId
 
-            blueprintProcessorCatalogServiceImpl.save(metadata, file)
-            blueprintProcessorCatalogServiceImpl.get("baseconfiguration", "1.0.0", true)
+            blueprintsProcessorCatalogService.save(metadata, file)
+            blueprintsProcessorCatalogService.get("baseconfiguration", "1.0.0", true)
         }
 
         assertTrue(File(blueprintCoreConfiguration.bluePrintPathConfiguration().blueprintArchivePath +
@@ -121,7 +118,7 @@ class BlueprintProcessorCatalogServiceImplTest {
     @Test
     fun `test delete function`() {
         runBlocking {
-            blueprintProcessorCatalogServiceImpl.delete("baseconfiguration", "1.0.0")
+            blueprintsProcessorCatalogService.delete("baseconfiguration", "1.0.0")
         }
     }
 }

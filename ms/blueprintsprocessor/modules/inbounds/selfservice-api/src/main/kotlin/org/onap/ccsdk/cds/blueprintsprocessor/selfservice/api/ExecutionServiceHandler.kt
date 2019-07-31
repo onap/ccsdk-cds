@@ -17,7 +17,6 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 
-import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import io.grpc.stub.StreamObserver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -42,7 +41,7 @@ import java.util.stream.Collectors
 
 @Service
 class ExecutionServiceHandler(private val bluePrintPathConfiguration: BluePrintPathConfiguration,
-                              private val bluePrintCatalogService: BluePrintCatalogService,
+                              private val blueprintsProcessorCatalogService: BluePrintCatalogService,
                               private val bluePrintWorkflowExecutionService
                               : BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput>) {
 
@@ -59,7 +58,7 @@ class ExecutionServiceHandler(private val bluePrintPathConfiguration: BluePrintP
             // Copy the File Part to Local File
             copyFromFilePart(filePart, compressedFile)
             // Save the Copied file to Database
-            return bluePrintCatalogService.saveToDatabase(saveId, compressedFile, true)
+            return blueprintsProcessorCatalogService.saveToDatabase(saveId, compressedFile, true)
         } catch (e: IOException) {
             throw BluePrintException(ErrorCode.IO_FILE_INTERRUPT.value,
                 "Error in Upload CBA: ${e.message}", e)
@@ -70,7 +69,7 @@ class ExecutionServiceHandler(private val bluePrintPathConfiguration: BluePrintP
     }
 
     suspend fun remove(name: String, version: String) {
-        bluePrintCatalogService.deleteFromDatabase(name, version)
+        blueprintsProcessorCatalogService.deleteFromDatabase(name, version)
     }
 
     suspend fun process(executionServiceInput: ExecutionServiceInput,
@@ -102,7 +101,7 @@ class ExecutionServiceHandler(private val bluePrintPathConfiguration: BluePrintP
         val blueprintName = actionIdentifiers.blueprintName
         val blueprintVersion = actionIdentifiers.blueprintVersion
         try {
-            val basePath = bluePrintCatalogService.getFromDatabase(blueprintName, blueprintVersion)
+            val basePath = blueprintsProcessorCatalogService.getFromDatabase(blueprintName, blueprintVersion)
             log.info("blueprint base path $basePath")
 
             val blueprintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(requestId, basePath.toString())
