@@ -16,16 +16,8 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.services.execution
 
-import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
-import org.onap.ccsdk.cds.controllerblueprints.core.*
-import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactDefinition
-import org.onap.ccsdk.cds.controllerblueprints.core.data.Implementation
-import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
-import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
-import org.onap.ccsdk.cds.controllerblueprints.core.dsl.ArtifactDefinitionBuilder
-import org.onap.ccsdk.cds.controllerblueprints.core.dsl.nodeTemplate
-import org.onap.ccsdk.cds.controllerblueprints.core.dsl.nodeType
+import org.onap.ccsdk.cds.controllerblueprints.core.getAsString
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
@@ -40,19 +32,23 @@ open class ComponentScriptExecutor(private var componentFunctionScriptingService
     : AbstractComponentFunction() {
 
     companion object {
-        const val SCRIPT_TYPE = "script-type"
-        const val SCRIPT_CLASS_REFERENCE = "script-class-reference"
-        const val DYNAMIC_PROPERTIES = "dynamic-properties"
-        const val RESPONSE_DATA = "response-data"
-        const val STATUS = "status"
+        const val INPUT_SCRIPT_TYPE = "script-type"
+        const val INPUT_SCRIPT_CLASS_REFERENCE = "script-class-reference"
+        const val INPUT_DYNAMIC_PROPERTIES = "dynamic-properties"
+
+        const val ATTRIBUTE_RESPONSE_DATA = "response-data"
+        const val ATTRIBUTE_STATUS = "status"
+
+        const val OUTPUT_RESPONSE_DATA = "response-data"
+        const val OUTPUT_STATUS = "status"
     }
 
     lateinit var scriptComponentFunction: AbstractScriptComponentFunction
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
 
-        val scriptType = operationInputs.getAsString(SCRIPT_TYPE)
-        val scriptClassReference = operationInputs.getAsString(SCRIPT_CLASS_REFERENCE)
+        val scriptType = operationInputs.getAsString(INPUT_SCRIPT_TYPE)
+        val scriptClassReference = operationInputs.getAsString(INPUT_SCRIPT_CLASS_REFERENCE)
 
         val scriptDependencies: MutableList<String> = arrayListOf()
         populateScriptDependencies(scriptDependencies)
@@ -72,137 +68,5 @@ open class ComponentScriptExecutor(private var componentFunctionScriptingService
 
     open fun populateScriptDependencies(scriptDependencies: MutableList<String>) {
         /** Place holder for Child to add extra dependencies */
-    }
-}
-
-/** Component Extensions **/
-
-fun BluePrintTypes.componentScriptExecutor(): NodeType {
-    return nodeType(id = "component-script-executor", version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-            derivedFrom = BluePrintConstants.MODEL_TYPE_NODE_COMPONENT,
-            description = "Generic Script Component Executor") {
-        attribute(ComponentScriptExecutor.RESPONSE_DATA, BluePrintConstants.DATA_TYPE_JSON, false)
-        attribute(ComponentScriptExecutor.STATUS, BluePrintConstants.DATA_TYPE_STRING, true)
-
-        operation("ComponentScriptExecutor", "ComponentScriptExecutor Operation") {
-            inputs {
-                property(ComponentScriptExecutor.SCRIPT_TYPE, BluePrintConstants.DATA_TYPE_STRING, true,
-                        "Script Type") {
-                    defaultValue(BluePrintConstants.SCRIPT_INTERNAL)
-                    constrain {
-                        validValues(listOf(BluePrintConstants.SCRIPT_INTERNAL.asJsonPrimitive(),
-                                BluePrintConstants.SCRIPT_JYTHON.asJsonPrimitive(),
-                                BluePrintConstants.SCRIPT_KOTLIN.asJsonPrimitive()))
-                    }
-                }
-                property(ComponentScriptExecutor.SCRIPT_CLASS_REFERENCE, BluePrintConstants.DATA_TYPE_STRING,
-                        true, "Kotlin Script class name or jython script name.")
-                property(ComponentScriptExecutor.DYNAMIC_PROPERTIES, BluePrintConstants.DATA_TYPE_JSON, false,
-                        "Dynamic Json Content or DSL Json reference.")
-            }
-            outputs {
-                property(ComponentScriptExecutor.RESPONSE_DATA, BluePrintConstants.DATA_TYPE_JSON, false,
-                        "Output Response")
-                property(ComponentScriptExecutor.STATUS, BluePrintConstants.DATA_TYPE_STRING, true,
-                        "Status of the Component Execution ( success or failure )")
-            }
-        }
-    }
-}
-
-/** Component Builder */
-
-fun componentScriptExecutor(id: String, description: String,
-                            block: ComponentScriptExecutorBuilder.() -> Unit): NodeTemplate {
-    return ComponentScriptExecutorBuilder(id, description).apply(block).build()
-}
-
-class ComponentScriptExecutorBuilder(private val id: String, private val description: String) {
-    private var implementation: Implementation? = null
-    private var inputs: MutableMap<String, JsonNode>? = null
-    private var outputs: MutableMap<String, JsonNode>? = null
-    private var artifacts: MutableMap<String, ArtifactDefinition>? = null
-
-    fun implementation(timeout: Int, operationHost: String? = BluePrintConstants.PROPERTY_SELF) {
-        val implementation = Implementation().apply {
-            this.operationHost = operationHost!!
-            this.timeout = timeout
-        }
-        this.implementation = implementation
-    }
-
-    fun inputs(block: InputAssignmentBuilder.() -> Unit) {
-        this.inputs = InputAssignmentBuilder().apply(block).build()
-    }
-
-    fun outputs(block: OutputAssignmentBuilder.() -> Unit) {
-        this.outputs = OutputAssignmentBuilder().apply(block).build()
-    }
-
-    fun artifact(id: String, type: String, file: String) {
-        if (artifacts == null)
-            artifacts = hashMapOf()
-        artifacts!![id] = ArtifactDefinitionBuilder(id, type, file).build()
-    }
-
-    fun artifact(id: String, type: String, file: String, block: ArtifactDefinitionBuilder.() -> Unit) {
-        if (artifacts == null)
-            artifacts = hashMapOf()
-        artifacts!![id] = ArtifactDefinitionBuilder(id, type, file).apply(block).build()
-    }
-
-    fun build(): NodeTemplate {
-        return nodeTemplate(id, "component-script-executor", description) {
-            operation("ComponentScriptExecutor") {
-                implementation(implementation)
-                inputs(inputs)
-                outputs(outputs)
-            }
-            artifacts(artifacts)
-        }
-    }
-
-    class InputAssignmentBuilder {
-        val properties: MutableMap<String, JsonNode> = hashMapOf()
-
-        fun type(type: String) {
-            properties[ComponentScriptExecutor.SCRIPT_TYPE] = type.asJsonPrimitive()
-        }
-
-        fun scriptClassReference(scriptClassReference: String) {
-            properties[ComponentScriptExecutor.SCRIPT_CLASS_REFERENCE] = scriptClassReference.asJsonPrimitive()
-        }
-
-        fun dynamicProperty(dynamicProperty: Any) {
-            dynamicProperty(dynamicProperty.asJsonType())
-        }
-
-        fun dynamicProperty(dynamicProperty: JsonNode) {
-            properties[ComponentScriptExecutor.DYNAMIC_PROPERTIES] = dynamicProperty
-        }
-
-        fun build(): MutableMap<String, JsonNode> {
-            return properties
-        }
-    }
-
-    class OutputAssignmentBuilder {
-        val properties: MutableMap<String, JsonNode> = hashMapOf()
-
-        fun status(status: String) {
-            properties[ComponentScriptExecutor.STATUS] = status.asJsonPrimitive()
-        }
-
-        fun responseData(responseData: Any) {
-            responseData(responseData.asJsonType())
-        }
-
-        fun responseData(responseData: JsonNode) {
-            properties[ComponentScriptExecutor.RESPONSE_DATA] = responseData
-        }
-
-        fun build(): MutableMap<String, JsonNode> {
-            return properties
-        }
     }
 }

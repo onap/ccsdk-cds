@@ -34,11 +34,11 @@ import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ExecutionServic
 import org.onap.ccsdk.cds.blueprintsprocessor.ssh.BluePrintSshLibConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintScriptsServiceImpl
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintScriptsServiceImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ContextConfiguration
@@ -79,8 +79,8 @@ class ComponentCliExecutorTest {
             operationInputs[BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE] = "activate-cli".asJsonPrimitive()
             operationInputs[BluePrintConstants.PROPERTY_CURRENT_INTERFACE] = "interfaceName".asJsonPrimitive()
             operationInputs[BluePrintConstants.PROPERTY_CURRENT_OPERATION] = "operationName".asJsonPrimitive()
-            operationInputs[ComponentScriptExecutor.SCRIPT_TYPE] = BluePrintConstants.SCRIPT_INTERNAL.asJsonPrimitive()
-            operationInputs[ComponentScriptExecutor.SCRIPT_CLASS_REFERENCE] =
+            operationInputs[ComponentScriptExecutor.INPUT_SCRIPT_TYPE] = BluePrintConstants.SCRIPT_INTERNAL.asJsonPrimitive()
+            operationInputs[ComponentScriptExecutor.INPUT_SCRIPT_CLASS_REFERENCE] =
                     "internal.scripts.TestCliScriptFunction".asJsonPrimitive()
 
             val stepInputData = StepData().apply {

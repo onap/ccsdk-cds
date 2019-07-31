@@ -16,10 +16,12 @@
 
 package cba.scripts.capability.cli
 
-import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.componentScriptExecutor
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.nodeTemplateComponentScriptExecutor
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.nodeTypeComponentScriptExecutor
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ServiceTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.artifactTypeTemplateVelocity
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.getAttribute
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.nodeTypeComponent
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.serviceTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.AbstractBluePrintDefinitions
@@ -61,14 +63,16 @@ fun CapabilityCliDefinitions.defaultServiceTemplate() =
                     step(id = "check", target = "check", description = "Calling check script node")
                 }
 
-                val checkComponent = componentScriptExecutor(id = "check", description = "") {
-                    inputs {
-                        type("kotlin")
-                        scriptClassReference("cba.scripts.capability.cli.Check")
-                    }
-                    outputs {
-                        status("success")
-                        responseData("""{ "data" : "Here I am "}""")
+                val checkComponent = BluePrintTypes.nodeTemplateComponentScriptExecutor(id = "check", description = "") {
+                    operation(description = "") {
+                        inputs {
+                            type("kotlin")
+                            scriptClassReference("cba.scripts.capability.cli.Check")
+                        }
+                        outputs {
+                            status(getAttribute("status"))
+                            responseData("""{ "data" : "Here I am "}""")
+                        }
                     }
                     artifact(id = "command-template", type = "artifact-template-velocity",
                             file = "Templates/check-command-template.vtl")
@@ -78,6 +82,6 @@ fun CapabilityCliDefinitions.defaultServiceTemplate() =
 
             artifactType(BluePrintTypes.artifactTypeTemplateVelocity())
             nodeType(BluePrintTypes.nodeTypeComponent())
-            nodeType(BluePrintTypes.componentScriptExecutor())
+            nodeType(BluePrintTypes.nodeTypeComponentScriptExecutor())
 
         }
