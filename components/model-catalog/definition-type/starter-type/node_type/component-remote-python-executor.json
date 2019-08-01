@@ -12,6 +12,10 @@
       "entry_schema": {
         "type": "string"
       }
+    },
+    "response-data": {
+      "required": false,
+      "type": "json"
     }
   },
   "capabilities": {

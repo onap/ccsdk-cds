@@ -48,6 +48,7 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
 
         const val ATTRIBUTE_PREPARE_ENV_LOG = "prepare-environment-logs"
         const val ATTRIBUTE_EXEC_CMD_LOG = "execute-command-logs"
+        const val ATTRIBUTE_RESPONSE_DATA = "response-data"
     }
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {

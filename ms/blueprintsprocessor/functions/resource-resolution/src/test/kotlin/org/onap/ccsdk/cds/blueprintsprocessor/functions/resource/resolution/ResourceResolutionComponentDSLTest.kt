@@ -42,7 +42,7 @@ class ResourceResolutionComponentDSLTest {
                     resourceType("vnf")
                     storeResult(false)
                     artifactPrefixNames(arrayListOf("template1", "template2"))
-                    dynamicProperty("""{
+                    dynamicProperties("""{
                         "prop1" : "1234",
                         "prop2" : true,
                         "prop3" : 23
