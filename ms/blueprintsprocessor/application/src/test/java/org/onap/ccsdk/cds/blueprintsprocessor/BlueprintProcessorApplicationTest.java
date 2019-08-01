@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2017-2018 AT&T Intellectual Property.
+ *  Modifications Copyright © 2019 IBM.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,7 +21,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
@@ -34,7 +34,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  * DATE : 8/14/2018
  */
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {BlueprintProcessorApplication.class, BluePrintLoadConfiguration.class})
+@ContextConfiguration(classes = {BlueprintProcessorApplication.class})
 @SpringBootTest(classes = BlueprintProcessorApplication.class,
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BlueprintProcessorApplicationTest {

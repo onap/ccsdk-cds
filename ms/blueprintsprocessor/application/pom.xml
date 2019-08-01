@@ -17,7 +17,8 @@
   ~  See the License for the specific language governing permissions and
   ~  limitations under the License.
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
@@ -56,8 +57,18 @@
         <!-- North Bound -->
         <dependency>
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <artifactId>designer-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
             <artifactId>resource-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <artifactId>selfservice-api</artifactId>
+        </dependency>
+
+        <!-- Functions -->
         <dependency>
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
             <artifactId>python-executor</artifactId>
@@ -78,10 +89,7 @@
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
             <artifactId>cli-executor</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-            <artifactId>selfservice-api</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>

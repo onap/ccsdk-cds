@@ -371,6 +371,13 @@
                 <artifactId>workflow-service</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
+            <!-- North Bound -->
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>designer-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>resource-api</artifactId>
@@ -443,6 +450,11 @@
             <dependency>
                 <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
                 <artifactId>blueprint-validation</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
+                <artifactId>service</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
