@@ -28,11 +28,8 @@
     <name>Blueprints Processor Parent</name>
     <description>Blueprints Processor Parent</description>
     <properties>
-        <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
-        <grpc.version>1.18.0</grpc.version>
         <sshd.version>2.2.0</sshd.version>
         <jsch.version>0.1.55</jsch.version>
-        <protobuff.java.utils.version>3.6.1</protobuff.java.utils.version>
         <spring.kafka.version>2.2.6.RELEASE</spring.kafka.version>
         <kafka.version>2.2.0</kafka.version>
         <eelf.version>1.0.0</eelf.version>
@@ -45,7 +42,6 @@
         <h2database.version>1.4.197</h2database.version>
         <onap.logger.slf4j>1.2.2</onap.logger.slf4j>
         <powermock.version>1.7.4</powermock.version>
-        <mockk.version>1.9</mockk.version>
         <dmaap.client.version>1.1.5</dmaap.client.version>
         <jinja.version>2.5.1</jinja.version>
         <velocity.version>1.7</velocity.version>
