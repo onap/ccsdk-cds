@@ -78,44 +78,34 @@ class ComponentScriptExecutorNodeTemplateImplBuilder(id: String, description: St
 
 class ComponentScriptExecutorInputAssignmentBuilder : PropertiesAssignmentBuilder() {
 
-    fun type(type: String) {
-        type(type.asJsonPrimitive())
-    }
+    fun type(type: String) = type(type.asJsonPrimitive())
 
     fun type(type: JsonNode) {
         property(ComponentScriptExecutor.INPUT_SCRIPT_TYPE, type)
     }
 
-    fun scriptClassReference(scriptClassReference: String) {
-        scriptClassReference(scriptClassReference.asJsonPrimitive())
-    }
+    fun scriptClassReference(scriptClassReference: String) = scriptClassReference(scriptClassReference.asJsonPrimitive())
 
     fun scriptClassReference(scriptClassReference: JsonNode) {
         property(ComponentScriptExecutor.INPUT_SCRIPT_CLASS_REFERENCE, scriptClassReference)
     }
 
-    fun dynamicProperty(dynamicProperty: String) {
-        dynamicProperty(dynamicProperty.asJsonType())
-    }
+    fun dynamicProperties(dynamicProperties: String) = dynamicProperties(dynamicProperties.asJsonType())
 
-    fun dynamicProperty(dynamicProperty: JsonNode) {
-        property(ComponentScriptExecutor.INPUT_DYNAMIC_PROPERTIES, dynamicProperty)
+    fun dynamicProperties(dynamicProperties: JsonNode) {
+        property(ComponentScriptExecutor.INPUT_DYNAMIC_PROPERTIES, dynamicProperties)
     }
 }
 
 class ComponentScriptExecutorOutputAssignmentBuilder : PropertiesAssignmentBuilder() {
 
-    fun status(status: String) {
-        status(status.asJsonPrimitive())
-    }
+    fun status(status: String) = status(status.asJsonPrimitive())
 
     fun status(status: JsonNode) {
         property(ComponentScriptExecutor.OUTPUT_STATUS, status)
     }
 
-    fun responseData(responseData: String) {
-        responseData(responseData.asJsonType())
-    }
+    fun responseData(responseData: String) = responseData(responseData.asJsonType())
 
     fun responseData(responseData: JsonNode) {
         property(ComponentScriptExecutor.OUTPUT_RESPONSE_DATA, responseData)

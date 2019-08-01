@@ -342,7 +342,7 @@ open class PropertiesAssignmentBuilder {
         properties[id] = value
     }
 
-    fun build(): MutableMap<String, JsonNode> {
+    open fun build(): MutableMap<String, JsonNode> {
         return properties
     }
 }
