@@ -59,7 +59,6 @@ public class BlueprintGRPCServer implements ApplicationListener<ContextRefreshed
 
             server.start();
             log.info("Blueprint Processor GRPC server started and ready to serve on port({})...", server.getPort());
-            server.awaitTermination();
         } catch (Exception e) {
             log.error("*** Error ***", e);
         }
