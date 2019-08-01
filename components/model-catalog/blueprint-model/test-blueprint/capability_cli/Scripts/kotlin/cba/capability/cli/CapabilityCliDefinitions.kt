@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package cba.scripts.capability.cli
+package cba.capability.cli
 
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.nodeTemplateComponentScriptExecutor
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.nodeTypeComponentScriptExecutor
@@ -67,7 +67,7 @@ fun CapabilityCliDefinitions.defaultServiceTemplate() =
                     operation(description = "") {
                         inputs {
                             type("kotlin")
-                            scriptClassReference("cba.scripts.capability.cli.Check")
+                            scriptClassReference("cba.capability.cli.Check")
                         }
                         outputs {
                             status(getAttribute("status"))
