@@ -1,0 +1,10 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Verified+1: Brinda Santh Muthuramalingam <brindasanth@in.ibm.com>
+Code-Review+1: Ezhilarasi R <ezhrajam@in.ibm.com>
+Code-Review+1: Steve Alphonse Siani <alphonse.steve.siani.djissitchi@ibm.com>
+Code-Review+2: Dan Timoney <dtimoney@att.com>
+Submitted-by: Dan Timoney <dtimoney@att.com>
+Submitted-at: Thu, 01 Aug 2019 18:30:11 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/ccsdk/cds/+/92482
+Project: ccsdk/cds
+Branch: refs/heads/master
