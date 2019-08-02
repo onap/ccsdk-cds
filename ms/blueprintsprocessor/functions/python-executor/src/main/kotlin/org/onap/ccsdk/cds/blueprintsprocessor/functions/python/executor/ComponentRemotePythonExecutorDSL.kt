@@ -89,15 +89,10 @@ fun BluePrintTypes.dataTypeDtSystemPackages(): DataType {
 /** Component Builder */
 fun BluePrintTypes.nodeTemplateComponentRemotePythonExecutor(id: String,
                                                              description: String,
-                                                             block: ComponentRemotePythonExecutorNodeTemplateOperationImplBuilder.() -> Unit)
+                                                             block: ComponentRemotePythonExecutorNodeTemplateBuilder.() -> Unit)
         : NodeTemplate {
-    return ComponentRemotePythonExecutorNodeTemplateOperationImplBuilder(id, description).apply(block).build()
+    return ComponentRemotePythonExecutorNodeTemplateBuilder(id, description).apply(block).build()
 }
-
-class ComponentRemotePythonExecutorNodeTemplateOperationImplBuilder(id: String, description: String) :
-        AbstractNodeTemplateOperationImplBuilder<PropertiesAssignmentBuilder, ComponentRemotePythonExecutorInputAssignmentBuilder,
-                ComponentRemotePythonExecutorOutputAssignmentBuilder>(id, "component-remote-python-executor",
-                "ComponentRemotePythonExecutor", description)
 
 class DtSystemPackageDataTypeBuilder : PropertiesAssignmentBuilder() {
 
@@ -116,48 +111,55 @@ class DtSystemPackageDataTypeBuilder : PropertiesAssignmentBuilder() {
     }
 }
 
-class ComponentRemotePythonExecutorInputAssignmentBuilder : PropertiesAssignmentBuilder() {
+class ComponentRemotePythonExecutorNodeTemplateBuilder(id: String, description: String) :
+        AbstractNodeTemplateOperationImplBuilder<PropertiesAssignmentBuilder, ComponentRemotePythonExecutorNodeTemplateBuilder.InputsBuilder,
+                ComponentRemotePythonExecutorNodeTemplateBuilder.OutputsBuilder>(id, "component-remote-python-executor",
+                "ComponentRemotePythonExecutor", description) {
 
-    private var packageList: ArrayNode? = null
+    class InputsBuilder : PropertiesAssignmentBuilder() {
 
-    fun endpointSelector(endpointSelector: String) = endpointSelector(endpointSelector.asJsonPrimitive())
+        private var packageList: ArrayNode? = null
 
-    fun endpointSelector(endpointSelector: JsonNode) {
-        property(ComponentRemotePythonExecutor.INPUT_ENDPOINT_SELECTOR, endpointSelector)
-    }
+        fun endpointSelector(endpointSelector: String) = endpointSelector(endpointSelector.asJsonPrimitive())
 
-    fun dynamicProperties(dynamicProperties: String) = dynamicProperties(dynamicProperties.asJsonType())
-
-    fun dynamicProperties(dynamicProperties: JsonNode) {
-        property(ComponentRemotePythonExecutor.INPUT_DYNAMIC_PROPERTIES, dynamicProperties)
-    }
-
-    fun argumentProperties(argumentProperties: String) = argumentProperties(argumentProperties.asJsonType())
-
-    fun argumentProperties(argumentProperties: JsonNode) {
-        property(ComponentRemotePythonExecutor.INPUT_ARGUMENT_PROPERTIES, argumentProperties)
-    }
-
-    fun command(command: String) = command(command.asJsonPrimitive())
-
-    fun command(command: JsonNode) {
-        property(ComponentRemotePythonExecutor.INPUT_COMMAND, command)
-    }
-
-    fun packages(block: DtSystemPackageDataTypeBuilder.() -> Unit) {
-        if (packageList == null)
-            packageList = JacksonUtils.objectMapper.createArrayNode()
-        val dtSysyemPackagePropertyAssignments = DtSystemPackageDataTypeBuilder().apply(block).build()
-        packageList!!.add(dtSysyemPackagePropertyAssignments.asJsonType())
-    }
-
-    override fun build(): MutableMap<String, JsonNode> {
-        val propertyAssignments = super.build()
-        if (packageList != null) {
-            propertyAssignments[ComponentRemotePythonExecutor.INPUT_PACKAGES] = packageList!!
+        fun endpointSelector(endpointSelector: JsonNode) {
+            property(ComponentRemotePythonExecutor.INPUT_ENDPOINT_SELECTOR, endpointSelector)
         }
-        return propertyAssignments
-    }
-}
 
-class ComponentRemotePythonExecutorOutputAssignmentBuilder : PropertiesAssignmentBuilder()
+        fun dynamicProperties(dynamicProperties: String) = dynamicProperties(dynamicProperties.asJsonType())
+
+        fun dynamicProperties(dynamicProperties: JsonNode) {
+            property(ComponentRemotePythonExecutor.INPUT_DYNAMIC_PROPERTIES, dynamicProperties)
+        }
+
+        fun argumentProperties(argumentProperties: String) = argumentProperties(argumentProperties.asJsonType())
+
+        fun argumentProperties(argumentProperties: JsonNode) {
+            property(ComponentRemotePythonExecutor.INPUT_ARGUMENT_PROPERTIES, argumentProperties)
+        }
+
+        fun command(command: String) = command(command.asJsonPrimitive())
+
+        fun command(command: JsonNode) {
+            property(ComponentRemotePythonExecutor.INPUT_COMMAND, command)
+        }
+
+        fun packages(block: DtSystemPackageDataTypeBuilder.() -> Unit) {
+            if (packageList == null)
+                packageList = JacksonUtils.objectMapper.createArrayNode()
+            val dtSysyemPackagePropertyAssignments = DtSystemPackageDataTypeBuilder().apply(block).build()
+            packageList!!.add(dtSysyemPackagePropertyAssignments.asJsonType())
+        }
+
+        override fun build(): MutableMap<String, JsonNode> {
+            val propertyAssignments = super.build()
+            if (packageList != null) {
+                propertyAssignments[ComponentRemotePythonExecutor.INPUT_PACKAGES] = packageList!!
+            }
+            return propertyAssignments
+        }
+    }
+
+    class OutputsBuilder : PropertiesAssignmentBuilder()
+
+}

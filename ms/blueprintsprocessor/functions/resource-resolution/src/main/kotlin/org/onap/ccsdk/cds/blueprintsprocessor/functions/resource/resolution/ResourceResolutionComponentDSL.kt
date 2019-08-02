@@ -81,89 +81,91 @@ fun BluePrintTypes.nodeTypeComponentResourceResolution(): NodeType {
 /** Component Builder */
 fun BluePrintTypes.nodeTemplateComponentResourceResolution(id: String,
                                                            description: String,
-                                                           block: ComponentResourceResolutionNodeTemplateOperationImplBuilder.() -> Unit)
+                                                           block: ComponentResourceResolutionNodeTemplateBuilder.() -> Unit)
         : NodeTemplate {
-    return ComponentResourceResolutionNodeTemplateOperationImplBuilder(id, description).apply(block).build()
+    return ComponentResourceResolutionNodeTemplateBuilder(id, description).apply(block).build()
 }
 
-class ComponentResourceResolutionNodeTemplateOperationImplBuilder(id: String, description: String) :
-        AbstractNodeTemplateOperationImplBuilder<PropertiesAssignmentBuilder, ComponentResourceResolutionInputAssignmentBuilder,
-                ComponentResourceResolutionOutputAssignmentBuilder>(id, "component-script-executor",
+class ComponentResourceResolutionNodeTemplateBuilder(id: String, description: String) :
+        AbstractNodeTemplateOperationImplBuilder<PropertiesAssignmentBuilder,
+                ComponentResourceResolutionNodeTemplateBuilder.InputsBuilder,
+                ComponentResourceResolutionNodeTemplateBuilder.OutputsBuilder>(id, "component-script-executor",
                 "ComponentResourceResolution",
-                description)
+                description) {
 
-class ComponentResourceResolutionInputAssignmentBuilder : PropertiesAssignmentBuilder() {
+    class InputsBuilder : PropertiesAssignmentBuilder() {
 
-    fun requestId(requestId: String) = requestId(requestId.asJsonPrimitive())
+        fun requestId(requestId: String) = requestId(requestId.asJsonPrimitive())
 
-    fun requestId(requestId: JsonNode) {
-        property(ResourceResolutionComponent.INPUT_REQUEST_ID, requestId)
+        fun requestId(requestId: JsonNode) {
+            property(ResourceResolutionComponent.INPUT_REQUEST_ID, requestId)
+        }
+
+        fun resourceId(resourceId: String) = resourceId(resourceId.asJsonPrimitive())
+
+        fun resourceId(resourceId: JsonNode) {
+            property(ResourceResolutionComponent.INPUT_RESOURCE_ID, resourceId)
+        }
+
+        fun actionName(actionName: String) = actionName(actionName.asJsonPrimitive())
+
+        fun actionName(actionName: JsonNode) {
+            property(ResourceResolutionComponent.INPUT_ACTION_NAME, actionName)
+        }
+
+        fun resolutionKey(resolutionKey: String) = resolutionKey(resolutionKey.asJsonPrimitive())
+
+        fun resolutionKey(resolutionKey: JsonNode) {
+            property(ResourceResolutionComponent.INPUT_RESOLUTION_KEY, resolutionKey)
+        }
+
+        fun dynamicProperties(dynamicProperties: String) = dynamicProperties(dynamicProperties.asJsonType())
+
+        fun dynamicProperties(dynamicProperties: JsonNode) {
+            property(ResourceResolutionComponent.INPUT_DYNAMIC_PROPERTIES, dynamicProperties)
+        }
+
+        fun occurrence(occurrence: Int) = occurrence(occurrence.asJsonPrimitive())
+
+        fun occurrence(resolutionKey: JsonNode) {
+            property(ResourceResolutionComponent.INPUT_OCCURRENCE, resolutionKey)
+        }
+
+        fun storeResult(storeResult: Boolean) = storeResult(storeResult.asJsonPrimitive())
+
+        fun storeResult(storeResult: JsonNode) {
+            property(ResourceResolutionComponent.INPUT_STORE_RESULT, storeResult)
+        }
+
+        fun resourceType(resourceType: String) = resourceType(resourceType.asJsonPrimitive())
+
+        fun resourceType(resourceType: JsonNode) {
+            property(ResourceResolutionComponent.INPUT_RESOURCE_TYPE, resourceType)
+        }
+
+        fun artifactPrefixNames(artifactPrefixNames: String) = artifactPrefixNames(artifactPrefixNames.jsonAsJsonType())
+
+        fun artifactPrefixNames(artifactPrefixNameList: List<String>) =
+                artifactPrefixNames(artifactPrefixNameList.asJsonString())
+
+        fun artifactPrefixNames(artifactPrefixNames: JsonNode) {
+            property(ResourceResolutionComponent.INPUT_ARTIFACT_PREFIX_NAMES, artifactPrefixNames)
+        }
     }
 
-    fun resourceId(resourceId: String) = resourceId(resourceId.asJsonPrimitive())
+    class OutputsBuilder : PropertiesAssignmentBuilder() {
 
-    fun resourceId(resourceId: JsonNode) {
-        property(ResourceResolutionComponent.INPUT_RESOURCE_ID, resourceId)
-    }
+        fun status(status: String) = status(status.asJsonPrimitive())
 
-    fun actionName(actionName: String) = actionName(actionName.asJsonPrimitive())
+        fun status(status: JsonNode) {
+            property(ResourceResolutionComponent.OUTPUT_STATUS, status)
+        }
 
-    fun actionName(actionName: JsonNode) {
-        property(ResourceResolutionComponent.INPUT_ACTION_NAME, actionName)
-    }
+        fun resourceAssignmentParams(resourceAssignmentParams: String) =
+                resourceAssignmentParams(resourceAssignmentParams.asJsonType())
 
-    fun resolutionKey(resolutionKey: String) = resolutionKey(resolutionKey.asJsonPrimitive())
-
-    fun resolutionKey(resolutionKey: JsonNode) {
-        property(ResourceResolutionComponent.INPUT_RESOLUTION_KEY, resolutionKey)
-    }
-
-    fun dynamicProperties(dynamicProperties: String) = dynamicProperties(dynamicProperties.asJsonType())
-
-    fun dynamicProperties(dynamicProperties: JsonNode) {
-        property(ResourceResolutionComponent.INPUT_DYNAMIC_PROPERTIES, dynamicProperties)
-    }
-
-    fun occurrence(occurrence: Int) = occurrence(occurrence.asJsonPrimitive())
-
-    fun occurrence(resolutionKey: JsonNode) {
-        property(ResourceResolutionComponent.INPUT_OCCURRENCE, resolutionKey)
-    }
-
-    fun storeResult(storeResult: Boolean) = storeResult(storeResult.asJsonPrimitive())
-
-    fun storeResult(storeResult: JsonNode) {
-        property(ResourceResolutionComponent.INPUT_STORE_RESULT, storeResult)
-    }
-
-    fun resourceType(resourceType: String) = resourceType(resourceType.asJsonPrimitive())
-
-    fun resourceType(resourceType: JsonNode) {
-        property(ResourceResolutionComponent.INPUT_RESOURCE_TYPE, resourceType)
-    }
-
-    fun artifactPrefixNames(artifactPrefixNames: String) = artifactPrefixNames(artifactPrefixNames.jsonAsJsonType())
-
-    fun artifactPrefixNames(artifactPrefixNameList: List<String>) {
-        artifactPrefixNames(artifactPrefixNameList.asJsonString())
-    }
-
-    fun artifactPrefixNames(artifactPrefixNames: JsonNode) {
-        property(ResourceResolutionComponent.INPUT_ARTIFACT_PREFIX_NAMES, artifactPrefixNames)
-    }
-}
-
-class ComponentResourceResolutionOutputAssignmentBuilder : PropertiesAssignmentBuilder() {
-
-    fun status(status: String) = status(status.asJsonPrimitive())
-
-    fun status(status: JsonNode) {
-        property(ResourceResolutionComponent.OUTPUT_STATUS, status)
-    }
-
-    fun resourceAssignmentParams(resourceAssignmentParams: String) = resourceAssignmentParams(resourceAssignmentParams.asJsonType())
-
-    fun resourceAssignmentParams(resourceAssignmentParams: JsonNode) {
-        property(ResourceResolutionComponent.OUTPUT_RESOURCE_ASSIGNMENT_PARAMS, resourceAssignmentParams)
+        fun resourceAssignmentParams(resourceAssignmentParams: JsonNode) {
+            property(ResourceResolutionComponent.OUTPUT_RESOURCE_ASSIGNMENT_PARAMS, resourceAssignmentParams)
+        }
     }
 }

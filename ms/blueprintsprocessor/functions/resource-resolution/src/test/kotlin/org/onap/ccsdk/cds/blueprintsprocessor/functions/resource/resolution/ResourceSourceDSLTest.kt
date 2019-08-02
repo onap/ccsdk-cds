@@ -24,36 +24,111 @@ class ResourceSourceDSLTest {
 
     @Test
     fun testNodeTypeSourceInput() {
-        val nodeTemplate = BluePrintTypes.nodeTypeSourceInput()
-        //println(nodeTemplate.asJsonString(true))
-        assertNotNull(nodeTemplate, "failed to generate nodeTypeSourceInput")
+        val nodeType = BluePrintTypes.nodeTypeSourceInput()
+        //println(nodeType.asJsonString(true))
+        assertNotNull(nodeType, "failed to generate nodeTypeSourceInput")
     }
 
     @Test
     fun testNodeTypeSourceDefault() {
-        val nodeTemplate = BluePrintTypes.nodeTypeSourceDefault()
-        //println(nodeTemplate.asJsonString(true))
-        assertNotNull(nodeTemplate, "failed to generate nodeTypeSourceDefault")
+        val nodeType = BluePrintTypes.nodeTypeSourceDefault()
+        //println(nodeType.asJsonString(true))
+        assertNotNull(nodeType, "failed to generate nodeTypeSourceDefault")
     }
 
     @Test
     fun testNodeTypeSourceDb() {
-        val nodeTemplate = BluePrintTypes.nodeTypeSourceDb()
-        //println(nodeTemplate.asJsonString(true))
-        assertNotNull(nodeTemplate, "failed to generate nodeTypeSourceDb")
+        val nodeType = BluePrintTypes.nodeTypeSourceDb()
+        //println(nodeType.asJsonString(true))
+        assertNotNull(nodeType, "failed to generate nodeTypeSourceDb")
     }
 
     @Test
     fun testNodeTypeSourceRest() {
-        val nodeTemplate = BluePrintTypes.nodeTypeSourceRest()
-        //println(nodeTemplate.asJsonString(true))
-        assertNotNull(nodeTemplate, "failed to generate nodeTypeSourceRest")
+        val nodeType = BluePrintTypes.nodeTypeSourceRest()
+        //println(nodeType.asJsonString(true))
+        assertNotNull(nodeType, "failed to generate nodeTypeSourceRest")
     }
 
     @Test
     fun testNodeTypeSourceCapability() {
-        val nodeTemplate = BluePrintTypes.nodeTypeSourceCapability()
+        val nodeType = BluePrintTypes.nodeTypeSourceCapability()
+        //println(nodeType.asJsonString(true))
+        assertNotNull(nodeType, "failed to generate nodeTypeSourceCapability")
+    }
+
+    @Test
+    fun testNodeTemplateSourceInput() {
+        val nodeTemplate = BluePrintTypes.nodeTemplateSourceInput("InputSystem", "") {
+
+        }
         //println(nodeTemplate.asJsonString(true))
-        assertNotNull(nodeTemplate, "failed to generate nodeTypeSourceCapability")
+        assertNotNull(nodeTemplate, "failed to generate nodeTemplateSourceInput")
+    }
+
+    @Test
+    fun testNodeTemplateSourceDefault() {
+        val nodeTemplate = BluePrintTypes.nodeTemplateSourceDefault("DefaultSystem", "") {
+
+        }
+        //println(nodeTemplate.asJsonString(true))
+        assertNotNull(nodeTemplate, "failed to generate nodeTemplateSourceDefault")
+    }
+
+    @Test
+    fun testNodeTemplateSourceDb() {
+        val nodeTemplate = BluePrintTypes.nodeTemplateSourceDb("DbSystem", "") {
+            definedProperties {
+                type("SQL")
+                query("SELECT * FROM DB WHERE name = \$name")
+                endpointSelector("db-source-endpoint")
+                inputKeyMapping {
+                    map("name", "\$name")
+                }
+                outputKeyMapping {
+                    map("field_name", "\$fieldValue")
+                }
+                keyDependencies(arrayListOf("name"))
+            }
+        }
+        //println(nodeTemplate.asJsonString(true))
+        assertNotNull(nodeTemplate, "failed to generate nodeTemplateSourceDb")
+    }
+
+    @Test
+    fun testNodeTemplateSourceRest() {
+        val nodeTemplate = BluePrintTypes.nodeTemplateSourceRest("restSystem", "") {
+            definedProperties {
+                type("JSON")
+                endpointSelector("rest-source-endpoint")
+                expressionType("JSON_PATH")
+                urlPath("/location")
+                path(".\$name")
+                verb("GET")
+                payload("sample payload")
+                inputKeyMapping {
+                    map("name", "\$name")
+                }
+                outputKeyMapping {
+                    map("field_name", "\$fieldValue")
+                }
+                keyDependencies(arrayListOf("name"))
+            }
+        }
+        //println(nodeTemplate.asJsonString(true))
+        assertNotNull(nodeTemplate, "failed to generate nodeTemplateSourceRest")
+    }
+
+    @Test
+    fun testNodeTemplateSourceCapability() {
+        val nodeTemplate = BluePrintTypes.nodeTemplateSourceCapability("capabiltySystem", "") {
+            definedProperties {
+                type("kotlin")
+                scriptClassReference("Scripts/Sample.kt")
+                keyDependencies(arrayListOf("name"))
+            }
+        }
+        //println(nodeTemplate.asJsonString(true))
+        assertNotNull(nodeTemplate, "failed to generate nodeTemplateSourceCapability")
     }
 }

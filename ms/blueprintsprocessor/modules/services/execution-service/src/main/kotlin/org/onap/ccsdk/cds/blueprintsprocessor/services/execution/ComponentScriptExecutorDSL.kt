@@ -65,49 +65,51 @@ fun BluePrintTypes.nodeTypeComponentScriptExecutor(): NodeType {
 /** Component Builder */
 fun BluePrintTypes.nodeTemplateComponentScriptExecutor(id: String,
                                                        description: String,
-                                                       block: ComponentScriptExecutorNodeTemplateOperationImplBuilder.() -> Unit)
+                                                       block: ComponentScriptExecutorNodeTemplateBuilder.() -> Unit)
         : NodeTemplate {
-    return ComponentScriptExecutorNodeTemplateOperationImplBuilder(id, description).apply(block).build()
+    return ComponentScriptExecutorNodeTemplateBuilder(id, description).apply(block).build()
 }
 
-class ComponentScriptExecutorNodeTemplateOperationImplBuilder(id: String, description: String) :
-        AbstractNodeTemplateOperationImplBuilder<PropertiesAssignmentBuilder, ComponentScriptExecutorInputAssignmentBuilder,
-                ComponentScriptExecutorOutputAssignmentBuilder>(id, "component-script-executor",
+class ComponentScriptExecutorNodeTemplateBuilder(id: String, description: String) :
+        AbstractNodeTemplateOperationImplBuilder<PropertiesAssignmentBuilder,
+                ComponentScriptExecutorNodeTemplateBuilder.InputsBuilder,
+                ComponentScriptExecutorNodeTemplateBuilder.OutputsBuilder>(id, "component-script-executor",
                 "ComponentScriptExecutor",
-                description)
+                description) {
 
-class ComponentScriptExecutorInputAssignmentBuilder : PropertiesAssignmentBuilder() {
+    class InputsBuilder : PropertiesAssignmentBuilder() {
 
-    fun type(type: String) = type(type.asJsonPrimitive())
+        fun type(type: String) = type(type.asJsonPrimitive())
 
-    fun type(type: JsonNode) {
-        property(ComponentScriptExecutor.INPUT_SCRIPT_TYPE, type)
+        fun type(type: JsonNode) {
+            property(ComponentScriptExecutor.INPUT_SCRIPT_TYPE, type)
+        }
+
+        fun scriptClassReference(scriptClassReference: String) = scriptClassReference(scriptClassReference.asJsonPrimitive())
+
+        fun scriptClassReference(scriptClassReference: JsonNode) {
+            property(ComponentScriptExecutor.INPUT_SCRIPT_CLASS_REFERENCE, scriptClassReference)
+        }
+
+        fun dynamicProperties(dynamicProperties: String) = dynamicProperties(dynamicProperties.asJsonType())
+
+        fun dynamicProperties(dynamicProperties: JsonNode) {
+            property(ComponentScriptExecutor.INPUT_DYNAMIC_PROPERTIES, dynamicProperties)
+        }
     }
 
-    fun scriptClassReference(scriptClassReference: String) = scriptClassReference(scriptClassReference.asJsonPrimitive())
+    class OutputsBuilder : PropertiesAssignmentBuilder() {
 
-    fun scriptClassReference(scriptClassReference: JsonNode) {
-        property(ComponentScriptExecutor.INPUT_SCRIPT_CLASS_REFERENCE, scriptClassReference)
-    }
+        fun status(status: String) = status(status.asJsonPrimitive())
 
-    fun dynamicProperties(dynamicProperties: String) = dynamicProperties(dynamicProperties.asJsonType())
+        fun status(status: JsonNode) {
+            property(ComponentScriptExecutor.OUTPUT_STATUS, status)
+        }
 
-    fun dynamicProperties(dynamicProperties: JsonNode) {
-        property(ComponentScriptExecutor.INPUT_DYNAMIC_PROPERTIES, dynamicProperties)
-    }
-}
+        fun responseData(responseData: String) = responseData(responseData.asJsonType())
 
-class ComponentScriptExecutorOutputAssignmentBuilder : PropertiesAssignmentBuilder() {
-
-    fun status(status: String) = status(status.asJsonPrimitive())
-
-    fun status(status: JsonNode) {
-        property(ComponentScriptExecutor.OUTPUT_STATUS, status)
-    }
-
-    fun responseData(responseData: String) = responseData(responseData.asJsonType())
-
-    fun responseData(responseData: JsonNode) {
-        property(ComponentScriptExecutor.OUTPUT_RESPONSE_DATA, responseData)
+        fun responseData(responseData: JsonNode) {
+            property(ComponentScriptExecutor.OUTPUT_RESPONSE_DATA, responseData)
+        }
     }
 }
