@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
-import org.onap.ccsdk.cds.controllerblueprints.core.dsl.AbstractNodeTemplateImplBuilder
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.AbstractNodeTemplateOperationImplBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.PropertiesAssignmentBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.nodeType
 
@@ -81,13 +81,13 @@ fun BluePrintTypes.nodeTypeComponentResourceResolution(): NodeType {
 /** Component Builder */
 fun BluePrintTypes.nodeTemplateComponentResourceResolution(id: String,
                                                            description: String,
-                                                           block: ComponentResourceResolutionNodeTemplateImplBuilder.() -> Unit)
+                                                           block: ComponentResourceResolutionNodeTemplateOperationImplBuilder.() -> Unit)
         : NodeTemplate {
-    return ComponentResourceResolutionNodeTemplateImplBuilder(id, description).apply(block).build()
+    return ComponentResourceResolutionNodeTemplateOperationImplBuilder(id, description).apply(block).build()
 }
 
-class ComponentResourceResolutionNodeTemplateImplBuilder(id: String, description: String) :
-        AbstractNodeTemplateImplBuilder<ComponentResourceResolutionInputAssignmentBuilder,
+class ComponentResourceResolutionNodeTemplateOperationImplBuilder(id: String, description: String) :
+        AbstractNodeTemplateOperationImplBuilder<PropertiesAssignmentBuilder, ComponentResourceResolutionInputAssignmentBuilder,
                 ComponentResourceResolutionOutputAssignmentBuilder>(id, "component-script-executor",
                 "ComponentResourceResolution",
                 description)

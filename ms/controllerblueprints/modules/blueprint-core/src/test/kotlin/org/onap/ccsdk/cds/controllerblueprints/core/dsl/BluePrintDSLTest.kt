@@ -218,7 +218,11 @@ class BluePrintDSLTest {
 
         val testNodeTemplateInstance = BluePrintTypes.nodeTemplateComponentTestExecutor(id = "test-node-template",
                 description = "") {
-            operation("") {
+            definedProperties {
+                prop1("i am property1")
+                prop2("i am property2")
+            }
+            definedOperation("") {
                 implementation(360)
                 inputs {
                     request("i am request")
@@ -235,15 +239,25 @@ class BluePrintDSLTest {
 
 fun BluePrintTypes.nodeTemplateComponentTestExecutor(id: String,
                                                      description: String,
-                                                     block: TestNodeTemplateImplBuilder.() -> Unit)
+                                                     block: TestNodeTemplateOperationImplBuilder.() -> Unit)
         : NodeTemplate {
-    return TestNodeTemplateImplBuilder(id, description).apply(block).build()
+    return TestNodeTemplateOperationImplBuilder(id, description).apply(block).build()
 }
 
-class TestNodeTemplateImplBuilder(id: String, description: String) :
-        AbstractNodeTemplateImplBuilder<TestInput, TestOutput>(id, "component-test-executor",
+class TestNodeTemplateOperationImplBuilder(id: String, description: String) :
+        AbstractNodeTemplateOperationImplBuilder<TestProperty, TestInput, TestOutput>(id, "component-test-executor",
                 "ComponentTestExecutor",
                 description)
+
+class TestProperty : PropertiesAssignmentBuilder() {
+    fun prop1(prop1: String) {
+        property("prop1", prop1.asJsonPrimitive())
+    }
+
+    fun prop2(prop2: String) {
+        property("prop2", prop2.asJsonPrimitive())
+    }
+}
 
 class TestInput : PropertiesAssignmentBuilder() {
     fun request(request: String) {
