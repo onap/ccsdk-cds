@@ -1,0 +1,7 @@
+TOSCA-Meta-File-Version: 1.0.0
+CSAR-Version: 1.0
+Created-By: Brinda Santh
+Entry-Definitions: cba.resource.audit.ResourceAuditDefinitions.kt
+Template-Name: resource-audit
+Template-Version: 1.0.0
+Template-Tags: resource-audit
