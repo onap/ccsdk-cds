@@ -33,7 +33,7 @@ class ResourceResolutionComponentDSLTest {
     @Test
     fun testNodeTemplateComponentResourceResolution() {
         val nodeTemplate = BluePrintTypes.nodeTemplateComponentResourceResolution("resource-resolve", "") {
-            operation("Resolve resources") {
+            definedOperation("Resolve resources") {
                 inputs {
                     actionName("resolve")
                     requestId("1234")
