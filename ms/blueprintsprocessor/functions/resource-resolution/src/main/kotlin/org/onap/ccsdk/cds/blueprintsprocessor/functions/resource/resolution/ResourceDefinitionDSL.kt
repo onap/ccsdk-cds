@@ -19,15 +19,50 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.PropertyDefinitionBuilder
+import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 
 /** Resource Definition DSL **/
-fun BluePrintTypes.resourceDefinition(name: String,
-                                      block: ResourceDefinitionBuilder.() -> Unit): ResourceDefinition {
-    return ResourceDefinitionBuilder(name).apply(block).build()
+fun BluePrintTypes.resourceDefinitions(block: ResourceDefinitionsBuilder.() -> Unit)
+        : MutableMap<String, ResourceDefinition> {
+    return ResourceDefinitionsBuilder().apply(block).build()
 }
 
-class ResourceDefinitionBuilder(private val name: String) {
+fun BluePrintTypes.resourceDefinition(name: String, description: String,
+                                      block: ResourceDefinitionBuilder.() -> Unit): ResourceDefinition {
+    return ResourceDefinitionBuilder(name, description).apply(block).build()
+}
+
+/** Resource Mapping DSL **/
+fun BluePrintTypes.resourceAssignments(block: ResourceAssignmentsBuilder.() -> Unit)
+        : MutableMap<String, ResourceAssignment> {
+    return ResourceAssignmentsBuilder().apply(block).build()
+}
+
+fun BluePrintTypes.resourceAssignment(name: String, dictionaryName: String, dictionarySource: String,
+                                      block: ResourceAssignmentBuilder.() -> Unit): ResourceAssignment {
+    return ResourceAssignmentBuilder(name, dictionaryName, dictionarySource).apply(block).build()
+}
+
+class ResourceDefinitionsBuilder() {
+    private val resourceDefinitions: MutableMap<String, ResourceDefinition> = hashMapOf()
+
+    fun resourceDefinition(name: String, description: String,
+                           block: ResourceDefinitionBuilder.() -> Unit) {
+        val resourceDefinition = ResourceDefinitionBuilder(name, description).apply(block).build()
+        resourceDefinitions[resourceDefinition.name] = resourceDefinition
+    }
+
+    fun resourceDefinition(resourceDefinition: ResourceDefinition) {
+        resourceDefinitions[resourceDefinition.name] = resourceDefinition
+    }
+
+    fun build(): MutableMap<String, ResourceDefinition> {
+        return resourceDefinitions
+    }
+}
+
+class ResourceDefinitionBuilder(private val name: String, private val description: String) {
     private val resourceDefinition = ResourceDefinition()
 
     fun updatedBy(updatedBy: String) {
@@ -38,13 +73,13 @@ class ResourceDefinitionBuilder(private val name: String) {
         resourceDefinition.tags = tags
     }
 
-    fun property(id: String, type: String, required: Boolean, description: String? = "") {
-        resourceDefinition.property = PropertyDefinitionBuilder(id, type, required, description).build()
+    fun property(type: String, required: Boolean) {
+        resourceDefinition.property = PropertyDefinitionBuilder(name, type, required, description).build()
     }
 
-    fun property(id: String, type: String, required: Boolean, description: String? = "",
+    fun property(type: String, required: Boolean,
                  block: PropertyDefinitionBuilder.() -> Unit) {
-        resourceDefinition.property = PropertyDefinitionBuilder(id, type, required, description).apply(block).build()
+        resourceDefinition.property = PropertyDefinitionBuilder(name, type, required, description).apply(block).build()
     }
 
     fun sources(block: ResourceDefinitionSourcesBuilder.() -> Unit) {
@@ -90,5 +125,52 @@ class ResourceDefinitionSourcesBuilder {
 
     fun build(): MutableMap<String, NodeTemplate> {
         return sources
+    }
+}
+
+class ResourceAssignmentsBuilder() {
+    private val resourceAssignments: MutableMap<String, ResourceAssignment> = hashMapOf()
+
+    fun resourceAssignment(name: String, dictionaryName: String, dictionarySource: String,
+                           block: ResourceAssignmentBuilder.() -> Unit) {
+        val resourceAssignment = ResourceAssignmentBuilder(name, dictionaryName, dictionarySource).apply(block).build()
+        resourceAssignments[resourceAssignment.name] = resourceAssignment
+    }
+
+    fun resourceAssignment(resourceAssignment: ResourceAssignment) {
+        resourceAssignments[resourceAssignment.name] = resourceAssignment
+    }
+
+    fun build(): MutableMap<String, ResourceAssignment> {
+        return resourceAssignments
+    }
+}
+
+class ResourceAssignmentBuilder(private val name: String, private val dictionaryName: String,
+                                private val dictionarySource: String) {
+    private val resourceAssignment = ResourceAssignment()
+
+    fun inputParameter(inputParameter: Boolean) {
+        resourceAssignment.inputParameter = inputParameter
+    }
+
+    fun property(type: String, required: Boolean, description: String? = "") {
+        resourceAssignment.property = PropertyDefinitionBuilder(name, type, required, description).build()
+    }
+
+    fun property(type: String, required: Boolean, description: String? = "",
+                 block: PropertyDefinitionBuilder.() -> Unit) {
+        resourceAssignment.property = PropertyDefinitionBuilder(name, type, required, description).apply(block).build()
+    }
+
+    fun dependencies(dependencies: MutableList<String>) {
+        resourceAssignment.dependencies = dependencies
+    }
+
+    fun build(): ResourceAssignment {
+        resourceAssignment.name = name
+        resourceAssignment.dictionaryName = dictionaryName
+        resourceAssignment.dictionarySource = dictionarySource
+        return resourceAssignment
     }
 }
