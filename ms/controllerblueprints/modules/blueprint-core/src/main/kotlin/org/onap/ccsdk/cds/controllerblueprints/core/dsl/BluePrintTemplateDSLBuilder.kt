@@ -108,6 +108,13 @@ open class NodeTemplateBuilder(private val id: String,
         properties = PropertiesAssignmentBuilder().apply(block).build()
     }
 
+    open fun <Prop : PropertiesAssignmentBuilder> typedProperties(block: Prop.() -> Unit) {
+        if (properties == null)
+            properties = hashMapOf()
+        val instance: Prop = (block.reflect()?.parameters?.get(0)?.type?.classifier as KClass<Prop>).createInstance()
+        properties = instance.apply(block).build()
+    }
+
     open fun <In : PropertiesAssignmentBuilder, Out : PropertiesAssignmentBuilder> typedOperation(
             interfaceName: String, description: String = "",
             block: OperationAssignmentBuilder<In, Out>.() -> Unit) {

@@ -64,7 +64,7 @@ fun CapabilityCliDefinitions.defaultServiceTemplate() =
                 }
 
                 val checkComponent = BluePrintTypes.nodeTemplateComponentScriptExecutor(id = "check", description = "") {
-                    operation(description = "") {
+                    definedOperation(description = "") {
                         inputs {
                             type("kotlin")
                             scriptClassReference("cba.capability.cli.Check")

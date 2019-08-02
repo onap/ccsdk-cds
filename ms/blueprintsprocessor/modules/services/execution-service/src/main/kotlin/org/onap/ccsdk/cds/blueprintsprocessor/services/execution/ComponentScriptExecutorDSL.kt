@@ -23,7 +23,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
-import org.onap.ccsdk.cds.controllerblueprints.core.dsl.AbstractNodeTemplateImplBuilder
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.AbstractNodeTemplateOperationImplBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.PropertiesAssignmentBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.nodeType
 
@@ -65,13 +65,13 @@ fun BluePrintTypes.nodeTypeComponentScriptExecutor(): NodeType {
 /** Component Builder */
 fun BluePrintTypes.nodeTemplateComponentScriptExecutor(id: String,
                                                        description: String,
-                                                       block: ComponentScriptExecutorNodeTemplateImplBuilder.() -> Unit)
+                                                       block: ComponentScriptExecutorNodeTemplateOperationImplBuilder.() -> Unit)
         : NodeTemplate {
-    return ComponentScriptExecutorNodeTemplateImplBuilder(id, description).apply(block).build()
+    return ComponentScriptExecutorNodeTemplateOperationImplBuilder(id, description).apply(block).build()
 }
 
-class ComponentScriptExecutorNodeTemplateImplBuilder(id: String, description: String) :
-        AbstractNodeTemplateImplBuilder<ComponentScriptExecutorInputAssignmentBuilder,
+class ComponentScriptExecutorNodeTemplateOperationImplBuilder(id: String, description: String) :
+        AbstractNodeTemplateOperationImplBuilder<PropertiesAssignmentBuilder, ComponentScriptExecutorInputAssignmentBuilder,
                 ComponentScriptExecutorOutputAssignmentBuilder>(id, "component-script-executor",
                 "ComponentScriptExecutor",
                 description)

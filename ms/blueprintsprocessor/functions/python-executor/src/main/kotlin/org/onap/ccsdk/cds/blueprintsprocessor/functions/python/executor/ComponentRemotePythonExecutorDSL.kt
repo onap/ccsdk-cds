@@ -25,7 +25,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
-import org.onap.ccsdk.cds.controllerblueprints.core.dsl.AbstractNodeTemplateImplBuilder
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.AbstractNodeTemplateOperationImplBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.PropertiesAssignmentBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.dataType
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.nodeType
@@ -89,13 +89,13 @@ fun BluePrintTypes.dataTypeDtSystemPackages(): DataType {
 /** Component Builder */
 fun BluePrintTypes.nodeTemplateComponentRemotePythonExecutor(id: String,
                                                              description: String,
-                                                             block: ComponentRemotePythonExecutorNodeTemplateImplBuilder.() -> Unit)
+                                                             block: ComponentRemotePythonExecutorNodeTemplateOperationImplBuilder.() -> Unit)
         : NodeTemplate {
-    return ComponentRemotePythonExecutorNodeTemplateImplBuilder(id, description).apply(block).build()
+    return ComponentRemotePythonExecutorNodeTemplateOperationImplBuilder(id, description).apply(block).build()
 }
 
-class ComponentRemotePythonExecutorNodeTemplateImplBuilder(id: String, description: String) :
-        AbstractNodeTemplateImplBuilder<ComponentRemotePythonExecutorInputAssignmentBuilder,
+class ComponentRemotePythonExecutorNodeTemplateOperationImplBuilder(id: String, description: String) :
+        AbstractNodeTemplateOperationImplBuilder<PropertiesAssignmentBuilder, ComponentRemotePythonExecutorInputAssignmentBuilder,
                 ComponentRemotePythonExecutorOutputAssignmentBuilder>(id, "component-remote-python-executor",
                 "ComponentRemotePythonExecutor", description)
 
