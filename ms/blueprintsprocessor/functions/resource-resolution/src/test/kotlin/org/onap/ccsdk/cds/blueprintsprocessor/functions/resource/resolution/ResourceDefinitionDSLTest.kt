@@ -18,16 +18,18 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-class ResourceDefinitionSDLTest {
+class ResourceDefinitionDSLTest {
 
     @Test
     fun testResourceDefinitionDSL() {
-        val resourceDefinition = BluePrintTypes.resourceDefinition("service-instance-id") {
+        val testResourceDefinition = BluePrintTypes.resourceDefinition("service-instance-id",
+                "VFW Service Instance Name") {
             tags("service-instance-name, vfw, resources")
             updatedBy("brindasanth@onap.com")
-            property("service-instance-name", "string", true, "VFW Service Instance Name")
+            property("string", true)
             sources {
                 sourceInput("input", "") {}
                 sourceDefault("default", "") {}
@@ -73,6 +75,37 @@ class ResourceDefinitionSDLTest {
             }
         }
         //println(resourceDefinition.asJsonString(true))
-        assertNotNull(resourceDefinition, "failed to generate resourceDefinition")
+        assertNotNull(testResourceDefinition, "failed to generate testResourceDefinition")
+
+        val testResourceDefinitions = BluePrintTypes.resourceDefinitions {
+            resourceDefinition(testResourceDefinition)
+        }
+        assertNotNull(testResourceDefinitions, "failed to generate testResourceDefinitions")
+        assertEquals(1, testResourceDefinitions.size, "testResourceDefinitions size doesn't match")
+    }
+
+    @Test
+    fun testResourceAssignment() {
+        val testResourceAssignment = BluePrintTypes.resourceAssignment("instance-name",
+                "service-instance-name", "odl-mdsal") {
+            inputParameter(true)
+            property("string", true)
+            dependencies(arrayListOf("service-instance-id"))
+        }
+        //println(resourceAssignment.asJsonString(true))
+        assertNotNull(testResourceAssignment, "failed to generate resourceAssignment")
+
+        val testResourceAssignments = BluePrintTypes.resourceAssignments {
+            resourceAssignment(testResourceAssignment)
+            resourceAssignment("instance-name1",
+                    "service-instance-name", "odl-mdsal") {
+                inputParameter(true)
+                property("string", true)
+                dependencies(arrayListOf("service-instance-id"))
+            }
+        }
+        //println(testResourceAssignments.asJsonString(true))
+        assertNotNull(testResourceAssignments, "failed to generate testResourceAssignments")
+        assertEquals(2, testResourceAssignments.size, "testResourceAssignments size doesn't match")
     }
 }
