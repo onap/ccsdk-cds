@@ -23,7 +23,9 @@ import { Component, OnInit, ViewChild, EventEmitter, Output } from '@angular/cor
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SearchTemplateService } from '../search-template.service';
 import { MatAutocompleteTrigger } from '@angular/material';
+import { NotificationHandlerService } from 'src/app/common/core/services/notification-handler.service';
 import { SearchPipe } from 'src/app/common/shared/pipes/search.pipe';
+
 @Component({
   selector: 'app-search-from-database',
   templateUrl: './search-from-database.component.html',
@@ -38,7 +40,7 @@ export class SearchFromDatabaseComponent implements OnInit {
 
   searchText: string = '';
   constructor(private _formBuilder: FormBuilder,
-    private searchService: SearchTemplateService) { }
+    private searchService: SearchTemplateService, private alertService: NotificationHandlerService, ) { }
 
   ngOnInit() {
     this.myControl = this._formBuilder.group({
@@ -50,18 +52,21 @@ export class SearchFromDatabaseComponent implements OnInit {
   }
 
   fetchResourceByName() {
+    this.options = [];
     this.searchService.searchByTags(this.searchText)
       .subscribe(data => {
-        // console.log(data);
         data.forEach(element => {
           this.options.push(element)
         });
-        // this.resourceSelect.openPanel();
       }, error => {
-        window.alert('error' + error);
+        this.alertService.error('Blueprint not matching the search tag' + error);
       })
-  console.log(this.options)
-    // this.options=['test','vns','capability','hello','hi','hoi','dfagfagshdgfashdf','adsfhksd'];
   }
+
+  editCBA(artifactname: string,option : string) {
+    
+  }
+
+
 
 }
