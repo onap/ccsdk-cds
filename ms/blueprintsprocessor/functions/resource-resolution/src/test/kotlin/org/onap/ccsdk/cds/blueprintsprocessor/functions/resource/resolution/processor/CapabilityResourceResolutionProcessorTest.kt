@@ -18,25 +18,34 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor
 
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.resourceAssignment
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.BlueprintJythonService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.PythonExecutorProperty
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.logger
+import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintScriptsServiceImpl
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
-import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintScriptsServiceImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [CapabilityResourceResolutionProcessor::class, ComponentFunctionScriptingService::class,
@@ -50,44 +59,36 @@ class CapabilityResourceResolutionProcessorTest {
     @Autowired
     lateinit var capabilityResourceResolutionProcessor: CapabilityResourceResolutionProcessor
 
-    @Ignore
     @Test
     fun `test kotlin capability`() {
         runBlocking {
+            val componentFunctionScriptingService = mockk<ComponentFunctionScriptingService>()
+            coEvery {
+                componentFunctionScriptingService
+                        .scriptInstance<ResourceAssignmentProcessor>(any(), any(), any())
+            } returns MockCapabilityScriptRA()
 
-            val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
-                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+            val raRuntimeService = mockk<ResourceAssignmentRuntimeService>()
+            every { raRuntimeService.bluePrintContext() } returns mockk<BluePrintContext>()
 
-            val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)
+            val capabilityResourceResolutionProcessor = CapabilityResourceResolutionProcessor(componentFunctionScriptingService)
+            capabilityResourceResolutionProcessor.raRuntimeService = raRuntimeService
 
-            capabilityResourceResolutionProcessor.raRuntimeService = resourceAssignmentRuntimeService
-            capabilityResourceResolutionProcessor.resourceDictionaries = hashMapOf()
-
-
-            val scriptPropertyInstances: MutableMap<String, Any> = mutableMapOf()
-            scriptPropertyInstances["mock-service1"] = MockCapabilityService()
-            scriptPropertyInstances["mock-service2"] = MockCapabilityService()
-
-            val instanceDependencies: List<String> = listOf()
-
-            val resourceAssignmentProcessor = capabilityResourceResolutionProcessor
-                    .scriptInstance("kotlin",
-                            "ResourceAssignmentProcessor_cba\$ScriptResourceAssignmentProcessor", instanceDependencies)
-
-            assertNotNull(resourceAssignmentProcessor, "couldn't get kotlin script resource assignment processor")
-
-            val resourceAssignment = ResourceAssignment().apply {
-                name = "ra-name"
-                dictionaryName = "ra-dict-name"
-                dictionarySource = "capability"
-                property = PropertyDefinition().apply {
-                    type = "string"
+            val resourceAssignment = BluePrintTypes.resourceAssignment(name = "test-property", dictionaryName = "ra-dict-name",
+                    dictionarySource = "capability") {
+                property("string", true, "")
+                sourceCapability {
+                    definedProperties {
+                        type("internal")
+                        scriptClassReference(MockCapabilityScriptRA::class.qualifiedName!!)
+                        keyDependencies(arrayListOf("dep-property"))
+                    }
                 }
             }
-
-            val processorName = resourceAssignmentProcessor.applyNB(resourceAssignment)
-            assertNotNull(processorName, "couldn't get kotlin script resource assignment processor name")
-            println(processorName)
+            val status = capabilityResourceResolutionProcessor.applyNB(resourceAssignment)
+            assertTrue(status, "failed to execute capability source")
+            assertEquals("assigned-data".asJsonPrimitive(), resourceAssignment.property!!.value,
+                    "assigned value miss match")
         }
     }
 
@@ -127,4 +128,21 @@ class CapabilityResourceResolutionProcessorTest {
 
 open class MockCapabilityService {
 
+}
+
+open class MockCapabilityScriptRA : ResourceAssignmentProcessor() {
+    val log = logger(MockCapabilityScriptRA::class)
+
+    override fun getName(): String {
+        return "MockCapabilityScriptRA"
+    }
+
+    override suspend fun processNB(executionRequest: ResourceAssignment) {
+        log.info("executing RA mock capability : ${executionRequest.name}")
+        executionRequest.property!!.value = "assigned-data".asJsonPrimitive()
+    }
+
+    override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ResourceAssignment) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }

@@ -27,14 +27,12 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
-import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
 
 @Service("${PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-capability")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-open class CapabilityResourceResolutionProcessor(private val applicationContext: ApplicationContext,
-                                                 private var componentFunctionScriptingService: ComponentFunctionScriptingService)
+open class CapabilityResourceResolutionProcessor(private var componentFunctionScriptingService: ComponentFunctionScriptingService)
     : ResourceAssignmentProcessor() {
 
     private val log = LoggerFactory.getLogger(CapabilityResourceResolutionProcessor::class.java)
@@ -47,12 +45,14 @@ open class CapabilityResourceResolutionProcessor(private val applicationContext:
 
     override suspend fun processNB(resourceAssignment: ResourceAssignment) {
 
-        val resourceDefinition = resourceDictionaries[resourceAssignment.dictionaryName]
-                ?: throw BluePrintProcessorException("couldn't get resource definition for ${resourceAssignment.dictionaryName}")
+        val dName = resourceAssignment.dictionaryName!!
+        val dSource = resourceAssignment.dictionarySource!!
+        val resourceDefinition = resourceDefinition(resourceAssignment.dictionaryName!!)
 
-        val resourceSource = resourceDefinition.sources[resourceAssignment.dictionarySource]
-                ?: throw BluePrintProcessorException("couldn't get resource definition " +
-                        "${resourceAssignment.dictionaryName} source(${resourceAssignment.dictionarySource})")
+        /** Check Resource Assignment has the source definitions, If not get from Resource Definition **/
+        val resourceSource = resourceAssignment.dictionarySourceDefinition
+                ?: resourceDefinition?.sources?.get(dSource)
+                ?: throw BluePrintProcessorException("couldn't get resource definition $dName source($dSource)")
 
         val resourceSourceProps = checkNotNull(resourceSource.properties) { "failed to get $resourceSource properties" }
         /**
@@ -96,10 +96,6 @@ open class CapabilityResourceResolutionProcessor(private val applicationContext:
                 .scriptInstance<ResourceAssignmentProcessor>(raRuntimeService.bluePrintContext(), scriptType,
                         scriptClassReference)
 
-        instanceDependencies.forEach { instanceDependency ->
-            scriptPropertyInstances[instanceDependency] = applicationContext
-                    .getBean(instanceDependency)
-        }
         return scriptComponent
     }
 
