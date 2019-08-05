@@ -19,6 +19,7 @@ package org.onap.ccsdk.cds.controllerblueprints.core.dsl
 import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.*
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 
@@ -63,56 +64,66 @@ fun relationshipType(id: String, version: String, derivedFrom: String, descripti
     return RelationshipTypeBuilder(id, version, derivedFrom, description).apply(block).build()
 }
 
+// DSL Function
+fun dslExpression(key: String): JsonNode {
+    return ("*$key").asJsonPrimitive()
+}
 // Input Function
 
-fun getInput(inputKey: String): JsonNode {
+fun getInput(inputKey: String, jsonPath: String? = null): JsonNode {
     return """{"get_input": "$inputKey"}""".jsonAsJsonType()
 }
 
-fun getAttribute(attributeId: String): JsonNode {
-    return """{"get_attribute": ["SELF", "$attributeId"]}""".jsonAsJsonType()
-}
-
-fun getAttribute(attributeId: String, jsonPath: String): JsonNode {
-    return """{"get_attribute": ["SELF", "$attributeId", "$jsonPath"]}""".jsonAsJsonType()
+fun getAttribute(attributeId: String, jsonPath: String? = null): JsonNode {
+    return getNodeTemplateAttribute("SELF", attributeId, jsonPath)
 }
 
 fun getNodeTemplateAttribute(nodeTemplateId: String, attributeId: String): JsonNode {
-    return """{"get_attribute": ["$nodeTemplateId", "$attributeId"]}""".jsonAsJsonType()
+    return getNodeTemplateAttribute(nodeTemplateId, attributeId, null)
 }
 
-fun getNodeTemplateAttribute(nodeTemplateId: String, attributeId: String, jsonPath: String): JsonNode {
-    return """{"get_attribute": ["$nodeTemplateId", "$attributeId", "$jsonPath]}""".jsonAsJsonType()
+fun getNodeTemplateAttribute(nodeTemplateId: String, attributeId: String, jsonPath: String?): JsonNode {
+    return if (jsonPath.isNullOrEmpty() || jsonPath.isNullOrBlank()) {
+        """{"get_attribute": ["$nodeTemplateId", "$attributeId"]}""".jsonAsJsonType()
+    } else {
+        """{"get_attribute": ["$nodeTemplateId", "$attributeId", "$jsonPath"]}""".jsonAsJsonType()
+    }
 }
 
 // Property Function
 
-fun getProperty(propertyId: String): JsonNode {
-    return """{"get_property": ["SELF", "$propertyId"]}""".jsonAsJsonType()
-}
-
-fun getProperty(propertyId: String, jsonPath: String): JsonNode {
-    return """{"get_property": ["SELF", "$propertyId", "$jsonPath"]}""".jsonAsJsonType()
+fun getProperty(propertyId: String, jsonPath: String? = null): JsonNode {
+    return getNodeTemplateProperty("SELF", propertyId, jsonPath)
 }
 
 fun getNodeTemplateProperty(nodeTemplateName: String, propertyId: String): JsonNode {
-    return """{"get_property": ["$nodeTemplateName", "$propertyId"]}""".jsonAsJsonType()
+    return getNodeTemplateProperty(nodeTemplateName, propertyId, null)
 }
 
-fun getNodeTemplateProperty(nodeTemplateName: String, propertyId: String, jsonPath: String): JsonNode {
-    return """{"get_property": ["$nodeTemplateName", "$propertyId", "$jsonPath]}""".jsonAsJsonType()
+fun getNodeTemplateProperty(nodeTemplateName: String, propertyId: String, jsonPath: String?): JsonNode {
+    return if (jsonPath.isNullOrEmpty() || jsonPath.isNullOrBlank()) {
+        """{"get_property": ["$nodeTemplateName", "$propertyId"]}""".jsonAsJsonType()
+    } else {
+        """{"get_property": ["$nodeTemplateName", "$propertyId", "$jsonPath"]}""".jsonAsJsonType()
+    }
 }
 
 // Artifact Function
 
 fun getArtifact(artifactId: String): JsonNode {
-    return """{"get_artifact": ["SELF", "$artifactId"]}""".jsonAsJsonType()
+    return getNodeTemplateArtifact("SELF", artifactId)
 }
 
 fun getNodeTemplateArtifact(nodeTemplateName: String, artifactId: String): JsonNode {
     return """{"get_artifact": ["$nodeTemplateName", "$artifactId"]}""".jsonAsJsonType()
 }
 
+// Operation Function
+
+fun getNodeTemplateOperationOutput(nodeTemplateName: String, interfaceName: String, propertyId: String,
+                                   jsonPath: String? = null): JsonNode {
+    return """{"get_operation_output": ["$nodeTemplateName", "$interfaceName", "process","$propertyId","$jsonPath" ]}""".trimMargin().jsonAsJsonType()
+}
 
 /** Blueprint Type Extensions */
 

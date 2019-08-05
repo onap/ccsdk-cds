@@ -18,6 +18,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.PropertyDefinitionBuilder
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
@@ -71,6 +72,10 @@ class ResourceDefinitionBuilder(private val name: String, private val descriptio
 
     fun tags(tags: String) {
         resourceDefinition.tags = tags
+    }
+
+    fun property(property: PropertyDefinition) {
+        resourceDefinition.property = property
     }
 
     fun property(type: String, required: Boolean) {
