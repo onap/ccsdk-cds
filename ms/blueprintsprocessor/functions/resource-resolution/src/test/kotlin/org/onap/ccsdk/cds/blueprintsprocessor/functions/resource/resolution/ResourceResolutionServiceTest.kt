@@ -228,7 +228,7 @@ class ResourceResolutionServiceTest {
                 sourceCapability(id = "sdno", description = "SDNO Source") {
                     definedProperties {
                         type(BluePrintConstants.SCRIPT_KOTLIN)
-                        scriptClassReference(MockCapabilityScriptRA::class.qualifiedName!!)
+                        scriptClassReference(MockCapabilityScriptRA::class)
                         keyDependencies(arrayListOf("device-id"))
                     }
                 }

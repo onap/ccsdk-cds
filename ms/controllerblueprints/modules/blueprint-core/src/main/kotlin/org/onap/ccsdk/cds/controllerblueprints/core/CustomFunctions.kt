@@ -24,6 +24,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JsonParserUtils
 import org.slf4j.LoggerFactory
 import org.slf4j.helpers.MessageFormatter
+import java.lang.Float
 import kotlin.reflect.KClass
 
 /**
@@ -93,6 +94,19 @@ fun <T : Any?> T.asJsonPrimitive(): JsonNode {
     }
 }
 
+/** Based on Blueprint DataType Convert string value to JsonNode Type **/
+fun String.asJsonType(bpDataType: String): JsonNode {
+    return when (bpDataType.toLowerCase()) {
+        BluePrintConstants.DATA_TYPE_STRING -> this.asJsonPrimitive()
+        BluePrintConstants.DATA_TYPE_BOOLEAN -> java.lang.Boolean.valueOf(this).asJsonPrimitive()
+        BluePrintConstants.DATA_TYPE_INTEGER -> Integer.valueOf(this).asJsonPrimitive()
+        BluePrintConstants.DATA_TYPE_FLOAT -> Float.valueOf(this).asJsonPrimitive()
+        BluePrintConstants.DATA_TYPE_DOUBLE -> java.lang.Double.valueOf(this).asJsonPrimitive()
+        // For List, Map and Complex Types.
+        else -> this.jsonAsJsonType()
+    }
+}
+
 /**
  * Utility to convert Complex or Primitive object to Json Type.
  */
@@ -154,6 +168,11 @@ fun <T : Any> Map<String, *>.castValue(key: String, valueType: KClass<T>): T {
 
 fun ArrayNode.asListOfString(): List<String> {
     return JacksonUtils.getListFromJsonNode(this, String::class.java)
+}
+
+fun <T> JsonNode.asType(clazzType: Class<T>): T {
+    return JacksonUtils.readValue(this, clazzType)
+            ?: throw BluePrintException("couldn't convert JsonNode of type $clazzType")
 }
 
 fun JsonNode.asListOfString(): List<String> {
@@ -260,6 +279,9 @@ fun isNotBlank(value: String?): Boolean {
     return value != null && value.isNotBlank()
 }
 
+fun <T : String> T?.emptyTONull(): String? {
+    return if (this == null || this.isEmpty()) null else this
+}
 
 fun nullToEmpty(value: String?): String {
     return if (isNotEmpty(value)) value!! else ""

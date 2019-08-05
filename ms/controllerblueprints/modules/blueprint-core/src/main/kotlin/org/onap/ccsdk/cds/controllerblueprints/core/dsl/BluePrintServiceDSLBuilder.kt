@@ -17,9 +17,9 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.dsl
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
+import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.data.*
+import kotlin.reflect.KClass
 
 class ServiceTemplateBuilder(private val name: String,
                              private val version: String,
@@ -52,6 +52,14 @@ class ServiceTemplateBuilder(private val name: String,
             this.file = file
         }
         imports.add(importDefinition)
+    }
+
+    fun dsl(id: String, kclass: KClass<*>) {
+        dsl(id, kclass.asPropertyDefinitionMap().asJsonNode())
+    }
+
+    fun dataType(dataType: KClass<*>) {
+        dataType(dataType.asBluePrintsDataTypes())
     }
 
     fun dsl(id: String, content: Any) {
