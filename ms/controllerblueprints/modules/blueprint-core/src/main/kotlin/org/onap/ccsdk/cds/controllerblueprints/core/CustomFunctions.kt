@@ -21,8 +21,8 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.*
 import org.apache.commons.lang3.ObjectUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-import org.slf4j.LoggerFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JsonParserUtils
+import org.slf4j.LoggerFactory
 import org.slf4j.helpers.MessageFormatter
 import kotlin.reflect.KClass
 
@@ -154,6 +154,11 @@ fun <T : Any> Map<String, *>.castValue(key: String, valueType: KClass<T>): T {
 
 fun ArrayNode.asListOfString(): List<String> {
     return JacksonUtils.getListFromJsonNode(this, String::class.java)
+}
+
+fun JsonNode.asListOfString(): List<String> {
+    check(this is ArrayNode) { "JsonNode is not of type ArrayNode" }
+    return this.asListOfString()
 }
 
 fun JsonNode.returnNullIfMissing(): JsonNode? {

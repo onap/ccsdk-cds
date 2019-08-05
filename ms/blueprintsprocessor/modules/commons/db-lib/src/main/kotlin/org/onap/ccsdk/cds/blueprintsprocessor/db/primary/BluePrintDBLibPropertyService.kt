@@ -32,7 +32,7 @@ class BluePrintDBLibPropertySevice(private var bluePrintProperties: BluePrintPro
     }
 
     fun JdbcTemplate(selector: String): BluePrintDBLibGenericService {
-        val prefix = "blueprintsprocessor.database.$selector"
+        val prefix = "blueprintsprocessor.db.$selector"
         val dBConnetionProperties = dBDataSourceProperties(prefix)
         return blueprintDBDataSourceService(dBConnetionProperties)
     }

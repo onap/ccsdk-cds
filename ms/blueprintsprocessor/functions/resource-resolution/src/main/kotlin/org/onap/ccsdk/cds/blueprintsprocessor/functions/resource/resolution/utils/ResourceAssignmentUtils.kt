@@ -19,7 +19,6 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.uti
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.databind.node.TextNode
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
@@ -70,7 +69,8 @@ class ResourceAssignmentUtils {
             try {
                 if (resourceProp.type.isNotEmpty()) {
                     logger.info("Setting Resource Value ($value) for Resource Name " +
-                            "(${resourceAssignment.name}) of type (${resourceProp.type})")
+                            "(${resourceAssignment.name}), definition(${resourceAssignment.dictionaryName}) " +
+                            "of type (${resourceProp.type})")
                     setResourceValue(resourceAssignment, raRuntimeService, value)
                     resourceAssignment.updatedDate = Date()
                     resourceAssignment.updatedBy = BluePrintConstants.USER_SYSTEM
@@ -106,7 +106,7 @@ class ResourceAssignmentUtils {
                 "Failed to populate mandatory resource resource mapping $resourceAssignment"
             }
             if (resourceProp.required != null && resourceProp.required!!
-                    && (resourceProp.value == null || resourceProp.value !is NullNode)) {
+                    && (resourceProp.value == null || resourceProp.value!!.returnNullIfMissing() == null)) {
                 logger.error("failed to populate mandatory resource mapping ($resourceAssignment)")
                 throw BluePrintProcessorException("failed to populate mandatory resource mapping ($resourceAssignment)")
             }
@@ -135,6 +135,21 @@ class ResourceAssignmentUtils {
             }
 
             return result
+        }
+
+        @Throws(BluePrintProcessorException::class)
+        fun generateResourceForAssignments(assignments: List<ResourceAssignment>): MutableMap<String, JsonNode> {
+            val data: MutableMap<String, JsonNode> = hashMapOf()
+            assignments.forEach {
+                if (isNotEmpty(it.name) && it.property != null) {
+                    val rName = it.name
+                    val type = nullToEmpty(it.property?.type).toLowerCase()
+                    val value = useDefaultValueIfNull(it, rName)
+                    logger.trace("Generating Resource name ($rName), type ($type), value ($value)")
+                    data[rName] = value
+                }
+            }
+            return data
         }
 
         private fun useDefaultValueIfNull(resourceAssignment: ResourceAssignment, resourceAssignmentName: String): JsonNode {
