@@ -26,6 +26,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.AbstractNodeTemplateOperationImplBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.PropertiesAssignmentBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.nodeType
+import kotlin.reflect.KClass
 
 /** Component Extensions **/
 
@@ -83,6 +84,10 @@ class ComponentScriptExecutorNodeTemplateBuilder(id: String, description: String
 
         fun type(type: JsonNode) {
             property(ComponentScriptExecutor.INPUT_SCRIPT_TYPE, type)
+        }
+
+        fun scriptClassReference(scriptClassReference: KClass<*>) {
+            scriptClassReference(scriptClassReference.qualifiedName!!)
         }
 
         fun scriptClassReference(scriptClassReference: String) = scriptClassReference(scriptClassReference.asJsonPrimitive())
