@@ -39,7 +39,7 @@ import { IEntrySchema } from 'src/app/common/core/store/models/entrySchema.model
 })
 export class ResourceMetadataComponent implements OnInit {
     entry_schema:IEntrySchema;
-    properties: IPropertyData;
+    properties: any = {};
     ResourceMetadata: FormGroup;
     resource_name: string;
     tags: string;
@@ -68,15 +68,22 @@ export class ResourceMetadataComponent implements OnInit {
         this.resource_name = resourcesState.resources.name;
         this.tags = resourcesState.resources.tags;
         this.resources = resourcesState.resources;
-        this.properties= resourcesState.resources.property;
-        this.propertyValues=  this.checkNested(this.properties);
+        if (resourcesState.resources.definition && resourcesState.resources.definition.property) {
+         this.properties= resourcesState.resources.definition.property;
+        } else {
+           this.properties['description']= '';
+           this.properties['type'] = '';
+           this.properties['entry_schema'] = '';
+           this.properties['required'] = false;
+        }
+      //   this.propertyValues=  this.checkNested(this.properties);
         this.ResourceMetadata = this.formBuilder.group({
         Resource_Name: [this.resource_name, Validators.required],
          _tags: [this.tags, Validators.required],
-         _description : [ this.propertyValues[0], Validators.required],
-         _type: [ this.propertyValues[1], Validators.required],
-         required: [ JSON.stringify(this.propertyValues[2]), Validators.required],
-         entry_schema: [this.propertyValues[3]]
+         _description : [ this.properties.description, Validators.required, ''],
+         _type: [ this.properties.type, Validators.required],
+         required: [ JSON.stringify(this.properties.required), Validators.required],
+         entry_schema: [this.properties.entry_schema]
       });   
     })
  }
@@ -85,10 +92,10 @@ export class ResourceMetadataComponent implements OnInit {
   
     this.resources.name = this.ResourceMetadata.value.Resource_Name;
     this.resources.tags = this.ResourceMetadata.value._tags;
-    this.resources.property.description = this.ResourceMetadata.value._description;
-    this.resources.property.type = this.ResourceMetadata.value._type;
- 	this.resources.property.required = this.ResourceMetadata.value.required;
- 	this.resources.property.entry_schema = this.ResourceMetadata.value.entry_schema;
+    this.resources.definition.property.description = this.ResourceMetadata.value._description;
+    this.resources.definition.property.type = this.ResourceMetadata.value._type;
+    this.resources.definition.property.required = this.ResourceMetadata.value.required;
+    this.resources.definition.property.entry_schema = this.ResourceMetadata.value.entry_schema;
  	this.resourcesData.emit(this.resources); 
  }
    
