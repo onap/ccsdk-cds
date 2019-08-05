@@ -26,6 +26,9 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.R
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.TemplateResolutionService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.ResourceAssignmentProcessor
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceDefinitionUtils
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceDefinitionUtils.checkDependencyDataExists
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceDefinitionUtils.createResourceAssignments
 import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintTemplateService
@@ -36,6 +39,7 @@ import org.onap.ccsdk.cds.controllerblueprints.resource.dict.utils.BulkResourceS
 import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Service
+import java.util.*
 
 interface ResourceResolutionService {
 
@@ -49,6 +53,11 @@ interface ResourceResolutionService {
 
     suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
                                  artifactPrefix: String, properties: Map<String, Any>): String
+
+    /** Resolve resources for all the sources defined in the Resource Definitions [ResourceDefinition],
+     * Used to get the same resource values from multiple sources. **/
+    suspend fun resolveResourceDefinition(blueprintRuntimeService: BluePrintRuntimeService<*>,
+                                           resourceDefinition: ResourceDefinition): MutableMap<String, JsonNode>
 
     suspend fun resolveResourceAssignments(blueprintRuntimeService: BluePrintRuntimeService<*>,
                                            resourceDefinitions: MutableMap<String, ResourceDefinition>,
@@ -86,12 +95,12 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                                           properties: Map<String, Any>): MutableMap<String, JsonNode> {
 
         val resourceAssignmentRuntimeService =
-            ResourceAssignmentUtils.transformToRARuntimeService(bluePrintRuntimeService, artifactNames.toString())
+                ResourceAssignmentUtils.transformToRARuntimeService(bluePrintRuntimeService, artifactNames.toString())
 
         val resolvedParams: MutableMap<String, JsonNode> = hashMapOf()
         artifactNames.forEach { artifactName ->
             val resolvedContent = resolveResources(resourceAssignmentRuntimeService, nodeTemplateName,
-                artifactName, properties)
+                    artifactName, properties)
 
             resolvedParams[artifactName] = resolvedContent.asJsonType()
         }
@@ -148,6 +157,23 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
         }
 
         return resolvedContent
+    }
+
+    override suspend fun resolveResourceDefinition(blueprintRuntimeService: BluePrintRuntimeService<*>,
+                                                    resourceDefinition: ResourceDefinition): MutableMap<String, JsonNode> {
+
+        val definitionDependencies = ResourceDefinitionUtils.definitionDependencies(resourceDefinition)
+        // Check if Resource Definition Source dependencies exists, if not Error out
+        checkDependencyDataExists(blueprintRuntimeService, definitionDependencies)
+        // Populate Dummy Resource Assignments
+        val resourceAssignments = createResourceAssignments(resourceDefinition)
+        val resourceDefinitions: MutableMap<String, ResourceDefinition> = mutableMapOf()
+        resourceDefinitions[resourceDefinition.name] = resourceDefinition
+        // Resolve Resource Assignments
+        resolveResourceAssignments(blueprintRuntimeService, resourceDefinitions, resourceAssignments,
+                UUID.randomUUID().toString(), hashMapOf())
+        // Get the data from Resource Assignments
+        return ResourceAssignmentUtils.generateResourceForAssignments(resourceAssignments)
     }
 
     /**

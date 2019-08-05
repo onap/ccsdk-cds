@@ -17,17 +17,19 @@
 package org.onap.ccsdk.cds.controllerblueprints.resource.dict.utils
 
 import org.apache.commons.collections.CollectionUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.asListOfString
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.TopologicalSortingUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory
-import java.util.ArrayList
+import java.util.*
+
 /**
  * BulkResourceSequencingUtils.
  *
  * @author Brinda Santh
  */
 object BulkResourceSequencingUtils {
-    private val log= LoggerFactory.getLogger(BulkResourceSequencingUtils::class.java)
+    private val log = LoggerFactory.getLogger(BulkResourceSequencingUtils::class.java)
 
     @JvmStatic
     fun process(resourceAssignments: MutableList<ResourceAssignment>): List<List<ResourceAssignment>> {
@@ -46,7 +48,13 @@ object BulkResourceSequencingUtils {
         // Preepare Sorting Map
         val topologySorting = TopologicalSortingUtils<ResourceAssignment>()
         resourceAssignmentMap.forEach { _, resourceAssignment ->
-            if (CollectionUtils.isNotEmpty(resourceAssignment.dependencies)) {
+            // Get the dependencies from the assignment sources, if not get from the Resource Assignment dependencies
+            if (resourceAssignment.dictionarySourceDefinition != null) {
+                val dependencies = resourceAssignment.dictionarySourceDefinition?.properties?.get("key-dependencies")?.asListOfString()
+                dependencies?.forEach { dependency ->
+                    topologySorting.add(resourceAssignmentMap[dependency]!!, resourceAssignment)
+                }
+            } else if (CollectionUtils.isNotEmpty(resourceAssignment.dependencies)) {
                 for (dependency in resourceAssignment.dependencies!!) {
                     topologySorting.add(resourceAssignmentMap[dependency]!!, resourceAssignment)
                 }
