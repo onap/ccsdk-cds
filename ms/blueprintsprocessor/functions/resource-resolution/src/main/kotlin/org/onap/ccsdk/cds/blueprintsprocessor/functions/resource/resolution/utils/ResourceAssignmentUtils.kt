@@ -137,6 +137,21 @@ class ResourceAssignmentUtils {
             return result
         }
 
+        @Throws(BluePrintProcessorException::class)
+        fun generateResourceForAssignments(assignments: List<ResourceAssignment>): MutableMap<String, JsonNode> {
+            val data: MutableMap<String, JsonNode> = hashMapOf()
+            assignments.forEach {
+                if (isNotEmpty(it.name) && it.property != null) {
+                    val rName = it.name
+                    val type = nullToEmpty(it.property?.type).toLowerCase()
+                    val value = useDefaultValueIfNull(it, rName)
+                    logger.trace("Generating Resource name ($rName), type ($type), value ($value)")
+                    data[rName] = value
+                }
+            }
+            return data
+        }
+
         private fun useDefaultValueIfNull(resourceAssignment: ResourceAssignment, resourceAssignmentName: String): JsonNode {
             if (resourceAssignment.property?.value == null) {
                 val defaultValue = "\${$resourceAssignmentName}"

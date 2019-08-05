@@ -58,6 +58,12 @@ open class ResourceAssignment {
     @JsonProperty("dictionary-source")
     var dictionarySource: String? = null
 
+    /** Modified Source definition,  Capability Source will use for script reference changes,
+     * Rest Source will use for extra headers etc **/
+    @JsonProperty("dictionary-source-definition")
+    var dictionarySourceDefinition: NodeTemplate? = null
+
+    /** Duplicate field : Shall be used directly from Dictionary Source definition dependencies. **/
     @JsonProperty("dependencies")
     var dependencies: MutableList<String>? = null
 

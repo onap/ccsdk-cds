@@ -79,11 +79,13 @@ open class DatabaseResourceAssignmentProcessor(private val bluePrintDBLibPropert
     }
 
     private fun setValueFromDB(resourceAssignment: ResourceAssignment) {
-        val dName = resourceAssignment.dictionaryName
-        val dSource = resourceAssignment.dictionarySource
-        val resourceDefinition = resourceDictionaries[dName]
-                ?: throw BluePrintProcessorException("couldn't get resource dictionary definition for $dName")
-        val resourceSource = resourceDefinition.sources[dSource]
+        val dName = resourceAssignment.dictionaryName!!
+        val dSource = resourceAssignment.dictionarySource!!
+        val resourceDefinition = resourceDefinition(dName)
+
+        /** Check Resource Assignment has the source definitions, If not get from Resource Definition **/
+        val resourceSource = resourceAssignment.dictionarySourceDefinition
+                ?: resourceDefinition?.sources?.get(dSource)
                 ?: throw BluePrintProcessorException("couldn't get resource definition $dName source($dSource)")
         val resourceSourceProperties = checkNotNull(resourceSource.properties) {
             "failed to get source properties for $dName "

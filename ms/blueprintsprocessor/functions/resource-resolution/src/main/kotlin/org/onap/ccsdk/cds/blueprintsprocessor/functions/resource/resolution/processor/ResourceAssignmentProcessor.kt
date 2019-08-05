@@ -38,7 +38,7 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
     private val log = LoggerFactory.getLogger(ResourceAssignmentProcessor::class.java)
 
     lateinit var raRuntimeService: ResourceAssignmentRuntimeService
-    lateinit var resourceDictionaries: MutableMap<String, ResourceDefinition>
+    var resourceDictionaries: MutableMap<String, ResourceDefinition> = hashMapOf()
 
     var scriptPropertyInstances: MutableMap<String, Any> = hashMapOf()
     lateinit var scriptType: String
@@ -62,9 +62,8 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
         return value
     }
 
-    open fun resourceDefinition(name: String): ResourceDefinition {
-        return resourceDictionaries[name]
-                ?: throw BluePrintProcessorException("couldn't get resource definition for ($name)")
+    open fun resourceDefinition(name: String): ResourceDefinition? {
+        return if (resourceDictionaries.containsKey(name)) resourceDictionaries[name] else null
     }
 
     open fun resolveInputKeyMappingVariables(inputKeyMapping: Map<String, String>): Map<String, JsonNode> {

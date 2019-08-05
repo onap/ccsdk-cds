@@ -163,6 +163,35 @@ class ResourceAssignmentBuilder(private val name: String, private val dictionary
         resourceAssignment.property = PropertyDefinitionBuilder(name, type, required, description).apply(block).build()
     }
 
+    fun source(source: NodeTemplate) {
+        resourceAssignment.dictionarySourceDefinition = source
+    }
+
+    fun sourceInput(block: SourceInputNodeTemplateBuilder.() -> Unit) {
+        resourceAssignment.dictionarySourceDefinition = SourceInputNodeTemplateBuilder(dictionarySource, "")
+                .apply(block).build()
+    }
+
+    fun sourceDefault(block: SourceDefaultNodeTemplateBuilder.() -> Unit) {
+        resourceAssignment.dictionarySourceDefinition = SourceDefaultNodeTemplateBuilder(dictionarySource, "")
+                .apply(block).build()
+    }
+
+    fun sourceDb(block: SourceDbNodeTemplateBuilder.() -> Unit) {
+        resourceAssignment.dictionarySourceDefinition = SourceDbNodeTemplateBuilder(dictionarySource, "")
+                .apply(block).build()
+    }
+
+    fun sourceRest(block: SourceRestNodeTemplateBuilder.() -> Unit) {
+        resourceAssignment.dictionarySourceDefinition = SourceRestNodeTemplateBuilder(dictionarySource, "")
+                .apply(block).build()
+    }
+
+    fun sourceCapability(block: SourceCapabilityNodeTemplateBuilder.() -> Unit) {
+        resourceAssignment.dictionarySourceDefinition = SourceCapabilityNodeTemplateBuilder(dictionarySource, "")
+                .apply(block).build()
+    }
+
     fun dependencies(dependencies: MutableList<String>) {
         resourceAssignment.dependencies = dependencies
     }
