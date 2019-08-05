@@ -16,9 +16,10 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.db
 
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.BluePrintDBLibPropertySevice
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.PrimaryDBLibGenericService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
@@ -39,15 +40,15 @@ open class BluePrintDBLibConfiguration(private var bluePrintProperties: BluePrin
 /**
  * Exposed Dependency Service by this SSH Lib Module
  */
-//TODO("right now not wired with name ")
 fun BluePrintDependencyService.dbLibPropertyService(): BluePrintDBLibPropertySevice =
-        instance(DBLibConstants.SERVICE_BLUEPRINT_DB_LIB_PROPERTY)
+        instance(BluePrintDBLibPropertySevice::class)
+
+fun BluePrintDependencyService.primaryDBLibGenericService(): BluePrintDBLibGenericService =
+        instance(PrimaryDBLibGenericService::class)
 
 
 class DBLibConstants {
     companion object {
-        //TODO("right now not wired with name ")
-        const val SERVICE_BLUEPRINT_DB_LIB_PROPERTY = "blueprint-db-lib-property-service"
         const val PREFIX_DB_PRIMARY: String = "blueprintsprocessor.db.primary"
 
         //list of database
@@ -62,7 +63,5 @@ class DBLibConstants {
         const val DRIVER_MYSQL_DB = "com.mysql.jdbc.Driver"
         const val DRIVER_ORACLE_DB = "oracle.jdbc.driver.OracleDriver"
         const val DRIVER_POSTGRES_DB = "org.postgresql.Driver"
-
-
     }
 }
