@@ -35,4 +35,8 @@ export class SearchTemplateService {
   searchByTags(searchText: String): Observable<any>{
     return this.api.get(BlueprintURLs.searchByTag+'/'+searchText);
   }
+  
+  getBlueprintZip(artifactDetails: string): Observable<any> {
+    return this.api.get(BlueprintURLs.download+artifactDetails, { responseType: 'blob' });
+  }
 }
