@@ -17,10 +17,12 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.dsl
 
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.asPropertyDefinitionMap
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Activity
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Step
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Workflow
+import kotlin.reflect.KClass
 
 class WorkflowBuilder(private val id: String, private val description: String) {
 
@@ -46,12 +48,20 @@ class WorkflowBuilder(private val id: String, private val description: String) {
         steps!![id] = StepBuilder(id, target, description).apply(block).build()
     }
 
+    fun inputs(kClazz: KClass<*>) {
+        inputs = kClazz.asPropertyDefinitionMap()
+    }
+
     fun inputs(block: PropertiesDefinitionBuilder.() -> Unit) {
         inputs = PropertiesDefinitionBuilder().apply(block).build()
     }
 
     fun outputs(block: PropertiesDefinitionBuilder.() -> Unit) {
         outputs = PropertiesDefinitionBuilder().apply(block).build()
+    }
+
+    fun outputs(kClazz: KClass<*>) {
+        outputs = kClazz.asPropertyDefinitionMap()
     }
 
     fun build(): Workflow {
