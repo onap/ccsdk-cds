@@ -1,7 +1,6 @@
 /*
  * Copyright © 2017-2019 AT&T, Bell Canada
- * Modifications Copyright © 2019 IBM.
- * Modifications Copyright © 2019 Huawei.
+ * Modifications Copyright © 2019 IBM, Bell Canada, Huawei.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +19,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.rest.service
 
 import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.DME2RestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.PolicyManagerRestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestLibConstants
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLBasicAuthRestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLRestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLTokenAuthRestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.TokenAuthRestClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.*
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.stereotype.Service
@@ -56,7 +47,7 @@ open class BluePrintRestLibPropertyService(private var bluePrintProperties:
             RestLibConstants.TYPE_BASIC_AUTH -> {
                 basicAuthRestClientProperties(prefix)
             }
-            RestLibConstants.TYPE_TOKEN_AUTH -> {
+            RestLibConstants.TYPE_TOKEN_AUTH, RestLibConstants.TYPE_VAULT_AUTH -> {
                 tokenRestClientProperties(prefix)
             }
             RestLibConstants.TYPE_SSL_BASIC_AUTH -> {
@@ -85,7 +76,7 @@ open class BluePrintRestLibPropertyService(private var bluePrintProperties:
 
         val type = jsonNode.get("type").textValue()
         return when (type) {
-            RestLibConstants.TYPE_TOKEN_AUTH -> {
+            RestLibConstants.TYPE_TOKEN_AUTH , RestLibConstants.TYPE_VAULT_AUTH -> {
                 JacksonUtils.readValue(jsonNode,
                         TokenAuthRestClientProperties::class.java)!!
             }
