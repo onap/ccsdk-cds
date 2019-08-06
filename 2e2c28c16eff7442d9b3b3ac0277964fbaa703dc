@@ -22,6 +22,30 @@
       "revId": "2e2c28c16eff7442d9b3b3ac0277964fbaa703dc",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54030939_88838491",
+        "filename": "components/model-catalog/blueprint-model/test-blueprint/capability_restconf/Scripts/python/RestconfConfigDeploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 5447
+      },
+      "writtenOn": "2019-08-06T12:43:35Z",
+      "side": 1,
+      "message": "Understood. I wasn\u0027t aware of this duplication. This is \nCan we leave this refactoring to a new task/bug since now, with the new UATs, we have more confidence to perform this kind of refactoring?",
+      "parentUuid": "9f78aca2_88b35f21",
+      "range": {
+        "startLine": 23,
+        "startChar": 6,
+        "endLine": 23,
+        "endChar": 26
+      },
+      "revId": "2e2c28c16eff7442d9b3b3ac0277964fbaa703dc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
