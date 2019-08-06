@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f78aca2_88b35f21",
+        "filename": "components/model-catalog/blueprint-model/test-blueprint/capability_restconf/Scripts/python/RestconfConfigDeploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-08-06T02:54:55Z",
+      "side": 1,
+      "message": "If possible, try to reuse org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor.RestconfExecutorExtensions.kt functions.",
+      "range": {
+        "startLine": 23,
+        "startChar": 6,
+        "endLine": 23,
+        "endChar": 26
+      },
+      "revId": "2e2c28c16eff7442d9b3b3ac0277964fbaa703dc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
