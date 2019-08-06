@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "1ecd73d6_e54b23cf",
+        "filename": "ms/blueprintsprocessor/application/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/ZipUtils.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-08-06T13:38:53Z",
+      "side": 1,
+      "message": "Sure, I understand, Yes, you shall move to BluePrintArchiveUtils. So that all modules can use.",
+      "parentUuid": "b7c7ecc7_16a0eee5",
+      "range": {
+        "startLine": 34,
+        "startChar": 3,
+        "endLine": 34,
+        "endChar": 27
+      },
+      "revId": "0aed6430a8e305111f83e4f083ad81feac3d4f4a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "61f30407_0daad50b",
         "filename": "ms/blueprintsprocessor/application/src/test/resources/blueprints/echo/Definitions/artifact_types.json",
         "patchSetId": 2
@@ -93,6 +117,30 @@
       "revId": "0aed6430a8e305111f83e4f083ad81feac3d4f4a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d138c5a2_64930c2a",
+        "filename": "ms/blueprintsprocessor/application/src/test/resources/blueprints/echo/Definitions/artifact_types.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-08-06T13:38:53Z",
+      "side": 1,
+      "message": "perfect, \"uat-blueprints\" shall be created to track UAT CBAs.",
+      "parentUuid": "386d5a92_a6b5a199",
+      "range": {
+        "startLine": 2,
+        "startChar": 2,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "0aed6430a8e305111f83e4f083ad81feac3d4f4a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
