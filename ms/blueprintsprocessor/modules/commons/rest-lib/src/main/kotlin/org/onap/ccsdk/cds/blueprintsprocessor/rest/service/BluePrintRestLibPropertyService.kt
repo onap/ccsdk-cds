@@ -20,15 +20,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.rest.service
 
 import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.DME2RestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.PolicyManagerRestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestLibConstants
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLBasicAuthRestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLRestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLTokenAuthRestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.TokenAuthRestClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.*
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.stereotype.Service
@@ -74,6 +66,9 @@ open class BluePrintRestLibPropertyService(private var bluePrintProperties:
             RestLibConstants.TYPE_POLICY_MANAGER -> {
                 policyManagerRestClientProperties(prefix)
             }
+            RestLibConstants.TYPE_VAULT_AUTH -> {
+                vaultRestClientProperties(prefix)
+            }
             else -> {
                 throw BluePrintProcessorException("Rest adaptor($type) is" +
                         " not supported")
@@ -113,6 +108,10 @@ open class BluePrintRestLibPropertyService(private var bluePrintProperties:
                 JacksonUtils.readValue(
                         jsonNode, SSLRestClientProperties::class.java)!!
             }
+            RestLibConstants.TYPE_VAULT_AUTH -> {
+                JacksonUtils.readValue(
+                        jsonNode, VaultAuthRestClientProperties::class.java)!!
+            }
             else -> {
                 throw BluePrintProcessorException("Rest adaptor($type) is" +
                         " not supported")
@@ -137,6 +136,9 @@ open class BluePrintRestLibPropertyService(private var bluePrintProperties:
             is DME2RestClientProperties -> {
                 return DME2ProxyRestClientService(restClientProperties)
             }
+            is VaultAuthRestClientProperties -> {
+                return VaultAuthRestClientService(restClientProperties)
+            }
             else -> {
                 throw BluePrintProcessorException("couldn't get rest " +
                         "service for")
@@ -148,6 +150,12 @@ open class BluePrintRestLibPropertyService(private var bluePrintProperties:
             TokenAuthRestClientProperties {
         return bluePrintProperties.propertyBeanType(
                 prefix, TokenAuthRestClientProperties::class.java)
+    }
+
+    private fun vaultRestClientProperties(prefix: String):
+            VaultAuthRestClientProperties {
+        return bluePrintProperties.propertyBeanType(
+                prefix, VaultAuthRestClientProperties::class.java)
     }
 
     private fun basicAuthRestClientProperties(prefix: String):

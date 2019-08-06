@@ -17,9 +17,9 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor
 
-import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.MissingNode
 import com.fasterxml.jackson.databind.node.NullNode
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.DATA_DICTIONARY_SECRET_SOURCE_TYPES
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.RestResourceSource
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
@@ -136,12 +136,14 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
         val responseNode = checkNotNull(JacksonUtils.jsonNode(restResponse).at(path)) {
             "Failed to find path ($path) in response ($restResponse)"
         }
-        logger.info("populating value for output mapping ($outputKeyMapping), from json ($responseNode)")
+        if (resourceAssignment.dictionarySource !in DATA_DICTIONARY_SECRET_SOURCE_TYPES)
+            logger.info("populating value for output mapping ($outputKeyMapping), from json ($responseNode)")
 
 
         when (type) {
             in BluePrintTypes.validPrimitiveTypes() -> {
-                logger.info("For template key (${resourceAssignment.name}) setting value as ($responseNode)")
+                if (resourceAssignment.dictionarySource !in DATA_DICTIONARY_SECRET_SOURCE_TYPES)
+                    logger.info("For template key (${resourceAssignment.name}) setting value as ($responseNode)")
                 ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, responseNode)
             }
             in BluePrintTypes.validCollectionTypes() -> {
@@ -163,15 +165,35 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                             val propertyTypeForDataType = ResourceAssignmentUtils
                                 .getPropertyType(raRuntimeService, entrySchemaType, it.key)
 
-                            logger.info("For List Type Resource: key (${it.key}), value ($responseKeyValue), " +
+                            if (resourceAssignment.dictionarySource !in DATA_DICTIONARY_SECRET_SOURCE_TYPES)
+                                logger.info("For List Type Resource: key (${it.key}), value ($responseKeyValue), " +
                                     "type  ({$propertyTypeForDataType})")
 
                             JacksonUtils.populateJsonNodeValues(it.value,
                                 responseKeyValue, propertyTypeForDataType, arrayChildNode)
+                            arrayNode.add(arrayChildNode)
                         }
-                        arrayNode.add(arrayChildNode)
                     }
                 }
+                else{
+                    val responseArrayNode = responseNode.rootFieldsToMap()
+                    for ((key, responseSingleJsonNode) in responseArrayNode) {
+                        val arrayChildNode = JacksonUtils.objectMapper.createObjectNode()
+
+                        outputKeyMapping.map {
+                            if (key == it.key) {
+                                if (resourceAssignment.dictionarySource !in DATA_DICTIONARY_SECRET_SOURCE_TYPES)
+                                    logger.info("For List Type Resource: key (${it.key}), value ($responseSingleJsonNode), " +
+                                            "type  ({$type})")
+
+                                JacksonUtils.populateJsonNodeValues(it.value,
+                                        responseSingleJsonNode, type, arrayChildNode)
+                                arrayNode.add(arrayChildNode)
+                            }
+                        }
+                    }
+                }
+                if (resourceAssignment.dictionarySource !in DATA_DICTIONARY_SECRET_SOURCE_TYPES)
                 logger.info("For template key (${resourceAssignment.name}) setting value as ($arrayNode)")
                 // Set the List of Complex Values
                 ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, arrayNode)
@@ -187,11 +209,13 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                     val propertyTypeForDataType = ResourceAssignmentUtils
                         .getPropertyType(raRuntimeService, entrySchemaType, it.key)
 
-                    logger.info("For List Type Resource: key (${it.key}), value ($responseKeyValue), type  ({$propertyTypeForDataType})")
+                    if (resourceAssignment.dictionarySource !in DATA_DICTIONARY_SECRET_SOURCE_TYPES)
+                        logger.info("For List Type Resource: key (${it.key}), value ($responseKeyValue), type  ({$propertyTypeForDataType})")
                     JacksonUtils.populateJsonNodeValues(it.value, responseKeyValue, propertyTypeForDataType, objectNode)
                 }
 
-                logger.info("For template key (${resourceAssignment.name}) setting value as ($objectNode)")
+                if (resourceAssignment.dictionarySource !in DATA_DICTIONARY_SECRET_SOURCE_TYPES)
+                    logger.info("For template key (${resourceAssignment.name}) setting value as ($objectNode)")
                 // Set the List of Complex Values
                 ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, objectNode)
             }

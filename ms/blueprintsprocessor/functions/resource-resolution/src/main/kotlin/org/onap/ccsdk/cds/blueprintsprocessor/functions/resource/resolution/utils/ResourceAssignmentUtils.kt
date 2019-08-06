@@ -69,7 +69,8 @@ class ResourceAssignmentUtils {
 
             try {
                 if (resourceProp.type.isNotEmpty()) {
-                    logger.info("Setting Resource Value ($value) for Resource Name " +
+                    if (resourceAssignment.dictionarySource !in ResourceResolutionConstants.DATA_DICTIONARY_SECRET_SOURCE_TYPES)
+                        logger.info("Setting Resource Value ($value) for Resource Name " +
                             "(${resourceAssignment.name}) of type (${resourceProp.type})")
                     setResourceValue(resourceAssignment, raRuntimeService, value)
                     resourceAssignment.updatedDate = Date()
@@ -119,17 +120,22 @@ class ResourceAssignmentUtils {
                 val mapper = ObjectMapper()
                 val root: ObjectNode = mapper.createObjectNode()
 
+                var containsSecret = false
                 assignments.forEach {
                     if (isNotEmpty(it.name) && it.property != null) {
                         val rName = it.name
                         val type = nullToEmpty(it.property?.type).toLowerCase()
                         val value = useDefaultValueIfNull(it, rName)
-                        logger.info("Generating Resource name ($rName), type ($type), value ($value)")
+                        if (it.dictionarySource !in ResourceResolutionConstants.DATA_DICTIONARY_SECRET_SOURCE_TYPES) {
+                            logger.info("Generating Resource name ($rName), type ($type), value ($value)")
+                            containsSecret = true
+                        }
                         root.set(rName, value)
                     }
                 }
                 result = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(root)
-                logger.info("Generated Resource Param Data ($result)")
+                if (!containsSecret)
+                    logger.info("Generated Resource Param Data ($result)")
             } catch (e: Exception) {
                 throw BluePrintProcessorException("Resource Assignment is failed with $e.message", e)
             }
