@@ -1,14 +1,22 @@
 {
-		"name": "hostname",
-		"tags": "hostname",
-		"updated-by" : "Singal, Kapil <ks220y@att.com>",
-		"property": {
-			"description" : "hostname",
-			"type": "string"
+	"name": "hostname",
+	"tags": "hostname",
+	"updated-by" : "Singal, Kapil <ks220y@att.com>, Steve Siani <alphonse.steve.siani.djissitchi@ibm.com>",
+	"property": {
+		"description" : "hostname resolved by input or by reading environment properties.",
+		"type": "string"
+	},
+	"sources": {
+		"input": {
+			"type": "source-input"
 		},
-		"sources": {
-			"input": {
-				"type": "source-input"
+		"capability": {
+			"type": "source-capability",
+			"properties" : {
+				"script-type" : "jython",
+				"script-class-reference" : "Scripts/python/ResolvProperties.py",
+				"instance-dependencies" : []
 			}
 		}
+	}
 }

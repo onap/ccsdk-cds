@@ -1,6 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
- * Modifications Copyright © 2019 Huawei.
+ * Modifications Copyright © 2019 Huawei, IBM, Bell Canada.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,6 +47,10 @@ open class BasicAuthRestClientProperties : RestClientProperties() {
 
 open class TokenAuthRestClientProperties : RestClientProperties() {
     var token: String? = null
+}
+
+open class VaultAuthRestClientProperties : RestClientProperties() {
+    var vaultToken: String? = null
 }
 
 open class DME2RestClientProperties : RestClientProperties() {
