@@ -19,6 +19,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.pro
 
 import com.fasterxml.jackson.databind.node.MissingNode
 import com.fasterxml.jackson.databind.node.NullNode
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.DATA_DICTIONARY_SECRET_SOURCE_TYPES
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.RestResourceSource
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
@@ -135,7 +136,8 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
         val responseNode = checkNotNull(JacksonUtils.jsonNode(restResponse).at(path)) {
             "Failed to find path ($path) in response ($restResponse)"
         }
-        logger.info("populating value for output mapping ($outputKeyMapping), from json ($responseNode)")
+        if (resourceAssignment.dictionarySource !in DATA_DICTIONARY_SECRET_SOURCE_TYPES)
+            logger.info("populating value for output mapping ($outputKeyMapping), from json ($responseNode)")
 
         val parsedResponseNode = ResourceAssignmentUtils.parseResponseNode(responseNode, resourceAssignment,
                 raRuntimeService, outputKeyMapping)

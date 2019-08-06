@@ -1,6 +1,5 @@
 /*
- * Copyright © 2019 Bell Canada, Nordix Foundation
- * Modifications Copyright (c) 2019 IBM, Bell Canada
+ * Copyright © 2019 IBM, Bell Canada
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,34 +17,29 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.rest.service
 
 import org.apache.http.message.BasicHeader
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestLibConstants
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.TokenAuthRestClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.VaultAuthRestClientProperties
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 
-class TokenAuthRestClientService(private val restClientProperties:
-                                 TokenAuthRestClientProperties) :
+class VaultAuthRestClientService(private val restClientProperties:
+                                 VaultAuthRestClientProperties) :
         BlueprintWebClientService {
-    private var authorization = HttpHeaders.AUTHORIZATION
+    val AUTHORIZATION = "X-Vault-Token"
 
     override fun defaultHeaders(): Map<String, String> {
-        if (restClientProperties.type == RestLibConstants.TYPE_VAULT_AUTH) {
-            authorization = "X-Vault-Token"
-        }
+
         return mapOf(
                 HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE,
                 HttpHeaders.ACCEPT to MediaType.APPLICATION_JSON_VALUE,
-                authorization to restClientProperties.token!!)
+                AUTHORIZATION to restClientProperties.vaultToken!!)
     }
 
     override fun convertToBasicHeaders(headers: Map<String, String>):
             Array<BasicHeader> {
-        if (restClientProperties.type == RestLibConstants.TYPE_VAULT_AUTH) {
-            authorization = "X-Vault-Token"
-        }
+
         val customHeaders: MutableMap<String, String> = headers.toMutableMap()
-        if (!headers.containsKey(authorization)) {
-            customHeaders[authorization] = restClientProperties.token!!
+        if (!headers.containsKey(AUTHORIZATION)) {
+            customHeaders[AUTHORIZATION] = restClientProperties.vaultToken!!
         }
         return super.convertToBasicHeaders(customHeaders)
     }
