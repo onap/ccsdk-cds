@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b7115990_64264c0f",
+        "filename": "ms/blueprintsprocessor/application/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/ZipUtils.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-08-06T02:40:49Z",
+      "side": 1,
+      "message": "Check, if org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintArchiveUtils, shall be reused, If not define this function org.onap.ccsdk.cds.controllerblueprints.core.FileExtensionFunctions.kt file.",
+      "range": {
+        "startLine": 34,
+        "startChar": 3,
+        "endLine": 34,
+        "endChar": 27
+      },
+      "revId": "0aed6430a8e305111f83e4f083ad81feac3d4f4a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61f30407_0daad50b",
+        "filename": "ms/blueprintsprocessor/application/src/test/resources/blueprints/echo/Definitions/artifact_types.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-08-06T02:40:49Z",
+      "side": 1,
+      "message": "If possible, try to keep all CBA blueprints in components/blueprints module, so that we shall keep track of the models and easy for migration and changes.",
+      "range": {
+        "startLine": 2,
+        "startChar": 2,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "0aed6430a8e305111f83e4f083ad81feac3d4f4a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
