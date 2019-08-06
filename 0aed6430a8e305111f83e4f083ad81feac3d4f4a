@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b7c7ecc7_16a0eee5",
+        "filename": "ms/blueprintsprocessor/application/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/ZipUtils.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 5447
+      },
+      "writtenOn": "2019-08-06T12:42:18Z",
+      "side": 1,
+      "message": "The BluePrintArchiveUtils.Companion#recurseFiles() function is similar but the new zipFolder() brings two significant differences: in order to avoid unnecessary processing, it generates an in-memory content and disables the compression.\n\nWhat about moving the zipFolder() to the BluePrintArchiveUtils module?",
+      "parentUuid": "b7115990_64264c0f",
+      "range": {
+        "startLine": 34,
+        "startChar": 3,
+        "endLine": 34,
+        "endChar": 27
+      },
+      "revId": "0aed6430a8e305111f83e4f083ad81feac3d4f4a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "61f30407_0daad50b",
         "filename": "ms/blueprintsprocessor/application/src/test/resources/blueprints/echo/Definitions/artifact_types.json",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2019-08-06T02:40:49Z",
       "side": 1,
       "message": "If possible, try to keep all CBA blueprints in components/blueprints module, so that we shall keep track of the models and easy for migration and changes.",
+      "range": {
+        "startLine": 2,
+        "startChar": 2,
+        "endLine": 2,
+        "endChar": 19
+      },
+      "revId": "0aed6430a8e305111f83e4f083ad81feac3d4f4a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "386d5a92_a6b5a199",
+        "filename": "ms/blueprintsprocessor/application/src/test/resources/blueprints/echo/Definitions/artifact_types.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 5447
+      },
+      "writtenOn": "2019-08-06T12:42:18Z",
+      "side": 1,
+      "message": "Understood.\nCan we create a new sub-folder under ./components/model-catalog/bluprint-model named \"uat-blueprints\" to draw a clear separation between the BPs that being used for UATs and the others that are provided as templates and/or for partial tests?",
+      "parentUuid": "61f30407_0daad50b",
       "range": {
         "startLine": 2,
         "startChar": 2,
