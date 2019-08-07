@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "e10fb36a_29744b04",
+        "filename": "ms/blueprintsprocessor/application/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-08-07T14:53:52Z",
+      "side": 1,
+      "message": "Check if mockk api satisfies your case.",
+      "range": {
+        "startLine": 122,
+        "startChar": 0,
+        "endLine": 127,
+        "endChar": 21
+      },
+      "revId": "0aed6430a8e305111f83e4f083ad81feac3d4f4a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b7115990_64264c0f",
         "filename": "ms/blueprintsprocessor/application/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/ZipUtils.kt",
         "patchSetId": 2
