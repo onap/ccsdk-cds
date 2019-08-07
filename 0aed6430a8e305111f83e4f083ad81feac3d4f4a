@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "ad932d99_6068e797",
+        "filename": "ms/blueprintsprocessor/application/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/ZipUtils.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 5447
+      },
+      "writtenOn": "2019-08-07T09:33:06Z",
+      "side": 1,
+      "message": "Done. The new zipFolder() was renamed to compressToBytes and moved to the BluePrintArchiveUtils. The core of this function was extracted to a private compressFolder() and the old compress() function was refactored to use this new function. This also enabled us to remove the commons-compress as compile/runtime dependency.",
+      "parentUuid": "1ecd73d6_e54b23cf",
+      "range": {
+        "startLine": 34,
+        "startChar": 3,
+        "endLine": 34,
+        "endChar": 27
+      },
+      "revId": "0aed6430a8e305111f83e4f083ad81feac3d4f4a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "61f30407_0daad50b",
         "filename": "ms/blueprintsprocessor/application/src/test/resources/blueprints/echo/Definitions/artifact_types.json",
         "patchSetId": 2
