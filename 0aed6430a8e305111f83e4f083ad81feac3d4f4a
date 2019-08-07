@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "09c59576_e3f313e9",
+        "filename": "ms/blueprintsprocessor/application/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 5447
+      },
+      "writtenOn": "2019-08-07T15:18:04Z",
+      "side": 1,
+      "message": "AFAIK mockk does not provide a reset() mechanism. See https://github.com/mockk/mockk/issues/292\nMoreover, to have a mocked bean overring a named singleton, Spring already provides @MockBean integrated with Mockito. The mockk equivalent maybe can be acomplished using the additional lib springmockk, but I didn\u0027t have a chance to test it.\nmockito-kotlin is just a tiny wrapper library that solves some annoyances when using Mockito directly from Kotlin.",
+      "parentUuid": "e10fb36a_29744b04",
+      "range": {
+        "startLine": 122,
+        "startChar": 0,
+        "endLine": 127,
+        "endChar": 21
+      },
+      "revId": "0aed6430a8e305111f83e4f083ad81feac3d4f4a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b7115990_64264c0f",
         "filename": "ms/blueprintsprocessor/application/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/ZipUtils.kt",
         "patchSetId": 2
