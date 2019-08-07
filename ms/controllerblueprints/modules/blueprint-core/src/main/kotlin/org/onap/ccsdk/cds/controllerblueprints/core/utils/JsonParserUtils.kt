@@ -1,6 +1,5 @@
 /*
  *  Copyright © 2018 IBM.
- *  Modifications Copyright © 2018 - 2019 IBM, Bell Canada.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -39,7 +38,7 @@ class JsonParserUtils {
         }
 
         fun paths(jsonNode: JsonNode, expression: String): List<String> {
-            return paths(jsonNode, expression)
+            return paths(jsonNode.toString(), expression)
         }
 
         fun parse(jsonContent: String, expression: String): JsonNode {
@@ -55,8 +54,7 @@ class JsonParserUtils {
         }
 
         fun parseNSet(jsonNode: JsonNode, expression: String, valueNode: JsonNode): JsonNode {
-
-            return parseNSet(jsonNode, expression, valueNode)
+            return parseNSet(jsonNode.toString(), expression, valueNode)
         }
     }
 }

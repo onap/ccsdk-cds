@@ -1,6 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
- * Modifications Copyright © 2018 - 2019 IBM, Bell Canada.
+ * Modifications Copyright © 2018 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,11 @@ package org.onap.ccsdk.cds.controllerblueprints.core.service
 import org.slf4j.LoggerFactory
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.NullNode
-import org.onap.ccsdk.cds.controllerblueprints.core.*
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.*
+import org.onap.ccsdk.cds.controllerblueprints.core.format
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JsonParserUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.ResourceResolverUtils
@@ -140,8 +143,8 @@ If Property Assignment is Expression.
 
         }
         if (subAttributeName != null) {
-            if (valueNode.isComplexType())
-                valueNode = JsonParserUtils.parse(valueNode.asJsonString(), subAttributeName)
+            if (valueNode.isObject || valueNode.isArray)
+                valueNode = JsonParserUtils.parse(valueNode, subAttributeName)
         }
         return valueNode
     }
@@ -173,8 +176,8 @@ If Property Assignment is Expression.
         valueNode = resolveAssignmentExpression(propertyNodeTemplateName, propertyName, nodeTemplatePropertyExpression)
 
         if (subPropertyName != null) {
-            if (valueNode.isComplexType())
-                valueNode = JsonParserUtils.parse(valueNode.asJsonString(), subPropertyName)
+            if (valueNode.isObject || valueNode.isArray)
+                valueNode = JsonParserUtils.parse(valueNode, subPropertyName)
         }
         return valueNode
     }
@@ -187,17 +190,9 @@ If Property Assignment is Expression.
         if (!operationOutputExpression.modelableEntityName.equals("SELF", true)) {
             outputNodeTemplateName = operationOutputExpression.modelableEntityName
         }
-
-        var valueNode = bluePrintRuntimeService.getNodeTemplateOperationOutputValue(outputNodeTemplateName,
+        return bluePrintRuntimeService.getNodeTemplateOperationOutputValue(outputNodeTemplateName,
                 operationOutputExpression.interfaceName, operationOutputExpression.operationName,
                 operationOutputExpression.propertyName)
-
-        val subPropertyName: String? = operationOutputExpression.subPropertyName
-        if (subPropertyName != null) {
-            if (valueNode.isComplexType())
-                valueNode = JsonParserUtils.parse(valueNode.asJsonString(), subPropertyName)
-        }
-        return valueNode
     }
 
     /*

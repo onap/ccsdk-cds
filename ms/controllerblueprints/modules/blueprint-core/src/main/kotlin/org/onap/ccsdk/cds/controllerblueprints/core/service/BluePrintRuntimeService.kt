@@ -1,6 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
- * Modifications Copyright © 2018-2019 IBM, Bell Canada.
+ * Modifications Copyright © 2018-2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -213,7 +213,8 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
 
     override fun loadEnvironments(type: String, fileName: String) {
         BluePrintMetadataUtils.environmentFileProperties(fileName).forEach { key, value ->
-            setNodeTemplateAttributeValue(type, key.toString(), value.asJsonType())
+            setNodeTemplateAttributeValue(type, key.toString(), value.toString()
+                    .asJsonPrimitive())
         }
     }
 
