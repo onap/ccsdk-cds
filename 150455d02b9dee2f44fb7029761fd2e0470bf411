@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "81554b10_af24777d",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/processor/RestResourceResolutionProcessor.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-07T14:56:02Z",
+      "side": 1,
+      "message": "you still want to log, but you want to obfuscate the response.",
+      "revId": "150455d02b9dee2f44fb7029761fd2e0470bf411",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9b90cf2f_525b1cf9",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/processor/RestResourceResolutionProcessor.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-07T14:56:02Z",
+      "side": 1,
+      "message": "don\u0027t duplicate the code.",
+      "range": {
+        "startLine": 178,
+        "startChar": 0,
+        "endLine": 196,
+        "endChar": 96
+      },
+      "revId": "150455d02b9dee2f44fb7029761fd2e0470bf411",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0485ee96_d0e551e5",
+        "filename": "ms/blueprintsprocessor/modules/commons/rest-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/rest/BluePrintRestLibData.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-07T14:56:02Z",
+      "side": 1,
+      "message": "what is the point of this. TokenAuth above already defines token auth... don\u0027t duplicate",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 1
+      },
+      "revId": "150455d02b9dee2f44fb7029761fd2e0470bf411",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7c019248_caffb0a1",
+        "filename": "ms/blueprintsprocessor/modules/commons/rest-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/rest/service/VaultAuthRestClientService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-07T14:56:02Z",
+      "side": 1,
+      "message": "instead of creating a new token auth type, parameterize the header value for authorization within default token auth",
+      "range": {
+        "startLine": 27,
+        "startChar": 3,
+        "endLine": 27,
+        "endChar": 39
+      },
+      "revId": "150455d02b9dee2f44fb7029761fd2e0470bf411",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
