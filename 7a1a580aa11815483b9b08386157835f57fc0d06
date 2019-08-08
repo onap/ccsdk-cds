@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7139e461_47e62d19",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/echo/TOSCA-Metadata/TOSCA.meta",
+        "patchSetId": 5
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-08-08T17:52:09Z",
+      "side": 1,
+      "message": "Template-Name: \u003cXXX\u003e\nTemplate-Version: \u003cXXX\u003e\n\nMinor : Pls add above optional properties, In future it may be validated, This is required for performant operations, without reading blueprints.",
+      "range": {
+        "startLine": 5,
+        "startChar": 26,
+        "endLine": 5,
+        "endChar": 35
+      },
+      "revId": "7a1a580aa11815483b9b08386157835f57fc0d06",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5d06dfd_3c98c513",
+        "filename": "ms/blueprintsprocessor/application/pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-08-08T17:52:09Z",
+      "side": 1,
+      "message": "Dependency versions, shall be managed in parent pom. This is minot one.",
+      "range": {
+        "startLine": 121,
+        "startChar": 7,
+        "endLine": 126,
+        "endChar": 21
+      },
+      "revId": "7a1a580aa11815483b9b08386157835f57fc0d06",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
