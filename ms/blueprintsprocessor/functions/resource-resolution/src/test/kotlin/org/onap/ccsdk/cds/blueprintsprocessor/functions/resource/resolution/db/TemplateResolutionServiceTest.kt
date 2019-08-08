@@ -59,7 +59,7 @@ class TemplateResolutionServiceTest {
             val res =
                 templateResolutionService.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
                     bluePrintRuntimeService, artifactPrefix, resolutionKey)
-            assertEquals(tr.result, res)
+            assertEquals(listOf(tr), res)
         }
     }
 

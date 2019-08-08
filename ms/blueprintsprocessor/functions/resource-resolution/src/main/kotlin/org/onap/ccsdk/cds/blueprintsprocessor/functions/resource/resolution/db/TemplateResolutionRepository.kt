@@ -20,20 +20,44 @@ import javax.transaction.Transactional
 
 interface TemplateResolutionRepository : JpaRepository<TemplateResolution, String> {
 
+    fun findByResolutionKeyAndBlueprintNameAndBlueprintVersion(
+        key: String,
+        blueprintName: String?,
+        blueprintVersion: String?): List<TemplateResolution>
+
+    fun findByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersion(
+        resourceId: String,
+        resourceType: String,
+        blueprintName: String?,
+        blueprintVersion: String?): List<TemplateResolution>
+
+    fun findByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactName(
+        resourceId: String,
+        resourceType: String,
+        blueprintName: String?,
+        blueprintVersion: String?,
+        artifactName: String): List<TemplateResolution>
+
     fun findByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
         resourceId: String,
         resourceType: String,
         blueprintName: String?,
         blueprintVersion: String?,
         artifactName: String,
-        occurrence: Int): TemplateResolution ?
+        occurrence: Int): TemplateResolution?
+
+    fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
+        key: String,
+        blueprintName: String?,
+        blueprintVersion: String?,
+        artifactName: String): List<TemplateResolution>?
 
     fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
         key: String,
         blueprintName: String?,
         blueprintVersion: String?,
         artifactName: String,
-        occurrence: Int): TemplateResolution ?
+        occurrence: Int): TemplateResolution?
 
     @Transactional
     fun deleteByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
