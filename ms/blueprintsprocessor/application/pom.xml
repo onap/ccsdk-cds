@@ -66,6 +66,11 @@
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
             <artifactId>selfservice-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <artifactId>configs-api</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
 
         <!-- Functions -->
         <dependency>
@@ -88,7 +93,11 @@
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
             <artifactId>cli-executor</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
+            <artifactId>config-snapshots</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
