@@ -3,28 +3,37 @@ version: '3.3'
 services:
   db:
     image: mariadb:latest
-    container_name: ccsdk-mariadb
+    container_name: cds-db
     ports:
-    - "3306:3306"
+      - "3306:3306"
     volumes:
-    - ~/vm_mysql:/var/lib/mysql
+      - ~/vm_mysql:/var/lib/mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: sdnctl
       MYSQL_DATABASE: sdnctl
       MYSQL_USER: sdnctl
       MYSQL_PASSWORD: sdnctl
+  command-executor:
+    depends_on:
+      - blueprints-processor
+    image: onap/ccsdk-commandexecutor:latest
+    container_name: cds-executor
+    volumes:
+      - /Users/adetalhouet/onap/master/cds/dc/deploy:/opt/app/onap/blueprints/deploy
+    ports:
+      - "50051:50051"
+    restart: always
   blueprints-processor:
     depends_on:
-    - db
+      - db
     image: onap/ccsdk-blueprintsprocessor:latest
-    container_name: bp-rest
+    container_name: cds-backend
+    volumes:
+      - /Users/adetalhouet/onap/master/cds/dc:/opt/app/onap/blueprints
+      - /Users/adetalhouet/onap/master/cds/ms/blueprintsprocessor/application/src/main/resources/application.properties:/opt/app/onap/config/application.properties
     ports:
-    - "8000:8080"
+      - "8000:8080"
     restart: always
     environment:
-      APPLICATIONNAME: BlueprintsProcessor
-      BUNDLEVERSION: 1.0.0
       APP_CONFIG_HOME: /opt/app/onap/config
-      STICKYSELECTORKEY:
-      ENVCONTEXT: dev

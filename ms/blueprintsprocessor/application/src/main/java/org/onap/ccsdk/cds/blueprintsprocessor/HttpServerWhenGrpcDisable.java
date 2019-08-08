@@ -22,8 +22,6 @@ import org.springframework.boot.web.embedded.netty.NettyReactiveWebServerFactory
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.stereotype.Component;
 
-// When GRPC disable, no need to create the netty server
-@ConditionalOnProperty(name = "blueprintsprocessor.grpcEnable", havingValue = "false")
 @Component
 public class HttpServerWhenGrpcDisable implements WebServerFactoryCustomizer<NettyReactiveWebServerFactory> {
 

@@ -34,7 +34,7 @@
     <modules>
         <module>controllerblueprints</module>
         <module>blueprintsprocessor</module>
-        <module>command-executor</module>
-        <module>sdclistener</module>
+<!--        <module>command-executor</module>-->
+<!--        <module>sdclistener</module>-->
     </modules>
 </project>

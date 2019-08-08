@@ -17,9 +17,16 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 
 import kotlinx.coroutines.runBlocking
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.ResourceAssignmentProcessor
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.restClientService
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 
+fun ResourceAssignmentProcessor.restClientService(selector: String): BlueprintWebClientService {
+    return BluePrintDependencyService.restClientService(selector)
+}
 
 /**
  * Register the Resolution module exposed dependency
