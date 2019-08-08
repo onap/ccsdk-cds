@@ -135,7 +135,8 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
         if (isToStore(properties)) {
             val existingResourceResolution = isNewResolution(bluePrintRuntimeService, properties, artifactPrefix)
             if (existingResourceResolution.isNotEmpty()) {
-                updateResourceAssignmentWithExisting(existingResourceResolution, resourceAssignments)
+                updateResourceAssignmentWithExisting(bluePrintRuntimeService as ResourceAssignmentRuntimeService,
+                    existingResourceResolution, resourceAssignments)
             }
         }
 
@@ -347,15 +348,18 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
     }
 
     // Update the resource assignment list with the status of the resource that have already been resolved
-    private fun updateResourceAssignmentWithExisting(resourceResolutionList: List<ResourceResolution>,
+    private fun updateResourceAssignmentWithExisting(raRuntimeService : ResourceAssignmentRuntimeService,
+                                                     resourceResolutionList: List<ResourceResolution>,
                                                      resourceAssignmentList: MutableList<ResourceAssignment>) {
         resourceResolutionList.forEach { resourceResolution ->
             if (resourceResolution.status == BluePrintConstants.STATUS_SUCCESS) {
                 resourceAssignmentList.forEach {
                     if (compareOne(resourceResolution, it)) {
                         log.info("Resource ({}) already resolve: value=({})", it.name, resourceResolution.value)
-                        it.property!!.value = resourceResolution.value!!.asJsonPrimitive()
+                        val value = resourceResolution.value!!.asJsonPrimitive()
+                        it.property!!.value = value
                         it.status = resourceResolution.status
+                        ResourceAssignmentUtils.setResourceDataValue(it, raRuntimeService, value)
                     }
                 }
             }
