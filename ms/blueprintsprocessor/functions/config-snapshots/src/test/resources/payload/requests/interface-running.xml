@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright © 2019 Bell Canada.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~   http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<output xmlns="http://yang.juniper.net/junos-qfx/rpc/interfaces">
+  <interface-information xmlns:junos="http://xml.juniper.net/junos/17.4R1/junos" junos:style="normal">
+      <ifd-specific-config-flags />
+      <if-config-flags />
+      <link-type>Full-Duplex</link-type>
+      <if-media-flags>
+        <ifmf-none />
+      </if-media-flags>
+      <interface-flapped junos:seconds="0">Never</interface-flapped>
+      <traffic-statistics junos:style="brief">
+        <input-packets>0</input-packets>
+        <output-packets>0</output-packets>
+      </traffic-statistics>
+    <physical-interface/>
+  </interface-information>
+</output>
