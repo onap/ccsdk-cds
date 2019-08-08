@@ -374,6 +374,11 @@
             <!-- North Bound -->
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>configs-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>designer-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -422,6 +427,11 @@
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
                 <artifactId>cli-executor</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
+                <artifactId>config-snapshots</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
