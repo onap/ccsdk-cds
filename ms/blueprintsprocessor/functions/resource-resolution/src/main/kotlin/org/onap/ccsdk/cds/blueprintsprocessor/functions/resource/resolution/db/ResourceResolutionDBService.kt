@@ -167,7 +167,7 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
         resourceResolution.dictionaryName = resourceAssignment.dictionaryName
         resourceResolution.dictionaryVersion = resourceAssignment.version
         resourceResolution.dictionarySource = resourceAssignment.dictionarySource
-        resourceResolution.status = resourceAssignment.status
+        resourceResolution.status = resourceAssignment.status ?: BluePrintConstants.STATUS_FAILURE
 
         try {
             resourceResolutionRepository.saveAndFlush(resourceResolution)
