@@ -52,8 +52,8 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfo(
             "CDS Blueprints Processor APIs",
-            "Provide APIs to interact with CBA, their related resolved resources and templates.",
-            "0.5.0",
+            "Provide APIs to interact with CBA, their resolved resources and templates, and stored resource configurations.",
+            "0.5.1",
             null,
             new Contact("CCSDK Team", "www.onap.org", "onap-discuss@lists.onap.org"),
             "Apache 2.0",
