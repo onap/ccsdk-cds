@@ -1,6 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
- * Modifications Copyright © 2018-2019 IBM.
+ * Modifications Copyright © 2018-2019 IBM, Bell Canada
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -226,23 +226,25 @@ class JacksonUtils {
         }
 
         fun getValue(value: Any, type: String): Any {
+            val valueNode = value.asJsonPrimitive()
             return when (type.toLowerCase()) {
-                BluePrintConstants.DATA_TYPE_BOOLEAN -> (value as BooleanNode).booleanValue()
-                BluePrintConstants.DATA_TYPE_INTEGER -> (value as IntNode).intValue()
-                BluePrintConstants.DATA_TYPE_FLOAT -> (value as FloatNode).floatValue()
-                BluePrintConstants.DATA_TYPE_DOUBLE -> (value as DoubleNode).doubleValue()
-                BluePrintConstants.DATA_TYPE_STRING -> (value as TextNode).textValue()
-                else -> (value as JsonNode)
+                BluePrintConstants.DATA_TYPE_BOOLEAN -> (valueNode as BooleanNode).booleanValue()
+                BluePrintConstants.DATA_TYPE_INTEGER -> (valueNode as IntNode).intValue()
+                BluePrintConstants.DATA_TYPE_FLOAT -> (valueNode as FloatNode).floatValue()
+                BluePrintConstants.DATA_TYPE_DOUBLE -> (valueNode as DoubleNode).doubleValue()
+                BluePrintConstants.DATA_TYPE_STRING -> (valueNode as TextNode).textValue()
+                else -> (valueNode as JsonNode)
             }
         }
 
         fun populatePrimitiveValues(key: String, value: Any, primitiveType: String, objectNode: ObjectNode) {
+            val valueNode = value.asJsonPrimitive()
             when (primitiveType.toLowerCase()) {
-                BluePrintConstants.DATA_TYPE_BOOLEAN -> objectNode.put(key, (value as BooleanNode).booleanValue())
-                BluePrintConstants.DATA_TYPE_INTEGER -> objectNode.put(key, (value as IntNode).intValue())
-                BluePrintConstants.DATA_TYPE_FLOAT -> objectNode.put(key, (value as FloatNode).floatValue())
-                BluePrintConstants.DATA_TYPE_DOUBLE -> objectNode.put(key, (value as DoubleNode).doubleValue())
-                else -> objectNode.put(key, (value as TextNode).textValue())
+                BluePrintConstants.DATA_TYPE_BOOLEAN -> objectNode.put(key, (valueNode as BooleanNode).booleanValue())
+                BluePrintConstants.DATA_TYPE_INTEGER -> objectNode.put(key, (valueNode as IntNode).intValue())
+                BluePrintConstants.DATA_TYPE_FLOAT -> objectNode.put(key, (valueNode as FloatNode).floatValue())
+                BluePrintConstants.DATA_TYPE_DOUBLE -> objectNode.put(key, (valueNode as DoubleNode).doubleValue())
+                else -> objectNode.put(key, (valueNode as TextNode).textValue())
             }
         }
 
