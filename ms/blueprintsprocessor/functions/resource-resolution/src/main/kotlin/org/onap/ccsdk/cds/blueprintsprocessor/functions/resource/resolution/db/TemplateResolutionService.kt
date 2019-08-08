@@ -32,14 +32,33 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
 
     private val log = LoggerFactory.getLogger(TemplateResolutionService::class.toString())
 
-    suspend fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
-        bluePrintRuntimeService: BluePrintRuntimeService<*>,
-        artifactPrefix: String,
-        resolutionKey: String): String =
+    suspend fun findByResolutionKeyAndBlueprintNameAndBlueprintVersion(blueprintName: String,
+                                                                       blueprintVersion: String,
+                                                                       resolutionKey: String): List<TemplateResolution> =
         withContext(Dispatchers.IO) {
+            templateResolutionRepository.findByResolutionKeyAndBlueprintNameAndBlueprintVersion(
+                resolutionKey,
+                blueprintName,
+                blueprintVersion)
+        }
 
+    suspend fun findByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersion(blueprintName: String,
+                                                                                   blueprintVersion: String,
+                                                                                   resourceId: String,
+                                                                                   resourceType: String): List<TemplateResolution> =
+        withContext(Dispatchers.IO) {
+            templateResolutionRepository.findByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersion(
+                resourceId,
+                resourceType,
+                blueprintName,
+                blueprintVersion)
+        }
+
+    suspend fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>, artifactPrefix: String,
+        resolutionKey: String): List<TemplateResolution> =
+        withContext(Dispatchers.IO) {
             val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
-
             val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
             val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
 
@@ -52,33 +71,27 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
     suspend fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(blueprintName: String,
                                                                                       blueprintVersion: String,
                                                                                       artifactPrefix: String,
-                                                                                      resolutionKey: String,
-                                                                                      occurrence: Int = 1): String =
+                                                                                      resolutionKey: String): List<TemplateResolution> =
         withContext(Dispatchers.IO) {
-
-            templateResolutionRepository.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
+            templateResolutionRepository.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
                 resolutionKey,
                 blueprintName,
                 blueprintVersion,
-                artifactPrefix,
-                occurrence)?.result ?: throw EmptyResultDataAccessException(1)
+                artifactPrefix) ?: throw EmptyResultDataAccessException(1)
         }
 
-    suspend fun findByResoureIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactName(blueprintName: String,
-                                                                                                 blueprintVersion: String,
-                                                                                                 artifactPrefix: String,
-                                                                                                 resourceId: String,
-                                                                                                 resourceType: String,
-                                                                                                 occurrence: Int = 1): String =
+    suspend fun findByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactName(blueprintName: String,
+                                                                                                  blueprintVersion: String,
+                                                                                                  artifactPrefix: String,
+                                                                                                  resourceId: String,
+                                                                                                  resourceType: String): List<TemplateResolution> =
         withContext(Dispatchers.IO) {
-
-            templateResolutionRepository.findByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
+            templateResolutionRepository.findByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactName(
                 resourceId,
                 resourceType,
                 blueprintName,
                 blueprintVersion,
-                artifactPrefix,
-                occurrence)?.result!!
+                artifactPrefix)
         }
 
     suspend fun write(properties: Map<String, Any>,
@@ -89,7 +102,8 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
 
         val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
         val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
-        val resolutionKey = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] as String
+        val resolutionKey =
+            properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] as String
         val resourceId = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] as String
         val resourceType = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] as String
         val occurrence = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] as Int
@@ -148,11 +162,12 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
             }
             try {
                 log.info("Writing out template_resolution result: bpName: $blueprintName bpVer $blueprintVersion resKey:$resolutionKey" +
-                    " (resourceId: $resourceId resourceType: $resourceType) occurrence:$occurrence")
+                        " (resourceId: $resourceId resourceType: $resourceType) occurrence:$occurrence")
                 templateResolutionRepository.saveAndFlush(resourceResolutionResult)
             } catch (ex: DataIntegrityViolationException) {
                 log.error("Error writing out template_resolution result: bpName: $blueprintName bpVer $blueprintVersion resKey:$resolutionKey" +
-                    " (resourceId: $resourceId resourceType: $resourceType) occurrence:$occurrence error: {}", ex.message)
+                        " (resourceId: $resourceId resourceType: $resourceType) occurrence:$occurrence error: {}",
+                    ex.message)
                 throw BluePrintException("Failed to store resource api result.", ex)
             }
         }
