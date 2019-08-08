@@ -1,0 +1,9 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+2: Dan Timoney <dtimoney@att.com>
+Code-Review+2: Brinda Santh Muthuramalingam <brindasanth@in.ibm.com>
+Code-Review+2: Gaurav Agrawal <gaurav.agrawal@huawei.com>
+Submitted-by: Dan Timoney <dtimoney@att.com>
+Submitted-at: Thu, 08 Aug 2019 11:58:11 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/ccsdk/cds/+/92963
+Project: ccsdk/cds
+Branch: refs/heads/master
