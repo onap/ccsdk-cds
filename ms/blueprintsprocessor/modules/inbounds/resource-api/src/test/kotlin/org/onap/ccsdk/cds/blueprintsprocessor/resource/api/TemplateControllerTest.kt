@@ -51,11 +51,11 @@ class TemplateControllerTest {
     var resolutionKey = "7cafa9f3-bbc8-49ec-8f25-fcaa6ac3ff08"
     val blueprintName = "baseconfiguration"
     val blueprintVersion = "1.0.0"
-    val templatePrefix = "activate"
+    val templatesPrefix = "activate"
     val payloadDummyTemplateData = "PAYLOAD DATA"
 
     var requestArguments = "bpName=$blueprintName&bpVersion=$blueprintVersion" +
-            "&artifactName=$templatePrefix&resolutionKey=$resolutionKey"
+            "&artifactName=$templatesPrefix&resolutionKey=$resolutionKey"
 
     @AfterTest
     fun cleanDir() {
@@ -65,7 +65,7 @@ class TemplateControllerTest {
     @Test
     fun `ping return Success`() {
         runBlocking {
-            webTestClient.get().uri("/api/v1/template/health-check")
+            webTestClient.get().uri("/api/v1/templates/health-check")
                 .exchange()
                 .expectStatus().isOk
                 .expectBody()
@@ -84,7 +84,7 @@ class TemplateControllerTest {
 
             webTestClient
                 .get()
-                .uri("/api/v1/template?$requestArguments")
+                .uri("/api/v1/templates?$requestArguments")
                 .exchange()
                 .expectStatus().is4xxClientError
                 .expectBody().equals(payloadDummyTemplateData)
@@ -114,10 +114,10 @@ class TemplateControllerTest {
         runBlocking {
             val arguments = "bpBADName=$blueprintName" +
                     "&bpBADVersion=$blueprintVersion" +
-                    "&artifactName=$templatePrefix" +
+                    "&artifactName=$templatesPrefix" +
                     "&resolutionKey=$resolutionKey"
 
-            webTestClient.get().uri("/api/v1/template?$arguments")
+            webTestClient.get().uri("/api/v1/templates?$arguments")
                 .exchange()
                 .expectStatus().isBadRequest
         }
@@ -129,8 +129,8 @@ class TemplateControllerTest {
 
             webTestClient
                 .get()
-                .uri("/api/v1/template?bpName=$blueprintName&bpVersion=$blueprintVersion" +
-                        "&artifactName=$templatePrefix&resolutionKey=notFound")
+                .uri("/api/v1/templates?bpName=$blueprintName&bpVersion=$blueprintVersion" +
+                        "&artifactName=$templatesPrefix&resolutionKey=notFound")
                 .exchange()
                 .expectStatus().isNotFound
         }
@@ -139,7 +139,7 @@ class TemplateControllerTest {
     private fun post(resKey: String) {
         webTestClient
             .post()
-            .uri("/api/v1/template/$blueprintName/$blueprintVersion/$templatePrefix/$resKey")
+            .uri("/api/v1/templates/$blueprintName/$blueprintVersion/$templatesPrefix/$resKey")
             .body(BodyInserters.fromObject(payloadDummyTemplateData))
             .exchange()
             .expectStatus().is2xxSuccessful
@@ -151,13 +151,13 @@ class TemplateControllerTest {
 
     private fun get(expectedType: String, resKey: String) {
         var requestArguments = "bpName=$blueprintName&bpVersion=$blueprintVersion" +
-                "&artifactName=$templatePrefix&resolutionKey=$resKey"
+                "&artifactName=$templatesPrefix&resolutionKey=$resKey"
 
         if (expectedType.isNotEmpty()) {
             requestArguments = "$requestArguments&format=$expectedType"
             webTestClient
                 .get()
-                .uri("/api/v1/template?$requestArguments")
+                .uri("/api/v1/templates?$requestArguments")
                 .exchange()
                 .expectStatus().is2xxSuccessful
                 .expectHeader().contentType(MediaType.valueOf("application/$expectedType"))
@@ -165,7 +165,7 @@ class TemplateControllerTest {
         } else {
             webTestClient
                 .get()
-                .uri("/api/v1/template?$requestArguments")
+                .uri("/api/v1/templates?$requestArguments")
                 .exchange()
                 .expectStatus().is2xxSuccessful
                 .expectHeader().contentType(MediaType.TEXT_PLAIN)
