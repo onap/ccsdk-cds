@@ -29,6 +29,7 @@
     <description>Blueprints Processor Inbounds</description>
 
     <modules>
+        <module>configs-api</module>
         <module>designer-api</module>
         <module>resource-api</module>
         <module>selfservice-api</module>

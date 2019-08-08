@@ -1,0 +1,90 @@
+{
+  "description": "This is Resource configuration snapshots Execution Component.",
+  "version": "1.0.0",
+  "attributes": {
+    "config-snapshot-status": {
+      "required": true,
+      "type": "string"
+    },
+    "config-snapshot-message": {
+      "required": true,
+      "type": "string"
+    },
+    "config-snapshot-value": {
+      "required": false,
+      "type": "string"
+    }
+  },
+  "capabilities": {
+    "component-node": {
+      "type": "tosca.capabilities.Node"
+    }
+  },
+  "interfaces": {
+    "ComponentConfigSnapshotsExecutor": {
+      "operations": {
+        "process": {
+          "inputs": {
+            "operation": {
+              "description": "Operation to perform: fetch, store, diff. (required)",
+              "required": true,
+              "type": "string",
+              "constraints": [
+                {
+                  "valid_values": [
+                    "fetch",
+                    "store",
+                    "diff"
+                  ]
+                }
+              ]
+            },
+            "resource-id": {
+              "description": "Identifier for the resource config to operate on. (required)",
+              "required": true,
+              "type": "string"
+            },
+            "resource-type": {
+              "description": "Type of the resource config to operate on, e.g. PNF, VNF, etc. (required)",
+              "required": true,
+              "type": "string"
+            },
+            "resource-status" : {
+              "description": "Status of the resource to fetch or store, either RUNNING or CANDIDATE. (optional)",
+              "required" : false,
+              "type" : "string",
+              "default": "RUNNING",
+              "constraints": [
+                {
+                  "valid_values": [
+                    "RUNNING",
+                    "CANDIDATE"
+                  ]
+                }
+              ]
+            },
+            "resource-snapshot": {
+              "description": "The resource config snapshot to store for the resource identified by id/type/status. (store operation only)",
+              "required": false,
+              "type": "string"
+            },
+            "diff-content-type": {
+              "description": "Specify the type of content expected, to perform comparison on. (diff operation only)",
+              "required": false,
+              "type": "string",
+              "constraints": [
+                {
+                  "valid_values": [
+                    "xml",
+                    "json"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "derived_from": "tosca.nodes.Component"
+}
