@@ -1,0 +1,35 @@
+{
+  "system-uptime-information" :
+  {
+    "current-time" :
+    {
+      "date-time" : "2018-05-15 13:49:56 PDT"
+    },
+    "time-source" : " NTP CLOCK ",
+    "system-booted-time" :
+    {
+      "date-time" : "2018-05-15 10:57:02 PDT",
+      "time-length" : "02:52:54"
+    },
+    "protocols-started-time" :
+    {
+      "date-time" : "2018-05-15 10:59:33 PDT",
+      "time-length" : "02:50:23"
+    },
+    "last-configured-time" :
+    {
+      "date-time" : "2018-05-15 13:49:40 PDT",
+      "time-length" : "00:00:16",
+      "user" : "admin"
+    },
+    "uptime-information" :
+    {
+      "date-time" : "1:49PM",
+      "up-time" : "2:53",
+      "active-user-count" : "1",
+      "load-average-1" : "0.00",
+      "load-average-5" : "0.06",
+      "load-average-15" : "0.06"
+    }
+  }
+}
