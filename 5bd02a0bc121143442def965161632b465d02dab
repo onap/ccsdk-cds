@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c872bd7_6d0e4bbe",
+        "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/utils/JacksonUtils.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-08-08T17:16:16Z",
+      "side": 1,
+      "message": "This also need to be parse first as JsonNode.",
+      "range": {
+        "startLine": 228,
+        "startChar": 8,
+        "endLine": 237,
+        "endChar": 9
+      },
+      "revId": "5bd02a0bc121143442def965161632b465d02dab",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
