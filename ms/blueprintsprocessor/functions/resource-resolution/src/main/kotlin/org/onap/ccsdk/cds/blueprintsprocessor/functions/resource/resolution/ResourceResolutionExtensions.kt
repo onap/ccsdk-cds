@@ -17,21 +17,21 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 
 import kotlinx.coroutines.runBlocking
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.TemplateResolution
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
-
 
 /**
  * Register the Resolution module exposed dependency
  */
 fun BluePrintDependencyService.resourceResolutionService(): ResourceResolutionService =
-        instance(ResourceResolutionConstants.SERVICE_RESOURCE_RESOLUTION)
+    instance(ResourceResolutionConstants.SERVICE_RESOURCE_RESOLUTION)
 
 
 suspend fun AbstractComponentFunction.storedContentFromResolvedArtifactNB(resolutionKey: String,
-                                                                          artifactName: String): String {
+                                                                          artifactName: String): List<TemplateResolution> {
     return BluePrintDependencyService.resourceResolutionService()
-            .resolveFromDatabase(bluePrintRuntimeService, artifactName, resolutionKey)
+        .resolveFromDatabase(bluePrintRuntimeService, artifactName, resolutionKey)
 }
 
 /**
@@ -39,7 +39,7 @@ suspend fun AbstractComponentFunction.storedContentFromResolvedArtifactNB(resolu
  */
 suspend fun AbstractComponentFunction.contentFromResolvedArtifactNB(artifactPrefix: String): String {
     return BluePrintDependencyService.resourceResolutionService()
-            .resolveResources(bluePrintRuntimeService, nodeTemplateName, artifactPrefix, mapOf())
+        .resolveResources(bluePrintRuntimeService, nodeTemplateName, artifactPrefix, mapOf())
 }
 
 
@@ -48,7 +48,7 @@ suspend fun AbstractComponentFunction.contentFromResolvedArtifactNB(artifactPref
  */
 
 fun AbstractComponentFunction.storedContentFromResolvedArtifact(resolutionKey: String, artifactName: String)
-        : String = runBlocking {
+        : List<TemplateResolution> = runBlocking {
     storedContentFromResolvedArtifactNB(resolutionKey, artifactName)
 }
 

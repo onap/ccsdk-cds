@@ -20,6 +20,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.TemplateResolution
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
 
 @Deprecated("Methods defined as extension function of AbstractComponentFunction")
@@ -50,7 +51,7 @@ abstract class NetconfComponentFunction : AbstractScriptComponentFunction() {
     @Deprecated(" Use storedContentFromResolvedArtifact method directly",
             replaceWith = ReplaceWith("storedContentFromResolvedArtifact(resolutionKey, artifactName)",
                     "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.storedContentFromResolvedArtifact"))
-    fun resolveFromDatabase(resolutionKey: String, artifactName: String): String = runBlocking {
+    fun resolveFromDatabase(resolutionKey: String, artifactName: String): List<TemplateResolution> = runBlocking {
         resourceResolutionService().resolveFromDatabase(bluePrintRuntimeService, artifactName, resolutionKey)
     }
 
