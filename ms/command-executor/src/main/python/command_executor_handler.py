@@ -15,11 +15,12 @@
 #
 from builtins import Exception, open, dict
 from subprocess import CalledProcessError, PIPE
+from google.protobuf.json_format import MessageToJson
 
 import logging
 import os
+import re
 import subprocess
-import sys
 import virtualenv
 import venv
 import utils
@@ -72,9 +73,8 @@ class CommandExecutorHandler():
         if "ansible-playbook" in request.command:
             cmd = cmd + "; " + request.command + " -e 'ansible_python_interpreter=" + self.venv_home + "/bin/python'"
         else:
-            cmd = cmd + "; " + request.command
+            cmd = cmd + "; " + request.command + " " + re.escape(MessageToJson(request.properties))
 
-        self.logger.info("Command: {}".format(cmd))
         try:
             with subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                                   shell=True, bufsize=1, universal_newlines=True) as newProcess:
