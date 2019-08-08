@@ -34,6 +34,7 @@
         <module>netconf-executor</module>
         <module>restconf-executor</module>
         <module>cli-executor</module>
+        <module>config-snapshots</module>
     </modules>
 
     <dependencies>
