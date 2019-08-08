@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "61235c44_4f13a0e0",
+        "filename": "ms/blueprintsprocessor/application/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-08T22:08:42Z",
+      "side": 1,
+      "message": "move this to dependencyManagement of parent pom. Then remove version here.",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 21
+      },
+      "revId": "47f98748607e4935458f0b19f13354cfc6331816",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "248da363_053d3492",
+        "filename": "ms/blueprintsprocessor/functions/config-snapshots/src/test/resources/payload/requests/interface-candidate.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-08T22:08:42Z",
+      "side": 1,
+      "message": "fix copyright header",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 5
+      },
+      "revId": "47f98748607e4935458f0b19f13354cfc6331816",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "96e3dac7_6b7749e8",
+        "filename": "ms/blueprintsprocessor/functions/config-snapshots/src/test/resources/payload/requests/interface-running.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-08T22:08:42Z",
+      "side": 1,
+      "message": "fix copyright header",
+      "revId": "47f98748607e4935458f0b19f13354cfc6331816",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
