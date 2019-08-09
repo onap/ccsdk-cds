@@ -52,7 +52,7 @@ fun File.compress(targetZipFileName: String): File {
  * Compress the current Dir to the target zip file and return the target zip file
  */
 fun File.compress(targetZipFile: File): File {
-    BluePrintArchiveUtils.compress(this, targetZipFile, true)
+    BluePrintArchiveUtils.compress(this, targetZipFile)
     return targetZipFile
 }
 

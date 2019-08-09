@@ -1,0 +1,34 @@
+%YAML 1.1
+---
+processes:
+  - name: echo-it
+    request:
+      commonHeader: &ch
+        originatorId: sdnc
+        requestId: "1234"
+        subRequestId: "1234-12234"
+      actionIdentifiers: &ai
+        blueprintName: echo_test
+        blueprintVersion: "1.0.0"
+        actionName: echo
+        mode: sync
+      payload:
+        echo-request:
+          echo-properties:
+            echoed-message: &message "Hello World!"
+    expectedResponse:
+      commonHeader: *ch
+      actionIdentifiers: *ai
+      status:
+        code: 200
+        eventType: EVENT_COMPONENT_EXECUTED
+        errorMessage: null
+        message: success
+      payload:
+        echo-response: {}
+      stepData:
+        name: echo
+        properties:
+          resource-assignment-params:
+            echo: *message
+          status: success
