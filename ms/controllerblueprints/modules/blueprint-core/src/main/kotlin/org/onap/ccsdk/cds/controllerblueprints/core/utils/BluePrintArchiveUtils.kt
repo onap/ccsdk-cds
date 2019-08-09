@@ -44,6 +44,9 @@ class BluePrintArchiveUtils {
          */
         fun compress(source: File, destination: File, absolute: Boolean): Boolean {
             try {
+                if(!destination.parentFile.exists()) {
+                    destination.parentFile.mkdirs()
+                }
                 destination.createNewFile()
                 ZipArchiveOutputStream(destination).use {
                     recurseFiles(source, source, it, absolute)
