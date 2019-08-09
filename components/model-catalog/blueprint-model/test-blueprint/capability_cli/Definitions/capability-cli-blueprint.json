@@ -90,7 +90,7 @@
                 },
                 "inputs": {
                   "script-type": "kotlin",
-                  "script-class-reference": "cba.scripts.capability.cli.Check"
+                  "script-class-reference": "cba.capability.cli.Check"
                 },
                 "outputs": {
                   "response-data": "",
