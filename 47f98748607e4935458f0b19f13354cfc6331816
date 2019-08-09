@@ -72,6 +72,52 @@
     },
     {
       "key": {
+        "uuid": "54823b45_79003891",
+        "filename": "ms/blueprintsprocessor/functions/config-snapshots/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-08-09T01:13:57Z",
+      "side": 1,
+      "message": "Please check with Dan, with License agrement and Security Vulnerability.\nManage versions in Parent POM",
+      "range": {
+        "startLine": 51,
+        "startChar": 12,
+        "endLine": 51,
+        "endChar": 33
+      },
+      "revId": "47f98748607e4935458f0b19f13354cfc6331816",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25da3e77_459e11a8",
+        "filename": "ms/blueprintsprocessor/functions/config-snapshots/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/config/snapshots/ComponentConfigSnapshotsExecutor.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-08-09T01:13:57Z",
+      "side": 1,
+      "message": "Pls use OUTPUT Prefix",
+      "range": {
+        "startLine": 74,
+        "startChar": 18,
+        "endLine": 74,
+        "endChar": 26
+      },
+      "revId": "47f98748607e4935458f0b19f13354cfc6331816",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "248da363_053d3492",
         "filename": "ms/blueprintsprocessor/functions/config-snapshots/src/test/resources/payload/requests/interface-candidate.xml",
         "patchSetId": 2
@@ -151,6 +197,29 @@
       "revId": "47f98748607e4935458f0b19f13354cfc6331816",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "14770a3e_7652ad48",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/configs-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/configs/api/ResourceConfigSnapshotController.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-08-09T01:13:57Z",
+      "side": 1,
+      "message": "\"Success\".asJsonPrimitive(), \n\nSuggestion to use extension functions and avoid JacksonUtils directly, if possible.",
+      "range": {
+        "startLine": 50,
+        "startChar": 33,
+        "endLine": 50,
+        "endChar": 42
+      },
+      "revId": "47f98748607e4935458f0b19f13354cfc6331816",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
