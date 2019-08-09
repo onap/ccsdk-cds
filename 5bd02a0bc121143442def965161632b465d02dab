@@ -22,6 +22,30 @@
       "revId": "5bd02a0bc121143442def965161632b465d02dab",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7263c93_b33e588d",
+        "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/utils/JacksonUtils.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-08-09T19:12:42Z",
+      "side": 1,
+      "message": "Yes, this will be done in different patch for different use case.",
+      "parentUuid": "2c872bd7_6d0e4bbe",
+      "range": {
+        "startLine": 228,
+        "startChar": 8,
+        "endLine": 237,
+        "endChar": 9
+      },
+      "revId": "5bd02a0bc121143442def965161632b465d02dab",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
