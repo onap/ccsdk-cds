@@ -25,6 +25,53 @@
     },
     {
       "key": {
+        "uuid": "709c3966_b324e970",
+        "filename": "ms/blueprintsprocessor/application/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2019-08-09T01:10:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61235c44_4f13a0e0",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 21
+      },
+      "revId": "47f98748607e4935458f0b19f13354cfc6331816",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "21b86d2f_86f8e1d8",
+        "filename": "ms/blueprintsprocessor/application/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2019-08-09T01:10:15Z",
+      "side": 1,
+      "message": "Done here too.",
+      "range": {
+        "startLine": 99,
+        "startChar": 20,
+        "endLine": 99,
+        "endChar": 56
+      },
+      "revId": "47f98748607e4935458f0b19f13354cfc6331816",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "248da363_053d3492",
         "filename": "ms/blueprintsprocessor/functions/config-snapshots/src/test/resources/payload/requests/interface-candidate.xml",
         "patchSetId": 2
@@ -48,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "709fa906_8ab6ed66",
+        "filename": "ms/blueprintsprocessor/functions/config-snapshots/src/test/resources/payload/requests/interface-candidate.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2019-08-09T01:10:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "248da363_053d3492",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 5
+      },
+      "revId": "47f98748607e4935458f0b19f13354cfc6331816",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "96e3dac7_6b7749e8",
         "filename": "ms/blueprintsprocessor/functions/config-snapshots/src/test/resources/payload/requests/interface-running.xml",
         "patchSetId": 2
@@ -59,6 +130,24 @@
       "writtenOn": "2019-08-08T22:08:42Z",
       "side": 1,
       "message": "fix copyright header",
+      "revId": "47f98748607e4935458f0b19f13354cfc6331816",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5c1415d4_6445405e",
+        "filename": "ms/blueprintsprocessor/functions/config-snapshots/src/test/resources/payload/requests/interface-running.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 2847
+      },
+      "writtenOn": "2019-08-09T01:10:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96e3dac7_6b7749e8",
       "revId": "47f98748607e4935458f0b19f13354cfc6331816",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
