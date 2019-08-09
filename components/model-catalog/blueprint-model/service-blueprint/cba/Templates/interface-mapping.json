@@ -1,0 +1,60 @@
+[
+  {
+    "name": "active",
+    "property": {
+      "type": "string",
+      "default": "act"
+    },
+    "dictionary-name": "default",
+    "dictionary-source": "default",
+    "dependencies": [
+
+    ]
+  },
+  {
+    "name": "name",
+    "property": {
+      "type": "string",
+      "default": "Loopback0"
+    },
+    "dictionary-name": "default",
+    "dictionary-source": "default",
+    "dependencies": [
+
+    ]
+  },
+  {
+    "name": "mask",
+    "property": {
+      "type": "string",
+      "default": "255.255.255.255"
+    },
+    "dictionary-name": "default",
+    "dictionary-source": "default",
+    "dependencies": [
+
+    ]
+  },
+  {
+    "name": "ipv4_network",
+    "property": {
+      "type": "boolean",
+      "default": "true"
+    },
+    "dictionary-name": "default",
+    "dictionary-source": "default",
+    "dependencies": [
+    ]
+  },
+  {
+    "name": "address",
+    "property": {
+      "type": "string",
+      "default": "4.4.4.4/3"
+    },
+    "dictionary-name": "default",
+    "dictionary-source": "default",
+    "dependencies": [
+    ]
+  }
+]

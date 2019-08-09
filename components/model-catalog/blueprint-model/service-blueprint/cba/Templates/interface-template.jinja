@@ -1,0 +1,78 @@
+  <interface-configurations xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-ifmgr-cfg">
+    <interface-configuration>
+      <active>{{active}}</active>
+      <interface-name>{{name}}</interface-name>
+      {%- if description %}   
+      <description>{{description}}</description>
+      {%- endif  %}
+      {%- if virtual %}   
+      <interface-virtual></interface-virtual>
+      {%- endif  %}
+      {%- if mtus %}   
+      <mtus>
+        <mtu>
+          <owner>{{name.split('0')[0]}}</owner>
+          <mtu>{{mtus}}</mtu>
+        </mtu>
+      </mtus>
+      {%- endif  %}
+      {%- if nonPhysIfMode %}
+      <interface-mode-non-physical>{{nonPhysIfMode}}</interface-mode-non-physical>
+      {%- endif  %}
+      {%- if Ethernet %}
+      <ethernet-service xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-l2-eth-infra-cfg">
+        <encapsulation>
+          <outer-tag-type>match-dot1q</outer-tag-type>
+          <outer-range1-low>{{name.split('.')[1]}}</outer-range1-low>
+        </encapsulation>
+        {%- if rewrite %}
+        <rewrite>
+          <rewrite-type>{{rewrite}}</rewrite-type>
+        </rewrite>
+        {%- endif %}
+      </ethernet-service>
+      {%- endif %}
+      {%- if bvi %}
+      <bvi xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-l2vpn-cfg">
+        <host-routing></host-routing>
+      </bvi>
+      {%- endif %}
+      {%- if vrf %}
+      <vrf xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-infra-rsi-cfg">{{vrf}}</vrf>
+      {%- endif %}
+      {%- if ipv4_network %}
+      <ipv4-network xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-ipv4-io-cfg">
+        <addresses>
+          <primary>
+    	<address>{{address|string|regex_replace('/.*$','')}}</address>
+    	<netmask>{{mask}}</netmask>
+          </primary>
+        </addresses>
+      </ipv4-network>
+      {%- endif %}
+      {%- if mac %}
+      <mac-addr xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-mdrv-lib-cfg">{{mac}}</mac-addr>
+      {%- endif %}
+      {%- if ipv4_packet_filter %}
+      <ipv4-packet-filter xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-ip-pfilter-cfg">
+        <inbound>
+          <acl-name-array>{{ipv4_packet_filter}}</acl-name-array>
+          <is-common-array>false</is-common-array>
+        </inbound>
+      </ipv4-packet-filter>
+      {%- endif %}
+      {%- if shutdown %}
+      <shutdown></shutdown>
+      {%- endif %}
+      {%- if statistics %}
+      <statistics xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-infra-statsd-cfg">
+        <load-interval>30</load-interval>
+      </statistics>
+      {%- endif %}
+      {%- if dampening %}
+      <dampening>
+        <args>default-values</args>
+      </dampening>
+      {%- endif %}
+    </interface-configuration>
+  </interface-configurations>
