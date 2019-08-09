@@ -33,7 +33,7 @@ class ComponentRemotePythonExecutorDSLTest {
     fun testNodeTemplateComponentRemotePythonExecutor() {
         val nodeTemplate = BluePrintTypes.nodeTemplateComponentRemotePythonExecutor("test-nodetemplate",
                 "test nodetemplate") {
-            operation("test operation") {
+            definedOperation("test operation") {
                 inputs {
                     endpointSelector("remote-container")
                     command("python sample.py")
