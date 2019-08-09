@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8e8af3ad_58c0c307",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/processor/RestResourceResolutionProcessor.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-08-09T17:29:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81554b10_af24777d",
+      "revId": "150455d02b9dee2f44fb7029761fd2e0470bf411",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9b90cf2f_525b1cf9",
         "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/processor/RestResourceResolutionProcessor.kt",
         "patchSetId": 1
@@ -30,6 +48,30 @@
       "writtenOn": "2019-08-07T14:56:02Z",
       "side": 1,
       "message": "don\u0027t duplicate the code.",
+      "range": {
+        "startLine": 178,
+        "startChar": 0,
+        "endLine": 196,
+        "endChar": 96
+      },
+      "revId": "150455d02b9dee2f44fb7029761fd2e0470bf411",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "05faa5ad_bb5c9f86",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/processor/RestResourceResolutionProcessor.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-08-09T17:29:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b90cf2f_525b1cf9",
       "range": {
         "startLine": 178,
         "startChar": 0,
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "726f2304_66e663b1",
+        "filename": "ms/blueprintsprocessor/modules/commons/rest-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/rest/BluePrintRestLibData.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-08-09T17:29:57Z",
+      "side": 1,
+      "message": "I will use TokenAuthRestClientProperties for Vault type Auth.",
+      "parentUuid": "0485ee96_d0e551e5",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 1
+      },
+      "revId": "150455d02b9dee2f44fb7029761fd2e0470bf411",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c019248_caffb0a1",
         "filename": "ms/blueprintsprocessor/modules/commons/rest-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/rest/service/VaultAuthRestClientService.kt",
         "patchSetId": 1
@@ -76,6 +142,30 @@
       "writtenOn": "2019-08-07T14:56:02Z",
       "side": 1,
       "message": "instead of creating a new token auth type, parameterize the header value for authorization within default token auth",
+      "range": {
+        "startLine": 27,
+        "startChar": 3,
+        "endLine": 27,
+        "endChar": 39
+      },
+      "revId": "150455d02b9dee2f44fb7029761fd2e0470bf411",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cf5e4daa_620f8f15",
+        "filename": "ms/blueprintsprocessor/modules/commons/rest-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/rest/service/VaultAuthRestClientService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-08-09T17:29:57Z",
+      "side": 1,
+      "message": "Good idea!",
+      "parentUuid": "7c019248_caffb0a1",
       "range": {
         "startLine": 27,
         "startChar": 3,
