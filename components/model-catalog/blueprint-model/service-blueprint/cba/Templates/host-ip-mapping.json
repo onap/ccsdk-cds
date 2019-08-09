@@ -1,0 +1,28 @@
+[
+  {
+    "name": "hostnames",
+    "property": {
+      "type": "list",
+      "entry_schema": {
+        "type": "string"
+      }
+    },
+    "dictionary-name": "input",
+    "dictionary-source": "input",
+    "dependencies": [
+    ]
+  },
+  {
+    "name": "hostIps",
+    "property": {
+      "type": "list",
+      "entry_schema": {
+        "type": "string"
+      }
+    },
+    "dictionary-name": "pnf-ips",
+    "dictionary-source": "capability",
+    "dependencies": [
+    ]
+  }
+]

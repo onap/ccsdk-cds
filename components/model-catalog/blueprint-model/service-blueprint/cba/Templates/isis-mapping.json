@@ -1,0 +1,12 @@
+[
+  {
+    "name": "netID",
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "sid",
+    "dictionary-source": "capability",
+    "dependencies": [
+    ]
+  }
+]

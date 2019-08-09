@@ -1,0 +1,220 @@
+{
+  "metadata": {
+    "template_author": "Alexis de Talhouët",
+    "author-email": "adetalhouet89@gmail.com",
+    "user-groups": "ADMIN, OPERATION",
+    "template_name": "stream5",
+    "template_version": "1.0.0",
+    "template_tags": "stream5"
+  },
+  "dsl_definitions": {
+    "ipam-ltec" : {
+      "type" : "token-auth",
+      "url" : "http://172.18.248.253:30420",
+      "token" : "Token 0123456789abcdef0123456789abcdef01234567"
+    },
+    "isis-commit-args" : {
+      "arg0" : {
+        "get_input" : "username"
+      },
+      "arg1" : {
+        "get_input" : "password"
+      },
+      "arg2" : {
+        "get_input" : "occurrence"
+      }
+    },
+    "isis-commit-props" : {
+      "config" : {
+        "get_attribute" : [ "assign-config", "assignment-params" ]
+      },
+      "ips" : {
+        "get_attribute" : [ "retrieve-ips", "assignment-params" ]
+      }
+    }
+  },
+  "topology_template": {
+    "workflows": {
+      "isis": {
+        "steps": {
+          "isis": {
+            "description": "isis Workflow",
+            "target": "isis-workflow"
+          }
+        },
+        "inputs": {
+          "resolution-key": {
+            "required": true,
+            "type": "string"
+          },
+          "occurrence": {
+            "required": true,
+            "type": "integer"
+          },
+          "hostnames": {
+            "required": true,
+            "type": "list",
+            "entry_schema": {
+              "type": "string"
+            }
+          },
+          "password": {
+            "required": true,
+            "type": "string"
+          },
+          "username": {
+            "required": true,
+            "type": "string"
+          }
+        }
+      }
+    },
+    "node_templates": {
+      "isis-workflow": {
+        "type": "dg-generic",
+        "properties": {
+          "content": {
+            "get_artifact": [
+              "SELF",
+              "dg-isis-workflow"
+            ]
+          },
+          "dependency-node-templates": [
+            "assign-config",
+            "retrieve-ips",
+            "isis-commit"
+          ]
+        },
+        "artifacts": {
+          "dg-isis-workflow": {
+            "type": "artifact-directed-graph",
+            "file": "Plans/isis.xml"
+          }
+        }
+      },
+      "assign-config": {
+        "type": "component-resource-resolution",
+        "interfaces": {
+          "ResourceResolutionComponent": {
+            "operations": {
+              "process": {
+                "inputs": {
+                  "resolution-key": {
+                    "get_input": "resolution-key"
+                  },
+                  "store-result": true,
+                  "occurrence": {
+                    "get_input": "occurrence"
+                  },
+                  "artifact-prefix-names": [
+                    "interface",
+                    "isis"
+                  ]
+                },
+                "outputs": {
+                  "status": "success",
+                  "resource-assignment-params": {
+                    "get_attribute": [
+                      "assign-config",
+                      "assignment-params"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "artifacts": {
+          "isis-template": {
+            "type": "artifact-template-jinja",
+            "file": "Templates/isis-template.jinja"
+          },
+          "isis-mapping": {
+            "type": "artifact-mapping-resource",
+            "file": "Templates/isis-mapping.json"
+          },
+          "interface-template": {
+            "type": "artifact-template-jinja",
+            "file": "Templates/interface-template.jinja"
+          },
+          "interface-mapping": {
+            "type": "artifact-mapping-resource",
+            "file": "Templates/interface-mapping.json"
+          }
+        }
+      },
+      "retrieve-ips": {
+        "type": "component-resource-resolution",
+        "interfaces": {
+          "ResourceResolutionComponent": {
+            "operations": {
+              "process": {
+                "inputs": {
+                  "resolution-key": {
+                    "get_input": "resolution-key"
+                  },
+                  "store-result": true,
+                  "artifact-prefix-names": [
+                    "host-ip"
+                  ]
+                },
+                "outputs": {
+                  "status": "success",
+                  "resource-assignment-params": {
+                    "get_attribute": [
+                      "retrieve-ips",
+                      "assignment-params"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "artifacts": {
+          "host-ip-template": {
+            "type": "artifact-template-jinja",
+            "file": "Templates/host-ip-template.jinja"
+          },
+          "host-ip-mapping": {
+            "type": "artifact-mapping-resource",
+            "file": "Templates/host-ip-mapping.json"
+          }
+        }
+      },
+      "isis-commit": {
+        "type": "component-remote-python-executor",
+        "interfaces": {
+          "ComponentRemotePythonExecutor": {
+            "operations": {
+              "process": {
+                "implementation": {
+                  "primary": "component-script"
+                },
+                "inputs": {
+                  "command": "python Commit.py",
+                  "argument-properties": "*isis-commit-args",
+                  "dynamic-properties" : "*isis-commit-props",
+                  "packages": [
+                    {
+                      "type": "pip",
+                      "package": [
+                        "ncclient"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "artifacts": {
+          "component-script": {
+            "type": "artifact-script-ansible",
+            "file": "Scripts/python/Commit.py"
+          }
+        }
+      }
+    }
+  }
+}
