@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33dec200_0dc09349",
+        "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/utils/BluePrintArchiveUtils.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 5447
+      },
+      "writtenOn": "2019-08-10T10:27:41Z",
+      "side": 1,
+      "message": "I can\u0027t see a cohesive relationship between this additional responsibility and the purpose of this compress() function.\nA natural pre-condition for this function is that the destination file can be created with success.",
+      "revId": "bf9424efd3f41893d2dfc0469fe934ce96199e6a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
