@@ -1,6 +1,6 @@
 /*
  *  Copyright © 2018 IBM.
- *  Modifications Copyright © 2017-2018 AT&T Intellectual Property.
+ *  Modifications Copyright © 2017-2018 AT&T Intellectual Property, Bell Canada.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor
 
-import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibGenericService
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.BluePrintDBLibPropertySevice
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.PrimaryDBLibGenericService
@@ -152,50 +151,13 @@ open class DatabaseResourceAssignmentProcessor(private val bluePrintDBLibPropert
         }
         logger.info("Response processing type($type)")
 
-        // Primitive Types
-        when (type) {
-            in BluePrintTypes.validPrimitiveTypes() -> {
-                val dbColumnValue = rows[0][outputKeyMapping[dName]]
-                logger.info("For template key (${resourceAssignment.name}) setting value as ($dbColumnValue)")
-                ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, dbColumnValue)
-            }
-            in BluePrintTypes.validCollectionTypes() -> {
-                val entrySchemaType = checkNotEmpty(resourceAssignment.property?.entrySchema?.type) {
-                    "Entry schema is not defined for dictionary ($dName) info"
-                }
-                val arrayNode = JacksonUtils.objectMapper.createArrayNode()
-                rows.forEach {
-                    if (entrySchemaType in BluePrintTypes.validPrimitiveTypes()) {
-                        val dbColumnValue = it[outputKeyMapping[dName]]
-                        // Add Array JSON
-                        JacksonUtils.populatePrimitiveValues(dbColumnValue!!, entrySchemaType, arrayNode)
-                    } else {
-                        val arrayChildNode = JsonNodeFactory.instance.objectNode()
-                        for (mapping in outputKeyMapping.entries) {
-                            val dbColumnValue = checkNotNull(it[mapping.key])
-                            val propertyTypeForDataType = ResourceAssignmentUtils.getPropertyType(raRuntimeService, entrySchemaType, mapping.key)
-                            JacksonUtils.populatePrimitiveValues(mapping.key, dbColumnValue, propertyTypeForDataType, arrayChildNode)
-                        }
-                        arrayNode.add(arrayChildNode)
-                    }
-                }
-                logger.info("For template key (${resourceAssignment.name}) setting value as ($arrayNode)")
-                // Set the List of Complex Values
-                ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, arrayNode)
-            }
-            else -> {
-                // Custom Simple Complex Types
-                val row = rows[0]
-                val objectNode = JacksonUtils.objectMapper.createObjectNode()
-                for (mapping in outputKeyMapping.entries) {
-                    val dbColumnValue = checkNotNull(row[mapping.value])
-                    val propertyTypeForDataType = ResourceAssignmentUtils.getPropertyType(raRuntimeService, type, mapping.key)
-                    JacksonUtils.populatePrimitiveValues(mapping.key, dbColumnValue, propertyTypeForDataType, objectNode)
-                }
-                logger.info("For template key (${resourceAssignment.name}) setting value as ($objectNode)")
-                ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, objectNode)
-            }
+        val responseNode = checkNotNull(JacksonUtils.getJsonNode(rows)) {
+            "Failed to get database query result into Json node."
         }
+
+        val parsedResponseNode = ResourceAssignmentUtils.parseResponseNode(responseNode, resourceAssignment,
+                raRuntimeService, outputKeyMapping)
+        ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, parsedResponseNode)
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {

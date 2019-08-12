@@ -19,6 +19,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.uti
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.databind.node.TextNode
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
@@ -26,6 +27,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.Reso
 import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonReactorUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.slf4j.LoggerFactory
@@ -187,6 +189,90 @@ class ResourceAssignmentUtils {
                 throw BluePrintProcessorException("${e.message}", e)
             }
             return type
+        }
+
+        @Throws(BluePrintProcessorException::class)
+        fun parseResponseNode(responseNode: JsonNode, resourceAssignment: ResourceAssignment,
+                              raRuntimeService: ResourceAssignmentRuntimeService, outputKeyMapping: MutableMap<String, String>): JsonNode {
+            val dName = resourceAssignment.dictionaryName
+            val dSource = resourceAssignment.dictionarySource
+            val type = nullToEmpty(resourceAssignment.property?.type)
+            lateinit var entrySchemaType: String
+            when (type) {
+                in BluePrintTypes.validPrimitiveTypes() -> {
+                    if (dSource !in ResourceResolutionConstants.DATA_DICTIONARY_SECRET_SOURCE_TYPES)
+                        logger.info("For template key (${resourceAssignment.name}) setting value as ($responseNode)")
+                    val result = if (responseNode is ArrayNode)
+                        responseNode.get(0)
+                    else
+                        responseNode
+                    return if (result.isComplexType()) {
+                        check(result.has(outputKeyMapping[dName])) {
+                            "Fail to find output key mapping ($dName) in result."
+                        }
+                        result[outputKeyMapping[dName]]
+                    } else {
+                        result
+                    }
+                }
+                in BluePrintTypes.validCollectionTypes() -> {
+                    // Array Types
+                    entrySchemaType = checkNotEmpty(resourceAssignment.property?.entrySchema?.type) {
+                        "Entry schema is not defined for dictionary ($dName) info"
+                    }
+                    val arrayNode = JacksonUtils.objectMapper.createArrayNode()
+                    lateinit var responseValueNode: JsonNode
+                    lateinit var propertyType: String
+                    outputKeyMapping.map {
+                        val arrayChildNode = JacksonUtils.objectMapper.createObjectNode()
+                        val responseArrayNode = responseNode.rootFieldsToMap()
+                        outer@ for ((key, responseSingleJsonNode) in responseArrayNode) {
+                            if (key == it.key) {
+                                if (entrySchemaType in BluePrintTypes.validPrimitiveTypes()) {
+                                    responseValueNode = responseSingleJsonNode
+                                    propertyType = entrySchemaType
+
+                                } else {
+                                    responseValueNode = responseSingleJsonNode.get(it.key)
+                                    propertyType = getPropertyType(raRuntimeService, entrySchemaType, it.key)
+                                }
+                                if (resourceAssignment.dictionarySource !in ResourceResolutionConstants.DATA_DICTIONARY_SECRET_SOURCE_TYPES)
+                                    logger.info("For List Type Resource: key (${it.key}), value ($responseValueNode), " +
+                                            "type  ({$propertyType})")
+                                JacksonUtils.populateJsonNodeValues(it.value,
+                                        responseValueNode, propertyType, arrayChildNode)
+                                arrayNode.add(arrayChildNode)
+                                break@outer
+                            }
+                        }
+                    }
+                    if (resourceAssignment.dictionarySource !in ResourceResolutionConstants.DATA_DICTIONARY_SECRET_SOURCE_TYPES)
+                        logger.info("For template key (${resourceAssignment.name}) setting value as ($arrayNode)")
+
+                    return arrayNode
+                }
+                else -> {
+                    // Complex Types
+                    entrySchemaType = checkNotEmpty(resourceAssignment.property?.type) {
+                        "Entry schema is not defined for dictionary ($dName) info"
+                    }
+                    val objectNode = JacksonUtils.objectMapper.createObjectNode()
+                    outputKeyMapping.map {
+                        val responseKeyValue = responseNode.get(it.key)
+                        val propertyTypeForDataType = ResourceAssignmentUtils
+                                .getPropertyType(raRuntimeService, entrySchemaType, it.key)
+
+                        if (resourceAssignment.dictionarySource !in ResourceResolutionConstants.DATA_DICTIONARY_SECRET_SOURCE_TYPES)
+                            logger.info("For List Type Resource: key (${it.key}), value ($responseKeyValue), type  ({$propertyTypeForDataType})")
+                        JacksonUtils.populateJsonNodeValues(it.value, responseKeyValue, propertyTypeForDataType, objectNode)
+                    }
+
+                    if (resourceAssignment.dictionarySource !in ResourceResolutionConstants.DATA_DICTIONARY_SECRET_SOURCE_TYPES)
+                        logger.info("For template key (${resourceAssignment.name}) setting value as ($objectNode)")
+
+                    return objectNode
+                }
+            }
         }
     }
 }

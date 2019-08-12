@@ -1,6 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
- * Modifications Copyright © 2019 IBM.
+ * Modifications Copyright © 2019 IBM, Bell Canada.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,5 @@ object ResourceResolutionConstants {
         const val RESOURCE_RESOLUTION_INPUT_OCCURRENCE = "occurrence"
         const val RESOURCE_RESOLUTION_INPUT_RESOURCE_ID = "resource-id"
         const val RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE = "resource-type"
-
-
+        val DATA_DICTIONARY_SECRET_SOURCE_TYPES = arrayOf("vault-data") //Add more secret data dictionary source type here
 }

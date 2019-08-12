@@ -137,64 +137,11 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
         }
         logger.info("populating value for output mapping ($outputKeyMapping), from json ($responseNode)")
 
+        val parsedResponseNode = ResourceAssignmentUtils.parseResponseNode(responseNode, resourceAssignment,
+                raRuntimeService, outputKeyMapping)
 
-        when (type) {
-            in BluePrintTypes.validPrimitiveTypes() -> {
-                logger.info("For template key (${resourceAssignment.name}) setting value as ($responseNode)")
-                ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, responseNode)
-            }
-            in BluePrintTypes.validCollectionTypes() -> {
-                // Array Types
-                entrySchemaType = checkNotEmpty(resourceAssignment.property?.entrySchema?.type) {
-                    "Entry schema is not defined for dictionary ($dName) info"
-                }
-                val arrayNode = JacksonUtils.objectMapper.createArrayNode()
-
-                if (entrySchemaType !in BluePrintTypes.validPrimitiveTypes()) {
-
-                    val responseArrayNode = responseNode.toList()
-                    for (responseSingleJsonNode in responseArrayNode) {
-
-                        val arrayChildNode = JacksonUtils.objectMapper.createObjectNode()
-
-                        outputKeyMapping.map {
-                            val responseKeyValue = responseSingleJsonNode.get(it.key)
-                            val propertyTypeForDataType = ResourceAssignmentUtils
-                                    .getPropertyType(raRuntimeService, entrySchemaType, it.key)
-
-                            logger.info("For List Type Resource: key (${it.key}), value ($responseKeyValue), " +
-                                    "type  ({$propertyTypeForDataType})")
-
-                            JacksonUtils.populateJsonNodeValues(it.value,
-                                    responseKeyValue, propertyTypeForDataType, arrayChildNode)
-                        }
-                        arrayNode.add(arrayChildNode)
-                    }
-                }
-                logger.info("For template key (${resourceAssignment.name}) setting value as ($arrayNode)")
-                // Set the List of Complex Values
-                ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, arrayNode)
-            }
-            else -> {
-                // Complex Types
-                entrySchemaType = checkNotEmpty(resourceAssignment.property?.type) {
-                    "Entry schema is not defined for dictionary ($dName) info"
-                }
-                val objectNode = JacksonUtils.objectMapper.createObjectNode()
-                outputKeyMapping.map {
-                    val responseKeyValue = responseNode.get(it.key)
-                    val propertyTypeForDataType = ResourceAssignmentUtils
-                            .getPropertyType(raRuntimeService, entrySchemaType, it.key)
-
-                    logger.info("For List Type Resource: key (${it.key}), value ($responseKeyValue), type  ({$propertyTypeForDataType})")
-                    JacksonUtils.populateJsonNodeValues(it.value, responseKeyValue, propertyTypeForDataType, objectNode)
-                }
-
-                logger.info("For template key (${resourceAssignment.name}) setting value as ($objectNode)")
-                // Set the List of Complex Values
-                ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, objectNode)
-            }
-        }
+        // Set the List of Complex Values
+        ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, parsedResponseNode)
     }
 
     @Throws(BluePrintProcessorException::class)
