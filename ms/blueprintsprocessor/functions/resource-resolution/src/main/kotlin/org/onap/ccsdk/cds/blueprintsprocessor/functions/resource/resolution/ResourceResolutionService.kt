@@ -47,7 +47,7 @@ interface ResourceResolutionService {
                                     resolutionKey: String): String
 
     suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
-                                 artifactNames: List<String>, properties: Map<String, Any>): MutableMap<String, JsonNode>
+                                 artifactNames: List<String>, properties: Map<String, Any>): MutableMap<String, String>
 
     suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
                                  artifactPrefix: String, properties: Map<String, Any>): String
@@ -93,17 +93,17 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
 
     override suspend fun resolveResources(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
                                           artifactNames: List<String>,
-                                          properties: Map<String, Any>): MutableMap<String, JsonNode> {
+                                          properties: Map<String, Any>): MutableMap<String, String> {
 
         val resourceAssignmentRuntimeService =
                 ResourceAssignmentUtils.transformToRARuntimeService(bluePrintRuntimeService, artifactNames.toString())
 
-        val resolvedParams: MutableMap<String, JsonNode> = hashMapOf()
+        val resolvedParams: MutableMap<String, String> = hashMapOf()
         artifactNames.forEach { artifactName ->
             val resolvedContent = resolveResources(resourceAssignmentRuntimeService, nodeTemplateName,
                     artifactName, properties)
 
-            resolvedParams[artifactName] = resolvedContent.asJsonType()
+            resolvedParams[artifactName] = resolvedContent
         }
         return resolvedParams
     }
