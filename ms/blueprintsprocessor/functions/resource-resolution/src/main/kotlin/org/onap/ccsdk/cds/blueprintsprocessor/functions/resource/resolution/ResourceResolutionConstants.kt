@@ -29,5 +29,4 @@ object ResourceResolutionConstants {
         const val RESOURCE_RESOLUTION_INPUT_OCCURRENCE = "occurrence"
         const val RESOURCE_RESOLUTION_INPUT_RESOURCE_ID = "resource-id"
         const val RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE = "resource-type"
-        val DATA_DICTIONARY_SECRET_SOURCE_TYPES = arrayOf("vault-data") //Add more secret data dictionary source type here
 }
