@@ -42,8 +42,8 @@ export class ResourceEditComponent implements OnInit {
     resources:IResources;
     data:IResources;
     rdState: Observable<IResourcesState>;
-    designerMode: boolean = false;
-    editorMode: boolean = true;
+    designerMode: boolean = true;
+    editorMode: boolean = false;
     viewText: string = "Open in Editor Mode";
     @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
     options = new JsonEditorOptions();
