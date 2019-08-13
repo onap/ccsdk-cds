@@ -238,14 +238,11 @@ class JacksonUtils {
 
         fun populatePrimitiveValues(key: String, value: Any, primitiveType: String, objectNode: ObjectNode) {
             when (primitiveType.toLowerCase()) {
-                BluePrintConstants.DATA_TYPE_STRING,
-                BluePrintConstants.DATA_TYPE_BOOLEAN,
-                BluePrintConstants.DATA_TYPE_INTEGER,
-                BluePrintConstants.DATA_TYPE_FLOAT,
-                BluePrintConstants.DATA_TYPE_DOUBLE,
-                BluePrintConstants.DATA_TYPE_TIMESTAMP ->
-                    objectNode.set(key, value.asJsonPrimitive())
-                else -> objectNode.set(key, value.asJsonType())
+                BluePrintConstants.DATA_TYPE_BOOLEAN -> objectNode.put(key, (value as BooleanNode).booleanValue())
+                BluePrintConstants.DATA_TYPE_INTEGER -> objectNode.put(key, (value as IntNode).intValue())
+                BluePrintConstants.DATA_TYPE_FLOAT -> objectNode.put(key, (value as FloatNode).floatValue())
+                BluePrintConstants.DATA_TYPE_DOUBLE -> objectNode.put(key, (value as DoubleNode).doubleValue())
+                else -> objectNode.put(key, (value as TextNode).textValue())
             }
         }
 
