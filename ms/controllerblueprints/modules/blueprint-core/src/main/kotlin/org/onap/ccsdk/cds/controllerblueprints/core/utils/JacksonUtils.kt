@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.node.*
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import jdk.nashorn.internal.runtime.regexp.joni.ast.StringNode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -238,45 +239,48 @@ class JacksonUtils {
 
         fun populatePrimitiveValues(key: String, value: Any, primitiveType: String, objectNode: ObjectNode) {
             when (primitiveType.toLowerCase()) {
-                BluePrintConstants.DATA_TYPE_STRING,
                 BluePrintConstants.DATA_TYPE_BOOLEAN,
                 BluePrintConstants.DATA_TYPE_INTEGER,
                 BluePrintConstants.DATA_TYPE_FLOAT,
                 BluePrintConstants.DATA_TYPE_DOUBLE,
-                BluePrintConstants.DATA_TYPE_TIMESTAMP ->
-                    objectNode.set(key, value.asJsonPrimitive())
-                else -> objectNode.set(key, value.asJsonType())
+                BluePrintConstants.DATA_TYPE_TIMESTAMP,
+                BluePrintConstants.DATA_TYPE_STRING->
+                    objectNode.set(key, value.asJsonType())
+                else -> throw BluePrintException("populatePrimitiveValues expected only primitive values! Received: ($value)")
             }
         }
 
         fun populatePrimitiveValues(value: Any, primitiveType: String, arrayNode: ArrayNode) {
             when (primitiveType.toLowerCase()) {
-                BluePrintConstants.DATA_TYPE_BOOLEAN -> arrayNode.add(value as Boolean)
-                BluePrintConstants.DATA_TYPE_INTEGER -> arrayNode.add(value as Int)
-                BluePrintConstants.DATA_TYPE_FLOAT -> arrayNode.add(value as Float)
-                BluePrintConstants.DATA_TYPE_DOUBLE -> arrayNode.add(value as Double)
-                BluePrintConstants.DATA_TYPE_TIMESTAMP -> arrayNode.add(value as String)
-                else -> arrayNode.add(value as String)
+                BluePrintConstants.DATA_TYPE_BOOLEAN,
+                BluePrintConstants.DATA_TYPE_INTEGER,
+                BluePrintConstants.DATA_TYPE_FLOAT,
+                BluePrintConstants.DATA_TYPE_DOUBLE,
+                BluePrintConstants.DATA_TYPE_TIMESTAMP,
+                BluePrintConstants.DATA_TYPE_STRING -> arrayNode.add(value.asJsonType())
+                else -> throw BluePrintException("populatePrimitiveValues expected only primitive values! Received: ($value)")
             }
         }
 
         fun populatePrimitiveDefaultValues(key: String, primitiveType: String, objectNode: ObjectNode) {
             when (primitiveType.toLowerCase()) {
-                BluePrintConstants.DATA_TYPE_BOOLEAN -> objectNode.put(key, false)
-                BluePrintConstants.DATA_TYPE_INTEGER -> objectNode.put(key, 0)
-                BluePrintConstants.DATA_TYPE_FLOAT -> objectNode.put(key, 0.0)
-                BluePrintConstants.DATA_TYPE_DOUBLE -> objectNode.put(key, 0.0)
-                else -> objectNode.put(key, "")
+                BluePrintConstants.DATA_TYPE_BOOLEAN -> objectNode.set(key, false as BooleanNode)
+                BluePrintConstants.DATA_TYPE_INTEGER -> objectNode.set(key, 0 as IntNode)
+                BluePrintConstants.DATA_TYPE_FLOAT -> objectNode.set(key, 0.0 as FloatNode)
+                BluePrintConstants.DATA_TYPE_DOUBLE -> objectNode.set(key, 0.0 as DoubleNode)
+                BluePrintConstants.DATA_TYPE_STRING -> objectNode.set(key, "" as TextNode)
+                else -> throw BluePrintException("populatePrimitiveDefaultValues expected only primitive values! Received type ($primitiveType)")
             }
         }
 
         fun populatePrimitiveDefaultValuesForArrayNode(primitiveType: String, arrayNode: ArrayNode) {
             when (primitiveType.toLowerCase()) {
-                BluePrintConstants.DATA_TYPE_BOOLEAN -> arrayNode.add(false)
-                BluePrintConstants.DATA_TYPE_INTEGER -> arrayNode.add(0)
-                BluePrintConstants.DATA_TYPE_FLOAT -> arrayNode.add(0.0)
-                BluePrintConstants.DATA_TYPE_DOUBLE -> arrayNode.add(0.0)
-                else -> arrayNode.add("")
+                BluePrintConstants.DATA_TYPE_BOOLEAN -> arrayNode.add(false as BooleanNode)
+                BluePrintConstants.DATA_TYPE_INTEGER -> arrayNode.add(0 as IntNode)
+                BluePrintConstants.DATA_TYPE_FLOAT -> arrayNode.add(0.0 as FloatNode)
+                BluePrintConstants.DATA_TYPE_DOUBLE -> arrayNode.add(0.0 as DoubleNode)
+                BluePrintConstants.DATA_TYPE_STRING -> arrayNode.add("" as TextNode)
+                else -> throw BluePrintException("populatePrimitiveDefaultValuesForArrayNode expected only primitive values! Received type ($primitiveType)")
             }
         }
 
@@ -292,10 +296,12 @@ class JacksonUtils {
 
         fun convertPrimitiveResourceValue(type: String, value: String): JsonNode {
             return when (type.toLowerCase()) {
-                BluePrintConstants.DATA_TYPE_BOOLEAN -> jsonNodeFromObject(java.lang.Boolean.valueOf(value))
-                BluePrintConstants.DATA_TYPE_INTEGER -> jsonNodeFromObject(Integer.valueOf(value))
-                BluePrintConstants.DATA_TYPE_FLOAT -> jsonNodeFromObject(java.lang.Float.valueOf(value))
-                BluePrintConstants.DATA_TYPE_DOUBLE -> jsonNodeFromObject(java.lang.Double.valueOf(value))
+                BluePrintConstants.DATA_TYPE_BOOLEAN -> jsonNodeFromObject(value.toBoolean())
+                BluePrintConstants.DATA_TYPE_INTEGER -> jsonNodeFromObject(value.toInt())
+                BluePrintConstants.DATA_TYPE_FLOAT -> jsonNodeFromObject(value.toFloat())
+                BluePrintConstants.DATA_TYPE_DOUBLE -> jsonNodeFromObject(value.toDouble())
+                //TODO: Verify.. I assume string type should be here..
+                BluePrintConstants.DATA_TYPE_STRING -> jsonNodeFromObject(value)
                 else -> getJsonNode(value)
             }
         }
