@@ -15,14 +15,20 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.services.workflow
 
+import io.mockk.every
+import io.mockk.mockkObject
+import io.mockk.unmockkAll
 import kotlinx.coroutines.runBlocking
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.blueprintsprocessor.services.workflow.mock.MockComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.assertEquals
@@ -32,8 +38,16 @@ import kotlin.test.assertNotNull
 @ContextConfiguration(classes = [WorkflowServiceConfiguration::class])
 
 class NodeTemplateExecutionServiceTest {
-    @Autowired
-    lateinit var nodeTemplateExecutionService: NodeTemplateExecutionService
+    @Before
+    fun init() {
+        mockkObject(BluePrintDependencyService)
+        every { BluePrintDependencyService.applicationContext.getBean(any()) } returns MockComponentFunction()
+    }
+
+    @After
+    fun afterTests() {
+        unmockkAll()
+    }
 
     @Test
     fun testExecuteNodeTemplate() {
@@ -49,7 +63,7 @@ class NodeTemplateExecutionServiceTest {
             bluePrintRuntimeService.assignWorkflowInputs("resource-assignment", input)
 
             val nodeTemplate = "resource-assignment"
-
+            val nodeTemplateExecutionService = NodeTemplateExecutionService()
             val executionServiceOutput = nodeTemplateExecutionService
                     .executeNodeTemplate(bluePrintRuntimeService, nodeTemplate, executionServiceInput)
 
