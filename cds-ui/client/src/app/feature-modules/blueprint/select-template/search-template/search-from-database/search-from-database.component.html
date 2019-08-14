@@ -20,8 +20,8 @@ limitations under the License.
 -->
 <form class="search-form" [formGroup]="myControl">
     <mat-form-field class="search-full-width">
-        <input #resourceSelect type="text" [(ngModel)]="searchText" placeholder="Search Resources" matInput [matAutocomplete]="auto" formControlName="search_input">
-        <!-- <input #resourceSelect type="text" [(ngModel)]="searchText" placeholder="Search Resources" formControlName="search_input"> -->
+        <!-- <input #resourceSelect type="text" [(ngModel)]="searchText" placeholder="Search Resources" matInput [matAutocomplete]="auto" formControlName="search_input"> -->
+        <input matInput type="text" [(ngModel)]="searchText" placeholder="Search Resources" formControlName="search_input">
         <button matSuffix mat-icon-button (click)="fetchResourceByName()">
       <mat-icon>search</mat-icon>
     </button>
@@ -41,9 +41,9 @@ limitations under the License.
                     <br>{{option.blueprintModel.updatedBy}}
                 </mat-card-content>
                 <mat-card-actions class="flexBox">
-                    <button mat-menu-item (click)="editCBA(option.blueprintModel.artifactName,edit)">Edit</button>
-                    <button mat-menu-item (click)="editCBA(option.blueprintModel.artifactName,clone)">Clone</button>
-                    <button mat-menu-item (click)="editCBA(option.blueprintModel.artifactName,info)">Info</button>
+                    <button matStepperNext mat-menu-item (click)="editCBA(option.blueprintModel.artifactName,option.blueprintModel.artifactVersion,edit)">Edit</button>
+                    <button matStepperNext mat-menu-item (click)="editCBA(option.blueprintModel.artifactName,option.blueprintModel.artifactVersion,clone)">Clone</button>
+                    <button matStepperNext mat-menu-item (click)="editCBA(option.blueprintModel.artifactName,option.blueprintModel.artifactVersion,info)">Info</button>
                 </mat-card-actions>
             </mat-card>
         </div>

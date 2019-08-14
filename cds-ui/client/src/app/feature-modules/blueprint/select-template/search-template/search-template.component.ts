@@ -28,12 +28,9 @@ import { IBlueprint } from '../../../../common/core/store/models/blueprint.model
 import { IBlueprintState } from '../../../../common/core/store/models/blueprintState.model';
 import { IAppState } from '../../../../common/core/store/state/app.state';
 import { LoadBlueprintSuccess, SET_BLUEPRINT_STATE, SetBlueprintState } from '../../../../common/core/store/actions/blueprint.action';
-import { json } from 'd3';
 import { SortPipe } from '../../../../common/shared/pipes/sort.pipe';
 import { LoaderService } from '../../../../common/core/services/loader.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatAutocompleteTrigger } from '@angular/material';
-
 
 @Component({
   selector: 'app-search-template',
@@ -52,9 +49,8 @@ export class SearchTemplateComponent implements OnInit {
   result: string = '';
   @Input() optionSelected: string;
   myControl: FormGroup;
-  @ViewChild('resourceSelect', { read: MatAutocompleteTrigger }) resourceSelect: MatAutocompleteTrigger;
   @Output() resourcesData = new EventEmitter();
-  options: any[]   = [];
+  options: any[] = [];
   searchText: string = '';
 
   private paths = [];
@@ -66,7 +62,7 @@ export class SearchTemplateComponent implements OnInit {
   private blueprintName: string;
   private entryDefinition: string;
 
-  constructor(private store: Store<IAppState>, private loader: LoaderService,private formBuilder: FormBuilder) { }
+  constructor(private store: Store<IAppState>, private loader: LoaderService, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.myControl = this.formBuilder.group({
@@ -78,18 +74,6 @@ export class SearchTemplateComponent implements OnInit {
     this.resourcesData.emit(value);
   }
 
-  fetchResourceByName() {
-    // this.exsistingModelService.searchByTags(this.searchText)
-    //   .subscribe(data => {
-    //     console.log(data);
-    //     data.forEach(element => {
-    //       this.options.push(element)
-    //     });
-    //     this.resourceSelect.openPanel();
-    //   }, error => {
-    //     window.alert('error' + error);
-    //   })
-  }
   fileChanged(e: any) {
     this.paths = [];
     this.file = e.target.files[0];
@@ -97,8 +81,8 @@ export class SearchTemplateComponent implements OnInit {
     this.zipFile.files = {};
     this.zipFile.loadAsync(this.file)
       .then((zip) => {
-        if(zip) { 
-          this.loader.showLoader();           
+        if (zip) {
+          this.loader.showLoader();
           this.buildFileViewData(zip);
         }
       });
@@ -123,21 +107,21 @@ export class SearchTemplateComponent implements OnInit {
     this.paths = [];
     console.log(zip.files);
     for (var file in zip.files) {
-      console.log("name: " +zip.files[file].name);
+      console.log("name: " + zip.files[file].name);
       this.fileObject = {
         // nameForUIDisplay: this.uploadedFileName + '/' + zip.files[file].name,
         // name: zip.files[file].name,
         name: this.uploadedFileName + '/' + zip.files[file].name,
         data: ''
       };
-      const value = <any>await  zip.files[file].async('string');
+      const value = <any>await zip.files[file].async('string');
       this.fileObject.data = value;
-      this.paths.push(this.fileObject); 
+      this.paths.push(this.fileObject);
     }
 
-    if(this.paths) {
-      this.paths.forEach(path =>{
-        if(path.name.includes("TOSCA.meta")) {
+    if (this.paths) {
+      this.paths.forEach(path => {
+        if (path.name.includes("TOSCA.meta")) {
           this.validfile = true
         }
       });
@@ -145,7 +129,7 @@ export class SearchTemplateComponent implements OnInit {
       alert('Please update proper file');
     }
 
-    if(this.validfile) {      
+    if (this.validfile) {
       this.fetchTOSACAMetadata();
       this.paths = new SortPipe().transform(this.paths, 'asc', 'name');
       this.tree = this.arrangeTreeData(this.paths);
@@ -173,31 +157,31 @@ export class SearchTemplateComponent implements OnInit {
             name: part,
             children: [],
             data: path.data,
-            path : path.name
+            path: path.name
           };
-          if(part.trim() == this.blueprintName.trim()) { 
-            this.activationBlueprint = path.data; 
-            newPart.data = JSON.parse(this.activationBlueprint.toString());            
+          if (part.trim() == this.blueprintName.trim()) {
+            this.activationBlueprint = path.data;
+            newPart.data = JSON.parse(this.activationBlueprint.toString());
             console.log('newpart', newPart);
             this.entryDefinition = path.name.trim();
           }
-          if(newPart.name !== '') {            
-              currentLevel.push(newPart);
-              currentLevel = newPart.children;
+          if (newPart.name !== '') {
+            currentLevel.push(newPart);
+            currentLevel = newPart.children;
           }
         }
       });
-    });    
+    });
     this.loader.hideLoader();
     return tree;
   }
 
   fetchTOSACAMetadata() {
     let toscaData = {};
-    this.paths.forEach(file =>{
-      if(file.name.includes('TOSCA.meta')) {
+    this.paths.forEach(file => {
+      if (file.name.includes('TOSCA.meta')) {
         let keys = file.data.split("\n");
-        keys.forEach((key)=>{
+        keys.forEach((key) => {
           let propertyData = key.split(':');
           toscaData[propertyData[0]] = propertyData[1];
         });
