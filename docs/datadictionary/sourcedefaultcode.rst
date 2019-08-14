@@ -5,9 +5,10 @@
 Source Default code
 ===================
 
-{
-  "description": "This is Default Resource Source Node Type",
-  "version": "1.0.0",
-  "properties": {},
-  "derived_from": "tosca.nodes.ResourceSource"
-}
+.. code-block:: json
+   :linenos:
+
+   "description": "This is Default Resource Source Node Type",
+   "version": "1.0.0",
+   "properties": {},
+   "derived_from": "tosca.nodes.ResourceSource"
