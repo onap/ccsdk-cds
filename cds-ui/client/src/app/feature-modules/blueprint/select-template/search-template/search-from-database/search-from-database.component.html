@@ -32,7 +32,24 @@ limitations under the License.
     </mat-autocomplete> -->
     </mat-form-field>
 </form>
-<mat-grid-list cols="8">
+<div class="searchcontainer">
+    <div class="flexBox">
+        <div *ngFor="let option of options" style="position: relative !important;width:20% !important">
+            <mat-card class="example-card">
+                <mat-card-content class="card-content">
+                    {{option.blueprintModel.artifactName}}
+                    <br>{{option.blueprintModel.updatedBy}}
+                </mat-card-content>
+                <mat-card-actions class="flexBox">
+                    <button mat-menu-item (click)="editCBA(option.blueprintModel.artifactName,edit)">Edit</button>
+                    <button mat-menu-item (click)="editCBA(option.blueprintModel.artifactName,clone)">Clone</button>
+                    <button mat-menu-item (click)="editCBA(option.blueprintModel.artifactName,info)">Info</button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </div>
+</div>
+<!-- <mat-grid-list cols="8">
     <mat-grid-tile *ngFor="let option of options">
         <mat-card class="example-card">
             <mat-card-content class="card-content">
@@ -44,4 +61,4 @@ limitations under the License.
             </mat-card-actions>
         </mat-card>
     </mat-grid-tile>
-</mat-grid-list>
+</mat-grid-list> -->
