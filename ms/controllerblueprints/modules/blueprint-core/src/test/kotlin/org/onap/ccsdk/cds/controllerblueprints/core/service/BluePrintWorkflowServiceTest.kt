@@ -33,11 +33,11 @@ class BluePrintWorkflowServiceTest {
         runBlocking {
             val graph = "[START>A/SUCCESS, A>B/SUCCESS, B>C/SUCCESS, C>D/SUCCESS, D>E/SUCCESS, E>END/SUCCESS]"
                     .toGraph()
-            val simpleWorkflow = TestBluePrintWorkFlowService(graph)
+            val simpleWorkflow = TestBluePrintWorkFlowService()
             simpleWorkflow.simulatedState = prepareSimulation(arrayListOf("A", "B", "C", "D", "E"), null)
             val deferredOutput = CompletableDeferred<String>()
             val input = "123456"
-            simpleWorkflow.executeWorkflow(mockBluePrintRuntimeService(), input, deferredOutput)
+            simpleWorkflow.executeWorkflow(graph, mockBluePrintRuntimeService(), input, deferredOutput)
             val response = deferredOutput.await()
             assertNotNull(response, "failed to get response")
         }
@@ -48,11 +48,11 @@ class BluePrintWorkflowServiceTest {
         runBlocking {
             val graph = "[START>A/SUCCESS, A>B/SUCCESS, A>C/FAILURE, B>D/SUCCESS, C>D/SUCCESS, D>END/SUCCESS]"
                     .toGraph()
-            val simpleWorkflow = TestBluePrintWorkFlowService(graph)
+            val simpleWorkflow = TestBluePrintWorkFlowService()
             simpleWorkflow.simulatedState = prepareSimulation(arrayListOf("A", "B", "C", "D", "E"), null)
             val deferredOutput = CompletableDeferred<String>()
             val input = "123456"
-            simpleWorkflow.executeWorkflow(mockBluePrintRuntimeService(), input, deferredOutput)
+            simpleWorkflow.executeWorkflow(graph, mockBluePrintRuntimeService(), input, deferredOutput)
             val response = deferredOutput.await()
             assertNotNull(response, "failed to get response")
         }
@@ -64,12 +64,12 @@ class BluePrintWorkflowServiceTest {
             // Failure Flow
             val failurePatGraph = "[START>A/SUCCESS, A>B/SUCCESS, A>C/FAILURE, B>D/SUCCESS, C>D/SUCCESS, D>END/SUCCESS]"
                     .toGraph()
-            val failurePathWorkflow = TestBluePrintWorkFlowService(failurePatGraph)
+            val failurePathWorkflow = TestBluePrintWorkFlowService()
             failurePathWorkflow.simulatedState = prepareSimulation(arrayListOf("B", "C", "D", "E"),
                     arrayListOf("A"))
             val failurePathWorkflowDeferredOutput = CompletableDeferred<String>()
             val failurePathWorkflowInput = "123456"
-            failurePathWorkflow.executeWorkflow(mockBluePrintRuntimeService(), failurePathWorkflowInput, failurePathWorkflowDeferredOutput)
+            failurePathWorkflow.executeWorkflow(failurePatGraph, mockBluePrintRuntimeService(), failurePathWorkflowInput, failurePathWorkflowDeferredOutput)
             val failurePathResponse = failurePathWorkflowDeferredOutput.await()
             assertNotNull(failurePathResponse, "failed to get response")
         }
@@ -80,11 +80,11 @@ class BluePrintWorkflowServiceTest {
         runBlocking {
             val graph = "[START>A/SUCCESS, A>B/SUCCESS, A>C/FAILURE, C>D/SUCCESS, D>E/SUCCESS, B>E/SUCCESS, E>END/SUCCESS]"
                     .toGraph()
-            val simpleWorkflow = TestBluePrintWorkFlowService(graph)
+            val simpleWorkflow = TestBluePrintWorkFlowService()
             simpleWorkflow.simulatedState = prepareSimulation(arrayListOf("A", "B", "C", "D", "E"), null)
             val deferredOutput = CompletableDeferred<String>()
             val input = "123456"
-            simpleWorkflow.executeWorkflow(mockBluePrintRuntimeService(), input, deferredOutput)
+            simpleWorkflow.executeWorkflow(graph, mockBluePrintRuntimeService(), input, deferredOutput)
             val response = deferredOutput.await()
             assertNotNull(response, "failed to get response")
         }
@@ -95,11 +95,11 @@ class BluePrintWorkflowServiceTest {
         runBlocking {
             val graph = "[START>A/SUCCESS, A>B/SUCCESS, A>C/SUCCESS, B>D/SUCCESS, C>D/SUCCESS, D>END/SUCCESS]"
                     .toGraph()
-            val simpleWorkflow = TestBluePrintWorkFlowService(graph)
+            val simpleWorkflow = TestBluePrintWorkFlowService()
             simpleWorkflow.simulatedState = prepareSimulation(arrayListOf("A", "B", "C", "D"), null)
             val deferredOutput = CompletableDeferred<String>()
             val input = "123456"
-            simpleWorkflow.executeWorkflow(mockBluePrintRuntimeService(), input, deferredOutput)
+            simpleWorkflow.executeWorkflow(graph, mockBluePrintRuntimeService(), input, deferredOutput)
             val response = deferredOutput.await()
             assertNotNull(response, "failed to get response")
         }
@@ -123,8 +123,8 @@ class BluePrintWorkflowServiceTest {
     }
 }
 
-class TestBluePrintWorkFlowService(graph: Graph)
-    : AbstractBluePrintWorkFlowService<String, String>(graph) {
+class TestBluePrintWorkFlowService
+    : AbstractBluePrintWorkFlowService<String, String>() {
 
     lateinit var simulatedState: MutableMap<String, EdgeLabel>
 

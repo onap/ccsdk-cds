@@ -17,16 +17,17 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
-import org.slf4j.LoggerFactory
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.NullNode
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintRuntimeUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.slf4j.LoggerFactory
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
@@ -36,7 +37,7 @@ import kotlin.test.assertNotNull
  * @author Brinda Santh
  */
 class BluePrintRuntimeServiceTest {
-    private val log= LoggerFactory.getLogger(this::class.toString())
+    private val log = LoggerFactory.getLogger(this::class.toString())
 
     @Test
     fun `test Resolve NodeTemplate Properties`() {
@@ -167,11 +168,15 @@ class BluePrintRuntimeServiceTest {
     }
 
     private fun getBluePrintRuntimeService(): BluePrintRuntimeService<MutableMap<String, JsonNode>> {
-        val blueprintBasePath: String = ("./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+        val blueprintBasePath = normalizedPathName("./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
         val blueprintRuntime = BluePrintMetadataUtils.getBluePrintRuntime("1234", blueprintBasePath)
+        val checkProcessId = blueprintRuntime.get(BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID)
         val checkBasePath = blueprintRuntime.get(BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH)
 
-        assertEquals(blueprintBasePath.asJsonPrimitive(), checkBasePath, "Failed to get base path after runtime creation")
+        assertEquals("1234".asJsonPrimitive(),
+                checkProcessId, "Failed to get process id after runtime creation")
+        assertEquals(blueprintBasePath.asJsonPrimitive(),
+                checkBasePath, "Failed to get base path after runtime creation")
 
         return blueprintRuntime
     }
