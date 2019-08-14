@@ -29,9 +29,9 @@ import kotlin.coroutines.CoroutineContext
 
 interface BluePrintWorkFlowService<In, Out> {
 
-    /** Executes imperative workflow for the bluePrintRuntimeService [bluePrintRuntimeService] and workflow
-     * input [input], response will be retrieve from output [output]*/
-    suspend fun executeWorkflow(bluePrintRuntimeService: BluePrintRuntimeService<*>,
+    /** Executes imperative workflow graph [graph] for the bluePrintRuntimeService [bluePrintRuntimeService]
+     * and workflow input [input], response will be retrieve from output [output]*/
+    suspend fun executeWorkflow(graph: Graph, bluePrintRuntimeService: BluePrintRuntimeService<*>,
                                 input: In, output: CompletableDeferred<Out>)
 
     suspend fun initializeWorkflow(input: In): EdgeLabel
@@ -89,8 +89,9 @@ enum class EdgeAction(val id: String) {
 }
 
 /** Abstract workflow service implementation */
-abstract class AbstractBluePrintWorkFlowService<In, Out>(private val graph: Graph)
-    : CoroutineScope, BluePrintWorkFlowService<In, Out> {
+abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BluePrintWorkFlowService<In, Out> {
+
+    lateinit var graph: Graph
 
     private val log = logger(AbstractBluePrintWorkFlowService::class)
 
@@ -100,8 +101,6 @@ abstract class AbstractBluePrintWorkFlowService<In, Out>(private val graph: Grap
 
     final override val coroutineContext: CoroutineContext
         get() = job + CoroutineName("Wf")
-
-    val root = graph.startNodes()
 
     fun cancel() {
         log.info("Received workflow($workflowId) cancel request")
@@ -121,7 +120,7 @@ abstract class AbstractBluePrintWorkFlowService<In, Out>(private val graph: Grap
             // Prepare Workflow and Populate the Initial store
             initializeWorkflow(workflowExecuteMessage.input)
 
-            val startNode = root.first()
+            val startNode = graph.startNodes().first()
             // Prepare first node message and Send NodeExecuteMessage
             // Start node doesn't wait for any nodes, so we can pass Execute message directly
             val nodeExecuteMessage = prepareNodeExecutionMessage(startNode)
@@ -325,16 +324,12 @@ abstract class AbstractBluePrintWorkFlowService<In, Out>(private val graph: Grap
         }
     }
 
-
-    override suspend fun executeWorkflow(bluePrintRuntimeService: BluePrintRuntimeService<*>, input: In, output: CompletableDeferred<Out>) {
+    override suspend fun executeWorkflow(graph: Graph, bluePrintRuntimeService: BluePrintRuntimeService<*>,
+                                         input: In, output: CompletableDeferred<Out>) {
         log.info("Executing Graph : $graph")
+        this.graph = graph
         this.workflowId = bluePrintRuntimeService.id()
-        validateWorkflow()
         val startMessage = WorkflowExecuteMessage(input, output)
         workflowActor.send(startMessage)
-    }
-
-    open fun validateWorkflow() {
-        //check(!graph.findCycles().isNotEmpty()) { "Graph is cyclic, Cycle is not supported" }
     }
 }
