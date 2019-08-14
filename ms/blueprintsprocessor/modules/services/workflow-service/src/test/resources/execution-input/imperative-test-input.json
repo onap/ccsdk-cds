@@ -1,0 +1,18 @@
+{
+  "commonHeader": {
+    "originatorId": "System",
+    "requestId": "1234",
+    "subRequestId": "1234-12234"
+  },
+  "actionIdentifiers": {
+    "blueprintName": "imperative-test",
+    "blueprintVersion": "1.0.0",
+    "actionName": "test-wf",
+    "mode": "sync"
+  },
+  "payload": {
+    "test-wf-request": {
+      "hostname": "localhost"
+    }
+  }
+}

@@ -19,6 +19,8 @@ package org.onap.ccsdk.cds.blueprintsprocessor.services.workflow.mock
 
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.nodeTemplateComponentScriptExecutor
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
@@ -26,6 +28,16 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
+
+fun mockNodeTemplateComponentScriptExecutor(id: String, script: String) = BluePrintTypes.nodeTemplateComponentScriptExecutor(id,
+        "mock($id) component function") {
+    definedOperation("") {
+        inputs {
+            type("kotlin")
+            scriptClassReference(script)
+        }
+    }
+}
 
 @Configuration
 open class MockComponentConfiguration {
