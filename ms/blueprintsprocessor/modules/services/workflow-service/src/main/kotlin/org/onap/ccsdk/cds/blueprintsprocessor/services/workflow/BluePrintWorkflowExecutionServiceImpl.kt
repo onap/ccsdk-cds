@@ -29,8 +29,9 @@ import org.springframework.stereotype.Service
 
 @Service("bluePrintWorkflowExecutionService")
 open class BluePrintWorkflowExecutionServiceImpl(
-    private val componentWorkflowExecutionService: ComponentWorkflowExecutionService,
-    private val dgWorkflowExecutionService: DGWorkflowExecutionService
+        private val componentWorkflowExecutionService: ComponentWorkflowExecutionService,
+        private val dgWorkflowExecutionService: DGWorkflowExecutionService,
+        private val imperativeWorkflowExecutionService: ImperativeWorkflowExecutionService
 ) : BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput> {
 
     private val log = LoggerFactory.getLogger(BluePrintWorkflowExecutionServiceImpl::class.java)!!
@@ -51,28 +52,37 @@ open class BluePrintWorkflowExecutionServiceImpl(
         val input = executionServiceInput.payload.get("$workflowName-request")
         bluePrintRuntimeService.assignWorkflowInputs(workflowName, input)
 
-        // Get the DG Node Template
-        val nodeTemplateName = bluePrintContext.workflowFirstStepNodeTemplate(workflowName)
+        val workflow = bluePrintContext.workflowByName(workflowName)
 
-        val derivedFrom = bluePrintContext.nodeTemplateNodeType(nodeTemplateName).derivedFrom
+        val steps = workflow.steps ?: throw BluePrintProcessorException("could't get steps for workflow($workflowName)")
 
-        log.info("Executing workflow($workflowName) NodeTemplate($nodeTemplateName), derived from($derivedFrom)")
-
-        val executionServiceOutput: ExecutionServiceOutput = when {
-            derivedFrom.startsWith(BluePrintConstants.MODEL_TYPE_NODE_COMPONENT, true) -> {
-                componentWorkflowExecutionService
+        /** If workflow has multiple steps, then it is imperative workflow */
+        val executionServiceOutput: ExecutionServiceOutput = if (steps.size > 1) {
+            imperativeWorkflowExecutionService
                     .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, properties)
-            }
-            derivedFrom.startsWith(BluePrintConstants.MODEL_TYPE_NODE_WORKFLOW, true) -> {
-                dgWorkflowExecutionService
-                    .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, properties)
-            }
-            else -> {
-                throw BluePrintProcessorException("couldn't execute workflow($workflowName) step mapped " +
-                        "to node template($nodeTemplateName) derived from($derivedFrom)")
+        } else {
+            // Get the DG Node Template
+            val nodeTemplateName = bluePrintContext.workflowFirstStepNodeTemplate(workflowName)
+
+            val derivedFrom = bluePrintContext.nodeTemplateNodeType(nodeTemplateName).derivedFrom
+
+            log.info("Executing workflow($workflowName) NodeTemplate($nodeTemplateName), derived from($derivedFrom)")
+            /** Return ExecutionServiceOutput based on DG node or Component Node */
+            when {
+                derivedFrom.startsWith(BluePrintConstants.MODEL_TYPE_NODE_COMPONENT, true) -> {
+                    componentWorkflowExecutionService
+                            .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, properties)
+                }
+                derivedFrom.startsWith(BluePrintConstants.MODEL_TYPE_NODE_WORKFLOW, true) -> {
+                    dgWorkflowExecutionService
+                            .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, properties)
+                }
+                else -> {
+                    throw BluePrintProcessorException("couldn't execute workflow($workflowName) step mapped " +
+                            "to node template($nodeTemplateName) derived from($derivedFrom)")
+                }
             }
         }
-
         executionServiceOutput.commonHeader = executionServiceInput.commonHeader
         executionServiceOutput.actionIdentifiers = executionServiceInput.actionIdentifiers
         // Resolve Workflow Outputs

@@ -36,24 +36,20 @@ interface BluePrintWorkFlowService<In, Out> {
 
     suspend fun initializeWorkflow(input: In): EdgeLabel
 
-    suspend fun prepareWorkflowOutput(): Out
+    suspend fun prepareWorkflowOutput(exception: BluePrintProcessorException?): Out
 
     /** Prepare the message for the Node */
     suspend fun prepareNodeExecutionMessage(node: Graph.Node): NodeExecuteMessage<In, Out>
 
     suspend fun prepareNodeSkipMessage(node: Graph.Node): NodeSkipMessage<In, Out>
 
-    suspend fun executeNode(node: Graph.Node, nodeInput: In, deferredNodeOutput: CompletableDeferred<Out>,
-                            deferredNodeStatus: CompletableDeferred<EdgeLabel>)
+    suspend fun executeNode(node: Graph.Node, nodeInput: In, nodeOutput: Out): EdgeLabel
 
-    suspend fun skipNode(node: Graph.Node, nodeInput: In, deferredNodeOutput: CompletableDeferred<Out>,
-                         deferredNodeStatus: CompletableDeferred<EdgeLabel>)
+    suspend fun skipNode(node: Graph.Node, nodeInput: In, nodeOutput: Out): EdgeLabel
 
-    suspend fun cancelNode(node: Graph.Node, nodeInput: In, deferredNodeOutput: CompletableDeferred<Out>,
-                           deferredNodeStatus: CompletableDeferred<EdgeLabel>)
+    suspend fun cancelNode(node: Graph.Node, nodeInput: In, nodeOutput: Out): EdgeLabel
 
-    suspend fun restartNode(node: Graph.Node, nodeInput: In, deferredNodeOutput: CompletableDeferred<Out>,
-                            deferredNodeStatus: CompletableDeferred<EdgeLabel>)
+    suspend fun restartNode(node: Graph.Node, nodeInput: In, nodeOutput: Out): EdgeLabel
 
 }
 
@@ -71,17 +67,13 @@ sealed class NodeMessage<In, Out>
 
 class NodeReadyMessage<In, Out>(val fromEdge: Graph.Edge, val edgeAction: EdgeAction) : NodeMessage<In, Out>()
 
-class NodeExecuteMessage<In, Out>(val node: Graph.Node, val nodeInput: In,
-                                  val nodeOutput: CompletableDeferred<Out>) : NodeMessage<In, Out>()
+class NodeExecuteMessage<In, Out>(val node: Graph.Node, val nodeInput: In, val nodeOutput: Out) : NodeMessage<In, Out>()
 
-class NodeRestartMessage<In, Out>(val node: Graph.Node, val nodeInput: In,
-                                  val nodeOutput: CompletableDeferred<Out>) : NodeMessage<In, Out>()
+class NodeRestartMessage<In, Out>(val node: Graph.Node, val nodeInput: In, val nodeOutput: Out) : NodeMessage<In, Out>()
 
-class NodeSkipMessage<In, Out>(val node: Graph.Node, val nodeInput: In,
-                               val nodeOutput: CompletableDeferred<Out>) : NodeMessage<In, Out>()
+class NodeSkipMessage<In, Out>(val node: Graph.Node, val nodeInput: In, val nodeOutput: Out) : NodeMessage<In, Out>()
 
-class NodeCancelMessage<In, Out>(val node: Graph.Node, val nodeInput: In,
-                                 val nodeOutput: CompletableDeferred<Out>) : NodeMessage<In, Out>()
+class NodeCancelMessage<In, Out>(val node: Graph.Node, val nodeInput: In, val nodeOutput: Out) : NodeMessage<In, Out>()
 
 enum class EdgeAction(val id: String) {
     EXECUTE("execute"),
@@ -105,7 +97,7 @@ abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BlueP
     fun cancel() {
         log.info("Received workflow($workflowId) cancel request")
         job.cancel()
-        throw CancellationException("Workflow($workflowId) cancelled as requested ...")
+        throw CancellationException("Workflow($workflowId) cancelled as requested")
     }
 
     val workflowActor = actor<WorkflowMessage<In, Out>>(coroutineContext, Channel.UNLIMITED) {
@@ -131,7 +123,10 @@ abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BlueP
             nodeActor.invokeOnClose { exception ->
                 launch {
                     log.debug("End Node Completed, processing completion message")
-                    val workflowOutput = prepareWorkflowOutput()
+                    val bluePrintProcessorException: BluePrintProcessorException? =
+                            if (exception != null) BluePrintProcessorException(exception) else null
+
+                    val workflowOutput = prepareWorkflowOutput(bluePrintProcessorException)
                     workflowExecuteMessage.output.complete(workflowOutput)
                     channel.close(exception)
                 }
@@ -142,17 +137,17 @@ abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BlueP
         consumeEach { message ->
             when (message) {
                 is WorkflowExecuteMessage<In, Out> -> {
-                    launch {
+                    launch(job) {
                         executeMessageActor(message)
                     }
                 }
                 is WorkflowRestartMessage<In, Out> -> {
-                    launch {
+                    launch(job) {
                         TODO("")
                     }
                 }
                 is WorkflowCancelMessage<In, Out> -> {
-                    launch {
+                    launch(job) {
                         TODO("")
                     }
                 }
@@ -228,7 +223,7 @@ abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BlueP
             }
         }
 
-        fun executeNodeWorker(message: NodeExecuteMessage<In, Out>) = launch {
+        suspend fun executeNodeWorker(message: NodeExecuteMessage<In, Out>) {
             val node = message.node
             node.status = NodeStatus.EXECUTING
             val nodeState = if (node.id == BluePrintConstants.GRAPH_START_NODE_NAME
@@ -237,9 +232,7 @@ abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BlueP
             } else {
                 log.debug("##### Processing workflow($workflowId) node($node) #####")
                 // Call the Extension function and get the next Edge state.
-                val deferredNodeState = CompletableDeferred<EdgeLabel>()
-                executeNode(node, message.nodeInput, message.nodeOutput, deferredNodeState)
-                deferredNodeState.await()
+                executeNode(node, message.nodeInput, message.nodeOutput)
             }
             // Update Node Completed
             node.status = NodeStatus.EXECUTED
@@ -263,7 +256,7 @@ abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BlueP
             }
         }
 
-        fun skipNodeWorker(message: NodeSkipMessage<In, Out>) = launch {
+        suspend fun skipNodeWorker(message: NodeSkipMessage<In, Out>) {
             val node = message.node
             val incomingEdges = graph.incomingEdges(node.id)
             // Check All Incoming Nodes Skipped
@@ -275,9 +268,7 @@ abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BlueP
             if (nonSkippedEdges.isEmpty()) {
                 log.debug("$$$$$ Skipping workflow($workflowId) node($node) $$$$$")
                 // Call the Extension Function
-                val deferredNodeState = CompletableDeferred<EdgeLabel>()
-                skipNode(node, message.nodeInput, message.nodeOutput, deferredNodeState)
-                val nodeState = deferredNodeState.await()
+                val nodeState = skipNode(node, message.nodeInput, message.nodeOutput)
                 log.info("Skip Node($node) -> Executed State($nodeState)")
                 // Mark the Current node as Skipped
                 node.status = NodeStatus.SKIPPED
@@ -303,21 +294,37 @@ abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BlueP
             when (nodeMessage) {
                 is NodeReadyMessage<In, Out> -> {
                     // Blocking call
-                    readyNodeWorker(nodeMessage)
+                    try {
+                        readyNodeWorker(nodeMessage)
+                    } catch (e: Exception) {
+                        channel.close(e)
+                    }
                 }
                 is NodeExecuteMessage<In, Out> -> {
-                    launch {
-                        executeNodeWorker(nodeMessage)
+                    launch(job) {
+                        try {
+                            executeNodeWorker(nodeMessage)
+                        } catch (e: Exception) {
+                            channel.close(e)
+                        }
                     }
                 }
                 is NodeSkipMessage<In, Out> -> {
-                    launch {
-                        skipNodeWorker(nodeMessage)
+                    launch(job) {
+                        try {
+                            skipNodeWorker(nodeMessage)
+                        } catch (e: Exception) {
+                            channel.close(e)
+                        }
                     }
                 }
                 is NodeRestartMessage<In, Out> -> {
-                    launch {
-                        restartNodeWorker(nodeMessage)
+                    launch(job) {
+                        try {
+                            restartNodeWorker(nodeMessage)
+                        } catch (e: Exception) {
+                            channel.close(e)
+                        }
                     }
                 }
             }
