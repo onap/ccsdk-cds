@@ -29,7 +29,7 @@
       "required": true
     },
     "dictionary-name": "bundle-id",
-    "dictionary-source": "primary-config-data",
+    "dictionary-source": "config-data",
     "dependencies": [
       "vnf-id"
     ]
@@ -42,7 +42,7 @@
       "required": true
     },
     "dictionary-name": "bundle-ip",
-    "dictionary-source": "primary-config-data",
+    "dictionary-source": "config-data",
     "dependencies": [
       "vnf-id"
     ]
@@ -54,7 +54,7 @@
       "type": "string"
     },
     "dictionary-name": "bundle-mac",
-    "dictionary-source": "primary-config-data",
+    "dictionary-source": "config-data",
     "dependencies": [
       "vnf-id",
       "bundle-id"
@@ -67,7 +67,7 @@
       "type": "string"
     },
     "dictionary-name": "managed-ip",
-    "dictionary-source": "primary-config-data",
+    "dictionary-source": "config-data",
     "dependencies": [
       "loopback-ip"
     ]
@@ -90,7 +90,7 @@
       "type": "string"
     },
     "dictionary-name": "managed-ip1",
-    "dictionary-source": "primary-config-data",
+    "dictionary-source": "config-data",
     "dependencies": [
       "loopback-ip"
     ]
@@ -102,7 +102,7 @@
       "type": "string"
     },
     "dictionary-name": "loopback-ip",
-    "dictionary-source": "primary-db",
+    "dictionary-source": "processor-db",
     "dependencies": [
       "bundle-mac"
     ]

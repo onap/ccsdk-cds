@@ -17,7 +17,7 @@
       "properties": {
       }
     },
-    "primary-config-data" : {
+    "config-data" : {
       "type" : "source-rest",
       "properties" : {
         "type" : "JSON",

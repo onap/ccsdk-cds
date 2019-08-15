@@ -7,7 +7,7 @@
   },
   "updated-by": "brindasanth@onap.com",
   "sources": {
-    "primary-config-data": {
+    "config-data": {
       "type": "source-rest",
       "properties": {
         "type": "JSON",

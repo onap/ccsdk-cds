@@ -8,7 +8,7 @@
     },
     "updated-by" : "adetalhouet",
     "sources" : {
-      "primary-config-data" : {
+      "config-data" : {
         "type" : "source-rest",
         "properties" : {
           "type" : "JSON",
@@ -28,6 +28,31 @@
       }
     }
   },
+  "golden-vf-module-type" : {
+    "tags" : "golden-vf-module-type",
+    "name" : "golden-vf-module-type",
+    "property" : {
+      "description" : "golden-vf-module-type",
+      "type" : "string"
+    },
+    "updated-by" : "adetalhouet",
+    "sources" : {
+      "processor-db" : {
+        "type" : "source-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select sdnctl.demo.value as value from sdnctl.demo where sdnctl.demo.id=:vfmoduleid",
+          "input-key-mapping" : {
+            "vfmoduleid" : "vf-module-number"
+          },
+          "output-key-mapping" : {
+            "golden-vf-module-type" : "value"
+          },
+          "key-dependencies" : [ "vf-module-number" ]
+        }
+      }
+    }
+  },
   "hostname" : {
     "tags" : "hostname",
     "name" : "hostname",
@@ -35,7 +60,7 @@
       "description" : "hostname",
       "type" : "string"
     },
-    "updated-by" : "adetalhouet",
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
     "sources" : {
       "input" : {
         "type" : "source-input"
@@ -117,31 +142,6 @@
       "default" : {
         "type" : "source-default",
         "properties" : { }
-      }
-    }
-  },
-  "vf-module-type" : {
-    "tags" : "vf-module-type",
-    "name" : "vf-module-type",
-    "property" : {
-      "description" : "vf-module-type",
-      "type" : "string"
-    },
-    "updated-by" : "adetalhouet",
-    "sources" : {
-      "processor-db" : {
-        "type" : "source-processor-db",
-        "properties" : {
-          "type" : "SQL",
-          "query" : "select sdnctl.demo.value as value from sdnctl.demo where sdnctl.demo.id=:vfmoduleid",
-          "input-key-mapping" : {
-            "vfmoduleid" : "vf-module-number"
-          },
-          "output-key-mapping" : {
-            "vf-module-type" : "value"
-          },
-          "key-dependencies" : [ "vf-module-number" ]
-        }
       }
     }
   }

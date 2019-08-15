@@ -14,7 +14,7 @@ create_netbox_ip_address code
     },
     "updated-by" : "adetalhouet",
     "sources" : {
-      "primary-config-data" : {
+      "config-data" : {
         "type" : "source-rest",
         "properties" : {
           "type" : "JSON",
