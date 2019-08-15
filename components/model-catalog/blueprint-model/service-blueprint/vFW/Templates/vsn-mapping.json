@@ -65,7 +65,7 @@
     },
     "input-param": false,
     "dictionary-name": "vnf-name",
-    "dictionary-source": "primary-config-data",
+    "dictionary-source": "config-data",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -355,7 +355,7 @@
     },
     "input-param": false,
     "dictionary-name": "image_name",
-    "dictionary-source": "primary-config-data",
+    "dictionary-source": "config-data",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -406,7 +406,7 @@
     },
     "input-param": false,
     "dictionary-name": "key_name",
-    "dictionary-source": "primary-config-data",
+    "dictionary-source": "config-data",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -431,7 +431,7 @@
     },
     "input-param": false,
     "dictionary-name": "pub_key",
-    "dictionary-source": "primary-config-data",
+    "dictionary-source": "config-data",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -456,7 +456,7 @@
     },
     "input-param": false,
     "dictionary-name": "onap_private_net_id",
-    "dictionary-source": "primary-config-data",
+    "dictionary-source": "config-data",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -481,7 +481,7 @@
     },
     "input-param": false,
     "dictionary-name": "onap_private_subnet_id",
-    "dictionary-source": "primary-config-data",
+    "dictionary-source": "config-data",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -629,7 +629,7 @@
     },
     "input-param": false,
     "dictionary-name": "vfw_private_ip_1",
-    "dictionary-source": "primary-config-data",
+    "dictionary-source": "config-data",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
