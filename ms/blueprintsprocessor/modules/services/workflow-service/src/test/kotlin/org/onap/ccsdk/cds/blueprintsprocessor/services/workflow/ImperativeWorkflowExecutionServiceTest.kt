@@ -27,7 +27,9 @@ import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.nodeTypeCompone
 import org.onap.ccsdk.cds.blueprintsprocessor.services.workflow.mock.MockComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.workflow.mock.mockNodeTemplateComponentScriptExecutor
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ServiceTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.serviceTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
@@ -37,6 +39,7 @@ import kotlin.test.Test
 import kotlin.test.assertNotNull
 
 class ImperativeWorkflowExecutionServiceTest {
+    val log = logger(ImperativeWorkflowExecutionServiceTest::class)
 
     @Before
     fun init() {
@@ -49,37 +52,40 @@ class ImperativeWorkflowExecutionServiceTest {
         unmockkAll()
     }
 
+    fun mockServiceTemplate(): ServiceTemplate {
+        return serviceTemplate("imperative-test", "1.0.0",
+                "brindasanth@onap.com", "tosca") {
+
+            topologyTemplate {
+                nodeTemplate(mockNodeTemplateComponentScriptExecutor("resolve-config",
+                        "cba.wt.imperative.test.ResolveConfig"))
+                nodeTemplate(mockNodeTemplateComponentScriptExecutor("activate-config",
+                        "cba.wt.imperative.test.ActivateConfig"))
+                nodeTemplate(mockNodeTemplateComponentScriptExecutor("activate-config-rollback",
+                        "cba.wt.imperative.test.ActivateConfigRollback"))
+                nodeTemplate(mockNodeTemplateComponentScriptExecutor("activate-licence",
+                        "cba.wt.imperative.test.ActivateLicence"))
+
+                workflow("imperative-test-wf", "Test Imperative flow") {
+                    step("resolve-config", "resolve-config", "") {
+                        success("activate-config")
+                    }
+                    step("activate-config", "activate-config", "") {
+                        success("activate-licence")
+                        failure("activate-config-rollback")
+                    }
+                    step("activate-config-rollback", "activate-config-rollback", "")
+                    step("activate-licence", "activate-licence", "")
+                }
+            }
+            nodeType(BluePrintTypes.nodeTypeComponentScriptExecutor())
+        }
+    }
+
     @Test
     fun testImperativeExecutionService() {
         runBlocking {
-            val serviceTemplate = serviceTemplate("imperative-test", "1.0.0",
-                    "brindasanth@onap.com", "tosca") {
-
-                topologyTemplate {
-                    nodeTemplate(mockNodeTemplateComponentScriptExecutor("resolve-config",
-                            "cba.wt.imperative.test.ResolveConfig"))
-                    nodeTemplate(mockNodeTemplateComponentScriptExecutor("activate-config",
-                            "cba.wt.imperative.test.ActivateConfig"))
-                    nodeTemplate(mockNodeTemplateComponentScriptExecutor("activate-config-rollback",
-                            "cba.wt.imperative.test.ActivateConfigRollback"))
-                    nodeTemplate(mockNodeTemplateComponentScriptExecutor("activate-licence",
-                            "cba.wt.imperative.test.ActivateLicence"))
-
-                    workflow("test-wf", "Test Imperative flow") {
-                        step("resolve-config", "resolve-config", "") {
-                            success("activate-config")
-                        }
-                        step("activate-config", "activate-config", "") {
-                            success("activate-licence")
-                            failure("activate-config-rollback")
-                        }
-                        step("activate-config-rollback", "activate-config-rollback", "")
-                        step("activate-licence", "activate-licence", "")
-                    }
-                }
-                nodeType(BluePrintTypes.nodeTypeComponentScriptExecutor())
-            }
-
+            val serviceTemplate = mockServiceTemplate()
             val bluePrintContext = BluePrintContext(serviceTemplate)
             bluePrintContext.rootPath = normalizedPathName(".")
             bluePrintContext.entryDefinition = "cba.imperative.test.ImperativeTestDefinitions.kt"

@@ -462,6 +462,43 @@
             ]
           }
         }
+      },
+      "imperative-test-wf": {
+        "steps": {
+          "activate-step1": {
+            "description": "Activate CLI flow 1",
+            "target": "activate-cli",
+            "activities": [
+              {
+                "call_operation": "ComponentScriptExecutor.process"
+              }
+            ],
+            "on_success": [
+              "activate-step2"
+            ]
+          },
+          "activate-step2": {
+            "description": "Activate CLI flow 2",
+            "target": "activate-cli",
+            "activities": [
+              {
+                "call_operation": "ComponentScriptExecutor.process"
+              }
+            ],
+            "on_success": [
+              "activate-step3"
+            ]
+          },
+          "activate-step3": {
+            "description": "Activate CLI flow 3",
+            "target": "activate-cli",
+            "activities": [
+              {
+                "call_operation": "ComponentScriptExecutor.process"
+              }
+            ]
+          }
+        }
       }
     }
   }

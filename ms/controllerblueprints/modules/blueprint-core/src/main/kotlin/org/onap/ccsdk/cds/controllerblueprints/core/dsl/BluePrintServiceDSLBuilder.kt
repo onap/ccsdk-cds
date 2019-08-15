@@ -26,7 +26,7 @@ class ServiceTemplateBuilder(private val name: String,
                              private val author: String,
                              private val tags: String) {
     private var serviceTemplate = ServiceTemplate()
-    private lateinit var topologyTemplate: TopologyTemplate
+    private var topologyTemplate: TopologyTemplate? = null
     private var metadata: MutableMap<String, String> = hashMapOf()
     private var dslDefinitions: MutableMap<String, JsonNode>? = null
     private var imports: MutableList<ImportDefinition> = mutableListOf()

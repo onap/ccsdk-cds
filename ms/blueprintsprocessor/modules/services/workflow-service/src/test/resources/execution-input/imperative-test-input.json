@@ -7,11 +7,11 @@
   "actionIdentifiers": {
     "blueprintName": "imperative-test",
     "blueprintVersion": "1.0.0",
-    "actionName": "test-wf",
+    "actionName": "imperative-test-wf",
     "mode": "sync"
   },
   "payload": {
-    "test-wf-request": {
+    "imperative-test-wf-request": {
       "hostname": "localhost"
     }
   }

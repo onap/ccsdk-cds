@@ -22,6 +22,7 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.data.EdgeLabel
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Graph
 import org.onap.ccsdk.cds.controllerblueprints.core.toGraph
@@ -134,49 +135,41 @@ class TestBluePrintWorkFlowService
 
     override suspend fun prepareNodeExecutionMessage(node: Graph.Node)
             : NodeExecuteMessage<String, String> {
-        val deferredNodeOutput = CompletableDeferred<String>()
-        val nodeExecuteMessage = NodeExecuteMessage(node, "$node Input", deferredNodeOutput)
-        return nodeExecuteMessage
+        return NodeExecuteMessage(node, "$node Input", "")
     }
 
     override suspend fun executeNode(node: Graph.Node, nodeInput: String,
-                                     deferredNodeOutput: CompletableDeferred<String>,
-                                     deferredNodeStatus: CompletableDeferred<EdgeLabel>) {
+                                     nodeOutput: String): EdgeLabel {
 //        val random = (1..10).random() * 1000
 //        println("will reply in $random ms")
 //        kotlinx.coroutines.delay(random.toLong())
         val status = simulatedState[node.id] ?: throw BluePrintException("failed to get status for the node($node)")
-        deferredNodeStatus.complete(status)
-        deferredNodeOutput.complete("$node, Output: $nodeInput output")
+        return status
     }
 
-    override suspend fun prepareNodeSkipMessage(node: Graph.Node)
-            : NodeSkipMessage<String, String> {
-        val deferredNodeOutput = CompletableDeferred<String>()
-        val nodeSkipMessage = NodeSkipMessage(node, "$node Skip Input", deferredNodeOutput)
+    override suspend fun prepareNodeSkipMessage(node: Graph.Node): NodeSkipMessage<String, String> {
+        val nodeOutput = ""
+        val nodeSkipMessage = NodeSkipMessage(node, "$node Skip Input", nodeOutput)
         return nodeSkipMessage
     }
 
     override suspend fun skipNode(node: Graph.Node, nodeInput: String,
-                                  deferredNodeOutput: CompletableDeferred<String>,
-                                  deferredNodeStatus: CompletableDeferred<EdgeLabel>) {
+                                  nodeOutput: String): EdgeLabel {
         val status = simulatedState[node.id] ?: throw BluePrintException("failed to get status for the node($node)")
-        deferredNodeStatus.complete(status)
+        return status
     }
 
     override suspend fun cancelNode(node: Graph.Node, nodeInput: String,
-                                    deferredNodeOutput: CompletableDeferred<String>,
-                                    deferredNodeStatus: CompletableDeferred<EdgeLabel>) {
+                                    nodeOutput: String): EdgeLabel {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override suspend fun restartNode(node: Graph.Node, nodeInput: String,
-                                     deferredNodeOutput: CompletableDeferred<String>,
-                                     deferredNodeStatus: CompletableDeferred<EdgeLabel>) {
+                                     nodeOutput: String): EdgeLabel {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override suspend fun prepareWorkflowOutput(): String {
+    override suspend fun prepareWorkflowOutput(exception: BluePrintProcessorException?): String {
         return "Final Response"
     }
 }
