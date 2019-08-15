@@ -55,7 +55,7 @@
     },
     "input-param": false,
     "dictionary-name": "vlb_onap_private_ip_0",
-    "dictionary-source": "primary-config-data",
+    "dictionary-source": "config-data",
     "dependencies": [
       "service-instance-id",
       "vnf-id"

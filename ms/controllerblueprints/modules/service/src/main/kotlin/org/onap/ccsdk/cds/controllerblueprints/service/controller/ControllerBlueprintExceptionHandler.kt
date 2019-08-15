@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 @RestControllerAdvice("org.onap.ccsdk.cds.controllerblueprints")
 open class ControllerBlueprintExceptionHandler {
 
-    companion object ControllerBlueprintExeptionHandler {
+    companion object ControllerBlueprintExceptionHandler {
         val LOG = LoggerFactory.getLogger(ControllerBlueprintExceptionHandler::class.java)
     }
 
@@ -55,4 +55,3 @@ open class ControllerBlueprintExceptionHandler {
         return ResponseEntity(errorMessage, HttpStatus.resolve(errorCode!!.httpCode))
     }
 }
-

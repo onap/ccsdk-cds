@@ -101,12 +101,12 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
 
     fun workflowStepFirstCallOperation(workFlowName: String, stepName: String): String {
         return workflowStepByName(workFlowName, stepName).activities?.filter { it.callOperation != null }?.single()?.callOperation
-                ?: throw BluePrintException("could't get first callOperation for WorkFlow($workFlowName) ")
+                ?: throw BluePrintException("couldn't get first callOperation for WorkFlow($workFlowName) ")
     }
 
     // DSL
     fun dslPropertiesByName(name: String): JsonNode = dslDefinitions()?.get(name)
-            ?: throw BluePrintException("could't get policy type for the dsl($name)")
+            ?: throw BluePrintException("couldn't get policy type for the dsl($name)")
 
     // Data Type
     fun dataTypeByName(name: String): DataType? = dataTypes()?.get(name)

@@ -49,4 +49,3 @@ open class MySqlDataSourceProperties: DBDataSourceProperties() {
     lateinit var hibernateDialect: String
     override var driverClassName = DBLibConstants.DRIVER_MYSQL_DB
 }
-
