@@ -34,6 +34,12 @@
       "resolution-key": {
         "get_input": "resolution-key"
       }
+    },
+    "dynamic-db-source": {
+      "type": "maria-db",
+      "url": "jdbc:mysql://mysql:3306/sdnctl",
+      "username": "root",
+      "password": "sdnctl"
     }
   },
   "topology_template": {

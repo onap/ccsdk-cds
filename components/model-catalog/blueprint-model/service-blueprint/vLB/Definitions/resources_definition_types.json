@@ -546,7 +546,7 @@
         }
       },
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-db",
         "properties" : {
           "endpoint-selector" : "dynamic-db-source",
           "type" : "SQL",
@@ -646,7 +646,7 @@
         "properties" : { }
       },
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-db",
         "properties" : {
           "type" : "SQL",
           "query" : "select nfc_naming_code as nfc_naming_code from sdnctl.VFC_MODEL where customization_uuid=:vfccustomizationuuid",
@@ -679,7 +679,7 @@
         "properties" : { }
       },
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-db",
         "properties" : {
           "endpoint-selector" : "dynamic-db-source",
           "type" : "SQL",
@@ -831,7 +831,7 @@
         "properties" : { }
       },
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-db",
         "properties" : {
           "type" : "SQL",
           "query" : "select sdnctl.IPAM_IP_POOL.prefix as prefix from sdnctl.IPAM_IP_POOL where description = \"private2\"",
@@ -895,7 +895,7 @@
         }
       },
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-db",
         "properties" : {
           "endpoint-selector" : "dynamic-db-source",
           "type" : "SQL",
@@ -942,7 +942,7 @@
         }
       },
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-db",
         "properties" : {
           "endpoint-selector" : "dynamic-db-source",
           "type" : "SQL",
@@ -1074,7 +1074,7 @@
         "properties" : { }
       },
       "any-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-db",
         "properties" : {
           "query" : "SELECT artifact_name FROM BLUEPRINT_RUNTIME where artifact_version=\"1.0.0\"",
           "input-key-mapping" : { },
@@ -1084,7 +1084,7 @@
         }
       },
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-db",
         "properties" : {
           "query" : "SELECT artifact_name FROM BLUEPRINT_RUNTIME where artifact_version=\"1.0.0\"",
           "input-key-mapping" : { },
@@ -1325,7 +1325,7 @@
         "properties" : { }
       },
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-db",
         "properties" : {
           "type" : "SQL",
           "query" : "select sdnctl.VF_MODULE_MODEL.vf_module_label as vf_module_label from sdnctl.VF_MODULE_MODEL where sdnctl.VF_MODULE_MODEL.customization_uuid=:customizationid",
@@ -1376,7 +1376,7 @@
         "properties" : { }
       },
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-db",
         "properties" : {
           "type" : "SQL",
           "query" : "select vf_module_type as vf_module_type from sdnctl.VF_MODULE_MODEL where customization_uuid=:customizationid",
@@ -1423,7 +1423,7 @@
         }
       },
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-db",
         "properties" : {
           "endpoint-selector" : "dynamic-db-source",
           "type" : "SQL",
@@ -1474,7 +1474,7 @@
         "properties" : { }
       },
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-db",
         "properties" : {
           "endpoint-selector" : "dynamic-db-source",
           "type" : "SQL",
@@ -1717,7 +1717,7 @@
         "properties" : { }
       },
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-db",
         "properties" : {
           "endpoint-selector" : "dynamic-db-source",
           "type" : "SQL",
@@ -1764,7 +1764,7 @@
         "properties" : { }
       },
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-db",
         "properties" : {
           "type" : "SQL",
           "query" : "select VFC_MODEL.vm_type as vm_type from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
@@ -1882,7 +1882,7 @@
         "properties" : { }
       },
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-db",
         "properties" : {
           "type" : "SQL",
           "query" : "select VFC_MODEL.invariant_uuid as vfc_invariant_uuid from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
@@ -1915,7 +1915,7 @@
         "properties" : { }
       },
       "processor-db" : {
-        "type" : "source-processor-db",
+        "type" : "source-db",
         "properties" : {
           "endpoint-selector" : "dynamic-db-source",
           "type" : "SQL",
