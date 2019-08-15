@@ -27,7 +27,7 @@
         "properties": {}
       },
       "processor-db": {
-        "type": "source-processor-db",
+        "type": "source-db",
         "properties": {
           "endpoint-selector": "dynamic-db-source",
           "query": "SELECT artifact_name FROM sdnctl.BLUEPRINT_RUNTIME where artifact_version=\"1.0.0\"",
@@ -65,7 +65,7 @@
     },
     "updated-by": "Singal, Kapil <ks220y@att.com>",
     "sources": {
-      "primary-config-data": {
+      "config-data": {
         "type": "source-rest",
         "properties": {
           "verb": "GET",
@@ -96,7 +96,7 @@
     },
     "updated-by": "Steve, Siani <steve.djissitchi@bell.ca>",
     "sources": {
-      "primary-aai-data": {
+      "aai-data": {
         "type": "source-rest",
         "properties": {
           "type": "JSON",
@@ -124,7 +124,7 @@
     },
     "updated-by": "Steve, Siani <steve.djissitchi@bell.ca>",
     "sources": {
-      "primary-aai-data": {
+      "aai-data": {
         "type": "source-rest",
         "properties": {
           "type": "JSON",
@@ -154,7 +154,7 @@
     },
     "updated-by": "Steve, Siani <steve.djissitchi@bell.ca>",
     "sources": {
-      "primary-aai-data": {
+      "aai-data": {
         "type": "source-rest",
         "properties": {
           "type": "JSON",

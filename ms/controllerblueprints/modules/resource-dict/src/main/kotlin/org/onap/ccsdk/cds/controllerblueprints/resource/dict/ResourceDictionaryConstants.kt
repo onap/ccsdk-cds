@@ -24,11 +24,7 @@ package org.onap.ccsdk.cds.controllerblueprints.resource.dict
 object ResourceDictionaryConstants {
     const val SOURCE_INPUT = "input"
     const val SOURCE_DEFAULT = "default"
-    //const val SOURCE_PRIMARY_CONFIG_DATA = "rest"
-    const val SOURCE_PROCESSOR_DB = "processor-db"
-    const val SOURCE_PRIMARY_CONFIG_DATA = "primary-config-data"
-    const val SOURCE_PRIMARY_DB = "primary-db"
-    const val SOURCE_PRIMARY_AAI_DATA = "primary-aai-data"
+    const val SOURCE_DB = "source-db"
 
     const val MODEL_DIR_RESOURCE_DEFINITION: String = "resource_dictionary"
 

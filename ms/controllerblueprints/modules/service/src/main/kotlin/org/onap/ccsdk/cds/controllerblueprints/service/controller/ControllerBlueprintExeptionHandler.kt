@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ErrorCode
 import org.onap.ccsdk.cds.controllerblueprints.service.common.ErrorMessage
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -34,10 +35,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 @RestControllerAdvice("org.onap.ccsdk.cds.controllerblueprints")
 open class ControllerBlueprintExeptionHandler {
 
+    companion object ControllerBlueprintExeptionHandler {
+        val LOG = LoggerFactory.getLogger(ControllerBlueprintExeptionHandler::class.java)
+    }
+
     @ExceptionHandler
     fun ControllerBlueprintException(e: BluePrintException): ResponseEntity<ErrorMessage> {
         var errorCode = ErrorCode.valueOf(e.code)
         val errorMessage = ErrorMessage(errorCode?.message(e.message!!), errorCode?.value, "ControllerBluePrint_Error_Message")
+        LOG.error("Error: $errorCode ${e.message}")
         return ResponseEntity(errorMessage, HttpStatus.resolve(errorCode!!.httpCode))
     }
 
@@ -45,6 +51,7 @@ open class ControllerBlueprintExeptionHandler {
     fun ControllerBlueprintException(e: Exception): ResponseEntity<ErrorMessage> {
         var errorCode = ErrorCode.GENERIC_FAILURE
         val errorMessage = ErrorMessage(errorCode?.message(e.message!!), errorCode?.value, "ControllerBluePrint_Error_Message")
+        LOG.error("Error: $errorCode ${e.message}")
         return ResponseEntity(errorMessage, HttpStatus.resolve(errorCode!!.httpCode))
     }
 }

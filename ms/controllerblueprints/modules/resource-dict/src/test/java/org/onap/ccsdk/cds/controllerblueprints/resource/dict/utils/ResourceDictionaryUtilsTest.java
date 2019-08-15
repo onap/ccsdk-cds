@@ -60,9 +60,9 @@ public class ResourceDictionaryUtilsTest {
         Assert.assertEquals("Expected First source Default, but.", ResourceDictionaryConstants.SOURCE_DEFAULT, resourceAssignment.getDictionarySource());
 
         // To Check Assigned Source
-        resourceAssignment.setDictionarySource(ResourceDictionaryConstants.SOURCE_PROCESSOR_DB);
+        resourceAssignment.setDictionarySource(ResourceDictionaryConstants.SOURCE_DB);
         ResourceDictionaryUtils.populateSourceMapping(resourceAssignment, resourceDefinition);
-        Assert.assertEquals("Expected Assigned source DB, but.", ResourceDictionaryConstants.SOURCE_PROCESSOR_DB, resourceAssignment.getDictionarySource());
+        Assert.assertEquals("Expected Assigned source DB, but.", ResourceDictionaryConstants.SOURCE_DB, resourceAssignment.getDictionarySource());
 
     }
 
@@ -79,7 +79,7 @@ public class ResourceDictionaryUtilsTest {
         Assert.assertEquals("Expected source Input, but.", ResourceDictionaryConstants.SOURCE_INPUT, inputFirstSource);
 
         // TO check the multiple Source
-        sources.put(ResourceDictionaryConstants.SOURCE_PROCESSOR_DB, new NodeTemplate());
+        sources.put(ResourceDictionaryConstants.SOURCE_DB, new NodeTemplate());
         String multipleFirstSource = ResourceDictionaryUtils.findFirstSource(sources);
         Assert.assertEquals("Expected source Input, but.", ResourceDictionaryConstants.SOURCE_INPUT, multipleFirstSource);
 

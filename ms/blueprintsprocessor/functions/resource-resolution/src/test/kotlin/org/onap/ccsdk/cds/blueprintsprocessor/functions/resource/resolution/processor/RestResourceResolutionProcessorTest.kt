@@ -73,7 +73,7 @@ class RestResourceResolutionProcessorTest {
             val resourceAssignment = ResourceAssignment().apply {
                 name = "rr-name"
                 dictionaryName = "vnf_name"
-                dictionarySource = "primary-config-data"
+                dictionarySource = "config-data"
                 property = PropertyDefinition().apply {
                     type = "string"
                 }
@@ -106,7 +106,7 @@ class RestResourceResolutionProcessorTest {
             val resourceAssignment = ResourceAssignment().apply {
                 name = "rr-aai"
                 dictionaryName = "aai-get-resource"
-                dictionarySource = "primary-aai-data"
+                dictionarySource = "aai-data"
                 property = PropertyDefinition().apply {
                     type = "string"
                 }
@@ -139,7 +139,7 @@ class RestResourceResolutionProcessorTest {
             val resourceAssignment = ResourceAssignment().apply {
                 name = "rr-aai"
                 dictionaryName = "aai-put-resource"
-                dictionarySource = "primary-aai-data"
+                dictionarySource = "aai-data"
                 property = PropertyDefinition().apply {
                     type = "string"
                 }
