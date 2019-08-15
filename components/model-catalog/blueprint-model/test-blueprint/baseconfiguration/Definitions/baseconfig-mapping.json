@@ -27,7 +27,7 @@
       "type": "string"
     },
     "dictionary-name": "vnf_name",
-    "dictionary-source": "primary-config-data",
+    "dictionary-source": "config-data",
     "dependencies": [
       "service-instance-id",
       "vnf-id"

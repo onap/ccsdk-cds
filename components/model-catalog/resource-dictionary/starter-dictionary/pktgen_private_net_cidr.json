@@ -14,7 +14,7 @@
           "type": "source-default",
           "properties": {}
         },
-        "primary-config-data": {
+        "config-data": {
           "type": "source-rest",
           "properties": {
             "type": "JSON",
@@ -35,7 +35,7 @@
         },
       
       "processor-db": {
-        "type": "source-processor-db",
+        "type": "source-db",
         "properties": {
           "endpoint-selector": "dynamic-db-source",
           "type": "SQL",
@@ -48,4 +48,3 @@
       }
     }
   }
- 
