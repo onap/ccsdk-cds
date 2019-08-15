@@ -19,12 +19,11 @@ package org.onap.ccsdk.cds.blueprintsprocessor.services.workflow
 import kotlinx.coroutines.CompletableDeferred
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.asGraph
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.Status
+import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.data.EdgeLabel
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Graph
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintWorkflowExecutionService
-import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.service.*
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
@@ -32,7 +31,7 @@ import org.springframework.stereotype.Service
 
 @Service("imperativeWorkflowExecutionService")
 class ImperativeWorkflowExecutionService(
-        private val bluePrintWorkFlowService: BluePrintWorkFlowService<ExecutionServiceInput, ExecutionServiceOutput>)
+        private val imperativeBluePrintWorkflowService: BluePrintWorkFlowService<ExecutionServiceInput, ExecutionServiceOutput>)
     : BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput> {
 
     override suspend fun executeBluePrintWorkflow(bluePrintRuntimeService: BluePrintRuntimeService<*>,
@@ -46,7 +45,8 @@ class ImperativeWorkflowExecutionService(
         val graph = bluePrintContext.workflowByName(workflowName).asGraph()
 
         val deferredOutput = CompletableDeferred<ExecutionServiceOutput>()
-        bluePrintWorkFlowService.executeWorkflow(graph, bluePrintRuntimeService, executionServiceInput, deferredOutput)
+        imperativeBluePrintWorkflowService.executeWorkflow(graph, bluePrintRuntimeService,
+                executionServiceInput, deferredOutput)
         return deferredOutput.await()
     }
 }
@@ -59,6 +59,7 @@ open class ImperativeBluePrintWorkflowService(private val nodeTemplateExecutionS
 
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
     lateinit var executionServiceInput: ExecutionServiceInput
+    lateinit var workflowName: String
     lateinit var deferredExecutionServiceOutput: CompletableDeferred<ExecutionServiceOutput>
 
     override suspend fun executeWorkflow(graph: Graph, bluePrintRuntimeService: BluePrintRuntimeService<*>,
@@ -67,77 +68,81 @@ open class ImperativeBluePrintWorkflowService(private val nodeTemplateExecutionS
         this.graph = graph
         this.bluePrintRuntimeService = bluePrintRuntimeService
         this.executionServiceInput = input
+        this.workflowName = this.executionServiceInput.actionIdentifiers.actionName
         this.deferredExecutionServiceOutput = output
         this.workflowId = bluePrintRuntimeService.id()
         val startMessage = WorkflowExecuteMessage(input, output)
-        workflowActor.send(startMessage)
+        workflowActor().send(startMessage)
     }
 
     override suspend fun initializeWorkflow(input: ExecutionServiceInput): EdgeLabel {
         return EdgeLabel.SUCCESS
     }
 
-    override suspend fun prepareWorkflowOutput(): ExecutionServiceOutput {
+    override suspend fun prepareWorkflowOutput(exception: BluePrintProcessorException?): ExecutionServiceOutput {
+        val wfStatus = if (exception != null) {
+            val status = Status()
+            status.message = BluePrintConstants.STATUS_FAILURE
+            status.errorMessage = exception.message
+            status
+        } else {
+            val status = Status()
+            status.message = BluePrintConstants.STATUS_SUCCESS
+            status
+        }
         return ExecutionServiceOutput().apply {
             commonHeader = executionServiceInput.commonHeader
             actionIdentifiers = executionServiceInput.actionIdentifiers
+            status = wfStatus
         }
     }
 
     override suspend fun prepareNodeExecutionMessage(node: Graph.Node)
             : NodeExecuteMessage<ExecutionServiceInput, ExecutionServiceOutput> {
-        val deferredOutput = CompletableDeferred<ExecutionServiceOutput>()
-        return NodeExecuteMessage(node, executionServiceInput, deferredOutput)
+        val nodeOutput = ExecutionServiceOutput().apply {
+            commonHeader = executionServiceInput.commonHeader
+            actionIdentifiers = executionServiceInput.actionIdentifiers
+        }
+        return NodeExecuteMessage(node, executionServiceInput, nodeOutput)
     }
 
     override suspend fun prepareNodeSkipMessage(node: Graph.Node)
             : NodeSkipMessage<ExecutionServiceInput, ExecutionServiceOutput> {
-        val deferredOutput = CompletableDeferred<ExecutionServiceOutput>()
-        return NodeSkipMessage(node, executionServiceInput, deferredOutput)
+        val nodeOutput = ExecutionServiceOutput().apply {
+            commonHeader = executionServiceInput.commonHeader
+            actionIdentifiers = executionServiceInput.actionIdentifiers
+        }
+        return NodeSkipMessage(node, executionServiceInput, nodeOutput)
     }
 
     override suspend fun executeNode(node: Graph.Node, nodeInput: ExecutionServiceInput,
-                                     deferredNodeOutput: CompletableDeferred<ExecutionServiceOutput>,
-                                     deferredNodeStatus: CompletableDeferred<EdgeLabel>) {
-        try {
-            val nodeTemplateName = node.id
-            /** execute node template */
-            val executionServiceOutput = nodeTemplateExecutionService
-                    .executeNodeTemplate(bluePrintRuntimeService, nodeTemplateName, nodeInput)
-            val edgeStatus = when (executionServiceOutput.status.message) {
-                BluePrintConstants.STATUS_FAILURE -> EdgeLabel.FAILURE
-                else -> EdgeLabel.SUCCESS
-            }
-            /** set deferred output and status */
-            deferredNodeOutput.complete(executionServiceOutput)
-            deferredNodeStatus.complete(edgeStatus)
-        } catch (e: Exception) {
-            log.error("failed in executeNode($node)", e)
-            deferredNodeOutput.completeExceptionally(e)
-            deferredNodeStatus.complete(EdgeLabel.FAILURE)
+                                     nodeOutput: ExecutionServiceOutput): EdgeLabel {
+        log.info("Executing workflow($workflowName[${this.workflowId}])'s step($${node.id})")
+        val step = bluePrintRuntimeService.bluePrintContext().workflowStepByName(this.workflowName, node.id)
+        checkNotEmpty(step.target) { "couldn't get step target for workflow(${this.workflowName})'s step(${node.id})" }
+        val nodeTemplateName = step.target!!
+        /** execute node template */
+        val executionServiceOutput = nodeTemplateExecutionService
+                .executeNodeTemplate(bluePrintRuntimeService, nodeTemplateName, nodeInput)
+
+        return when (executionServiceOutput.status.message) {
+            BluePrintConstants.STATUS_FAILURE -> EdgeLabel.FAILURE
+            else -> EdgeLabel.SUCCESS
         }
     }
 
     override suspend fun skipNode(node: Graph.Node, nodeInput: ExecutionServiceInput,
-                                  deferredNodeOutput: CompletableDeferred<ExecutionServiceOutput>,
-                                  deferredNodeStatus: CompletableDeferred<EdgeLabel>) {
-        val executionServiceOutput = ExecutionServiceOutput().apply {
-            commonHeader = nodeInput.commonHeader
-            actionIdentifiers = nodeInput.actionIdentifiers
-        }
-        deferredNodeOutput.complete(executionServiceOutput)
-        deferredNodeStatus.complete(EdgeLabel.SUCCESS)
+                                  nodeOutput: ExecutionServiceOutput): EdgeLabel {
+        return EdgeLabel.SUCCESS
     }
 
     override suspend fun cancelNode(node: Graph.Node, nodeInput: ExecutionServiceInput,
-                                    deferredNodeOutput: CompletableDeferred<ExecutionServiceOutput>,
-                                    deferredNodeStatus: CompletableDeferred<EdgeLabel>) {
+                                    nodeOutput: ExecutionServiceOutput): EdgeLabel {
         TODO("not implemented")
     }
 
     override suspend fun restartNode(node: Graph.Node, nodeInput: ExecutionServiceInput,
-                                     deferredNodeOutput: CompletableDeferred<ExecutionServiceOutput>,
-                                     deferredNodeStatus: CompletableDeferred<EdgeLabel>) {
+                                     nodeOutput: ExecutionServiceOutput): EdgeLabel {
         TODO("not implemented")
     }
 }
