@@ -51,7 +51,7 @@
 				"default": {
 					"type": "any"
 				},
-				"primary-aai-data": {
+				"aai-data": {
 					"type": "object",
 					"properties": {
 						"verb": {
@@ -92,7 +92,7 @@
 						}
 					}
 				},
-				"primary-config-data": {
+				"config-data": {
 					"type": "object",
 					"properties": {
 						"path": {
@@ -215,7 +215,7 @@
 						}
 					}
 				},
-				"primary-aai-data": {
+				"aai-data": {
 					"type": "object",
 					"properties": {
 						"names": {
@@ -226,7 +226,7 @@
 						}
 					}
 				},
-				"primary-config-data": {
+				"config-data": {
 					"type": "object",
 					"properties": {
 						"names": {

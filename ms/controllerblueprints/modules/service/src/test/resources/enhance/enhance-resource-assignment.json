@@ -56,7 +56,7 @@
       "required": true
     },
     "dictionary-name": "sample-mdsal-source",
-    "dictionary-source": "primary-config-data",
+    "dictionary-source": "config-data",
     "dependencies": []
   }
 ]

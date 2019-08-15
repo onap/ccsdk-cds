@@ -27,7 +27,7 @@
   "dsl_definitions": {
     "ipam-1": {
       "type": "token-auth",
-      "url": "http://netbox-nginx:8080",
+      "url": "http://10.195.197.73:30420",
       "token": "Token 0123456789abcdef0123456789abcdef01234567"
     },
     "config-deploy-properties": {

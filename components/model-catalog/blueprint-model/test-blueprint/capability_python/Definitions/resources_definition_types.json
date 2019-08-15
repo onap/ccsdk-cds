@@ -13,7 +13,7 @@
         "properties" : { }
       },
       "primary-db": {
-        "type": "source-processor-db",
+        "type": "source-db",
         "properties": {
           "endpoint-selector": "dynamic-db-source",
           "query": "SELECT artifact_name FROM sdnctl.BLUEPRINT_RUNTIME where artifact_version=\"1.0.0\"",

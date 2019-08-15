@@ -22,11 +22,11 @@ object ResourceDictionaryTestUtils {
 
     @JvmStatic
     fun setUpResourceSourceMapping() {
-        ResourceSourceMappingFactory.registerSourceMapping("primary-db", "source-processor-db")
-        ResourceSourceMappingFactory.registerSourceMapping("processor-db", "source-processor-db")
+        ResourceSourceMappingFactory.registerSourceMapping("primary-db", "source-db")
+        ResourceSourceMappingFactory.registerSourceMapping("processor-db", "source-db")
         ResourceSourceMappingFactory.registerSourceMapping("input", "source-input")
         ResourceSourceMappingFactory.registerSourceMapping("default", "source-default")
-        ResourceSourceMappingFactory.registerSourceMapping("primary-config-data", "source-rest")
-        ResourceSourceMappingFactory.registerSourceMapping("primary-aai-data", "source-rest")
+        ResourceSourceMappingFactory.registerSourceMapping("config-data", "source-rest")
+        ResourceSourceMappingFactory.registerSourceMapping("aai-data", "source-rest")
     }
 }
