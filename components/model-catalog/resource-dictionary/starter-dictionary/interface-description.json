@@ -1,0 +1,19 @@
+{
+  "tags": "interface-description",
+  "name": "interface-description",
+  "property": {
+    "description": "interface-description",
+    "type": "string"
+  },
+  "updated-by": "adetalhouet",
+  "sources": {
+    "capability": {
+      "type": "source-capability",
+      "properties": {
+        "script-type": "jython",
+        "script-class-reference": "Scripts/python/DescriptionExample.py",
+        "instance-dependencies": []
+      }
+    }
+  }
+}

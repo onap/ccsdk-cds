@@ -227,7 +227,7 @@
                 },
                 "input-param" : false,
                 "dictionary-name" : "sample-db-source",
-                "dictionary-source" : "primary-db",
+                "dictionary-source" : "processor-db",
                 "dependencies" : [ "hostname" ],
                 "version" : 0
               }, {
@@ -242,7 +242,7 @@
                 },
                 "input-param" : false,
                 "dictionary-name" : "sample-mdsal-source",
-                "dictionary-source" : "primary-config-data",
+                "dictionary-source" : "config-data",
                 "dependencies" : [ "service-instance-id" ],
                 "version" : 0
               }, {
@@ -304,7 +304,7 @@
                 },
                 "input-param" : false,
                 "dictionary-name" : "sample-licenses",
-                "dictionary-source" : "primary-config-data",
+                "dictionary-source" : "config-data",
                 "dependencies" : [ "service-instance-id" ],
                 "version" : 0
               }, {

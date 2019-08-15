@@ -7,7 +7,7 @@
     "type" : "string"
   },
   "sources" : {
-    "primary-config-data": {
+    "config-data": {
       "type": "source-rest",
       "properties": {
         "type": "JSON",
@@ -26,7 +26,7 @@
         ]
       }
     },
-    "primary-aai-data": {
+    "aai-data": {
       "type": "source-rest",
       "properties": {
         "type": "JSON",
