@@ -123,11 +123,15 @@ open class DatabaseResourceAssignmentProcessor(private val bluePrintDBLibPropert
         checkNotEmpty(resourceAssignment.dictionaryName) {
             "resource assignment dictionary name is not defined for template key (${resourceAssignment.name})"
         }
-        check(resourceAssignment.dictionarySource in arrayOf(ResourceDictionaryConstants.SOURCE_PROCESSOR_DB, ResourceDictionaryConstants.SOURCE_PRIMARY_DB))
+        check(resourceAssignment.dictionarySource in getListOfDBSources())
         {
-            "resource assignment source is not ${ResourceDictionaryConstants.SOURCE_PROCESSOR_DB} but it is ${resourceAssignment.dictionarySource}"
+            "resource assignment source is not ${ResourceDictionaryConstants.PROCESSOR_DB} but it is ${resourceAssignment.dictionarySource}"
         }
     }
+
+    //placeholder to get the list of DB sources.
+    //TODO: This will be replaced with a DB
+    private fun getListOfDBSources(): Array<String> =  arrayOf(ResourceDictionaryConstants.PROCESSOR_DB)
 
     private fun populateNamedParameter(inputKeyMapping: Map<String, String>): Map<String, Any> {
         val namedParameters = HashMap<String, Any>()

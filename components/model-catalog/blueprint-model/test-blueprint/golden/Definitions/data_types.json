@@ -13,6 +13,9 @@
         "interface-name" : {
           "type" : "string"
         },
+        "golden-vf-module-type" : {
+          "type" : "string"
+        },
         "interface-description" : {
           "type" : "string"
         },
@@ -22,9 +25,6 @@
         "prefix-id" : {
           "type" : "string",
           "default" : "6"
-        },
-        "vf-module-type" : {
-          "type" : "string"
         },
         "vf-module-number" : {
           "type" : "string",

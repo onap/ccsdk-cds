@@ -32,7 +32,7 @@ open class BluePrintDBLibConfiguration(private var bluePrintProperties: BluePrin
 
     @Bean("primary-database-properties")
     open fun getPrimaryProperties(): PrimaryDataSourceProperties {
-        return bluePrintProperties.propertyBeanType(DBLibConstants.PREFIX_DB_PRIMARY,
+        return bluePrintProperties.propertyBeanType(DBLibConstants.PREFIX_DB,
                 PrimaryDataSourceProperties::class.java)
     }
 }
@@ -49,11 +49,11 @@ fun BluePrintDependencyService.primaryDBLibGenericService(): BluePrintDBLibGener
 
 class DBLibConstants {
     companion object {
-        const val PREFIX_DB_PRIMARY: String = "blueprintsprocessor.db.primary"
+        const val PREFIX_DB: String = "blueprintsprocessor.db"
 
         //list of database
         const val MARIA_DB: String = "maria-db"
-        const val PRIMARY_DB: String = "primary-db"
+        const val PRIMARY_DB: String = "processor-db"
         const val MYSQL_DB: String = "mysql-db"
         const val ORACLE_DB: String = "oracle-db"
         const val POSTGRES_DB: String = "postgres-db"

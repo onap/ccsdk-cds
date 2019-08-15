@@ -15,9 +15,8 @@
       "properties": {}
     },
     "processor-db": {
-      "type": "source-processor-db",
+      "type": "source-db",
       "properties": {
-        "endpoint-selector": "dynamic-db-source",
         "type": "SQL",
         "query": "select vf_module_type as vf_module_type from sdnctl.VF_MODULE_MODEL where customization_uuid=:customizationid",
         "input-key-mapping": {
