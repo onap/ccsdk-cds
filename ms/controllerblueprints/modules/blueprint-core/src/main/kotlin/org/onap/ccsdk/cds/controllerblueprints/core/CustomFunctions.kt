@@ -243,6 +243,22 @@ fun Map<String, JsonNode>.getAsDouble(key: String): Double {
     return this[key]?.asDouble() ?: throw BluePrintException("couldn't find value for key($key)")
 }
 
+fun Map<String, JsonNode>.getOptionalAsString(key: String): String? {
+    return if (this.containsKey(key)) this[key]!!.asText() else null
+}
+
+fun Map<String, JsonNode>.getOptionalAsBoolean(key: String): Boolean? {
+    return if (this.containsKey(key)) this[key]!!.asBoolean() else null
+}
+
+fun Map<String, JsonNode>.getOptionalAsInt(key: String): Int? {
+    return if (this.containsKey(key)) this[key]!!.asInt() else null
+}
+
+fun Map<String, JsonNode>.getOptionalAsDouble(key: String): Double? {
+    return if (this.containsKey(key)) this[key]!!.asDouble() else null
+}
+
 // Checks
 
 inline fun checkEquals(value1: String?, value2: String?, lazyMessage: () -> Any): Boolean {

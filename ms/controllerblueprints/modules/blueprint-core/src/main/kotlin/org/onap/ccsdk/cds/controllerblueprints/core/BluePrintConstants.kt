@@ -180,6 +180,7 @@ object BluePrintConstants {
     const val PROPERTY_CURRENT_NODE_TEMPLATE = "current-node-template"
     const val PROPERTY_CURRENT_INTERFACE = "current-interface"
     const val PROPERTY_CURRENT_OPERATION = "current-operation"
+    const val PROPERTY_CURRENT_TIMEOUT = "current-timeout"
     const val PROPERTY_CURRENT_IMPLEMENTATION = "current-implementation"
     const val PROPERTY_EXECUTION_REQUEST = "execution-request"
 

@@ -44,10 +44,8 @@ class ImperativeWorkflowExecutionService(
 
         val graph = bluePrintContext.workflowByName(workflowName).asGraph()
 
-        val deferredOutput = CompletableDeferred<ExecutionServiceOutput>()
-        imperativeBluePrintWorkflowService.executeWorkflow(graph, bluePrintRuntimeService,
-                executionServiceInput, deferredOutput)
-        return deferredOutput.await()
+        return imperativeBluePrintWorkflowService.executeWorkflow(graph, bluePrintRuntimeService,
+                executionServiceInput)
     }
 }
 
@@ -60,35 +58,41 @@ open class ImperativeBluePrintWorkflowService(private val nodeTemplateExecutionS
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
     lateinit var executionServiceInput: ExecutionServiceInput
     lateinit var workflowName: String
-    lateinit var deferredExecutionServiceOutput: CompletableDeferred<ExecutionServiceOutput>
 
     override suspend fun executeWorkflow(graph: Graph, bluePrintRuntimeService: BluePrintRuntimeService<*>,
-                                         input: ExecutionServiceInput,
-                                         output: CompletableDeferred<ExecutionServiceOutput>) {
+                                         input: ExecutionServiceInput): ExecutionServiceOutput {
         this.graph = graph
         this.bluePrintRuntimeService = bluePrintRuntimeService
         this.executionServiceInput = input
         this.workflowName = this.executionServiceInput.actionIdentifiers.actionName
-        this.deferredExecutionServiceOutput = output
         this.workflowId = bluePrintRuntimeService.id()
+        val output = CompletableDeferred<ExecutionServiceOutput>()
         val startMessage = WorkflowExecuteMessage(input, output)
-        workflowActor().send(startMessage)
+        val workflowActor = workflowActor()
+        if (!workflowActor.isClosedForSend) {
+            workflowActor.send(startMessage)
+        } else {
+            throw BluePrintProcessorException("workflow($workflowActor) actor is closed")
+        }
+        return output.await()
     }
 
     override suspend fun initializeWorkflow(input: ExecutionServiceInput): EdgeLabel {
         return EdgeLabel.SUCCESS
     }
 
-    override suspend fun prepareWorkflowOutput(exception: BluePrintProcessorException?): ExecutionServiceOutput {
-        val wfStatus = if (exception != null) {
-            val status = Status()
-            status.message = BluePrintConstants.STATUS_FAILURE
-            status.errorMessage = exception.message
-            status
-        } else {
-            val status = Status()
-            status.message = BluePrintConstants.STATUS_SUCCESS
-            status
+    override suspend fun prepareWorkflowOutput(): ExecutionServiceOutput {
+        val wfStatus = Status().apply {
+            if (exceptions.isNotEmpty()) {
+                exceptions.forEach {
+                    val errorMessage = it.message ?: ""
+                    bluePrintRuntimeService.getBluePrintError().addError(errorMessage)
+                    log.error("workflow($workflowId) exception :", it)
+                }
+                message = BluePrintConstants.STATUS_FAILURE
+            } else {
+                message = BluePrintConstants.STATUS_SUCCESS
+            }
         }
         return ExecutionServiceOutput().apply {
             commonHeader = executionServiceInput.commonHeader

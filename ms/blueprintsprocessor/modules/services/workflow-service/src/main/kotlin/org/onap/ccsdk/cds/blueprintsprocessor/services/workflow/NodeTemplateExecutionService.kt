@@ -22,7 +22,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutp
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.putJsonElement
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.slf4j.LoggerFactory
@@ -37,15 +37,22 @@ open class NodeTemplateExecutionService {
                                     executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
         // Get the Blueprint Context
         val blueprintContext = bluePrintRuntimeService.bluePrintContext()
+
+        val nodeTemplate = blueprintContext.nodeTemplateByName(nodeTemplateName)
         // Get the Component Name, NodeTemplate type is mapped to Component Name
-        val componentName = blueprintContext.nodeTemplateByName(nodeTemplateName).type
+        val componentName = nodeTemplate.type
 
         val interfaceName = blueprintContext.nodeTemplateFirstInterfaceName(nodeTemplateName)
 
         val operationName = blueprintContext.nodeTemplateFirstInterfaceFirstOperationName(nodeTemplateName)
 
+        val nodeTemplateImplementation = blueprintContext
+                .nodeTemplateOperationImplementation(nodeTemplateName, interfaceName, operationName)
+
+        val timeout: Int = nodeTemplateImplementation?.timeout ?: 180
+
         log.info("executing node template($nodeTemplateName) component($componentName) " +
-                "interface($interfaceName) operation($operationName)")
+                "interface($interfaceName) operation($operationName) with timeout($timeout) sec.")
 
         // Get the Component Instance
         val plugin = BluePrintDependencyService.instance<AbstractComponentFunction>(componentName)
@@ -62,9 +69,10 @@ open class NodeTemplateExecutionService {
 
         // Populate Step Meta Data
         val stepInputs: MutableMap<String, JsonNode> = hashMapOf()
-        stepInputs.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, nodeTemplateName)
-        stepInputs.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, interfaceName)
-        stepInputs.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, operationName)
+        stepInputs[BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE] = nodeTemplateName.asJsonPrimitive()
+        stepInputs[BluePrintConstants.PROPERTY_CURRENT_INTERFACE] = interfaceName.asJsonPrimitive()
+        stepInputs[BluePrintConstants.PROPERTY_CURRENT_OPERATION] = operationName.asJsonPrimitive()
+        stepInputs[BluePrintConstants.PROPERTY_CURRENT_TIMEOUT] = timeout.asJsonPrimitive()
         val stepInputData = StepData().apply {
             name = nodeTemplateName
             properties = stepInputs
