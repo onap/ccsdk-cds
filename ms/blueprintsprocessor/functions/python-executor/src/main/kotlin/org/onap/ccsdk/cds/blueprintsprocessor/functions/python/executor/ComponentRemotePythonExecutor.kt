@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2019 IBM.
+ *  Modifications Copyright © 2018 - 2019 IBM, Bell Canada.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -150,5 +151,9 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
             node.forEach { sb.append(" $it") }
         }
         return sb.toString()
+    }
+
+    fun setExecutionScriptResponsedata(responseData: JsonNode) {
+        bluePrintRuntimeService.setNodeTemplateAttributeValue(nodeTemplateName, ATTRIBUTE_RESPONSE_DATA, responseData)
     }
 }

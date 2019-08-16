@@ -60,3 +60,9 @@ class NetconfClient:
     def discard_change(self):
         device_response = self.netconf_rpc_client.discardConfig()
         return device_response
+
+    def setStatus(self, status):
+        NetconfExecutorExtensionsKt.setStatus(self.component_function. status)
+
+    def setResponseData(self, response_data):
+        NetconfExecutorExtensionsKt.setResponseData(self.component_function. response_data)

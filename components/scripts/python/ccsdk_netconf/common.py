@@ -26,3 +26,4 @@ class ResolutionHelper:
     def retrieve_resolved_template_from_database(self, key, artifact_template):
         return ResourceResolutionExtensionsKt.storedContentFromResolvedArtifact(self.component_function, key,
                                                                                 artifact_template)
+

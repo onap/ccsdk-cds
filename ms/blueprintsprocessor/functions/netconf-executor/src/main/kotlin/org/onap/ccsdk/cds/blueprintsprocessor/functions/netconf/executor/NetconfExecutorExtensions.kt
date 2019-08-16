@@ -18,6 +18,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.TextNode
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionService
@@ -51,6 +52,15 @@ fun AbstractComponentFunction.netconfDeviceInfo(requirementName: String): Device
 
 private fun AbstractComponentFunction.netconfDeviceInfo(capabilityProperty: MutableMap<String, JsonNode>): DeviceInfo {
     return JacksonUtils.getInstanceFromMap(capabilityProperty, DeviceInfo::class.java)
+}
+
+private fun AbstractComponentFunction.setExecutionScriptResponseData(responseData: JsonNode) {
+    bluePrintRuntimeService.setNodeTemplateOperationOutputValue(nodeTemplateName, interfaceName, operationName, "response-data", responseData)
+}
+
+private fun AbstractComponentFunction.setExecutionScriptStatus(status: String) {
+    val statusNode = TextNode(status)
+    bluePrintRuntimeService.setNodeTemplateOperationOutputValue(nodeTemplateName, interfaceName, operationName, "status", statusNode)
 }
 
 /**
