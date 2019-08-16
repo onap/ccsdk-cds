@@ -13,6 +13,10 @@
     "config-snapshot-value": {
       "required": false,
       "type": "string"
+    },
+    "response-data": {
+      "required": false,
+      "type": "json"
     }
   },
   "capabilities": {

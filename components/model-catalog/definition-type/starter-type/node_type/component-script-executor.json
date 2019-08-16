@@ -1,6 +1,12 @@
 {
   "description": "This is CLI Transaction Configuration Component API",
   "version": "1.0.0",
+  "attributes": {
+    "response-data": {
+      "required": false,
+      "type": "json"
+    }
+  },
   "capabilities": {
     "component-node": {
       "type": "tosca.capabilities.Node"

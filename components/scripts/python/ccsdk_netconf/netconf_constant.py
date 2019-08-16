@@ -8,6 +8,8 @@ PARAM_ACTION = "action"
 STATUS_SUCCESS = "success"
 STATUS_FAILURE = "failure"
 
+ATTRIBUTE_RESPONSE_DATA = "response-data"
+
 CONFIG_TARGET_RUNNING = "running"
 CONFIG_TARGET_CANDIDATE = "candidate"
 CONFIG_DEFAULT_OPERATION_MERGE = "merge"

@@ -18,6 +18,7 @@
 # ============LICENSE_END=========================================================
 #
 from time import sleep
+from restconf_constant import *
 from org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor import RestconfExecutorExtensionsKt
 from org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution import ResourceResolutionExtensionsKt
 
@@ -92,3 +93,6 @@ class RestconfClient:
         url = self.__base_odl_url + nf_id
         self.__log.debug("sending unmount request, url: {}", url)
         web_client_service.exchangeResource("DELETE", url, "")
+
+    def set_execution_attribute_response_data(self, response_data):
+        self.setAttribute(ATTRIBUTE_RESPONSE_DATA, response_data)

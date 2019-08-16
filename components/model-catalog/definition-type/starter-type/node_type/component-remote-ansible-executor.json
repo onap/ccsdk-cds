@@ -9,6 +9,10 @@
     "ansible-command-logs": {
       "required": true,
       "type": "string"
+    },
+    "response-data": {
+      "required": false,
+      "type": "json"
     }
   },
   "capabilities": {

@@ -1,5 +1,4 @@
-from netconf_constant import CONFIG_TARGET_RUNNING, CONFIG_TARGET_CANDIDATE, \
-    CONFIG_DEFAULT_OPERATION_REPLACE
+from netconf_constant import *
 from org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor import NetconfExecutorExtensionsKt
 
 
@@ -60,3 +59,6 @@ class NetconfClient:
     def discard_change(self):
         device_response = self.netconf_rpc_client.discardConfig()
         return device_response
+
+    def set_execution_attribute_response_data(self, response_data):
+        self.setAttribute(ATTRIBUTE_RESPONSE_DATA, response_data)
