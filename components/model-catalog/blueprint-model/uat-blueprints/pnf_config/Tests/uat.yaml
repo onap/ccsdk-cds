@@ -52,6 +52,11 @@ processes:
                     target: /
                     value: { netconflist: { netconf: [ { netconf-id: "30", netconf-param: "3000" }]}}
           status: success
+    responseNormalizerSpec:
+      stepData:
+        properties:
+          resource-assignment-params:
+            config-assign: ?from-json(.stepData.properties.resource-assignment-params.config-assign)
   - name: config-deploy
     request:
       commonHeader: *commonHeader

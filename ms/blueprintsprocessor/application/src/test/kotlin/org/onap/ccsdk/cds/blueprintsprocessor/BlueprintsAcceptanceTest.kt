@@ -19,7 +19,9 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.MissingNode
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argThat
 import com.nhaarman.mockitokotlin2.atLeast
@@ -53,15 +55,17 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.rules.SpringClassRule
 import org.springframework.test.context.junit4.rules.SpringMethodRule
+import org.springframework.test.web.reactive.server.EntityExchangeResult
 import org.springframework.test.web.reactive.server.WebTestClient
-import org.yaml.snakeyaml.Yaml
 import reactor.core.publisher.Mono
 import java.io.File
-import java.nio.file.Path
+import java.nio.charset.StandardCharsets
 import java.nio.file.Paths
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 
+// Only one runner can be configured with jUnit 4. We had to replace the SpringRunner by equivalent jUnit rules.
+// See more on https://docs.spring.io/autorepo/docs/spring-framework/current/spring-framework-reference/testing.html#testcontext-junit4-rules
 @RunWith(Parameterized::class)
 // Set blueprintsprocessor.httpPort=0 to trigger a random port selection
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -71,8 +75,7 @@ import kotlin.test.Test
     TestSecuritySettings.ServerContextInitializer::class
 ])
 @TestPropertySource(locations = ["classpath:application-test.properties"])
-@Suppress("UNCHECKED_CAST")
-class BlueprintsAcceptanceTests(private val blueprintName: String, private val filename: String) {
+class BlueprintsAcceptanceTest(private val blueprintName: String, private val filename: String) {
 
     companion object {
         const val UAT_BLUEPRINTS_BASE_DIR = "../../../components/model-catalog/blueprint-model/uat-blueprints"
@@ -82,11 +85,15 @@ class BlueprintsAcceptanceTests(private val blueprintName: String, private val f
         @JvmField
         val springClassRule = SpringClassRule()
 
-        val log: Logger = LoggerFactory.getLogger(BlueprintsAcceptanceTests::class.java)
+        val log: Logger = LoggerFactory.getLogger(BlueprintsAcceptanceTest::class.java)
 
+        /**
+         * Generates the parameters to create a test instance for every blueprint found under UAT_BLUEPRINTS_BASE_DIR
+         * that contains the proper UAT definition file.
+         */
         @Parameterized.Parameters(name = "{index} {0}")
         @JvmStatic
-        fun filenames(): List<Array<String>> {
+        fun testParameters(): List<Array<String>> {
             return File(UAT_BLUEPRINTS_BASE_DIR)
                     .listFiles { file -> file.isDirectory && File(file, EMBEDDED_UAT_FILE).isFile }
                     ?.map { file -> arrayOf(file.nameWithoutExtension, file.canonicalPath) }
@@ -119,38 +126,31 @@ class BlueprintsAcceptanceTests(private val blueprintName: String, private val f
 
     @Test
     fun testBlueprint() {
-        val yaml: Map<String, *> = loadYaml(Paths.get(filename, EMBEDDED_UAT_FILE))
+        val uat = UatDefinition.load(mapper, Paths.get(filename, EMBEDDED_UAT_FILE))
 
         uploadBlueprint(blueprintName)
 
         // Configure mocked external services
-        val services = yaml["external-services"] as List<Map<String, *>>? ?: emptyList()
-        val expectationPerClient = services.map { service ->
-            val selector = service["selector"] as String
-            val expectations = (service["expectations"] as List<Map<String, *>>).map {
-                parseExpectation(it)
-            }
-            val mockClient = createRestClientMock(selector, expectations)
-            mockClient to expectations
-        }.toMap()
+        val expectationPerClient = uat.externalServices.associateBy(
+                { service -> createRestClientMock(service.selector, service.expectations) },
+                { service -> service.expectations }
+        )
 
         // Run processes
-        for (process in (yaml["processes"] as List<Map<String, *>>)) {
-            val processName = process["name"]
-            log.info("Executing process '$processName'")
-            val request = mapper.writeValueAsString(process["request"])
-            val expectedResponse = mapper.writeValueAsString(process["expectedResponse"])
-            processBlueprint(request, expectedResponse)
+        for (process in uat.processes) {
+            log.info("Executing process '${process.name}'")
+            processBlueprint(process.request, process.expectedResponse,
+                    JsonNormalizer.getNormalizer(mapper, process.responseNormalizerSpec))
         }
 
-        // Validate request payloads
+        // Validate request payloads to external services
         for ((mockClient, expectations) in expectationPerClient) {
             expectations.forEach { expectation ->
                 verify(mockClient, atLeastOnce()).exchangeResource(
-                        eq(expectation.method),
-                        eq(expectation.path),
-                        argThat { assertJsonEqual(expectation.expectedRequestBody, this) },
-                        expectation.requestHeadersMatcher())
+                        eq(expectation.request.method),
+                        eq(expectation.request.path),
+                        argThat { assertJsonEqual(expectation.request.body, this) },
+                        expectation.request.requestHeadersMatcher())
             }
             // Don't mind the invocations to the overloaded exchangeResource(String, String, String)
             verify(mockClient, atLeast(0)).exchangeResource(any(), any(), any())
@@ -158,7 +158,8 @@ class BlueprintsAcceptanceTests(private val blueprintName: String, private val f
         }
     }
 
-    private fun createRestClientMock(selector: String, restExpectations: List<RestExpectation>): BlueprintWebClientService {
+    private fun createRestClientMock(selector: String, restExpectations: List<ExpectationDefinition>)
+            : BlueprintWebClientService {
         val restClient = mock<BlueprintWebClientService>(verboseLogging = true)
 
         // Delegates to overloaded exchangeResource(String, String, String, Map<String, String>)
@@ -171,11 +172,11 @@ class BlueprintsAcceptanceTests(private val blueprintName: String, private val f
                 }
         for (expectation in restExpectations) {
             whenever(restClient.exchangeResource(
-                    eq(expectation.method),
-                    eq(expectation.path),
+                    eq(expectation.request.method),
+                    eq(expectation.request.path),
                     any(),
                     any()))
-                    .thenReturn(WebClientResponse(expectation.statusCode, expectation.responseBody))
+                    .thenReturn(WebClientResponse(expectation.response.status, expectation.response.body.toString()))
         }
 
         whenever(restClientFactory.blueprintWebClientService(selector))
@@ -194,17 +195,20 @@ class BlueprintsAcceptanceTests(private val blueprintName: String, private val f
                 .expectStatus().isOk
     }
 
-    private fun processBlueprint(request: String, expectedResponse: String) {
+    private fun processBlueprint(request: JsonNode, expectedResponse: JsonNode,
+                                 responseNormalizer: (String) -> String) {
         webTestClient
                 .post()
                 .uri("/api/v1/execution-service/process")
                 .header("Authorization", TestSecuritySettings.clientAuthToken())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(Mono.just(request), String::class.java)
+                .body(Mono.just(request.toString()), String::class.java)
                 .exchange()
                 .expectStatus().isOk
                 .expectBody()
-                .json(expectedResponse)
+                .consumeWith { response ->
+                    assertJsonEqual(expectedResponse, responseNormalizer(getBodyAsString(response)))
+                }
     }
 
     private fun getBlueprintAsResource(blueprintName: String): Resource {
@@ -216,65 +220,21 @@ class BlueprintsAcceptanceTests(private val blueprintName: String, private val f
         }
     }
 
-    private fun loadYaml(path: Path): Map<String, Any> {
-        return path.toFile().reader().use { reader ->
-            Yaml().load(reader)
+    private fun assertJsonEqual(expected: JsonNode, actual: String): Boolean {
+        if ((actual == "") && (expected is MissingNode)) {
+            return true
         }
-    }
-
-    private fun assertJsonEqual(expected: Any, actual: String): Boolean {
-        if (actual != expected) {
-            // assertEquals throws an exception whenever match fails
-            JSONAssert.assertEquals(mapper.writeValueAsString(expected), actual, JSONCompareMode.LENIENT)
-        }
+        JSONAssert.assertEquals(expected.toString(), actual, JSONCompareMode.LENIENT)
+        // assertEquals throws an exception whenever match fails
         return true
     }
 
-    private fun parseExpectation(expectation: Map<String, *>): RestExpectation {
-        val request = expectation["request"] as Map<String, Any>
-        val method = request["method"] as String
-        val path = joinPath(request.getValue("path"))
-        val contentType = request["content-type"] as String?
-        val requestBody = request.getOrDefault("body", "")
-
-        val response = expectation["response"] as Map<String, Any>? ?: emptyMap()
-        val status = response["status"] as Int? ?: 200
-        val responseBody = when (val body = response["body"] ?: "") {
-            is String -> body
-            else -> mapper.writeValueAsString(body)
+    private fun getBodyAsString(result: EntityExchangeResult<ByteArray>): String {
+        val body = result.responseBody
+        if ((body == null) || body.isEmpty()) {
+            return ""
         }
-
-        return RestExpectation(method, path, contentType, requestBody, status, responseBody)
-    }
-
-    /**
-     * Join a multilevel lists of strings.
-     * Example: joinPath(listOf("a", listOf("b", "c"), "d")) will result in "a/b/c/d".
-     */
-    private fun joinPath(any: Any): String {
-        fun recursiveJoin(any: Any, sb: StringBuilder): StringBuilder {
-            when (any) {
-                is List<*> -> any.filterNotNull().forEach { recursiveJoin(it, sb) }
-                is String -> {
-                    if (sb.isNotEmpty()) {
-                        sb.append('/')
-                    }
-                    sb.append(any)
-                }
-                else -> throw IllegalArgumentException("Unsupported type: ${any.javaClass}")
-            }
-            return sb
-        }
-
-        return recursiveJoin(any, StringBuilder()).toString()
-    }
-
-    data class RestExpectation(val method: String, val path: String, val contentType: String?,
-                               val expectedRequestBody: Any,
-                               val statusCode: Int, val responseBody: String) {
-
-        fun requestHeadersMatcher(): Map<String, String> {
-            return if (contentType != null) eq(mapOf("Content-Type" to contentType)) else any()
-        }
+        val charset = result.responseHeaders.contentType?.charset ?: StandardCharsets.UTF_8
+        return String(body, charset)
     }
 }
