@@ -3,6 +3,8 @@ FROM omahoco1/alpine-java-python
 ENV HTTP_PROXY  ${HTTP_PROXY}
 ENV HTTPS_PROXY ${HTTPS_PROXY}
 
+RUN apk add --no-cache bash
+
 # add entrypoint
 COPY run.source /etc/run.source
 COPY startService.sh /startService.sh
@@ -15,4 +17,4 @@ RUN tar -xzf /source.tar.gz -C /tmp \
  && rm -rf /source.tar.gz \
  && rm -rf /tmp/@project.build.finalName@
 
-ENTRYPOINT /startService.sh
+ENTRYPOINT ["/bin/bash", "/startService.sh"]
