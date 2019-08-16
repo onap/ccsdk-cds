@@ -30,7 +30,7 @@ import { IBlueprint } from 'src/app/common/core/store/models/blueprint.model';
 import { IMetaData } from '../../../../common/core/store/models/metadata.model';
 import { SetBlueprintState } from 'src/app/common/core/store/actions/blueprint.action';
 import { LoaderService } from '../../../../common/core/services/loader.service';
-
+import { SelectTemplateService } from 'src/app/feature-modules/blueprint/select-template/select-template.service';
 @Component({
   selector: 'app-metadata',
   templateUrl: './metadata.component.html',
@@ -48,8 +48,9 @@ export class MetadataComponent implements OnInit {
   blueprintName: string;
   uploadedFileName: string;
   entryDefinition: string;
-  
-  constructor(private formBuilder: FormBuilder, private store: Store<IAppState>, private loader: LoaderService) {
+
+  constructor(private formBuilder: FormBuilder, private store: Store<IAppState>,
+    private loader: LoaderService, private dataService: SelectTemplateService) {
     this.bpState = this.store.select('blueprint');
     this.CBAMetadataForm = this.formBuilder.group({
       template_author: ['', Validators.required],
@@ -62,6 +63,9 @@ export class MetadataComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.dataService.getCbaOption().subscribe(
+      res => {console.log("data from service " + res);}
+    );
     this.bpState.subscribe(
       blueprintdata => {
         var blueprintState: IBlueprintState = { blueprint: blueprintdata.blueprint, isLoadSuccess: blueprintdata.isLoadSuccess, isSaveSuccess: blueprintdata.isSaveSuccess, isUpdateSuccess: blueprintdata.isUpdateSuccess };
@@ -95,18 +99,22 @@ export class MetadataComponent implements OnInit {
         });
       })
   }
-
+ngAfterInit(){
+  this.dataService.getCbaOption().subscribe(
+    res => {console.log("data from service after init" + res);}
+  );
+}
   UploadMetadata() {
     this.loader.showLoader();
     this.metadata = Object.assign({}, this.CBAMetadataForm.value);
     this.blueprint.metadata = this.metadata;
-    if( this.blueprint && 
-        this.blueprint['topology_template'] && 
-        this.blueprint['topology_template'].workflows && 
-        this.blueprint['topology_template'].workflows['resource-assignment'] &&
-        this.blueprint['topology_template'].workflows['resource-assignment'].name) {
-          delete this.blueprint['topology_template'].workflows['resource-assignment'].name;
-      }
+    /*if (this.blueprint &&
+      this.blueprint['topology_template'] &&
+      this.blueprint['topology_template'].workflows &&
+      this.blueprint['topology_template'].workflows['resource-assignment'] &&
+      this.blueprint['topology_template'].workflows['resource-assignment'].name) {
+      delete this.blueprint['topology_template'].workflows['resource-assignment'].name;
+    }*/
     this.filesData.forEach((fileNode) => {
       if (fileNode.name.includes(this.blueprintName) && fileNode.name == this.entryDefinition) {
         fileNode.data = JSON.stringify(this.blueprint, null, "\t");
