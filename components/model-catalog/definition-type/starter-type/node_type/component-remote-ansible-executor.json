@@ -30,6 +30,11 @@
               "required": true,
               "type": "string"
             },
+            "workflow-job-template-id": {
+              "description": "Primary key (name not supported) of the workflow job template to launch new job.",
+              "required": false,
+              "type": "string"
+            },
             "limit": {
               "description": "Specify host limit for job template to run.",
               "required": false,
