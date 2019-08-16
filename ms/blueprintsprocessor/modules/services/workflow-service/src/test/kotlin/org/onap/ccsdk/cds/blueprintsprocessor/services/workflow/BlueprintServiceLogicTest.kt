@@ -18,6 +18,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.services.workflow
 
 import kotlinx.coroutines.runBlocking
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
@@ -25,6 +26,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.services.workflow.executor.Compone
 import org.onap.ccsdk.cds.blueprintsprocessor.services.workflow.mock.PrototypeComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.workflow.mock.SingletonComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonReactorUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -43,6 +45,11 @@ class BlueprintServiceLogicTest {
 
     @Autowired
     lateinit var dgWorkflowExecutionService: DGWorkflowExecutionService
+
+    @Before
+    fun init() {
+        BluePrintDependencyService.inject(applicationContext)
+    }
 
     @Test
     fun testExecuteGraphWithSingleComponent() {

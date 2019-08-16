@@ -18,9 +18,16 @@ package org.onap.ccsdk.cds.controllerblueprints.core
 
 import org.onap.ccsdk.cds.controllerblueprints.core.data.EdgeLabel
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Graph
+import org.onap.ccsdk.cds.controllerblueprints.core.data.Workflow
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.WorkflowGraphUtils
 import java.util.regex.Pattern
 
 private val graphTokenSeparators = Pattern.compile("[->/]")
+
+/** Convert Blueprint workflow to graph data structure */
+fun Workflow.asGraph(): Graph {
+    return WorkflowGraphUtils.workFlowToGraph(this)
+}
 
 fun String.toGraph(): Graph {
     if (!startsWith('[') || !endsWith(']')) {

@@ -61,7 +61,7 @@ class BluePrintMetadataUtils {
             // Verify if the environment directory exists
             if (envDir.exists() && envDir.isDirectory) {
                 //Find all available environment files
-                envDir.listFiles()
+                envDir.listFiles()!!
                         .filter { it.name.endsWith(".properties") }
                         .forEach {
                             val istream = it.inputStream()
@@ -96,14 +96,20 @@ class BluePrintMetadataUtils {
             return toscaMetaData
         }
 
-        fun getBluePrintRuntime(id: String, blueprintBasePath: String): BluePrintRuntimeService<MutableMap<String, JsonNode>> {
-
+        fun getBluePrintRuntime(id: String, blueprintBasePath: String)
+                : BluePrintRuntimeService<MutableMap<String, JsonNode>> {
             val bluePrintContext: BluePrintContext = getBluePrintContext(blueprintBasePath)
+            return getBluePrintRuntime(id, bluePrintContext)
+        }
 
+        fun getBluePrintRuntime(id: String, bluePrintContext: BluePrintContext)
+                : BluePrintRuntimeService<MutableMap<String, JsonNode>> {
+            checkNotEmpty(bluePrintContext.rootPath) { "blueprint context root path is missing." }
+            checkNotEmpty(bluePrintContext.entryDefinition) { "blueprint context entry definition is missing." }
+            val blueprintBasePath = bluePrintContext.rootPath
             val bluePrintRuntimeService = DefaultBluePrintRuntimeService(id, bluePrintContext)
             bluePrintRuntimeService.put(BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH, blueprintBasePath.asJsonPrimitive())
             bluePrintRuntimeService.put(BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID, id.asJsonPrimitive())
-
             return bluePrintRuntimeService
         }
 
