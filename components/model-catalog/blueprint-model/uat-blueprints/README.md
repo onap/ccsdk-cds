@@ -7,7 +7,7 @@ The BPP runs in an almost production-like configuration with some minor exceptio
 
 - It uses an embedded, in-memory, and initially empty H2 database, running in MySQL/MariaDB compatibility mode;
 - All external services are mocked.
-  
+
 ## How it works?
 
 The UATs are declarative, data-driven tests implemented in YAML 1.1 documents.
@@ -32,6 +32,62 @@ CDS project's `components/model-catalog/blueprint-model/uat-blueprints` director
 2. Create a `Tests/uat.yaml` document under your BP folder.
 
 ## `uat.yaml` reference
+
+The structure of an UAT YAML file could be documented using the Protobuf language as follows:
+
+```proto
+message Uat {
+    message Path {}
+    message Json {}
+
+    message Process {
+        required string name = 1;
+        required Json request = 2;
+        required Json expectedResponse = 3;
+        optional Json responseNormalizerSpec = 4;
+    }
+
+    message Request {
+        required string method = 1;
+        required Path path = 2;
+        optional string contentType = 3 [default = None];
+        optional Json body = 4;
+    }
+
+    message Response {
+        optional int32 status = 1 [default = 200];
+        optional Json body = 2;
+    }
+
+    message Expectation {
+        required Request request = 1;
+        required Response response = 2;
+    }
+
+    message ExternalService {
+        required string selector = 1;
+        repeated Expectation expectations = 2;      // min cardinality = 1
+    }
+
+    repeated Process processes = 1;                 // min cardinality = 1
+    repeated ExternalService externalServices = 2;  // min cardinality = 0
+}
+
+```
+
+The optional `responseNormalizerSpec` specifies transformations that may be needed to apply to the response
+returned by BPP to get a full JSON representation. For example, it's possible to convert an string field "outer.inner"
+into JSON using the following specification:
+
+```yaml
+    responseNormalizerSpec:
+      outer:
+        inner: ?from-json(.outer.inner)
+
+```
+
+The "?" must prefix every expression that is NOT a literal string. The `from-json()` function and
+many others are documented [here](https://github.com/schibsted/jslt/blob/0.1.8/functions.md).
 
 ### Skeleton of a basic `uat.yaml`
 
@@ -93,16 +149,16 @@ external-services:
 
 ### Composite URI paths
 
-In case your YAML document contains many URI path definitions, you'd better keep the duplications
+In case your YAML document contains many URI path definitions, it's recommended to keep the duplications
 as low as possible in order to ease the document maintenance, and avoid inconsistencies.
- 
+
 Since YAML doesn't provide a standard mechanism to concatenate strings,
 the UAT engine implements an ad-hoc mechanism based on multi-level lists.
 Please note that currently this mechanism is only applied to URI paths.
 
 To exemplify how it works, let's take the case of eliminating duplications when defining multiple OpenDaylight URLs.
 
-You might starting using the following definitions:
+You might start using the following definitions:
 ```yaml
    nodeId: &nodeId "new-netconf-device"
    # ...
@@ -127,7 +183,7 @@ The UAT engine will expand the above multi-level lists, resulting on the followi
    # ...
    - request:
      path: restconf/config/network-topology:network-topology/topology/topology-netconf/node/new-netconf-device/yang-ext:mount/mynetconf:netconflist
-``` 
+```
 
 ## License
 
@@ -135,9 +191,7 @@ Copyright (C) 2019 Nordix Foundation.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
+You may obtain a copy of the License at https://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
