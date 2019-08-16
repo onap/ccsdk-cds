@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "87602a42_1b274663",
+        "filename": "cds-ui/client/src/app/feature-modules/blueprint/select-template/metadata/metadata.component.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-08-16T14:09:38Z",
+      "side": 1,
+      "message": "why the workflow names are hard coded ?",
+      "range": {
+        "startLine": 113,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 87
+      },
+      "revId": "9f5a4a60110353ca4df3c019a8687370306d0f11",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
