@@ -2,4 +2,6 @@ TOSCA-Meta-File-Version: 1.0.0
 CSAR-Version: 1.0
 Created-By: Rodrigo Ottero
 Entry-Definitions: Definitions/activation-blueprint.json
+Template-Name: activation-blueprint
+Template-Version: 1.0.0
 Template-Tags: activation-blueprint
