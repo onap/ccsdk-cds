@@ -24,7 +24,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JsonParserUtils
 import org.slf4j.LoggerFactory
 import org.slf4j.helpers.MessageFormatter
-import java.lang.Float
 import kotlin.reflect.KClass
 
 /**
@@ -98,10 +97,10 @@ fun <T : Any?> T.asJsonPrimitive(): JsonNode {
 fun String.asJsonType(bpDataType: String): JsonNode {
     return when (bpDataType.toLowerCase()) {
         BluePrintConstants.DATA_TYPE_STRING -> this.asJsonPrimitive()
-        BluePrintConstants.DATA_TYPE_BOOLEAN -> java.lang.Boolean.valueOf(this).asJsonPrimitive()
-        BluePrintConstants.DATA_TYPE_INTEGER -> Integer.valueOf(this).asJsonPrimitive()
-        BluePrintConstants.DATA_TYPE_FLOAT -> Float.valueOf(this).asJsonPrimitive()
-        BluePrintConstants.DATA_TYPE_DOUBLE -> java.lang.Double.valueOf(this).asJsonPrimitive()
+        BluePrintConstants.DATA_TYPE_BOOLEAN -> this.toBoolean().asJsonPrimitive()
+        BluePrintConstants.DATA_TYPE_INTEGER -> this.toInt().asJsonPrimitive()
+        BluePrintConstants.DATA_TYPE_FLOAT -> this.toFloat().asJsonPrimitive()
+        BluePrintConstants.DATA_TYPE_DOUBLE -> this.toDouble().asJsonPrimitive()
         // For List, Map and Complex Types.
         else -> this.jsonAsJsonType()
     }
