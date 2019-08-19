@@ -7,36 +7,48 @@ Resource Rest Authentication
 ----------------------------
 
 token-auth:
+~~~~~~~~~~~
 
-"dsl_definitions": {
-  "dynamic-rest-source": {
-    "type" : "token-auth",
-    "url" : "http://localhost:32778",
-    "token" : "Token 0123456789abcdef0123456789abcdef01234567"
-  }
-}
-
+.. code-block:: json
+   :linenos:
+   
+   "dsl_definitions": {
+     "dynamic-rest-source": {
+       "type" : "token-auth",
+       "url" : "http://localhost:32778",
+       "token" : "Token 0123456789abcdef0123456789abcdef01234567"
+     }
+   }
+   
 basic-auth:
+~~~~~~~~~~~
 
-"dsl_definitions": {
-  "dynamic-rest-source": {
-    "type" : "basic-auth",
-    "url" : "http://localhost:32778",
-    "username" : "bob",
-    "password": "marley"
- }
-}
-
+.. code-block:: json
+   :linenos:
+      
+   "dsl_definitions": {
+     "dynamic-rest-source": {
+       "type" : "basic-auth",
+       "url" : "http://localhost:32778",
+       "username" : "bob",
+       "password": "marley"
+    }
+   }
+   
 ssl-basic-auth:
+~~~~~~~~~~~~~~~
 
-"dsl_definitions": {
-  "dynamic-rest-source": {
-    "type" : "ssl-basic-auth",
-    "url" : "http://localhost:32778",
-    "keyStoreInstance": "JKS or PKCS12",
-    "sslTrust": "trusture",
-    "sslTrustPassword": "trustore password",
-    "sslKey": "keystore",
-    "sslKeyPassword: "keystore password"
- }
-}
+.. code-block:: json
+   :linenos:
+      
+   "dsl_definitions": {
+     "dynamic-rest-source": {
+       "type" : "ssl-basic-auth",
+       "url" : "http://localhost:32778",
+       "keyStoreInstance": "JKS or PKCS12",
+       "sslTrust": "trusture",
+       "sslTrustPassword": "trustore password",
+       "sslKey": "keystore",
+       "sslKeyPassword: "keystore password"
+    }
+   }
