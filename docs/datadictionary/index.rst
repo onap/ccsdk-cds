@@ -40,7 +40,7 @@ Here is how input-key-mapping, output-key-mapping and key-dependencies can be us
 .. toctree::
    :maxdepth: 1
    
-	resourcedefinitioncodesnip 
+   resourcedefinitioncodesnip 
 
 
 Resource source:
