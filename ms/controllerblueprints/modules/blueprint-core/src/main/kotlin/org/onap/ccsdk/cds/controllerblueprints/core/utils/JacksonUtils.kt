@@ -243,8 +243,8 @@ class JacksonUtils {
                 BluePrintConstants.DATA_TYPE_FLOAT,
                 BluePrintConstants.DATA_TYPE_DOUBLE,
                 BluePrintConstants.DATA_TYPE_TIMESTAMP,
-                BluePrintConstants.DATA_TYPE_STRING->
-                    objectNode.set(key, value.asJsonPrimitive())
+                BluePrintConstants.DATA_TYPE_STRING ->
+                    objectNode.set(key, value as JsonNode)
                 else -> throw BluePrintException("populatePrimitiveValues expected only primitive values! Received: ($value)")
             }
         }
@@ -256,7 +256,7 @@ class JacksonUtils {
                 BluePrintConstants.DATA_TYPE_FLOAT,
                 BluePrintConstants.DATA_TYPE_DOUBLE,
                 BluePrintConstants.DATA_TYPE_TIMESTAMP,
-                BluePrintConstants.DATA_TYPE_STRING -> arrayNode.add(value.asJsonPrimitive())
+                BluePrintConstants.DATA_TYPE_STRING -> arrayNode.add(value as JsonNode)
                 else -> throw BluePrintException("populatePrimitiveValues expected only primitive values! Received: ($value)")
             }
         }
@@ -300,7 +300,6 @@ class JacksonUtils {
                 BluePrintConstants.DATA_TYPE_INTEGER -> jsonNodeFromObject(value.toInt())
                 BluePrintConstants.DATA_TYPE_FLOAT -> jsonNodeFromObject(value.toFloat())
                 BluePrintConstants.DATA_TYPE_DOUBLE -> jsonNodeFromObject(value.toDouble())
-                //TODO: Verify.. I assume string type should be here..
                 BluePrintConstants.DATA_TYPE_STRING -> jsonNodeFromObject(value)
                 else -> getJsonNode(value)
             }
