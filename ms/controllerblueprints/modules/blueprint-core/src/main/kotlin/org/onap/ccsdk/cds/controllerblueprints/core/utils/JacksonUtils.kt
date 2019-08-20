@@ -236,7 +236,7 @@ class JacksonUtils {
             }
         }
 
-        fun populatePrimitiveValues(key: String, value: Any, primitiveType: String, objectNode: ObjectNode) {
+        fun populatePrimitiveValues(key: String, value: JsonNode, primitiveType: String, objectNode: ObjectNode) {
             when (primitiveType.toLowerCase()) {
                 BluePrintConstants.DATA_TYPE_BOOLEAN,
                 BluePrintConstants.DATA_TYPE_INTEGER,
@@ -244,19 +244,19 @@ class JacksonUtils {
                 BluePrintConstants.DATA_TYPE_DOUBLE,
                 BluePrintConstants.DATA_TYPE_TIMESTAMP,
                 BluePrintConstants.DATA_TYPE_STRING ->
-                    objectNode.set(key, value as JsonNode)
+                    objectNode.set(key, value)
                 else -> throw BluePrintException("populatePrimitiveValues expected only primitive values! Received: ($value)")
             }
         }
 
-        fun populatePrimitiveValues(value: Any, primitiveType: String, arrayNode: ArrayNode) {
+        fun populatePrimitiveValues(value: JsonNode, primitiveType: String, arrayNode: ArrayNode) {
             when (primitiveType.toLowerCase()) {
                 BluePrintConstants.DATA_TYPE_BOOLEAN,
                 BluePrintConstants.DATA_TYPE_INTEGER,
                 BluePrintConstants.DATA_TYPE_FLOAT,
                 BluePrintConstants.DATA_TYPE_DOUBLE,
                 BluePrintConstants.DATA_TYPE_TIMESTAMP,
-                BluePrintConstants.DATA_TYPE_STRING -> arrayNode.add(value as JsonNode)
+                BluePrintConstants.DATA_TYPE_STRING -> arrayNode.add(value)
                 else -> throw BluePrintException("populatePrimitiveValues expected only primitive values! Received: ($value)")
             }
         }
