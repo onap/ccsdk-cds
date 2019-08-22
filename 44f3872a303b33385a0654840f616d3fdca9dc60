@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d0c2ae35_94bd7016",
+        "filename": "docs/datadictionary/dbsystemcode.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 4567
+      },
+      "writtenOn": "2019-08-22T16:01:47Z",
+      "side": 1,
+      "message": "should be just $username",
+      "range": {
+        "startLine": 14,
+        "startChar": 17,
+        "endLine": 14,
+        "endChar": 23
+      },
+      "revId": "44f3872a303b33385a0654840f616d3fdca9dc60",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8dd46dc9_7d7189d7",
+        "filename": "docs/datadictionary/dbsystemcode.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 4567
+      },
+      "writtenOn": "2019-08-22T16:01:47Z",
+      "side": 1,
+      "message": "should be just $password",
+      "range": {
+        "startLine": 15,
+        "startChar": 17,
+        "endLine": 15,
+        "endChar": 23
+      },
+      "revId": "44f3872a303b33385a0654840f616d3fdca9dc60",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
