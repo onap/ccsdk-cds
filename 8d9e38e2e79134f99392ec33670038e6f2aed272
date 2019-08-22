@@ -22,6 +22,52 @@
       "revId": "8d9e38e2e79134f99392ec33670038e6f2aed272",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dee7a20b_30958ef5",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-08-22T14:16:55Z",
+      "side": 1,
+      "message": "I think this pattern of for loop/breaking can be cleaned up using findFirstOrNull with similar predicate.\n\nIn case of iteration over maps, may want to use keySet",
+      "range": {
+        "startLine": 345,
+        "startChar": 17,
+        "endLine": 348,
+        "endChar": 48
+      },
+      "revId": "8d9e38e2e79134f99392ec33670038e6f2aed272",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "571133aa_d023215f",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-08-22T14:16:55Z",
+      "side": 1,
+      "message": "possible to make cleaner with findFirstOrNull",
+      "range": {
+        "startLine": 365,
+        "startChar": 19,
+        "endLine": 369,
+        "endChar": 17
+      },
+      "revId": "8d9e38e2e79134f99392ec33670038e6f2aed272",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
