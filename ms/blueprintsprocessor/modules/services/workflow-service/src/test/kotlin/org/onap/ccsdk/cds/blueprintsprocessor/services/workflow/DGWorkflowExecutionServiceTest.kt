@@ -18,14 +18,18 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.services.workflow
 
 import kotlinx.coroutines.runBlocking
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.services.workflow.executor.ComponentExecuteNodeExecutor
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonReactorUtils
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationContext
+import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.assertEquals
@@ -36,8 +40,16 @@ import kotlin.test.assertNotNull
 class DGWorkflowExecutionServiceTest {
 
     @Autowired
+    lateinit var applicationContext: ApplicationContext
+
+    @Autowired
     lateinit var dgWorkflowExecutionService: DGWorkflowExecutionService
 
+
+    @Before
+    fun init() {
+        BluePrintDependencyService.inject(applicationContext)
+    }
 
     @Test
     fun testExecuteDirectedGraph() {
