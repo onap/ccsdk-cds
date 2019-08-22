@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "15dd3913_f5391387",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-08-22T20:13:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2ddc19e_86fd0bb4",
+      "range": {
+        "startLine": 221,
+        "startChar": 10,
+        "endLine": 224,
+        "endChar": 28
+      },
+      "revId": "1f8919de72695070dbb2c7d4194fa2bb2450f640",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4fda36e9_ab91395a",
         "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
         "patchSetId": 3
@@ -65,6 +89,30 @@
     },
     {
       "key": {
+        "uuid": "2486ebcf_d6651e5a",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-08-22T20:13:27Z",
+      "side": 1,
+      "message": "Better to declare as VAL and local.",
+      "parentUuid": "4fda36e9_ab91395a",
+      "range": {
+        "startLine": 248,
+        "startChar": 24,
+        "endLine": 248,
+        "endChar": 41
+      },
+      "revId": "1f8919de72695070dbb2c7d4194fa2bb2450f640",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b5c79ed6_2c1282f3",
         "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
         "patchSetId": 3
@@ -76,6 +124,30 @@
       "writtenOn": "2019-08-22T18:43:04Z",
       "side": 1,
       "message": "Rename it with something else to get the clarity whats being added.",
+      "range": {
+        "startLine": 264,
+        "startChar": 38,
+        "endLine": 264,
+        "endChar": 40
+      },
+      "revId": "1f8919de72695070dbb2c7d4194fa2bb2450f640",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5e20a661_384c8810",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-08-22T20:13:27Z",
+      "side": 1,
+      "message": "Thanks for the comment!\nChange it.",
+      "parentUuid": "b5c79ed6_2c1282f3",
       "range": {
         "startLine": 264,
         "startChar": 38,
