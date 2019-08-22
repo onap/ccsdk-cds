@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "18fe14c5_9dd71932",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2019-08-22T22:15:54Z",
+      "side": 1,
+      "message": "What if result is empty?",
+      "range": {
+        "startLine": 230,
+        "startChar": 29,
+        "endLine": 230,
+        "endChar": 38
+      },
+      "revId": "926d3c285c7a99f504116002088dccf97ec629e5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a76526c4_c3f4ea9c",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2019-08-22T22:15:54Z",
+      "side": 1,
+      "message": "Add curly braces.",
+      "range": {
+        "startLine": 301,
+        "startChar": 23,
+        "endLine": 302,
+        "endChar": 51
+      },
+      "revId": "926d3c285c7a99f504116002088dccf97ec629e5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f5a2ddc4_626c7054",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2019-08-22T22:15:54Z",
+      "side": 1,
+      "message": "Add curly braces applies elsewhere.",
+      "range": {
+        "startLine": 322,
+        "startChar": 15,
+        "endLine": 323,
+        "endChar": 41
+      },
+      "revId": "926d3c285c7a99f504116002088dccf97ec629e5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a822f339_22ce0e12",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2019-08-22T22:15:54Z",
+      "side": 1,
+      "message": "Optional you can use foreach loop",
+      "range": {
+        "startLine": 352,
+        "startChar": 11,
+        "endLine": 354,
+        "endChar": 13
+      },
+      "revId": "926d3c285c7a99f504116002088dccf97ec629e5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "61387ce3_da5c03ee",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2019-08-22T22:15:54Z",
+      "side": 1,
+      "message": "What if result is empty ?\n\nreturn result\u003d\u003d null is redudant in this case.\njust do return \u003cyour condition\u003e",
+      "range": {
+        "startLine": 362,
+        "startChar": 95,
+        "endLine": 362,
+        "endChar": 106
+      },
+      "revId": "926d3c285c7a99f504116002088dccf97ec629e5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
