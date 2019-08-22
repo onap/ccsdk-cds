@@ -35,6 +35,7 @@ import org.junit.ClassRule
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
+import org.mockito.Answers
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestLibConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
@@ -105,7 +106,7 @@ class BlueprintsAcceptanceTest(private val blueprintName: String, private val fi
     @JvmField
     val springMethodRule = SpringMethodRule()
 
-    @MockBean(name = RestLibConstants.SERVICE_BLUEPRINT_REST_LIB_PROPERTY)
+    @MockBean(name = RestLibConstants.SERVICE_BLUEPRINT_REST_LIB_PROPERTY, answer = Answers.RETURNS_SMART_NULLS)
     lateinit var restClientFactory: BluePrintRestLibPropertyService
 
     @Autowired
@@ -160,7 +161,8 @@ class BlueprintsAcceptanceTest(private val blueprintName: String, private val fi
 
     private fun createRestClientMock(selector: String, restExpectations: List<ExpectationDefinition>)
             : BlueprintWebClientService {
-        val restClient = mock<BlueprintWebClientService>(verboseLogging = true)
+        val restClient = mock<BlueprintWebClientService>(verboseLogging = true,
+                defaultAnswer = Answers.RETURNS_SMART_NULLS)
 
         // Delegates to overloaded exchangeResource(String, String, String, Map<String, String>)
         whenever(restClient.exchangeResource(any(), any(), any()))
