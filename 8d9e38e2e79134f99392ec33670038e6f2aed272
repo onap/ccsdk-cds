@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c4a5961b_b5091860",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-08-22T03:50:04Z",
+      "side": 1,
+      "message": "Why we need this check ?",
+      "range": {
+        "startLine": 219,
+        "startChar": 28,
+        "endLine": 219,
+        "endChar": 91
+      },
+      "revId": "8d9e38e2e79134f99392ec33670038e6f2aed272",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
