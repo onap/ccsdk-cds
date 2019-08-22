@@ -48,7 +48,7 @@ export class MetadataComponent implements OnInit {
   blueprintName: string;
   uploadedFileName: string;
   entryDefinition: string;
-
+  
   constructor(private formBuilder: FormBuilder, private store: Store<IAppState>,
     private loader: LoaderService, private dataService: SelectTemplateService) {
     this.bpState = this.store.select('blueprint');
@@ -60,12 +60,17 @@ export class MetadataComponent implements OnInit {
       template_version: ['', Validators.required],
       template_tags: ['', Validators.required]
     });
+
   }
 
   ngOnInit() {
-    this.dataService.getCbaOption().subscribe(
-      res => {console.log("data from service " + res);}
+    this.dataService.currentMessage.subscribe(
+      res => {
+        let options = res;
+        console.log(options + " data from service ngoninit" + res);
+      }
     );
+    
     this.bpState.subscribe(
       blueprintdata => {
         var blueprintState: IBlueprintState = { blueprint: blueprintdata.blueprint, isLoadSuccess: blueprintdata.isLoadSuccess, isSaveSuccess: blueprintdata.isSaveSuccess, isUpdateSuccess: blueprintdata.isUpdateSuccess };
@@ -75,8 +80,6 @@ export class MetadataComponent implements OnInit {
         this.blueprintName = blueprintdata.name;
         this.uploadedFileName = blueprintdata.uploadedFileName;
         this.entryDefinition = blueprintdata.entryDefinition;
-
-
 
         var blueprintState: IBlueprintState = { blueprint: blueprintdata.blueprint, isLoadSuccess: blueprintdata.isLoadSuccess, isSaveSuccess: blueprintdata.isSaveSuccess, isUpdateSuccess: blueprintdata.isUpdateSuccess };
         this.metadata = blueprintState.blueprint.metadata;
@@ -99,11 +102,7 @@ export class MetadataComponent implements OnInit {
         });
       })
   }
-ngAfterInit(){
-  this.dataService.getCbaOption().subscribe(
-    res => {console.log("data from service after init" + res);}
-  );
-}
+  
   UploadMetadata() {
     this.loader.showLoader();
     this.metadata = Object.assign({}, this.CBAMetadataForm.value);

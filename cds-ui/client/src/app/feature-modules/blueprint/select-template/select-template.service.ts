@@ -20,21 +20,29 @@ limitations under the License.
 */
 
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SelectTemplateService {
   cbaOption: string;
+  private messageSource = new BehaviorSubject('default message');
+  currentMessage = this.messageSource.asObservable();
 
   constructor() { }
 
   setCbaOption(option: string) {
-    this.cbaOption = option;
+    this.messageSource.next(option);
   }
+  // setCbaOption(option: string) {
+  //   this.cbaOption = option;
+  //   console.log("CBA option set to"+this.cbaOption+":"+option);
+  // }
 
-  getCbaOption(): Observable<string> {
-    return of(this.cbaOption);
-  }
+  // getCbaOption(): Observable<any> {
+  //   console.log("CBA option is "+this.cbaOption);
+  //   // return of(this.cbaOption);
+  //   return this.cbaOption.asObservable(); 
+  // }
 }

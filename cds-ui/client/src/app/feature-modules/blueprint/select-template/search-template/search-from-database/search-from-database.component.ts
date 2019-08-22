@@ -33,7 +33,7 @@ import { IBlueprint } from '../../../../../common/core/store/models/blueprint.mo
 import { IBlueprintState } from '../../../../../common/core/store/models/blueprintState.model';
 import { IAppState } from '../../../../../common/core/store/state/app.state';
 import { SetBlueprintState } from '../../../../../common/core/store/actions/blueprint.action';
-
+import { SelectTemplateService } from '../../select-template.service';
 @Component({
   selector: 'app-search-from-database',
   templateUrl: './search-from-database.component.html',
@@ -61,8 +61,8 @@ export class SearchFromDatabaseComponent implements OnInit {
 
   searchText: string = '';
   constructor(private _formBuilder: FormBuilder,
-    private searchService: SearchTemplateService, private alertService: NotificationHandlerService, 
-    private loader: LoaderService, private store: Store<IAppState>) { }
+    private searchService: SearchTemplateService, private alertService: NotificationHandlerService,
+    private loader: LoaderService, private store: Store<IAppState>, private cbEditOption: SelectTemplateService) { }
 
   ngOnInit() {
     this.myControl = this._formBuilder.group({
@@ -85,7 +85,8 @@ export class SearchFromDatabaseComponent implements OnInit {
       })
   }
 
-  editCBA(artifactName: string,artifactVersion:string, option: string) {
+  editCBA(artifactName: string, artifactVersion: string, option: string) {
+    this.cbEditOption.setCbaOption(option);
     this.zipFile.generateAsync({ type: "blob" })
       .then(blob => {
         const formData = new FormData();
