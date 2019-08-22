@@ -19,29 +19,22 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { SearchFromDatabaseComponent } from './search-from-database/search-from-database.component';
-import { SearchTemplateComponent } from './search-template.component';
-import { ReactiveFormsModule } from '@angular/forms';
-import { AppMaterialModule } from 'src/app/common/modules/app-material.module';
-import { SharedModule} from 'src/app/common/shared/shared.module';
-import { SelectTemplateService } from 'src/app/feature-modules/blueprint/select-template/select-template.service';
-  
-@NgModule({
-  declarations: [
-    SearchTemplateComponent,
-    SearchFromDatabaseComponent],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    AppMaterialModule,
-    SharedModule   
-  ],
-  exports:[
-    SearchTemplateComponent,
-    SearchFromDatabaseComponent
-    ],
-  providers:[ SelectTemplateService]
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
 })
-export class SearchTemplateModule { }
+export class SelectTemplateService {
+  cbaOption: string;
+
+  constructor() { }
+
+  setCbaOption(option: string) {
+    this.cbaOption = option;
+  }
+
+  getCbaOption(): Observable<string> {
+    return of(this.cbaOption);
+  }
+}
