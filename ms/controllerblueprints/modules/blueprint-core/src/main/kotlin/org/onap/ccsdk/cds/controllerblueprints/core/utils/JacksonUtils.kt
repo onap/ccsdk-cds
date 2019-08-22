@@ -243,7 +243,8 @@ class JacksonUtils {
                 BluePrintConstants.DATA_TYPE_FLOAT,
                 BluePrintConstants.DATA_TYPE_DOUBLE,
                 BluePrintConstants.DATA_TYPE_TIMESTAMP,
-                BluePrintConstants.DATA_TYPE_STRING ->
+                BluePrintConstants.DATA_TYPE_STRING,
+                BluePrintConstants.DATA_TYPE_NULL ->
                     objectNode.set(key, value)
                 else -> throw BluePrintException("populatePrimitiveValues expected only primitive values! Received: ($value)")
             }
@@ -256,7 +257,9 @@ class JacksonUtils {
                 BluePrintConstants.DATA_TYPE_FLOAT,
                 BluePrintConstants.DATA_TYPE_DOUBLE,
                 BluePrintConstants.DATA_TYPE_TIMESTAMP,
-                BluePrintConstants.DATA_TYPE_STRING -> arrayNode.add(value)
+                BluePrintConstants.DATA_TYPE_STRING,
+                BluePrintConstants.DATA_TYPE_NULL ->
+ 		    arrayNode.add(value)
                 else -> throw BluePrintException("populatePrimitiveValues expected only primitive values! Received: ($value)")
             }
         }
