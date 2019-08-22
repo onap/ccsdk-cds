@@ -33,7 +33,8 @@ enum class NodeStatus(val id: String) {
     READY("ready"),
     EXECUTING("executing"),
     EXECUTED("executed"),
-    SKIPPED("skipped")
+    SKIPPED("skipped"),
+    TERMINATED("terminated")
 }
 
 class Graph {

@@ -19,6 +19,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.services.execution
 
 
 import com.fasterxml.jackson.databind.JsonNode
+import kotlinx.coroutines.withTimeout
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.Status
@@ -47,6 +48,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     lateinit var interfaceName: String
     lateinit var operationName: String
     lateinit var nodeTemplateName: String
+    var timeout: Int = 180
     var operationInputs: MutableMap<String, JsonNode> = hashMapOf()
 
     override fun getName(): String {
@@ -87,6 +89,9 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
 
         this.operationInputs.putAll(operationResolvedProperties)
 
+        val timeout = this.operationInputs.getOptionalAsInt(BluePrintConstants.PROPERTY_CURRENT_TIMEOUT)
+        timeout?.let { this.timeout = timeout }
+
         return executionRequest
     }
 
@@ -118,7 +123,9 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     override suspend fun applyNB(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
         try {
             prepareRequestNB(executionServiceInput)
-            processNB(executionServiceInput)
+            withTimeout((timeout * 1000).toLong()) {
+                processNB(executionServiceInput)
+            }
         } catch (runtimeException: RuntimeException) {
             log.error("failed in ${getName()} : ${runtimeException.message}", runtimeException)
             recoverNB(runtimeException, executionServiceInput)

@@ -30,13 +30,12 @@ import kotlin.coroutines.CoroutineContext
 interface BluePrintWorkFlowService<In, Out> {
 
     /** Executes imperative workflow graph [graph] for the bluePrintRuntimeService [bluePrintRuntimeService]
-     * and workflow input [input], response will be retrieve from output [output]*/
-    suspend fun executeWorkflow(graph: Graph, bluePrintRuntimeService: BluePrintRuntimeService<*>,
-                                input: In, output: CompletableDeferred<Out>)
+     * and workflow input [input]*/
+    suspend fun executeWorkflow(graph: Graph, bluePrintRuntimeService: BluePrintRuntimeService<*>, input: In): Out
 
     suspend fun initializeWorkflow(input: In): EdgeLabel
 
-    suspend fun prepareWorkflowOutput(exception: BluePrintProcessorException?): Out
+    suspend fun prepareWorkflowOutput(): Out
 
     /** Prepare the message for the Node */
     suspend fun prepareNodeExecutionMessage(node: Graph.Node): NodeExecuteMessage<In, Out>
@@ -91,6 +90,8 @@ abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BlueP
 
     lateinit var workflowId: String
 
+    var exceptions: MutableList<Exception> = arrayListOf()
+
     final override val coroutineContext: CoroutineContext
         get() = job + CoroutineName("Wf")
 
@@ -100,7 +101,7 @@ abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BlueP
         throw CancellationException("Workflow($workflowId) cancelled as requested")
     }
 
-    fun workflowActor() = actor<WorkflowMessage<In, Out>>(coroutineContext, Channel.UNLIMITED) {
+    suspend fun workflowActor() = actor<WorkflowMessage<In, Out>>(coroutineContext, Channel.UNLIMITED) {
         /** Process the workflow execution message */
         suspend fun executeMessageActor(workflowExecuteMessage: WorkflowExecuteMessage<In, Out>) {
 
@@ -119,13 +120,11 @@ abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BlueP
             // Wait for workflow completion or Error
             nodeActor.invokeOnClose { exception ->
                 launch {
-                    log.info("End Node Completed, processing completion message")
-                    val bluePrintProcessorException: BluePrintProcessorException? =
-                            if (exception != null) BluePrintProcessorException(exception) else null
-
-                    val workflowOutput = prepareWorkflowOutput(bluePrintProcessorException)
+                    if (exception != null) exceptions.add(BluePrintProcessorException(exception))
+                    log.info("workflow($workflowId) nodes completed with (${exceptions.size})exceptions")
+                    val workflowOutput = prepareWorkflowOutput()
                     workflowExecuteMessage.output.complete(workflowOutput)
-                    channel.close(exception)
+                    channel.close()
                 }
             }
         }
@@ -135,7 +134,11 @@ abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BlueP
             when (message) {
                 is WorkflowExecuteMessage<In, Out> -> {
                     launch {
-                        executeMessageActor(message)
+                        try {
+                            executeMessageActor(message)
+                        } catch (e: Exception) {
+                            exceptions.add(e)
+                        }
                     }
                 }
                 is WorkflowRestartMessage<In, Out> -> {
@@ -153,7 +156,7 @@ abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BlueP
     }
 
 
-    private fun nodeActor() = actor<NodeMessage<In, Out>>(coroutineContext, Channel.UNLIMITED) {
+    private suspend fun nodeActor() = actor<NodeMessage<In, Out>>(coroutineContext, Channel.UNLIMITED) {
 
         /** Send message to process from one state to other state */
         fun sendNodeMessage(nodeMessage: NodeMessage<In, Out>) = launch {
@@ -164,7 +167,6 @@ abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BlueP
         fun processNextNodes(node: Graph.Node, nodeState: EdgeLabel) {
             // Process only Next Success Node
             val stateEdges = graph.outgoingEdges(node.id, arrayListOf(nodeState))
-            log.debug("Next Edges :$stateEdges")
             if (stateEdges.isNotEmpty()) {
                 stateEdges.forEach { stateEdge ->
                     // Prepare next node ready message and Send NodeReadyMessage
@@ -213,7 +215,7 @@ abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BlueP
                     }
                     triggerToExecuteOrSkip(newMessage)
                 } else {
-                    log.info("node(${node.id}) waiting for not completed edges($notCompletedEdges)")
+                    log.info("node(${node.id}) is waiting for incoming edges($notCompletedEdges)")
                 }
             } else {
                 triggerToExecuteOrSkip(message)
@@ -233,15 +235,19 @@ abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BlueP
             }
             // Update Node Completed
             node.status = NodeStatus.EXECUTED
-            log.info("Execute Node($node) -> Executed State($nodeState)")
+            log.info("Execute node(${node.id}) -> executed state($nodeState)")
+            // Check if the Node status edge is there, If not close processing
+            val edgePresent = graph.outgoingEdges(node.id, nodeState).isNotEmpty()
 
             // If End Node, Send End Message
             if (graph.isEndNode(node)) {
                 // Close the current channel
                 channel.close()
+            } else if (!edgePresent) {
+                throw BluePrintProcessorException("node(${node.id}) outgoing edge($nodeState) is missing.")
             } else {
                 val skippingEdges = graph.outgoingEdgesNotInLabels(node.id, arrayListOf(nodeState))
-                log.debug("Skipping node($node) outgoing Edges($skippingEdges)")
+                log.debug("Skipping node($node)'s outgoing edges($skippingEdges)")
                 // Process Skip Edges
                 skippingEdges.forEach { skippingEdge ->
                     // Prepare next node ready message and Send NodeReadyMessage
@@ -266,7 +272,7 @@ abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BlueP
                 log.debug("$$$$$ Skipping workflow($workflowId) node($node) $$$$$")
                 // Call the Extension Function
                 val nodeState = skipNode(node, message.nodeInput, message.nodeOutput)
-                log.info("Skip Node($node) -> Executed State($nodeState)")
+                log.info("Skip node(${node.id}) -> executed state($nodeState)")
                 // Mark the Current node as Skipped
                 node.status = NodeStatus.SKIPPED
                 // Look for next possible skip nodes
@@ -283,7 +289,7 @@ abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BlueP
 
         fun cancelNodeWorker(messageWorkflow: WorkflowCancelMessage<In, Out>) = launch {
             channel.close()
-            throw CancellationException("Workflow($workflowId) actor cancelled as requested ...")
+            throw CancellationException("Workflow($workflowId) actor cancelled as requested.")
         }
 
         /** Process each actor message received based on type **/
@@ -294,7 +300,8 @@ abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BlueP
                     try {
                         readyNodeWorker(nodeMessage)
                     } catch (e: Exception) {
-                        channel.close(e)
+                        exceptions.add(e)
+                        channel.close()
                     }
                 }
                 is NodeExecuteMessage<In, Out> -> {
@@ -302,7 +309,9 @@ abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BlueP
                         try {
                             executeNodeWorker(nodeMessage)
                         } catch (e: Exception) {
-                            channel.close(e)
+                            nodeMessage.node.status = NodeStatus.TERMINATED
+                            exceptions.add(e)
+                            channel.close()
                         }
                     }
                 }
@@ -311,7 +320,9 @@ abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BlueP
                         try {
                             skipNodeWorker(nodeMessage)
                         } catch (e: Exception) {
-                            channel.close(e)
+                            nodeMessage.node.status = NodeStatus.TERMINATED
+                            exceptions.add(e)
+                            channel.close()
                         }
                     }
                 }
@@ -320,20 +331,12 @@ abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BlueP
                         try {
                             restartNodeWorker(nodeMessage)
                         } catch (e: Exception) {
-                            channel.close(e)
+                            exceptions.add(e)
+                            channel.close()
                         }
                     }
                 }
             }
         }
-    }
-
-    override suspend fun executeWorkflow(graph: Graph, bluePrintRuntimeService: BluePrintRuntimeService<*>,
-                                         input: In, output: CompletableDeferred<Out>) {
-        log.info("Executing Graph : $graph")
-        this.graph = graph
-        this.workflowId = bluePrintRuntimeService.id()
-        val startMessage = WorkflowExecuteMessage(input, output)
-        workflowActor().send(startMessage)
     }
 }

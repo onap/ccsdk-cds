@@ -216,6 +216,11 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
                 ?: throw BluePrintException("could't get NodeTemplate($nodeTemplateName)'s first InterfaceAssignment's first OperationAssignment name")
     }
 
+    fun nodeTemplateOperationImplementation(nodeTemplateName: String, interfaceName: String, operationName: String)
+            : Implementation? {
+        return nodeTemplateInterfaceOperation(nodeTemplateName, interfaceName, operationName).implementation
+    }
+
     fun nodeTemplateInterfaceOperationInputs(nodeTemplateName: String, interfaceName: String, operationName: String): MutableMap<String, JsonNode>? {
         return nodeTemplateInterfaceOperation(nodeTemplateName, interfaceName, operationName).inputs
     }
