@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "009b22c7_d8167a67",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2019-08-22T18:43:04Z",
+      "side": 1,
+      "message": "Optional: Add some description for the new methods so it would be easy to understand what this method do.",
+      "revId": "1f8919de72695070dbb2c7d4194fa2bb2450f640",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d2ddc19e_86fd0bb4",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2019-08-22T18:43:04Z",
+      "side": 1,
+      "message": "Please add curly braces.",
+      "range": {
+        "startLine": 221,
+        "startChar": 10,
+        "endLine": 224,
+        "endChar": 28
+      },
+      "revId": "1f8919de72695070dbb2c7d4194fa2bb2450f640",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4fda36e9_ab91395a",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2019-08-22T18:43:04Z",
+      "side": 1,
+      "message": "Why cant u initialize at the one place ?\nI can see responseArrayNode in every if statment make it global instead.",
+      "range": {
+        "startLine": 248,
+        "startChar": 24,
+        "endLine": 248,
+        "endChar": 41
+      },
+      "revId": "1f8919de72695070dbb2c7d4194fa2bb2450f640",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b5c79ed6_2c1282f3",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2019-08-22T18:43:04Z",
+      "side": 1,
+      "message": "Rename it with something else to get the clarity whats being added.",
+      "range": {
+        "startLine": 264,
+        "startChar": 38,
+        "endLine": 264,
+        "endChar": 40
+      },
+      "revId": "1f8919de72695070dbb2c7d4194fa2bb2450f640",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
