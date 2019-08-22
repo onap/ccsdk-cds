@@ -331,18 +331,7 @@ export class EditorComponent implements OnInit {
   download() {
     console.log(this.artifactName);
     // status = this.editorService.downloadCBA("/download-blueprint/" + this.artifactName + "/" + this.artifactVersion);
-    status = this.editorService.downloadCBA("/"+this.artifactName + "/" + this.artifactVersion);
-    window.alert(status);
-    // .subscribe(response => {
-    //   console.log(response);
-    //   var blob = new Blob([response], { type: 'application/zip' });
-    //   const fileName = 'CBA';
-    //   saveAs(blob, fileName);
-    // },
-    //   error => {
-    //     console.log(error);
-    //   }
-    // );
+     this.editorService.downloadCBA("/"+this.artifactName + "/" + this.artifactVersion);
   }
   
   setEditorMode() {

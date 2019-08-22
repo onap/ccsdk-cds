@@ -1,7 +1,7 @@
 /*
 ============LICENSE_START==========================================
 ===================================================================
-Copyright (C) 2018 IBM Intellectual Property. All rights reserved.
+Copyright (C) 2018-19 IBM Intellectual Property. All rights reserved.
 ===================================================================
 
 Unless otherwise specified, all software contained herein is licensed
@@ -26,10 +26,12 @@ import { Observable, observable } from 'rxjs';
 import { ApiService } from '../../../../common/core/services/api.service';
 import { saveAs } from 'file-saver';
 import { BlueprintURLs } from '../../../../common/constants/app-constants';
+import { NotificationHandlerService } from 'src/app/common/core/services/notification-handler.service';
 
 @Injectable()
 export class EditorService {
-    constructor(private _http: HttpClient, private api: ApiService) {
+    constructor(private _http: HttpClient, private api: ApiService,
+        private alertService: NotificationHandlerService,) {
     }
 
     enrich(body: FormData): Observable<any> {
@@ -40,7 +42,7 @@ export class EditorService {
             .subscribe(response => {
                 let blob = new Blob([response], { 'type': "application/octet-stream" });
                 saveAs(blob, "CBA.zip");
-                window.alert('Blueprint download successfull' );
+                this.alertService.success('Blueprint downloaded successfully' );
             });
         return "Download Success";
 
