@@ -27,15 +27,15 @@ import { MetadataComponent } from './metadata/metadata.component';
 import { SelectTemplateComponent } from './select-template.component';
 import { SelectTemplateRoutingModule } from './select-template-routing.module';
 import { AppMaterialModule } from 'src/app/common/modules/app-material.module';
-import { SearchTemplateModule} from './search-template/search-template.module';
-
+import { SearchTemplateModule } from './search-template/search-template.module';
+import { SelectTemplateService } from './select-template.service';
 @NgModule({
   declarations: [
     TemplateOptionsComponent,
-     MetadataComponent,
-     SelectTemplateComponent
+    MetadataComponent,
+    SelectTemplateComponent
   ],
-   exports: [
+  exports: [
     TemplateOptionsComponent,
     SearchTemplateComponent,
     MetadataComponent,
@@ -47,6 +47,9 @@ import { SearchTemplateModule} from './search-template/search-template.module';
     ReactiveFormsModule,
     AppMaterialModule,
     SearchTemplateModule
+  ],
+  providers: [
+    SelectTemplateService
   ]
 })
 export class SelectTemplateModule { }
