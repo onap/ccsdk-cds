@@ -37,6 +37,29 @@
     },
     {
       "key": {
+        "uuid": "946f942d_96f0fa8b",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/processor/RestResourceResolutionProcessor.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2019-08-22T18:50:31Z",
+      "side": 1,
+      "message": "This code and from line 206 to 215 is same. U can add it into one common method to avoid duplication.",
+      "range": {
+        "startLine": 161,
+        "startChar": 22,
+        "endLine": 174,
+        "endChar": 56
+      },
+      "revId": "150455d02b9dee2f44fb7029761fd2e0470bf411",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9b90cf2f_525b1cf9",
         "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/processor/RestResourceResolutionProcessor.kt",
         "patchSetId": 1
