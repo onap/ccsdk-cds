@@ -32,10 +32,12 @@ import { DeployTemplateModule } from './deploy-template/deploy-template.module';
 import { TestTemplateModule } from './test-template/test-template.module';
 import { AppMaterialModule } from '../../../app/common/modules/app-material.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ZipfileExtractionComponent } from './common-module/zipfile-extraction/zipfile-extraction.component';
 
 @NgModule({
   declarations: [
-    BlueprintComponent
+    BlueprintComponent,
+    ZipfileExtractionComponent
   ],
   imports: [
     CommonModule,
