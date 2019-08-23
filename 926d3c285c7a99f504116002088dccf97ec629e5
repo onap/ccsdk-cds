@@ -191,6 +191,30 @@
     },
     {
       "key": {
+        "uuid": "45004a63_81cb2a5d",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-08-23T15:09:09Z",
+      "side": 1,
+      "message": "Thanks Oleg!",
+      "parentUuid": "12e2b302_44e3a8b5",
+      "range": {
+        "startLine": 322,
+        "startChar": 15,
+        "endLine": 323,
+        "endChar": 41
+      },
+      "revId": "926d3c285c7a99f504116002088dccf97ec629e5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a822f339_22ce0e12",
         "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
         "patchSetId": 5
