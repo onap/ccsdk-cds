@@ -167,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "12e2b302_44e3a8b5",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-08-23T14:27:28Z",
+      "side": 1,
+      "message": "personal opinion: \nsomeNewValue \u003d if (condition) trueValue  else falseValue \nis infinitely more readable than\n\nsome newVal \u003d if (condition) {\n  trueValue\n} else {\n  falseValue\n}\n\nFor Java code, ONAP defines the 2nd way as preferable. For Kotlin I\u0027m not sure what\u0027s the preference; but most languages are moving towards #1 as it\u0027s more readable...",
+      "parentUuid": "efd78a24_ce2bcaec",
+      "range": {
+        "startLine": 322,
+        "startChar": 15,
+        "endLine": 323,
+        "endChar": 41
+      },
+      "revId": "926d3c285c7a99f504116002088dccf97ec629e5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a822f339_22ce0e12",
         "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
         "patchSetId": 5
