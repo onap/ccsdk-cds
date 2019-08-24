@@ -131,10 +131,10 @@ class BlueprintsAcceptanceTest(private val blueprintName: String, private val fi
 
         uploadBlueprint(blueprintName)
 
-        // Configure mocked external services
-        val expectationPerClient = uat.externalServices.associateBy(
+        // Configure mocked external services and save their expected requests for further validation
+        val requestsPerClient = uat.externalServices.associateBy(
                 { service -> createRestClientMock(service.selector, service.expectations) },
-                { service -> service.expectations }
+                { service -> service.expectations.map { it.request } }
         )
 
         // Run processes
@@ -144,14 +144,14 @@ class BlueprintsAcceptanceTest(private val blueprintName: String, private val fi
                     JsonNormalizer.getNormalizer(mapper, process.responseNormalizerSpec))
         }
 
-        // Validate request payloads to external services
-        for ((mockClient, expectations) in expectationPerClient) {
-            expectations.forEach { expectation ->
+        // Validate requests to external services
+        for ((mockClient, requests) in requestsPerClient) {
+            requests.forEach { request ->
                 verify(mockClient, atLeastOnce()).exchangeResource(
-                        eq(expectation.request.method),
-                        eq(expectation.request.path),
-                        argThat { assertJsonEqual(expectation.request.body, this) },
-                        expectation.request.requestHeadersMatcher())
+                        eq(request.method),
+                        eq(request.path),
+                        argThat { assertJsonEqual(request.body, this) },
+                        argThat(RequiredMapEntriesMatcher(request.headers)))
             }
             // Don't mind the invocations to the overloaded exchangeResource(String, String, String)
             verify(mockClient, atLeast(0)).exchangeResource(any(), any(), any())
