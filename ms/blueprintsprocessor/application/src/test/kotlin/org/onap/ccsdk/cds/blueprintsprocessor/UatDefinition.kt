@@ -24,8 +24,6 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.node.MissingNode
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.eq
 import org.yaml.snakeyaml.Yaml
 import java.nio.file.Path
 
@@ -35,13 +33,8 @@ data class ProcessDefinition(val name: String, val request: JsonNode, val expect
 data class RequestDefinition(val method: String,
                              @JsonDeserialize(using = PathDeserializer::class)
                              val path: String,
-                             @JsonAlias("content-type")
-                             val contentType: String? = null,
-                             val body: JsonNode = MissingNode.getInstance()) {
-    fun requestHeadersMatcher(): Map<String, String> {
-        return if (contentType != null) eq(mapOf("Content-Type" to contentType)) else any()
-    }
-}
+                             val headers: Map<String, String> = emptyMap(),
+                             val body: JsonNode = MissingNode.getInstance())
 
 data class ResponseDefinition(val status: Int = 200, val body: JsonNode = MissingNode.getInstance()) {
     companion object {

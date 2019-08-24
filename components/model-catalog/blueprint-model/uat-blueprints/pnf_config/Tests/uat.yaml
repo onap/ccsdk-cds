@@ -96,7 +96,8 @@ external-services:
       - request:
           method: PUT
           path: &configUri [ restconf/config, &nodeIdentifier [network-topology:network-topology/topology/topology-netconf/node, *pnfId]]
-          content-type: application/json
+          headers:
+            Content-Type: application/json
           body:
             node:
               - node-id: *pnfId
@@ -124,7 +125,8 @@ external-services:
       - request:
           method: PATCH
           path: [*configUri, *configletResourcePath]
-          content-type: application/yang.patch+json
+          headers:
+            Content-Type: application/yang.patch+json
           body: *assignPatch
       - request:
           method: DELETE
