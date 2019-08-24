@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a30bcd57_0427dc10",
+        "filename": "ms/blueprintsprocessor/application/src/main/resources/application.properties",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2019-08-24T16:41:40Z",
+      "side": 1,
+      "message": "Dnt forget to update the application.properties in the oom project for blueprintprocessor and controllerblueprint.",
+      "revId": "e54d54130fcf7f31cec7cc0c4e042a1309500568",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
