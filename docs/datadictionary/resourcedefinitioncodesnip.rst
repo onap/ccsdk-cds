@@ -5,44 +5,45 @@
 Source Capability Code
 ======================
 
-{
-  "description": "This is Component Resource Source Node Type",
-  "version": "1.0.0",
-  "properties": {
-    "script-type": {
-      "required": true,
-      "type": "string",
-      "default": "kotlin",
-      "constraints": [
-        {
-          "valid_values": [
-            "kotlin",
-            "jython"
-          ]
-        }
-      ]
-    },
-    "script-class-reference": {
-      "description": "Capability reference name for internal and kotlin, for jython script file path",
-      "required": true,
-      "type": "string"
-    },
-    "instance-dependencies": {
-      "required": false,
-      "description": "Instance dependency Names to Inject to Kotlin / Jython Script.",
-      "type": "list",
-      "entry_schema": {
-        "type": "string"
-      }
-    },
-    "key-dependencies": {
-      "description": "Resource Resolution dependency dictionary names.",
-      "required": true,
-      "type": "list",
-      "entry_schema": {
-        "type": "string"
-      }
-    }
-  },
-  "derived_from": "tosca.nodes.ResourceSource"
-}
+.. code-block:: json
+   :linenos:
+   
+   "description": "This is Component Resource Source Node Type",
+   "version": "1.0.0",
+   "properties": {
+     "script-type": {
+       "required": true,
+       "type": "string",
+       "default": "kotlin",
+       "constraints": [
+         {
+           "valid_values": [
+             "kotlin",
+             "jython"
+           ]
+         }
+       ]
+     },
+     "script-class-reference": {
+       "description": "Capability reference name for internal and kotlin, for jython script file path",
+       "required": true,
+       "type": "string"
+     },
+     "instance-dependencies": {
+       "required": false,
+       "description": "Instance dependency Names to Inject to Kotlin / Jython Script.",
+       "type": "list",
+       "entry_schema": {
+         "type": "string"
+       }
+     },
+     "key-dependencies": {
+       "description": "Resource Resolution dependency dictionary names.",
+       "required": true,
+       "type": "list",
+       "entry_schema": {
+         "type": "string"
+       }
+     }
+   },
+   "derived_from": "tosca.nodes.ResourceSource"
