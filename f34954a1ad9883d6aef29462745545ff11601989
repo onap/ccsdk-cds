@@ -88,6 +88,24 @@
     },
     {
       "key": {
+        "uuid": "6fe689f3_84ae8281",
+        "filename": "ms/controllerblueprints/modules/resource-dict/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/resource/dict/ResourceDictionaryConstants.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-08-26T16:09:56Z",
+      "side": 1,
+      "message": "It wasn\u0027t referred by anything. Need to prune unused stuff too, no?",
+      "parentUuid": "80e61ce1_529fa4d8",
+      "revId": "f34954a1ad9883d6aef29462745545ff11601989",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "134c66e4_f928db37",
         "filename": "ms/controllerblueprints/modules/resource-dict/src/test/kotlin/org/onap/ccsdk/cds/controllerblueprints/resource/dict/utils/ResourceDictionaryTestUtils.kt",
         "patchSetId": 3
@@ -122,6 +140,30 @@
       "writtenOn": "2019-08-21T20:33:56Z",
       "side": 1,
       "message": "we should remove this. only need one mapping for processor-db\u003dsource-db",
+      "range": {
+        "startLine": 23,
+        "startChar": 46,
+        "endLine": 23,
+        "endChar": 58
+      },
+      "revId": "f34954a1ad9883d6aef29462745545ff11601989",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "271b0b14_8b6d7d14",
+        "filename": "ms/controllerblueprints/modules/service/src/test/resources/application.properties",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-08-26T16:09:56Z",
+      "side": 1,
+      "message": "Agree",
+      "parentUuid": "e1985c0d_2ea2b261",
       "range": {
         "startLine": 23,
         "startChar": 46,
