@@ -84,4 +84,4 @@ Testing the environment:
 
 Point your browser to http://localhost:8000/api/v1/execution-service/ping (please note that the port is 8000, not 8080)
 
-To authenticate, use ccsdkapps / ccsdkapps as login / password.
+To authenticate, use login user id and password.

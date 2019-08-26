@@ -5,18 +5,21 @@
 dt-netbox-ip code
 =================
 
-{
-  "version": "1.0.0",
-  "description": "This is Netbox IP Data Type",
-  "properties": {
-    "address": {
-      "required": true,
-      "type": "string"
-    },
-    "id": {
-      "required": true,
-      "type": "integer"
-    }
-  },
-  "derived_from": "tosca.datatypes.Root"
-}
+.. code-block:: none
+   :linenos:
+   
+   {
+     "version": "1.0.0",
+     "description": "This is Netbox IP Data Type",
+     "properties": {
+       "address": {
+         "required": true,
+         "type": "string"
+       },
+       "id": {
+         "required": true,
+         "type": "integer"
+       }
+     },
+     "derived_from": "tosca.datatypes.Root"
+   }
