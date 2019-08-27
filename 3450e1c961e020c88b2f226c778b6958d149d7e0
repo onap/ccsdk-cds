@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d318a555_391b9ccf",
+        "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/utils/JacksonUtils.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-27T15:22:10Z",
+      "side": 1,
+      "message": "remove tabs please",
+      "range": {
+        "startLine": 262,
+        "startChar": 0,
+        "endLine": 262,
+        "endChar": 3
+      },
+      "revId": "3450e1c961e020c88b2f226c778b6958d149d7e0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
