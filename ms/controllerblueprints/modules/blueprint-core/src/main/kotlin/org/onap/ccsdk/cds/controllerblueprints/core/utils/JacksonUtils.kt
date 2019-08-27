@@ -287,7 +287,7 @@ class JacksonUtils {
             }
         }
 
-        fun populateJsonNodeValues(key: String, nodeValue: JsonNode, type: String, objectNode: ObjectNode) {
+        fun populateJsonNodeValues(key: String, nodeValue: JsonNode?, type: String, objectNode: ObjectNode) {
             if (nodeValue == null || nodeValue is NullNode) {
                 objectNode.set(key, nodeValue)
             } else if (BluePrintTypes.validPrimitiveTypes().contains(type)) {
