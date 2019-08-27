@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4d414091_d09821f3",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-08-27T15:39:20Z",
+      "side": 1,
+      "message": "Good catch, thanks!",
+      "parentUuid": "dd01cc3e_d50a5bc3",
+      "range": {
+        "startLine": 198,
+        "startChar": 23,
+        "endLine": 198,
+        "endChar": 34
+      },
+      "revId": "a057ef52cd9ced7217a248cd2db684005040d240",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c2521f70_8a3efa01",
         "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2019-08-27T12:45:54Z",
       "side": 1,
       "message": "not used",
+      "range": {
+        "startLine": 217,
+        "startChar": 12,
+        "endLine": 217,
+        "endChar": 61
+      },
+      "revId": "a057ef52cd9ced7217a248cd2db684005040d240",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fb594818_d2130f7e",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-08-27T15:39:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2521f70_8a3efa01",
       "range": {
         "startLine": 217,
         "startChar": 12,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "a766a15e_f0c39b7c",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-08-27T15:39:20Z",
+      "side": 1,
+      "message": "I do not assume outputkeymapping will always have dName. If you recheck the implementation, I assume that if the response data is complex Type, in that case I will expect a dname.\nBut if the response type is not complex type, I donot check dName.\nHere outputKeyMapping couldn\u0027t be null, it could be and empty map.",
+      "parentUuid": "56acec94_44776116",
+      "range": {
+        "startLine": 225,
+        "startChar": 66,
+        "endLine": 225,
+        "endChar": 82
+      },
+      "revId": "a057ef52cd9ced7217a248cd2db684005040d240",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "82f94e7e_9bbfddaa",
         "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
         "patchSetId": 6
@@ -82,6 +154,30 @@
       "writtenOn": "2019-08-27T12:45:54Z",
       "side": 1,
       "message": "redundant with line 233/234",
+      "range": {
+        "startLine": 226,
+        "startChar": 0,
+        "endLine": 227,
+        "endChar": 32
+      },
+      "revId": "a057ef52cd9ced7217a248cd2db684005040d240",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d3e09cfc_6118636f",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-08-27T15:39:20Z",
+      "side": 1,
+      "message": "No, 226 means it is a complex type but not array so it is not a primary Json type.\n233 means it is a primary type.",
+      "parentUuid": "82f94e7e_9bbfddaa",
       "range": {
         "startLine": 226,
         "startChar": 0,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "4f31feee_0a97941e",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-08-27T15:39:20Z",
+      "side": 1,
+      "message": "Yep, good point!",
+      "parentUuid": "a586dd54_0609b75c",
+      "range": {
+        "startLine": 229,
+        "startChar": 0,
+        "endLine": 231,
+        "endChar": 17
+      },
+      "revId": "a057ef52cd9ced7217a248cd2db684005040d240",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d47526cb_5fc5550d",
         "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
         "patchSetId": 6
@@ -128,6 +248,30 @@
       "writtenOn": "2019-08-27T12:45:54Z",
       "side": 1,
       "message": "don\u0027t throw runtime exception, use BluePrintProcessorException",
+      "range": {
+        "startLine": 242,
+        "startChar": 34,
+        "endLine": 242,
+        "endChar": 47
+      },
+      "revId": "a057ef52cd9ced7217a248cd2db684005040d240",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a9cf2db1_598e436c",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-08-27T15:39:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d47526cb_5fc5550d",
       "range": {
         "startLine": 242,
         "startChar": 34,
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "7c57e631_2099bbde",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-08-27T15:39:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7dfbe355_7b9f49f3",
+      "range": {
+        "startLine": 263,
+        "startChar": 0,
+        "endLine": 264,
+        "endChar": 20
+      },
+      "revId": "a057ef52cd9ced7217a248cd2db684005040d240",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e9d5fdee_653c1e7d",
         "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
         "patchSetId": 6
@@ -174,6 +342,30 @@
       "writtenOn": "2019-08-27T12:45:54Z",
       "side": 1,
       "message": "same as above",
+      "range": {
+        "startLine": 288,
+        "startChar": 34,
+        "endLine": 288,
+        "endChar": 47
+      },
+      "revId": "a057ef52cd9ced7217a248cd2db684005040d240",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d509c3d3_9e62d794",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-08-27T15:39:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9d5fdee_653c1e7d",
       "range": {
         "startLine": 288,
         "startChar": 34,
@@ -209,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "668d652a_e6338067",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-08-27T15:39:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c09282d9_4c6f9d49",
+      "range": {
+        "startLine": 300,
+        "startChar": 24,
+        "endLine": 301,
+        "endChar": 51
+      },
+      "revId": "a057ef52cd9ced7217a248cd2db684005040d240",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "20f107cc_12728311",
         "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
         "patchSetId": 6
@@ -232,6 +448,30 @@
     },
     {
       "key": {
+        "uuid": "f5d5e941_e693b0be",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-08-27T15:39:20Z",
+      "side": 1,
+      "message": "Good catch Alexis :-)\n\nHere I want to return all the response object as it is when no output-key-mapping was provided.\n\n\"result\" here will be the attribute name of the end result.",
+      "parentUuid": "20f107cc_12728311",
+      "range": {
+        "startLine": 308,
+        "startChar": 57,
+        "endLine": 308,
+        "endChar": 63
+      },
+      "revId": "a057ef52cd9ced7217a248cd2db684005040d240",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "40b642f5_fecdee91",
         "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
         "patchSetId": 6
@@ -243,6 +483,30 @@
       "writtenOn": "2019-08-27T12:45:54Z",
       "side": 1,
       "message": "remove whitespace",
+      "range": {
+        "startLine": 364,
+        "startChar": 0,
+        "endLine": 364,
+        "endChar": 8
+      },
+      "revId": "a057ef52cd9ced7217a248cd2db684005040d240",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f6e548cd_10e4353f",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-08-27T15:39:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40b642f5_fecdee91",
       "range": {
         "startLine": 364,
         "startChar": 0,
