@@ -1,3 +1,19 @@
+/*
+ * Copyright © 2019 Bell Canada
+ * Modifications Copyright (c) 2019 IBM
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.utils
 
 import org.junit.Assert.*
@@ -13,6 +29,13 @@ class NetconfMessageUtilsTest {
         val outcome = NetconfMessageUtils.getConfig("customMessageId", "customConfigType", "customFilterContent")
         val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/getConfig-response-all-parameters.xml")
         assertEquals("getConfig return was not correct", expectation, outcome)
+    }
+
+    @Test
+    fun `test get operational`() {
+        val outcome = NetconfMessageUtils.get("customMessageId", "customConfigType")
+        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/get-response.xml")
+        assertEquals("get return was not correct", expectation, outcome)
     }
 
     @Test

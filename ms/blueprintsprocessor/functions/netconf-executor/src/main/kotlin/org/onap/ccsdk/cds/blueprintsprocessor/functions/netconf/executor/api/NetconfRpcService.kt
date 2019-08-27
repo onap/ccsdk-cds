@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright (c) 2019 IBM, Bell Canada
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -139,4 +140,12 @@ interface NetconfRpcService {
      * @return Device response
      */
     fun asyncRpc(request: String, messageId: String): DeviceResponse
+
+    /**
+     * Get
+     *
+     * @param filter filter content for operational command
+     * @return Device response
+     */
+    fun get(filter: String): DeviceResponse
 }

@@ -1,5 +1,6 @@
 /*
  * Copyright © 2019 Bell Canada
+ * Modifications Copyright (c) 2019 IBM
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,13 +82,34 @@ class NetconfRpcServiceImplTest {
     }
 
     @Test
+    fun `get completes normally`() {
+        val netconfRpcService = NetconfRpcServiceImpl(deviceInfo)
+        netconfRpcService.setNetconfSession(mockNetconfSession)
+        val spy = spyk(netconfRpcService)
+        every { spy.asyncRpc(any(), any()) } returns successfulDeviceResponse
+        val getRpcrResult = spy.get(someString)
+        assertEquals(successfulDeviceResponse, getRpcrResult)
+    }
+
+    @Test
+    fun `get on error sets DeviceResponse status to FAILURE`() {
+        val netconfRpcService = NetconfRpcServiceImpl(deviceInfo)
+        netconfRpcService.setNetconfSession(mockNetconfSession)
+        val spy = spyk(netconfRpcService)
+        every { spy.asyncRpc(any(), any()) } throws IOException("Some IO exception...")
+        val getRpcResult = spy.get(someString)
+        assertEquals(failedDeviceResponse.status, getRpcResult.status)
+        assertTrue { getRpcResult.errorMessage!!.contains("failed in 'get' command") }
+    }
+
+    @Test
     fun `getConfig completes normally`() {
         val netconfRpcService = NetconfRpcServiceImpl(deviceInfo)
         netconfRpcService.setNetconfSession(mockNetconfSession)
         val spy = spyk(netconfRpcService)
         every { spy.asyncRpc(any(), any()) } returns successfulDeviceResponse
-        val invokeRpcrResult = spy.getConfig(someString)
-        assertEquals(successfulDeviceResponse, invokeRpcrResult)
+        val getConfigRpcResult = spy.getConfig(someString)
+        assertEquals(successfulDeviceResponse, getConfigRpcResult)
     }
 
     @Test
