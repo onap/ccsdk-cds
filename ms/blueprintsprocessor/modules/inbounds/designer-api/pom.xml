@@ -26,6 +26,10 @@
     <name>Blueprints Designer API</name>
     <description>Blueprints Designer API</description>
 
+    <properties>
+        <sonar.skip>true</sonar.skip>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
