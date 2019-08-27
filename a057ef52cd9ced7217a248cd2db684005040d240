@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd01cc3e_d50a5bc3",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-27T12:45:54Z",
+      "side": 1,
+      "message": "if type is null, you would go to the else condition, this is wrong.. you should throw an exception",
+      "range": {
+        "startLine": 198,
+        "startChar": 23,
+        "endLine": 198,
+        "endChar": 34
+      },
+      "revId": "a057ef52cd9ced7217a248cd2db684005040d240",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c2521f70_8a3efa01",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-27T12:45:54Z",
+      "side": 1,
+      "message": "not used",
+      "range": {
+        "startLine": 217,
+        "startChar": 12,
+        "endLine": 217,
+        "endChar": 61
+      },
+      "revId": "a057ef52cd9ced7217a248cd2db684005040d240",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "56acec94_44776116",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-27T12:45:54Z",
+      "side": 1,
+      "message": "what if outputKeyMapping is null?\n\nalso, why do you assume output key mapping will always have the dName in there as key?",
+      "range": {
+        "startLine": 225,
+        "startChar": 66,
+        "endLine": 225,
+        "endChar": 82
+      },
+      "revId": "a057ef52cd9ced7217a248cd2db684005040d240",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "82f94e7e_9bbfddaa",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-27T12:45:54Z",
+      "side": 1,
+      "message": "redundant with line 233/234",
+      "range": {
+        "startLine": 226,
+        "startChar": 0,
+        "endLine": 227,
+        "endChar": 32
+      },
+      "revId": "a057ef52cd9ced7217a248cd2db684005040d240",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a586dd54_0609b75c",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-27T12:45:54Z",
+      "side": 1,
+      "message": "don\u0027t throw runtime exception, instead use BluePrintProcessorException",
+      "range": {
+        "startLine": 229,
+        "startChar": 0,
+        "endLine": 231,
+        "endChar": 17
+      },
+      "revId": "a057ef52cd9ced7217a248cd2db684005040d240",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d47526cb_5fc5550d",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-27T12:45:54Z",
+      "side": 1,
+      "message": "don\u0027t throw runtime exception, use BluePrintProcessorException",
+      "range": {
+        "startLine": 242,
+        "startChar": 34,
+        "endLine": 242,
+        "endChar": 47
+      },
+      "revId": "a057ef52cd9ced7217a248cd2db684005040d240",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7dfbe355_7b9f49f3",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-27T12:45:54Z",
+      "side": 1,
+      "message": "collapse else if statement",
+      "range": {
+        "startLine": 263,
+        "startChar": 0,
+        "endLine": 264,
+        "endChar": 20
+      },
+      "revId": "a057ef52cd9ced7217a248cd2db684005040d240",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e9d5fdee_653c1e7d",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-27T12:45:54Z",
+      "side": 1,
+      "message": "same as above",
+      "range": {
+        "startLine": 288,
+        "startChar": 34,
+        "endLine": 288,
+        "endChar": 47
+      },
+      "revId": "a057ef52cd9ced7217a248cd2db684005040d240",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c09282d9_4c6f9d49",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-27T12:45:54Z",
+      "side": 1,
+      "message": "expand if/else statement, and add curly bracket. This is to code style in practice for ONAP. Same applies elsewhere.",
+      "range": {
+        "startLine": 300,
+        "startChar": 24,
+        "endLine": 301,
+        "endChar": 51
+      },
+      "revId": "a057ef52cd9ced7217a248cd2db684005040d240",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "20f107cc_12728311",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-27T12:45:54Z",
+      "side": 1,
+      "message": "where is this coming from?",
+      "range": {
+        "startLine": 308,
+        "startChar": 57,
+        "endLine": 308,
+        "endChar": 63
+      },
+      "revId": "a057ef52cd9ced7217a248cd2db684005040d240",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "40b642f5_fecdee91",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-27T12:45:54Z",
+      "side": 1,
+      "message": "remove whitespace",
+      "range": {
+        "startLine": 364,
+        "startChar": 0,
+        "endLine": 364,
+        "endChar": 8
+      },
+      "revId": "a057ef52cd9ced7217a248cd2db684005040d240",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
