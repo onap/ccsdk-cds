@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2019 AT&T, Bell Canada
+ * Modifications Copyright (c) 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,6 +44,20 @@ class NetconfMessageUtils {
             Pattern.compile("(\\n#([1-9][0-9]*)\\n(.+))+\\n##\\n", Pattern.DOTALL)
         private val CHUNKED_SIZE_PATTERN: Pattern = Pattern.compile("\\n#([1-9][0-9]*)\\n")
         private val MSG_ID_STRING_PATTERN = Pattern.compile("${RpcMessageUtils.MESSAGE_ID_STRING}=\"(.*?)\"")
+
+        fun get(messageId: String, filterContent: String): String {
+            val request = StringBuilder()
+
+            request.append("<get>").append(NEW_LINE)
+            if (!filterContent.isNullOrEmpty()) {
+                request.append(RpcMessageUtils.SUBTREE_FILTER_OPEN).append(NEW_LINE)
+                request.append(filterContent).append(NEW_LINE)
+                request.append(RpcMessageUtils.SUBTREE_FILTER_CLOSE).append(NEW_LINE)
+            }
+            request.append("</get>").append(NEW_LINE)
+
+            return doWrappedRpc(messageId, request.toString())
+        }
 
         fun getConfig(messageId: String, configType: String, filterContent: String?): String {
             val request = StringBuilder()

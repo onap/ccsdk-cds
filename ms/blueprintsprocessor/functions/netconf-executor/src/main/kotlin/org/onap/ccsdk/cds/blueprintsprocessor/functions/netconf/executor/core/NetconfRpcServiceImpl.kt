@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2019 AT&T, Bell Canada
+ * Modifications Copyright (c) 2019 IBM, Bell Canada
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,6 +51,20 @@ class NetconfRpcServiceImpl(private var deviceInfo: DeviceInfo) : NetconfRpcServ
         } catch (e: Exception) {
             output.status = RpcStatus.FAILURE
             output.errorMessage = "$deviceInfo: failed in 'invokeRpc' command ${e.message}"
+        }
+        return output
+    }
+
+    override fun get(filter: String): DeviceResponse {
+        var output = DeviceResponse()
+        val messageId = messageIdInteger.getAndIncrement().toString()
+        log.info("$deviceInfo: get operational config: messageId($messageId)")
+        try {
+            val message = NetconfMessageUtils.get(messageId, filter)
+            output = asyncRpc(message, messageId)
+        } catch (e: Exception) {
+            output.status = RpcStatus.FAILURE
+            output.errorMessage = "$deviceInfo: failed in 'get' command ${e.message}"
         }
         return output
     }
