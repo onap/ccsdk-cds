@@ -48,7 +48,8 @@ export class MetadataComponent implements OnInit {
   blueprintName: string;
   uploadedFileName: string;
   entryDefinition: string;
-  
+  viewOnly: boolean = true;
+  options: string;
   constructor(private formBuilder: FormBuilder, private store: Store<IAppState>,
     private loader: LoaderService, private dataService: SelectTemplateService) {
     this.bpState = this.store.select('blueprint');
@@ -66,11 +67,10 @@ export class MetadataComponent implements OnInit {
   ngOnInit() {
     this.dataService.currentMessage.subscribe(
       res => {
-        let options = res;
-        console.log(options + " data from service ngoninit" + res);
+        this.options = res;
+        // this.metdataFormfields(res);
       }
     );
-    
     this.bpState.subscribe(
       blueprintdata => {
         var blueprintState: IBlueprintState = { blueprint: blueprintdata.blueprint, isLoadSuccess: blueprintdata.isLoadSuccess, isSaveSuccess: blueprintdata.isSaveSuccess, isUpdateSuccess: blueprintdata.isUpdateSuccess };
@@ -92,6 +92,28 @@ export class MetadataComponent implements OnInit {
         }
         let temp_author = metadatavalues[0];
         console.log(temp_author);
+        if(this.options=='2'){
+          this.CBAMetadataForm = this.formBuilder.group({
+            template_author: ['', Validators.required],
+            author_email: ['', Validators.required],
+            user_groups: [metadatavalues[2], Validators.required],
+            template_name: ['', Validators.required],
+            template_version: ['', Validators.required],
+            template_tags: [metadatavalues[5], Validators.required]
+          });
+        } 
+        else if(this.options=='3'){
+          this.CBAMetadataForm = this.formBuilder.group({
+            template_author: [metadatavalues[0]],
+            author_email: [metadatavalues[1]],
+            user_groups: [metadatavalues[2]],
+            template_name: [metadatavalues[3]],
+            template_version: [metadatavalues[4]],
+            template_tags: [metadatavalues[5]]
+          });
+          this.CBAMetadataForm.disable();
+        }
+          else{
         this.CBAMetadataForm = this.formBuilder.group({
           template_author: [metadatavalues[0], Validators.required],
           author_email: [metadatavalues[1], Validators.required],
@@ -100,9 +122,28 @@ export class MetadataComponent implements OnInit {
           template_version: [metadatavalues[4], Validators.required],
           template_tags: [metadatavalues[5], Validators.required]
         });
+      }
+      
       })
+
+
   }
-  
+
+  metdataFormfields(options: string) {
+    if (options == '2') {
+      this.CBAMetadataForm.setValue({
+        template_author: ["", Validators.required],
+        author_email: ["", Validators.required],
+        template_name: ["", Validators.required],
+        template_version: ["1.0.0", Validators.required]
+
+      })
+    }
+    if (options == '3') {
+      this.CBAMetadataForm.disable();
+    }
+  }
+
   UploadMetadata() {
     this.loader.showLoader();
     this.metadata = Object.assign({}, this.CBAMetadataForm.value);
