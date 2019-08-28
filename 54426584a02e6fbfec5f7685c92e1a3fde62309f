@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a971d30_d1557f49",
+        "filename": "ms/blueprintsprocessor/application/src/main/resources/application.properties",
+        "patchSetId": 9
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-28T12:34:35Z",
+      "side": 1,
+      "message": "would have been good to have sdnc rather than config-data",
+      "range": {
+        "startLine": 88,
+        "startChar": 31,
+        "endLine": 88,
+        "endChar": 42
+      },
+      "revId": "54426584a02e6fbfec5f7685c92e1a3fde62309f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
