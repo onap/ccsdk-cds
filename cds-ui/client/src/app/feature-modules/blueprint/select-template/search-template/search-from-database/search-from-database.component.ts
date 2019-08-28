@@ -87,6 +87,8 @@ export class SearchFromDatabaseComponent implements OnInit {
 
   editCBA(artifactName: string, artifactVersion: string, option: string) {
     this.cbEditOption.setCbaOption(option);
+    this.uploadedFileName = artifactName;
+    console.log("filename:" + this.uploadedFileName);
     this.zipFile.generateAsync({ type: "blob" })
       .then(blob => {
         const formData = new FormData();
@@ -101,18 +103,6 @@ export class SearchFromDatabaseComponent implements OnInit {
                 .then((zip) => {
                   if (zip) {
                     this.buildFileViewData(zip);
-                    // console.log("processed");
-                    let data: IBlueprint = this.activationBlueprint ? JSON.parse(this.activationBlueprint.toString()) : this.activationBlueprint;
-                    let blueprintState = {
-                      blueprint: data,
-                      name: this.blueprintName,
-                      files: this.tree,
-                      filesData: this.paths,
-                      uploadedFileName: this.blueprintName,
-                      entryDefinition: this.entryDefinition
-                    }
-                    this.store.dispatch(new SetBlueprintState(blueprintState));
-                    // console.log(blueprintState);
                   }
                 });
               // this.alertService.success('Blueprint enriched successfully');
@@ -121,14 +111,6 @@ export class SearchFromDatabaseComponent implements OnInit {
               this.alertService.error('Blue print error' + error.message);
             });
       });
-  }
-
-  create() {
-    this.filesData.forEach((path) => {
-      let index = path.name.indexOf("/");
-      let name = path.name.slice(index + 1, path.name.length);
-      this.zipFile.file(name, path.data);
-    });
   }
 
   async buildFileViewData(zip) {
@@ -202,7 +184,8 @@ export class SearchFromDatabaseComponent implements OnInit {
       });
     });
     this.loader.hideLoader();
-    return tree;
+    this.filesTree = tree;
+    this.updateBlueprint();
   }
 
   fetchTOSACAMetadata() {
@@ -219,4 +202,19 @@ export class SearchFromDatabaseComponent implements OnInit {
     this.blueprintName = (((toscaData['Entry-Definitions']).split('/'))[1]).toString();;
     // console.log(toscaData);
   }
+
+  updateBlueprint() {
+
+    let data: IBlueprint = this.activationBlueprint ? JSON.parse(this.activationBlueprint.toString()) : this.activationBlueprint;
+    let blueprintState = {
+      blueprint: data,
+      name: this.blueprintName,
+      files: this.filesTree,
+      filesData: this.filesData,
+      uploadedFileName: this.uploadedFileName,
+      entryDefinition: this.entryDefinition
+    }
+    this.store.dispatch(new SetBlueprintState(blueprintState));
+  }
+
 }
