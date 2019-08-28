@@ -73,7 +73,7 @@ class RestResourceResolutionProcessorTest {
             val resourceAssignment = ResourceAssignment().apply {
                 name = "rr-name"
                 dictionaryName = "vnf_name"
-                dictionarySource = "config-data"
+                dictionarySource = "sdnc"
                 property = PropertyDefinition().apply {
                     type = "string"
                 }

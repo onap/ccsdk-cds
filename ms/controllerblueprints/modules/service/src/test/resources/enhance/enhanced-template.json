@@ -242,7 +242,7 @@
                 },
                 "input-param" : false,
                 "dictionary-name" : "sample-mdsal-source",
-                "dictionary-source" : "config-data",
+                "dictionary-source" : "sdnc",
                 "dependencies" : [ "service-instance-id" ],
                 "version" : 0
               }, {
@@ -304,7 +304,7 @@
                 },
                 "input-param" : false,
                 "dictionary-name" : "sample-licenses",
-                "dictionary-source" : "config-data",
+                "dictionary-source" : "sdnc",
                 "dependencies" : [ "service-instance-id" ],
                 "version" : 0
               }, {

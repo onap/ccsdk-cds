@@ -55,7 +55,7 @@
     },
     "input-param": false,
     "dictionary-name": "vdns_vf_module_id",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
 	  "service-instance-id",
       "vnf-id"
@@ -78,7 +78,7 @@
     },
     "input-param": false,
     "dictionary-name": "vdns_int_private_ip_0",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id",
@@ -102,7 +102,7 @@
     },
     "input-param": false,
     "dictionary-name": "vdns_onap_private_ip_0",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id",

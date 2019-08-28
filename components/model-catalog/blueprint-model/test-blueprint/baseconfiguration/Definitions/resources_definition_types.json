@@ -65,7 +65,7 @@
     },
     "updated-by": "Singal, Kapil <ks220y@att.com>",
     "sources": {
-      "config-data": {
+      "sdnc": {
         "type": "source-rest",
         "properties": {
           "verb": "GET",

@@ -14,7 +14,7 @@
       "type": "source-default",
       "properties": {}
     },
-    "config-data": {
+    "sdnc": {
       "type": "source-rest",
       "properties": {
         "type": "JSON",

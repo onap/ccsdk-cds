@@ -11,7 +11,7 @@
   },
   "updated-by": "brindasanth@onap.com",
   "sources": {
-    "config-data": {
+    "sdnc": {
       "type": "source-rest",
       "properties": {
         "type": "JSON",

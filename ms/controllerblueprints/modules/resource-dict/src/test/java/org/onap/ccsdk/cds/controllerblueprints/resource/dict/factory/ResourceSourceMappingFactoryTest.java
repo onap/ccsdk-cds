@@ -28,7 +28,7 @@ public class ResourceSourceMappingFactoryTest {
         ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("processor-db", "source-db");
         ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("input", "source-input");
         ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("default", "source-default");
-        ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("config-data", "source-rest");
+        ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("sdnc", "source-rest");
         ResourceSourceMappingFactory.INSTANCE.registerSourceMapping("aai-data", "source-rest");
 
         String nodeTypeName = ResourceSourceMappingFactory.INSTANCE.getRegisterSourceMapping("processor-db");
