@@ -15,12 +15,11 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.controllerblueprints.service.controller
+package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.service.domain.BlueprintModelSearch
-import org.onap.ccsdk.cds.controllerblueprints.service.handler.BluePrintModelHandler
 import org.springframework.core.io.Resource
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity

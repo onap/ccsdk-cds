@@ -23,12 +23,8 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>designer-api</artifactId>
     <packaging>jar</packaging>
-    <name>Blueprints Designer API</name>
-    <description>Blueprints Designer API</description>
-
-    <properties>
-        <sonar.skip>true</sonar.skip>
-    </properties>
+    <name>Blueprints Processor Designer API</name>
+    <description>Blueprints Processor Designer API</description>
 
     <dependencies>
         <dependency>
