@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.controllerblueprints.service.controller
+package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
