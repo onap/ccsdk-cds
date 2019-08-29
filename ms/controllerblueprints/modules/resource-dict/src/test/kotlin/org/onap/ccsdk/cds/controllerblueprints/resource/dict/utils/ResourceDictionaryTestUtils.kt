@@ -25,7 +25,7 @@ object ResourceDictionaryTestUtils {
         ResourceSourceMappingFactory.registerSourceMapping("processor-db", "source-db")
         ResourceSourceMappingFactory.registerSourceMapping("input", "source-input")
         ResourceSourceMappingFactory.registerSourceMapping("default", "source-default")
-        ResourceSourceMappingFactory.registerSourceMapping("config-data", "source-rest")
+        ResourceSourceMappingFactory.registerSourceMapping("sdnc", "source-rest")
         ResourceSourceMappingFactory.registerSourceMapping("aai-data", "source-rest")
     }
 }

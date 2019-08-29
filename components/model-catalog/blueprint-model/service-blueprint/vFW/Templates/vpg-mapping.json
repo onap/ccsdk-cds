@@ -65,7 +65,7 @@
     },
     "input-param": false,
     "dictionary-name": "vnf-name",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -380,7 +380,7 @@
     },
     "input-param": false,
     "dictionary-name": "image_name",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -405,7 +405,7 @@
     },
     "input-param": false,
     "dictionary-name": "key_name",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -430,7 +430,7 @@
     },
     "input-param": false,
     "dictionary-name": "pub_key",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -455,7 +455,7 @@
     },
     "input-param": false,
     "dictionary-name": "onap_private_net_id",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -480,7 +480,7 @@
     },
     "input-param": false,
     "dictionary-name": "onap_private_subnet_id",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -553,7 +553,7 @@
     },
     "input-param": false,
     "dictionary-name": "vfw_private_ip_0",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -578,7 +578,7 @@
     },
     "input-param": false,
     "dictionary-name": "vsn_private_ip_0",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -653,7 +653,7 @@
     },
     "input-param": false,
     "dictionary-name": "vpg_private_ip_0",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"

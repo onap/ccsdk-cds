@@ -78,7 +78,7 @@
 	  },
     "input-param": false,
     "dictionary-name": "vf-naming-policy",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
 	  "service-instance-id",
       "vnf-id"
@@ -223,7 +223,7 @@
     },
     "input-param": false,
     "dictionary-name": "vlb_private_net_cidr",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -246,7 +246,7 @@
     },
     "input-param": false,
     "dictionary-name": "pktgen_private_net_cidr",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -269,7 +269,7 @@
     },
     "input-param": false,
     "dictionary-name": "vnf_name",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -292,7 +292,7 @@
     },
     "input-param": false,
     "dictionary-name": "pub_key",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -399,7 +399,7 @@
     },
     "input-param": false,
     "dictionary-name": "key_name",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"

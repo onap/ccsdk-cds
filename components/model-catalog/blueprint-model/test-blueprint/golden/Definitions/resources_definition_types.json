@@ -8,7 +8,7 @@
     },
     "updated-by" : "adetalhouet",
     "sources" : {
-      "config-data" : {
+      "sdnc" : {
         "type" : "source-rest",
         "properties" : {
           "type" : "JSON",

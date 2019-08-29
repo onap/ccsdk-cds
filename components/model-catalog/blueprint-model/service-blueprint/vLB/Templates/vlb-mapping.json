@@ -81,7 +81,7 @@
     },
     "input-param": false,
     "dictionary-name": "vpg_int_pktgen_private_ip_0",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -128,7 +128,7 @@
     },
     "input-param": false,
     "dictionary-name": "demo_artifacts_version",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -172,7 +172,7 @@
     },
     "input-param": false,
     "dictionary-name": "install_script_version",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -195,7 +195,7 @@
     },
     "input-param": false,
     "dictionary-name": "vnf_name",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -303,7 +303,7 @@
     },
     "input-param": false,
     "dictionary-name": "onap_private_net_cidr",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -326,7 +326,7 @@
     },
     "input-param": false,
     "dictionary-name": "onap_private_net_id",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -349,7 +349,7 @@
     },
     "input-param": false,
     "dictionary-name": "onap_private_subnet_id",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -372,7 +372,7 @@
     },
     "input-param": false,
     "dictionary-name": "pktgen_private_net_cidr",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -395,7 +395,7 @@
     },
     "input-param": false,
     "dictionary-name": "public_net_id",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -418,7 +418,7 @@
     },
     "input-param": false,
     "dictionary-name": "sec_group",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -547,7 +547,7 @@
 	  },
     "input-param": false,
     "dictionary-name": "vf-naming-policy",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
 	  "service-instance-id",
       "vnf-id"
@@ -635,7 +635,7 @@
 	  },
     "input-param": false,
     "dictionary-name": "image_name",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
 	  "service-instance-id",
       "vnf-id"
@@ -658,7 +658,7 @@
     },
     "input-param": false,
     "dictionary-name": "vlb_int_pktgen_private_ip_0",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -681,7 +681,7 @@
     },
     "input-param": false,
     "dictionary-name": "vlb_int_private_ip_0",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -725,7 +725,7 @@
     },
     "input-param": false,
     "dictionary-name": "vlb_onap_private_ip_0",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -748,7 +748,7 @@
     },
     "input-param": false,
     "dictionary-name": "vlb_private_net_cidr",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"
@@ -875,7 +875,7 @@
     },
     "input-param": false,
     "dictionary-name": "vpg_onap_private_ip_0",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"

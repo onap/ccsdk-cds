@@ -92,7 +92,7 @@
 						}
 					}
 				},
-				"config-data": {
+				"sdnc": {
 					"type": "object",
 					"properties": {
 						"path": {
@@ -226,7 +226,7 @@
 						}
 					}
 				},
-				"config-data": {
+				"sdnc": {
 					"type": "object",
 					"properties": {
 						"names": {

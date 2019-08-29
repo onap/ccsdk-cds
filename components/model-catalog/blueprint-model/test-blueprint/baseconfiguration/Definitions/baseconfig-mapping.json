@@ -27,7 +27,7 @@
       "type": "string"
     },
     "dictionary-name": "vnf_name",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"

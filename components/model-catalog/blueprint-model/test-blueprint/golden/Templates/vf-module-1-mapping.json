@@ -56,7 +56,7 @@
         "type": "dt-netbox-ip"
     },
     "dictionary-name": "create_netbox_ip",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "prefix-id"
     ]

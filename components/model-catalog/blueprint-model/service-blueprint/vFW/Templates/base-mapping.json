@@ -209,7 +209,7 @@
     },
     "input-param": false,
     "dictionary-name": "vnf-name",
-    "dictionary-source": "config-data",
+    "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
       "vnf-id"

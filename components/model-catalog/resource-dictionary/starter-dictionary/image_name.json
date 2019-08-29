@@ -10,7 +10,7 @@
     "input": {
       "type": "source-input"
     },
-    "config-data": {
+    "sdnc": {
       "type": "source-rest",
       "properties": {
         "type": "JSON",
