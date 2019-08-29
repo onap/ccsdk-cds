@@ -20,8 +20,8 @@ limitations under the License.
 */
 import { Component, OnInit } from '@angular/core';
 import * as JSZip from 'jszip';
-import { SortPipe } from '../../../../common/shared/pipes/sort.pipe';
-import { LoaderService } from '../../../../common/core/services/loader.service';
+import { SortPipe } from '../shared/pipes/sort.pipe';
+import { LoaderService } from '../core/services/loader.service';
 
 @Component({
   selector: 'app-zipfile-extraction',
