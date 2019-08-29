@@ -41,6 +41,7 @@ import { EditorService } from './editor.service';
 import { SortPipe } from '../../../../common/shared/pipes/sort.pipe';
 import { NotificationHandlerService } from 'src/app/common/core/services/notification-handler.service';
 import { LoaderService } from 'src/app/common/core/services/loader.service';
+import { SelectTemplateService } from '../../select-template/select-template.service';
 
 
 interface Node {
@@ -111,7 +112,7 @@ export class EditorComponent implements OnInit {
   metadata: IMetaData;
   uploadedFileName: string;
   entryDefinition: string;
-
+  editorReadOnly: boolean = false;
   private transformer = (node: Node, level: number) => {
     return {
       expandable: !!node.children && node.children.length > 0,
@@ -129,11 +130,12 @@ export class EditorComponent implements OnInit {
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
   artifactName: any;
   artifactVersion: any;
+  options: string;
 
   constructor(private store: Store<IAppState>, private editorService: EditorService,
-    private alertService: NotificationHandlerService, private loader: LoaderService
-    ) 
-    {
+    private alertService: NotificationHandlerService, private loader: LoaderService,
+    private dataService: SelectTemplateService
+  ) {
     this.dataSource.data = TREE_DATA;
     this.bpState = this.store.select('blueprint');
     // this.dataSource.data = TREE_DATA;
@@ -142,6 +144,12 @@ export class EditorComponent implements OnInit {
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
 
   ngOnInit() {
+    this.dataService.currentMessage.subscribe(
+      res => {
+        this.options = res;
+        // this.metdataFormfields(res);
+      }
+    );
     this.editorContent();
     this.dataSource.data = this.filesTree;
   }
@@ -236,6 +244,10 @@ export class EditorComponent implements OnInit {
     })
     this.fileExtension = this.selectedFile.substr(this.selectedFile.lastIndexOf('.') + 1);
     this.setEditorMode();
+    if(this.options == '3')
+    {
+      this.editorReadOnly= true;
+    }
   }
 
   getEnriched() {
@@ -258,7 +270,7 @@ export class EditorComponent implements OnInit {
                 });
               this.alertService.success('Blueprint enriched successfully');
             },
-            (error)=>{
+            (error) => {
               this.alertService.error('Enrich:' + error.message);
             });
       });
@@ -277,8 +289,8 @@ export class EditorComponent implements OnInit {
           .subscribe(
             data => {
               this.alertService.success('Success:' + JSON.stringify(data));
-            }, error=>{
-              this.alertService.error('Save -' +error.message);
+            }, error => {
+              this.alertService.error('Save -' + error.message);
             });
 
       });
@@ -295,7 +307,7 @@ export class EditorComponent implements OnInit {
         this.editorService.deployPost(formData)
           .subscribe(data => {
             this.alertService.success('Saved Successfully:' + JSON.stringify(data));
-          }, error=>{
+          }, error => {
             this.alertService.error('Deploy - ' + error.message);
           });
 
@@ -312,7 +324,7 @@ export class EditorComponent implements OnInit {
         this.editorService.publishBlueprint(formData)
           .subscribe(data => {
             this.alertService.success('Published:' + JSON.stringify(data))
-          }, error=>{
+          }, error => {
             this.alertService.error('Publish - ' + error.message);
           });
 
@@ -331,9 +343,9 @@ export class EditorComponent implements OnInit {
   download() {
     console.log(this.artifactName);
     // status = this.editorService.downloadCBA("/download-blueprint/" + this.artifactName + "/" + this.artifactVersion);
-     this.editorService.downloadCBA("/"+this.artifactName + "/" + this.artifactVersion);
+    this.editorService.downloadCBA("/" + this.artifactName + "/" + this.artifactVersion);
   }
-  
+
   setEditorMode() {
     switch (this.fileExtension) {
       case "xml":
