@@ -55,11 +55,6 @@
             <groupId>io.grpc</groupId>
             <artifactId>grpc-testing</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>test</scope>
-        </dependency>
 
         <!-- For Message libraries -->
         <dependency>
