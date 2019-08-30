@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.controllerblueprints.service.enhancer
+package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.enhancer
 
-import org.slf4j.LoggerFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.data.InterfaceDefinition
@@ -25,6 +24,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.data.OperationDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintNodeTypeEnhancer
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintRepoService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
+import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.service.utils.BluePrintEnhancerUtils
@@ -37,7 +37,7 @@ import org.springframework.stereotype.Service
 open class BluePrintNodeTypeEnhancerImpl(private val bluePrintRepoService: BluePrintRepoService,
                                          private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService) : BluePrintNodeTypeEnhancer {
 
-    private val log= LoggerFactory.getLogger(BluePrintNodeTypeEnhancerImpl::class.toString())
+    private val log= logger(BluePrintNodeTypeEnhancerImpl::class)
 
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
     lateinit var bluePrintContext: BluePrintContext

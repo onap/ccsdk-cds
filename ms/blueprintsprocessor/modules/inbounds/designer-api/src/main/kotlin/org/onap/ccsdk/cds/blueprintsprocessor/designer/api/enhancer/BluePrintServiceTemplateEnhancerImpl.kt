@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.controllerblueprints.service.enhancer
+package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.enhancer
 
-import org.slf4j.LoggerFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ServiceTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintServiceTemplateEnhancer
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
+import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
@@ -30,7 +30,7 @@ import org.springframework.stereotype.Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class BluePrintServiceTemplateEnhancerImpl(private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService)
     : BluePrintServiceTemplateEnhancer {
-    private val log= LoggerFactory.getLogger(BluePrintServiceTemplateEnhancerImpl::class.toString())
+    private val log = logger(BluePrintServiceTemplateEnhancerImpl::class)
 
 
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>

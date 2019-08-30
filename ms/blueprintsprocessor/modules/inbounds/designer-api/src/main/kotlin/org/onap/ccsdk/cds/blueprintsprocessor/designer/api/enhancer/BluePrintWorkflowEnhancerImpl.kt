@@ -15,13 +15,9 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.controllerblueprints.service.enhancer
+package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.enhancer
 
-import org.slf4j.LoggerFactory
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Workflow
@@ -42,7 +38,7 @@ open class BluePrintWorkflowEnhancerImpl(private val bluePrintRepoService: BlueP
                                          private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService,
                                          private val resourceAssignmentEnhancerService: ResourceAssignmentEnhancerService)
     : BluePrintWorkflowEnhancer {
-    private val log= LoggerFactory.getLogger(BluePrintWorkflowEnhancerImpl::class.toString())
+    private val log= logger(BluePrintWorkflowEnhancerImpl::class)
 
     companion object {
         const val ARTIFACT_TYPE_MAPPING_SOURCE: String = "artifact-mapping-resource"
@@ -224,7 +220,7 @@ open class BluePrintWorkflowEnhancerImpl(private val bluePrintRepoService: BlueP
             log.info("dynamic dataType($dataTypeName) already present for workflow($workflowName).")
         }
         // Merge all the Recipe Properties
-        mappingProperties.forEach { propertyName, propertyDefinition ->
+        mappingProperties.forEach { (propertyName, propertyDefinition) ->
             dynamicDataType.properties?.put(propertyName, propertyDefinition)
         }
     }

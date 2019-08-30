@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.controllerblueprints.service.enhancer
+package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.enhancer
 
-import org.slf4j.LoggerFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintEnhancerService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
+import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
@@ -32,7 +32,7 @@ import java.util.*
 open class BluePrintEnhancerServiceImpl(private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService,
                                         private val resourceDefinitionEnhancerService: ResourceDefinitionEnhancerService) : BluePrintEnhancerService {
 
-    private val log= LoggerFactory.getLogger(BluePrintEnhancerServiceImpl::class.toString())
+    private val log = logger(BluePrintEnhancerServiceImpl::class)
 
     override suspend fun enhance(basePath: String, enrichedBasePath: String): BluePrintContext {
 
