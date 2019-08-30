@@ -16,8 +16,11 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.load
+package org.onap.ccsdk.cds.blueprintsprocessor.db.service
 
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModel
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelContent
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.BlueprintModelRepository
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.common.ApplicationConstants
@@ -26,10 +29,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.data.ErrorCode
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidatorService
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPath
-import org.onap.ccsdk.cds.blueprintsprocessor.db.BlueprintCatalogServiceImpl
-import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModel
-import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelContent
-import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.ControllerBlueprintModelRepository
 import org.slf4j.LoggerFactory
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
@@ -37,14 +36,14 @@ import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.*
-
+//TODO("Duplicate : Merge BlueprintProcessorCatalogServiceImpl and ControllerBlueprintCatalogServiceImpl")
 /**
  * Similar implementation in [org.onap.ccsdk.cds.blueprintsprocessor.db.BlueprintProcessorCatalogServiceImpl]
  */
 @Service("controllerBlueprintsCatalogService")
 class ControllerBlueprintCatalogServiceImpl(bluePrintDesignTimeValidatorService: BluePrintValidatorService,
                                             private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
-                                            private val blueprintModelRepository: ControllerBlueprintModelRepository)
+                                            private val blueprintModelRepository: BlueprintModelRepository)
     : BlueprintCatalogServiceImpl(bluePrintLoadConfiguration, bluePrintDesignTimeValidatorService) {
 
 
@@ -98,8 +97,8 @@ class ControllerBlueprintCatalogServiceImpl(bluePrintDesignTimeValidatorService:
                 ?: BluePrintConstants.FLAG_N
         blueprintModel.artifactName = artifactName
         blueprintModel.artifactVersion = artifactVersion
-        blueprintModel.updatedBy = metadata[BluePrintConstants.METADATA_TEMPLATE_AUTHOR]
-        blueprintModel.tags = metadata[BluePrintConstants.METADATA_TEMPLATE_TAGS]
+        blueprintModel.updatedBy = metadata[BluePrintConstants.METADATA_TEMPLATE_AUTHOR]!!
+        blueprintModel.tags = metadata[BluePrintConstants.METADATA_TEMPLATE_TAGS]!!
         blueprintModel.artifactDescription = "Controller Blueprint for $artifactName:$artifactVersion"
 
         val blueprintModelContent = BlueprintModelContent()

@@ -56,7 +56,7 @@ import kotlin.test.assertTrue
 class ExecutionServiceHandlerTest {
 
     @Autowired
-    lateinit var blueprintCatalog: BluePrintCatalogService
+    lateinit var blueprintsProcessorCatalogService: BluePrintCatalogService
     @Autowired
     lateinit var webTestClient: WebTestClient
 
@@ -98,7 +98,7 @@ class ExecutionServiceHandlerTest {
     @Test
     fun `test rest process`() {
         runBlocking {
-            blueprintCatalog.saveToDatabase(UUID.randomUUID().toString(), loadTestCbaFile())
+            blueprintsProcessorCatalogService.saveToDatabase(UUID.randomUUID().toString(), loadTestCbaFile())
 
             val executionServiceInput = JacksonUtils
                     .readValueFromClassPathFile("execution-input/default-input.json",
@@ -116,7 +116,7 @@ class ExecutionServiceHandlerTest {
     @Test
     fun `rest resource process should return status code 500 in case of server-side exception`() {
         runBlocking {
-            blueprintCatalog.saveToDatabase(UUID.randomUUID().toString(), loadTestCbaFile())
+            blueprintsProcessorCatalogService.saveToDatabase(UUID.randomUUID().toString(), loadTestCbaFile())
 
             val executionServiceInput = JacksonUtils
                     .readValueFromClassPathFile("execution-input/faulty-input.json",
