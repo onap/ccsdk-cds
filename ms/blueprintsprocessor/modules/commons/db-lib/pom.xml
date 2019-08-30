@@ -35,10 +35,6 @@
         </dependency>
         <dependency>
             <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
-            <artifactId>db-resources</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
             <artifactId>blueprint-validation</artifactId>
         </dependency>
         <dependency>

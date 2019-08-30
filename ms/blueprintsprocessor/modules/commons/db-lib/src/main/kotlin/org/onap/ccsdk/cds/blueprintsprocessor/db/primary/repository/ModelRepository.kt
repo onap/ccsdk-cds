@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.controllerblueprints.db.resources.repository
+package org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository
 
 import org.jetbrains.annotations.NotNull
 import org.springframework.data.jpa.repository.JpaRepository

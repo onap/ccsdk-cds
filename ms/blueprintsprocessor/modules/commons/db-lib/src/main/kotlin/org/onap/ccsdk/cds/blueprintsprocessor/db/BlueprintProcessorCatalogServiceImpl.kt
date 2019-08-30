@@ -28,7 +28,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.data.ErrorCode
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidatorService
 import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintCompileCache
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
-import org.onap.ccsdk.cds.controllerblueprints.db.resources.BlueprintCatalogServiceImpl
 import org.slf4j.LoggerFactory
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
