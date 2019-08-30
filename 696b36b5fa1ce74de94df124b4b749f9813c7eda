@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ea2c696_493df47c",
+        "filename": "components/model-catalog/resource-dictionary/starter-dictionary/default-vault-secrets.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-30T12:32:04Z",
+      "side": 1,
+      "message": "what do you have dynamic-vault-secrets.json and default-vault-secrets.json ?\nAlso, same comment as other file.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 1
+      },
+      "revId": "696b36b5fa1ce74de94df124b4b749f9813c7eda",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "743b9e13_4647ee47",
+        "filename": "components/model-catalog/resource-dictionary/starter-dictionary/dynamic-vault-secrets.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-30T12:32:04Z",
+      "side": 1,
+      "message": "don\u0027t create generic vault DD, instead, create a specific example so it is more undersanding how it should work.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 1
+      },
+      "revId": "696b36b5fa1ce74de94df124b4b749f9813c7eda",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bbe2b56c_c84be254",
+        "filename": "components/model-catalog/resource-dictionary/starter-dictionary/hostname.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-30T12:32:04Z",
+      "side": 1,
+      "message": "what is this change for?",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 1
+      },
+      "revId": "696b36b5fa1ce74de94df124b4b749f9813c7eda",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6f05e6f6_19612ff1",
+        "filename": "ms/blueprintsprocessor/application/src/main/resources/application-dev.properties",
+        "patchSetId": 5
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-30T12:32:04Z",
+      "side": 1,
+      "message": "we don\u0027t want this here. ONAP doesn\u0027t provide any Vault server for now.",
+      "range": {
+        "startLine": 113,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 74
+      },
+      "revId": "696b36b5fa1ce74de94df124b4b749f9813c7eda",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bbecae68_4ea14732",
+        "filename": "ms/blueprintsprocessor/application/src/main/resources/application.properties",
+        "patchSetId": 5
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-30T12:32:04Z",
+      "side": 1,
+      "message": "we don\u0027t want this here. ONAP doesn\u0027t provide any Vault server for now.",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 111,
+        "endChar": 74
+      },
+      "revId": "696b36b5fa1ce74de94df124b4b749f9813c7eda",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d1d97c49_16441476",
+        "filename": "ms/blueprintsprocessor/modules/commons/rest-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/rest/BluePrintRestLibData.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-30T12:32:04Z",
+      "side": 1,
+      "message": "see previous comment on this please.",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 1
+      },
+      "revId": "696b36b5fa1ce74de94df124b4b749f9813c7eda",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "521b906e_ed8b0cb1",
+        "filename": "ms/blueprintsprocessor/modules/commons/rest-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/rest/service/BluePrintRestLibPropertyService.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-30T12:32:04Z",
+      "side": 1,
+      "message": "we don\u0027t want to consider vault or any type of system when creating the properties. This should be 100% based on the model, rather than code.",
+      "range": {
+        "startLine": 50,
+        "startChar": 46,
+        "endLine": 50,
+        "endChar": 78
+      },
+      "revId": "696b36b5fa1ce74de94df124b4b749f9813c7eda",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba40a987_56ab1538",
+        "filename": "ms/blueprintsprocessor/modules/commons/rest-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/rest/service/TokenAuthRestClientService.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-30T12:32:04Z",
+      "side": 1,
+      "message": "please revert these changes. The specific header can be passed through the model. Better than to hardcode.",
+      "range": {
+        "startLine": 26,
+        "startChar": 6,
+        "endLine": 26,
+        "endChar": 32
+      },
+      "revId": "696b36b5fa1ce74de94df124b4b749f9813c7eda",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
