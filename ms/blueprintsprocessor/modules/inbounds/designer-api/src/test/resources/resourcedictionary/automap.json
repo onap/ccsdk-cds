@@ -1,0 +1,14 @@
+[
+	{
+		"name": "sample-input-source"
+	},
+	{
+		"name": "sample-default-source"
+	},
+	{
+		"name": "sample-db-source"
+	},
+	{
+		"name": "sample-mdsal-source"
+	}
+]
