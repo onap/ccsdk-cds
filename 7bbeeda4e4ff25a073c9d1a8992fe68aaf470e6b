@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "369fd315_4b0959bb",
+        "filename": "ms/blueprintsprocessor/modules/commons/db-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/db/primary/repository/ControllerBlueprintModelContentRepository.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-30T17:22:51Z",
+      "side": 1,
+      "message": "don\u0027t you want to remove this altogether?",
+      "range": {
+        "startLine": 21,
+        "startChar": 10,
+        "endLine": 21,
+        "endChar": 51
+      },
+      "revId": "7bbeeda4e4ff25a073c9d1a8992fe68aaf470e6b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "183eda81_9dd84fe6",
+        "filename": "ms/blueprintsprocessor/modules/commons/db-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/db/primary/repository/ControllerBlueprintModelRepository.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-30T17:22:51Z",
+      "side": 1,
+      "message": "don\u0027t you want to remove this altogether?",
+      "range": {
+        "startLine": 20,
+        "startChar": 10,
+        "endLine": 20,
+        "endChar": 44
+      },
+      "revId": "7bbeeda4e4ff25a073c9d1a8992fe68aaf470e6b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
