@@ -17,10 +17,10 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 
 import kotlinx.coroutines.runBlocking
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictionary
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.ResourceDictionaryHandler
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceSourceMapping
-import org.onap.ccsdk.cds.controllerblueprints.service.domain.ResourceDictionary
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 

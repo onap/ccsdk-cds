@@ -25,9 +25,9 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.DesignerApiTestConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictionary
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
-import org.onap.ccsdk.cds.controllerblueprints.service.domain.ResourceDictionary
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.annotation.Commit
 import org.springframework.test.context.ContextConfiguration
@@ -90,8 +90,8 @@ class ResourceDictionaryReactRepositoryTest {
         val resourceDictionary = ResourceDictionary()
         resourceDictionary.name = resourceDefinition.name
         resourceDictionary.dataType = resourceDefinition.property.type
-        resourceDictionary.description = resourceDefinition.property.description
-        resourceDictionary.tags = resourceDefinition.tags
+        resourceDictionary.description = resourceDefinition.property.description!!
+        resourceDictionary.tags = resourceDefinition.tags!!
         resourceDictionary.updatedBy = resourceDefinition.updatedBy
         resourceDictionary.definition = resourceDefinition
         return resourceDictionary

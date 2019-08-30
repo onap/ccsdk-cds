@@ -20,13 +20,13 @@ package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.service
 import com.google.common.base.Preconditions
 import org.apache.commons.collections.CollectionUtils
 import org.apache.commons.lang3.StringUtils
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.AutoMapResponse
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictionary
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.repository.ResourceDictionaryRepository
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.utils.ResourceDictionaryUtils
-import org.onap.ccsdk.cds.controllerblueprints.service.domain.ResourceDictionary
-import org.onap.ccsdk.cds.controllerblueprints.service.model.AutoMapResponse
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.util.*

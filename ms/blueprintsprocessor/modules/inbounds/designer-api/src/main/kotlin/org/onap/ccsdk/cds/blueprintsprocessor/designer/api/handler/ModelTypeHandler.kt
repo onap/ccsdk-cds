@@ -20,7 +20,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.repository.ModelTypeRepository
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.utils.ModelTypeValidator
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.cds.controllerblueprints.service.domain.ModelType
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ModelType
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 

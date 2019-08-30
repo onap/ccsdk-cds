@@ -17,12 +17,12 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.utils
 
 import com.fasterxml.jackson.databind.JsonNode
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ModelType
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.data.*
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-import org.onap.ccsdk.cds.controllerblueprints.service.domain.ModelType
 
 class ModelTypeValidator {
     companion object {

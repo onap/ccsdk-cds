@@ -18,7 +18,6 @@ package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ErrorCode
-import org.onap.ccsdk.cds.controllerblueprints.service.common.ErrorMessage
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

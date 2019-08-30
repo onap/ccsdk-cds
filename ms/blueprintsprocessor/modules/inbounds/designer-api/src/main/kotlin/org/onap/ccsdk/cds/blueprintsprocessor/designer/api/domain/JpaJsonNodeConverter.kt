@@ -14,27 +14,25 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.cds.controllerblueprints.service.domain;
+package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain
 
-import com.fasterxml.jackson.databind.JsonNode;
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils;
+import com.fasterxml.jackson.databind.JsonNode
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
+import javax.persistence.AttributeConverter
+import javax.persistence.Converter
+
 /**
  * @author Brinda Santh
  */
 @Converter
-public class JpaJsonNodeConverter implements
-        AttributeConverter<JsonNode, String> {
+class JpaJsonNodeConverter : AttributeConverter<JsonNode, String> {
 
-    @Override
-    public String convertToDatabaseColumn(JsonNode node) {
-        return JacksonUtils.Companion.getJson(node, true);
+    override fun convertToDatabaseColumn(node: JsonNode): String {
+        return JacksonUtils.getJson(node, true)
     }
 
-    @Override
-    public JsonNode convertToEntityAttribute(String dbData) {
-        return JacksonUtils.Companion.jsonNode(dbData);
+    override fun convertToEntityAttribute(dbData: String): JsonNode {
+        return JacksonUtils.jsonNode(dbData)
     }
 }

@@ -22,6 +22,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang3.text.StrBuilder
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ModelType
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.ModelTypeHandler
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
@@ -29,7 +30,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.data.*
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.readNBText
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-import org.onap.ccsdk.cds.controllerblueprints.service.domain.ModelType
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.File
@@ -131,7 +131,7 @@ open class ModelTypeLoadService(private val modelTypeHandler: ModelTypeHandler) 
             }
             modelType.definitionType = definitionType
             modelType.derivedFrom = definition.derivedFrom
-            modelType.description = definition.description
+            modelType.description = definition.description!!
             modelType.definition = JacksonUtils.jsonNode(definitionContent)
             modelType.modelName = dataKey
             modelType.version = definition.version
