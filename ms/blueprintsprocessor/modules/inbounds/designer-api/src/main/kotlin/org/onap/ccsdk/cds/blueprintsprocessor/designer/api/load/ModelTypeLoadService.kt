@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.controllerblueprints.service.load
+package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.load
 
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
