@@ -17,13 +17,12 @@ package org.onap.ccsdk.cds.controllerblueprints.core.service
 
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintPathConfiguration
+import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintTemplateService
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.stereotype.Service
 
 @Service
-class BluePrintTemplateService(private val bluePrintPathConfiguration: BluePrintPathConfiguration) :
+class BluePrintTemplateService(private val bluePrintLoadConfiguration: BluePrintLoadConfiguration) :
     BlueprintTemplateService {
 
     override suspend fun generateContent(bluePrintRuntimeService: BluePrintRuntimeService<*>,
@@ -41,7 +40,7 @@ class BluePrintTemplateService(private val bluePrintPathConfiguration: BluePrint
                     jsonData,
                     ignoreJsonNull,
                     additionalContext,
-                    bluePrintPathConfiguration,
+                    bluePrintLoadConfiguration,
                     bluePrintRuntimeService.bluePrintContext().name(),
                     bluePrintRuntimeService.bluePrintContext().version())
             }

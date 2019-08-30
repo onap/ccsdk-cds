@@ -109,9 +109,9 @@ class BlueprintProcessorCatalogServiceImplTest {
             blueprintsProcessorCatalogService.get("baseconfiguration", "1.0.0", true)
         }
 
-        assertTrue(File(blueprintCoreConfiguration.bluePrintPathConfiguration().blueprintArchivePath +
+        assertTrue(File(blueprintCoreConfiguration.bluePrintLoadConfiguration().blueprintArchivePath +
                 "/baseconfiguration").deleteRecursively(),"Couldn't get blueprint archive " +
-                "${blueprintCoreConfiguration.bluePrintPathConfiguration().blueprintArchivePath}/baseconfiguration " +
+                "${blueprintCoreConfiguration.bluePrintLoadConfiguration().blueprintArchivePath}/baseconfiguration " +
                 "from data base.")
     }
 

@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +17,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.core
 
-import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintPathConfiguration
+import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -31,18 +32,17 @@ import org.springframework.core.env.Environment
 import org.springframework.stereotype.Service
 
 @Configuration
-open class BluePrintCoreConfiguration(private val bluePrintProperties: BlueprintProcessorProperties) {
+open class BluePrintCoreConfiguration(private val bluePrintPropertiesService: BlueprintPropertiesService) {
 
     companion object {
         const val PREFIX_BLUEPRINT_PROCESSOR = "blueprintsprocessor"
     }
 
     @Bean
-    open fun bluePrintPathConfiguration(): BluePrintPathConfiguration {
-        return bluePrintProperties
-                .propertyBeanType(PREFIX_BLUEPRINT_PROCESSOR, BluePrintPathConfiguration::class.java)
+    open fun bluePrintLoadConfiguration(): BluePrintLoadConfiguration {
+        return bluePrintPropertiesService
+                .propertyBeanType(PREFIX_BLUEPRINT_PROCESSOR, BluePrintLoadConfiguration::class.java)
     }
-
 }
 
 @Configuration
@@ -58,7 +58,7 @@ open class BlueprintPropertyConfiguration {
 }
 
 @Service
-open class BlueprintProcessorProperties(private var bluePrintPropertyBinder: Binder) {
+open class BlueprintPropertiesService(private var bluePrintPropertyBinder: Binder) {
     fun <T> propertyBeanType(prefix: String, type: Class<T>): T {
         return bluePrintPropertyBinder.bind(prefix, Bindable.of(type)).get()
     }

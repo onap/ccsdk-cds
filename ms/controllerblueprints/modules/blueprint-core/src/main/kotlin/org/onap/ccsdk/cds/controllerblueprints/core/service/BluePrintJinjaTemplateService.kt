@@ -25,7 +25,7 @@ import com.hubspot.jinjava.interpret.JinjavaInterpreter
 import com.hubspot.jinjava.loader.ResourceLocator
 import com.hubspot.jinjava.loader.ResourceNotFoundException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintPathConfiguration
+import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintJsonNodeFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.cds.controllerblueprints.core.removeNullNode
@@ -39,7 +39,7 @@ object BluePrintJinjaTemplateService {
     /**
      * To enable inheritance within CBA, we need Jinja runtime to know where to load the templates.
      */
-    class BlueprintRelatedTemplateLocator(private val bluePrintPathConfiguration: BluePrintPathConfiguration,
+    class BlueprintRelatedTemplateLocator(private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
                                           private val artifactName: String,
                                           private val artifactVersion: String) : ResourceLocator {
 
@@ -47,7 +47,7 @@ object BluePrintJinjaTemplateService {
         override fun getString(fullName: String, encoding: Charset, interpreter: JinjavaInterpreter): String {
             try {
                 val deployFile =
-                    normalizedPathName(bluePrintPathConfiguration.blueprintDeployPath,
+                    normalizedPathName(bluePrintLoadConfiguration.blueprintDeployPath,
                         artifactName,
                         artifactVersion,
                         fullName)
@@ -62,14 +62,14 @@ object BluePrintJinjaTemplateService {
 
     fun generateContent(template: String, json: String, ignoreJsonNull: Boolean,
                         additionalContext: MutableMap<String, Any>,
-                        bluePrintPathConfiguration: BluePrintPathConfiguration, artifactName: String,
+                        bluePrintLoadConfiguration: BluePrintLoadConfiguration, artifactName: String,
                         artifactVersion: String): String {
         
         return generateContent(template,
             json,
             ignoreJsonNull,
             additionalContext,
-            BlueprintRelatedTemplateLocator(bluePrintPathConfiguration, artifactName, artifactVersion))
+            BlueprintRelatedTemplateLocator(bluePrintLoadConfiguration, artifactName, artifactVersion))
     }
 
     fun generateContent(template: String, json: String, ignoreJsonNull: Boolean,
