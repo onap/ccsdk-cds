@@ -18,16 +18,16 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModel
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelSearch
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.ControllerBlueprintModelContentRepository
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.ControllerBlueprintModelRepository
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.ControllerBlueprintModelSearchRepository
 import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ErrorCode
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintEnhancerService
-import org.onap.ccsdk.cds.controllerblueprints.service.domain.BlueprintModel
-import org.onap.ccsdk.cds.controllerblueprints.service.domain.BlueprintModelSearch
-import org.onap.ccsdk.cds.controllerblueprints.service.repository.ControllerBlueprintModelContentRepository
-import org.onap.ccsdk.cds.controllerblueprints.service.repository.ControllerBlueprintModelRepository
-import org.onap.ccsdk.cds.controllerblueprints.service.repository.ControllerBlueprintModelSearchRepository
 import org.onap.ccsdk.cds.controllerblueprints.service.utils.BluePrintEnhancerUtils
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.ByteArrayResource
@@ -88,7 +88,10 @@ open class BluePrintModelHandler(private val controllerBlueprintsCatalogService:
             // Save the Copied file to Database
             val blueprintId = controllerBlueprintsCatalogService.saveToDatabase(saveId, deCompressedFile, false)
             // Check and Return the Saved File
-            val blueprintModelSearch = blueprintModelSearchRepository.findById(blueprintId).get()
+            val blueprintModelSearch = blueprintModelSearchRepository.findById(blueprintId)
+                    ?: throw BluePrintException(ErrorCode.RESOURCE_NOT_FOUND.value,
+                            String.format(BLUEPRINT_MODEL_ID_FAILURE_MSG, blueprintId))
+
             log.info("Save($saveId) successful for blueprint(${blueprintModelSearch.artifactName}) " +
                     "version(${blueprintModelSearch.artifactVersion})")
             return blueprintModelSearch
@@ -121,16 +124,10 @@ open class BluePrintModelHandler(private val controllerBlueprintsCatalogService:
      */
     @Throws(BluePrintException::class)
     open fun getBlueprintModelSearchByNameAndVersion(name: String, version: String): BlueprintModelSearch {
-        val blueprintModelSearch: BlueprintModelSearch
-        val dbBlueprintModel = blueprintModelSearchRepository
-                .findByArtifactNameAndArtifactVersion(name, version)
-        if (dbBlueprintModel.isPresent) {
-            blueprintModelSearch = dbBlueprintModel.get()
-        } else {
-            throw BluePrintException(ErrorCode.RESOURCE_NOT_FOUND.value,
-                    String.format(BLUEPRINT_MODEL_NAME_VERSION_FAILURE_MSG, name, version))
-        }
-        return blueprintModelSearch
+        return blueprintModelSearchRepository.findByArtifactNameAndArtifactVersion(name, version)
+                ?: throw BluePrintException(ErrorCode.RESOURCE_NOT_FOUND.value,
+                        String.format(BLUEPRINT_MODEL_NAME_VERSION_FAILURE_MSG, name, version))
+
     }
 
     /**
@@ -148,11 +145,14 @@ open class BluePrintModelHandler(private val controllerBlueprintsCatalogService:
         try {
             blueprintModel = getBlueprintModelByNameAndVersion(name, version)
         } catch (e: BluePrintException) {
-            throw BluePrintException(ErrorCode.RESOURCE_NOT_FOUND.value, String.format("Error while " + "downloading the CBA file: %s", e.message), e)
+            throw BluePrintException(ErrorCode.RESOURCE_NOT_FOUND.value,
+                    String.format("Error while " + "downloading the CBA file: %s", e.message), e)
         }
 
         val fileName = blueprintModel.id + ".zip"
-        val file = blueprintModel.blueprintModelContent.content
+        val file = blueprintModel.blueprintModelContent?.content
+                ?: throw BluePrintException(ErrorCode.RESOURCE_NOT_FOUND.value,
+                        String.format("Error while downloading the CBA file: couldn't get model content"))
         return prepareResourceEntity(fileName, file)
     }
 
@@ -172,7 +172,9 @@ open class BluePrintModelHandler(private val controllerBlueprintsCatalogService:
         }
 
         val fileName = blueprintModel.id + ".zip"
-        val file = blueprintModel.blueprintModelContent.content
+        val file = blueprintModel.blueprintModelContent?.content
+                ?: throw BluePrintException(ErrorCode.RESOURCE_NOT_FOUND.value,
+                        String.format("Error while downloading the CBA file: couldn't get model content"))
         return prepareResourceEntity(fileName, file)
     }
 
@@ -235,16 +237,9 @@ open class BluePrintModelHandler(private val controllerBlueprintsCatalogService:
      */
     @Throws(BluePrintException::class)
     open fun getBlueprintModelSearch(id: String): BlueprintModelSearch {
-        val blueprintModelSearch: BlueprintModelSearch
-        val dbBlueprintModel = blueprintModelSearchRepository.findById(id)
-        if (dbBlueprintModel.isPresent) {
-            blueprintModelSearch = dbBlueprintModel.get()
-        } else {
-            val msg = String.format(BLUEPRINT_MODEL_ID_FAILURE_MSG, id)
-            throw BluePrintException(ErrorCode.RESOURCE_NOT_FOUND.value, msg)
-        }
-
-        return blueprintModelSearch
+        return blueprintModelSearchRepository.findById(id)
+                ?: throw BluePrintException(ErrorCode.RESOURCE_NOT_FOUND.value,
+                        String.format(BLUEPRINT_MODEL_ID_FAILURE_MSG, id))
     }
 
     /**
@@ -257,7 +252,7 @@ open class BluePrintModelHandler(private val controllerBlueprintsCatalogService:
     @Throws(BluePrintException::class)
     open fun deleteBlueprintModel(id: String) {
         val dbBlueprintModel = blueprintModelRepository.findById(id)
-        if (dbBlueprintModel.isPresent) {
+        if (dbBlueprintModel != null && dbBlueprintModel.isPresent) {
             blueprintModelContentRepository.deleteByBlueprintModel(dbBlueprintModel.get())
             blueprintModelRepository.delete(dbBlueprintModel.get())
         } else {
@@ -317,7 +312,9 @@ open class BluePrintModelHandler(private val controllerBlueprintsCatalogService:
 
             val blueprintId = controllerBlueprintsCatalogService.saveToDatabase(publishId, compressedFilePart, true)
 
-            return blueprintModelSearchRepository.findById(blueprintId).get()
+            return blueprintModelSearchRepository.findById(blueprintId)
+                    ?: throw BluePrintException(ErrorCode.RESOURCE_NOT_FOUND.value,
+                            String.format(BLUEPRINT_MODEL_ID_FAILURE_MSG, blueprintId))
 
         } catch (e: Exception) {
             throw BluePrintException(ErrorCode.IO_FILE_INTERRUPT.value,

@@ -19,7 +19,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.cds.controllerblueprints.service.domain.BlueprintModelSearch
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelSearch
 import org.springframework.core.io.Resource
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
