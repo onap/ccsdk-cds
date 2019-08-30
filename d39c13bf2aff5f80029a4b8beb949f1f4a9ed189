@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "084e9257_515ff7ad",
+        "filename": "ms/blueprintsprocessor/modules/commons/db-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/db/primary/domain/BlueprintModel.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-08-30T17:21:14Z",
+      "side": 1,
+      "message": "Instead of bringing this and BlueprintModelContent, can we refactor BlueprintProcessorModel and BlueprintProcessorModelContent to remove the _RUNTIME notion from them?",
+      "range": {
+        "startLine": 39,
+        "startChar": 6,
+        "endLine": 39,
+        "endChar": 20
+      },
+      "revId": "d39c13bf2aff5f80029a4b8beb949f1f4a9ed189",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
