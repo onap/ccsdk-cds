@@ -1,5 +1,0 @@
-{
-  "description": "TOSCA base type for Resource Sources",
-  "version": "1.0.0",
-  "derived_from": "tosca.nodes.Root"
-}
