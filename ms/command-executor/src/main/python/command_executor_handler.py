@@ -35,6 +35,7 @@ class CommandExecutorHandler():
         self.request = request
         self.logger = logging.getLogger(self.__class__.__name__)
         self.blueprint_id = utils.get_blueprint_id(request)
+        # FIXME parameterize path
         self.venv_home = '/opt/app/onap/blueprints/deploy/' + self.blueprint_id
         self.installed = self.venv_home + '/.installed'
 
@@ -60,7 +61,6 @@ class CommandExecutorHandler():
             results.append(f.read())
             f.close()
 
-        # deactivate_venv(blueprint_id)
         return True
 
     def execute_command(self, request, results):
@@ -73,6 +73,7 @@ class CommandExecutorHandler():
         if "ansible-playbook" in request.command:
             cmd = cmd + "; " + request.command + " -e 'ansible_python_interpreter=" + self.venv_home + "/bin/python'"
         else:
+            # we append the properties as last agr to the script
             cmd = cmd + "; " + request.command + " " + re.escape(MessageToJson(request.properties))
 
         try:
@@ -170,8 +171,8 @@ class CommandExecutorHandler():
 
         path = "%s/bin/activate_this.py" % self.venv_home
         try:
-            exec (open(path).read(), {'__file__': path})
-            exec (fixpathenvvar)
+            exec(open(path).read(), {'__file__': path})
+            exec(fixpathenvvar)
             self.logger.info("Running with PATH : {}".format(os.environ['PATH']))
             return True
         except Exception as err:
