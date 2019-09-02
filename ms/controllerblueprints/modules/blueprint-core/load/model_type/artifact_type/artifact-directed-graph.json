@@ -1,9 +1,0 @@
-{
-  "description": "Directed Graph File",
-  "version": "1.0.0",
-  "file_ext": [
-    "json",
-    "xml"
-  ],
-  "derived_from": "tosca.artifacts.Implementation"
-}

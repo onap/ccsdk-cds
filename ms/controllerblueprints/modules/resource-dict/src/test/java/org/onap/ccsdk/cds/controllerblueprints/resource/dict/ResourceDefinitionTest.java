@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 public class ResourceDefinitionTest {
     private Logger log = LoggerFactory.getLogger(ResourceDefinitionTest.class);
-    private String basePath = "load/resource_dictionary";
+    private String basePath = "./../../../../components/model-catalog/resource-dictionary/starter-dictionary";
 
     @Test
     public void testDictionaryDefinitionInputSource(){
@@ -46,7 +46,7 @@ public class ResourceDefinitionTest {
     @Test
     public void testDictionaryDefinitionDBSource(){
 
-        String fileName = basePath + "/processor-db-source.json";
+        String fileName = basePath + "/db-source.json";
         ResourceDefinition resourceDefinition = JacksonUtils.Companion.readValueFromFile(fileName, ResourceDefinition.class);
         Assert.assertNotNull("Failed to populate dictionaryDefinition for processor-db type", resourceDefinition);
     }

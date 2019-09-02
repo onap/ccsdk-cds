@@ -28,7 +28,7 @@ import kotlin.test.assertNotNull
  */
 class BluePrintRepoFileServiceTest {
 
-    private val basePath = "load/model_type"
+    private val basePath = "./../../../../components/model-catalog/definition-type/starter-type"
     private val bluePrintRepoFileService = BluePrintRepoFileService(basePath)
 
     @Test
@@ -39,7 +39,7 @@ class BluePrintRepoFileServiceTest {
 
     @Test
     fun testGetNodeType() {
-        val nodeType = bluePrintRepoFileService.getNodeType("component-resource-assignment")
+        val nodeType = bluePrintRepoFileService.getNodeType("component-resource-resolution")
         assertNotNull(nodeType, "Failed to get NodeType from repo")
     }
 
