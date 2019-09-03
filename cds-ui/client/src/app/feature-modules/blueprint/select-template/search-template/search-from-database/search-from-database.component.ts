@@ -93,11 +93,9 @@ export class SearchFromDatabaseComponent implements OnInit {
       .then(blob => {
         const formData = new FormData();
         formData.append("file", blob);
-        // this.editorService.enrich("/enrich-blueprint/", formData)
         this.searchService.getBlueprintZip(artifactName + "/" + artifactVersion)
           .subscribe(
             (response) => {
-              // console.log(response);
               this.zipFile.files = {};
               this.zipFile.loadAsync(response)
                 .then((zip) => {
@@ -105,7 +103,7 @@ export class SearchFromDatabaseComponent implements OnInit {
                     this.buildFileViewData(zip);
                   }
                 });
-              // this.alertService.success('Blueprint enriched successfully');
+              
             },
             (error) => {
               this.alertService.error('Blue print error' + error.message);
@@ -116,12 +114,9 @@ export class SearchFromDatabaseComponent implements OnInit {
   async buildFileViewData(zip) {
     this.validfile = false;
     this.paths = [];
-    // console.log(zip.files);
     for (var file in zip.files) {
       console.log("name: " + zip.files[file].name);
       this.fileObject = {
-        // nameForUIDisplay: this.uploadedFileName + '/' + zip.files[file].name,
-        // name: zip.files[file].name,
         name: this.uploadedFileName + '/' + zip.files[file].name,
         data: ''
       };

@@ -26,7 +26,6 @@ import { SearchTemplateComponent } from './search-template.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AppMaterialModule } from 'src/app/common/modules/app-material.module';
 import { SharedModule} from 'src/app/common/shared/shared.module';
-// import { SelectTemplateService } from 'src/app/feature-modules/blueprint/select-template/select-template.service';
   
 @NgModule({
   declarations: [
@@ -42,6 +41,6 @@ import { SharedModule} from 'src/app/common/shared/shared.module';
     SearchTemplateComponent,
     SearchFromDatabaseComponent
     ],
-  // providers:[ SelectTemplateService]
+  
 })
 export class SearchTemplateModule { }
