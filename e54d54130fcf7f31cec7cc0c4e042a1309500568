@@ -16,6 +16,24 @@
       "revId": "e54d54130fcf7f31cec7cc0c4e042a1309500568",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d13dbf64_5eccfc60",
+        "filename": "ms/blueprintsprocessor/application/src/main/resources/application.properties",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-09-03T14:31:16Z",
+      "side": 1,
+      "message": "Sure, thanks for remind!",
+      "parentUuid": "a30bcd57_0427dc10",
+      "revId": "e54d54130fcf7f31cec7cc0c4e042a1309500568",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
