@@ -1,4 +1,5 @@
 syntax = "proto3";
+import "google/protobuf/struct.proto";
 import "BluePrintCommon.proto";
 option java_multiple_files = true;
 package org.onap.ccsdk.cds.controllerblueprints.management.api;
@@ -6,6 +7,15 @@ package org.onap.ccsdk.cds.controllerblueprints.management.api;
 message BluePrintUploadInput {
   org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader commonHeader = 1;
   FileChunk fileChunk = 2;
+  UploadType uploadType = 3;
+  // Extra optional dynamic properties for such as publish fields and other properties.
+  google.protobuf.Struct properties = 4;
+}
+
+message BluePrintDownloadInput {
+  org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader commonHeader = 1;
+  string blueprintName = 2;
+  string blueprintVersion = 3;
 }
 
 message BluePrintRemoveInput {
@@ -16,14 +26,27 @@ message BluePrintRemoveInput {
 
 message BluePrintManagementOutput {
   org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader commonHeader = 1;
+  // Optional file chunk sent back to the client for Enrich and Download this is mandatory.
+  FileChunk fileChunk = 2;
   org.onap.ccsdk.cds.controllerblueprints.common.api.Status status = 3;
+  // Extra optional dynamic properties for such as publish fields and other properties.
+  google.protobuf.Struct properties = 4;
 }
 
 message FileChunk {
   bytes chunk = 1;
 }
 
+enum UploadType {
+  // Default is DRAFT_SAVE
+  DRAFT_SAVE = 0;
+  ENRICH = 1;
+  VALIDATE = 2;
+  PUBLISH = 3;
+}
+
 service BluePrintManagementService {
+  rpc downloadBlueprint (BluePrintDownloadInput) returns (BluePrintManagementOutput);
   rpc uploadBlueprint (BluePrintUploadInput) returns (BluePrintManagementOutput);
   rpc removeBlueprint (BluePrintRemoveInput) returns (BluePrintManagementOutput);
 }
