@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "5f6abdb1_4ad65e71",
+        "filename": "components/model-catalog/resource-dictionary/starter-dictionary/hostname.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-09-03T14:31:16Z",
+      "side": 1,
+      "message": "I think that we need to add many source capabilities to DD, so that they can be reused easily.\n\nNow DD a limited to what are defined in runtime, so there is a need to have all DD loaded in Runtime more complete as possible.\n\nBut, I will remove this because it is not the point of this patch.",
+      "parentUuid": "bbe2b56c_c84be254",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 1
+      },
+      "revId": "696b36b5fa1ce74de94df124b4b749f9813c7eda",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6f05e6f6_19612ff1",
         "filename": "ms/blueprintsprocessor/application/src/main/resources/application-dev.properties",
         "patchSetId": 5
@@ -82,6 +106,30 @@
       "writtenOn": "2019-08-30T12:32:04Z",
       "side": 1,
       "message": "we don\u0027t want this here. ONAP doesn\u0027t provide any Vault server for now.",
+      "range": {
+        "startLine": 113,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 74
+      },
+      "revId": "696b36b5fa1ce74de94df124b4b749f9813c7eda",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "82693e51_4b6995af",
+        "filename": "ms/blueprintsprocessor/application/src/main/resources/application-dev.properties",
+        "patchSetId": 5
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-09-03T14:31:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f05e6f6_19612ff1",
       "range": {
         "startLine": 113,
         "startChar": 0,
@@ -117,6 +165,47 @@
     },
     {
       "key": {
+        "uuid": "80998323_e58a0022",
+        "filename": "ms/blueprintsprocessor/application/src/main/resources/application.properties",
+        "patchSetId": 5
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-09-03T14:31:16Z",
+      "side": 1,
+      "message": "If there is no need to have a Vault Server coming with CDS, Yes.\n\nWill remove this.",
+      "parentUuid": "bbecae68_4ea14732",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 111,
+        "endChar": 74
+      },
+      "revId": "696b36b5fa1ce74de94df124b4b749f9813c7eda",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a080470_a614d9d0",
+        "filename": "ms/blueprintsprocessor/modules/commons/rest-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/rest/BluePrintRestLibConfiguration.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-09-03T14:31:16Z",
+      "side": 1,
+      "message": "This will be removed too.",
+      "revId": "696b36b5fa1ce74de94df124b4b749f9813c7eda",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d1d97c49_16441476",
         "filename": "ms/blueprintsprocessor/modules/commons/rest-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/rest/BluePrintRestLibData.kt",
         "patchSetId": 5
@@ -128,6 +217,30 @@
       "writtenOn": "2019-08-30T12:32:04Z",
       "side": 1,
       "message": "see previous comment on this please.",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 1
+      },
+      "revId": "696b36b5fa1ce74de94df124b4b749f9813c7eda",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "49bb85a1_081f9e1f",
+        "filename": "ms/blueprintsprocessor/modules/commons/rest-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/rest/BluePrintRestLibData.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-09-03T14:31:16Z",
+      "side": 1,
+      "message": "Yes!\n\nI need the patch from Oleg on customizing header to remove this. \nhttps://gerrit.onap.org/r/c/ccsdk/cds/+/88011",
+      "parentUuid": "d1d97c49_16441476",
       "range": {
         "startLine": 52,
         "startChar": 0,
@@ -163,6 +276,30 @@
     },
     {
       "key": {
+        "uuid": "a9488270_96f9ded7",
+        "filename": "ms/blueprintsprocessor/modules/commons/rest-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/rest/service/BluePrintRestLibPropertyService.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-09-03T14:31:16Z",
+      "side": 1,
+      "message": "Sure!\n\nThis should be removed once I have the patch on customizing header",
+      "parentUuid": "521b906e_ed8b0cb1",
+      "range": {
+        "startLine": 50,
+        "startChar": 46,
+        "endLine": 50,
+        "endChar": 78
+      },
+      "revId": "696b36b5fa1ce74de94df124b4b749f9813c7eda",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba40a987_56ab1538",
         "filename": "ms/blueprintsprocessor/modules/commons/rest-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/rest/service/TokenAuthRestClientService.kt",
         "patchSetId": 5
@@ -174,6 +311,30 @@
       "writtenOn": "2019-08-30T12:32:04Z",
       "side": 1,
       "message": "please revert these changes. The specific header can be passed through the model. Better than to hardcode.",
+      "range": {
+        "startLine": 26,
+        "startChar": 6,
+        "endLine": 26,
+        "endChar": 32
+      },
+      "revId": "696b36b5fa1ce74de94df124b4b749f9813c7eda",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c6e30f9a_fae074d4",
+        "filename": "ms/blueprintsprocessor/modules/commons/rest-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/rest/service/TokenAuthRestClientService.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-09-03T14:31:16Z",
+      "side": 1,
+      "message": "Sure!",
+      "parentUuid": "ba40a987_56ab1538",
       "range": {
         "startLine": 26,
         "startChar": 6,
