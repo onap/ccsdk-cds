@@ -39,6 +39,7 @@ limitations under the License.
                 <mat-card-content class="card-content">
                     {{option.blueprintModel.artifactName}}
                     <br>{{option.blueprintModel.updatedBy}}
+                    <br>{{option.blueprintModel.artifactVersion}}
                 </mat-card-content>
                 <mat-card-actions class="flexBox">
                     <button matStepperNext mat-menu-item (click)="editCBA(option.blueprintModel.artifactName,option.blueprintModel.artifactVersion,1)">Edit</button>
