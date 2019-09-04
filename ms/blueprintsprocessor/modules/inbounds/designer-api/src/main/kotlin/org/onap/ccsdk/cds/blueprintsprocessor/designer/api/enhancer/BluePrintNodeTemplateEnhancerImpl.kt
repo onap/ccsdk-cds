@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.controllerblueprints.service.enhancer
+package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.enhancer
 
-import org.slf4j.LoggerFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintNodeTemplateEnhancer
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintRepoService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
+import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.service.utils.BluePrintEnhancerUtils
@@ -35,7 +35,7 @@ open class BluePrintNodeTemplateEnhancerImpl(private val bluePrintRepoService: B
                                              private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService)
     : BluePrintNodeTemplateEnhancer {
 
-    private val log= LoggerFactory.getLogger(BluePrintNodeTemplateEnhancerImpl::class.toString())
+    private val log= logger(BluePrintNodeTemplateEnhancerImpl::class)
 
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
     lateinit var bluePrintContext: BluePrintContext

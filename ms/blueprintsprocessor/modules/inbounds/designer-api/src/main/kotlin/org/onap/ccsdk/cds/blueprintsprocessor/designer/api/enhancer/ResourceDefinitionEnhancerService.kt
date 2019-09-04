@@ -15,14 +15,14 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.controllerblueprints.service.enhancer
+package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.enhancer
 
-import org.slf4j.LoggerFactory
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
+import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
@@ -43,7 +43,7 @@ interface ResourceDefinitionEnhancerService {
 class ResourceDefinitionEnhancerServiceImpl(private val resourceDefinitionRepoService: ResourceDefinitionRepoService) :
         ResourceDefinitionEnhancerService {
 
-    private val log= LoggerFactory.getLogger(ResourceDefinitionEnhancerService::class.toString())
+    private val log = logger(ResourceDefinitionEnhancerService::class)
 
     companion object {
         const val ARTIFACT_TYPE_MAPPING_SOURCE: String = "artifact-mapping-resource"

@@ -14,12 +14,12 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.cds.controllerblueprints.service.enhancer
+package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.enhancer
 
-import org.slf4j.LoggerFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
+import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
@@ -52,7 +52,7 @@ interface ResourceAssignmentEnhancerService {
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class ResourceAssignmentEnhancerServiceImpl(private val resourceDefinitionRepoService: ResourceDefinitionRepoService)
     : ResourceAssignmentEnhancerService {
-    private val log= LoggerFactory.getLogger(ResourceAssignmentEnhancerServiceImpl::class.java)
+    private val log= logger(ResourceAssignmentEnhancerServiceImpl::class)
 
     /**
      * Get the defined source instance from the ResourceAssignment,
@@ -83,7 +83,7 @@ open class ResourceAssignmentEnhancerServiceImpl(private val resourceDefinitionR
                 // Get the Resource Definition from Repo
                 val resourceDefinition: ResourceDefinition = getResourceDefinition(dictionaryName)
 
-                val sourceNodeTemplate = resourceDefinition.sources.get(dictionarySource)
+                val sourceNodeTemplate = resourceDefinition.sources[dictionarySource]
                         ?: throw BluePrintException("failed to get assigned dictionarySource($dictionarySource) from resourceDefinition($dictionaryName)")
 
                 // Enrich as NodeTemplate
