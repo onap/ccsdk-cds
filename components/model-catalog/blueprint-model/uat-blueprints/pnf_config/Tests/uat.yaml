@@ -31,32 +31,6 @@ processes:
         message: success
       payload:
         config-assign-response: {}
-      stepData:
-        name: config-assign
-        properties:
-          resource-assignment-params:
-            config-assign: &assignPatch
-              ietf-restconf:yang-patch:
-                patch-id: patch-1
-                edit:
-                  - edit-id: edit1
-                    operation: merge
-                    target: /
-                    value: { netconflist: { netconf: [ { netconf-id: "10", netconf-param: "1000" }]}}
-                  - edit-id: edit2
-                    operation: merge
-                    target: /
-                    value: { netconflist: { netconf: [ { netconf-id: "20", netconf-param: "2000" }]}}
-                  - edit-id: edit3
-                    operation: merge
-                    target: /
-                    value: { netconflist: { netconf: [ { netconf-id: "30", netconf-param: "3000" }]}}
-          status: success
-    responseNormalizerSpec:
-      stepData:
-        properties:
-          resource-assignment-params:
-            config-assign: ?from-json(.stepData.properties.resource-assignment-params.config-assign)
   - name: config-deploy
     request:
       commonHeader: *commonHeader
@@ -84,11 +58,6 @@ processes:
         errorMessage: null
         eventType: EVENT_COMPONENT_EXECUTED
         message: success
-      stepData:
-        name: config-deploy
-        properties:
-          response-data: ""
-          status: success
 
 external-services:
   - selector: sdncodl
@@ -127,7 +96,22 @@ external-services:
           path: [*configUri, *configletResourcePath]
           headers:
             Content-Type: application/yang.patch+json
-          body: *assignPatch
+          body:
+            ietf-restconf:yang-patch:
+              patch-id: patch-1
+              edit:
+                - edit-id: edit1
+                  operation: merge
+                  target: /
+                  value: { netconflist: { netconf: [ { netconf-id: "10", netconf-param: "1000" }]}}
+                - edit-id: edit2
+                  operation: merge
+                  target: /
+                  value: { netconflist: { netconf: [ { netconf-id: "20", netconf-param: "2000" }]}}
+                - edit-id: edit3
+                  operation: merge
+                  target: /
+                  value: { netconflist: { netconf: [ { netconf-id: "30", netconf-param: "3000" }]}}
       - request:
           method: DELETE
           path: *configUri

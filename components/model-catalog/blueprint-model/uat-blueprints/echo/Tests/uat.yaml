@@ -26,9 +26,3 @@ processes:
         message: success
       payload:
         echo-response: {}
-      stepData:
-        name: echo
-        properties:
-          resource-assignment-params:
-            echo: *message
-          status: success
