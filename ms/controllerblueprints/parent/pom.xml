@@ -225,16 +225,6 @@
                 <artifactId>blueprint-validation</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
-                <artifactId>service</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
-                <artifactId>application</artifactId>
-                <version>${project.version}</version>
-            </dependency>
 
             <!-- Testing Dependencies -->
             <dependency>
