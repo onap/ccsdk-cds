@@ -41,11 +41,11 @@ class BlueprintModelContent : Serializable {
 
     @Column(name = "name", nullable = false)
     @ApiModelProperty(required = true)
-    var name: String? = null
+    lateinit var name: String
 
     @Column(name = "content_type", nullable = false)
     @ApiModelProperty(required = true)
-    var contentType: String? = null
+    lateinit var contentType: String
 
     @OneToOne
     @JoinColumn(name = "config_model_id")
@@ -58,7 +58,7 @@ class BlueprintModelContent : Serializable {
     @Lob
     @Column(name = "content", nullable = false)
     @ApiModelProperty(required = true)
-    var content: ByteArray? = null
+    lateinit var content: ByteArray
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     @LastModifiedDate

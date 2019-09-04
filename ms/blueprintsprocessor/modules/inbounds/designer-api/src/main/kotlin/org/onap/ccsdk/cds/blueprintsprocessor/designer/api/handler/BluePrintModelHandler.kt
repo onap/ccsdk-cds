@@ -20,9 +20,9 @@ package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler
 
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModel
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelSearch
-import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.ControllerBlueprintModelContentRepository
-import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.ControllerBlueprintModelRepository
-import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.ControllerBlueprintModelSearchRepository
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.BlueprintModelContentRepository
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.BlueprintModelRepository
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.BlueprintModelSearchRepository
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.utils.BluePrintEnhancerUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
@@ -52,9 +52,9 @@ import java.util.*
 @Service
 open class BluePrintModelHandler(private val controllerBlueprintsCatalogService: BluePrintCatalogService,
                                  private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
-                                 private val blueprintModelSearchRepository: ControllerBlueprintModelSearchRepository,
-                                 private val blueprintModelRepository: ControllerBlueprintModelRepository,
-                                 private val blueprintModelContentRepository: ControllerBlueprintModelContentRepository,
+                                 private val blueprintModelSearchRepository: BlueprintModelSearchRepository,
+                                 private val blueprintModelRepository: BlueprintModelRepository,
+                                 private val blueprintModelContentRepository: BlueprintModelContentRepository,
                                  private val bluePrintEnhancerService: BluePrintEnhancerService) {
 
     private val log = LoggerFactory.getLogger(BluePrintModelHandler::class.java)!!

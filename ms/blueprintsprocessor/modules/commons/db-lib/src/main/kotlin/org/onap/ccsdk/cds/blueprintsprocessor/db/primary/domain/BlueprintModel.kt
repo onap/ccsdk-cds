@@ -26,7 +26,7 @@ import java.util.*
 import javax.persistence.*
 
 /**
- *  Provide Configuration Generator BlueprintModel Entity
+ *  Provide BlueprintModel Entity
  *
  * @author Brinda Santh
  * @version 1.0
@@ -76,7 +76,7 @@ class BlueprintModel : Serializable {
 
     @Column(name = "artifact_version", nullable = false)
     @ApiModelProperty(required = true)
-    var artifactVersion: String? = null
+    lateinit var artifactVersion: String
 
     @Lob
     @Column(name = "artifact_description")
@@ -93,20 +93,20 @@ class BlueprintModel : Serializable {
 
     @Column(name = "artifact_name", nullable = false)
     @ApiModelProperty(required = true)
-    var artifactName: String? = null
+    lateinit var artifactName: String
 
     @Column(name = "published", nullable = false)
     @ApiModelProperty(required = true)
-    var published: String? = null
+    lateinit var published: String
 
     @Column(name = "updated_by", nullable = false)
     @ApiModelProperty(required = true)
-    var updatedBy: String? = null
+    lateinit var updatedBy: String
 
     @Lob
     @Column(name = "tags", nullable = false)
     @ApiModelProperty(required = true)
-    var tags: String? = null
+    lateinit var tags: String
 
     @OneToOne(mappedBy = "blueprintModel", fetch = FetchType.EAGER, orphanRemoval = true, cascade = [CascadeType.ALL])
     var blueprintModelContent: BlueprintModelContent? = null

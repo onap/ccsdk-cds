@@ -16,11 +16,11 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.db
+package org.onap.ccsdk.cds.blueprintsprocessor.db.service
 
-import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintProcessorModel
-import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintProcessorModelContent
-import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.BlueprintProcessorModelRepository
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModel
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelContent
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.BlueprintModelRepository
 import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.common.ApplicationConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
@@ -34,14 +34,14 @@ import org.springframework.stereotype.Service
 import java.io.File
 import java.nio.file.Path
 import java.util.*
-
+// TODO("Duplicate : Merge BlueprintProcessorCatalogServiceImpl and ControllerBlueprintCatalogServiceImpl")
 /**
  * Similar/Duplicate implementation in [org.onap.ccsdk.cds.controllerblueprints.service.load.ControllerBlueprintCatalogServiceImpl]
  */
 @Service("blueprintsProcessorCatalogService")
 class BlueprintProcessorCatalogServiceImpl(bluePrintRuntimeValidatorService: BluePrintValidatorService,
                                            private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
-                                           private val blueprintModelRepository: BlueprintProcessorModelRepository)
+                                           private val blueprintModelRepository: BlueprintModelRepository)
     : BlueprintCatalogServiceImpl(bluePrintLoadConfiguration, bluePrintRuntimeValidatorService) {
 
     private val log = LoggerFactory.getLogger(BlueprintProcessorCatalogServiceImpl::class.toString())
@@ -123,16 +123,18 @@ class BlueprintProcessorCatalogServiceImpl(bluePrintRuntimeValidatorService: Blu
             }
         }
 
-        val blueprintModel = BlueprintProcessorModel()
+        val blueprintModel = BlueprintModel()
         blueprintModel.id = metadata[BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID]
         blueprintModel.artifactType = ApplicationConstants.ASDC_ARTIFACT_TYPE_SDNC_MODEL
+        blueprintModel.published = metadata[BluePrintConstants.PROPERTY_BLUEPRINT_VALID]
+                ?: BluePrintConstants.FLAG_Y
         blueprintModel.artifactName = artifactName
         blueprintModel.artifactVersion = artifactVersion
-        blueprintModel.updatedBy = metadata[BluePrintConstants.METADATA_TEMPLATE_AUTHOR]
-        blueprintModel.tags = metadata[BluePrintConstants.METADATA_TEMPLATE_TAGS]
+        blueprintModel.updatedBy = metadata[BluePrintConstants.METADATA_TEMPLATE_AUTHOR]!!
+        blueprintModel.tags = metadata[BluePrintConstants.METADATA_TEMPLATE_TAGS]!!
         blueprintModel.artifactDescription = "Controller Blueprint for $artifactName:$artifactVersion"
 
-        val blueprintModelContent = BlueprintProcessorModelContent()
+        val blueprintModelContent = BlueprintModelContent()
         blueprintModelContent.id = metadata[BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID]
         blueprintModelContent.contentType = "CBA_ZIP"
         blueprintModelContent.name = "$artifactName:$artifactVersion"

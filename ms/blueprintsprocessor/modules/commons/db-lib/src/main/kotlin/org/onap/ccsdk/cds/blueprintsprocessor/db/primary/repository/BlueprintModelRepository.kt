@@ -18,16 +18,17 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository
 
 import org.jetbrains.annotations.NotNull
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModel
 import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.data.repository.NoRepositoryBean
+import org.springframework.stereotype.Repository
 import java.util.*
 import javax.transaction.Transactional
 
 /**
  * @param <T> Model
  */
-@NoRepositoryBean
-interface ModelRepository<T> : JpaRepository<T, String> {
+@Repository
+interface BlueprintModelRepository : JpaRepository<BlueprintModel, String> {
 
     /**
      * This is a findById method
@@ -35,8 +36,7 @@ interface ModelRepository<T> : JpaRepository<T, String> {
      * @param id id
      * @return Optional<T>
      */
-    @NotNull
-    override fun findById(@NotNull id: String): Optional<T>
+    override fun findById(id: String): Optional<BlueprintModel>
 
     /**
      * This is a findByArtifactNameAndArtifactVersion method
@@ -45,7 +45,7 @@ interface ModelRepository<T> : JpaRepository<T, String> {
      * @param artifactVersion artifactVersion
      * @return T?
      */
-    fun findByArtifactNameAndArtifactVersion(artifactName: String, artifactVersion: String): T?
+    fun findByArtifactNameAndArtifactVersion(artifactName: String, artifactVersion: String): BlueprintModel?
 
     /**
      * This is a findTopByArtifactNameOrderByArtifactIdDesc method
@@ -53,7 +53,7 @@ interface ModelRepository<T> : JpaRepository<T, String> {
      * @param artifactName artifactName
      * @return T?
      */
-    fun findTopByArtifactNameOrderByArtifactVersionDesc(artifactName: String): T?
+    fun findTopByArtifactNameOrderByArtifactVersionDesc(artifactName: String): BlueprintModel?
 
     /**
      * This is a findTopByArtifactName method
@@ -61,7 +61,7 @@ interface ModelRepository<T> : JpaRepository<T, String> {
      * @param artifactName artifactName
      * @return List<T>
      */
-    fun findTopByArtifactName(artifactName: String): List<T>
+    fun findTopByArtifactName(artifactName: String): List<BlueprintModel>
 
     /**
      * This is a findByTagsContainingIgnoreCase method
@@ -69,7 +69,7 @@ interface ModelRepository<T> : JpaRepository<T, String> {
      * @param tags tags
      * @return List<T>
      */
-    fun findByTagsContainingIgnoreCase(tags: String): List<T>
+    fun findByTagsContainingIgnoreCase(tags: String): List<BlueprintModel>
 
     /**
      * This is a deleteByArtifactNameAndArtifactVersion method

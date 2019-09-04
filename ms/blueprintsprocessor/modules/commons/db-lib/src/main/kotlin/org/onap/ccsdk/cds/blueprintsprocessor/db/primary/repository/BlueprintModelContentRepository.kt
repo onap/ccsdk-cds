@@ -18,16 +18,18 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository
 
 import org.jetbrains.annotations.NotNull
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModel
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelContent
 import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.data.repository.NoRepositoryBean
+import org.springframework.stereotype.Repository
 import java.util.*
 
 /**
  * @param <T> Model
  * @param <B> ModelContent
  */
-@NoRepositoryBean
-interface ModelContentRepository<T, B> : JpaRepository<B, String> {
+@Repository
+interface BlueprintModelContentRepository : JpaRepository<BlueprintModelContent, String> {
 
     /**
      * This is a findById method
@@ -36,7 +38,7 @@ interface ModelContentRepository<T, B> : JpaRepository<B, String> {
      * @return Optional<T>
      */
     @NotNull
-    override fun findById(@NotNull id: String): Optional<B>
+    override fun findById(@NotNull id: String): Optional<BlueprintModelContent>
 
     /**
      * This is a findTopByBlueprintModelAndContentType method
@@ -45,7 +47,8 @@ interface ModelContentRepository<T, B> : JpaRepository<B, String> {
      * @param contentType contentType
      * @return B?
      */
-    fun findTopByBlueprintModelAndContentType(blueprintModel: T, contentType: String): B?
+    fun findTopByBlueprintModelAndContentType(blueprintModel: BlueprintModel, contentType: String)
+            : BlueprintModelContent?
 
     /**
      * This is a findByBlueprintModelAndContentType method
@@ -54,7 +57,8 @@ interface ModelContentRepository<T, B> : JpaRepository<B, String> {
      * @param contentType contentType
      * @return List<B>
      */
-    fun findByBlueprintModelAndContentType(blueprintModel: T, contentType: String): List<B>
+    fun findByBlueprintModelAndContentType(blueprintModel: BlueprintModel, contentType: String)
+            : List<BlueprintModelContent>
 
     /**
      * This is a findByBlueprintModel method
@@ -62,7 +66,7 @@ interface ModelContentRepository<T, B> : JpaRepository<B, String> {
      * @param blueprintModel T
      * @return List<B>
      */
-    fun findByBlueprintModel(blueprintModel: T): List<B>
+    fun findByBlueprintModel(blueprintModel: BlueprintModel): List<BlueprintModelContent>
 
     /**
      * This is a findByBlueprintModelAndContentTypeAndName method
@@ -72,14 +76,15 @@ interface ModelContentRepository<T, B> : JpaRepository<B, String> {
      * @param name name
      * @return B?
      */
-    fun findByBlueprintModelAndContentTypeAndName(blueprintModel: T, contentType: String, name: String): B?
+    fun findByBlueprintModelAndContentTypeAndName(blueprintModel: BlueprintModel,
+                                                  contentType: String, name: String): BlueprintModelContent?
 
     /**
      * This is a deleteByMdeleteByBlueprintModelodelName method
      *
      * @param blueprintModel T
      */
-    fun deleteByBlueprintModel(blueprintModel: T)
+    fun deleteByBlueprintModel(blueprintModel: BlueprintModel)
 
     /**
      * This is a deleteById method
