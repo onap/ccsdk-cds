@@ -99,7 +99,7 @@ export class SearchTemplateComponent implements OnInit {
       entryDefinition: this.entryDefinition
     }
     this.store.dispatch(new SetBlueprintState(blueprintState))
-    // this.store.dispatch(new LoadBlueprintSuccess(data));
+    
   }
 
   async buildFileViewData(zip) {
