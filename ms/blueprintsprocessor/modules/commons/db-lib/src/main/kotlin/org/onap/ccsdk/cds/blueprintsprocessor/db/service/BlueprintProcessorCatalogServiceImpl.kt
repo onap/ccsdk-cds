@@ -127,7 +127,7 @@ class BlueprintProcessorCatalogServiceImpl(bluePrintRuntimeValidatorService: Blu
         blueprintModel.id = metadata[BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID]
         blueprintModel.artifactType = ApplicationConstants.ASDC_ARTIFACT_TYPE_SDNC_MODEL
         blueprintModel.published = metadata[BluePrintConstants.PROPERTY_BLUEPRINT_VALID]
-                ?: BluePrintConstants.FLAG_Y
+                ?: BluePrintConstants.FLAG_N
         blueprintModel.artifactName = artifactName
         blueprintModel.artifactVersion = artifactVersion
         blueprintModel.updatedBy = metadata[BluePrintConstants.METADATA_TEMPLATE_AUTHOR]!!

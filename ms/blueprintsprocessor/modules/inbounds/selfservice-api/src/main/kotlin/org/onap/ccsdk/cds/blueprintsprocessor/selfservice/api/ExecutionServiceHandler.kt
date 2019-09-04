@@ -49,6 +49,7 @@ class ExecutionServiceHandler(private val bluePrintLoadConfiguration: BluePrintL
 
     private val log = LoggerFactory.getLogger(ExecutionServiceHandler::class.toString())
 
+    //TODO("Remove from self service api and move to designer api module")
     suspend fun upload(filePart: FilePart): String {
         val saveId = UUID.randomUUID().toString()
         val blueprintArchive = normalizedPathName(bluePrintLoadConfiguration.blueprintArchivePath, saveId)
@@ -74,6 +75,7 @@ class ExecutionServiceHandler(private val bluePrintLoadConfiguration: BluePrintL
         }
     }
 
+    //TODO("Remove from self service api and move to designer api module")
     suspend fun remove(name: String, version: String) {
         blueprintsProcessorCatalogService.deleteFromDatabase(name, version)
     }
