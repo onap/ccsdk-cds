@@ -15,9 +15,10 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.functions.ansible.executor
+package org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots
 
 import com.github.fge.jsonpatch.diff.JsonDiff
+import org.apache.logging.log4j.util.Strings
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db.ResourceConfigSnapshot
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db.ResourceConfigSnapshot.Status.RUNNING
@@ -144,18 +145,20 @@ open class ComponentConfigSnapshotsExecutor(private val cfgSnapshotService: Reso
      */
     private suspend fun compareConfigurationSnapshot(resourceId: String, resourceType: String, contentType : String) {
 
+        val cfgRunning = cfgSnapshotService.findByResourceIdAndResourceTypeAndStatus(resourceId, resourceType, RUNNING)
+        val cfgCandidate = cfgSnapshotService.findByResourceIdAndResourceTypeAndStatus(resourceId, resourceType, CANDIDATE)
+
+        if (cfgRunning.isEmpty() || cfgCandidate.isEmpty()) {
+            setNodeOutputProperties(OUTPUT_STATUS_SUCCESS, Strings.EMPTY)
+            return
+        }
+
         when (contentType.toUpperCase()) {
             DIFF_JSON -> {
-                val cfgRunning = cfgSnapshotService.findByResourceIdAndResourceTypeAndStatus(resourceId, resourceType, RUNNING)
-                val cfgCandidate = cfgSnapshotService.findByResourceIdAndResourceTypeAndStatus(resourceId, resourceType, CANDIDATE)
-
                 val patchNode = JsonDiff.asJson(cfgRunning.jsonAsJsonType(), cfgCandidate.jsonAsJsonType())
                 setNodeOutputProperties(OUTPUT_STATUS_SUCCESS, patchNode.toString())
             }
             DIFF_XML -> {
-                val cfgRunning = cfgSnapshotService.findByResourceIdAndResourceTypeAndStatus(resourceId, resourceType, RUNNING)
-                val cfgCandidate = cfgSnapshotService.findByResourceIdAndResourceTypeAndStatus(resourceId, resourceType, CANDIDATE)
-
                 val myDiff = DiffBuilder
                         .compare(Input.fromString(cfgRunning))
                         .withTest(Input.fromString(cfgCandidate))

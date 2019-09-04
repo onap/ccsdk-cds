@@ -129,14 +129,15 @@ class ResourceConfigSnapshotControllerTest {
     }
 
     @Test
-    fun `get returns 404 if entry not found`() {
+    fun `get returns 200 if entry not found`() {
         runBlocking {
 
             webTestClient
                 .get()
                 .uri("/api/v1/configs?resourceId=MISSING&resourceType=PNF")
                 .exchange()
-                .expectStatus().isNotFound
+                .expectStatus().is2xxSuccessful
+                .expectBody()
         }
     }
 

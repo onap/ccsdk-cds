@@ -48,18 +48,6 @@ class ResourceConfigSnapshotServiceTest {
         }
     }
 
-    @Test(expected = NoSuchElementException::class)
-    fun notFoundEntryReturnsExceptionTest() {
-        val tr = ResourceConfigSnapshot()
-        runBlocking {
-            every {
-                cfgRepository.findByResourceIdAndResourceTypeAndStatus(any(), any(), any())
-            } returns tr
-            val snap = cfgService.findByResourceIdAndResourceTypeAndStatus("MISSING_ID", "UNKNOWN_TYPE")
-            assertTrue ( snap.isBlank(), "Not found but returned a non empty string" )
-        }
-    }
-
     @Test
     fun createNewResourceConfigSnapshotTest() {
         val tr = ResourceConfigSnapshot()
