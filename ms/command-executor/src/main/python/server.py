@@ -1,5 +1,4 @@
-
-#!/usr/bin/python
+# !/usr/bin/python
 
 #
 # Copyright (C) 2019 Bell Canada.
@@ -43,7 +42,7 @@ def serve():
         'Access denied!')
 
     server = grpc.server(
-        futures.ThreadPoolExecutor(max_workers=10),
+        futures.ProcessPoolExecutor(),
         interceptors=(header_validator,))
 
     CommandExecutor_pb2_grpc.add_CommandExecutorServiceServicer_to_server(
