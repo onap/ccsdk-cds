@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +18,11 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.config
 
 
-open class BluePrintPathConfiguration {
+open class BluePrintLoadConfiguration {
     lateinit var blueprintDeployPath: String
     lateinit var blueprintArchivePath: String
     lateinit var blueprintWorkingPath: String
-}
 
-
-open class BluePrintLoadConfiguration : BluePrintPathConfiguration() {
     var loadInitialData: Boolean = false
     var loadBluePrint: Boolean = false
     var loadBluePrintPaths: String? = null

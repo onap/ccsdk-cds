@@ -23,7 +23,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintProcess
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.BlueprintProcessorModelRepository
 import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.common.ApplicationConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintPathConfiguration
+import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ErrorCode
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidatorService
 import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintCompileCache
@@ -41,20 +41,20 @@ import java.util.*
  */
 @Service("blueprintsProcessorCatalogService")
 class BlueprintProcessorCatalogServiceImpl(bluePrintRuntimeValidatorService: BluePrintValidatorService,
-                                           private val bluePrintPathConfiguration: BluePrintPathConfiguration,
+                                           private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
                                            private val blueprintModelRepository: BlueprintProcessorModelRepository)
-    : BlueprintCatalogServiceImpl(bluePrintPathConfiguration, bluePrintRuntimeValidatorService) {
+    : BlueprintCatalogServiceImpl(bluePrintLoadConfiguration, bluePrintRuntimeValidatorService) {
 
     private val log = LoggerFactory.getLogger(BlueprintProcessorCatalogServiceImpl::class.toString())
 
     override suspend fun delete(name: String, version: String) {
         // Clean blueprint script cache
         val cacheKey = BluePrintFileUtils
-                .compileCacheKey(normalizedPathName(bluePrintPathConfiguration.blueprintDeployPath, name, version))
+                .compileCacheKey(normalizedPathName(bluePrintLoadConfiguration.blueprintDeployPath, name, version))
         BluePrintCompileCache.cleanClassLoader(cacheKey)
         log.info("removed cba file name($name), version($version) from cache")
         // Cleaning Deployed Blueprint
-        deleteNBDir(bluePrintPathConfiguration.blueprintDeployPath, name, version)
+        deleteNBDir(bluePrintLoadConfiguration.blueprintDeployPath, name, version)
         log.info("removed cba file name($name), version($version) from deploy location")
         // Cleaning Data Base
         blueprintModelRepository
@@ -65,8 +65,8 @@ class BlueprintProcessorCatalogServiceImpl(bluePrintRuntimeValidatorService: Blu
 
     override suspend fun get(name: String, version: String, extract: Boolean): Path? {
 
-        val deployFile = normalizedFile(bluePrintPathConfiguration.blueprintDeployPath, name, version)
-        val cbaFile = normalizedFile(bluePrintPathConfiguration.blueprintArchivePath,
+        val deployFile = normalizedFile(bluePrintLoadConfiguration.blueprintDeployPath, name, version)
+        val cbaFile = normalizedFile(bluePrintLoadConfiguration.blueprintArchivePath,
                 UUID.randomUUID().toString(), "cba.zip")
 
         if (extract && deployFile.exists()) {
@@ -117,7 +117,7 @@ class BlueprintProcessorCatalogServiceImpl(bluePrintRuntimeValidatorService: Blu
             log.info("Overwriting blueprint model :$artifactName::$artifactVersion")
             blueprintModelRepository.deleteByArtifactNameAndArtifactVersion(artifactName, artifactVersion)
             val deployFile =
-                    normalizedPathName(bluePrintPathConfiguration.blueprintDeployPath, artifactName, artifactVersion)
+                    normalizedPathName(bluePrintLoadConfiguration.blueprintDeployPath, artifactName, artifactVersion)
             deleteNBDir(deployFile).let {
                 if (it) log.info("Deleted deployed blueprint model :$artifactName::$artifactVersion")
                 else log.info("Fail to delete deployed blueprint model :$artifactName::$artifactVersion")

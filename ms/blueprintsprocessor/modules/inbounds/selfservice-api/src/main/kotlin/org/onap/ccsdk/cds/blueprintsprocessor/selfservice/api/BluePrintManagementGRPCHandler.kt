@@ -24,7 +24,7 @@ import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.utils.currentTimestamp
 import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader
 import org.onap.ccsdk.cds.controllerblueprints.common.api.Status
-import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintPathConfiguration
+import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
@@ -40,7 +40,7 @@ import java.io.File
 import java.util.*
 
 @Service
-open class BluePrintManagementGRPCHandler(private val bluePrintPathConfiguration: BluePrintPathConfiguration,
+open class BluePrintManagementGRPCHandler(private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
                                           private val blueprintsProcessorCatalogService: BluePrintCatalogService)
     : BluePrintManagementServiceGrpc.BluePrintManagementServiceImplBase() {
 
@@ -54,7 +54,7 @@ open class BluePrintManagementGRPCHandler(private val bluePrintPathConfiguration
             log.info("request(${request.commonHeader.requestId})")
             val uploadId = UUID.randomUUID().toString()
             try {
-                val cbaFile = normalizedFile(bluePrintPathConfiguration.blueprintArchivePath, uploadId, "cba-zip")
+                val cbaFile = normalizedFile(bluePrintLoadConfiguration.blueprintArchivePath, uploadId, "cba-zip")
 
                 saveToDisk(request, cbaFile)
 
@@ -64,8 +64,8 @@ open class BluePrintManagementGRPCHandler(private val bluePrintPathConfiguration
             } catch (e: Exception) {
                 responseObserver.onError(failStatus("request(${request.commonHeader.requestId}): Failed to upload CBA", e))
             } finally {
-                deleteDir(bluePrintPathConfiguration.blueprintArchivePath, uploadId)
-                deleteDir(bluePrintPathConfiguration.blueprintWorkingPath, uploadId)
+                deleteDir(bluePrintLoadConfiguration.blueprintArchivePath, uploadId)
+                deleteDir(bluePrintLoadConfiguration.blueprintWorkingPath, uploadId)
             }
         }
     }

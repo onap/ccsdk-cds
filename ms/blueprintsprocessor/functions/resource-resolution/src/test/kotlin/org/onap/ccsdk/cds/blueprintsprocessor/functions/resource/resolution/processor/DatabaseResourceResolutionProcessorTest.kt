@@ -20,7 +20,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintProcessorProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.BluePrintDBLibPropertySevice
@@ -41,7 +41,7 @@ import kotlin.test.assertNotNull
 @ContextConfiguration(classes = [DatabaseResourceAssignmentProcessor::class, BlueprintPropertyConfiguration::class,
     BluePrintProperties::class, BluePrintDBLibPropertySevice::class, BluePrintDBLibConfiguration::class,
     BluePrintCoreConfiguration::class, MockDatabaseConfiguration::class, MockBlueprintProcessorCatalogServiceImpl::class,
-    BlueprintProcessorProperties::class])
+    BlueprintPropertiesService::class])
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class DatabaseResourceResolutionProcessorTest {
 

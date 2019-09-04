@@ -28,8 +28,8 @@ import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.onap.ccsdk.cds.controllerblueprints.TestApplication
 import org.onap.ccsdk.cds.controllerblueprints.core.*
-import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintPathConfiguration
-import org.onap.ccsdk.cds.controllerblueprints.service.ControllerBluePrintCoreConfiguration
+import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
+import org.onap.ccsdk.cds.controllerblueprints.service.BluePrintDesignerCoreConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.service.domain.BlueprintModelSearch
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -62,7 +62,7 @@ import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes = [TestApplication::class, ControllerBluePrintCoreConfiguration::class])
+@ContextConfiguration(classes = [TestApplication::class, BluePrintDesignerCoreConfiguration::class])
 @ComponentScan(basePackages = ["org.onap.ccsdk.cds.controllerblueprints"])
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @EnableAutoConfiguration
@@ -77,7 +77,7 @@ class BlueprintModelControllerTest {
     @Autowired
     lateinit var webTestClient: WebTestClient
 
-    private var bluePrintLoadConfiguration: BluePrintPathConfiguration? = null
+    private var bluePrintLoadConfiguration: BluePrintLoadConfiguration? = null
 
     private val blueprintDir = "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
     private var zipBlueprintFileName: String? = null
@@ -89,7 +89,7 @@ class BlueprintModelControllerTest {
     fun setUp() {
         assertNotNull(webTestClient, " Failed to create WebTestClient")
 
-        bluePrintLoadConfiguration = BluePrintPathConfiguration().apply {
+        bluePrintLoadConfiguration = BluePrintLoadConfiguration().apply {
             blueprintArchivePath = "./target/blueprints/archive"
             blueprintWorkingPath = "./target/blueprints/work"
             blueprintDeployPath = "./target/blueprints/deploy"

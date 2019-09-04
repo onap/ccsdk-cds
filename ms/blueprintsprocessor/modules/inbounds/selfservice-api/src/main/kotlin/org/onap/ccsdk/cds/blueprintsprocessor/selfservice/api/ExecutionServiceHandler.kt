@@ -26,7 +26,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.*
 import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.utils.toProto
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.core.*
-import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintPathConfiguration
+import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ErrorCode
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintWorkflowExecutionService
@@ -42,7 +42,7 @@ import java.util.*
 import java.util.stream.Collectors
 
 @Service
-class ExecutionServiceHandler(private val bluePrintPathConfiguration: BluePrintPathConfiguration,
+class ExecutionServiceHandler(private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
                               private val blueprintsProcessorCatalogService: BluePrintCatalogService,
                               private val bluePrintWorkflowExecutionService
                               : BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput>) {
@@ -51,8 +51,8 @@ class ExecutionServiceHandler(private val bluePrintPathConfiguration: BluePrintP
 
     suspend fun upload(filePart: FilePart): String {
         val saveId = UUID.randomUUID().toString()
-        val blueprintArchive = normalizedPathName(bluePrintPathConfiguration.blueprintArchivePath, saveId)
-        val blueprintWorking = normalizedPathName(bluePrintPathConfiguration.blueprintWorkingPath, saveId)
+        val blueprintArchive = normalizedPathName(bluePrintLoadConfiguration.blueprintArchivePath, saveId)
+        val blueprintWorking = normalizedPathName(bluePrintLoadConfiguration.blueprintWorkingPath, saveId)
         try {
 
             val compressedFile = normalizedFile(blueprintArchive, "cba.zip")
@@ -67,7 +67,7 @@ class ExecutionServiceHandler(private val bluePrintPathConfiguration: BluePrintP
         } finally {
             // Clean blueprint script cache
             val cacheKey = BluePrintFileUtils
-                    .compileCacheKey(normalizedPathName(bluePrintPathConfiguration.blueprintWorkingPath,saveId))
+                    .compileCacheKey(normalizedPathName(bluePrintLoadConfiguration.blueprintWorkingPath,saveId))
             BluePrintCompileCache.cleanClassLoader(cacheKey)
             deleteNBDir(blueprintArchive)
             deleteNBDir(blueprintWorking)

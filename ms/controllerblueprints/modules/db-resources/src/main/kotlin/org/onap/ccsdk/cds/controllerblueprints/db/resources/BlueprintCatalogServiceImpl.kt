@@ -19,7 +19,7 @@
 package org.onap.ccsdk.cds.controllerblueprints.db.resources
 
 import org.onap.ccsdk.cds.controllerblueprints.core.*
-import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintPathConfiguration
+import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidatorService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintArchiveUtils
@@ -31,7 +31,7 @@ import javax.persistence.MappedSuperclass
 
 @MappedSuperclass
 abstract class BlueprintCatalogServiceImpl(
-        private val bluePrintPathConfiguration: BluePrintPathConfiguration,
+        private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
         private val blueprintValidator: BluePrintValidatorService) : BluePrintCatalogService {
 
     private val log = LoggerFactory.getLogger(BlueprintCatalogServiceImpl::class.java)!!
@@ -44,7 +44,7 @@ abstract class BlueprintCatalogServiceImpl(
         if (blueprintFile.isDirectory) {
             log.info("Save processing($processingId) Working Dir(${blueprintFile.absolutePath})")
             workingDir = blueprintFile.absolutePath
-            archiveFile = normalizedFile(bluePrintPathConfiguration.blueprintArchivePath, processingId, "cba.zip")
+            archiveFile = normalizedFile(bluePrintLoadConfiguration.blueprintArchivePath, processingId, "cba.zip")
 
             if (!BluePrintArchiveUtils.compress(blueprintFile, archiveFile)) {
                 throw BluePrintException("Fail to compress blueprint")
@@ -52,7 +52,7 @@ abstract class BlueprintCatalogServiceImpl(
         } else {
             // Compressed File
             log.info("Save processing($processingId) CBA(${blueprintFile.absolutePath})")
-            workingDir = normalizedPathName(bluePrintPathConfiguration.blueprintWorkingPath, processingId)
+            workingDir = normalizedPathName(bluePrintLoadConfiguration.blueprintWorkingPath, processingId)
             archiveFile = blueprintFile
             // Decompress the CBA file to working Directory
             blueprintFile.deCompress(workingDir)

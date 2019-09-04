@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,34 +28,34 @@ import org.springframework.core.env.Environment
 import org.springframework.stereotype.Service
 
 @Configuration
-open class ControllerBluePrintCoreConfiguration(private val bluePrintProperties: ControllerBlueprintProperties) {
+open class BluePrintDesignerCoreConfiguration(private val bluePrintProperties: BluePrintDesignerProperties) {
 
     companion object {
-        const val PREFIX_BLUEPRINT_LOAD_CONFIGURATION = "controllerblueprints"
+        const val PREFIX_BLUEPRINT_LOAD_CONFIGURATION = "blueprintsprocessor"
     }
 
     @Bean
-    open fun bluePrintLoadConfiguration(): BluePrintLoadConfiguration {
+    open fun bluePrintDesignerLoadConfiguration(): BluePrintLoadConfiguration {
         return bluePrintProperties
                 .propertyBeanType(PREFIX_BLUEPRINT_LOAD_CONFIGURATION, BluePrintLoadConfiguration::class.java)
     }
 }
 
 @Configuration
-open class ControllerBlueprintPropertyConfiguration {
+open class BlueprintDesignerPropertyConfiguration {
     @Autowired
     lateinit var environment: Environment
 
     @Bean
-    open fun controllerBluePrintPropertyBinder(): Binder {
+    open fun bluePrintDesignerPropertyBinder(): Binder {
         val configurationPropertySource = ConfigurationPropertySources.get(environment)
         return Binder(configurationPropertySource)
     }
 }
 
 @Service
-open class ControllerBlueprintProperties(private var bluePrintPropertyBinder: Binder) {
+open class BluePrintDesignerProperties(private var bluePrintDesignerPropertyBinder: Binder) {
     fun <T> propertyBeanType(prefix: String, type: Class<T>): T {
-        return bluePrintPropertyBinder.bind(prefix, Bindable.of(type)).get()
+        return bluePrintDesignerPropertyBinder.bind(prefix, Bindable.of(type)).get()
     }
 }
