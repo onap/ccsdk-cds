@@ -27,9 +27,9 @@ import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidatorService
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPath
 import org.onap.ccsdk.cds.controllerblueprints.db.resources.BlueprintCatalogServiceImpl
-import org.onap.ccsdk.cds.controllerblueprints.service.domain.BlueprintModel
-import org.onap.ccsdk.cds.controllerblueprints.service.domain.BlueprintModelContent
-import org.onap.ccsdk.cds.controllerblueprints.service.repository.ControllerBlueprintModelRepository
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModel
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelContent
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.ControllerBlueprintModelRepository
 import org.slf4j.LoggerFactory
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service

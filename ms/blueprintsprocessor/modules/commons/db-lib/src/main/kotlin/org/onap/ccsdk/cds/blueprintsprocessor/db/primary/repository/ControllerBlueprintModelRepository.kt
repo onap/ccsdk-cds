@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.onap.ccsdk.cds.controllerblueprints.service.repository
+package org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository
 
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModel
 import org.onap.ccsdk.cds.controllerblueprints.db.resources.repository.ModelRepository
-import org.onap.ccsdk.cds.controllerblueprints.service.domain.BlueprintModel
 
 interface ControllerBlueprintModelRepository : ModelRepository<BlueprintModel>

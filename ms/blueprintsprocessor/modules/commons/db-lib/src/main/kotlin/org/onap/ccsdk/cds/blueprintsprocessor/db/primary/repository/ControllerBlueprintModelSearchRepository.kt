@@ -14,15 +14,14 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.cds.controllerblueprints.service.repository
+package org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository
 
-import org.onap.ccsdk.cds.controllerblueprints.service.domain.BlueprintModelSearch
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelSearch
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
-import java.util.*
 
 /**
- * ControllerBlueprintModelSearchRepository.java Purpose: Provide Configuration Generator AsdcArtifactsRepository
+ * Provide Configuration Generator AsdcArtifactsRepository
  *
  * @author Brinda Santh
  * @version 1.0
@@ -36,7 +35,7 @@ interface ControllerBlueprintModelSearchRepository : JpaRepository<BlueprintMode
      * @param id id
      * @return Optional<BlueprintModelSearch>
     </BlueprintModelSearch> */
-    fun findById(id: String): Optional<BlueprintModelSearch>
+    fun findById(id: String): BlueprintModelSearch?
 
     /**
      * This is a findAll method
@@ -51,7 +50,7 @@ interface ControllerBlueprintModelSearchRepository : JpaRepository<BlueprintMode
      * @param artifactVersion artifactVersion
      * @return Optional<AsdcArtifacts>
     </AsdcArtifacts> */
-    fun findByArtifactNameAndArtifactVersion(artifactName: String, artifactVersion: String): Optional<BlueprintModelSearch>
+    fun findByArtifactNameAndArtifactVersion(artifactName: String, artifactVersion: String): BlueprintModelSearch?
 
     /**
      * This is a findByTagsContainingIgnoreCase method

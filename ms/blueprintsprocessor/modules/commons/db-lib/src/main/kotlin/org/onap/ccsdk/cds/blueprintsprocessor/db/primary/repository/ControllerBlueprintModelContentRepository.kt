@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.onap.ccsdk.cds.controllerblueprints.service.repository
+package org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository
 
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModel
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelContent
 import org.onap.ccsdk.cds.controllerblueprints.db.resources.repository.ModelContentRepository
-import org.onap.ccsdk.cds.controllerblueprints.service.domain.BlueprintModel
-import org.onap.ccsdk.cds.controllerblueprints.service.domain.BlueprintModelContent
 
 interface ControllerBlueprintModelContentRepository : ModelContentRepository<BlueprintModel, BlueprintModelContent>
