@@ -26,7 +26,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.data.ErrorCode
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidatorService
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPath
-import org.onap.ccsdk.cds.controllerblueprints.db.resources.BlueprintCatalogServiceImpl
+import org.onap.ccsdk.cds.blueprintsprocessor.db.BlueprintCatalogServiceImpl
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModel
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelContent
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.ControllerBlueprintModelRepository

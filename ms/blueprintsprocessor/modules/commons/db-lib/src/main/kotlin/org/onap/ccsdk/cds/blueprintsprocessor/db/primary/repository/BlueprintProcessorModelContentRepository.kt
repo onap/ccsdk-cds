@@ -17,6 +17,5 @@ package org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository
 
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintProcessorModel
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintProcessorModelContent
-import org.onap.ccsdk.cds.controllerblueprints.db.resources.repository.ModelContentRepository
 
 interface BlueprintProcessorModelContentRepository : ModelContentRepository<BlueprintProcessorModel, BlueprintProcessorModelContent>
