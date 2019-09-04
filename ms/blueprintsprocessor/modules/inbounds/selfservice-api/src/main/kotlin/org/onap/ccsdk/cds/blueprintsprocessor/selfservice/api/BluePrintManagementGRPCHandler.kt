@@ -24,21 +24,19 @@ import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.utils.currentTimestamp
 import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader
 import org.onap.ccsdk.cds.controllerblueprints.common.api.Status
+import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
-import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
-import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
-import org.onap.ccsdk.cds.controllerblueprints.core.reCreateDirs
-import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintManagementOutput
-import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintManagementServiceGrpc
-import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintRemoveInput
-import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintUploadInput
+import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintCompileCache
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
+import org.onap.ccsdk.cds.controllerblueprints.management.api.*
 import org.slf4j.LoggerFactory
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Service
 import java.io.File
 import java.util.*
 
+// TODO("move to management-api or designer-api module")
 @Service
 open class BluePrintManagementGRPCHandler(private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
                                           private val blueprintsProcessorCatalogService: BluePrintCatalogService)
@@ -53,19 +51,48 @@ open class BluePrintManagementGRPCHandler(private val bluePrintLoadConfiguration
 
             log.info("request(${request.commonHeader.requestId})")
             val uploadId = UUID.randomUUID().toString()
+            val blueprintArchive = normalizedPathName(bluePrintLoadConfiguration.blueprintArchivePath, uploadId)
+            val blueprintWorking = normalizedPathName(bluePrintLoadConfiguration.blueprintWorkingPath, uploadId)
             try {
-                val cbaFile = normalizedFile(bluePrintLoadConfiguration.blueprintArchivePath, uploadId, "cba-zip")
+                val cbaFile = normalizedFile(blueprintArchive, "cba.zip")
 
                 saveToDisk(request, cbaFile)
 
-                val blueprintId = blueprintsProcessorCatalogService.saveToDatabase(uploadId, cbaFile)
-                responseObserver.onNext(successStatus("Successfully uploaded CBA($blueprintId)...", request.commonHeader))
+                val uploadAction = request.actionIdentifiers?.actionName.emptyTONull()
+                        ?: UploadAction.DRAFT.toString()
+
+                when (uploadAction) {
+                    UploadAction.DRAFT.toString() -> {
+                        val blueprintId = blueprintsProcessorCatalogService.saveToDatabase(uploadId, cbaFile, false)
+                        responseObserver.onNext(successStatus("Successfully uploaded CBA($blueprintId)...",
+                                request.commonHeader))
+                    }
+                    UploadAction.PUBLISH.toString() -> {
+                        val blueprintId = blueprintsProcessorCatalogService.saveToDatabase(uploadId, cbaFile, true)
+                        responseObserver.onNext(successStatus("Successfully uploaded CBA($blueprintId)...",
+                                request.commonHeader))
+                    }
+                    UploadAction.VALIDATE.toString() -> {
+                        //TODO("Not Implemented")
+                        responseObserver.onError(failStatus("Not Implemented",
+                                BluePrintProcessorException("Not Implemented")))
+                    }
+                    UploadAction.ENRICH.toString() -> {
+                        //TODO("Not Implemented")
+                        responseObserver.onError(failStatus("Not Implemented",
+                                BluePrintProcessorException("Not Implemented")))
+                    }
+                }
                 responseObserver.onCompleted()
             } catch (e: Exception) {
                 responseObserver.onError(failStatus("request(${request.commonHeader.requestId}): Failed to upload CBA", e))
             } finally {
-                deleteDir(bluePrintLoadConfiguration.blueprintArchivePath, uploadId)
-                deleteDir(bluePrintLoadConfiguration.blueprintWorkingPath, uploadId)
+                // Clean blueprint script cache
+                val cacheKey = BluePrintFileUtils
+                        .compileCacheKey(normalizedPathName(bluePrintLoadConfiguration.blueprintWorkingPath, uploadId))
+                BluePrintCompileCache.cleanClassLoader(cacheKey)
+                deleteNBDir(blueprintArchive)
+                deleteNBDir(blueprintWorking)
             }
         }
     }

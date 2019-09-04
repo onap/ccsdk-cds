@@ -25,13 +25,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.messaginglib.MessagingControllerTest
 import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.messaginglib.ProducerConfiguration
+import org.onap.ccsdk.cds.controllerblueprints.common.api.ActionIdentifiers
 import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
-import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintManagementServiceGrpc
-import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintRemoveInput
-import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintUploadInput
-import org.onap.ccsdk.cds.controllerblueprints.management.api.FileChunk
+import org.onap.ccsdk.cds.controllerblueprints.management.api.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.context.annotation.ComponentScan
@@ -75,7 +73,7 @@ class BluePrintManagementGRPCHandlerTest {
     fun `test upload blueprint`() {
         val blockingStub = BluePrintManagementServiceGrpc.newBlockingStub(grpcServerRule.channel)
         val id = "123_upload"
-        val req = createUploadInputRequest(id)
+        val req = createUploadInputRequest(id, UploadAction.PUBLISH.toString())
         val output = blockingStub.uploadBlueprint(req)
 
         assertEquals(200, output.status.code)
@@ -87,7 +85,7 @@ class BluePrintManagementGRPCHandlerTest {
     fun `test delete blueprint`() {
         val blockingStub = BluePrintManagementServiceGrpc.newBlockingStub(grpcServerRule.channel)
         val id = "123_delete"
-        val req = createUploadInputRequest(id)
+        val req = createUploadInputRequest(id, UploadAction.DRAFT.toString())
 
         var output = blockingStub.uploadBlueprint(req)
         assertEquals(200, output.status.code)
@@ -99,7 +97,7 @@ class BluePrintManagementGRPCHandlerTest {
         assertEquals(200, output.status.code)
     }
 
-    private fun createUploadInputRequest(id: String): BluePrintUploadInput {
+    private fun createUploadInputRequest(id: String, action: String): BluePrintUploadInput {
         val file = normalizedFile("./src/test/resources/test-cba.zip")
         assertTrue(file.exists(), "couldnt get file ${file.absolutePath}")
 
@@ -110,11 +108,18 @@ class BluePrintManagementGRPCHandlerTest {
                 .setRequestId(id)
                 .setSubRequestId("1234-56").build()
 
+        val actionIdentifier = ActionIdentifiers.newBuilder()
+                .setActionName(action)
+                .setBlueprintName("sample")
+                .setBlueprintVersion("1.0.0")
+                .build()
+
         val fileChunk = FileChunk.newBuilder().setChunk(ByteString.copyFrom(file.inputStream().readBytes()))
                 .build()
 
         return BluePrintUploadInput.newBuilder()
                 .setCommonHeader(commonHeader)
+                .setActionIdentifiers(actionIdentifier)
                 .setFileChunk(fileChunk)
                 .build()
     }
