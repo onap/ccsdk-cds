@@ -18,6 +18,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.core.api.data
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import io.swagger.annotations.ApiModelProperty
@@ -40,6 +41,7 @@ open class ExecutionServiceInput {
                 " and the input for resource resolution located within the xxx-request block, contained within xxx-properties")
     lateinit var payload: ObjectNode
     @get:ApiModelProperty(hidden = true)
+    @get:JsonIgnore
     var stepData: StepData? = null
 }
 
@@ -56,6 +58,7 @@ open class ExecutionServiceOutput {
                 " and the input for resource resolution located within the xxx-request block, contained within xxx-properties")
     lateinit var payload: ObjectNode
     @get:ApiModelProperty(hidden = true)
+    @get:JsonIgnore
     var stepData: StepData? = null
 }
 
