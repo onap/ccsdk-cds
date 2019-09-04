@@ -22,13 +22,13 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.text.StrBuilder
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.ResourceDictionaryHandler
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.readNBText
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.cds.controllerblueprints.service.domain.ResourceDictionary
-import org.onap.ccsdk.cds.controllerblueprints.service.handler.ResourceDictionaryHandler
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.File

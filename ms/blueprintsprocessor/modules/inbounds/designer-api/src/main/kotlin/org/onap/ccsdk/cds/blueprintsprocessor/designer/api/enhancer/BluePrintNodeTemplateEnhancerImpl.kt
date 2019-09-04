@@ -17,6 +17,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.enhancer
 
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.utils.BluePrintEnhancerUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintNodeTemplateEnhancer
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintRepoService
@@ -24,7 +25,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeEnha
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
-import org.onap.ccsdk.cds.controllerblueprints.service.utils.BluePrintEnhancerUtils
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service

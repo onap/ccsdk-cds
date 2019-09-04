@@ -28,8 +28,8 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeServ
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.utils.ResourceDictionaryUtils
-import org.onap.ccsdk.cds.controllerblueprints.service.ResourceDefinitionRepoService
-import org.onap.ccsdk.cds.controllerblueprints.service.utils.BluePrintEnhancerUtils
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.service.ResourceDefinitionRepoService
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.utils.BluePrintEnhancerUtils
 import org.springframework.stereotype.Service
 
 interface ResourceDefinitionEnhancerService {
