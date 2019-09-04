@@ -17,6 +17,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.apache.logging.log4j.util.Strings
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db.ResourceConfigSnapshot.Status.RUNNING
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.slf4j.LoggerFactory
@@ -40,7 +41,7 @@ class ResourceConfigSnapshotService(private val repository: ResourceConfigSnapsh
                                                          status : ResourceConfigSnapshot.Status = RUNNING): String =
             withContext(Dispatchers.IO) {
                 repository.findByResourceIdAndResourceTypeAndStatus(resourceId, resourceType, status)
-                        ?.config_snapshot ?: throw NoSuchElementException()
+                        ?.config_snapshot ?: Strings.EMPTY
             }
 
     suspend fun write(snapshot: String, resId: String, resType: String,

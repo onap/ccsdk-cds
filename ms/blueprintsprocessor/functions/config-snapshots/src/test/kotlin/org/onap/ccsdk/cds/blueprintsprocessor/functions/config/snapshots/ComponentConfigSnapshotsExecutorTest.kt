@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.functions.ansible.executor
+package org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots
 
 import com.fasterxml.jackson.databind.JsonNode
 import kotlinx.coroutines.runBlocking
@@ -27,11 +27,12 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.ansible.executor.ComponentConfigSnapshotsExecutor.Companion.DIFF_JSON
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.ansible.executor.ComponentConfigSnapshotsExecutor.Companion.DIFF_XML
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.ansible.executor.ComponentConfigSnapshotsExecutor.Companion.OPERATION_DIFF
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.ansible.executor.ComponentConfigSnapshotsExecutor.Companion.OPERATION_FETCH
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.ansible.executor.ComponentConfigSnapshotsExecutor.Companion.OPERATION_STORE
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.ComponentConfigSnapshotsExecutor
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.ComponentConfigSnapshotsExecutor.Companion.DIFF_JSON
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.ComponentConfigSnapshotsExecutor.Companion.DIFF_XML
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.ComponentConfigSnapshotsExecutor.Companion.OPERATION_DIFF
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.ComponentConfigSnapshotsExecutor.Companion.OPERATION_FETCH
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.ComponentConfigSnapshotsExecutor.Companion.OPERATION_STORE
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db.ResourceConfigSnapshot
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db.ResourceConfigSnapshotService
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
@@ -192,9 +193,7 @@ class ComponentConfigSnapshotsExecutorTest {
                 return@runBlocking
             }
 
-            // then; we should get error and the PAYLOAD payload in our output properties
-            assertTrue( bluePrintRuntimeService.getBluePrintError().errors.size > 0 )
-            assertEquals(ComponentConfigSnapshotsExecutor.OUTPUT_STATUS_ERROR.asJsonPrimitive(),
+            assertEquals(ComponentConfigSnapshotsExecutor.OUTPUT_STATUS_SUCCESS.asJsonPrimitive(),
                     bluePrintRuntimeService.getNodeTemplateAttributeValue(nodeTemplateName,
                             ComponentConfigSnapshotsExecutor.OUTPUT_STATUS))
         }
@@ -234,7 +233,10 @@ class ComponentConfigSnapshotsExecutorTest {
         runBlocking {
             // when; asking for unknown content type diff operation; should get an error response
             try {
-                prepareRequestProperties(OPERATION_DIFF, "asdasd",  "PNF", "YANG")
+                val resId = "121111"
+                val resType = "PNF"
+                cfgSnapshotService.write("snapshotConfig", resId, resType,  ResourceConfigSnapshot.Status.CANDIDATE)
+                prepareRequestProperties(OPERATION_DIFF, resId,  resType, "YANG")
 
                 cfgSnapshotComponent.processNB(executionRequest)
 
@@ -245,7 +247,6 @@ class ComponentConfigSnapshotsExecutorTest {
             }
 
             // then; we should get error in our output properties
-            assertTrue( bluePrintRuntimeService.getBluePrintError().errors.size == 1 )
             assertEquals(ComponentConfigSnapshotsExecutor.OUTPUT_STATUS_ERROR.asJsonPrimitive(),
                     bluePrintRuntimeService.getNodeTemplateAttributeValue(nodeTemplateName,
                             ComponentConfigSnapshotsExecutor.OUTPUT_STATUS))
