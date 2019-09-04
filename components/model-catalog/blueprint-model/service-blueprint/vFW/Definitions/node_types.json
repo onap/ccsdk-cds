@@ -24,6 +24,12 @@
                   "required" : false,
                   "type" : "string"
                 },
+                "occurrence" : {
+                  "description" : "Number of time to perform the resolution.",
+                  "required" : false,
+                  "type" : "integer",
+                  "default" : 1
+                },
                 "store-result" : {
                   "description" : "Whether or not to store the output.",
                   "required" : false,
@@ -115,18 +121,6 @@
       },
       "derived_from" : "tosca.nodes.ResourceSource"
     },
-    "source-default" : {
-      "description" : "This is Default Resource Source Node Type",
-      "version" : "1.0.0",
-      "properties" : { },
-      "derived_from" : "tosca.nodes.ResourceSource"
-    },
-    "source-input" : {
-      "description" : "This is Input Resource Source Node Type",
-      "version" : "1.0.0",
-      "properties" : { },
-      "derived_from" : "tosca.nodes.ResourceSource"
-    },
     "source-db" : {
       "description" : "This is Database Resource Source Node Type",
       "version" : "1.0.0",
@@ -136,7 +130,8 @@
           "type" : "string",
           "constraints" : [ {
             "valid_values" : [ "SQL", "PLSQL" ]
-          } ]
+          } ],
+          "default" : "SQL"
         },
         "endpoint-selector" : {
           "required" : false,
@@ -168,6 +163,18 @@
           }
         }
       },
+      "derived_from" : "tosca.nodes.ResourceSource"
+    },
+    "source-default" : {
+      "description" : "This is Default Resource Source Node Type",
+      "version" : "1.0.0",
+      "properties" : { },
+      "derived_from" : "tosca.nodes.ResourceSource"
+    },
+    "source-input" : {
+      "description" : "This is Input Resource Source Node Type",
+      "version" : "1.0.0",
+      "properties" : { },
       "derived_from" : "tosca.nodes.ResourceSource"
     },
     "source-rest" : {

@@ -81,15 +81,30 @@
       "description" : "nexus_artifact_repo",
       "type" : "string"
     },
-    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
     "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
       "default" : {
         "type" : "source-default",
         "properties" : { }
       },
-      "input" : {
-        "type" : "source-input",
-        "properties" : { }
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "type" : "JSON",
+          "url-path" : "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/nexus_artifact_repo",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "nexus_artifact_repo" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
       }
     }
   },
@@ -129,11 +144,19 @@
       "description" : "nfc-naming-code",
       "type" : "string"
     },
-    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
     "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
       "processor-db" : {
         "type" : "source-db",
         "properties" : {
+          "endpoint-selector" : "dynamic-db-source",
           "type" : "SQL",
           "query" : "select nfc_naming_code as nfc_naming_code from sdnctl.VFC_MODEL where customization_uuid=:vfccustomizationuuid",
           "input-key-mapping" : {
@@ -154,13 +177,38 @@
       "description" : "onap_private_net_cidr",
       "type" : "string"
     },
-    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
     "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "type" : "JSON",
+          "url-path" : "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/onap_private_net_cidr",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "onap_private_net_cidr" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      },
       "processor-db" : {
         "type" : "source-db",
         "properties" : {
+          "endpoint-selector" : "dynamic-db-source",
           "type" : "SQL",
-          "query" : "select sdnctl.IPAM_IP_POOL.prefix as prefix from sdnctl.IPAM_IP_POOL where description = \"private\"",
+          "query" : "select sdnctl.IPAM_IP_POOL.prefix as prefix from sdnctl.IPAM_IP_POOL where description = \"management\"",
+          "input-key-mapping" : { },
           "output-key-mapping" : {
             "onap_private_net_cidr" : "prefix"
           }
@@ -175,10 +223,14 @@
       "description" : "onap_private_net_id",
       "type" : "string"
     },
-    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
     "sources" : {
       "input" : {
         "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
       },
       "sdnc" : {
         "type" : "source-rest",
@@ -205,10 +257,14 @@
       "description" : "onap_private_subnet_id",
       "type" : "string"
     },
-    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
     "sources" : {
       "input" : {
         "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
       },
       "sdnc" : {
         "type" : "source-rest",
@@ -235,13 +291,22 @@
       "description" : "private-prefix-id",
       "type" : "string"
     },
-    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
     "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
       "processor-db" : {
         "type" : "source-db",
         "properties" : {
+          "endpoint-selector" : "dynamic-db-source",
           "type" : "SQL",
           "query" : "select sdnctl.IPAM_IP_POOL.prefix_id as prefix_id from sdnctl.IPAM_IP_POOL where description = \"private\"",
+          "input-key-mapping" : { },
           "output-key-mapping" : {
             "private-prefix-id" : "prefix_id"
           }
@@ -298,10 +363,14 @@
       "description" : "pub_key",
       "type" : "string"
     },
-    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
     "sources" : {
       "input" : {
         "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
       },
       "sdnc" : {
         "type" : "source-rest",
@@ -328,14 +397,30 @@
       "description" : "public_net_id",
       "type" : "string"
     },
-    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
     "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
       "default" : {
         "type" : "source-default",
         "properties" : { }
       },
-      "input" : {
-        "type" : "source-input"
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "type" : "JSON",
+          "url-path" : "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/public_net_id",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "public_net_id" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
       }
     }
   },
@@ -346,15 +431,30 @@
       "description" : "sec_group",
       "type" : "string"
     },
-    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
     "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
       "default" : {
         "type" : "source-default",
         "properties" : { }
       },
-      "input" : {
-        "type" : "source-input",
-        "properties" : { }
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "type" : "JSON",
+          "url-path" : "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/sec_group",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "sec_group" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
       }
     }
   },
@@ -465,8 +565,15 @@
       "description" : "vf-module-label",
       "type" : "string"
     },
-    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
     "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
       "processor-db" : {
         "type" : "source-db",
         "properties" : {
@@ -490,10 +597,13 @@
       "description" : "vf-module-model-customization-uuid",
       "type" : "string"
     },
-    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
     "sources" : {
       "input" : {
-        "type" : "source-input",
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
         "properties" : { }
       }
     }
@@ -593,17 +703,25 @@
     }
   },
   "vfccustomizationuuid" : {
-    "tags" : "vfccustomizationuuid, tosca.datatypes.Root, data_type",
+    "tags" : "vfccustomizationuuid",
     "name" : "vfccustomizationuuid",
     "property" : {
       "description" : "vfccustomizationuuid",
       "type" : "string"
     },
-    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
     "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
       "processor-db" : {
         "type" : "source-db",
         "properties" : {
+          "endpoint-selector" : "dynamic-db-source",
           "type" : "SQL",
           "query" : "select sdnctl.VF_MODULE_TO_VFC_MAPPING.vfc_customization_uuid as vnf_customid from sdnctl.VF_MODULE_TO_VFC_MAPPING where vm_count = 1 and sdnctl.VF_MODULE_TO_VFC_MAPPING.vf_module_customization_uuid=:vfmodulecustomizationuuid",
           "input-key-mapping" : {
@@ -717,11 +835,19 @@
       "description" : "vm-type",
       "type" : "string"
     },
-    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
     "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
       "processor-db" : {
         "type" : "source-db",
         "properties" : {
+          "endpoint-selector" : "dynamic-db-source",
           "type" : "SQL",
           "query" : "select VFC_MODEL.vm_type as vm_type from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
           "input-key-mapping" : {
@@ -742,11 +868,30 @@
       "description" : "vnf-id",
       "type" : "string"
     },
-    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
     "sources" : {
       "input" : {
-        "type" : "source-input",
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
         "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "type" : "JSON",
+          "url-path" : "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vnf-id",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vnf-id" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
       }
     }
   },
@@ -766,29 +911,51 @@
     }
   },
   "vnf-name" : {
-    "tags" : "vnf-name, tosca.datatypes.Root, data_type",
+    "tags" : "vnf-name",
     "name" : "vnf-name",
     "property" : {
       "description" : "vnf-name",
       "type" : "string"
     },
-    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
     "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
       "sdnc" : {
         "type" : "source-rest",
         "properties" : {
           "type" : "JSON",
-          "url-path" : "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vnf_name",
+          "url-path" : "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-name/vnf-data/vnf-topology/vnf-parameters-data/param/vnf-name",
           "path" : "/param/0/value",
-          "expression-type" : "JSON_POINTER",
           "input-key-mapping" : {
             "service-instance-id" : "service-instance-id",
-            "vnf-id" : "vnf-id"
+            "vnf-name" : "vnf-name"
           },
           "output-key-mapping" : {
             "vnf-name" : "value"
           },
-          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+          "key-dependencies" : [ "service-instance-id", "vnf-name" ]
+        }
+      },
+      "aai-data" : {
+        "type" : "source-rest",
+        "properties" : {
+          "type" : "JSON",
+          "verb" : "GET",
+          "url-path" : "/aai/v14/network/generic-vnfs/generic-vnf/$vnf-id",
+          "path" : "",
+          "input-key-mapping" : {
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vnf-name" : "vnf-name"
+          },
+          "key-dependencies" : [ "vnf-id" ]
         }
       }
     }
@@ -832,14 +999,22 @@
     "tags" : "vnfc-model-invariant-uuid",
     "name" : "vnfc-model-invariant-uuid",
     "property" : {
-      "description" : "vnfc-model-invariant-uuid for SRIOV VPE template",
+      "description" : "vnfc-model-invariant-uuid",
       "type" : "string"
     },
-    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
     "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
       "processor-db" : {
         "type" : "source-db",
         "properties" : {
+          "endpoint-selector" : "dynamic-db-source",
           "type" : "SQL",
           "query" : "select VFC_MODEL.invariant_uuid as vfc_invariant_uuid from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
           "input-key-mapping" : {
@@ -857,14 +1032,22 @@
     "tags" : "vnfc-model-version",
     "name" : "vnfc-model-version",
     "property" : {
-      "description" : "vnfc-model-version for  SRIOV VPE template",
+      "description" : "vnfc-model-version",
       "type" : "string"
     },
-    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
     "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
       "processor-db" : {
         "type" : "source-db",
         "properties" : {
+          "endpoint-selector" : "dynamic-db-source",
           "type" : "SQL",
           "query" : "select VFC_MODEL.version as vnfc_model_version from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
           "input-key-mapping" : {

@@ -1,3 +1,448 @@
 {
-  "data_types" : { }
+  "data_types" : {
+    "dt-resource-assignment-properties" : {
+      "description" : "Dynamic DataType definition for workflow(resource-assignment).",
+      "version" : "1.0.0",
+      "properties" : {
+        "nf-role" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "default" : "vSN",
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vm-type" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vnf-id" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "public_net_id" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "value" : "public_net_id",
+          "default" : "public_net_id",
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vnf_name" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vfw_private_ip_1" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "unprotected-prefix-id" : {
+          "description" : "",
+          "required" : false,
+          "type" : "integer",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "onap_private_subnet_id" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vfw_private_ip_0" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "aic-cloud-region" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "sec_group" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "default" : "onap_sg_PUhf",
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vfw_private_ip_2" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vnfc-model-invariant-uuid" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "nfc-naming-code" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "private-prefix-id" : {
+          "description" : "",
+          "required" : false,
+          "type" : "integer",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vf-module-model-customization-uuid" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vfw_name_0" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vf_module_name" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "nexus_artifact_repo" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "value" : "nexus_artifact_repo",
+          "default" : "nexus_artifact_repo",
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "onap_private_net_cidr" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "image_name" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vf-nf-code" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vf-module-id" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vf-module-label" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vsn_private_ip_0" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vpg_name_0" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vpg_private_ip_1" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "protected_private_net_cidr" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vf-naming-policy" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "default" : "SDNC_Policy.Config_MS_ONAP_VSN_NAMING_TIMESTAMP",
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vpg_private_ip_0" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vsn_private_ip_1" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vfccustomizationuuid" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "unprotected_private_net_cidr" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vsn_name_0" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "onap_private_net_id" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vnfc-model-version" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "service-instance-id" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vf-module-type" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vnf-model-customization-uuid" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "pub_key" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "key_name" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "protected-prefix-id" : {
+          "description" : "",
+          "required" : false,
+          "type" : "integer",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vnf-name" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        }
+      },
+      "derived_from" : "tosca.datatypes.Dynamic"
+    }
+  }
 }

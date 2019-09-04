@@ -1,19 +1,31 @@
 {
-  "metadata": {
-    "template_author": "Alexis de Talhouët",
-    "author-email": "adetalhouet89@gmail.com",
-    "user-groups": "ADMIN, OPERATION",
-    "template_name": "vFW_spinup",
-    "template_version": "1.0.0",
-    "template_tags": "vFW"
+  "tosca_definitions_version" : "controller_blueprint_1_0_0",
+  "metadata" : {
+    "template_author" : "Alexis de Talhouët",
+    "author-email" : "adetalhouet89@gmail.com",
+    "user-groups" : "ADMIN, OPERATION",
+    "template_name" : "vFW_spinup",
+    "template_version" : "1.0.0",
+    "template_tags" : "vFW"
   },
-  "topology_template": {
-    "workflows": {
-      "resource-assignment": {
-        "steps": {
-          "resource-assignment": {
-            "description": "Resource Assign Workflow",
-            "target": "resource-assignment"
+  "imports" : [ {
+    "file" : "Definitions/data_types.json"
+  }, {
+    "file" : "Definitions/relationship_types.json"
+  }, {
+    "file" : "Definitions/artifact_types.json"
+  }, {
+    "file" : "Definitions/node_types.json"
+  }, {
+    "file" : "Definitions/policy_types.json"
+  } ],
+  "topology_template" : {
+    "workflows" : {
+      "resource-assignment" : {
+        "steps" : {
+          "resource-assignment" : {
+            "description" : "Resource Assign Workflow",
+            "target" : "resource-assignment"
           }
         },
         "inputs" : {
@@ -23,22 +35,24 @@
             "entry_schema" : {
               "type" : "string"
             }
+          },
+          "resource-assignment-properties" : {
+            "description" : "Dynamic PropertyDefinition for workflow(resource-assignment).",
+            "required" : true,
+            "type" : "dt-resource-assignment-properties"
           }
         },
-        "outputs": {
-          "meshed-template": {
-            "type": "json",
-            "value": {
-              "get_attribute": [
-                "resource-assignment",
-                "assignment-params"
-              ]
+        "outputs" : {
+          "meshed-template" : {
+            "type" : "json",
+            "value" : {
+              "get_attribute" : [ "resource-assignment", "assignment-params" ]
             }
           }
         }
       }
     },
-    "node_templates": {
+    "node_templates" : {
       "resource-assignment" : {
         "type" : "component-resource-resolution",
         "interfaces" : {
@@ -54,46 +68,46 @@
             }
           }
         },
-        "artifacts": {
-          "base-template": {
-            "type": "artifact-template-velocity",
-            "file": "Templates/base-template.vtl"
+        "artifacts" : {
+          "base-template" : {
+            "type" : "artifact-template-velocity",
+            "file" : "Templates/base-template.vtl"
           },
-          "base-mapping": {
-            "type": "artifact-mapping-resource",
-            "file": "Templates/base-mapping.json"
+          "base-mapping" : {
+            "type" : "artifact-mapping-resource",
+            "file" : "Templates/base-mapping.json"
           },
-          "vfw-template": {
-            "type": "artifact-template-velocity",
-            "file": "Templates/vfw-template.vtl"
+          "vfw-template" : {
+            "type" : "artifact-template-velocity",
+            "file" : "Templates/vfw-template.vtl"
           },
-          "vfw-mapping": {
-            "type": "artifact-mapping-resource",
-            "file": "Templates/vfw-mapping.json"
+          "vfw-mapping" : {
+            "type" : "artifact-mapping-resource",
+            "file" : "Templates/vfw-mapping.json"
           },
-          "vfw-vnf-template": {
-            "type": "artifact-template-velocity",
-            "file": "Templates/vfw-vnf-template.vtl"
+          "vfw-vnf-template" : {
+            "type" : "artifact-template-velocity",
+            "file" : "Templates/vfw-vnf-template.vtl"
           },
-          "vfw-vnf-mapping": {
-            "type": "artifact-mapping-resource",
-            "file": "Templates/vfw-vnf-mapping.json"
+          "vfw-vnf-mapping" : {
+            "type" : "artifact-mapping-resource",
+            "file" : "Templates/vfw-vnf-mapping.json"
           },
-          "vpg-template": {
-            "type": "artifact-template-velocity",
-            "file": "Templates/vpg-template.vtl"
+          "vpg-template" : {
+            "type" : "artifact-template-velocity",
+            "file" : "Templates/vpg-template.vtl"
           },
-          "vpg-mapping": {
-            "type": "artifact-mapping-resource",
-            "file": "Templates/vpg-mapping.json"
+          "vpg-mapping" : {
+            "type" : "artifact-mapping-resource",
+            "file" : "Templates/vpg-mapping.json"
           },
-          "vsn-template": {
-            "type": "artifact-template-velocity",
-            "file": "Templates/vsn-template.vtl"
+          "vsn-template" : {
+            "type" : "artifact-template-velocity",
+            "file" : "Templates/vsn-template.vtl"
           },
-          "vsn-mapping": {
-            "type": "artifact-mapping-resource",
-            "file": "Templates/vsn-mapping.json"
+          "vsn-mapping" : {
+            "type" : "artifact-mapping-resource",
+            "file" : "Templates/vsn-mapping.json"
           }
         }
       }
