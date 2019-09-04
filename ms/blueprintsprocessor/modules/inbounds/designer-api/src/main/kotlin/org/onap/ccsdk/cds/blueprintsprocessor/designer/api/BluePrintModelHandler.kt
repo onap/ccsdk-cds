@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.controllerblueprints.service.handler
+package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 
 import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration

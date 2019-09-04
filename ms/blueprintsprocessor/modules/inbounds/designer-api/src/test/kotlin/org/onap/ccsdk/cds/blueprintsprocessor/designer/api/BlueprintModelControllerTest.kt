@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.controllerblueprints.service.controller
+package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 
 import kotlinx.coroutines.reactive.awaitSingle
 import kotlinx.coroutines.runBlocking
@@ -26,21 +26,21 @@ import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
-import org.onap.ccsdk.cds.controllerblueprints.TestApplication
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
-import org.onap.ccsdk.cds.controllerblueprints.service.BluePrintDesignerCoreConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.service.domain.BlueprintModelSearch
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.annotation.ComponentScan
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.http.client.MultipartBodyBuilder
 import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.returnResult
@@ -48,7 +48,6 @@ import org.springframework.util.Base64Utils
 import org.springframework.web.reactive.function.BodyInserters
 import java.io.File
 import java.nio.charset.StandardCharsets.UTF_8
-import java.nio.file.Paths
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
@@ -62,10 +61,10 @@ import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes = [TestApplication::class, BluePrintDesignerCoreConfiguration::class])
-@ComponentScan(basePackages = ["org.onap.ccsdk.cds.controllerblueprints"])
+@ContextConfiguration(classes = [DesignerApiTestConfiguration::class,
+    BlueprintPropertyConfiguration::class, BluePrintProperties::class, BluePrintDBLibConfiguration::class])
+@TestPropertySource(locations = ["classpath:application-test.properties"])
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@EnableAutoConfiguration
 class BlueprintModelControllerTest {
 
     private val log = LoggerFactory.getLogger(BlueprintModelControllerTest::class.java)!!
@@ -79,7 +78,7 @@ class BlueprintModelControllerTest {
 
     private var bluePrintLoadConfiguration: BluePrintLoadConfiguration? = null
 
-    private val blueprintDir = "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+    private val blueprintDir = "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
     private var zipBlueprintFileName: String? = null
 
     private var testZipFile: File? = null
@@ -99,7 +98,7 @@ class BlueprintModelControllerTest {
         val archiveDir = normalizedFile(bluePrintLoadConfiguration!!.blueprintArchivePath).reCreateDirs()
         assertTrue(archiveDir.exists(), "failed to create archiveDir(${archiveDir.absolutePath}")
 
-        val blueprintFile = Paths.get(blueprintDir).toFile().normalize()
+        val blueprintFile = normalizedFile(blueprintDir)
         testZipFile = blueprintFile.compress(zipBlueprintFileName!!)
         assertNotNull(testZipFile, "test zip is null")
         assertTrue(testZipFile!!.exists(), "Failed to create blueprint test zip(${testZipFile!!.absolutePath}")
