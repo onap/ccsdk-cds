@@ -25,12 +25,12 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.DesignerApiTestConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.load.ModelTypeLoadService
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.load.ResourceDictionaryLoadService
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintEnhancerService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidatorService
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
-import org.onap.ccsdk.cds.controllerblueprints.service.load.ModelTypeLoadService
-import org.onap.ccsdk.cds.controllerblueprints.service.load.ResourceDictionaryLoadService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
