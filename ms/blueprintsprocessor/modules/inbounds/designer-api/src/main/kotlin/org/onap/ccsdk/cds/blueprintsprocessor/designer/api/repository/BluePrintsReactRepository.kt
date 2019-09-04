@@ -16,7 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.repository
 
-import org.onap.ccsdk.cds.controllerblueprints.service.domain.ModelType
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ModelType
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono

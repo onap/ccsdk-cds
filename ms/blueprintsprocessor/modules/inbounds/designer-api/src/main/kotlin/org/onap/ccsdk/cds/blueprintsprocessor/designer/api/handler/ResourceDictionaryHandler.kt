@@ -20,12 +20,12 @@ package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler
 import com.google.common.base.Preconditions
 import org.apache.commons.collections.CollectionUtils
 import org.apache.commons.lang3.StringUtils
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictionary
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.repository.ResourceDictionaryRepository
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceSourceMapping
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.factory.ResourceSourceMappingFactory
-import org.onap.ccsdk.cds.controllerblueprints.service.domain.ResourceDictionary
 import org.springframework.stereotype.Service
 
 @Service
@@ -88,11 +88,11 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
         //TODO( Save Validator)
         //validate(resourceDefinition)
 
-        resourceDictionary.tags = resourceDefinition.tags
+        resourceDictionary.tags = resourceDefinition.tags!!
         resourceDefinition.updatedBy = resourceDictionary.updatedBy
         // Set the Property Definitions
         val propertyDefinition = resourceDefinition.property
-        resourceDictionary.description = propertyDefinition.description
+        resourceDictionary.description = propertyDefinition.description!!
         resourceDictionary.dataType = propertyDefinition.type
         if (propertyDefinition.entrySchema != null) {
             resourceDictionary.entrySchema = propertyDefinition.entrySchema!!.type

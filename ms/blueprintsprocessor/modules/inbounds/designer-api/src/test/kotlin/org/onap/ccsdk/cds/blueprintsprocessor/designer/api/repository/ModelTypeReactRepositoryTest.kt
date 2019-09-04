@@ -28,7 +28,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.DesignerApiTestConfig
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-import org.onap.ccsdk.cds.controllerblueprints.service.domain.ModelType
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ModelType
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.annotation.Commit
 import org.springframework.test.context.ContextConfiguration

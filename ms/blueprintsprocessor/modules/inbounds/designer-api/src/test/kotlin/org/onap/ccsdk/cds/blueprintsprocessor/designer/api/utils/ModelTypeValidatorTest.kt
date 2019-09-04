@@ -16,9 +16,9 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.utils
 
-import com.fasterxml.jackson.databind.JsonNode
 import org.junit.Test
-import org.onap.ccsdk.cds.controllerblueprints.service.domain.ModelType
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ModelType
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 
 class ModelTypeValidatorTest {
 
@@ -29,8 +29,7 @@ class ModelTypeValidatorTest {
         modelType.definitionType = ""
         modelType.derivedFrom = ""
         modelType.description = ""
-        val definitionContent: JsonNode? = null
-        modelType.definition = definitionContent
+        modelType.definition = JacksonUtils.objectMapper.createObjectNode()
         modelType.modelName = ""
         modelType.version = ""
         modelType.tags = ""

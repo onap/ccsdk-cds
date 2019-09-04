@@ -22,13 +22,13 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.text.StrBuilder
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictionary
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.ResourceDictionaryHandler
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.readNBText
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
-import org.onap.ccsdk.cds.controllerblueprints.service.domain.ResourceDictionary
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.File
@@ -82,7 +82,7 @@ open class ResourceDictionaryLoadService(private val resourceDictionaryHandler: 
                 resourceDictionary.definition = resourceDefinition
 
                 checkNotNull(resourceDefinition.property) { "Property field is missing" }
-                resourceDictionary.description = resourceDefinition.property.description
+                resourceDictionary.description = resourceDefinition.property.description!!
                 resourceDictionary.dataType = resourceDefinition.property.type
 
                 if (resourceDefinition.property.entrySchema != null) {
@@ -95,7 +95,7 @@ open class ResourceDictionaryLoadService(private val resourceDictionaryHandler: 
                             + ", " + resourceDefinition.updatedBy)
 
                 } else {
-                    resourceDictionary.tags = resourceDefinition.tags
+                    resourceDictionary.tags = resourceDefinition.tags!!
                 }
                 resourceDictionaryHandler.saveResourceDictionary(resourceDictionary)
 

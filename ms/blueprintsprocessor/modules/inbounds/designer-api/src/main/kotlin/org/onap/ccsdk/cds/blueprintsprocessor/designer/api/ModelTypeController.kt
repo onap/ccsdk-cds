@@ -20,7 +20,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.ModelTypeHandler
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.cds.controllerblueprints.service.domain.ModelType
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ModelType
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 

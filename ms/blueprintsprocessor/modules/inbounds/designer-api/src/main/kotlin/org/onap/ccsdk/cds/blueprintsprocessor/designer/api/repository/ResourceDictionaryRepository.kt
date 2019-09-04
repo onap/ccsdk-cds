@@ -16,7 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.repository
 
-import org.onap.ccsdk.cds.controllerblueprints.service.domain.ResourceDictionary
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictionary
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
