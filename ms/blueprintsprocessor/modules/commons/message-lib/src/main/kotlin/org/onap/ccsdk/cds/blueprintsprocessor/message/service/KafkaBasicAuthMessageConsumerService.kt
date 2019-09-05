@@ -17,6 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.message.service
 
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.apache.kafka.clients.CommonClientConfigs
@@ -47,6 +48,10 @@ class KafkaBasicAuthMessageConsumerService(
         configProperties[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = "latest"
         configProperties[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         configProperties[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
+        if (messageConsumerProperties.clientId != null) {
+            configProperties[ConsumerConfig.CLIENT_ID_CONFIG] = messageConsumerProperties.clientId!!
+        }
+        // TODO("Security Implementation based on type")
         /** add or override already set properties */
         additionalConfig?.let { configProperties.putAll(it) }
         /** Create Kafka consumer */
@@ -55,7 +60,7 @@ class KafkaBasicAuthMessageConsumerService(
 
     override suspend fun subscribe(additionalConfig: Map<String, Any>?): Channel<String> {
         /** get to topic names */
-        val consumerTopic = messageConsumerProperties.consumerTopic?.split(",")?.map { it.trim() }
+        val consumerTopic = messageConsumerProperties.topic?.split(",")?.map { it.trim() }
         check(!consumerTopic.isNullOrEmpty()) { "couldn't get topic information" }
         return subscribe(consumerTopic, additionalConfig)
     }
@@ -64,6 +69,7 @@ class KafkaBasicAuthMessageConsumerService(
     override suspend fun subscribe(consumerTopic: List<String>, additionalConfig: Map<String, Any>?): Channel<String> {
         /** Create Kafka consumer */
         kafkaConsumer = kafkaConsumer(additionalConfig)
+
         checkNotNull(kafkaConsumer) {
             "failed to create kafka consumer for " +
                     "server(${messageConsumerProperties.bootstrapServers})'s " +
@@ -73,7 +79,7 @@ class KafkaBasicAuthMessageConsumerService(
         kafkaConsumer!!.subscribe(consumerTopic)
         log.info("Successfully consumed topic($consumerTopic)")
 
-        val listenerThread = thread(start = true, name = "KafkaConsumer") {
+        thread(start = true, name = "KafkaConsumer") {
             keepGoing = true
             kafkaConsumer!!.use { kc ->
                 while (keepGoing) {
@@ -93,21 +99,18 @@ class KafkaBasicAuthMessageConsumerService(
                         }
                     }
                 }
+                log.info("message listener shutting down.....")
             }
-
         }
-        log.info("Successfully consumed in thread(${listenerThread})")
         return channel
     }
 
     override suspend fun shutDown() {
-        /** Close the Channel */
-        channel.close()
         /** stop the polling loop */
         keepGoing = false
-        if (kafkaConsumer != null) {
-            /** sunsubscribe the consumer */
-            kafkaConsumer!!.unsubscribe()
-        }
+        /** Close the Channel */
+        channel.cancel()
+        /** TO shutdown gracefully, need to wait for the maximum poll time */
+        delay(messageConsumerProperties.pollMillSec)
     }
 }

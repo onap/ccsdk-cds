@@ -54,6 +54,10 @@ fun String.asJsonPrimitive(): TextNode {
     return TextNode(this)
 }
 
+inline fun <reified T : Any> String.jsonAsType(): T {
+    return JacksonUtils.readValue<T>(this.trim())
+}
+
 // If you know the string is json content, then use the function directly
 fun String.jsonAsJsonType(): JsonNode {
     return JacksonUtils.jsonNode(this.trim())

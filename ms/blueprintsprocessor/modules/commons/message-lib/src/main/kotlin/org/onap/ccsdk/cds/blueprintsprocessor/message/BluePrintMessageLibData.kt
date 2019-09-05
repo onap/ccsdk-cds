@@ -33,8 +33,9 @@ open class MessageConsumerProperties
 open class KafkaMessageConsumerProperties : MessageConsumerProperties() {
     lateinit var bootstrapServers: String
     lateinit var groupId: String
-    var consumerTopic: String? = null
-    var pollMillSec: Long = 100
+    var clientId: String? = null
+    var topic: String? = null
+    var pollMillSec: Long = 1000
 }
 
 open class KafkaBasicAuthMessageConsumerProperties : KafkaMessageConsumerProperties()
