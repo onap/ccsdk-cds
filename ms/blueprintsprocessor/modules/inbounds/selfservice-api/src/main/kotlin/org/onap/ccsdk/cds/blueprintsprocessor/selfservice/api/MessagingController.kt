@@ -26,6 +26,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Service
 
+//TODO("Implement with property service and remove spring bindings")
 @ConditionalOnProperty(name = ["blueprintsprocessor.messageclient.self-service-api.kafkaEnable"], havingValue = "true")
 @Service
 open class MessagingController(private val propertyService: BluePrintMessageLibPropertyService,
@@ -56,18 +57,16 @@ open class MessagingController(private val propertyService: BluePrintMessageLibP
 
         val executionServiceOutput = executionServiceHandler.doProcess(executionServiceInput)
 
-       if (executionServiceOutput.status.code == EXECUTION_STATUS) {
-           val bluePrintMessageClientService = propertyService
-                   .blueprintMessageClientService(PREFIX)
+        if (executionServiceOutput.status.code == EXECUTION_STATUS) {
+            val blueprintMessageProducerService = propertyService.blueprintMessageProducerService(PREFIX)
 
-           val payload = executionServiceOutput.payload
+            val payload = executionServiceOutput.payload
 
-           log.info("The payload to publish is {}", payload)
+            log.info("The payload to publish is {}", payload)
 
-            bluePrintMessageClientService.sendMessage(payload)
-       }
-        else {
-           log.error("Fail to process the given event due to {}", executionServiceOutput.status.errorMessage)
-       }
+            blueprintMessageProducerService.sendMessage(payload)
+        } else {
+            log.error("Fail to process the given event due to {}", executionServiceOutput.status.errorMessage)
+        }
     }
 }

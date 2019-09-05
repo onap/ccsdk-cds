@@ -41,10 +41,10 @@ import kotlin.test.assertTrue
 @ContextConfiguration(classes = [BluePrintMessageLibConfiguration::class,
     BlueprintPropertyConfiguration::class, BluePrintProperties::class])
 @TestPropertySource(properties =
-["blueprintsprocessor.messageclient.sample.type=kafka-basic-auth",
-    "blueprintsprocessor.messageclient.sample.bootstrapServers=127:0.0.1:9092",
-    "blueprintsprocessor.messageclient.sample.topic=default-topic",
-    "blueprintsprocessor.messageclient.sample.clientId=default-client-id"
+["blueprintsprocessor.messageproducer.sample.type=kafka-basic-auth",
+    "blueprintsprocessor.messageproducer.sample.bootstrapServers=127:0.0.1:9092",
+    "blueprintsprocessor.messageproducer.sample.topic=default-topic",
+    "blueprintsprocessor.messageproducer.sample.clientId=default-client-id"
 ])
 open class BlueprintMessageProducerServiceTest {
 
@@ -52,10 +52,10 @@ open class BlueprintMessageProducerServiceTest {
     lateinit var bluePrintMessageLibPropertyService: BluePrintMessageLibPropertyService
 
     @Test
-    fun testKafkaBasicAuthClientService() {
+    fun testKafkaBasicAuthProducertService() {
         runBlocking {
-            val bluePrintMessageClientService = bluePrintMessageLibPropertyService
-                    .blueprintMessageClientService("sample") as KafkaBasicAuthMessageProducerService
+            val blueprintMessageProducerService = bluePrintMessageLibPropertyService
+                    .blueprintMessageProducerService("sample") as KafkaBasicAuthMessageProducerService
 
             val mockKafkaTemplate = mockk<KafkaTemplate<String, Any>>()
 
@@ -64,11 +64,11 @@ open class BlueprintMessageProducerServiceTest {
 
             every { mockKafkaTemplate.send(any(), any()) } returns future
 
-            val spyBluePrintMessageClientService = spyk(bluePrintMessageClientService, recordPrivateCalls = true)
+            val spyBluePrintMessageProducerService = spyk(blueprintMessageProducerService, recordPrivateCalls = true)
 
-            every { spyBluePrintMessageClientService.messageTemplate(any()) } returns mockKafkaTemplate
+            every { spyBluePrintMessageProducerService.messageTemplate(any()) } returns mockKafkaTemplate
 
-            val response = spyBluePrintMessageClientService.sendMessage("Testing message")
+            val response = spyBluePrintMessageProducerService.sendMessage("Testing message")
             assertTrue(response, "failed to get command response")
         }
     }
