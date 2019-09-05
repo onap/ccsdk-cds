@@ -83,7 +83,6 @@ class KafkaBasicAuthMessageProducerService(
     }
 
     fun messageTemplate(additionalConfig: Map<String, Any>? = null): KafkaTemplate<String, Any> {
-        log.info("Prepering templates")
         if (kafkaTemplate == null) {
             kafkaTemplate = KafkaTemplate(producerFactory(additionalConfig))
         }

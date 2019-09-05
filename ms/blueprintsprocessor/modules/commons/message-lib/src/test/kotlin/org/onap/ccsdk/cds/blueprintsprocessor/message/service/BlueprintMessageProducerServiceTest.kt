@@ -42,7 +42,7 @@ import kotlin.test.assertTrue
     BlueprintPropertyConfiguration::class, BluePrintProperties::class])
 @TestPropertySource(properties =
 ["blueprintsprocessor.messageproducer.sample.type=kafka-basic-auth",
-    "blueprintsprocessor.messageproducer.sample.bootstrapServers=127:0.0.1:9092",
+    "blueprintsprocessor.messageproducer.sample.bootstrapServers=127.0.0.1:9092",
     "blueprintsprocessor.messageproducer.sample.topic=default-topic",
     "blueprintsprocessor.messageproducer.sample.clientId=default-client-id"
 ])
