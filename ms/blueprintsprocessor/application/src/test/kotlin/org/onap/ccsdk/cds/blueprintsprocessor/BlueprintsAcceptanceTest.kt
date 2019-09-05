@@ -190,7 +190,7 @@ class BlueprintsAcceptanceTest(private val blueprintName: String, private val fi
         val body = toMultiValueMap("file", getBlueprintAsResource(blueprintName))
         webTestClient
                 .post()
-                .uri("/api/v1/execution-service/upload")
+                .uri("/api/v1/blueprint-model/publish")
                 .header("Authorization", TestSecuritySettings.clientAuthToken())
                 .syncBody(body)
                 .exchange()

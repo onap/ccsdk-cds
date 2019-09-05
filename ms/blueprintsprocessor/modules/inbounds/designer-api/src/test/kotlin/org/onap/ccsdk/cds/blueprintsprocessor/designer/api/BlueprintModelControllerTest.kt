@@ -176,6 +176,31 @@ class BlueprintModelControllerTest {
 
     @Test
     fun test07_publishBlueprintModel() {
+        bp = runBlocking {
+            val body = MultipartBodyBuilder().apply {
+                part("file", object : ByteArrayResource(testZipFile!!.readBytes()) {
+                    override fun getFilename(): String {
+                        return "test.zip"
+                    }
+                })
+            }.build()
+
+            val publishBP = webTestClient
+                    .post()
+                    .uri("/api/v1/blueprint-model/publish")
+                    .body(BodyInserters.fromMultipartData(body))
+                    .exchange()
+                    .expectStatus().isOk
+                    .returnResult<BlueprintModelSearch>()
+                    .responseBody
+                    .awaitSingle()
+
+            assertNotNull(publishBP, "failed to get response")
+            assertEquals("baseconfiguration", publishBP.artifactName, "mismatch artifact name")
+            assertEquals("1.0.0", publishBP.artifactVersion, "mismatch artifact version")
+            assertEquals("Y", publishBP.published, "mismatch publish")
+            publishBP
+        }
     }
 
     @Test
@@ -196,7 +221,13 @@ class BlueprintModelControllerTest {
 
     @Test
     fun test10_deleteBluePrint() {
-        webTestClient.delete().uri("/api/v1/blueprint-model/${bp!!.id}")
+//        webTestClient.delete().uri("/api/v1/blueprint-model/${bp!!.id}")
+//                .header("Authorization", "Basic " + Base64Utils
+//                        .encodeToString(("ccsdkapps" + ":" + "ccsdkapps").toByteArray(UTF_8)))
+//                .exchange()
+//                .expectStatus().is2xxSuccessful
+
+        webTestClient.delete().uri("/api/v1/blueprint-model/name/${bp!!.artifactName}/version/${bp!!.artifactVersion}")
                 .header("Authorization", "Basic " + Base64Utils
                         .encodeToString(("ccsdkapps" + ":" + "ccsdkapps").toByteArray(UTF_8)))
                 .exchange()

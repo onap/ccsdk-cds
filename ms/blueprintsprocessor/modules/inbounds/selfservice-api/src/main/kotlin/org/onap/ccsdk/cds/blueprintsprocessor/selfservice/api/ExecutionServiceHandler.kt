@@ -21,24 +21,16 @@ import io.grpc.stub.StreamObserver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.reactive.awaitSingle
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.*
 import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.utils.toProto
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
-import org.onap.ccsdk.cds.controllerblueprints.core.*
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
-import org.onap.ccsdk.cds.controllerblueprints.core.data.ErrorCode
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintWorkflowExecutionService
-import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintCompileCache
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.slf4j.LoggerFactory
-import org.springframework.http.codec.multipart.FilePart
 import org.springframework.stereotype.Service
-import java.io.File
-import java.io.IOException
-import java.util.*
 import java.util.stream.Collectors
 
 @Service
@@ -48,37 +40,6 @@ class ExecutionServiceHandler(private val bluePrintLoadConfiguration: BluePrintL
                               : BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput>) {
 
     private val log = LoggerFactory.getLogger(ExecutionServiceHandler::class.toString())
-
-    //TODO("Remove from self service api and move to designer api module")
-    suspend fun upload(filePart: FilePart): String {
-        val saveId = UUID.randomUUID().toString()
-        val blueprintArchive = normalizedPathName(bluePrintLoadConfiguration.blueprintArchivePath, saveId)
-        val blueprintWorking = normalizedPathName(bluePrintLoadConfiguration.blueprintWorkingPath, saveId)
-        try {
-
-            val compressedFile = normalizedFile(blueprintArchive, "cba.zip")
-            compressedFile.parentFile.reCreateNBDirs()
-            // Copy the File Part to Local File
-            copyFromFilePart(filePart, compressedFile)
-            // Save the Copied file to Database
-            return blueprintsProcessorCatalogService.saveToDatabase(saveId, compressedFile, true)
-        } catch (e: IOException) {
-            throw BluePrintException(ErrorCode.IO_FILE_INTERRUPT.value,
-                "Error in Upload CBA: ${e.message}", e)
-        } finally {
-            // Clean blueprint script cache
-            val cacheKey = BluePrintFileUtils
-                    .compileCacheKey(normalizedPathName(bluePrintLoadConfiguration.blueprintWorkingPath,saveId))
-            BluePrintCompileCache.cleanClassLoader(cacheKey)
-            deleteNBDir(blueprintArchive)
-            deleteNBDir(blueprintWorking)
-        }
-    }
-
-    //TODO("Remove from self service api and move to designer api module")
-    suspend fun remove(name: String, version: String) {
-        blueprintsProcessorCatalogService.deleteFromDatabase(name, version)
-    }
 
     suspend fun process(executionServiceInput: ExecutionServiceInput,
                         responseObserver: StreamObserver<org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceOutput>) {
@@ -97,8 +58,8 @@ class ExecutionServiceHandler(private val bluePrintLoadConfiguration: BluePrintL
                 responseObserver.onCompleted()
             }
             else -> responseObserver.onNext(response(executionServiceInput,
-                "Failed to process request, 'actionIdentifiers.mode' not specified. Valid value are: 'sync' or 'async'.",
-                true).toProto());
+                    "Failed to process request, 'actionIdentifiers.mode' not specified. Valid value are: 'sync' or 'async'.",
+                    true).toProto());
         }
     }
 
@@ -115,7 +76,7 @@ class ExecutionServiceHandler(private val bluePrintLoadConfiguration: BluePrintL
             val blueprintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(requestId, basePath.toString())
 
             val output = bluePrintWorkflowExecutionService.executeBluePrintWorkflow(blueprintRuntimeService,
-                executionServiceInput, hashMapOf())
+                    executionServiceInput, hashMapOf())
 
             val errors = blueprintRuntimeService.getBluePrintError().errors
             if (errors.isNotEmpty()) {
@@ -127,12 +88,6 @@ class ExecutionServiceHandler(private val bluePrintLoadConfiguration: BluePrintL
             log.error("fail processing request id $requestId", e)
             return response(executionServiceInput, e.localizedMessage ?: e.message ?: e.toString(), true)
         }
-    }
-
-    private suspend fun copyFromFilePart(filePart: FilePart, targetFile: File): File {
-        return filePart.transferTo(targetFile)
-            .thenReturn(targetFile)
-            .awaitSingle()
     }
 
     private fun setErrorStatus(errorMessage: String, status: Status) {

@@ -18,8 +18,8 @@ package org.onap.ccsdk.cds.blueprintsprocessor;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.BluePrintManagementGRPCHandler;
 import org.onap.ccsdk.cds.blueprintsprocessor.security.BasicAuthServerInterceptor;
-import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.BluePrintManagementGRPCHandler;
 import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.BluePrintProcessingGRPCHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -32,10 +32,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
  * @version 1.0
  */
 @RestControllerAdvice("org.onap.ccsdk.cds.controllerblueprints")
-open class ControllerBlueprintExceptionHandler {
+open class DesignerBlueprintExceptionHandler {
 
     companion object ControllerBlueprintExceptionHandler {
-        val LOG = LoggerFactory.getLogger(ControllerBlueprintExceptionHandler::class.java)
+        val LOG = LoggerFactory.getLogger(DesignerBlueprintExceptionHandler::class.java)
     }
 
     @ExceptionHandler

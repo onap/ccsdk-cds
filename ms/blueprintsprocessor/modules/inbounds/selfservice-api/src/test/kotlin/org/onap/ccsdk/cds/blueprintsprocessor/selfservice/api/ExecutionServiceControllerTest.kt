@@ -1,5 +1,6 @@
 /*
- * Copyright © 2019 Bell Canada
+ * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2019 Bell Canada.
  * Modifications Copyright © 2019 IBM.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,85 +17,93 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 
-import kotlinx.coroutines.reactive.awaitSingle
 import kotlinx.coroutines.runBlocking
-import org.junit.After
-import org.junit.Before
+import org.junit.Test
 import org.junit.runner.RunWith
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
-import org.slf4j.LoggerFactory
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.security.SecurityProperties
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.context.annotation.ComponentScan
-import org.springframework.core.io.ByteArrayResource
-import org.springframework.http.client.MultipartBodyBuilder
-import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.reactive.server.WebTestClient
-import org.springframework.test.web.reactive.server.returnResult
 import org.springframework.web.reactive.function.BodyInserters
 import java.io.File
-import java.nio.file.Files
-import java.nio.file.Paths
-import kotlin.test.Test
+import java.util.*
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
-@EnableAutoConfiguration
-@ContextConfiguration(classes = [ExecutionServiceControllerTest::class, SecurityProperties::class])
-@ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
-@TestPropertySource(locations = ["classpath:application-test.properties"])
-@DirtiesContext
 @WebFluxTest
+@ContextConfiguration(classes = [ExecutionServiceHandler::class, BluePrintCoreConfiguration::class,
+    BluePrintCatalogService::class, SecurityProperties::class])
+@ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor",
+    "org.onap.ccsdk.cds.controllerblueprints"])
+@TestPropertySource(locations = ["classpath:application-test.properties"])
 class ExecutionServiceControllerTest {
 
-    private val log = LoggerFactory.getLogger(ExecutionServiceControllerTest::class.java)!!
-
+    @Autowired
+    lateinit var blueprintsProcessorCatalogService: BluePrintCatalogService
     @Autowired
     lateinit var webTestClient: WebTestClient
 
-    var event: ExecutionServiceInput? = null
-
-    @Before
-    fun setup() {
+    @BeforeTest
+    fun init() {
         deleteDir("target", "blueprints")
     }
 
-    @After
-    fun clean() {
+    @AfterTest
+    fun cleanDir() {
         deleteDir("target", "blueprints")
     }
 
     @Test
-    fun uploadBluePrint() {
+    fun `test rest process`() {
         runBlocking {
-            val body = MultipartBodyBuilder().apply {
-                part("file", object : ByteArrayResource(Files.readAllBytes(loadCbaArchive().toPath())) {
-                    override fun getFilename(): String {
-                        return "test-cba.zip"
-                    }
-                })
-            }.build()
+            blueprintsProcessorCatalogService.saveToDatabase(UUID.randomUUID().toString(), loadTestCbaFile())
+
+            val executionServiceInput = JacksonUtils
+                    .readValueFromClassPathFile("execution-input/default-input.json",
+                            ExecutionServiceInput::class.java)!!
 
             webTestClient
                     .post()
-                    .uri("/api/v1/execution-service/upload")
-                    .body(BodyInserters.fromMultipartData(body))
+                    .uri("/api/v1/execution-service/process")
+                    .body(BodyInserters.fromObject(executionServiceInput))
                     .exchange()
                     .expectStatus().isOk
-                    .returnResult<String>()
-                    .responseBody
-                    .awaitSingle()
         }
     }
 
-    private fun loadCbaArchive(): File {
-        return Paths.get("./src/test/resources/cba-for-kafka-integration_enriched.zip").toFile()
+    @Test
+    fun `rest resource process should return status code 500 in case of server-side exception`() {
+        runBlocking {
+            blueprintsProcessorCatalogService.saveToDatabase(UUID.randomUUID().toString(), loadTestCbaFile())
+
+            val executionServiceInput = JacksonUtils
+                    .readValueFromClassPathFile("execution-input/faulty-input.json",
+                            ExecutionServiceInput::class.java)!!
+
+            webTestClient
+                    .post()
+                    .uri("/api/v1/execution-service/process")
+                    .body(BodyInserters.fromObject(executionServiceInput))
+                    .exchange()
+                    .expectStatus().is5xxServerError
+        }
+    }
+
+    private fun loadTestCbaFile(): File {
+        val testCbaFile = normalizedFile("./src/test/resources/test-cba.zip")
+        assertTrue(testCbaFile.exists(), "couldn't get file ${testCbaFile.absolutePath}")
+        return testCbaFile
     }
 }
-
-
