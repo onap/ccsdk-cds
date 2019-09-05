@@ -28,6 +28,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.proc
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceDefinitionUtils.createResourceAssignments
 import org.onap.ccsdk.cds.controllerblueprints.core.*
+import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintTemplateService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -147,6 +148,8 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                 artifactPrefix,
                 properties)
 
+        exposeOccurrencePropertyInResourceAssignments(resourceAssignments, properties)
+
         val resolvedParamJsonContent =
                 ResourceAssignmentUtils.generateResourceDataForAssignments(resourceAssignments.toList())
 
@@ -245,6 +248,18 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
 
     }
 
+    private fun exposeOccurrencePropertyInResourceAssignments (resourceAssignments: MutableList<ResourceAssignment>,
+                                                               properties: Map<String, Any>) {
+        val occurrenceRA = ResourceAssignment ()
+
+        occurrenceRA.name = ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE
+        occurrenceRA.property = PropertyDefinition()
+        occurrenceRA.property?.type = BluePrintConstants.DATA_TYPE_INTEGER
+        occurrenceRA.property?.value = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE].asJsonPrimitive()
+
+        resourceAssignments.add(occurrenceRA)
+    }
+
     /**
      * If the Source instance is "input", then it is not mandatory to have source Resource Definition, So it can
      *  derive the default input processor.
@@ -330,7 +345,9 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                 resourceAssignmentList.forEach {
                     if (compareOne(resourceResolution, it)) {
                         log.info("Resource ({}) already resolve: value=({})", it.name, resourceResolution.value)
-                        val value = resourceResolution.value!!.asJsonPrimitive()
+
+                        // Make sure to recreate value as per the defined type.
+                        val value = resourceResolution.value!!.asJsonType(it.property!!.type)
                         it.property!!.value = value
                         it.status = resourceResolution.status
                         ResourceAssignmentUtils.setResourceDataValue(it, raRuntimeService, value)
