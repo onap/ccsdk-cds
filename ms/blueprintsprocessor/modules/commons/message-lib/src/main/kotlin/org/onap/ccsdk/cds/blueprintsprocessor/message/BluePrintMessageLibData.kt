@@ -16,7 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.message
 
-
+/** Producer Properties **/
 open class MessageProducerProperties
 
 
@@ -25,3 +25,16 @@ open class KafkaBasicAuthMessageProducerProperties : MessageProducerProperties()
     var topic: String? = null
     var clientId: String? = null
 }
+
+/** Consumer Properties **/
+
+open class MessageConsumerProperties
+
+open class KafkaMessageConsumerProperties : MessageConsumerProperties() {
+    lateinit var bootstrapServers: String
+    lateinit var groupId: String
+    var consumerTopic: String? = null
+    var pollMillSec: Long = 100
+}
+
+open class KafkaBasicAuthMessageConsumerProperties : KafkaMessageConsumerProperties()
