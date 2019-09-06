@@ -46,7 +46,6 @@
         <module>modules</module>
         <module>functions</module>
         <module>application</module>
-        <module>distribution</module>
     </modules>
 
 </project>
