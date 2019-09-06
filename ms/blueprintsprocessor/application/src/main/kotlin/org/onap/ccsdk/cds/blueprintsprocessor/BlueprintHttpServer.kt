@@ -14,21 +14,20 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor;
+package org.onap.ccsdk.cds.blueprintsprocessor
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.embedded.netty.NettyReactiveWebServerFactory;
-import org.springframework.boot.web.server.WebServerFactoryCustomizer;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.web.embedded.netty.NettyReactiveWebServerFactory
+import org.springframework.boot.web.server.WebServerFactoryCustomizer
+import org.springframework.stereotype.Component
 
 @Component
-public class BlueprintHttpServer implements WebServerFactoryCustomizer<NettyReactiveWebServerFactory> {
+open class BlueprintHttpServer : WebServerFactoryCustomizer<NettyReactiveWebServerFactory> {
 
-    @Value("${blueprintsprocessor.httpPort}")
-    private Integer httpPort;
+    @Value("\${blueprintsprocessor.httpPort}")
+    private val httpPort: Int? = null
 
-    @Override
-    public void customize(NettyReactiveWebServerFactory serverFactory) {
-        serverFactory.setPort(httpPort);
+    override fun customize(serverFactory: NettyReactiveWebServerFactory) {
+        serverFactory.port = httpPort!!
     }
 }
