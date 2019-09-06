@@ -8,7 +8,7 @@ project_lead: &onap_releng_ptl
     email: 'dtimoney@att.com'
     id: 'djtimoney'
     company: 'ATT'
-    timezone: 'America/New York'
+    timezone: 'America/New_York'
 primary_contact: *onap_releng_ptl
 issue_tracking:
     type: 'jira'
@@ -33,12 +33,12 @@ committers:
       email: 'jflucas@research.att.com'
       company: 'ATT'
       id: 'jackl'
-      timezone: 'America/New York'
+      timezone: 'America/New_York'
     - name: 'Jun (Nicolas) Hu'
       email: 'jh245g@att.com'
       company: 'ATT'
       id: 'jh245g'
-      timezone: 'America/New York'
+      timezone: 'America/New_York'
     - name: 'Gaurav Agrawal'
       email: 'gaurav.agrawal@huawei.com'
       company: 'Huawei'
@@ -48,7 +48,7 @@ committers:
       email: 'brindasanth@in.ibm.com'
       company: 'IBM'
       id: 'brindasanthm'
-      timezone: 'America/New York'
+      timezone: 'America/New_York'
 repositories:
     - ccsdk-apps
     - ccsdk-cds
