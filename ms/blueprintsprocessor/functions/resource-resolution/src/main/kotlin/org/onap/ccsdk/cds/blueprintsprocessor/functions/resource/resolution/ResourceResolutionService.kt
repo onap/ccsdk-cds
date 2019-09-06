@@ -28,6 +28,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.proc
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceDefinitionUtils.createResourceAssignments
 import org.onap.ccsdk.cds.controllerblueprints.core.*
+import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintTemplateService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -151,7 +152,9 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                 ResourceAssignmentUtils.generateResourceDataForAssignments(resourceAssignments.toList())
 
         resolvedContent = blueprintTemplateService.generateContent(bluePrintRuntimeService, nodeTemplateName,
-                artifactTemplate, resolvedParamJsonContent)
+                artifactTemplate, resolvedParamJsonContent, false,
+                mutableMapOf(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE to
+                    properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE].asJsonPrimitive()))
 
         if (isToStore(properties)) {
             templateResolutionDBService.write(properties, resolvedContent, bluePrintRuntimeService, artifactPrefix)
@@ -330,7 +333,9 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                 resourceAssignmentList.forEach {
                     if (compareOne(resourceResolution, it)) {
                         log.info("Resource ({}) already resolve: value=({})", it.name, resourceResolution.value)
-                        val value = resourceResolution.value!!.asJsonPrimitive()
+
+                        // Make sure to recreate value as per the defined type.
+                        val value = resourceResolution.value!!.asJsonType(it.property!!.type)
                         it.property!!.value = value
                         it.status = resourceResolution.status
                         ResourceAssignmentUtils.setResourceDataValue(it, raRuntimeService, value)
