@@ -18,27 +18,24 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 
+import com.google.protobuf.ByteString
 import io.grpc.StatusException
 import io.grpc.stub.StreamObserver
 import kotlinx.coroutines.runBlocking
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.BluePrintModelHandler
 import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader
 import org.onap.ccsdk.cds.controllerblueprints.common.api.Status
-import org.onap.ccsdk.cds.controllerblueprints.core.*
-import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
-import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintCompileCache
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.emptyTONull
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.currentTimestamp
 import org.onap.ccsdk.cds.controllerblueprints.management.api.*
 import org.slf4j.LoggerFactory
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Service
-import java.io.File
-import java.util.*
 
 @Service
-open class BluePrintManagementGRPCHandler(private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
-                                          private val blueprintsProcessorCatalogService: BluePrintCatalogService)
+open class BluePrintManagementGRPCHandler(private val bluePrintModelHandler: BluePrintModelHandler)
     : BluePrintManagementServiceGrpc.BluePrintManagementServiceImplBase() {
 
     private val log = LoggerFactory.getLogger(BluePrintManagementGRPCHandler::class.java)
@@ -46,30 +43,24 @@ open class BluePrintManagementGRPCHandler(private val bluePrintLoadConfiguration
     @PreAuthorize("hasRole('USER')")
     override fun uploadBlueprint(request: BluePrintUploadInput, responseObserver:
     StreamObserver<BluePrintManagementOutput>) {
+
         runBlocking {
-
             log.info("request(${request.commonHeader.requestId})")
-            val uploadId = UUID.randomUUID().toString()
-            val blueprintArchive = normalizedPathName(bluePrintLoadConfiguration.blueprintArchivePath, uploadId)
-            val blueprintWorking = normalizedPathName(bluePrintLoadConfiguration.blueprintWorkingPath, uploadId)
             try {
-                val cbaFile = normalizedFile(blueprintArchive, "cba.zip")
-
-                saveToDisk(request, cbaFile)
-
+                /** Get the file byte array */
+                val byteArray = request.fileChunk.chunk.toByteArray()
+                /** Get the Upload Action */
                 val uploadAction = request.actionIdentifiers?.actionName.emptyTONull()
                         ?: UploadAction.DRAFT.toString()
 
                 when (uploadAction) {
                     UploadAction.DRAFT.toString() -> {
-                        val blueprintId = blueprintsProcessorCatalogService.saveToDatabase(uploadId, cbaFile, false)
-                        responseObserver.onNext(successStatus("Successfully uploaded CBA($blueprintId)...",
-                                request.commonHeader))
+                        val blueprintModel = bluePrintModelHandler.upload(byteArray, false)
+                        responseObserver.onNext(successStatus(request.commonHeader))
                     }
                     UploadAction.PUBLISH.toString() -> {
-                        val blueprintId = blueprintsProcessorCatalogService.saveToDatabase(uploadId, cbaFile, true)
-                        responseObserver.onNext(successStatus("Successfully uploaded CBA($blueprintId)...",
-                                request.commonHeader))
+                        val blueprintModel = bluePrintModelHandler.upload(byteArray, true)
+                        responseObserver.onNext(successStatus(request.commonHeader))
                     }
                     UploadAction.VALIDATE.toString() -> {
                         //TODO("Not Implemented")
@@ -77,21 +68,17 @@ open class BluePrintManagementGRPCHandler(private val bluePrintLoadConfiguration
                                 BluePrintProcessorException("Not Implemented")))
                     }
                     UploadAction.ENRICH.toString() -> {
-                        //TODO("Not Implemented")
-                        responseObserver.onError(failStatus("Not Implemented",
-                                BluePrintProcessorException("Not Implemented")))
+                        val enrichedByteArray = bluePrintModelHandler.enrichBlueprintFileSource(byteArray)
+                        responseObserver.onNext(enrichmentStatus(request.commonHeader, enrichedByteArray))
+                    }
+                    else -> {
+                        responseObserver.onError(failStatus("Upload action($uploadAction) not implemented",
+                                BluePrintProcessorException("Upload action($uploadAction) not implemented")))
                     }
                 }
                 responseObserver.onCompleted()
             } catch (e: Exception) {
                 responseObserver.onError(failStatus("request(${request.commonHeader.requestId}): Failed to upload CBA", e))
-            } finally {
-                // Clean blueprint script cache
-                val cacheKey = BluePrintFileUtils
-                        .compileCacheKey(normalizedPathName(bluePrintLoadConfiguration.blueprintWorkingPath, uploadId))
-                BluePrintCompileCache.cleanClassLoader(cacheKey)
-                deleteNBDir(blueprintArchive)
-                deleteNBDir(blueprintWorking)
             }
         }
     }
@@ -106,11 +93,9 @@ open class BluePrintManagementGRPCHandler(private val bluePrintLoadConfiguration
             val blueprint = "blueprint $blueprintName:$blueprintVersion"
 
             log.info("request(${request.commonHeader.requestId}): Received delete $blueprint")
-
-
             try {
-                blueprintsProcessorCatalogService.deleteFromDatabase(blueprintName, blueprintVersion)
-                responseObserver.onNext(successStatus("Successfully deleted $blueprint", request.commonHeader))
+                bluePrintModelHandler.deleteBlueprintModel(blueprintName, blueprintVersion)
+                responseObserver.onNext(successStatus(request.commonHeader))
                 responseObserver.onCompleted()
             } catch (e: Exception) {
                 responseObserver.onError(failStatus("request(${request.commonHeader.requestId}): Failed to delete $blueprint", e))
@@ -118,25 +103,23 @@ open class BluePrintManagementGRPCHandler(private val bluePrintLoadConfiguration
         }
     }
 
-    private fun saveToDisk(request: BluePrintUploadInput, cbaFile: File) {
-        log.info("request(${request.commonHeader.requestId}): Writing CBA File under :${cbaFile.absolutePath}")
+    private fun enrichmentStatus(header: CommonHeader, byteArray: ByteArray): BluePrintManagementOutput =
+            BluePrintManagementOutput.newBuilder()
+                    .setCommonHeader(header)
+                    .setFileChunk(FileChunk.newBuilder().setChunk(ByteString.copyFrom(byteArray)))
+                    .setStatus(Status.newBuilder()
+                            .setTimestamp(currentTimestamp())
+                            .setMessage(BluePrintConstants.STATUS_SUCCESS)
+                            .setCode(200)
+                            .build())
+                    .build()
 
-        // Recreate Folder
-        cbaFile.parentFile.reCreateDirs()
-
-        // Write the File
-        cbaFile.writeBytes(request.fileChunk.chunk.toByteArray()).apply {
-            log.info("request(${request.commonHeader.requestId}): CBA file(${cbaFile.absolutePath} written successfully")
-        }
-
-    }
-
-    private fun successStatus(message: String, header: CommonHeader): BluePrintManagementOutput =
+    private fun successStatus(header: CommonHeader): BluePrintManagementOutput =
             BluePrintManagementOutput.newBuilder()
                     .setCommonHeader(header)
                     .setStatus(Status.newBuilder()
                             .setTimestamp(currentTimestamp())
-                            .setMessage(message)
+                            .setMessage(BluePrintConstants.STATUS_SUCCESS)
                             .setCode(200)
                             .build())
                     .build()

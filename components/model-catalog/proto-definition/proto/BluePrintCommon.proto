@@ -24,7 +24,9 @@ message ActionIdentifiers {
 
 message Status {
   int32 code = 1;
+  // present only if message is failure
   string errorMessage = 2;
+  // This will be success or failure
   string message = 3;
   EventType eventType = 4;
   string timestamp = 5;

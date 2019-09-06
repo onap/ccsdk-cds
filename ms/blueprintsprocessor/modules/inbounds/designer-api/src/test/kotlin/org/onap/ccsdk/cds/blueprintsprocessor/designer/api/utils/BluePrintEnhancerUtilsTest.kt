@@ -58,8 +58,8 @@ class BluePrintEnhancerUtilsTest {
             val enhanceId = UUID.randomUUID().toString()
             val blueprintArchiveLocation = normalizedPathName(blueprintArchivePath, enhanceId)
             val blueprintEnrichmentLocation = normalizedPathName(blueprintEnrichmentPath, enhanceId)
-            BluePrintEnhancerUtils.decompressFilePart(filePart, blueprintArchiveLocation, blueprintEnrichmentLocation)
-            BluePrintEnhancerUtils.compressToFilePart(blueprintEnrichmentLocation, blueprintArchiveLocation)
+            BluePrintEnhancerUtils.copyFilePartToEnhanceDir(filePart, blueprintArchiveLocation, blueprintEnrichmentLocation)
+            BluePrintEnhancerUtils.compressEnhanceDirAndReturnFilePart(blueprintEnrichmentLocation, blueprintArchiveLocation)
         }
     }
 }

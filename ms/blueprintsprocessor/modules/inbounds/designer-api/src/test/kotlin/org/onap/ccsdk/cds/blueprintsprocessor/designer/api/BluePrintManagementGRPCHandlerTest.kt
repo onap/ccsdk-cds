@@ -25,6 +25,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.controllerblueprints.common.api.ActionIdentifiers
 import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.management.api.*
@@ -42,7 +43,8 @@ import kotlin.test.assertTrue
 @RunWith(SpringRunner::class)
 @EnableAutoConfiguration
 @DirtiesContext
-@ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
+@ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor",
+    "org.onap.ccsdk.cds.controllerblueprints"])
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class BluePrintManagementGRPCHandlerTest {
 
@@ -72,7 +74,8 @@ class BluePrintManagementGRPCHandlerTest {
         val output = blockingStub.uploadBlueprint(req)
 
         assertEquals(200, output.status.code)
-        assertTrue(output.status.message.contains("Successfully uploaded CBA"))
+        assertTrue(output.status.message.contentEquals(BluePrintConstants.STATUS_SUCCESS),
+                "failed to get success status")
         assertEquals(id, output.commonHeader.requestId)
     }
 
@@ -84,7 +87,8 @@ class BluePrintManagementGRPCHandlerTest {
 
         var output = blockingStub.uploadBlueprint(req)
         assertEquals(200, output.status.code)
-        assertTrue(output.status.message.contains("Successfully uploaded CBA"))
+        assertTrue(output.status.message.contentEquals(BluePrintConstants.STATUS_SUCCESS),
+                "failed to get success status")
         assertEquals(id, output.commonHeader.requestId)
 
         val removeReq = createRemoveInputRequest(id)
