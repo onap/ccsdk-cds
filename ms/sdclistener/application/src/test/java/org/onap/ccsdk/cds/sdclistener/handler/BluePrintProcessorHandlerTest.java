@@ -15,32 +15,38 @@
  */
 package org.onap.ccsdk.cds.sdclistener.handler;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import com.google.protobuf.ByteString;
 import io.grpc.ManagedChannel;
 import io.grpc.inprocess.InProcessChannelBuilder;
 import io.grpc.inprocess.InProcessServerBuilder;
 import io.grpc.stub.StreamObserver;
 import io.grpc.testing.GrpcCleanupRule;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Paths;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.onap.ccsdk.cds.sdclistener.client.SdcListenerAuthClientInterceptor;
+import org.onap.ccsdk.cds.controllerblueprints.common.api.ActionIdentifiers;
+import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader;
 import org.onap.ccsdk.cds.controllerblueprints.common.api.Status;
 import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintManagementOutput;
 import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintManagementServiceGrpc.BluePrintManagementServiceImplBase;
 import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintUploadInput;
 import org.onap.ccsdk.cds.controllerblueprints.management.api.FileChunk;
+import org.onap.ccsdk.cds.controllerblueprints.management.api.UploadAction;
+import org.onap.ccsdk.cds.sdclistener.client.SdcListenerAuthClientInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.UUID;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @EnableConfigurationProperties({BluePrintProcesssorHandler.class, SdcListenerAuthClientInterceptor.class})
@@ -66,7 +72,7 @@ public class BluePrintProcessorHandlerTest {
         final BluePrintManagementServiceImplBase serviceImplBase = new BluePrintManagementServiceImplBase() {
             @Override
             public void uploadBlueprint(BluePrintUploadInput request,
-                StreamObserver<BluePrintManagementOutput> responseObserver) {
+                                        StreamObserver<BluePrintManagementOutput> responseObserver) {
                 responseObserver.onNext(getBluePrintManagementOutput());
                 responseObserver.onCompleted();
             }
@@ -77,7 +83,7 @@ public class BluePrintProcessorHandlerTest {
 
         // Create a server, add service, start, and register.
         grpcCleanup.register(
-            InProcessServerBuilder.forName(serverName).addService(serviceImplBase).directExecutor().build().start());
+                InProcessServerBuilder.forName(serverName).addService(serviceImplBase).directExecutor().build().start());
 
         // Create a client channel.
         channel = grpcCleanup.register(InProcessChannelBuilder.forName(serverName).directExecutor().build());
@@ -101,7 +107,16 @@ public class BluePrintProcessorHandlerTest {
         byte[] bytes = FileUtils.readFileToByteArray(file);
         FileChunk fileChunk = FileChunk.newBuilder().setChunk(ByteString.copyFrom(bytes)).build();
 
-        return BluePrintUploadInput.newBuilder().setFileChunk(fileChunk).build();
+
+        return BluePrintUploadInput.newBuilder()
+                .setCommonHeader(CommonHeader.newBuilder()
+                        .setRequestId(UUID.randomUUID().toString())
+                        .setSubRequestId(UUID.randomUUID().toString())
+                        .setOriginatorId("SDC-LISTENER")
+                        .build())
+                .setActionIdentifiers(ActionIdentifiers.newBuilder()
+                        .setActionName(UploadAction.PUBLISH.toString()).build())
+                .setFileChunk(fileChunk).build();
     }
 
     private BluePrintManagementOutput getBluePrintManagementOutput() {

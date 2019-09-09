@@ -20,9 +20,13 @@ package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 
 import com.google.protobuf.ByteString
 import io.grpc.testing.GrpcServerRule
+import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.GRPCLibConstants
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.TokenAuthGrpcClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.TokenAuthGrpcClientService
 import org.onap.ccsdk.cds.controllerblueprints.common.api.ActionIdentifiers
 import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
@@ -35,10 +39,7 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 @RunWith(SpringRunner::class)
 @EnableAutoConfiguration
@@ -95,6 +96,28 @@ class BluePrintManagementGRPCHandlerTest {
         output = blockingStub.removeBlueprint(removeReq)
         assertEquals(200, output.status.code)
     }
+
+    /** This is Integration test sample, Do not enable this test case in server build, this is for local desktop testing*/
+    private fun integrationTestGrpcManagement() {
+        runBlocking {
+            val tokenAuthGrpcClientProperties = TokenAuthGrpcClientProperties().apply {
+                host = "127.0.0.1"
+                port = 9111
+                type = GRPCLibConstants.TYPE_TOKEN_AUTH
+                token = "Basic Y2NzZGthcHBzOmNjc2RrYXBwcw=="
+            }
+            val basicAuthGrpcClientService = TokenAuthGrpcClientService(tokenAuthGrpcClientProperties)
+            val channel = basicAuthGrpcClientService.channel()
+
+            val blockingStub = BluePrintManagementServiceGrpc.newBlockingStub(channel)
+
+            val bluePrintUploadInput = createUploadInputRequest("12345", UploadAction.DRAFT.toString())
+
+            val bluePrintManagementOutput = blockingStub.uploadBlueprint(bluePrintUploadInput)
+            assertNotNull(bluePrintManagementOutput, "failed to get response")
+        }
+    }
+
 
     private fun createUploadInputRequest(id: String, action: String): BluePrintUploadInput {
         val file = normalizedFile("./src/test/resources/test-cba.zip")
