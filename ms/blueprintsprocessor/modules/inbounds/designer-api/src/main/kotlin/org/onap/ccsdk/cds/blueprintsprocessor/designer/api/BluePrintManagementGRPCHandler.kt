@@ -73,7 +73,7 @@ open class BluePrintManagementGRPCHandler(private val bluePrintModelHandler: Blu
                     }
                     UploadAction.ENRICH.toString() -> {
                         val enrichedByteArray = bluePrintModelHandler.enrichBlueprintFileSource(byteArray)
-                        responseObserver.onNext(enrichmentStatus(request.commonHeader, enrichedByteArray))
+                        responseObserver.onNext(outputWithFileBytes(request.commonHeader, enrichedByteArray))
                     }
                     else -> {
                         responseObserver.onNext(failStatus(request.commonHeader,
@@ -84,6 +84,40 @@ open class BluePrintManagementGRPCHandler(private val bluePrintModelHandler: Blu
             } catch (e: Exception) {
                 responseObserver.onNext(failStatus(request.commonHeader,
                         "request(${request.commonHeader.requestId}): Failed to upload CBA", e))
+            } finally {
+                responseObserver.onCompleted()
+            }
+        }
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    override fun downloadBlueprint(request: BluePrintDownloadInput,
+                                   responseObserver: StreamObserver<BluePrintManagementOutput>) {
+        runBlocking {
+            val blueprintName = request.actionIdentifiers.blueprintName
+            val blueprintVersion = request.actionIdentifiers.blueprintVersion
+            val blueprint = "blueprint $blueprintName:$blueprintVersion"
+
+            /** Get the Search Action */
+            val searchAction = request.actionIdentifiers?.actionName.emptyTONull()
+                    ?: DownloadAction.SEARCH.toString()
+
+            log.info("request(${request.commonHeader.requestId}): Received download $blueprint")
+            try {
+                when (searchAction) {
+                    DownloadAction.SEARCH.toString() -> {
+                        val downloadByteArray = bluePrintModelHandler.download(blueprintName, blueprintVersion)
+                        responseObserver.onNext(outputWithFileBytes(request.commonHeader, downloadByteArray))
+                    }
+                    else -> {
+                        responseObserver.onNext(failStatus(request.commonHeader,
+                                "Search action($searchAction) not implemented",
+                                BluePrintProcessorException("Not implemented")))
+                    }
+                }
+            } catch (e: Exception) {
+                responseObserver.onNext(failStatus(request.commonHeader,
+                        "request(${request.commonHeader.requestId}): Failed to delete $blueprint", e))
             } finally {
                 responseObserver.onCompleted()
             }
@@ -112,7 +146,7 @@ open class BluePrintManagementGRPCHandler(private val bluePrintModelHandler: Blu
         }
     }
 
-    private fun enrichmentStatus(header: CommonHeader, byteArray: ByteArray): BluePrintManagementOutput =
+    private fun outputWithFileBytes(header: CommonHeader, byteArray: ByteArray): BluePrintManagementOutput =
             BluePrintManagementOutput.newBuilder()
                     .setCommonHeader(header)
                     .setFileChunk(FileChunk.newBuilder().setChunk(ByteString.copyFrom(byteArray)))

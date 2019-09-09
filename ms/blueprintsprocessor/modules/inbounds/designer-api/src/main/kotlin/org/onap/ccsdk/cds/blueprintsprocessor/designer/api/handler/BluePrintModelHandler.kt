@@ -123,19 +123,14 @@ open class BluePrintModelHandler(private val blueprintsProcessorCatalogService: 
     @Throws(BluePrintException::class)
     open fun downloadBlueprintModelFileByNameAndVersion(name: String,
                                                         version: String): ResponseEntity<Resource> {
-        val blueprintModel: BlueprintModel
         try {
-            blueprintModel = getBlueprintModelByNameAndVersion(name, version)
+            val archiveByteArray = download(name, version)
+            val fileName = "${name}_$version.zip"
+            return prepareResourceEntity(fileName, archiveByteArray)
         } catch (e: BluePrintException) {
             throw BluePrintException(ErrorCode.RESOURCE_NOT_FOUND.value,
                     String.format("Error while " + "downloading the CBA file: %s", e.message), e)
         }
-
-        val fileName = blueprintModel.id + ".zip"
-        val file = blueprintModel.blueprintModelContent?.content
-                ?: throw BluePrintException(ErrorCode.RESOURCE_NOT_FOUND.value,
-                        String.format("Error while downloading the CBA file: couldn't get model content"))
-        return prepareResourceEntity(fileName, file)
     }
 
     /**
@@ -153,7 +148,7 @@ open class BluePrintModelHandler(private val blueprintsProcessorCatalogService: 
             throw BluePrintException(ErrorCode.RESOURCE_NOT_FOUND.value, String.format("Error while " + "downloading the CBA file: %s", e.message), e)
         }
 
-        val fileName = blueprintModel.id + ".zip"
+        val fileName = "${blueprintModel.artifactName}_${blueprintModel.artifactVersion}.zip"
         val file = blueprintModel.blueprintModelContent?.content
                 ?: throw BluePrintException(ErrorCode.RESOURCE_NOT_FOUND.value,
                         String.format("Error while downloading the CBA file: couldn't get model content"))
@@ -316,6 +311,20 @@ open class BluePrintModelHandler(private val blueprintsProcessorCatalogService: 
             BluePrintCompileCache.cleanClassLoader(cacheKey)
             deleteNBDir(blueprintArchive)
             deleteNBDir(blueprintWorking)
+        }
+    }
+
+    /** Common CBA download function for RestController and GRPC Handler, the [fileSource] may be
+     * byteArray or File Part type.*/
+    open fun download(name: String, version: String): ByteArray {
+        try {
+            val blueprintModel = getBlueprintModelByNameAndVersion(name, version)
+            return blueprintModel.blueprintModelContent?.content
+                    ?: throw BluePrintException(ErrorCode.RESOURCE_NOT_FOUND.value,
+                            String.format("Error while downloading the CBA file: couldn't get model content"))
+        } catch (e: BluePrintException) {
+            throw BluePrintException(ErrorCode.RESOURCE_NOT_FOUND.value,
+                    String.format("Error while " + "downloading the CBA file: %s", e.message), e)
         }
     }
 
