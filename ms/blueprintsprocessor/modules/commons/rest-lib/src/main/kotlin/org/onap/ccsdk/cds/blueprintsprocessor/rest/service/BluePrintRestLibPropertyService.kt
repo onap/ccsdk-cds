@@ -38,7 +38,7 @@ open class BluePrintRestLibPropertyService(private var bluePrintProperties:
                                            BluePrintProperties) {
 
     open fun blueprintWebClientService(jsonNode: JsonNode):
-            BlueprintWebClientService {
+        BlueprintWebClientService {
         val restClientProperties = restClientProperties(jsonNode)
         return blueprintWebClientService(restClientProperties)
     }
@@ -51,7 +51,7 @@ open class BluePrintRestLibPropertyService(private var bluePrintProperties:
 
     fun restClientProperties(prefix: String): RestClientProperties {
         val type = bluePrintProperties.propertyBeanType(
-                "$prefix.type", String::class.java)
+            "$prefix.type", String::class.java)
         return when (type) {
             RestLibConstants.TYPE_BASIC_AUTH -> {
                 basicAuthRestClientProperties(prefix)
@@ -76,7 +76,7 @@ open class BluePrintRestLibPropertyService(private var bluePrintProperties:
             }
             else -> {
                 throw BluePrintProcessorException("Rest adaptor($type) is" +
-                        " not supported")
+                    " not supported")
             }
         }
     }
@@ -86,43 +86,35 @@ open class BluePrintRestLibPropertyService(private var bluePrintProperties:
         val type = jsonNode.get("type").textValue()
         return when (type) {
             RestLibConstants.TYPE_TOKEN_AUTH -> {
-                JacksonUtils.readValue(jsonNode,
-                        TokenAuthRestClientProperties::class.java)!!
+                JacksonUtils.readValue(jsonNode, TokenAuthRestClientProperties::class.java)!!
             }
             RestLibConstants.TYPE_BASIC_AUTH -> {
-                JacksonUtils.readValue(jsonNode,
-                        BasicAuthRestClientProperties::class.java)!!
+                JacksonUtils.readValue(jsonNode, BasicAuthRestClientProperties::class.java)!!
             }
             RestLibConstants.TYPE_DME2_PROXY -> {
-                JacksonUtils.readValue(jsonNode,
-                        DME2RestClientProperties::class.java)!!
+                JacksonUtils.readValue(jsonNode, DME2RestClientProperties::class.java)!!
             }
             RestLibConstants.TYPE_POLICY_MANAGER -> {
-                JacksonUtils.readValue(jsonNode,
-                        PolicyManagerRestClientProperties::class.java)!!
+                JacksonUtils.readValue(jsonNode, PolicyManagerRestClientProperties::class.java)!!
             }
             RestLibConstants.TYPE_SSL_BASIC_AUTH -> {
-                JacksonUtils.readValue(jsonNode,
-                        SSLBasicAuthRestClientProperties::class.java)!!
+                JacksonUtils.readValue(jsonNode, SSLBasicAuthRestClientProperties::class.java)!!
             }
             RestLibConstants.TYPE_SSL_TOKEN_AUTH -> {
-                JacksonUtils.readValue(jsonNode,
-                        SSLTokenAuthRestClientProperties::class.java)!!
+                JacksonUtils.readValue(jsonNode, SSLTokenAuthRestClientProperties::class.java)!!
             }
             RestLibConstants.TYPE_SSL_NO_AUTH -> {
-                JacksonUtils.readValue(
-                        jsonNode, SSLRestClientProperties::class.java)!!
+                JacksonUtils.readValue(jsonNode, SSLRestClientProperties::class.java)!!
             }
             else -> {
-                throw BluePrintProcessorException("Rest adaptor($type) is" +
-                        " not supported")
+                throw BluePrintProcessorException(
+                    "Rest adaptor($type) is not supported")
             }
         }
     }
-    
-    private fun blueprintWebClientService(
-            restClientProperties: RestClientProperties):
-            BlueprintWebClientService {
+
+    private fun blueprintWebClientService(restClientProperties: RestClientProperties):
+        BlueprintWebClientService {
 
         when (restClientProperties) {
             is SSLRestClientProperties -> {
@@ -138,66 +130,65 @@ open class BluePrintRestLibPropertyService(private var bluePrintProperties:
                 return DME2ProxyRestClientService(restClientProperties)
             }
             else -> {
-                throw BluePrintProcessorException("couldn't get rest " +
-                        "service for")
+                throw BluePrintProcessorException("couldn't get rest service for type:${restClientProperties.type}  uri: ${restClientProperties.url}")
             }
         }
     }
 
     private fun tokenRestClientProperties(prefix: String):
-            TokenAuthRestClientProperties {
+        TokenAuthRestClientProperties {
         return bluePrintProperties.propertyBeanType(
-                prefix, TokenAuthRestClientProperties::class.java)
+            prefix, TokenAuthRestClientProperties::class.java)
     }
 
     private fun basicAuthRestClientProperties(prefix: String):
-            BasicAuthRestClientProperties {
+        BasicAuthRestClientProperties {
         return bluePrintProperties.propertyBeanType(
-                prefix, BasicAuthRestClientProperties::class.java)
+            prefix, BasicAuthRestClientProperties::class.java)
     }
 
     private fun sslBasicAuthRestClientProperties(prefix: String):
-            SSLRestClientProperties {
+        SSLRestClientProperties {
 
         val sslProps: SSLBasicAuthRestClientProperties =
-                bluePrintProperties.propertyBeanType(
-                        prefix, SSLBasicAuthRestClientProperties::class.java)
-        val basicProps : BasicAuthRestClientProperties =
-                bluePrintProperties.propertyBeanType(
-                        prefix, BasicAuthRestClientProperties::class.java)
+            bluePrintProperties.propertyBeanType(
+                prefix, SSLBasicAuthRestClientProperties::class.java)
+        val basicProps: BasicAuthRestClientProperties =
+            bluePrintProperties.propertyBeanType(
+                prefix, BasicAuthRestClientProperties::class.java)
         sslProps.basicAuth = basicProps
         return sslProps
     }
 
     private fun sslTokenAuthRestClientProperties(prefix: String):
-            SSLRestClientProperties {
+        SSLRestClientProperties {
 
         val sslProps: SSLTokenAuthRestClientProperties =
-                bluePrintProperties.propertyBeanType(prefix,
-                        SSLTokenAuthRestClientProperties::class.java)
-        val basicProps : TokenAuthRestClientProperties =
-                bluePrintProperties.propertyBeanType(prefix,
-                        TokenAuthRestClientProperties::class.java)
+            bluePrintProperties.propertyBeanType(prefix,
+                SSLTokenAuthRestClientProperties::class.java)
+        val basicProps: TokenAuthRestClientProperties =
+            bluePrintProperties.propertyBeanType(prefix,
+                TokenAuthRestClientProperties::class.java)
         sslProps.tokenAuth = basicProps
         return sslProps
     }
 
     private fun sslNoAuthRestClientProperties(prefix: String):
-            SSLRestClientProperties {
+        SSLRestClientProperties {
         return bluePrintProperties.propertyBeanType(
-                prefix, SSLRestClientProperties::class.java)
+            prefix, SSLRestClientProperties::class.java)
     }
 
     private fun dme2ProxyClientProperties(prefix: String):
-            DME2RestClientProperties {
+        DME2RestClientProperties {
         return bluePrintProperties.propertyBeanType(
-                prefix, DME2RestClientProperties::class.java)
+            prefix, DME2RestClientProperties::class.java)
     }
 
     private fun policyManagerRestClientProperties(prefix: String):
-            PolicyManagerRestClientProperties {
+        PolicyManagerRestClientProperties {
         return bluePrintProperties.propertyBeanType(
-                prefix, PolicyManagerRestClientProperties::class.java)
+            prefix, PolicyManagerRestClientProperties::class.java)
     }
 }
 
