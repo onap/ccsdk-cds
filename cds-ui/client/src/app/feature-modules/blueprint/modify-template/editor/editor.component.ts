@@ -244,9 +244,8 @@ export class EditorComponent implements OnInit {
     })
     this.fileExtension = this.selectedFile.substr(this.selectedFile.lastIndexOf('.') + 1);
     this.setEditorMode();
-    if(this.options == '3')
-    {
-      this.editorReadOnly= true;
+    if (this.options == '3') {
+      this.editorReadOnly = true;
     }
   }
 
@@ -355,6 +354,9 @@ export class EditorComponent implements OnInit {
         this.mode = 'python';
         break;
       case "kts":
+        this.mode = 'kotlin';
+        break;
+      case "kt":
         this.mode = 'kotlin';
         break;
       case "txt":
