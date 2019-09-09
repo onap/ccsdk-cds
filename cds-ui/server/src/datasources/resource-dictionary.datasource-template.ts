@@ -88,7 +88,6 @@ export default {
 
             }
         },
-        ,
         {
             "template": {
                 "method": "GET",
@@ -102,6 +101,22 @@ export default {
             },
             "functions": {
                 "getModelType": ["source"]
+
+            }
+        },
+        {
+            "template": {
+                "method": "GET",
+                "url": controllerApiConfig.http.url + "/model-type/by-definition/data_type",
+                "headers": {
+                    "accepts": "application/json",
+                    "content-type": "application/json",
+                    "authorization": controllerApiConfig.http.authToken
+                },
+                "responsePath": "$.*"
+            },
+            "functions": {
+                "getDataTypes": []
 
             }
         }

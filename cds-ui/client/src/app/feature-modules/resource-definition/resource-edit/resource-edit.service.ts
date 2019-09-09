@@ -44,4 +44,8 @@ export class ResourceEditService {
     getModelType(name) {
         return this.api.get(ResourceDictionaryURLs.getModelType + '/' + name);
     }
+
+    getDataTypes() {
+        return this.api.get(ResourceDictionaryURLs.getDataType);
+    }
 }

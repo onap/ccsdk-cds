@@ -95,4 +95,15 @@ export class DataDictionaryController {
   async getmodelType(@param.path.string('source') source: string) {
     return await this.rdservice.getModelType(source);
   }
+
+  @get('/resourcedictionary/model-type/by-definition/data_type', {
+    responses: {
+      '200': {
+        content: { 'application/json': {} },
+      },
+    },
+  })
+  async getDataTypes() {
+    return await this.rdservice.getDataTypes();
+  }
 }

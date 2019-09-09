@@ -24,13 +24,15 @@ import { Component, OnInit, EventEmitter, Output  } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { IResources } from 'src/app/common/core/store/models/resources.model';
 import { IResourcesState } from 'src/app/common/core/store/models/resourcesState.model';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { IAppState } from '../../../../common/core/store/state/app.state';
 import { A11yModule } from '@angular/cdk/a11y';
+
 import { LoadResourcesSuccess } from 'src/app/common/core/store/actions/resources.action';
 import { IPropertyData } from 'src/app/common/core/store/models/propertyData.model';
 import { IEntrySchema } from 'src/app/common/core/store/models/entrySchema.model';
+import { ResourceEditService } from '../resource-edit.service';
 
 @Component({
   selector: 'app-resource-metadata',
@@ -48,8 +50,13 @@ export class ResourceMetadataComponent implements OnInit {
     propertyValues = [];
     property = [];   
     @Output() resourcesData = new EventEmitter();
+    dataTypeList: any[] = [
+       {modelName: 'String'}, {modelName: 'Boolean'}, {modelName: 'Integer'}, {modelName: 'Float'}, {modelName: 'Double'}
+    ];
      
- constructor(private formBuilder: FormBuilder, private store: Store<IAppState>) { 
+ constructor(private formBuilder: FormBuilder, 
+             private store: Store<IAppState>, 
+             private resourceEditService: ResourceEditService) { 
     this.rdState = this.store.select('resources');
     this.ResourceMetadata = this.formBuilder.group({
         Resource_Name: ['', Validators.required],
@@ -62,6 +69,17 @@ export class ResourceMetadataComponent implements OnInit {
  }
 
  ngOnInit() {
+    this.resourceEditService.getDataTypes()
+    .subscribe(data=>{
+      console.log(data);
+      if(data) {
+         data.forEach(element => {
+            this.dataTypeList.push(element);
+         });
+      }
+    }, (error)=>{
+       console.log("There is an error");
+    });
     this.rdState.subscribe(
       resourcesdata => {
         var resourcesState: IResourcesState = { resources: resourcesdata.resources, isLoadSuccess: resourcesdata.isLoadSuccess, isSaveSuccess: resourcesdata.isSaveSuccess, isUpdateSuccess: resourcesdata.isUpdateSuccess };
