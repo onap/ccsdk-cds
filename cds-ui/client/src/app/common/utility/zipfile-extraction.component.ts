@@ -39,11 +39,21 @@ export class ZipfileExtractionComponent implements OnInit {
   private entryDefinition: string;
   validfile: boolean = false;
   uploadedFileName: string;
-
+  filesData: any = [];
+  
   constructor(private loader: LoaderService) { }
 
   ngOnInit() {
   }
+
+  create() {
+    this.filesData.forEach((path) => {
+      let index = path.name.indexOf("/");
+      let name = path.name.slice(index + 1, path.name.length);
+      this.zipFile.file(name, path.data);
+    });
+  }
+
   async buildFileViewData(zip) {
     this.validfile = false;
     this.paths = [];
