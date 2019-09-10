@@ -17,7 +17,6 @@ from google.protobuf.timestamp_pb2 import Timestamp
 
 import proto.CommandExecutor_pb2 as CommandExecutor_pb2
 
-
 def get_blueprint_id(request):
     blueprint_name = request.identifiers.blueprintName
     blueprint_version = request.identifiers.blueprintVersion
