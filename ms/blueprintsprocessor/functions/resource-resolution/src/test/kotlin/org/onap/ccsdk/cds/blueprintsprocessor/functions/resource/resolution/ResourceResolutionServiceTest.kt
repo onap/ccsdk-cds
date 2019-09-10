@@ -261,6 +261,7 @@ class ResourceResolutionServiceTest {
             every { raRuntimeService.getBluePrintError() } returns BluePrintError()
             every { raRuntimeService.setBluePrintError(any())} returns Unit
             every { raRuntimeService.getInputValue("device-id") } returns "123456".asJsonPrimitive()
+            every { raRuntimeService.putResolutionStore(any(), any()) } returns Unit
 
             val applicationContext = mockk<ApplicationContext>()
             every { applicationContext.getBean("rr-processor-source-capability") } returns MockCapabilityScriptRA()
