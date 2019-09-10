@@ -28,8 +28,9 @@
     </mat-form-field>
     <mat-form-field class="form-field">
       <mat-select matInput placeholder="Data Type" formControlName="_type">
-      	<mat-option value="string">string</mat-option>
-      	<mat-option value="list">list</mat-option>
+      	<!-- <mat-option value="string">string</mat-option> -->
+        <!-- <mat-option value="list">list</mat-option> -->
+        <mat-option value="string" *ngFor="let item of dataTypeList">{{item.modelName}}</mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field class="form-field" >

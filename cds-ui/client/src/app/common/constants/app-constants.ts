@@ -108,5 +108,6 @@ export const ResourceDictionaryURLs = {
     searchResourceDictionaryByTags: '/resourcedictionary/search',
     searchResourceDictionaryByName: '',
     getSources: '/resourcedictionary/source-mapping',
-    getModelType: '/resourcedictionary/model-type'
+    getModelType: '/resourcedictionary/model-type',
+    getDataType: '/resourcedictionary/model-type/by-definition/data_type'
 }
