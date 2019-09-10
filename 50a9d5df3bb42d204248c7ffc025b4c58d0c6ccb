@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8cb35f69_4465ae03",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionService.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-09-10T01:14:08Z",
+      "side": 1,
+      "message": "it\u0027s not that easy. This is breaking functionality when you have a list of string for instance...",
+      "range": {
+        "startLine": 338,
+        "startChar": 61,
+        "endLine": 338,
+        "endChar": 93
+      },
+      "revId": "50a9d5df3bb42d204248c7ffc025b4c58d0c6ccb",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
