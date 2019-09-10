@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc8ca8f4_027edd5b",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-09-10T13:01:21Z",
+      "side": 1,
+      "message": "please, do not duplicate this 10 times.",
+      "range": {
+        "startLine": 442,
+        "startChar": 0,
+        "endLine": 445,
+        "endChar": 17
+      },
+      "revId": "ef598aa7ed50ded2023134a3b9c1acbff53e9cee",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
