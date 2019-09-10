@@ -33,6 +33,7 @@
         <module>designer-api</module>
         <module>resource-api</module>
         <module>selfservice-api</module>
+        <module>health-api</module>
     </modules>
     <dependencies>
         <dependency>
