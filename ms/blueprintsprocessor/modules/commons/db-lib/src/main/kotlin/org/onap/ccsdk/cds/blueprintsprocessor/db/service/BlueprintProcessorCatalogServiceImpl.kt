@@ -117,6 +117,10 @@ class BlueprintProcessorCatalogServiceImpl(bluePrintRuntimeValidatorService: Blu
             blueprintModelRepository.deleteByArtifactNameAndArtifactVersion(artifactName, artifactVersion)
             val deployFile =
                     normalizedPathName(bluePrintLoadConfiguration.blueprintDeployPath, artifactName, artifactVersion)
+
+            val cacheKey = BluePrintFileUtils.compileCacheKey(deployFile)
+            BluePrintCompileCache.cleanClassLoader(cacheKey)
+
             deleteNBDir(deployFile).let {
                 if (it) log.info("Deleted deployed blueprint model :$artifactName::$artifactVersion")
                 else log.info("Fail to delete deployed blueprint model :$artifactName::$artifactVersion")

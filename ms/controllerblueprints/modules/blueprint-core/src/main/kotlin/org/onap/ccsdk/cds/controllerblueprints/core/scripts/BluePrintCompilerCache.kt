@@ -39,6 +39,10 @@ object BluePrintCompileCache {
 
     fun cleanClassLoader(key: String) {
         if(hasClassLoader(key)){
+            // Make sure to close all classloader loaded resources before we let go of it.
+            // This fixes a Delete failure message on filesystem that keeps locks on opened jars;
+            // like Windows and NFS.
+            classLoaderCache.get(key).close()
             classLoaderCache.invalidate(key)
             log.info("Cleaned compiled cache($key)")
         }else{
