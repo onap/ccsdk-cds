@@ -32,7 +32,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelSearch
 import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.core.io.ByteArrayResource
@@ -67,7 +66,7 @@ import kotlin.test.assertTrue
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class BlueprintModelControllerTest {
 
-    private val log = LoggerFactory.getLogger(BlueprintModelControllerTest::class.java)!!
+    private val log = logger(BlueprintModelControllerTest::class)
 
     companion object {
         private var bp: BlueprintModelSearch? = null

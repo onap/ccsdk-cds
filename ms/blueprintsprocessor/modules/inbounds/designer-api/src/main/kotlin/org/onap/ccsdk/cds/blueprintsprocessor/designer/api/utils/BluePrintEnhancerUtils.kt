@@ -18,11 +18,12 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.utils
 
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.reactive.awaitSingle
-import kotlinx.coroutines.withContext
 import org.onap.ccsdk.cds.controllerblueprints.core.*
-import org.onap.ccsdk.cds.controllerblueprints.core.data.*
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.RelationshipType
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintRepoService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintArchiveUtils
@@ -32,17 +33,13 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.http.codec.multipart.FilePart
-import org.springframework.util.StringUtils
-import reactor.core.publisher.Mono
 import java.io.File
-import java.io.IOException
-import java.nio.file.Path
 import java.nio.file.Paths
-import java.util.*
 
 
 class BluePrintEnhancerUtils {
     companion object {
+        val log = logger(BluePrintEnhancerUtils)
 
         fun populateDataTypes(bluePrintContext: BluePrintContext, bluePrintRepoService: BluePrintRepoService,
                               dataTypeName: String): DataType {
@@ -84,81 +81,88 @@ class BluePrintEnhancerUtils {
             return artifactType
         }
 
-        suspend fun copyFromFilePart(filePart: FilePart, targetFile: File): File {
+        suspend fun byteArrayAsFile(byteArray: ByteArray, targetFile: File): File {
+            // Recreate Folder
+            targetFile.parentFile.reCreateNBDirs()
+            targetFile.writeBytes(byteArray).apply {
+                log.info("CBA file(${targetFile.absolutePath} written successfully")
+            }
+            return targetFile
+        }
+
+
+        suspend fun filePartAsFile(filePart: FilePart, targetFile: File): File {
             // Delete the Directory
-            targetFile.deleteRecursively()
+            targetFile.parentFile.reCreateNBDirs()
             return filePart.transferTo(targetFile)
                     .thenReturn(targetFile)
                     .awaitSingle()
         }
 
-        suspend fun extractCompressFilePart(filePart: FilePart, archiveDir: String, enhanceDir: String): File {
+        private suspend fun byteArrayAsArchiveFile(byteArray: ByteArray, archiveDir: String, enhanceDir: String): File {
             //Recreate the Base Directories
-            normalizedFile(archiveDir).reCreateDirs()
-            normalizedFile(enhanceDir).reCreateDirs()
-            val filePartFile = normalizedFile(archiveDir, "cba.zip")
+            normalizedFile(archiveDir).reCreateNBDirs()
+            normalizedFile(enhanceDir).reCreateNBDirs()
+            val archiveFile = normalizedFile(archiveDir, "cba.zip")
             // Copy the File Part to ZIP
-            return copyFromFilePart(filePart, filePartFile)
+            return byteArrayAsFile(byteArray, archiveFile)
         }
 
-        suspend fun decompressFilePart(filePart: FilePart, archiveDir: String, enhanceDir: String): File {
-            val filePartFile = extractCompressFilePart(filePart, archiveDir, enhanceDir)
+        private suspend fun filePartAsArchiveFile(filePart: FilePart, archiveDir: String, enhanceDir: String): File {
+            //Recreate the Base Directories
+            normalizedFile(archiveDir).reCreateNBDirs()
+            normalizedFile(enhanceDir).reCreateNBDirs()
+            val archiveFile = normalizedFile(archiveDir, "cba.zip")
+            // Copy the File Part to ZIP
+            return filePartAsFile(filePart, archiveFile)
+        }
+
+        /** copy the [byteArray] zip file to [archiveDir] and then decompress to [enhanceDir] */
+        suspend fun copyByteArrayToEnhanceDir(byteArray: ByteArray, archiveDir: String, enhanceDir: String): File {
+            val archiveFile = byteArrayAsArchiveFile(byteArray, archiveDir, enhanceDir)
+            val deCompressFileName = normalizedPathName(enhanceDir)
+            return archiveFile.deCompress(deCompressFileName)
+        }
+
+        /** copy the [filePart] zip file to [archiveDir] and then decompress to [enhanceDir] */
+        suspend fun copyFilePartToEnhanceDir(filePart: FilePart, archiveDir: String, enhanceDir: String): File {
+            val filePartFile = filePartAsArchiveFile(filePart, archiveDir, enhanceDir)
             val deCompressFileName = normalizedPathName(enhanceDir)
             return filePartFile.deCompress(deCompressFileName)
         }
 
-        suspend fun compressToFilePart(enhanceDir: String, archiveDir: String,
-                                       outputFileName:String="enhanced-cba.zip"): ResponseEntity<Resource> {
+        /** compress [enhanceDir] to [archiveDir] and return ByteArray */
+        suspend fun compressEnhanceDirAndReturnByteArray(enhanceDir: String, archiveDir: String,
+                                                         outputFileName: String = "enhanced-cba.zip"): ByteArray {
             val compressedFile = normalizedFile(archiveDir, outputFileName)
             BluePrintArchiveUtils.compress(Paths.get(enhanceDir).toFile(), compressedFile)
-            return prepareResourceEntity(compressedFile.name, compressedFile.readBytes())
+            return compressedFile.readBytes()
         }
 
-        suspend fun prepareResourceEntity(fileName: String, file: ByteArray): ResponseEntity<Resource> {
+        /** compress [enhanceDir] to [archiveDir] and return ResponseEntity */
+        suspend fun compressEnhanceDirAndReturnFilePart(enhanceDir: String, archiveDir: String,
+                                                        outputFileName: String = "enhanced-cba.zip")
+                : ResponseEntity<Resource> {
+            val compressedFile = normalizedFile(archiveDir, outputFileName)
+            BluePrintArchiveUtils.compress(Paths.get(enhanceDir).toFile(), compressedFile)
+            return prepareResourceEntity(compressedFile)
+        }
+
+        /** convert [file] to ResourceEntity */
+        suspend fun prepareResourceEntity(file: File): ResponseEntity<Resource> {
+            return prepareResourceEntity(file.name, file.readBytes())
+        }
+        /** convert [byteArray] to ResourceEntity with [fileName]*/
+        fun prepareResourceEntity(fileName: String, byteArray: ByteArray): ResponseEntity<Resource> {
             return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType("text/plain"))
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"$fileName\"")
-                    .body(ByteArrayResource(file))
+                    .body(ByteArrayResource(byteArray))
         }
 
-        suspend fun cleanEnhancer(archiveLocation: String, enhancementLocation: String) = withContext(Dispatchers.Default) {
-            deleteDir(archiveLocation)
-            deleteDir(enhancementLocation)
-        }
-
-        /**
-         * This is a saveCBAFile method
-         * take a [FilePart], transfer it to disk using a Flux of FilePart and return a [Mono] representing the CBA file name
-         *
-         * @param (filePart, targetDirectory) - the request part containing the file to be saved and the default directory where to save
-         * @return a [Mono] String representing the result of the operation
-         * @throws (BluePrintException, IOException) BluePrintException, IOException
-         */
-        @Throws(BluePrintException::class, IOException::class)
-        fun saveCBAFile(filePart: FilePart, targetDirectory: Path): Mono<String> {
-
-            // Normalize file name
-            val fileName = StringUtils.cleanPath(filePart.filename())
-
-            // Check if the file's extension is "CBA"
-            if (StringUtils.getFilenameExtension(fileName) != "zip") {
-                throw BluePrintException(ErrorCode.INVALID_FILE_EXTENSION.value, "Invalid file extension required ZIP")
-            }
-
-            // Change file name to match a pattern
-            val changedFileName = UUID.randomUUID().toString() + ".zip"
-            //String changedFileName = BluePrintFileUtils.Companion.getCBAGeneratedFileName(fileName, this.CBA_FILE_NAME_PATTERN);
-
-            // Copy file to the target location (Replacing existing file with the same name)
-            val targetLocation = targetDirectory.resolve(changedFileName)
-
-            // if a file with the same name already exists in a repository, delete and recreate it
-            val file = File(targetLocation.toString())
-            if (file.exists())
-                file.delete()
-            file.createNewFile()
-
-            return filePart.transferTo(file).thenReturn(changedFileName)
+        suspend fun cleanEnhancer(archiveLocation: String, enhancementLocation: String) {
+            deleteNBDir(archiveLocation)
+            deleteNBDir(enhancementLocation)
         }
     }
 }
