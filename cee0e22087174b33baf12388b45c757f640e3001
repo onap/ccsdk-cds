@@ -1,0 +1,205 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "10b31646_c1ca7c8a",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-09-11T14:01:53Z",
+      "side": 1,
+      "message": "missing copyright headers, same elswhere",
+      "revId": "cee0e22087174b33baf12388b45c757f640e3001",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c187d5a2_b897799b",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/configuration/RestTemplateConf.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-09-11T14:01:53Z",
+      "side": 1,
+      "message": "please use rest lib https://github.com/onap/ccsdk-cds/tree/master/ms/blueprintsprocessor/modules/commons/rest-lib to create a rest client, also, use properties from applications.properties for user/password information.",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 5
+      },
+      "revId": "cee0e22087174b33baf12388b45c757f640e3001",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f482f9f3_3592e8df",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/controller/HealthCheckController.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-09-11T14:01:53Z",
+      "side": 1,
+      "message": "drop `-api` please, it is not necessary",
+      "range": {
+        "startLine": 16,
+        "startChar": 31,
+        "endLine": 16,
+        "endChar": 35
+      },
+      "revId": "cee0e22087174b33baf12388b45c757f640e3001",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fd80083b_203fd55e",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/controller/HealthCheckController.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-09-11T14:01:53Z",
+      "side": 1,
+      "message": "no need specific path, can use the path defined at the class level. That way, uri would be /api/v1/health",
+      "range": {
+        "startLine": 24,
+        "startChar": 20,
+        "endLine": 24,
+        "endChar": 37
+      },
+      "revId": "cee0e22087174b33baf12388b45c757f640e3001",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "380eecd7_6d330498",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/controller/HealthCheckController.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-09-11T14:01:53Z",
+      "side": 1,
+      "message": "rename function accordingly",
+      "range": {
+        "startLine": 29,
+        "startChar": 8,
+        "endLine": 29,
+        "endChar": 35
+      },
+      "revId": "cee0e22087174b33baf12388b45c757f640e3001",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fc7411d3_7cd42d71",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/service/HealthCheckService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-09-11T14:01:53Z",
+      "side": 1,
+      "message": "rather use function name than rest controller name. Here could be \"Execution Service\"",
+      "range": {
+        "startLine": 22,
+        "startChar": 46,
+        "endLine": 22,
+        "endChar": 76
+      },
+      "revId": "cee0e22087174b33baf12388b45c757f640e3001",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6df145f5_b998a3bb",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/service/HealthCheckService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-09-11T14:01:53Z",
+      "side": 1,
+      "message": "Template service",
+      "range": {
+        "startLine": 23,
+        "startChar": 33,
+        "endLine": 23,
+        "endChar": 54
+      },
+      "revId": "cee0e22087174b33baf12388b45c757f640e3001",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fe084ad7_7d937b8d",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/service/HealthCheckService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-09-11T14:01:53Z",
+      "side": 1,
+      "message": "Resource service",
+      "range": {
+        "startLine": 24,
+        "startChar": 33,
+        "endLine": 24,
+        "endChar": 55
+      },
+      "revId": "cee0e22087174b33baf12388b45c757f640e3001",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d7ec2584_b4fc0107",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/service/HealthCheckService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 137
+      },
+      "writtenOn": "2019-09-11T14:01:53Z",
+      "side": 1,
+      "message": "SDC Listener service",
+      "range": {
+        "startLine": 25,
+        "startChar": 33,
+        "endLine": 25,
+        "endChar": 58
+      },
+      "revId": "cee0e22087174b33baf12388b45c757f640e3001",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
