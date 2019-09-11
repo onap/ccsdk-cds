@@ -22,19 +22,9 @@ import org.springframework.util.StringUtils
 import java.io.File
 import java.io.IOException
 import java.nio.file.Path
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 const val INTERNAL_SERVER_ERROR_HTTP_STATUS_CODE = 500
-
-fun currentTimestamp(): String {
-    val now = LocalDateTime.now(ZoneId.systemDefault())
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    return formatter.format(now)
-}
-
 
 @Throws(BluePrintException::class, IOException::class)
 fun saveCBAFile(filePart: FilePart, targetDirectory: Path): Path {

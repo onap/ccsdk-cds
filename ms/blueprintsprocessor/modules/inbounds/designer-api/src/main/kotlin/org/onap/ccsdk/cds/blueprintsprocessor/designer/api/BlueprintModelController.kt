@@ -17,14 +17,17 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 
+import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.ApiParam
 import kotlinx.coroutines.runBlocking
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelSearch
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.BluePrintModelHandler
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.springframework.core.io.Resource
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.http.codec.multipart.FilePart
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
 /**
@@ -40,18 +43,21 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @PostMapping("", produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     @ResponseBody
     @Throws(BluePrintException::class)
+    @PreAuthorize("hasRole('USER')")
     fun saveBlueprint(@RequestPart("file") filePart: FilePart): BlueprintModelSearch = runBlocking {
         bluePrintModelHandler.saveBlueprintModel(filePart)
     }
 
     @GetMapping("", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
+    @PreAuthorize("hasRole('USER')")
     fun allBlueprintModel(): List<BlueprintModelSearch> {
         return this.bluePrintModelHandler.allBlueprintModel()
     }
 
     @DeleteMapping("/{id}")
     @Throws(BluePrintException::class)
+    @PreAuthorize("hasRole('USER')")
     fun deleteBlueprint(@PathVariable(value = "id") id: String) {
         this.bluePrintModelHandler.deleteBlueprintModel(id)
     }
@@ -59,6 +65,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @GetMapping("/by-name/{name}/version/{version}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     @Throws(BluePrintException::class)
+    @PreAuthorize("hasRole('USER')")
     fun getBlueprintByNameAndVersion(@PathVariable(value = "name") name: String,
                                      @PathVariable(value = "version") version: String): BlueprintModelSearch {
         return this.bluePrintModelHandler.getBlueprintModelSearchByNameAndVersion(name, version)
@@ -67,6 +74,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @GetMapping("/download/by-name/{name}/version/{version}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     @Throws(BluePrintException::class)
+    @PreAuthorize("hasRole('USER')")
     fun downloadBlueprintByNameAndVersion(@PathVariable(value = "name") name: String,
                                           @PathVariable(value = "version") version: String): ResponseEntity<Resource> {
         return this.bluePrintModelHandler.downloadBlueprintModelFileByNameAndVersion(name, version)
@@ -75,6 +83,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @GetMapping("/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     @Throws(BluePrintException::class)
+    @PreAuthorize("hasRole('USER')")
     fun getBlueprintModel(@PathVariable(value = "id") id: String): BlueprintModelSearch {
         return this.bluePrintModelHandler.getBlueprintModelSearch(id)
     }
@@ -82,6 +91,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @GetMapping("/download/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     @Throws(BluePrintException::class)
+    @PreAuthorize("hasRole('USER')")
     fun downloadBluePrint(@PathVariable(value = "id") id: String): ResponseEntity<Resource> {
         return this.bluePrintModelHandler.downloadBlueprintModelFile(id)
     }
@@ -90,6 +100,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
             .MULTIPART_FORM_DATA_VALUE])
     @ResponseBody
     @Throws(BluePrintException::class)
+    @PreAuthorize("hasRole('USER')")
     fun enrichBlueprint(@RequestPart("file") file: FilePart): ResponseEntity<Resource> = runBlocking {
         bluePrintModelHandler.enrichBlueprint(file)
     }
@@ -97,13 +108,27 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @PostMapping("/publish", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     @Throws(BluePrintException::class)
+    @PreAuthorize("hasRole('USER')")
     fun publishBlueprint(@RequestPart("file") file: FilePart): BlueprintModelSearch = runBlocking {
         bluePrintModelHandler.publishBlueprint(file)
     }
 
     @GetMapping("/search/{tags}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
+    @PreAuthorize("hasRole('USER')")
     fun searchBlueprintModels(@PathVariable(value = "tags") tags: String): List<BlueprintModelSearch> {
         return this.bluePrintModelHandler.searchBlueprintModels(tags)
+    }
+
+    @DeleteMapping("/name/{name}/version/{version}")
+    @ApiOperation(value = "Delete a CBA",
+            notes = "Delete the CBA package identified by its name and version.",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('USER')")
+    fun deleteBlueprint(@ApiParam(value = "Name of the CBA.", required = true)
+                        @PathVariable(value = "name") name: String,
+                        @ApiParam(value = "Version of the CBA.", required = true)
+                        @PathVariable(value = "version") version: String) = runBlocking {
+        bluePrintModelHandler.deleteBlueprintModel(name, version)
     }
 }

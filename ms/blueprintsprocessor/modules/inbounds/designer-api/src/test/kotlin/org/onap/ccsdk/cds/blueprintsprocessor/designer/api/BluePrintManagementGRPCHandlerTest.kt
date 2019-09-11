@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
+package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 
 import com.google.protobuf.ByteString
 import io.grpc.testing.GrpcServerRule

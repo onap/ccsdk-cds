@@ -33,14 +33,8 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.onap.ccsdk.cds.components</groupId>
             <artifactId>proto-definition</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
@@ -50,10 +44,6 @@
         <dependency>
             <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
             <artifactId>blueprint-validation</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-testing</artifactId>
         </dependency>
 
         <!-- For Message libraries -->

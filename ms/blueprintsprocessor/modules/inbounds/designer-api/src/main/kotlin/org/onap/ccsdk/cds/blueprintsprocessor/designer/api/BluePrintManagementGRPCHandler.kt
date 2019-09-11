@@ -16,12 +16,11 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
+package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 
 import io.grpc.StatusException
 import io.grpc.stub.StreamObserver
 import kotlinx.coroutines.runBlocking
-import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.utils.currentTimestamp
 import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader
 import org.onap.ccsdk.cds.controllerblueprints.common.api.Status
 import org.onap.ccsdk.cds.controllerblueprints.core.*
@@ -29,6 +28,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfigur
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintCompileCache
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.currentTimestamp
 import org.onap.ccsdk.cds.controllerblueprints.management.api.*
 import org.slf4j.LoggerFactory
 import org.springframework.security.access.prepost.PreAuthorize
@@ -36,7 +36,6 @@ import org.springframework.stereotype.Service
 import java.io.File
 import java.util.*
 
-// TODO("move to management-api or designer-api module")
 @Service
 open class BluePrintManagementGRPCHandler(private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
                                           private val blueprintsProcessorCatalogService: BluePrintCatalogService)
