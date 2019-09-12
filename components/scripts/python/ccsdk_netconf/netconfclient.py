@@ -63,6 +63,3 @@ class NetconfClient:
     def get(self, filter_content):
         device_response = self.netconf_rpc_client.get(filter_content)
         return device_response
-
-    def set_execution_attribute_response_data(self, response_data):
-        self.component_function.setAttribute(ATTRIBUTE_RESPONSE_DATA, response_data)

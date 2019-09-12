@@ -19,11 +19,12 @@
 package internal.scripts
 
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.cli.executor.cliDeviceInfo
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.cli.executor.getSshClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentScriptExecutor
-import org.onap.ccsdk.cds.blueprintsprocessor.ssh.sshClientService
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
+
 import org.slf4j.LoggerFactory
 
 open class TestCliScriptFunction : AbstractScriptComponentFunction() {
@@ -54,10 +55,10 @@ open class Check : AbstractScriptComponentFunction() {
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
         // Get the Device Information from the DSL Model
-        val deviceInformation = bluePrintRuntimeService.resolveDSLExpression("device-properties")
+        val deviceInformation = cliDeviceInfo("device-properties")
 
         // Get the Client Service
-        val sshClientService = BluePrintDependencyService.sshClientService(deviceInformation)
+        val sshClientService = getSshClientService(deviceInformation)
 
         sshClientService.startSessionNB()
 
