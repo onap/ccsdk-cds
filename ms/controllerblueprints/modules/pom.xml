@@ -31,6 +31,7 @@
         <module>blueprint-core</module>
         <module>resource-dict</module>
         <module>blueprint-validation</module>
+        <module>blueprint-proto</module>
     </modules>
 
     <dependencies>
