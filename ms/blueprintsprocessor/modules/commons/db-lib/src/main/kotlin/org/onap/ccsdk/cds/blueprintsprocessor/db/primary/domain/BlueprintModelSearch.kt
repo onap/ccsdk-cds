@@ -32,13 +32,13 @@ import javax.persistence.*
  */
 
 @Entity
-@Table(name = "CONFIG_MODEL")
+@Table(name = "BLUEPRINT_MODEL")
 @JsonTypeName("blueprintModel")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 class BlueprintModelSearch : Serializable {
 
     @Id
-    @Column(name = "config_model_id")
+    @Column(name = "blueprint_model_id")
     var id: String? = null
 
     @Column(name = "artifact_uuid")

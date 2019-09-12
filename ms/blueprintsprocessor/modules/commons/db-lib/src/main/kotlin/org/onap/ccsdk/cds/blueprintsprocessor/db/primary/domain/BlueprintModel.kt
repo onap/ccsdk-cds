@@ -34,11 +34,11 @@ import javax.persistence.*
 
 @EntityListeners(AuditingEntityListener::class)
 @Entity
-@Table(name = "CONFIG_MODEL", uniqueConstraints = [UniqueConstraint(columnNames = ["artifact_name", "artifact_version"])])
+@Table(name = "BLUEPRINT_MODEL", uniqueConstraints = [UniqueConstraint(columnNames = ["artifact_name", "artifact_version"])])
 @Proxy(lazy = false)
 class BlueprintModel : Serializable {
     @Id
-    @Column(name = "config_model_id")
+    @Column(name = "blueprint_model_id")
     var id: String? = null
 
     @Column(name = "service_uuid")
