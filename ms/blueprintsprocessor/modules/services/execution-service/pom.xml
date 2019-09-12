@@ -57,10 +57,6 @@
             <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
             <artifactId>resource-dict</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.onap.ccsdk.cds.components</groupId>
-            <artifactId>proto-definition</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.onap.ccsdk.sli.core</groupId>
