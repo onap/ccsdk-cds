@@ -248,11 +248,7 @@
                 <artifactId>protobuf-java-util</artifactId>
                 <version>${protobuff.java.utils.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.onap.ccsdk.cds.components</groupId>
-                <artifactId>proto-definition</artifactId>
-                <version>${project.version}</version>
-            </dependency>
+
 
             <!-- Adaptors -->
             <dependency>
@@ -456,6 +452,11 @@
             <dependency>
                 <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
                 <artifactId>blueprint-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
+                <artifactId>blueprint-proto</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
