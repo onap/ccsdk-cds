@@ -22,7 +22,6 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.TextNode
 import io.mockk.every
 import io.mockk.spyk
@@ -42,10 +41,24 @@ import kotlin.test.assertEquals
 data class IpAddress(val port: String, val ip: String)
 data class Host(val name: String, val ipAddress: IpAddress)
 data class ExpectedResponseIp(val ip: String)
-data class ExpectedResponsePort(val port: String)
+data class ExpectedResponseIpAddress(val ipAddress: IpAddress)
 
 class ResourceAssignmentUtilsTest {
     private lateinit var resourceAssignmentRuntimeService: ResourceAssignmentRuntimeService
+
+    private lateinit var inputMapToTestPrimitiveTypeWithValue: JsonNode
+    private lateinit var inputMapToTestPrimitiveTypeWithKeyValue: JsonNode
+    private lateinit var inputMapToTestCollectionOfPrimitiveType: JsonNode
+    private lateinit var inputMapToTestCollectionOfComplexTypeWithOneOutputKeyMapping: JsonNode
+    private lateinit var inputMapToTestCollectionOfComplexTypeWithAllOutputKeyMapping: JsonNode
+    private lateinit var inputMapToTestComplexTypeWithOneOutputKeyMapping: JsonNode
+    private lateinit var inputMapToTestComplexTypeWithAllOutputKeyMapping: JsonNode
+    private lateinit var expectedValueToTestPrimitiveType: JsonNode
+    private lateinit var expectedValueToTesCollectionOfPrimitiveType: JsonNode
+    private lateinit var expectedValueToTestCollectionOfComplexTypeWithOneOutputKeyMapping: JsonNode
+    private lateinit var expectedValueToTestComplexTypeWithOneOutputKeyMapping: JsonNode
+    private lateinit var expectedValueToTestComplexTypeWithAllOutputKeyMapping: JsonNode
+    private lateinit var expectedValueToTestCollectionOfComplexTypeWithAllOutputKeyMapping: JsonNode
 
     @Before
     fun setup() {
@@ -54,6 +67,11 @@ class ResourceAssignmentUtilsTest {
                 "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
         resourceAssignmentRuntimeService = spyk(ResourceAssignmentRuntimeService("1234", bluePrintContext))
+
+        //Init input map and expected values for tests
+        initInputMapAndExpectedValuesForPrimitiveType()
+        initInputMapAndExpectedValuesForCollection()
+        initInputMapAndExpectedValuesForComplexType()
 
         val propertiesDefinition1 = PropertyDefinition().apply {
             type = "string"
@@ -149,146 +167,127 @@ class ResourceAssignmentUtilsTest {
 
     @Test
     fun parseResponseNodeTestForPrimitivesTypes(){
-        // Input values for primitive type
-        val keyValue = mutableMapOf<String, String>()
-        keyValue["value"]= "1.2.3.1"
-        val expectedPrimitiveType = TextNode("1.2.3.1")
+        var outcome = prepareResponseNodeForTest("sample-value", "string", "",
+                inputMapToTestPrimitiveTypeWithValue)
+        assertEquals(expectedValueToTestPrimitiveType, outcome, "Unexpected outcome returned for primitive type of simple String")
 
-        var outcome = prepareResponseNodeForTest("sample-value", "string",
-                "", "1.2.3.1".asJsonPrimitive())
-        assertEquals(expectedPrimitiveType, outcome, "Unexpected outcome returned for primitive type of simple String")
-        outcome = prepareResponseNodeForTest("sample-key-value", "string", "", keyValue)
-        assertEquals(expectedPrimitiveType, outcome, "Unexpected outcome returned for primitive type of key-value String")
+        outcome = prepareResponseNodeForTest("sample-key-value", "string", "",
+                inputMapToTestPrimitiveTypeWithKeyValue)
+        assertEquals(expectedValueToTestPrimitiveType, outcome, "Unexpected outcome returned for primitive type of key-value String")
     }
 
     @Test
     fun parseResponseNodeTestForCollectionsOfString(){
-        // Input values for collection type
-        val mapOfString = mutableMapOf<String, String>()
-        mapOfString["value1"] = "1.2.3.1"
-        mapOfString["port"] = "8888"
-        mapOfString["value2"] = "1.2.3.2"
-        val arrayOfKeyValue = arrayListOf(ExpectedResponseIp("1.2.3.1"),
-                ExpectedResponsePort( "8888"), ExpectedResponseIp("1.2.3.2"))
-
-        val mutableMapKeyValue = mutableMapOf<String, String>()
-        mutableMapKeyValue["value1"] = "1.2.3.1"
-        mutableMapKeyValue["port"] = "8888"
-
-        //List
-        val expectedListOfString = arrayOfKeyValue.asJsonType()
         var outcome = prepareResponseNodeForTest("listOfString", "list",
-                "string", mapOfString.asJsonType())
-        assertEquals(expectedListOfString, outcome, "unexpected outcome returned for list of String")
+                "string", inputMapToTestCollectionOfPrimitiveType)
+        assertEquals(expectedValueToTesCollectionOfPrimitiveType, outcome, "unexpected outcome returned for list of String")
 
-        //Map
-        val expectedMapOfString = mutableMapOf<String, JsonNode>()
-        expectedMapOfString["ip"] = "1.2.3.1".asJsonPrimitive()
-        expectedMapOfString["port"] = "8888".asJsonPrimitive()
-
-        val arrayNode = JacksonUtils.objectMapper.createArrayNode()
-        expectedMapOfString.map {
-            val arrayChildNode = JacksonUtils.objectMapper.createObjectNode()
-            arrayChildNode.set(it.key, it.value)
-            arrayNode.add(arrayChildNode)
-        }
-        val arrayChildNode1 = JacksonUtils.objectMapper.createObjectNode()
-        arrayChildNode1.set("ip", NullNode.getInstance())
-        arrayNode.add(arrayChildNode1)
         outcome = prepareResponseNodeForTest("mapOfString", "map", "string",
-                mutableMapKeyValue.asJsonType())
-        assertEquals(arrayNode, outcome, "unexpected outcome returned for map of String")
-    }
-
-    @Test
-    fun parseResponseNodeTestForCollectionsOfJsonNode(){
-        // Input values for collection type
-        val mapOfString = mutableMapOf<String, JsonNode>()
-        mapOfString["value1"] = "1.2.3.1".asJsonPrimitive()
-        mapOfString["port"] = "8888".asJsonPrimitive()
-        mapOfString["value2"] = "1.2.3.2".asJsonPrimitive()
-        val arrayOfKeyValue = arrayListOf(ExpectedResponseIp("1.2.3.1"),
-                ExpectedResponsePort( "8888"), ExpectedResponseIp("1.2.3.2"))
-
-        val mutableMapKeyValue = mutableMapOf<String, JsonNode>()
-        mutableMapKeyValue["value1"] = "1.2.3.1".asJsonPrimitive()
-        mutableMapKeyValue["port"] = "8888".asJsonPrimitive()
-
-        //List
-        val expectedListOfString = arrayOfKeyValue.asJsonType()
-        var outcome = prepareResponseNodeForTest("listOfString", "list",
-                "string", mapOfString.asJsonType())
-        assertEquals(expectedListOfString, outcome, "unexpected outcome returned for list of String")
-
-        //Map
-        val expectedMapOfString = mutableMapOf<String, JsonNode>()
-        expectedMapOfString["ip"] = "1.2.3.1".asJsonPrimitive()
-        expectedMapOfString["port"] = "8888".asJsonPrimitive()
-        val arrayNode = JacksonUtils.objectMapper.createArrayNode()
-        expectedMapOfString.map {
-            val arrayChildNode = JacksonUtils.objectMapper.createObjectNode()
-            arrayChildNode.set(it.key, it.value)
-            arrayNode.add(arrayChildNode)
-        }
-        val arrayChildNode1 = JacksonUtils.objectMapper.createObjectNode()
-        arrayChildNode1.set("ip", NullNode.getInstance())
-        arrayNode.add(arrayChildNode1)
-        outcome = prepareResponseNodeForTest("mapOfString", "map",
-                "string", mutableMapKeyValue.asJsonType())
-        assertEquals(arrayNode, outcome, "unexpected outcome returned for map of String")
+                inputMapToTestCollectionOfPrimitiveType)
+        assertEquals(expectedValueToTesCollectionOfPrimitiveType, outcome, "unexpected outcome returned for map of String")
     }
 
     @Test
     fun parseResponseNodeTestForCollectionsOfComplexType(){
-        // Input values for collection type
-        val mapOfComplexType = mutableMapOf<String, JsonNode>()
-        mapOfComplexType["value1"] = IpAddress("1111", "1.2.3.1").asJsonType()
-        mapOfComplexType["value2"] = IpAddress("2222", "1.2.3.2").asJsonType()
-        mapOfComplexType["value3"] = IpAddress("3333", "1.2.3.3").asJsonType()
+        var outcome = prepareResponseNodeForTest("listOfMyDataTypeWithOneOutputKeyMapping", "list",
+                "ip-address", inputMapToTestCollectionOfComplexTypeWithOneOutputKeyMapping)
+        assertEquals(expectedValueToTestCollectionOfComplexTypeWithOneOutputKeyMapping, outcome, "unexpected outcome returned for list of String")
 
-        //List
-        val arrayNode = JacksonUtils.objectMapper.createArrayNode()
-        mapOfComplexType.map {
-            val arrayChildNode = JacksonUtils.objectMapper.createObjectNode()
-            arrayChildNode.set("ipAddress", it.value)
-            arrayNode.add(arrayChildNode)
-        }
-        var outcome = prepareResponseNodeForTest("listOfMyDataType", "list",
-                "ip-address", mapOfComplexType.asJsonType())
-        assertEquals(arrayNode, outcome, "unexpected outcome returned for list of String")
+        outcome = prepareResponseNodeForTest("listOfMyDataTypeWithAllOutputKeyMapping", "list",
+                "ip-address", inputMapToTestCollectionOfComplexTypeWithAllOutputKeyMapping)
+        assertEquals(expectedValueToTestCollectionOfComplexTypeWithAllOutputKeyMapping, outcome, "unexpected outcome returned for list of String")
     }
 
     @Test
     fun `parseResponseNodeTestForComplexType find one output key mapping`(){
-        // Input values for complex type
-        val objectNode = JacksonUtils.objectMapper.createObjectNode()
-
-        // Input values for collection type
-        val mapOfComplexType = mutableMapOf<String, JsonNode>()
-        mapOfComplexType["value"] = Host("my-ipAddress", IpAddress("1111", "1.2.3.1")).asJsonType()
-        mapOfComplexType["port"] = "8888".asJsonType()
-        mapOfComplexType["something"] = "1.2.3.2".asJsonType()
-
-        val expectedComplexType = objectNode.set("ipAddress", Host("my-ipAddress", IpAddress("1111", "1.2.3.1")).asJsonType())
         val outcome = prepareResponseNodeForTest("complexTypeOneKeys", "host",
-                "", mapOfComplexType.asJsonType())
-        assertEquals(expectedComplexType, outcome, "Unexpected outcome returned for complex type")
+                "", inputMapToTestComplexTypeWithOneOutputKeyMapping)
+        assertEquals(expectedValueToTestComplexTypeWithOneOutputKeyMapping, outcome, "Unexpected outcome returned for complex type")
     }
 
     @Test
     fun `parseResponseNodeTestForComplexType find all output key mapping`(){
-        // Input values for complex type
-        val objectNode = JacksonUtils.objectMapper.createObjectNode()
-
-        // Input values for collection type
-        val mapOfComplexType = mutableMapOf<String, JsonNode>()
-        mapOfComplexType["name"] = "my-ipAddress".asJsonType()
-        mapOfComplexType["ipAddress"] = IpAddress("1111", "1.2.3.1").asJsonType()
-
-        val expectedComplexType = Host("my-ipAddress", IpAddress("1111", "1.2.3.1")).asJsonType()
         val outcome = prepareResponseNodeForTest("complexTypeAllKeys", "host",
-                "", mapOfComplexType.asJsonType())
-        assertEquals(expectedComplexType, outcome, "Unexpected outcome returned for complex type")
+                "", inputMapToTestComplexTypeWithAllOutputKeyMapping)
+        assertEquals(expectedValueToTestComplexTypeWithAllOutputKeyMapping, outcome, "Unexpected outcome returned for complex type")
+    }
+
+    private fun initInputMapAndExpectedValuesForPrimitiveType() {
+        inputMapToTestPrimitiveTypeWithValue = "1.2.3.1".asJsonType()
+        val keyValue = mutableMapOf<String, String>()
+        keyValue["value"]= "1.2.3.1"
+        inputMapToTestPrimitiveTypeWithKeyValue = keyValue.asJsonType()
+        expectedValueToTestPrimitiveType = TextNode("1.2.3.1")
+    }
+
+    private fun initInputMapAndExpectedValuesForCollection(){
+        val listOfIps = arrayListOf("1.2.3.1", "1.2.3.2", "1.2.3.3")
+        val arrayNodeForList1 = JacksonUtils.objectMapper.createArrayNode()
+        listOfIps.forEach {
+            val arrayChildNode = JacksonUtils.objectMapper.createObjectNode()
+            arrayChildNode.set("value", it.asJsonPrimitive())
+            arrayNodeForList1.add(arrayChildNode)
+        }
+        inputMapToTestCollectionOfPrimitiveType = arrayNodeForList1
+
+        expectedValueToTesCollectionOfPrimitiveType = arrayListOf(ExpectedResponseIp("1.2.3.1"),
+                ExpectedResponseIp( "1.2.3.2"), ExpectedResponseIp("1.2.3.3")).asJsonType()
+
+
+        val listOfIpAddresses = arrayListOf(IpAddress("1111", "1.2.3.1").asJsonType(),
+                IpAddress("2222", "1.2.3.2").asJsonType(), IpAddress("3333", "1.2.3.3").asJsonType())
+        val arrayNodeForList2 = JacksonUtils.objectMapper.createArrayNode()
+        listOfIpAddresses.forEach {
+            val arrayChildNode = JacksonUtils.objectMapper.createObjectNode()
+            arrayChildNode.set("value", it.asJsonType())
+            arrayNodeForList2.add(arrayChildNode)
+        }
+        inputMapToTestCollectionOfComplexTypeWithOneOutputKeyMapping = arrayNodeForList2
+
+        val arrayNodeForList3 = JacksonUtils.objectMapper.createArrayNode()
+        var childNode = JacksonUtils.objectMapper.createObjectNode()
+        childNode.set("port", "1111".asJsonPrimitive())
+        childNode.set("ip", "1.2.3.1".asJsonPrimitive())
+        arrayNodeForList3.add(childNode)
+        childNode = JacksonUtils.objectMapper.createObjectNode()
+        childNode.set("port", "2222".asJsonPrimitive())
+        childNode.set("ip", "1.2.3.2".asJsonPrimitive())
+        arrayNodeForList3.add(childNode)
+        childNode = JacksonUtils.objectMapper.createObjectNode()
+        childNode.set("port", "3333".asJsonPrimitive())
+        childNode.set("ip", "1.2.3.3".asJsonPrimitive())
+        arrayNodeForList3.add(childNode)
+        inputMapToTestCollectionOfComplexTypeWithAllOutputKeyMapping = arrayNodeForList3
+
+        expectedValueToTestCollectionOfComplexTypeWithOneOutputKeyMapping = arrayListOf(ExpectedResponseIpAddress(IpAddress("1111", "1.2.3.1")),
+                ExpectedResponseIpAddress(IpAddress("2222", "1.2.3.2")), ExpectedResponseIpAddress(
+                IpAddress("3333", "1.2.3.3"))).asJsonType()
+        expectedValueToTestCollectionOfComplexTypeWithAllOutputKeyMapping = arrayListOf(IpAddress("1111", "1.2.3.1"),
+                IpAddress("2222", "1.2.3.2"),
+                IpAddress("3333", "1.2.3.3")).asJsonType()
+    }
+
+    private fun initInputMapAndExpectedValuesForComplexType(){
+        val mapOfComplexType = mutableMapOf<String, JsonNode>()
+        mapOfComplexType["value"] = Host("my-ipAddress", IpAddress("1111", "1.2.3.1")).asJsonType()
+        mapOfComplexType["port"] = "8888".asJsonType()
+        mapOfComplexType["something"] = "1.2.3.2".asJsonType()
+        inputMapToTestComplexTypeWithOneOutputKeyMapping = mapOfComplexType.asJsonType()
+
+        val objectNode = JacksonUtils.objectMapper.createObjectNode()
+        expectedValueToTestComplexTypeWithOneOutputKeyMapping = objectNode.set("host", Host("my-ipAddress", IpAddress("1111", "1.2.3.1")).asJsonType())
+
+        val childNode1 = JacksonUtils.objectMapper.createObjectNode()
+        childNode1.set("name", "my-ipAddress".asJsonPrimitive())
+        childNode1.set("ipAddress", IpAddress("1111", "1.2.3.1").asJsonType())
+        childNode1.set("port", "8888".asJsonType())
+        childNode1.set("something", IpAddress("2222", "1.2.3.1").asJsonType())
+        inputMapToTestComplexTypeWithAllOutputKeyMapping = childNode1
+
+        val childNode2 = JacksonUtils.objectMapper.createObjectNode()
+        childNode2.set("name", "my-ipAddress".asJsonPrimitive())
+        childNode2.set("ipAddress", IpAddress("1111", "1.2.3.1").asJsonType())
+        expectedValueToTestComplexTypeWithAllOutputKeyMapping = childNode2
     }
 
     private fun prepareResponseNodeForTest(dictionary_source: String, sourceType: String, entrySchema: String,
@@ -355,27 +354,28 @@ class ResourceAssignmentUtilsTest {
         val outputMapping = mutableMapOf<String, String>()
 
         when (dictionary_source) {
-            "listOfString", "mapOfString" -> {
-                //List of string
-                outputMapping["value1"] = "ip"
-                outputMapping["port"] = "port"
-                outputMapping["value2"] = "ip"
-            }
-            "listOfMyDataType", "mapOfMyDataType" -> {
-                //List or map of complex Type
-                outputMapping["value1"] = "ipAddress"
-                outputMapping["value2"] = "ipAddress"
-                outputMapping["value3"] = "ipAddress"
-            }
             "sample-key-value", "sample-value" -> {
                 //Primary Type
                 if (dictionary_source=="sample-key-value")
                     outputMapping["sample-ip"] = "value"
             }
+            "listOfString", "mapOfString" -> {
+                //List of string
+                outputMapping["ip"] = "value"
+            }
+            "listOfMyDataTypeWithOneOutputKeyMapping", "listOfMyDataTypeWithAllOutputKeyMapping" -> {
+                //List or map of complex Type
+                if (dictionary_source == "listOfMyDataTypeWithOneOutputKeyMapping")
+                    outputMapping["ipAddress"] = "value"
+                else {
+                    outputMapping["port"] = "port"
+                    outputMapping["ip"] = "ip"
+                }
+            }
             else -> {
                 //Complex Type
                 if (dictionary_source == "complexTypeOneKeys")
-                    outputMapping["value"] = "ipAddress"
+                    outputMapping["host"] = "value"
                 else {
                     outputMapping["name"] = "name"
                     outputMapping["ipAddress"] = "ipAddress"
