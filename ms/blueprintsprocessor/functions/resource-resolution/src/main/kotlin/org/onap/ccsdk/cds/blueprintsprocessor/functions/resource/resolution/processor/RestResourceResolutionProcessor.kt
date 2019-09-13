@@ -126,7 +126,6 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
         val dName = resourceAssignment.dictionaryName
         val dSource = resourceAssignment.dictionarySource
         val type = nullToEmpty(resourceAssignment.property?.type)
-        lateinit var entrySchemaType: String
 
         val outputKeyMapping = checkNotNull(sourceProperties.outputKeyMapping) {
             "failed to get output-key-mappings for $dName under $dSource properties"
