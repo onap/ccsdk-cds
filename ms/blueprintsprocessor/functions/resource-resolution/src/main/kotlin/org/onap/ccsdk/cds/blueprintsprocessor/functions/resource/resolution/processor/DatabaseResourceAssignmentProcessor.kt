@@ -57,9 +57,8 @@ open class DatabaseResourceAssignmentProcessor(private val bluePrintDBLibPropert
             // Check if It has Input
             try {
                 val value = raRuntimeService.getInputValue(resourceAssignment.name)
-                if (value.returnNullIfMissing() != null) {
-                    logger.info("processor-db source template key (${resourceAssignment.name}) found from input and value is ($value)")
-                    ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, value)
+                if (ResourceAssignmentUtils.checkIfInputWasProvided(resourceAssignment, value)) {
+                    ResourceAssignmentUtils.setInputValueIfProvided(resourceAssignment, raRuntimeService, value)
                 } else {
                     setValueFromDB(resourceAssignment)
                 }
