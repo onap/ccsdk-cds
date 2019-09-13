@@ -54,8 +54,11 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
             validate(resourceAssignment)
 
             // Check if It has Input
-            val value = getFromInput(resourceAssignment)
-            if (value == null || value is MissingNode || value is NullNode) {
+            val value = raRuntimeService.getInputValue(resourceAssignment.name)
+            if (ResourceAssignmentUtils.checkIfInputWasProvided(resourceAssignment, value)) {
+                ResourceAssignmentUtils.setInputValueIfProvided(resourceAssignment, raRuntimeService, value)
+            }
+            else {
                 val dName = resourceAssignment.dictionaryName!!
                 val dSource = resourceAssignment.dictionarySource!!
                 val resourceDefinition = resourceDefinition(dName)
@@ -126,7 +129,6 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
         val dName = resourceAssignment.dictionaryName
         val dSource = resourceAssignment.dictionarySource
         val type = nullToEmpty(resourceAssignment.property?.type)
-        lateinit var entrySchemaType: String
 
         val outputKeyMapping = checkNotNull(sourceProperties.outputKeyMapping) {
             "failed to get output-key-mappings for $dName under $dSource properties"
