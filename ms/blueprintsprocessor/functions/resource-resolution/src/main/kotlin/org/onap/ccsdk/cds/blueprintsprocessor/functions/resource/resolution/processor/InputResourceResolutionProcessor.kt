@@ -17,14 +17,11 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor
 
-import com.fasterxml.jackson.databind.node.MissingNode
-import com.fasterxml.jackson.databind.node.NullNode
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.isNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
@@ -38,8 +35,6 @@ import org.springframework.stereotype.Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class InputResourceResolutionProcessor : ResourceAssignmentProcessor() {
 
-    private val logger = LoggerFactory.getLogger(InputResourceResolutionProcessor::class.java)
-
     override fun getName(): String {
         return "${PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-input"
     }
@@ -47,12 +42,7 @@ open class InputResourceResolutionProcessor : ResourceAssignmentProcessor() {
     override suspend fun processNB(resourceAssignment: ResourceAssignment) {
         try {
             if (isNotEmpty(resourceAssignment.name)) {
-                val value = raRuntimeService.getInputValue(resourceAssignment.name)
-                // if value is null don't call setResourceDataValue to populate the value
-                if (value !is MissingNode && value !is NullNode) {
-                    logger.info("input source template key (${resourceAssignment.name}) found from input and value is ($value)")
-                    ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, value)
-                }
+                setFromInput(resourceAssignment)
             }
             // Check the value has populated for mandatory case
             ResourceAssignmentUtils.assertTemplateKeyValueNotNull(resourceAssignment)
