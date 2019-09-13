@@ -38,8 +38,6 @@ import org.springframework.stereotype.Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class InputResourceResolutionProcessor : ResourceAssignmentProcessor() {
 
-    private val logger = LoggerFactory.getLogger(InputResourceResolutionProcessor::class.java)
-
     override fun getName(): String {
         return "${PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-input"
     }
@@ -49,9 +47,8 @@ open class InputResourceResolutionProcessor : ResourceAssignmentProcessor() {
             if (isNotEmpty(resourceAssignment.name)) {
                 val value = raRuntimeService.getInputValue(resourceAssignment.name)
                 // if value is null don't call setResourceDataValue to populate the value
-                if (value !is MissingNode && value !is NullNode) {
-                    logger.info("input source template key (${resourceAssignment.name}) found from input and value is ($value)")
-                    ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, value)
+                if (ResourceAssignmentUtils.checkIfInputWasProvided(resourceAssignment, value)) {
+                    ResourceAssignmentUtils.setInputValueIfProvided(resourceAssignment, raRuntimeService, value)
                 }
             }
             // Check the value has populated for mandatory case
