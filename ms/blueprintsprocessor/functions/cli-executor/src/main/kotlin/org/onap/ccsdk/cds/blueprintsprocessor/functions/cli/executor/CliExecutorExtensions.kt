@@ -17,7 +17,20 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.cli.executor
 
+import com.fasterxml.jackson.databind.JsonNode
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
+import org.onap.ccsdk.cds.blueprintsprocessor.ssh.service.BlueprintSshClientService
+import org.onap.ccsdk.cds.blueprintsprocessor.ssh.sshClientService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
+
 /**
  * Register the CLI module exposed dependency
  */
+fun AbstractComponentFunction.cliDeviceInfo(requirementName: String): JsonNode {
+    return bluePrintRuntimeService.resolveDSLExpression(requirementName)
+}
+
+fun AbstractComponentFunction.getSshClientService(cliDeviceInfo: JsonNode): BlueprintSshClientService {
+    return BluePrintDependencyService.sshClientService(cliDeviceInfo)
+}
 
