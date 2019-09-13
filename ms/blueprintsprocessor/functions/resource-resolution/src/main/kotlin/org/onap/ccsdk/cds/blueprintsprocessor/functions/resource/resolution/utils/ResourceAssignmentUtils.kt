@@ -221,7 +221,7 @@ class ResourceAssignmentUtils {
 
         private fun parseResponseNodeForPrimitiveTypes(responseNode: JsonNode, resourceAssignment: ResourceAssignment,
                                                        outputKeyMapping: MutableMap<String, String>): JsonNode {
-            val dName = resourceAssignment.dictionaryName
+
             logger.info("For template key (${resourceAssignment.name}) setting value as ($responseNode)")
 
             var result: JsonNode? = responseNode
@@ -257,6 +257,14 @@ class ResourceAssignmentUtils {
                     returnNode
                 }
             }
+            else {
+                if (outputKeyMapping.isEmpty()) {
+                    result = responseNode
+                }
+                else {
+                    throw BluePrintProcessorException("Fail to find key-value in response node to map output-key-mapping.")
+                }
+            }
             return result!!
         }
 
@@ -264,6 +272,8 @@ class ResourceAssignmentUtils {
                                                    raRuntimeService: ResourceAssignmentRuntimeService,
                                                    outputKeyMapping: MutableMap<String, String>): JsonNode {
             val dName = resourceAssignment.dictionaryName
+            var resultNode: JsonNode
+
             if ((resourceAssignment.property?.entrySchema?.type).isNullOrEmpty()) {
                 throw BluePrintProcessorException("Couldn't get data type for dictionary type " +
                         "(${resourceAssignment.property!!.type}) and dictionary name ($dName)")
@@ -271,21 +281,20 @@ class ResourceAssignmentUtils {
             val entrySchemaType = resourceAssignment.property!!.entrySchema!!.type
 
             var arrayNode = JacksonUtils.objectMapper.createArrayNode()
-
             if (outputKeyMapping.isNotEmpty()) {
                 when (responseNode) {
                     is ArrayNode -> {
                         val responseArrayNode = responseNode.toList()
                         for (responseSingleJsonNode in responseArrayNode) {
-                            val arrayChildNode = parseArrayNodeElementWithOutputKeyMapping(raRuntimeService, responseSingleJsonNode,
-                                    outputKeyMapping, entrySchemaType)
+                            val arrayChildNode = parseSingleElementOfArrayResponseNode(entrySchemaType,
+                                                                    outputKeyMapping, raRuntimeService, responseSingleJsonNode)
                             arrayNode.add(arrayChildNode)
                         }
+                        resultNode = arrayNode
                     }
                     is ObjectNode -> {
                         val responseArrayNode = responseNode.rootFieldsToMap()
-                        val arrayNodeResult = parseObjectNodeWithOutputKeyMapping(responseArrayNode, outputKeyMapping, entrySchemaType)
-                        arrayNode.addAll(arrayNodeResult)
+                        resultNode = parseObjectResponseNode(entrySchemaType, outputKeyMapping, responseArrayNode)
                     }
                     else -> {
                         throw BluePrintProcessorException("Key-value response expected to match the responseNode.")
@@ -298,6 +307,7 @@ class ResourceAssignmentUtils {
                         responseNode.forEach { elementNode ->
                             arrayNode.add(elementNode)
                         }
+                        resultNode = arrayNode
                     }
                     is ObjectNode -> {
                         val responseArrayNode = responseNode.rootFieldsToMap()
@@ -306,16 +316,115 @@ class ResourceAssignmentUtils {
                             JacksonUtils.populateJsonNodeValues(key, responseSingleJsonNode, entrySchemaType, arrayChildNode)
                             arrayNode.add(arrayChildNode)
                         }
+                        resultNode = arrayNode
                     }
                     else -> {
-                        arrayNode.add(responseNode)
+                        resultNode = responseNode
                     }
                 }
             }
 
-            logger.info("For template key (${resourceAssignment.name}) setting value as ($arrayNode)")
+            logger.info("For template key (${resourceAssignment.name}) setting value as ($resultNode)")
 
-            return arrayNode
+            return resultNode
+        }
+
+        private fun parseSingleElementNodeWithOneOutputKeyMapping(responseSingleJsonNode: JsonNode, outputKeyMappingKey:
+                                                String, outputKeyMappingValue: String, type: String): ObjectNode {
+            val arrayChildNode = JacksonUtils.objectMapper.createObjectNode()
+
+            val responseKeyValue = if (responseSingleJsonNode.has(outputKeyMappingValue)) {
+                responseSingleJsonNode.get(outputKeyMappingValue)
+            }
+            else {
+                NullNode.getInstance()
+            }
+
+            logger.info("For List Type Resource: key ($outputKeyMappingKey), value ($responseKeyValue), " +
+                    "type  ({$type})")
+
+            JacksonUtils.populateJsonNodeValues(outputKeyMappingKey, responseKeyValue, type, arrayChildNode)
+
+            return arrayChildNode
+        }
+
+        private fun parseSingleElementNodeWithAllOutputKeyMapping(responseSingleJsonNode: JsonNode,
+                                    raRuntimeService: ResourceAssignmentRuntimeService,
+                                    outputKeyMapping: MutableMap<String, String>, type: String): ObjectNode {
+            val arrayChildNode = JacksonUtils.objectMapper.createObjectNode()
+            outputKeyMapping.map {
+                val responseKeyValue = if (responseSingleJsonNode.has(it.value)) {
+                    responseSingleJsonNode.get(it.value)
+                } else {
+                    NullNode.getInstance()
+                }
+
+                logger.info("For List Type Resource: key (${it.key}), value ($responseKeyValue), " +
+                        "type  ({$type})")
+                JacksonUtils.populateJsonNodeValues(it.key, responseKeyValue, type, arrayChildNode)
+            }
+
+            return arrayChildNode
+        }
+
+        private fun parseObjectResponseNodeWithOneOutputKeyMapping(responseArrayNode: MutableMap<String, JsonNode>,
+                                                           outputKeyMappingKey: String, outputKeyMappingValue: String,
+                                                           type: String): ObjectNode {
+            val objectNode = JacksonUtils.objectMapper.createObjectNode()
+            val responseSingleJsonNode = responseArrayNode.filterKeys { key ->
+                key == outputKeyMappingValue }.entries.firstOrNull()
+
+            if (responseSingleJsonNode == null) {
+                JacksonUtils.populateJsonNodeValues(outputKeyMappingKey, NullNode.getInstance(), type, objectNode)
+            }
+            else
+            {
+                JacksonUtils.populateJsonNodeValues(outputKeyMappingKey, responseSingleJsonNode.value, type, objectNode)
+            }
+            return objectNode
+        }
+
+        private fun parseSingleElementOfArrayResponseNode(entrySchemaType: String, outputKeyMapping: MutableMap<String, String>,
+                                                           raRuntimeService: ResourceAssignmentRuntimeService, responseNode: JsonNode): ObjectNode {
+            val outputKeyMappingHasOnlyOneElement = checkIfOutputKeyMappingProvideOneElement(outputKeyMapping)
+            when (entrySchemaType) {
+                in BluePrintTypes.validPrimitiveTypes() -> {
+                    if (outputKeyMappingHasOnlyOneElement) {
+                        val outputKeyMap = outputKeyMapping.entries.first()
+                        return parseSingleElementNodeWithOneOutputKeyMapping(responseNode, outputKeyMap.key, outputKeyMap.value, entrySchemaType)
+                    }
+                    else {
+                        throw BluePrintProcessorException("Expect one entry in output-key-mapping")
+                    }
+                }
+                else -> {
+                    return when {
+                        checkOutputKeyMappingAllElementsInDataTypeProperties(entrySchemaType, outputKeyMapping, raRuntimeService) -> {
+                            parseSingleElementNodeWithAllOutputKeyMapping(responseNode, raRuntimeService, outputKeyMapping, entrySchemaType)
+                        }
+                        outputKeyMappingHasOnlyOneElement -> {
+                            val outputKeyMap = outputKeyMapping.entries.first()
+                            parseSingleElementNodeWithOneOutputKeyMapping(responseNode, outputKeyMap.key, outputKeyMap.value, entrySchemaType)
+                        }
+                        else -> {
+                            throw BluePrintProcessorException("Output-key-mapping do not map the Data Type $entrySchemaType")
+                        }
+                    }
+                }
+            }
+        }
+
+        private fun parseObjectResponseNode(entrySchemaType: String, outputKeyMapping: MutableMap<String, String>,
+                                                           responseArrayNode: MutableMap<String, JsonNode>): ObjectNode {
+            val outputKeyMappingHasOnlyOneElement = checkIfOutputKeyMappingProvideOneElement(outputKeyMapping)
+            if (outputKeyMappingHasOnlyOneElement) {
+                val outputKeyMap = outputKeyMapping.entries.first()
+                return parseObjectResponseNodeWithOneOutputKeyMapping(responseArrayNode, outputKeyMap.key, outputKeyMap.value,
+                        entrySchemaType)
+            }
+            else {
+                throw BluePrintProcessorException("Output-key-mapping do not map the Data Type $entrySchemaType")
+            }
         }
 
         private fun parseResponseNodeForComplexType(responseNode: JsonNode, resourceAssignment: ResourceAssignment,
@@ -323,86 +432,38 @@ class ResourceAssignmentUtils {
                                                     outputKeyMapping: MutableMap<String, String>): JsonNode {
             val entrySchemaType = resourceAssignment.property!!.type
             val dictionaryName = resourceAssignment.dictionaryName!!
+            val outputKeyMappingHasOnlyOneElement = checkIfOutputKeyMappingProvideOneElement(outputKeyMapping)
 
-            var result: ObjectNode
-            if (checkOutputKeyMappingInDataTypeProperties(entrySchemaType, outputKeyMapping, raRuntimeService))
-            {
-                result = parseArrayNodeElementWithOutputKeyMapping(raRuntimeService, responseNode, outputKeyMapping, entrySchemaType)
+            if (outputKeyMapping.isNotEmpty()) {
+                return when {
+                    checkOutputKeyMappingAllElementsInDataTypeProperties(entrySchemaType, outputKeyMapping, raRuntimeService) -> {
+                        parseSingleElementNodeWithAllOutputKeyMapping(responseNode, raRuntimeService, outputKeyMapping, entrySchemaType)
+                    }
+                    outputKeyMappingHasOnlyOneElement -> {
+                        val outputKeyMap = outputKeyMapping.entries.first()
+                        parseSingleElementNodeWithOneOutputKeyMapping(responseNode, outputKeyMap.key, outputKeyMap.value, entrySchemaType)
+                    }
+                    else -> {
+                        throw BluePrintProcessorException("Output-key-mapping do not map the Data Type $entrySchemaType")
+                    }
+                }
             }
             else {
                 val childNode = JacksonUtils.objectMapper.createObjectNode()
-                if (outputKeyMapping.isNotEmpty()) {
-                    outputKeyMapping.map {
-                        val responseKeyValue = if (responseNode.has(it.key)) {
-                            responseNode.get(it.key)
-                        }
-                        else {
-                            NullNode.getInstance()
-                        }
-
-                        JacksonUtils.populateJsonNodeValues(it.value,
-                                responseKeyValue, entrySchemaType, childNode)
-                    }
-                }
-                else {
-                    JacksonUtils.populateJsonNodeValues(dictionaryName, responseNode, entrySchemaType, childNode)
-                }
-                result = childNode
+                JacksonUtils.populateJsonNodeValues(dictionaryName, responseNode, entrySchemaType, childNode)
+                return childNode
             }
-            return result
         }
 
-        private fun parseArrayNodeElementWithOutputKeyMapping(raRuntimeService: ResourceAssignmentRuntimeService,
-                                                              responseSingleJsonNode: JsonNode, outputKeyMapping:
-                                                              MutableMap<String, String>, entrySchemaType: String): ObjectNode {
-            val arrayChildNode = JacksonUtils.objectMapper.createObjectNode()
-
-            outputKeyMapping.map {
-                val responseKeyValue = if (responseSingleJsonNode.has(it.key)) {
-                    responseSingleJsonNode.get(it.key)
-                }
-                else {
-                    NullNode.getInstance()
-                }
-                val propertyTypeForDataType = ResourceAssignmentUtils
-                        .getPropertyType(raRuntimeService, entrySchemaType, it.key)
-
-                logger.info("For List Type Resource: key (${it.key}), value ($responseKeyValue), " +
-                        "type  ({$propertyTypeForDataType})")
-
-                JacksonUtils.populateJsonNodeValues(it.value,
-                        responseKeyValue, propertyTypeForDataType, arrayChildNode)
-            }
-
-            return arrayChildNode
-        }
-
-        private fun parseObjectNodeWithOutputKeyMapping(responseArrayNode: MutableMap<String, JsonNode>,
-                                                        outputKeyMapping: MutableMap<String, String>,
-                                                        entrySchemaType: String): ArrayNode {
-            val arrayNode = JacksonUtils.objectMapper.createArrayNode()
-            outputKeyMapping.map {
-                val objectNode = JacksonUtils.objectMapper.createObjectNode()
-                val responseSingleJsonNode = responseArrayNode.filterKeys { key -> key == it.key }.entries.firstOrNull()
-
-                if (responseSingleJsonNode == null) {
-                    JacksonUtils.populateJsonNodeValues(it.value, NullNode.getInstance(), entrySchemaType, objectNode)
-                }
-                else
-                {
-                    JacksonUtils.populateJsonNodeValues(it.value, responseSingleJsonNode.value, entrySchemaType, objectNode)
-                }
-                arrayNode.add(objectNode)
-            }
-
-            return arrayNode
-        }
-
-        private fun checkOutputKeyMappingInDataTypeProperties(dataTypeName: String, outputKeyMapping: MutableMap<String, String>,
-                                                              raRuntimeService: ResourceAssignmentRuntimeService): Boolean {
+        private fun checkOutputKeyMappingAllElementsInDataTypeProperties(dataTypeName: String, outputKeyMapping: MutableMap<String, String>,
+                                                                         raRuntimeService: ResourceAssignmentRuntimeService): Boolean {
             val dataTypeProps = raRuntimeService.bluePrintContext().dataTypeByName(dataTypeName)?.properties
             val result = outputKeyMapping.filterKeys { !dataTypeProps!!.containsKey(it) }.keys.firstOrNull()
             return result == null
+        }
+
+        private fun checkIfOutputKeyMappingProvideOneElement(outputKeyMapping: MutableMap<String, String>): Boolean {
+            return (outputKeyMapping.size == 1)
         }
     }
 }
