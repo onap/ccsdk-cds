@@ -28,7 +28,6 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 import java.util.Collections;
-import springfox.documentation.swagger2.annotations.EnableSwagger2WebFlux;
 
 /**
  * SwaggerConfig
@@ -36,7 +35,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2WebFlux;
  * @author Brinda Santh 8/13/2018
  */
 @Configuration
-@EnableSwagger2WebFlux
+//@EnableSwagger2WebFlux
 public class SwaggerConfig {
 
     @Bean
