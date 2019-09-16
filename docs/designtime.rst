@@ -16,7 +16,7 @@ Prerequisite
 
 * Gather the cloud parameters:
 
-instantiation:
+Instantiation:
 ~~~~~~~~~~~~~~
 
 Have the HEAT template along with the HEAT environment file (or) Have the Helm chart along with the Values.yaml file
@@ -40,7 +40,7 @@ While doing so, identify the resources using the same process to be resolved; fo
 
 
 Services:
-=========
+--------
 
 .. toctree::
    :maxdepth: 1
