@@ -1,0 +1,6 @@
+grpc_coroutines {
+    filter { exclude_path: "google/*" }
+}
+grpc_stub_exts {
+    support_coroutines: true
+}
