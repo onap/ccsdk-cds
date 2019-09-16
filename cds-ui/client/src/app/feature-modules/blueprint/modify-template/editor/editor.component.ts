@@ -249,13 +249,43 @@ export class EditorComponent implements OnInit {
     }
   }
 
+  setEditorMode() {
+    switch (this.fileExtension) {
+      case "xml":
+        this.mode = 'xml';
+        break;
+      case "py":
+        this.mode = 'python';
+        break;
+      case "kts":
+        this.mode = 'kotlin';
+        break;
+      case "kt":
+        this.mode = 'kotlin';
+        break;
+      case "txt":
+        this.mode = 'text';
+        break;
+      case "meta":
+        this.mode = 'text';
+        break;
+      case "vtl":
+        this.mode = 'velocity';
+        break;
+      case "properties":
+        this.mode = 'properties';
+        break;
+      default:
+        this.mode = 'json';
+    }
+  }
+
   getEnriched() {
     this.create();
     this.zipFile.generateAsync({ type: "blob" })
       .then(blob => {
         const formData = new FormData();
         formData.append("file", blob);
-        // this.editorService.enrich("/enrich-blueprint/", formData)
         this.editorService.enrich(formData)
           .subscribe(
             (response) => {
@@ -274,8 +304,6 @@ export class EditorComponent implements OnInit {
             });
       });
   }
-
-
 
   saveToBackend() {
     this.create();
@@ -345,33 +373,7 @@ export class EditorComponent implements OnInit {
     this.editorService.downloadCBA("/" + this.artifactName + "/" + this.artifactVersion);
   }
 
-  setEditorMode() {
-    switch (this.fileExtension) {
-      case "xml":
-        this.mode = 'xml';
-        break;
-      case "py":
-        this.mode = 'python';
-        break;
-      case "kts":
-        this.mode = 'kotlin';
-        break;
-      case "kt":
-        this.mode = 'kotlin';
-        break;
-      case "txt":
-        this.mode = 'text';
-        break;
-      case "meta":
-        this.mode = 'text';
-        break;
-      case "vtl":
-        this.mode = 'velocity';
-        break;
-      default:
-        this.mode = 'json';
-    }
-  }
+  
 
   selectFolder(node) {
     this.currentFilePath = '';
