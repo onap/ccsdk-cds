@@ -4,6 +4,7 @@
 # Python
 **/*.pyc
 
+**/.apt_generated
 # Logs
 logs
 *.log
@@ -98,6 +99,7 @@ typings/
 **/target/*
 **/logs/*
 **/tokens/*
+**/lib/cachedir/**
 
 # Added for Intellij IDEA IDE
 **/*.ipr
@@ -108,12 +110,13 @@ typings/
 **/*.project
 **/.springBeans
 **/.factorypath
+**/.directory
 
+**/transaction.log
 **/*versionsBackup
 **/blackDuckHub*
 **/*.jsonld
 **/.checkstyle
-**/.gitignore
 
 **/*.log
 **/*py.class
@@ -151,3 +154,4 @@ MacOS
 **/*cba-kts.jar
 **/application/blueprints
 /target/
+
