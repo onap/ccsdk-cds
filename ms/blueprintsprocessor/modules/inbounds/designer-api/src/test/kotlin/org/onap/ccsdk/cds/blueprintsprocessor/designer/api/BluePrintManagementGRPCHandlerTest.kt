@@ -68,7 +68,7 @@ class BluePrintManagementGRPCHandlerTest {
     }
 
     @Test
-    fun `test upload blueprint`() {
+    fun `test upload and download blueprint`() {
         val blockingStub = BluePrintManagementServiceGrpc.newBlockingStub(grpcServerRule.channel)
         val id = "123_upload"
         val req = createUploadInputRequest(id, UploadAction.PUBLISH.toString())
@@ -78,6 +78,16 @@ class BluePrintManagementGRPCHandlerTest {
         assertTrue(output.status.message.contentEquals(BluePrintConstants.STATUS_SUCCESS),
                 "failed to get success status")
         assertEquals(id, output.commonHeader.requestId)
+
+        val downloadId = "123_download"
+        val downloadReq = createDownloadInputRequest(downloadId, DownloadAction.SEARCH.toString())
+
+        val downloadOutput = blockingStub.downloadBlueprint(downloadReq)
+        assertEquals(200, downloadOutput.status.code)
+        assertTrue(downloadOutput.status.message.contentEquals(BluePrintConstants.STATUS_SUCCESS),
+                "failed to get success status")
+        assertNotNull(downloadOutput.fileChunk?.chunk, "failed to get cba file chunks")
+        assertEquals(downloadId, downloadOutput.commonHeader.requestId)
     }
 
     @Test
@@ -143,6 +153,23 @@ class BluePrintManagementGRPCHandlerTest {
                 .setCommonHeader(commonHeader)
                 .setActionIdentifiers(actionIdentifier)
                 .setFileChunk(fileChunk)
+                .build()
+    }
+
+    private fun createDownloadInputRequest(id: String, action: String): BluePrintDownloadInput {
+        val commonHeader = CommonHeader
+                .newBuilder()
+                .setTimestamp("2012-04-23T18:25:43.511Z")
+                .setOriginatorId("System")
+                .setRequestId(id)
+                .setSubRequestId("1234-56").build()
+
+        return BluePrintDownloadInput.newBuilder()
+                .setCommonHeader(commonHeader)
+                .setActionIdentifiers(ActionIdentifiers.newBuilder()
+                        .setBlueprintName("baseconfiguration")
+                        .setBlueprintVersion("1.0.0")
+                        .setActionName(action).build())
                 .build()
     }
 
