@@ -2,6 +2,10 @@
 .. http://creativecommons.org/licenses/by/4.0
 .. Copyright (C) 2019 IBM.
 
+
+User Guide
+==========
+
 Installation
 ------------
 
@@ -64,3 +68,21 @@ Result
    replicaset.apps/cds-controller-blueprints-545bbf98cf   1         1         1         2m
    NAME                          DESIRED   CURRENT   AGE
    statefulset.apps/cds-cds-db   1         1         2m
+   
+   
+   
+Running CDS UI:
+---------------
+
+Client:
+~~~~~~~
+Install Node.js and angularCLI. Refer https://angular.io/guide/quickstart
+npm install in the directory cds/cds-ui/client
+npm run build - to build UI module 
+
+
+Loopback Server:
+~~~~~~~~~~~~~~~~
+
+npm install in the directory cds/cds-ui/server
+npm start should bring you the CDS UI page in your local machine with the link https://127.0.0.1:3000/
