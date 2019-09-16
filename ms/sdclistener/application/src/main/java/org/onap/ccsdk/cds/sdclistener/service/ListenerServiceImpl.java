@@ -15,30 +15,16 @@
  */
 package org.onap.ccsdk.cds.sdclistener.service;
 
-import static java.lang.String.format;
-import static org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus.NotificationType.SDC_LISTENER_COMPONENT;
-import static org.onap.sdc.utils.DistributionStatusEnum.COMPONENT_DONE_ERROR;
-import static org.onap.sdc.utils.DistributionStatusEnum.COMPONENT_DONE_OK;
 import com.google.protobuf.ByteString;
 import io.grpc.ManagedChannel;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.regex.Pattern;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 import org.apache.commons.io.FileUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.onap.ccsdk.cds.controllerblueprints.common.api.ActionIdentifiers;
+import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader;
 import org.onap.ccsdk.cds.controllerblueprints.common.api.Status;
 import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintUploadInput;
 import org.onap.ccsdk.cds.controllerblueprints.management.api.FileChunk;
+import org.onap.ccsdk.cds.controllerblueprints.management.api.UploadAction;
 import org.onap.ccsdk.cds.sdclistener.client.SdcListenerAuthClientInterceptor;
 import org.onap.ccsdk.cds.sdclistener.dto.SdcListenerDto;
 import org.onap.ccsdk.cds.sdclistener.handler.BluePrintProcesssorHandler;
@@ -51,6 +37,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.UUID;
+import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
+import static java.lang.String.format;
+import static org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus.NotificationType.SDC_LISTENER_COMPONENT;
+import static org.onap.sdc.utils.DistributionStatusEnum.COMPONENT_DONE_ERROR;
+import static org.onap.sdc.utils.DistributionStatusEnum.COMPONENT_DONE_OK;
 
 @Component
 @ConfigurationProperties("listenerservice")
@@ -216,6 +218,13 @@ public class ListenerServiceImpl implements ListenerService {
         FileChunk fileChunk = FileChunk.newBuilder().setChunk(ByteString.copyFrom(bytes)).build();
         FileUtil.deleteFile(file, path);
         return BluePrintUploadInput.newBuilder()
+                .setCommonHeader(CommonHeader.newBuilder()
+                        .setRequestId(UUID.randomUUID().toString())
+                        .setSubRequestId(UUID.randomUUID().toString())
+                        .setOriginatorId("SDC-LISTENER")
+                        .build())
+                .setActionIdentifiers(ActionIdentifiers.newBuilder()
+                        .setActionName(UploadAction.PUBLISH.toString()).build())
                 .setFileChunk(fileChunk)
                 .build();
     }
