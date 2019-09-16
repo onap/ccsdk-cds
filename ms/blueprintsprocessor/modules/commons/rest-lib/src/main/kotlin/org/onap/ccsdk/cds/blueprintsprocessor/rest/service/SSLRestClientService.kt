@@ -32,6 +32,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.security.KeyStore
 import java.security.cert.X509Certificate
+import org.apache.http.conn.ssl.NoopHostnameVerifier
 
 class SSLRestClientService(private val restClientProperties: SSLRestClientProperties) :
     BlueprintWebClientService {
@@ -87,6 +88,7 @@ class SSLRestClientService(private val restClientProperties: SSLRestClientProper
         val sslKeyPwd = restClientProperties.sslKeyPassword
         val sslTrust = restClientProperties.sslTrust
         val sslTrustPwd = restClientProperties.sslTrustPassword
+        val sslTrustIgnoreHostname = restClientProperties.sslTrustIgnoreHostname
 
         val acceptingTrustStrategy = { _: Array<X509Certificate>, _: String ->
             true
@@ -101,9 +103,13 @@ class SSLRestClientService(private val restClientProperties: SSLRestClientProper
             }
         }
 
-        sslContext.loadTrustMaterial(File(sslTrust), sslTrustPwd.toCharArray(),
-            acceptingTrustStrategy)
-        val csf = SSLConnectionSocketFactory(sslContext.build())
+        sslContext.loadTrustMaterial(File(sslTrust), sslTrustPwd.toCharArray(), acceptingTrustStrategy)
+        var csf : SSLConnectionSocketFactory
+        if (sslTrustIgnoreHostname) {
+            csf = SSLConnectionSocketFactory(sslContext.build(), NoopHostnameVerifier())
+        } else {
+            csf = SSLConnectionSocketFactory(sslContext.build())
+        }
         return HttpClients.custom()
             .addInterceptorFirst(WebClientUtils.logRequest())
             .addInterceptorLast(WebClientUtils.logResponse())
