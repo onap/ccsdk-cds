@@ -32,11 +32,11 @@ import javax.persistence.*
  */
 @EntityListeners(AuditingEntityListener::class)
 @Entity
-@Table(name = "CONFIG_MODEL_CONTENT")
+@Table(name = "BLUEPRINT_MODEL_CONTENT")
 class BlueprintModelContent : Serializable {
 
     @Id
-    @Column(name = "config_model_content_id")
+    @Column(name = "blueprint_model_content_id")
     var id: String? = null
 
     @Column(name = "name", nullable = false)
@@ -48,7 +48,7 @@ class BlueprintModelContent : Serializable {
     lateinit var contentType: String
 
     @OneToOne
-    @JoinColumn(name = "config_model_id")
+    @JoinColumn(name = "blueprint_model_id")
     var blueprintModel: BlueprintModel? = null
 
     @Lob

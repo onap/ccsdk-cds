@@ -1,8 +1,8 @@
 -- -----------------------------------------------------
 -- table CONFIG_MODEL
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS configurator.CONFIG_MODEL (
-  config_model_id 		INT(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS configurator.BLUEPRINT_MODEL (
+  blueprint_model_id 		VARCHAR(50) NOT NULL,
   service_uuid 			VARCHAR(50) NULL DEFAULT NULL,
   distribution_id 		VARCHAR(50) NULL DEFAULT NULL,
   service_name 			VARCHAR(255) NULL DEFAULT NULL,
@@ -22,25 +22,25 @@ CREATE TABLE IF NOT EXISTS configurator.CONFIG_MODEL (
   published 			varchar(1) not null,
   updated_by 			varchar(100) not null,
   tags 				longtext null default null,
-  primary key PK_CONFIG_MODEL (config_model_id),
-  UNIQUE KEY UK_CONFIG_MODEL (artifact_name , artifact_version)
+  primary key PK_BLUEPRINT_MODEL (blueprint_model_id),
+  UNIQUE KEY UK_BLUEPRINT_MODEL (artifact_name , artifact_version)
 ) ENGINE=InnoDB;
 
 
 -- -----------------------------------------------------
 -- table CONFIG_MODEL_CONTENT
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS configurator.CONFIG_MODEL_CONTENT (
-  config_model_content_id 	INT(11) NOT NULL AUTO_INCREMENT, 
-  config_model_id 		INT NOT NULL,
+CREATE TABLE IF NOT EXISTS configurator.BLUEPRINT_MODEL_CONTENT (
+  blueprint_model_content_id 	VARCHAR(50) NOT NULL,
+  blueprint_model_id 		VARCHAR(50) NOT NULL,
   name 				VARCHAR(100) NOT NULL,
   content_type 			VARCHAR(50) NOT NULL,
   description 			LONGTEXT NULL DEFAULT NULL,
   updated_date 			DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  content 			LONGTEXT NULL DEFAULT NULL,
-  PRIMARY KEY PK_CONFIG_MODEL_CONTENT (config_model_content_id),
-  UNIQUE KEY UK_CONFIG_MODEL_CONTENT (config_model_id, name, content_type),
-  FOREIGN KEY FK_CONFIG_MODEL_CONTENT (config_model_id) REFERENCES configurator.CONFIG_MODEL(config_model_id) ON DELETE CASCADE
+  content 			LONGBLOB NULL DEFAULT NULL,
+  PRIMARY KEY PK_BLUEPRINT_MODEL_CONTENT (blueprint_model_content_id),
+  UNIQUE KEY UK_BLUEPRINT_MODEL_CONTENT (blueprint_model_id, name, content_type),
+  FOREIGN KEY FK_BLUEPRINT_MODEL_CONTENT (blueprint_model_id) REFERENCES configurator.BLUEPRINT_MODEL(blueprint_model_id) ON delete CASCADE
 ) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
