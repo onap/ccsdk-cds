@@ -28,6 +28,7 @@ open class SSLRestClientProperties : RestClientProperties() {
     lateinit var keyStoreInstance: String // JKS, PKCS12
     lateinit var sslTrust: String
     lateinit var sslTrustPassword: String
+    var sslTrustIgnoreHostname: Boolean = false
     var sslKey: String? = null
     var sslKeyPassword: String? = null
 }
