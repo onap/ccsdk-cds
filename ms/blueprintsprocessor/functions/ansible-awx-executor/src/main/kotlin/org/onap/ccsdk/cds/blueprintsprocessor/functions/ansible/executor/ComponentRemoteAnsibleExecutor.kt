@@ -57,7 +57,8 @@ open class ComponentRemoteAnsibleExecutor(private val blueprintRestLibPropertySe
     private val GET = HttpMethod.GET.name
     private val POST = HttpMethod.POST.name
 
-    var checkDelay: Long = 1_000
+    private val checkDelay: Long = 15_000
+    private val plainTextHeaders = mapOf("Accept" to "text/plain")
 
     companion object {
         private val log = LoggerFactory.getLogger(ComponentRemoteAnsibleExecutor::class.java)
@@ -73,6 +74,7 @@ open class ComponentRemoteAnsibleExecutor(private val blueprintRestLibPropertySe
         const val INPUT_SKIP_TAGS = "skip-tags"
 
         // output fields names (and values) populated by this executor; aligned with job details status field values.
+        const val ATTRIBUTE_EXEC_CMD_ARTIFACTS = "ansible-artifacts"
         const val ATTRIBUTE_EXEC_CMD_STATUS = "ansible-command-status"
         const val ATTRIBUTE_EXEC_CMD_LOG = "ansible-command-logs"
         const val ATTRIBUTE_EXEC_CMD_STATUS_ERROR = "error"
@@ -161,7 +163,7 @@ open class ComponentRemoteAnsibleExecutor(private val blueprintRestLibPropertySe
      */
     private fun runJobTemplateOnAWX(awxClient: BlueprintWebClientService, job_template_name: String?, jtId: String,
                                     workflowPrefix : String) {
-        setNodeOutputProperties("preparing".asJsonPrimitive(), "".asJsonPrimitive())
+        setNodeOutputProperties("preparing".asJsonPrimitive(), "".asJsonPrimitive(),  "".asJsonPrimitive())
 
         // Get Job Template requirements
         var response = awxClient.exchangeResource(GET, "/api/v2/${workflowPrefix}job_templates/${jtId}/launch/", "")
@@ -197,10 +199,8 @@ open class ComponentRemoteAnsibleExecutor(private val blueprintRestLibPropertySe
 
             log.info("Execution of job template $job_template_name in job #$jobId finished with status ($jobStatus) for requestId $processId")
 
-            // Get workflow/job execution results
-            val collectedOutput = extractJobRunResponse(awxClient, jobId, workflowPrefix)
+            populateJobRunResponse(awxClient, jobId, workflowPrefix, jobStatus)
 
-            setNodeOutputProperties(jobStatus.asJsonPrimitive(), collectedOutput.asJsonPrimitive())
         } else {
             // The job template requirements were not fulfilled with the values passed in. The message below will
             // provide more information via the response, like the ignored_fields, or variables_needed_to_start,
@@ -213,33 +213,67 @@ open class ComponentRemoteAnsibleExecutor(private val blueprintRestLibPropertySe
     }
 
     /**
-     * Extracts the response from either a job stdout call OR collects the workflow run output
+     * Extracts the output from either a job stdout call OR collects the workflow run output, as well as the artifacts
+     * and populate the component corresponding output properties
      */
-    private fun extractJobRunResponse(awxClient: BlueprintWebClientService, jobId: String, workflowPrefix: String): String {
+    private fun populateJobRunResponse(awxClient: BlueprintWebClientService, jobId: String, workflowPrefix: String,
+                                       jobStatus: String) {
 
-        // First, collect all job ID from either the job template run or the workflow nodes that ran
-        var jobIds : Array<String>
-        var collectedResponses = StringBuilder()
+        val collectedResponses = StringBuilder(4096)
+        val artifacts: MutableMap<String, JsonNode> = mutableMapOf()
+
+        collectJobIdsRelatedToJobRun(awxClient, jobId, workflowPrefix).forEach { aJobId ->
+
+            // Collect the response text from the corresponding jobIds
+            var response = awxClient.exchangeResource(GET, "/api/v2/jobs/${aJobId}/stdout/?format=txt", "", plainTextHeaders)
+            if (response.status in HTTP_SUCCESS) {
+                val jobOutput = response.body
+                collectedResponses
+                        .append("Output for Job $aJobId :" + System.lineSeparator())
+                        .append(jobOutput)
+                        .append(System.lineSeparator())
+                log.info("Response for job ${aJobId}: \n ${jobOutput} \n")
+            } else {
+                log.warn("Could not gather response for job ${aJobId}. Status=${response.status}")
+            }
+
+            // Collect artifacts variables from each job and gather them up in one json node
+            response = awxClient.exchangeResource(GET, "/api/v2/jobs/${aJobId}/", "")
+            if (response.status in HTTP_SUCCESS) {
+                val jobArtifacts = mapper.readTree(response.body).at("/artifacts")
+                if (jobArtifacts != null) {
+                    artifacts.putAll(jobArtifacts.rootFieldsToMap())
+                }
+            }
+        }
+
+        log.info("Artifacts for job ${jobId}: \n $artifacts \n")
+
+        setNodeOutputProperties(jobStatus.asJsonPrimitive(), collectedResponses.toString().asJsonPrimitive(), artifacts.asJsonNode())
+    }
+
+    /**
+     * List all the job Ids for a give workflow, i.e. sub jobs, or the jobId if not a workflow instance
+     */
+    private fun collectJobIdsRelatedToJobRun(awxClient: BlueprintWebClientService, jobId: String, workflowPrefix: String): Array<String> {
+
+        var jobIds: Array<String>
+
         if (workflowPrefix.isNotEmpty()) {
             var response = awxClient.exchangeResource(GET, "/api/v2/${workflowPrefix}jobs/${jobId}/workflow_nodes/", "")
             val jobDetails = mapper.readTree(response.body).at("/results")
+
+            // gather up job Id of all actual job nodes that ran during the workflow
             jobIds = emptyArray()
             for (jobDetail in jobDetails.elements()) {
-                jobIds = jobIds.plus( jobDetail.at("/summary_fields/job/id").asText() )
+                if (jobDetail.at("/do_not_run").asText() == "false") {
+                    jobIds = jobIds.plus(jobDetail.at("/summary_fields/job/id").asText())
+                }
             }
         } else {
             jobIds = arrayOf(jobId)
         }
-
-        // Then collect the response text from the corresponding jobIds
-        val plainTextHeaders = mutableMapOf<String, String>()
-        plainTextHeaders["Content-Type"] = "text/plain ;utf-8"
-        for (aJobId in jobIds) {
-            var response = awxClient.exchangeResource(GET, "/api/v2/jobs/${aJobId}/stdout/?format=txt", "", plainTextHeaders)
-            collectedResponses.append("Output for job ${aJobId}:")
-            collectedResponses.append(response.body)
-        }
-        return collectedResponses.toString()
+        return jobIds
     }
 
     /**
@@ -282,10 +316,9 @@ open class ComponentRemoteAnsibleExecutor(private val blueprintRestLibPropertySe
             }
             payload.set(INPUT_INVENTORY, inventoryKeyId)
         }
-        val askVariablesOnLaunch = jtLaunchReqs.at("/ask_variables_on_launch").asBoolean()
-        if (askVariablesOnLaunch) {
+
             payload.set("extra_vars", extraArgs)
-        }
+
         return payload.asJsonString(false)
     }
 
@@ -317,19 +350,22 @@ open class ComponentRemoteAnsibleExecutor(private val blueprintRestLibPropertySe
     /**
      * Utility function to set the output properties of the executor node
      */
-    private fun setNodeOutputProperties(status: JsonNode, message: JsonNode) {
+    private fun setNodeOutputProperties(status: JsonNode, message: JsonNode, artifacts: JsonNode) {
         setAttribute(ATTRIBUTE_EXEC_CMD_STATUS, status)
-        log.info("Executor status: $status")
+        log.info("Executor status   : $status")
+        setAttribute(ATTRIBUTE_EXEC_CMD_ARTIFACTS, artifacts)
+        log.info("Executor artifacts: $artifacts")
         setAttribute(ATTRIBUTE_EXEC_CMD_LOG, message)
-        log.info("Executor message: $message")
+        log.info("Executor message  : $message")
     }
 
     /**
      * Utility function to set the output properties and errors of the executor node, in cas of errors
      */
-    private fun setNodeOutputErrors(status: String, message: String) {
+    private fun setNodeOutputErrors(status: String, message: String, artifacts: JsonNode = "".asJsonPrimitive()  ) {
         setAttribute(ATTRIBUTE_EXEC_CMD_STATUS, status.asJsonPrimitive())
         setAttribute(ATTRIBUTE_EXEC_CMD_LOG, message.asJsonPrimitive())
+        setAttribute(ATTRIBUTE_EXEC_CMD_ARTIFACTS, artifacts)
 
         addError(status, ATTRIBUTE_EXEC_CMD_LOG, message)
     }
