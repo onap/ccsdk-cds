@@ -15,14 +15,6 @@
  */
 package org.onap.ccsdk.cds.sdclistener.service;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus.NotificationType.SDC_LISTENER_COMPONENT;
-import static org.onap.sdc.utils.DistributionStatusEnum.COMPONENT_DONE_OK;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Rule;
@@ -45,6 +37,16 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import static junit.framework.TestCase.assertTrue;
+import static org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus.NotificationType.SDC_LISTENER_COMPONENT;
+import static org.onap.sdc.utils.DistributionStatusEnum.COMPONENT_DONE_OK;
 
 @RunWith(SpringRunner.class)
 @EnableConfigurationProperties({SdcListenerAuthClientInterceptor.class,

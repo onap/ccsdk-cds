@@ -22,20 +22,20 @@
         </encoder>
     </appender>
 
-    <logger name="org.springframework.web.HttpLogging" level="trace"/>
-    <logger name="org.springframework.web.reactive.function.client.ExchangeFunctions" level="trace"/>
+    <logger name="org.springframework.web.HttpLogging" level="trace" />
+    <logger name="org.springframework.web.reactive.function.client.ExchangeFunctions" level="trace" />
 
     <!-- Helpful to optimize Spring Context caching to speed-up tests
          and prevent resorting to @DirtiesContext as much as possible -->
-    <logger name="org.springframework.test.context.cache" level="debug"/>
+    <logger name="org.springframework.test.context.cache" level="debug" />
 
     <!-- Please refer to https://thoughts-on-java.org/hibernate-logging-guide/
          for a lengthy discussion on good Hibernate logging practices -->
-    <logger name="org.hibernate.SQL" level="debug"/>
-    <logger name="org.hibernate.type.descriptor.sql" level="trace"/>
+    <logger name="org.hibernate.SQL" level="debug" />
+    <logger name="org.hibernate.type.descriptor.sql" level="trace" />
 
     <root level="info">
-        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="STDOUT" />
     </root>
 
 </configuration>

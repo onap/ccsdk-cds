@@ -17,12 +17,12 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
-import org.slf4j.LoggerFactory
 import com.fasterxml.jackson.databind.JsonNode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.apache.commons.io.IOUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.nio.charset.Charset
 

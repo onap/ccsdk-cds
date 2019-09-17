@@ -16,13 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.core
 
-import io.mockk.CapturingSlot
-import io.mockk.Runs
-import io.mockk.every
-import io.mockk.just
-import io.mockk.mockk
-import io.mockk.spyk
-import io.mockk.verify
+import io.mockk.*
 import org.junit.Before
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
@@ -64,8 +58,7 @@ class NetconfDeviceCommunicatorTest {
             |#79
             |     xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
             |  <close-session/>
-            |</rpc>
-            |##
+            |</rpc>|##
             |""".trimMargin()
     }
 
@@ -188,8 +181,7 @@ class NetconfDeviceCommunicatorTest {
 <rpc message-id="102"
      xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
   <close-session/>
-</rpc>
-        """.trimIndent(), eventSlot.captured.messagePayload)
+</rpc>""".trimIndent(), eventSlot.captured.messagePayload)
     }
 
     @Test

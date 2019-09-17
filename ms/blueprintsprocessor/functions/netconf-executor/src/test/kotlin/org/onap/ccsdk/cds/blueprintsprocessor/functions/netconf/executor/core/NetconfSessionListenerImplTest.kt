@@ -16,11 +16,11 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.core
 
-import org.junit.Test
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verifyAll
 import org.junit.Before
+import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfReceivedEvent
 

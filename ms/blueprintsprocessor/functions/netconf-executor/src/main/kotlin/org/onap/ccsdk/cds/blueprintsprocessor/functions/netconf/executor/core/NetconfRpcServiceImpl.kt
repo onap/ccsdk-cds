@@ -17,11 +17,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.core
 
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceResponse
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfException
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfRpcService
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfSession
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.*
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.utils.NetconfMessageUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.utils.RpcStatus
 import org.slf4j.LoggerFactory

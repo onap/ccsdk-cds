@@ -16,13 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.core
 
-import io.mockk.CapturingSlot
-import io.mockk.Runs
-import io.mockk.every
-import io.mockk.just
-import io.mockk.mockk
-import io.mockk.spyk
-import io.mockk.verify
+import io.mockk.*
 import org.apache.sshd.client.SshClient
 import org.apache.sshd.client.channel.ChannelSubsystem
 import org.apache.sshd.client.channel.ClientChannel
