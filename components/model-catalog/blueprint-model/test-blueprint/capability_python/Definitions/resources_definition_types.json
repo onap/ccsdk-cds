@@ -16,7 +16,7 @@
         "type": "source-db",
         "properties": {
           "endpoint-selector": "dynamic-db-source",
-          "query": "SELECT artifact_name FROM sdnctl.BLUEPRINT_RUNTIME where artifact_version=\"1.0.0\"",
+          "query": "SELECT artifact_name FROM sdnctl.BLUEPRINT_MODEL where artifact_version=\"1.0.0\"",
           "input-key-mapping": {
           },
           "output-key-mapping": {

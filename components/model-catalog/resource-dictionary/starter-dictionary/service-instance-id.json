@@ -14,7 +14,7 @@
     "any-db": {
       "type": "source-db",
       "properties": {
-        "query": "SELECT artifact_name FROM BLUEPRINT_RUNTIME where artifact_version=\"1.0.0\"",
+        "query": "SELECT artifact_name FROM BLUEPRINT_MODEL where artifact_version=\"1.0.0\"",
         "input-key-mapping": {
         },
         "output-key-mapping": {
@@ -25,7 +25,7 @@
     "processor-db": {
       "type": "source-db",
       "properties": {
-        "query": "SELECT artifact_name FROM BLUEPRINT_RUNTIME where artifact_version=\"1.0.0\"",
+        "query": "SELECT artifact_name FROM BLUEPRINT_MODEL where artifact_version=\"1.0.0\"",
         "input-key-mapping": {
         },
         "output-key-mapping": {
