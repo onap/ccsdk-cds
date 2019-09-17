@@ -15,7 +15,10 @@
  */
 package org.onap.ccsdk.cds.sdclistener.util;
 
-import static java.nio.file.Files.walk;
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,9 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static java.nio.file.Files.walk;
 
 public final class FileUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(FileUtils.class);

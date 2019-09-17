@@ -21,11 +21,13 @@ import com.github.fge.jsonpatch.diff.JsonDiff
 import org.apache.logging.log4j.util.Strings
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db.ResourceConfigSnapshot
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db.ResourceConfigSnapshot.Status.RUNNING
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db.ResourceConfigSnapshot.Status.CANDIDATE
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db.ResourceConfigSnapshot.Status.RUNNING
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db.ResourceConfigSnapshotService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.*
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
+import org.onap.ccsdk.cds.controllerblueprints.core.returnNullIfMissing
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
@@ -33,7 +35,8 @@ import org.springframework.stereotype.Component
 import org.w3c.dom.Node
 import org.xmlunit.builder.DiffBuilder
 import org.xmlunit.builder.Input
-import org.xmlunit.diff.*
+import org.xmlunit.diff.ComparisonType
+import org.xmlunit.diff.Diff
 
 
 /**

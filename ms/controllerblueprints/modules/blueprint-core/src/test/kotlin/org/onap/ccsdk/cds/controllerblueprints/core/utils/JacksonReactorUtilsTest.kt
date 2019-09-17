@@ -16,9 +16,9 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
-import org.slf4j.LoggerFactory
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
+import org.slf4j.LoggerFactory
 
 class JacksonReactorUtilsTest {
 

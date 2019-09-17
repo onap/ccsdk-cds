@@ -15,10 +15,9 @@
  */
 package org.onap.ccsdk.cds.sdclistener.client;
 
-import java.util.Optional;
 import org.onap.ccsdk.cds.sdclistener.SdcListenerConfiguration;
-import org.onap.ccsdk.cds.sdclistener.dto.SdcListenerDto;
 import org.onap.ccsdk.cds.sdclistener.SdcListenerNotificationCallback;
+import org.onap.ccsdk.cds.sdclistener.dto.SdcListenerDto;
 import org.onap.ccsdk.cds.sdclistener.exceptions.SdcListenerException;
 import org.onap.sdc.api.IDistributionClient;
 import org.onap.sdc.api.results.IDistributionClientResult;
@@ -31,6 +30,8 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 @ComponentScan("org.onap.ccsdk.cds.cdssdclistener.dto")

@@ -21,11 +21,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.db.MariaDataSourceProperties
 import org.slf4j.LoggerFactory
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.jdbc.datasource.DriverManagerDataSource
-import org.springframework.orm.jpa.JpaTransactionManager
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter
-import org.springframework.transaction.PlatformTransactionManager
-import java.util.*
 import javax.sql.DataSource
 
 class MariaDatabaseConfiguration(private val mariaDataSourceProperties: MariaDataSourceProperties) : BluePrintDBLibGenericService {

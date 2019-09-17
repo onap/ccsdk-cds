@@ -16,8 +16,9 @@
 package org.onap.ccsdk.cds.sdclistener.service;
 
 import io.grpc.ManagedChannel;
-import java.nio.file.Path;
 import org.onap.sdc.api.results.IDistributionClientDownloadResult;
+
+import java.nio.file.Path;
 
 public interface ListenerService {
 
