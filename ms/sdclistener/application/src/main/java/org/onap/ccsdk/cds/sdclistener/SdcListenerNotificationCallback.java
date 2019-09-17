@@ -15,12 +15,6 @@
  */
 package org.onap.ccsdk.cds.sdclistener;
 
-import static org.onap.sdc.utils.DistributionActionResultEnum.SUCCESS;
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Objects;
 import org.onap.ccsdk.cds.sdclistener.dto.SdcListenerDto;
 import org.onap.ccsdk.cds.sdclistener.service.ListenerService;
 import org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus;
@@ -39,6 +33,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
+
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Objects;
+
+import static org.onap.sdc.utils.DistributionActionResultEnum.SUCCESS;
 
 @ConfigurationProperties("listenerservice")
 @Component

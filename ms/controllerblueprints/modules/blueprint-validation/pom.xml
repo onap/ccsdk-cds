@@ -47,7 +47,6 @@
             <artifactId>resource-dict</artifactId>
         </dependency>
 
-
         <!--Testing dependencies-->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>

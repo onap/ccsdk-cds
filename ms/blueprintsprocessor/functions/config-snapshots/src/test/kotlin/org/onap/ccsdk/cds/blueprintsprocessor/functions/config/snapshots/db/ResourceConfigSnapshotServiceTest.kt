@@ -22,7 +22,6 @@ import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class ResourceConfigSnapshotServiceTest {
 

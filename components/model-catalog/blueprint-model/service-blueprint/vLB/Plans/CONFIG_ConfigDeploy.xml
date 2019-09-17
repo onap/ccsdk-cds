@@ -1,7 +1,7 @@
 <service-logic
-  xmlns='http://www.onap.org/sdnc/svclogic'
-  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-  xsi:schemaLocation='http://www.onap.org/sdnc/svclogic ./svclogic.xsd' module='CONFIG' version='1.0.0'>
+        xmlns='http://www.onap.org/sdnc/svclogic'
+        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+        xsi:schemaLocation='http://www.onap.org/sdnc/svclogic ./svclogic.xsd' module='CONFIG' version='1.0.0'>
     <method rpc='ConfigDeploy' mode='sync'>
         <block atomic="true">
             <execute plugin="nf-account-collection" method="process">

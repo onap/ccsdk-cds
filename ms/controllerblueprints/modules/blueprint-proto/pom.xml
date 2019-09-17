@@ -66,19 +66,21 @@
                             </pluginArtifact>
                         </configuration>
                     </execution>
-<!--                    <execution>-->
-<!--                        <id>grpc-coroutines</id>-->
-<!--                        <goals>-->
-<!--                            <goal>compile-custom</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <pluginId>kroto-plus</pluginId>-->
-<!--                            <pluginArtifact>-->
-<!--                                com.github.marcoferrer.krotoplus:protoc-gen-kroto-plus:${kroto-plus.version}:jar:jvm8-->
-<!--                            </pluginArtifact>-->
-<!--                            <pluginParameter>ConfigPath=${project.basedir}/krotoPlusConfig.asciipb</pluginParameter>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
+                    <!--
+                    <execution>
+                        <id>grpc-coroutines</id>
+                        <goals>
+                            <goal>compile-custom</goal>
+                        </goals>
+                        <configuration>
+                            <pluginId>kroto-plus</pluginId>
+                            <pluginArtifact>
+                                com.github.marcoferrer.krotoplus:protoc-gen-kroto-plus:${kroto-plus.version}:jar:jvm8
+                            </pluginArtifact>
+                            <pluginParameter>ConfigPath=${project.basedir}/krotoPlusConfig.asciipb</pluginParameter>
+                        </configuration>
+                    </execution>
+                    -->
                 </executions>
             </plugin>
             <plugin>
@@ -95,7 +97,7 @@
                             <sourceDirs>
                                 <sourceDir>${project.basedir}/target/generated-sources/protobuf/java</sourceDir>
                                 <sourceDir>${project.basedir}/target/generated-sources/protobuf/grpc-java</sourceDir>
-<!--                                <sourceDir>${project.basedir}/target/generated-sources/protobuf/kroto-plus</sourceDir>-->
+                                <!--<sourceDir>${project.basedir}/target/generated-sources/protobuf/kroto-plus</sourceDir>-->
                             </sourceDirs>
                         </configuration>
                     </execution>
