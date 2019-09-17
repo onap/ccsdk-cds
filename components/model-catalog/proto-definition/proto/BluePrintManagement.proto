@@ -21,8 +21,9 @@ message BluePrintDownloadInput {
 
 message BluePrintRemoveInput {
     org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader commonHeader = 1;
-    string blueprintName = 2;
-    string blueprintVersion = 3;
+    org.onap.ccsdk.cds.controllerblueprints.common.api.ActionIdentifiers actionIdentifiers = 2;
+    // Extra optional dynamic properties used to remove.
+    google.protobuf.Struct properties = 3;
 }
 
 message BluePrintManagementOutput {
@@ -53,6 +54,11 @@ enum UploadAction {
     ENRICH = 1;
     VALIDATE = 2;
     PUBLISH = 3;
+}
+
+enum RemoveAction {
+    // Delete CBA from database, deploy path and clean cache.
+    DEFAULT = 0;
 }
 
 service BluePrintManagementService {
