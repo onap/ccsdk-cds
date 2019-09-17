@@ -22,13 +22,12 @@ import org.junit.Before
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.mock.MockFilePart
 import org.onap.ccsdk.cds.controllerblueprints.core.*
-import java.nio.file.Paths
 import java.util.*
 import kotlin.test.assertTrue
 
 class BluePrintEnhancerUtilsTest {
 
-    private val blueprintDir = "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+    private val blueprintDir = "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
     private val blueprintArchivePath: String = "./target/blueprints/archive"
     private val blueprintEnrichmentPath: String = "./target/blueprints/enrichment"
     private var zipBlueprintFileName =  normalizedPathName(blueprintArchivePath, "test.zip")
@@ -39,7 +38,7 @@ class BluePrintEnhancerUtilsTest {
         assertTrue(archiveDir.exists(), "failed to create archiveDir(${archiveDir.absolutePath}")
         val enhancerDir = normalizedFile(blueprintEnrichmentPath).reCreateDirs()
         assertTrue(enhancerDir.exists(), "failed to create enhancerDir(${enhancerDir.absolutePath}")
-        val blueprintFile = Paths.get(blueprintDir).toFile().normalize()
+        val blueprintFile = normalizedFile(blueprintDir)
         val testZipFile = blueprintFile.compress(zipBlueprintFileName)
         assertTrue(testZipFile.exists(), "Failed to create blueprint test zip(${testZipFile.absolutePath}")
     }
