@@ -20,33 +20,31 @@
 * ============LICENSE_END=========================================================
 */-->
 
+
 <form [formGroup]="ResourceMetadata" (ngSubmit)="UploadMetadata()">
    	<mat-form-field class="form-field">
-      <input matInput placeholder="Name" formControlName="Resource_Name">
+      <input matInput placeholder="Name" formControlName="Resource_Name" (change)="UploadMetadata()">
     </mat-form-field><mat-form-field class="form-field">
-      <input matInput placeholder="Tags" formControlName="_tags">
+      <input matInput placeholder="Tags" formControlName="_tags" (change)="UploadMetadata()">
     </mat-form-field>
     <mat-form-field class="form-field">
-      <mat-select matInput placeholder="Data Type" formControlName="_type">
+      <mat-select matInput placeholder="Data Type" formControlName="_type" (selectionChange)="UploadMetadata()">
       	<!-- <mat-option value="string">string</mat-option> -->
         <!-- <mat-option value="list">list</mat-option> -->
-        <mat-option value="string" *ngFor="let item of dataTypeList">{{item.modelName}}</mat-option>
+        <mat-option value="string" *ngFor="let item of dataTypeList" >{{item.modelName}}</mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field class="form-field" >
-      <input matInput placeholder="entry_schema" formControlName="entry_schema">
+      <input matInput placeholder="entry_schema" formControlName="entry_schema" (change)="UploadMetadata()">
     </mat-form-field>
     <mat-form-field class="form-field" >
-      <mat-select matInput placeholder="required" formControlName="required">
+      <mat-select matInput placeholder="required" formControlName="required" (selectionChange)="UploadMetadata()">
       	<mat-option value="true">true</mat-option>
       	<mat-option value="false">false</mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field class="form-field" >
-      <textarea matInput placeholder="Description" formControlName="_description"></textarea>
+      <textarea matInput placeholder="Description" formControlName="_description" (change)="UploadMetadata()"></textarea>
     </mat-form-field>
-    <br>
-    <div>
-    	<button mat-button class="matStepNextBtn" type="submit">Save Metadata</button>
-    </div>  
+    <br> 
 </form>
