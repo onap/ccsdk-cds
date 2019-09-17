@@ -24,9 +24,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import java.util.*
-import kotlin.script.experimental.api.ResultValue
-import kotlin.script.experimental.api.resultOrNull
-import kotlin.script.experimental.jvmhost.createJvmCompilationConfigurationFromTemplate
 
 
 open class BluePrintScriptsServiceImpl : BluePrintScriptsService {
@@ -34,14 +31,8 @@ open class BluePrintScriptsServiceImpl : BluePrintScriptsService {
     val log = logger(BluePrintScriptsServiceImpl::class)
 
     override suspend fun <T> scriptInstance(bluePrintSourceCode: BluePrintSourceCode, scriptClassName: String): T {
-        val compilationConfiguration = createJvmCompilationConfigurationFromTemplate<BluePrintKotlinScript>()
-        val scriptEvaluator = BluePrintScriptEvaluator(scriptClassName)
-
-        val compiledResponse = BlueprintScriptingHost(scriptEvaluator)
-                .eval(bluePrintSourceCode, compilationConfiguration, null)
-
-        val returnValue = compiledResponse.resultOrNull()?.returnValue as? ResultValue.Value
-        return returnValue?.value!! as T
+        val bluePrintCompileService = BluePrintCompileService()
+        return bluePrintCompileService.eval(bluePrintSourceCode, scriptClassName, null)
     }
 
     override suspend fun <T> scriptInstance(blueprintBasePath: String, artifactName: String, artifactVersion: String,
