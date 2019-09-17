@@ -16,6 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.onap.ccsdk.parent</groupId>
@@ -24,8 +25,6 @@ limitations under the License.
         <relativePath/>
     </parent>
 
-    <modelVersion>4.0.0</modelVersion>
-
     <groupId>org.onap.ccsdk.cds</groupId>
     <artifactId>parent</artifactId>
     <version>0.7.0-SNAPSHOT</version>
@@ -33,16 +32,15 @@ limitations under the License.
 
     <name>cds-parent</name>
     <description>CCSDK Controller Design Studio</description>
+    <url>https://wiki.onap.org</url>
+    <organization>
+        <name>ONAP</name>
+    </organization>
 
     <modules>
         <module>cds-ui</module>
         <module>ms</module>
     </modules>
-
-    <url>https://wiki.onap.org</url>
-    <organization>
-        <name>ONAP</name>
-    </organization>
 
     <properties>
         <!--Don't set any language to let sonar enable multi-language support-->
@@ -57,6 +55,10 @@ limitations under the License.
         <sonar.coverage.jacoco.xmlReportPaths>${project.reporting.outputDirectory}/jacoco-ut/jacoco.xml
         </sonar.coverage.jacoco.xmlReportPaths>
         <jacoco.version>0.8.3</jacoco.version>
+	
+	<!-- Properties for POM Format -->
+	<format.skipValidate>false</format.skipValidate>
+        <format.skipExecute>true</format.skipExecute>
     </properties>
 
     <build>
@@ -65,6 +67,35 @@ limitations under the License.
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco.version}</version>
+            </plugin>
+
+	    <!-- Plugin to Format/Validate POM Files -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>tidy-maven-plugin</artifactId>
+                <version>1.1.0</version>
+                <executions>
+                    <execution>
+                        <id>format-pom</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>pom</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${format.skipExecute}</skip>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>validate-pom</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${format.skipValidate}</skip>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
@@ -101,6 +132,14 @@ limitations under the License.
                 </plugins>
             </build>
         </profile>
-    </profiles>
 
+	<!-- Profile to format skip validate or execute -->
+	<profile>
+            <id>format</id>
+            <properties>
+                <format.skipValidate>true</format.skipValidate>
+                <format.skipExecute>false</format.skipExecute>
+            </properties>
+        </profile>
+    </profiles>
 </project>

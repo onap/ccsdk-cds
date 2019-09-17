@@ -16,6 +16,7 @@
  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.onap.ccsdk.cds</groupId>
         <artifactId>ms</artifactId>
@@ -24,9 +25,16 @@
     </parent>
 
     <artifactId>sdclistener</artifactId>
+    <packaging>pom</packaging>
+
     <name>SDC Listener Root</name>
     <description>SDC Listener Root</description>
-    <packaging>pom</packaging>
+
+    <modules>
+        <module>parent</module>
+        <module>application</module>
+        <module>distribution</module>
+    </modules>
 
     <properties>
         <service.name>sdclistener</service.name>
@@ -39,11 +47,4 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <ccsdk.project.version>${project.version}</ccsdk.project.version>
     </properties>
-
-    <modules>
-        <module>parent</module>
-        <module>application</module>
-        <module>distribution</module>
-    </modules>
-
 </project>

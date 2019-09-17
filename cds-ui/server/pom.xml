@@ -42,7 +42,6 @@ limitations under the License.
         <docker.push.phase>deploy</docker.push.phase>
     </properties>
 
-
     <build>
         <plugins>
             <plugin>
@@ -139,8 +138,8 @@ limitations under the License.
             </plugin>
         </plugins>
     </build>
-    
-        <profiles>
+
+    <profiles>
         <profile>
             <id>docker</id>
             <build>

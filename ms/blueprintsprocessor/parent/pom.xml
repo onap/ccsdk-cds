@@ -16,16 +16,20 @@
   -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.onap.ccsdk.cds</groupId>
         <artifactId>blueprintsprocessor</artifactId>
         <version>0.7.0-SNAPSHOT</version>
     </parent>
+
     <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
     <artifactId>parent</artifactId>
     <packaging>pom</packaging>
+
     <name>Blueprints Processor Parent</name>
     <description>Blueprints Processor Parent</description>
+
     <properties>
         <sshd.version>2.2.0</sshd.version>
         <jsch.version>0.1.55</jsch.version>
@@ -50,6 +54,7 @@
         <xmlunit.version>2.6.3</xmlunit.version>
         <json-patch.version>1.9</json-patch.version>
     </properties>
+
     <dependencyManagement>
         <dependencies>
             <!-- Spring Boot -->
@@ -534,7 +539,6 @@
 
         </dependencies>
     </dependencyManagement>
-
     <dependencies>
         <dependency>
             <groupId>org.apache.commons</groupId>

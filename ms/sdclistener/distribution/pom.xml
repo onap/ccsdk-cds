@@ -16,15 +16,19 @@
   -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.onap.ccsdk.cds.sdclistener</groupId>
         <artifactId>parent</artifactId>
         <version>0.7.0-SNAPSHOT</version>
         <relativePath>../parent</relativePath>
     </parent>
+
     <artifactId>distribution</artifactId>
     <packaging>pom</packaging>
+
     <name>SDC Listener Distribution</name>
+
     <properties>
         <assembly.id>maven</assembly.id>
         <name.space>org.onap.ccsdk.cds</name.space>
@@ -44,6 +48,7 @@
             <artifactId>application</artifactId>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -89,8 +94,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <!--build the final artifact for docker deployment -->
+            <plugin><!--build the final artifact for docker deployment -->
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>

@@ -19,6 +19,7 @@
   -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
         <artifactId>modules</artifactId>
@@ -27,6 +28,7 @@
 
     <artifactId>commons</artifactId>
     <packaging>pom</packaging>
+
     <name>Blueprints Processor Commons POM</name>
     <description>Blueprints Processor Commons</description>
 
@@ -39,6 +41,7 @@
         <module>message-lib</module>
         <module>ssh-lib</module>
     </modules>
+
     <dependencies>
         <dependency>
             <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
@@ -76,5 +79,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
 </project>
