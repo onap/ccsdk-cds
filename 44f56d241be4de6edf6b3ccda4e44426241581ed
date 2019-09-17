@@ -16,6 +16,24 @@
       "revId": "44f56d241be4de6edf6b3ccda4e44426241581ed",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "336d8d46_1e12527b",
+        "filename": "ms/blueprintsprocessor/functions/config-snapshots/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-09-17T15:59:17Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "14655f30_8d183c84",
+      "revId": "44f56d241be4de6edf6b3ccda4e44426241581ed",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
