@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "12a0da62_54ada16a",
+        "filename": "ms/blueprintsprocessor/modules/commons/rest-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/rest/BluePrintRestLibData.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-09-17T16:02:39Z",
+      "side": 1,
+      "message": "Is there any reason for String, I prefer boolean. or to find list of hostnames to trust.",
+      "range": {
+        "startLine": 31,
+        "startChar": 32,
+        "endLine": 31,
+        "endChar": 38
+      },
+      "revId": "673fbaccf965485539c18766fdd7f9cf07a297f6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
