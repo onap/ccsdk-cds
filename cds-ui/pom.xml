@@ -36,6 +36,12 @@ limitations under the License.
     <name>cds-ui-parent</name>
     <description>Creates Controller Design Studio UI Docker container</description>
 
+    <modules>
+        <module>client</module>
+        <module>server</module>
+        <module>application</module>
+    </modules>
+
     <properties>
         <image.name>onap/ccsdk-cds-ui</image.name>
         <ccsdk.project.version>${project.version}</ccsdk.project.version>
@@ -44,11 +50,4 @@ limitations under the License.
         <maven.build.timestamp.format>yyyyMMdd'T'HHmmss'Z'</maven.build.timestamp.format>
         <docker.verbose>true</docker.verbose>
     </properties>
-
-    <modules>
-        <module>client</module>
-        <module>server</module>
-        <module>application</module>
-    </modules>
-
 </project>

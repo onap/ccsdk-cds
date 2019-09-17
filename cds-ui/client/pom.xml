@@ -40,7 +40,6 @@ limitations under the License.
     <onap.nexus.url>https://nexus.onap.org</onap.nexus.url>
   </properties>
 
-
   <build>
     <plugins>
       <plugin>
