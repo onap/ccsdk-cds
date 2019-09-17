@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "14655f30_8d183c84",
+        "filename": "ms/blueprintsprocessor/functions/config-snapshots/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2019-09-17T13:53:07Z",
+      "side": 0,
+      "message": "Do not delete this - the plugin used to roll versions does not work properly if this is missing.",
+      "revId": "44f56d241be4de6edf6b3ccda4e44426241581ed",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
