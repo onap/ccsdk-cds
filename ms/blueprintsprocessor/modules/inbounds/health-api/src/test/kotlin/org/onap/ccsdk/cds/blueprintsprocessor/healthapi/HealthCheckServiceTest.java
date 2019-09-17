@@ -16,13 +16,6 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.healthapi;
 
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.anyString;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,6 +31,12 @@ import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BasicAuthRestClientService;
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService.WebClientResponse;
 import org.springframework.http.HttpMethod;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.anyString;
 
 @RunWith(MockitoJUnitRunner.class)
 public class HealthCheckServiceTest {

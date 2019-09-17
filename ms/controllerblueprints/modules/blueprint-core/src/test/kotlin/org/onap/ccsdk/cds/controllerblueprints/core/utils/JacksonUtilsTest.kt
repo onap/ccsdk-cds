@@ -17,9 +17,9 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
-import org.slf4j.LoggerFactory
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.slf4j.LoggerFactory
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 

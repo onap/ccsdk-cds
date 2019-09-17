@@ -16,12 +16,12 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
-import org.slf4j.LoggerFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.data.*
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintRepoService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.slf4j.LoggerFactory
 
 open class BluePrintRepoFileService(modelTypePath: String) : BluePrintRepoService {
 

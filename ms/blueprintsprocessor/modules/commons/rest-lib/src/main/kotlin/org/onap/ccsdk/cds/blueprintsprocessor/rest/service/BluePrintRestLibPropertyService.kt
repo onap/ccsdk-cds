@@ -20,15 +20,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.rest.service
 
 import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.DME2RestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.PolicyManagerRestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestLibConstants
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLBasicAuthRestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLRestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLTokenAuthRestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.TokenAuthRestClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.*
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.stereotype.Service

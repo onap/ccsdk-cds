@@ -21,12 +21,7 @@ package org.onap.ccsdk.cds.controllerblueprints.core.utils
 import com.google.common.base.Predicates
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.slf4j.LoggerFactory
-import java.io.BufferedInputStream
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.OutputStream
+import java.io.*
 import java.nio.charset.Charset
 import java.nio.file.FileVisitResult
 import java.nio.file.Files

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
 ============LICENSE_START==========================================
 ===================================================================
 Copyright (C) 2018 IBM Intellectual Property. All rights reserved.
@@ -32,7 +32,7 @@ limitations under the License.
   <version>0.7.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>cds-ui-client</name>
+  <name>CDS UI Client</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

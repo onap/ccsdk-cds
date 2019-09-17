@@ -17,8 +17,9 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.core
 
 import org.junit.Test
-import kotlin.test.assertEquals
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.core.NetconfDeviceCommunicator.NetconfMessageState
+import kotlin.test.assertEquals
+
 class NetconfMessageStateTest {
 
     private val charList: List<Char> = Char.MIN_VALUE.toInt().rangeTo(Char.MAX_VALUE.toInt())
