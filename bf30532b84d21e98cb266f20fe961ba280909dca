@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "149e882e_f53ff69f",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/configuration/BasicAuthRestClientServiceConfiguration.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-09-17T03:16:38Z",
+      "side": 1,
+      "message": "Use Property Lib Service to get the property information.",
+      "range": {
+        "startLine": 30,
+        "startChar": 3,
+        "endLine": 30,
+        "endChar": 37
+      },
+      "revId": "bf30532b84d21e98cb266f20fe961ba280909dca",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7356569e_831e2dfd",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/configuration/BasicAuthRestClientServiceConfiguration.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-09-17T03:16:38Z",
+      "side": 1,
+      "message": "Try to avoid spring beans for Shrive types.",
+      "range": {
+        "startLine": 44,
+        "startChar": 4,
+        "endLine": 44,
+        "endChar": 9
+      },
+      "revId": "bf30532b84d21e98cb266f20fe961ba280909dca",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e12b271_ded930f9",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/controller/HealthCheckController.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-09-17T03:16:38Z",
+      "side": 1,
+      "message": "pass as constructor arguments.",
+      "range": {
+        "startLine": 38,
+        "startChar": 17,
+        "endLine": 38,
+        "endChar": 53
+      },
+      "revId": "bf30532b84d21e98cb266f20fe961ba280909dca",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1bf82d54_3ef4119a",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/service/HealthCheckService.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-09-17T03:16:38Z",
+      "side": 1,
+      "message": "Should have implemented Acutator implementation.\n\n\nhttps://docs.spring.io/spring-boot/docs/current/reference/html/production-ready.html",
+      "range": {
+        "startLine": 33,
+        "startChar": 6,
+        "endLine": 33,
+        "endChar": 26
+      },
+      "revId": "bf30532b84d21e98cb266f20fe961ba280909dca",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42d894b3_6c0fd909",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api/src/main/resources/application.properties",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-09-17T03:16:38Z",
+      "side": 1,
+      "message": "Try to use existing property with encrypted password.",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 33
+      },
+      "revId": "bf30532b84d21e98cb266f20fe961ba280909dca",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
