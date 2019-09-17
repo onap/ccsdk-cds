@@ -183,7 +183,6 @@
                 <version>${project.version}</version>
             </dependency>
 
-
             <!-- Controller Blueprints Application Dependency -->
             <dependency>
                 <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>

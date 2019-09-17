@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rpc message-id="customMessageId" xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
-<cancel-commit>
-<persist-id>customPersistId</persist-id></cancel-commit>
+    <cancel-commit>
+        <persist-id>customPersistId</persist-id>
+    </cancel-commit>
 </rpc>
