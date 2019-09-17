@@ -17,7 +17,6 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.utils
 
 import org.junit.Assert
 import org.junit.Assert.assertTrue
-import org.junit.Ignore
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfException
 import kotlin.test.assertFailsWith

@@ -18,13 +18,13 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
 
-import org.slf4j.LoggerFactory
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.NullNode
 import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.data.*
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.ResourceResolverUtils
+import org.slf4j.LoggerFactory
 
 /**
  *

@@ -16,6 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.enhancer
 
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.service.ResourceDefinitionRepoService
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
@@ -25,7 +26,6 @@ import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDictionaryConstants
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.factory.ResourceSourceMappingFactory
-import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.service.ResourceDefinitionRepoService
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service

@@ -17,7 +17,6 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.resource.dict.utils;
 
-
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,11 +26,11 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment;
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition;
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDictionaryConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * ResourceDictionaryUtilsTest.

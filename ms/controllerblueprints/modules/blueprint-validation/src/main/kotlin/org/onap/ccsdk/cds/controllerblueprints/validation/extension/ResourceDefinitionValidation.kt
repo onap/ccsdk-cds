@@ -16,11 +16,11 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.validation.extension
 
-import org.slf4j.LoggerFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidator
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service

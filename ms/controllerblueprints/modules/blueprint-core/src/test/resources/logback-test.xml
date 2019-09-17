@@ -23,9 +23,9 @@
         </encoder>
     </appender>
 
-    <logger name="org.onap.ccsdk.cds.controllerblueprints" level="info"/>
+    <logger name="org.onap.ccsdk.cds.controllerblueprints" level="info" />
     <root level="info">
-        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="STDOUT" />
     </root>
 
 </configuration>

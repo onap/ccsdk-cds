@@ -20,6 +20,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment;
+
 import java.util.List;
 /**
  * BulkResourceSequencingUtils.

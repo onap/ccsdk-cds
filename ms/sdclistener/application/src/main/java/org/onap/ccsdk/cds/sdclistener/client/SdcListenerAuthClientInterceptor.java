@@ -15,14 +15,8 @@
  */
 package org.onap.ccsdk.cds.sdclistener.client;
 
-import io.grpc.CallOptions;
-import io.grpc.Channel;
-import io.grpc.ClientCall;
-import io.grpc.ClientInterceptor;
-import io.grpc.ForwardingClientCall;
-import io.grpc.Metadata;
+import io.grpc.*;
 import io.grpc.Metadata.Key;
-import io.grpc.MethodDescriptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
