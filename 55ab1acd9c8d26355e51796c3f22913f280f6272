@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "463d82eb_2ab849d6",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 8
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2019-09-18T21:42:42Z",
+      "side": 1,
+      "message": "why we need to check: value !\u003d defaultValueNode\nhow does it make different if input value is same as default value, still value wass provided in input.",
+      "revId": "55ab1acd9c8d26355e51796c3f22913f280f6272",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
