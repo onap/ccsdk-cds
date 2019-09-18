@@ -183,8 +183,10 @@ class BluePrintManagementGRPCHandlerTest {
 
         return BluePrintRemoveInput.newBuilder()
                 .setCommonHeader(commonHeader)
-                .setBlueprintName("sample")
-                .setBlueprintVersion("1.0.0")
+                .setActionIdentifiers(ActionIdentifiers.newBuilder()
+                        .setBlueprintName("sample")
+                        .setBlueprintVersion("1.0.0")
+                        .setActionName(RemoveAction.DEFAULT.toString()).build())
                 .build()
     }
 }

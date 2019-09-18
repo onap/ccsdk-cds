@@ -129,14 +129,28 @@ open class BluePrintManagementGRPCHandler(private val bluePrintModelHandler: Blu
     StreamObserver<BluePrintManagementOutput>) {
 
         runBlocking {
-            val blueprintName = request.blueprintName
-            val blueprintVersion = request.blueprintVersion
+            val blueprintName = request.actionIdentifiers.blueprintName
+            val blueprintVersion = request.actionIdentifiers.blueprintVersion
             val blueprint = "blueprint $blueprintName:$blueprintVersion"
 
             log.info("request(${request.commonHeader.requestId}): Received delete $blueprint")
+
+            /** Get the Remove Action */
+            val removeAction = request.actionIdentifiers?.actionName.emptyTONull()
+                    ?: RemoveAction.DEFAULT.toString()
+
             try {
-                bluePrintModelHandler.deleteBlueprintModel(blueprintName, blueprintVersion)
-                responseObserver.onNext(successStatus(request.commonHeader))
+                when (removeAction) {
+                    RemoveAction.DEFAULT.toString() -> {
+                        bluePrintModelHandler.deleteBlueprintModel(blueprintName, blueprintVersion)
+                        responseObserver.onNext(successStatus(request.commonHeader))
+                    }
+                    else -> {
+                        responseObserver.onNext(failStatus(request.commonHeader,
+                                "Remove action($removeAction) not implemented",
+                                BluePrintProcessorException("Not implemented")))
+                    }
+                }
             } catch (e: Exception) {
                 responseObserver.onNext(failStatus(request.commonHeader,
                         "request(${request.commonHeader.requestId}): Failed to delete $blueprint", e))
