@@ -16,13 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.core
 
-import io.mockk.CapturingSlot
-import io.mockk.Runs
-import io.mockk.every
-import io.mockk.just
-import io.mockk.mockk
-import io.mockk.spyk
-import io.mockk.verify
+import io.mockk.*
 import org.junit.Before
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
@@ -33,10 +27,9 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.utils.R
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
-import java.nio.charset.StandardCharsets
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.ConcurrentHashMap
-import java.util.regex.Pattern
+import java.nio.charset.*
+import java.util.concurrent.*
+import java.util.regex.*
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -185,10 +178,10 @@ class NetconfDeviceCommunicatorTest {
         //eventually, sessionListener is called with message type DEVICE_REPLY
         assertEquals(NetconfReceivedEvent.Type.DEVICE_REPLY, eventSlot.captured.type)
         assertEquals("""
-<rpc message-id="102"
-     xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
-  <close-session/>
-</rpc>
+        <rpc message-id="102"
+             xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+          <close-session/>
+        </rpc>
         """.trimIndent(), eventSlot.captured.messagePayload)
     }
 

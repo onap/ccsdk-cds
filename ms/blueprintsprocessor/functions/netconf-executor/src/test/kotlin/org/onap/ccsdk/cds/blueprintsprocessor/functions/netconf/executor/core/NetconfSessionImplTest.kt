@@ -16,13 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.core
 
-import io.mockk.CapturingSlot
-import io.mockk.Runs
-import io.mockk.every
-import io.mockk.just
-import io.mockk.mockk
-import io.mockk.spyk
-import io.mockk.verify
+import io.mockk.*
 import org.apache.sshd.client.SshClient
 import org.apache.sshd.client.channel.ChannelSubsystem
 import org.apache.sshd.client.channel.ClientChannel
@@ -43,10 +37,8 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
-import java.nio.charset.StandardCharsets
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.ExecutionException
-import java.util.concurrent.TimeoutException
+import java.nio.charset.*
+import java.util.concurrent.*
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue

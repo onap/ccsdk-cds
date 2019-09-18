@@ -20,7 +20,7 @@
     <method rpc='ResourceAssignment' mode='sync'>
         <block atomic="true">
             <execute plugin="resource-assignment" method="process">
-                 <outcome value='failure'>
+                <outcome value='failure'>
                     <return status="failure">
                     </return>
                 </outcome>
