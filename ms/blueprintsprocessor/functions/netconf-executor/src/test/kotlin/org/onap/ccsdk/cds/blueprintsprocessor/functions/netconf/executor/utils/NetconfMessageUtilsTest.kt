@@ -16,7 +16,7 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.utils
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import kotlin.test.Test

@@ -15,20 +15,20 @@
   ~ limitations under the License.
   -->
 <output xmlns="http://yang.juniper.net/junos-qfx/rpc/interfaces">
-  <interface-information xmlns:junos="http://xml.juniper.net/junos/17.4R1/junos" junos:style="normal">
-      <ifd-specific-config-flags />
-      <if-config-flags />
-      <link-type>Full-Duplex</link-type>
-      <if-media-flags>
-        <ifmf-none />
-      </if-media-flags>
-      <interface-flapped junos:seconds="2343">34</interface-flapped>
-      <traffic-statistics junos:style="brief">
-        <input-packets>09098789</input-packets>
-        <output-packets>2828828</output-packets>
-      </traffic-statistics>
-    <physical-interface>
-        <interface-name>TEGig400-int01</interface-name>
-    </physical-interface>
-  </interface-information>
+    <interface-information xmlns:junos="http://xml.juniper.net/junos/17.4R1/junos" junos:style="normal">
+        <ifd-specific-config-flags />
+        <if-config-flags />
+        <link-type>Full-Duplex</link-type>
+        <if-media-flags>
+            <ifmf-none />
+        </if-media-flags>
+        <interface-flapped junos:seconds="2343">34</interface-flapped>
+        <traffic-statistics junos:style="brief">
+            <input-packets>09098789</input-packets>
+            <output-packets>2828828</output-packets>
+        </traffic-statistics>
+        <physical-interface>
+            <interface-name>TEGig400-int01</interface-name>
+        </physical-interface>
+    </interface-information>
 </output>

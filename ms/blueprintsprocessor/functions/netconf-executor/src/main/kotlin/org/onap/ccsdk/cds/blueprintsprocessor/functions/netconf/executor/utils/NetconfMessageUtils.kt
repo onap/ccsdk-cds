@@ -54,7 +54,7 @@ class NetconfMessageUtils {
                 request.append(filterContent).append(NEW_LINE)
                 request.append(RpcMessageUtils.SUBTREE_FILTER_CLOSE).append(NEW_LINE)
             }
-            request.append("</get>").append(NEW_LINE)
+            request.append("</get>")
 
             return doWrappedRpc(messageId, request.toString())
         }
@@ -73,7 +73,7 @@ class NetconfMessageUtils {
                 request.append(filterContent).append(NEW_LINE)
                 request.append(RpcMessageUtils.SUBTREE_FILTER_CLOSE).append(NEW_LINE)
             }
-            request.append("</get-config>").append(NEW_LINE)
+            request.append("</get-config>")
 
             return doWrappedRpc(messageId, request.toString())
         }
@@ -84,8 +84,7 @@ class NetconfMessageUtils {
             rpc.append(RpcMessageUtils.MESSAGE_ID_STRING).append(RpcMessageUtils.EQUAL)
             rpc.append(RpcMessageUtils.QUOTE).append(messageId).append(RpcMessageUtils.QUOTE_SPACE)
             rpc.append(RpcMessageUtils.NETCONF_BASE_NAMESPACE).append(RpcMessageUtils.CLOSE)
-                .append(NEW_LINE)
-            rpc.append(request)
+            rpc.append(NEW_LINE).append(request).append(NEW_LINE)
             rpc.append(RpcMessageUtils.RPC_CLOSE)
             // rpc.append(NEW_LINE).append(END_PATTERN);
 
@@ -94,9 +93,7 @@ class NetconfMessageUtils {
 
         fun editConfig(messageId: String, configType: String, defaultOperation: String?,
                        newConfiguration: String): String {
-
             val request = StringBuilder()
-
             request.append("<edit-config>").append(NEW_LINE)
             request.append(RpcMessageUtils.TARGET_OPEN).append(NEW_LINE)
             request.append(RpcMessageUtils.OPEN).append(configType).append(RpcMessageUtils.TAG_CLOSE)
@@ -112,7 +109,7 @@ class NetconfMessageUtils {
             request.append(RpcMessageUtils.CONFIG_OPEN).append(NEW_LINE)
             request.append(newConfiguration.trim { it <= ' ' }).append(NEW_LINE)
             request.append(RpcMessageUtils.CONFIG_CLOSE).append(NEW_LINE)
-            request.append("</edit-config>").append(NEW_LINE)
+            request.append("</edit-config>")
 
             return doWrappedRpc(messageId, request.toString())
         }
@@ -125,7 +122,7 @@ class NetconfMessageUtils {
             request.append(RpcMessageUtils.OPEN).append(configType).append(RpcMessageUtils.TAG_CLOSE)
                 .append(NEW_LINE)
             request.append(RpcMessageUtils.SOURCE_CLOSE).append(NEW_LINE)
-            request.append("</validate>").append(NEW_LINE)
+            request.append("</validate>")
 
             return doWrappedRpc(messageId, request.toString())
         }
@@ -145,16 +142,16 @@ class NetconfMessageUtils {
             val request = StringBuilder()
             request.append("<commit>").append(NEW_LINE)
             if (confirmed) {
-                request.append("<confirmed/>")
-                request.append("<confirm-timeout>$confirmTimeout</confirm-timeout>")
+                request.append("<confirmed/>").append(NEW_LINE)
+                request.append("<confirm-timeout>$confirmTimeout</confirm-timeout>").append(NEW_LINE)
                 if (!persist.isEmpty()) {
-                    request.append("<persist>$persist</persist>")
+                    request.append("<persist>$persist</persist>").append(NEW_LINE)
                 }
             }
             if (!persistId.isEmpty()) {
-                request.append("<persist-id>$persistId</persist-id>")
+                request.append("<persist-id>$persistId</persist-id>").append(NEW_LINE)
             }
-            request.append("</commit>").append(NEW_LINE)
+            request.append("</commit>")
 
             return doWrappedRpc(messageId, request.toString())
         }
@@ -163,9 +160,9 @@ class NetconfMessageUtils {
             val request = StringBuilder()
             request.append("<cancel-commit>").append(NEW_LINE)
             if (!persistId.isEmpty()) {
-                request.append("<persist-id>$persistId</persist-id>")
+                request.append("<persist-id>$persistId</persist-id>").append(NEW_LINE)
             }
-            request.append("</cancel-commit>").append(NEW_LINE)
+            request.append("</cancel-commit>")
 
             return doWrappedRpc(messageId, request.toString())
         }
@@ -178,7 +175,7 @@ class NetconfMessageUtils {
             request.append(RpcMessageUtils.OPEN).append(configType).append(RpcMessageUtils.TAG_CLOSE)
                 .append(NEW_LINE)
             request.append(RpcMessageUtils.TARGET_CLOSE).append(NEW_LINE)
-            request.append("</unlock>").append(NEW_LINE)
+            request.append("</unlock>")
 
             return doWrappedRpc(messageId, request.toString())
         }
@@ -198,14 +195,14 @@ class NetconfMessageUtils {
                 .append(RpcMessageUtils.TAG_CLOSE)
                 .append(NEW_LINE)
             request.append(RpcMessageUtils.TARGET_CLOSE).append(NEW_LINE)
-            request.append("</delete-config>").append(NEW_LINE)
+            request.append("</delete-config>")
 
             return doWrappedRpc(messageId, request.toString())
         }
 
         fun discardChanges(messageId: String): String {
             val request = StringBuilder()
-            request.append("<discard-changes/>").append(NEW_LINE)
+            request.append("<discard-changes/>")
             return doWrappedRpc(messageId, request.toString())
         }
 
@@ -217,7 +214,7 @@ class NetconfMessageUtils {
             request.append(RpcMessageUtils.OPEN).append(configType).append(RpcMessageUtils.TAG_CLOSE)
                 .append(NEW_LINE)
             request.append(RpcMessageUtils.TARGET_CLOSE).append(NEW_LINE)
-            request.append("</lock>").append(NEW_LINE)
+            request.append("</lock>")
 
             return doWrappedRpc(messageId, request.toString())
         }
@@ -226,9 +223,9 @@ class NetconfMessageUtils {
             val request = StringBuilder()
 
             if (force) {
-                request.append("<kill-session/>").append(NEW_LINE)
+                request.append("<kill-session/>")
             } else {
-                request.append("<close-session/>").append(NEW_LINE)
+                request.append("<close-session/>")
             }
 
             return doWrappedRpc(messageId, request.toString())

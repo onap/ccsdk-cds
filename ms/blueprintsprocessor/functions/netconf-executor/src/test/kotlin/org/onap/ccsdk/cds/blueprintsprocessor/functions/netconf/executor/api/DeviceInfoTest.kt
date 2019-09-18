@@ -17,7 +17,6 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api
 
 
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
 import org.junit.Test
 import kotlin.test.assertEquals
 
