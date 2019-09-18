@@ -22,7 +22,7 @@ limitations under the License.
         <groupId>org.onap.ccsdk.parent</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>1.5.0-SNAPSHOT</version>
-        <relativePath />
+        <relativePath/>
     </parent>
 
     <groupId>org.onap.ccsdk.cds</groupId>
@@ -44,7 +44,7 @@ limitations under the License.
 
     <properties>
         <!--Don't set any language to let sonar enable multi-language support-->
-        <sonar.language />
+        <sonar.language/>
         <!--Provide src/main as source path so both src/main/java and src/main/kotlin are scanned-->
         <sonar.sources>src/main</sonar.sources>
         <!--Provide src/test as source path for test so both src/test/java and src/test/kotlin are scanned-->

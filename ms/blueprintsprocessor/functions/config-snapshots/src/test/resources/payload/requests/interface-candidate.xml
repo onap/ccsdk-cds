@@ -16,11 +16,11 @@
   -->
 <output xmlns="http://yang.juniper.net/junos-qfx/rpc/interfaces">
     <interface-information xmlns:junos="http://xml.juniper.net/junos/17.4R1/junos" junos:style="normal">
-        <ifd-specific-config-flags />
-        <if-config-flags />
+        <ifd-specific-config-flags/>
+        <if-config-flags/>
         <link-type>Full-Duplex</link-type>
         <if-media-flags>
-            <ifmf-none />
+            <ifmf-none/>
         </if-media-flags>
         <interface-flapped junos:seconds="2343">34</interface-flapped>
         <traffic-statistics junos:style="brief">

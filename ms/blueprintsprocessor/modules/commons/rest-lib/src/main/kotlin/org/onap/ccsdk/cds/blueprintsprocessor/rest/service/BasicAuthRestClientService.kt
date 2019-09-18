@@ -18,10 +18,6 @@ package org.onap.ccsdk.cds.blueprintsprocessor.rest.service
 
 import org.apache.http.message.BasicHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestLibConstants
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.utils.WebClientUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import java.nio.charset.Charset

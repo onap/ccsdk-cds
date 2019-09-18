@@ -21,23 +21,12 @@ package org.onap.ccsdk.cds.controllerblueprints.core.utils
 import com.google.common.base.Predicates
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.slf4j.LoggerFactory
-import java.io.BufferedInputStream
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.OutputStream
-import java.nio.charset.Charset
-import java.nio.file.FileVisitResult
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.SimpleFileVisitor
-import java.nio.file.attribute.BasicFileAttributes
-import java.util.function.Predicate
-import java.util.zip.Deflater
-import java.util.zip.ZipEntry
-import java.util.zip.ZipFile
-import java.util.zip.ZipOutputStream
+import java.io.*
+import java.nio.charset.*
+import java.nio.file.*
+import java.nio.file.attribute.*
+import java.util.function.*
+import java.util.zip.*
 
 class BluePrintArchiveUtils {
 

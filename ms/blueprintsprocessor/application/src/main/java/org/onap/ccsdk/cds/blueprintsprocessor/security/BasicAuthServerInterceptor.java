@@ -16,13 +16,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.security;
 
 import com.google.common.base.Strings;
-import io.grpc.Metadata;
-import io.grpc.ServerCall;
-import io.grpc.ServerCallHandler;
-import io.grpc.ServerInterceptor;
-import io.grpc.Status;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+import io.grpc.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +26,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 @Component
 public class BasicAuthServerInterceptor implements ServerInterceptor {
