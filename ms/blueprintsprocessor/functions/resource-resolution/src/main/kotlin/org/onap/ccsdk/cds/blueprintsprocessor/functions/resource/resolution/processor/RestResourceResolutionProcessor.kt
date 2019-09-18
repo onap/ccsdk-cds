@@ -54,8 +54,11 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
             validate(resourceAssignment)
 
             // Check if It has Input
-            val value = getFromInput(resourceAssignment)
-            if (value == null || value is MissingNode || value is NullNode) {
+            val value = raRuntimeService.getInputValue(resourceAssignment.name)
+            if (ResourceAssignmentUtils.checkIfInputWasProvided(resourceAssignment, value)) {
+                ResourceAssignmentUtils.setInputValueIfProvided(resourceAssignment, raRuntimeService, value)
+            }
+            else {
                 val dName = resourceAssignment.dictionaryName!!
                 val dSource = resourceAssignment.dictionarySource!!
                 val resourceDefinition = resourceDefinition(dName)
