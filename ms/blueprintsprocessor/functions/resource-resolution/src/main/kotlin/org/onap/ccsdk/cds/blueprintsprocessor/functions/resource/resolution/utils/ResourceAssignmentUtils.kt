@@ -110,6 +110,21 @@ class ResourceAssignmentUtils {
         }
 
         @Throws(BluePrintProcessorException::class)
+        fun setInputValueIfProvided(resourceAssignment: ResourceAssignment,
+                                     raRuntimeService: ResourceAssignmentRuntimeService, value: JsonNode) {
+            logger.info("${resourceAssignment.dictionarySource} source template key (${resourceAssignment.name}) found from input and value is ($value)")
+            try {
+                ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, value)
+            }
+            catch (e: Exception) {
+                throw BluePrintProcessorException("Failed to set input value in resource name " +
+                        "(${resourceAssignment.name}) and dictionary key (${resourceAssignment.dictionaryName}) of " +
+                        "type (${resourceAssignment.property!!.type}) with error message (${e.message})", e)
+            }
+
+        }
+
+        @Throws(BluePrintProcessorException::class)
         fun assertTemplateKeyValueNotNull(resourceAssignment: ResourceAssignment) {
             val resourceProp = checkNotNull(resourceAssignment.property) {
                 "Failed to populate mandatory resource resource mapping $resourceAssignment"
@@ -496,6 +511,11 @@ class ResourceAssignmentUtils {
 
         private fun checkIfOutputKeyMappingProvideOneElement(outputKeyMapping: MutableMap<String, String>): Boolean {
             return (outputKeyMapping.size == 1)
+        }
+
+        fun checkIfInputWasProvided(resourceAssignment: ResourceAssignment, value: JsonNode) : Boolean{
+            val defaultValueNode = resourceAssignment.property!!.defaultValue.asJsonType()
+            return (value.returnNullIfMissing() != null && value != defaultValueNode)
         }
     }
 }
