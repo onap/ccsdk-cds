@@ -32,10 +32,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.FileFilter
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.Paths
-import java.nio.file.StandardOpenOption
+import java.nio.file.*
 
 
 class BluePrintFileUtils {

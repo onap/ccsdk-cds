@@ -78,7 +78,6 @@
             <artifactId>health-api</artifactId>
         </dependency>
 
-
         <!-- Functions -->
         <dependency>
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>

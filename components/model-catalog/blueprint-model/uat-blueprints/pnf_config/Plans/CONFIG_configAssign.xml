@@ -4,10 +4,10 @@
         <block atomic="true">
             <execute plugin="config-assign" method="process">
                 <outcome value="failure">
-                    <return status="failure" />
+                    <return status="failure"/>
                 </outcome>
                 <outcome value="success">
-                    <return status="success" />
+                    <return status="success"/>
                 </outcome>
             </execute>
         </block>

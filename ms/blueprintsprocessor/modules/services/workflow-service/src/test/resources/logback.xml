@@ -23,7 +23,6 @@
         </encoder>
     </appender>
 
-
     <logger name="org.springframework" level="warn"/>
     <logger name="org.hibernate" level="info"/>
     <logger name="org.onap.ccsdk.cds.blueprintsprocessor" level="info"/>
