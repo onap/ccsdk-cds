@@ -86,7 +86,7 @@ class ComponentRemoteAnsibleExecutorTest {
         )
         every {
             webClientService.exchangeResource("GET", "/api/v2/jobs/$jobId/stdout/?format=txt", "",
-                    mapOf("Content-Type" to "text/plain ;utf-8"))
+                    mapOf("Accept" to "text/plain"))
         } returns WebClientResponse(200, getReport())
         val selector = mapper.readTree(endpointSelector)
         val bluePrintRestLibPropertyService = mockk<BluePrintRestLibPropertyService>()

@@ -10,7 +10,7 @@
       "required": true,
       "type": "string"
     },
-    "response-data": {
+    "ansible-artifacts": {
       "required": false,
       "type": "json"
     }
@@ -27,7 +27,7 @@
           "inputs": {
             "job-template-name": {
               "description": "Primary key or name of the job template to launch new job.",
-              "required": true,
+              "required": false,
               "type": "string"
             },
             "workflow-job-template-id": {
