@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a6820bad_d14ca278",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 11
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-09-19T15:42:10Z",
+      "side": 1,
+      "message": "Sure! Thanks!",
+      "parentUuid": "8058b389_d4886493",
+      "revId": "e8f46f065c2bfaafe542f102be53ea411a047dc4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "74c2fe4d_f6b2ef64",
         "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
         "patchSetId": 11
@@ -33,6 +51,24 @@
       "revId": "e8f46f065c2bfaafe542f102be53ea411a047dc4",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e8e52cd_2cfb8e4b",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 11
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-09-19T15:42:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74c2fe4d_f6b2ef64",
+      "revId": "e8f46f065c2bfaafe542f102be53ea411a047dc4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
