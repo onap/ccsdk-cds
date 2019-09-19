@@ -86,6 +86,24 @@
       "revId": "55ab1acd9c8d26355e51796c3f22913f280f6272",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5aeed9dd_21ff1b1a",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 8
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2019-09-19T15:22:44Z",
+      "side": 1,
+      "message": "I still didn\u0027t get the need of checking that.. logic should be simple as:\n\nIf value is provided in input -\u003e just take the value, doesn\u0027t matter if it\u0027s same as default or not.\n\nExample: \nDefault value is XYZ, but in input it was ABC, which should be final resolved value -\u003e ABC (doesn\u0027t matter if it\u0027s same as default or not)\nDefault value is XYZ, but in input it was XYZ, which should be final resolved value -\u003e XYZ (doesn\u0027t matter if it\u0027s same as default or not)",
+      "parentUuid": "e196c9d8_605a11bf",
+      "revId": "55ab1acd9c8d26355e51796c3f22913f280f6272",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
