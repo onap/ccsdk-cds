@@ -45,14 +45,14 @@ object ResourceDefinitionUtils {
             : MutableList<ResourceAssignment> {
         /** Check if resolve definition is defined in the resource definition Map */
         val resourceDefinition = resourceDefinitions[resolveDefinition]
-                ?: throw BluePrintProcessorException("failed to get resolve definition($resolveDefinition)")
+            ?: throw BluePrintProcessorException("failed to get resolve definition($resolveDefinition)")
 
         val resourceAssignments: MutableList<ResourceAssignment> = arrayListOf()
         /** Get the dependency property fields for the the resource definition to resolve */
         val definitionDependencies = definitionDependencies(resourceDefinition, sources)
         definitionDependencies.forEach { definitionDependencyName ->
             val definitionDependency = resourceDefinitions[definitionDependencyName]
-                    ?: throw BluePrintProcessorException("failed to get dependency definition($definitionDependencyName)")
+                ?: throw BluePrintProcessorException("failed to get dependency definition($definitionDependencyName)")
 
             val resourceAssignment = ResourceAssignment().apply {
                 name = definitionDependency.name
@@ -73,7 +73,7 @@ object ResourceDefinitionUtils {
                     dictionarySourceDefinition = source
                     // Clone the PropertyDefinition, otherwise property value will be overridden
                     property = JacksonUtils
-                            .readValue(resourceDefinition.property.asJsonString(), PropertyDefinition::class.java)
+                        .readValue(resourceDefinition.property.asJsonString(), PropertyDefinition::class.java)
                     val keyDependenciesExists = source.properties?.containsKey("key-dependencies") ?: false
                     if (keyDependenciesExists) {
                         dependencies = source.properties!!["key-dependencies"]!!.asListOfString().toMutableList()
