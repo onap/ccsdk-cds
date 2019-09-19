@@ -32,8 +32,8 @@ import org.springframework.stereotype.Service
 
 @Service("${PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-capability")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-open class CapabilityResourceResolutionProcessor(private var componentFunctionScriptingService: ComponentFunctionScriptingService)
-    : ResourceAssignmentProcessor() {
+open class CapabilityResourceResolutionProcessor(private var componentFunctionScriptingService: ComponentFunctionScriptingService) :
+    ResourceAssignmentProcessor() {
 
     private val log = LoggerFactory.getLogger(CapabilityResourceResolutionProcessor::class.java)
 
@@ -44,57 +44,65 @@ open class CapabilityResourceResolutionProcessor(private var componentFunctionSc
     }
 
     override suspend fun processNB(resourceAssignment: ResourceAssignment) {
+        // Execute only if value is not in Input
+        if (!setFromInput(resourceAssignment)) {
+            val dName = resourceAssignment.dictionaryName!!
+            val dSource = resourceAssignment.dictionarySource!!
+            val resourceDefinition = resourceDefinition(resourceAssignment.dictionaryName!!)
 
-        val dName = resourceAssignment.dictionaryName!!
-        val dSource = resourceAssignment.dictionarySource!!
-        val resourceDefinition = resourceDefinition(resourceAssignment.dictionaryName!!)
-
-        /** Check Resource Assignment has the source definitions, If not get from Resource Definition **/
-        val resourceSource = resourceAssignment.dictionarySourceDefinition
+            /** Check Resource Assignment has the source definitions, If not get from Resource Definition **/
+            val resourceSource = resourceAssignment.dictionarySourceDefinition
                 ?: resourceDefinition?.sources?.get(dSource)
                 ?: throw BluePrintProcessorException("couldn't get resource definition $dName source($dSource)")
 
-        val resourceSourceProps = checkNotNull(resourceSource.properties) { "failed to get $resourceSource properties" }
-        /**
-         * Get the Capability Resource Source Info from Property Definitions.
-         */
-        val capabilityResourceSourceProperty = JacksonUtils
+            val resourceSourceProps =
+                checkNotNull(resourceSource.properties) { "failed to get $resourceSource properties" }
+            /**
+             * Get the Capability Resource Source Info from Property Definitions.
+             */
+            val capabilityResourceSourceProperty = JacksonUtils
                 .getInstanceFromMap(resourceSourceProps, CapabilityResourceSource::class.java)
 
-        val scriptType = capabilityResourceSourceProperty.scriptType
-        val scriptClassReference = capabilityResourceSourceProperty.scriptClassReference
-        val instanceDependencies = capabilityResourceSourceProperty.instanceDependencies ?: listOf()
+            val scriptType = capabilityResourceSourceProperty.scriptType
+            val scriptClassReference = capabilityResourceSourceProperty.scriptClassReference
+            val instanceDependencies = capabilityResourceSourceProperty.instanceDependencies ?: listOf()
 
-        componentResourceAssignmentProcessor = scriptInstance(scriptType, scriptClassReference, instanceDependencies)
+            componentResourceAssignmentProcessor =
+                scriptInstance(scriptType, scriptClassReference, instanceDependencies)
 
-        checkNotNull(componentResourceAssignmentProcessor) {
-            "failed to get capability resource assignment processor($scriptClassReference)"
+            checkNotNull(componentResourceAssignmentProcessor) {
+                "failed to get capability resource assignment processor($scriptClassReference)"
+            }
+
+            // Assign Current Blueprint runtime and ResourceDictionaries
+            componentResourceAssignmentProcessor!!.scriptType = scriptType
+            componentResourceAssignmentProcessor!!.raRuntimeService = raRuntimeService
+            componentResourceAssignmentProcessor!!.resourceDictionaries = resourceDictionaries
+
+            // Invoke componentResourceAssignmentProcessor
+            componentResourceAssignmentProcessor!!.executeScript(resourceAssignment)
         }
-
-        // Assign Current Blueprint runtime and ResourceDictionaries
-        componentResourceAssignmentProcessor!!.scriptType = scriptType
-        componentResourceAssignmentProcessor!!.raRuntimeService = raRuntimeService
-        componentResourceAssignmentProcessor!!.resourceDictionaries = resourceDictionaries
-
-        // Invoke componentResourceAssignmentProcessor
-        componentResourceAssignmentProcessor!!.executeScript(resourceAssignment)
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
         raRuntimeService.getBluePrintError()
-                .addError("Failed in CapabilityResourceResolutionProcessor : ${runtimeException.message}")
+            .addError("Failed in CapabilityResourceResolutionProcessor : ${runtimeException.message}")
         ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, runtimeException.message)
     }
 
     suspend fun scriptInstance(scriptType: String, scriptClassReference: String, instanceDependencies: List<String>)
             : ResourceAssignmentProcessor {
 
-        log.info("creating resource resolution of script type($scriptType), reference name($scriptClassReference) and" +
-                "instanceDependencies($instanceDependencies)")
+        log.info(
+            "creating resource resolution of script type($scriptType), reference name($scriptClassReference) and" +
+                    "instanceDependencies($instanceDependencies)"
+        )
 
         val scriptComponent = componentFunctionScriptingService
-                .scriptInstance<ResourceAssignmentProcessor>(raRuntimeService.bluePrintContext(), scriptType,
-                        scriptClassReference)
+            .scriptInstance<ResourceAssignmentProcessor>(
+                raRuntimeService.bluePrintContext(), scriptType,
+                scriptClassReference
+            )
 
         return scriptComponent
     }
