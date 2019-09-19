@@ -19,6 +19,41 @@
     },
     {
       "key": {
+        "uuid": "10a88e00_cf585a7f",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 8
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-09-19T02:53:42Z",
+      "side": 1,
+      "message": "I Will double check!",
+      "parentUuid": "b4925bab_6abe00e3",
+      "revId": "55ab1acd9c8d26355e51796c3f22913f280f6272",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8b83bc3_77ad7395",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 8
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-09-19T02:53:42Z",
+      "side": 1,
+      "message": "I will remove this.",
+      "revId": "55ab1acd9c8d26355e51796c3f22913f280f6272",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "463d82eb_2ab849d6",
         "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
         "patchSetId": 8
@@ -30,6 +65,24 @@
       "writtenOn": "2019-09-18T21:42:42Z",
       "side": 1,
       "message": "why we need to check: value !\u003d defaultValueNode\nhow does it make different if input value is same as default value, still value wass provided in input.",
+      "revId": "55ab1acd9c8d26355e51796c3f22913f280f6272",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e196c9d8_605a11bf",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 8
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-09-19T02:53:42Z",
+      "side": 1,
+      "message": "Yes it makes a difference because, if we are resolving a resource and a default value was provided:\nThe default value is always applied to the input value of any resource to resolve (if there is no input). \n\nSo keep the default value and do the resolution, we check if no input was provided and if the default is equal to default (when provided).",
+      "parentUuid": "463d82eb_2ab849d6",
       "revId": "55ab1acd9c8d26355e51796c3f22913f280f6272",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
