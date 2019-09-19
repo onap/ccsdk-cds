@@ -17,7 +17,6 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor
 
-import com.fasterxml.jackson.databind.node.MissingNode
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
@@ -44,17 +43,15 @@ open class DefaultResourceResolutionProcessor : ResourceAssignmentProcessor() {
 
     override suspend fun processNB(resourceAssignment: ResourceAssignment) {
         try {
-            var value = getFromInput(resourceAssignment)
-            if (value == null || value is MissingNode) {
-                value = resourceAssignment.property?.defaultValue
+            if (!setFromInput(resourceAssignment)) {
+                val value = resourceAssignment.property?.defaultValue
                 ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, value)
             }
             // Check the value has populated for mandatory case
             ResourceAssignmentUtils.assertTemplateKeyValueNotNull(resourceAssignment)
         } catch (e: Exception) {
             ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, e.message)
-            throw BluePrintProcessorException("Failed in template key ($resourceAssignment) assignments with: ${e.message}",
-                    e)
+            throw BluePrintProcessorException("Failed in template key ($resourceAssignment) assignments with: ${e.message}", e)
         }
 
     }
