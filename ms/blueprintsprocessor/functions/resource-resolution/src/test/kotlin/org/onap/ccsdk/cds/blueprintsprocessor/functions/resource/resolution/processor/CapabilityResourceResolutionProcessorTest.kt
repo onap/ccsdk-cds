@@ -18,6 +18,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor
 
+import com.fasterxml.jackson.databind.node.NullNode
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -48,12 +49,16 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [CapabilityResourceResolutionProcessor::class, ComponentFunctionScriptingService::class,
-    BluePrintScriptsServiceImpl::class,
-    BlueprintJythonService::class, PythonExecutorProperty::class, MockCapabilityService::class])
-@TestPropertySource(properties =
-["blueprints.processor.functions.python.executor.modulePaths=./../../../../components/scripts/python/ccsdk_blueprints",
-    "blueprints.processor.functions.python.executor.executionPath=./../../../../components/scripts/python/ccsdk_blueprints"])
+@ContextConfiguration(
+    classes = [CapabilityResourceResolutionProcessor::class, ComponentFunctionScriptingService::class,
+        BluePrintScriptsServiceImpl::class,
+        BlueprintJythonService::class, PythonExecutorProperty::class, MockCapabilityService::class]
+)
+@TestPropertySource(
+    properties =
+    ["blueprints.processor.functions.python.executor.modulePaths=./../../../../components/scripts/python/ccsdk_blueprints",
+        "blueprints.processor.functions.python.executor.executionPath=./../../../../components/scripts/python/ccsdk_blueprints"]
+)
 class CapabilityResourceResolutionProcessorTest {
 
     @Autowired
@@ -65,17 +70,21 @@ class CapabilityResourceResolutionProcessorTest {
             val componentFunctionScriptingService = mockk<ComponentFunctionScriptingService>()
             coEvery {
                 componentFunctionScriptingService
-                        .scriptInstance<ResourceAssignmentProcessor>(any(), any(), any())
+                    .scriptInstance<ResourceAssignmentProcessor>(any(), any(), any())
             } returns MockCapabilityScriptRA()
 
             val raRuntimeService = mockk<ResourceAssignmentRuntimeService>()
             every { raRuntimeService.bluePrintContext() } returns mockk<BluePrintContext>()
+            every { raRuntimeService.getInputValue("test-property") } returns NullNode.getInstance()
 
-            val capabilityResourceResolutionProcessor = CapabilityResourceResolutionProcessor(componentFunctionScriptingService)
+            val capabilityResourceResolutionProcessor =
+                CapabilityResourceResolutionProcessor(componentFunctionScriptingService)
             capabilityResourceResolutionProcessor.raRuntimeService = raRuntimeService
 
-            val resourceAssignment = BluePrintTypes.resourceAssignment(name = "test-property", dictionaryName = "ra-dict-name",
-                    dictionarySource = "capability") {
+            val resourceAssignment = BluePrintTypes.resourceAssignment(
+                name = "test-property", dictionaryName = "ra-dict-name",
+                dictionarySource = "capability"
+            ) {
                 property("string", true, "")
                 sourceCapability {
                     definedProperties {
@@ -87,8 +96,10 @@ class CapabilityResourceResolutionProcessorTest {
             }
             val status = capabilityResourceResolutionProcessor.applyNB(resourceAssignment)
             assertTrue(status, "failed to execute capability source")
-            assertEquals("assigned-data".asJsonPrimitive(), resourceAssignment.property!!.value,
-                    "assigned value miss match")
+            assertEquals(
+                "assigned-data".asJsonPrimitive(), resourceAssignment.property!!.value,
+                "assigned value miss match"
+            )
         }
     }
 
@@ -97,15 +108,18 @@ class CapabilityResourceResolutionProcessorTest {
         runBlocking {
 
             val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
-                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/capability_python")
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/capability_python"
+            )
 
             val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)
 
             capabilityResourceResolutionProcessor.raRuntimeService = resourceAssignmentRuntimeService
 
             val resourceDefinition = JacksonUtils
-                    .readValueFromClassPathFile("mapping/capability/jython-resource-definitions.json",
-                            ResourceDefinition::class.java)!!
+                .readValueFromClassPathFile(
+                    "mapping/capability/jython-resource-definitions.json",
+                    ResourceDefinition::class.java
+                )!!
             val resourceDefinitions: MutableMap<String, ResourceDefinition> = mutableMapOf()
             resourceDefinitions[resourceDefinition.name] = resourceDefinition
             capabilityResourceResolutionProcessor.resourceDictionaries = resourceDefinitions
