@@ -122,6 +122,24 @@
       "revId": "55ab1acd9c8d26355e51796c3f22913f280f6272",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74308825_f0d2518d",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 8
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2019-09-19T16:29:23Z",
+      "side": 1,
+      "message": "I got you, but what if input value was provided but it was same as default value ?\nIn that case API will return \u0027false\u0027 which I guess is not expected.",
+      "parentUuid": "da5825ef_2d53ed6f",
+      "revId": "55ab1acd9c8d26355e51796c3f22913f280f6272",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
