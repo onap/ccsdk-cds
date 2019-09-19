@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8058b389_d4886493",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 11
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2019-09-19T15:22:44Z",
+      "side": 1,
+      "message": "Use getValueToLog API instead.",
+      "revId": "e8f46f065c2bfaafe542f102be53ea411a047dc4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74c2fe4d_f6b2ef64",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 11
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2019-09-19T15:22:44Z",
+      "side": 1,
+      "message": "Don\u0027t need this if else jut to print logger, return result at #160 itself.",
+      "revId": "e8f46f065c2bfaafe542f102be53ea411a047dc4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
