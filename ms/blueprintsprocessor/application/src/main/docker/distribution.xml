@@ -36,7 +36,7 @@
     </dependencySets>
     <fileSets>
         <fileSet>
-            <directory>${project.basedir}/../application/src/main/resources</directory>
+            <directory>${project.basedir}/src/main/resources</directory>
             <includes>
                 <include>application.properties</include>
                 <include>logback.xml</include>
