@@ -140,6 +140,24 @@
       "revId": "55ab1acd9c8d26355e51796c3f22913f280f6272",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb03df8b_51908f54",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 8
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-09-19T17:32:11Z",
+      "side": 1,
+      "message": "If Input is provided and \u003d\u003d default -\u003e this case shouldn\u0027t be necessary as the default value\nwill be enough.\n\nCan we have a call Kapil? Because, Default is failing now because of that simple condition\n(value.returnNullIfMissing() !\u003d null) Input will not be null if we define default.\n\nTwo options:\n- avoid setting default value to input when loading Blueprint context\n- Add a condition to take default in consideration.",
+      "parentUuid": "74308825_f0d2518d",
+      "revId": "55ab1acd9c8d26355e51796c3f22913f280f6272",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
