@@ -17,7 +17,6 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.moc
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
-import com.fasterxml.jackson.databind.node.MissingNode
 import org.apache.commons.collections.MapUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.RestResourceSource
@@ -55,8 +54,7 @@ class MockRestResourceResolutionProcessor(private val blueprintRestLibPropertySe
     override suspend fun processNB(executionRequest: ResourceAssignment) {
         try {
             // Check if It has Input
-            val value = getFromInput(executionRequest)
-            if (value == null || value is MissingNode) {
+            if (!setFromInput(executionRequest)) {
                 val dName = executionRequest.dictionaryName
                 val dSource = executionRequest.dictionarySource
                 val resourceDefinition = resourceDictionaries[dName]
@@ -66,7 +64,7 @@ class MockRestResourceResolutionProcessor(private val blueprintRestLibPropertySe
                 val resourceSourceProperties = resourceSource!!.properties
 
                 val sourceProperties =
-                        JacksonUtils.getInstanceFromMap(resourceSourceProperties!!, RestResourceSource::class.java)
+                    JacksonUtils.getInstanceFromMap(resourceSourceProperties!!, RestResourceSource::class.java)
 
                 val path = nullToEmpty(sourceProperties.path)
                 val inputKeyMapping = sourceProperties.inputKeyMapping
@@ -76,7 +74,7 @@ class MockRestResourceResolutionProcessor(private val blueprintRestLibPropertySe
                 // Resolving content Variables
                 val payload = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.payload), resolvedInputKeyMapping)
                 val urlPath =
-                        resolveFromInputKeyMapping(checkNotNull(sourceProperties.urlPath), resolvedInputKeyMapping)
+                    resolveFromInputKeyMapping(checkNotNull(sourceProperties.urlPath), resolvedInputKeyMapping)
                 val verb = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.verb), resolvedInputKeyMapping)
 
                 logger.info("$dSource dictionary information : ($urlPath), ($inputKeyMapping), (${sourceProperties.outputKeyMapping})")
@@ -98,8 +96,7 @@ class MockRestResourceResolutionProcessor(private val blueprintRestLibPropertySe
             }
         } catch (e: Exception) {
             ResourceAssignmentUtils.setFailedResourceDataValue(executionRequest, e.message)
-            throw BluePrintProcessorException("Failed in template resolutionKey ($executionRequest) assignments with: ${e.message}",
-                    e)
+            throw BluePrintProcessorException("Failed in template resolutionKey ($executionRequest) assignments with: ${e.message}", e)
         }
     }
 
@@ -139,10 +136,12 @@ class MockRestResourceResolutionProcessor(private val blueprintRestLibPropertySe
                         outputKeyMapping!!.map {
                             val responseKeyValue = responseSingleJsonNode.get(it.key)
                             val propertyTypeForDataType = ResourceAssignmentUtils
-                                    .getPropertyType(raRuntimeService, entrySchemaType, it.key)
+                                .getPropertyType(raRuntimeService, entrySchemaType, it.key)
 
-                            JacksonUtils.populateJsonNodeValues(it.value,
-                                    responseKeyValue, propertyTypeForDataType, arrayChildNode)
+                            JacksonUtils.populateJsonNodeValues(
+                                it.value,
+                                responseKeyValue, propertyTypeForDataType, arrayChildNode
+                            )
                         }
                         arrayNode.add(arrayChildNode)
                     }
@@ -157,7 +156,7 @@ class MockRestResourceResolutionProcessor(private val blueprintRestLibPropertySe
                 outputKeyMapping!!.map {
                     val responseKeyValue = responseNode.get(it.key)
                     val propertyTypeForDataType = ResourceAssignmentUtils
-                            .getPropertyType(raRuntimeService, entrySchemaType, it.key)
+                        .getPropertyType(raRuntimeService, entrySchemaType, it.key)
                     JacksonUtils.populateJsonNodeValues(it.value, responseKeyValue, propertyTypeForDataType, objectNode)
                 }
                 // Set the List of Complex Values

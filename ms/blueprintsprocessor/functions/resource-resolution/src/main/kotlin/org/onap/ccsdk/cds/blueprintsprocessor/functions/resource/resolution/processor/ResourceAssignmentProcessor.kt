@@ -22,10 +22,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import org.apache.commons.collections.MapUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
+import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintFunctionNode
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintVelocityTemplateService
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
@@ -48,18 +45,20 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
      */
     open fun <T> scriptPropertyInstanceType(name: String): T {
         return scriptPropertyInstances as? T
-                ?: throw BluePrintProcessorException("couldn't get script property instance ($name)")
+            ?: throw BluePrintProcessorException("couldn't get script property instance ($name)")
     }
 
-    open fun getFromInput(resourceAssignment: ResourceAssignment): JsonNode? {
-        var value: JsonNode? = null
+    open fun setFromInput(resourceAssignment: ResourceAssignment): Boolean {
         try {
-            value = raRuntimeService.getInputValue(resourceAssignment.name)
-            ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, value)
+            val value = raRuntimeService.getInputValue(resourceAssignment.name)
+            if (value.returnNullIfMissing() != null) {
+                ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, value)
+                return true
+            }
         } catch (e: BluePrintProcessorException) {
             // NoOp - couldn't find value from input
         }
-        return value
+        return false
     }
 
     open fun resourceDefinition(name: String): ResourceDefinition? {
