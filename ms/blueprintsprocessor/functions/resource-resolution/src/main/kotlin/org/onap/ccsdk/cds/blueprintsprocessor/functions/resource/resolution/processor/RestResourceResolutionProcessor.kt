@@ -24,7 +24,10 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.Rest
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
-import org.onap.ccsdk.cds.controllerblueprints.core.*
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
+import org.onap.ccsdk.cds.controllerblueprints.core.isNotEmpty
+import org.onap.ccsdk.cds.controllerblueprints.core.nullToEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory
@@ -39,8 +42,8 @@ import org.springframework.stereotype.Service
  */
 @Service("${PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-rest")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyService: BluePrintRestLibPropertyService)
-    : ResourceAssignmentProcessor() {
+open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyService: BluePrintRestLibPropertyService) :
+    ResourceAssignmentProcessor() {
 
     private val logger = LoggerFactory.getLogger(RestResourceResolutionProcessor::class.java)
 
@@ -53,32 +56,36 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
             validate(resourceAssignment)
 
             // Check if It has Input
+<<<<<<< HEAD   (1e0871 Release 0.6.3 CCSDK artifacts)
             val value = getFromInput(resourceAssignment)
             if (value == null || value is MissingNode || value is NullNode) {
+=======
+            if (!setFromInput(resourceAssignment)) {
+>>>>>>> CHANGE (6c13c5 Refactoring Resource Resolution Component)
                 val dName = resourceAssignment.dictionaryName!!
                 val dSource = resourceAssignment.dictionarySource!!
                 val resourceDefinition = resourceDefinition(dName)
 
                 /** Check Resource Assignment has the source definitions, If not get from Resource Definitions **/
                 val resourceSource = resourceAssignment.dictionarySourceDefinition
-                        ?: resourceDefinition?.sources?.get(dSource)
-                        ?: throw BluePrintProcessorException("couldn't get resource definition $dName source($dSource)")
+                    ?: resourceDefinition?.sources?.get(dSource)
+                    ?: throw BluePrintProcessorException("couldn't get resource definition $dName source($dSource)")
 
                 val resourceSourceProperties =
-                        checkNotNull(resourceSource.properties) { "failed to get source properties for $dName " }
+                    checkNotNull(resourceSource.properties) { "failed to get source properties for $dName " }
 
                 val sourceProperties =
-                        JacksonUtils.getInstanceFromMap(resourceSourceProperties, RestResourceSource::class.java)
+                    JacksonUtils.getInstanceFromMap(resourceSourceProperties, RestResourceSource::class.java)
 
                 val path = nullToEmpty(sourceProperties.path)
                 val inputKeyMapping =
-                        checkNotNull(sourceProperties.inputKeyMapping) { "failed to get input-key-mappings for $dName under $dSource properties" }
+                    checkNotNull(sourceProperties.inputKeyMapping) { "failed to get input-key-mappings for $dName under $dSource properties" }
                 val resolvedInputKeyMapping = resolveInputKeyMappingVariables(inputKeyMapping).toMutableMap()
 
                 // Resolving content Variables
                 val payload = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.payload), resolvedInputKeyMapping)
                 val urlPath =
-                        resolveFromInputKeyMapping(checkNotNull(sourceProperties.urlPath), resolvedInputKeyMapping)
+                    resolveFromInputKeyMapping(checkNotNull(sourceProperties.urlPath), resolvedInputKeyMapping)
                 val verb = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.verb), resolvedInputKeyMapping)
 
                 logger.info("$dSource dictionary information : ($urlPath), ($inputKeyMapping), (${sourceProperties.outputKeyMapping})")
@@ -95,7 +102,7 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                     populateResource(resourceAssignment, sourceProperties, responseBody, path)
                 } else {
                     val errMsg =
-                            "Failed to get $dSource result for dictionary name ($dName) using urlPath ($urlPath) response_code: ($responseStatusCode)"
+                        "Failed to get $dSource result for dictionary name ($dName) using urlPath ($urlPath) response_code: ($responseStatusCode)"
                     logger.warn(errMsg)
                     throw BluePrintProcessorException(errMsg)
                 }
@@ -104,13 +111,14 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
             ResourceAssignmentUtils.assertTemplateKeyValueNotNull(resourceAssignment)
         } catch (e: Exception) {
             ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, e.message)
-            throw BluePrintProcessorException("Failed in template key ($resourceAssignment) assignments with: ${e.message}",
-                    e)
+            throw BluePrintProcessorException("Failed in template key ($resourceAssignment) assignments with: ${e.message}", e)
         }
     }
 
-    fun blueprintWebClientService(resourceAssignment: ResourceAssignment,
-                                  restResourceSource: RestResourceSource): BlueprintWebClientService {
+    fun blueprintWebClientService(
+        resourceAssignment: ResourceAssignment,
+        restResourceSource: RestResourceSource
+    ): BlueprintWebClientService {
         return if (isNotEmpty(restResourceSource.endpointSelector)) {
             val restPropertiesJson = raRuntimeService.resolveDSLExpression(restResourceSource.endpointSelector!!)
             blueprintRestLibPropertyService.blueprintWebClientService(restPropertiesJson)
@@ -120,8 +128,10 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
     }
 
     @Throws(BluePrintProcessorException::class)
-    private fun populateResource(resourceAssignment: ResourceAssignment, sourceProperties: RestResourceSource,
-                                 restResponse: String, path: String) {
+    private fun populateResource(
+        resourceAssignment: ResourceAssignment, sourceProperties: RestResourceSource,
+        restResponse: String, path: String
+    ) {
         val dName = resourceAssignment.dictionaryName
         val dSource = resourceAssignment.dictionarySource
         val type = nullToEmpty(resourceAssignment.property?.type)
@@ -137,8 +147,10 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
         }
         logger.info("populating value for output mapping ($outputKeyMapping), from json ($responseNode)")
 
-        val parsedResponseNode = ResourceAssignmentUtils.parseResponseNode(responseNode, resourceAssignment,
-                raRuntimeService, outputKeyMapping)
+        val parsedResponseNode = ResourceAssignmentUtils.parseResponseNode(
+            responseNode, resourceAssignment,
+            raRuntimeService, outputKeyMapping
+        )
 
         // Set the List of Complex Values
         ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, parsedResponseNode)
