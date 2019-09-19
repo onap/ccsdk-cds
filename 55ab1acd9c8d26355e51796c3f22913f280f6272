@@ -104,6 +104,24 @@
       "revId": "55ab1acd9c8d26355e51796c3f22913f280f6272",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da5825ef_2d53ed6f",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 8
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-09-19T15:42:10Z",
+      "side": 1,
+      "message": "Hello Kapil,\n\nIt is a little bit confusing.\n\nNow when we set a default value in mapping file for example:\n{\n    \"name\": \"private-prefix-id\",\n    \"property\": {\n      \"description\": \"\",\n      \"required\": false,\n      \"type\": \"string\",\n      \"default\": \"\"\n    },\n    \"input-param\": false,\n    \"dictionary-name\": \"private-prefix-id\",\n    \"dictionary-source\": \"processor-db\",\n    \"dependencies\": [],\n    \"version\": 0\n}\n\nThe value inside default is automatically assigned to the input (because the input is NULL from the start).\n\nThen, in resource resolution, we check if the input value change (means that we check if the input value is still NULL) and for how case, we added a default value into mapping file and this changed the input value. So, resource resolution will not be process and think that input value was process.\n\nWe want to continue the resolution if a default value was provided. So we keep input value change by default and process resource resolution. That is why we double check if value !\u003d Default.",
+      "parentUuid": "5aeed9dd_21ff1b1a",
+      "revId": "55ab1acd9c8d26355e51796c3f22913f280f6272",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
