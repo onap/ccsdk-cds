@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0eff6265_3b98759c",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 10
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-09-19T14:08:52Z",
+      "side": 1,
+      "message": "Source shouldn\u0027t be hard coded, Logging properties should be modeled.",
+      "range": {
+        "startLine": 148,
+        "startChar": 51,
+        "endLine": 148,
+        "endChar": 115
+      },
+      "revId": "8683cd55fb314a116170f4b6b7c054282081a3f0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
