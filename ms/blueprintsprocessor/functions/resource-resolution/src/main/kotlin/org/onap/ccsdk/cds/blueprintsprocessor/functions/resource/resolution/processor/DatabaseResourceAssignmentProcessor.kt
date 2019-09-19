@@ -23,7 +23,10 @@ import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.PrimaryDBLibGenericServ
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.DatabaseResourceSource
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.*
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
+import org.onap.ccsdk.cds.controllerblueprints.core.isNotEmpty
+import org.onap.ccsdk.cds.controllerblueprints.core.nullToEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDictionaryConstants
@@ -40,9 +43,10 @@ import java.util.*
  */
 @Service("${PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-db")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-open class DatabaseResourceAssignmentProcessor(private val bluePrintDBLibPropertySevice: BluePrintDBLibPropertySevice,
-                                               private val primaryDBLibGenericService: PrimaryDBLibGenericService)
-    : ResourceAssignmentProcessor() {
+open class DatabaseResourceAssignmentProcessor(
+    private val bluePrintDBLibPropertySevice: BluePrintDBLibPropertySevice,
+    private val primaryDBLibGenericService: PrimaryDBLibGenericService
+) : ResourceAssignmentProcessor() {
 
     private val logger = LoggerFactory.getLogger(DatabaseResourceAssignmentProcessor::class.java)
 
@@ -53,20 +57,10 @@ open class DatabaseResourceAssignmentProcessor(private val bluePrintDBLibPropert
     override suspend fun processNB(resourceAssignment: ResourceAssignment) {
         try {
             validate(resourceAssignment)
-
             // Check if It has Input
-            try {
-                val value = raRuntimeService.getInputValue(resourceAssignment.name)
-                if (value.returnNullIfMissing() != null) {
-                    logger.info("processor-db source template key (${resourceAssignment.name}) found from input and value is ($value)")
-                    ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, value)
-                } else {
-                    setValueFromDB(resourceAssignment)
-                }
-            } catch (e: BluePrintProcessorException) {
+            if (!setFromInput(resourceAssignment)) {
                 setValueFromDB(resourceAssignment)
             }
-
             // Check the value has populated for mandatory case
             ResourceAssignmentUtils.assertTemplateKeyValueNotNull(resourceAssignment)
         } catch (e: Exception) {
@@ -82,12 +76,13 @@ open class DatabaseResourceAssignmentProcessor(private val bluePrintDBLibPropert
 
         /** Check Resource Assignment has the source definitions, If not get from Resource Definition **/
         val resourceSource = resourceAssignment.dictionarySourceDefinition
-                ?: resourceDefinition?.sources?.get(dSource)
-                ?: throw BluePrintProcessorException("couldn't get resource definition $dName source($dSource)")
+            ?: resourceDefinition?.sources?.get(dSource)
+            ?: throw BluePrintProcessorException("couldn't get resource definition $dName source($dSource)")
         val resourceSourceProperties = checkNotNull(resourceSource.properties) {
             "failed to get source properties for $dName "
         }
-        val sourceProperties = JacksonUtils.getInstanceFromMap(resourceSourceProperties, DatabaseResourceSource::class.java)
+        val sourceProperties =
+            JacksonUtils.getInstanceFromMap(resourceSourceProperties, DatabaseResourceSource::class.java)
 
         val sql = checkNotNull(sourceProperties.query) {
             "failed to get request query for $dName under $dSource properties"
@@ -131,7 +126,7 @@ open class DatabaseResourceAssignmentProcessor(private val bluePrintDBLibPropert
 
     //placeholder to get the list of DB sources.
     //TODO: This will be replaced with a DB
-    private fun getListOfDBSources(): Array<String> =  arrayOf(ResourceDictionaryConstants.PROCESSOR_DB)
+    private fun getListOfDBSources(): Array<String> = arrayOf(ResourceDictionaryConstants.PROCESSOR_DB)
 
     private fun populateNamedParameter(inputKeyMapping: Map<String, String>): Map<String, Any> {
         val namedParameters = HashMap<String, Any>()
@@ -145,7 +140,11 @@ open class DatabaseResourceAssignmentProcessor(private val bluePrintDBLibPropert
     }
 
     @Throws(BluePrintProcessorException::class)
-    private fun populateResource(resourceAssignment: ResourceAssignment, sourceProperties: DatabaseResourceSource, rows: List<Map<String, Any>>) {
+    private fun populateResource(
+        resourceAssignment: ResourceAssignment,
+        sourceProperties: DatabaseResourceSource,
+        rows: List<Map<String, Any>>
+    ) {
         val dName = resourceAssignment.dictionaryName
         val dSource = resourceAssignment.dictionarySource
         val type = nullToEmpty(resourceAssignment.property?.type)
@@ -159,8 +158,10 @@ open class DatabaseResourceAssignmentProcessor(private val bluePrintDBLibPropert
             "Failed to get database query result into Json node."
         }
 
-        val parsedResponseNode = ResourceAssignmentUtils.parseResponseNode(responseNode, resourceAssignment,
-                raRuntimeService, outputKeyMapping)
+        val parsedResponseNode = ResourceAssignmentUtils.parseResponseNode(
+            responseNode, resourceAssignment,
+            raRuntimeService, outputKeyMapping
+        )
         ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, parsedResponseNode)
     }
 
