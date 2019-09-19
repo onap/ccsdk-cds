@@ -17,9 +17,6 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor
 
-import com.fasterxml.jackson.databind.node.MissingNode
-import com.fasterxml.jackson.databind.node.NullNode
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.DATA_DICTIONARY_SECRET_SOURCE_TYPES
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.RestResourceSource
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
@@ -54,8 +51,11 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
             validate(resourceAssignment)
 
             // Check if It has Input
-            val value = getFromInput(resourceAssignment)
-            if (value == null || value is MissingNode || value is NullNode) {
+            val value = raRuntimeService.getInputValue(resourceAssignment.name)
+            if (ResourceAssignmentUtils.checkIfInputWasProvided(resourceAssignment, value)) {
+                ResourceAssignmentUtils.setInputValueIfProvided(resourceAssignment, raRuntimeService, value)
+            }
+            else {
                 val dName = resourceAssignment.dictionaryName!!
                 val dSource = resourceAssignment.dictionarySource!!
                 val resourceDefinition = resourceDefinition(dName)
@@ -126,7 +126,7 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
         val dName = resourceAssignment.dictionaryName
         val dSource = resourceAssignment.dictionarySource
         val type = nullToEmpty(resourceAssignment.property?.type)
-        lateinit var entrySchemaType: String
+        val metadata = resourceAssignment.property!!.metadata
 
         val outputKeyMapping = checkNotNull(sourceProperties.outputKeyMapping) {
             "failed to get output-key-mappings for $dName under $dSource properties"
@@ -136,12 +136,10 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
         val responseNode = checkNotNull(JacksonUtils.jsonNode(restResponse).at(path)) {
             "Failed to find path ($path) in response ($restResponse)"
         }
-        if (resourceAssignment.dictionarySource in DATA_DICTIONARY_SECRET_SOURCE_TYPES) {
-            logger.info("populating value for output mapping ($outputKeyMapping), from json (*************)")
-        }
-        else {
-            logger.info("populating value for output mapping ($outputKeyMapping), from json ($responseNode)")
-        }
+
+        val valueToPrint = ResourceAssignmentUtils.getValueToLog(metadata, responseNode)
+        logger.info("populating value for output mapping ($outputKeyMapping), from json ($valueToPrint)")
+
         val parsedResponseNode = ResourceAssignmentUtils.parseResponseNode(responseNode, resourceAssignment,
                 raRuntimeService, outputKeyMapping)
 
