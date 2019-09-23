@@ -125,7 +125,7 @@ class ResourceAssignmentUtils {
                 "Failed to populate mandatory resource resource mapping $resourceAssignment"
             }
             if (resourceProp.required != null && resourceProp.required!!
-                && (resourceProp.value == null || resourceProp.value!!.returnNullIfMissing() == null)
+                && (resourceProp.value == null || resourceProp.value!!.isNullOrBlank())
             ) {
                 logger.error("failed to populate mandatory resource mapping ($resourceAssignment)")
                 throw BluePrintProcessorException("failed to populate mandatory resource mapping ($resourceAssignment)")
@@ -283,7 +283,7 @@ class ResourceAssignmentUtils {
                     responseNode
                 }
 
-                if (returnNode.isNull() || returnNode!!.isComplexType() && !returnNode.has(outputKeyMapping[outputKey])) {
+                if (returnNode.isNullOrBlank() || returnNode!!.isComplexType() && !returnNode.has(outputKeyMapping[outputKey])) {
                     throw BluePrintProcessorException("Fail to find output key mapping ($outputKey) in the responseNode.")
                 }
                 return if (returnNode.isComplexType()) {

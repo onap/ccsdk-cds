@@ -51,7 +51,7 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
     open fun setFromInput(resourceAssignment: ResourceAssignment): Boolean {
         try {
             val value = raRuntimeService.getInputValue(resourceAssignment.name)
-            if (value.returnNullIfMissing() != null) {
+            if (!value.isNullOrBlank()) {
                 ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, value)
                 return true
             }
