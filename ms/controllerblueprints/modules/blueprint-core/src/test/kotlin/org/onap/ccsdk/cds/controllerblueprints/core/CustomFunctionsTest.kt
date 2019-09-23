@@ -129,6 +129,32 @@ class CustomFunctionsTest {
         assertNull(missingValue)
     }
 
+    @Test
+    fun testIsNullOrMissing() {
+        assertTrue(NullNode.instance.isNullOrMissing())
+        assertTrue(MissingNode.getInstance().isNullOrMissing())
+
+        assertFalse(TextNode("").isNullOrMissing())
+        assertFalse("".asJsonType().isNullOrMissing())
+        assertFalse("hello".asJsonType().isNullOrMissing())
+        assertFalse("{\"key\": \"value\"}".asJsonType().isNullOrMissing())
+        assertFalse(TextNode("hello").isNullOrMissing())
+    }
+
+    @Test
+    fun testIsComplexType() {
+        assertFalse(NullNode.instance.isComplexType())
+        assertFalse(MissingNode.getInstance().isComplexType())
+
+        assertFalse(TextNode("").isComplexType())
+        assertFalse("".asJsonType().isComplexType())
+        assertFalse("hello".asJsonType().isComplexType())
+        assertFalse(TextNode("hello").isComplexType())
+
+        assertTrue("{\"key\": \"value\"}".asJsonType().isComplexType())
+        assertTrue("[{\"key\": \"value\"},{\"key\": \"value\"}]".asJsonType().isComplexType())
+    }
+
     @Test(expected = BluePrintException::class)
     fun testRootFieldsToMap() {
         1.asJsonType().rootFieldsToMap()
