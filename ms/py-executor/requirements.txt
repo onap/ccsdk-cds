@@ -1,0 +1,6 @@
+grpcio==1.23.0
+grpcio-tools==1.23.0
+configparser==4.0.2
+requests==2.22.0
+ncclient==0.6.6
+ciscoconfparse==1.4.7
