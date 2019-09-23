@@ -1,7 +1,7 @@
 TOSCA-Meta-File-Version: 1.0.0
 CSAR-Version: 1.0
 Created-By: Brinda Santh
-Entry-Definitions: Definitions/capability-cli-blueprint.json
+Entry-Definitions: cba.capability.cli.CapabilityCliDefinitions.kt
 Template-Name: capability-cli
 Template-Version: 1.0.0
 Template-Tags: capability-cli-blueprint
