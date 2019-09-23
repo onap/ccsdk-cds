@@ -146,8 +146,7 @@ class BluePrintRuntimeServiceTest {
 
         val bluePrintRuntimeService = getBluePrintRuntimeService()
 
-        bluePrintRuntimeService.setInputValue("rest-user-name", PropertyDefinition(), "sample-username"
-                .asJsonPrimitive())
+        bluePrintRuntimeService.setInputValue("rest-user-name", "sample-username".asJsonPrimitive())
 
         val resolvedJsonNode: JsonNode = bluePrintRuntimeService.resolveDSLExpression("dynamic-rest-source")
         assertNotNull(resolvedJsonNode, "Failed to populate dsl property values")

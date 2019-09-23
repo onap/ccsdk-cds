@@ -51,7 +51,9 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
     open fun setFromInput(resourceAssignment: ResourceAssignment): Boolean {
         try {
             val value = raRuntimeService.getInputValue(resourceAssignment.name)
-            if (value.returnNullIfMissing() != null) {
+            if (!value.isNullOrMissing()) {
+                log.debug("For Resource:(${resourceAssignment.name}) found value:({}) in input-data.",
+                    ResourceAssignmentUtils.getValueToLog(resourceAssignment.property?.metadata, value))
                 ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, value)
                 return true
             }

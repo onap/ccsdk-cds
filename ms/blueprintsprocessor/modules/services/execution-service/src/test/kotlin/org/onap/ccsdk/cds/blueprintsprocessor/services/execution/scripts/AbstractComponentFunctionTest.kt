@@ -70,9 +70,6 @@ class AbstractComponentFunctionTest {
         every { blueprintContext.rootPath } returns normalizedPathName("target")
     }
 
-    /**
-     * Tests the abstract component functionality.
-     */
     @Test
     fun testAbstractComponent() {
         runBlocking {
@@ -95,9 +92,6 @@ class AbstractComponentFunctionTest {
         }
     }
 
-    /**
-     * Tests the abstract script component functionality.
-     */
     @Test
     fun testAbstractScriptComponent() {
         runBlocking {
@@ -190,5 +184,6 @@ class AbstractComponentFunctionTest {
         val componentScriptExecutor = BluePrintTypes.nodeTypeComponentScriptExecutor()
         assertNotNull(componentScriptExecutor.interfaces, "failed to get interface operations")
     }
+
 }
 
