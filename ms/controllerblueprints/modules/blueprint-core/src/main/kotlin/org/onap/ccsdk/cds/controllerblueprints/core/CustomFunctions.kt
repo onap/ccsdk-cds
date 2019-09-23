@@ -175,7 +175,7 @@ fun ArrayNode.asListOfString(): List<String> {
 
 fun <T> JsonNode.asType(clazzType: Class<T>): T {
     return JacksonUtils.readValue(this, clazzType)
-            ?: throw BluePrintException("couldn't convert JsonNode of type $clazzType")
+        ?: throw BluePrintException("couldn't convert JsonNode of type $clazzType")
 }
 
 fun JsonNode.asListOfString(): List<String> {
@@ -183,18 +183,15 @@ fun JsonNode.asListOfString(): List<String> {
     return this.asListOfString()
 }
 
-fun JsonNode.returnNullIfMissing(): JsonNode? {
-    return if (this is NullNode || this is MissingNode) {
+fun <T : JsonNode> T?.returnNullIfMissing(): JsonNode? {
+    return if (this == null || this is NullNode || this is MissingNode) {
         null
-    } else this
+    }
+    else this
 }
 
-fun <T : JsonNode> T?.isNull(): Boolean {
+fun <T : JsonNode> T?.isNullOrMissing(): Boolean {
     return this == null || this is NullNode || this is MissingNode
-}
-
-fun <T : JsonNode> T?.isNotNull(): Boolean {
-    return !(this == null || this is NullNode || this is MissingNode)
 }
 
 /**

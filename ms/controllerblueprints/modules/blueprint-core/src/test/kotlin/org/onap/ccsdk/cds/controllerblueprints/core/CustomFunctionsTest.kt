@@ -129,6 +129,18 @@ class CustomFunctionsTest {
         assertNull(missingValue)
     }
 
+    @Test
+    fun testIsNullOrMissing() {
+        assertTrue(NullNode.instance.isNullOrMissing())
+        assertTrue(MissingNode.getInstance().isNullOrMissing())
+
+        assertFalse(TextNode("").isNullOrMissing())
+        assertFalse("".asJsonType().isNullOrMissing())
+        assertFalse("hello".asJsonType().isNullOrMissing())
+        assertFalse("{\"key\": \"value\"}".asJsonType().isNullOrMissing())
+        assertFalse(TextNode("hello").isNullOrMissing())
+    }
+
     @Test(expected = BluePrintException::class)
     fun testRootFieldsToMap() {
         1.asJsonType().rootFieldsToMap()
