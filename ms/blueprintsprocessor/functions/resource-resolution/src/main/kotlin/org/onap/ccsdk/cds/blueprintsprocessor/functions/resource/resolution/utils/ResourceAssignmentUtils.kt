@@ -124,9 +124,7 @@ class ResourceAssignmentUtils {
             val resourceProp = checkNotNull(resourceAssignment.property) {
                 "Failed to populate mandatory resource resource mapping $resourceAssignment"
             }
-            if (resourceProp.required != null && resourceProp.required!!
-                && (resourceProp.value == null || resourceProp.value!!.returnNullIfMissing() == null)
-            ) {
+            if (resourceProp.required != null && resourceProp.required!! && resourceProp.value.isNullOrMissing()) {
                 logger.error("failed to populate mandatory resource mapping ($resourceAssignment)")
                 throw BluePrintProcessorException("failed to populate mandatory resource mapping ($resourceAssignment)")
             }
@@ -244,7 +242,7 @@ class ResourceAssignmentUtils {
                 val type = resourceAssignment.property!!.type
                 val valueToPrint = getValueToLog(metadata, responseNode)
 
-                logger.info("For template key (${resourceAssignment.name}) setting value as ($valueToPrint)")
+                logger.info("For template key (${resourceAssignment.name}) setting value from ($valueToPrint)")
                 return when (type) {
                     in BluePrintTypes.validPrimitiveTypes() -> {
                         parseResponseNodeForPrimitiveTypes(responseNode, outputKeyMapping)
@@ -283,7 +281,7 @@ class ResourceAssignmentUtils {
                     responseNode
                 }
 
-                if (returnNode.isNull() || returnNode!!.isComplexType() && !returnNode.has(outputKeyMapping[outputKey])) {
+                if (returnNode.isNullOrMissing() || returnNode!!.isComplexType() && !returnNode.has(outputKeyMapping[outputKey])) {
                     throw BluePrintProcessorException("Fail to find output key mapping ($outputKey) in the responseNode.")
                 }
                 return if (returnNode.isComplexType()) {
@@ -566,7 +564,7 @@ class ResourceAssignmentUtils {
 
         fun getValueToLog(metadata: MutableMap<String, String>?, value: Any): Any {
             return if (checkIfLogIsProtected(metadata)) {
-                "*************"
+                "******REDACTED******"
             } else {
                 value
             }

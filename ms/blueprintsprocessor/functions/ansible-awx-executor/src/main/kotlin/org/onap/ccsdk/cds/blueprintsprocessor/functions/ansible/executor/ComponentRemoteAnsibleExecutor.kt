@@ -296,20 +296,20 @@ open class ComponentRemoteAnsibleExecutor(private val blueprintRestLibPropertySe
             val skipTagsProp = getOptionalOperationInput(INPUT_SKIP_TAGS)
 
             val askLimitOnLaunch = jtLaunchReqs.at("/ask_limit_on_launch").asBoolean()
-            if (askLimitOnLaunch && limitProp.isNotNull()) {
+            if (askLimitOnLaunch && !limitProp.isNullOrMissing()) {
                 payload.set(INPUT_LIMIT_TO_HOST, limitProp)
             }
             val askTagsOnLaunch = jtLaunchReqs.at("/ask_tags_on_launch").asBoolean()
-            if (askTagsOnLaunch && tagsProp.isNotNull()) {
+            if (askTagsOnLaunch && !tagsProp.isNullOrMissing()) {
                 payload.set(INPUT_TAGS, tagsProp)
             }
-            if (askTagsOnLaunch && skipTagsProp.isNotNull()) {
+            if (askTagsOnLaunch && !skipTagsProp.isNullOrMissing()) {
                 payload.set("skip_tags", skipTagsProp)
             }
         }
 
         val askInventoryOnLaunch = jtLaunchReqs.at("/ask_inventory_on_launch").asBoolean()
-        if (askInventoryOnLaunch && inventoryProp.isNotNull()) {
+        if (askInventoryOnLaunch && !inventoryProp.isNullOrMissing()) {
             var inventoryKeyId = if (inventoryProp is TextNode) {
                 resolveInventoryIdByName(awxClient, inventoryProp.textValue())?.asJsonPrimitive()
             } else {
