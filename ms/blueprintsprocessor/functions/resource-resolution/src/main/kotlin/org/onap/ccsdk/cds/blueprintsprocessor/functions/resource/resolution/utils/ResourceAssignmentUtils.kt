@@ -196,8 +196,10 @@ class ResourceAssignmentUtils {
             }
         }
 
-        fun transformToRARuntimeService(blueprintRuntimeService: BluePrintRuntimeService<*>,
-                                        templateArtifactName: String): ResourceAssignmentRuntimeService {
+        fun transformToRARuntimeService(
+            blueprintRuntimeService: BluePrintRuntimeService<*>,
+            templateArtifactName: String
+        ): ResourceAssignmentRuntimeService {
 
             val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService(
                 blueprintRuntimeService.id(),
@@ -210,8 +212,10 @@ class ResourceAssignmentUtils {
         }
 
         @Throws(BluePrintProcessorException::class)
-        fun getPropertyType(raRuntimeService: ResourceAssignmentRuntimeService, dataTypeName: String,
-                            propertyName: String): String {
+        fun getPropertyType(
+            raRuntimeService: ResourceAssignmentRuntimeService, dataTypeName: String,
+            propertyName: String
+        ): String {
             lateinit var type: String
             try {
                 val dataTypeProps =
@@ -228,8 +232,10 @@ class ResourceAssignmentUtils {
         }
 
         @Throws(BluePrintProcessorException::class)
-        fun parseResponseNode(responseNode: JsonNode, resourceAssignment: ResourceAssignment,
-                              raRuntimeService: ResourceAssignmentRuntimeService, outputKeyMapping: MutableMap<String, String>): JsonNode {
+        fun parseResponseNode(
+            responseNode: JsonNode, resourceAssignment: ResourceAssignment,
+            raRuntimeService: ResourceAssignmentRuntimeService, outputKeyMapping: MutableMap<String, String>
+        ): JsonNode {
             val metadata = resourceAssignment.property!!.metadata
             try {
                 if ((resourceAssignment.property?.type).isNullOrEmpty()) {
@@ -258,46 +264,38 @@ class ResourceAssignmentUtils {
             }
         }
 
-        //TODO: Need to Refactor
-        private fun parseResponseNodeForPrimitiveTypes(responseNode: JsonNode,
-                                                       outputKeyMapping: MutableMap<String, String>): JsonNode {
-            var result: JsonNode? = responseNode
-
+        private fun parseResponseNodeForPrimitiveTypes(
+            responseNode: JsonNode,
+            outputKeyMapping: MutableMap<String, String>
+        ): JsonNode {
             if (responseNode.isComplexType()) {
-                val key = outputKeyMapping.keys.firstOrNull()
-                var returnNode: JsonNode?
-                if (responseNode is ArrayNode) {
+                val outputKey = outputKeyMapping.keys.firstOrNull()
+                var returnNode = if (responseNode is ArrayNode) {
                     val arrayNode = responseNode.toList()
-                    val firstElement = if (key.isNullOrEmpty()) {
+                    if (outputKey.isNullOrEmpty()) {
                         arrayNode.first()
                     } else {
                         arrayNode.firstOrNull { element ->
-                            element.isComplexType() && element.has(outputKeyMapping[key])
+                            element.isComplexType() && element.has(outputKeyMapping[outputKey])
                         }
                     }
-                    returnNode = firstElement
-                } else {
-                    returnNode = responseNode
-                }
-
-                if (returnNode.isNull() || (returnNode!!.isComplexType() && !returnNode.has(outputKeyMapping[key]))) {
-                    if (key.isNullOrEmpty()) {
-                        throw BluePrintProcessorException("Fail to find mapping in the responseNode.")
-                    } else {
-                        throw BluePrintProcessorException("Fail to find response with output key mapping ($key) in result.")
-                    }
-                }
-                result = if (returnNode.isComplexType()) {
-                    returnNode[outputKeyMapping[key]]
                 } else {
                     responseNode
                 }
-            } else {
-                if (outputKeyMapping.isNotEmpty()) {
-                    throw BluePrintProcessorException("Fail to find key-value in response node to map output-key-mapping.")
+
+                if (returnNode.isNull() || returnNode!!.isComplexType() && !returnNode.has(outputKeyMapping[outputKey])) {
+                    throw BluePrintProcessorException("Fail to find output key mapping ($outputKey) in the responseNode.")
+                }
+                return if (returnNode.isComplexType()) {
+                    returnNode[outputKeyMapping[outputKey]]
+                } else {
+                    returnNode
                 }
             }
-            return result!!
+            if (outputKeyMapping.isNotEmpty()) {
+                throw BluePrintProcessorException("Fail to find key-value in response node to map output-key-mapping.")
+            }
+            return responseNode
         }
 
         private fun parseResponseNodeForCollection(
