@@ -84,15 +84,19 @@ open class ResourceAssignment {
     var updatedBy: String? = null
 
     override fun toString(): String {
-        return StringBuilder()
-            .append("[")
-            .append("name=", name)
-            .append(", status=", status)
-            .append(", property=", property?.value ?: "")
-            .append(", dictionaryName=", dictionaryName)
-            .append(", dictionarySource=", dictionarySource)
-            .append("]")
-            .toString()
+        return """
+            [ 
+                name = $name
+                status = $status 
+                property [ 
+                    defaultValue = ${property?.defaultValue}
+                    required = ${property?.required}
+                    metadata = ${property?.metadata} 
+                ] 
+                dictionaryName = $dictionaryName
+                dictionarySource = $dictionarySource 
+            ]
+            """.trimIndent()
     }
 }
 

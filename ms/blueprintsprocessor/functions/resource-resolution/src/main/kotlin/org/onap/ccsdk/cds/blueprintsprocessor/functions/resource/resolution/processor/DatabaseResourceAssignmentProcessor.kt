@@ -135,7 +135,9 @@ open class DatabaseResourceAssignmentProcessor(
             logger.trace("Reference dictionary key (${it.key}) resulted in value ($expressionValue)")
             namedParameters[it.key] = expressionValue
         }
-        logger.info("Parameter information : ($namedParameters)")
+        if (namedParameters.isNotEmpty()) {
+            logger.info("Parameter information : ($namedParameters)")
+        }
         return namedParameters
     }
 
@@ -152,7 +154,7 @@ open class DatabaseResourceAssignmentProcessor(
         val outputKeyMapping = checkNotNull(sourceProperties.outputKeyMapping) {
             "failed to get output-key-mappings for $dName under $dSource properties"
         }
-        logger.info("Response processing type($type)")
+        logger.info("Response processing type ($type)")
 
         val responseNode = checkNotNull(JacksonUtils.getJsonNode(rows)) {
             "Failed to get database query result into Json node."

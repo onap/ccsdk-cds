@@ -124,9 +124,7 @@ class ResourceAssignmentUtils {
             val resourceProp = checkNotNull(resourceAssignment.property) {
                 "Failed to populate mandatory resource resource mapping $resourceAssignment"
             }
-            if (resourceProp.required != null && resourceProp.required!!
-                && (resourceProp.value == null || resourceProp.value!!.returnNullIfMissing() == null)
-            ) {
+            if (resourceProp.required != null && resourceProp.required!! && resourceProp.value.isNullOrMissing()) {
                 logger.error("failed to populate mandatory resource mapping ($resourceAssignment)")
                 throw BluePrintProcessorException("failed to populate mandatory resource mapping ($resourceAssignment)")
             }
@@ -244,9 +242,10 @@ class ResourceAssignmentUtils {
                 val type = resourceAssignment.property!!.type
                 val valueToPrint = getValueToLog(metadata, responseNode)
 
-                logger.info("For template key (${resourceAssignment.name}) setting value as ($valueToPrint)")
+                logger.info("For template key (${resourceAssignment.name}) trying to get value from responseNode ($valueToPrint)")
                 return when (type) {
                     in BluePrintTypes.validPrimitiveTypes() -> {
+                        // Primitive Types
                         parseResponseNodeForPrimitiveTypes(responseNode, outputKeyMapping)
                     }
                     in BluePrintTypes.validCollectionTypes() -> {
@@ -268,34 +267,33 @@ class ResourceAssignmentUtils {
             responseNode: JsonNode,
             outputKeyMapping: MutableMap<String, String>
         ): JsonNode {
-            if (responseNode.isComplexType()) {
-                val outputKey = outputKeyMapping.keys.firstOrNull()
-                var returnNode = if (responseNode is ArrayNode) {
-                    val arrayNode = responseNode.toList()
-                    if (outputKey.isNullOrEmpty()) {
-                        arrayNode.first()
-                    } else {
-                        arrayNode.firstOrNull { element ->
-                            element.isComplexType() && element.has(outputKeyMapping[outputKey])
-                        }
-                    }
-                } else {
-                    responseNode
-                }
+            // Return responseNode if is not a Complex Type
+            if (!responseNode.isComplexType()) {
+                return responseNode
+            }
 
-                if (returnNode.isNull() || returnNode!!.isComplexType() && !returnNode.has(outputKeyMapping[outputKey])) {
-                    throw BluePrintProcessorException("Fail to find output key mapping ($outputKey) in the responseNode.")
-                }
-                return if (returnNode.isComplexType()) {
-                    returnNode[outputKeyMapping[outputKey]]
+            val outputKey = outputKeyMapping.keys.firstOrNull()
+            var returnNode = if (responseNode is ArrayNode) {
+                val arrayNode = responseNode.toList()
+                if (outputKey.isNullOrEmpty()) {
+                    arrayNode.first()
                 } else {
-                    returnNode
+                    arrayNode.firstOrNull { element ->
+                        element.isComplexType() && element.has(outputKeyMapping[outputKey])
+                    }
                 }
+            } else {
+                responseNode
             }
-            if (outputKeyMapping.isNotEmpty()) {
-                throw BluePrintProcessorException("Fail to find key-value in response node to map output-key-mapping.")
+
+            if (returnNode.isNullOrMissing() || returnNode!!.isComplexType() && !returnNode.has(outputKeyMapping[outputKey])) {
+                throw BluePrintProcessorException("Fail to find output key mapping ($outputKey) in the responseNode.")
             }
-            return responseNode
+            return if (returnNode.isComplexType()) {
+                returnNode[outputKeyMapping[outputKey]]
+            } else {
+                returnNode
+            }
         }
 
         private fun parseResponseNodeForCollection(
@@ -566,7 +564,7 @@ class ResourceAssignmentUtils {
 
         fun getValueToLog(metadata: MutableMap<String, String>?, value: Any): Any {
             return if (checkIfLogIsProtected(metadata)) {
-                "*************"
+                "******REDACTED******"
             } else {
                 value
             }

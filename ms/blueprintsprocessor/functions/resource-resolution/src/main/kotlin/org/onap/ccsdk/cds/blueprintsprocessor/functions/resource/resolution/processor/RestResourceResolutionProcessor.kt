@@ -133,7 +133,7 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
         val outputKeyMapping = checkNotNull(sourceProperties.outputKeyMapping) {
             "failed to get output-key-mappings for $dName under $dSource properties"
         }
-        logger.info("Response processing type($type)")
+        logger.info("Response processing type ($type)")
 
         val responseNode = checkNotNull(JacksonUtils.jsonNode(restResponse).at(path)) {
             "Failed to find path ($path) in response ($restResponse)"
