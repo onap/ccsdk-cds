@@ -81,7 +81,8 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                     resolveFromInputKeyMapping(checkNotNull(sourceProperties.urlPath), resolvedInputKeyMapping)
                 val verb = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.verb), resolvedInputKeyMapping)
 
-                logger.info("$dSource dictionary information : ($urlPath), ($inputKeyMapping), (${sourceProperties.outputKeyMapping})")
+                logger.info("RestResource ($dSource) dictionary information: " +
+                        "URL:($urlPath), input-key-mapping:($inputKeyMapping), output-key-mapping:(${sourceProperties.outputKeyMapping})")
                 // Get the Rest Client Service
                 val restClientService = blueprintWebClientService(resourceAssignment, sourceProperties)
 
@@ -133,7 +134,7 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
         val outputKeyMapping = checkNotNull(sourceProperties.outputKeyMapping) {
             "failed to get output-key-mappings for $dName under $dSource properties"
         }
-        logger.info("Response processing type($type)")
+        logger.info("Response processing type ($type)")
 
         val responseNode = checkNotNull(JacksonUtils.jsonNode(restResponse).at(path)) {
             "Failed to find path ($path) in response ($restResponse)"

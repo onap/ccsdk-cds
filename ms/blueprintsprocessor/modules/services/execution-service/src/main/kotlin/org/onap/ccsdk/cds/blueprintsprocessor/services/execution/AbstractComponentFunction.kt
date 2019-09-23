@@ -154,6 +154,26 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         bluePrintRuntimeService.getBluePrintError().addError(error)
     }
 
+    /**
+     * Get Execution Input Payload data
+     */
+    fun requestPayload(): JsonNode? {
+        return executionServiceInput.payload
+    }
+
+    /**
+     * Get Execution Input payload action property with [expression]
+     * ex: requestPayloadActionProperty("data") will look for path "payload/<action-name>-request/data"
+     */
+    fun requestPayloadActionProperty(expression: String?): JsonNode? {
+        val requestExpression = if (expression.isNullOrBlank()) {
+            "$operationName-request"
+        } else {
+            "$operationName-request.$expression"
+        }
+        return executionServiceInput.payload.jsonPathParse(".$requestExpression")
+    }
+
     fun artifactContent(artifactName: String): String {
         return bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactName)
     }

@@ -91,7 +91,8 @@ open class DatabaseResourceAssignmentProcessor(
             "failed to get input-key-mappings for $dName under $dSource properties"
         }
 
-        logger.info("$dSource dictionary information : ($sql), ($inputKeyMapping), (${sourceProperties.outputKeyMapping})")
+        logger.info("DatabaseResource ($dSource) dictionary information: " +
+                "Query:($sql), input-key-mapping:($inputKeyMapping), output-key-mapping:(${sourceProperties.outputKeyMapping})")
         val jdbcTemplate = blueprintDBLibService(sourceProperties)
 
         val rows = jdbcTemplate.query(sql, populateNamedParameter(inputKeyMapping))
@@ -135,7 +136,9 @@ open class DatabaseResourceAssignmentProcessor(
             logger.trace("Reference dictionary key (${it.key}) resulted in value ($expressionValue)")
             namedParameters[it.key] = expressionValue
         }
-        logger.info("Parameter information : ($namedParameters)")
+        if (namedParameters.isNotEmpty()) {
+            logger.info("Parameter information : ($namedParameters)")
+        }
         return namedParameters
     }
 
@@ -152,7 +155,7 @@ open class DatabaseResourceAssignmentProcessor(
         val outputKeyMapping = checkNotNull(sourceProperties.outputKeyMapping) {
             "failed to get output-key-mappings for $dName under $dSource properties"
         }
-        logger.info("Response processing type($type)")
+        logger.info("Response processing type ($type)")
 
         val responseNode = checkNotNull(JacksonUtils.getJsonNode(rows)) {
             "Failed to get database query result into Json node."
