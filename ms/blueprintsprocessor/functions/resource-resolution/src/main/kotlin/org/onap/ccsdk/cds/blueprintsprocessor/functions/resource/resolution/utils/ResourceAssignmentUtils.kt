@@ -283,7 +283,7 @@ class ResourceAssignmentUtils {
                     responseNode
                 }
 
-                if (returnNode.isNull() || returnNode!!.isComplexType() && !returnNode.has(outputKeyMapping[outputKey])) {
+                if (returnNode.isNullOrBlank() || returnNode!!.isComplexType() && !returnNode.has(outputKeyMapping[outputKey])) {
                     throw BluePrintProcessorException("Fail to find output key mapping ($outputKey) in the responseNode.")
                 }
                 return if (returnNode.isComplexType()) {

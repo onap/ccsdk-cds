@@ -20,6 +20,7 @@ package org.onap.ccsdk.cds.controllerblueprints.core
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.*
 import org.apache.commons.lang3.ObjectUtils
+import org.apache.commons.lang3.StringUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JsonParserUtils
 import org.slf4j.LoggerFactory
@@ -184,13 +185,13 @@ fun JsonNode.asListOfString(): List<String> {
 }
 
 fun JsonNode.returnNullIfMissing(): JsonNode? {
-    return if (this is NullNode || this is MissingNode) {
+    return if (this is NullNode || this is MissingNode || StringUtils.isBlank(this.textValue())) {
         null
     } else this
 }
 
-fun <T : JsonNode> T?.isNull(): Boolean {
-    return this == null || this is NullNode || this is MissingNode
+fun <T : JsonNode> T?.isNullOrBlank(): Boolean {
+    return this == null || this is NullNode || this is MissingNode || StringUtils.isBlank(this.textValue())
 }
 
 fun <T : JsonNode> T?.isNotNull(): Boolean {
