@@ -14,12 +14,14 @@
 #  limitations under the License.
 from netconf_constant import *
 from org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution import ResourceResolutionExtensionsKt
+from blueprint_runtime_service import BluePrintRuntimeService
 
 
 class ResolutionHelper:
 
     def __init__(self, component_function):
         self.component_function = component_function
+        self.blueprint_runtime = BluePrintRuntimeService(component_function.bluePrintRuntimeService)
 
     def resolve_and_generate_message_from_template_prefix(self, artifact_prefix):
         """Get the template resolved in the current workflow execution by the artifact prefix
@@ -54,13 +56,13 @@ class ResolutionHelper:
         :param attribute_key:
         :return: JsonNode
         """
-        self.component_function.getNodeTemplateAttribute(node_template_name, attribute_key)
+        return self.component_function.getNodeTemplateAttributeValue(node_template_name, attribute_key)
 
-    def get_input_value(self, key):
-        """Get input value of the current node template execution
+    def get_blueprint_runtime(self):
+        """get blueprint runtime environment
 
-        :param key:
-        :return: JsonNode
+        :param
+        :return: BluePrintRuntimeService
         """
-        self.component_function.bluePrintRuntimeService.getInputValue(key)
+        return self.blueprint_runtime
 
