@@ -46,6 +46,30 @@
       "revId": "7fb750b2fc1119e2381d3d91e49e1d1b54e3d2df",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06c20fab_ba002fc2",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-09-24T14:01:07Z",
+      "side": 1,
+      "message": "I mean\nresourceProp.value \u003d\u003d null is already checked in the custom function isNullOrBlank() I think.",
+      "parentUuid": "ebfc7ad5_d07ac8ff",
+      "range": {
+        "startLine": 128,
+        "startChar": 20,
+        "endLine": 128,
+        "endChar": 46
+      },
+      "revId": "7fb750b2fc1119e2381d3d91e49e1d1b54e3d2df",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
