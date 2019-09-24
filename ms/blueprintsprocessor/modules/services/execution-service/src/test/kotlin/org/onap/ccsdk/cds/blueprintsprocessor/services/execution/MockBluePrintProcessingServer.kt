@@ -17,49 +17,32 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts
 
 import io.grpc.ServerBuilder
-import io.grpc.stub.StreamObserver
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.channels.SendChannel
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.interceptor.GrpcServerLoggingInterceptor
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.common.api.Status
-import org.onap.ccsdk.cds.controllerblueprints.core.MDCContext
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
-import org.onap.ccsdk.cds.controllerblueprints.processing.api.BluePrintProcessingServiceGrpc
+import org.onap.ccsdk.cds.controllerblueprints.processing.api.BluePrintProcessingServiceCoroutineGrpc
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceInput
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceOutput
 
 private val log = logger(MockBluePrintProcessingServer::class)
 
 
-class MockBluePrintProcessingServer : BluePrintProcessingServiceGrpc.BluePrintProcessingServiceImplBase() {
+class MockBluePrintProcessingServer : BluePrintProcessingServiceCoroutineGrpc.BluePrintProcessingServiceImplBase() {
 
-    override fun process(responseObserver: StreamObserver<ExecutionServiceOutput>): StreamObserver<ExecutionServiceInput> {
+    override suspend fun process(requestChannel: ReceiveChannel<ExecutionServiceInput>,
+                                 responseChannel: SendChannel<ExecutionServiceOutput>) {
 
-        return object : StreamObserver<ExecutionServiceInput> {
-            override fun onNext(executionServiceInput: ExecutionServiceInput) {
-                log.info("Received requestId(${executionServiceInput.commonHeader.requestId})  " +
-                        "subRequestId(${executionServiceInput.commonHeader.subRequestId})")
-                runBlocking {
-                    launch(MDCContext()) {
-                        responseObserver.onNext(buildNotification(executionServiceInput))
-                        responseObserver.onNext(buildResponse(executionServiceInput))
-                        log.info("message has sent successfully...")
-                    }
-                }
-                responseObserver.onCompleted()
-            }
+        val requestIterator = requestChannel.iterator()
 
-            override fun onError(error: Throwable) {
-                log.debug("Fail to process message", error)
-                responseObserver.onError(io.grpc.Status.INTERNAL
-                        .withDescription(error.message)
-                        .asException())
-            }
-
-            override fun onCompleted() {
-                log.info("Completed")
-            }
+        while (requestIterator.hasNext()) {
+            val request = requestIterator.next()
+            log.info("Received requestId(${request.commonHeader.requestId})  " +
+                    "subRequestId(${request.commonHeader.subRequestId})")
+            responseChannel.send(buildNotification(request))
+            responseChannel.send(buildResponse(request))
         }
     }
 
