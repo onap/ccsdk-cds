@@ -73,7 +73,7 @@ open class BluePrintGrpcLibPropertyService(private var bluePrintProperties: Blue
         }
     }
 
-    private fun blueprintGrpcClientService(grpcClientProperties: GrpcClientProperties):
+    fun blueprintGrpcClientService(grpcClientProperties: GrpcClientProperties):
             BluePrintGrpcClientService {
         when (grpcClientProperties) {
             is TokenAuthGrpcClientProperties -> {
