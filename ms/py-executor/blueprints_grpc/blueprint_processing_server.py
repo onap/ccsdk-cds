@@ -46,4 +46,4 @@ class BluePrintProcessingServer(BluePrintProcessing_pb2_grpc.BluePrintProcessing
             # Get the Dynamic Process Instance based on request
             instance: AbstractScriptFunction = instance_for_input(self.configuration, request)
             instance.set_context(context)
-            return instance.process(request)
+            yield from instance.process(request)
