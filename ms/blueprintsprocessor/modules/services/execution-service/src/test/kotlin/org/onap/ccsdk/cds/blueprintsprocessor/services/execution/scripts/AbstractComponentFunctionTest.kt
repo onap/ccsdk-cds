@@ -70,9 +70,6 @@ class AbstractComponentFunctionTest {
         every { blueprintContext.rootPath } returns normalizedPathName("target")
     }
 
-    /**
-     * Tests the abstract component functionality.
-     */
     @Test
     fun testAbstractComponent() {
         runBlocking {
@@ -95,9 +92,18 @@ class AbstractComponentFunctionTest {
         }
     }
 
-    /**
-     * Tests the abstract script component functionality.
-     */
+    @Test
+    fun testComponentFunctionPayload() {
+        val sampleComponent = SampleComponent()
+        sampleComponent.operationName = "sample-action"
+        sampleComponent.executionServiceInput = JacksonUtils.readValueFromClassPathFile(
+            "payload/requests/sample-execution-request.json", ExecutionServiceInput::class.java)!!
+        val payload = sampleComponent.requestPayload()
+        assertNotNull(payload, "failed to get payload")
+        val data = sampleComponent.requestPayloadActionProperty("data")?.first()
+        assertNotNull(data, "failed to get payload request action data")
+    }
+
     @Test
     fun testAbstractScriptComponent() {
         runBlocking {
@@ -190,5 +196,6 @@ class AbstractComponentFunctionTest {
         val componentScriptExecutor = BluePrintTypes.nodeTypeComponentScriptExecutor()
         assertNotNull(componentScriptExecutor.interfaces, "failed to get interface operations")
     }
+
 }
 
