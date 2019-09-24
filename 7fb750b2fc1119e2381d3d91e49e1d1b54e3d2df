@@ -22,6 +22,30 @@
       "revId": "7fb750b2fc1119e2381d3d91e49e1d1b54e3d2df",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebfc7ad5_d07ac8ff",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/utils/ResourceAssignmentUtils.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2019-09-24T13:25:51Z",
+      "side": 1,
+      "message": "Didn\u0027t understand you.",
+      "parentUuid": "3a9385ef_e4c28cb4",
+      "range": {
+        "startLine": 128,
+        "startChar": 20,
+        "endLine": 128,
+        "endChar": 46
+      },
+      "revId": "7fb750b2fc1119e2381d3d91e49e1d1b54e3d2df",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
