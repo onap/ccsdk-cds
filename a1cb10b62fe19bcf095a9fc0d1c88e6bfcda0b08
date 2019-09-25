@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "51689de5_29e23f8a",
+        "filename": "ms/py-executor/docker/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2019-09-25T15:53:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf273f04_f16be6fc",
+      "range": {
+        "startLine": 14,
+        "startChar": 5,
+        "endLine": 15,
+        "endChar": 5
+      },
+      "revId": "a1cb10b62fe19bcf095a9fc0d1c88e6bfcda0b08",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3bf47392_3aa732ca",
         "filename": "ms/py-executor/docker/start.sh",
         "patchSetId": 1
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "602f3b87_a15df69c",
+        "filename": "ms/py-executor/docker/start.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2019-09-25T15:53:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3bf47392_3aa732ca",
+      "revId": "a1cb10b62fe19bcf095a9fc0d1c88e6bfcda0b08",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0bfe97af_b9a86760",
         "filename": "ms/py-executor/requirements.txt",
         "patchSetId": 1
@@ -53,6 +95,30 @@
       "writtenOn": "2019-09-24T06:36:13Z",
       "side": 1,
       "message": "this is use case specific",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 21
+      },
+      "revId": "a1cb10b62fe19bcf095a9fc0d1c88e6bfcda0b08",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "98317a5c_48d55a43",
+        "filename": "ms/py-executor/requirements.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2019-09-25T15:53:35Z",
+      "side": 1,
+      "message": "This py_executor is sample micro service for python based reactive ( bi directional ) communication.\nSo it holds the cds used python packages such as netconf, rest and configuration parsing capability. \n\nService Specific or southbound specific docker images will be build based on required packages by tweaking requirement.txt.\n\nMost of the organization, won\u0027t recommend virtual env in their production to install their packages on fly. So we will be using requirements.txt as a place holder.",
+      "parentUuid": "0bfe97af_b9a86760",
       "range": {
         "startLine": 3,
         "startChar": 0,
