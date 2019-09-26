@@ -91,7 +91,8 @@ open class DatabaseResourceAssignmentProcessor(
             "failed to get input-key-mappings for $dName under $dSource properties"
         }
 
-        logger.info("$dSource dictionary information : ($sql), ($inputKeyMapping), (${sourceProperties.outputKeyMapping})")
+        logger.info("DatabaseResource ($dSource) dictionary information: " +
+                "Query:($sql), input-key-mapping:($inputKeyMapping), output-key-mapping:(${sourceProperties.outputKeyMapping})")
         val jdbcTemplate = blueprintDBLibService(sourceProperties)
 
         val rows = jdbcTemplate.query(sql, populateNamedParameter(inputKeyMapping))

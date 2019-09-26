@@ -26,7 +26,7 @@
     </formats>
     <dependencySets>
         <dependencySet>
-            <outputDirectory>/opt/app/onap/lib</outputDirectory>
+            <outputDirectory>opt/app/onap/lib</outputDirectory>
             <outputFileNameMapping>${artifact.groupId}-${artifact.artifactId}-${artifact.version}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
             <excludes>
                 <exclude>org.slf4j:slf4j-simple</exclude>
@@ -41,21 +41,24 @@
                 <include>application.properties</include>
                 <include>logback.xml</include>
             </includes>
-            <outputDirectory>/opt/app/onap/config</outputDirectory>
+            <outputDirectory>opt/app/onap/config</outputDirectory>
             <useDefaultExcludes>true</useDefaultExcludes>
         </fileSet>
         <fileSet>
             <directory>${project.basedir}/../../../components/model-catalog</directory>
-            <outputDirectory>/opt/app/onap/model-catalog</outputDirectory>
+            <outputDirectory>opt/app/onap/model-catalog</outputDirectory>
             <includes>
                 <include>blueprint-model/service-blueprint/**</include>
                 <include>definition-type/starter-type/**</include>
                 <include>resource-dictionary/starter-dictionary/**</include>
             </includes>
+            <excludes>
+                <exclude>**/target/**</exclude>
+            </excludes>
         </fileSet>
         <fileSet>
             <directory>${project.basedir}/../../../components/scripts/python</directory>
-            <outputDirectory>/opt/app/onap/scripts/jython</outputDirectory>
+            <outputDirectory>opt/app/onap/scripts/jython</outputDirectory>
             <useDefaultExcludes>true</useDefaultExcludes>
         </fileSet>
     </fileSets>

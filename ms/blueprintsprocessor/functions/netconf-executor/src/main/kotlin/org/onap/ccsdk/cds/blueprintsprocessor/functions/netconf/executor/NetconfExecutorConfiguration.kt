@@ -24,5 +24,5 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 @ComponentScan
 @EnableConfigurationProperties
-@ConditionalOnProperty(name = ["blueprintprocessor.netconfExecutor.enabled"], havingValue = "true")
+@ConditionalOnProperty(name = ["blueprintsprocessor.netconfExecutor.enabled"], havingValue = "true")
 open class NetconfExecutorConfiguration

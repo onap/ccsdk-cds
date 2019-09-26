@@ -35,7 +35,7 @@ object BulkResourceSequencingUtils {
     fun process(resourceAssignments: MutableList<ResourceAssignment>): List<List<ResourceAssignment>> {
         val resourceAssignmentMap: MutableMap<String, ResourceAssignment> = hashMapOf()
         val sequenceBatchResourceAssignment = ArrayList<List<ResourceAssignment>>()
-        log.info("Assignments ({})", resourceAssignments)
+        log.trace("Assignments ({})", resourceAssignments)
         // Prepare Map
         resourceAssignments.forEach { resourceAssignment ->
             log.trace("Processing Key ({})", resourceAssignment.name)
@@ -64,7 +64,7 @@ object BulkResourceSequencingUtils {
         }
 
         val sequencedResourceAssignments: MutableList<ResourceAssignment> = topologySorting.topSort()!! as MutableList<ResourceAssignment>
-        log.info("Sorted Sequenced Assignments ({})", sequencedResourceAssignments)
+        log.trace("Sorted Sequenced Assignments ({})", sequencedResourceAssignments)
 
         var batchResourceAssignment: MutableList<ResourceAssignment>? = null
         var batchAssignmentName: MutableList<String>? = null

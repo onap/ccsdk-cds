@@ -25,7 +25,7 @@
     </formats>
     <dependencySets>
         <dependencySet>
-            <outputDirectory>/opt/app/onap/lib</outputDirectory>
+            <outputDirectory>opt/app/onap/lib</outputDirectory>
             <outputFileNameMapping>${artifact.groupId}-${artifact.artifactId}-${artifact.version}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
             <excludes>
                 <exclude>org.slf4j:slf4j-simple</exclude>
@@ -40,7 +40,7 @@
                 <include>application.yml</include>
                 <include>logback.xml</include>
             </includes>
-            <outputDirectory>/opt/app/onap/config</outputDirectory>
+            <outputDirectory>opt/app/onap/config</outputDirectory>
             <useDefaultExcludes>true</useDefaultExcludes>
         </fileSet>
     </fileSets>
