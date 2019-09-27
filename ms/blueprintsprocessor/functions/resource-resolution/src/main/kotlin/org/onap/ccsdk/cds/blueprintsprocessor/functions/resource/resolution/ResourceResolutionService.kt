@@ -229,7 +229,7 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                                                 blueprintRuntimeService,
                                                 artifactPrefix,
                                                 resourceAssignment)
-                                        log.info("Resource resolution saved into database successfully : ($resourceAssignment)")
+                                        log.info("Resource resolution saved into database successfully : (${resourceAssignment.name})")
                                     }
 
                                     // Set errors from RA
