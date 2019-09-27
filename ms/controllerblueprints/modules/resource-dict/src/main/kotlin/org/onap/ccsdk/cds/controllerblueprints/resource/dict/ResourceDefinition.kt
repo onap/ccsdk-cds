@@ -85,16 +85,13 @@ open class ResourceAssignment {
 
     override fun toString(): String {
         return """
-            [ 
+            [
                 name = $name
-                status = $status 
-                property [ 
-                    defaultValue = ${property?.defaultValue}
-                    required = ${property?.required}
-                    metadata = ${property?.metadata} 
-                ] 
+                status = $status
+                required = ${property?.required}
+                dependencies = $dependencies
                 dictionaryName = $dictionaryName
-                dictionarySource = $dictionarySource 
+                dictionarySource = $dictionarySource
             ]
             """.trimIndent()
     }
