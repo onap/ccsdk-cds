@@ -131,7 +131,7 @@ class ResourceAssignmentUtilsTest {
 
         //then the assignment should produce a valid result
         val expected = "{\n" + "  \"pnf-id\" : \"valid_value\"\n" + "}"
-        assertEquals(expected, outcome, "unexpected outcome generated")
+        assertEquals(expected, outcome.replace("\r\n","\n"), "unexpected outcome generated")
     }
 
     @Test
@@ -147,7 +147,7 @@ class ResourceAssignmentUtilsTest {
 
         //then the assignment should produce a valid result
         val expected = "{\n" + "  \"pnf-id\" : \"\${pnf-id}\"\n" + "}"
-        assertEquals(expected, outcome, "unexpected outcome generated")
+        assertEquals(expected, outcome.replace("\r\n","\n"), "unexpected outcome generated")
 
     }
 
