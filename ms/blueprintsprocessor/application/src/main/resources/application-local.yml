@@ -1,0 +1,65 @@
+appName: ControllerBluePrints
+appVersion: 1.0.0
+blueprints:
+    processor:
+        functions:
+            python:
+                executor:
+                    executionPath: ./components/scripts/python/ccsdk_blueprints
+                    modulePaths: ./components/scripts/python/ccsdk_blueprints,./components/scripts/python/ccsdk_netconf,./components/scripts/python/ccsdk_restconf
+blueprintsprocessor:
+    blueprintArchivePath: /tmp/cds/archive
+    blueprintDeployPath: /tmp/cds/deploy
+    blueprintWorkingPath: /tmp/cds/work
+    db:
+        primary:
+            driverClassName: org.mariadb.jdbc.Driver
+            hibernateDDLAuto: none
+            hibernateDialect: org.hibernate.dialect.MySQL5InnoDBDialect
+            hibernateHbm2ddlAuto: update
+            hibernateNamingStrategy: org.hibernate.cfg.ImprovedNamingStrategy
+            password: sdnctl
+            url: jdbc:mysql://localhost:3306/sdnctl
+            username: sdnctl
+    grpcEnable: false
+    grpcPort: 9111
+    httpPort: 8080
+    loadModelType: false
+    loadResourceDictionary: false
+    messageclient:
+        self-service-api:
+            bootstrapServers: 127.0.0.1:9092
+            clientId: default-client-id
+            consumerTopic: receiver.t
+            groupId: receiver-id
+            kafkaEnable: false
+            topic: producer.t
+            type: kafka-basic-auth
+    remoteScriptCommand:
+        enabled: true
+    restclient:
+        sdncodl:
+            password: Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U
+            type: basic-auth
+            url: http://localhost:8282/
+            username: admin
+    restconfEnabled: true
+controllerblueprints:
+    loadInitialData: true
+logging:
+    level:
+        org:
+            springframework:
+                boot:
+                    context:
+                        config: debug
+ms_name: org.onap.ccsdk.apps.controllerblueprints
+spring:
+    datasource:
+        password: sdnctl
+        url: jdbc:mysql://localhost:3306/sdnctl
+        username: sdnctl
+    security:
+        user:
+            name: ccsdkapps
+            password: '{bcrypt}$2a$10$duaUzVUVW0YPQCSIbGEkQOXwafZGwQ/b32/Ys4R1iwSSawFgz7QNu'

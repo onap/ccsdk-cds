@@ -16,10 +16,17 @@
   -->
 
 <configuration>
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %-5level %-40.40logger{39} : %msg%n</pattern>
-        </encoder>
+    <appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <discriminator class="org.onap.ccsdk.cds.blueprintsprocessor.uat.logging.SmartColorDiscriminator">
+            <defaultValue>white</defaultValue>
+        </discriminator>
+        <sift>
+            <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+                <encoder>
+                    <pattern>%${color}(%d{HH:mm:ss.SSS} %-5level %-40.40logger{39} : %msg%n)</pattern>
+                </encoder>
+            </appender>
+        </sift>
     </appender>
 
     <logger name="org.springframework.web.HttpLogging" level="trace"/>
@@ -34,8 +41,11 @@
     <logger name="org.hibernate.SQL" level="debug"/>
     <logger name="org.hibernate.type.descriptor.sql" level="trace"/>
 
+    <logger name="org.apache.http" level="debug"/>
+    <logger name="org.apache.http.wire" level="error"/>
+
     <root level="info">
-        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="SIFT"/>
     </root>
 
 </configuration>

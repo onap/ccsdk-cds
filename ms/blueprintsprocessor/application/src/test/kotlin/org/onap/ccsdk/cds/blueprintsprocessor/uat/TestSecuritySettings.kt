@@ -17,13 +17,12 @@
  * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
-package org.onap.ccsdk.cds.blueprintsprocessor
+package org.onap.ccsdk.cds.blueprintsprocessor.uat
 
 import org.springframework.context.ApplicationContextInitializer
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.test.context.support.TestPropertySourceUtils
 import org.springframework.util.Base64Utils
-import java.nio.charset.StandardCharsets
 
 class TestSecuritySettings {
     companion object {
@@ -31,7 +30,7 @@ class TestSecuritySettings {
         private const val authPassword = "Heisenberg"
 
         fun clientAuthToken() =
-                "Basic " + Base64Utils.encodeToString("$authUsername:$authPassword".toByteArray(StandardCharsets.UTF_8))
+                "Basic " + Base64Utils.encodeToString("$authUsername:$authPassword".toByteArray())
     }
 
     class ServerContextInitializer : ApplicationContextInitializer<ConfigurableApplicationContext> {

@@ -17,13 +17,13 @@
  * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
-package org.onap.ccsdk.cds.blueprintsprocessor
+package org.onap.ccsdk.cds.blueprintsprocessor.uat
 
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 
-class PathDeserializer : StdDeserializer<String>(String::class.java) {
+internal class PathDeserializer : StdDeserializer<String>(String::class.java) {
     override fun deserialize(jp: JsonParser, ctxt: DeserializationContext?): String {
         val path = jp.codec.readValue(jp, Any::class.java)
         return flatJoin(path)

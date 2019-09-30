@@ -17,45 +17,76 @@
  * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
-package org.onap.ccsdk.cds.blueprintsprocessor
+package org.onap.ccsdk.cds.blueprintsprocessor.uat
 
 import com.fasterxml.jackson.annotation.JsonAlias
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.node.MissingNode
+import com.fasterxml.jackson.module.kotlin.convertValue
+import org.yaml.snakeyaml.DumperOptions
 import org.yaml.snakeyaml.Yaml
-import java.nio.file.Path
+import org.yaml.snakeyaml.nodes.Tag
 
-data class ProcessDefinition(val name: String, val request: JsonNode, val expectedResponse: JsonNode,
-                             val responseNormalizerSpec: JsonNode = MissingNode.getInstance())
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+data class ProcessDefinition(val name: String, val request: JsonNode, val expectedResponse: JsonNode? = null,
+                             val responseNormalizerSpec: JsonNode? = null)
 
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 data class RequestDefinition(val method: String,
                              @JsonDeserialize(using = PathDeserializer::class)
                              val path: String,
                              val headers: Map<String, String> = emptyMap(),
-                             val body: JsonNode = MissingNode.getInstance())
+                             val body: JsonNode? = null)
 
-data class ResponseDefinition(val status: Int = 200, val body: JsonNode = MissingNode.getInstance()) {
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+data class ResponseDefinition(val status: Int = 200, val body: JsonNode? = null) {
     companion object {
         val DEFAULT_RESPONSE = ResponseDefinition()
     }
 }
 
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 data class ExpectationDefinition(val request: RequestDefinition,
                                  val response: ResponseDefinition = ResponseDefinition.DEFAULT_RESPONSE)
 
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 data class ServiceDefinition(val selector: String, val expectations: List<ExpectationDefinition>)
 
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 data class UatDefinition(val processes: List<ProcessDefinition>,
                          @JsonAlias("external-services")
                          val externalServices: List<ServiceDefinition> = emptyList()) {
 
-    companion object {
-        fun load(mapper: ObjectMapper, path: Path): UatDefinition {
-            return path.toFile().reader().use { reader ->
-                mapper.convertValue(Yaml().load(reader), UatDefinition::class.java)
-            }
+    fun dump(mapper: ObjectMapper, excludedProperties: List<String> = emptyList()): String {
+        val uatAsMap: Map<String, Any> = mapper.convertValue(this)
+        if (excludedProperties.isNotEmpty()) {
+            pruneTree(uatAsMap, excludedProperties)
         }
+        return Yaml().dumpAs(uatAsMap, Tag.MAP, DumperOptions.FlowStyle.BLOCK)
+    }
+
+    fun toBare(): UatDefinition {
+        val newProcesses = processes.map { p ->
+            ProcessDefinition(p.name, p.request, null, p.responseNormalizerSpec)
+        }
+        return UatDefinition(newProcesses)
+    }
+
+    private fun pruneTree(node: Any?, excludedProperties: List<String>) {
+        when (node) {
+            is MutableMap<*, *> -> {
+                excludedProperties.forEach { key -> node.remove(key) }
+                node.forEach { (_, value) -> pruneTree(value, excludedProperties) }
+            }
+            is List<*> -> node.forEach { value -> pruneTree(value, excludedProperties) }
+        }
+    }
+
+    companion object {
+        fun load(mapper: ObjectMapper, spec: String): UatDefinition =
+                mapper.convertValue(Yaml().load(spec), UatDefinition::class.java)
+
     }
 }
