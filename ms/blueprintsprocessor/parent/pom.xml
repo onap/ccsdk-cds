@@ -386,11 +386,13 @@
                 <version>${project.version}</version>
             </dependency>
 
+            <!--
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>health-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            -->
 
             <!-- North Bound -->
             <dependency>

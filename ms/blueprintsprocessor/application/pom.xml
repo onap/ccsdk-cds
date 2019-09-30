@@ -85,10 +85,12 @@
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
             <artifactId>configs-api</artifactId>
         </dependency>
+        <!--
         <dependency>
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
             <artifactId>health-api</artifactId>
         </dependency>
+        -->
 
         <!-- Functions -->
         <dependency>
