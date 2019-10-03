@@ -19,7 +19,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
-import kotlinx.coroutines.runBlocking
+import org.onap.ccsdk.cds.blueprintsprocessor.core.monoMdc
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelSearch
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.BluePrintModelHandler
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
@@ -29,6 +29,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
+import reactor.core.publisher.Mono
 
 /**
  * BlueprintModelController Purpose: Handle controllerBlueprint API request
@@ -44,7 +45,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @ResponseBody
     @Throws(BluePrintException::class)
     @PreAuthorize("hasRole('USER')")
-    fun saveBlueprint(@RequestPart("file") filePart: FilePart): BlueprintModelSearch = runBlocking {
+    fun saveBlueprint(@RequestPart("file") filePart: FilePart): Mono<BlueprintModelSearch> = monoMdc {
         bluePrintModelHandler.saveBlueprintModel(filePart)
     }
 
@@ -67,8 +68,9 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @Throws(BluePrintException::class)
     @PreAuthorize("hasRole('USER')")
     fun getBlueprintByNameAndVersion(@PathVariable(value = "name") name: String,
-                                     @PathVariable(value = "version") version: String): BlueprintModelSearch {
-        return this.bluePrintModelHandler.getBlueprintModelSearchByNameAndVersion(name, version)
+                                     @PathVariable(value = "version") version: String)
+            : Mono<BlueprintModelSearch> = monoMdc {
+        bluePrintModelHandler.getBlueprintModelSearchByNameAndVersion(name, version)
     }
 
     @GetMapping("/download/by-name/{name}/version/{version}", produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -76,8 +78,9 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @Throws(BluePrintException::class)
     @PreAuthorize("hasRole('USER')")
     fun downloadBlueprintByNameAndVersion(@PathVariable(value = "name") name: String,
-                                          @PathVariable(value = "version") version: String): ResponseEntity<Resource> {
-        return this.bluePrintModelHandler.downloadBlueprintModelFileByNameAndVersion(name, version)
+                                          @PathVariable(value = "version") version: String)
+            : Mono<ResponseEntity<Resource>> = monoMdc {
+        bluePrintModelHandler.downloadBlueprintModelFileByNameAndVersion(name, version)
     }
 
     @GetMapping("/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -92,8 +95,8 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @ResponseBody
     @Throws(BluePrintException::class)
     @PreAuthorize("hasRole('USER')")
-    fun downloadBluePrint(@PathVariable(value = "id") id: String): ResponseEntity<Resource> {
-        return this.bluePrintModelHandler.downloadBlueprintModelFile(id)
+    fun downloadBluePrint(@PathVariable(value = "id") id: String): Mono<ResponseEntity<Resource>> = monoMdc {
+        bluePrintModelHandler.downloadBlueprintModelFile(id)
     }
 
     @PostMapping("/enrich", produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
@@ -101,7 +104,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @ResponseBody
     @Throws(BluePrintException::class)
     @PreAuthorize("hasRole('USER')")
-    fun enrichBlueprint(@RequestPart("file") file: FilePart): ResponseEntity<Resource> = runBlocking {
+    fun enrichBlueprint(@RequestPart("file") file: FilePart): Mono<ResponseEntity<Resource>> = monoMdc {
         bluePrintModelHandler.enrichBlueprint(file)
     }
 
@@ -109,7 +112,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @ResponseBody
     @Throws(BluePrintException::class)
     @PreAuthorize("hasRole('USER')")
-    fun publishBlueprint(@RequestPart("file") file: FilePart): BlueprintModelSearch = runBlocking {
+    fun publishBlueprint(@RequestPart("file") file: FilePart): Mono<BlueprintModelSearch> = monoMdc {
         bluePrintModelHandler.publishBlueprint(file)
     }
 
@@ -128,7 +131,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     fun deleteBlueprint(@ApiParam(value = "Name of the CBA.", required = true)
                         @PathVariable(value = "name") name: String,
                         @ApiParam(value = "Version of the CBA.", required = true)
-                        @PathVariable(value = "version") version: String) = runBlocking {
+                        @PathVariable(value = "version") version: String) = monoMdc {
         bluePrintModelHandler.deleteBlueprintModel(name, version)
     }
 }
