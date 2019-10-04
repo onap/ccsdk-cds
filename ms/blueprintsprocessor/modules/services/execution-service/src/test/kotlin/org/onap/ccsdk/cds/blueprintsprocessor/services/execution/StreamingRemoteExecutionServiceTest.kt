@@ -36,6 +36,8 @@ import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceInput
 import java.util.*
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 
 class StreamingRemoteExecutionServiceTest {
@@ -69,25 +71,48 @@ class StreamingRemoteExecutionServiceTest {
 
             val spyStreamingRemoteExecutionService = spyk(streamingRemoteExecutionService)
             /** To test with real server, uncomment below line */
-            coEvery { spyStreamingRemoteExecutionService.createGrpcChannel(any()) } returns channel
+            coEvery() { spyStreamingRemoteExecutionService.createGrpcChannel(any()) } returns channel
 
+            /** Test Send and Receive non interactive transaction */
+            val nonInteractiveDeferred = arrayListOf<Deferred<*>>()
+            repeat(2) { count ->
+                val requestId = "1234-$count"
+                val request = getRequest(requestId)
+                val invocationId = request.commonHeader.subRequestId
+                val deferred = async {
+                    val response = spyStreamingRemoteExecutionService.sendNonInteractive(tokenAuthGrpcClientProperties,
+                            invocationId, request, 1000L)
+                    assertNotNull(response, "failed to get non interactive response")
+                    assertEquals(response.commonHeader.requestId, requestId,
+                            "failed to match non interactive response id")
+                    assertEquals(response.status.eventType, EventType.EVENT_COMPONENT_EXECUTED,
+                            "failed to match non interactive response type")
+                }
+                nonInteractiveDeferred.add(deferred)
+
+            }
+            nonInteractiveDeferred.awaitAll()
+
+            /** Test Send and Receive interactive transaction */
             val responseFlowsDeferred = arrayListOf<Deferred<*>>()
-
-            repeat(1) { count ->
+            repeat(2) { count ->
                 val requestId = "12345-$count"
-                val responseFlow = spyStreamingRemoteExecutionService.openSubscription(tokenAuthGrpcClientProperties, requestId)
+                val request = getRequest(requestId)
+                val invocationId = request.commonHeader.requestId
+                val responseFlow = spyStreamingRemoteExecutionService
+                        .openSubscription(tokenAuthGrpcClientProperties, invocationId)
 
                 val deferred = async {
                     responseFlow.collect {
-                        log.info("Received $count-response (${it.commonHeader.subRequestId}) : ${it.status.eventType}")
+                        log.info("Received $count-response ($invocationId) : ${it.status.eventType}")
                         if (it.status.eventType == EventType.EVENT_COMPONENT_EXECUTED) {
-                            spyStreamingRemoteExecutionService.cancelSubscription(it.commonHeader.requestId)
+                            spyStreamingRemoteExecutionService.cancelSubscription(invocationId)
                         }
                     }
                 }
                 responseFlowsDeferred.add(deferred)
                 /** Sending Multiple messages with same requestId  and different subRequestId */
-                spyStreamingRemoteExecutionService.send(getRequest(requestId))
+                spyStreamingRemoteExecutionService.send(invocationId, request)
             }
             responseFlowsDeferred.awaitAll()
             streamingRemoteExecutionService.closeChannel(tokenAuthGrpcClientProperties)
