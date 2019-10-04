@@ -36,6 +36,7 @@ open class KafkaMessageConsumerProperties : MessageConsumerProperties() {
     var clientId: String? = null
     var topic: String? = null
     var pollMillSec: Long = 1000
+    var pollRecords: Int = -1
 }
 
 open class KafkaBasicAuthMessageConsumerProperties : KafkaMessageConsumerProperties()
