@@ -41,6 +41,25 @@ services:
     restart: always
     volumes:
       - blueprints-deploy:/opt/app/onap/blueprints/deploy
+  py-executor:
+    depends_on:
+      - db
+    image: onap/ccsdk-py-script-executor
+    container_name: bp-py-executor
+    ports:
+      - "50052:50052"
+    restart: always
+    volumes:
+      - blueprints-deploy:/opt/app/onap/blueprints/deploy
+    environment:
+      APPLICATIONNAME: PythonExecutor
+      BUNDLEVERSION: 1.0.0
+      APP_CONFIG_HOME: /opt/app/onap/config
+      STICKYSELECTORKEY:
+      ENVCONTEXT: dev
+      APP_PORT: 50052
+      BASIC_AUTH: Basic Y2NzZGthcHBzOmNjc2RrYXBwcw==
+      LOG_FILE: /opt/app/onap/logs/application.log
 
 volumes:
   blueprints-deploy:

@@ -29,7 +29,7 @@ logger = logging.getLogger("Utils")
 
 def current_time():
     ts = time.time()
-    return datetime.datetime.fromtimestamp(ts).strftime("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    return datetime.datetime.fromtimestamp(ts).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
 
 def blueprint_id(input: ExecutionServiceInput):

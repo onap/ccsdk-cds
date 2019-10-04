@@ -11,8 +11,8 @@ RUN tar -xzf /source.tar.gz -C /tmp \
  && rm -rf /source.tar.gz \
  && rm -rf /tmp/@project.build.finalName@
 
-RUN pip install --no-cache-dir -r /opt/app/onap/requirements.txt
+RUN pip install --no-cache-dir -r /opt/app/onap/python/requirements.txt
 
 VOLUME /opt/app/onap/blueprints/deploy/
 
-ENTRYPOINT /opt/app/onap/start.sh
+ENTRYPOINT /opt/app/onap/python/start.sh
