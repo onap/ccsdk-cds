@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d26950ad_fa7fe4f2",
+        "filename": "ms/blueprintsprocessor/modules/services/execution-service/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2019-10-04T13:31:46Z",
+      "side": 1,
+      "message": "Is this only used for unit testing?  If so, should add \u003cscope\u003etest\u003c/scope\u003e to make sure no unnecessary runtime dependency is added",
+      "revId": "4c2b42f141e1501222a284f964eb4303cc4f03aa",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
