@@ -4,7 +4,7 @@
     "template_author" : "Abdelmuhaimen Seaudi",
     "author-email" : "abdelmuhaimen.seaudi@orange.com",
     "user-groups" : "ADMIN, OPERATION",
-    "template_name" : "test",
+    "template_name" : "vLB_CDS",
     "template_version" : "1.0.0",
     "template_tags" : "test, vDNS-CDS, SCALE-OUT, MARCO"
   },
@@ -167,13 +167,13 @@
             "type" : "artifact-mapping-resource",
             "file" : "Templates/vdns-mapping.json"
           },
-          "vdns-vnf-template" : {
+          "vnf-template" : {
             "type" : "artifact-template-velocity",
-            "file" : "Templates/vdns-vnf-template.vtl"
+            "file" : "Templates/vnf-template.vtl"
           },
-          "vdns-vnf-mapping" : {
+          "vnf-mapping" : {
             "type" : "artifact-mapping-resource",
-            "file" : "Templates/vdns-vnf-mapping.json"
+            "file" : "Templates/vnf-mapping.json"
           },
           "vlb-template" : {
             "type" : "artifact-template-velocity",

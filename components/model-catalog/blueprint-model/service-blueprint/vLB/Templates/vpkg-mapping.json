@@ -538,13 +538,15 @@
       ],
       "entry_schema": {
         "type": ""
-      },
-      "default": "m1.medium"
+      }
     },
     "input-param": false,
-    "dictionary-name": "vpg_flavor_name",
-    "dictionary-source": "default",
-    "dependencies": [],
+   "dictionary-name": "flavor_name",
+    "dictionary-source": "sdnc",
+    "dependencies": [
+	  "service-instance-id",
+      "vnf-id"
+	],
     "version": 0
   },
   {
