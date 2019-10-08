@@ -25,8 +25,8 @@ class ConfigDeploy(NetconfComponentFunction):
   def process(self, execution_request):      
       log = globals()[netconf_constant.SERVICE_LOG]	  
       print(globals())
-      print("Waiting 4 minutes until NETCONF server is UP on vLB ...")
-      sleep (240)
+#      print("Waiting 4 minutes until NETCONF server is UP on vLB ...")
+#     sleep (240)
       nc = NetconfClient(log, self, "netconf-connection")
       rr = ResolutionHelper(self)
 

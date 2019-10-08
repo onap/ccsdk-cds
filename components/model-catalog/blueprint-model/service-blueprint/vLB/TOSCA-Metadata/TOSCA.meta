@@ -1,6 +1,6 @@
 TOSCA-Meta-File-Version: 1.0.0
 CSAR-Version: 1.0
 Created-By: PLATANIA, MARCO <platania@research.att.com>
-Entry-Definitions: Definitions/vDNS-CDS.json
+Entry-Definitions: Definitions/vLB_CDS.json
 Template-Tags: vDNS-CDS-test1
 Content-Type: application/vnd.oasis.bpmn
