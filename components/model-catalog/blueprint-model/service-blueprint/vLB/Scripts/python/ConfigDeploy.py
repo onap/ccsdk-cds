@@ -25,8 +25,13 @@ class ConfigDeploy(NetconfComponentFunction):
   def process(self, execution_request):      
       log = globals()[netconf_constant.SERVICE_LOG]	  
       print(globals())
+<<<<<<< HEAD   (fed812 Worked on defect CCSDK-1793)
       print("Waiting 4 minutes until NETCONF server is UP on vLB ...")
       sleep (240)
+=======
+#      print("Waiting 4 minutes until NETCONF server is UP on vLB ...")
+#     sleep (240)
+>>>>>>> CHANGE (c4fb52 update vLB CDS CBA)
       nc = NetconfClient(log, self, "netconf-connection")
       rr = ResolutionHelper(self)
 

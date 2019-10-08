@@ -1,3 +1,4 @@
+<<<<<<< HEAD   (fed812 Worked on defect CCSDK-1793)
 [
   {
     "name": "service-instance-id",
@@ -111,3 +112,118 @@
     "version": 0
   }
 ]
+=======
+[
+  {
+    "name": "service-instance-id",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      }
+    },
+    "input-param": false,
+    "dictionary-name": "service-instance-id",
+    "dictionary-source": "input",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "vnf-id",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      }
+    },
+    "input-param": false,
+    "dictionary-name": "vnf-id",
+    "dictionary-source": "input",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "vdns_vf_module_id",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      }
+    },
+    "input-param": false,
+    "dictionary-name": "vdns_vf_module_id",
+    "dictionary-source": "sdnc",
+    "dependencies": [
+	  "service-instance-id",
+      "vnf-id"
+    ],
+    "version": 0
+  },
+  {
+    "name": "vdns_int_private_ip_0",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      }
+    },
+    "input-param": false,
+    "dictionary-name": "vdns_int_private_ip_0",
+    "dictionary-source": "sdnc",
+    "dependencies": [
+      "service-instance-id",
+      "vnf-id",
+      "vdns_vf_module_id"
+    ],
+    "version": 0
+  },
+  {
+    "name": "vdns_onap_private_ip_0",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      }
+    },
+    "input-param": false,
+    "dictionary-name": "vdns_onap_private_ip_0",
+    "dictionary-source": "sdnc",
+    "dependencies": [
+      "service-instance-id",
+      "vnf-id",
+      "vdns_vf_module_id"
+    ],
+    "version": 0
+  }
+]
+>>>>>>> CHANGE (c4fb52 update vLB CDS CBA)
