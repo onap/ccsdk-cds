@@ -40,6 +40,26 @@
     "dependencies": [],
     "version": 0
   },
+    {
+    "name": "flavor_name",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      }
+    },
+    "input-param": false,
+    "dictionary-name": "flavor_name",
+    "dictionary-source": "input",
+    "dependencies": [],
+    "version": 0
+  },
   {
     "name": "image_name",
     "property": {

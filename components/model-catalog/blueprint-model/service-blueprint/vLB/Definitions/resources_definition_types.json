@@ -75,7 +75,7 @@
           "key-dependencies" : [ "vf-module-id", "service-instance-id", "vnf-id" ]
         }
       },
-      "aai-data" : {
+      "primary-aai-data" : {
         "type" : "source-rest",
         "properties" : {
           "verb" : "PATCH",
@@ -191,6 +191,41 @@
           },
           "output-key-mapping" : {
             "demo_artifacts_version" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "flavor_name" : {
+    "tags" : "flavor_name",
+    "name" : "flavor_name",
+    "property" : {
+      "description" : "flavor_name",
+      "type" : "string"
+    },
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/flavor_name",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "flavor_name" : "value"
           },
           "key-dependencies" : [ "service-instance-id", "vnf-id" ]
         }
@@ -1076,7 +1111,7 @@
       "any-db" : {
         "type" : "source-db",
         "properties" : {
-          "query" : "SELECT artifact_name FROM BLUEPRINT_MODEL where artifact_version=\"1.0.0\"",
+          "query" : "SELECT artifact_name FROM BLUEPRINT_RUNTIME where artifact_version=\"1.0.0\"",
           "input-key-mapping" : { },
           "output-key-mapping" : {
             "service-instance-id" : "artifact_name"
@@ -1086,7 +1121,7 @@
       "processor-db" : {
         "type" : "source-db",
         "properties" : {
-          "query" : "SELECT artifact_name FROM BLUEPRINT_MODEL where artifact_version=\"1.0.0\"",
+          "query" : "SELECT artifact_name FROM BLUEPRINT_RUNTIME where artifact_version=\"1.0.0\"",
           "input-key-mapping" : { },
           "output-key-mapping" : {
             "service-instance-id" : "artifact_name"
@@ -1099,41 +1134,6 @@
           "script-type" : "jython",
           "script-class-reference" : "SampleRAProcessor",
           "instance-dependencies" : [ ]
-        }
-      }
-    }
-  },
-  "vdns_flavor_name" : {
-    "tags" : "vdns_flavor_name",
-    "name" : "vdns_flavor_name",
-    "property" : {
-      "description" : "vdns_flavor_name",
-      "type" : "string"
-    },
-    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
-    "sources" : {
-      "input" : {
-        "type" : "source-input"
-      },
-      "default" : {
-        "type" : "source-default",
-        "properties" : { }
-      },
-      "sdnc" : {
-        "type" : "source-rest",
-        "properties" : {
-          "verb" : "GET",
-          "type" : "JSON",
-          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vdns_flavor_name",
-          "path" : "/param/0/value",
-          "input-key-mapping" : {
-            "service-instance-id" : "service-instance-id",
-            "vnf-id" : "vnf-id"
-          },
-          "output-key-mapping" : {
-            "vdns_flavor_name" : "value"
-          },
-          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
         }
       }
     }
@@ -1275,7 +1275,7 @@
           "key-dependencies" : [ "service-instance-id", "vnf-id" ]
         }
       },
-      "aai-data" : {
+      "primary-aai-data" : {
         "type" : "source-rest",
         "properties" : {
           "verb" : "GET",
@@ -1439,11 +1439,11 @@
       }
     }
   },
-  "vf_module_name" : {
-    "tags" : "vf_module_name",
-    "name" : "vf_module_name",
+  "vf-module-name" : {
+    "tags" : "vf-module-name",
+    "name" : "vf-module-name",
     "property" : {
-      "description" : "vf_module_name",
+      "description" : "vf-module-name",
       "type" : "string"
     },
     "updated-by" : "Singal, Kapil <ks220y@att.com>",
@@ -1519,41 +1519,6 @@
           },
           "output-key-mapping" : {
             "vip" : "value"
-          },
-          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
-        }
-      }
-    }
-  },
-  "vlb_flavor_name" : {
-    "tags" : "vlb_flavor_name",
-    "name" : "vlb_flavor_name",
-    "property" : {
-      "description" : "vlb_flavor_name",
-      "type" : "string"
-    },
-    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
-    "sources" : {
-      "input" : {
-        "type" : "source-input"
-      },
-      "default" : {
-        "type" : "source-default",
-        "properties" : { }
-      },
-      "sdnc" : {
-        "type" : "source-rest",
-        "properties" : {
-          "verb" : "GET",
-          "type" : "JSON",
-          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vlb_flavor_name",
-          "path" : "/param/0/value",
-          "input-key-mapping" : {
-            "service-instance-id" : "service-instance-id",
-            "vnf-id" : "vnf-id"
-          },
-          "output-key-mapping" : {
-            "vlb_flavor_name" : "value"
           },
           "key-dependencies" : [ "service-instance-id", "vnf-id" ]
         }
@@ -1716,18 +1681,6 @@
         "type" : "source-default",
         "properties" : { }
       },
-      "processor-db" : {
-        "type" : "source-db",
-        "properties" : {
-          "endpoint-selector" : "dynamic-db-source",
-          "type" : "SQL",
-          "query" : "select sdnctl.IPAM_IP_POOL.prefix as prefix from sdnctl.IPAM_IP_POOL where description = \"private1\"",
-          "input-key-mapping" : { },
-          "output-key-mapping" : {
-            "vlb_private_net_cidr" : "prefix"
-          }
-        }
-      },
       "sdnc" : {
         "type" : "source-rest",
         "properties" : {
@@ -1743,6 +1696,18 @@
             "vlb_private_net_cidr" : "value"
           },
           "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      },
+      "processor-db" : {
+        "type" : "source-db",
+        "properties" : {
+          "endpoint-selector" : "dynamic-db-source",
+          "type" : "SQL",
+          "query" : "select sdnctl.IPAM_IP_POOL.prefix as prefix from sdnctl.IPAM_IP_POOL where description = \"private1\"",
+          "input-key-mapping" : { },
+          "output-key-mapping" : {
+            "vlb_private_net_cidr" : "prefix"
+          }
         }
       }
     }
@@ -1917,51 +1882,16 @@
       "processor-db" : {
         "type" : "source-db",
         "properties" : {
-          "endpoint-selector" : "dynamic-db-source",
           "type" : "SQL",
           "query" : "select VFC_MODEL.version as vnfc_model_version from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
-          "input-key-mapping" : {
-            "vfccustomizationuuid" : "vfccustomizationuuid"
-          },
           "output-key-mapping" : {
             "vnfc-model-version" : "vnfc_model_version"
           },
-          "key-dependencies" : [ "vfccustomizationuuid" ]
-        }
-      }
-    }
-  },
-  "vpg_flavor_name" : {
-    "tags" : "vpg_flavor_name",
-    "name" : "vpg_flavor_name",
-    "property" : {
-      "description" : "vpg_flavor_name",
-      "type" : "string"
-    },
-    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
-    "sources" : {
-      "input" : {
-        "type" : "source-input"
-      },
-      "default" : {
-        "type" : "source-default",
-        "properties" : { }
-      },
-      "sdnc" : {
-        "type" : "source-rest",
-        "properties" : {
-          "verb" : "GET",
-          "type" : "JSON",
-          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vpg_flavor_name",
-          "path" : "/param/0/value",
+          "endpoint-selector" : "dynamic-db-source",
           "input-key-mapping" : {
-            "service-instance-id" : "service-instance-id",
-            "vnf-id" : "vnf-id"
+            "vfccustomizationuuid" : "vfccustomizationuuid"
           },
-          "output-key-mapping" : {
-            "vpg_flavor_name" : "value"
-          },
-          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+          "key-dependencies" : [ "vfccustomizationuuid" ]
         }
       }
     }
