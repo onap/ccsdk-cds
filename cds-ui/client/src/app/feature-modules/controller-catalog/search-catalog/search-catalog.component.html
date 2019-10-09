@@ -1,0 +1,41 @@
+<!-- /*
+* ============LICENSE_START=======================================================
+* ONAP : CDS
+* ================================================================================
+* Copyright (C) 2019 TechMahindra
+*=================================================================================
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+* ============LICENSE_END=========================================================
+*/--> 
+<form class="search-form" [formGroup]="myControl">
+  <mat-form-field class="search-full-width">
+      <input matInput type="text" [(ngModel)]="searchText" placeholder="Search Resources" formControlName="search_input">
+      <button matSuffix mat-icon-button (click)="fetchCatalogByName()">
+    <mat-icon>search</mat-icon>
+  </button>
+  </mat-form-field>
+</form>
+<div class="searchcontainer">
+  <div class="flexBox">
+      <div *ngFor="let option of options" style="position: relative !important;width:20% !important">
+          <mat-card class="example-card">
+              <mat-card-content class="card-content">
+                  {{option.modelName}}
+              </mat-card-content>
+              <mat-card-actions class="flexBox">
+                  <button matStepperNext mat-menu-item (click)="editInfo(option.blueprintModel.artifactName,option.blueprintModel.artifactVersion,3)">Info</button>
+              </mat-card-actions>
+          </mat-card>
+      </div>
+  </div>
+</div>

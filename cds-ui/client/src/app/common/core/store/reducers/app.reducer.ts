@@ -21,13 +21,14 @@ limitations under the License.
 
 import { ActionReducerMap } from '@ngrx/store';
 import { routerReducer } from '@ngrx/router-store';
-
 import { IAppState } from '../state/app.state';
 import { blueprintReducer } from '../reducers/blueprint.reducer';
 import { resourcesReducer } from '../reducers/resources.reducer';
+import { catalogReducer } from '../reducers/catalog.reducer';
 
 export const appReducers: ActionReducerMap<IAppState, any> = {
     router: routerReducer,
     blueprint: blueprintReducer,
-    resources:resourcesReducer
+    resources:resourcesReducer,
+    catalog: catalogReducer
 };

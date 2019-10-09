@@ -25,13 +25,13 @@ import { StoreModule, Store } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { HttpClientModule } from '@angular/common/http';
-
 import { appReducers } from './store/reducers/app.reducer';
 import { BlueprintEffects } from './store/effects/blueprint.effects';
 import { ResourcesEffects } from './store/effects/resources.effects';
 import { ApiService } from './services/api.service';
 import { NotificationHandlerService } from './services/notification-handler.service';
 import { LoaderService } from './services/loader.service';
+import { CatalogEffects } from './store/effects/catalog.effect';
 // import { BlueprintService } from './services/blueprint.service';
 
 @NgModule({
@@ -40,7 +40,7 @@ import { LoaderService } from './services/loader.service';
   imports: [
     CommonModule,
     StoreModule.forRoot(appReducers),
-    EffectsModule.forRoot([BlueprintEffects, ResourcesEffects]),
+    EffectsModule.forRoot([BlueprintEffects, ResourcesEffects, CatalogEffects]),
     StoreRouterConnectingModule.forRoot({ stateKey: 'router' }),
     HttpClientModule
   ],

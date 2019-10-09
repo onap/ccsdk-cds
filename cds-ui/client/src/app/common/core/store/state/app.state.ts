@@ -24,14 +24,17 @@ import { IBlueprintState } from '../models/blueprintState.model';
 import { initialBlueprintState } from './blueprint.state';
 import { IResourcesState } from '../models/resourcesState.model';
 import { initialResourcesState } from './resources.state';
+import { ICatalogState } from '../models/catalogState.model';
+import { initialCatalogState } from './catalog.state';
 
 export interface IAppState {
     router? : RouterReducerState,
     blueprint: IBlueprintState,
-    resources: IResourcesState
+    resources: IResourcesState,
+    catalog: ICatalogState
 }
-
 export const initialAppState: IAppState = {
     blueprint: initialBlueprintState,
-    resources: initialResourcesState
+    resources: initialResourcesState,
+    catalog: initialCatalogState
 }

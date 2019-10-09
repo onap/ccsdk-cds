@@ -2,6 +2,8 @@
 ============LICENSE_START==========================================
 ===================================================================
 Copyright (C) 2018 IBM Intellectual Property. All rights reserved.
+
+Modifications Copyright (C) 2019 TechMahindra
 ===================================================================
 
 Unless otherwise specified, all software contained herein is licensed
@@ -110,4 +112,11 @@ export const ResourceDictionaryURLs = {
     getSources: '/resourcedictionary/source-mapping',
     getModelType: '/resourcedictionary/model-type',
     getDataType: '/resourcedictionary/model-type/by-definition/data_type'
+}
+
+export const ControllerCatalogURLs = {
+		 searchControllerCatalogByTags: '/controllercatalog/search',
+		 saveControllerCatalog: '/controllercatalog/save',
+		 getDefinition: '/controllercatalog/model-type/by-definition',
+		 getDerivedFrom: '/controllercatalog/model-type/by-derivedfrom'
 }

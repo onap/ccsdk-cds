@@ -2,6 +2,8 @@
 ============LICENSE_START==========================================
 ===================================================================
 Copyright (C) 2018 IBM Intellectual Property. All rights reserved.
+
+Modifications Copyright (C) 2019 TechMahindra
 ===================================================================
 
 Unless otherwise specified, all software contained herein is licensed
@@ -36,6 +38,10 @@ const routes: Routes = [
     {
       path: 'resource-definition',
       loadChildren: './feature-modules/resource-definition/resource-definition.module#ResourceDefinitionModule'
+    },
+    {
+        path: 'controller-catalog',
+        loadChildren: './feature-modules/controller-catalog/controller-catalog.module#ControllerCatalogModule'
     }
   ]
 }

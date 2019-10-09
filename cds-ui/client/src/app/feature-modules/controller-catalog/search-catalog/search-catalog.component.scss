@@ -1,0 +1,78 @@
+/*
+* ============LICENSE_START=======================================================
+* ONAP : CDS
+* ================================================================================
+* Copyright (C) 2019 TechMahindra
+*=================================================================================
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+* ============LICENSE_END=========================================================
+*/
+
+.example-card {
+  // min-width: 300px;
+  max-height: 200px;
+  background-color: #ebebeb;
+  position: relative;
+  width: 250px;
+  margin: 5px;
+}
+
+.mat-grid-tile {
+  position: absolute;
+  width: 240px !important;
+}
+
+.mat-grid-list div {
+  position: relative;
+}
+
+button.mat-menu-item {
+  width: auto;
+  float: left;
+  border-radius: 4px;
+  background-color: #3f51b5;
+  margin: 5px;
+  cursor: pointer;
+  color: white;
+}
+
+.flexBox {
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+}
+
+.card-deck-container {
+  position: relative;
+  border-radius: 1px;
+  padding: 2px;
+  margin: 2px;
+  // background-color: #f5f5f5;
+}
+
+.searchcontainer {
+  // min-height: 300px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.card-content {
+  text-align: center;
+  margin: 5px;
+}
+
+.mat-card-actions {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+  padding: 0px 0 !important;
+}

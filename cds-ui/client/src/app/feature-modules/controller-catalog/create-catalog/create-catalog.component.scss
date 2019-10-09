@@ -1,0 +1,60 @@
+/*
+* ============LICENSE_START=======================================================
+* ONAP : CDS
+* ================================================================================
+* Copyright (C) 2019 TechMahindra
+*=================================================================================
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+* ============LICENSE_END=========================================================
+*/
+.matStepNextBtn{
+    color:white;
+    background:#3f51b5;
+    margin-top: 10px;
+    position: absolute;
+    margin-bottom: 5px;
+    border-radius: 4px;
+}
+.meta-form {
+  width: 100%;
+}
+
+.form-field {
+  width: 40%;
+  padding:20px;
+}
+
+.form-table {
+  width: 100%;
+}
+.ver-card {
+    width: 100%;  
+    background-color: #f1f1f1;
+     padding: 0.01em 16px;
+      margin: 20px 0;
+      box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)!important;
+      height: 800px;
+  }
+  .mat-card-header{
+      height:35px;  
+      padding-top: 4px;
+  }
+  .mat-card-content{
+      width: auto;
+      background-color: #fff;
+      padding: 8px 8px;
+      // border-left: 4px solid #4CAF50;
+      word-wrap: break-word;
+      min-height:350px;
+      height: auto;
+  }
