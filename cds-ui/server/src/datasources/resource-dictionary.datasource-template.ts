@@ -1,19 +1,19 @@
-import {controllerApiConfig} from '../config/app-config';
+import {processorApiConfig} from '../config/app-config';
 
 export default {
     "name": "resourceDictionary",
     "connector": "rest",
-    "baseURL": controllerApiConfig.http.url + "/dictionary",
+    "baseURL": processorApiConfig.http.url + "/dictionary",
     "crud": false,
     "debug": true,
     "operations": [{
             "template": {
                 "method": "GET",
-                "url": controllerApiConfig.http.url + "/dictionary/{name}",
+                "url": processorApiConfig.http.url + "/dictionary/{name}",
                 "headers": {
                     "accepts": "application/json",
                     "content-type": "application/json",
-                    "authorization": controllerApiConfig.http.authToken
+                    "authorization": processorApiConfig.http.authToken
                 },
                 "responsePath": "$.*"
             },
@@ -25,11 +25,11 @@ export default {
         {
             "template": {
                 "method": "GET",
-                "url": controllerApiConfig.http.url + "/dictionary/source-mapping",
+                "url": processorApiConfig.http.url + "/dictionary/source-mapping",
                 "headers": {
                     "accepts": "application/json",
                     "content-type": "application/json",
-                    "authorization": controllerApiConfig.http.authToken
+                    "authorization": processorApiConfig.http.authToken
                 },
                 "responsePath": "$.*"
             },
@@ -41,11 +41,11 @@ export default {
         {
             "template": {
                 "method": "GET",
-                "url": controllerApiConfig.http.url + "/dictionary/search/{tags}",
+                "url": processorApiConfig.http.url + "/dictionary/search/{tags}",
                 "headers": {
                     "accepts": "application/json",
                     "content-type": "application/json",
-                    "authorization": controllerApiConfig.http.authToken
+                    "authorization": processorApiConfig.http.authToken
                 },
                 "responsePath": "$.*"
             },
@@ -57,11 +57,11 @@ export default {
         {
             "template": {
                 "method": "POST",
-                "url": controllerApiConfig.http.url + "/dictionary",
+                "url": processorApiConfig.http.url + "/dictionary",
                 "headers": {
                     "accepts": "application/json",
                     "content-type": "application/json",
-                    "authorization": controllerApiConfig.http.authToken
+                    "authorization": processorApiConfig.http.authToken
                 },
                 "body": "{resourceDictionary}",
                 "responsePath": "$.*"
@@ -74,11 +74,11 @@ export default {
         {
             "template": {
                 "method": "POST",
-                "url": controllerApiConfig.http.url + "/dictionary/by-names",
+                "url": processorApiConfig.http.url + "/dictionary/by-names",
                 "headers": {
                     "accepts": "application/json",
                     "content-type": "application/json",
-                    "authorization": controllerApiConfig.http.authToken
+                    "authorization": processorApiConfig.http.authToken
                 },
                 "body": "{resourceDictionaryList}",
                 "responsePath": "$.*"
@@ -91,11 +91,11 @@ export default {
         {
             "template": {
                 "method": "GET",
-                "url": controllerApiConfig.http.url + "/model-type/{source}",
+                "url": processorApiConfig.http.url + "/model-type/{source}",
                 "headers": {
                     "accepts": "application/json",
                     "content-type": "application/json",
-                    "authorization": controllerApiConfig.http.authToken
+                    "authorization": processorApiConfig.http.authToken
                 },
                 "responsePath": "$.*"
             },
@@ -107,11 +107,11 @@ export default {
         {
             "template": {
                 "method": "GET",
-                "url": controllerApiConfig.http.url + "/model-type/by-definition/data_type",
+                "url": processorApiConfig.http.url + "/model-type/by-definition/data_type",
                 "headers": {
                     "accepts": "application/json",
                     "content-type": "application/json",
-                    "authorization": controllerApiConfig.http.authToken
+                    "authorization": processorApiConfig.http.authToken
                 },
                 "responsePath": "$.*"
             },

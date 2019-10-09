@@ -1,19 +1,19 @@
-import {controllerApiConfig} from '../config/app-config';
+import {processorApiConfig} from '../config/app-config';
 
 export default {
     "name": "blueprint",
     "connector": "rest",
-    "baseURL": controllerApiConfig.http.url,
+    "baseURL": processorApiConfig.http.url,
     "crud": false,
     "debug": true,
     "operations": [{
         "template": {
             "method": "GET",
-            "url": controllerApiConfig.http.url + "/blueprint-model/",
+            "url": processorApiConfig.http.url + "/blueprint-model/",
             "headers": {
                 "accepts": "application/json",
                 "content-type": "application/json",
-                "authorization": controllerApiConfig.http.authToken
+                "authorization": processorApiConfig.http.authToken
             },
             "responsePath": "$.*"
         },
@@ -25,11 +25,11 @@ export default {
     {
         "template": {
             "method": "GET",
-            "url": controllerApiConfig.http.url + "/blueprint-model/search/{tags}",
+            "url": processorApiConfig.http.url + "/blueprint-model/search/{tags}",
             "headers": {
                 "accepts": "application/json",
                 "content-type": "application/json",
-                "authorization": controllerApiConfig.http.authToken
+                "authorization": processorApiConfig.http.authToken
             },
             "responsePath": "$.*"
         },

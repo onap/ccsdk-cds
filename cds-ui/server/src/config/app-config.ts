@@ -21,12 +21,12 @@ export const appConfig = Object.freeze({
     })
 });
 
-export const controllerApiConfig = Object.freeze({
-    http: Object.freeze({
-        url: process.env.API_BLUEPRINT_PROCESSOR_HTTP_BASE_URL || "http://localhost:8081/api/v1",
-        authToken: process.env.API_BLUEPRINT_PROCESSOR_HTTP_AUTH_TOKEN || "Basic Y2NzZGthcHBzOmNjc2RrYXBwcw=="
-    })
-});
+// export const controllerApiConfig = Object.freeze({
+//     http: Object.freeze({
+//         url: process.env.API_BLUEPRINT_PROCESSOR_HTTP_BASE_URL || "http://localhost:8081/api/v1",
+//         authToken: process.env.API_BLUEPRINT_PROCESSOR_HTTP_AUTH_TOKEN || "Basic Y2NzZGthcHBzOmNjc2RrYXBwcw=="
+//     })
+// });
 
 export const processorApiConfig = Object.freeze({
     http: Object.freeze({

@@ -48,7 +48,7 @@ import { BlueprintService } from '../services';
 import * as fs from 'fs';
 import * as multiparty from 'multiparty';
 import * as request_lib from 'request';
-import { controllerApiConfig, processorApiConfig, appConfig } from '../config/app-config';
+import { processorApiConfig, appConfig } from '../config/app-config';
 import { bluePrintManagementServiceGrpcClient } from '../clients/blueprint-management-service-grpc-client';
 
 export class BlueprintRestController {
@@ -220,7 +220,7 @@ export class BlueprintRestController {
   }
 
   async uploadFileToBlueprintController(file: multiparty.File, uri: string, response: Response): Promise<Response> {
-    return this.uploadFileToBlueprintService(file, controllerApiConfig.http.url + uri, controllerApiConfig.http.authToken, response);
+    return this.uploadFileToBlueprintService(file, processorApiConfig.http.url + uri, processorApiConfig.http.authToken, response);
   }
 
   async uploadFileToBlueprintProcessor(file: multiparty.File, uri: string, response: Response): Promise<Response> {
@@ -267,7 +267,7 @@ export class BlueprintRestController {
   }
 
   async downloadFileFromBlueprintController(uri: string, response: Response): Promise<Response> {
-    return this.downloadFileFromBlueprintService(controllerApiConfig.http.url + uri, controllerApiConfig.http.authToken, response);
+    return this.downloadFileFromBlueprintService(processorApiConfig.http.url + uri, processorApiConfig.http.authToken, response);
   }
 
   async downloadFileFromBlueprintService(url: string, authToken: string, response: Response): Promise<Response> {
