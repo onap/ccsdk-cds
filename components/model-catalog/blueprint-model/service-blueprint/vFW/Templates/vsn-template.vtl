@@ -10,7 +10,7 @@
     },
     {
       "param-name": "vnf_name",
-      "param-value": "${vnf-name}"
+      "param-value": "${vnf_name}"
     },
     {
       "param-name": "vnf_model_customization_uuid",
@@ -36,10 +36,7 @@
       "param-name": "aic-cloud-region",
       "param-value": "${aic-cloud-region}"
     },
-    {
-      "param-name": "vm-type",
-      "param-value": "${vm-type}"
-    },
+
     {
       "param-name": "vnfc-model-customization-uuid",
       "param-value": "${vfccustomizationuuid}"
@@ -53,72 +50,28 @@
       "param-value": "${vnfc-model-version}"
     },
     {
-      "param-name": "nfc-function",
-      "param-value": "${nf-role}"
-    },
-    {
       "param-name": "nfc-naming-code",
       "param-value": "${nfc-naming-code}"
     },
+
     {
-      "param-name": "cloud_env",
-      "param-value": "openstack"
+      "param-name": "vsn_image_name",
+      "param-value": "${vsn_image_name}"
     },
     {
-      "param-name": "repo_url_artifacts",
-      "param-value": "https://nexus.onap.org/content/groups/staging"
-    },
-    {
-      "param-name": "repo_url_blob",
-      "param-value": "https://nexus.onap.org/content/repositories/raw"
-    },
-    {
-      "param-name": "dcae_collector_port",
-      "param-value": "8080"
-    },
-    {
-      "param-name": "image_name",
-      "param-value": "${image_name}"
-    },
-    {
-      "param-name": "flavor_name",
-      "param-value": "m1.medium"
-    },
-    {
-      "param-name": "install_script_version",
-      "param-value": "1.2.1-SNAPSHOT"
-    },
-    {
-      "param-name": "key_name",
-      "param-value": "${key_name}"
-    },
-    {
-      "param-name": "pub_key",
-      "param-value": "${pub_key}"
-    },
-    {
-      "param-name": "demo_artifacts_version",
-      "param-value": "1.2.1-SNAPSHOT"
-    },
-    {
-      "param-name": "dcae_collector_ip",
-      "param-value": "10.0.4.1"
+      "param-name": "vsn_flavor_name",
+      "param-value": "${vsn_flavor_name}"
     },
     {
       "param-name": "public_net_id",
       "param-value": "${public_net_id}"
-    },
+    },  
+
+
+    
     {
-      "param-name": "unprotected_private_net_id",
-      "param-value": "${vnf-name}_unprotected"
-    },
-    {
-      "param-name": "protected_private_subnet_id",
-      "param-value": "${vnf-name}_protected_sub"
-    },
-    {
-      "param-name": "protected_private_net_id",
-      "param-value": "${vnf-name}_protected"
+      "param-name": "int_private2_net_cidr",
+      "param-value": "${int_private2_net_cidr}"
     },
     {
       "param-name": "onap_private_net_id",
@@ -128,30 +81,45 @@
       "param-name": "onap_private_subnet_id",
       "param-value": "${onap_private_subnet_id}"
     },
-    {
-      "param-name": "unprotected_private_net_cidr",
-      "param-value": "${unprotected_private_net_cidr}"
-    },
-    {
-      "param-name": "protected_private_net_cidr",
-      "param-value": "${protected_private_net_cidr}"
-    },
-    {
+	    {
       "param-name": "onap_private_net_cidr",
       "param-value": "${onap_private_net_cidr}"
     },
     {
-      "param-name": "nexus_artifact_repo",
-      "param-value": "${nexus_artifact_repo}"
+      "param-name": "vfw_int_private2_ip_0",
+      "param-value": "${vfw_int_private2_ip_0}"
     },
-    {
+	{
+      "param-name": "vsn_int_private2_ip_0",
+      "param-value": "${vsn_int_private2_ip_0}"
+    },
+	{
+      "param-name": "demo_artifacts_version",
+      "param-value": "${demo_artifacts_version}"
+    },	  
+	  {
+      "param-name": "install_script_version",
+      "param-value": "${install_script_version}"
+    },  
+	{
+      "param-name": "key_name",
+      "param-value": "${vnf_name}_key_name"
+    },  
+	 {
+      "param-name": "cloud_env",
+      "param-value": "openstack"
+    },
+	   {
       "param-name": "sec_group",
       "param-value": "${sec_group}"
     },
-    {
-      "param-name": "vfw_private_ip_1",
-      "param-value": "${vfw_private_ip_1}"
+	{
+      "param-name": "nexus_artifact_repo",
+      "param-value": "${nexus_artifact_repo}"
     }
+  
+	
+	
   ],
   "capability-data": [
     {
@@ -176,16 +144,12 @@
               "param-value": "${vf-naming-policy}"
             },
             {
-              "param-name": "nf-role",
-              "param-value": "${nf-role}"
-            },
-            {
               "param-name": "naming-type",
               "param-value": "VNFC"
             },
             {
               "param-name": "VNF_NAME",
-              "param-value": "${vnf-name}"
+              "param-value": "${vnf_name}"
             },
             {
               "param-name": "NFC_NAMING_CODE",
@@ -203,23 +167,19 @@
           "payload": [
             {
               "param-name": "resource-name",
-              "param-value": "vf_module_name"
+              "param-value": "vf-module-name"
             },
             {
               "param-name": "resource-value",
-              "param-value": "${vf_module_name}"
+              "param-value": "${vf-module-name}"
             },
             {
               "param-name": "external-key",
-              "param-value": "${vf-module-id}_vf_module_name"
+              "param-value": "${vf-module-id}_vf-module-name"
             },
             {
               "param-name": "policy-instance-name",
               "param-value": "${vf-naming-policy}"
-            },
-            {
-              "param-name": "nf-role",
-              "param-value": "${nf-role}"
             },
             {
               "param-name": "naming-type",
@@ -227,7 +187,7 @@
             },
             {
               "param-name": "VNF_NAME",
-              "param-value": "${vnf-name}"
+              "param-value": "${vnf_name}"
             },
             {
               "param-name": "VF_MODULE_LABEL",
@@ -240,8 +200,8 @@
           ],
           "output-key-mapping": [
             {
-              "resource-name": "vf_module_name",
-              "resource-value": "${vf_module_name}"
+              "resource-name": "vf-module-name",
+              "resource-value": "${vf-module-name}"
             }
           ]
         }
@@ -258,21 +218,21 @@
             },
             {
               "param-name": "prefix-id",
-              "param-value": "${private-prefix-id}"
+              "param-value": "${management-prefix-id}"
             },
             {
-              "param-name": "vf-module-id",
+              "param-name": "vf_module_id",
               "param-value": "${vf-module-id}"
             },
             {
               "param-name": "external_key",
-              "param-value": "${vf-module-id}-vsn_private_ip_1"
+              "param-value": "${vf-module-id}-vsn_onap_private_ip_0"
             }
           ],
           "output-key-mapping": [
             {
-              "resource-name": "vsn_private_ip_1",
-              "resource-value": "${vsn_private_ip_1}"
+              "resource-name": "vsn_onap_private_ip_0",
+              "resource-value": "${vsn_onap_private_ip_0}"
             }
           ]
         }
@@ -286,45 +246,12 @@
             {
               "param-name": "vf-module",
               "param-value": "vf-module"
-            },
-            {
-              "param-name": "vnfc",
-              "param-value": "vnfc"
             }
           ],
           "output-key-mapping": [
             {
               "resource-name": "aai-vf-module-put",
               "resource-value": "${status}"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "capability-name": "unresolved-composite-data",
-      "key-mapping": [
-        {
-          "output-key-mapping": [
-            {
-              "resource-name": "volume-group-name",
-              "resource-value": "${volume_group_name}"
-            },
-            {
-              "resource-name": "vf-module-name",
-              "resource-value": "${vf_module_name}"
-            },
-            {
-              "resource-name": "vnfc-name",
-              "resource-value": "${vsn_name_0}"
-            },
-            {
-              "resource-name": "ipv4-oam-address",
-              "resource-value": "${vsn_private_ip_1}"
-            },
-            {
-              "resource-name": "ipv4-oam-address-prefix",
-              "resource-value": "${onap_private_net_cidr}"
             }
           ]
         }
