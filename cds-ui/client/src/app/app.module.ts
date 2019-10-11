@@ -33,6 +33,7 @@ import { SharedModule } from './common/shared/shared.module';
 import { CoreModule } from './common/core/core.module';
 import { AppMaterialModule } from './common/modules/app-material.module';
 import { ResourceDefinitionModule } from './feature-modules/resource-definition/resource-definition.module';
+import { BlueprintDesignerModule } from './feature-modules/blueprint-designer/blueprint-designer.module';
 
 @NgModule({ 
   declarations: [
@@ -48,7 +49,8 @@ import { ResourceDefinitionModule } from './feature-modules/resource-definition/
     AppMaterialModule,
     SharedModule,
     CoreModule,
-    ResourceDefinitionModule
+    ResourceDefinitionModule,
+    BlueprintDesignerModule
   ],
   providers: [],
   bootstrap: [AppComponent]
