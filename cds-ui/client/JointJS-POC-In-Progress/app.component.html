@@ -1,0 +1,31 @@
+<!-- <div id="myholder"></div> -->
+<div style="background-color: black; color: white; height: 75px; width:100%; font-size: 2em; margin-bottom: 3px">
+  CDS DESIGNER POC
+  <button (click)="convertGraphToJson()">Save</button>
+</div>
+<div style="display: flex;flex-direction:row; height: 700PX">
+  <div id="stencil" style="width: 30%;height: 100%;border: 1px solid; border-radius:0.5em; background-color: gainsboro"></div>
+  <div style="width: 70%; height: 100%;">
+    <div style="position: fixed;width: 200px;background-color: gainsboro;height: 36px;z-index: 2;">
+    <button *ngIf="!sourceMode" style="border-radius: 0.5em;width: 6em;height: 2.5em;border: 2px solid black;" (click)="convertGraphToJson()">Source</button>
+    <button  *ngIf="sourceMode" style="border-radius: 0.5em;width: 6em;height: 2.5em;border: 2px solid black;" (click)="convertJsonToGraph()">Graph</button>
+    <i (click) ="zoomIn()" class="fa fa-search-plus" aria-hidden="true"></i>
+    <i (click) ="zoomOut()" class="fa fa-search-minus" aria-hidden="true"></i>
+    </div>    
+    <div [hidden]="sourceMode" id="paper" style="height: 100%;"></div>
+    <div id="sourceJson" [hidden]="!sourceMode"style="width: 100%; height: 100%;"><textarea style="margin-top: 4em;
+      width: 100%;
+      height: 100%;">{{grapJson}}</textarea></div>
+  </div> 
+  <div id="propertyPanel" style="width: 20%; height: 100%; background-color: white">
+    <div style="background-color: gainsboro;height:28px">Attributes</div>
+    <div style="height: 100px;padding: 10px">
+      Action Name<br/>
+      <input type="text" [(ngModel)]="selectedElement.attributes.attrs.label.text" (change)="setNewValue($event)"/>
+    </div>
+    <div>
+      <div style="background-color: gainsboro;height:28px">Input</div>
+
+    </div>
+  </div>
+</div>
