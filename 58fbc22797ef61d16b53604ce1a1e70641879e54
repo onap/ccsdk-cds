@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "22bb4d5f_c0b041b1",
+        "filename": "components/model-catalog/blueprint-model/service-blueprint/vFW/Definitions/vFW_CDS.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 3957
+      },
+      "writtenOn": "2019-10-11T15:46:18Z",
+      "side": 1,
+      "message": "should this be MACRO?",
+      "range": {
+        "startLine": 9,
+        "startChar": 52,
+        "endLine": 9,
+        "endChar": 57
+      },
+      "revId": "58fbc22797ef61d16b53604ce1a1e70641879e54",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03aaeeeb_e306b1e0",
+        "filename": "components/model-catalog/blueprint-model/service-blueprint/vFW/Definitions/vFW_CDS.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 3957
+      },
+      "writtenOn": "2019-10-11T15:46:18Z",
+      "side": 1,
+      "message": "?",
+      "range": {
+        "startLine": 30,
+        "startChar": 15,
+        "endLine": 30,
+        "endChar": 24
+      },
+      "revId": "58fbc22797ef61d16b53604ce1a1e70641879e54",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c420cd8_1ca07750",
+        "filename": "components/model-catalog/blueprint-model/service-blueprint/vFW/Definitions/vFW_CDS.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 3957
+      },
+      "writtenOn": "2019-10-11T15:46:18Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 96,
+        "startChar": 15,
+        "endLine": 96,
+        "endChar": 29
+      },
+      "revId": "58fbc22797ef61d16b53604ce1a1e70641879e54",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
