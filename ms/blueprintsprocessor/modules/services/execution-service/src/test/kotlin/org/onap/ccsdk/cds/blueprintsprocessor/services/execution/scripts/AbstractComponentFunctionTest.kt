@@ -95,7 +95,7 @@ class AbstractComponentFunctionTest {
     @Test
     fun testComponentFunctionPayload() {
         val sampleComponent = SampleComponent()
-        sampleComponent.operationName = "sample-action"
+        sampleComponent.workflowName = "sample-action"
         sampleComponent.executionServiceInput = JacksonUtils.readValueFromClassPathFile(
             "payload/requests/sample-execution-request.json", ExecutionServiceInput::class.java)!!
         val payload = sampleComponent.requestPayload()

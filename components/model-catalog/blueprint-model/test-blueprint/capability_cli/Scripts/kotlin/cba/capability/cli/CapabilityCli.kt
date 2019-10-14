@@ -35,7 +35,8 @@ open class Check : AbstractScriptComponentFunction() {
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
         log.info("Executing process : ${executionRequest.payload}")
 
-        val data = executionRequest.payload.at("/check-request/data")
+        val data = requestPayloadActionProperty("data")?.first()
+            ?: throw BluePrintProcessorException("Failed to load payload data properties.")
 
         log.info("Data : ${data.asJsonString()}")
 
