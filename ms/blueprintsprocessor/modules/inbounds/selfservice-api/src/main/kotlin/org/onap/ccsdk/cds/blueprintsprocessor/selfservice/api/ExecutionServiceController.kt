@@ -17,27 +17,29 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 
-import com.fasterxml.jackson.databind.JsonNode
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
-import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ACTION_MODE_ASYNC
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.monoMdc
 import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.utils.determineHttpStatusCode
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
+import reactor.core.publisher.Mono
 
 @RestController
 @RequestMapping("/api/v1/execution-service")
 @Api(value = "/api/v1/execution-service",
         description = "Interaction with CBA.")
 open class ExecutionServiceController {
+    val log = logger(ExecutionServiceController::class)
 
     @Autowired
     lateinit var executionServiceHandler: ExecutionServiceHandler
@@ -47,7 +49,8 @@ open class ExecutionServiceController {
             produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     @ApiOperation(value = "Health Check", hidden = true)
-    fun executionServiceControllerHealthCheck(): JsonNode = runBlocking {
+    fun executionServiceControllerHealthCheck() = monoMdc {
+        log.info("Health check success...")
         "Success".asJsonPrimitive()
     }
 
@@ -59,12 +62,13 @@ open class ExecutionServiceController {
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     fun process(@ApiParam(value = "ExecutionServiceInput payload.", required = true)
-                @RequestBody executionServiceInput: ExecutionServiceInput): ResponseEntity<ExecutionServiceOutput> =
-            runBlocking {
-                if (executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC) {
-                    throw IllegalStateException("Can't process async request through the REST endpoint. Use gRPC for async processing.")
-                }
-                val processResult = executionServiceHandler.doProcess(executionServiceInput)
-                ResponseEntity(processResult, determineHttpStatusCode(processResult.status.code))
-            }
+                @RequestBody executionServiceInput: ExecutionServiceInput)
+            : Mono<ResponseEntity<ExecutionServiceOutput>> = monoMdc {
+
+        if (executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC) {
+            throw IllegalStateException("Can't process async request through the REST endpoint. Use gRPC for async processing.")
+        }
+        val processResult = executionServiceHandler.doProcess(executionServiceInput)
+        ResponseEntity(processResult, determineHttpStatusCode(processResult.status.code))
+    }
 }
