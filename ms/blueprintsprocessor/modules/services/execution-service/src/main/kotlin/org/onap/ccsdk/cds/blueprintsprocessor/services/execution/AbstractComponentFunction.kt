@@ -167,9 +167,9 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
      */
     fun requestPayloadActionProperty(expression: String?): JsonNode? {
         val requestExpression = if (expression.isNullOrBlank()) {
-            "$operationName-request"
+            "$workflowName-request"
         } else {
-            "$operationName-request.$expression"
+            "$workflowName-request.$expression"
         }
         return executionServiceInput.payload.jsonPathParse(".$requestExpression")
     }

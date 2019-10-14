@@ -54,6 +54,7 @@ class ComponentFunctionScriptingService(private val applicationContext: Applicat
         scriptComponent.operationName = componentFunction.operationName
         scriptComponent.nodeTemplateName = componentFunction.nodeTemplateName
         scriptComponent.operationInputs = componentFunction.operationInputs
+        scriptComponent.executionServiceInput = componentFunction.executionServiceInput
         scriptComponent.scriptType = scriptType
 
         // Populate Instance Properties
