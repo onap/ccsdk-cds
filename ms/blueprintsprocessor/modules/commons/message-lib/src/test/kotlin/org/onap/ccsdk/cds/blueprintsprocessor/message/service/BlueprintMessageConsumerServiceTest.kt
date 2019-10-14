@@ -52,6 +52,7 @@ import kotlin.test.assertTrue
     "blueprintsprocessor.messageconsumer.sample.topic=default-topic",
     "blueprintsprocessor.messageconsumer.sample.clientId=default-client-id",
     "blueprintsprocessor.messageconsumer.sample.pollMillSec=10",
+    "blueprintsprocessor.messageconsumer.sample.pollRecords=1",
 
     "blueprintsprocessor.messageproducer.sample.type=kafka-basic-auth",
     "blueprintsprocessor.messageproducer.sample.bootstrapServers=127.0.0.1:9092",
@@ -129,11 +130,11 @@ open class BlueprintMessageConsumerServiceTest {
                     .blueprintMessageProducerService("sample") as KafkaBasicAuthMessageProducerService
             launch {
                 repeat(5) {
-                    delay(1000)
+                    delay(100)
                     blueprintMessageProducerService.sendMessage("this is my message($it)")
                 }
             }
-            delay(10000)
+            delay(5000)
             blueprintMessageConsumerService.shutDown()
         }
     }
