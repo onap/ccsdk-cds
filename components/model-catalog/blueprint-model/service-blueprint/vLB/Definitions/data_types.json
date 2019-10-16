@@ -531,13 +531,13 @@
             "type" : ""
           }
         },
-        "vf-module-name" : {
+        "vf_module_name" : {
           "description" : "",
           "required" : false,
           "type" : "string",
           "status" : "",
           "constraints" : [ { } ],
-          "default" : "${vf-module-name}",
+          "default" : "${vf_module_name}",
           "entry_schema" : {
             "type" : ""
           }
