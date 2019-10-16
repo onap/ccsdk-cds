@@ -1,0 +1,18 @@
+{
+  "tags": "active-streams",
+  "name": "active-streams",
+  "property": {
+    "description": "active-streams",
+    "type": "string"
+  },
+  "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+  "sources": {
+    "input": {
+      "type": "source-input"
+    },
+    "default": {
+      "type": "source-default",
+      "properties": {}
+    }
+  }
+}
