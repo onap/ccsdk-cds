@@ -40,11 +40,11 @@ class ConfigDeploy(NetconfComponentFunction):
       #if not response.isSuccess():
       #  og.error(response.errorMessage)
       nc.discard_change()
-      nc.edit_config(message_content=payloadInterface, edit_default_peration="none")
-      nc.edit_config(message_content=payloadHostname, edit_default_peration="none")
-      nc.validate()
+      nc.edit_config(message_content=payloadInterface, edit_default_peration="merge") 
+      nc.edit_config(message_content=payloadHostname, edit_default_peration="merge")  
+      #nc.validate()
       nc.commit()
-      #nc.commit(confirmed = True, confirm_timeout=15)
+      nc.get_config()				#nc.commit(confirmed = True, confirm_timeout=15)
       nc.unlock()
       nc.disconnect()
 
