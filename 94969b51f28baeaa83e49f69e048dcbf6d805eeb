@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "48d52b88_837fcf07",
+        "filename": "components/model-catalog/blueprint-model/service-blueprint/vLB/Definitions/data_types.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 4567
+      },
+      "writtenOn": "2019-10-16T11:32:21Z",
+      "side": 1,
+      "message": "should be vf-module-name",
+      "range": {
+        "startLine": 534,
+        "startChar": 0,
+        "endLine": 540,
+        "endChar": 42
+      },
+      "revId": "94969b51f28baeaa83e49f69e048dcbf6d805eeb",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
