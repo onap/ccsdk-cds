@@ -1,45 +1,43 @@
 {
-  "name" : "service-instance-id",
-  "tags" : "service-instance-id, tosca.datatypes.Root, data_type",
-  "updated-by" : "Singal, Kapil <ks220y@att.com>",
-  "property" : {
-    "description" : "To be provided",
-    "type" : "string"
-  },
-  "sources" : {
-    "input" : {
-      "type" : "source-input",
-      "properties" : { }
-    },
-    "any-db": {
-      "type": "source-db",
-      "properties": {
-        "query": "SELECT artifact_name FROM BLUEPRINT_MODEL where artifact_version=\"1.0.0\"",
-        "input-key-mapping": {
-        },
-        "output-key-mapping": {
-          "service-instance-id": "artifact_name"
-        }
-      }
-    },
-    "processor-db": {
-      "type": "source-db",
-      "properties": {
-        "query": "SELECT artifact_name FROM BLUEPRINT_MODEL where artifact_version=\"1.0.0\"",
-        "input-key-mapping": {
-        },
-        "output-key-mapping": {
-          "service-instance-id": "artifact_name"
-        }
-      }
-    },
-    "capability": {
-      "type": "source-capability",
-      "properties": {
-          "script-type": "jython",
-          "script-class-reference": "SampleRAProcessor",
-          "instance-dependencies": []
-      }
-    }
-  }
+	"tags": "service-instance-id, tosca.datatypes.Root, data_type",
+	"name": "service-instance-id",
+	"property": {
+		"description": "To be provided",
+		"type": "string"
+	},
+	"updated-by": "Singal, Kapil <ks220y@att.com>",
+	"sources": {
+		"input": {
+			"type": "source-input",
+			"properties": {}
+		},
+		"any-db": {
+			"type": "source-db",
+			"properties": {
+				"query": "SELECT artifact_name FROM BLUEPRINT_RUNTIME where artifact_version=\"1.0.0\"",
+				"input-key-mapping": {},
+				"output-key-mapping": {
+					"service-instance-id": "artifact_name"
+				}
+			}
+		},
+		"processor-db": {
+			"type": "source-db",
+			"properties": {
+				"query": "SELECT artifact_name FROM BLUEPRINT_RUNTIME where artifact_version=\"1.0.0\"",
+				"input-key-mapping": {},
+				"output-key-mapping": {
+					"service-instance-id": "artifact_name"
+				}
+			}
+		},
+		"capability": {
+			"type": "source-capability",
+			"properties": {
+				"script-type": "jython",
+				"script-class-reference": "SampleRAProcessor",
+				"instance-dependencies": []
+			}
+		}
+	}
 }

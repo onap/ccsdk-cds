@@ -1,36 +1,36 @@
 {
-  "name" : "vnf_name",
-  "tags" : "vnf_name",
-  "updated-by" : "Singal, Kapil <ks220y@att.com>",
-  "property" : {
-    "description" : "vnf_name",
-    "type" : "string"
+  "tags": "vnf_name",
+  "name": "vnf_name",
+  "property": {
+    "description": "vnf_name",
+    "type": "string"
   },
-  "sources" : {
+  "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+  "sources": {
+    "input": {
+      "type": "source-input"
+    },
     "default": {
       "type": "source-default",
-      "properties": {
-      }
+      "properties": {}
     },
-    "input": {
-      "type": "source-input",
+    "sdnc": {
+      "type": "source-rest",
       "properties": {
-      }
-    },
-    "sdnc" : {
-      "type" : "source-rest",
-      "properties" : {
-        "type" : "JSON",
-        "url-path" : "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vnf_name",
-        "path" : "/param/0/value",
-        "input-key-mapping" : {
-          "service-instance-id" : "service-instance-id",
-          "vnf-id" : "vnf-id"
+        "verb": "GET",   "type": "JSON",
+        "url-path": "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vnf_name",
+        "path": "/param/0/value",
+        "input-key-mapping": {
+          "service-instance-id": "service-instance-id",
+          "vnf-id": "vnf-id"
         },
-        "output-key-mapping" : {
-          "vnf_name" : "value"
+        "output-key-mapping": {
+          "vnf_name": "value"
         },
-        "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        "key-dependencies": [
+          "service-instance-id",
+          "vnf-id"
+        ]
       }
     }
   }

@@ -1,0 +1,40 @@
+{
+  "name": "put-active-streams",
+  "tags": "put-active-streams",
+  "property": {
+    "description": "put-active-streams",
+    "type": "string"
+  },
+  "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+  "sources": {
+    "input": {
+      "type": "source-input"
+    },
+    "default": {
+      "type": "source-default",
+      "properties": {}
+    },
+    "sdnc": {
+      "type": "source-rest",
+      "properties": {
+        "verb": "PUT",
+        "type": "JSON",
+        "url-path": "$vpg_onap_private_ip_0:8183/restconf/config/stream-count:stream-count/streams",
+        "path": "/param/0/value",
+        "input-key-mapping": {
+          "vpg_onap_private_ip_0": "vpg_onap_private_ip_0",
+          "active-streams": "active-streams"
+        },
+        "output-key-mapping": {
+    
+        },
+        "key-dependencies": [
+          "vpg_onap_private_ip_0",
+          "active-streams"
+        ],
+        "endpoint-selector": "vpkg-rest-api",
+        "payload": "{\"streams\": {\"active-streams\": $active-streams}}"
+      }
+    }
+  }
+}

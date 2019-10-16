@@ -1,30 +1,31 @@
 {
-  "name" : "nf-role",
-  "tags" : "nf-role",
-  "updated-by" : "Singal, Kapil <ks220y@att.com>",
-  "property" : {
-    "description" : "vnf/nf-role",
-    "type" : "string"
-  },
-  "sources" : {
-    "default": {
-      "type": "source-default",
-      "properties": {
-      }
-    },
-    "processor-db" : {
-      "type" : "source-db",
-      "properties" : {
-        "type" : "SQL",
-        "query" : "select sdnctl.VF_MODEL.nf_role as vf_model_role from sdnctl.VF_MODEL where sdnctl.VF_MODEL.customization_uuid=:vnfmodelcustomizationuuid",
-        "input-key-mapping" : {
-          "vnfmodelcustomizationuuid" : "vnf-model-customization-uuid"
-        },
-        "output-key-mapping" : {
-          "nf-role" : "vf_model_role"
-        },
-        "key-dependencies" : [ "vnf-model-customization-uuid" ]
-      }
-    }
-  }
+	"tags": "nf-role",
+	"name": "nf-role",
+	"property": {
+		"description": "vnf/nf-role",
+		"type": "string"
+	},
+	"updated-by": "Singal, Kapil <ks220y@att.com>",
+	"sources": {
+		"default": {
+			"type": "source-default",
+			"properties": {}
+		},
+		"processor-db": {
+			"type": "source-db",
+			"properties": {
+				"type": "SQL",
+				"query": "select sdnctl.VF_MODEL.nf_role as vf_model_role from sdnctl.VF_MODEL where sdnctl.VF_MODEL.customization_uuid=:vnfmodelcustomizationuuid",
+				"input-key-mapping": {
+					"vnfmodelcustomizationuuid": "vnf-model-customization-uuid"
+				},
+				"output-key-mapping": {
+					"nf-role": "vf_model_role"
+				},
+				"key-dependencies": [
+					"vnf-model-customization-uuid"
+				]
+			}
+		}
+	}
 }

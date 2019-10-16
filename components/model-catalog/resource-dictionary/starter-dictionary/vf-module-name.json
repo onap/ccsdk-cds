@@ -1,0 +1,18 @@
+{
+	"tags": "vf-module-name",
+	"name": "vf-module-name",
+	"property": {
+		"description": "vf_module_name",
+		"type": "string"
+	},
+	"updated-by": "Singal, Kapil <ks220y@att.com>",
+	"sources": {
+		"input": {
+			"type": "source-input"
+		},
+		"default": {
+			"type": "source-default",
+			"properties": {}
+		}
+	}
+}
