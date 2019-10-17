@@ -17,7 +17,7 @@ import * as fs from 'fs';
 import * as uuidv1 from 'uuid/v1';
 const grpc = require('grpc');
 import * as protoLoader from '@grpc/proto-loader';
-import {processorApiConfig} from '../config/app-config';
+import { processorApiConfig } from '../config/app-config';
 
 const PROTO_PATH = processorApiConfig.grpc.bluePrintManagement.protoPath;
 
@@ -44,7 +44,7 @@ metadata.add('Authorization', processorApiConfig.grpc.authToken);
 
 class BluePrintManagementServiceGrpcClient {
 
-    async uploadBlueprint(filePath: string): Promise<any> {
+    async uploadBlueprint(filePath: string, actionName: string): Promise<any> {
 
         let input = {
             commonHeader: {
@@ -55,6 +55,11 @@ class BluePrintManagementServiceGrpcClient {
             },
             fileChunk: {
                 chunk: fs.readFileSync(filePath)
+            },
+            actionIdentifiers: {
+                mode: "sync",
+                blueprintName: "cds.zip",
+                actionName: actionName
             }
         }
 
@@ -75,6 +80,34 @@ class BluePrintManagementServiceGrpcClient {
                 }
 
                 removeTempFile();
+                resolve(output);
+            });
+        });
+
+    }
+
+    async downloadBlueprint(blueprintName: string,blueprintVersion: string): Promise<any> {
+
+        let input = {
+            commonHeader: {
+                timestamp: new Date(),
+                originatorId: "cds-ui",
+                requestId: uuidv1(),
+                subRequestId: "1234-56",
+            },
+            actionIdentifiers: {
+                mode: "sync",
+                blueprintName: blueprintName,
+                blueprintVersion: blueprintVersion
+            }
+        }
+
+        return new Promise<any>((resolve, reject) => {
+            stub.downloadBlueprint(input, metadata, (err: any, output: any) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
                 resolve(output);
             });
         });

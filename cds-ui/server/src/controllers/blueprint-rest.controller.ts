@@ -98,15 +98,26 @@ export class BlueprintRestController {
   ): Promise<Response> {
     return new Promise((resolve, reject) => {
       this.getFileFromMultiPartForm(request).then(file => {
-        this.uploadFileToBlueprintController(file, "/blueprint-model/", response).then(resp => {
-          resolve(resp);
-        }, err => {
-          reject(err);
-        });
+        // if (appConfig.action.deployBlueprint.grpcEnabled)
+        if (appConfig.action.grpcEnabled)
+          return this.uploadFileToBlueprintProcessorGrpc(file, "DRAFT", response);
+        else
+          return this.uploadFileToBlueprintController(file, "/blueprint-model/", response);
       }, err => {
         reject(err);
       });
     });
+    // return new Promise((resolve, reject) => {
+    //   this.getFileFromMultiPartForm(request).then(file => {
+    //     this.uploadFileToBlueprintController(file, "/blueprint-model/", response).then(resp => {
+    //       resolve(resp);
+    //     }, err => {
+    //       reject(err);
+    //     });
+    //   }, err => {
+    //     reject(err);
+    //   });
+    // });
   }
 
   @post('/controllerblueprint/publish')
@@ -127,15 +138,26 @@ export class BlueprintRestController {
   ): Promise<Response> {
     return new Promise((resolve, reject) => {
       this.getFileFromMultiPartForm(request).then(file => {
-        this.uploadFileToBlueprintController(file, "/blueprint-model/publish/", response).then(resp => {
-          resolve(resp);
-        }, err => {
-          reject(err);
-        });
+        // if (appConfig.action.deployBlueprint.grpcEnabled)
+        if (appConfig.action.grpcEnabled)
+          return this.uploadFileToBlueprintProcessorGrpc(file, "PUBLISH", response);
+        else
+          return this.uploadFileToBlueprintController(file, "/blueprint-model/publish/", response);
       }, err => {
         reject(err);
       });
     });
+    // return new Promise((resolve, reject) => {
+    //   this.getFileFromMultiPartForm(request).then(file => {
+    //     this.uploadFileToBlueprintController(file, "/blueprint-model/publish/", response).then(resp => {
+    //       resolve(resp);
+    //     }, err => {
+    //       reject(err);
+    //     });
+    //   }, err => {
+    //     reject(err);
+    //   });
+    // });
   }
 
   @post('/controllerblueprint/enrich-blueprint')
@@ -173,8 +195,13 @@ export class BlueprintRestController {
     @param.path.string('version') version: string,
     @inject(RestBindings.Http.RESPONSE) response: Response,
   ): Promise<Response> {
-    return this.downloadFileFromBlueprintController("/blueprint-model/download/by-name/" + name + "/version/" + version, response);
+
+    if (appConfig.action.grpcEnabled)
+      return this.downloadFileFromBlueprintProcessorGrpc(name, version, response);
+    else
+      return this.downloadFileFromBlueprintController("/blueprint-model/download/by-name/" + name + "/version/" + version, response);
   }
+
 
   async getFileFromMultiPartForm(request: Request): Promise<multiparty.File> {
     return new Promise((resolve, reject) => {
@@ -209,8 +236,9 @@ export class BlueprintRestController {
   ): Promise<Response> {
     return new Promise((resolve, reject) => {
       this.getFileFromMultiPartForm(request).then(file => {
-        if (appConfig.action.deployBlueprint.grpcEnabled)
-          return this.uploadFileToBlueprintProcessorGrpc(file, response);
+        // if (appConfig.action.deployBlueprint.grpcEnabled)
+        if (appConfig.action.grpcEnabled)
+          return this.uploadFileToBlueprintProcessorGrpc(file, "PUBLISH", response);
         else
           return this.uploadFileToBlueprintProcessor(file, "/execution-service/upload/", response);
       }, err => {
@@ -289,9 +317,21 @@ export class BlueprintRestController {
     })
   }
 
-  async uploadFileToBlueprintProcessorGrpc(file: multiparty.File, response: Response): Promise<Response> {
+  async uploadFileToBlueprintProcessorGrpc(file: multiparty.File, actionName: string, response: Response): Promise<Response> {
     return new Promise<Response>((resolve, reject) => {
-      bluePrintManagementServiceGrpcClient.uploadBlueprint(file.path).then(output => {
+      bluePrintManagementServiceGrpcClient.uploadBlueprint(file.path, actionName).then(output => {
+        response.send(output.status.message);
+        resolve(response);
+      }, err => {
+        response.status(500).send(err);
+        resolve(response);
+      });
+    });
+  }
+  async downloadFileFromBlueprintProcessorGrpc(blueprintName: string, blueprintVersion: string, response: Response): Promise<Response> {
+    return new Promise<Response>((resolve, reject) => {
+      bluePrintManagementServiceGrpcClient.downloadBlueprint(blueprintName, blueprintVersion)
+      .then(output => {
         response.send(output.status.message);
         resolve(response);
       }, err => {
