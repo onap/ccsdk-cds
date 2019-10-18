@@ -49,11 +49,11 @@ export class EditorService {
     }
     saveBlueprint(body: any | null, options?: any): Observable<any> {
 
-        return this.api.post(BlueprintURLs.save, body, options);
+        return this.api.post(BlueprintURLs.save, body, { responseType: 'text' });
     }
     publishBlueprint(body: any | null, options?: any): Observable<any> {
 
-        return this.api.post(BlueprintURLs.publish, body, options);
+        return this.api.post(BlueprintURLs.publish, body, { responseType: 'text' });
     }
 
     deployPost(body: any | null, options?: any): Observable<any> {
