@@ -18,6 +18,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor
 
 import io.grpc.ServerBuilder
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.BluePrintManagementGRPCHandler
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.interceptor.GrpcServerLoggingInterceptor
 import org.onap.ccsdk.cds.blueprintsprocessor.security.BasicAuthServerInterceptor
 import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.BluePrintProcessingGRPCHandler
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
@@ -44,6 +45,7 @@ open class BlueprintGRPCServer(private val bluePrintProcessingGRPCHandler: BlueP
             log.info("Starting Blueprint Processor GRPC Starting..")
             val server = ServerBuilder
                     .forPort(grpcPort!!)
+                    .intercept(GrpcServerLoggingInterceptor())
                     .intercept(authInterceptor)
                     .addService(bluePrintProcessingGRPCHandler)
                     .addService(bluePrintManagementGRPCHandler)
