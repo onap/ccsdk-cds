@@ -16,6 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.services.execution
 
+import com.google.protobuf.util.JsonFormat
 import io.grpc.inprocess.InProcessChannelBuilder
 import io.grpc.inprocess.InProcessServerBuilder
 import io.grpc.testing.GrpcCleanupRule
@@ -26,6 +27,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import org.junit.Rule
 import org.junit.Test
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ACTION_MODE_SYNC
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.GRPCLibConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.TokenAuthGrpcClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.BluePrintGrpcLibPropertyService
@@ -132,12 +134,17 @@ class StreamingRemoteExecutionServiceTest {
                 .setActionName("SampleScript")
                 .setBlueprintName("sample-cba")
                 .setBlueprintVersion("1.0.0")
+                .setMode(ACTION_MODE_SYNC)
                 .build()
+
+        val jsonContent = """{ "key1" : "value1" }"""
+        val payloadBuilder = ExecutionServiceInput.newBuilder().payloadBuilder
+        JsonFormat.parser().merge(jsonContent, payloadBuilder)
 
         return ExecutionServiceInput.newBuilder()
                 .setCommonHeader(commonHeader)
                 .setActionIdentifiers(actionIdentifier)
-                //.setPayload(payloadBuilder.build())
+                .setPayload(payloadBuilder.build())
                 .build()
 
     }

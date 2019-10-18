@@ -18,8 +18,12 @@ package org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts
 
 import io.grpc.ServerBuilder
 import io.grpc.stub.StreamObserver
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.interceptor.GrpcServerLoggingInterceptor
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.common.api.Status
+import org.onap.ccsdk.cds.controllerblueprints.core.MDCContext
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.BluePrintProcessingServiceGrpc
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceInput
@@ -36,8 +40,13 @@ class MockBluePrintProcessingServer : BluePrintProcessingServiceGrpc.BluePrintPr
             override fun onNext(executionServiceInput: ExecutionServiceInput) {
                 log.info("Received requestId(${executionServiceInput.commonHeader.requestId})  " +
                         "subRequestId(${executionServiceInput.commonHeader.subRequestId})")
-                responseObserver.onNext(buildNotification(executionServiceInput))
-                responseObserver.onNext(buildResponse(executionServiceInput))
+                runBlocking {
+                    launch(MDCContext()) {
+                        responseObserver.onNext(buildNotification(executionServiceInput))
+                        responseObserver.onNext(buildResponse(executionServiceInput))
+                        log.info("message has sent successfully...")
+                    }
+                }
                 responseObserver.onCompleted()
             }
 
@@ -85,6 +94,7 @@ fun main() {
     try {
         val server = ServerBuilder
                 .forPort(50052)
+                .intercept(GrpcServerLoggingInterceptor())
                 .addService(MockBluePrintProcessingServer())
                 .build()
         server.start()

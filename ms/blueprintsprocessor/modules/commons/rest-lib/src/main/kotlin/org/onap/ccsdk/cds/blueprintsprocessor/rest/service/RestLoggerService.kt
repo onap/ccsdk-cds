@@ -14,43 +14,45 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.core.service
+package org.onap.ccsdk.cds.blueprintsprocessor.rest.service
 
-import kotlinx.coroutines.AbstractCoroutine
-import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.handleCoroutineException
+import kotlinx.coroutines.*
+import kotlinx.coroutines.reactor.ReactorContext
+import kotlinx.coroutines.reactor.asCoroutineContext
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_INVOCATION_ID
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_PARTNER_NAME
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_REQUEST_ID
+import org.onap.ccsdk.cds.controllerblueprints.core.MDCContext
+import org.onap.ccsdk.cds.controllerblueprints.core.defaultToEmpty
+import org.onap.ccsdk.cds.controllerblueprints.core.defaultToUUID
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.slf4j.MDC
 import org.springframework.http.server.reactive.ServerHttpRequest
 import org.springframework.http.server.reactive.ServerHttpResponse
 import reactor.core.Disposable
+import reactor.core.publisher.Mono
 import reactor.core.publisher.MonoSink
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
-class LoggingService {
-    private val log = logger(LoggingService::class)
+class RestLoggerService {
+    private val log = logger(RestLoggerService::class)
 
-    companion object {
-        const val ONAP_REQUEST_ID = "X-ONAP-RequestID"
-        const val ONAP_INVOCATION_ID = "X-ONAP-InvocationID"
-        const val ONAP_PARTNER_NAME = "X-ONAP-PartnerName"
-    }
 
     fun entering(request: ServerHttpRequest) {
         val headers = request.headers
-        val requestID = defaultToUUID(headers.getFirst(ONAP_REQUEST_ID))
-        val invocationID = defaultToUUID(headers.getFirst(ONAP_INVOCATION_ID))
-        val partnerName = defaultToEmpty(headers.getFirst(ONAP_PARTNER_NAME))
+        val requestID = headers.getFirst(ONAP_REQUEST_ID).defaultToUUID()
+        val invocationID = headers.getFirst(ONAP_INVOCATION_ID).defaultToUUID()
+        val partnerName = headers.getFirst(ONAP_PARTNER_NAME).defaultToEmpty()
         MDC.put("InvokeTimestamp", ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT))
         MDC.put("RequestID", requestID)
         MDC.put("InvocationID", invocationID)
         MDC.put("PartnerName", partnerName)
-        MDC.put("ClientIPAddress", defaultToEmpty(request.remoteAddress?.address?.hostAddress))
-        MDC.put("ServerFQDN", defaultToEmpty(request.remoteAddress?.hostString))
+        MDC.put("ClientIPAddress", request.remoteAddress?.address?.hostAddress.defaultToEmpty())
+        MDC.put("ServerFQDN", request.remoteAddress?.hostString.defaultToEmpty())
         if (MDC.get("ServiceName") == null || MDC.get("ServiceName").equals("", ignoreCase = true)) {
             MDC.put("ServiceName", request.uri.path)
         }
@@ -62,22 +64,35 @@ class LoggingService {
             val resHeaders = response.headers
             resHeaders[ONAP_REQUEST_ID] = MDC.get("RequestID")
             resHeaders[ONAP_INVOCATION_ID] = MDC.get("InvocationID")
+            val partnerName = System.getProperty("APPNAME") ?: "BlueprintsProcessor"
+            resHeaders[ONAP_PARTNER_NAME] = partnerName
         } catch (e: Exception) {
             log.warn("couldn't set response headers", e)
         } finally {
             MDC.clear()
         }
     }
-
-    private fun defaultToEmpty(input: Any?): String {
-        return input?.toString() ?: ""
-    }
-
-    private fun defaultToUUID(input: String?): String {
-        return input ?: UUID.randomUUID().toString()
-    }
 }
 
+
+/** Used in Rest controller API methods to populate MDC context to nested coroutines from reactor web filter context. */
+@UseExperimental(InternalCoroutinesApi::class)
+fun <T> monoMdc(context: CoroutineContext = EmptyCoroutineContext,
+                block: suspend CoroutineScope.() -> T?): Mono<T> = Mono.create { sink ->
+
+    val reactorContext = (context[ReactorContext]?.context?.putAll(sink.currentContext())
+            ?: sink.currentContext()).asCoroutineContext()
+    /** Populate MDC context only if present in Reactor Context */
+    val newContext = if (!reactorContext.context.isEmpty
+            && reactorContext.context.hasKey(MDCContext)) {
+        val mdcContext = reactorContext.context.get<MDCContext>(MDCContext)
+        GlobalScope.newCoroutineContext(context + reactorContext + mdcContext)
+    } else GlobalScope.newCoroutineContext(context + reactorContext)
+
+    val coroutine = MonoMDCCoroutine(newContext, sink)
+    sink.onDispose(coroutine)
+    coroutine.start(CoroutineStart.DEFAULT, coroutine, block)
+}
 
 @InternalCoroutinesApi
 class MonoMDCCoroutine<in T>(
