@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c860e64_9544b301",
+        "filename": "cds-ui/server/src/clients/blueprint-management-service-grpc-client.ts",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-10-22T14:48:26Z",
+      "side": 1,
+      "message": "Shouldn\u0027t be hard coded, Is there any request Id management and tracking implemented ?",
+      "range": {
+        "startLine": 54,
+        "startChar": 30,
+        "endLine": 54,
+        "endChar": 39
+      },
+      "revId": "515636e496d18b908f2abab90439b395a66f2087",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
