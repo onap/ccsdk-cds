@@ -33,21 +33,45 @@ _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 
 def serve(configuration: ScriptExecutorConfiguration):
     port = configuration.script_executor_property('port')
-    basic_auth = configuration.script_executor_property('auth')
+    authType = configuration.script_executor_property('authType')
     maxWorkers = configuration.script_executor_property('maxWorkers')
 
-    header_validator = RequestHeaderValidatorInterceptor(
-        'authorization', basic_auth, grpc.StatusCode.UNAUTHENTICATED,
-        'Access denied!')
+    if authType == 'tls-auth':
+        cert_chain_file = configuration.script_executor_property('certChain')
+        private_key_file = configuration.script_executor_property('privateKey')
+        logger.info("Setting GRPC server TLS authentication, cert file(%s) private key file(%s)", cert_chain_file,
+                    private_key_file)
+        # read in key and certificate
+        with open(cert_chain_file, 'rb') as f:
+            certificate_chain = f.read()
+        with open(private_key_file, 'rb') as f:
+            private_key = f.read()
 
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=int(maxWorkers)),
-                         interceptors=(header_validator,))
+        # create server credentials
+        server_credentials = grpc.ssl_server_credentials(((private_key, certificate_chain),))
 
-    BluePrintProcessing_pb2_grpc.add_BluePrintProcessingServiceServicer_to_server(
-        BluePrintProcessingServer(configuration), server)
+        # create server
+        server = grpc.server(futures.ThreadPoolExecutor(max_workers=int(maxWorkers)))
+        BluePrintProcessing_pb2_grpc.add_BluePrintProcessingServiceServicer_to_server(
+            BluePrintProcessingServer(configuration), server)
 
-    server.add_insecure_port('[::]:' + port)
-    server.start()
+        # add secure port using credentials
+        server.add_secure_port('[::]:' + port, server_credentials)
+        server.start()
+    else:
+        logger.info("Setting GRPC server base authentication")
+        basic_auth = configuration.script_executor_property('token')
+        header_validator = RequestHeaderValidatorInterceptor(
+            'authorization', basic_auth, grpc.StatusCode.UNAUTHENTICATED,
+            'Access denied!')
+        # create server with token authentication interceptors
+        server = grpc.server(futures.ThreadPoolExecutor(max_workers=int(maxWorkers)),
+                             interceptors=(header_validator,))
+        BluePrintProcessing_pb2_grpc.add_BluePrintProcessingServiceServicer_to_server(
+            BluePrintProcessingServer(configuration), server)
+
+        server.add_insecure_port('[::]:' + port)
+        server.start()
 
     logger.info("Command Executor Server started on %s" % port)
 

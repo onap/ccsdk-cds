@@ -27,6 +27,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.grpc.TLSAuthGrpcClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.TLSAuthGrpcServerProperties
 import org.onap.ccsdk.cds.controllerblueprints.common.api.ActionIdentifiers
 import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader
+import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.BluePrintProcessingServiceGrpc
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceInput
 import java.util.*
@@ -38,15 +39,15 @@ class BluePrintGrpcServerTest {
     private val tlsAuthGrpcServerProperties = TLSAuthGrpcServerProperties().apply {
         port = 50052
         type = GRPCLibConstants.TYPE_TLS_AUTH
-        certChain = "src/test/resources/tls-manual/my-public-key-cert.pem"
-        privateKey = "src/test/resources/tls-manual/my-private-key.pem"
+        certChain = "src/test/resources/tls-manual/py-executor-chain.pem"
+        privateKey = "src/test/resources/tls-manual/py-executor-key.pem"
     }
 
     private val tlsAuthGrpcClientProperties = TLSAuthGrpcClientProperties().apply {
         host = "localhost"
         port = 50052
         type = GRPCLibConstants.TYPE_TLS_AUTH
-        trustCertCollection = "src/test/resources/tls-manual/my-public-key-cert.pem"
+        trustCertCollection = "src/test/resources/tls-manual/py-executor-chain.pem"
     }
 
     @Test
@@ -72,6 +73,9 @@ class BluePrintGrpcServerTest {
             launch {
                 resChannel.consumeEach {
                     log.info("Received Response")
+                    if (it.status.eventType == EventType.EVENT_COMPONENT_EXECUTED) {
+                        resChannel.cancel()
+                    }
                 }
             }
             val request = getRequest("12345")
