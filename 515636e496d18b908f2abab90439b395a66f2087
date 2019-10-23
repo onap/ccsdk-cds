@@ -22,6 +22,30 @@
       "revId": "515636e496d18b908f2abab90439b395a66f2087",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38cf32a3_09128802",
+        "filename": "cds-ui/server/src/clients/blueprint-management-service-grpc-client.ts",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 4699
+      },
+      "writtenOn": "2019-10-23T10:14:44Z",
+      "side": 1,
+      "message": "Right now we dont have any implementation. Team will work on it in next change",
+      "parentUuid": "3c860e64_9544b301",
+      "range": {
+        "startLine": 54,
+        "startChar": 30,
+        "endLine": 54,
+        "endChar": 39
+      },
+      "revId": "515636e496d18b908f2abab90439b395a66f2087",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
