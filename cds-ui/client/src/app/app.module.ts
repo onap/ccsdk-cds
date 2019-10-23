@@ -32,7 +32,6 @@ import { AppComponent } from './app.component';
 import { SharedModule } from './common/shared/shared.module';
 import { CoreModule } from './common/core/core.module';
 import { AppMaterialModule } from './common/modules/app-material.module';
-import { ResourceDefinitionModule } from './feature-modules/resource-definition/resource-definition.module';
 
 @NgModule({ 
   declarations: [
@@ -47,8 +46,7 @@ import { ResourceDefinitionModule } from './feature-modules/resource-definition/
     HttpClientModule,
     AppMaterialModule,
     SharedModule,
-    CoreModule,
-    ResourceDefinitionModule
+    CoreModule
   ],
   providers: [],
   bootstrap: [AppComponent]
