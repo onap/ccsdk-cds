@@ -17,20 +17,28 @@
 * limitations under the License.
 * ============LICENSE_END=========================================================
 */
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { CatalogDataDialogComponent } from './catalog-data-dialog.component';
 
-import { SearchCatalogComponent } from './search-catalog.component';
+describe('CatalogDataDialogComponent', () => {
+  let component: CatalogDataDialogComponent;
+  let fixture: ComponentFixture<CatalogDataDialogComponent>;
 
-const routes: Routes = [
-  {
-      path: '',
-      component: SearchCatalogComponent
-  }
-];
-@NgModule({
-imports: [RouterModule.forChild(routes)],
-exports: [RouterModule]
-})
-export class SearchCatalogRoutingModule { }
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [ CatalogDataDialogComponent ]
+    })
+    .compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(CatalogDataDialogComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

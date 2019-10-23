@@ -18,61 +18,18 @@
 * ============LICENSE_END=========================================================
 */
 
-.example-card {
-  // min-width: 300px;
-  max-height: 200px;
-  background-color: #ebebeb;
-  position: relative;
-  width: 250px;
-  margin: 5px;
+.form-field {
+  width: 40%;
+  padding:10px;
 }
-
-.mat-grid-tile {
-  position: absolute;
-  width: 240px !important;
+.mat-form-field-type-mat-native-select.mat-form-field-disabled .mat-form-field-infix::after, .mat-input-element:disabled {
+  color: rgba(0,0,0,.87);
 }
-
-.mat-grid-list div {
-  position: relative;
-}
-
-.matStepNextBtn {
-  width: auto;
+.mat-button{
   float: center;
   color:white;
   background-color:#3f51b5;
   margin-top: 10px;
   margin: 5px;
   border-radius: 6px;
-}
-
-.flexBox {
-  display: flex;
-  flex-flow: row;
-  flex-wrap: wrap;
-}
-
-.card-deck-container {
-  position: relative;
-  border-radius: 1px;
-  padding: 2px;
-  margin: 2px;
-  // background-color: #f5f5f5;
-}
-
-.searchcontainer {
-  // min-height: 300px;
-  overflow-x: hidden;
-  overflow-y: scroll;
-}
-
-.card-content {
-  text-align: center;
-  margin: 5px;
-}
-
-.mat-card-actions {
-  margin-left: 50px !important;
-  margin-right: 0px !important;
-  padding: 0px 0 !important;
 }
