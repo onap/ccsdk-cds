@@ -1,9 +1,7 @@
 /*
 ============LICENSE_START==========================================
 ===================================================================
-Copyright (C) 2018 IBM Intellectual Property. All rights reserved.
-
-Modifications Copyright (C) 2019 TechMahindra
+Copyright (C) 2019 IBM Intellectual Property. All rights reserved.
 ===================================================================
 
 Unless otherwise specified, all software contained herein is licensed
@@ -23,36 +21,18 @@ limitations under the License.
 
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { HomeComponent } from './common/shared/components/home/home.component';
+import { BlueprintDesignerComponent } from './blueprint-designer.component';
 
 
 const routes: Routes = [
-{
-  path: '',
-  component: HomeComponent,
-   children: [
     {
-      path: 'blueprint',
-      loadChildren: './feature-modules/blueprint/blueprint.module#BlueprintModule'
-    },
-    {
-      path: 'resource-definition',
-      loadChildren: './feature-modules/resource-definition/resource-definition.module#ResourceDefinitionModule'
-    },
-    {
-        path: 'controller-catalog',
-        loadChildren: './feature-modules/controller-catalog/controller-catalog.module#ControllerCatalogModule'
-    },
-    {
-      path: 'blueprint-designer',
-      loadChildren: './feature-modules/blueprint-designer/blueprint-designer.module#BlueprintDesignerModule'
+        path: '',
+        component: BlueprintDesignerComponent
     }
-  ]
-}
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class BlueprintDesignerRoutingModule { }
