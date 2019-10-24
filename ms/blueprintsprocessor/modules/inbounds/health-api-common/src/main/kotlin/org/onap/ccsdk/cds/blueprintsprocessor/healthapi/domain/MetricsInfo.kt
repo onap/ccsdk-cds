@@ -1,5 +1,4 @@
-<!--
-  /*
+/*
  * Copyright © 2019-2020 Orange.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,21 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-  -->
 
-<configuration>
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %-5level %logger{100} - %msg%n</pattern>
-        </encoder>
-    </appender>
+package org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain
 
-    <logger name="org.springframework" level="warn"/>
-    <logger name="org.hibernate" level="info"/>
-    <logger name="org.onap.ccsdk.cds.blueprintsprocessor" level="info"/>
-
-    <root level="info">
-        <appender-ref ref="STDOUT"/>
-    </root>
-
-</configuration>
+data class MetricsInfo(val health: List<ActuatorCheckResponse>)

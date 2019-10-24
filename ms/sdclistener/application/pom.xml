@@ -53,6 +53,14 @@
             <scope>test</scope>
         </dependency>
 
+
+
+        <dependency>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <artifactId>health-api-common</artifactId>
+            <version>0.7.0-SNAPSHOT</version>
+        </dependency>
+
         <!-- SDC Distribution client dependency -->
         <dependency>
             <groupId>org.onap.sdc.sdc-distribution-client</groupId>
