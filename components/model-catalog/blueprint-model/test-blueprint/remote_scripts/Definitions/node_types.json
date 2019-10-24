@@ -14,6 +14,14 @@
           "entry_schema": {
             "type": "string"
           }
+        },
+        "status": {
+          "required": true,
+          "type": "string"
+        },
+        "response-data": {
+          "required": false,
+          "type": "json"
         }
       },
       "capabilities" : {
