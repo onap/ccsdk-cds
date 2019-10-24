@@ -25,6 +25,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.*
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.BluePrintGrpcClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.BluePrintGrpcLibPropertyService
 import org.onap.ccsdk.cds.controllerblueprints.command.api.*
+import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
@@ -154,7 +155,8 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
         return RemoteScriptExecutionOutput(
                 requestId = this.requestId,
                 response = this.responseList,
-                status = StatusType.valueOf(this.status.name)
+                status = StatusType.valueOf(this.status.name),
+                payload =  payload.jsonAsJsonType()
         )
     }
 

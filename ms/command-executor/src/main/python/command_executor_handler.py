@@ -25,6 +25,8 @@ import virtualenv
 import venv
 import utils
 import proto.CommandExecutor_pb2 as CommandExecutor_pb2
+import email.parser
+import json
 
 REQUIREMENTS_TXT = "requirements.txt"
 
@@ -75,6 +77,10 @@ class CommandExecutorHandler():
         else:
             cmd = cmd + "; " + request.command + " " + re.escape(MessageToJson(request.properties))
 
+        payload_result = {}
+        payload_section = []
+        is_payload_section = False
+
         try:
             with subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                                   shell=True, bufsize=1, universal_newlines=True) as newProcess:
@@ -82,19 +88,36 @@ class CommandExecutorHandler():
                     output = newProcess.stdout.readline()
                     if output == '' and newProcess.poll() is not None:
                         break
-                    if output:
+                    if output.startswith('BEGIN_EXTRA_PAYLOAD'):
+                        is_payload_section = True
+                        output = newProcess.stdout.readline()
+                    if output.startswith('END_EXTRA_PAYLOAD'):
+                        is_payload_section = False
+                        output = ''
+                        payload = '\n'.join(payload_section)
+                        msg = email.parser.Parser().parsestr(payload)
+                        for part in msg.get_payload():
+                            payload_result = json.loads(part.get_payload())
+                    if output and not is_payload_section:
                         self.logger.info(output.strip())
                         results.append(output.strip())
-                    rc = newProcess.poll()
+                    else:
+                        payload_section.append(output.strip())
+                rc = newProcess.poll()
         except Exception as e:
             self.logger.info("{} - Failed to execute command. Error: {}".format(self.blueprint_id, e))
             results.append(e)
-            return False
+            payload_result["cds_return_code"] = False
+            return payload_result
 
         # deactivate_venv(blueprint_id)
-        return True
+
+        payload_result["cds_return_code"] = rc
+        return payload_result
 
     def install_packages(self, request, type, f, results):
+        success = self.install_python_packages('UTILITY', results)
+
         for package in request.packages:
             if package.type == type:
                 f.write("Installed %s packages:\r\n" % CommandExecutor_pb2.PackageType.Name(type))
@@ -116,6 +139,8 @@ class CommandExecutorHandler():
 
         if REQUIREMENTS_TXT == package:
             command = ["pip", "install", "-r", self.venv_home + "/Environments/" + REQUIREMENTS_TXT]
+        elif package == 'UTILITY':
+            command = ["cp", "-r", "./cds_utils", self.venv_home + "/lib/python3.6/site-packages/"]
         else:
             command = ["pip", "install", package]
 

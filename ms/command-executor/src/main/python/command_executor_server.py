@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 import logging
-
+import os, sys
 import proto.CommandExecutor_pb2_grpc as CommandExecutor_pb2_grpc
 
 from command_executor_handler import CommandExecutorHandler
@@ -39,19 +39,26 @@ class CommandExecutorServer(CommandExecutor_pb2_grpc.CommandExecutorServiceServi
         handler = CommandExecutorHandler(request)
         if not handler.prepare_env(request, results):
             self.logger.info("{} - Failed to prepare python environment. {}".format(blueprint_id, results))
-            return utils.build_response(request, results, False)
+            return utils.build_response(request, results, {}, False)
         self.logger.info("{} - Package installation logs {}".format(blueprint_id, results))
-        return utils.build_response(request, results)
+        return utils.build_response(request, results, {}, True)
 
     def executeCommand(self, request, context):
         blueprint_id = utils.get_blueprint_id(request)
         self.logger.info("{} - Received executeCommand request".format(blueprint_id))
-        self.logger.info(request)
+        if os.environ.get('CE_DEBUG','false') == "true":
+            self.logger.info(request)
 
-        results = []
+        log_results = []
+        payload_result = {}
         handler = CommandExecutorHandler(request)
-        if not handler.execute_command(request, results):
-            self.logger.info("{} - Failed to executeCommand. {}".format(blueprint_id, results))
-            return utils.build_response(request, results, False)
-        self.logger.info("{} - Execution finished successfully.".format(blueprint_id))
-        return utils.build_response(request, results)
+        payload_result = handler.execute_command(request, log_results)
+        if not payload_result["cds_return_code"]:
+            self.logger.info("{} - Failed to executeCommand. {}".format(blueprint_id, log_results))
+        else:
+            self.logger.info("{} - Execution finished successfully.".format(blueprint_id))
+
+        ret = utils.build_response(request, log_results, payload_result, payload_result["cds_return_code"])
+        self.logger.info("Payload returned %s" % payload_result)
+
+        return ret
