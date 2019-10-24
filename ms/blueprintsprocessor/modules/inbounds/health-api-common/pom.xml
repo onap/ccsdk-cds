@@ -24,18 +24,28 @@
         <version>0.7.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>health-api</artifactId>
+    <artifactId>health-api-common</artifactId>
     <packaging>jar</packaging>
 
-    <name>Blueprints Processor Health API</name>
+    <name>Blueprints Processor Health API common </name>
     <description>checking system check health endpoints</description>
 
     <dependencies>
-
         <dependency>
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-            <artifactId>health-api-common</artifactId>
-            <version>0.7.0-SNAPSHOT</version>
+            <artifactId>rest-lib</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>
