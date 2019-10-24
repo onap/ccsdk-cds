@@ -18,6 +18,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.healthapi.configuration
 
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BasicAuthRestClientService
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -33,11 +34,14 @@ open class BasicAuthRestClientServiceConfiguration {
     @Value("\${endpoints.user.password}")
     private val password: String? = null
 
+    @Autowired
+    lateinit var securityConfiguration: SecurityEncryptionConfiguration
+
     @Bean
     open fun getBasicAuthRestClientProperties(): BasicAuthRestClientProperties {
         val basicAuthRestClientProperties = BasicAuthRestClientProperties()
-        basicAuthRestClientProperties.username = username.toString()
-        basicAuthRestClientProperties.password = password.toString()
+        basicAuthRestClientProperties.username = securityConfiguration.decrypt(username.toString()).toString()
+        basicAuthRestClientProperties.password = securityConfiguration.decrypt(password.toString()).toString()
         return basicAuthRestClientProperties
     }
 
@@ -45,6 +49,5 @@ open class BasicAuthRestClientServiceConfiguration {
     open fun getBasicAuthRestClientService(): BasicAuthRestClientService {
         return BasicAuthRestClientService(getBasicAuthRestClientProperties())
     }
-
 
 }
