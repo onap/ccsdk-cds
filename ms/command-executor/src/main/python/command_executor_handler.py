@@ -29,7 +29,7 @@ import proto.CommandExecutor_pb2 as CommandExecutor_pb2
 REQUIREMENTS_TXT = "requirements.txt"
 
 
-class CommandExecutorHandler():
+class CommandExecutorHandler:
 
     def __init__(self, request):
         self.request = request
@@ -74,10 +74,16 @@ class CommandExecutorHandler():
             cmd = cmd + "; " + request.command + " -e 'ansible_python_interpreter=" + self.venv_home + "/bin/python'"
         else:
             cmd = cmd + "; " + request.command + " " + re.escape(MessageToJson(request.properties))
-
+        ### extract the original header request into sys-env variables
+        ### RequestID
+        request_id = request.requestId
+        ### Sub-requestID
+        subrequest_id = request.correlationId
+        request_id_map = {'CDS_REQUEST_ID':request_id, 'CDS_SUBREQUEST_ID':subrequest_id}
+        updated_env =  { **os.environ, **request_id_map }
         try:
             with subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                                  shell=True, bufsize=1, universal_newlines=True) as newProcess:
+                                  shell=True, bufsize=1, universal_newlines=True, env=updated_env) as newProcess:
                 while True:
                     output = newProcess.stdout.readline()
                     if output == '' and newProcess.poll() is not None:
