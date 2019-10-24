@@ -46,6 +46,7 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
         const val INPUT_PACKAGES = "packages"
         const val DEFAULT_SELECTOR = "remote-python"
 
+        const val ATTRIBUTE_EXEC_CMD_STATUS = "status"
         const val ATTRIBUTE_PREPARE_ENV_LOG = "prepare-environment-logs"
         const val ATTRIBUTE_EXEC_CMD_LOG = "execute-command-logs"
         const val ATTRIBUTE_RESPONSE_DATA = "response-data"
@@ -53,7 +54,7 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
 
-        log.info("Processing : $operationInputs")
+        log.debug("Processing : $operationInputs")
 
         val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
         val blueprintName = bluePrintContext.name()
@@ -109,12 +110,17 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
                 )
                 val prepareEnvOutput = remoteScriptExecutionService.prepareEnv(prepareEnvInput)
                 log.info("$ATTRIBUTE_PREPARE_ENV_LOG - ${prepareEnvOutput.response}")
-                setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, JacksonUtils.jsonNodeFromObject(prepareEnvOutput.response))
+                val logs = JacksonUtils.jsonNodeFromObject(prepareEnvOutput.response)
+                setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, logs)
                 setAttribute(ATTRIBUTE_EXEC_CMD_LOG, "N/A".asJsonPrimitive())
-                check(prepareEnvOutput.status == StatusType.SUCCESS) {
-                    "failed to get prepare remote env response status for requestId(${prepareEnvInput.requestId})"
+
+                if (prepareEnvOutput.status != StatusType.SUCCESS) {
+                    setNodeOutputErrors(prepareEnvOutput.status.name, logs)
+                } else {
+                    setNodeOutputProperties(prepareEnvOutput.status.name.asJsonPrimitive(), logs, "".asJsonPrimitive())
                 }
             }
+
             // Populate command execution properties and pass it to the remote server
             val properties = dynamicProperties?.returnNullIfMissing()?.rootFieldsToMap() ?: hashMapOf()
 
@@ -124,10 +130,13 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
                 command = scriptCommand,
                 properties = properties)
             val remoteExecutionOutput = remoteScriptExecutionService.executeCommand(remoteExecutionInput)
-            log.info("$ATTRIBUTE_EXEC_CMD_LOG  - ${remoteExecutionOutput.response}")
-            setAttribute(ATTRIBUTE_EXEC_CMD_LOG, JacksonUtils.jsonNodeFromObject(remoteExecutionOutput.response))
-            check(remoteExecutionOutput.status == StatusType.SUCCESS) {
-                "failed to get prepare remote command response status for requestId(${remoteExecutionOutput.requestId})"
+
+            val logs = JacksonUtils.jsonNodeFromObject(remoteExecutionOutput.response)
+            if (remoteExecutionOutput.status != StatusType.SUCCESS) {
+                setNodeOutputErrors(remoteExecutionOutput.status.name,logs, remoteExecutionOutput.payload)
+            } else {
+                setNodeOutputProperties(remoteExecutionOutput.status.name.asJsonPrimitive(), logs,
+                                        remoteExecutionOutput.payload)
             }
 
         } catch (e: Exception) {
@@ -139,7 +148,7 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         bluePrintRuntimeService.getBluePrintError()
-            .addError("Failed in ComponentJythonExecutor : ${runtimeException.message}")
+            .addError("Failed in ComponentRemotePythonExecutor : ${runtimeException.message}")
     }
 
     private fun formatNestedJsonNode(node: JsonNode): String {
@@ -150,5 +159,28 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
             node.forEach { sb.append(" $it") }
         }
         return sb.toString()
+    }
+
+    /**
+     * Utility function to set the output properties of the executor node
+     */
+    private fun setNodeOutputProperties(status: JsonNode, message: JsonNode, artifacts: JsonNode) {
+        setAttribute(ATTRIBUTE_EXEC_CMD_STATUS, status)
+        log.info("Executor status   : $status")
+        setAttribute(ATTRIBUTE_RESPONSE_DATA, artifacts)
+        log.info("Executor artifacts: $artifacts")
+        setAttribute(ATTRIBUTE_EXEC_CMD_LOG, message)
+        log.info("Executor message  : $message")
+    }
+
+    /**
+     * Utility function to set the output properties and errors of the executor node, in cas of errors
+     */
+    private fun setNodeOutputErrors(status: String, message: JsonNode, artifacts: JsonNode = "".asJsonPrimitive()  ) {
+        setAttribute(ATTRIBUTE_EXEC_CMD_STATUS, status.asJsonPrimitive())
+        setAttribute(ATTRIBUTE_EXEC_CMD_LOG, message)
+        setAttribute(ATTRIBUTE_RESPONSE_DATA, artifacts)
+
+        addError(status, ATTRIBUTE_EXEC_CMD_LOG, message.asText())
     }
 }
