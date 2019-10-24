@@ -29,16 +29,32 @@ import org.springframework.stereotype.Service
 open class BluePrintRestLibPropertyService(private var bluePrintProperties:
                                            BluePrintProperties) {
 
-    open fun blueprintWebClientService(jsonNode: JsonNode):
-        BlueprintWebClientService {
-        val restClientProperties = restClientProperties(jsonNode)
-        return blueprintWebClientService(restClientProperties)
+    private var preInterceptor: PreInterceptor? = null
+    private var postInterceptor: PostInterceptor? = null
+
+    fun setInterceptors(preInterceptor: PreInterceptor?, postInterceptor: PostInterceptor?) {
+        this.preInterceptor = preInterceptor
+        this.postInterceptor = postInterceptor
+    }
+
+    fun clearInterceptors() {
+        this.preInterceptor = null
+        this.postInterceptor = null
+    }
+
+    open fun blueprintWebClientService(jsonNode: JsonNode): BlueprintWebClientService {
+        val service = preInterceptor?.getInstance(jsonNode)
+                ?: blueprintWebClientService(restClientProperties(jsonNode))
+        return postInterceptor?.getInstance(jsonNode, service) ?: service
     }
 
     open fun blueprintWebClientService(selector: String): BlueprintWebClientService {
-        val prefix = "blueprintsprocessor.restclient.$selector"
-        val restClientProperties = restClientProperties(prefix)
-        return blueprintWebClientService(restClientProperties)
+        val service = preInterceptor?.getInstance(selector) ?: run {
+            val prefix = "blueprintsprocessor.restclient.$selector"
+            val restClientProperties = restClientProperties(prefix)
+            blueprintWebClientService(restClientProperties)
+        }
+        return postInterceptor?.getInstance(selector, service) ?: service
     }
 
     fun restClientProperties(prefix: String): RestClientProperties {
@@ -181,6 +197,18 @@ open class BluePrintRestLibPropertyService(private var bluePrintProperties:
         PolicyManagerRestClientProperties {
         return bluePrintProperties.propertyBeanType(
             prefix, PolicyManagerRestClientProperties::class.java)
+    }
+
+    interface PreInterceptor {
+        fun getInstance(jsonNode: JsonNode): BlueprintWebClientService?
+
+        fun getInstance(selector: String): BlueprintWebClientService?
+    }
+
+    interface PostInterceptor {
+        fun getInstance(jsonNode: JsonNode, service: BlueprintWebClientService): BlueprintWebClientService
+
+        fun getInstance(selector: String, service: BlueprintWebClientService): BlueprintWebClientService
     }
 }
 

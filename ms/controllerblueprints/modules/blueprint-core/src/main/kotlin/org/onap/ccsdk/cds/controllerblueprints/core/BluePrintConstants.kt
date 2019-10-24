@@ -161,6 +161,8 @@ object BluePrintConstants {
     const val TOSCA_SCRIPTS_KOTLIN_DIR: String = "$TOSCA_SCRIPTS_DIR/kotlin"
     const val TOSCA_SCRIPTS_JYTHON_DIR: String = "$TOSCA_SCRIPTS_DIR/python"
 
+    const val UAT_SPECIFICATION_FILE = "Tests/uat.yaml"
+
     const val GRAPH_START_NODE_NAME = "START"
     const val GRAPH_END_NODE_NAME = "END"
 

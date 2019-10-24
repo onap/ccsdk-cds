@@ -17,21 +17,20 @@
  * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
-package org.onap.ccsdk.cds.blueprintsprocessor
+package org.onap.ccsdk.cds.blueprintsprocessor.uat
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ContainerNode
-import com.fasterxml.jackson.databind.node.MissingNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.schibsted.spt.data.jslt.Parser
 
-class JsonNormalizer {
+internal class JsonNormalizer {
 
     companion object {
 
-        fun getNormalizer(mapper: ObjectMapper, jsltSpec: JsonNode): (String) -> String {
-            if (jsltSpec is MissingNode) {
+        fun getNormalizer(mapper: ObjectMapper, jsltSpec: JsonNode?): (String) -> String {
+            if (jsltSpec == null) {
                 return { it }
             }
             return { s: String ->

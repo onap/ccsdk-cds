@@ -1,0 +1,4 @@
+server:
+    error:
+        include-exception: true
+        include-stacktrace: always

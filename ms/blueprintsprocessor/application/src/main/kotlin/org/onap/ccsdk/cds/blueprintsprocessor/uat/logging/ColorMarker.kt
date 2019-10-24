@@ -17,15 +17,8 @@
  * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
-package org.onap.ccsdk.cds.blueprintsprocessor
+package org.onap.ccsdk.cds.blueprintsprocessor.uat.logging
 
-import org.springframework.util.CollectionUtils
-import org.springframework.util.MultiValueMap
+import org.slf4j.Marker
 
-
-/**
- * Convenient method to create a single-entry MultiValueMap.
- */
-fun <K, V> toMultiValueMap(key: K, vararg values: V): MultiValueMap<K, V> {
-    return CollectionUtils.toMultiValueMap(mapOf(key to values.asList()))
-}
+class ColorMarker internal constructor(private val dlg: Marker) : Marker by dlg
