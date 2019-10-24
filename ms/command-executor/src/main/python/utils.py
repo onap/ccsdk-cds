@@ -16,6 +16,10 @@
 from google.protobuf.timestamp_pb2 import Timestamp
 
 import proto.CommandExecutor_pb2 as CommandExecutor_pb2
+<<<<<<< HEAD   (b8c996 Remove Controller API url and use blueprintProcessorApi url )
+=======
+import json
+>>>>>>> CHANGE (35ab81 Improve Remote Python Executor error handling and allow for )
 
 def get_blueprint_id(request):
     blueprint_name = request.identifiers.blueprintName
@@ -23,7 +27,7 @@ def get_blueprint_id(request):
     return blueprint_name + '/' + blueprint_version
 
 
-def build_response(request, results, is_success=True):
+def build_response(request, log_results, payload_return, is_success=False):
     if is_success:
         status = CommandExecutor_pb2.SUCCESS
     else:
@@ -31,5 +35,9 @@ def build_response(request, results, is_success=True):
 
     timestamp = Timestamp()
     timestamp.GetCurrentTime()
-    return CommandExecutor_pb2.ExecutionOutput(requestId=request.requestId, response=results, status=status,
-                                               timestamp=timestamp)
+
+    if 'cds_return_code' in payload_return:
+        payload_return.pop('cds_return_code')
+    payload_str = json.dumps(payload_return)
+    return CommandExecutor_pb2.ExecutionOutput(requestId=request.requestId, response=log_results, status=status,
+                                               payload=payload_str, timestamp=timestamp)

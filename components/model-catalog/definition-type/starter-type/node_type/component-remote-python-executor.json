@@ -2,6 +2,10 @@
   "description": "This is Remote Python Execution Component.",
   "version": "1.0.0",
   "attributes": {
+    "status": {
+      "required": true,
+      "type": "string"
+    },
     "prepare-environment-logs": {
       "required": false,
       "type": "string"

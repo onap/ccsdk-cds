@@ -3,3 +3,4 @@ CSAR-Version: 1.0
 Created-By: Brinda Santh <brindasanth@in.ibm.com>
 Entry-Definitions: Definitions/remote_scripts.json
 Template-Tags: Brinda Santh, remote_scripts
+Content-Type: application/vnd.oasis.bpmn
