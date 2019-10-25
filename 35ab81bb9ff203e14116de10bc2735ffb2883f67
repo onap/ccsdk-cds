@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2cead1e3_a2b738e3",
+        "filename": "components/model-catalog/blueprint-model/test-blueprint/remote_scripts/TOSCA-Metadata/TOSCA.meta",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-10-25T01:45:23Z",
+      "side": 1,
+      "message": "NOt Needed",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 40
+      },
+      "revId": "35ab81bb9ff203e14116de10bc2735ffb2883f67",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
