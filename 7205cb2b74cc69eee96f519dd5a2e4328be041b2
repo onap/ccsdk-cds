@@ -22,6 +22,30 @@
       "revId": "7205cb2b74cc69eee96f519dd5a2e4328be041b2",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61544137_c3e2c028",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/service/CombinedHealthService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 5989
+      },
+      "writtenOn": "2019-10-27T15:37:53Z",
+      "side": 1,
+      "message": "No, It will return status with Health Check service information Including name and link",
+      "parentUuid": "ff0dcf7a_116d3fc6",
+      "range": {
+        "startLine": 21,
+        "startChar": 16,
+        "endLine": 21,
+        "endChar": 108
+      },
+      "revId": "7205cb2b74cc69eee96f519dd5a2e4328be041b2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
