@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee014dff_451bc927",
+        "filename": "components/model-catalog/blueprint-model/service-blueprint/vLB_CDS_Kotlin/Scripts/kotlin/kotlin.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-10-27T13:52:04Z",
+      "side": 1,
+      "message": "Use Kotlin Delay function, This won\u0027t block the thread.",
+      "range": {
+        "startLine": 46,
+        "startChar": 8,
+        "endLine": 46,
+        "endChar": 28
+      },
+      "revId": "b2975ab0e2ea8cba7f1bb0bac9871e66eed919ae",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d5f7f64_11e3f1b3",
+        "filename": "components/model-catalog/blueprint-model/service-blueprint/vLB_CDS_Kotlin/TOSCA-Metadata/TOSCA.meta",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-10-27T13:52:04Z",
+      "side": 1,
+      "message": "Remove Content-Type\n\nInclude : Template-Name and Template-Version.",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 40
+      },
+      "revId": "b2975ab0e2ea8cba7f1bb0bac9871e66eed919ae",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
