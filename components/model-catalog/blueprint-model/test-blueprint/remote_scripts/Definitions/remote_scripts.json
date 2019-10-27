@@ -83,6 +83,14 @@
                 "execute-command-logs"
               ]
             }
+          },
+          "execute-command-status": {
+            "type": "string",
+            "value": { "get_attribute": ["execute-remote-python", "status"]}
+          },
+          "execute-command-payload": {
+            "type": "json",
+            "value": { "get_attribute": ["execute-remote-python", "response-data"]}
           }
         }
       },
