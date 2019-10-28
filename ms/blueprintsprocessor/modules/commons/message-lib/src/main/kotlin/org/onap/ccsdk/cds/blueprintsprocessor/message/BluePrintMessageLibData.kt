@@ -35,6 +35,8 @@ open class KafkaMessageConsumerProperties : MessageConsumerProperties() {
     lateinit var groupId: String
     var clientId: String? = null
     var topic: String? = null
+    var autoCommit: Boolean = true
+    var autoOffsetReset: String = "latest"
     var pollMillSec: Long = 1000
     var pollRecords: Int = -1
 }

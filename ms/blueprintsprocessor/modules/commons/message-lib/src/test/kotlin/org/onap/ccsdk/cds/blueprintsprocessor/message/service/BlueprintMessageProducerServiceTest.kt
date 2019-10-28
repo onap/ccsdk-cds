@@ -20,18 +20,18 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import kotlinx.coroutines.runBlocking
+import org.apache.kafka.clients.producer.KafkaProducer
+import org.apache.kafka.clients.producer.RecordMetadata
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.message.BluePrintMessageLibConfiguration
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.kafka.core.KafkaTemplate
-import org.springframework.kafka.support.SendResult
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import org.springframework.util.concurrent.SettableListenableFuture
+import java.util.concurrent.Future
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
@@ -57,12 +57,12 @@ open class BlueprintMessageProducerServiceTest {
             val blueprintMessageProducerService = bluePrintMessageLibPropertyService
                     .blueprintMessageProducerService("sample") as KafkaBasicAuthMessageProducerService
 
-            val mockKafkaTemplate = mockk<KafkaTemplate<String, Any>>()
+            val mockKafkaTemplate = mockk<KafkaProducer<String, ByteArray>>()
 
-            val future = SettableListenableFuture<SendResult<String, Any>>()
-            //future.setException(BluePrintException("failed sending"))
+            val responseMock = mockk<Future<RecordMetadata>>()
+            every { responseMock.get() } returns mockk()
 
-            every { mockKafkaTemplate.send(any(), any()) } returns future
+            every { mockKafkaTemplate.send(any(), any()) } returns responseMock
 
             val spyBluePrintMessageProducerService = spyk(blueprintMessageProducerService, recordPrivateCalls = true)
 

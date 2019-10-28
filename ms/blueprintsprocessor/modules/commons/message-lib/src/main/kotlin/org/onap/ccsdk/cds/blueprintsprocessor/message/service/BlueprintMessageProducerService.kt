@@ -20,15 +20,31 @@ import kotlinx.coroutines.runBlocking
 
 interface BlueprintMessageProducerService {
 
-    fun sendMessage(message: Any): Boolean = runBlocking {
-        sendMessageNB(message)
+    fun sendMessage(message: Any): Boolean {
+        return sendMessage(message = message, headers = null)
     }
 
-    fun sendMessage(topic: String, message: Any): Boolean = runBlocking {
-        sendMessageNB(topic, message)
+    fun sendMessage(topic: String, message: Any): Boolean {
+        return sendMessage(topic, message, null)
     }
 
-    suspend fun sendMessageNB(message: Any): Boolean
+    fun sendMessage(message: Any, headers: MutableMap<String, String>?): Boolean = runBlocking {
+        sendMessageNB(message = message, headers = headers)
+    }
 
-    suspend fun sendMessageNB(topic: String, message: Any): Boolean
+    fun sendMessage(topic: String, message: Any, headers: MutableMap<String, String>?): Boolean = runBlocking {
+        sendMessageNB(topic, message, headers)
+    }
+
+    suspend fun sendMessageNB(message: Any): Boolean {
+        return sendMessageNB(message = message, headers = null)
+    }
+
+    suspend fun sendMessageNB(message: Any, headers: MutableMap<String, String>?): Boolean
+
+    suspend fun sendMessageNB(topic: String, message: Any): Boolean {
+        return sendMessageNB(topic, message, null)
+    }
+
+    suspend fun sendMessageNB(topic: String, message: Any, headers: MutableMap<String, String>?): Boolean
 }
