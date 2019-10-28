@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2019 IBM.
+ *  Modifications Copyright © 2018-2019 AT&T Intellectual Property.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -36,9 +37,10 @@ open class KafkaBasicAuthMessageConsumerService(
         private val messageConsumerProperties: KafkaBasicAuthMessageConsumerProperties)
     : BlueprintMessageConsumerService {
 
+    val log = logger(KafkaBasicAuthMessageConsumerService::class)
+
     val channel = Channel<String>()
     var kafkaConsumer: Consumer<String, ByteArray>? = null
-    val log = logger(KafkaBasicAuthMessageConsumerService::class)
 
     @Volatile
     var keepGoing = true
