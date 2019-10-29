@@ -38,7 +38,7 @@ limitations under the License.
     </organization>
 
     <modules>
-        <module>cds-ui</module>
+        <!-- <module>cds-ui</module> -->
         <module>ms</module>
     </modules>
 

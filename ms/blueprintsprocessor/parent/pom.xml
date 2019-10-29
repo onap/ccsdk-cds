@@ -37,8 +37,10 @@
         <!-- Should be using released artifact as soon as available: -->
         <!-- https://github.com/springfox/springfox/milestone/44 -->
         <springfox.swagger2.version>2.9.2</springfox.swagger2.version>
-        <spring.kafka.version>2.2.6.RELEASE</spring.kafka.version>
-        <kafka.version>2.2.0</kafka.version>
+        <spring.kafka.version>2.3.1.RELEASE</spring.kafka.version>
+        <kafka.version>2.3.0</kafka.version>
+        <!-- <spring.kafka.version>2.2.6.RELEASE</spring.kafka.version> -->
+        <!-- <kafka.version>2.2.0</kafka.version> -->
         <eelf.version>1.0.0</eelf.version>
         <onap.logger.slf4j>1.2.2</onap.logger.slf4j>
 
@@ -243,6 +245,13 @@
                 <artifactId>kotlin-stdlib-jdk7</artifactId>
                 <version>${kotlin.version}</version>
             </dependency>
+
+            <!-- <dependency> -->
+            <!--   <groupId>org.springframework.kotlin</groupId> -->
+            <!--   <artifactId>spring-kotlin-coroutine</artifactId> -->
+            <!--   <version>0.3.7</version> -->
+            <!--   <type>pom</type> -->
+            <!-- </dependency> -->
 
             <!-- GRPC Dependencies -->
             <dependency>
