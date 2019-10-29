@@ -1,8 +1,5 @@
 FROM omahoco1/alpine-java-python
 
-ENV HTTP_PROXY  ${HTTP_PROXY}
-ENV HTTPS_PROXY ${HTTPS_PROXY}
-
 # add entrypoint
 COPY run.source /etc/run.source
 COPY startService.sh /startService.sh

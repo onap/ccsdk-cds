@@ -30,7 +30,6 @@
         <name.space>org.onap.ccsdk.cds</name.space>
         <serviceArtifactName>blueprintsprocessor</serviceArtifactName>
         <image.name>onap/ccsdk-blueprintsprocessor</image.name>
-        <docker.buildArg.https_proxy>${https_proxy}</docker.buildArg.https_proxy>
         <docker.push.phase>deploy</docker.push.phase>
         <docker.verbose>true</docker.verbose>
         <ccsdk.project.version>${project.version}</ccsdk.project.version>
