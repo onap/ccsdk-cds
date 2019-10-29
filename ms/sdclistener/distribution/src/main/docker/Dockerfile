@@ -1,8 +1,5 @@
 FROM openjdk:8-jdk-alpine
 
-ENV HTTP_PROXY  ${HTTP_PROXY}
-ENV HTTPS_PROXY ${HTTPS_PROXY}
-
 # add entrypoint
 COPY startService.sh /startService.sh
 RUN chmod 751 /startService.sh

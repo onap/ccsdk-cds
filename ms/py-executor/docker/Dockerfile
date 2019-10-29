@@ -1,8 +1,5 @@
 FROM python:3.7-slim
 
-ENV HTTP_PROXY  ${HTTP_PROXY}
-ENV HTTPS_PROXY ${HTTPS_PROXY}
-
 RUN mkdir -p /opt/app/onap/logs/ && touch /opt/app/onap/logs/application.log
 
 COPY @project.build.finalName@-@assembly.id@.tar.gz /source.tar.gz
