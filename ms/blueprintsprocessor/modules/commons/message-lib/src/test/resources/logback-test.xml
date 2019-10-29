@@ -27,7 +27,7 @@
         <!-- encoders are assigned the type
              ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
         <encoder>
-            <pattern>${testing}</pattern>
+            <pattern>${localPattern}</pattern>
         </encoder>
     </appender>
 

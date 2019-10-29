@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2019 IBM.
+ *  Modifications Copyright © 2018-2019 AT&T Intellectual Property.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -33,7 +34,7 @@ open class MessageConsumerProperties
 open class KafkaMessageConsumerProperties : MessageConsumerProperties() {
     lateinit var bootstrapServers: String
     lateinit var groupId: String
-    var clientId: String? = null
+    lateinit var clientId: String
     var topic: String? = null
     var autoCommit: Boolean = true
     var autoOffsetReset: String = "latest"
