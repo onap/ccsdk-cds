@@ -610,7 +610,7 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
             val key = it.replace(path, "")
             if (keys.contains(key)) {
                 val value = store[it] as JsonNode
-                jsonNode.set(key, value)
+                jsonNode.replace(key, value)
             }
         }
         return jsonNode

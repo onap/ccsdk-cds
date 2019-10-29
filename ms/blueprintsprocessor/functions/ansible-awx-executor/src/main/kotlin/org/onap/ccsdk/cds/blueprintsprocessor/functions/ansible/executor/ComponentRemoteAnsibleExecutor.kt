@@ -297,14 +297,14 @@ open class ComponentRemoteAnsibleExecutor(private val blueprintRestLibPropertySe
 
             val askLimitOnLaunch = jtLaunchReqs.at("/ask_limit_on_launch").asBoolean()
             if (askLimitOnLaunch && !limitProp.isNullOrMissing()) {
-                payload.set(INPUT_LIMIT_TO_HOST, limitProp)
+                payload.replace(INPUT_LIMIT_TO_HOST, limitProp)
             }
             val askTagsOnLaunch = jtLaunchReqs.at("/ask_tags_on_launch").asBoolean()
             if (askTagsOnLaunch && !tagsProp.isNullOrMissing()) {
-                payload.set(INPUT_TAGS, tagsProp)
+                payload.replace(INPUT_TAGS, tagsProp)
             }
             if (askTagsOnLaunch && !skipTagsProp.isNullOrMissing()) {
-                payload.set("skip_tags", skipTagsProp)
+                payload.replace("skip_tags", skipTagsProp)
             }
         }
 
@@ -315,10 +315,10 @@ open class ComponentRemoteAnsibleExecutor(private val blueprintRestLibPropertySe
             } else {
                 inventoryProp
             }
-            payload.set(INPUT_INVENTORY, inventoryKeyId)
+            payload.replace(INPUT_INVENTORY, inventoryKeyId)
         }
 
-            payload.set("extra_vars", extraArgs)
+            payload.replace("extra_vars", extraArgs)
 
         return payload.asJsonString(false)
     }

@@ -90,7 +90,7 @@ open class BluePrintWorkflowExecutionServiceImpl(
 
         // Set the Response Payload
         executionServiceOutput.payload = JacksonUtils.objectMapper.createObjectNode()
-        executionServiceOutput.payload.set("$workflowName-response", workflowOutputs.asObjectNode())
+        executionServiceOutput.payload.replace("$workflowName-response", workflowOutputs.asObjectNode())
         return executionServiceOutput
     }
 

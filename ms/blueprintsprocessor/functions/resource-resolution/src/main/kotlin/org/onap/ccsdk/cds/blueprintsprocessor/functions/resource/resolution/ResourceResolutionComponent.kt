@@ -97,7 +97,7 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
 
             // provide indexed result in output if we have multiple resolution
             if (occurrence != 1) {
-                jsonResponse.set(Integer.toString(j), response.asJsonNode())
+                jsonResponse.replace(Integer.toString(j), response.asJsonNode())
             } else {
                 jsonResponse.setAll(response.asObjectNode())
             }

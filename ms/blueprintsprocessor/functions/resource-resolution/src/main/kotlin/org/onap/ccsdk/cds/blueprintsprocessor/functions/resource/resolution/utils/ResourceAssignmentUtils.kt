@@ -149,7 +149,7 @@ class ResourceAssignmentUtils {
                             containsLogProtected = true
                         }
                         logger.trace("Generating Resource name ($rName), type ($type), value ($valueToPrint)")
-                        root.set(rName, value)
+                        root.replace(rName, value)
                     }
                 }
                 result = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(root)

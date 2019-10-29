@@ -20,14 +20,17 @@ package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
+import kotlinx.coroutines.delay
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ACTION_MODE_ASYNC
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.Status
 import org.onap.ccsdk.cds.blueprintsprocessor.core.monoMdc
 import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.utils.determineHttpStatusCode
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -61,14 +64,34 @@ open class ExecutionServiceController {
             response = ExecutionServiceOutput::class)
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
-    fun process(@ApiParam(value = "ExecutionServiceInput payload.", required = true)
+    suspend fun process(@ApiParam(value = "ExecutionServiceInput payload.", required = true)
                 @RequestBody executionServiceInput: ExecutionServiceInput)
-            : Mono<ResponseEntity<ExecutionServiceOutput>> = monoMdc {
+            : ResponseEntity<ExecutionServiceOutput> {
 
         if (executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC) {
             throw IllegalStateException("Can't process async request through the REST endpoint. Use gRPC for async processing.")
         }
         val processResult = executionServiceHandler.doProcess(executionServiceInput)
-        ResponseEntity(processResult, determineHttpStatusCode(processResult.status.code))
+        return ResponseEntity(processResult, determineHttpStatusCode(processResult.status.code))
+    }
+
+    @RequestMapping(path = ["/process2/{waitTime}"], method = [RequestMethod.POST], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ApiOperation(value = "Execute a CBA workflow (action)",
+            notes = "Execute the appropriate CBA's action based on the ExecutionServiceInput object passed as input.",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            response = ExecutionServiceOutput::class)
+    @ResponseBody
+    @PreAuthorize("hasRole('USER')")
+    suspend fun process2(@ApiParam(value = "ExecutionServiceInput payload.", required = true)
+                        @PathVariable(value = "waitTime") waitTime: Long,
+                        @RequestBody executionServiceInput: ExecutionServiceInput)
+            : ResponseEntity<String> {
+
+        if (executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC) {
+            throw IllegalStateException("Can't process async request through the REST endpoint. Use gRPC for async processing.")
+        }
+
+        delay(waitTime)
+        return ResponseEntity("Process", HttpStatus.OK)
     }
 }

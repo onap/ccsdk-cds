@@ -21,6 +21,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 import org.springframework.context.annotation.ComponentScan
+import javax.annotation.PreDestroy
 
 /**
  * BlueprintProcessorApplication
@@ -38,4 +39,10 @@ fun main(args: Array<String>) {
     System.setProperty("org.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH", "true")
 
     SpringApplication.run(BlueprintProcessorApplication::class.java, *args)
+}
+
+
+@PreDestroy
+fun onExit() {
+    println("onExit called() !!!!")
 }
