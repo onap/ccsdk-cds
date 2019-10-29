@@ -225,7 +225,7 @@ class ResourceAssignmentUtilsTest {
         val arrayNodeForList1 = JacksonUtils.objectMapper.createArrayNode()
         listOfIps.forEach {
             val arrayChildNode = JacksonUtils.objectMapper.createObjectNode()
-            arrayChildNode.set("value", it.asJsonPrimitive())
+            arrayChildNode.replace("value", it.asJsonPrimitive())
             arrayNodeForList1.add(arrayChildNode)
         }
         inputMapToTestCollectionOfPrimitiveType = arrayNodeForList1
@@ -239,23 +239,23 @@ class ResourceAssignmentUtilsTest {
         val arrayNodeForList2 = JacksonUtils.objectMapper.createArrayNode()
         listOfIpAddresses.forEach {
             val arrayChildNode = JacksonUtils.objectMapper.createObjectNode()
-            arrayChildNode.set("value", it.asJsonType())
+            arrayChildNode.replace("value", it.asJsonType())
             arrayNodeForList2.add(arrayChildNode)
         }
         inputMapToTestCollectionOfComplexTypeWithOneOutputKeyMapping = arrayNodeForList2
 
         val arrayNodeForList3 = JacksonUtils.objectMapper.createArrayNode()
         var childNode = JacksonUtils.objectMapper.createObjectNode()
-        childNode.set("port", "1111".asJsonPrimitive())
-        childNode.set("ip", "1.2.3.1".asJsonPrimitive())
+        childNode.replace("port", "1111".asJsonPrimitive())
+        childNode.replace("ip", "1.2.3.1".asJsonPrimitive())
         arrayNodeForList3.add(childNode)
         childNode = JacksonUtils.objectMapper.createObjectNode()
-        childNode.set("port", "2222".asJsonPrimitive())
-        childNode.set("ip", "1.2.3.2".asJsonPrimitive())
+        childNode.replace("port", "2222".asJsonPrimitive())
+        childNode.replace("ip", "1.2.3.2".asJsonPrimitive())
         arrayNodeForList3.add(childNode)
         childNode = JacksonUtils.objectMapper.createObjectNode()
-        childNode.set("port", "3333".asJsonPrimitive())
-        childNode.set("ip", "1.2.3.3".asJsonPrimitive())
+        childNode.replace("port", "3333".asJsonPrimitive())
+        childNode.replace("ip", "1.2.3.3".asJsonPrimitive())
         arrayNodeForList3.add(childNode)
         inputMapToTestCollectionOfComplexTypeWithAllOutputKeyMapping = arrayNodeForList3
 
@@ -275,18 +275,18 @@ class ResourceAssignmentUtilsTest {
         inputMapToTestComplexTypeWithOneOutputKeyMapping = mapOfComplexType.asJsonType()
 
         val objectNode = JacksonUtils.objectMapper.createObjectNode()
-        expectedValueToTestComplexTypeWithOneOutputKeyMapping = objectNode.set("host", Host("my-ipAddress", IpAddress("1111", "1.2.3.1")).asJsonType())
+        expectedValueToTestComplexTypeWithOneOutputKeyMapping = objectNode.replace("host", Host("my-ipAddress", IpAddress("1111", "1.2.3.1")).asJsonType())
 
         val childNode1 = JacksonUtils.objectMapper.createObjectNode()
-        childNode1.set("name", "my-ipAddress".asJsonPrimitive())
-        childNode1.set("ipAddress", IpAddress("1111", "1.2.3.1").asJsonType())
-        childNode1.set("port", "8888".asJsonType())
-        childNode1.set("something", IpAddress("2222", "1.2.3.1").asJsonType())
+        childNode1.replace("name", "my-ipAddress".asJsonPrimitive())
+        childNode1.replace("ipAddress", IpAddress("1111", "1.2.3.1").asJsonType())
+        childNode1.replace("port", "8888".asJsonType())
+        childNode1.replace("something", IpAddress("2222", "1.2.3.1").asJsonType())
         inputMapToTestComplexTypeWithAllOutputKeyMapping = childNode1
 
         val childNode2 = JacksonUtils.objectMapper.createObjectNode()
-        childNode2.set("name", "my-ipAddress".asJsonPrimitive())
-        childNode2.set("ipAddress", IpAddress("1111", "1.2.3.1").asJsonType())
+        childNode2.replace("name", "my-ipAddress".asJsonPrimitive())
+        childNode2.replace("ipAddress", IpAddress("1111", "1.2.3.1").asJsonType())
         expectedValueToTestComplexTypeWithAllOutputKeyMapping = childNode2
     }
 

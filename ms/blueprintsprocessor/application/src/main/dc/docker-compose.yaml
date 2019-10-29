@@ -64,6 +64,5 @@ services:
       AUTH_CERT_CHAIN: /opt/app/onap/python/py-executor-chain.pem
       AUTH_PRIVATE_KEY: /opt/app/onap/python/py-executor-key.pem
       LOG_FILE: /opt/app/onap/logs/application.log
-
 volumes:
   blueprints-deploy:

@@ -75,7 +75,7 @@ abstract class AbstractServiceFunction : BlueprintFunctionNode<ExecutionServiceI
         try {
             // Set the Response Payload
             executionServiceOutput.payload = JacksonUtils.objectMapper.createObjectNode()
-            executionServiceOutput.payload.set("$actionName-response", responseActionPayload)
+            executionServiceOutput.payload.replace("$actionName-response", responseActionPayload)
             // Set the Default Step Status
             status.eventType = EventType.EVENT_COMPONENT_EXECUTED.name
         } catch (e: Exception) {
