@@ -1,0 +1,349 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ede82515_287b1d04",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/configuration/SecurityEncryptionConfiguration.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-10-29T14:45:53Z",
+      "side": 1,
+      "message": "Hard-coded encryption key doesn\u0027t add any security, it\u0027s just an obfuscation function...",
+      "range": {
+        "startLine": 13,
+        "startChar": 39,
+        "endLine": 14,
+        "endChar": 40
+      },
+      "revId": "61bf33338a28a5721cb69ff11d4d52a5e4f5f786",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5544b7da_2ec75052",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/domain/ApplicationHealth.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-10-29T14:45:53Z",
+      "side": 1,
+      "message": "I think it could be done as \nApplicationHealth(val status: Status?\u003dnull, val details: Map\u003cString, Any\u003e?\u003dhashMapOf())",
+      "range": {
+        "startLine": 6,
+        "startChar": 11,
+        "endLine": 6,
+        "endChar": 80
+      },
+      "revId": "61bf33338a28a5721cb69ff11d4d52a5e4f5f786",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee0ca536_8d8fd63a",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/domain/Metrics.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-10-29T14:45:53Z",
+      "side": 1,
+      "message": "I think this can be done just as \ndata class Metrics(val names: ArrayList\u003cAny\u003e? \u003d null) \nor \u003d listOf() to provide a default constructor\nyou get names accessor",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 30
+      },
+      "revId": "61bf33338a28a5721cb69ff11d4d52a5e4f5f786",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eaeb82aa_766b2379",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/domain/MetricsResponse.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-10-29T14:45:53Z",
+      "side": 1,
+      "message": "Map\u003cString, String\u003e",
+      "range": {
+        "startLine": 3,
+        "startChar": 37,
+        "endLine": 3,
+        "endChar": 44
+      },
+      "revId": "61bf33338a28a5721cb69ff11d4d52a5e4f5f786",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8c74690_378639de",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/service/EndPointExecution.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-10-29T14:45:53Z",
+      "side": 1,
+      "message": "Logging the name of the service or endpoint is more useful log msg than a stack trace.",
+      "range": {
+        "startLine": 50,
+        "startChar": 26,
+        "endLine": 50,
+        "endChar": 45
+      },
+      "revId": "61bf33338a28a5721cb69ff11d4d52a5e4f5f786",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3cb7d107_1cb5b1b6",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/service/health/AbstractHealthCheck.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-10-29T14:45:53Z",
+      "side": 1,
+      "message": "Is this really needed?",
+      "range": {
+        "startLine": 12,
+        "startChar": 8,
+        "endLine": 12,
+        "endChar": 45
+      },
+      "revId": "61bf33338a28a5721cb69ff11d4d52a5e4f5f786",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "503ad35b_fd4dd421",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/service/health/AbstractHealthCheck.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-10-29T14:45:53Z",
+      "side": 1,
+      "message": "More specific?",
+      "range": {
+        "startLine": 38,
+        "startChar": 20,
+        "endLine": 38,
+        "endChar": 29
+      },
+      "revId": "61bf33338a28a5721cb69ff11d4d52a5e4f5f786",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ac2942c_93232a99",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/service/health/AbstractHealthCheck.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-10-29T14:45:53Z",
+      "side": 1,
+      "message": "Printing which service is down (if inside a more specific exception is better)",
+      "range": {
+        "startLine": 39,
+        "startChar": 26,
+        "endLine": 39,
+        "endChar": 45
+      },
+      "revId": "61bf33338a28a5721cb69ff11d4d52a5e4f5f786",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32545db4_530e898c",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/HealthCheckServiceTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-10-29T14:45:53Z",
+      "side": 1,
+      "message": "would cds-blueprints-processor-http be ok with non-k8s?",
+      "range": {
+        "startLine": 73,
+        "startChar": 62,
+        "endLine": 73,
+        "endChar": 91
+      },
+      "revId": "61bf33338a28a5721cb69ff11d4d52a5e4f5f786",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f27a901c_73a66291",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/HealthCheckServiceTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-10-29T14:45:53Z",
+      "side": 1,
+      "message": ".stream() is redundant.",
+      "range": {
+        "startLine": 87,
+        "startChar": 34,
+        "endLine": 87,
+        "endChar": 50
+      },
+      "revId": "61bf33338a28a5721cb69ff11d4d52a5e4f5f786",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8ec79c4_e63615c0",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/HealthCheckServiceTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-10-29T14:45:53Z",
+      "side": 1,
+      "message": "similar pattern.",
+      "range": {
+        "startLine": 103,
+        "startChar": 34,
+        "endLine": 103,
+        "endChar": 49
+      },
+      "revId": "61bf33338a28a5721cb69ff11d4d52a5e4f5f786",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c64eaa2_753934c4",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/test/resources/mockito-extensions/org.mockito.plugins.MockMaker",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-10-29T14:45:53Z",
+      "side": 1,
+      "message": "Is kotlintest not enough?",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "61bf33338a28a5721cb69ff11d4d52a5e4f5f786",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "750ee955_fd4ae138",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/service/CombinedHealthService.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-10-29T14:45:53Z",
+      "side": 1,
+      "message": "Is it really needed to return mutable list here?",
+      "range": {
+        "startLine": 29,
+        "startChar": 39,
+        "endLine": 29,
+        "endChar": 50
+      },
+      "revId": "61bf33338a28a5721cb69ff11d4d52a5e4f5f786",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61fd903b_d76a9f09",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/service/CombinedHealthService.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-10-29T14:45:53Z",
+      "side": 1,
+      "message": "listOfResponse.add(ApplicationHealth(Status.DOWN, hashMapOf(serviceEndpoint.serviceLink to serviceEndpoint.serviceLink)))",
+      "range": {
+        "startLine": 36,
+        "startChar": 16,
+        "endLine": 38,
+        "endChar": 79
+      },
+      "revId": "61bf33338a28a5721cb69ff11d4d52a5e4f5f786",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27497ee1_d31cb856",
+        "filename": "ms/sdclistener/application/src/main/java/org/onap/ccsdk/cds/sdclistener/actuator/indicator/SDCListenerCustomIndicator.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-10-29T14:45:53Z",
+      "side": 1,
+      "message": "remove",
+      "range": {
+        "startLine": 18,
+        "startChar": 2,
+        "endLine": 27,
+        "endChar": 5
+      },
+      "revId": "61bf33338a28a5721cb69ff11d4d52a5e4f5f786",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
