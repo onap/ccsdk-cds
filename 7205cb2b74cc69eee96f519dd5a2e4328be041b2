@@ -2,6 +2,98 @@
   "comments": [
     {
       "key": {
+        "uuid": "180ae7fd_3c38e283",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/configuration/BasicAuthRestClientServiceConfiguration.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-10-29T14:45:53Z",
+      "side": 1,
+      "message": "maybe username!!",
+      "range": {
+        "startLine": 43,
+        "startChar": 87,
+        "endLine": 43,
+        "endChar": 98
+      },
+      "revId": "7205cb2b74cc69eee96f519dd5a2e4328be041b2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ddb7bfc_45df0b04",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/configuration/SecurityEncryptionConfiguration.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-10-29T14:45:53Z",
+      "side": 1,
+      "message": "no",
+      "range": {
+        "startLine": 13,
+        "startChar": 3,
+        "endLine": 13,
+        "endChar": 40
+      },
+      "revId": "7205cb2b74cc69eee96f519dd5a2e4328be041b2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07361049_f93e8d0c",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/domain/ApplicationHealth.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-10-29T14:45:53Z",
+      "side": 1,
+      "message": "is this needed? maybe ApplicationHealth is a data class",
+      "range": {
+        "startLine": 8,
+        "startChar": 4,
+        "endLine": 8,
+        "endChar": 35
+      },
+      "revId": "7205cb2b74cc69eee96f519dd5a2e4328be041b2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b8da60c_4d961676",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/domain/Metrics.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-10-29T14:45:53Z",
+      "side": 1,
+      "message": "is this needed?",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 11,
+        "endChar": 5
+      },
+      "revId": "7205cb2b74cc69eee96f519dd5a2e4328be041b2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ff0dcf7a_116d3fc6",
         "filename": "ms/blueprintsprocessor/modules/inbounds/health-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/service/CombinedHealthService.kt",
         "patchSetId": 1
