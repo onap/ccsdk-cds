@@ -1,0 +1,15 @@
+{
+	"tags": "int_private1_subnet_id",
+	"name": "int_private1_subnet_id",
+	"property": {
+		"description": "int_private1_subnet_id",
+		"type": "string"
+	},
+	"updated-by": "Singal, Kapil <ks220y@att.com>",
+	"sources": {
+		"input": {
+			"type": "source-input",
+			"properties": {}
+		}
+	}
+}
