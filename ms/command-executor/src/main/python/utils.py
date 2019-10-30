@@ -16,10 +16,7 @@
 from google.protobuf.timestamp_pb2 import Timestamp
 
 import proto.CommandExecutor_pb2 as CommandExecutor_pb2
-<<<<<<< HEAD   (b8c996 Remove Controller API url and use blueprintProcessorApi url )
-=======
 import json
->>>>>>> CHANGE (35ab81 Improve Remote Python Executor error handling and allow for )
 
 def get_blueprint_id(request):
     blueprint_name = request.identifiers.blueprintName
