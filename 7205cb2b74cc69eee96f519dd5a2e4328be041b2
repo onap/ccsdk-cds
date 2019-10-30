@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1823344f_25a7a726",
+        "filename": "ms/blueprintsprocessor/application/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/actuator/indicator/BluePrintCustomIndicator.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2019-10-30T19:55:41Z",
+      "side": 1,
+      "message": "Remove unwanted code.",
+      "range": {
+        "startLine": 26,
+        "startChar": 8,
+        "endLine": 26,
+        "endChar": 29
+      },
+      "revId": "7205cb2b74cc69eee96f519dd5a2e4328be041b2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "180ae7fd_3c38e283",
         "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/configuration/BasicAuthRestClientServiceConfiguration.kt",
         "patchSetId": 1
