@@ -1,0 +1,233 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8ff29b1_98438399",
+        "filename": "ms/blueprintsprocessor/application/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/actuator/indicator/BluePrintCustomIndicator.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2019-10-30T19:55:41Z",
+      "side": 1,
+      "message": "Remove unwanted code.",
+      "range": {
+        "startLine": 24,
+        "startChar": 8,
+        "endLine": 24,
+        "endChar": 29
+      },
+      "revId": "5131af1b0bf9fd24e660d97f95e2930e14de2b0f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4644c5f0_7562a372",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/configuration/HealthCheckProperties.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2019-10-30T19:55:41Z",
+      "side": 1,
+      "message": "Missing copyright header.",
+      "revId": "5131af1b0bf9fd24e660d97f95e2930e14de2b0f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "77e61b4e_2c8f730f",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/configuration/HealthCheckProperties.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2019-10-30T19:55:41Z",
+      "side": 1,
+      "message": "I think this code is same as the code inside getListOfCDSListenerServicesEndpoint. Better to avoid duplicate code in my opinion.",
+      "range": {
+        "startLine": 44,
+        "startChar": 10,
+        "endLine": 48,
+        "endChar": 13
+      },
+      "revId": "5131af1b0bf9fd24e660d97f95e2930e14de2b0f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba222c5a_be10c3a4",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/configuration/SecurityEncryptionConfiguration.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2019-10-30T19:55:41Z",
+      "side": 1,
+      "message": "Missing copyright header",
+      "revId": "5131af1b0bf9fd24e660d97f95e2930e14de2b0f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3b81a123_80c37e57",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/configuration/SecurityEncryptionConfiguration.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2019-10-30T19:55:41Z",
+      "side": 1,
+      "message": "I agree with Oleg\u0027s previous comment here.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 40
+      },
+      "revId": "5131af1b0bf9fd24e660d97f95e2930e14de2b0f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "51ab69fb_600f109a",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/configuration/SecurityEncryptionConfiguration.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2019-10-30T19:55:41Z",
+      "side": 1,
+      "message": "Most of the logic is same inside decrypt method.\nIt would be better have one common method instead duplicating it.",
+      "range": {
+        "startLine": 18,
+        "startChar": 11,
+        "endLine": 25,
+        "endChar": 63
+      },
+      "revId": "5131af1b0bf9fd24e660d97f95e2930e14de2b0f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6a463287_298e6c9c",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/configuration/SecurityEncryptionConfiguration.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2019-10-30T19:55:41Z",
+      "side": 1,
+      "message": "Dnt return null. I think there are ways you can avoid this behavior.",
+      "range": {
+        "startLine": 31,
+        "startChar": 8,
+        "endLine": 31,
+        "endChar": 19
+      },
+      "revId": "5131af1b0bf9fd24e660d97f95e2930e14de2b0f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "61beeb52_a07a992f",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/domain/ActuatorCheckResponse.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2019-10-30T19:55:41Z",
+      "side": 1,
+      "message": "Missing copyright.",
+      "revId": "5131af1b0bf9fd24e660d97f95e2930e14de2b0f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1d78826a_60476284",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/domain/ActuatorCheckResponse.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2019-10-30T19:55:41Z",
+      "side": 1,
+      "message": "Question: What name represents here ?",
+      "range": {
+        "startLine": 3,
+        "startChar": 37,
+        "endLine": 3,
+        "endChar": 41
+      },
+      "revId": "5131af1b0bf9fd24e660d97f95e2930e14de2b0f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ac570ff2_455c18ab",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/domain/ActuatorEndpointType.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2019-10-30T19:55:41Z",
+      "side": 1,
+      "message": "Missing copyright. \nApplies elsewhere.",
+      "revId": "5131af1b0bf9fd24e660d97f95e2930e14de2b0f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "14b86e9a_f1d1a6c4",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/health-api-common/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/healthapi/HealthCheckServiceTest.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2019-10-30T19:55:41Z",
+      "side": 1,
+      "message": "Remove unwanted code.",
+      "range": {
+        "startLine": 156,
+        "startChar": 0,
+        "endLine": 158,
+        "endChar": 7
+      },
+      "revId": "5131af1b0bf9fd24e660d97f95e2930e14de2b0f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
