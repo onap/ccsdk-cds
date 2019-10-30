@@ -365,6 +365,12 @@
                 <artifactId>ssh-lib</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <!-- message-lib dependency -->
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>message-lib</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>dmaap-lib</artifactId>
@@ -544,13 +550,6 @@
                 <artifactId>spring-kafka-test</artifactId>
                 <version>${spring.kafka.version}</version>
                 <scope>test</scope>
-            </dependency>
-
-            <!-- message-lib dependency -->
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>message-lib</artifactId>
-                <version>${project.version}</version>
             </dependency>
 
         </dependencies>
