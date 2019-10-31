@@ -32,6 +32,7 @@ import org.springframework.http.server.reactive.ServerHttpResponse
 import reactor.core.Disposable
 import reactor.core.publisher.Mono
 import reactor.core.publisher.MonoSink
+import java.net.InetAddress
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -43,6 +44,7 @@ class RestLoggerService {
 
 
     fun entering(request: ServerHttpRequest) {
+        val localhost = InetAddress.getLocalHost()
         val headers = request.headers
         val requestID = headers.getFirst(ONAP_REQUEST_ID).defaultToUUID()
         val invocationID = headers.getFirst(ONAP_INVOCATION_ID).defaultToUUID()
@@ -52,7 +54,7 @@ class RestLoggerService {
         MDC.put("InvocationID", invocationID)
         MDC.put("PartnerName", partnerName)
         MDC.put("ClientIPAddress", request.remoteAddress?.address?.hostAddress.defaultToEmpty())
-        MDC.put("ServerFQDN", request.remoteAddress?.hostString.defaultToEmpty())
+        MDC.put("ServerFQDN",localhost.hostName.defaultToEmpty())
         if (MDC.get("ServiceName") == null || MDC.get("ServiceName").equals("", ignoreCase = true)) {
             MDC.put("ServiceName", request.uri.path)
         }

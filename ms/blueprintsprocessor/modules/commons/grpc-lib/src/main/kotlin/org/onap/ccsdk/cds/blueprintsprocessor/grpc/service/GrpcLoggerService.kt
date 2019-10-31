@@ -31,6 +31,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.defaultToEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.defaultToUUID
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.slf4j.MDC
+import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -46,7 +47,7 @@ class GrpcLoggerService {
                                                  headers: Metadata, next: ServerCallHandler<ReqT, RespT>) {
         val requestID = headers.getStringKey(ONAP_REQUEST_ID).defaultToUUID()
         val invocationID = headers.getStringKey(ONAP_INVOCATION_ID).defaultToUUID()
-        val partnerName = headers.getStringKey(ONAP_PARTNER_NAME).defaultToUUID()
+        val partnerName = headers.getStringKey(ONAP_PARTNER_NAME) ?: "UNKNOWN"
         grpcRequesting(requestID, invocationID, partnerName, call)
     }
 
@@ -54,12 +55,14 @@ class GrpcLoggerService {
                                                  headers: CommonHeader, next: ServerCallHandler<ReqT, RespT>) {
         val requestID = headers.requestId.defaultToUUID()
         val invocationID = headers.subRequestId.defaultToUUID()
-        val partnerName = headers.originatorId.defaultToUUID()
+        val partnerName = headers.originatorId ?: "UNKNOWN"
         grpcRequesting(requestID, invocationID, partnerName, call)
     }
 
     fun <ReqT : Any, RespT : Any> grpcRequesting(requestID: String, invocationID: String, partnerName: String,
                                                  call: ServerCall<ReqT, RespT>) {
+        val localhost = InetAddress.getLocalHost()
+
         val clientSocketAddress = call.attributes.get(Grpc.TRANSPORT_ATTR_REMOTE_ADDR) as? InetSocketAddress
                 ?: throw BluePrintProcessorException("failed to get client address")
         val serviceName = call.methodDescriptor.fullMethodName
@@ -69,7 +72,7 @@ class GrpcLoggerService {
         MDC.put("InvocationID", invocationID)
         MDC.put("PartnerName", partnerName)
         MDC.put("ClientIPAddress", clientSocketAddress.address.defaultToEmpty())
-        MDC.put("ServerFQDN", clientSocketAddress.address.hostName.defaultToEmpty())
+        MDC.put("ServerFQDN", localhost.hostName.defaultToEmpty())
         MDC.put("ServiceName", serviceName)
         log.trace("MDC Properties : ${MDC.getCopyOfContextMap()}")
     }
