@@ -1,0 +1,6 @@
+TOSCA-Meta-File-Version: 1.0.0
+CSAR-Version: 1.0
+Created-By: Seaudi, Abdelmuhaimen <abdelmuhaimen.seaudi@orange.com>
+Entry-Definitions: Definitions/vLB_CDS.json
+Template-Tags: vLB-CDS
+Content-Type: application/vnd.oasis.bpmn
