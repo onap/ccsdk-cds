@@ -1,0 +1,712 @@
+[
+  {
+    "name": "cloud_env",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": "openstack"
+    },
+    "input-param": true,
+    "dictionary-name": "cloud_env",
+    "dictionary-source": "input",
+    "dependencies": [],
+    "version": 0
+  },
+    {
+    "name": "dcae_collector_ip",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      }
+    },
+    "input-param": false,
+    "dictionary-name": "dcae_collector_ip",
+    "dictionary-source": "input",
+    "dependencies": [
+   
+    ],
+    "version": 0
+  },
+  {
+    "name": "demo_artifacts_version",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      }
+    },
+    "input-param": false,
+    "dictionary-name": "demo_artifacts_version",
+    "dictionary-source": "input",
+    "dependencies": [],
+    "version": 0
+  },
+    {
+    "name": "flavor_name",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      }
+    },
+    "input-param": false,
+    "dictionary-name": "flavor_name",
+    "dictionary-source": "input",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "image_name",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      }
+    },
+    "input-param": false,
+    "dictionary-name": "image_name",
+    "dictionary-source": "input",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "vpg_int_pktgen_private_ip_0",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": "${vpg_int_pktgen_private_ip_0}"
+    },
+    "input-param": false,
+    "dictionary-name": "vpg_int_pktgen_private_ip_0",
+    "dictionary-source": "default",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "install_script_version",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      }
+    },
+    "input-param": false,
+    "dictionary-name": "install_script_version",
+    "dictionary-source": "input",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "pub_key",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCs84Cy8+qi/jvucay0BwFtOq3ian0ulTXFGxkZcZCR0N48j88pbHJaEqb9e25MAsrfH+7Etb9Kd5nbBThEL/i0AyHXnDsc80Oq0sqlLcfLo3SGSurkrNoRofHboJ5Hn+N9SlWN5FCQGbTx1w3rjqR4LasAI6XxH9xpXSFyyge6ysVXH0cYaZ8sg98nFZa1fPJR9L8COjZvF+EYudub2RC5HVyV/sx7bliNFo9JwQh6du1abG4G7ZDjTIcYwYp21iq52UzWU28RVcAyY6AQZJu2lHLdsr8fPvyeWZpC5EqGsxI1G609m9G/dURRKwYfez/f2ATzpn5QjEX7LrLWBM8r Generated-by-Nova"
+    },
+    "input-param": false,
+    "dictionary-name": "pub_key",
+    "dictionary-source": "input",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "int_private_net_id",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": "${int_private_net_id}"
+    },
+    "input-param": false,
+    "dictionary-name": "int_private_net_id",
+    "dictionary-source": "default",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "onap_private_net_id",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": ""
+    },
+    "input-param": false,
+    "dictionary-name": "onap_private_net_id",
+    "dictionary-source": "input",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "onap_private_subnet_id",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": ""
+    },
+    "input-param": false,
+    "dictionary-name": "onap_private_subnet_id",
+    "dictionary-source": "input",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "pktgen_private_net_cidr",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": ""
+    },
+    "input-param": false,
+    "dictionary-name": "pktgen_private_net_cidr",
+    "dictionary-source": "processor-db",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "vdns_int_private_ip_0",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": "${vdns_int_private_ip_0}"
+    },
+    "input-param": false,
+    "dictionary-name": "vdns_int_private_ip_0",
+    "dictionary-source": "default",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "vdns_onap_private_ip_0",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": "${vdns_onap_private_ip_0}"
+    },
+    "input-param": false,
+    "dictionary-name": "vdns_onap_private_ip_0",
+    "dictionary-source": "default",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "vlb_int_pktgen_private_ip_0",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": "${vlb_int_pktgen_private_ip_0}"
+    },
+    "input-param": false,
+    "dictionary-name": "vlb_int_pktgen_private_ip_0",
+    "dictionary-source": "default",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "vlb_onap_private_ip_0",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": "${vlb_onap_private_ip_0}"
+    },
+    "input-param": false,
+    "dictionary-name": "vlb_onap_private_ip_0",
+    "dictionary-source": "default",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "vpg_onap_private_ip_0",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": "${vpg_onap_private_ip_0}"
+    },
+    "input-param": false,
+    "dictionary-name": "vpg_onap_private_ip_0",
+    "dictionary-source": "default",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "int_pktgen_private_net_id",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": "${int_pktgen_private_net_id}"
+    },
+    "input-param": false,
+    "dictionary-name": "int_pktgen_private_net_id",
+    "dictionary-source": "default",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "int_pktgen_private_subnet_id",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": "${int_pktgen_private_subnet_id}"
+    },
+    "input-param": false,
+    "dictionary-name": "int_pktgen_private_subnet_id",
+    "dictionary-source": "default",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "int_private_subnet_id",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": "${int_private_subnet_id}"
+    },
+    "input-param": false,
+    "dictionary-name": "int_private_subnet_id",
+    "dictionary-source": "default",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "public_net_id",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": ""
+    },
+    "input-param": false,
+    "dictionary-name": "public_net_id",
+    "dictionary-source": "input",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "onap_private_net_cidr",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": ""
+    },
+    "input-param": false,
+    "dictionary-name": "onap_private_net_cidr",
+    "dictionary-source": "processor-db",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "sec_group",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      }
+    },
+    "input-param": false,
+    "dictionary-name": "sec_group",
+    "dictionary-source": "input",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "service-instance-id",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": ""
+    },
+    "input-param": false,
+    "dictionary-name": "service-instance-id",
+    "dictionary-source": "input",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "vlb_int_private_ip_0",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": "${vlb_int_private_ip_0}"
+    },
+    "input-param": false,
+    "dictionary-name": "vlb_int_private_ip_0",
+    "dictionary-source": "default",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "vlb_private_net_cidr",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": ""
+    },
+    "input-param": false,
+    "dictionary-name": "vlb_private_net_cidr",
+    "dictionary-source": "processor-db",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "vnf-id",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": ""
+    },
+    "input-param": false,
+    "dictionary-name": "vnf-id",
+    "dictionary-source": "input",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "vnf-model-customization-uuid",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": ""
+    },
+    "input-param": false,
+    "dictionary-name": "vnf-model-customization-uuid",
+    "dictionary-source": "input",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "vf-naming-policy",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": "SDNC_Policy.Config_MS_ONAP_VNF_NAMING_TIMESTAMP"
+    },
+    "input-param": false,
+    "dictionary-name": "vf-naming-policy",
+    "dictionary-source": "default",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "vnf_name",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": "${vnf_name}"
+    },
+    "input-param": false,
+    "dictionary-name": "vnf_name",
+    "dictionary-source": "default",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "aic-cloud-region",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": ""
+    },
+    "input-param": false,
+    "dictionary-name": "aic-cloud-region",
+    "dictionary-source": "input",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "management-prefix-id",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": ""
+    },
+    "input-param": false,
+    "dictionary-name": "management-prefix-id",
+    "dictionary-source": "processor-db",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "private1-prefix-id",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": ""
+    },
+    "input-param": false,
+    "dictionary-name": "private1-prefix-id",
+    "dictionary-source": "processor-db",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "private2-prefix-id",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": ""
+    },
+    "input-param": false,
+    "dictionary-name": "private2-prefix-id",
+    "dictionary-source": "processor-db",
+    "dependencies": [],
+    "version": 0
+  }
+]
