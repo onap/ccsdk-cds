@@ -21,14 +21,13 @@ package org.onap.ccsdk.cds.blueprintsprocessor.db.service
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModel
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelContent
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.BlueprintModelRepository
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.common.ApplicationConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ErrorCode
-import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidatorService
-import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPath
+import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintCompileCache
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
 import org.slf4j.LoggerFactory
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
@@ -84,6 +83,12 @@ class ControllerBlueprintCatalogServiceImpl(bluePrintDesignTimeValidatorService:
         check(archiveFile.isFile && !archiveFile.isDirectory) {
             throw BluePrintException("Not a valid Archive file(${archiveFile.absolutePath})")
         }
+
+        // cleanup up deploy folder for the Blueprint
+        val blueprintDeploy = normalizedPathName(bluePrintLoadConfiguration.blueprintDeployPath,
+                                    artifactName, artifactVersion)
+        val cacheKey = BluePrintFileUtils.compileCacheKey(blueprintDeploy)
+        BluePrintCompileCache.cleanClassLoader(cacheKey)
 
         blueprintModelRepository.findByArtifactNameAndArtifactVersion(artifactName!!, artifactVersion!!)?.let {
             log.info("Overwriting blueprint model :$artifactName::$artifactVersion")
