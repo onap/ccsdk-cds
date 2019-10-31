@@ -29,11 +29,11 @@ class DeviceInfo {
     @get:JsonProperty("port-number")
     var port: Int = 0
     @get:JsonProperty("connection-time-out")
-    var connectTimeout: Long = 5
+    var connectTimeout: Long = 30
     @get:JsonIgnore
     var source: String? = null
     @get:JsonIgnore
-    var replyTimeout: Int = 5
+    var replyTimeout: Int = 20
     @get:JsonIgnore
     var idleTimeout: Int = 99999
 
