@@ -43,7 +43,7 @@ def serve():
         'Access denied!')
 
     server = grpc.server(
-        futures.ThreadPoolExecutor(max_workers=10),
+        futures.ThreadPoolExecutor(max_workers=15),
         interceptors=(header_validator,))
 
     CommandExecutor_pb2_grpc.add_CommandExecutorServiceServicer_to_server(
