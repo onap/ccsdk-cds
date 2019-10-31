@@ -38,7 +38,6 @@ open class KafkaBasicAuthMessageConsumerService(
     : BlueprintMessageConsumerService {
 
     val log = logger(KafkaBasicAuthMessageConsumerService::class)
-
     val channel = Channel<String>()
     var kafkaConsumer: Consumer<String, ByteArray>? = null
 
@@ -57,9 +56,8 @@ open class KafkaBasicAuthMessageConsumerService(
         configProperties[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = messageConsumerProperties.autoOffsetReset
         configProperties[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         configProperties[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = ByteArrayDeserializer::class.java
-        if (messageConsumerProperties.clientId != null) {
-            configProperties[ConsumerConfig.CLIENT_ID_CONFIG] = messageConsumerProperties.clientId!!
-        }
+        configProperties[ConsumerConfig.CLIENT_ID_CONFIG] = messageConsumerProperties.clientId
+
         /** To handle Back pressure, Get only configured record for processing */
         if (messageConsumerProperties.pollRecords > 0) {
             configProperties[ConsumerConfig.MAX_POLL_RECORDS_CONFIG] = messageConsumerProperties.pollRecords
@@ -79,7 +77,7 @@ open class KafkaBasicAuthMessageConsumerService(
     }
 
 
-    override suspend fun subscribe(consumerTopic: List<String>, additionalConfig: Map<String, Any>?): Channel<String> {
+    override suspend fun subscribe(topics: List<String>, additionalConfig: Map<String, Any>?): Channel<String> {
         /** Create Kafka consumer */
         kafkaConsumer = kafkaConsumer(additionalConfig)
 
@@ -89,15 +87,15 @@ open class KafkaBasicAuthMessageConsumerService(
                     "topics(${messageConsumerProperties.bootstrapServers})"
         }
 
-        kafkaConsumer!!.subscribe(consumerTopic)
-        log.info("Successfully consumed topic($consumerTopic)")
+        kafkaConsumer!!.subscribe(topics)
+        log.info("Successfully consumed topic($topics)")
 
-        thread(start = true, name = "KafkaConsumer") {
+        thread(start = true, name = "KafkaConsumer-${messageConsumerProperties.clientId}") {
             keepGoing = true
             kafkaConsumer!!.use { kc ->
                 while (keepGoing) {
                     val consumerRecords = kc.poll(Duration.ofMillis(messageConsumerProperties.pollMillSec))
-                    log.info("Consumed Records : ${consumerRecords.count()}")
+                    log.trace("Consumed Records : ${consumerRecords.count()}")
                     runBlocking {
                         consumerRecords?.forEach { consumerRecord ->
                             /** execute the command block */
@@ -117,6 +115,46 @@ open class KafkaBasicAuthMessageConsumerService(
             }
         }
         return channel
+    }
+
+    override suspend fun consume(additionalConfig: Map<String, Any>?, consumerFunction: ConsumerFunction) {
+        /** get to topic names */
+        val consumerTopic = messageConsumerProperties.topic?.split(",")?.map { it.trim() }
+        check(!consumerTopic.isNullOrEmpty()) { "couldn't get topic information" }
+        return consume(topics = consumerTopic, additionalConfig = additionalConfig, consumerFunction = consumerFunction)
+    }
+
+    override suspend fun consume(topics: List<String>, additionalConfig: Map<String, Any>?,
+                                 consumerFunction: ConsumerFunction) {
+
+        val kafkaConsumerFunction = consumerFunction as KafkaConsumerRecordsFunction
+
+        /** Create Kafka consumer */
+        kafkaConsumer = kafkaConsumer(additionalConfig)
+
+        checkNotNull(kafkaConsumer) {
+            "failed to create kafka consumer for " +
+                    "server(${messageConsumerProperties.bootstrapServers})'s " +
+                    "topics(${messageConsumerProperties.bootstrapServers})"
+        }
+
+        kafkaConsumer!!.subscribe(topics)
+        log.info("Successfully consumed topic($topics)")
+
+        thread(start = true, name = "KafkaConsumer-${messageConsumerProperties.clientId}") {
+            keepGoing = true
+            kafkaConsumer!!.use { kc ->
+                while (keepGoing) {
+                    val consumerRecords = kc.poll(Duration.ofMillis(messageConsumerProperties.pollMillSec))
+                    log.trace("Consumed Records : ${consumerRecords.count()}")
+                    runBlocking {
+                        /** Execute dynamic consumer Block substitution */
+                        kafkaConsumerFunction.invoke(messageConsumerProperties, kc, consumerRecords)
+                    }
+                }
+                log.info("message listener shutting down.....")
+            }
+        }
     }
 
     override suspend fun shutDown() {
