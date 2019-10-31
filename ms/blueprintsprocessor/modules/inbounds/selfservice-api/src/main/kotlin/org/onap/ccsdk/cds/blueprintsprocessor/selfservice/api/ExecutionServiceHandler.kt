@@ -23,11 +23,13 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.*
 import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.utils.toProto
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractServiceFunction
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintWorkflowExecutionService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -70,24 +72,43 @@ class ExecutionServiceHandler(private val bluePrintLoadConfiguration: BluePrintL
         val blueprintName = actionIdentifiers.blueprintName
         val blueprintVersion = actionIdentifiers.blueprintVersion
         try {
-            val basePath = blueprintsProcessorCatalogService.getFromDatabase(blueprintName, blueprintVersion)
-            log.info("blueprint base path $basePath")
+            /** Check Blueprint is needed for this request */
+            if (checkServiceFunction(executionServiceInput)) {
+                return executeServiceFunction(executionServiceInput)
+            } else {
+                val basePath = blueprintsProcessorCatalogService.getFromDatabase(blueprintName, blueprintVersion)
+                log.info("blueprint base path $basePath")
 
-            val blueprintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(requestId, basePath.toString())
+                val blueprintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(requestId, basePath.toString())
 
-            val output = bluePrintWorkflowExecutionService.executeBluePrintWorkflow(blueprintRuntimeService,
-                    executionServiceInput, hashMapOf())
+                val output = bluePrintWorkflowExecutionService.executeBluePrintWorkflow(blueprintRuntimeService,
+                        executionServiceInput, hashMapOf())
 
-            val errors = blueprintRuntimeService.getBluePrintError().errors
-            if (errors.isNotEmpty()) {
-                val errorMessage = errors.stream().map { it.toString() }.collect(Collectors.joining(", "))
-                setErrorStatus(errorMessage, output.status)
+                val errors = blueprintRuntimeService.getBluePrintError().errors
+                if (errors.isNotEmpty()) {
+                    val errorMessage = errors.stream().map { it.toString() }.collect(Collectors.joining(", "))
+                    setErrorStatus(errorMessage, output.status)
+                }
+                return output
             }
-            return output
         } catch (e: Exception) {
             log.error("fail processing request id $requestId", e)
             return response(executionServiceInput, e.localizedMessage ?: e.message ?: e.toString(), true)
         }
+    }
+
+    /** If the blueprint name is default, It means no blueprint is needed for the execution */
+    fun checkServiceFunction(executionServiceInput: ExecutionServiceInput): Boolean {
+        return executionServiceInput.actionIdentifiers.blueprintName == "default"
+    }
+
+    /** If no blueprint is needed, then get the Service function instance mapping to the action name and execute it */
+    suspend fun executeServiceFunction(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
+        val actionName = executionServiceInput.actionIdentifiers.actionName
+        val instance = BluePrintDependencyService.instance<AbstractServiceFunction>(actionName)
+        checkNotNull(instance) { "failed to initialize service function($actionName)" }
+        instance.actionName = actionName
+        return instance.applyNB(executionServiceInput)
     }
 
     private fun setErrorStatus(errorMessage: String, status: Status) {
