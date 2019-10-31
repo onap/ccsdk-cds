@@ -28,18 +28,25 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutp
 import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.utils.determineHttpStatusCode
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
+import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
+import java.util.concurrent.Phaser
+import javax.annotation.PreDestroy
 
 @RestController
 @RequestMapping("/api/v1/execution-service")
 @Api(value = "/api/v1/execution-service",
         description = "Interaction with CBA.")
 open class ExecutionServiceController {
+
+    private val log = logger(ExecutionServiceController::class)
+
+    private val ph = Phaser(1)
 
     @Autowired
     lateinit var executionServiceHandler: ExecutionServiceHandler
@@ -90,7 +97,18 @@ open class ExecutionServiceController {
                 if (executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC) {
                     throw IllegalStateException("Can't process async request through the REST endpoint. Use gRPC for async processing.")
                 }
+
+                ph.register()
                 val processResult = executionServiceHandler.doProcess(executionServiceInput)
+                ph.arriveAndDeregister()
                 ResponseEntity(processResult, determineHttpStatusCode(processResult.status.code))
             }
+
+    @PreDestroy
+    fun preDestroy() {
+        val name = "ExecutionServiceController"
+        log.info("Starting to shutdown $name waiting for in-flight requests to finish ...")
+        ph.arriveAndAwaitAdvance()
+        log.info("Done waiting in $name")
+    }
 }
