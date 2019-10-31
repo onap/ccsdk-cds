@@ -24,6 +24,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JsonParserUtils
 import org.slf4j.LoggerFactory
 import org.slf4j.helpers.MessageFormatter
+import java.util.*
 import kotlin.reflect.KClass
 
 /**
@@ -36,6 +37,13 @@ fun <T : Any> logger(clazz: T) = LoggerFactory.getLogger(clazz.javaClass)!!
 
 fun <T : KClass<*>> logger(clazz: T) = LoggerFactory.getLogger(clazz.java)!!
 
+fun <T : Any> T?.defaultToEmpty(): String {
+    return this?.toString() ?: ""
+}
+
+fun <T : Any> T?.defaultToUUID(): String {
+    return this?.toString() ?: UUID.randomUUID().toString()
+}
 
 fun <T : Any> T.bpClone(): T {
     return ObjectUtils.clone(this)
@@ -175,7 +183,7 @@ fun ArrayNode.asListOfString(): List<String> {
 
 fun <T> JsonNode.asType(clazzType: Class<T>): T {
     return JacksonUtils.readValue(this, clazzType)
-        ?: throw BluePrintException("couldn't convert JsonNode of type $clazzType")
+            ?: throw BluePrintException("couldn't convert JsonNode of type $clazzType")
 }
 
 fun JsonNode.asListOfString(): List<String> {
@@ -186,8 +194,7 @@ fun JsonNode.asListOfString(): List<String> {
 fun <T : JsonNode> T?.returnNullIfMissing(): JsonNode? {
     return if (this == null || this is NullNode || this is MissingNode) {
         null
-    }
-    else this
+    } else this
 }
 
 fun <T : JsonNode> T?.isNullOrMissing(): Boolean {

@@ -16,7 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor
 
-import org.onap.ccsdk.cds.blueprintsprocessor.core.service.LoggingService
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.RestLoggerService
 import org.onap.ccsdk.cds.controllerblueprints.core.MDCContext
 import org.springframework.stereotype.Component
 import org.springframework.web.server.ServerWebExchange
@@ -29,7 +29,7 @@ import reactor.util.context.Context
 open class LoggingWebFilter : WebFilter {
     override fun filter(serverWebExchange: ServerWebExchange, webFilterChain: WebFilterChain): Mono<Void> {
 
-        val loggingService = LoggingService()
+        val loggingService = RestLoggerService()
         loggingService.entering(serverWebExchange.request)
         val filterChain = webFilterChain.filter(serverWebExchange).subscriberContext(
                 Context.of(MDCContext,  MDCContext()))

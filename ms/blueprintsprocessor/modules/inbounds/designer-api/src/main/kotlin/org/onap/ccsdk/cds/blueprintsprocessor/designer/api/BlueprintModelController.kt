@@ -19,9 +19,9 @@ package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
-import org.onap.ccsdk.cds.blueprintsprocessor.core.monoMdc
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelSearch
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.BluePrintModelHandler
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.monoMdc
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.springframework.core.io.Resource
 import org.springframework.http.MediaType

@@ -39,13 +39,13 @@ class MDCContextTest {
 
     @Test
     fun testContextCanBePassedBetweenCoroutines() {
-        MDC.put(BluePrintConstants.RESPONSE_HEADER_TRANSACTION_ID, "12345")
+        MDC.put(BluePrintConstants.ONAP_REQUEST_ID, "12345")
         runBlocking {
             GlobalScope.launch {
-                assertEquals(null, MDC.get(BluePrintConstants.RESPONSE_HEADER_TRANSACTION_ID))
+                assertEquals(null, MDC.get(BluePrintConstants.ONAP_REQUEST_ID))
             }
             launch(MDCContext()) {
-                assertEquals("12345", MDC.get(BluePrintConstants.RESPONSE_HEADER_TRANSACTION_ID),
+                assertEquals("12345", MDC.get(BluePrintConstants.ONAP_REQUEST_ID),
                         "couldn't get request id")
 
                 MDC.put("client_id", "client-1")

@@ -24,10 +24,13 @@ package org.onap.ccsdk.cds.controllerblueprints.core
  */
 object BluePrintConstants {
 
-    const val RESPONSE_HEADER_TRANSACTION_ID: String = "X-ONAP-RequestID"
     const val RESPONSE_HEADER_MINOR_VERSION: String = "X-MinorVersion"
     const val RESPONSE_HEADER_PATCH_VERSION: String = "X-PatchVersion"
     const val RESPONSE_HEADER_LATEST_VERSION: String = "X-LatestVersion"
+
+    const val ONAP_REQUEST_ID = "X-ONAP-RequestID"
+    const val ONAP_INVOCATION_ID = "X-ONAP-InvocationID"
+    const val ONAP_PARTNER_NAME = "X-ONAP-PartnerName"
 
     const val STATUS_SUCCESS: String = "success"
     const val STATUS_PROCESSING: String = "processing"

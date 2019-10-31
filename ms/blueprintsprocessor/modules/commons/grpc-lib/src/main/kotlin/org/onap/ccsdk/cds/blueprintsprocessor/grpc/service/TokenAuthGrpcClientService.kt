@@ -21,6 +21,7 @@ import io.grpc.internal.DnsNameResolverProvider
 import io.grpc.internal.PickFirstLoadBalancerProvider
 import io.grpc.netty.NettyChannelBuilder
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.TokenAuthGrpcClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.interceptor.GrpcClientLoggingInterceptor
 
 class TokenAuthGrpcClientService(private val tokenAuthGrpcClientProperties: TokenAuthGrpcClientProperties)
     : BluePrintGrpcClientService {
@@ -30,6 +31,7 @@ class TokenAuthGrpcClientService(private val tokenAuthGrpcClientProperties: Toke
                 .forAddress(tokenAuthGrpcClientProperties.host, tokenAuthGrpcClientProperties.port)
                 .nameResolverFactory(DnsNameResolverProvider())
                 .loadBalancerFactory(PickFirstLoadBalancerProvider())
+                .intercept(GrpcClientLoggingInterceptor())
                 .intercept(TokenAuthClientInterceptor(tokenAuthGrpcClientProperties)).usePlaintext().build()
         return managedChannel
     }
