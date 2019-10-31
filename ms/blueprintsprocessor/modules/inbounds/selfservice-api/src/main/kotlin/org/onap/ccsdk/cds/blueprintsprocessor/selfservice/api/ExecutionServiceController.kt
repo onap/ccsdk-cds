@@ -33,6 +33,8 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Mono
+import java.util.concurrent.atomic.AtomicInteger
+import javax.annotation.PreDestroy
 
 @RestController
 @RequestMapping("/api/v1/execution-service")
@@ -43,6 +45,8 @@ open class ExecutionServiceController {
 
     @Autowired
     lateinit var executionServiceHandler: ExecutionServiceHandler
+
+    var pendingRequests: AtomicInteger = AtomicInteger(0)
 
     @RequestMapping(path = ["/health-check"],
             method = [RequestMethod.GET],
@@ -68,7 +72,20 @@ open class ExecutionServiceController {
         if (executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC) {
             throw IllegalStateException("Can't process async request through the REST endpoint. Use gRPC for async processing.")
         }
+
+        pendingRequests.incrementAndGet()
         val processResult = executionServiceHandler.doProcess(executionServiceInput)
+        pendingRequests.decrementAndGet()
         ResponseEntity(processResult, determineHttpStatusCode(processResult.status.code))
+    }
+
+    @PreDestroy
+    fun preDestroy() {
+        log.info("Starting to shutdown application waiting for in-flight requests to finish ...")
+        while(pendingRequests.get() > 0) {
+            log.info("Waiting for ${pendingRequests.get()} request(s) to finish")
+            Thread.sleep(1000)
+        }
+        log.info("Done waiting continuing shutdown process")
     }
 }
