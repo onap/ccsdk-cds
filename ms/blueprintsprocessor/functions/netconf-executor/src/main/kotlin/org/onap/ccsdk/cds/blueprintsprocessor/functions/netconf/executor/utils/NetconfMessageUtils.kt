@@ -224,7 +224,15 @@ class NetconfMessageUtils {
 
         fun closeSession(messageId: String, force: Boolean): String {
             val request = StringBuilder()
+            //TODO: kill-session without session-id is a cisco-only variant.
+            //will fail on JUNIPER device.
+            //netconf RFC for kill-session requires session-id
+            //Cisco can accept <kill-session/> for current session
+            //or <kill-session><session-id>####</session-id></kill-session>
+            //as long as session ID is not the same as the current session.
 
+            //Juniperhttps://www.juniper.net/documentation/en_US/junos/topics/task/operational/netconf-session-terminating.html
+            //will accept only with session-id
             if (force) {
                 request.append("<kill-session/>").append(NEW_LINE)
             } else {

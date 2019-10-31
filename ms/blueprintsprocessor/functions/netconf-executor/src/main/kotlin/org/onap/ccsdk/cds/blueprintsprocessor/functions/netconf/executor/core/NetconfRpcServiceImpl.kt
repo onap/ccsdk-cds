@@ -42,15 +42,36 @@ class NetconfRpcServiceImpl(private var deviceInfo: DeviceInfo) : NetconfRpcServ
         this.netconfSession = netconfSession
     }
 
+    /**
+     * accept a user-supplied RPC message WITH HEADER
+     * <rpc message-id="abc123" xmlns=".....">
+     *     .....
+     *     .....
+     * </rpc>
+     *
+     * and replace the user-supplied message-id with the one that is passed.
+     * Used by NetconfRpcServiceImpl.invokeRpc to keep the message-id consistent
+     * with auto-incremented numbering scheme.
+     * @param rpc: Complete custom RPC call including the header
+     * @param updatedMessageID new message-id to substitute
+     * @return updated RPC message with message-id replaced.
+     */
+    private fun replaceUserSuppliedNetconfMessageID(rpc: String, updatedMessageID: String): String {
+        return rpc.replaceFirst("message-id=\".+\"".toRegex(), "message-id=\"$updatedMessageID\"")
+    }
+
     override fun invokeRpc(rpc: String): DeviceResponse {
         var output = DeviceResponse()
-        val messageId = messageIdInteger.getAndIncrement().toString()
-        log.info("$deviceInfo: invokeRpc: messageId($messageId)")
+        //Attempt to extract the message-id field from the <rpc call
+        val updatedMessageId = messageIdInteger.getAndIncrement().toString()
+        val origMessageId = NetconfMessageUtils.getMsgId(rpc)
+        log.info("$deviceInfo: invokeRpc: updating rpc original message-id:($origMessageId) to messageId($updatedMessageId)")
         try {
-            output = asyncRpc(rpc, messageId)
+            output = asyncRpc(replaceUserSuppliedNetconfMessageID(rpc, updatedMessageId), updatedMessageId)
         } catch (e: Exception) {
             output.status = RpcStatus.FAILURE
-            output.errorMessage = "$deviceInfo: failed in 'invokeRpc' command ${e.message}"
+            output.errorMessage = "$deviceInfo: failed in 'invokeRpc' command. Message: ${e.message}."
+            log.error("$deviceInfo: failed in 'invokeRpc' command. Exception: $e")
         }
         return output
     }
@@ -64,7 +85,8 @@ class NetconfRpcServiceImpl(private var deviceInfo: DeviceInfo) : NetconfRpcServ
             output = asyncRpc(message, messageId)
         } catch (e: Exception) {
             output.status = RpcStatus.FAILURE
-            output.errorMessage = "$deviceInfo: failed in 'get' command ${e.message}"
+            output.errorMessage = "$deviceInfo: failed in 'get' command. Message: ${e.message}..."
+            log.error("$deviceInfo: failed in 'get' command. Exception: $e")
         }
         return output
     }
@@ -78,7 +100,8 @@ class NetconfRpcServiceImpl(private var deviceInfo: DeviceInfo) : NetconfRpcServ
             output = asyncRpc(message, messageId)
         } catch (e: Exception) {
             output.status = RpcStatus.FAILURE
-            output.errorMessage = "$deviceInfo: failed in 'get-config' command ${e.message}"
+            output.errorMessage = "$deviceInfo: failed in 'get-config' command. Message: ${e.message}"
+            log.error("$deviceInfo: failed in 'get-config' command. Exception: $e")
         }
         return output
     }
@@ -93,7 +116,8 @@ class NetconfRpcServiceImpl(private var deviceInfo: DeviceInfo) : NetconfRpcServ
             output = asyncRpc(deleteConfigMessage, messageId)
         } catch (e: Exception) {
             output.status = RpcStatus.FAILURE
-            output.errorMessage = "$deviceInfo: failed in 'delete-config' command ${e.message}"
+            output.errorMessage = "$deviceInfo: failed in 'delete-config' command. Message: ${e.message}"
+            log.error("$deviceInfo: failed in 'deleteConfig' command. Exception: $e")
         }
         return output
     }
@@ -108,7 +132,8 @@ class NetconfRpcServiceImpl(private var deviceInfo: DeviceInfo) : NetconfRpcServ
             output = asyncRpc(lockMessage, messageId)
         } catch (e: Exception) {
             output.status = RpcStatus.FAILURE
-            output.errorMessage = "$deviceInfo: failed in 'lock' command ${e.message}"
+            output.errorMessage = "$deviceInfo: failed in 'lock' command. Message ${e.message}"
+            log.error("$deviceInfo: failed in 'lock' command. Exception: $e")
         }
 
         return output
@@ -124,7 +149,8 @@ class NetconfRpcServiceImpl(private var deviceInfo: DeviceInfo) : NetconfRpcServ
             output = asyncRpc(unlockMessage, messageId)
         } catch (e: Exception) {
             output.status = RpcStatus.FAILURE
-            output.errorMessage = "$deviceInfo: failed in 'unLock' command ${e.message}"
+            output.errorMessage = "$deviceInfo: failed in 'unLock' command. Message: ${e.message}"
+            log.error("$deviceInfo: failed in 'unLock' command. Exception: $e")
         }
         return output
     }
@@ -138,7 +164,8 @@ class NetconfRpcServiceImpl(private var deviceInfo: DeviceInfo) : NetconfRpcServ
             output = asyncRpc(messageContent, messageId)
         } catch (e: Exception) {
             output.status = RpcStatus.FAILURE
-            output.errorMessage = "$deviceInfo: failed in 'commit' command ${e.message}"
+            output.errorMessage = "$deviceInfo: failed in 'commit' command. Message: ${e.message}"
+            log.error("$deviceInfo: failed in 'commit' command. Exception: $e")
         }
         return output
     }
@@ -152,7 +179,8 @@ class NetconfRpcServiceImpl(private var deviceInfo: DeviceInfo) : NetconfRpcServ
             output = asyncRpc(messageContent, messageId)
         } catch (e: Exception) {
             output.status = RpcStatus.FAILURE
-            output.errorMessage = "$deviceInfo: failed in 'cancelCommit' command ${e.message}"
+            output.errorMessage = "$deviceInfo: failed in 'cancelCommit' command. Message: ${e.message}"
+            log.error("$deviceInfo: failed in 'cancelCommit' command. Exception: $e")
         }
         return output
     }
@@ -167,7 +195,8 @@ class NetconfRpcServiceImpl(private var deviceInfo: DeviceInfo) : NetconfRpcServ
             output = asyncRpc(discardChangesMessage, messageId)
         } catch (e: Exception) {
             output.status = RpcStatus.FAILURE
-            output.errorMessage = "$deviceInfo: failed in 'discard-config' command ${e.message}"
+            output.errorMessage = "$deviceInfo: failed in 'discard-config' command. Message: ${e.message}"
+            log.error("$deviceInfo: failed in 'discard-config' command. Exception: $e")
         }
         return output
     }
@@ -184,7 +213,8 @@ class NetconfRpcServiceImpl(private var deviceInfo: DeviceInfo) : NetconfRpcServ
             response = asyncRpc(editMessage, messageId)
         } catch (e: Exception) {
             response.status = RpcStatus.FAILURE
-            response.errorMessage = "$deviceInfo: failed in 'editConfig' command ${e.message}"
+            response.errorMessage = "$deviceInfo: failed in 'editConfig' command. Message: ${e.message}"
+            log.error("$deviceInfo: failed in 'editConfig' command. Exception: $e")
         }
         return response
     }
@@ -198,7 +228,8 @@ class NetconfRpcServiceImpl(private var deviceInfo: DeviceInfo) : NetconfRpcServ
             output = asyncRpc(validateMessage, messageId)
         } catch (e: Exception) {
             output.status = RpcStatus.FAILURE
-            output.errorMessage = "$deviceInfo: failed in 'validate' command ${e.message}"
+            output.errorMessage = "$deviceInfo: failed in 'validate' command. Message: ${e.message}"
+            log.error("$deviceInfo: failed in 'validate' command. Exception: $e")
         }
         return output
     }
@@ -212,7 +243,8 @@ class NetconfRpcServiceImpl(private var deviceInfo: DeviceInfo) : NetconfRpcServ
             output = asyncRpc(messageContent, messageId)
         } catch (e: Exception) {
             output.status = RpcStatus.FAILURE
-            output.errorMessage = "$deviceInfo: failed in 'closeSession' command ${e.message}"
+            output.errorMessage = "$deviceInfo: failed in 'closeSession' command. Message: ${e.message}"
+            log.error("$deviceInfo: failed in 'closeSession' command. Exception: $e")
         }
         return output
     }
@@ -224,7 +256,9 @@ class NetconfRpcServiceImpl(private var deviceInfo: DeviceInfo) : NetconfRpcServ
         response.requestMessage = request
 
         val rpcResponse = netconfSession.asyncRpc(request, messageId).get(responseTimeout.toLong(), TimeUnit.SECONDS)
+        //TODO catch TimeoutException and ExecutionException
         if (!NetconfMessageUtils.checkReply(rpcResponse)) {
+            log.error("RPC response didn't pass validation... $rpcResponse")
             throw NetconfException(rpcResponse)
         }
         response.responseMessage = rpcResponse

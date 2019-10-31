@@ -251,6 +251,7 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
 
         if (sessionIDMatcher.find()) {
             sessionId = sessionIDMatcher.group(1)
+            log.info("netconf exchangeHelloMessage sessionID: $sessionId")
         } else {
             throw NetconfException("$deviceInfo: Missing sessionId in server hello message: $serverHelloResponse")
         }
