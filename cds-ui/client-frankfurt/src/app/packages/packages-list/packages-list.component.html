@@ -1,0 +1,218 @@
+<!--Page Title-->
+<header class="page-title">
+    <div class="row">
+        <h2 class="col m-0">CBA Packages
+            <span>(20 packages)</span>
+        </h2>
+        <div class="col">
+
+
+            <!-- <ul class="page-title-actions text-right">
+                <li>
+                    <a rel="float" href="#" class="title-action bold float" role="button" aria-pressed="true" data-toggle="modal" data-target="#exampleModalLong">Primary</a>
+                    <p>New</p>
+                </li>
+                <li>
+                    <a href="#" class="title-action" role="button" aria-pressed="true">Primary</a>
+                    <p>Import</p>
+                </li>
+            </ul> -->
+        </div>
+    </div>
+</header>
+
+<div class="container-fluid body-container">
+    <nav class="row">
+        <!--Nav Tabs-->
+        <div class="col pr-0">
+            <div class="nav nav-tabs " id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
+                   aria-controls="nav-home"
+                   aria-selected="true">All</a>
+                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
+                   aria-controls="nav-profile"
+                   aria-selected="false">Deployed</a>
+                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab"
+                   aria-controls="nav-contact"
+                   aria-selected="false">Under Construction</a>
+                <a class="nav-item nav-link" id="nav-contact1-tab" data-toggle="tab" href="#nav-contact1" role="tab"
+                   aria-controls="nav-contact1"
+                   aria-selected="false">Archived</a>
+            </div>
+        </div>
+        <!--Nav Search & Filter-->
+        <div class="col search-filter-col">
+            <div class="row">
+                <div class="col-7">
+                    <div class="searchBox">
+                        <input class="searchInput" type="text" name="" placeholder="Search packages">
+                        <button class="searchButton" href="#"></button>
+                    </div>
+                </div>
+                <div class="col-5 pl-2">
+                    <div class="dropdown packagesFilter w-100">
+                        <input class="dropdown-toggle" type="text">
+                        <div class="dropdown-text">ALL PACKAGES TAGS</div>
+                        <ul class="dropdown-content w-100">
+                            <li>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Search" autofocus>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                    <label class="custom-control-label" for="customCheck1">Check this custom
+                                        checkbox</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck2">
+                                    <label class="custom-control-label" for="customCheck2">Check this custom
+                                        checkbox</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck3">
+                                    <label class="custom-control-label" for="customCheck3">Check this custom
+                                        checkbox</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck4">
+                                    <label class="custom-control-label" for="customCheck4">Check this custom
+                                        checkbox</label>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="row mt-4">
+        <div class="col">
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                    <div class="row">
+                        <!--Package Sort-->
+                        <div class="col sort-packages">
+                            Sort by:
+                            <div class="dropdown">
+                                <input class="dropdown-toggle" type="text">
+                                <div class="dropdown-text">Recent</div>
+                                <ul class="dropdown-content">
+                                    <li>
+                                        <a href="#">Name</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Recent</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!--Package Paginator-->
+                      <div class="col package-paginator pr-0">
+                            <ngb-pagination [collectionSize]="70" [(page)]="page" class="float-right"></ngb-pagination>
+                        </div>
+                    </div>
+                    <div class="row packages-card">
+                        <div class="col-md-3 pl-0 pr-0">
+                            <!--Add Package Card-->
+                            <div class="card addPaackage-card">
+                                <div class="card-body text-center">
+                                    <img src="/assets/img/icon-addPackage.svg">
+                                </div>
+                                <div class="card-footer row">
+                                    <div class="col text-right pr-0">
+                                        <a href="#" role="button" aria-pressed="true" class="btn-create-package float">Create
+                                            Package</a>
+                                    </div>
+                                    <div class="col pr-0">
+                                        <a href="#" role="button" aria-pressed="true" class="btn-import-package float">Import
+                                            Package</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 pl-0 pr-0" *ngFor="let bluePrint of packages">
+                            <!--Card 1-->
+                            <div >
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-9 pr-0">
+                                                <h5 class="card-title">{{bluePrint.artifactName}}</h5>
+                                            </div>
+                                            <div class="col-3">
+                                                <img class="icon-deployed" src="/assets/img/icon-deploy.svg">
+                                                <div class="dropdown">
+                                                    <input class="dropdown-toggle" type="text">
+                                                    <div class="dropdown-text">
+                                                        <img src="/assets/img/icon-menuDots.svg" title="Actions">
+                                                    </div>
+                                                    <ul class="dropdown-content">
+                                                        <li class="action-clone">
+                                                            <a href="#">Clone</a>
+                                                        </li>
+                                                        <li class="action-archive">
+                                                            <a href="#">Archive</a>
+                                                        </li>
+                                                        <li class="action-delete">
+                                                            <a href="#">Delete</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p>Last modified {{bluePrint.createdDate}} by {{bluePrint.updatedBy}}</p>
+                                        <ul class="package-contributers">
+                                            <li>
+                                                <button type="button" class="border-fade" data-toggle="tooltip"
+                                                        data-placement="bottom" title="User name">
+                                                    <img src="/assets/img/img-user1.jpeg">
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button type="button" data-toggle="tooltip" data-placement="bottom"
+                                                        title="User name">
+                                                    <img src="/assets/img/img-user2.jpg">
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button type="button" data-toggle="tooltip" data-placement="bottom"
+                                                        title="User name">
+                                                    <img src="/assets/img/img-user3.jpg">
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <a href="">5 contributors</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="card-footer">
+                                        <div class="row">
+                                            <div class="col">
+                                                <button type="button" class="btn btn-card-topology">Topology View
+                                                </button>
+                                            </div>
+                                            <div class="col">
+                                                <button type="button" class="btn btn-card-config">Configuration</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
+                <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
+                <div class="tab-pane fade" id="nav-contact1" role="tabpanel" aria-labelledby="nav-contact1-tab">...
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
