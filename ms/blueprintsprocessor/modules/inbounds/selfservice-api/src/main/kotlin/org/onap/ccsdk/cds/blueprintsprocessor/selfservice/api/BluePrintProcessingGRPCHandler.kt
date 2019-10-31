@@ -27,12 +27,16 @@ import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceOu
 import org.slf4j.LoggerFactory
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Service
+import java.util.concurrent.Phaser
+import javax.annotation.PreDestroy
 
 @Service
 open class BluePrintProcessingGRPCHandler(private val bluePrintCoreConfiguration: BluePrintCoreConfiguration,
                                           private val executionServiceHandler: ExecutionServiceHandler)
     : BluePrintProcessingServiceGrpc.BluePrintProcessingServiceImplBase() {
     private val log = LoggerFactory.getLogger(BluePrintProcessingGRPCHandler::class.java)
+
+    private val ph = Phaser(1)
 
     @PreAuthorize("hasRole('USER')")
     override fun process(
@@ -41,11 +45,15 @@ open class BluePrintProcessingGRPCHandler(private val bluePrintCoreConfiguration
         return object : StreamObserver<ExecutionServiceInput> {
             override fun onNext(executionServiceInput: ExecutionServiceInput) {
                 try {
+                    ph.register()
                     runBlocking {
                         executionServiceHandler.process(executionServiceInput.toJava(), responseObserver)
                     }
                 } catch (e: Exception) {
                     onError(e)
+                }
+                finally {
+                    ph.arriveAndDeregister()
                 }
             }
 
@@ -60,5 +68,13 @@ open class BluePrintProcessingGRPCHandler(private val bluePrintCoreConfiguration
                 log.info("Completed")
             }
         }
+    }
+
+    @PreDestroy
+    fun preDestroy() {
+        val name = "BluePrintProcessingGRPCHandler"
+        log.info("Starting to shutdown $name waiting for in-flight requests to finish ...")
+        ph.arriveAndAwaitAdvance()
+        log.info("Done waiting in $name")
     }
 }
