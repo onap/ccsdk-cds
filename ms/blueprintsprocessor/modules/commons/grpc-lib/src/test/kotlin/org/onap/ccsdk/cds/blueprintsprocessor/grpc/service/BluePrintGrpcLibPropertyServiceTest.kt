@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2019 IBM.
+ *  Modifications Copyright © 2018-2019 AT&T Intellectual Property.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,9 +23,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.grpc.BasicAuthGrpcClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.grpc.BluePrintGrpcLibConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.grpc.TokenAuthGrpcClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.*
+import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
@@ -42,11 +42,25 @@ import kotlin.test.assertTrue
     "blueprintsprocessor.grpcclient.sample.port=50505",
     "blueprintsprocessor.grpcclient.sample.username=sampleuser",
     "blueprintsprocessor.grpcclient.sample.password=sampleuser",
+
     "blueprintsprocessor.grpcclient.token.type=token-auth",
     "blueprintsprocessor.grpcclient.token.host=127.0.0.1",
     "blueprintsprocessor.grpcclient.token.port=50505",
     "blueprintsprocessor.grpcclient.token.username=sampleuser",
-    "blueprintsprocessor.grpcclient.token.password=sampleuser"
+    "blueprintsprocessor.grpcclient.token.password=sampleuser",
+
+    "blueprintsprocessor.grpcserver.tls-sample.type=tls-auth",
+    "blueprintsprocessor.grpcserver.tls-sample.port=50505",
+    "blueprintsprocessor.grpcserver.tls-sample.certChain=server1.pem",
+    "blueprintsprocessor.grpcserver.tls-sample.privateKey=server1.key",
+    "blueprintsprocessor.grpcserver.tls-sample.trustCertCollection=ca.pem",
+
+    "blueprintsprocessor.grpcclient.tls-sample.type=tls-auth",
+    "blueprintsprocessor.grpcclient.tls-sample.host=127.0.0.1",
+    "blueprintsprocessor.grpcclient.tls-sample.port=50505",
+    "blueprintsprocessor.grpcclient.tls-sample.trustCertCollection=ca.pem",
+    "blueprintsprocessor.grpcclient.tls-sample.clientCertChain=client.pem",
+    "blueprintsprocessor.grpcclient.tls-sample.clientPrivateKey=client.key"
 ])
 class BluePrintGrpcLibPropertyServiceTest {
 
@@ -128,5 +142,53 @@ class BluePrintGrpcLibPropertyServiceTest {
         val svc = bluePrintGrpcLibPropertyService
                 .blueprintGrpcClientService(actualObj)
         assertTrue(svc is BasicAuthGrpcClientService)
+    }
+
+    @Test
+    fun testGrpcClientTLSProperties() {
+        val properties = bluePrintGrpcLibPropertyService
+                .grpcClientProperties("blueprintsprocessor.grpcclient.tls-sample") as TLSAuthGrpcClientProperties
+        assertNotNull(properties, "failed to create property bean")
+        assertNotNull(properties.host, "failed to get host property in property bean")
+        assertNotNull(properties.port, "failed to get host property in property bean")
+        assertNotNull(properties.trustCertCollection, "failed to get trustCertCollection property in property bean")
+        assertNotNull(properties.clientCertChain, "failed to get clientCertChain property in property bean")
+        assertNotNull(properties.clientPrivateKey, "failed to get clientPrivateKey property in property bean")
+
+        val configDsl = """{
+            "type" : "tls-auth",
+            "host" : "localhost",
+            "port" : "50505",
+            "trustCertCollection" : "server1.pem",
+            "clientCertChain" : "server1.key",
+            "clientPrivateKey" : "ca.pem"
+            }           
+        """.trimIndent()
+        val jsonProperties = bluePrintGrpcLibPropertyService
+                .grpcClientProperties(configDsl.jsonAsJsonType()) as TLSAuthGrpcClientProperties
+        assertNotNull(jsonProperties, "failed to create property bean from json")
+    }
+
+    @Test
+    fun testGrpcServerTLSProperties() {
+        val properties = bluePrintGrpcLibPropertyService
+                .grpcServerProperties("blueprintsprocessor.grpcserver.tls-sample") as TLSAuthGrpcServerProperties
+        assertNotNull(properties, "failed to create property bean")
+        assertNotNull(properties.port, "failed to get host property in property bean")
+        assertNotNull(properties.trustCertCollection, "failed to get trustCertCollection property in property bean")
+        assertNotNull(properties.certChain, "failed to get certChain property in property bean")
+        assertNotNull(properties.privateKey, "failed to get privateKey property in property bean")
+
+        val configDsl = """{
+            "type" : "tls-auth",
+            "port" : "50505",
+            "certChain" : "server1.pem",
+            "privateKey" : "server1.key",
+            "trustCertCollection" : "ca.pem"
+            }           
+        """.trimIndent()
+        val jsonProperties = bluePrintGrpcLibPropertyService
+                .grpcServerProperties(configDsl.jsonAsJsonType()) as TLSAuthGrpcServerProperties
+        assertNotNull(jsonProperties, "failed to create property bean from json")
     }
 }

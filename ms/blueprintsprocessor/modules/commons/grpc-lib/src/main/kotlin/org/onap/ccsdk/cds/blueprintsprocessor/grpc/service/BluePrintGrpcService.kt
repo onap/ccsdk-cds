@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2019 IBM.
+ *  Modifications Copyright © 2018-2019 AT&T Intellectual Property.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,6 +18,11 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.grpc.service
 
 import io.grpc.ManagedChannel
+import io.grpc.netty.NettyServerBuilder
+
+interface BluePrintGrpcServerService {
+    fun serverBuilder(): NettyServerBuilder
+}
 
 interface BluePrintGrpcClientService {
     suspend fun channel(): ManagedChannel
