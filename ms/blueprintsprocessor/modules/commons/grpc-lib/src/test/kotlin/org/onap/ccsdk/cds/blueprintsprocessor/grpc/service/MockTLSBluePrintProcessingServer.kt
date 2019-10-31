@@ -36,8 +36,8 @@ fun main() {
         val tlsAuthGrpcServerProperties = TLSAuthGrpcServerProperties().apply {
             port = 50052
             type = GRPCLibConstants.TYPE_TLS_AUTH
-            certChain = "src/test/resources/tls-manual/my-public-key-cert.pem"
-            privateKey = "src/test/resources/tls-manual/my-private-key.pem"
+            certChain = "src/test/resources/tls-manual/py-executor-chain.pem"
+            privateKey = "src/test/resources/tls-manual/py-executor-key.pem"
         }
         val server = TLSAuthGrpcServerService(tlsAuthGrpcServerProperties).serverBuilder()
                 .intercept(GrpcServerLoggingInterceptor())
