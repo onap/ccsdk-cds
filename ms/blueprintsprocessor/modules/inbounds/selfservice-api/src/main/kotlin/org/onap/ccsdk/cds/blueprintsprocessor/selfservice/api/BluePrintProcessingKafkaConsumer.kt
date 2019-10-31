@@ -29,6 +29,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
+import java.util.concurrent.Phaser
 import javax.annotation.PreDestroy
 
 @ConditionalOnProperty(name = ["blueprintsprocessor.messageconsumer.self-service-api.kafkaEnable"],
@@ -39,6 +40,8 @@ open class BluePrintProcessingKafkaConsumer(
         private val executionServiceHandler: ExecutionServiceHandler) {
 
     val log = logger(BluePrintProcessingKafkaConsumer::class)
+
+    private val ph = Phaser(1)
 
     private lateinit var blueprintMessageConsumerService: BlueprintMessageConsumerService
 
@@ -76,6 +79,7 @@ open class BluePrintProcessingKafkaConsumer(
                 channel.consumeEach { message ->
                     launch {
                         try {
+                            ph.register()
                             log.trace("Consumed Message : $message")
                             val executionServiceInput = message.jsonAsType<ExecutionServiceInput>()
                             val executionServiceOutput = executionServiceHandler.doProcess(executionServiceInput)
@@ -84,6 +88,9 @@ open class BluePrintProcessingKafkaConsumer(
                             blueprintMessageProducerService.sendMessage(executionServiceOutput)
                         } catch (e: Exception) {
                             log.error("failed in processing the consumed message : $message", e)
+                        }
+                        finally {
+                            ph.arriveAndDeregister()
                         }
                     }
                 }
@@ -100,6 +107,7 @@ open class BluePrintProcessingKafkaConsumer(
             log.info("Shutting down message consumer($CONSUMER_SELECTOR) and " +
                     "message producer($PRODUCER_SELECTOR)...")
             blueprintMessageConsumerService.shutDown()
+            ph.arriveAndAwaitAdvance()
         } catch (e: Exception) {
             log.error("failed to shutdown message listener($CONSUMER_SELECTOR)", e)
         }

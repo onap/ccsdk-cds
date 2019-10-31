@@ -34,12 +34,19 @@ import org.springframework.http.ResponseEntity
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
+import reactor.core.publisher.Mono
+import java.util.concurrent.Phaser
+import javax.annotation.PreDestroy
 
 @RestController
 @RequestMapping("/api/v1/execution-service")
 @Api(value = "/api/v1/execution-service",
         description = "Interaction with CBA.")
 open class ExecutionServiceController {
+
+    val log = logger(ExecutionServiceController::class)
+
+    private val ph = Phaser(1)
 
     @Autowired
     lateinit var executionServiceHandler: ExecutionServiceHandler
@@ -85,12 +92,24 @@ open class ExecutionServiceController {
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     fun process(@ApiParam(value = "ExecutionServiceInput payload.", required = true)
-                @RequestBody executionServiceInput: ExecutionServiceInput): ResponseEntity<ExecutionServiceOutput> =
+                @RequestBody executionServiceInput: ExecutionServiceInput) : ResponseEntity<ExecutionServiceOutput> =
             runBlocking {
-                if (executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC) {
-                    throw IllegalStateException("Can't process async request through the REST endpoint. Use gRPC for async processing.")
-                }
-                val processResult = executionServiceHandler.doProcess(executionServiceInput)
-                ResponseEntity(processResult, determineHttpStatusCode(processResult.status.code))
-            }
+
+        if (executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC) {
+            throw IllegalStateException("Can't process async request through the REST endpoint. Use gRPC for async processing.")
+        }
+
+        ph.register()
+        val processResult = executionServiceHandler.doProcess(executionServiceInput)
+        ph.arriveAndDeregister()
+        ResponseEntity(processResult, determineHttpStatusCode(processResult.status.code))
+    }
+
+    @PreDestroy
+    fun preDestroy() {
+        val name = "ExecutionServiceController"
+        log.info("Starting to shutdown $name waiting for in-flight requests to finish ...")
+        ph.arriveAndAwaitAdvance()
+        log.info("Done waiting in $name")
+    }
 }
