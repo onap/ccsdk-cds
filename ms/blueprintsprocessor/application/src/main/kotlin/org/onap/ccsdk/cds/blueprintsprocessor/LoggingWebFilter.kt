@@ -16,24 +16,8 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor
 
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.RestLoggerService
-import org.onap.ccsdk.cds.controllerblueprints.core.MDCContext
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.filters.RestServerLoggingWebFilter
 import org.springframework.stereotype.Component
-import org.springframework.web.server.ServerWebExchange
-import org.springframework.web.server.WebFilter
-import org.springframework.web.server.WebFilterChain
-import reactor.core.publisher.Mono
-import reactor.util.context.Context
 
 @Component
-open class LoggingWebFilter : WebFilter {
-    override fun filter(serverWebExchange: ServerWebExchange, webFilterChain: WebFilterChain): Mono<Void> {
-
-        val loggingService = RestLoggerService()
-        loggingService.entering(serverWebExchange.request)
-        val filterChain = webFilterChain.filter(serverWebExchange).subscriberContext(
-                Context.of(MDCContext,  MDCContext()))
-        loggingService.exiting(serverWebExchange.request, serverWebExchange.response)
-        return filterChain
-    }
-}
+open class LoggingWebFilter : RestServerLoggingWebFilter()
