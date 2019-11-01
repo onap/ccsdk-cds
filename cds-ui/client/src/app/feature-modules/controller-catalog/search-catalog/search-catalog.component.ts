@@ -20,8 +20,19 @@
 
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { SearchCatalogService } from './search-catalog.service';
+import { MatDialog ,MatDialogRef } from '@angular/material';
 import { MatAutocompleteTrigger } from '@angular/material';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+
+import { SearchCatalogService } from './search-catalog.service';
+import { CatalogDataDialogComponent } from './catalog-data-dialog/catalog-data-dialog.component';
+import { ICatalog } from 'src/app/common/core/store/models/catalog.model'; 
+import { CreateCatalogService } from '../create-catalog/create-catalog.service';
+import { NotificationHandlerService } from 'src/app/common/core/services/notification-handler.service';
+import { ICatalogState } from 'src/app/common/core/store/models/catalogState.model';
+import { IAppState } from 'src/app/common/core/store/state/app.state';
+
 
 @Component({
   selector: 'app-search-catalog',
@@ -31,28 +42,87 @@ import { MatAutocompleteTrigger } from '@angular/material';
 export class SearchCatalogComponent implements OnInit {
   myControl: FormGroup;
   searchText: string = '';
-  options: any[]   = [];
-  @ViewChild('catalogSelect', { read: MatAutocompleteTrigger }) catalogSelect: MatAutocompleteTrigger;
-  constructor(private _formBuilder: FormBuilder, private searchCatalogService: SearchCatalogService)  { }
   
+  options: any[] = [];
+  private dialogRef: MatDialogRef<CatalogDataDialogComponent>;
+  data: any;
+  catalog: ICatalog;
+  ccState: Observable<ICatalogState>;
+  @ViewChild('catalogSelect', { read: MatAutocompleteTrigger }) catalogSelect: MatAutocompleteTrigger;
+  
+  constructor(private _formBuilder: FormBuilder, private store: Store<IAppState>, private searchCatalogService: SearchCatalogService, private dialog: MatDialog, private catalogCreateService: CreateCatalogService, private alertService: NotificationHandlerService)  { 
+    this.ccState = this.store.select('catalog');
+  }
+ 
  ngOnInit() {
+
+  this.ccState.subscribe(
+    catalogdata => {
+      var catalogState: ICatalogState = { catalog: catalogdata.catalog, isLoadSuccess: catalogdata.isLoadSuccess, isSaveSuccess: catalogdata.isSaveSuccess, isUpdateSuccess: catalogdata.isUpdateSuccess };
+      this.catalog = catalogState.catalog;
+      console.log( this.catalog );
+    });
+
     this.myControl = this._formBuilder.group({
       search_input: ['', Validators.required]
     });
   }
   fetchCatalogByName() {
-    this.searchCatalogService.searchByTags(this.searchText)
-    .subscribe(data=>{
-        console.log(data);
-        data.forEach(element => {
-          this.options.push(element)
-        });          
-      this.catalogSelect.openPanel();
-    }, error=>{
-      window.alert('Catalog not matching the search tag' + error);
-    })
+    // this.searchCatalogService.searchByTags(this.searchText)
+    // .subscribe(data=>{
+    //     console.log(data);
+    //     data.forEach(element => {
+    //       this.options.push(element)
+    //     });          
+    //   this.catalogSelect.openPanel();
+    // }, error=>{
+    //   window.alert('Catalog not matching the search tag' + error);
+    // })
+
+    this.options=[  {
+      "modelName": "tosca.nodes.Artifact",
+      "derivedFrom": "tosca.nodes.Root",
+      "definitionType": "node_type",
+      "definition": {
+        "description": "This is Deprecated Artifact Node Type.",
+        "version": "1.0.0",
+        "derived_from": "tosca.nodes.Root"
+      },
+      "description": "This is Deprecated Artifact Node Type.",
+      "version": "1.0.0",
+      "tags": "tosca.nodes.Artifact,tosca.nodes.Root,node_type",
+      "creationDate": "2019-09-16T07:35:24.000Z",
+      "updatedBy": "System"
+    }];
    }
 
-   editInfo(artifactName: string, artifactVersion: string, option: string) {
+   editInfo(item: ICatalog, option: string) {
+
+      this.dialogRef = this.dialog.open(CatalogDataDialogComponent, {
+        height: '500px',
+        width: '700px',
+        disableClose: true,
+        data: {item, option}
+      });
+
+      this.dialogRef.afterClosed().subscribe(result => {
+        if(result == undefined || result == null){
+          console.log("dialogbox is closed");
+        }else{
+          this.catalog.Model_Name=result['Model_Name'];
+          this.catalog.User_id=result['User_id'];
+          this.catalog._tags=result['_tags'];
+          this.catalog._type=result['_type'];
+          this.catalog.Derived_From=result['Derived_From'];
+          console.log(this.catalog);
+          this.catalogCreateService.saveCatalog(this.catalog)
+          .subscribe(response=>{
+              this.alertService.success("save success"+ response)
+          },
+          error=>{
+          this.alertService.error('Error saving resources');
+          })  
+        } 
+      });
   }
 }
