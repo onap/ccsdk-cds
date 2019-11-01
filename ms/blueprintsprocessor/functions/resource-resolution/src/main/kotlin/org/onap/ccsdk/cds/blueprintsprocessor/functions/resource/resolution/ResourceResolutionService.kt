@@ -199,6 +199,7 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
             blueprintRuntimeService
         }
 
+        exposeOccurrencePropertyInResourceAssignments(resourceAssignmentRuntimeService, properties)
 
         coroutineScope {
             bulkSequenced.forEach { batchResourceAssignments ->
@@ -353,4 +354,9 @@ open class ResourceResolutionServiceImpl(private var applicationContext: Applica
                 && resourceResolution.dictionaryVersion == resourceAssignment.version)
     }
 
+    private fun exposeOccurrencePropertyInResourceAssignments(raRuntimeService: ResourceAssignmentRuntimeService,
+                                                              properties: Map<String, Any>) {
+        raRuntimeService.putResolutionStore(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE,
+            properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE].asJsonPrimitive())
+    }
 }
