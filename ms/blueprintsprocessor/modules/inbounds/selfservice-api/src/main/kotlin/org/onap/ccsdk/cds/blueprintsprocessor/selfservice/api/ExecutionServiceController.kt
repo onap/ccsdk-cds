@@ -1,6 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
- * Modifications Copyright © 2019 IBM.
+ * Modifications Copyright © 2019 IBM, Bell Canada.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
+import kotlinx.coroutines.Dispatchers
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ACTION_MODE_ASYNC
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
@@ -49,7 +50,7 @@ open class ExecutionServiceController {
             produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     @ApiOperation(value = "Health Check", hidden = true)
-    fun executionServiceControllerHealthCheck() = monoMdc {
+    fun executionServiceControllerHealthCheck() = monoMdc(Dispatchers.IO) {
         log.info("Health check success...")
         "Success".asJsonPrimitive()
     }
@@ -63,7 +64,7 @@ open class ExecutionServiceController {
     @PreAuthorize("hasRole('USER')")
     fun process(@ApiParam(value = "ExecutionServiceInput payload.", required = true)
                 @RequestBody executionServiceInput: ExecutionServiceInput)
-            : Mono<ResponseEntity<ExecutionServiceOutput>> = monoMdc {
+            : Mono<ResponseEntity<ExecutionServiceOutput>> = monoMdc(Dispatchers.IO) {
 
         if (executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC) {
             throw IllegalStateException("Can't process async request through the REST endpoint. Use gRPC for async processing.")
@@ -72,3 +73,4 @@ open class ExecutionServiceController {
         ResponseEntity(processResult, determineHttpStatusCode(processResult.status.code))
     }
 }
+
