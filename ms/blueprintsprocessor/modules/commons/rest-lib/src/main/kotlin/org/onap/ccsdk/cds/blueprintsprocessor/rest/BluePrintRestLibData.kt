@@ -52,16 +52,6 @@ open class TokenAuthRestClientProperties : RestClientProperties() {
     var token: String? = null
 }
 
-open class DME2RestClientProperties : RestClientProperties() {
-    lateinit var service: String
-    lateinit var subContext: String
-    lateinit var version: String
-    lateinit var envContext: String
-    lateinit var routeOffer: String
-    var partner: String? = null
-    lateinit var appId: String
-}
-
 open class PolicyManagerRestClientProperties : RestClientProperties() {
     lateinit var env: String
     lateinit var clientAuth: String
