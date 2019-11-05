@@ -66,8 +66,15 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
     }
 
     override fun disconnect() {
-        if (rpcService.closeSession(false).status.equals(
-                RpcStatus.FAILURE, true)) {
+        var retryNum = 3
+        while(rpcService.closeSession(false).status
+                .equals(RpcStatus.FAILURE, true) &&retryNum>0) {
+            log.error("disconnect: graceful disconnect failed, attempt $retryNum")
+            retryNum--;
+        }
+        //if we can't close the session, try to force terminate.
+        if(retryNum == 0) {
+            log.error("disconnect: trying to force-terminate the session.")
             rpcService.closeSession(true)
         }
         try {
@@ -276,6 +283,7 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
      */
     @Throws(IOException::class)
     private fun close() {
+        log.debug("close was called.")
         session.close()
         // Closes the socket which should interrupt the streamHandler
         channel.close()
