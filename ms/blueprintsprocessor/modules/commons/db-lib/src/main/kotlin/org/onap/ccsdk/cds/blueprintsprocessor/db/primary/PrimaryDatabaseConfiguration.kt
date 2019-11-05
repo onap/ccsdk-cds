@@ -18,7 +18,9 @@ package org.onap.ccsdk.cds.blueprintsprocessor.db.primary
 
 import org.onap.ccsdk.cds.blueprintsprocessor.db.PrimaryDataSourceProperties
 import org.slf4j.LoggerFactory
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing
@@ -33,6 +35,9 @@ import java.util.*
 import javax.sql.DataSource
 
 @Configuration
+@ConditionalOnProperty(name = ["blueprintsprocessor.db.primary.defaultConfig"], havingValue = "true",
+        matchIfMissing = true)
+@ComponentScan
 @EnableJpaRepositories(
         basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor.*",
             "org.onap.ccsdk.cds.controllerblueprints.*"],
@@ -41,7 +46,7 @@ import javax.sql.DataSource
 )
 @EnableJpaAuditing
 open class PrimaryDatabaseConfiguration(private val primaryDataSourceProperties: PrimaryDataSourceProperties) {
-    val log = LoggerFactory.getLogger(PrimaryDatabaseConfiguration::class.java)!!
+    private val log = LoggerFactory.getLogger(PrimaryDatabaseConfiguration::class.java)!!
 
     @Primary
     @Bean("primaryEntityManager")

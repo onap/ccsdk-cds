@@ -22,8 +22,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.db.mock.MockBlueprintProcessorCatalogServiceImpl
-import org.onap.ccsdk.cds.blueprintsprocessor.db.service.BlueprintCatalogServiceImpl
-import org.onap.ccsdk.cds.blueprintsprocessor.db.service.BlueprintProcessorCatalogServiceImpl
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.service.BlueprintCatalogServiceImpl
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.service.BlueprintProcessorCatalogServiceImpl
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile

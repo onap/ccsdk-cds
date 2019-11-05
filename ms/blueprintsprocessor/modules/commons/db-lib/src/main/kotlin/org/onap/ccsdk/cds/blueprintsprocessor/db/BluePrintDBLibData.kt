@@ -22,7 +22,6 @@ open class DBDataSourceProperties {
     lateinit var username: String
     lateinit var password: String
     open lateinit var driverClassName: String
-
 }
 
 open class PrimaryDataSourceProperties: DBDataSourceProperties() {
