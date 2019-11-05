@@ -33,6 +33,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintCompileCach
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.core.io.Resource
+import org.springframework.data.domain.Page
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -41,6 +42,8 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.io.IOException
 import java.util.*
+import org.springframework.data.domain.Pageable
+
 
 /**
  * BlueprintModelHandler Purpose: Handler service to handle the request from BlurPrintModelRest
@@ -66,6 +69,15 @@ open class BluePrintModelHandler(private val blueprintsProcessorCatalogService: 
     </BlueprintModelSearch> */
     open fun allBlueprintModel(): List<BlueprintModelSearch> {
         return blueprintModelSearchRepository.findAll()
+    }
+
+    /**
+     * This is a getAllBlueprintModel method to retrieve all the BlueprintModel in Database
+     *
+     * @return List<BlueprintModelSearch> list of the controller blueprint archives
+    </BlueprintModelSearch> */
+    open fun allBlueprintModel(pageRequest: Pageable): Page<BlueprintModelSearch> {
+        return blueprintModelSearchRepository.findAll(pageRequest)
     }
 
     /**
