@@ -20,19 +20,20 @@
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatToolbarModule, MatButtonModule, MatSidenavModule,  MatListModule, MatGridListModule, MatCardModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatFormFieldModule, MatStepperModule, MatAutocompleteModule, MatDialogModule} from '@angular/material';
+import { MatIconModule } from '@angular/material/icon';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
+import { NgJsonEditorModule } from 'ang-jsoneditor';
+
+import { SharedModule } from '../../../app/common/shared/shared.module';
 import { ControllerCatalogRoutingModule } from './controller-catalog-routing.module';
 import { ControllerCatalogComponent } from './controller-catalog.component';
-import { SharedModule } from '../../../app/common/shared/shared.module';
-import { MatToolbarModule, MatButtonModule, MatSidenavModule,  MatListModule, MatGridListModule, MatCardModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatFormFieldModule, MatStepperModule, MatAutocompleteModule} from '@angular/material';
-import { MatIconModule } from '@angular/material/icon';
 import { SelectTemplateComponent } from './select-template/select-template.component';
 import { TemplateOptionsComponent } from './select-template/template-options/template-options.component';
 import { SearchCatalogComponent } from './search-catalog/search-catalog.component';
 import { CreateCatalogComponent } from './create-catalog/create-catalog.component';
 import { CreateCatalogModule } from './create-catalog/create-catalog.module';
 import { SearchCatalogModule } from './search-catalog/search-catalog.module';
-import { FormsModule,ReactiveFormsModule } from '@angular/forms';
-import { NgJsonEditorModule } from 'ang-jsoneditor';
 
 @NgModule({
   declarations: [ ControllerCatalogComponent, SelectTemplateComponent, TemplateOptionsComponent, SearchCatalogComponent, CreateCatalogComponent ],
@@ -59,6 +60,7 @@ import { NgJsonEditorModule } from 'ang-jsoneditor';
     MatFormFieldModule, 
     MatStepperModule,
     MatAutocompleteModule,
+    MatDialogModule,
     FormsModule,
     ReactiveFormsModule,
     NgJsonEditorModule

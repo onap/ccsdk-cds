@@ -19,7 +19,7 @@
 */--> 
 <form class="search-form" [formGroup]="myControl">
   <mat-form-field class="search-full-width">
-      <input matInput type="text" [(ngModel)]="searchText" placeholder="Search Resources" formControlName="search_input">
+      <input matInput type="text" [(ngModel)]="searchText" placeholder="Search Catalog" formControlName="search_input">
       <button matSuffix mat-icon-button (click)="fetchCatalogByName()">
     <mat-icon>search</mat-icon>
   </button>
@@ -30,10 +30,12 @@
       <div *ngFor="let option of options" style="position: relative !important;width:20% !important">
           <mat-card class="example-card">
               <mat-card-content class="card-content">
-                  {{option.modelName}}
+                 {{option.modelName}}<br>
+                 {{option.derivedFrom}}
               </mat-card-content>
               <mat-card-actions class="flexBox">
-                  <button matStepperNext mat-menu-item (click)="editInfo(option.blueprintModel.artifactName,option.blueprintModel.artifactVersion,3)">Info</button>
+                  <button class="matStepNextBtn" matStepperNext mat-menu-item (click)="editInfo(option,'Info')">Info</button>
+                  <button class="matStepNextBtn" matStepperNext mat-menu-item (click)="editInfo(option,'Edit')">Edit</button>
               </mat-card-actions>
           </mat-card>
       </div>

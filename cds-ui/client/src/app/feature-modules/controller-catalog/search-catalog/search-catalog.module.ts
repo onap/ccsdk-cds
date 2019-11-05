@@ -21,14 +21,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SearchCatalogRoutingModule } from './search-catalog-routing.module';
-import { MatToolbarModule, MatButtonModule, MatSidenavModule,  MatListModule, MatGridListModule, MatCardModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatFormFieldModule, MatStepperModule, MatAutocompleteModule} from '@angular/material';
+import { MatToolbarModule, MatButtonModule, MatSidenavModule,  MatDialogModule, MatListModule, MatGridListModule, MatCardModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatSortModule, MatInputModule, MatSelectModule, MatRadioModule, MatFormFieldModule, MatStepperModule, MatAutocompleteModule } from '@angular/material';
 import { MatIconModule } from '@angular/material/icon';
 import { SharedModule } from 'src/app/common/shared/shared.module';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { SearchCatalogService } from './search-catalog.service';
+import { CatalogDataDialogComponent } from './catalog-data-dialog/catalog-data-dialog.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [ CatalogDataDialogComponent ],
   imports: [
     CommonModule,
     SearchCatalogRoutingModule,
@@ -51,8 +52,10 @@ import { SearchCatalogService } from './search-catalog.service';
     MatRadioModule, 
     MatFormFieldModule, 
     MatStepperModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatDialogModule
   ],
-  providers: [ SearchCatalogService ]
+  providers: [ SearchCatalogService ],
+  entryComponents: [ CatalogDataDialogComponent ]
 })
 export class SearchCatalogModule { }
