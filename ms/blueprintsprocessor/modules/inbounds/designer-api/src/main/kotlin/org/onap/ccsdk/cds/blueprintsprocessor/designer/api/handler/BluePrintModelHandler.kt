@@ -2,6 +2,7 @@
  * Copyright © 2017-2018 AT&T Intellectual Property.
  * Modifications Copyright © 2019 Bell Canada.
  * Modifications Copyright © 2019 IBM.
+ * Modifications Copyright © 2019 Orange.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -231,6 +232,20 @@ open class BluePrintModelHandler(private val blueprintsProcessorCatalogService: 
                         String.format(BLUEPRINT_MODEL_ID_FAILURE_MSG, id))
     }
 
+    /**
+     * This is a searchBluePrintModelsByKeyWord method to retrieve specific  BlueprintModel in Database
+     * where keyword equals updatedBy or tags or artifcat name or artifcat version or artifact type
+     * @author Shaaban Ebrahim
+     * @param keyWord
+     *
+     * @return List<BlueprintModelSearch> list of the controller blueprint
+    </BlueprintModelSearch> */
+    open fun searchBluePrintModelsByKeyWord(keyWord: String): List<BlueprintModelSearch> {
+        return blueprintModelSearchRepository.
+                findByUpdatedByOrTagsOrOrArtifactNameOrOrArtifactVersionOrArtifactType(
+                        keyWord,keyWord,keyWord,keyWord,keyWord)
+    }
+    
     /**
      * This is a deleteBlueprintModel method
      *

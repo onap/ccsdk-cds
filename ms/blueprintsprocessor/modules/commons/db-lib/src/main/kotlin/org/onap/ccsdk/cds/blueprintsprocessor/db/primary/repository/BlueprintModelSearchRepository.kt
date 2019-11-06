@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2019 IBM.
+ *  Modifications Copyright © 2019 Orange.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -59,4 +60,20 @@ interface BlueprintModelSearchRepository : JpaRepository<BlueprintModelSearch, L
      * @return Optional<BlueprintModelSearch>
     </BlueprintModelSearch> */
     fun findByTagsContainingIgnoreCase(tags: String): List<BlueprintModelSearch>
+
+    /**
+     * This is a findby some attributes method
+     *
+     * @author Shaaban Ebrahim
+     *
+     * @param updatedBy
+     * @param tags
+     * @param artifactName
+     * @param artifactVersion
+     * @param artifactType
+     * @return Optional<BlueprintModelSearch>
+    </BlueprintModelSearch>
+     */
+    fun findByUpdatedByOrTagsOrOrArtifactNameOrOrArtifactVersionOrArtifactType(updatedBy: String, tags: String, artifactName: String, artifactVersion: String,
+                                                                               artifactType: String): List<BlueprintModelSearch>
 }

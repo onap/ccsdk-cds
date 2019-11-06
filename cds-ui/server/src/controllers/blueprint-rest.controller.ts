@@ -69,6 +69,20 @@ export class BlueprintRestController {
     return await this.bpservice.getAllblueprints();
   }
 
+ @get('/controllerblueprint/meta-data/{keyword}', {
+    responses: {
+      '200': {
+        description: 'Blueprint model instance',
+        content: { 'application/json': { schema: { 'x-ts-type': Blueprint } } },
+      },
+    },
+  })
+  async getAllPacakgesByKeword(@param.path.string('keyword') keyword: string) {
+    return await this.bpservice.getBlueprintsByKeyword(keyword);
+  }
+
+
+
   @get('/controllerblueprint/searchByTags/{tags}', {
     responses: {
       '200': {
