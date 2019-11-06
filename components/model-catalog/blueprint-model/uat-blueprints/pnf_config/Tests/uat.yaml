@@ -80,6 +80,8 @@ external-services:
                 netconf-node-topology:max-connection-attempts: 5
         response:
           status: 201
+          body:
+            node: []
       - request:
           method: GET
           path: [ restconf/operational, *nodeIdentifier]
