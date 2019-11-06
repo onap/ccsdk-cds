@@ -79,7 +79,7 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
         var retryNum = 3
         while(rpcService.closeSession(false).status
                 .equals(RpcStatus.FAILURE, true) &&retryNum>0) {
-            log.error("disconnect: graceful disconnect failed, attempt $retryNum")
+            log.error("disconnect: graceful disconnect failed, retrying $retryNum times...")
             retryNum--;
         }
         //if we can't close the session, try to force terminate.
