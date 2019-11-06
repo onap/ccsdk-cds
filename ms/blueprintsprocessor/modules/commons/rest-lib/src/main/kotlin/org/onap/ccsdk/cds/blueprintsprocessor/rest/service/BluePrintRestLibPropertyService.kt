@@ -76,9 +76,7 @@ open class BluePrintRestLibPropertyService(private var bluePrintProperties:
             RestLibConstants.TYPE_SSL_NO_AUTH -> {
                 sslNoAuthRestClientProperties(prefix)
             }
-            RestLibConstants.TYPE_DME2_PROXY -> {
-                dme2ProxyClientProperties(prefix)
-            }
+
             RestLibConstants.TYPE_POLICY_MANAGER -> {
                 policyManagerRestClientProperties(prefix)
             }
@@ -99,9 +97,7 @@ open class BluePrintRestLibPropertyService(private var bluePrintProperties:
             RestLibConstants.TYPE_BASIC_AUTH -> {
                 JacksonUtils.readValue(jsonNode, BasicAuthRestClientProperties::class.java)!!
             }
-            RestLibConstants.TYPE_DME2_PROXY -> {
-                JacksonUtils.readValue(jsonNode, DME2RestClientProperties::class.java)!!
-            }
+
             RestLibConstants.TYPE_POLICY_MANAGER -> {
                 JacksonUtils.readValue(jsonNode, PolicyManagerRestClientProperties::class.java)!!
             }
@@ -133,9 +129,6 @@ open class BluePrintRestLibPropertyService(private var bluePrintProperties:
             }
             is BasicAuthRestClientProperties -> {
                 return BasicAuthRestClientService(restClientProperties)
-            }
-            is DME2RestClientProperties -> {
-                return DME2ProxyRestClientService(restClientProperties)
             }
             else -> {
                 throw BluePrintProcessorException("couldn't get rest service for type:${restClientProperties.type}  uri: ${restClientProperties.url}")
@@ -185,12 +178,6 @@ open class BluePrintRestLibPropertyService(private var bluePrintProperties:
         SSLRestClientProperties {
         return bluePrintProperties.propertyBeanType(
             prefix, SSLRestClientProperties::class.java)
-    }
-
-    private fun dme2ProxyClientProperties(prefix: String):
-        DME2RestClientProperties {
-        return bluePrintProperties.propertyBeanType(
-            prefix, DME2RestClientProperties::class.java)
     }
 
     private fun policyManagerRestClientProperties(prefix: String):
