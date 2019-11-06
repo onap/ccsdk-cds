@@ -1,6 +1,7 @@
 /*
  * Copyright © 2019 Bell Canada Intellectual Property.
  * Modifications Copyright © 2019 IBM.
+ * Modifications Copyright © 2019 Orange.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +20,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
+import org.jetbrains.annotations.NotNull
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelSearch
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.BluePrintModelHandler
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.monoMdc
@@ -55,6 +57,14 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     fun allBlueprintModel(): List<BlueprintModelSearch> {
         return this.bluePrintModelHandler.allBlueprintModel()
     }
+
+    @GetMapping("meta-data/{keyword}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseBody
+    @PreAuthorize("hasRole('USER')")
+    fun allBlueprintModelMetaData(@NotNull @PathVariable(value = "keyword") keyWord: String): List<BlueprintModelSearch> {
+        return this.bluePrintModelHandler.searchBluePrintModelsByKeyWord(keyWord)
+    }
+
 
     @DeleteMapping("/{id}")
     @Throws(BluePrintException::class)
