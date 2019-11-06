@@ -20,13 +20,13 @@
     <parent>
         <groupId>org.onap.ccsdk.cds</groupId>
         <artifactId>parent</artifactId>
-        <version>0.6.4-SNAPSHOT</version>
+        <version>0.6.4</version>
         <relativePath>../../../</relativePath>
     </parent>
 
     <groupId>org.onap.ccsdk.cds.components</groupId>
     <artifactId>proto-definition</artifactId>
-    <version>0.6.4-SNAPSHOT</version>
+    <version>0.6.4</version>
     <packaging>jar</packaging>
 
     <name>Controller Blueprints Proto Definition</name>

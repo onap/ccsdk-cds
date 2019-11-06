@@ -18,13 +18,13 @@
     <parent>
         <artifactId>functions</artifactId>
         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-        <version>0.6.4-SNAPSHOT</version>
+        <version>0.6.4</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
     <artifactId>config-snapshots</artifactId>
-    <version>0.6.4-SNAPSHOT</version>
+    <version>0.6.4</version>
     <name>Blueprints Processor Function - Config Snapshots</name>
     <description>Blueprints Processor Function - Config Snapshots</description>
 

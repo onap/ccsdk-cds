@@ -19,12 +19,12 @@
     <parent>
         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
         <artifactId>inbounds</artifactId>
-        <version>0.6.4-SNAPSHOT</version>
+        <version>0.6.4</version>
     </parent>
 
     <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
     <artifactId>configs-api</artifactId>
-    <version>0.6.4-SNAPSHOT</version>
+    <version>0.6.4</version>
     <packaging>jar</packaging>
     <name>Blueprints Processor Resource Configurations API</name>
     <description>Blueprints Processor Resource Configurations API</description>
