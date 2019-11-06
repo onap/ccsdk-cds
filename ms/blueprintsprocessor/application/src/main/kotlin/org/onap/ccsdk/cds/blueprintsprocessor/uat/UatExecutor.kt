@@ -304,6 +304,10 @@ class UatExecutor(
             return realAnswer
         }
 
+        override suspend fun <T> retry(times: Int, initialDelay: Long, delay: Long, block: suspend (Int) -> T): T {
+            return super.retry(times, initialDelay, delay, block)
+        }
+
         fun asServiceDefinition() =
                 ServiceDefinition(selector, expectations)
 

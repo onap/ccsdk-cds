@@ -19,6 +19,7 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.uat
 
+import kotlinx.coroutines.runBlocking
 import org.junit.ClassRule
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -38,7 +39,7 @@ import kotlin.test.Test
 // See more on https://docs.spring.io/autorepo/docs/spring-framework/current/spring-framework-reference/testing.html#testcontext-junit4-rules
 @RunWith(Parameterized::class)
 class BlueprintsAcceptanceTest(@Suppress("unused") private val blueprintName: String, // readable test description
-                               private val rootFs: FileSystem): BaseUatTest() {
+                               private val rootFs: FileSystem) : BaseUatTest() {
 
     companion object {
 
@@ -84,8 +85,10 @@ class BlueprintsAcceptanceTest(@Suppress("unused") private val blueprintName: St
 
     @Test
     fun runUat() {
-        val uatSpec = rootFs.getPath(UAT_SPECIFICATION_FILE).toFile().readText()
-        val cbaBytes = compressToBytes(rootFs.getPath("/"))
-        uatExecutor.execute(uatSpec, cbaBytes)
+        runBlocking {
+            val uatSpec = rootFs.getPath(UAT_SPECIFICATION_FILE).toFile().readText()
+            val cbaBytes = compressToBytes(rootFs.getPath("/"))
+            uatExecutor.execute(uatSpec, cbaBytes)
+        }
     }
 }
