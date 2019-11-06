@@ -83,10 +83,12 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
 
                 logger.info("RestResource ($dSource) dictionary information: " +
                         "URL:($urlPath), input-key-mapping:($inputKeyMapping), output-key-mapping:(${sourceProperties.outputKeyMapping})")
+                val requestHeaders = sourceProperties.headers
+                logger.info("$dSource dictionary information : ($urlPath), ($inputKeyMapping), (${sourceProperties.outputKeyMapping})")
                 // Get the Rest Client Service
                 val restClientService = blueprintWebClientService(resourceAssignment, sourceProperties)
 
-                val response = restClientService.exchangeResource(verb, urlPath, payload)
+                val response = restClientService.exchangeResource(verb, urlPath, payload, requestHeaders.toMap())
                 val responseStatusCode = response.status
                 val responseBody = response.body
                 val outputKeyMapping = sourceProperties.outputKeyMapping
