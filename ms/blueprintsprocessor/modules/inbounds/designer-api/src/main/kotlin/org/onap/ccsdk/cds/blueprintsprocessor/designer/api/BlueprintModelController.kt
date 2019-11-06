@@ -21,9 +21,13 @@ import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelSearch
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.BluePrintModelHandler
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.utils.BlueprintSortByOption
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.monoMdc
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.springframework.core.io.Resource
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.http.codec.multipart.FilePart
@@ -54,6 +58,16 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @PreAuthorize("hasRole('USER')")
     fun allBlueprintModel(): List<BlueprintModelSearch> {
         return this.bluePrintModelHandler.allBlueprintModel()
+    }
+
+    @GetMapping("/paged", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseBody
+    @PreAuthorize("hasRole('USER')")
+    fun allBlueprintModel(@RequestParam(defaultValue = "20") limit: Int,
+                          @RequestParam(defaultValue = "0") offset: Int,
+                          @RequestParam(defaultValue = "DATE") sort: BlueprintSortByOption): Page<BlueprintModelSearch> {
+        val pageRequest = PageRequest.of(offset, limit, Sort.Direction.ASC, sort.columnName)
+        return this.bluePrintModelHandler.allBlueprintModel(pageRequest)
     }
 
     @DeleteMapping("/{id}")
