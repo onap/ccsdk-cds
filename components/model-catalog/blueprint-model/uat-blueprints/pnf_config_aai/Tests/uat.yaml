@@ -46,8 +46,6 @@ processes:
             pnf-id: *pnfId
             service-model-uuid: service-model-uuid
             pnf-customization-uuid: pnf-customization-uuid
-            pnf-ipv4-address: &pnfAddress 13.13.13.13
-            ipaddress-v6-oam: 1::13
     expectedResponse:
       commonHeader: *commonHeader
       actionIdentifiers: *deploy-ai
@@ -60,6 +58,19 @@ processes:
         message: success
 
 external-services:
+  - selector: aai-data
+    expectations:
+      - request:
+          method: GET
+          path: [ /aai/v14/network/pnfs/pnf, *pnfId]
+          headers:
+            Accept: application/json
+        response:
+          headers:
+            Content-Type: application/json
+          body:
+            ipaddress-v4-oam: &pnfAddress 13.13.13.13
+            ipaddress-v6-oam: 1::13
   - selector: sdncodl
     expectations:
       - request:
@@ -115,3 +126,5 @@ external-services:
       - request:
           method: DELETE
           path: *configUri
+
+

@@ -63,6 +63,8 @@ open class RestResourceSource : ResourceSourceProperties() {
     var inputKeyMapping: MutableMap<String, String>? = null
     @get:JsonProperty("output-key-mapping")
     var outputKeyMapping: MutableMap<String, String>? = null
+    @get:JsonProperty("headers")
+    var headers: Map<String, String> = emptyMap()
     @get:JsonProperty("key-dependencies")
     lateinit var keyDependencies: MutableList<String>
 }
