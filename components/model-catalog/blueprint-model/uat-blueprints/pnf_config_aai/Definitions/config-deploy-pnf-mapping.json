@@ -1,0 +1,25 @@
+[
+  {
+    "name": "pnf-id",
+    "input-param": true,
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "pnf-id",
+    "dictionary-source": "input",
+    "dependencies": [
+    ]
+  },
+  {
+    "name": "pnf-ipv4-address",
+    "input-param": false,
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "pnf-ipaddress-aai",
+    "dictionary-source": "primary-aai-data",
+    "dependencies": [
+      "pnf-id"
+    ]
+  }
+]

@@ -6,7 +6,7 @@
       "description" : "pnf-id",
       "type" : "string"
     },
-    "updated-by" : "Rodrigo Ottero <rodrigo.ottero@est.tech>",
+    "updated-by" : "Rahul Tyagi <rahul.tyagi@est.tech>",
     "sources" : {
       "input" : {
         "type" : "source-input",
@@ -14,9 +14,9 @@
       }
     }
   },
-  "pnf-ipv4-address" : {
+  "pnf-ipaddress-aai" : {
     "tags" : "aai-get",
-    "name" : "pnf-ipv4-address",
+    "name" : "pnf-ipaddress-aai",
     "property" : {
       "description" : "primary aai data to get resource",
       "type" : "string"
