@@ -124,8 +124,8 @@
                   "operation_host" : "SELF"
                 },
                 "inputs" : {
-                  "script-type" : "jython",
-                  "script-class-reference" : "Scripts/python/RestconfConfigDeploy.py",
+                  "script-type" : "kotlin",
+                  "script-class-reference" : "org.onap.ccsdk.cds.blueprintsprocessor.uat.pnfconfig.aai.scripts.RestconfConfigDeploy",
                   "dynamic-properties" : "*config-deploy-properties"
                 },
                 "outputs" : {
@@ -144,10 +144,6 @@
           "config-deploy-mapping" : {
             "type" : "artifact-mapping-resource",
             "file" : "Definitions/config-deploy-pnf-mapping.json"
-          },
-          "component-script" : {
-            "type" : "artifact-script-jython",
-            "file" : "Scripts/python/RestconfConfigDeploy.py"
           }
         }
       }
