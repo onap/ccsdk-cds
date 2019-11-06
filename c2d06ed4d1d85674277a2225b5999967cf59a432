@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "34a7262d_f63af764",
+        "filename": "ms/blueprintsprocessor/functions/netconf-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/netconf/executor/core/NetconfSessionImpl.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2019-11-06T15:39:24Z",
+      "side": 1,
+      "message": "1) It\u0027s going to execute closeSession 4 times, is that expected ? If not then while should 1st check retryNum instead closeSession\n2) Log statement #82 -\u003e will print retryNum from 3 to 0 -\u003e better to have count in increasing order.\n\nSee if below make sesne :\n\n        var retryNum \u003d 0\n        while (retryNum \u003c 3 \u0026\u0026 rpcService.closeSession(false).status.equals(RpcStatus.FAILURE, true)) {\n            retryNum++;\n            log.error(\"disconnect: graceful disconnect failed, attempt $retryNum\")\n        }\n        //if we can\u0027t close the session, try to force terminate (kill-session).\n        if (retryNum \u003d\u003d 3) {\n            log.error(\"disconnect: trying to force-terminate the session.\")\n            rpcService.closeSession(true)\n        }",
+      "revId": "c2d06ed4d1d85674277a2225b5999967cf59a432",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
