@@ -384,6 +384,13 @@ class PropertyDefinitionBuilder(private val id: String,
         propertyDefinition.defaultValue = defaultValue
     }
 
+    fun metadata(name: String, value: String) {
+        if (propertyDefinition.metadata == null) {
+            propertyDefinition.metadata = hashMapOf()
+        }
+        propertyDefinition.metadata!![name] = value
+    }
+
     fun value(value: Any) {
         value(value.asJsonType())
     }
