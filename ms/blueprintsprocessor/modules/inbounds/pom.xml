@@ -35,7 +35,8 @@
         <module>designer-api</module>
         <module>resource-api</module>
         <module>selfservice-api</module>
-        <!--<module>health-api</module>-->
+        <module>health-api</module>
+        <module>health-api-common</module>
     </modules>
 
     <dependencies>
@@ -51,16 +52,7 @@
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
             <artifactId>resource-resolution</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+
 
         <!-- Test Dependencies -->
         <dependency>

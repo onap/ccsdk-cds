@@ -25,7 +25,7 @@ import org.springframework.context.annotation.PropertySource
 
 @Configuration
 @PropertySource("classpath:application.properties")
-open class BasicAuthRestClientServiceConfiguration {
+open class BasicAuthRestClientServiceConfiguration(private val securityConfiguration: SecurityEncryptionConfiguration) {
 
     @Value("\${endpoints.user.name}")
     private val username: String? = null
@@ -36,8 +36,8 @@ open class BasicAuthRestClientServiceConfiguration {
     @Bean
     open fun getBasicAuthRestClientProperties(): BasicAuthRestClientProperties {
         val basicAuthRestClientProperties = BasicAuthRestClientProperties()
-        basicAuthRestClientProperties.username = username.toString()
-        basicAuthRestClientProperties.password = password.toString()
+        basicAuthRestClientProperties.username = securityConfiguration.decrypt(username!!)!!
+        basicAuthRestClientProperties.password = securityConfiguration.decrypt(password!!)!!
         return basicAuthRestClientProperties
     }
 
@@ -45,6 +45,5 @@ open class BasicAuthRestClientServiceConfiguration {
     open fun getBasicAuthRestClientService(): BasicAuthRestClientService {
         return BasicAuthRestClientService(getBasicAuthRestClientProperties())
     }
-
 
 }
