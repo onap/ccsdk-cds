@@ -22,11 +22,9 @@ import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.PrimaryDBLibGenericServ
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-@ComponentScan
 @EnableConfigurationProperties
 open class BluePrintDBLibConfiguration(private var bluePrintProperties: BluePrintProperties) {
 
