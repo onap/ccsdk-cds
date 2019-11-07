@@ -38,5 +38,21 @@ export default {
 
         }
     },
+  {
+            "template": {
+                "method": "GET",
+                "url": processorApiConfig.http.url + "/blueprint-model/meta-data/{keyword}",
+                "headers": {
+                    "accepts": "application/json",
+                    "content-type": "application/json",
+                    "authorization": processorApiConfig.http.authToken
+                },
+                "responsePath": "$.*"
+            },
+            "functions": {
+                "getBlueprintsByKeyword": ["keyword"]
+
+            }
+        },
 ]
 };
