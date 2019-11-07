@@ -20,7 +20,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 import io.grpc.stub.StreamObserver
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.utils.toJava
+import org.onap.ccsdk.cds.blueprintsprocessor.core.utils.toJava
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.BluePrintProcessingServiceGrpc
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceInput
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceOutput

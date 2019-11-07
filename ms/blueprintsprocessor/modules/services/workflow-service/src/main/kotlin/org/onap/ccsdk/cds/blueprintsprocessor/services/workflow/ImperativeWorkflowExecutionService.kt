@@ -20,6 +20,7 @@ import kotlinx.coroutines.CompletableDeferred
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.Status
+import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.data.EdgeLabel
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Graph
@@ -93,6 +94,7 @@ open class ImperativeBluePrintWorkflowService(private val nodeTemplateExecutionS
             } else {
                 message = BluePrintConstants.STATUS_SUCCESS
             }
+            eventType = EventType.EVENT_COMPONENT_EXECUTED.name
         }
         return ExecutionServiceOutput().apply {
             commonHeader = executionServiceInput.commonHeader

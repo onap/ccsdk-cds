@@ -1,4 +1,4 @@
-package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.utils
+package org.onap.ccsdk.cds.blueprintsprocessor.core.utils
 
 import org.junit.Assert
 import org.junit.Test

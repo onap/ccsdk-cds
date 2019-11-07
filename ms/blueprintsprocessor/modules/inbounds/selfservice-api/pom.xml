@@ -33,11 +33,6 @@
     <description>Blueprints Processor Selfservice API</description>
 
     <dependencies>
-
-        <dependency>
-            <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
-            <artifactId>blueprint-proto</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
             <artifactId>blueprint-core</artifactId>

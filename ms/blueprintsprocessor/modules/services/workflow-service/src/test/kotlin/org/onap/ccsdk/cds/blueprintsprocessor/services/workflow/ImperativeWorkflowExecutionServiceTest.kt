@@ -26,6 +26,8 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInpu
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.nodeTypeComponentScriptExecutor
 import org.onap.ccsdk.cds.blueprintsprocessor.services.workflow.mock.MockComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.workflow.mock.mockNodeTemplateComponentScriptExecutor
+import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ServiceTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.serviceTemplate
@@ -36,6 +38,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyS
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 class ImperativeWorkflowExecutionServiceTest {
@@ -99,7 +102,10 @@ class ImperativeWorkflowExecutionServiceTest {
             val imperativeWorkflowExecutionService = ImperativeWorkflowExecutionService(bluePrintWorkFlowService)
             val output = imperativeWorkflowExecutionService
                     .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, hashMapOf())
-            assertNotNull(output)
+            assertNotNull(output, "failed to get imperative workflow output")
+            assertNotNull(output.status, "failed to get imperative workflow output status")
+            assertEquals(output.status.message, BluePrintConstants.STATUS_SUCCESS)
+            assertEquals(output.status.eventType, EventType.EVENT_COMPONENT_EXECUTED.name)
         }
     }
 }

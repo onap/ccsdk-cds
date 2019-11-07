@@ -22,7 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.*
-import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.utils.toProto
+import org.onap.ccsdk.cds.blueprintsprocessor.core.utils.toProto
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractServiceFunction
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
