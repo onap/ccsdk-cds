@@ -195,7 +195,7 @@ class NetconfDeviceCommunicator(private var inputStream: InputStream,
     }
 
     fun sendMessage(request: String, messageId: String): CompletableFuture<String> {
-        log.info("$deviceInfo: Sending message: \n $request")
+        log.info("$deviceInfo: Sending message with message-id: $messageId: message: \n $request")
         val future = CompletableFuture<String>()
         replies.put(messageId, future)
         val outputStream = OutputStreamWriter(out, StandardCharsets.UTF_8)
