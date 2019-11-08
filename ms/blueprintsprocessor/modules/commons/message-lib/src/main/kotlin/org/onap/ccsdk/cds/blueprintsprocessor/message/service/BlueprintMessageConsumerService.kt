@@ -20,6 +20,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.message.service
 import kotlinx.coroutines.channels.Channel
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.consumer.ConsumerRecords
+import org.apache.kafka.streams.Topology
 import org.onap.ccsdk.cds.blueprintsprocessor.message.MessageConsumerProperties
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 
@@ -61,4 +62,9 @@ interface BlueprintMessageConsumerService {
 interface KafkaConsumerRecordsFunction : ConsumerFunction {
     suspend fun invoke(messageConsumerProperties: MessageConsumerProperties, consumer: Consumer<*, *>,
                        consumerRecords: ConsumerRecords<*, *>)
+}
+
+interface KafkaStreamConsumerFunction : ConsumerFunction {
+    suspend fun createTopology(messageConsumerProperties: MessageConsumerProperties,
+                               additionalConfig: Map<String, Any>?): Topology
 }
