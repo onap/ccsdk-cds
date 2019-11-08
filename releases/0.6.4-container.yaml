@@ -1,0 +1,17 @@
+---
+distribution_type: 'container'
+container_release_tag: '0.6.4'
+project: 'ccsdk-cds'
+log_dir: 'ccsdk-cds-maven-docker-stage-elalto/66/'
+ref: c2d06ed4d1d85674277a2225b5999967cf59a432
+containers:
+    - name: 'ccsdk-cds-ui-server'
+      version: '0.6.4-STAGING-20191106T164028Z'
+    - name: 'ccsdk-cds-ui'
+      version: '0.6.4-STAGING-20191106T164028Z'
+    - name: 'ccsdk-blueprintsprocessor'
+      version: '0.6.4-STAGING-20191106T164028Z'
+    - name: 'ccsdk-commandexecutor'
+      version: '0.6.4-STAGING-20191106T164028Z'
+    - name: 'ccsdk-sdclistener'
+      version: '0.6.4-STAGING-20191106T164028Z'
