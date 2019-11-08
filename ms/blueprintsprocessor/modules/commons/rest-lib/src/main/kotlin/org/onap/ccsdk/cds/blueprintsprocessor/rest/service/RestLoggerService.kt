@@ -19,6 +19,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.rest.service
 import kotlinx.coroutines.*
 import kotlinx.coroutines.reactor.ReactorContext
 import kotlinx.coroutines.reactor.asCoroutineContext
+import org.apache.http.message.BasicHeader
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_INVOCATION_ID
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_PARTNER_NAME
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_REQUEST_ID
@@ -36,12 +37,24 @@ import java.net.InetAddress
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 class RestLoggerService {
     private val log = logger(RestLoggerService::class)
 
+    companion object {
+        /** Used before invoking any REST outbound request, Inbound Invocation ID is used as request Id
+         * for outbound Request, If invocation Id is missing then default Request Id will be generated.
+         */
+        fun httpInvoking(headers: Array<BasicHeader>) {
+            headers.plusElement(BasicHeader(ONAP_REQUEST_ID, MDC.get("InvocationID").defaultToUUID()))
+            headers.plusElement(BasicHeader(ONAP_INVOCATION_ID, UUID.randomUUID().toString()))
+            val partnerName = System.getProperty("APPNAME") ?: "BlueprintsProcessor"
+            headers.plusElement(BasicHeader(ONAP_PARTNER_NAME, partnerName))
+        }
+    }
 
     fun entering(request: ServerHttpRequest) {
         val localhost = InetAddress.getLocalHost()
@@ -54,7 +67,7 @@ class RestLoggerService {
         MDC.put("InvocationID", invocationID)
         MDC.put("PartnerName", partnerName)
         MDC.put("ClientIPAddress", request.remoteAddress?.address?.hostAddress.defaultToEmpty())
-        MDC.put("ServerFQDN",localhost.hostName.defaultToEmpty())
+        MDC.put("ServerFQDN", localhost.hostName.defaultToEmpty())
         if (MDC.get("ServiceName") == null || MDC.get("ServiceName").equals("", ignoreCase = true)) {
             MDC.put("ServiceName", request.uri.path)
         }

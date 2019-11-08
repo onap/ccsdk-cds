@@ -97,12 +97,14 @@ interface BlueprintWebClientService {
 
     fun <T> delete(path: String, headers: Array<BasicHeader>, responseType: Class<T>): WebClientResponse<T> {
         val httpDelete = HttpDelete(host(path))
+        RestLoggerService.httpInvoking(headers)
         httpDelete.setHeaders(headers)
         return performCallAndExtractTypedWebClientResponse(httpDelete, responseType)
     }
 
     fun <T> get(path: String, headers: Array<BasicHeader>, responseType: Class<T>): WebClientResponse<T> {
         val httpGet = HttpGet(host(path))
+        RestLoggerService.httpInvoking(headers)
         httpGet.setHeaders(headers)
         return performCallAndExtractTypedWebClientResponse(httpGet, responseType)
     }
@@ -111,6 +113,7 @@ interface BlueprintWebClientService {
         val httpPost = HttpPost(host(path))
         val entity = StringEntity(strRequest(request))
         httpPost.entity = entity
+        RestLoggerService.httpInvoking(headers)
         httpPost.setHeaders(headers)
         return performCallAndExtractTypedWebClientResponse(httpPost, responseType)
     }
@@ -119,6 +122,7 @@ interface BlueprintWebClientService {
         val httpPut = HttpPut(host(path))
         val entity = StringEntity(strRequest(request))
         httpPut.entity = entity
+        RestLoggerService.httpInvoking(headers)
         httpPut.setHeaders(headers)
         return performCallAndExtractTypedWebClientResponse(httpPut, responseType)
     }
@@ -127,6 +131,7 @@ interface BlueprintWebClientService {
         val httpPatch = HttpPatch(host(path))
         val entity = StringEntity(strRequest(request))
         httpPatch.entity = entity
+        RestLoggerService.httpInvoking(headers)
         httpPatch.setHeaders(headers)
         return performCallAndExtractTypedWebClientResponse(httpPatch, responseType)
     }

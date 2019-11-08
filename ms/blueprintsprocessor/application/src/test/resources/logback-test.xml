@@ -23,7 +23,7 @@
         <sift>
             <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
                 <encoder>
-                    <pattern>%${color}(%d{HH:mm:ss.SSS} %-5level %-40.40logger{39} : %msg%n)</pattern>
+                    <pattern>%${color}(%d{HH:mm:ss.SSS}|%X{RequestID}|%X{InvocationID}| %-5level %-40.40logger{39} : %msg%n)</pattern>
                 </encoder>
             </appender>
         </sift>

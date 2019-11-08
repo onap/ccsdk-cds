@@ -20,12 +20,20 @@
     <property name="defaultPattern"
               value="%date{ISO8601,UTC}|%X{RequestID}|%X{InvocationID}|%thread|%X{ServiceName}|%X{ClientIPAddress}|%logger{50}| %msg%n"/>
 
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <!-- encoders are assigned the type
-             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
-        <encoder>
-            <pattern>${defaultPattern}</pattern>
-        </encoder>
+    <property name="colorPattern"
+              value="%${color}(%d{HH:mm:ss.SSS}|%X{RequestID}|%thread|%X{ServiceName}|%X{ClientIPAddress}|%logger{50}| %msg%n)"/>
+
+    <appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <discriminator class="org.onap.ccsdk.cds.blueprintsprocessor.uat.logging.SmartColorDiscriminator">
+            <defaultValue>white</defaultValue>
+        </discriminator>
+        <sift>
+            <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+                <encoder>
+                    <pattern>${defaultPattern}</pattern>
+                </encoder>
+            </appender>
+        </sift>
     </appender>
 
     <logger name="org.springframework" level="info"/>
@@ -34,7 +42,7 @@
     <logger name="org.onap.ccsdk.cds" level="info"/>
 
     <root level="info">
-        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="SIFT"/>
     </root>
 
 </configuration>
