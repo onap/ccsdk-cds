@@ -23,8 +23,8 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.BluePrintRestLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLBasicAuthRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLRestClientProperties
@@ -41,7 +41,8 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [BluePrintRestLibConfiguration::class, BlueprintPropertyConfiguration::class, BluePrintProperties::class])
+@ContextConfiguration(classes = [BluePrintRestLibConfiguration::class, BluePrintPropertyConfiguration::class,
+    BluePrintPropertiesService::class])
 @TestPropertySource(properties =
 ["blueprintsprocessor.restclient.sample.type=basic-auth",
     "blueprintsprocessor.restclient.sample.url=http://localhost:8080",

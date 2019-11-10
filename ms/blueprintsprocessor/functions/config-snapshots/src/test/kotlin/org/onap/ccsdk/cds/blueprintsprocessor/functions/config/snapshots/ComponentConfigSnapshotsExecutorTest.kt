@@ -23,8 +23,8 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.ComponentConfigSnapshotsExecutor.Companion.DIFF_JSON
@@ -48,7 +48,7 @@ import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [ResourceConfigSnapshotService::class,
-    BlueprintPropertyConfiguration::class, BluePrintProperties::class,
+    BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class,
     BluePrintDBLibConfiguration::class, BluePrintLoadConfiguration::class])
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 @ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])

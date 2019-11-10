@@ -21,8 +21,8 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.*
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 import org.springframework.beans.factory.annotation.Autowired
@@ -35,7 +35,7 @@ import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [BluePrintGrpcLibConfiguration::class,
-    BlueprintPropertyConfiguration::class, BluePrintProperties::class])
+    BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class])
 @TestPropertySource(properties =
 ["blueprintsprocessor.grpcclient.sample.type=basic-auth",
     "blueprintsprocessor.grpcclient.sample.host=127.0.0.1",

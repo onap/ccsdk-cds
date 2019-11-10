@@ -21,8 +21,8 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.DesignerApiTestConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.load.ModelTypeLoadService
@@ -38,7 +38,7 @@ import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [DesignerApiTestConfiguration::class,
-    BlueprintPropertyConfiguration::class, BluePrintProperties::class, BluePrintDBLibConfiguration::class])
+    BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, BluePrintDBLibConfiguration::class])
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class BluePrintEnhancerServiceImplTest {
 

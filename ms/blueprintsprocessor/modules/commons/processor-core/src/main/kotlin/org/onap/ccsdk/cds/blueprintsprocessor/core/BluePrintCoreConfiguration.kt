@@ -32,7 +32,7 @@ import org.springframework.core.env.Environment
 import org.springframework.stereotype.Service
 
 @Configuration
-open class BluePrintCoreConfiguration(private val bluePrintPropertiesService: BlueprintPropertiesService) {
+open class BluePrintCoreConfiguration(private val bluePrintPropertiesService: BluePrintPropertiesService) {
 
     companion object {
         const val PREFIX_BLUEPRINT_PROCESSOR = "blueprintsprocessor"
@@ -46,7 +46,7 @@ open class BluePrintCoreConfiguration(private val bluePrintPropertiesService: Bl
 }
 
 @Configuration
-open class BlueprintPropertyConfiguration {
+open class BluePrintPropertyConfiguration {
     @Autowired
     lateinit var environment: Environment
 
@@ -58,7 +58,7 @@ open class BlueprintPropertyConfiguration {
 }
 
 @Service
-open class BlueprintPropertiesService(private var bluePrintPropertyBinder: Binder) {
+open class BluePrintPropertiesService(private var bluePrintPropertyBinder: Binder) {
     fun <T> propertyBeanType(prefix: String, type: Class<T>): T {
         return bluePrintPropertyBinder.bind(prefix, Bindable.of(type)).get()
     }

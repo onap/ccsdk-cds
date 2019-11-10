@@ -27,8 +27,8 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.BluePrintRestLibConfiguration
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -57,7 +57,7 @@ import kotlin.test.assertNotNull
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ContextConfiguration(classes = [BluePrintRestLibConfiguration::class, SampleController::class,
     SecurityConfiguration::class,
-    BlueprintPropertyConfiguration::class, BluePrintProperties::class])
+    BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class])
 @TestPropertySource(properties =
 [
     "server.port=8443",
