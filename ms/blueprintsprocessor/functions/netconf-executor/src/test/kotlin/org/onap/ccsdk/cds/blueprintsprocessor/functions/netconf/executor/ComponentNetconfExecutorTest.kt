@@ -20,51 +20,56 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor
 
 import com.fasterxml.jackson.databind.JsonNode
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.spyk
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.BlueprintJythonService
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.putJsonElement
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration
-import org.springframework.context.annotation.ComponentScan
-import org.springframework.test.annotation.DirtiesContext
-import org.springframework.test.context.TestPropertySource
-import org.springframework.test.context.junit4.SpringRunner
+import org.springframework.context.ApplicationContext
 
-@RunWith(SpringRunner::class)
-@EnableAutoConfiguration
-@ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
-@DirtiesContext
-@TestPropertySource(properties =
-["blueprints.processor.functions.python.executor.modulePaths=./../../../../components/scripts/python/ccsdk_netconf,./../../../../components/scripts/python/ccsdk_blueprints",
-    "blueprints.processor.functions.python.executor.executionPath=./../../../../components/scripts/python/ccsdk_netconf"],
-        locations = ["classpath:application-test.properties"])
 class ComponentNetconfExecutorTest {
-
-    @Autowired
-    lateinit var componentNetconfExecutor: ComponentNetconfExecutor
-
 
     @Test
     fun testComponentNetconfExecutor() {
 
         runBlocking {
+
+            val applicationContext = mockk<ApplicationContext>()
+            every { applicationContext.getBean(any()) } returns mockk()
+
+            val blueprintJythonService = mockk<BlueprintJythonService>()
+            val mockAbstractScriptComponentFunction = spyk<AbstractScriptComponentFunction>()
+            coEvery { mockAbstractScriptComponentFunction.executeScript(any()) } returns mockk()
+
+            coEvery { blueprintJythonService.jythonComponentInstance(any(), any()) } returns mockAbstractScriptComponentFunction
+
+            val componentFunctionScriptingService = ComponentFunctionScriptingService(applicationContext,
+                    blueprintJythonService)
+
+            val componentNetconfExecutor = ComponentNetconfExecutor(componentFunctionScriptingService)
+
             val executionServiceInput = JacksonUtils.readValueFromClassPathFile("requests/sample-activate-request.json",
                     ExecutionServiceInput::class.java)!!
 
             val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
                     "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
-            val assignmentParams = "{\n" +
-                    "            \"ipAddress\": \"127.0.0.1\",\n" +
-                    "            \"hostName\": \"vnf-host\"\n" +
-                    "          }"
+            val assignmentParams = """{
+                "ipAddress" : "127.0.0.1",
+                "hostName" : "vnf-host"
+                }                
+            """.trimIndent()
 
             val json = """{
                 "hostname" : "127.0.0.1"
@@ -74,8 +79,6 @@ class ComponentNetconfExecutorTest {
             bluePrintRuntimeService.assignInputs(json.asJsonType())
             bluePrintRuntimeService.setNodeTemplateAttributeValue("resource-assignment", "assignment-params",
                     JacksonUtils.jsonNode(assignmentParams))
-
-            val executionContext = bluePrintRuntimeService.getExecutionContext()
 
             componentNetconfExecutor.bluePrintRuntimeService = bluePrintRuntimeService
 
@@ -93,7 +96,6 @@ class ComponentNetconfExecutorTest {
             executionServiceInput.stepData = stepInputData
             componentNetconfExecutor.applyNB(executionServiceInput)
         }
-
     }
 }
 

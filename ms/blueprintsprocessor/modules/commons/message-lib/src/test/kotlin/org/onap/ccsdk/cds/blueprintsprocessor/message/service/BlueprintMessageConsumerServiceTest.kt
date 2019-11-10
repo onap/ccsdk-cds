@@ -27,7 +27,7 @@ import org.apache.kafka.clients.consumer.*
 import org.apache.kafka.common.TopicPartition
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.message.BluePrintMessageLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.message.MessageConsumerProperties
@@ -44,7 +44,7 @@ import kotlin.test.assertTrue
 @RunWith(SpringRunner::class)
 @DirtiesContext
 @ContextConfiguration(classes = [BluePrintMessageLibConfiguration::class,
-    BlueprintPropertyConfiguration::class, BluePrintProperties::class])
+    BlueprintPropertyConfiguration::class, BlueprintPropertiesService::class])
 @TestPropertySource(properties =
 ["blueprintsprocessor.messageconsumer.sample.type=kafka-basic-auth",
     "blueprintsprocessor.messageconsumer.sample.bootstrapServers=127.0.0.1:9092",

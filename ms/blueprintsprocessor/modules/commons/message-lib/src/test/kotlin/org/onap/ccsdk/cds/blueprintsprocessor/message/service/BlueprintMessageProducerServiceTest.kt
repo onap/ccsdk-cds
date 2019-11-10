@@ -23,7 +23,7 @@ import kotlinx.coroutines.runBlocking
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.RecordMetadata
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.message.BluePrintMessageLibConfiguration
 import org.springframework.beans.factory.annotation.Autowired
@@ -39,7 +39,7 @@ import kotlin.test.assertTrue
 @RunWith(SpringRunner::class)
 @DirtiesContext
 @ContextConfiguration(classes = [BluePrintMessageLibConfiguration::class,
-    BlueprintPropertyConfiguration::class, BluePrintProperties::class])
+    BlueprintPropertyConfiguration::class, BlueprintPropertiesService::class])
 @TestPropertySource(properties =
 ["blueprintsprocessor.messageproducer.sample.type=kafka-basic-auth",
     "blueprintsprocessor.messageproducer.sample.bootstrapServers=127.0.0.1:9092",

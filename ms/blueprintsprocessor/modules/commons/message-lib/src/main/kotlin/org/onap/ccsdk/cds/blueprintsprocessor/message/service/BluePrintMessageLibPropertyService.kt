@@ -17,14 +17,14 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.message.service
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.message.*
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.stereotype.Service
 
 @Service(MessageLibConstants.SERVICE_BLUEPRINT_MESSAGE_LIB_PROPERTY)
-open class BluePrintMessageLibPropertyService(private var bluePrintProperties: BluePrintProperties) {
+open class BluePrintMessageLibPropertyService(private var bluePrintPropertiesService: BlueprintPropertiesService) {
 
     fun blueprintMessageProducerService(jsonNode: JsonNode): BlueprintMessageProducerService {
         val messageClientProperties = messageProducerProperties(jsonNode)
@@ -38,7 +38,7 @@ open class BluePrintMessageLibPropertyService(private var bluePrintProperties: B
     }
 
     fun messageProducerProperties(prefix: String): MessageProducerProperties {
-        val type = bluePrintProperties.propertyBeanType("$prefix.type", String::class.java)
+        val type = bluePrintPropertiesService.propertyBeanType("$prefix.type", String::class.java)
         return when (type) {
             MessageLibConstants.TYPE_KAFKA_BASIC_AUTH -> {
                 kafkaBasicAuthMessageProducerProperties(prefix)
@@ -75,7 +75,7 @@ open class BluePrintMessageLibPropertyService(private var bluePrintProperties: B
     }
 
     private fun kafkaBasicAuthMessageProducerProperties(prefix: String): KafkaBasicAuthMessageProducerProperties {
-        return bluePrintProperties.propertyBeanType(
+        return bluePrintPropertiesService.propertyBeanType(
                 prefix, KafkaBasicAuthMessageProducerProperties::class.java)
     }
 
@@ -96,7 +96,7 @@ open class BluePrintMessageLibPropertyService(private var bluePrintProperties: B
 
     /** Return Message Consumer Properties for [prefix] definitions. */
     fun messageConsumerProperties(prefix: String): MessageConsumerProperties {
-        val type = bluePrintProperties.propertyBeanType("$prefix.type", String::class.java)
+        val type = bluePrintPropertiesService.propertyBeanType("$prefix.type", String::class.java)
         return when (type) {
             MessageLibConstants.TYPE_KAFKA_BASIC_AUTH -> {
                 kafkaBasicAuthMessageConsumerProperties(prefix)
@@ -133,7 +133,7 @@ open class BluePrintMessageLibPropertyService(private var bluePrintProperties: B
     }
 
     private fun kafkaBasicAuthMessageConsumerProperties(prefix: String): KafkaBasicAuthMessageConsumerProperties {
-        return bluePrintProperties.propertyBeanType(
+        return bluePrintPropertiesService.propertyBeanType(
                 prefix, KafkaBasicAuthMessageConsumerProperties::class.java)
     }
 

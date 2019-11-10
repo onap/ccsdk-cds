@@ -21,7 +21,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.dmaap
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.dmaap.DmaapLibConstants.Companion.SERVICE_BLUEPRINT_DMAAP_LIB_PROPERTY
 import org.onap.ccsdk.cds.blueprintsprocessor.dmaap.DmaapLibConstants.Companion.TYPE_HTTP_AAF_AUTH
 import org.onap.ccsdk.cds.blueprintsprocessor.dmaap.DmaapLibConstants.Companion.TYPE_HTTP_NO_AUTH
@@ -36,7 +36,7 @@ import org.springframework.core.env.ConfigurableEnvironment
 import org.springframework.core.env.Environment
 import org.springframework.core.io.support.ResourcePropertySource
 import org.springframework.stereotype.Service
-import java.util.Properties
+import java.util.*
 
 /**
  * Representation of DMAAP lib property service to load the properties
@@ -46,15 +46,14 @@ import java.util.Properties
 @Service(SERVICE_BLUEPRINT_DMAAP_LIB_PROPERTY)
 @Configuration
 @PropertySources(PropertySource("classpath:event.properties"))
-open class BluePrintDmaapLibPropertyService(private var bluePrintProperties:
-                                            BluePrintProperties) {
+open class BluePrintDmaapLibPropertyService(private var bluePrintPropertiesService: BlueprintPropertiesService) {
 
     /**
      * Static variable for logging.
      */
     companion object {
         var log = LoggerFactory.getLogger(
-            BluePrintDmaapLibPropertyService::class.java)!!
+                BluePrintDmaapLibPropertyService::class.java)!!
     }
 
     /**
@@ -90,20 +89,20 @@ open class BluePrintDmaapLibPropertyService(private var bluePrintProperties:
      * requires.
      */
     fun dmaapClientProperties(prefix: String): DmaapClientProperties {
-        val type = bluePrintProperties.propertyBeanType(
-            "$prefix.type", String::class.java)
-        val clientProps : DmaapClientProperties
+        val type = bluePrintPropertiesService.propertyBeanType(
+                "$prefix.type", String::class.java)
+        val clientProps: DmaapClientProperties
 
         when (type) {
             TYPE_HTTP_NO_AUTH -> {
-                clientProps =  bluePrintProperties.propertyBeanType(
-                    prefix, HttpNoAuthDmaapClientProperties::class.java)
+                clientProps = bluePrintPropertiesService.propertyBeanType(
+                        prefix, HttpNoAuthDmaapClientProperties::class.java)
                 clientProps.props = parseEventProps()
             }
 
             TYPE_HTTP_AAF_AUTH -> {
-                clientProps =  bluePrintProperties.propertyBeanType(
-                    prefix, AafAuthDmaapClientProperties::class.java)
+                clientProps = bluePrintPropertiesService.propertyBeanType(
+                        prefix, AafAuthDmaapClientProperties::class.java)
                 clientProps.props = parseEventProps()
             }
 
@@ -121,18 +120,18 @@ open class BluePrintDmaapLibPropertyService(private var bluePrintProperties:
      */
     fun dmaapClientProperties(jsonNode: JsonNode): DmaapClientProperties {
         val type = jsonNode.get("type").textValue()
-        val clientProps : DmaapClientProperties
+        val clientProps: DmaapClientProperties
 
         when (type) {
             TYPE_HTTP_NO_AUTH -> {
                 clientProps = JacksonUtils.readValue(jsonNode,
-                    HttpNoAuthDmaapClientProperties::class.java)!!
+                        HttpNoAuthDmaapClientProperties::class.java)!!
                 clientProps.props = parseEventProps()
             }
 
             TYPE_HTTP_AAF_AUTH -> {
                 clientProps = JacksonUtils.readValue(jsonNode,
-                    AafAuthDmaapClientProperties::class.java)!!
+                        AafAuthDmaapClientProperties::class.java)!!
                 clientProps.props = parseEventProps()
             }
 
@@ -172,7 +171,7 @@ open class BluePrintDmaapLibPropertyService(private var bluePrintProperties:
     private fun parseEventProps(): Properties {
         val prodProps = Properties()
         val proProps = (env as ConfigurableEnvironment).propertySources.get(
-            "class path resource [event.properties]")
+                "class path resource [event.properties]")
 
         if (proProps != null) {
             val entries = (proProps as ResourcePropertySource).source.entries

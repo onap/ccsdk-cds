@@ -18,7 +18,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.grpc.service
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.*
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.returnNullIfMissing
@@ -26,7 +26,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.stereotype.Service
 
 @Service(GRPCLibConstants.SERVICE_BLUEPRINT_GRPC_LIB_PROPERTY)
-open class BluePrintGrpcLibPropertyService(private var bluePrintProperties: BluePrintProperties) {
+open class BluePrintGrpcLibPropertyService(private var bluePrintPropertiesService: BlueprintPropertiesService) {
 
     /** GRPC Server Lib Property Service */
     fun grpcServerProperties(jsonNode: JsonNode): GrpcServerProperties {
@@ -44,7 +44,7 @@ open class BluePrintGrpcLibPropertyService(private var bluePrintProperties: Blue
     }
 
     fun grpcServerProperties(prefix: String): GrpcServerProperties {
-        val type = bluePrintProperties.propertyBeanType(
+        val type = bluePrintPropertiesService.propertyBeanType(
                 "$prefix.type", String::class.java)
         return when (type) {
             GRPCLibConstants.TYPE_TOKEN_AUTH -> {
@@ -60,11 +60,11 @@ open class BluePrintGrpcLibPropertyService(private var bluePrintProperties: Blue
     }
 
     private fun tokenAuthGrpcServerProperties(prefix: String): TokenAuthGrpcServerProperties {
-        return bluePrintProperties.propertyBeanType(prefix, TokenAuthGrpcServerProperties::class.java)
+        return bluePrintPropertiesService.propertyBeanType(prefix, TokenAuthGrpcServerProperties::class.java)
     }
 
     private fun tlsAuthGrpcServerProperties(prefix: String): TLSAuthGrpcServerProperties {
-        return bluePrintProperties.propertyBeanType(prefix, TLSAuthGrpcServerProperties::class.java)
+        return bluePrintPropertiesService.propertyBeanType(prefix, TLSAuthGrpcServerProperties::class.java)
     }
 
     /** GRPC Client Lib Property Service */
@@ -101,7 +101,7 @@ open class BluePrintGrpcLibPropertyService(private var bluePrintProperties: Blue
     }
 
     fun grpcClientProperties(prefix: String): GrpcClientProperties {
-        val type = bluePrintProperties.propertyBeanType(
+        val type = bluePrintPropertiesService.propertyBeanType(
                 "$prefix.type", String::class.java)
         return when (type) {
             GRPCLibConstants.TYPE_TOKEN_AUTH -> {
@@ -139,14 +139,14 @@ open class BluePrintGrpcLibPropertyService(private var bluePrintProperties: Blue
     }
 
     private fun tokenAuthGrpcClientProperties(prefix: String): TokenAuthGrpcClientProperties {
-        return bluePrintProperties.propertyBeanType(prefix, TokenAuthGrpcClientProperties::class.java)
+        return bluePrintPropertiesService.propertyBeanType(prefix, TokenAuthGrpcClientProperties::class.java)
     }
 
     private fun tlsAuthGrpcClientProperties(prefix: String): TLSAuthGrpcClientProperties {
-        return bluePrintProperties.propertyBeanType(prefix, TLSAuthGrpcClientProperties::class.java)
+        return bluePrintPropertiesService.propertyBeanType(prefix, TLSAuthGrpcClientProperties::class.java)
     }
 
     private fun basicAuthGrpcClientProperties(prefix: String): BasicAuthGrpcClientProperties {
-        return bluePrintProperties.propertyBeanType(prefix, BasicAuthGrpcClientProperties::class.java)
+        return bluePrintPropertiesService.propertyBeanType(prefix, BasicAuthGrpcClientProperties::class.java)
     }
 }

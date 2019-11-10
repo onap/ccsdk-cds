@@ -22,45 +22,31 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ActionIdentifiers
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.CommonHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentScriptExecutor
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration
-import org.springframework.context.annotation.ComponentScan
-import org.springframework.test.annotation.DirtiesContext
-import org.springframework.test.context.TestPropertySource
-import org.springframework.test.context.junit4.SpringRunner
+import org.springframework.context.ApplicationContext
 import kotlin.test.assertNotNull
 
-@RunWith(SpringRunner::class)
-@EnableAutoConfiguration
-@ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
-@DirtiesContext
-@TestPropertySource(properties =
-["server.port=9111",
-    "blueprintsprocessor.restconfEnabled=true",
-    "blueprintsprocessor.restclient.odlPrimary.type=basic-auth",
-    "blueprintsprocessor.restclient.odlPrimary.url=http://127.0.0.1:9111",
-    "blueprintsprocessor.restclient.odlPrimary.userId=sampleuser",
-    "blueprintsprocessor.restclient.odlPrimary.token=sampletoken"],
-        locations = ["classpath:application-test.properties"])
 class ComponentRestconfExecutorTest {
-
-    @Autowired
-    lateinit var componentScriptExecutor: ComponentScriptExecutor
 
     @Test
     fun `test Restconf Component Instance`() {
         runBlocking {
+
+            val applicationContext = mockk<ApplicationContext>()
+            every { applicationContext.getBean(any()) } returns mockk()
+            val componentFunctionScriptingService = ComponentFunctionScriptingService(applicationContext, mockk())
+            val componentScriptExecutor = ComponentScriptExecutor(componentFunctionScriptingService)
+
             assertNotNull(componentScriptExecutor, "failed to get ComponentRestconfExecutor instance")
             val executionServiceInput = ExecutionServiceInput().apply {
                 commonHeader = CommonHeader().apply {

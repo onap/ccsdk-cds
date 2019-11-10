@@ -22,7 +22,7 @@ import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.DesignerApiTestConfiguration
@@ -39,7 +39,7 @@ import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [DesignerApiTestConfiguration::class,
-    BlueprintPropertyConfiguration::class, BluePrintProperties::class, BluePrintDBLibConfiguration::class])
+    BlueprintPropertyConfiguration::class, BlueprintPropertiesService::class, BluePrintDBLibConfiguration::class])
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class ModelTypeServiceTest {

@@ -18,7 +18,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.pro
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock.MockBluePrintRestLibPropertyService
@@ -37,7 +37,7 @@ import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [MockRestResourceResolutionProcessor::class, MockBluePrintRestLibPropertyService::class,
-    BlueprintPropertyConfiguration::class, BluePrintProperties::class, RestClientProperties::class])
+    BlueprintPropertyConfiguration::class, BlueprintPropertiesService::class, RestClientProperties::class])
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class RestResourceResolutionProcessorTest {
     @Autowired

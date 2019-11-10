@@ -18,7 +18,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.ssh.service
 
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.ssh.BasicAuthSshClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.ssh.BluePrintSshLibConfiguration
@@ -32,7 +32,7 @@ import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [BluePrintSshLibConfiguration::class,
-    BlueprintPropertyConfiguration::class, BluePrintProperties::class])
+    BlueprintPropertyConfiguration::class, BlueprintPropertiesService::class])
 @TestPropertySource(properties =
 ["blueprintsprocessor.sshclient.sample.type=basic-auth",
     "blueprintsprocessor.sshclient.sample.host=127.0.0.1",

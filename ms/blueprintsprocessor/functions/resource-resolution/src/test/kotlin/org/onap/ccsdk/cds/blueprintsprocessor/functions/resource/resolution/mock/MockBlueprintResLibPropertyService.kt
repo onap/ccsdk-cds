@@ -15,11 +15,11 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock
 
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
 
-class MockBluePrintRestLibPropertyService(bluePrintProperties: BluePrintProperties) :
+class MockBluePrintRestLibPropertyService(bluePrintProperties: BlueprintPropertiesService) :
         BluePrintRestLibPropertyService(bluePrintProperties) {
 
     fun mockBlueprintWebClientService (selector: String):

@@ -17,14 +17,14 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.db.primary
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.db.*
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.stereotype.Service
 
 @Service
-class BluePrintDBLibPropertySevice(private var bluePrintProperties: BluePrintProperties) {
+class BluePrintDBLibPropertySevice(private var bluePrintPropertiesService: BlueprintPropertiesService) {
 
     fun JdbcTemplate(jsonNode: JsonNode): BluePrintDBLibGenericService {
         val dBConnetionProperties = dBDataSourceProperties(jsonNode)
@@ -53,7 +53,7 @@ class BluePrintDBLibPropertySevice(private var bluePrintProperties: BluePrintPro
     }
 
     private fun dBDataSourceProperties(prefix: String): DBDataSourceProperties {
-        val type = bluePrintProperties.propertyBeanType("$prefix.type", String::class.java)
+        val type = bluePrintPropertiesService.propertyBeanType("$prefix.type", String::class.java)
         return when (type) {
             DBLibConstants.MARIA_DB -> {
                 mariaDBConnectionProperties(prefix)
@@ -91,15 +91,15 @@ class BluePrintDBLibPropertySevice(private var bluePrintProperties: BluePrintPro
     }
 
     private fun mySqlDBConnectionProperties(prefix: String): MySqlDataSourceProperties {
-        return bluePrintProperties.propertyBeanType(prefix, MySqlDataSourceProperties::class.java)
+        return bluePrintPropertiesService.propertyBeanType(prefix, MySqlDataSourceProperties::class.java)
     }
 
     private fun mariaDBConnectionProperties(prefix: String): MariaDataSourceProperties {
-        return bluePrintProperties.propertyBeanType(prefix, MariaDataSourceProperties::class.java)
+        return bluePrintPropertiesService.propertyBeanType(prefix, MariaDataSourceProperties::class.java)
     }
 
     private fun primaryDBConnectionProperties(prefix: String): PrimaryDataSourceProperties {
-        return bluePrintProperties.propertyBeanType(prefix, PrimaryDataSourceProperties::class.java)
+        return bluePrintPropertiesService.propertyBeanType(prefix, PrimaryDataSourceProperties::class.java)
     }
 
 }

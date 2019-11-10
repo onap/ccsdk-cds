@@ -16,7 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.db
 
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.BluePrintDBLibPropertySevice
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.PrimaryDBLibGenericService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
@@ -26,11 +26,11 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 @EnableConfigurationProperties
-open class BluePrintDBLibConfiguration(private var bluePrintProperties: BluePrintProperties) {
+open class BluePrintDBLibConfiguration(private var bluePrintPropertiesService: BlueprintPropertiesService) {
 
     @Bean("primary-database-properties")
     open fun getPrimaryProperties(): PrimaryDataSourceProperties {
-        return bluePrintProperties.propertyBeanType(DBLibConstants.PREFIX_DB,
+        return bluePrintPropertiesService.propertyBeanType(DBLibConstants.PREFIX_DB,
                 PrimaryDataSourceProperties::class.java)
     }
 }

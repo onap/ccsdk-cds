@@ -25,7 +25,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.utils.PayloadUtils
@@ -61,7 +61,7 @@ import kotlin.test.assertTrue
     InputResourceResolutionProcessor::class, DefaultResourceResolutionProcessor::class,
     DatabaseResourceAssignmentProcessor::class, RestResourceResolutionProcessor::class,
     CapabilityResourceResolutionProcessor::class,
-    BlueprintPropertyConfiguration::class, BluePrintProperties::class,
+    BlueprintPropertyConfiguration::class, BlueprintPropertiesService::class,
     BluePrintDBLibConfiguration::class, BluePrintLoadConfiguration::class])
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 @ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
