@@ -39,6 +39,7 @@
         <module>restconf-executor</module>
         <module>cli-executor</module>
         <module>config-snapshots</module>
+        <module>message-prioritizaion</module>
     </modules>
 
     <dependencies>
