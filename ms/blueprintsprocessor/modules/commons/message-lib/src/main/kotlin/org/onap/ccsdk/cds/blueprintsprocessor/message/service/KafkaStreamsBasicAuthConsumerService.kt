@@ -56,6 +56,7 @@ open class KafkaStreamsBasicAuthConsumerService(private val messageConsumerPrope
         val streamsConfig = streamsConfig(additionalConfig)
         val kafkaStreamConsumerFunction = consumerFunction as KafkaStreamConsumerFunction
         val topology = kafkaStreamConsumerFunction.createTopology(messageConsumerProperties, additionalConfig)
+        log.info("Kafka streams topology : ${topology.describe()}")
         kafkaStreams = KafkaStreams(topology, streamsConfig)
         kafkaStreams.cleanUp()
         kafkaStreams.start()
