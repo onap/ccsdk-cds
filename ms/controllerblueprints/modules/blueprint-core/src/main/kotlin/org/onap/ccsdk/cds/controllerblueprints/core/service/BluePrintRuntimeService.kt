@@ -27,6 +27,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 import java.io.File
 
@@ -429,7 +430,7 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
     }
 
     override fun setInputValue(propertyName: String, value: JsonNode) {
-        val path = """${BluePrintConstants.PATH_INPUTS}${BluePrintConstants.PATH_DIVIDER}${propertyName}"""
+        val path = """${BluePrintConstants.PATH_INPUTS}${BluePrintConstants.PATH_DIVIDER}$propertyName"""
         log.trace("setting input path ({}), values ({})", path, value)
         put(path, value)
     }
@@ -555,15 +556,17 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
     override fun assignInputs(jsonNode: JsonNode) {
         log.info("assignInputs from input JSON ({})", jsonNode.toString())
         bluePrintContext.inputs()?.forEach { propertyName, property ->
+            property.type
             val valueNode: JsonNode = jsonNode.at(BluePrintConstants.PATH_DIVIDER + propertyName)
                 ?: property.defaultValue
                 ?: NullNode.getInstance()
-            setInputValue(propertyName, valueNode)
+            val jsonValue = JacksonUtils.convertNodeToJsonTypeNode(property.type, valueNode)
+            setInputValue(propertyName, jsonValue)
         }
     }
 
     override fun assignWorkflowInputs(workflowName: String, jsonNode: JsonNode) {
-        log.info("For workflow ($workflowName) driving input data from (${jsonNode})")
+        log.info("For workflow ($workflowName) driving input data from ($jsonNode)")
         val dynamicInputPropertiesName = "$workflowName-properties"
 
         bluePrintContext.workflowByName(workflowName).inputs?.
@@ -573,21 +576,23 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
                     jsonNode.at(BluePrintConstants.PATH_DIVIDER + propertyName).returnNullIfMissing()
                         ?: property.defaultValue
                         ?: NullNode.getInstance()
-                log.trace("Setting input data - attribute:($propertyName) value:($valueNode)")
-                setInputValue(propertyName, valueNode)
+                val jsonValue = JacksonUtils.convertNodeToJsonTypeNode(property.type, valueNode)
+                log.trace("Setting input data - attribute:($propertyName) value:($jsonValue)")
+                setInputValue(propertyName, jsonValue)
             }
         }
         // Load Dynamic data Types
         jsonNode.get(dynamicInputPropertiesName)?.let {
             bluePrintContext.dataTypeByName("dt-$dynamicInputPropertiesName")?.properties?.
                 forEach { propertyName, property ->
-                val valueNode: JsonNode =
+                    val valueNode: JsonNode =
                     it.at(BluePrintConstants.PATH_DIVIDER + propertyName).returnNullIfMissing()
                         ?: property.defaultValue
                         ?: NullNode.getInstance()
-                log.trace("Setting input data - attribute:($propertyName) value:($valueNode)")
-                setInputValue(propertyName, valueNode)
-            }
+                    val jsonValue = JacksonUtils.convertNodeToJsonTypeNode(property.type, valueNode)
+                    log.trace("Setting input data - attribute:($propertyName) value:($jsonValue)")
+                    setInputValue(propertyName, jsonValue)
+                }
         }
     }
 

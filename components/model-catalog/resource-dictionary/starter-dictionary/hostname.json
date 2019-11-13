@@ -8,7 +8,17 @@
 		},
 		"sources": {
 			"input": {
-				"type": "source-input"
+				"type": "source-input",
+				"properties": {
+					"input-key-mapping": {
+						"service-instance-id": "service-instance-id",
+						"vnf-id": "vnf-id"
+					},
+					"key-dependencies": [
+						"service-instance-id",
+						"vnf-id"
+					]
+				}
 			}
 		}
 }
