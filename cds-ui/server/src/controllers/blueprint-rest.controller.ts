@@ -69,6 +69,21 @@ export class BlueprintRestController {
     return await this.bpservice.getAllblueprints();
   }
 
+  @get('/controllerblueprint/paged', {
+    responses: {
+      '200': {
+        description: 'Blueprint model instance with pagination',
+        content: { 'application/json': { schema: { 'x-ts-type': Blueprint } } },
+      },
+    },
+  })
+  async getPagedBlueprints(
+    @param.query.number('limit') limit: number, 
+    @param.query.number('offset') offset: number, 
+    @param.query.string('sort') sort: string) {
+    return await this.bpservice.getPagedBueprints(limit, offset, sort);
+  }
+
  @get('/controllerblueprint/meta-data/{keyword}', {
     responses: {
       '200': {

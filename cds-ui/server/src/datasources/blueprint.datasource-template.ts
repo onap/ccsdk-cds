@@ -38,21 +38,36 @@ export default {
 
         }
     },
-  {
-            "template": {
-                "method": "GET",
-                "url": processorApiConfig.http.url + "/blueprint-model/meta-data/{keyword}",
-                "headers": {
-                    "accepts": "application/json",
-                    "content-type": "application/json",
-                    "authorization": processorApiConfig.http.authToken
-                },
-                "responsePath": "$.*"
+    {
+        "template": {
+            "method": "GET",
+            "url": processorApiConfig.http.url + "/blueprint-model/meta-data/{keyword}",
+            "headers": {
+                "accepts": "application/json",
+                "content-type": "application/json",
+                "authorization": processorApiConfig.http.authToken
             },
-            "functions": {
-                "getBlueprintsByKeyword": ["keyword"]
-
-            }
+            "responsePath": "$.*"
         },
+        "functions": {
+            "getBlueprintsByKeyword": ["keyword"]
+
+        }
+    },
+    {
+        "template": {
+            "method": "GET",
+            "url": processorApiConfig.http.url + "/blueprint-model/paged?limit={limit}&offset={offset}&sort={sort}",
+            "headers": {
+                "accepts": "application/json",
+                "content-type": "application/json",
+                "authorization": processorApiConfig.http.authToken
+            },
+            "responsePath": "$.content.*",
+        },
+        "functions": {
+            "getPagedBueprints": ["limit","offset", "sort"],
+        }
+    },
 ]
 };
