@@ -23,6 +23,7 @@ package org.onap.ccsdk.cds.controllerblueprints.resource.dict
  */
 object ResourceDictionaryConstants {
     const val SOURCE_INPUT = "input"
+    const val SOURCE_DYNAMIC_INPUT = "dynamic-input"
     const val SOURCE_DEFAULT = "default"
     const val PROCESSOR_DB = "processor-db"
 

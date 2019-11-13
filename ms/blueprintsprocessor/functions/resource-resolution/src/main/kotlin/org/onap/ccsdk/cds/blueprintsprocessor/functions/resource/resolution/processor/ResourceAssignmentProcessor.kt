@@ -21,12 +21,15 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.pro
 import com.fasterxml.jackson.databind.JsonNode
 import org.apache.commons.collections.MapUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.RestResourceSource
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintFunctionNode
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintVelocityTemplateService
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
+import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDictionaryConstants
 import org.slf4j.LoggerFactory
 import java.util.*
 
@@ -48,13 +51,47 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
             ?: throw BluePrintProcessorException("couldn't get script property instance ($name)")
     }
 
-    open fun setFromInput(resourceAssignment: ResourceAssignment): Boolean {
+    open suspend fun setFromInput(resourceAssignment: ResourceAssignment): Boolean {
+
+        val dName = resourceAssignment.dictionaryName!!
+        val dSource = resourceAssignment.dictionarySource!!
+        val resourceDefinition = resourceDefinition(dName)
+
         try {
-            val value = raRuntimeService.getInputValue(resourceAssignment.name)
-            if (!value.isNullOrMissing()) {
+            var valueNode = raRuntimeService.getInputValue(resourceAssignment.name)
+            if (dSource == ResourceDictionaryConstants.SOURCE_DYNAMIC_INPUT) {
+
+                /** Check Resource Assignment has the source definitions, If not get from Resource Definitions **/
+                val resourceSource = resourceAssignment.dictionarySourceDefinition
+                        ?: resourceDefinition?.sources?.get(dSource)
+                        ?: throw BluePrintProcessorException("couldn't get resource definition $dName source($dSource)")
+
+                val resourceSourceProperties =
+                        checkNotNull(resourceSource.properties) { "failed to get source properties for $dName " }
+
+                val sourceProperties =
+                        JacksonUtils.getInstanceFromMap(resourceSourceProperties, RestResourceSource::class.java)
+
+                val inputKeyMapping =
+                        checkNotNull(sourceProperties.inputKeyMapping) { "failed to get input-key-mappings for $dName under $dSource properties" }
+                val outputKeyMapping = checkNotNull(sourceProperties.outputKeyMapping) {
+                    "failed to get output-key-mappings for $dName under $dSource properties"
+                }
+                val resolvedInputKeyMapping = resolveInputKeyMappingVariables(inputKeyMapping).toMutableMap()
+
+                // Resolving content Variables
+                val valueResolved = resolveFromInputKeyMapping(raRuntimeService.getInputValue(resourceAssignment.name).toString(),
+                        resolvedInputKeyMapping)
+                valueNode = ResourceAssignmentUtils.parseResponseNode(
+                        valueResolved.asJsonType(resourceAssignment.property!!.type), resourceAssignment,
+                        raRuntimeService, outputKeyMapping
+                )
+            }
+
+            if (!valueNode.isNullOrMissing()) {
                 log.debug("For Resource:(${resourceAssignment.name}) found value:({}) in input-data.",
-                    ResourceAssignmentUtils.getValueToLog(resourceAssignment.property?.metadata, value))
-                ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, value)
+                    ResourceAssignmentUtils.getValueToLog(resourceAssignment.property?.metadata, valueNode))
+                ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, valueNode)
                 return true
             }
         } catch (e: BluePrintProcessorException) {
