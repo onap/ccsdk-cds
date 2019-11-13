@@ -1,0 +1,24 @@
+{
+  "name": "dynamic-input-source",
+  "tags": "dynamic-input-source",
+  "updated-by" : "Steve, Siani",
+  "property": {
+    "description" : "Dynamic input source with input-key-mapping and output-key-mapping",
+    "type": "string"
+  },
+  "sources": {
+    "dynamic-input": {
+      "type": "source-dynamic-input",
+      "properties": {
+        "input-key-mapping": {
+          "service-instance-id": "service-instance-id",
+          "vnf-id": "vnf-id"
+        },
+        "key-dependencies": [
+          "service-instance-id",
+          "vnf-id"
+        ]
+      }
+    }
+  }
+}

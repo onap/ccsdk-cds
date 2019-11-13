@@ -307,5 +307,14 @@ class JacksonUtils {
                 else -> getJsonNode(value)
             }
         }
+
+        fun convertNodeToJsonTypeNode(type: String, value: JsonNode): JsonNode {
+            return if (!value.isNullOrMissing() && value.isTextual) {
+                value.textValue().asJsonType(type)
+            }
+            else {
+                value
+            }
+        }
     }
 }
