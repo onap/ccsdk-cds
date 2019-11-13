@@ -1,0 +1,31 @@
+{
+  "name" : "pnf-id-mapping",
+  "tags" : "pnf-id",
+  "updated-by" : "Steve, Siani <alphonse.steve.siani.djissitchi@ibm.com>",
+  "property" : {
+    "description" : "pnf-id",
+    "type" : "string"
+  },
+  "sources" : {
+    "sdnc": {
+      "type": "source-rest",
+      "properties": {
+        "verb": "GET",
+        "type": "JSON",
+        "url-path": "LOOKING_FOR_THIS",
+        "path": "/param/0/value",
+        "input-key-mapping": {
+          "service-instance-id": "service-instance.service-instance-id",
+          "vnf-id": "generic-vnf.vnf-id"
+        },
+        "output-key-mapping": {
+          "vnf-id": "value"
+        },
+        "key-dependencies": [
+          "service-instance-id",
+          "vnf-id"
+        ]
+      }
+    }
+  }
+}

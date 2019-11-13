@@ -1,0 +1,31 @@
+{
+  "name" : "vf-module-id-mapping",
+  "tags" : "vf-module-id",
+  "updated-by" : "Singal, Kapil <ks220y@att.com>",
+  "property" : {
+    "description" : "vf-module-id",
+    "type" : "string"
+  },
+  "sources" : {
+    "sdnc": {
+      "type": "source-rest",
+      "properties": {
+        "verb": "GET",
+        "type": "JSON",
+        "url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vf-modules/vf-module/$vf-module-id",
+        "path": "/vf-module/0/vf-module-id",
+        "input-key-mapping": {
+          "service-instance-id": "service-instance.service-instance-id",
+          "vnf-id": "generic-vnf.vnf-id",
+          "vf-module-id": "vf-module.vf-module-id"
+        },
+        "output-key-mapping": {},
+        "key-dependencies": [
+          "service-instance-id",
+          "vnf-id",
+          "vf-module.vf-module-id"
+        ]
+      }
+    }
+  }
+}
