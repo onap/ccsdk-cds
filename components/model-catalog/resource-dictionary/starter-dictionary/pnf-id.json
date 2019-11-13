@@ -10,6 +10,24 @@
     "input" : {
       "type" : "source-input",
       "properties" : { }
+    },
+    "sdnc": {
+      "type": "source-rest",
+      "properties": {
+        "verb": "GET",
+        "type": "JSON",
+        "url-path": "/aai/v14/network/pnfs/pnf/$pnf-id",
+        "path": "/ipaddress-v4-oam",
+        "input-key-mapping": {
+          "pnf-id": "pnf.pnf-id"
+        },
+        "output-key-mapping": {
+          "pnf-id": "value"
+        },
+        "key-dependencies": [
+          "pnf.pnf-id"
+        ]
+      }
     }
   }
 }
