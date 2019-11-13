@@ -8,7 +8,8 @@
 		},
 		"sources": {
 			"input": {
-				"type": "source-input"
+				"type": "source-input",
+				"properties": {	}
 			}
 		}
 }
