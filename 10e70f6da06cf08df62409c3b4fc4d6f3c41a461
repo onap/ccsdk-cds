@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a7a579ed_d011ab74",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/processor/InputResourceResolutionProcessor.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-11-14T04:10:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c9dfe2a_0dacef2c",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 94
+      },
+      "revId": "10e70f6da06cf08df62409c3b4fc4d6f3c41a461",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e7eade7c_b9a3e79d",
         "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/processor/InputResourceResolutionProcessor.kt",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2019-11-13T20:45:01Z",
       "side": 1,
       "message": "Please remove unwanted imports",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 70
+      },
+      "revId": "10e70f6da06cf08df62409c3b4fc4d6f3c41a461",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3151a5fa_8d71d950",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/processor/InputResourceResolutionProcessor.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-11-14T04:10:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7eade7c_b9a3e79d",
       "range": {
         "startLine": 25,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "e05a9acb_cf16ec97",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/processor/ResourceAssignmentProcessor.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-11-14T04:10:16Z",
+      "side": 1,
+      "message": "I didn\u0027t touch this part. This was implement like this.",
+      "parentUuid": "d258d95c_ebbfd84a",
+      "range": {
+        "startLine": 91,
+        "startChar": 12,
+        "endLine": 91,
+        "endChar": 52
+      },
+      "revId": "10e70f6da06cf08df62409c3b4fc4d6f3c41a461",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3f1733a7_ada6037c",
         "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/service/BluePrintRuntimeService.kt",
         "patchSetId": 2
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "688c083c_a13787f2",
+        "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/service/BluePrintRuntimeService.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-11-14T04:10:16Z",
+      "side": 1,
+      "message": "It is not duplicated, I changed the message.",
+      "parentUuid": "3f1733a7_ada6037c",
+      "range": {
+        "startLine": 579,
+        "startChar": 16,
+        "endLine": 581,
+        "endChar": 54
+      },
+      "revId": "10e70f6da06cf08df62409c3b4fc4d6f3c41a461",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a8131d7_77717189",
         "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/utils/JacksonUtils.kt",
         "patchSetId": 2
@@ -105,6 +201,30 @@
       "writtenOn": "2019-11-13T20:45:01Z",
       "side": 1,
       "message": "Optional:\nYou can do something like this also \n\n      fun convertNodeToJsonTypeNode(type: String, value: JsonNode): JsonNode \u003d\n            if (!value.isNullOrMissing() \u0026\u0026 value.isTextual) {\n                value.textValue().asJsonType(type)\n            }\n            else {\n                value\n            }",
+      "range": {
+        "startLine": 311,
+        "startChar": 1,
+        "endLine": 317,
+        "endChar": 13
+      },
+      "revId": "10e70f6da06cf08df62409c3b4fc4d6f3c41a461",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2b3cc66b_39389c00",
+        "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/utils/JacksonUtils.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-11-14T04:10:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5a8131d7_77717189",
       "range": {
         "startLine": 311,
         "startChar": 1,
