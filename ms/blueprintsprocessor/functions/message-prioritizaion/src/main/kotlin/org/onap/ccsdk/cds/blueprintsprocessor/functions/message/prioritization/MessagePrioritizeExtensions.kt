@@ -16,21 +16,27 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization
 
-import org.apache.kafka.streams.processor.ProcessorSupplier
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.MessagePrioritization
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.service.MessagePrioritizationStateService
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 
 
-fun <K, V> bluePrintProcessorSupplier(name: String, prioritizationConfiguration: PrioritizationConfiguration)
-        : ProcessorSupplier<K, V> {
-    return ProcessorSupplier<K, V> {
-        // Dynamically resolve the Prioritization Processor
-        val processorInstance = BluePrintDependencyService.instance<AbstractMessagePrioritizeProcessor<K, V>>(name)
-        processorInstance.prioritizationConfiguration = prioritizationConfiguration
-        processorInstance
-    }
-}
+/**
+ * Register the MessagePrioritizationStateService and exposed dependency
+ */
+fun BluePrintDependencyService.messagePrioritizationStateService(): MessagePrioritizationStateService =
+        instance(MessagePrioritizationStateService::class)
 
+/**
+ * Expose messagePrioritizationStateService to AbstractComponentFunction
+ */
+fun AbstractComponentFunction.messagePrioritizationStateService() =
+        BluePrintDependencyService.messagePrioritizationStateService()
+
+/**
+ * MessagePrioritization correlation extensions
+ */
 fun MessagePrioritization.toFormatedCorrelation(): String {
     val ascendingKey = this.correlationId!!.split(",")
             .map { it.trim() }.sorted().joinToString(",")

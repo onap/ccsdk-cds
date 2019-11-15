@@ -41,12 +41,22 @@ open class MessagePrioritizeProcessor : AbstractMessagePrioritizeProcessor<ByteA
 
     override suspend fun processNB(key: ByteArray, value: ByteArray) {
         log.info("***** received in prioritize processor key(${String(key)})")
-        val data = JacksonUtils.readValue(String(value), MessagePrioritization::class.java)
+        val messagePrioritize = JacksonUtils.readValue(String(value), MessagePrioritization::class.java)
                 ?: throw BluePrintProcessorException("failed to convert")
-        // Save the Message
-        messagePrioritizationStateService.saveMessage(data)
-        handleCorrelationAndNextStep(data)
-
+        try {
+            // Save the Message
+            messagePrioritizationStateService.saveMessage(messagePrioritize)
+            handleCorrelationAndNextStep(messagePrioritize)
+        } catch (e: Exception) {
+            messagePrioritize.error = "failed in Prioritize message(${messagePrioritize.id}) : ${e.message}"
+            log.error(messagePrioritize.error)
+            /** Update the data store */
+            messagePrioritizationStateService.setMessageStateANdError(messagePrioritize.id, MessageState.ERROR.name,
+                    messagePrioritize.error!!)
+            /** Publish to Output topic */
+            this.processorContext.forward(messagePrioritize.id, messagePrioritize,
+                    To.child(MessagePrioritizationConstants.SINK_OUTPUT))
+        }
     }
 
     override fun init(context: ProcessorContext) {
