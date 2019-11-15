@@ -58,8 +58,8 @@ limitations under the License.
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>org.onap.ccsdk.cds.components</groupId>
-                                    <artifactId>proto-definition</artifactId>
+                                    <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
+                                    <artifactId>blueprint-proto</artifactId>
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
