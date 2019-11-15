@@ -49,6 +49,16 @@ committers:
       company: 'IBM'
       id: 'brindasanthm'
       timezone: 'America/New_York'
+    - name: 'Kevin Smokowski'
+      email: 'ks6305@att.com'
+      company: 'ATT'
+      id: 'nullop'
+      timezone: 'America/New_York'
+    - name: 'Kapil Singal'
+      email: 'kaggarwal@in.ibm.com'
+      company: 'IBM'
+      id: 'kasingal'
+      timezone: 'America/New_York'
 repositories:
     - ccsdk/cds
 tsc:
@@ -63,3 +73,9 @@ tsc:
         - type: 'Addition'
           name: 'Brinda Santh Muthuramalingam'
           link: 'https://lists.onap.org/g/onap-tsc/message/5208'
+        - type: 'Addition'
+          name: 'Kevin Smokowski'
+          link: 'https://lists.onap.org/g/onap-tsc/message/5635'
+        - type: 'Addition'
+          name: 'Kapil Singal'
+          link: 'https://lists.onap.org/g/onap-tsc/message/5635'
