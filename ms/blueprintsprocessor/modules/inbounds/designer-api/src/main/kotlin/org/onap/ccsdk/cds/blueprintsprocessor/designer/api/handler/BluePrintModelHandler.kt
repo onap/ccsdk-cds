@@ -35,6 +35,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.core.io.Resource
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -245,7 +246,22 @@ open class BluePrintModelHandler(private val blueprintsProcessorCatalogService: 
                 findByUpdatedByOrTagsOrOrArtifactNameOrOrArtifactVersionOrArtifactType(
                         keyWord,keyWord,keyWord,keyWord,keyWord)
     }
-    
+
+
+
+    /**
+     * This is a searchBluePrintModelsByKeyWordPagebale method to retrieve specific  BlueprintModel in Database
+     * where keyword equals updatedBy or tags or artifcat name or artifcat version or artifact type and pageable
+     * @author Shaaban Ebrahim
+     * @param keyWord
+     *
+     * @return List<BlueprintModelSearch> list of the controller blueprint
+    </BlueprintModelSearch> */
+    open fun searchBluePrintModelsByKeyWordPaged(keyWord: String, pageRequest: PageRequest): Page<BlueprintModelSearch>
+    {
+        return blueprintModelSearchRepository.
+                findByUpdatedByOrTagsOrOrArtifactNameOrOrArtifactVersionOrArtifactType(keyWord,keyWord,keyWord,keyWord,keyWord,pageRequest)
+    }
     /**
      * This is a deleteBlueprintModel method
      *

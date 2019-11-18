@@ -7,6 +7,9 @@ export interface BlueprintService {
    getBlueprintsByKeyword(keyword: string): Promise<any>;
    getByTags(tags: string): Promise<JSON>;
    getPagedBueprints(limit: number, offset: number , sort: string): Promise<any>;
+   getMetaDataPagedBlueprints(limit: number, offset: number, sort: string, keyword: string): Promise<any>;
+
+
 }
 
 export class BlueprintServiceProvider implements Provider<BlueprintService> {

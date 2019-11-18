@@ -35,7 +35,9 @@ import org.springframework.http.ResponseEntity
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import java.time.Duration
 
 /**
  * BlueprintModelController Purpose: Handle controllerBlueprint API request
@@ -76,9 +78,22 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     fun allBlueprintModelMetaData(@NotNull @PathVariable(value = "keyword") keyWord: String): List<BlueprintModelSearch> {
-        return this.bluePrintModelHandler.searchBluePrintModelsByKeyWord(keyWord)
+      return this.bluePrintModelHandler.searchBluePrintModelsByKeyWord(keyWord)
     }
 
+
+    @GetMapping("/paged/meta-data/{keyword}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseBody
+    @PreAuthorize("hasRole('USER')")
+    fun allBlueprintModelMetaDataPaged(@NotNull @PathVariable(value = "keyword") keyWord: String,
+                                       @RequestParam(defaultValue = "20") limit: Int,
+                                       @RequestParam(defaultValue = "0") offset: Int,
+                                       @RequestParam(defaultValue = "DATE") sort: BlueprintSortByOption
+    ): Page<BlueprintModelSearch> {
+        val pageRequest = PageRequest.of(offset, limit, Sort.Direction.ASC, sort.columnName)
+     return this.bluePrintModelHandler.searchBluePrintModelsByKeyWordPaged(keyWord,pageRequest)
+
+    }
 
     @DeleteMapping("/{id}")
     @Throws(BluePrintException::class)
