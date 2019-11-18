@@ -77,9 +77,21 @@ interface PrioritizationMessageRepository : JpaRepository<MessagePrioritization,
 
     @Modifying
     @Transactional
+    @Query("UPDATE MessagePrioritization SET priority = :priority, updatedDate = :currentDate " +
+            "WHERE id = :id")
+    fun setPriorityForMessageId(id: String, priority: String, currentDate: Date): Int
+
+    @Modifying
+    @Transactional
     @Query("UPDATE MessagePrioritization SET state = :state, updatedDate = :currentDate " +
             "WHERE id IN :ids")
     fun setStateForMessageIds(ids: List<String>, state: String, currentDate: Date): Int
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE MessagePrioritization SET priority = :priority, updatedDate = :currentDate " +
+            "WHERE id IN :ids")
+    fun setPriorityForMessageIds(ids: List<String>, priority: String, currentDate: Date): Int
 
     @Modifying
     @Transactional

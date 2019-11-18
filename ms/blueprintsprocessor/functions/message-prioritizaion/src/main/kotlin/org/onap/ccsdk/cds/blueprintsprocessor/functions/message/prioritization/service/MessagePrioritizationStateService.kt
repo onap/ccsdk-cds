@@ -54,6 +54,8 @@ interface MessagePrioritizationStateService {
 
     suspend fun setMessageState(id: String, state: String)
 
+    suspend fun setMessagesPriority(ids: List<String>, priority: String)
+
     suspend fun setMessagesState(ids: List<String>, state: String)
 
     suspend fun setMessageStateANdError(id: String, state: String, error: String)
@@ -138,6 +140,11 @@ open class MessagePrioritizationStateServiceImpl(
     @Transactional
     override suspend fun setMessageState(id: String, state: String) {
         prioritizationMessageRepository.setStateForMessageId(id, state, Date())
+    }
+
+    @Transactional
+    override suspend fun setMessagesPriority(ids: List<String>, priority: String) {
+        prioritizationMessageRepository.setPriorityForMessageIds(ids, priority, Date())
     }
 
     @Transactional

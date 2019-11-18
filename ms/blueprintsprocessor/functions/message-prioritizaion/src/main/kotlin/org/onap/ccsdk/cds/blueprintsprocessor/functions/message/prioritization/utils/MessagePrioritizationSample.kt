@@ -93,6 +93,7 @@ object MessagePrioritizationSample {
             group = groupName
             type = messageType
             state = messageState
+            priority = 5
             correlationId = messageCorrelationId
             message = "I am the Message"
             createdDate = Date()

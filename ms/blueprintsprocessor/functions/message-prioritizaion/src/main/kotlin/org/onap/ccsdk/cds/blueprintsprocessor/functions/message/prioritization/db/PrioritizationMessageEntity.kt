@@ -44,6 +44,9 @@ open class MessagePrioritization {
     @Column(name = "message_state", length = 20, nullable = false)
     lateinit var state: String
 
+    @Column(name = "priority", nullable = false)
+    var priority: Int = 5
+
     @Lob
     @Column(name = "message", nullable = false)
     var message: String? = null
