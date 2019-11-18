@@ -65,9 +65,9 @@ class KafkaBasicAuthMessageProducerService(
             headers.forEach { (key, value) -> recordHeaders.add(RecordHeader(key, value.toByteArray())) }
         }
         val callback = Callback { metadata, exception ->
-            log.info("message published offset(${metadata.offset()}, headers :$headers )")
+            log.trace("message published to(${metadata.topic()}), offset(${metadata.offset()}), headers :$headers")
         }
-        messageTemplate().send(record, callback).get()
+        messageTemplate().send(record, callback)
         return true
     }
 
@@ -77,6 +77,8 @@ class KafkaBasicAuthMessageProducerService(
         configProps[BOOTSTRAP_SERVERS_CONFIG] = messageProducerProperties.bootstrapServers
         configProps[KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
         configProps[VALUE_SERIALIZER_CLASS_CONFIG] = ByteArraySerializer::class.java
+        configProps[ACKS_CONFIG] = messageProducerProperties.acks
+        configProps[ENABLE_IDEMPOTENCE_CONFIG] = messageProducerProperties.enableIdempotence
         if (messageProducerProperties.clientId != null) {
             configProps[CLIENT_ID_CONFIG] = messageProducerProperties.clientId!!
         }

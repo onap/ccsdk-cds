@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2019 IBM.
+ *  Modifications Copyright © 2018-2019 AT&T Intellectual Property.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -101,6 +102,9 @@ open class BluePrintMessageLibPropertyService(private var bluePrintPropertiesSer
             MessageLibConstants.TYPE_KAFKA_BASIC_AUTH -> {
                 kafkaBasicAuthMessageConsumerProperties(prefix)
             }
+            MessageLibConstants.TYPE_KAFKA_STREAMS_BASIC_AUTH -> {
+                kafkaStreamsBasicAuthMessageConsumerProperties(prefix)
+            }
             else -> {
                 throw BluePrintProcessorException("Message adaptor($type) is not supported")
             }
@@ -112,6 +116,9 @@ open class BluePrintMessageLibPropertyService(private var bluePrintPropertiesSer
         return when (type) {
             MessageLibConstants.TYPE_KAFKA_BASIC_AUTH -> {
                 JacksonUtils.readValue(jsonNode, KafkaBasicAuthMessageConsumerProperties::class.java)!!
+            }
+            MessageLibConstants.TYPE_KAFKA_STREAMS_BASIC_AUTH -> {
+                JacksonUtils.readValue(jsonNode, KafkaStreamsBasicAuthConsumerProperties::class.java)!!
             }
             else -> {
                 throw BluePrintProcessorException("Message adaptor($type) is not supported")
@@ -126,6 +133,9 @@ open class BluePrintMessageLibPropertyService(private var bluePrintPropertiesSer
             is KafkaBasicAuthMessageConsumerProperties -> {
                 return KafkaBasicAuthMessageConsumerService(messageConsumerProperties)
             }
+            is KafkaStreamsBasicAuthConsumerProperties -> {
+                return KafkaStreamsBasicAuthConsumerService(messageConsumerProperties)
+            }
             else -> {
                 throw BluePrintProcessorException("couldn't get Message client service for")
             }
@@ -135,6 +145,11 @@ open class BluePrintMessageLibPropertyService(private var bluePrintPropertiesSer
     private fun kafkaBasicAuthMessageConsumerProperties(prefix: String): KafkaBasicAuthMessageConsumerProperties {
         return bluePrintPropertiesService.propertyBeanType(
                 prefix, KafkaBasicAuthMessageConsumerProperties::class.java)
+    }
+
+    private fun kafkaStreamsBasicAuthMessageConsumerProperties(prefix: String): KafkaStreamsBasicAuthConsumerProperties {
+        return bluePrintProperties.propertyBeanType(
+                prefix, KafkaStreamsBasicAuthConsumerProperties::class.java)
     }
 
 }

@@ -17,6 +17,8 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.message
 
+import org.apache.kafka.streams.StreamsConfig
+
 /** Producer Properties **/
 open class MessageProducerProperties
 
@@ -25,11 +27,26 @@ open class KafkaBasicAuthMessageProducerProperties : MessageProducerProperties()
     lateinit var bootstrapServers: String
     var topic: String? = null
     var clientId: String? = null
+    // strongest producing guarantee
+    var acks: String = "all"
+    var retries: Int = 0
+    // ensure we don't push duplicates
+    var enableIdempotence: Boolean = true
 }
 
 /** Consumer Properties **/
 
 open class MessageConsumerProperties
+
+open class KafkaStreamsConsumerProperties : MessageConsumerProperties() {
+    lateinit var bootstrapServers: String
+    lateinit var applicationId: String
+    lateinit var topic: String
+    var autoOffsetReset: String = "latest"
+    var processingGuarantee: String = StreamsConfig.EXACTLY_ONCE
+}
+
+open class KafkaStreamsBasicAuthConsumerProperties : KafkaStreamsConsumerProperties()
 
 open class KafkaMessageConsumerProperties : MessageConsumerProperties() {
     lateinit var bootstrapServers: String
