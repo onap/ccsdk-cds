@@ -1,8 +1,8 @@
 {
   "tosca_definitions_version" : "controller_blueprint_1_0_0",
   "metadata" : {
-    "template_author" : "Rodrigo Ottero",
-    "author-email" : "rodrigo.ottero@est.tech",
+    "template_author" : "Rahul Tyagi",
+    "author-email" : "rahul.tyagi@est.tech",
     "user-groups" : "ADMIN, OPERATION",
     "template_name" : "configuration_over_restconf",
     "template_version" : "1.0.0",

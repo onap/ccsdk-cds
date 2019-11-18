@@ -1,0 +1,18 @@
+{
+  "node": [
+    {
+      "node-id": "${pnf-id}",
+      "netconf-node-topology:protocol": {
+        "name": "TLS"
+      },
+      "netconf-node-topology:host": "${pnf-ipv4-address}",
+      "netconf-node-topology:key-based": {
+        "username": "netconf",
+        "key-id": "ODL_private_key_0"
+      },
+      "netconf-node-topology:port": 6513,
+      "netconf-node-topology:tcp-only": false,
+      "netconf-node-topology:max-connection-attempts": 5
+    }
+  ]
+}
