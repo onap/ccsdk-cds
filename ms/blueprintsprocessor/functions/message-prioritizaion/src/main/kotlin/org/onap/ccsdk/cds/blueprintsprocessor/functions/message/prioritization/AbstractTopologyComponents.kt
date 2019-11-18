@@ -34,7 +34,7 @@ abstract class AbstractMessagePrioritizeProcessor<K, V> : AbstractBluePrintMessa
         this.processorContext = context
         /** Get the State service to update in store */
         this.messagePrioritizationStateService = BluePrintDependencyService
-                .instance(MessagePrioritizationStateService::class)
+                .messagePrioritizationStateService()
 
     }
 

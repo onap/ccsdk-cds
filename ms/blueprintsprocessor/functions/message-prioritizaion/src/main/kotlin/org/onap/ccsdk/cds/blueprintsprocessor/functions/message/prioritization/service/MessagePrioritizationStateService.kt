@@ -33,15 +33,20 @@ interface MessagePrioritizationStateService {
 
     suspend fun getMessage(id: String): MessagePrioritization
 
+    suspend fun getMessages(ids: List<String>): List<MessagePrioritization>?
+
     suspend fun getExpiryEligibleMessages(count: Int): List<MessagePrioritization>?
 
-    suspend fun getMessageForStatesNotExpiredIn(group: String, states: List<String>, count: Int): List<MessagePrioritization>?
+    suspend fun getMessageForStatesNotExpiredIn(group: String, states: List<String>, count: Int)
+            : List<MessagePrioritization>?
 
-    suspend fun getMessageForStatesExpired(group: String, states: List<String>, count: Int): List<MessagePrioritization>?
+    suspend fun getMessageForStatesExpired(group: String, states: List<String>, count: Int)
+            : List<MessagePrioritization>?
 
     suspend fun getExpiredMessages(group: String, expiryDate: Date, count: Int): List<MessagePrioritization>?
 
-    suspend fun getCorrelatedMessages(group: String, states: List<String>, types: List<String>?, correlationIds: String): List<MessagePrioritization>?
+    suspend fun getCorrelatedMessages(group: String, states: List<String>, types: List<String>?,
+                                      correlationIds: String): List<MessagePrioritization>?
 
     suspend fun updateMessagesState(ids: List<String>, state: String)
 
@@ -51,7 +56,9 @@ interface MessagePrioritizationStateService {
 
     suspend fun setMessagesState(ids: List<String>, state: String)
 
-    suspend fun updateMessageStateAndGroupedIds(id: String, state: String, groupedIds: List<String>): MessagePrioritization
+    suspend fun setMessageStateANdError(id: String, state: String, error: String)
+
+    suspend fun setMessageStateAndAggregatedIds(id: String, state: String, aggregatedIds: List<String>)
 
     suspend fun deleteMessage(id: String)
 
@@ -64,7 +71,8 @@ interface MessagePrioritizationStateService {
 
 @Service
 open class MessagePrioritizationStateServiceImpl(
-        private val prioritizationMessageRepository: PrioritizationMessageRepository) : MessagePrioritizationStateService {
+        private val prioritizationMessageRepository: PrioritizationMessageRepository)
+    : MessagePrioritizationStateService {
 
     private val log = logger(MessagePrioritizationStateServiceImpl::class)
 
@@ -80,6 +88,10 @@ open class MessagePrioritizationStateServiceImpl(
     override suspend fun getMessage(id: String): MessagePrioritization {
         return prioritizationMessageRepository.findById(id).orElseGet(null)
                 ?: throw BluePrintProcessorException("couldn't find message for id($id)")
+    }
+
+    override suspend fun getMessages(ids: List<String>): List<MessagePrioritization>? {
+        return prioritizationMessageRepository.findAllById(ids)
     }
 
     override suspend fun getExpiryEligibleMessages(count: Int): List<MessagePrioritization>? {
@@ -115,6 +127,7 @@ open class MessagePrioritizationStateServiceImpl(
         }
     }
 
+    @Transactional
     override suspend fun updateMessagesState(ids: List<String>, state: String) {
         ids.forEach {
             val updated = updateMessageState(it, state)
@@ -124,12 +137,17 @@ open class MessagePrioritizationStateServiceImpl(
 
     @Transactional
     override suspend fun setMessageState(id: String, state: String) {
-        prioritizationMessageRepository.setStatusForMessageId(id, state)
+        prioritizationMessageRepository.setStateForMessageId(id, state, Date())
     }
 
     @Transactional
     override suspend fun setMessagesState(ids: List<String>, state: String) {
-        prioritizationMessageRepository.setStatusForMessageIds(ids, state)
+        prioritizationMessageRepository.setStateForMessageIds(ids, state, Date())
+    }
+
+    @Transactional
+    override suspend fun setMessageStateANdError(id: String, state: String, error: String) {
+        prioritizationMessageRepository.setStateAndErrorForMessageId(id, state, error, Date())
     }
 
     @Transactional
@@ -141,16 +159,10 @@ open class MessagePrioritizationStateServiceImpl(
         return saveMessage(updateMessage)
     }
 
-    override suspend fun updateMessageStateAndGroupedIds(id: String, state: String, groupedMessageIds: List<String>)
-            : MessagePrioritization {
-
-        val groupedIds = groupedMessageIds.joinToString(",")
-        val updateMessage = getMessage(id).apply {
-            this.updatedDate = Date()
-            this.state = state
-            this.aggregatedMessageIds = groupedIds
-        }
-        return saveMessage(updateMessage)
+    @Transactional
+    override suspend fun setMessageStateAndAggregatedIds(id: String, state: String, aggregatedIds: List<String>) {
+        val groupedIds = aggregatedIds.joinToString(",")
+        prioritizationMessageRepository.setStateAndAggregatedMessageIds(id, state, groupedIds, Date())
     }
 
     override suspend fun deleteMessage(id: String) {

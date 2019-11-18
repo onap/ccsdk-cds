@@ -49,6 +49,10 @@ open class MessagePrioritization {
     var message: String? = null
 
     @Lob
+    @Column(name = "error", nullable = true)
+    var error: String? = null
+
+    @Lob
     @Column(name = "aggregated_message_ids", nullable = true)
     var aggregatedMessageIds: String? = null
 

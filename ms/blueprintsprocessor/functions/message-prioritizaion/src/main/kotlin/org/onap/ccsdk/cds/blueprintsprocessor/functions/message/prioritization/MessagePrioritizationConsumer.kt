@@ -19,6 +19,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.Topology
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.topology.MessagePrioritizationSerde
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.utils.MessageProcessorUtils.bluePrintProcessorSupplier
 import org.onap.ccsdk.cds.blueprintsprocessor.message.KafkaStreamsBasicAuthConsumerProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.message.MessageConsumerProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BluePrintMessageLibPropertyService
@@ -74,9 +75,12 @@ open class MessagePrioritizationConsumer(
                         Serdes.String().serializer(), MessagePrioritizationSerde().serializer(),
                         MessagePrioritizationConstants.PROCESSOR_PRIORITIZE)
 
+                /** To receive completed and error messages */
                 topology.addSink(MessagePrioritizationConstants.SINK_OUTPUT,
                         prioritizationConfiguration.outputTopic,
                         Serdes.String().serializer(), MessagePrioritizationSerde().serializer(),
+                        MessagePrioritizationConstants.PROCESSOR_PRIORITIZE,
+                        MessagePrioritizationConstants.PROCESSOR_AGGREGATE,
                         MessagePrioritizationConstants.PROCESSOR_OUTPUT)
 
                 // Output will be sent to the group-output topic from Processor API

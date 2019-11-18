@@ -71,19 +71,27 @@ interface PrioritizationMessageRepository : JpaRepository<MessagePrioritization,
 
     @Modifying
     @Transactional
-    @Query("UPDATE MessagePrioritization pm SET pm.state = :state WHERE pm.id = :id")
-    fun setStatusForMessageId(id: String, state: String): Int
+    @Query("UPDATE MessagePrioritization SET state = :state, updatedDate = :currentDate " +
+            "WHERE id = :id")
+    fun setStateForMessageId(id: String, state: String, currentDate: Date): Int
 
     @Modifying
     @Transactional
-    @Query("UPDATE MessagePrioritization pm SET pm.state = :state WHERE pm.id IN :ids")
-    fun setStatusForMessageIds(ids: List<String>, state: String): Int
+    @Query("UPDATE MessagePrioritization SET state = :state, updatedDate = :currentDate " +
+            "WHERE id IN :ids")
+    fun setStateForMessageIds(ids: List<String>, state: String, currentDate: Date): Int
 
     @Modifying
     @Transactional
-    @Query("UPDATE MessagePrioritization pm SET pm.aggregatedMessageIds = :aggregatedMessageIds " +
-            "WHERE pm.id = :id")
-    fun setAggregatedMessageIds(id: String, aggregatedMessageIds: String): Int
+    @Query("UPDATE MessagePrioritization SET state = :state, error = :error, updatedDate = :currentDate " +
+            "WHERE id = :id")
+    fun setStateAndErrorForMessageId(id: String, state: String, error: String, currentDate: Date): Int
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE MessagePrioritization SET state = :state, " +
+            "aggregatedMessageIds = :aggregatedMessageIds, updatedDate = :currentDate WHERE id = :id")
+    fun setStateAndAggregatedMessageIds(id: String, state: String, aggregatedMessageIds: String, currentDate: Date): Int
 
     @Modifying
     @Transactional

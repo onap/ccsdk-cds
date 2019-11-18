@@ -32,14 +32,36 @@ open class MessageAggregateProcessor : AbstractMessagePrioritizeProcessor<String
         log.info("@@@@@ received in aggregation processor key($key), value($value)")
         val ids = value.split(",").map { it.trim() }
         if (!ids.isNullOrEmpty()) {
-            if (ids.size == 1) {
-                processorContext.forward(key, ids.first(), To.child(MessagePrioritizationConstants.PROCESSOR_OUTPUT))
-            } else {
-                /** Implement Aggregation logic in overridden class, If necessary,
-                 Populate New Message and Update status with Prioritized, Forward the message to next processor */
-                handleAggregation(ids)
-                /** Update all messages to Aggregated state */
-                messagePrioritizationStateService.setMessagesState(ids, MessageState.AGGREGATED.name)
+            try {
+                if (ids.size == 1) {
+                    processorContext.forward(key, ids.first(), To.child(MessagePrioritizationConstants.PROCESSOR_OUTPUT))
+                } else {
+                    /** Implement Aggregation logic in overridden class, If necessary,
+                    Populate New Message and Update status with Prioritized, Forward the message to next processor */
+                    handleAggregation(ids)
+                    /** Update all messages to Aggregated state */
+                    messagePrioritizationStateService.setMessagesState(ids, MessageState.AGGREGATED.name)
+                }
+            } catch (e: Exception) {
+                val error = "failed in Aggregate message($ids) : ${e.message}"
+                log.error(error, e)
+                val storeMessages = messagePrioritizationStateService.getMessages(ids)
+                if (!storeMessages.isNullOrEmpty()) {
+                    storeMessages.forEach { messagePrioritization ->
+                        try {
+                            /** Update the data store */
+                            messagePrioritizationStateService.setMessageStateANdError(messagePrioritization.id,
+                                    MessageState.ERROR.name, error)
+                            /** Publish to Error topic */
+                            this.processorContext.forward(messagePrioritization.id, messagePrioritization,
+                                    To.child(MessagePrioritizationConstants.SINK_OUTPUT))
+                        } catch (sendException: Exception) {
+                            log.error("failed to update/publish error message(${messagePrioritization.id}) : " +
+                                    "${sendException.message}", e)
+                        }
+
+                    }
+                }
             }
         }
     }

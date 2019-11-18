@@ -28,8 +28,8 @@ enum class MessageState(val id: String) {
     EXPIRED("expired"),
     PRIORITIZED("prioritized"),
     AGGREGATED("aggregated"),
-    IGNORED("ignored"),
     COMPLETED("completed"),
+    ERROR("error")
 }
 
 open class PrioritizationConfiguration : Serializable {
@@ -59,7 +59,6 @@ open class UpdateStateRequest : Serializable {
     lateinit var id: String
     var group: String? = null
     var state: String? = null
-    var notifyMessage: String? = null
 }
 
 data class CorrelationCheckResponse(var message: String? = null,
