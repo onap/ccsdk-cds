@@ -23,8 +23,8 @@ import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ActionIdentifiers
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.CommonHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
@@ -50,7 +50,7 @@ import kotlin.test.assertNotNull
 @ContextConfiguration(classes = [CliExecutorConfiguration::class,
     ExecutionServiceConfiguration::class,
     BluePrintSshLibConfiguration::class, BluePrintScriptsServiceImpl::class,
-    BlueprintPropertyConfiguration::class, BluePrintProperties::class, BluePrintDependencyService::class])
+    BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, BluePrintDependencyService::class])
 @DirtiesContext
 @TestPropertySource(properties = [], locations = ["classpath:application-test.properties"])
 class ComponentCliExecutorTest {

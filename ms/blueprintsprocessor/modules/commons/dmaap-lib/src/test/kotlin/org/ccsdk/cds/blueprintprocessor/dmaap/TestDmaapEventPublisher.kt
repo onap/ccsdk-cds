@@ -23,8 +23,8 @@ package org.ccsdk.apps.blueprintprocessor.dmaap
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.dmaap.BluePrintDmaapLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.dmaap.BluePrintDmaapLibPropertyService
 import org.springframework.beans.factory.annotation.Autowired
@@ -50,7 +50,7 @@ import kotlin.test.assertNotNull
 @EnableAutoConfiguration(exclude = [DataSourceAutoConfiguration::class])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ContextConfiguration(classes = [BluePrintDmaapLibConfiguration::class, TestController::class,
-    BlueprintPropertyConfiguration::class, BluePrintProperties::class])
+    BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class])
 @TestPropertySource(properties = ["server.port=9111",
     "blueprintsprocessor.dmaapclient.aai.topic=cds_aai",
     "blueprintsprocessor.dmaapclient.aai.type=HTTPNOAUTH",

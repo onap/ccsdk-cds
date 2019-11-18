@@ -19,9 +19,8 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.BluePrintDBLibPropertySevice
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.PrimaryDatabaseConfiguration
@@ -39,10 +38,10 @@ import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [DatabaseResourceAssignmentProcessor::class, BlueprintPropertyConfiguration::class,
-    BluePrintProperties::class, BluePrintDBLibPropertySevice::class, BluePrintDBLibConfiguration::class,
+@ContextConfiguration(classes = [DatabaseResourceAssignmentProcessor::class, BluePrintPropertyConfiguration::class,
+    BluePrintPropertiesService::class, BluePrintDBLibPropertySevice::class, BluePrintDBLibConfiguration::class,
     BluePrintCoreConfiguration::class, MockDatabaseConfiguration::class, MockBlueprintProcessorCatalogServiceImpl::class,
-    BlueprintPropertiesService::class, PrimaryDatabaseConfiguration::class])
+    BluePrintPropertiesService::class, PrimaryDatabaseConfiguration::class])
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class DatabaseResourceResolutionProcessorTest {
 
