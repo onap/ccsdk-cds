@@ -26,8 +26,8 @@ import org.apache.kafka.streams.processor.ProcessorSupplier
 import org.apache.kafka.streams.state.Stores
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.message.BluePrintMessageLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.message.KafkaStreamsBasicAuthConsumerProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.message.MessageConsumerProperties
@@ -42,7 +42,7 @@ import kotlin.test.assertNotNull
 @RunWith(SpringRunner::class)
 @DirtiesContext
 @ContextConfiguration(classes = [BluePrintMessageLibConfiguration::class,
-    BlueprintPropertyConfiguration::class, BluePrintProperties::class])
+    BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class])
 @TestPropertySource(properties =
 [
     "blueprintsprocessor.messageproducer.sample.type=kafka-basic-auth",

@@ -148,7 +148,7 @@ open class BluePrintMessageLibPropertyService(private var bluePrintPropertiesSer
     }
 
     private fun kafkaStreamsBasicAuthMessageConsumerProperties(prefix: String): KafkaStreamsBasicAuthConsumerProperties {
-        return bluePrintProperties.propertyBeanType(
+        return bluePrintPropertiesService.propertyBeanType(
                 prefix, KafkaStreamsBasicAuthConsumerProperties::class.java)
     }
 
