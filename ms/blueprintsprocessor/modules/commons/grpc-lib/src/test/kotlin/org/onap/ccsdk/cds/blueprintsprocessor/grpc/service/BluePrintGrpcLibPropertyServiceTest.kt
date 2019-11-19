@@ -19,6 +19,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.grpc.service
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
@@ -190,5 +191,9 @@ class BluePrintGrpcLibPropertyServiceTest {
         val jsonProperties = bluePrintGrpcLibPropertyService
                 .grpcServerProperties(configDsl.jsonAsJsonType()) as TLSAuthGrpcServerProperties
         assertNotNull(jsonProperties, "failed to create property bean from json")
+
+        val grpcServerService = bluePrintGrpcLibPropertyService.blueprintGrpcServerService("tls-sample")
+        assertNotNull(grpcServerService, "failed to get grpc server service")
+        Assert.assertEquals(TLSAuthGrpcServerService::class.java, grpcServerService.javaClass)
     }
 }

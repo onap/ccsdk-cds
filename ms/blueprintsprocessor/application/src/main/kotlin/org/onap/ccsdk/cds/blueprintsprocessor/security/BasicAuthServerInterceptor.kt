@@ -49,7 +49,7 @@ class BasicAuthServerInterceptor(private val authenticationManager: Authenticati
             log.info("Basic Authentication Authorization header found for user: {}", username)
 
             val authRequest = UsernamePasswordAuthenticationToken(username, tokens[1])
-            val authResult = authenticationManager!!.authenticate(authRequest).block()
+            val authResult = authenticationManager.authenticate(authRequest).block()
 
             log.info("Authentication success: {}", authResult)
 

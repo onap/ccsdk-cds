@@ -45,6 +45,8 @@ fun BluePrintDependencyService.grpcClientService(jsonNode: JsonNode): BluePrintG
 class GRPCLibConstants {
     companion object {
         const val SERVICE_BLUEPRINT_GRPC_LIB_PROPERTY = "blueprint-grpc-lib-property-service"
+        const val PROPERTY_GRPC_CLIENT_PREFIX = "blueprintsprocessor.grpcclient."
+        const val PROPERTY_GRPC_SERVER_PREFIX = "blueprintsprocessor.grpcserver."
         const val TYPE_TOKEN_AUTH = "token-auth"
         const val TYPE_BASIC_AUTH = "basic-auth"
         const val TYPE_TLS_AUTH = "tls-auth"

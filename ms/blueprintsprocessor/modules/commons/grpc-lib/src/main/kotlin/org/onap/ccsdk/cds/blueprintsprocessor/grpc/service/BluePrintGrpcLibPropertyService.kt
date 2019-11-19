@@ -28,6 +28,18 @@ import org.springframework.stereotype.Service
 @Service(GRPCLibConstants.SERVICE_BLUEPRINT_GRPC_LIB_PROPERTY)
 open class BluePrintGrpcLibPropertyService(private var bluePrintPropertiesService: BluePrintPropertiesService) {
 
+    fun blueprintGrpcServerService(jsonNode: JsonNode): BluePrintGrpcServerService {
+        val grpcServerProperties = grpcServerProperties(jsonNode)
+        return blueprintGrpcServerService(grpcServerProperties)
+    }
+
+    fun blueprintGrpcServerService(selector: String): BluePrintGrpcServerService {
+        val prefix = "${GRPCLibConstants.PROPERTY_GRPC_SERVER_PREFIX}$selector"
+        val grpcServerProperties = grpcServerProperties(prefix)
+        return blueprintGrpcServerService(grpcServerProperties)
+    }
+
+
     /** GRPC Server Lib Property Service */
     fun grpcServerProperties(jsonNode: JsonNode): GrpcServerProperties {
         return when (val type = jsonNode.get("type").textValue()) {
@@ -67,6 +79,19 @@ open class BluePrintGrpcLibPropertyService(private var bluePrintPropertiesServic
         return bluePrintPropertiesService.propertyBeanType(prefix, TLSAuthGrpcServerProperties::class.java)
     }
 
+    private fun blueprintGrpcServerService(grpcServerProperties: GrpcServerProperties)
+            : BluePrintGrpcServerService {
+        when (grpcServerProperties) {
+            is TLSAuthGrpcServerProperties -> {
+                return TLSAuthGrpcServerService(grpcServerProperties)
+            }
+            else -> {
+                throw BluePrintProcessorException("couldn't get grpc client service for properties $grpcServerProperties")
+            }
+        }
+    }
+
+
     /** GRPC Client Lib Property Service */
 
     fun blueprintGrpcClientService(jsonNode: JsonNode): BluePrintGrpcClientService {
@@ -75,7 +100,7 @@ open class BluePrintGrpcLibPropertyService(private var bluePrintPropertiesServic
     }
 
     fun blueprintGrpcClientService(selector: String): BluePrintGrpcClientService {
-        val prefix = "blueprintsprocessor.grpcclient.$selector"
+        val prefix = "${GRPCLibConstants.PROPERTY_GRPC_CLIENT_PREFIX}$selector"
         val restClientProperties = grpcClientProperties(prefix)
         return blueprintGrpcClientService(restClientProperties)
     }
