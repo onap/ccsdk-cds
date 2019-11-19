@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts
+package org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor.scripts
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -25,11 +25,13 @@ import org.springframework.context.annotation.Configuration
 import java.io.File
 import java.util.Properties
 
+@Deprecated("CDS won't support JythonService")
 @Configuration
 @ComponentScan
 @EnableConfigurationProperties
 open class PythonExecutorConfiguration
 
+@Deprecated("CDS won't support JythonService")
 @Configuration
 open class PythonExecutorProperty {
 
@@ -39,12 +41,14 @@ open class PythonExecutorProperty {
     lateinit var modulePaths: List<String>
 }
 
+@Deprecated("CDS won't support JythonService")
 class PythonExecutorConstants {
     companion object {
         const val INPUT_INSTANCE_DEPENDENCIES = "instance-dependencies"
     }
 }
 
+@Deprecated("CDS won't support JythonService")
 open class BluePrintPython(
     executablePath: String,
     blueprintPythonPlatform: MutableList<String>,

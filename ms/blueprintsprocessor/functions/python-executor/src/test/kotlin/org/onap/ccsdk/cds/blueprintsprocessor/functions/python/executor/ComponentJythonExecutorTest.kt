@@ -24,8 +24,8 @@ import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor.mock.MockInstanceConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.PythonExecutorConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.PythonExecutorProperty
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor.scripts.PythonExecutorConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor.scripts.PythonExecutorProperty
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.putJsonElement
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils

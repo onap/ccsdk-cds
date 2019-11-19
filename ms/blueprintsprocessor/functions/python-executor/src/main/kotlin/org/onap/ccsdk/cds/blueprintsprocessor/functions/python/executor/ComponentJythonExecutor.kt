@@ -21,9 +21,9 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor
 import com.fasterxml.jackson.databind.node.ArrayNode
 import org.apache.commons.io.FilenameUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor.scripts.BlueprintJythonServiceImpl
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor.scripts.PythonExecutorConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
-import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.BlueprintJythonService
-import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.PythonExecutorConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
@@ -38,7 +38,7 @@ import org.springframework.stereotype.Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class ComponentJythonExecutor(
     private var applicationContext: ApplicationContext,
-    private val blueprintJythonService: BlueprintJythonService
+    private val blueprintJythonService: BlueprintJythonServiceImpl
 ) : AbstractComponentFunction() {
 
     private val log = LoggerFactory.getLogger(ComponentJythonExecutor::class.java)
@@ -57,22 +57,22 @@ open class ComponentJythonExecutor(
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         bluePrintRuntimeService.getBluePrintError()
-            .addError("Failed in ComponentJythonExecutor : ${runtimeException.message}")
+                .addError("Failed in ComponentJythonExecutor : ${runtimeException.message}")
     }
 
     private fun populateJythonComponentInstance() {
         val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
 
         val operationAssignment: OperationAssignment = bluePrintContext
-            .nodeTemplateInterfaceOperation(nodeTemplateName, interfaceName, operationName)
+                .nodeTemplateInterfaceOperation(nodeTemplateName, interfaceName, operationName)
 
         val artifactName: String = operationAssignment.implementation?.primary
-            ?: throw BluePrintProcessorException("missing primary field to get artifact name for node template ($nodeTemplateName)")
+                ?: throw BluePrintProcessorException("missing primary field to get artifact name for node template ($nodeTemplateName)")
 
         val artifactDefinition = bluePrintRuntimeService.resolveNodeTemplateArtifactDefinition(nodeTemplateName, artifactName)
 
         val pythonFileName = artifactDefinition.file
-            ?: throw BluePrintProcessorException("missing file name for node template ($nodeTemplateName)'s artifactName($artifactName)")
+                ?: throw BluePrintProcessorException("missing file name for node template ($nodeTemplateName)'s artifactName($artifactName)")
 
         val pythonClassName = FilenameUtils.getBaseName(pythonFileName)
 
@@ -81,7 +81,7 @@ open class ComponentJythonExecutor(
         checkNotEmpty(content) { "artifact ($artifactName) content is empty" }
 
         val instanceDependenciesNode: ArrayNode = operationInputs[PythonExecutorConstants.INPUT_INSTANCE_DEPENDENCIES] as? ArrayNode
-            ?: throw BluePrintProcessorException("Failed to get property(${PythonExecutorConstants.INPUT_INSTANCE_DEPENDENCIES})")
+                ?: throw BluePrintProcessorException("Failed to get property(${PythonExecutorConstants.INPUT_INSTANCE_DEPENDENCIES})")
 
         val jythonInstance: MutableMap<String, Any> = hashMapOf()
         jythonInstance["log"] = LoggerFactory.getLogger(pythonClassName)

@@ -57,8 +57,7 @@ import kotlin.test.assertNotNull
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
     classes = [ComponentFunctionScriptingService::class,
-        BluePrintScriptsServiceImpl::class, PythonExecutorProperty::class,
-        BlueprintJythonService::class]
+        BluePrintScriptsServiceImpl::class, DeprecatedBlueprintJythonService::class]
 )
 class AbstractComponentFunctionTest {
 

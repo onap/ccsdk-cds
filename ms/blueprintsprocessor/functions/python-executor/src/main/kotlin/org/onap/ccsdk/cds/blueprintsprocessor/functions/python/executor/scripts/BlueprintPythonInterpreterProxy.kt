@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts
+package org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor.scripts
 
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.python.core.PyObject
 import org.python.core.PySyntaxError
 import org.python.util.PythonInterpreter
 
+@Deprecated("CDS won't support JythonService")
 open class BlueprintPythonInterpreterProxy(private val bluePrintPython: BluePrintPython) : PythonInterpreter() {
 
     fun getPythonInstance(properties: MutableMap<String, Any>?): PyObject {

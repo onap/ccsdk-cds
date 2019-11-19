@@ -24,45 +24,24 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.resourceAssignment
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
-import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.BlueprintJythonService
-import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.PythonExecutorProperty
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
-import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintScriptsServiceImpl
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.TestPropertySource
-import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-@RunWith(SpringRunner::class)
-@ContextConfiguration(
-    classes = [CapabilityResourceResolutionProcessor::class, ComponentFunctionScriptingService::class,
-        BluePrintScriptsServiceImpl::class,
-        BlueprintJythonService::class, PythonExecutorProperty::class, MockCapabilityService::class]
-)
-@TestPropertySource(
-    properties =
-    ["blueprints.processor.functions.python.executor.modulePaths=./../../../../components/scripts/python/ccsdk_blueprints",
-        "blueprints.processor.functions.python.executor.executionPath=./../../../../components/scripts/python/ccsdk_blueprints"]
-)
 class CapabilityResourceResolutionProcessorTest {
-
-    @Autowired
-    lateinit var capabilityResourceResolutionProcessor: CapabilityResourceResolutionProcessor
 
     @Test
     fun `test kotlin capability`() {
@@ -111,7 +90,16 @@ class CapabilityResourceResolutionProcessorTest {
                 "./../../../../components/model-catalog/blueprint-model/test-blueprint/capability_python"
             )
 
+            val componentFunctionScriptingService = mockk<ComponentFunctionScriptingService>()
+            coEvery {
+                componentFunctionScriptingService
+                    .scriptInstance<ResourceAssignmentProcessor>(any(), BluePrintConstants.SCRIPT_JYTHON, any())
+            } returns MockCapabilityScriptRA()
+
             val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)
+
+            val capabilityResourceResolutionProcessor =
+                CapabilityResourceResolutionProcessor(componentFunctionScriptingService)
 
             capabilityResourceResolutionProcessor.raRuntimeService = resourceAssignmentRuntimeService
 
@@ -150,6 +138,11 @@ open class MockCapabilityScriptRA : ResourceAssignmentProcessor() {
     }
 
     override suspend fun processNB(executionRequest: ResourceAssignment) {
+        log.info("executing RA mock capability : ${executionRequest.name}")
+        executionRequest.property!!.value = "assigned-data".asJsonPrimitive()
+    }
+
+    override fun process(executionRequest: ResourceAssignment) {
         log.info("executing RA mock capability : ${executionRequest.name}")
         executionRequest.property!!.value = "assigned-data".asJsonPrimitive()
     }
