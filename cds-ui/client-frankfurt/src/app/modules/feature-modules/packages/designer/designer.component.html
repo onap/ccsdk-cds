@@ -1,0 +1,337 @@
+<!--Header-->
+<header>
+  <div class="row m-0">
+    <div class="col pl-0">
+      <p class="logo mb-0"></p>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0">
+          <li class="breadcrumb-item">
+            <a href="#">CBA Packages</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a href="#">Package Name</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+            <p class="mb-0">Topology View</p>
+          </li>
+        </ol>
+      </nav>
+    </div>
+    <div class="col pr-0 text-right">
+      <ul class="topology-actions">
+        <li>
+          <div class="btn-group" role="group" aria-label="Basic example">
+            <a href="#" role="button" aria-pressed="true" class="btn-topology-action float tooltip-bottom" data-tooltip="Preview">
+              <i class="fa fa-eye"></i>
+            </a>
+            <a href="#" role="button" aria-pressed="true" class="btn-topology-action float tooltip-bottom" data-tooltip="Download">
+              <i class="fa fa-download"></i>
+            </a>
+            <a href="#" role="button" aria-pressed="true" class="btn-topology-action float tooltip-bottom" data-tooltip="Share">
+              <i class="fa fa-share-square"></i>
+            </a>
+          </div>
+        </li>
+        <li>
+          <div class="dropdown">
+            <input class="dropdown-toggle" type="text">
+            <div class="dropdown-text">Save</div>
+            <ul class="dropdown-content">
+              <li>
+                <a href="">Save</a>
+              </li>
+              <li>
+                <a href="">Save &amp; Deploy</a>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+
+
+    </div>
+  </div>
+</header>
+<ng-sidebar-container class="sidebar-container">
+  <!-- Controller SideBar -->
+  <ng-sidebar [(opened)]="controllerSideBar" [sidebarClass]="'demo-sidebar controllerSidebar container-fluid'" [mode]="'push'"
+    #sidebarLeft>
+    <div class="row">
+      <div class="col-12 p-0">
+        <form>
+          <input type="text" class="form-control input-search-controller" placeholder="Search actions and functions">
+        </form>
+      </div>
+      <h1 class="col-12">Actions</h1>
+      <div class="col-12 text-center p-0">
+        <div class="btn-group actionBtns" role="group">
+          <button type="button" class="btn">Insert Custom</button>
+          <button type="button" class="btn">Import Action</button>
+        </div>
+      </div>
+      <div class="col-12 actionsList">
+        <b>Select from other packages:</b>
+        <div class="actions-scroll">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="customCheck1">
+            <label class="custom-control-label" for="customCheck1">Action name
+              <p class="m-0">Toplogy name</p>
+            </label>
+          </div>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="customCheck2">
+            <label class="custom-control-label" for="customCheck2">Action name
+              <p class="m-0">Toplogy name</p>
+            </label>
+          </div>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="customCheck3">
+            <label class="custom-control-label" for="customCheck3">Action name
+              <p class="m-0">Toplogy name</p>
+            </label>
+          </div>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="customCheck4">
+            <label class="custom-control-label" for="customCheck4">Action name
+              <p class="m-0">Toplogy name</p>
+            </label>
+          </div>
+        </div>
+        <div class="btn-group inserActionBtns" role="group" aria-label="Basic example">
+          <button type="button" class="btn btn-secondary mr-3">Insert</button>
+          <button type="button" class="btn btn-secondary">Cancel</button>
+        </div>
+      </div>
+      <h1 class="col-12">Functions</h1>
+      <div class="col-12 componentsList">
+        <b>Drag and drop function to Action’s box</b>
+        <ul class="list-group actions-scroll">
+          <li class="list-group-item">
+            <p class="compType-1">component-resource-resolution</p>
+          </li>
+          <li class="list-group-item">
+            <p class="compType-2">component-netconf-executor</p>
+          </li>
+          <li class="list-group-item">
+            <p class="compType-3">component-remote-ansible-executor</p>
+          </li>
+          <li class="list-group-item">
+            <p class="compType-4">dg-generic</p>
+          </li>
+          <li class="list-group-item">
+            <p class="compType-1">component-resource-resolution</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </ng-sidebar>
+  <!-- Page content -->
+  <div ng-sidebar-content>
+    <button class="rotate" (click)="_toggleSidebar1()">
+      <span>
+        Controller
+        <i class="fa fa-angle-double-left"></i>
+      </span>
+    </button>
+    <!-- Canvas -->
+    <div class="editBar text-center">
+      <div class="btn-group mr-2" role="group" aria-label="First group">
+        <button type="button" class="btn btn-secondary tooltip-bottom" data-tooltip="Undo">
+          <img src="/assets/img/icon-undoActive.svg">
+        </button>
+        <button type="button" class="btn btn-secondary tooltip-bottom" data-tooltip="Redo">
+          <img src="/assets/img/icon-redo.svg">
+        </button>
+      </div>
+      <div class="btn-group mr-2" role="group" aria-label="Second group">
+        <button type="button" class="btn btn-secondary tooltip-bottom" data-tooltip="Zoom Out">
+          <img src="/assets/img/icon-zoomOut.svg">
+        </button>
+        <button type="button" class="btn btn-secondary pl-0 pr-0">100%</button>
+        <button type="button" class="btn btn-secondary tooltip-bottom" data-tooltip="Zoom In">
+          <img src="/assets/img/icon-zoomIn.svg">
+        </button>
+      </div>
+      <div class="btn-group viewBtns" role="group" aria-label="Third group">
+        <button type="button" class="btn btn-secondary topologySource active">View</button>
+        <button type="button" class="btn btn-secondary topologyView">Source</button>
+      </div>
+    </div>
+    <div class="card actionContainer">
+      <div class="card-header">
+        <span>Action 1</span>
+      </div>
+      <div class="card-body">
+        <a (click)="sidebarRight.open()" class="componentContainer text-center">
+          <img src="/assets/img/icon-comType1.svg" title="">
+          <h2>config-assign</h2>
+          <p>component-resource-resolution</p>
+        </a>
+        <a (click)="sidebarRight.open()" class="componentContainer text-center">
+          <img src="/assets/img/icon-comType2.svg" title="">
+          <h2>execute</h2>
+          <p>component-netconf-executor</p>
+        </a>
+        <a (click)="sidebarRight.open()" class="componentContainer text-center">
+          <img src="/assets/img/icon-comType3.svg" title="">
+          <h2>function 1</h2>
+          <p>dg-generic</p>
+        </a>
+        <a (click)="sidebarRight.open()" class="componentContainer text-center">
+          <img src="/assets/img/icon-comType2.svg" title="">
+          <h2>execute</h2>
+          <p>component-netconf-executor</p>
+        </a>
+      </div>
+    </div>
+    <!-- <button (click)="_toggleSidebar2()" style="float:right;">Toggle sidebar right</button> -->
+  </div>
+  <!-- Attribute SideBar -->
+  <ng-sidebar [(opened)]="attributesSideBar" [sidebarClass]="'demo-sidebar attributesSideBar '" [mode]="'push'" [position]="'right'"
+    #sidebarRight>
+    <div class="container-fluid0">
+      <div class="row m-0">
+        <div class="col-2 pr-0">
+          <button (click)="sidebarRight.close()" class="closeBar"></button>
+        </div>
+        <div class="col-10 attributesContainer p-0">
+          <h1>Action Attributes</h1>
+          <div class="scrolll">
+            <div class="row m-0">
+              <div class="col-12">
+                <div class="form-group actionName">
+                  <label for="exampleInputEmail1">Action Name</label>
+                  <input type="text" class="form-control" placeholder="Action 1">
+                </div>
+              </div>
+            </div>
+            <div class="accordion" id="accordionExample">
+              <div class="card">
+                <div class="card-header row" id="headingOne">
+                  <h2 class="col-10 mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      Steps
+                    </button>
+                  </h2>
+                  <div class="col-2 p-0 text-center">
+                    <button class="btn btn-addAttribute" type="button"></button>
+                  </div>
+                </div>
+
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-9">
+                        <label for="exampleInputEmail1">Name</label> &nbsp;
+                        <button type="button" class="btn p-0">
+                          <img src="/assets/img/icon-edit.svg">
+                        </button>
+                      </div>
+                      <div class="col-3">
+                        <button type="button" class="btn btn-deleteAttribute">Delete</button>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Name</label>
+                      <input type="text" class="form-control" placeholder="Action 1">
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleFormControlTextarea1">Description</label>
+                      <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Target</label>
+                      <input type="text" class="form-control" placeholder="Action 1">
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header row" id="headingTwo">
+                  <h2 class="col-10 mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                      Inputs
+                    </button>
+                  </h2>
+                  <div class="col-2 p-0 text-center">
+                    <button class="btn btn-addAttribute" type="button"></button>
+                  </div>
+                </div>
+                <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-9">
+                        <label for="exampleInputEmail1">Name</label> &nbsp;
+                        <button type="button" class="btn p-0">
+                          <img src="/assets/img/icon-edit.svg">
+                        </button>
+                      </div>
+                      <div class="col-3">
+                        <button type="button" class="btn btn-deleteAttribute">Delete</button>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Name</label>
+                      <input type="text" class="form-control" placeholder="Action 1">
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleFormControlTextarea1">Description</label>
+                      <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Target</label>
+                      <input type="text" class="form-control" placeholder="Action 1">
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header row" id="headingThree">
+                  <h2 class="col-10 mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                      Outputs
+                    </button>
+                  </h2>
+                  <div class="col-2 p-0 text-center">
+                    <button class="btn btn-addAttribute" type="button"></button>
+                  </div>
+                </div>
+                <div id="collapseThree" class="collapse show" aria-labelledby="headingThree" data-parent="#accordionExample">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-9">
+                        <label for="exampleInputEmail1">Name</label> &nbsp;
+                        <button type="button" class="btn p-0">
+                          <img src="/assets/img/icon-edit.svg">
+                        </button>
+                      </div>
+                      <div class="col-3">
+                        <button type="button" class="btn btn-deleteAttribute">Delete</button>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Name</label>
+                      <input type="text" class="form-control" placeholder="Action 1">
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleFormControlTextarea1">Description</label>
+                      <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Target</label>
+                      <input type="text" class="form-control" placeholder="Action 1">
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-sidebar>
+
+</ng-sidebar-container>
