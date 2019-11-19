@@ -35,6 +35,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.nodeTypeComponentScriptExecutor
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
@@ -58,6 +59,8 @@ import kotlin.test.assertNotNull
     BluePrintScriptsServiceImpl::class, PythonExecutorProperty::class,
     BlueprintJythonService::class])
 class AbstractComponentFunctionTest {
+
+    private var blueprintError = BluePrintError()
 
     lateinit var blueprintContext: BluePrintContext
 
@@ -186,6 +189,7 @@ class AbstractComponentFunctionTest {
             bluePrintRuntime.resolveNodeTemplateInterfaceOperationOutputs(
                     "activate-restconf", "interfaceName", "operationName")
         } returns operationOutputs
+        every { bluePrintRuntime.getBluePrintError() } returns blueprintError
         every { bluePrintRuntime.bluePrintContext() } returns blueprintContext
 
         return executionServiceInput
