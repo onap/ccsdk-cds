@@ -19,11 +19,13 @@
 */
 
 export interface ICatalog { 
-      Model_Name: string;
-      User_id: string;
-      _tags: string;
-      _type: string;
-      Derived_From: string;
-      _description : string;
-      definition: object[];
+      modelName: string;
+      derivedFrom: string;
+      definitionType : string;
+      definition: object;
+      description: string;
+      version: String;
+      tags: String;
+      creationDate: String;
+      updatedBy: String;     
 }
