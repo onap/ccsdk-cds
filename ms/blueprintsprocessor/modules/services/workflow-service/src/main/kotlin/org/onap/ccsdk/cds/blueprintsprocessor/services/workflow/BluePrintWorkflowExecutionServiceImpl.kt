@@ -89,12 +89,21 @@ open class BluePrintWorkflowExecutionServiceImpl(
         }
         executionServiceOutput.commonHeader = executionServiceInput.commonHeader
         executionServiceOutput.actionIdentifiers = executionServiceInput.actionIdentifiers
-        // Resolve Workflow Outputs
-        val workflowOutputs = bluePrintRuntimeService.resolveWorkflowOutputs(workflowName)
 
-        // Set the Response Payload
         executionServiceOutput.payload = JacksonUtils.objectMapper.createObjectNode()
-        executionServiceOutput.payload.set("$workflowName-response", workflowOutputs.asObjectNode())
+
+        // Make sure to not overwrite the errors that might have been raised in previous steps, while
+        // trying to resolve outputs that might not actually have been resolved
+        try {
+            // Resolve Workflow Outputs and Set the Response Payload
+            val workflowOutputs = bluePrintRuntimeService.resolveWorkflowOutputs(workflowName)
+            executionServiceOutput.payload.set("$workflowName-response", workflowOutputs.asObjectNode())
+        } catch (e : Exception ) {
+            // Ignore the execption but log for developper benefit.
+            // and keep the previously raised error status
+            log.error("Could not resolve outputs for workflow $workflowName", e)
+        }
+
         return executionServiceOutput
     }
 }

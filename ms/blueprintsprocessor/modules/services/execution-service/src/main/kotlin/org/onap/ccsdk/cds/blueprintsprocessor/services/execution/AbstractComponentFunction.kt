@@ -103,7 +103,6 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     }
 
     override suspend fun prepareResponseNB(): ExecutionServiceOutput {
-        log.info("Preparing Response...")
         executionServiceOutput.commonHeader = executionServiceInput.commonHeader
         executionServiceOutput.actionIdentifiers = executionServiceInput.actionIdentifiers
         var status = Status()
@@ -117,13 +116,21 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
                 properties = stepOutputs
             }
             executionServiceOutput.stepData = stepOutputData
+
             // Set the Default Step Status
             status.eventType = EventType.EVENT_COMPONENT_EXECUTED.name
+            // If an error was populated by node execution, report back failure
+            // this will ensure DG failure outcome actually gets triggered
+            if (!bluePrintRuntimeService.getBluePrintError().errors.isEmpty()) {
+                status.message = BluePrintConstants.STATUS_FAILURE
+            }
         } catch (e: Exception) {
             status.message = BluePrintConstants.STATUS_FAILURE
             status.eventType = EventType.EVENT_COMPONENT_FAILURE.name
         }
         executionServiceOutput.status = status
+        log.info("Response Status : ${executionServiceOutput.status.message} AND ${executionServiceOutput.status.eventType}")
+
         return this.executionServiceOutput
     }
 
