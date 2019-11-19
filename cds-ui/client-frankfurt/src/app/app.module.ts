@@ -1,3 +1,4 @@
+
 /*
 ============LICENSE_START==========================================
 ===================================================================
@@ -30,13 +31,9 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {ApiService} from './common/core/services/api.service';
 import {HttpClientModule} from '@angular/common/http';
 
-
-
 @NgModule({
     declarations: [
         AppComponent,
-
-
     ],
     imports: [
         BrowserModule,
@@ -45,8 +42,9 @@ import {HttpClientModule} from '@angular/common/http';
         AppRoutingModule,
         NoopAnimationsModule,
         MatTabsModule,
-        HttpClientModule
+        HttpClientModule,
     ],
+
     providers: [ApiService],
     bootstrap: [AppComponent]
 })
