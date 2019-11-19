@@ -69,5 +69,20 @@ export default {
             "getPagedBueprints": ["limit","offset", "sort"],
         }
     },
+        {
+            "template": {
+                "method": "GET",
+                "url": processorApiConfig.http.url + "/blueprint-model/paged/meta-data/{keyword}?limit={limit}&offset={offset}&sort={sort}",
+                "headers": {
+                    "accepts": "application/json",
+                    "content-type": "application/json",
+                    "authorization": processorApiConfig.http.authToken
+                },
+                "responsePath": "$",
+            },
+            "functions": {
+                "getMetaDataPagedBlueprints": ["limit","offset", "sort","keyword"],
+            }
+        },
 ]
 };
