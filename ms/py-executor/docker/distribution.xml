@@ -38,10 +38,13 @@
             <includes>
                 <include>requirements.txt</include>
                 <include>configuration.ini</include>
-                <include>*.crt</include>
-                <include>*.key</include>
-                 <include>*.pem</include>
             </includes>
+            <useDefaultExcludes>true</useDefaultExcludes>
+            <fileMode>0666</fileMode>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/certs</directory>
+            <outputDirectory>opt/app/onap/python/certs</outputDirectory>
             <useDefaultExcludes>true</useDefaultExcludes>
             <fileMode>0666</fileMode>
         </fileSet>

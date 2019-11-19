@@ -19,8 +19,6 @@ services:
       #AUTH_TYPE: basic-auth
       #AUTH_TOKEN: Basic Y2NzZGthcHBzOmNjc2RrYXBwcw==
       AUTH_TYPE: tls-auth
-      AUTH_CERT_CHAIN: /opt/app/onap/python/py-executor-chain.pem
-      AUTH_PRIVATE_KEY: /opt/app/onap/python/py-executor-key.pem
       LOG_FILE: /opt/app/onap/logs/application.log
 
 volumes:
