@@ -110,35 +110,38 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
                 )
                 val prepareEnvOutput = remoteScriptExecutionService.prepareEnv(prepareEnvInput)
                 log.info("$ATTRIBUTE_PREPARE_ENV_LOG - ${prepareEnvOutput.response}")
-                val logs = JacksonUtils.jsonNodeFromObject(prepareEnvOutput.response)
-                setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, logs)
-                setAttribute(ATTRIBUTE_EXEC_CMD_LOG, "N/A".asJsonPrimitive())
+                val logs = prepareEnvOutput.response
+                val logsEnv = logs.toString().asJsonPrimitive()
+                setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, logsEnv)
 
                 if (prepareEnvOutput.status != StatusType.SUCCESS) {
-                    setNodeOutputErrors(prepareEnvOutput.status.name, logs)
+                    setAttribute(ATTRIBUTE_EXEC_CMD_LOG, "N/A".asJsonPrimitive())
+                    setNodeOutputErrors(prepareEnvOutput.status.name, logsEnv)
                 } else {
-                    setNodeOutputProperties(prepareEnvOutput.status.name.asJsonPrimitive(), logs, "".asJsonPrimitive())
+                    setNodeOutputProperties(prepareEnvOutput.status.name.asJsonPrimitive(), logsEnv, "".asJsonPrimitive())
                 }
             }
 
-            // Populate command execution properties and pass it to the remote server
-            val properties = dynamicProperties?.returnNullIfMissing()?.rootFieldsToMap() ?: hashMapOf()
+            // if Env preparation was successful, then proceed with command execution in this Env
+            if (bluePrintRuntimeService.getBluePrintError().errors.isEmpty()) {
+                // Populate command execution properties and pass it to the remote server
+                val properties = dynamicProperties?.returnNullIfMissing()?.rootFieldsToMap() ?: hashMapOf()
 
-            val remoteExecutionInput = RemoteScriptExecutionInput(
-                requestId = processId,
-                remoteIdentifier = RemoteIdentifier(blueprintName = blueprintName, blueprintVersion = blueprintVersion),
-                command = scriptCommand,
-                properties = properties)
-            val remoteExecutionOutput = remoteScriptExecutionService.executeCommand(remoteExecutionInput)
+                val remoteExecutionInput = RemoteScriptExecutionInput(
+                        requestId = processId,
+                        remoteIdentifier = RemoteIdentifier(blueprintName = blueprintName, blueprintVersion = blueprintVersion),
+                        command = scriptCommand,
+                        properties = properties)
+                val remoteExecutionOutput = remoteScriptExecutionService.executeCommand(remoteExecutionInput)
 
-            val logs = JacksonUtils.jsonNodeFromObject(remoteExecutionOutput.response)
-            if (remoteExecutionOutput.status != StatusType.SUCCESS) {
-                setNodeOutputErrors(remoteExecutionOutput.status.name,logs, remoteExecutionOutput.payload)
-            } else {
-                setNodeOutputProperties(remoteExecutionOutput.status.name.asJsonPrimitive(), logs,
-                                        remoteExecutionOutput.payload)
+                val logs = JacksonUtils.jsonNodeFromObject(remoteExecutionOutput.response)
+                if (remoteExecutionOutput.status != StatusType.SUCCESS) {
+                    setNodeOutputErrors(remoteExecutionOutput.status.name, logs, remoteExecutionOutput.payload)
+                } else {
+                    setNodeOutputProperties(remoteExecutionOutput.status.name.asJsonPrimitive(), logs,
+                            remoteExecutionOutput.payload)
+                }
             }
-
         } catch (e: Exception) {
             log.error("Failed to process on remote executor", e)
         } finally {
@@ -178,9 +181,12 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
      */
     private fun setNodeOutputErrors(status: String, message: JsonNode, artifacts: JsonNode = "".asJsonPrimitive()  ) {
         setAttribute(ATTRIBUTE_EXEC_CMD_STATUS, status.asJsonPrimitive())
+        log.info("Executor status   : $status")
         setAttribute(ATTRIBUTE_EXEC_CMD_LOG, message)
+        log.info("Executor message  : $message")
         setAttribute(ATTRIBUTE_RESPONSE_DATA, artifacts)
+        log.info("Executor artifacts: $artifacts")
 
-        addError(status, ATTRIBUTE_EXEC_CMD_LOG, message.asText())
+        addError(status, ATTRIBUTE_EXEC_CMD_LOG, message.toString())
     }
 }
