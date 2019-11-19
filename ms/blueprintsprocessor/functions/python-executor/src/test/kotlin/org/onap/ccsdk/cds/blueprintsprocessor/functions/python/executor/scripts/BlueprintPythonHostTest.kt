@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 IBM, Bell Canada.
+ * Copyright © 2018-2019 AT&T Intellectual Property.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts
+package org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor.scripts
 
 import org.junit.Test
-
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.assertNotNull
 import kotlin.test.BeforeTest
+import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [BluePrintPython::class, PythonExecutorProperty::class, String::class])

@@ -21,9 +21,9 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor
 import com.fasterxml.jackson.databind.node.ArrayNode
 import org.apache.commons.io.FilenameUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor.scripts.JythonService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor.scripts.PythonExecutorConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
-import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.BlueprintJythonService
-import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.PythonExecutorConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
@@ -37,7 +37,7 @@ import org.springframework.stereotype.Component
 @Component("component-jython-executor")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class ComponentJythonExecutor(private var applicationContext: ApplicationContext,
-                                   private val blueprintJythonService: BlueprintJythonService) : AbstractComponentFunction() {
+                                   private val blueprintJythonService: JythonService) : AbstractComponentFunction() {
 
     private val log = LoggerFactory.getLogger(ComponentJythonExecutor::class.java)
 

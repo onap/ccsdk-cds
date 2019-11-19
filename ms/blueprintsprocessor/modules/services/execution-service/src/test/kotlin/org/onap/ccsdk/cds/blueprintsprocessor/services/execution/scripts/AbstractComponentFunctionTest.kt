@@ -55,8 +55,7 @@ import kotlin.test.assertNotNull
  */
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [ComponentFunctionScriptingService::class,
-    BluePrintScriptsServiceImpl::class, PythonExecutorProperty::class,
-    BlueprintJythonService::class])
+    BluePrintScriptsServiceImpl::class, DeprecatedBlueprintJythonService::class])
 class AbstractComponentFunctionTest {
 
     lateinit var blueprintContext: BluePrintContext
@@ -97,7 +96,7 @@ class AbstractComponentFunctionTest {
         val sampleComponent = SampleComponent()
         sampleComponent.workflowName = "sample-action"
         sampleComponent.executionServiceInput = JacksonUtils.readValueFromClassPathFile(
-            "payload/requests/sample-execution-request.json", ExecutionServiceInput::class.java)!!
+                "payload/requests/sample-execution-request.json", ExecutionServiceInput::class.java)!!
         val payload = sampleComponent.requestPayload()
         assertNotNull(payload, "failed to get payload")
         val data = sampleComponent.requestPayloadActionProperty("data")?.first()

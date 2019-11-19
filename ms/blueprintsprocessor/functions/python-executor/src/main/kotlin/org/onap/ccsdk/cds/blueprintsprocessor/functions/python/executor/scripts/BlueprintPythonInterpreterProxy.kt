@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 IBM, Bell Canada.
+ * Copyright © 2018-2019 AT&T Intellectual Property.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts
+package org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor.scripts
 
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.python.core.PyObject
