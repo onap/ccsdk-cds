@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts
+package org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor.scripts
 
 import io.mockk.every
 import io.mockk.mockk
@@ -32,7 +32,7 @@ import kotlin.test.BeforeTest
 import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [BlueprintJythonService::class, PythonExecutorProperty::class])
+@ContextConfiguration(classes = [JythonService::class, PythonExecutorProperty::class])
 @TestPropertySource(properties =
 ["blueprints.processor.functions.python.executor.modulePaths=./../../../../../components/scripts/python/ccsdk_blueprints",
     "blueprints.processor.functions.python.executor.executionPath=./../../../../../components/scripts/python/ccsdk_blueprints"])
@@ -40,7 +40,7 @@ class BlueprintJythonServiceTest {
 
     lateinit var blueprintContext: BluePrintContext
     @Autowired
-    private lateinit var blueprintJythonService: BlueprintJythonService
+    private lateinit var blueprintJythonService: JythonService
 
     @BeforeTest
     fun init() {

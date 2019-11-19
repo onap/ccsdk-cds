@@ -25,11 +25,11 @@ import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor.scripts.JythonService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor.scripts.PythonExecutorProperty
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.resourceAssignment
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
-import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.BlueprintJythonService
-import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.PythonExecutorProperty
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
@@ -52,7 +52,7 @@ import kotlin.test.assertTrue
 @ContextConfiguration(
     classes = [CapabilityResourceResolutionProcessor::class, ComponentFunctionScriptingService::class,
         BluePrintScriptsServiceImpl::class,
-        BlueprintJythonService::class, PythonExecutorProperty::class, MockCapabilityService::class]
+        JythonService::class, PythonExecutorProperty::class, MockCapabilityService::class]
 )
 @TestPropertySource(
     properties =
