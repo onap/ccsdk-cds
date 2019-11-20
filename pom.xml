@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 Copyright (C) 2019 Bell Canada
+Modification Copyright © 2018-2019 AT&T Intellectual Property.
 
 Unless otherwise specified, all software contained herein is licensed
 under the Apache License, Version 2.0 (the License);
@@ -40,6 +41,7 @@ limitations under the License.
     <modules>
         <module>ms</module>
         <module>cds-ui</module>
+        <module>components</module>
     </modules>
 
     <properties>

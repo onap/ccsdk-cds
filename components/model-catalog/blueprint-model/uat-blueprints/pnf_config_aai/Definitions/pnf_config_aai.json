@@ -4,7 +4,7 @@
     "template_author" : "Rahul Tyagi",
     "author-email" : "rahul.tyagi@est.tech",
     "user-groups" : "ADMIN, OPERATION",
-    "template_name" : "configuration_over_restconf",
+    "template_name" : "pnf_config_aai",
     "template_version" : "1.0.0",
     "template_tags" : "pnf, restconf, config, configuration"
   },
