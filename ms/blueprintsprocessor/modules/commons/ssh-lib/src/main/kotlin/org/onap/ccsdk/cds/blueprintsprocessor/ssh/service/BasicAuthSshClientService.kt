@@ -1,6 +1,8 @@
 /*
  *  Copyright © 2019 IBM.
  *
+ *  Modifications Copyright © 2018-2019 IBM, Bell Canada
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -16,8 +18,10 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.ssh.service
 
+import org.apache.commons.io.output.TeeOutputStream
 import org.apache.sshd.client.SshClient
 import org.apache.sshd.client.channel.ChannelExec
+import org.apache.sshd.client.channel.ChannelShell
 import org.apache.sshd.client.channel.ClientChannel
 import org.apache.sshd.client.channel.ClientChannelEvent
 import org.apache.sshd.client.keyverifier.AcceptAllServerKeyVerifier
@@ -26,17 +30,20 @@ import org.onap.ccsdk.cds.blueprintsprocessor.ssh.BasicAuthSshClientProperties
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.slf4j.LoggerFactory
 import java.io.ByteArrayOutputStream
+import java.io.PipedInputStream
+import java.io.PipedOutputStream
 import java.util.Collections
 import java.util.EnumSet
 
-open class BasicAuthSshClientService(private val basicAuthSshClientProperties: BasicAuthSshClientProperties) :
-    BlueprintSshClientService {
+open class BasicAuthSshClientService(private val basicAuthSshClientProperties: BasicAuthSshClientProperties)
+    : BlueprintSshClientService {
 
     private val log = LoggerFactory.getLogger(BasicAuthSshClientService::class.java)!!
 
     private lateinit var sshClient: SshClient
     private lateinit var clientSession: ClientSession
-    var channel: ChannelExec? = null
+    private var channel: ChannelExec? = null
+    private var shellChannel: ChannelShell? = null
 
     override suspend fun startSessionNB(): ClientSession {
         sshClient = SshClient.setUpDefaultClient()
@@ -57,6 +64,65 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
     }
 
     override suspend fun executeCommandsNB(commands: List<String>, timeOut: Long): String {
+
+        if (!clientSession.isAuthenticated) {
+            throw BluePrintProcessorException("Failed to authenticate user (${basicAuthSshClientProperties.username}) " +
+                    "on the remote device ${basicAuthSshClientProperties.host}")
+        }
+
+        val buffer = StringBuffer()
+        try {
+           clientSession.use { session ->
+               session.createShellChannel().use { channel ->
+                   ByteArrayOutputStream().use { sent ->
+                       PipedOutputStream().use { pipedIn ->
+                           PipedInputStream(pipedIn).use { pipedOut ->
+                               channel.setIn(pipedOut)
+                               TeeOutputStream(sent, pipedIn).use { teeOut ->
+                                   ByteArrayOutputStream().use { out ->
+                                       ByteArrayOutputStream().use { err ->
+                                           channel.out = out
+                                           channel.err = err
+                                           shellChannel = channel
+                                           channel.open()
+                                           buffer.append("\n")
+                                           commands.forEach { command ->
+                                               log.debug("Executing host($session) command($command) \n")
+                                               val commandToExecute = command + "\n"
+                                               buffer.append("Command : $commandToExecute")
+                                               teeOut.write(commandToExecute.toByteArray())
+                                               teeOut.flush()
+                                               buffer.append("\n" + waitForPrompt(timeOut))
+                                               out.reset()
+                                               err.reset()
+                                           }
+                                       }
+                                   }
+                               }
+                           }
+                       }
+                   }
+               }
+           }
+        } catch (e: Exception) {
+            throw BluePrintProcessorException("Failed to execute commands, below the output : $buffer Exception: \n $e")
+        }
+
+        shellChannel!!.close(false)
+        return buffer.toString()
+    }
+
+    private fun waitForPrompt(timeOut: Long): String {
+        val waitMask = shellChannel!!.waitFor(
+                Collections.unmodifiableSet(EnumSet.of(ClientChannelEvent.CLOSED)), timeOut)
+        if (shellChannel!!.out.toString().indexOf("$") <= 0 && waitMask.contains(ClientChannelEvent.TIMEOUT)) {
+            throw BluePrintProcessorException("Failed to retrieve commands result in $timeOut ms")
+        }
+
+        return shellChannel!!.out.toString()
+    }
+
+    override suspend fun executeCommandsInDifferentContextsNB(commands: List<String>, timeOut: Long): String {
         val buffer = StringBuffer()
         try {
             commands.forEach { command ->
@@ -70,8 +136,11 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
     }
 
     override suspend fun executeCommandNB(command: String, timeOut: Long): String {
-        log.debug("Executing host($clientSession) command($command)")
+        log.debug("Executing host($clientSession) command($command) in a new context")
 
+        if (channel != null) {
+            channel!!.close()
+        }
         channel = clientSession.createExecChannel(command)
         checkNotNull(channel) { "failed to create Channel for the command : $command" }
 
@@ -86,12 +155,18 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
         }
         val exitStatus = channel!!.exitStatus
         ClientChannel.validateCommandExitStatusCode(command, exitStatus!!)
-        return outputStream.toString()
+        return channel!!.out.toString()
     }
 
     override suspend fun closeSessionNB() {
-        if (channel != null)
+        if (channel != null) {
             channel!!.close()
+        }
+
+        if (clientSession.isOpen && !clientSession.isClosing) {
+            clientSession.close()
+        }
+
         if (sshClient.isStarted) {
             sshClient.stop()
         }
