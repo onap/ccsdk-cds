@@ -1,6 +1,8 @@
 /*
  *  Copyright © 2019 IBM.
  *
+ *  Modifications Copyright © 2018-2019 IBM, Bell Canada
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -25,18 +27,22 @@ import org.apache.sshd.server.auth.pubkey.AcceptAllPublickeyAuthenticator
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider
 import org.apache.sshd.server.session.ServerSession
 import org.apache.sshd.server.shell.ProcessShellCommandFactory
-import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.ssh.BluePrintSshLibConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.ssh.service.echoShell.EchoShellFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import java.nio.file.Paths
+import org.junit.runner.RunWith
+import kotlin.test.BeforeTest
+import kotlin.test.AfterTest
 import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import kotlin.test.assertNotNull
+import kotlin.test.assertEquals
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
@@ -57,29 +63,76 @@ class BlueprintSshClientServiceTest {
     @Autowired
     lateinit var bluePrintSshLibPropertyService: BluePrintSshLibPropertyService
 
-    @Test
-    fun testBasicAuthSshClientService() {
+    lateinit var bluePrintSshLibPropertyServiceMock: BluePrintSshLibPropertyService
+
+    private lateinit var sshServer: SshServer
+
+    @BeforeTest
+    fun startShellServer() {
         runBlocking {
-            val sshServer = setupTestServer("localhost", 52815, "root", "dummyps")
+            println("Start local Shell server")
+            sshServer = setupTestServer("localhost", 52815, "root", "dummyps")
             sshServer.start()
             println(sshServer)
-            val bluePrintSshLibPropertyService = bluePrintSshLibPropertyService.blueprintSshClientService("sample")
-            val sshSession = bluePrintSshLibPropertyService.startSession()
-            val response = bluePrintSshLibPropertyService.executeCommandsNB(arrayListOf("echo '1'", "echo '2'"), 2000)
-            assertNotNull(response, "failed to get command response")
-            bluePrintSshLibPropertyService.closeSession()
-            sshServer.stop(true)
         }
     }
 
-    private fun setupTestServer(host: String, port: Int, userName: String, password: String): SshServer {
+    @AfterTest
+    fun stopShellServer() {
+        println("End the Shell server")
+        sshServer.stop(true)
+    }
+
+    @Test
+    fun testStartSessionNB() {
+        val clientSession = getSshClientService().startSession()
+        assertNotNull(clientSession, "Failed to start ssh session with server")
+    }
+
+    @Test
+    fun testBasicAuthSshClientService() {
+        runBlocking {
+            val blueprintSshClientService = getSshClientService()
+            blueprintSshClientService.startSession()
+            // Preparing response
+            val commandResults = arrayListOf<CommandResult>()
+            commandResults.add(CommandResult("echo 1", "echo 1\n#", true))
+            commandResults.add(CommandResult("echo 2", "echo 1\n#echo 2\n#", true))
+            val response = blueprintSshClientService.executeCommands(arrayListOf("echo 1", "echo 2"), 2000)
+            blueprintSshClientService.closeSession()
+
+            assertEquals(response, commandResults, "failed to get command responses")
+        }
+    }
+
+    @Test
+    fun `testBasicAuthSshClientService single execution command`() {
+        runBlocking {
+            val blueprintSshClientService = getSshClientService()
+            blueprintSshClientService.startSession()
+            val response = blueprintSshClientService.executeCommand("echo 1", 2000)
+            blueprintSshClientService.closeSession()
+
+            assertEquals(response, CommandResult("echo 1", "echo 1\n#", true), "failed to get command response")
+        }
+    }
+
+    @Test
+    fun testCloseSessionNB() {
+        val bluePrintSshLibPropertyService = bluePrintSshLibPropertyService.blueprintSshClientService("sample")
+        val clientSession = bluePrintSshLibPropertyService.startSession()
+        bluePrintSshLibPropertyService.closeSession()
+        assertTrue(clientSession.isClosed, "Failed to close ssh session with server")
+    }
+
+    private fun setupTestServer(host: String, port: Int, username: String, password: String): SshServer {
         val sshd = SshServer.setUpDefaultServer()
         sshd.port = port
         sshd.host = host
         sshd.keyPairProvider = createTestHostKeyProvider()
-        sshd.passwordAuthenticator = BogusPasswordAuthenticator(userName, password)
+        sshd.passwordAuthenticator = BogusPasswordAuthenticator(username, password)
         sshd.publickeyAuthenticator = AcceptAllPublickeyAuthenticator.INSTANCE
-        // sshd.shellFactory = EchoShellFactory()
+        sshd.shellFactory = EchoShellFactory.INSTANCE
         sshd.commandFactory = ProcessShellCommandFactory.INSTANCE
         return sshd
     }
@@ -90,12 +143,17 @@ class BlueprintSshClientServiceTest {
         keyProvider.algorithm = RSA_ALGORITHM
         return keyProvider
     }
+
+    private fun getSshClientService(): BlueprintSshClientService {
+        return bluePrintSshLibPropertyService.blueprintSshClientService("sample")
+    }
 }
 
-class BogusPasswordAuthenticator(userName: String, password: String) : PasswordAuthenticator {
+class BogusPasswordAuthenticator(private val usr: String, private val pwd: String) : PasswordAuthenticator {
+
     override fun authenticate(username: String, password: String, serverSession: ServerSession): Boolean {
-        assertEquals(username, "root", "failed to match username")
-        assertEquals(password, "dummyps", "failed to match password")
+        assertEquals(username, usr, "failed to match username")
+        assertEquals(password, pwd, "failed to match password")
         return true
     }
 }
