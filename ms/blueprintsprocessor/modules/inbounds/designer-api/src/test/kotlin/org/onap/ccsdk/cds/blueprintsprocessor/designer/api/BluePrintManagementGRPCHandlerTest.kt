@@ -68,6 +68,18 @@ class BluePrintManagementGRPCHandlerTest {
     }
 
     @Test
+    fun testBootstrap() {
+        val blockingStub = BluePrintManagementServiceGrpc.newBlockingStub(grpcServerRule.channel)
+        val id = "123_Bootstrap"
+        val req = createBootstrapInputRequest(id)
+        val bootstrapOutput = blockingStub.bootstrapBlueprint(req)
+        assertEquals(200, bootstrapOutput.status.code)
+        assertTrue(bootstrapOutput.status.message.contentEquals(BluePrintConstants.STATUS_SUCCESS),
+                "failed to get success status")
+        assertEquals(id, bootstrapOutput.commonHeader.requestId)
+    }
+
+    @Test
     fun `test upload and download blueprint`() {
         val blockingStub = BluePrintManagementServiceGrpc.newBlockingStub(grpcServerRule.channel)
         val id = "123_upload"
@@ -128,6 +140,21 @@ class BluePrintManagementGRPCHandlerTest {
         }
     }
 
+    private fun createBootstrapInputRequest(id: String): BluePrintBootstrapInput {
+        val commonHeader = CommonHeader
+                .newBuilder()
+                .setTimestamp("2012-04-23T18:25:43.511Z")
+                .setOriginatorId("System")
+                .setRequestId(id)
+                .setSubRequestId("1234-56").build()
+
+        return BluePrintBootstrapInput.newBuilder()
+                .setCommonHeader(commonHeader)
+                .setLoadModelType(false)
+                .setLoadResourceDictionary(false)
+                .setLoadCBA(false)
+                .build()
+    }
 
     private fun createUploadInputRequest(id: String, action: String): BluePrintUploadInput {
         val file = normalizedFile("./src/test/resources/test-cba.zip")

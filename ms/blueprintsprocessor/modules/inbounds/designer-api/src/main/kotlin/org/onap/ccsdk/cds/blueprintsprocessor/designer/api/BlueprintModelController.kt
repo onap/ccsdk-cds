@@ -35,9 +35,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
-import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import java.time.Duration
 
 /**
  * BlueprintModelController Purpose: Handle controllerBlueprint API request
@@ -48,6 +46,15 @@ import java.time.Duration
 @RestController
 @RequestMapping("/api/v1/blueprint-model")
 open class BlueprintModelController(private val bluePrintModelHandler: BluePrintModelHandler) {
+
+    @PostMapping(path = arrayOf("/bootstrap"), produces = arrayOf(MediaType.APPLICATION_JSON_VALUE),
+            consumes = arrayOf(MediaType.APPLICATION_JSON_VALUE))
+    @ResponseBody
+    @Throws(BluePrintException::class)
+    @PreAuthorize("hasRole('USER')")
+    fun bootstrap(@RequestBody bootstrapRequest: BootstrapRequest): Mono<Unit> = monoMdc {
+        bluePrintModelHandler.bootstrapBlueprint(bootstrapRequest)
+    }
 
     @PostMapping("", produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     @ResponseBody
@@ -78,7 +85,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     fun allBlueprintModelMetaData(@NotNull @PathVariable(value = "keyword") keyWord: String): List<BlueprintModelSearch> {
-      return this.bluePrintModelHandler.searchBluePrintModelsByKeyWord(keyWord)
+        return this.bluePrintModelHandler.searchBluePrintModelsByKeyWord(keyWord)
     }
 
 
@@ -91,7 +98,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
                                        @RequestParam(defaultValue = "DATE") sort: BlueprintSortByOption
     ): Page<BlueprintModelSearch> {
         val pageRequest = PageRequest.of(offset, limit, Sort.Direction.ASC, sort.columnName)
-     return this.bluePrintModelHandler.searchBluePrintModelsByKeyWordPaged(keyWord,pageRequest)
+        return this.bluePrintModelHandler.searchBluePrintModelsByKeyWordPaged(keyWord, pageRequest)
 
     }
 

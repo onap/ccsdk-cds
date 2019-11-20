@@ -26,6 +26,13 @@ message BluePrintRemoveInput {
     google.protobuf.Struct properties = 3;
 }
 
+message BluePrintBootstrapInput {
+    org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader commonHeader = 1;
+    bool loadCBA = 2;
+    bool loadModelType = 3;
+    bool loadResourceDictionary = 4;
+}
+
 message BluePrintManagementOutput {
     org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader commonHeader = 1;
     // Optional file chunk sent back to the client for Enrich and Download this is mandatory.
@@ -65,4 +72,5 @@ service BluePrintManagementService {
     rpc downloadBlueprint (BluePrintDownloadInput) returns (BluePrintManagementOutput);
     rpc uploadBlueprint (BluePrintUploadInput) returns (BluePrintManagementOutput);
     rpc removeBlueprint (BluePrintRemoveInput) returns (BluePrintManagementOutput);
+    rpc bootstrapBlueprint (BluePrintBootstrapInput) returns (BluePrintManagementOutput);
 }

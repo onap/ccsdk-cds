@@ -24,6 +24,8 @@ import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelSe
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.BlueprintModelContentRepository
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.BlueprintModelRepository
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.BlueprintModelSearchRepository
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.BootstrapRequest
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.load.BluePrintDatabaseLoadService
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.utils.BluePrintEnhancerUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
@@ -36,6 +38,7 @@ import org.springframework.core.io.ByteArrayResource
 import org.springframework.core.io.Resource
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -44,7 +47,6 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.io.IOException
 import java.util.*
-import org.springframework.data.domain.Pageable
 
 
 /**
@@ -55,7 +57,8 @@ import org.springframework.data.domain.Pageable
  */
 
 @Service
-open class BluePrintModelHandler(private val blueprintsProcessorCatalogService: BluePrintCatalogService,
+open class BluePrintModelHandler(private val bluePrintDatabaseLoadService: BluePrintDatabaseLoadService,
+                                 private val blueprintsProcessorCatalogService: BluePrintCatalogService,
                                  private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
                                  private val blueprintModelSearchRepository: BlueprintModelSearchRepository,
                                  private val blueprintModelRepository: BlueprintModelRepository,
@@ -63,6 +66,22 @@ open class BluePrintModelHandler(private val blueprintsProcessorCatalogService: 
                                  private val bluePrintEnhancerService: BluePrintEnhancerService) {
 
     private val log = logger(BluePrintModelHandler::class)
+
+
+    open suspend fun bootstrapBlueprint(bootstrapRequest: BootstrapRequest) {
+        log.info("Bootstrap request with type load(${bootstrapRequest.loadModelType}), " +
+                "resource dictionary load(${bootstrapRequest.loadResourceDictionary}) and " +
+                "cba load(${bootstrapRequest.loadCBA})")
+        if (bootstrapRequest.loadModelType) {
+            bluePrintDatabaseLoadService.initModelTypes()
+        }
+        if (bootstrapRequest.loadResourceDictionary) {
+            bluePrintDatabaseLoadService.initResourceDictionary()
+        }
+        if (bootstrapRequest.loadCBA) {
+            bluePrintDatabaseLoadService.initBluePrintCatalog()
+        }
+    }
 
     /**
      * This is a getAllBlueprintModel method to retrieve all the BlueprintModel in Database
@@ -242,11 +261,9 @@ open class BluePrintModelHandler(private val blueprintsProcessorCatalogService: 
      * @return List<BlueprintModelSearch> list of the controller blueprint
     </BlueprintModelSearch> */
     open fun searchBluePrintModelsByKeyWord(keyWord: String): List<BlueprintModelSearch> {
-        return blueprintModelSearchRepository.
-                findByUpdatedByOrTagsOrOrArtifactNameOrOrArtifactVersionOrArtifactType(
-                        keyWord,keyWord,keyWord,keyWord,keyWord)
+        return blueprintModelSearchRepository.findByUpdatedByOrTagsOrOrArtifactNameOrOrArtifactVersionOrArtifactType(
+                keyWord, keyWord, keyWord, keyWord, keyWord)
     }
-
 
 
     /**
@@ -257,11 +274,10 @@ open class BluePrintModelHandler(private val blueprintsProcessorCatalogService: 
      *
      * @return List<BlueprintModelSearch> list of the controller blueprint
     </BlueprintModelSearch> */
-    open fun searchBluePrintModelsByKeyWordPaged(keyWord: String, pageRequest: PageRequest): Page<BlueprintModelSearch>
-    {
-        return blueprintModelSearchRepository.
-                findByUpdatedByOrTagsOrOrArtifactNameOrOrArtifactVersionOrArtifactType(keyWord,keyWord,keyWord,keyWord,keyWord,pageRequest)
+    open fun searchBluePrintModelsByKeyWordPaged(keyWord: String, pageRequest: PageRequest): Page<BlueprintModelSearch> {
+        return blueprintModelSearchRepository.findByUpdatedByOrTagsOrOrArtifactNameOrOrArtifactVersionOrArtifactType(keyWord, keyWord, keyWord, keyWord, keyWord, pageRequest)
     }
+
     /**
      * This is a deleteBlueprintModel method
      *
