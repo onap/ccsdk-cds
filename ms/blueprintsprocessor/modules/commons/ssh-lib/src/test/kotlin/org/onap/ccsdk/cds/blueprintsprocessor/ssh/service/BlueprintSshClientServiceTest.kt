@@ -1,6 +1,8 @@
 /*
  *  Copyright © 2019 IBM.
  *
+ *  Modifications Copyright © 2018-2019 IBM, Bell Canada
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -34,6 +36,7 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import java.nio.file.Paths
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -57,15 +60,30 @@ class BlueprintSshClientServiceTest {
     @Autowired
     lateinit var bluePrintSshLibPropertyService: BluePrintSshLibPropertyService
 
-    @Test
+    // TODO: enable this once we are able to have EchoShellFactory() for shellChannel testing
+    @Ignore
     fun testBasicAuthSshClientService() {
         runBlocking {
             val sshServer = setupTestServer("localhost", 52815, "root", "dummyps")
             sshServer.start()
             println(sshServer)
             val bluePrintSshLibPropertyService = bluePrintSshLibPropertyService.blueprintSshClientService("sample")
-            val sshSession = bluePrintSshLibPropertyService.startSession()
-            val response = bluePrintSshLibPropertyService.executeCommandsNB(arrayListOf("echo '1'", "echo '2'"), 2000)
+            bluePrintSshLibPropertyService.startSession()
+            val response = bluePrintSshLibPropertyService.executeCommands(arrayListOf("date", "ls"), 3000)
+            assertNotNull(response, "failed to get command response")
+            bluePrintSshLibPropertyService.closeSession()
+            sshServer.stop(true)
+        }
+    }
+
+    @Test
+    fun `testBasicAuthSshClientService running commands in different contexts`() { runBlocking {
+            val sshServer = setupTestServer("localhost", 52815, "root", "dummyps")
+            sshServer.start()
+            println(sshServer)
+            val bluePrintSshLibPropertyService = bluePrintSshLibPropertyService.blueprintSshClientService("sample")
+            bluePrintSshLibPropertyService.startSession()
+            val response = bluePrintSshLibPropertyService.executeCommandsInDifferentContexts(arrayListOf("echo '1'", "echo '2'"), 2000)
             assertNotNull(response, "failed to get command response")
             bluePrintSshLibPropertyService.closeSession()
             sshServer.stop(true)
