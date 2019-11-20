@@ -61,8 +61,23 @@ class BlueprintSshClientServiceTest {
             sshServer.start()
             println(sshServer)
             val bluePrintSshLibPropertyService = bluePrintSshLibPropertyService.blueprintSshClientService("sample")
-            val sshSession = bluePrintSshLibPropertyService.startSession()
-            val response = bluePrintSshLibPropertyService.executeCommandsNB(arrayListOf("echo '1'", "echo '2'"), 2000)
+            bluePrintSshLibPropertyService.startSession()
+            val response = bluePrintSshLibPropertyService.executeCommandsNB(arrayListOf("echo '1'", "echo '2'"))
+            assertNotNull(response, "failed to get command response")
+            bluePrintSshLibPropertyService.closeSession()
+            sshServer.stop(true)
+        }
+    }
+
+    @Test
+    fun `testBasicAuthSshClientService running commands in new context`() {
+        runBlocking {
+            val sshServer = setupTestServer("localhost", 52815, "root", "dummyps")
+            sshServer.start()
+            println(sshServer)
+            val bluePrintSshLibPropertyService = bluePrintSshLibPropertyService.blueprintSshClientService("sample")
+            bluePrintSshLibPropertyService.startSession()
+            val response = bluePrintSshLibPropertyService.executeCommandsWithNewContextNB(arrayListOf("echo '1'", "echo '2'"), 2000)
             assertNotNull(response, "failed to get command response")
             bluePrintSshLibPropertyService.closeSession()
             sshServer.stop(true)

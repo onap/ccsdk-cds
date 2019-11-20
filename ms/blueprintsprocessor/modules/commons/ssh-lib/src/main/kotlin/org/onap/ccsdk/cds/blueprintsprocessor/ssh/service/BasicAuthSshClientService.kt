@@ -1,6 +1,8 @@
 /*
  *  Copyright © 2019 IBM.
  *
+ *  Modifications Copyright © 2018-2019 IBM, Bell Canada
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -27,7 +29,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.slf4j.LoggerFactory
 import java.io.ByteArrayOutputStream
 import java.util.*
-
+import java.util.EnumSet
 
 open class BasicAuthSshClientService(private val basicAuthSshClientProperties: BasicAuthSshClientProperties)
     : BlueprintSshClientService {
@@ -36,7 +38,7 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
 
     private lateinit var sshClient: SshClient
     private lateinit var clientSession: ClientSession
-    var channel: ChannelExec? = null
+    private var channel: ChannelExec? = null
 
     override suspend fun startSessionNB(): ClientSession {
         sshClient = SshClient.setUpDefaultClient()
@@ -54,7 +56,31 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
         return clientSession
     }
 
-    override suspend fun executeCommandsNB(commands: List<String>, timeOut: Long): String {
+    override suspend fun executeCommandsNB(commands: List<String>): String {
+        val buffer = StringBuffer()
+        try {
+            commands.forEach { command ->
+                buffer.append("\nCommand : $command")
+                buffer.append("\n" + executeCommand(command))
+            }
+
+        } catch (e: Exception) {
+            throw BluePrintProcessorException("Failed to execute commands, below the output : $buffer")
+        }
+        return buffer.toString()
+    }
+
+    private fun executeCommand(command: String): String {
+        log.debug("Executing host($clientSession) command($command)")
+
+        if (!clientSession.isAuthenticated) {
+            throw BluePrintProcessorException("Failed to authenticate user (${basicAuthSshClientProperties.username}) " +
+                    "on the remote device ${basicAuthSshClientProperties.host}")
+        }
+        return clientSession.executeRemoteCommand(command)
+    }
+
+    override suspend fun executeCommandsWithNewContextNB(commands: List<String>, timeOut: Long): String {
         val buffer = StringBuffer()
         try {
             commands.forEach { command ->
@@ -68,8 +94,11 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
     }
 
     override suspend fun executeCommandNB(command: String, timeOut: Long): String {
-        log.debug("Executing host($clientSession) command($command)")
+        log.debug("Executing host($clientSession) command($command) in a new context")
 
+        if (channel != null) {
+            channel!!.close()
+        }
         channel = clientSession.createExecChannel(command)
         checkNotNull(channel) { "failed to create Channel for the command : $command" }
 
@@ -84,15 +113,22 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
         }
         val exitStatus = channel!!.exitStatus
         ClientChannel.validateCommandExitStatusCode(command, exitStatus!!)
-        return outputStream.toString()
+        return channel!!.out.toString()
     }
 
     override suspend fun closeSessionNB() {
-        if (channel != null)
+        if (channel != null) {
             channel!!.close()
+        }
+
+        if (clientSession.isOpen && !clientSession.isClosing) {
+            clientSession.close()
+        }
+
         if (sshClient.isStarted) {
             sshClient.stop()
         }
+
         log.debug("SSH Client Service stopped successfully")
     }
 }
