@@ -16,6 +16,8 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 
+import java.util.concurrent.Phaser
+import javax.annotation.PreDestroy
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -29,15 +31,14 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
-import java.util.concurrent.Phaser
-import javax.annotation.PreDestroy
 
 @ConditionalOnProperty(name = ["blueprintsprocessor.messageconsumer.self-service-api.kafkaEnable"],
-        havingValue = "true")
+    havingValue = "true")
 @Service
 open class BluePrintProcessingKafkaConsumer(
-        private val bluePrintMessageLibPropertyService: BluePrintMessageLibPropertyService,
-        private val executionServiceHandler: ExecutionServiceHandler) {
+    private val bluePrintMessageLibPropertyService: BluePrintMessageLibPropertyService,
+    private val executionServiceHandler: ExecutionServiceHandler
+) {
 
     val log = logger(BluePrintProcessingKafkaConsumer::class)
 
@@ -59,7 +60,7 @@ open class BluePrintProcessingKafkaConsumer(
             /** Get the Message Consumer Service **/
             blueprintMessageConsumerService = try {
                 bluePrintMessageLibPropertyService
-                        .blueprintMessageConsumerService(CONSUMER_SELECTOR)
+                    .blueprintMessageConsumerService(CONSUMER_SELECTOR)
             } catch (e: Exception) {
                 throw BluePrintProcessorException("failed to create consumer service ${e.message}")
             }
@@ -67,7 +68,7 @@ open class BluePrintProcessingKafkaConsumer(
             /** Get the Message Producer Service **/
             val blueprintMessageProducerService = try {
                 bluePrintMessageLibPropertyService
-                        .blueprintMessageProducerService(PRODUCER_SELECTOR)
+                    .blueprintMessageProducerService(PRODUCER_SELECTOR)
             } catch (e: Exception) {
                 throw BluePrintProcessorException("failed to create producer service ${e.message}")
             }
@@ -83,13 +84,12 @@ open class BluePrintProcessingKafkaConsumer(
                             log.trace("Consumed Message : $message")
                             val executionServiceInput = message.jsonAsType<ExecutionServiceInput>()
                             val executionServiceOutput = executionServiceHandler.doProcess(executionServiceInput)
-                            //TODO("In future, Message publisher configuration vary with respect to request")
+                            // TODO("In future, Message publisher configuration vary with respect to request")
                             /** Send the response message */
                             blueprintMessageProducerService.sendMessage(executionServiceOutput)
                         } catch (e: Exception) {
                             log.error("failed in processing the consumed message : $message", e)
-                        }
-                        finally {
+                        } finally {
                             ph.arriveAndDeregister()
                         }
                     }
@@ -112,5 +112,4 @@ open class BluePrintProcessingKafkaConsumer(
             log.error("failed to shutdown message listener($CONSUMER_SELECTOR)", e)
         }
     }
-
 }

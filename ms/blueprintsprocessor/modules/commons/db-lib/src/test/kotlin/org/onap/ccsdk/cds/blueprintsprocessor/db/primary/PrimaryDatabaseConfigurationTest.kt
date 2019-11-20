@@ -16,6 +16,8 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.db.primary
 
+import javax.sql.DataSource
+import kotlin.test.assertNotNull
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
@@ -28,8 +30,6 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import javax.sql.DataSource
-import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class,

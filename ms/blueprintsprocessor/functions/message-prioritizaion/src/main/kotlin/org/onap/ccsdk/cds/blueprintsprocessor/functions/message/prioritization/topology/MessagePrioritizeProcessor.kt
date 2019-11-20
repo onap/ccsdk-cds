@@ -16,6 +16,8 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.topology
 
+import java.time.Duration
+import java.util.UUID
 import org.apache.kafka.streams.processor.Cancellable
 import org.apache.kafka.streams.processor.ProcessorContext
 import org.apache.kafka.streams.processor.PunctuationType
@@ -28,9 +30,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.u
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-import java.time.Duration
-import java.util.*
-
 
 open class MessagePrioritizeProcessor : AbstractMessagePrioritizeProcessor<ByteArray, ByteArray>() {
 
@@ -42,7 +41,7 @@ open class MessagePrioritizeProcessor : AbstractMessagePrioritizeProcessor<ByteA
     override suspend fun processNB(key: ByteArray, value: ByteArray) {
         log.info("***** received in prioritize processor key(${String(key)})")
         val messagePrioritize = JacksonUtils.readValue(String(value), MessagePrioritization::class.java)
-                ?: throw BluePrintProcessorException("failed to convert")
+            ?: throw BluePrintProcessorException("failed to convert")
         try {
             // Save the Message
             messagePrioritizationStateService.saveMessage(messagePrioritize)
@@ -52,10 +51,10 @@ open class MessagePrioritizeProcessor : AbstractMessagePrioritizeProcessor<ByteA
             log.error(messagePrioritize.error)
             /** Update the data store */
             messagePrioritizationStateService.setMessageStateANdError(messagePrioritize.id, MessageState.ERROR.name,
-                    messagePrioritize.error!!)
+                messagePrioritize.error!!)
             /** Publish to Output topic */
             this.processorContext.forward(messagePrioritize.id, messagePrioritize,
-                    To.child(MessagePrioritizationConstants.SINK_OUTPUT))
+                To.child(MessagePrioritizationConstants.SINK_OUTPUT))
         }
     }
 
@@ -80,7 +79,7 @@ open class MessagePrioritizeProcessor : AbstractMessagePrioritizeProcessor<ByteA
         expiryPunctuator.configuration = prioritizationConfiguration
         val expiryConfiguration = prioritizationConfiguration.expiryConfiguration
         expiryCancellable = processorContext.schedule(Duration.ofMillis(expiryConfiguration.frequencyMilli),
-                PunctuationType.WALL_CLOCK_TIME, expiryPunctuator)
+            PunctuationType.WALL_CLOCK_TIME, expiryPunctuator)
         log.info("Expiry punctuator setup complete with frequency(${expiryConfiguration.frequencyMilli})mSec")
     }
 
@@ -90,7 +89,7 @@ open class MessagePrioritizeProcessor : AbstractMessagePrioritizeProcessor<ByteA
         cleanPunctuator.configuration = prioritizationConfiguration
         val cleanConfiguration = prioritizationConfiguration.cleanConfiguration
         cleanCancellable = processorContext.schedule(Duration.ofDays(cleanConfiguration.expiredRecordsHoldDays.toLong()),
-                PunctuationType.WALL_CLOCK_TIME, cleanPunctuator)
+            PunctuationType.WALL_CLOCK_TIME, cleanPunctuator)
         log.info("Clean punctuator setup complete with expiry " +
                 "hold(${cleanConfiguration.expiredRecordsHoldDays})days")
     }
@@ -107,20 +106,20 @@ open class MessagePrioritizeProcessor : AbstractMessagePrioritizeProcessor<ByteA
 
             /** Get all previously received messages from database for group and optional types and correlation Id */
             val waitingCorrelatedStoreMessages = messagePrioritizationStateService.getCorrelatedMessages(group,
-                    arrayListOf(MessageState.NEW.name, MessageState.WAIT.name), types, correlationId)
+                arrayListOf(MessageState.NEW.name, MessageState.WAIT.name), types, correlationId)
 
             /** If multiple records found, then check correlation */
             if (!waitingCorrelatedStoreMessages.isNullOrEmpty() && waitingCorrelatedStoreMessages.size > 1) {
                 /** Check all correlation satisfies */
                 val correlationResults = MessageCorrelationUtils
-                        .correlatedMessagesWithTypes(waitingCorrelatedStoreMessages, types)
+                    .correlatedMessagesWithTypes(waitingCorrelatedStoreMessages, types)
 
                 if (correlationResults.correlated) {
                     /** Correlation  satisfied */
                     val correlatedIds = waitingCorrelatedStoreMessages.map { it.id }.joinToString(",")
                     /**  Send only correlated ids to next processor */
                     this.processorContext.forward(UUID.randomUUID().toString(), correlatedIds,
-                            To.child(MessagePrioritizationConstants.PROCESSOR_AGGREGATE))
+                        To.child(MessagePrioritizationConstants.PROCESSOR_AGGREGATE))
                 } else {
                     /** Correlation not satisfied */
                     log.trace("correlation not matched : ${correlationResults.message}")
@@ -136,7 +135,7 @@ open class MessagePrioritizeProcessor : AbstractMessagePrioritizeProcessor<ByteA
             // No Correlation check needed, simply forward to next processor.
             messagePrioritizationStateService.setMessageState(messagePrioritization.id, MessageState.PRIORITIZED.name)
             this.processorContext.forward(messagePrioritization.id, messagePrioritization.id,
-                    To.child(MessagePrioritizationConstants.PROCESSOR_AGGREGATE))
+                To.child(MessagePrioritizationConstants.PROCESSOR_AGGREGATE))
         }
     }
 

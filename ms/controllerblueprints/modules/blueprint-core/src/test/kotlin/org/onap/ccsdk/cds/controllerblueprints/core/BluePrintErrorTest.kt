@@ -1,8 +1,8 @@
 package org.onap.ccsdk.cds.controllerblueprints.core
 
-import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import org.junit.Test
 
 class BluePrintErrorTest {
 

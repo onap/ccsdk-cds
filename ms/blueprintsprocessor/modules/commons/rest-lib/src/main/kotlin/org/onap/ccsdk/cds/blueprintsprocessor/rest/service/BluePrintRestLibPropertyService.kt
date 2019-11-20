@@ -20,7 +20,14 @@ package org.onap.ccsdk.cds.blueprintsprocessor.rest.service
 
 import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.*
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.PolicyManagerRestClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestLibConstants
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLBasicAuthRestClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLRestClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLTokenAuthRestClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.TokenAuthRestClientProperties
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.stereotype.Service
@@ -43,7 +50,7 @@ open class BluePrintRestLibPropertyService(private var bluePrintPropertiesServic
 
     open fun blueprintWebClientService(jsonNode: JsonNode): BlueprintWebClientService {
         val service = preInterceptor?.getInstance(jsonNode)
-                ?: blueprintWebClientService(restClientProperties(jsonNode))
+            ?: blueprintWebClientService(restClientProperties(jsonNode))
         return postInterceptor?.getInstance(jsonNode, service) ?: service
     }
 
@@ -58,7 +65,7 @@ open class BluePrintRestLibPropertyService(private var bluePrintPropertiesServic
 
     fun restClientProperties(prefix: String): RestClientProperties {
         val type = bluePrintPropertiesService.propertyBeanType(
-                "$prefix.type", String::class.java)
+            "$prefix.type", String::class.java)
         return when (type) {
             RestLibConstants.TYPE_BASIC_AUTH -> {
                 basicAuthRestClientProperties(prefix)
@@ -111,7 +118,7 @@ open class BluePrintRestLibPropertyService(private var bluePrintPropertiesServic
             }
             else -> {
                 throw BluePrintProcessorException(
-                        "Rest adaptor($type) is not supported")
+                    "Rest adaptor($type) is not supported")
             }
         }
     }
@@ -138,24 +145,24 @@ open class BluePrintRestLibPropertyService(private var bluePrintPropertiesServic
     private fun tokenRestClientProperties(prefix: String):
             TokenAuthRestClientProperties {
         return bluePrintPropertiesService.propertyBeanType(
-                prefix, TokenAuthRestClientProperties::class.java)
+            prefix, TokenAuthRestClientProperties::class.java)
     }
 
     private fun basicAuthRestClientProperties(prefix: String):
             BasicAuthRestClientProperties {
         return bluePrintPropertiesService.propertyBeanType(
-                prefix, BasicAuthRestClientProperties::class.java)
+            prefix, BasicAuthRestClientProperties::class.java)
     }
 
     private fun sslBasicAuthRestClientProperties(prefix: String):
             SSLRestClientProperties {
 
         val sslProps: SSLBasicAuthRestClientProperties =
-                bluePrintPropertiesService.propertyBeanType(
-                        prefix, SSLBasicAuthRestClientProperties::class.java)
+            bluePrintPropertiesService.propertyBeanType(
+                prefix, SSLBasicAuthRestClientProperties::class.java)
         val basicProps: BasicAuthRestClientProperties =
-                bluePrintPropertiesService.propertyBeanType(
-                        prefix, BasicAuthRestClientProperties::class.java)
+            bluePrintPropertiesService.propertyBeanType(
+                prefix, BasicAuthRestClientProperties::class.java)
         sslProps.basicAuth = basicProps
         return sslProps
     }
@@ -164,11 +171,11 @@ open class BluePrintRestLibPropertyService(private var bluePrintPropertiesServic
             SSLRestClientProperties {
 
         val sslProps: SSLTokenAuthRestClientProperties =
-                bluePrintPropertiesService.propertyBeanType(prefix,
-                        SSLTokenAuthRestClientProperties::class.java)
+            bluePrintPropertiesService.propertyBeanType(prefix,
+                SSLTokenAuthRestClientProperties::class.java)
         val basicProps: TokenAuthRestClientProperties =
-                bluePrintPropertiesService.propertyBeanType(prefix,
-                        TokenAuthRestClientProperties::class.java)
+            bluePrintPropertiesService.propertyBeanType(prefix,
+                TokenAuthRestClientProperties::class.java)
         sslProps.tokenAuth = basicProps
         return sslProps
     }
@@ -176,13 +183,13 @@ open class BluePrintRestLibPropertyService(private var bluePrintPropertiesServic
     private fun sslNoAuthRestClientProperties(prefix: String):
             SSLRestClientProperties {
         return bluePrintPropertiesService.propertyBeanType(
-                prefix, SSLRestClientProperties::class.java)
+            prefix, SSLRestClientProperties::class.java)
     }
 
     private fun policyManagerRestClientProperties(prefix: String):
             PolicyManagerRestClientProperties {
         return bluePrintPropertiesService.propertyBeanType(
-                prefix, PolicyManagerRestClientProperties::class.java)
+            prefix, PolicyManagerRestClientProperties::class.java)
     }
 
     interface PreInterceptor {
@@ -197,5 +204,3 @@ open class BluePrintRestLibPropertyService(private var bluePrintPropertiesServic
         fun getInstance(selector: String, service: BlueprintWebClientService): BlueprintWebClientService
     }
 }
-
-

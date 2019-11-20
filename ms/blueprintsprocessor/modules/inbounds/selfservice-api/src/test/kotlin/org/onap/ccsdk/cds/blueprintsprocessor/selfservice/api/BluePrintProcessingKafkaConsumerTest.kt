@@ -18,6 +18,8 @@ package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlin.test.Test
+import kotlin.test.assertNotNull
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -30,8 +32,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.Test
-import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [BluePrintMessageLibConfiguration::class,
@@ -46,14 +46,14 @@ class BluePrintProcessingKafkaConsumerTest {
     fun testExecutionInputMessageConsumer() {
         runBlocking {
             assertNotNull(bluePrintMessageLibPropertyService,
-                    "failed to initialise bluePrintMessageLibPropertyService")
+                "failed to initialise bluePrintMessageLibPropertyService")
 
             val executionServiceHandle = mockk<ExecutionServiceHandler>()
 
             coEvery { executionServiceHandle.doProcess(any()) } returns mockk()
 
             val bluePrintProcessingKafkaConsumer = BluePrintProcessingKafkaConsumer(bluePrintMessageLibPropertyService,
-                    executionServiceHandle)
+                executionServiceHandle)
 
             launch {
                 bluePrintProcessingKafkaConsumer.setupMessageListener()
@@ -62,5 +62,4 @@ class BluePrintProcessingKafkaConsumerTest {
             bluePrintProcessingKafkaConsumer.shutdownMessageListener()
         }
     }
-
 }

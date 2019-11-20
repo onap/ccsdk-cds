@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import io.mockk.every
 import io.mockk.mockk
+import kotlin.test.assertNotNull
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ActionIdentifiers
@@ -34,7 +35,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.context.ApplicationContext
-import kotlin.test.assertNotNull
 
 class ComponentRestconfExecutorTest {
 
@@ -67,7 +67,7 @@ class ComponentRestconfExecutorTest {
             operationInputs[BluePrintConstants.PROPERTY_CURRENT_OPERATION] = "operationName".asJsonPrimitive()
             operationInputs[ComponentScriptExecutor.INPUT_SCRIPT_TYPE] = BluePrintConstants.SCRIPT_INTERNAL.asJsonPrimitive()
             operationInputs[ComponentScriptExecutor.INPUT_SCRIPT_CLASS_REFERENCE] =
-                    "internal.scripts.TestRestconfConfigure".asJsonPrimitive()
+                "internal.scripts.TestRestconfConfigure".asJsonPrimitive()
 
             val stepInputData = StepData().apply {
                 name = "activate-restconf"
@@ -79,13 +79,13 @@ class ComponentRestconfExecutorTest {
             every { bluePrintRuntime.bluePrintContext() } returns blueprintContext
             every {
                 bluePrintRuntime.resolveNodeTemplateInterfaceOperationInputs("activate-restconf",
-                        "interfaceName", "operationName")
+                    "interfaceName", "operationName")
             } returns operationInputs
 
             val operationOutputs = hashMapOf<String, JsonNode>()
             every {
                 bluePrintRuntime.resolveNodeTemplateInterfaceOperationOutputs("activate-restconf",
-                        "interfaceName", "operationName")
+                    "interfaceName", "operationName")
             } returns operationOutputs
 
             componentScriptExecutor.applyNB(executionServiceInput)

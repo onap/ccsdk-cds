@@ -19,6 +19,8 @@ package org.onap.ccsdk.cds.controllerblueprints.validation
 
 import io.mockk.every
 import io.mockk.mockk
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
@@ -29,8 +31,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.validation.extension.ResourceDefinitionValidator
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class BluePrintDesignTimeValidatorServiceTest {
 
@@ -60,7 +60,8 @@ class BluePrintDesignTimeValidatorServiceTest {
         workflowValidator.validate(bluePrintRuntime, workflowName, workflow)
 
         assertEquals(1, bluePrintRuntime.getBluePrintError().errors.size)
-        assertEquals("Failed to validate Workflow(resource-assignment)'s step(test)'s definition : resource-assignment/steps/test : could't get node template for the name(TestCaseFailNoNodeTemplate)", bluePrintRuntime.getBluePrintError().errors[0])
+        assertEquals("Failed to validate Workflow(resource-assignment)'s step(test)'s definition : resource-assignment/steps/test : could't get node template for the name(TestCaseFailNoNodeTemplate)",
+            bluePrintRuntime.getBluePrintError().errors[0])
     }
 
     @Test
@@ -100,6 +101,4 @@ class BluePrintDesignTimeValidatorServiceTest {
         val workflowName = "resource-assignment"
         workflowValidator.validate(bluePrintRuntime, workflowName, bluePrintRuntime.bluePrintContext().workflowByName(workflowName))
     }
-
 }
-

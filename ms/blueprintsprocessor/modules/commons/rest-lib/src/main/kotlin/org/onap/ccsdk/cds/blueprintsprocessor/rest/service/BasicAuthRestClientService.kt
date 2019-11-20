@@ -16,15 +16,17 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.rest.service
 
+import java.nio.charset.Charset
+import java.util.Base64
 import org.apache.http.message.BasicHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
-import java.nio.charset.Charset
-import java.util.*
 
-class BasicAuthRestClientService(private val restClientProperties:
-                                 BasicAuthRestClientProperties) :
+class BasicAuthRestClientService(
+    private val restClientProperties:
+    BasicAuthRestClientProperties
+) :
     BlueprintWebClientService {
 
     override fun defaultHeaders(): Map<String, String> {
@@ -41,11 +43,10 @@ class BasicAuthRestClientService(private val restClientProperties:
         return restClientProperties.url + uri
     }
 
-
     override fun convertToBasicHeaders(headers: Map<String, String>):
-        Array<BasicHeader> {
+            Array<BasicHeader> {
         val customHeaders: MutableMap<String, String> = headers.toMutableMap()
-        //inject additionalHeaders
+        // inject additionalHeaders
         customHeaders.putAll(verifyAdditionalHeaders(restClientProperties))
 
         if (!headers.containsKey(HttpHeaders.AUTHORIZATION)) {
@@ -63,5 +64,4 @@ class BasicAuthRestClientService(private val restClientProperties:
         return Base64.getEncoder().encodeToString(
             credentialsString.toByteArray(Charset.defaultCharset()))
     }
-
 }

@@ -18,6 +18,8 @@ package org.onap.ccsdk.cds.blueprintsprocessor.services.workflow
 import io.mockk.every
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -31,13 +33,12 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [WorkflowServiceConfiguration::class])
 
 class NodeTemplateExecutionServiceTest {
+
     @Before
     fun init() {
         mockkObject(BluePrintDependencyService)
@@ -53,10 +54,10 @@ class NodeTemplateExecutionServiceTest {
     fun testExecuteNodeTemplate() {
         runBlocking {
             val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                    "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+                "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
             val executionServiceInput = JacksonUtils.readValueFromClassPathFile("execution-input/resource-assignment-input.json",
-                    ExecutionServiceInput::class.java)!!
+                ExecutionServiceInput::class.java)!!
 
             // Assign Workflow inputs Mock
             val input = executionServiceInput.payload.get("resource-assignment-request")
@@ -65,11 +66,11 @@ class NodeTemplateExecutionServiceTest {
             val nodeTemplate = "resource-assignment"
             val nodeTemplateExecutionService = NodeTemplateExecutionService()
             val executionServiceOutput = nodeTemplateExecutionService
-                    .executeNodeTemplate(bluePrintRuntimeService, nodeTemplate, executionServiceInput)
+                .executeNodeTemplate(bluePrintRuntimeService, nodeTemplate, executionServiceInput)
 
             assertNotNull(executionServiceOutput, "failed to get response")
             assertEquals(BluePrintConstants.STATUS_SUCCESS, executionServiceOutput.status.message,
-                    "failed to get successful response")
+                "failed to get successful response")
         }
     }
 }

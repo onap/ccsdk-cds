@@ -30,31 +30,41 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
 import org.onap.ccsdk.cds.controllerblueprints.core.emptyTONull
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.currentTimestamp
-import org.onap.ccsdk.cds.controllerblueprints.management.api.*
+import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintDownloadInput
+import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintManagementOutput
+import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintManagementServiceGrpc
+import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintRemoveInput
+import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintUploadInput
+import org.onap.ccsdk.cds.controllerblueprints.management.api.DownloadAction
+import org.onap.ccsdk.cds.controllerblueprints.management.api.FileChunk
+import org.onap.ccsdk.cds.controllerblueprints.management.api.RemoveAction
+import org.onap.ccsdk.cds.controllerblueprints.management.api.UploadAction
 import org.slf4j.LoggerFactory
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Service
 
-//TODO("Convert to coroutines handler")
+// TODO("Convert to coroutines handler")
 @Service
-open class BluePrintManagementGRPCHandler(private val bluePrintModelHandler: BluePrintModelHandler)
-    : BluePrintManagementServiceGrpc.BluePrintManagementServiceImplBase() {
+open class BluePrintManagementGRPCHandler(private val bluePrintModelHandler: BluePrintModelHandler) :
+    BluePrintManagementServiceGrpc.BluePrintManagementServiceImplBase() {
 
     private val log = LoggerFactory.getLogger(BluePrintManagementGRPCHandler::class.java)
 
     @PreAuthorize("hasRole('USER')")
-    override fun uploadBlueprint(request: BluePrintUploadInput, responseObserver:
-    StreamObserver<BluePrintManagementOutput>) {
+    override fun uploadBlueprint(
+        request: BluePrintUploadInput,
+        responseObserver: StreamObserver<BluePrintManagementOutput>
+    ) {
 
         runBlocking {
-            //TODO("catch if request id is missing")
+            // TODO("catch if request id is missing")
             log.info("request(${request.commonHeader.requestId})")
             try {
                 /** Get the file byte array */
                 val byteArray = request.fileChunk.chunk.toByteArray()
                 /** Get the Upload Action */
                 val uploadAction = request.actionIdentifiers?.actionName.emptyTONull()
-                        ?: UploadAction.DRAFT.toString()
+                    ?: UploadAction.DRAFT.toString()
 
                 when (uploadAction) {
                     UploadAction.DRAFT.toString() -> {
@@ -66,10 +76,10 @@ open class BluePrintManagementGRPCHandler(private val bluePrintModelHandler: Blu
                         responseObserver.onNext(successStatus(request.commonHeader, blueprintModel.asJsonString()))
                     }
                     UploadAction.VALIDATE.toString() -> {
-                        //TODO("Not Implemented")
+                        // TODO("Not Implemented")
                         responseObserver.onNext(failStatus(request.commonHeader,
-                                "Upload action($uploadAction) not implemented",
-                                BluePrintProcessorException("Not Implemented")))
+                            "Upload action($uploadAction) not implemented",
+                            BluePrintProcessorException("Not Implemented")))
                     }
                     UploadAction.ENRICH.toString() -> {
                         val enrichedByteArray = bluePrintModelHandler.enrichBlueprintFileSource(byteArray)
@@ -77,13 +87,13 @@ open class BluePrintManagementGRPCHandler(private val bluePrintModelHandler: Blu
                     }
                     else -> {
                         responseObserver.onNext(failStatus(request.commonHeader,
-                                "Upload action($uploadAction) not implemented",
-                                BluePrintProcessorException("Not implemented")))
+                            "Upload action($uploadAction) not implemented",
+                            BluePrintProcessorException("Not implemented")))
                     }
                 }
             } catch (e: Exception) {
                 responseObserver.onNext(failStatus(request.commonHeader,
-                        "request(${request.commonHeader.requestId}): Failed to upload CBA", e))
+                    "request(${request.commonHeader.requestId}): Failed to upload CBA", e))
             } finally {
                 responseObserver.onCompleted()
             }
@@ -91,8 +101,10 @@ open class BluePrintManagementGRPCHandler(private val bluePrintModelHandler: Blu
     }
 
     @PreAuthorize("hasRole('USER')")
-    override fun downloadBlueprint(request: BluePrintDownloadInput,
-                                   responseObserver: StreamObserver<BluePrintManagementOutput>) {
+    override fun downloadBlueprint(
+        request: BluePrintDownloadInput,
+        responseObserver: StreamObserver<BluePrintManagementOutput>
+    ) {
         runBlocking {
             val blueprintName = request.actionIdentifiers.blueprintName
             val blueprintVersion = request.actionIdentifiers.blueprintVersion
@@ -100,7 +112,7 @@ open class BluePrintManagementGRPCHandler(private val bluePrintModelHandler: Blu
 
             /** Get the Search Action */
             val searchAction = request.actionIdentifiers?.actionName.emptyTONull()
-                    ?: DownloadAction.SEARCH.toString()
+                ?: DownloadAction.SEARCH.toString()
 
             log.info("request(${request.commonHeader.requestId}): Received download $blueprint")
             try {
@@ -111,13 +123,13 @@ open class BluePrintManagementGRPCHandler(private val bluePrintModelHandler: Blu
                     }
                     else -> {
                         responseObserver.onNext(failStatus(request.commonHeader,
-                                "Search action($searchAction) not implemented",
-                                BluePrintProcessorException("Not implemented")))
+                            "Search action($searchAction) not implemented",
+                            BluePrintProcessorException("Not implemented")))
                     }
                 }
             } catch (e: Exception) {
                 responseObserver.onNext(failStatus(request.commonHeader,
-                        "request(${request.commonHeader.requestId}): Failed to delete $blueprint", e))
+                    "request(${request.commonHeader.requestId}): Failed to delete $blueprint", e))
             } finally {
                 responseObserver.onCompleted()
             }
@@ -125,8 +137,11 @@ open class BluePrintManagementGRPCHandler(private val bluePrintModelHandler: Blu
     }
 
     @PreAuthorize("hasRole('USER')")
-    override fun removeBlueprint(request: BluePrintRemoveInput, responseObserver:
-    StreamObserver<BluePrintManagementOutput>) {
+    override fun removeBlueprint(
+        request: BluePrintRemoveInput,
+        responseObserver:
+            StreamObserver<BluePrintManagementOutput>
+    ) {
 
         runBlocking {
             val blueprintName = request.actionIdentifiers.blueprintName
@@ -137,7 +152,7 @@ open class BluePrintManagementGRPCHandler(private val bluePrintModelHandler: Blu
 
             /** Get the Remove Action */
             val removeAction = request.actionIdentifiers?.actionName.emptyTONull()
-                    ?: RemoveAction.DEFAULT.toString()
+                ?: RemoveAction.DEFAULT.toString()
 
             try {
                 when (removeAction) {
@@ -147,13 +162,13 @@ open class BluePrintManagementGRPCHandler(private val bluePrintModelHandler: Blu
                     }
                     else -> {
                         responseObserver.onNext(failStatus(request.commonHeader,
-                                "Remove action($removeAction) not implemented",
-                                BluePrintProcessorException("Not implemented")))
+                            "Remove action($removeAction) not implemented",
+                            BluePrintProcessorException("Not implemented")))
                     }
                 }
             } catch (e: Exception) {
                 responseObserver.onNext(failStatus(request.commonHeader,
-                        "request(${request.commonHeader.requestId}): Failed to delete $blueprint", e))
+                    "request(${request.commonHeader.requestId}): Failed to delete $blueprint", e))
             } finally {
                 responseObserver.onCompleted()
             }
@@ -161,15 +176,15 @@ open class BluePrintManagementGRPCHandler(private val bluePrintModelHandler: Blu
     }
 
     private fun outputWithFileBytes(header: CommonHeader, byteArray: ByteArray): BluePrintManagementOutput =
-            BluePrintManagementOutput.newBuilder()
-                    .setCommonHeader(header)
-                    .setFileChunk(FileChunk.newBuilder().setChunk(ByteString.copyFrom(byteArray)))
-                    .setStatus(Status.newBuilder()
-                            .setTimestamp(currentTimestamp())
-                            .setMessage(BluePrintConstants.STATUS_SUCCESS)
-                            .setCode(200)
-                            .build())
-                    .build()
+        BluePrintManagementOutput.newBuilder()
+            .setCommonHeader(header)
+            .setFileChunk(FileChunk.newBuilder().setChunk(ByteString.copyFrom(byteArray)))
+            .setStatus(Status.newBuilder()
+                .setTimestamp(currentTimestamp())
+                .setMessage(BluePrintConstants.STATUS_SUCCESS)
+                .setCode(200)
+                .build())
+            .build()
 
     private fun successStatus(header: CommonHeader, propertyContent: String? = null): BluePrintManagementOutput {
         // Populate Response Payload
@@ -178,30 +193,30 @@ open class BluePrintManagementGRPCHandler(private val bluePrintModelHandler: Blu
             JsonFormat.parser().merge(propertyContent, propertiesBuilder)
         }
         return BluePrintManagementOutput.newBuilder()
-                .setCommonHeader(header)
-                .setProperties(propertiesBuilder.build())
-                .setStatus(Status.newBuilder()
-                        .setTimestamp(currentTimestamp())
-                        .setMessage(BluePrintConstants.STATUS_SUCCESS)
-                        .setCode(200)
-                        .build())
-                .build()
+            .setCommonHeader(header)
+            .setProperties(propertiesBuilder.build())
+            .setStatus(Status.newBuilder()
+                .setTimestamp(currentTimestamp())
+                .setMessage(BluePrintConstants.STATUS_SUCCESS)
+                .setCode(200)
+                .build())
+            .build()
     }
 
     private fun failStatus(header: CommonHeader, message: String, e: Exception): BluePrintManagementOutput {
         log.error(message, e)
         return BluePrintManagementOutput.newBuilder()
-                .setCommonHeader(header)
-                .setStatus(Status.newBuilder()
-                        .setTimestamp(currentTimestamp())
-                        .setMessage(BluePrintConstants.STATUS_FAILURE)
-                        .setErrorMessage(message)
-                        .setCode(500)
-                        .build())
-                .build()
-//        return io.grpc.Status.INTERNAL
-//                .withDescription(message)
-//                .withCause(e)
-//                .asException()
+            .setCommonHeader(header)
+            .setStatus(Status.newBuilder()
+                .setTimestamp(currentTimestamp())
+                .setMessage(BluePrintConstants.STATUS_FAILURE)
+                .setErrorMessage(message)
+                .setCode(500)
+                .build())
+            .build()
+        //        return io.grpc.Status.INTERNAL
+        //                .withDescription(message)
+        //                .withCause(e)
+        //                .asException()
     }
 }

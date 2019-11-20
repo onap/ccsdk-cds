@@ -38,7 +38,6 @@ import org.xmlunit.builder.Input
 import org.xmlunit.diff.ComparisonType
 import org.xmlunit.diff.Diff
 
-
 /**
  * ComponentConfigSnapshotsExecutor
  *
@@ -54,7 +53,7 @@ import org.xmlunit.diff.Diff
 @Component("component-config-snapshots-executor")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class ComponentConfigSnapshotsExecutor(private val cfgSnapshotService: ResourceConfigSnapshotService) :
-        AbstractComponentFunction() {
+    AbstractComponentFunction() {
 
     companion object {
         private val log = LoggerFactory.getLogger(ComponentConfigSnapshotsExecutor::class.java)
@@ -100,10 +99,10 @@ open class ComponentConfigSnapshotsExecutor(private val cfgSnapshotService: Reso
         when (operation) {
             OPERATION_FETCH -> fetchConfigurationSnapshot(resourceId, resourceType, status)
             OPERATION_STORE -> storeConfigurationSnapshot(snapshot, resourceId, resourceType, status)
-            OPERATION_DIFF  -> compareConfigurationSnapshot(resourceId, resourceType, contentType)
+            OPERATION_DIFF -> compareConfigurationSnapshot(resourceId, resourceType, contentType)
 
             else -> setNodeOutputErrors(OUTPUT_STATUS_ERROR,
-                                "Operation parameter must be fetch, store or diff")
+                "Operation parameter must be fetch, store or diff")
         }
     }
 
@@ -117,12 +116,15 @@ open class ComponentConfigSnapshotsExecutor(private val cfgSnapshotService: Reso
     /**
      * Fetch a configuration snapshot, for resource identified by ID/type, of type status (RUNNING by default)
      */
-    private suspend fun fetchConfigurationSnapshot(resourceId: String, resourceType: String,
-                                                   status : ResourceConfigSnapshot.Status = RUNNING) {
+    private suspend fun fetchConfigurationSnapshot(
+        resourceId: String,
+        resourceType: String,
+        status: ResourceConfigSnapshot.Status = RUNNING
+    ) {
         try {
             val cfgSnapshotValue = cfgSnapshotService.findByResourceIdAndResourceTypeAndStatus(resourceId, resourceType, status)
             setNodeOutputProperties(OUTPUT_STATUS_SUCCESS, cfgSnapshotValue)
-        } catch (er : NoSuchElementException) {
+        } catch (er: NoSuchElementException) {
             val message = "No Resource config snapshot identified by resourceId={$resourceId}, " +
                     "resourceType={$resourceType} does not exists"
             setNodeOutputErrors(OUTPUT_STATUS_ERROR, message)
@@ -132,11 +134,15 @@ open class ComponentConfigSnapshotsExecutor(private val cfgSnapshotService: Reso
     /**
      * Store a configuration snapshot, for resource identified by ID/type, of type status (RUNNING by default)
      */
-    private suspend fun storeConfigurationSnapshot(cfgSnapshotValue : String, resourceId: String, resourceType: String,
-                                                   status : ResourceConfigSnapshot.Status = RUNNING) {
+    private suspend fun storeConfigurationSnapshot(
+        cfgSnapshotValue: String,
+        resourceId: String,
+        resourceType: String,
+        status: ResourceConfigSnapshot.Status = RUNNING
+    ) {
         if (cfgSnapshotValue.isNotEmpty()) {
             val cfgSnapshotSaved = cfgSnapshotService.write(cfgSnapshotValue, resourceId, resourceType, status)
-            setNodeOutputProperties(OUTPUT_STATUS_SUCCESS, cfgSnapshotSaved.config_snapshot ?: "" )
+            setNodeOutputProperties(OUTPUT_STATUS_SUCCESS, cfgSnapshotSaved.config_snapshot ?: "")
         } else {
             val message = "Could not store config snapshot identified by resourceId={$resourceId},resourceType={$resourceType} does not exists"
             setNodeOutputErrors(OUTPUT_STATUS_ERROR, message)
@@ -146,7 +152,7 @@ open class ComponentConfigSnapshotsExecutor(private val cfgSnapshotService: Reso
     /**
      * Compare two configs (RUNNING vs CANDIDATE) for resource identified by ID/type, using the specified contentType
      */
-    private suspend fun compareConfigurationSnapshot(resourceId: String, resourceType: String, contentType : String) {
+    private suspend fun compareConfigurationSnapshot(resourceId: String, resourceType: String, contentType: String) {
 
         val cfgRunning = cfgSnapshotService.findByResourceIdAndResourceTypeAndStatus(resourceId, resourceType, RUNNING)
         val cfgCandidate = cfgSnapshotService.findByResourceIdAndResourceTypeAndStatus(resourceId, resourceType, CANDIDATE)
@@ -163,13 +169,13 @@ open class ComponentConfigSnapshotsExecutor(private val cfgSnapshotService: Reso
             }
             DIFF_XML -> {
                 val myDiff = DiffBuilder
-                        .compare(Input.fromString(cfgRunning))
-                        .withTest(Input.fromString(cfgCandidate))
-                        .checkForSimilar()
-                        .ignoreComments()
-                        .ignoreWhitespace()
-                        .normalizeWhitespace()
-                        .build()
+                    .compare(Input.fromString(cfgRunning))
+                    .withTest(Input.fromString(cfgCandidate))
+                    .checkForSimilar()
+                    .ignoreComments()
+                    .ignoreWhitespace()
+                    .normalizeWhitespace()
+                    .build()
 
                 setNodeOutputProperties(OUTPUT_STATUS_SUCCESS, formatXmlDifferences(myDiff))
             }
@@ -205,7 +211,7 @@ open class ComponentConfigSnapshotsExecutor(private val cfgSnapshotService: Reso
     /**
      * Formats XmlUnit differences into xml-patch like response (RFC5261)
      */
-    private fun formatXmlDifferences(differences : Diff) : String {
+    private fun formatXmlDifferences(differences: Diff): String {
         val output = StringBuilder()
         output.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
                 "<diff>")
@@ -216,18 +222,18 @@ open class ComponentConfigSnapshotsExecutor(private val cfgSnapshotService: Reso
             when (aDiff.type) {
                 ComparisonType.ATTR_VALUE -> {
                     output.append("<replace sel=\"").append(aDiff.testDetails.xPath).append("\">")
-                            .append(aDiff.testDetails.value)
-                            .append("</replace>")
+                        .append(aDiff.testDetails.value)
+                        .append("</replace>")
                 }
                 ComparisonType.TEXT_VALUE -> {
                     output.append("<replace sel=\"").append(aDiff.testDetails.xPath).append("\">")
-                            .append(aDiff.testDetails.value)
-                            .append("</replace>")
+                        .append(aDiff.testDetails.value)
+                        .append("</replace>")
                 }
                 ComparisonType.CHILD_LOOKUP -> {
                     output.append("<add sel=\"").append(aDiff.testDetails.parentXPath).append("\">")
-                            .append(formatNode(aDiff.testDetails.target))
-                            .append("</add>")
+                        .append(formatNode(aDiff.testDetails.target))
+                        .append("</add>")
                 }
                 ComparisonType.CHILD_NODELIST_LENGTH -> {
                     // Ignored; will be processed in the CHILD_LOOKUP case
@@ -253,7 +259,7 @@ open class ComponentConfigSnapshotsExecutor(private val cfgSnapshotService: Reso
         if (node.hasChildNodes()) {
             val nodes = node.childNodes
             for (index in 1..nodes.length) {
-                val child = nodes.item(index-1)
+                val child = nodes.item(index - 1)
                 if (child.nodeType == Node.TEXT_NODE || child.nodeType == Node.COMMENT_NODE) {
                     output.append(child.nodeValue)
                 } else {

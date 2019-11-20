@@ -16,9 +16,9 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
-import org.onap.ccsdk.cds.controllerblueprints.core.dsl.workflow
 import kotlin.test.Test
 import kotlin.test.assertNotNull
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.workflow
 
 class WorkflowGraphUtilsTest {
 

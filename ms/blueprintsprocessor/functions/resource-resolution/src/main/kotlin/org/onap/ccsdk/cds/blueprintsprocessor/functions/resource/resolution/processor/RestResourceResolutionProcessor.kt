@@ -125,8 +125,10 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
 
     @Throws(BluePrintProcessorException::class)
     private fun populateResource(
-        resourceAssignment: ResourceAssignment, sourceProperties: RestResourceSource,
-        restResponse: String, path: String
+        resourceAssignment: ResourceAssignment,
+        sourceProperties: RestResourceSource,
+        restResponse: String,
+        path: String
     ) {
         val dName = resourceAssignment.dictionaryName
         val dSource = resourceAssignment.dictionarySource
@@ -168,5 +170,4 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
     override suspend fun recoverNB(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
         raRuntimeService.getBluePrintError().addError(runtimeException.message!!)
     }
-
 }

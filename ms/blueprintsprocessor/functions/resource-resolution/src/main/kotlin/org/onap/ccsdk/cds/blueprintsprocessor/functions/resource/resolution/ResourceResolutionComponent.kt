@@ -32,8 +32,9 @@ import org.springframework.stereotype.Component
 @Component("component-resource-resolution")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class ResourceResolutionComponent(private val resourceResolutionService: ResourceResolutionService) :
-        AbstractComponentFunction() {
-    companion object{
+    AbstractComponentFunction() {
+
+    companion object {
         const val INPUT_REQUEST_ID = "request-id"
         const val INPUT_RESOURCE_ID = "resource-id"
         const val INPUT_ACTION_NAME = "action-name"
@@ -54,11 +55,14 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
 
         val occurrence = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE)?.asInt() ?: 1
-        val resolutionKey = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY)?.returnNullIfMissing()?.textValue() ?: ""
+        val resolutionKey =
+            getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY)?.returnNullIfMissing()?.textValue() ?: ""
         val storeResult = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT)?.asBoolean() ?: false
-        val resourceId = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID)?.returnNullIfMissing()?.textValue() ?: ""
+        val resourceId =
+            getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID)?.returnNullIfMissing()?.textValue() ?: ""
 
-        val resourceType = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE)?.returnNullIfMissing()?.textValue() ?: ""
+        val resourceType =
+            getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE)?.returnNullIfMissing()?.textValue() ?: ""
 
         val properties: MutableMap<String, Any> = mutableMapOf()
         properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] = storeResult
@@ -91,9 +95,9 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
             properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] = j
 
             val response = resourceResolutionService.resolveResources(bluePrintRuntimeService,
-                    nodeTemplateName,
-                    artifactPrefixNames,
-                    properties)
+                nodeTemplateName,
+                artifactPrefixNames,
+                properties)
 
             // provide indexed result in output if we have multiple resolution
             if (occurrence != 1) {
@@ -101,12 +105,11 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
             } else {
                 jsonResponse.setAll(response.asObjectNode())
             }
-
         }
 
         // Set Output Attributes with resolved value
         bluePrintRuntimeService.setNodeTemplateAttributeValue(nodeTemplateName,
-                ResourceResolutionConstants.OUTPUT_ASSIGNMENT_PARAMS, jsonResponse)
+            ResourceResolutionConstants.OUTPUT_ASSIGNMENT_PARAMS, jsonResponse)
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {

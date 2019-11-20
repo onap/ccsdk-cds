@@ -19,16 +19,20 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor
 
 import com.fasterxml.jackson.databind.JsonNode
+import java.util.HashMap
 import org.apache.commons.collections.MapUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.*
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintFunctionNode
+import org.onap.ccsdk.cds.controllerblueprints.core.isNullOrMissing
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintVelocityTemplateService
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.slf4j.LoggerFactory
-import java.util.*
 
 abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssignment, Boolean> {
 
@@ -63,6 +67,23 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
         return false
     }
 
+    open fun setFromInputKeyDependencies(keys: MutableList<String>, resourceAssignment: ResourceAssignment): Boolean {
+        try {
+            for (dependencyKey in keys) {
+                var value = raRuntimeService.getInputValue(dependencyKey)
+                if (!value.isNullOrMissing()) {
+                    log.debug("For Resource:(${resourceAssignment.name}) found value:({}) in input-data under: ($dependencyKey).",
+                        ResourceAssignmentUtils.getValueToLog(resourceAssignment.property?.metadata, value))
+                    ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, value)
+                    return true
+                }
+            }
+        } catch (e: BluePrintProcessorException) {
+            // NoOp - couldn't find value from input
+        }
+        return false
+    }
+
     open fun resourceDefinition(name: String): ResourceDefinition? {
         return if (resourceDictionaries.containsKey(name)) resourceDictionaries[name] else null
     }
@@ -83,7 +104,7 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
         if (valueToResolve.isEmpty() || !valueToResolve.contains("$")) {
             return valueToResolve
         }
-        //TODO("Optimize to JSON Node directly without velocity").asJsonNode().toString()
+        // TODO("Optimize to JSON Node directly without velocity").asJsonNode().toString()
         return BluePrintVelocityTemplateService.generateContent(valueToResolve, keyMapping.asJsonNode().toString())
     }
 

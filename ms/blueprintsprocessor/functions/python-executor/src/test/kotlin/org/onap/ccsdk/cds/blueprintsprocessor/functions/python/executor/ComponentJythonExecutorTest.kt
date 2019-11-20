@@ -51,10 +51,10 @@ class ComponentJythonExecutorTest {
         runBlocking {
 
             val executionServiceInput = JacksonUtils.readValueFromClassPathFile("payload/requests/sample-activate-request.json",
-                    ExecutionServiceInput::class.java)!!
+                ExecutionServiceInput::class.java)!!
 
             val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
             val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
             stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "activate-jython")
@@ -68,6 +68,5 @@ class ComponentJythonExecutorTest {
             executionServiceInput.stepData = stepInputData
             componentJythonExecutor.applyNB(executionServiceInput)
         }
-
     }
 }

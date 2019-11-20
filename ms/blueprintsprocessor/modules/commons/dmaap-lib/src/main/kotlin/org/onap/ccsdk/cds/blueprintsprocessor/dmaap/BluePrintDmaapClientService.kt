@@ -22,10 +22,9 @@ package org.onap.ccsdk.cds.blueprintsprocessor.dmaap
 
 import com.att.nsa.mr.client.MRBatchingPublisher
 import com.att.nsa.mr.client.MRPublisher
-import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.util.concurrent.TimeUnit
-
+import org.slf4j.LoggerFactory
 
 /**
  * Abstraction of DMAAP client services that could form DMAAP client from the
@@ -38,6 +37,7 @@ interface BluePrintDmaapClientService {
      * Static variable for logging.
      */
     companion object {
+
         var log = LoggerFactory.getLogger(
             BluePrintDmaapClientService::class.java)!!
     }
@@ -45,7 +45,7 @@ interface BluePrintDmaapClientService {
     /**
      * Returns the properly constructed DMAAP client with the type.
      */
-    fun  getDmaapClient(): MutableList<MRBatchingPublisher>
+    fun getDmaapClient(): MutableList<MRBatchingPublisher>
 
     /**
      * Sends messages to the sessions created by the information provided from

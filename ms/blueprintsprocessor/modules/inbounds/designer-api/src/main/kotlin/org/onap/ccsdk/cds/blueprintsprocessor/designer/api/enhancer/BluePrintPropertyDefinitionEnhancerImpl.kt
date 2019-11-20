@@ -32,9 +32,11 @@ import org.springframework.stereotype.Service
 
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-open class BluePrintPropertyDefinitionEnhancerImpl(private val bluePrintRepoService: BluePrintRepoService,
-                                                   private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService)
-    : BluePrintPropertyDefinitionEnhancer {
+open class BluePrintPropertyDefinitionEnhancerImpl(
+    private val bluePrintRepoService: BluePrintRepoService,
+    private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService
+) :
+    BluePrintPropertyDefinitionEnhancer {
 
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
     lateinit var bluePrintContext: BluePrintContext
@@ -44,12 +46,12 @@ open class BluePrintPropertyDefinitionEnhancerImpl(private val bluePrintRepoServ
         this.bluePrintContext = bluePrintRuntimeService.bluePrintContext()
 
         val propertyType = propertyDefinition.type
-        if (BluePrintTypes.validPrimitiveTypes().contains(propertyType)
-                || BluePrintTypes.validComplexTypes().contains(propertyType)) {
+        if (BluePrintTypes.validPrimitiveTypes().contains(propertyType) ||
+            BluePrintTypes.validComplexTypes().contains(propertyType)) {
             // Do Nothing,
         } else if (BluePrintTypes.validCollectionTypes().contains(propertyType)) {
             val entrySchema = propertyDefinition.entrySchema
-                    ?: throw BluePrintException("Entry Schema is missing for collection property($name)")
+                ?: throw BluePrintException("Entry Schema is missing for collection property($name)")
 
             if (!BluePrintTypes.validPrimitiveTypes().contains(entrySchema.type)) {
                 BluePrintEnhancerUtils.populateDataTypes(bluePrintContext, bluePrintRepoService, entrySchema.type)
@@ -58,5 +60,4 @@ open class BluePrintPropertyDefinitionEnhancerImpl(private val bluePrintRepoServ
             BluePrintEnhancerUtils.populateDataTypes(bluePrintContext, bluePrintRepoService, propertyType)
         }
     }
-
 }

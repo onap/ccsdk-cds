@@ -16,16 +16,15 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.annotations
 
-
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import kotlin.reflect.KClass
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 
 @Target(AnnotationTarget.CLASS)
 annotation class BluePrintsDataType(
-        val name: String,
-        val version: String = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-        val description: String,
-        val derivedFrom: String = "tosca.datatypes.root"
+    val name: String,
+    val version: String = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+    val description: String,
+    val derivedFrom: String = "tosca.datatypes.root"
 )
 
 @Target(AnnotationTarget.CLASS)
@@ -35,13 +34,17 @@ annotation class BluePrintsWorkflowInput
 annotation class BluePrintsWorkflowOutput
 
 @Target(AnnotationTarget.CLASS)
-annotation class BluePrintsNodeType(val propertiesType: KClass<*>, val attributesType: KClass<*>,
-                                    val inputsType: KClass<*>, val outputsType: KClass<*>)
+annotation class BluePrintsNodeType(
+    val propertiesType: KClass<*>,
+    val attributesType: KClass<*>,
+    val inputsType: KClass<*>,
+    val outputsType: KClass<*>
+)
 
 @Target(AnnotationTarget.FIELD, AnnotationTarget.TYPE_PARAMETER, AnnotationTarget.PROPERTY)
 annotation class BluePrintsProperty(
-        val name: String = "",
-        val description: String = ""
+    val name: String = "",
+    val description: String = ""
 )
 
 @Target(AnnotationTarget.FIELD, AnnotationTarget.TYPE_PARAMETER, AnnotationTarget.PROPERTY)
@@ -55,43 +58,43 @@ annotation class PropertyValidValue(val value: String)
 
 @Target(AnnotationTarget.FIELD, AnnotationTarget.TYPE_PARAMETER, AnnotationTarget.PROPERTY)
 annotation class InputExpression(
-        val propertyName: String
+    val propertyName: String
 )
 
 @Target(AnnotationTarget.FIELD, AnnotationTarget.TYPE_PARAMETER, AnnotationTarget.PROPERTY)
 annotation class PropertyExpression(
-        val modelableEntityName: String = "SELF",
-        val reqOrCapEntityName: String = "",
-        val propertyName: String,
-        val subPropertyName: String = ""
+    val modelableEntityName: String = "SELF",
+    val reqOrCapEntityName: String = "",
+    val propertyName: String,
+    val subPropertyName: String = ""
 )
 
 @Target(AnnotationTarget.FIELD, AnnotationTarget.TYPE_PARAMETER, AnnotationTarget.PROPERTY)
 annotation class AttributeExpression(
-        val modelableEntityName: String = "SELF",
-        val reqOrCapEntityName: String = "",
-        val attributeName: String,
-        val subAttributeName: String = ""
+    val modelableEntityName: String = "SELF",
+    val reqOrCapEntityName: String = "",
+    val attributeName: String,
+    val subAttributeName: String = ""
 )
 
 @Target(AnnotationTarget.FIELD, AnnotationTarget.TYPE_PARAMETER, AnnotationTarget.PROPERTY)
 annotation class ArtifactExpression(
-        val modelableEntityName: String = "SELF",
-        val artifactName: String,
-        val location: String = "LOCAL_FILE",
-        val remove: Boolean = false
+    val modelableEntityName: String = "SELF",
+    val artifactName: String,
+    val location: String = "LOCAL_FILE",
+    val remove: Boolean = false
 )
 
 @Target(AnnotationTarget.FIELD, AnnotationTarget.TYPE_PARAMETER, AnnotationTarget.PROPERTY)
 annotation class OperationOutputExpression(
-        val modelableEntityName: String = "SELF",
-        val interfaceName: String,
-        val operationName: String,
-        val propertyName: String,
-        val subPropertyName: String = ""
+    val modelableEntityName: String = "SELF",
+    val interfaceName: String,
+    val operationName: String,
+    val propertyName: String,
+    val subPropertyName: String = ""
 )
 
 @Target(AnnotationTarget.FIELD, AnnotationTarget.TYPE_PARAMETER, AnnotationTarget.PROPERTY)
 annotation class DSLExpression(
-        val propertyName: String
+    val propertyName: String
 )

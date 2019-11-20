@@ -16,6 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization
 
+import javax.sql.DataSource
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.PrimaryDBLibGenericService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.MessagePrioritization
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.topology.MessageAggregateProcessor
@@ -27,7 +28,6 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Service
-import javax.sql.DataSource
 
 @Configuration
 @ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db"])
@@ -42,6 +42,7 @@ open class TestDatabaseConfiguration {
 
 @Service(MessagePrioritizationConstants.PROCESSOR_PRIORITIZE)
 open class TestMessagePrioritizeProcessor : MessagePrioritizeProcessor() {
+
     override fun getGroupCorrelationTypes(messagePrioritization: MessagePrioritization): List<String>? {
         return when (messagePrioritization.group) {
             "group-typed" -> arrayListOf("type-0", "type-1", "type-2")

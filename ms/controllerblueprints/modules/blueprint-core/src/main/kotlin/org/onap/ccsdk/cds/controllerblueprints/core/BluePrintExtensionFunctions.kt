@@ -16,16 +16,30 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core
 
-import org.onap.ccsdk.cds.controllerblueprints.core.annotations.*
-import org.onap.ccsdk.cds.controllerblueprints.core.data.ConstraintClause
-import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
-import org.onap.ccsdk.cds.controllerblueprints.core.data.EntrySchema
-import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
-import org.onap.ccsdk.cds.controllerblueprints.core.dsl.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1
 import kotlin.reflect.KType
 import kotlin.reflect.full.declaredMemberProperties
+import org.onap.ccsdk.cds.controllerblueprints.core.annotations.ArtifactExpression
+import org.onap.ccsdk.cds.controllerblueprints.core.annotations.AttributeExpression
+import org.onap.ccsdk.cds.controllerblueprints.core.annotations.BluePrintsConstrain
+import org.onap.ccsdk.cds.controllerblueprints.core.annotations.BluePrintsDataType
+import org.onap.ccsdk.cds.controllerblueprints.core.annotations.BluePrintsProperty
+import org.onap.ccsdk.cds.controllerblueprints.core.annotations.DSLExpression
+import org.onap.ccsdk.cds.controllerblueprints.core.annotations.InputExpression
+import org.onap.ccsdk.cds.controllerblueprints.core.annotations.OperationOutputExpression
+import org.onap.ccsdk.cds.controllerblueprints.core.annotations.PropertyDefaultValue
+import org.onap.ccsdk.cds.controllerblueprints.core.annotations.PropertyExpression
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ConstraintClause
+import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.EntrySchema
+import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.dslExpression
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.getInput
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.getNodeTemplateArtifact
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.getNodeTemplateAttribute
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.getNodeTemplateOperationOutput
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.getNodeTemplateProperty
 
 fun <T : KClass<*>> T.asBluePrintsDataTypes(): DataType {
     val annotation = this.annotations.filter { it is BluePrintsDataType }.single() as BluePrintsDataType
@@ -58,7 +72,7 @@ fun <T> KProperty1<T, *>.asPropertyDefinition(): PropertyDefinition {
         property.entrySchema = this.returnType.entitySchema()
     }
     this.annotations.forEach { fieldAnnotation ->
-        //println("Field : ${this.name} : Annotation : $fieldAnnotation")
+        // println("Field : ${this.name} : Annotation : $fieldAnnotation")
         when (fieldAnnotation) {
             is BluePrintsProperty ->
                 property.description = fieldAnnotation.description
@@ -73,19 +87,19 @@ fun <T> KProperty1<T, *>.asPropertyDefinition(): PropertyDefinition {
             }
             is PropertyExpression -> {
                 property.value = getNodeTemplateProperty(fieldAnnotation.modelableEntityName,
-                        fieldAnnotation.propertyName, fieldAnnotation.subPropertyName)
+                    fieldAnnotation.propertyName, fieldAnnotation.subPropertyName)
             }
             is AttributeExpression -> {
                 property.value = getNodeTemplateAttribute(fieldAnnotation.modelableEntityName,
-                        fieldAnnotation.attributeName, fieldAnnotation.subAttributeName)
+                    fieldAnnotation.attributeName, fieldAnnotation.subAttributeName)
             }
             is ArtifactExpression -> {
                 property.value = getNodeTemplateArtifact(fieldAnnotation.modelableEntityName,
-                        fieldAnnotation.artifactName)
+                    fieldAnnotation.artifactName)
             }
             is OperationOutputExpression -> {
                 property.value = getNodeTemplateOperationOutput(fieldAnnotation.modelableEntityName,
-                        fieldAnnotation.interfaceName, fieldAnnotation.propertyName, fieldAnnotation.subPropertyName)
+                    fieldAnnotation.interfaceName, fieldAnnotation.propertyName, fieldAnnotation.subPropertyName)
             }
             is DSLExpression -> {
                 property.value = dslExpression(fieldAnnotation.propertyName)
@@ -111,14 +125,14 @@ internal fun <T : KType> T.entitySchema(): EntrySchema {
 
 internal fun <T : KType> T.asBluePrintsDataType(propertyName: String): String {
     val simpleName = (this.classifier as? KClass<*>)?.java?.simpleName
-            ?: throw BluePrintException("filed to get simple name.")
+        ?: throw BluePrintException("filed to get simple name.")
     return when (simpleName) {
         "String", "Date" -> BluePrintConstants.DATA_TYPE_STRING
         "int" -> BluePrintConstants.DATA_TYPE_INTEGER
         "Boolean" -> BluePrintConstants.DATA_TYPE_BOOLEAN
         "Float" -> BluePrintConstants.DATA_TYPE_FLOAT
         "Double" -> BluePrintConstants.DATA_TYPE_DOUBLE
-        "List" ->  BluePrintConstants.DATA_TYPE_LIST
+        "List" -> BluePrintConstants.DATA_TYPE_LIST
         "Map" -> BluePrintConstants.DATA_TYPE_MAP
         "Object", "JsonNode", "ObjectNode", "ArrayNode" -> BluePrintConstants.DATA_TYPE_JSON
         else -> simpleName

@@ -35,7 +35,7 @@ class SmartColorDiscriminator : AbstractDiscriminator<ILoggingEvent>() {
     }
 
     override fun getDiscriminatingValue(e: ILoggingEvent): String =
-            (e.marker as? ColorMarker)?.name
-                    ?: e.mdcPropertyMap?.get(MDC_COLOR_KEY)
-                    ?: defaultValue
+        (e.marker as? ColorMarker)?.name
+            ?: e.mdcPropertyMap?.get(MDC_COLOR_KEY)
+            ?: defaultValue
 }

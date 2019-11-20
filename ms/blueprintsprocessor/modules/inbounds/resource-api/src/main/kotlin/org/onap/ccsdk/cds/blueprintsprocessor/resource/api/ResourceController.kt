@@ -27,7 +27,11 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v1/resources")
@@ -66,8 +70,9 @@ open class ResourceController(private var resourceResolutionDBService: ResourceR
         @ApiParam(value = "Resource Type associated with the resolution.", required = false)
         @RequestParam(value = "resourceType", required = false, defaultValue = "") resourceType: String,
         @ApiParam(value = "Resource Id associated with the resolution.", required = false)
-        @RequestParam(value = "resourceId", required = false, defaultValue = "") resourceId: String)
-            : ResponseEntity<List<ResourceResolution>> = runBlocking {
+        @RequestParam(value = "resourceId", required = false, defaultValue = "") resourceId: String
+    ):
+            ResponseEntity<List<ResourceResolution>> = runBlocking {
 
         if ((resolutionKey.isNotEmpty() || artifactName.isNotEmpty()) && (resourceId.isNotEmpty() || resourceType.isNotEmpty())) {
             throw ResolutionException("Either retrieve resolved value using artifact name and resolution-key OR using resource-id and resource-type.")
@@ -93,17 +98,19 @@ open class ResourceController(private var resourceResolutionDBService: ResourceR
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
-    fun getOneFromResolutionKey(@ApiParam(value = "Name of the CBA.", required = true)
-                                @RequestParam(value = "bpName", required = true) bpName: String,
-                                @ApiParam(value = "Version of the CBA.", required = true)
-                                @RequestParam(value = "bpVersion", required = true) bpVersion: String,
-                                @ApiParam(value = "Artifact name for which to retrieve a resolved resource.", required = true)
-                                @RequestParam(value = "artifactName", required = true) artifactName: String,
-                                @ApiParam(value = "Resolution Key associated with the resolution.", required = true)
-                                @RequestParam(value = "resolutionKey", required = true) resolutionKey: String,
-                                @ApiParam(value = "Name of the resource to retrieve.", required = true)
-                                @RequestParam(value = "name", required = true) name: String)
-            : ResponseEntity<ResourceResolution> = runBlocking {
+    fun getOneFromResolutionKey(
+        @ApiParam(value = "Name of the CBA.", required = true)
+        @RequestParam(value = "bpName", required = true) bpName: String,
+        @ApiParam(value = "Version of the CBA.", required = true)
+        @RequestParam(value = "bpVersion", required = true) bpVersion: String,
+        @ApiParam(value = "Artifact name for which to retrieve a resolved resource.", required = true)
+        @RequestParam(value = "artifactName", required = true) artifactName: String,
+        @ApiParam(value = "Resolution Key associated with the resolution.", required = true)
+        @RequestParam(value = "resolutionKey", required = true) resolutionKey: String,
+        @ApiParam(value = "Name of the resource to retrieve.", required = true)
+        @RequestParam(value = "name", required = true) name: String
+    ):
+            ResponseEntity<ResourceResolution> = runBlocking {
 
         ResponseEntity.ok()
             .body(resourceResolutionDBService.readValue(bpName, bpVersion, artifactName, resolutionKey, name))

@@ -17,10 +17,16 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.message.service
 
+import java.nio.charset.Charset
 import org.apache.commons.lang.builder.ToStringBuilder
 import org.apache.kafka.clients.producer.Callback
 import org.apache.kafka.clients.producer.KafkaProducer
-import org.apache.kafka.clients.producer.ProducerConfig.*
+import org.apache.kafka.clients.producer.ProducerConfig.ACKS_CONFIG
+import org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG
+import org.apache.kafka.clients.producer.ProducerConfig.CLIENT_ID_CONFIG
+import org.apache.kafka.clients.producer.ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG
+import org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG
+import org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.header.internals.RecordHeader
 import org.apache.kafka.common.serialization.ByteArraySerializer
@@ -29,11 +35,11 @@ import org.onap.ccsdk.cds.blueprintsprocessor.message.KafkaBasicAuthMessageProdu
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
 import org.onap.ccsdk.cds.controllerblueprints.core.defaultToUUID
 import org.slf4j.LoggerFactory
-import java.nio.charset.Charset
 
 class KafkaBasicAuthMessageProducerService(
-        private val messageProducerProperties: KafkaBasicAuthMessageProducerProperties)
-    : BlueprintMessageProducerService {
+    private val messageProducerProperties: KafkaBasicAuthMessageProducerProperties
+) :
+    BlueprintMessageProducerService {
 
     private val log = LoggerFactory.getLogger(KafkaBasicAuthMessageProducerService::class.java)!!
 
@@ -51,8 +57,11 @@ class KafkaBasicAuthMessageProducerService(
         return sendMessageNB(messageProducerProperties.topic!!, message, headers)
     }
 
-    override suspend fun sendMessageNB(topic: String, message: Any,
-                                       headers: MutableMap<String, String>?): Boolean {
+    override suspend fun sendMessageNB(
+        topic: String,
+        message: Any,
+        headers: MutableMap<String, String>?
+    ): Boolean {
         val byteArrayMessage = when (message) {
             is String -> message.toByteArray(Charset.defaultCharset())
             else -> message.asJsonString().toByteArray(Charset.defaultCharset())
@@ -95,4 +104,3 @@ class KafkaBasicAuthMessageProducerService(
         return kafkaProducer!!
     }
 }
-

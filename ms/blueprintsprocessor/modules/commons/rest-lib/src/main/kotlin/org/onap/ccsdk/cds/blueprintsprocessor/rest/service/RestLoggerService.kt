@@ -16,7 +16,20 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.rest.service
 
-import kotlinx.coroutines.*
+import java.net.InetAddress
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.UUID
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
+import kotlinx.coroutines.AbstractCoroutine
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.handleCoroutineException
+import kotlinx.coroutines.newCoroutineContext
 import kotlinx.coroutines.reactor.ReactorContext
 import kotlinx.coroutines.reactor.asCoroutineContext
 import org.apache.http.message.BasicHeader
@@ -33,13 +46,6 @@ import org.springframework.http.server.reactive.ServerHttpResponse
 import reactor.core.Disposable
 import reactor.core.publisher.Mono
 import reactor.core.publisher.MonoSink
-import java.net.InetAddress
-import java.time.ZoneOffset
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
-import java.util.*
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
 
 class RestLoggerService {
     private val log = logger(RestLoggerService::class)
@@ -89,17 +95,18 @@ class RestLoggerService {
     }
 }
 
-
 /** Used in Rest controller API methods to populate MDC context to nested coroutines from reactor web filter context. */
 @UseExperimental(InternalCoroutinesApi::class)
-fun <T> monoMdc(context: CoroutineContext = EmptyCoroutineContext,
-                block: suspend CoroutineScope.() -> T?): Mono<T> = Mono.create { sink ->
+fun <T> monoMdc(
+    context: CoroutineContext = EmptyCoroutineContext,
+    block: suspend CoroutineScope.() -> T?
+): Mono<T> = Mono.create { sink ->
 
     val reactorContext = (context[ReactorContext]?.context?.putAll(sink.currentContext())
-            ?: sink.currentContext()).asCoroutineContext()
+        ?: sink.currentContext()).asCoroutineContext()
     /** Populate MDC context only if present in Reactor Context */
-    val newContext = if (!reactorContext.context.isEmpty
-            && reactorContext.context.hasKey(MDCContext)) {
+    val newContext = if (!reactorContext.context.isEmpty &&
+        reactorContext.context.hasKey(MDCContext)) {
         val mdcContext = reactorContext.context.get<MDCContext>(MDCContext)
         GlobalScope.newCoroutineContext(context + reactorContext + mdcContext)
     } else GlobalScope.newCoroutineContext(context + reactorContext)
@@ -111,9 +118,10 @@ fun <T> monoMdc(context: CoroutineContext = EmptyCoroutineContext,
 
 @InternalCoroutinesApi
 class MonoMDCCoroutine<in T>(
-        parentContext: CoroutineContext,
-        private val sink: MonoSink<T>
+    parentContext: CoroutineContext,
+    private val sink: MonoSink<T>
 ) : AbstractCoroutine<T>(parentContext, true), Disposable {
+
     private var disposed = false
 
     override fun onCompleted(value: T) {

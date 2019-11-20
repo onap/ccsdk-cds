@@ -16,11 +16,11 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.utils
 
+import kotlin.test.Test
+import kotlin.test.assertFailsWith
 import org.junit.Assert.assertEquals
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-import kotlin.test.Test
-import kotlin.test.assertFailsWith
 
 class NetconfMessageUtilsTest {
 
@@ -40,7 +40,7 @@ class NetconfMessageUtilsTest {
 
     @Test
     fun `test getConfig with filterContent parameter null`() {
-        val outcome = NetconfMessageUtils.getConfig("customMessageId", "customConfigType",null)
+        val outcome = NetconfMessageUtils.getConfig("customMessageId", "customConfigType", null)
         val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/getConfig-response-filterContent-null.xml")
         assertEquals("getConfig return was not correct", expectation, outcome)
     }
@@ -55,7 +55,7 @@ class NetconfMessageUtilsTest {
     @Test
     fun `test editConfig with all parameters present`() {
         val outcome = NetconfMessageUtils.editConfig("customMessageId", "customConfigType", "customDefaultOperation",
-                "customNewConfiguration")
+            "customNewConfiguration")
         val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/editConfig-response-all-parameters.xml")
         assertEquals("editConfig return was not correct", expectation, outcome)
     }
@@ -63,7 +63,7 @@ class NetconfMessageUtilsTest {
     @Test
     fun `test editConfig with defaultOperation parameter null`() {
         val outcome = NetconfMessageUtils.editConfig("customMessageId", "customConfigType", null,
-                "customNewConfiguration")
+            "customNewConfiguration")
         val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/editConfig-response-defaultOperation-null.xml")
         assertEquals("editConfig return was not correct", expectation, outcome)
     }
@@ -92,21 +92,24 @@ class NetconfMessageUtilsTest {
     @Test
     fun `test commit with confirmed true, persistId empty and persist empty`() {
         val outcome = NetconfMessageUtils.commit("customMessageId", true, 1, "", "")
-        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/commit-response-confirmed-true-and-persistId-empty-and-persist-empty.xml")
+        val expectation =
+            JacksonUtils.getClassPathFileContent("netconf-messages/commit-response-confirmed-true-and-persistId-empty-and-persist-empty.xml")
         assertEquals("commit return was not correct", expectation, outcome)
     }
 
     @Test
     fun `test commit with confirmed false, persistId non-empty and persist empty`() {
         val outcome = NetconfMessageUtils.commit("customMessageId", false, 1, "", "customPersistId")
-        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/commit-response-confirmed-false-and-persistId-empty-and-persist-not-empty.xml")
+        val expectation =
+            JacksonUtils.getClassPathFileContent("netconf-messages/commit-response-confirmed-false-and-persistId-empty-and-persist-not-empty.xml")
         assertEquals("commit return was not correct", expectation, outcome)
     }
 
     @Test
     fun `test commit with confirmed false, persistId empty and persist non-empty`() {
         val outcome = NetconfMessageUtils.commit("customMessageId", false, 1, "customPersist", "")
-        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/commit-response-confirmed-false-and-persistId-not-empty-and-persist-empty.xml")
+        val expectation =
+            JacksonUtils.getClassPathFileContent("netconf-messages/commit-response-confirmed-false-and-persistId-not-empty-and-persist-empty.xml")
         assertEquals("commit return was not correct", expectation, outcome)
     }
 
@@ -173,7 +176,7 @@ class NetconfMessageUtilsTest {
         assertEquals("closeSession return was not correct", expectation, outcome)
     }
 
-    //TODO validateRPCXML
+    // TODO validateRPCXML
 
     @Test
     fun `test getMsgId with valid message`() {
@@ -197,6 +200,5 @@ class NetconfMessageUtilsTest {
         assertEquals("getMsgId return was not correct", expectation, outcome)
     }
 
-//TODO validateChunkedFraming
-
+    // TODO validateChunkedFraming
 }

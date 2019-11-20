@@ -18,18 +18,26 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.core
 
 import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableSet
+import java.io.IOException
+import java.util.Collections
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ExecutionException
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 import org.apache.sshd.client.SshClient
 import org.apache.sshd.client.channel.ClientChannel
 import org.apache.sshd.client.session.ClientSession
 import org.apache.sshd.common.FactoryManager
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.*
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfException
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfRpcService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfSession
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfSessionListener
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.utils.NetconfMessageUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.utils.RpcMessageUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.utils.RpcStatus
 import org.slf4j.LoggerFactory
-import java.io.IOException
-import java.util.*
-import java.util.concurrent.*
 
 class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcService: NetconfRpcService) :
     NetconfSession {
@@ -67,13 +75,13 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
 
     override fun disconnect() {
         var retryNum = 3
-        while(rpcService.closeSession(false).status
-                .equals(RpcStatus.FAILURE, true) &&retryNum>0) {
+        while (rpcService.closeSession(false).status
+                .equals(RpcStatus.FAILURE, true) && retryNum > 0) {
             log.error("disconnect: graceful disconnect failed, retrying $retryNum times...")
-            retryNum--;
+            retryNum--
         }
-        //if we can't close the session, try to force terminate.
-        if(retryNum == 0) {
+        // if we can't close the session, try to force terminate.
+        if (retryNum == 0) {
             log.error("disconnect: trying to force-terminate the session.")
             rpcService.closeSession(true)
         }
@@ -179,10 +187,9 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
         } catch (e: Exception) {
             throw NetconfException("$deviceInfo: Failed to establish SSH session", e)
         }
-
     }
 
-    //Needed to unit test connect method interacting with client.start in startClient() below
+    // Needed to unit test connect method interacting with client.start in startClient() below
     private fun setupNewSSHClient() {
         client = SshClient.setUpDefaultClient()
     }
@@ -254,7 +261,7 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
         }
 
         val capabilityMatcher = NetconfMessageUtils.CAPABILITY_REGEX_PATTERN.matcher(serverHelloResponse)
-        while (capabilityMatcher.find()) { //TODO: refactor to add unit test easily for device capability accumulation.
+        while (capabilityMatcher.find()) { // TODO: refactor to add unit test easily for device capability accumulation.
             deviceCapabilities.add(capabilityMatcher.group(1))
         }
     }
@@ -300,9 +307,18 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
      * internal function for accessing errorReplies for testing.
      */
     internal fun getErrorReplies() = errorReplies
+
     internal fun clearErrorReplies() = errorReplies.clear()
     internal fun clearReplies() = replies.clear()
-    internal fun setClient(client: SshClient) { this.client = client }
-    internal fun setSession(session: ClientSession) { this.session = session }
-    internal fun setChannel(channel: ClientChannel) { this.channel = channel }
+    internal fun setClient(client: SshClient) {
+        this.client = client
+    }
+
+    internal fun setSession(session: ClientSession) {
+        this.session = session
+    }
+
+    internal fun setChannel(channel: ClientChannel) {
+        this.channel = channel
+    }
 }

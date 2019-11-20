@@ -18,6 +18,12 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
+import java.io.File
+import java.io.FileFilter
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.nio.file.StandardOpenOption
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
@@ -30,10 +36,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.slf4j.LoggerFactory
-import java.io.File
-import java.io.FileFilter
-import java.nio.file.*
-
 
 class BluePrintFileUtils {
     companion object {
@@ -51,7 +53,7 @@ class BluePrintFileUtils {
             Files.createDirectories(metaDataDir.toPath())
 
             val metaFile = File(blueprintDir.absolutePath.plus(File.separator).plus(BluePrintConstants
-                    .TOSCA_METADATA_ENTRY_DEFINITION_FILE))
+                .TOSCA_METADATA_ENTRY_DEFINITION_FILE))
             Files.write(metaFile.toPath(), getMetaDataContent().toByteArray(), StandardOpenOption.CREATE_NEW)
 
             val definitionsDir = File(blueprintDir.absolutePath.plus(File.separator).plus(BluePrintConstants.TOSCA_DEFINITIONS_DIR))
@@ -65,7 +67,6 @@ class BluePrintFileUtils {
 
             val templatesDir = File(blueprintDir.absolutePath.plus(File.separator).plus(BluePrintConstants.TOSCA_TEMPLATES_DIR))
             Files.createDirectories(templatesDir.toPath())
-
         }
 
         fun copyBluePrint(sourcePath: String, targetPath: String) {
@@ -95,7 +96,6 @@ class BluePrintFileUtils {
             populateDefaultImports(blueprintContext)
             // Rewrite the Entry Definition Files
             writeEntryDefinitionFile(blueprintContext)
-
         }
 
         fun writeBluePrintTypes(blueprintContext: BluePrintContext) {
@@ -138,8 +138,8 @@ class BluePrintFileUtils {
         private fun populateDefaultImports(blueprintContext: BluePrintContext) {
             // Get the Default Types
             val types = arrayListOf(BluePrintConstants.PATH_DATA_TYPES, BluePrintConstants.PATH_RELATIONSHIP_TYPES,
-                    BluePrintConstants.PATH_ARTIFACT_TYPES, BluePrintConstants.PATH_NODE_TYPES,
-                    BluePrintConstants.PATH_POLICY_TYPES)
+                BluePrintConstants.PATH_ARTIFACT_TYPES, BluePrintConstants.PATH_NODE_TYPES,
+                BluePrintConstants.PATH_POLICY_TYPES)
 
             // Clean Type Imports
             cleanImportTypes(blueprintContext.serviceTemplate)
@@ -213,11 +213,10 @@ class BluePrintFileUtils {
                     "\nCSAR-Version: <VERSION>" +
                     "\nCreated-By: <AUTHOR NAME>" +
                     "\nEntry-Definitions: Definitions/<BLUEPRINT_NAME>.json" +
-                    "\nTemplate-Name: <BLUEPRINT_NAME>"+
-                    "\nTemplate-Tags: <BLUEPRINT_VERSION>"+
+                    "\nTemplate-Name: <BLUEPRINT_NAME>" +
+                    "\nTemplate-Tags: <BLUEPRINT_VERSION>" +
                     "\nTemplate-Tags: <TAGS>"
         }
-
 
         fun getBluePrintFile(fileName: String, targetPath: Path): File {
             val filePath = targetPath.resolve(fileName).toString()
@@ -253,12 +252,12 @@ class BluePrintFileUtils {
 
         fun compileJarFilePathName(basePath: String, artifactName: String, artifactVersion: String): String {
             return normalizedPathName(basePath, BluePrintConstants.TOSCA_SCRIPTS_KOTLIN_DIR,
-                    compileJarFileName(artifactName, artifactVersion))
+                compileJarFileName(artifactName, artifactVersion))
         }
 
         fun compileJarFile(basePath: String, artifactName: String, artifactVersion: String): File {
             return normalizedFile(compileJarFilePathName(basePath,
-                    artifactName, artifactVersion))
+                artifactName, artifactVersion))
         }
 
         fun stripFileExtension(fileName: String): String {
@@ -267,6 +266,5 @@ class BluePrintFileUtils {
             // In case dot is in first position, we are dealing with a hidden file rather than an extension
             return if (dotIndexe > 0) fileName.substring(0, dotIndexe) else fileName
         }
-
     }
 }

@@ -27,7 +27,6 @@ import org.onap.ccsdk.cds.controllerblueprints.processing.api.BluePrintProcessin
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceInput
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceOutput
 
-
 val log = logger(MockTLSBluePrintProcessingServer::class)
 
 /** For Integration testing stat this server, Set the working path to run this method */
@@ -40,16 +39,15 @@ fun main() {
             privateKey = "src/test/resources/tls-manual/py-executor-key.pem"
         }
         val server = TLSAuthGrpcServerService(tlsAuthGrpcServerProperties).serverBuilder()
-                .intercept(GrpcServerLoggingInterceptor())
-                .addService(MockTLSBluePrintProcessingServer())
-                .build()
+            .intercept(GrpcServerLoggingInterceptor())
+            .addService(MockTLSBluePrintProcessingServer())
+            .build()
         server.start()
         log.info("GRPC Serve started(${server.isShutdown}) on port(${server.port})...")
         server.awaitTermination()
     } catch (e: Exception) {
         log.error("Failed to start tls grpc integration server", e)
     }
-
 }
 
 class MockTLSBluePrintProcessingServer : BluePrintProcessingServiceGrpc.BluePrintProcessingServiceImplBase() {
@@ -66,8 +64,8 @@ class MockTLSBluePrintProcessingServer : BluePrintProcessingServiceGrpc.BluePrin
             override fun onError(error: Throwable) {
                 log.debug("Fail to process message", error)
                 responseObserver.onError(io.grpc.Status.INTERNAL
-                        .withDescription(error.message)
-                        .asException())
+                    .withDescription(error.message)
+                    .asException())
             }
 
             override fun onCompleted() {
@@ -78,13 +76,12 @@ class MockTLSBluePrintProcessingServer : BluePrintProcessingServiceGrpc.BluePrin
 
     private fun buildResponse(input: ExecutionServiceInput): ExecutionServiceOutput {
         val status = Status.newBuilder().setCode(200)
-                .setEventType(EventType.EVENT_COMPONENT_EXECUTED)
-                .build()
+            .setEventType(EventType.EVENT_COMPONENT_EXECUTED)
+            .build()
         return ExecutionServiceOutput.newBuilder()
-                .setCommonHeader(input.commonHeader)
-                .setActionIdentifiers(input.actionIdentifiers)
-                .setStatus(status)
-                .build()
-
+            .setCommonHeader(input.commonHeader)
+            .setActionIdentifiers(input.actionIdentifiers)
+            .setStatus(status)
+            .build()
     }
 }

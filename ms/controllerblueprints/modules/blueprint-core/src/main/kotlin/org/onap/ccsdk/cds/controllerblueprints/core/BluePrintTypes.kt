@@ -28,60 +28,60 @@ object BluePrintTypes {
 
     @JvmStatic
     val validNodeTypeDerivedFroms: MutableList<String> = arrayListOf(
-            BluePrintConstants.MODEL_TYPE_NODES_ROOT,
-            BluePrintConstants.MODEL_TYPE_NODE_WORKFLOW,
-            BluePrintConstants.MODEL_TYPE_NODE_COMPONENT,
-            BluePrintConstants.MODEL_TYPE_NODE_VNF,
-            BluePrintConstants.MODEL_TYPE_NODE_RESOURCE_SOURCE,
-            BluePrintConstants.MODEL_TYPE_NODES_COMPONENT_JAVA,
-            BluePrintConstants.MODEL_TYPE_NODES_COMPONENT_BUNDLE,
-            BluePrintConstants.MODEL_TYPE_NODES_COMPONENT_SCRIPT,
-            BluePrintConstants.MODEL_TYPE_NODES_COMPONENT_PYTHON,
-            BluePrintConstants.MODEL_TYPE_NODES_COMPONENT_JYTHON,
-            BluePrintConstants.MODEL_TYPE_NODES_COMPONENT_JAVA_SCRIPT
+        BluePrintConstants.MODEL_TYPE_NODES_ROOT,
+        BluePrintConstants.MODEL_TYPE_NODE_WORKFLOW,
+        BluePrintConstants.MODEL_TYPE_NODE_COMPONENT,
+        BluePrintConstants.MODEL_TYPE_NODE_VNF,
+        BluePrintConstants.MODEL_TYPE_NODE_RESOURCE_SOURCE,
+        BluePrintConstants.MODEL_TYPE_NODES_COMPONENT_JAVA,
+        BluePrintConstants.MODEL_TYPE_NODES_COMPONENT_BUNDLE,
+        BluePrintConstants.MODEL_TYPE_NODES_COMPONENT_SCRIPT,
+        BluePrintConstants.MODEL_TYPE_NODES_COMPONENT_PYTHON,
+        BluePrintConstants.MODEL_TYPE_NODES_COMPONENT_JYTHON,
+        BluePrintConstants.MODEL_TYPE_NODES_COMPONENT_JAVA_SCRIPT
     )
 
     @JvmStatic
     val validArtifactTypeDerivedFroms: MutableList<String> = arrayListOf(
-            BluePrintConstants.MODEL_TYPE_ARTIFACTS_ROOT,
-            BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION
+        BluePrintConstants.MODEL_TYPE_ARTIFACTS_ROOT,
+        BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION
     )
 
     @JvmStatic
     val validDataTypeDerivedFroms: MutableList<String> = arrayListOf(
-            BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT,
-            BluePrintConstants.MODEL_TYPE_DATA_TYPE_DYNAMIC
+        BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT,
+        BluePrintConstants.MODEL_TYPE_DATA_TYPE_DYNAMIC
     )
 
     @JvmStatic
     val validRelationShipDerivedFroms: MutableList<String> = arrayListOf(
-            BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_ROOT,
-            BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_DEPENDS_ON,
-            BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_HOSTED_ON,
-            BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO,
-            BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_ATTACH_TO,
-            BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_ROUTES_TO
+        BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_ROOT,
+        BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_DEPENDS_ON,
+        BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_HOSTED_ON,
+        BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO,
+        BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_ATTACH_TO,
+        BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_ROUTES_TO
     )
 
     @JvmStatic
     val validCapabilityTypes: MutableList<String> = arrayListOf(
-            BluePrintConstants.MODEL_TYPE_CAPABILITIES_ROOT,
-            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_NODE,
-            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_COMPUTE,
-            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_NETWORK,
-            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_STORAGE,
-            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT,
-            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT_PUBLIC,
-            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT_ADMIN,
-            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT_DATABASE,
-            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ATTACHMENT,
-            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_OPERATION_SYSTEM,
-            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_BINDABLE,
-            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_CONTENT,
-            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_MAPPING,
-            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_NETCONF,
-            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_SSH,
-            BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_SFTP
+        BluePrintConstants.MODEL_TYPE_CAPABILITIES_ROOT,
+        BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_NODE,
+        BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_COMPUTE,
+        BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_NETWORK,
+        BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_STORAGE,
+        BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT,
+        BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT_PUBLIC,
+        BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT_ADMIN,
+        BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT_DATABASE,
+        BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ATTACHMENT,
+        BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_OPERATION_SYSTEM,
+        BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_BINDABLE,
+        BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_CONTENT,
+        BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_MAPPING,
+        BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_NETCONF,
+        BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_SSH,
+        BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_SFTP
     )
 
     @JvmStatic
@@ -135,19 +135,19 @@ object BluePrintTypes {
     @JvmStatic
     fun validPrimitiveOrCollectionPrimitive(propertyDefinition: PropertyDefinition): Boolean {
         val entrySchema = propertyDefinition.entrySchema?.type ?: BluePrintConstants.DATA_TYPE_NULL
-        return BluePrintTypes.validPropertyTypes().contains(propertyDefinition.type)
-                && BluePrintTypes.validPrimitiveTypes().contains(entrySchema)
+        return BluePrintTypes.validPropertyTypes().contains(propertyDefinition.type) &&
+                BluePrintTypes.validPrimitiveTypes().contains(entrySchema)
     }
 
     @JvmStatic
     fun validCommands(): List<String> {
         return listOf(BluePrintConstants.EXPRESSION_DSL_REFERENCE,
-                BluePrintConstants.EXPRESSION_GET_INPUT,
-                BluePrintConstants.EXPRESSION_GET_ATTRIBUTE,
-                BluePrintConstants.EXPRESSION_GET_PROPERTY,
-                BluePrintConstants.EXPRESSION_GET_ARTIFACT,
-                BluePrintConstants.EXPRESSION_GET_OPERATION_OUTPUT,
-                BluePrintConstants.EXPRESSION_GET_NODE_OF_TYPE)
+            BluePrintConstants.EXPRESSION_GET_INPUT,
+            BluePrintConstants.EXPRESSION_GET_ATTRIBUTE,
+            BluePrintConstants.EXPRESSION_GET_PROPERTY,
+            BluePrintConstants.EXPRESSION_GET_ARTIFACT,
+            BluePrintConstants.EXPRESSION_GET_OPERATION_OUTPUT,
+            BluePrintConstants.EXPRESSION_GET_NODE_OF_TYPE)
     }
 
     @JvmStatic
@@ -159,6 +159,4 @@ object BluePrintTypes {
     fun rootDataTypes(): List<String> {
         return listOf(BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT)
     }
-
-
 }

@@ -16,10 +16,6 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.utils
 
-import org.apache.commons.lang3.StringUtils
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfException
-import org.slf4j.LoggerFactory
-import org.xml.sax.InputSource
 import java.io.StringReader
 import java.nio.charset.StandardCharsets
 import java.util.regex.MatchResult
@@ -27,7 +23,10 @@ import java.util.regex.Pattern
 import javax.xml.XMLConstants
 import javax.xml.parsers.DocumentBuilderFactory
 import kotlin.text.Charsets.UTF_8
-
+import org.apache.commons.lang3.StringUtils
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfException
+import org.slf4j.LoggerFactory
+import org.xml.sax.InputSource
 
 class NetconfMessageUtils {
 
@@ -91,8 +90,12 @@ class NetconfMessageUtils {
             return rpc.toString()
         }
 
-        fun editConfig(messageId: String, configType: String, defaultOperation: String?,
-                       newConfiguration: String): String {
+        fun editConfig(
+            messageId: String,
+            configType: String,
+            defaultOperation: String?,
+            newConfiguration: String
+        ): String {
             val request = StringBuilder()
             request.append("<edit-config>").append(NEW_LINE)
             request.append(RpcMessageUtils.TARGET_OPEN).append(NEW_LINE)
@@ -127,8 +130,13 @@ class NetconfMessageUtils {
             return doWrappedRpc(messageId, request.toString())
         }
 
-        fun commit(messageId: String, confirmed: Boolean, confirmTimeout: Int, persist: String,
-                   persistId: String): String {
+        fun commit(
+            messageId: String,
+            confirmed: Boolean,
+            confirmTimeout: Int,
+            persist: String,
+            persistId: String
+        ): String {
 
             if (!persist.isEmpty() && !persistId.isEmpty()) {
                 throw NetconfException("Can't proceed <commit> with both persist($persist) and " +
@@ -221,15 +229,15 @@ class NetconfMessageUtils {
 
         fun closeSession(messageId: String, force: Boolean): String {
             val request = StringBuilder()
-            //TODO: kill-session without session-id is a cisco-only variant.
-            //will fail on JUNIPER device.
-            //netconf RFC for kill-session requires session-id
-            //Cisco can accept <kill-session/> for current session
-            //or <kill-session><session-id>####</session-id></kill-session>
-            //as long as session ID is not the same as the current session.
+            // TODO: kill-session without session-id is a cisco-only variant.
+            // will fail on JUNIPER device.
+            // netconf RFC for kill-session requires session-id
+            // Cisco can accept <kill-session/> for current session
+            // or <kill-session><session-id>####</session-id></kill-session>
+            // as long as session ID is not the same as the current session.
 
-            //Juniperhttps://www.juniper.net/documentation/en_US/junos/topics/task/operational/netconf-session-terminating.html
-            //will accept only with session-id
+            // Juniperhttps://www.juniper.net/documentation/en_US/junos/topics/task/operational/netconf-session-terminating.html
+            // will accept only with session-id
             if (force) {
                 request.append("<kill-session/>")
             } else {
@@ -254,7 +262,6 @@ class NetconfMessageUtils {
             } catch (e: Exception) {
                 return false
             }
-
         }
 
         fun getMsgId(message: String): String {
@@ -355,8 +362,8 @@ class NetconfMessageUtils {
             if (!message.startsWith(RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH)) {
                 // chunk encode message
                 message =
-                    (RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH + message.toByteArray(UTF_8).size + RpcMessageUtils.NEW_LINE + message + RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH + RpcMessageUtils.HASH
-                            + RpcMessageUtils.NEW_LINE)
+                    (RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH + message.toByteArray(UTF_8).size + RpcMessageUtils.NEW_LINE + message + RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH + RpcMessageUtils.HASH +
+                            RpcMessageUtils.NEW_LINE)
             }
             return message
         }
@@ -420,5 +427,4 @@ class NetconfMessageUtils {
             } else false
         }
     }
-
 }

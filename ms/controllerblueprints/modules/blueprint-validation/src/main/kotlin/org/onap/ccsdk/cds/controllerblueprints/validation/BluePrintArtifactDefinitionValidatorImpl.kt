@@ -16,7 +16,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.validation
 
-import org.slf4j.LoggerFactory
+import java.io.File
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactDefinition
@@ -24,24 +24,28 @@ import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintArtifact
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
-import java.io.File
 
 @Service("default-artifact-definition-validator")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class BluePrintArtifactDefinitionValidatorImpl(
-        private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintArtifactDefinitionValidator {
+    private val bluePrintTypeValidatorService: BluePrintTypeValidatorService
+) : BluePrintArtifactDefinitionValidator {
 
-    private val log= LoggerFactory.getLogger(BluePrintArtifactDefinitionValidatorImpl::class.toString())
+    private val log = LoggerFactory.getLogger(BluePrintArtifactDefinitionValidatorImpl::class.toString())
 
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
     lateinit var bluePrintContext: BluePrintContext
     var paths: MutableList<String> = arrayListOf()
 
-    override fun validate(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String,
-                          artifactDefinition: ArtifactDefinition) {
+    override fun validate(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        name: String,
+        artifactDefinition: ArtifactDefinition
+    ) {
 
         this.bluePrintRuntimeService = bluePrintRuntimeService
         this.bluePrintContext = bluePrintRuntimeService.bluePrintContext()
@@ -69,7 +73,7 @@ open class BluePrintArtifactDefinitionValidatorImpl(
     open fun checkValidArtifactType(artifactDefinitionName: String, artifactTypeName: String) {
 
         val artifactType = bluePrintContext.serviceTemplate.artifactTypes?.get(artifactTypeName)
-                ?: throw BluePrintException("failed to get artifactType($artifactTypeName) for ArtifactDefinition($artifactDefinitionName)")
+            ?: throw BluePrintException("failed to get artifactType($artifactTypeName) for ArtifactDefinition($artifactDefinitionName)")
 
         checkValidArtifactTypeDerivedFrom(artifactTypeName, artifactType.derivedFrom)
     }
@@ -84,13 +88,12 @@ open class BluePrintArtifactDefinitionValidatorImpl(
     private fun validateExtension(referencePrefix: String, name: String, artifactDefinition: ArtifactDefinition) {
 
         val customValidators = bluePrintTypeValidatorService
-                .bluePrintValidators(referencePrefix, BluePrintArtifactDefinitionValidator::class.java)
+            .bluePrintValidators(referencePrefix, BluePrintArtifactDefinitionValidator::class.java)
 
         customValidators?.let {
             it.forEach { validator ->
                 validator.validate(bluePrintRuntimeService, name, artifactDefinition)
             }
-
         }
     }
 }

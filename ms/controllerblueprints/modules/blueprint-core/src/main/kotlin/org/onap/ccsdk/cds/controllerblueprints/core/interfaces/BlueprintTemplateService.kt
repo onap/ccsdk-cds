@@ -34,18 +34,21 @@ interface BlueprintTemplateService {
      * @return Content result
      *
      **/
-    suspend fun generateContent(bluePrintRuntimeService: BluePrintRuntimeService<*>,
-                                nodeTemplateName: String,
-                                artifactName: String,
-                                jsonData: String = "",
-                                ignoreJsonNull: Boolean = false,
-                                additionalContext: MutableMap<String, Any> = mutableMapOf()): String
+    suspend fun generateContent(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        nodeTemplateName: String,
+        artifactName: String,
+        jsonData: String = "",
+        ignoreJsonNull: Boolean = false,
+        additionalContext: MutableMap<String, Any> = mutableMapOf()
+    ): String
 }
 
 /**
  * Customise JsonNodeFactory and TextNode, Since it introduces quotes for string data.
  */
 open class BluePrintJsonNodeFactory : JsonNodeFactory() {
+
     override fun textNode(text: String): TextNode {
         return BluePrintTextNode(text)
     }
@@ -59,5 +62,4 @@ open class BluePrintTextNode(v: String) : TextNode(v) {
         CharTypes.appendQuoted(sb, this._value)
         return sb.toString()
     }
-
 }

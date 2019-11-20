@@ -19,14 +19,25 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
 import com.google.common.base.Predicates
+import java.io.BufferedInputStream
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
+import java.nio.charset.Charset
+import java.nio.file.FileVisitResult
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.SimpleFileVisitor
+import java.nio.file.attribute.BasicFileAttributes
+import java.util.function.Predicate
+import java.util.zip.Deflater
+import java.util.zip.ZipEntry
+import java.util.zip.ZipFile
+import java.util.zip.ZipOutputStream
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.slf4j.LoggerFactory
-import java.io.*
-import java.nio.charset.*
-import java.nio.file.*
-import java.nio.file.attribute.*
-import java.util.function.*
-import java.util.zip.*
 
 class BluePrintArchiveUtils {
 
@@ -42,7 +53,7 @@ class BluePrintArchiveUtils {
          */
         fun compress(source: File, destination: File): Boolean {
             try {
-                if(!destination.parentFile.exists()) {
+                if (!destination.parentFile.exists()) {
                     destination.parentFile.mkdirs()
                 }
                 destination.createNewFile()
@@ -62,7 +73,7 @@ class BluePrintArchiveUtils {
          */
         fun compressToBytes(baseDir: Path, compressionLevel: Int = Deflater.NO_COMPRESSION): ByteArray {
             return compressFolder(baseDir, ByteArrayOutputStream(), compressionLevel = compressionLevel)
-                    .toByteArray()
+                .toByteArray()
         }
 
         /**
@@ -75,42 +86,45 @@ class BluePrintArchiveUtils {
          * @param fixedModificationTime to force every entry to have this modification time.
          * Useful for reproducible operations, like tests, for example.
          */
-        private fun <T> compressFolder(baseDir: Path, output: T,
-                                       pathFilter: Predicate<Path> = Predicates.alwaysTrue(),
-                                       compressionLevel: Int = Deflater.DEFAULT_COMPRESSION,
-                                       fixedModificationTime: Long? = null): T
+        private fun <T> compressFolder(
+            baseDir: Path,
+            output: T,
+            pathFilter: Predicate<Path> = Predicates.alwaysTrue(),
+            compressionLevel: Int = Deflater.DEFAULT_COMPRESSION,
+            fixedModificationTime: Long? = null
+        ): T
                 where T : OutputStream {
             ZipOutputStream(output)
-                    .apply { setLevel(compressionLevel) }
-                    .use { zos ->
-                        Files.walkFileTree(baseDir, object : SimpleFileVisitor<Path>() {
-                            @Throws(IOException::class)
-                            override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
-                                if (pathFilter.test(file)) {
-                                    val zipEntry = ZipEntry(baseDir.relativize(file).toString())
-                                    fixedModificationTime?.let {
-                                        zipEntry.time = it
-                                    }
-                                    zipEntry.time = 0;
-                                    zos.putNextEntry(zipEntry)
-                                    Files.copy(file, zos)
-                                    zos.closeEntry()
-                                }
-                                return FileVisitResult.CONTINUE
-                            }
-
-                            @Throws(IOException::class)
-                            override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
-                                val zipEntry = ZipEntry(baseDir.relativize(dir).toString() + "/")
+                .apply { setLevel(compressionLevel) }
+                .use { zos ->
+                    Files.walkFileTree(baseDir, object : SimpleFileVisitor<Path>() {
+                        @Throws(IOException::class)
+                        override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
+                            if (pathFilter.test(file)) {
+                                val zipEntry = ZipEntry(baseDir.relativize(file).toString())
                                 fixedModificationTime?.let {
                                     zipEntry.time = it
                                 }
+                                zipEntry.time = 0
                                 zos.putNextEntry(zipEntry)
+                                Files.copy(file, zos)
                                 zos.closeEntry()
-                                return FileVisitResult.CONTINUE
                             }
-                        })
-                    }
+                            return FileVisitResult.CONTINUE
+                        }
+
+                        @Throws(IOException::class)
+                        override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
+                            val zipEntry = ZipEntry(baseDir.relativize(dir).toString() + "/")
+                            fixedModificationTime?.let {
+                                zipEntry.time = it
+                            }
+                            zos.putNextEntry(zipEntry)
+                            zos.closeEntry()
+                            return FileVisitResult.CONTINUE
+                        }
+                    })
+                }
             return output
         }
 
@@ -141,5 +155,4 @@ class BluePrintArchiveUtils {
             return destinationDir
         }
     }
-
 }

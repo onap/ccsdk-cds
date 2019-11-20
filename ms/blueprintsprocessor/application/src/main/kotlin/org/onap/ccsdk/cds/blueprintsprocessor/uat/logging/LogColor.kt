@@ -41,5 +41,5 @@ object LogColor {
     }
 
     fun markerOf(color: String): ColorMarker =
-            ColorMarker(MarkerFactory.getMarker(color))
+        ColorMarker(MarkerFactory.getMarker(color))
 }

@@ -20,19 +20,19 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.annotation.JsonTypeName
+import java.io.Serializable
+import java.util.Date
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ErrorCode
 import org.slf4j.LoggerFactory
+import org.springframework.dao.EmptyResultDataAccessException
+import org.springframework.dao.IncorrectResultSizeDataAccessException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException
-import org.springframework.dao.EmptyResultDataAccessException
-import org.springframework.dao.IncorrectResultSizeDataAccessException
-import org.springframework.web.server.ServerWebInputException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
-import java.io.Serializable
-import java.util.*
+import org.springframework.web.server.ServerWebInputException
 
 /**
  * Handle exceptions in Resolution API and provide relevant HTTP status codes and messages
@@ -103,6 +103,7 @@ open class ResourceExceptionHandler {
 @JsonTypeName("errorMessage")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 class ErrorMessage(var message: String?, var code: Int?, var debugMessage: String?) : Serializable {
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     var timestamp = Date()
 }

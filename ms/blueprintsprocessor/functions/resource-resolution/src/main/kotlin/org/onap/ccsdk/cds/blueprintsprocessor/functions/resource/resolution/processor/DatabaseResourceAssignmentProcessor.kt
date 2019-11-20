@@ -17,8 +17,9 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor
 
+import java.util.HashMap
 import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibGenericService
-import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.BluePrintDBLibPropertySevice
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.BluePrintDBLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.PrimaryDBLibGenericService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.DatabaseResourceSource
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
@@ -34,7 +35,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
-import java.util.*
 
 /**
  * DatabaseResourceAssignmentProcessor
@@ -44,7 +44,7 @@ import java.util.*
 @Service("${PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-db")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class DatabaseResourceAssignmentProcessor(
-    private val bluePrintDBLibPropertySevice: BluePrintDBLibPropertySevice,
+    private val bluePrintDBLibPropertyService: BluePrintDBLibPropertyService,
     private val primaryDBLibGenericService: PrimaryDBLibGenericService
 ) : ResourceAssignmentProcessor() {
 
@@ -106,11 +106,10 @@ open class DatabaseResourceAssignmentProcessor(
     private fun blueprintDBLibService(sourceProperties: DatabaseResourceSource): BluePrintDBLibGenericService {
         return if (isNotEmpty(sourceProperties.endpointSelector)) {
             val dbPropertiesJson = raRuntimeService.resolveDSLExpression(sourceProperties.endpointSelector!!)
-            bluePrintDBLibPropertySevice.JdbcTemplate(dbPropertiesJson)
+            bluePrintDBLibPropertyService.JdbcTemplate(dbPropertiesJson)
         } else {
             primaryDBLibGenericService
         }
-
     }
 
     @Throws(BluePrintProcessorException::class)
@@ -119,14 +118,13 @@ open class DatabaseResourceAssignmentProcessor(
         checkNotEmpty(resourceAssignment.dictionaryName) {
             "resource assignment dictionary name is not defined for template key (${resourceAssignment.name})"
         }
-        check(resourceAssignment.dictionarySource in getListOfDBSources())
-        {
+        check(resourceAssignment.dictionarySource in getListOfDBSources()) {
             "resource assignment source is not ${ResourceDictionaryConstants.PROCESSOR_DB} but it is ${resourceAssignment.dictionarySource}"
         }
     }
 
-    //placeholder to get the list of DB sources.
-    //TODO: This will be replaced with a DB
+    // placeholder to get the list of DB sources.
+    // TODO: This will be replaced with a DB
     private fun getListOfDBSources(): Array<String> = arrayOf(ResourceDictionaryConstants.PROCESSOR_DB)
 
     private fun populateNamedParameter(inputKeyMapping: Map<String, String>): Map<String, Any> {

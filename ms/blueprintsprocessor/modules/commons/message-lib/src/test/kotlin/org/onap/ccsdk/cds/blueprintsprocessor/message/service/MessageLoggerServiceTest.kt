@@ -18,6 +18,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.message.service
 
 import io.mockk.every
 import io.mockk.mockk
+import kotlin.test.assertEquals
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.common.header.internals.RecordHeaders
 import org.junit.Test
@@ -25,10 +26,8 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.CommonHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.message.toMap
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.slf4j.MDC
-import kotlin.test.assertEquals
 
 class MessageLoggerServiceTest {
-
 
     @Test
     fun testMessagingHeaders() {
@@ -55,7 +54,5 @@ class MessageLoggerServiceTest {
         assertEquals("1234-12", map[BluePrintConstants.ONAP_REQUEST_ID])
 
         messageLoggerService.messageConsumingExisting()
-
     }
-
 }

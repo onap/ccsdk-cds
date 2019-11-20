@@ -17,12 +17,11 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
-import kotlinx.coroutines.runBlocking
-import org.junit.Test
 import java.io.File
 import java.nio.file.Paths
 import kotlin.test.assertTrue
-
+import kotlinx.coroutines.runBlocking
+import org.junit.Test
 
 class BluePrintFileUtilsTest {
 
@@ -30,7 +29,6 @@ class BluePrintFileUtilsTest {
     fun testNewBlueprint() = runBlocking {
         val targetPath: String = Paths.get("target").toUri().toURL().path.plus("/bp-new-test")
         BluePrintFileUtils.createEmptyBluePrint(targetPath)
-
     }
 
     @Test
@@ -54,7 +52,5 @@ class BluePrintFileUtilsTest {
         bluePrintContext.rootPath = targetDir.absolutePath
 
         BluePrintFileUtils.writeBluePrintTypes(bluePrintContext)
-
-
     }
 }

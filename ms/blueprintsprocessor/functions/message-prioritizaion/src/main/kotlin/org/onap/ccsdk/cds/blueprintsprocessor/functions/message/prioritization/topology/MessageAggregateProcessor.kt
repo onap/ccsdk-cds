@@ -22,7 +22,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.M
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.MessageState
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 
-
 open class MessageAggregateProcessor : AbstractMessagePrioritizeProcessor<String, String>() {
 
     private val log = logger(MessageAggregateProcessor::class)
@@ -51,15 +50,14 @@ open class MessageAggregateProcessor : AbstractMessagePrioritizeProcessor<String
                         try {
                             /** Update the data store */
                             messagePrioritizationStateService.setMessageStateANdError(messagePrioritization.id,
-                                    MessageState.ERROR.name, error)
+                                MessageState.ERROR.name, error)
                             /** Publish to Error topic */
                             this.processorContext.forward(messagePrioritization.id, messagePrioritization,
-                                    To.child(MessagePrioritizationConstants.SINK_OUTPUT))
+                                To.child(MessagePrioritizationConstants.SINK_OUTPUT))
                         } catch (sendException: Exception) {
                             log.error("failed to update/publish error message(${messagePrioritization.id}) : " +
                                     "${sendException.message}", e)
                         }
-
                     }
                 }
             }

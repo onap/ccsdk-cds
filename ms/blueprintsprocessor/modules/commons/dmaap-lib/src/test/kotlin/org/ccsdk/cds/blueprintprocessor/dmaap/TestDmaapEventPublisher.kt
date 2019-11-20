@@ -21,6 +21,8 @@
 package org.ccsdk.apps.blueprintprocessor.dmaap
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
@@ -40,8 +42,6 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 /**
  * Unit test cases for DMaap publisher code.
@@ -61,7 +61,7 @@ import kotlin.test.assertNotNull
 class TestDmaapEventPublisher {
 
     @Autowired
-    lateinit var dmaapService : BluePrintDmaapLibPropertyService
+    lateinit var dmaapService: BluePrintDmaapLibPropertyService
 
     /**
      * Tests the event properties being set properly and sent as request.
@@ -88,7 +88,7 @@ class TestDmaapEventPublisher {
     @Test
     fun testEventPropertiesWithSingleMsg() {
         val dmaapClient = dmaapService.blueprintDmaapClientService("aai")
-        val str : String = "{\n" +
+        val str: String = "{\n" +
                 "    \"a\" : \"hello\"\n" +
                 "}"
         dmaapClient.sendMessage(str)
@@ -118,7 +118,6 @@ class TestDmaapEventPublisher {
         assertEquals(topic2!!.size, 0)
     }
 
-
     /**
      * Tests the event properties with multiple topics with JSON node as input.
      */
@@ -145,7 +144,6 @@ class TestDmaapEventPublisher {
         val topic2 = msgs.get(1)
         assertEquals(topic2!!.size, 0)
     }
-
 
     /**
      * Tests the event properties with multiple messages.
@@ -190,7 +188,6 @@ class TestDmaapEventPublisher {
         assertNotNull(blueprintDmaapClientService,
             "failed to create blueprintDmaapClientService")
     }
-
 }
 
 /**
@@ -204,7 +201,7 @@ open class TestController {
      * Accepts request for a topic and sends a message as response.
      */
     @PostMapping(path = ["/{topic}"])
-    fun postTopic(@PathVariable(value = "topic") topic : String):
+    fun postTopic(@PathVariable(value = "topic") topic: String):
             ResponseEntity<Any> {
         var a = "{\n" +
                 "    \"message\" : \"The message is published into $topic " +

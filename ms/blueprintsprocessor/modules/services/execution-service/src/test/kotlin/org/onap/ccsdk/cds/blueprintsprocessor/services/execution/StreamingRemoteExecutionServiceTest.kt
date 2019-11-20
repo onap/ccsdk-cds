@@ -23,8 +23,16 @@ import io.grpc.testing.GrpcCleanupRule
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.spyk
-import kotlinx.coroutines.*
+import java.util.UUID
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ACTION_MODE_SYNC
@@ -37,10 +45,6 @@ import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceInput
-import java.util.*
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-
 
 class StreamingRemoteExecutionServiceTest {
 
@@ -83,15 +87,14 @@ class StreamingRemoteExecutionServiceTest {
                 val invocationId = request.commonHeader.subRequestId
                 val deferred = async {
                     val response = spyStreamingRemoteExecutionService.sendNonInteractive(tokenAuthGrpcClientProperties,
-                            invocationId, request, 1000L)
+                        invocationId, request, 1000L)
                     assertNotNull(response, "failed to get non interactive response")
                     assertEquals(response.commonHeader.requestId, requestId,
-                            "failed to match non interactive response id")
+                        "failed to match non interactive response id")
                     assertEquals(response.status.eventType, EventType.EVENT_COMPONENT_EXECUTED,
-                            "failed to match non interactive response type")
+                        "failed to match non interactive response type")
                 }
                 nonInteractiveDeferred.add(deferred)
-
             }
             nonInteractiveDeferred.awaitAll()
 
@@ -102,7 +105,7 @@ class StreamingRemoteExecutionServiceTest {
                 val request = getRequest(requestId)
                 val invocationId = request.commonHeader.requestId
                 val responseFlow = spyStreamingRemoteExecutionService
-                        .openSubscription(tokenAuthGrpcClientProperties, invocationId)
+                    .openSubscription(tokenAuthGrpcClientProperties, invocationId)
 
                 val deferred = async {
                     responseFlow.collect {
@@ -119,33 +122,30 @@ class StreamingRemoteExecutionServiceTest {
             responseFlowsDeferred.awaitAll()
             streamingRemoteExecutionService.closeChannel(tokenAuthGrpcClientProperties)
         }
-
     }
 
     private fun getRequest(requestId: String): ExecutionServiceInput {
         val commonHeader = CommonHeader.newBuilder()
-                .setTimestamp("2012-04-23T18:25:43.511Z")
-                .setOriginatorId("System")
-                .setRequestId(requestId)
-                .setSubRequestId("$requestId-" + UUID.randomUUID().toString()).build()
-
+            .setTimestamp("2012-04-23T18:25:43.511Z")
+            .setOriginatorId("System")
+            .setRequestId(requestId)
+            .setSubRequestId("$requestId-" + UUID.randomUUID().toString()).build()
 
         val actionIdentifier = ActionIdentifiers.newBuilder()
-                .setActionName("SampleScript")
-                .setBlueprintName("sample-cba")
-                .setBlueprintVersion("1.0.0")
-                .setMode(ACTION_MODE_SYNC)
-                .build()
+            .setActionName("SampleScript")
+            .setBlueprintName("sample-cba")
+            .setBlueprintVersion("1.0.0")
+            .setMode(ACTION_MODE_SYNC)
+            .build()
 
         val jsonContent = """{ "key1" : "value1" }"""
         val payloadBuilder = ExecutionServiceInput.newBuilder().payloadBuilder
         JsonFormat.parser().merge(jsonContent, payloadBuilder)
 
         return ExecutionServiceInput.newBuilder()
-                .setCommonHeader(commonHeader)
-                .setActionIdentifiers(actionIdentifier)
-                .setPayload(payloadBuilder.build())
-                .build()
-
+            .setCommonHeader(commonHeader)
+            .setActionIdentifiers(actionIdentifier)
+            .setPayload(payloadBuilder.build())
+            .build()
     }
 }

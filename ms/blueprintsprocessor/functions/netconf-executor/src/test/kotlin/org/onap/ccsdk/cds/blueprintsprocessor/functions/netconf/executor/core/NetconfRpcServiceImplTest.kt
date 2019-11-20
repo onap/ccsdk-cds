@@ -20,18 +20,17 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.core
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
-import org.junit.Before
-
-import org.junit.Test
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceResponse
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfException
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.utils.RpcStatus
 import java.io.IOException
 import java.util.concurrent.CompletableFuture
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
+import org.junit.Before
+import org.junit.Test
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceResponse
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfException
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.utils.RpcStatus
 
 class NetconfRpcServiceImplTest {
     private lateinit var mockNetconfSession: NetconfSessionImpl
@@ -40,10 +39,10 @@ class NetconfRpcServiceImplTest {
         private const val someString = "someString"
         private const val replyStr = "this is a reply"
         private val failedDeviceResponse = DeviceResponse(status = RpcStatus.FAILURE,
-            requestMessage = "request message", responseMessage = replyStr) //responseMessage will be null in this POJO
+            requestMessage = "request message", responseMessage = replyStr) // responseMessage will be null in this POJO
         private val successfulDeviceResponse = DeviceResponse(status = RpcStatus.SUCCESS,
-            requestMessage = "request message", responseMessage = replyStr) //responseMessage will be null in this POJO
-        //but will be set later from mockSession
+            requestMessage = "request message", responseMessage = replyStr) // responseMessage will be null in this POJO
+        // but will be set later from mockSession
         private const val msgId = "100"
         private const val timeout = 5
         private val deviceInfo: DeviceInfo = DeviceInfo().apply {

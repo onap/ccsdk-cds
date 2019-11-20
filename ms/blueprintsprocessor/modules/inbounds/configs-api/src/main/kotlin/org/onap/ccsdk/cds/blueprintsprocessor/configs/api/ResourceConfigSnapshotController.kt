@@ -27,7 +27,14 @@ import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.RestController
 
 /**
  * Exposes Resource Configuration Snapshot API to store and retrieve stored resource configurations.
@@ -59,30 +66,31 @@ open class ResourceConfigSnapshotController(private val resourceConfigSnapshotSe
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     fun get(
-            @ApiParam(value = "Resource Type associated of the resource configuration snapshot.", required = false)
+        @ApiParam(value = "Resource Type associated of the resource configuration snapshot.", required = false)
         @RequestParam(value = "resourceType", required = true) resourceType: String,
 
-            @ApiParam(value = "Resource Id associated of the resource configuration snapshot.", required = false)
+        @ApiParam(value = "Resource Id associated of the resource configuration snapshot.", required = false)
         @RequestParam(value = "resourceId", required = true) resourceId: String,
 
-            @ApiParam(value = "Status of the snapshot being retrieved.", defaultValue = "RUNNING", required = false)
+        @ApiParam(value = "Status of the snapshot being retrieved.", defaultValue = "RUNNING", required = false)
         @RequestParam(value = "status", required = false, defaultValue = "RUNNING") status: String,
 
-            @ApiParam(value = "Expected format of the snapshot being retrieved.", defaultValue = MediaType.TEXT_PLAIN_VALUE,
+        @ApiParam(value = "Expected format of the snapshot being retrieved.", defaultValue = MediaType.TEXT_PLAIN_VALUE,
             required = false)
-        @RequestParam(value = "format", required = false, defaultValue = MediaType.TEXT_PLAIN_VALUE)  format: String)
+        @RequestParam(value = "format", required = false, defaultValue = MediaType.TEXT_PLAIN_VALUE) format: String
+    ):
 
-        : ResponseEntity<String> = runBlocking {
+            ResponseEntity<String> = runBlocking {
 
         var configSnapshot = ""
 
         if (resourceType.isNotEmpty() && resourceId.isNotEmpty()) {
             try {
                 configSnapshot = resourceConfigSnapshotService.findByResourceIdAndResourceTypeAndStatus(resourceId,
-                        resourceType, ResourceConfigSnapshot.Status.valueOf(status.toUpperCase()))
-            } catch (ex : NoSuchElementException) {
+                    resourceType, ResourceConfigSnapshot.Status.valueOf(status.toUpperCase()))
+            } catch (ex: NoSuchElementException) {
                 throw ResourceConfigSnapshotException(
-                        "Could not find configuration snapshot entry for type $resourceType and Id $resourceId")
+                    "Could not find configuration snapshot entry for type $resourceType and Id $resourceId")
             }
         } else {
             throw IllegalArgumentException("Missing param. You must specify resource-id and resource-type.")
@@ -113,11 +121,12 @@ open class ResourceConfigSnapshotController(private val resourceConfigSnapshotSe
         @ApiParam(value = "Status of the snapshot being retrieved.", defaultValue = "RUNNING", required = true)
         @PathVariable(value = "status", required = true) status: String,
         @ApiParam(value = "Config snapshot to store.", required = true)
-        @RequestBody snapshot: String): ResponseEntity<ResourceConfigSnapshot> = runBlocking {
+        @RequestBody snapshot: String
+    ): ResponseEntity<ResourceConfigSnapshot> = runBlocking {
 
         val resultStored =
-                resourceConfigSnapshotService.write(snapshot, resourceId, resourceType,
-                                                    ResourceConfigSnapshot.Status.valueOf(status.toUpperCase()))
+            resourceConfigSnapshotService.write(snapshot, resourceId, resourceType,
+                ResourceConfigSnapshot.Status.valueOf(status.toUpperCase()))
 
         ResponseEntity.ok().body(resultStored)
     }

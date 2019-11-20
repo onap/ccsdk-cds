@@ -21,6 +21,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.dmaap
 
 import com.fasterxml.jackson.databind.JsonNode
+import java.util.Properties
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.dmaap.DmaapLibConstants.Companion.SERVICE_BLUEPRINT_DMAAP_LIB_PROPERTY
 import org.onap.ccsdk.cds.blueprintsprocessor.dmaap.DmaapLibConstants.Companion.TYPE_HTTP_AAF_AUTH
@@ -36,7 +37,6 @@ import org.springframework.core.env.ConfigurableEnvironment
 import org.springframework.core.env.Environment
 import org.springframework.core.io.support.ResourcePropertySource
 import org.springframework.stereotype.Service
-import java.util.*
 
 /**
  * Representation of DMAAP lib property service to load the properties
@@ -52,8 +52,9 @@ open class BluePrintDmaapLibPropertyService(private var bluePrintPropertiesServi
      * Static variable for logging.
      */
     companion object {
+
         var log = LoggerFactory.getLogger(
-                BluePrintDmaapLibPropertyService::class.java)!!
+            BluePrintDmaapLibPropertyService::class.java)!!
     }
 
     /**
@@ -90,19 +91,19 @@ open class BluePrintDmaapLibPropertyService(private var bluePrintPropertiesServi
      */
     fun dmaapClientProperties(prefix: String): DmaapClientProperties {
         val type = bluePrintPropertiesService.propertyBeanType(
-                "$prefix.type", String::class.java)
+            "$prefix.type", String::class.java)
         val clientProps: DmaapClientProperties
 
         when (type) {
             TYPE_HTTP_NO_AUTH -> {
                 clientProps = bluePrintPropertiesService.propertyBeanType(
-                        prefix, HttpNoAuthDmaapClientProperties::class.java)
+                    prefix, HttpNoAuthDmaapClientProperties::class.java)
                 clientProps.props = parseEventProps()
             }
 
             TYPE_HTTP_AAF_AUTH -> {
                 clientProps = bluePrintPropertiesService.propertyBeanType(
-                        prefix, AafAuthDmaapClientProperties::class.java)
+                    prefix, AafAuthDmaapClientProperties::class.java)
                 clientProps.props = parseEventProps()
             }
 
@@ -125,13 +126,13 @@ open class BluePrintDmaapLibPropertyService(private var bluePrintPropertiesServi
         when (type) {
             TYPE_HTTP_NO_AUTH -> {
                 clientProps = JacksonUtils.readValue(jsonNode,
-                        HttpNoAuthDmaapClientProperties::class.java)!!
+                    HttpNoAuthDmaapClientProperties::class.java)!!
                 clientProps.props = parseEventProps()
             }
 
             TYPE_HTTP_AAF_AUTH -> {
                 clientProps = JacksonUtils.readValue(jsonNode,
-                        AafAuthDmaapClientProperties::class.java)!!
+                    AafAuthDmaapClientProperties::class.java)!!
                 clientProps.props = parseEventProps()
             }
 
@@ -171,7 +172,7 @@ open class BluePrintDmaapLibPropertyService(private var bluePrintPropertiesServi
     private fun parseEventProps(): Properties {
         val prodProps = Properties()
         val proProps = (env as ConfigurableEnvironment).propertySources.get(
-                "class path resource [event.properties]")
+            "class path resource [event.properties]")
 
         if (proProps != null) {
             val entries = (proProps as ResourcePropertySource).source.entries

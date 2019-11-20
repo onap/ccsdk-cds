@@ -36,17 +36,15 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/combinedMetrics")
 @Api(value = "/api/v1/combinedMetrics",
-        description = "gather all Metrics info from BluePrint and CDSListener")
+    description = "gather all Metrics info from BluePrint and CDSListener")
 open class CombinedMetrics(private val combinedMetricsService: CombinedMetricsService) {
 
     @RequestMapping(path = [""],
-            method = [RequestMethod.GET],
-            produces = [MediaType.APPLICATION_JSON_VALUE])
+        method = [RequestMethod.GET],
+        produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     @ApiOperation(value = " Metrics Check", hidden = true)
     fun getMetricsHealthCheckResponse(): ResponseEntity<MetricsInfo?> {
         return ResponseEntity.ok().body(combinedMetricsService.metricsInfo)
-
     }
-
 }

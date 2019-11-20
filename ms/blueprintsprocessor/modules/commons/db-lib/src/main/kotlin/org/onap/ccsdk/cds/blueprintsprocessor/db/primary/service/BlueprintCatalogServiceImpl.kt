@@ -18,21 +18,26 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.db.primary.service
 
-import org.onap.ccsdk.cds.controllerblueprints.core.*
-import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidatorService
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintArchiveUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
-import org.slf4j.LoggerFactory
 import java.io.File
 import java.nio.file.Path
 import javax.persistence.MappedSuperclass
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
+import org.onap.ccsdk.cds.controllerblueprints.core.deCompress
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidatorService
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintArchiveUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.slf4j.LoggerFactory
 
 @MappedSuperclass
 abstract class BlueprintCatalogServiceImpl(
-        private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
-        private val blueprintValidator: BluePrintValidatorService) : BluePrintCatalogService {
+    private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
+    private val blueprintValidator: BluePrintValidatorService
+) : BluePrintCatalogService {
 
     private val log = LoggerFactory.getLogger(BlueprintCatalogServiceImpl::class.java)!!
 
@@ -75,13 +80,12 @@ abstract class BlueprintCatalogServiceImpl(
     }
 
     override suspend fun getFromDatabase(name: String, version: String, extract: Boolean): Path = get(name, version,
-            extract)
-            ?: throw BluePrintException("Could not find blueprint $name:$version from database")
+        extract)
+        ?: throw BluePrintException("Could not find blueprint $name:$version from database")
 
     override suspend fun deleteFromDatabase(name: String, version: String) = delete(name, version)
 
     abstract suspend fun save(metadata: MutableMap<String, String>, archiveFile: File)
     abstract suspend fun get(name: String, version: String, extract: Boolean): Path?
     abstract suspend fun delete(name: String, version: String)
-
 }

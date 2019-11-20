@@ -28,7 +28,8 @@ import org.onap.ccsdk.cds.blueprintsprocessor.message.service.KafkaStreamConsume
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 
 open class MessagePrioritizationConsumer(
-        private val bluePrintMessageLibPropertyService: BluePrintMessageLibPropertyService) {
+    private val bluePrintMessageLibPropertyService: BluePrintMessageLibPropertyService
+) {
 
     private val log = logger(MessagePrioritizationConsumer::class)
 
@@ -36,15 +37,17 @@ open class MessagePrioritizationConsumer(
 
     open fun consumerService(selector: String): BlueprintMessageConsumerService {
         return bluePrintMessageLibPropertyService
-                .blueprintMessageConsumerService(selector)
+            .blueprintMessageConsumerService(selector)
     }
 
-    open fun kafkaStreamConsumerFunction(prioritizationConfiguration: PrioritizationConfiguration)
-            : KafkaStreamConsumerFunction {
+    open fun kafkaStreamConsumerFunction(prioritizationConfiguration: PrioritizationConfiguration):
+            KafkaStreamConsumerFunction {
         return object : KafkaStreamConsumerFunction {
 
-            override suspend fun createTopology(messageConsumerProperties: MessageConsumerProperties,
-                                                additionalConfig: Map<String, Any>?): Topology {
+            override suspend fun createTopology(
+                messageConsumerProperties: MessageConsumerProperties,
+                additionalConfig: Map<String, Any>?
+            ): Topology {
 
                 val topology = Topology()
                 val kafkaStreamsBasicAuthConsumerProperties = messageConsumerProperties
@@ -56,32 +59,32 @@ open class MessagePrioritizationConsumer(
                 topology.addSource(MessagePrioritizationConstants.SOURCE_INPUT, *topics.toTypedArray())
 
                 topology.addProcessor(MessagePrioritizationConstants.PROCESSOR_PRIORITIZE,
-                        bluePrintProcessorSupplier<ByteArray, ByteArray>(MessagePrioritizationConstants.PROCESSOR_PRIORITIZE,
-                                prioritizationConfiguration),
-                        MessagePrioritizationConstants.SOURCE_INPUT)
+                    bluePrintProcessorSupplier<ByteArray, ByteArray>(MessagePrioritizationConstants.PROCESSOR_PRIORITIZE,
+                        prioritizationConfiguration),
+                    MessagePrioritizationConstants.SOURCE_INPUT)
 
                 topology.addProcessor(MessagePrioritizationConstants.PROCESSOR_AGGREGATE,
-                        bluePrintProcessorSupplier<String, String>(MessagePrioritizationConstants.PROCESSOR_AGGREGATE,
-                                prioritizationConfiguration),
-                        MessagePrioritizationConstants.PROCESSOR_PRIORITIZE)
+                    bluePrintProcessorSupplier<String, String>(MessagePrioritizationConstants.PROCESSOR_AGGREGATE,
+                        prioritizationConfiguration),
+                    MessagePrioritizationConstants.PROCESSOR_PRIORITIZE)
 
                 topology.addProcessor(MessagePrioritizationConstants.PROCESSOR_OUTPUT,
-                        bluePrintProcessorSupplier<String, String>(MessagePrioritizationConstants.PROCESSOR_OUTPUT,
-                                prioritizationConfiguration),
-                        MessagePrioritizationConstants.PROCESSOR_AGGREGATE)
+                    bluePrintProcessorSupplier<String, String>(MessagePrioritizationConstants.PROCESSOR_OUTPUT,
+                        prioritizationConfiguration),
+                    MessagePrioritizationConstants.PROCESSOR_AGGREGATE)
 
                 topology.addSink(MessagePrioritizationConstants.SINK_EXPIRED,
-                        prioritizationConfiguration.expiredTopic,
-                        Serdes.String().serializer(), MessagePrioritizationSerde().serializer(),
-                        MessagePrioritizationConstants.PROCESSOR_PRIORITIZE)
+                    prioritizationConfiguration.expiredTopic,
+                    Serdes.String().serializer(), MessagePrioritizationSerde().serializer(),
+                    MessagePrioritizationConstants.PROCESSOR_PRIORITIZE)
 
                 /** To receive completed and error messages */
                 topology.addSink(MessagePrioritizationConstants.SINK_OUTPUT,
-                        prioritizationConfiguration.outputTopic,
-                        Serdes.String().serializer(), MessagePrioritizationSerde().serializer(),
-                        MessagePrioritizationConstants.PROCESSOR_PRIORITIZE,
-                        MessagePrioritizationConstants.PROCESSOR_AGGREGATE,
-                        MessagePrioritizationConstants.PROCESSOR_OUTPUT)
+                    prioritizationConfiguration.outputTopic,
+                    Serdes.String().serializer(), MessagePrioritizationSerde().serializer(),
+                    MessagePrioritizationConstants.PROCESSOR_PRIORITIZE,
+                    MessagePrioritizationConstants.PROCESSOR_AGGREGATE,
+                    MessagePrioritizationConstants.PROCESSOR_OUTPUT)
 
                 // Output will be sent to the group-output topic from Processor API
                 return topology

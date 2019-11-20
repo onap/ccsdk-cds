@@ -16,6 +16,9 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.message.service
 
+import java.io.Serializable
+import java.nio.charset.Charset
+import java.util.UUID
 import org.apache.kafka.common.serialization.Deserializer
 import org.apache.kafka.common.serialization.Serde
 import org.apache.kafka.common.serialization.Serializer
@@ -26,9 +29,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-import java.io.Serializable
-import java.nio.charset.Charset
-import java.util.*
 
 class PriorityMessage : Serializable {
     lateinit var id: String
@@ -47,7 +47,7 @@ open class PriorityMessageSerde : Serde<PriorityMessage> {
         return object : Deserializer<PriorityMessage> {
             override fun deserialize(topic: String, data: ByteArray): PriorityMessage {
                 return JacksonUtils.readValue(String(data), PriorityMessage::class.java)
-                        ?: throw BluePrintProcessorException("failed to convert")
+                    ?: throw BluePrintProcessorException("failed to convert")
             }
 
             override fun configure(configs: MutableMap<String, *>?, isKey: Boolean) {
@@ -72,7 +72,6 @@ open class PriorityMessageSerde : Serde<PriorityMessage> {
         }
     }
 }
-
 
 class FirstProcessor : Processor<ByteArray, ByteArray> {
 

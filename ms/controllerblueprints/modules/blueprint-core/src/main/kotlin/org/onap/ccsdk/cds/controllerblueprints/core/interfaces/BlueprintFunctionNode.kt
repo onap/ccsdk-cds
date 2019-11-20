@@ -17,10 +17,9 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.interfaces
 
+import java.util.function.Function
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import java.util.function.Function
-
 
 interface BlueprintFunctionNode<T, R> : Function<T, R> {
 

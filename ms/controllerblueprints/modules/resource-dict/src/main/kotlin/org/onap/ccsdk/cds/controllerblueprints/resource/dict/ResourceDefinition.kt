@@ -19,10 +19,10 @@ package org.onap.ccsdk.cds.controllerblueprints.resource.dict
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.io.Serializable
+import java.util.Date
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
-import java.io.Serializable
-import java.util.*
 
 open class ResourceDefinition {
 
@@ -102,7 +102,6 @@ open class ResourceAssignment {
  * Default Source, Database Source, Rest Sources, etc)
  */
 interface ResourceSource : Serializable
-
 
 open class ResourceSourceMapping {
     lateinit var resourceSourceMappings: MutableMap<String, String>

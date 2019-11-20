@@ -18,10 +18,15 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 
 import io.grpc.stub.StreamObserver
+import java.util.stream.Collectors
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.*
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ACTION_MODE_ASYNC
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ACTION_MODE_SYNC
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.Status
 import org.onap.ccsdk.cds.blueprintsprocessor.core.utils.toProto
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractServiceFunction
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
@@ -33,18 +38,21 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyS
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import java.util.stream.Collectors
 
 @Service
-class ExecutionServiceHandler(private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
-                              private val blueprintsProcessorCatalogService: BluePrintCatalogService,
-                              private val bluePrintWorkflowExecutionService
-                              : BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput>) {
+class ExecutionServiceHandler(
+    private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
+    private val blueprintsProcessorCatalogService: BluePrintCatalogService,
+    private val bluePrintWorkflowExecutionService:
+    BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput>
+) {
 
     private val log = LoggerFactory.getLogger(ExecutionServiceHandler::class.toString())
 
-    suspend fun process(executionServiceInput: ExecutionServiceInput,
-                        responseObserver: StreamObserver<org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceOutput>) {
+    suspend fun process(
+        executionServiceInput: ExecutionServiceInput,
+        responseObserver: StreamObserver<org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceOutput>
+    ) {
         when {
             executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC -> {
                 GlobalScope.launch(Dispatchers.Default) {
@@ -60,8 +68,8 @@ class ExecutionServiceHandler(private val bluePrintLoadConfiguration: BluePrintL
                 responseObserver.onCompleted()
             }
             else -> responseObserver.onNext(response(executionServiceInput,
-                    "Failed to process request, 'actionIdentifiers.mode' not specified. Valid value are: 'sync' or 'async'.",
-                    true).toProto());
+                "Failed to process request, 'actionIdentifiers.mode' not specified. Valid value are: 'sync' or 'async'.",
+                true).toProto())
         }
     }
 
@@ -82,7 +90,7 @@ class ExecutionServiceHandler(private val bluePrintLoadConfiguration: BluePrintL
                 val blueprintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(requestId, basePath.toString())
 
                 val output = bluePrintWorkflowExecutionService.executeBluePrintWorkflow(blueprintRuntimeService,
-                        executionServiceInput, hashMapOf())
+                    executionServiceInput, hashMapOf())
 
                 val errors = blueprintRuntimeService.getBluePrintError().errors
                 if (errors.isNotEmpty()) {
@@ -118,8 +126,11 @@ class ExecutionServiceHandler(private val bluePrintLoadConfiguration: BluePrintL
         status.message = BluePrintConstants.STATUS_FAILURE
     }
 
-    private fun response(executionServiceInput: ExecutionServiceInput, errorMessage: String = "",
-                         failure: Boolean = false): ExecutionServiceOutput {
+    private fun response(
+        executionServiceInput: ExecutionServiceInput,
+        errorMessage: String = "",
+        failure: Boolean = false
+    ): ExecutionServiceOutput {
         val executionServiceOutput = ExecutionServiceOutput()
         executionServiceOutput.commonHeader = executionServiceInput.commonHeader
         executionServiceOutput.actionIdentifiers = executionServiceInput.actionIdentifiers
@@ -138,5 +149,4 @@ class ExecutionServiceHandler(private val bluePrintLoadConfiguration: BluePrintL
 
         return executionServiceOutput
     }
-
 }

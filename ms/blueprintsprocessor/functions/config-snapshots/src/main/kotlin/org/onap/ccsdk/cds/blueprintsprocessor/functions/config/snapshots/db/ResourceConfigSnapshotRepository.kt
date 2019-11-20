@@ -15,8 +15,8 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db
 
-import org.springframework.data.jpa.repository.JpaRepository
 import javax.transaction.Transactional
+import org.springframework.data.jpa.repository.JpaRepository
 
 /**
  * JPA repository managing the underlying ResourceConfigSnapshot table.
@@ -29,11 +29,13 @@ interface ResourceConfigSnapshotRepository : JpaRepository<ResourceConfigSnapsho
     fun findByResourceIdAndResourceTypeAndStatus(
         resourceId: String,
         resourceType: String,
-        status : ResourceConfigSnapshot.Status): ResourceConfigSnapshot?
+        status: ResourceConfigSnapshot.Status
+    ): ResourceConfigSnapshot?
 
     @Transactional
     fun deleteByResourceIdAndResourceTypeAndStatus(
         resourceId: String,
         resourceType: String,
-        status : ResourceConfigSnapshot.Status)
+        status: ResourceConfigSnapshot.Status
+    )
 }

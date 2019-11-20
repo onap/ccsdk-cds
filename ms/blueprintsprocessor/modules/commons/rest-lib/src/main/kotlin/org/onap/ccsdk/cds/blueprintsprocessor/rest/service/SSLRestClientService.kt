@@ -17,6 +17,11 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.rest.service
 
+import java.io.File
+import java.io.FileInputStream
+import java.security.KeyStore
+import java.security.cert.X509Certificate
+import org.apache.http.conn.ssl.NoopHostnameVerifier
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory
 import org.apache.http.impl.client.CloseableHttpClient
 import org.apache.http.impl.client.HttpClients
@@ -28,11 +33,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLTokenAuthRestClientPropert
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.utils.WebClientUtils
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
-import java.io.File
-import java.io.FileInputStream
-import java.security.KeyStore
-import java.security.cert.X509Certificate
-import org.apache.http.conn.ssl.NoopHostnameVerifier
 
 class SSLRestClientService(private val restClientProperties: SSLRestClientProperties) :
     BlueprintWebClientService {
@@ -44,8 +44,8 @@ class SSLRestClientService(private val restClientProperties: SSLRestClientProper
     }
 
     private fun getAuthService(): BlueprintWebClientService? {
-        //type,url and additional headers don't get carried over to TokenAuthRestClientProperties from SSLTokenAuthRestClientProperties
-        //set them in auth obj to be consistent. TODO: refactor
+        // type,url and additional headers don't get carried over to TokenAuthRestClientProperties from SSLTokenAuthRestClientProperties
+        // set them in auth obj to be consistent. TODO: refactor
         return when (restClientProperties) {
             is SSLBasicAuthRestClientProperties -> {
                 val basicAuthProps = restClientProperties.basicAuth!!
@@ -62,7 +62,7 @@ class SSLRestClientService(private val restClientProperties: SSLRestClientProper
                 TokenAuthRestClientService(token)
             }
             else -> {
-                //Returns null for No auth
+                // Returns null for No auth
                 null
             }
         }
@@ -104,7 +104,7 @@ class SSLRestClientService(private val restClientProperties: SSLRestClientProper
         }
 
         sslContext.loadTrustMaterial(File(sslTrust), sslTrustPwd.toCharArray(), acceptingTrustStrategy)
-        var csf : SSLConnectionSocketFactory
+        var csf: SSLConnectionSocketFactory
         if (sslTrustIgnoreHostname) {
             csf = SSLConnectionSocketFactory(sslContext.build(), NoopHostnameVerifier())
         } else {
@@ -123,13 +123,13 @@ class SSLRestClientService(private val restClientProperties: SSLRestClientProper
 
     override fun convertToBasicHeaders(headers: Map<String, String>): Array<BasicHeader> {
         val mergedDefaultAndSuppliedHeaders = defaultHeaders().plus(headers)
-        //During the initialization, getAuthService() sets the auth variable.
-        //If it's not null, then we have an authentication mechanism.
-        //If null - indicates no-auth used
+        // During the initialization, getAuthService() sets the auth variable.
+        // If it's not null, then we have an authentication mechanism.
+        // If null - indicates no-auth used
         if (auth != null) {
             return auth!!.convertToBasicHeaders(mergedDefaultAndSuppliedHeaders)
         }
-        //inject additionalHeaders
+        // inject additionalHeaders
         return super.convertToBasicHeaders(mergedDefaultAndSuppliedHeaders
             .plus(verifyAdditionalHeaders(restClientProperties)))
     }

@@ -31,8 +31,8 @@ import org.springframework.stereotype.Component
 
 @Component("component-netconf-executor")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-open class ComponentNetconfExecutor(private var componentFunctionScriptingService: ComponentFunctionScriptingService)
-    : AbstractComponentFunction() {
+open class ComponentNetconfExecutor(private var componentFunctionScriptingService: ComponentFunctionScriptingService) :
+    AbstractComponentFunction() {
 
     companion object {
         const val SCRIPT_TYPE = "script-type"
@@ -56,9 +56,8 @@ open class ComponentNetconfExecutor(private var componentFunctionScriptingServic
         }
 
         scriptComponent = componentFunctionScriptingService
-                .scriptInstance<AbstractScriptComponentFunction>(this, scriptType,
-                        scriptClassReference, scriptDependencies)
-
+            .scriptInstance<AbstractScriptComponentFunction>(this, scriptType,
+                scriptClassReference, scriptDependencies)
 
         checkNotNull(scriptComponent) { "failed to get netconf script component" }
 
@@ -68,7 +67,6 @@ open class ComponentNetconfExecutor(private var componentFunctionScriptingServic
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         bluePrintRuntimeService.getBluePrintError()
-                .addError("Failed in ComponentNetconfExecutor : ${runtimeException.message}")
-
+            .addError("Failed in ComponentNetconfExecutor : ${runtimeException.message}")
     }
 }

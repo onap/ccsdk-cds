@@ -17,13 +17,13 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.validation
 
-import org.slf4j.LoggerFactory
-import org.onap.ccsdk.cds.controllerblueprints.validation.utils.PropertyAssignmentValidationUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Workflow
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintWorkflowValidator
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.validation.utils.PropertyAssignmentValidationUtils
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
@@ -32,7 +32,7 @@ import org.springframework.stereotype.Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class BluePrintWorkflowValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintWorkflowValidator {
 
-    private val log= LoggerFactory.getLogger(BluePrintServiceTemplateValidatorImpl::class.toString())
+    private val log = LoggerFactory.getLogger(BluePrintServiceTemplateValidatorImpl::class.toString())
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
 
     var paths: MutableList<String> = arrayListOf()
@@ -41,7 +41,6 @@ open class BluePrintWorkflowValidatorImpl(private val bluePrintTypeValidatorServ
         log.info("Validating Workflow($workflowName)")
 
         this.bluePrintRuntimeService = bluePrintRuntimeService
-
 
         paths.add(workflowName)
         paths.joinToString(BluePrintConstants.PATH_DIVIDER)
@@ -65,18 +64,17 @@ open class BluePrintWorkflowValidatorImpl(private val bluePrintTypeValidatorServ
 
                     val nodeTypeDerivedFrom = bluePrintRuntimeService.bluePrintContext().nodeTemplateNodeType(it).derivedFrom
 
-                    check(nodeTypeDerivedFrom == BluePrintConstants.MODEL_TYPE_NODE_WORKFLOW
-                            || nodeTypeDerivedFrom == BluePrintConstants.MODEL_TYPE_NODE_COMPONENT) {
+                    check(nodeTypeDerivedFrom == BluePrintConstants.MODEL_TYPE_NODE_WORKFLOW ||
+                            nodeTypeDerivedFrom == BluePrintConstants.MODEL_TYPE_NODE_COMPONENT) {
                         "NodeType(${nodeTemplate.type}) derived from is '$nodeTypeDerivedFrom', Expected " +
                                 "'${BluePrintConstants.MODEL_TYPE_NODE_WORKFLOW}' or '${BluePrintConstants.MODEL_TYPE_NODE_COMPONENT}'"
                     }
                 } catch (e: Exception) {
                     bluePrintRuntimeService.getBluePrintError()
-                            .addError("Failed to validate Workflow($workflowName)'s step($stepName)'s " +
-                                    "definition", paths.joinToString(BluePrintConstants.PATH_DIVIDER), e.message!!)
+                        .addError("Failed to validate Workflow($workflowName)'s step($stepName)'s " +
+                                "definition", paths.joinToString(BluePrintConstants.PATH_DIVIDER), e.message!!)
                 }
             }
-
         }
         paths.removeAt(paths.lastIndex)
         // Step Validation Ends
@@ -97,12 +95,10 @@ open class BluePrintWorkflowValidatorImpl(private val bluePrintTypeValidatorServ
             bluePrintTypeValidatorService.validatePropertyDefinitions(bluePrintRuntimeService, workflow.outputs!!)
 
             PropertyAssignmentValidationUtils(bluePrintRuntimeService.bluePrintContext())
-                    .validatePropertyDefinitionNAssignments(workflow.outputs!!)
+                .validatePropertyDefinitionNAssignments(workflow.outputs!!)
         }
         // Validate Value or Expression
         workflow.outputs?.forEach { propertyName, propertyDefinition ->
-
         }
     }
-
 }

@@ -16,11 +16,11 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
-import org.slf4j.LoggerFactory
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.NullNode
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
+import org.slf4j.LoggerFactory
 
 /**
  *
@@ -28,15 +28,20 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
  * @author Brinda Santh
  */
 object BluePrintRuntimeUtils {
-    private val log= LoggerFactory.getLogger(this::class.toString())
+
+    private val log = LoggerFactory.getLogger(this::class.toString())
 
     fun assignInputsFromFile(bluePrintContext: BluePrintContext, fileName: String, context: MutableMap<String, JsonNode>) {
         val jsonNode: JsonNode = JacksonUtils.jsonNodeFromFile(fileName)
         return assignInputs(bluePrintContext, jsonNode, context)
     }
 
-    fun assignInputsFromClassPathFile(bluePrintContext: BluePrintContext, fileName: String, context: MutableMap<String,
-            JsonNode>) {
+    fun assignInputsFromClassPathFile(
+        bluePrintContext: BluePrintContext,
+        fileName: String,
+        context: MutableMap<String,
+                JsonNode>
+    ) {
         val jsonNode = JacksonUtils.jsonNodeFromClassPathFile(fileName)
         return assignInputs(bluePrintContext, jsonNode, context)
     }
@@ -56,5 +61,4 @@ object BluePrintRuntimeUtils {
             context[path] = valueNode
         }
     }
-
 }

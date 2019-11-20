@@ -19,16 +19,15 @@ package org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts
  * limitations under the License.
  * ============LICENSE_END=========================================================
  */
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
 import org.slf4j.LoggerFactory
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 open class SampleTest : AbstractScriptComponentFunction() {
 
     val log = LoggerFactory.getLogger(SampleTest::class.java)!!
-
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
         val isPresent = checkDynamicProperties("type")

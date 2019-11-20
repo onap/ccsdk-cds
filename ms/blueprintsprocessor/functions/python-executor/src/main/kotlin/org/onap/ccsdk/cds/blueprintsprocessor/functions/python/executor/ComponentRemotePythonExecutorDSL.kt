@@ -34,35 +34,35 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 /** Component Extensions **/
 fun BluePrintTypes.nodeTypeComponentRemotePythonExecutor(): NodeType {
     return nodeType(id = "component-remote-python-executor", version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-            derivedFrom = BluePrintConstants.MODEL_TYPE_NODE_COMPONENT,
-            description = "This is Remote Python Execution Component.") {
+        derivedFrom = BluePrintConstants.MODEL_TYPE_NODE_COMPONENT,
+        description = "This is Remote Python Execution Component.") {
 
         attribute(ComponentRemotePythonExecutor.ATTRIBUTE_PREPARE_ENV_LOG, BluePrintConstants.DATA_TYPE_STRING,
-                false)
+            false)
         attribute(ComponentRemotePythonExecutor.ATTRIBUTE_EXEC_CMD_LOG, BluePrintConstants.DATA_TYPE_LIST,
-                false) {
+            false) {
             entrySchema(BluePrintConstants.DATA_TYPE_STRING)
         }
         attribute(ComponentRemotePythonExecutor.ATTRIBUTE_RESPONSE_DATA, BluePrintConstants.DATA_TYPE_JSON,
-                false)
+            false)
 
         operation("ComponentRemotePythonExecutor", "ComponentRemotePythonExecutor Operation") {
             inputs {
                 property(ComponentRemotePythonExecutor.INPUT_ENDPOINT_SELECTOR, BluePrintConstants.DATA_TYPE_STRING,
-                        false, "Remote Container or Server selector name.") {
+                    false, "Remote Container or Server selector name.") {
                     defaultValue(ComponentRemotePythonExecutor.DEFAULT_SELECTOR)
                 }
                 property(ComponentRemotePythonExecutor.INPUT_DYNAMIC_PROPERTIES, BluePrintConstants.DATA_TYPE_JSON,
-                        false, "Dynamic Json Content or DSL Json reference.")
+                    false, "Dynamic Json Content or DSL Json reference.")
 
                 property(ComponentRemotePythonExecutor.INPUT_ARGUMENT_PROPERTIES, BluePrintConstants.DATA_TYPE_JSON,
-                        false, "Argument Json Content or DSL Json reference.")
+                    false, "Argument Json Content or DSL Json reference.")
 
                 property(ComponentRemotePythonExecutor.INPUT_COMMAND, BluePrintConstants.DATA_TYPE_STRING,
-                        true, "Command to execute.")
+                    true, "Command to execute.")
 
                 property(ComponentRemotePythonExecutor.INPUT_PACKAGES, BluePrintConstants.DATA_TYPE_LIST,
-                        false, "Packages to install based on type.") {
+                    false, "Packages to install based on type.") {
                     entrySchema("dt-system-packages")
                 }
             }
@@ -72,8 +72,8 @@ fun BluePrintTypes.nodeTypeComponentRemotePythonExecutor(): NodeType {
 
 fun BluePrintTypes.dataTypeDtSystemPackages(): DataType {
     return dataType(id = "dt-system-packages", version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-            derivedFrom = BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT,
-            description = "This represent System Package Data Type") {
+        derivedFrom = BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT,
+        description = "This represent System Package Data Type") {
         property("type", BluePrintConstants.DATA_TYPE_LIST, true, "") {
             constrain {
                 entrySchema(BluePrintConstants.DATA_TYPE_STRING)
@@ -87,10 +87,12 @@ fun BluePrintTypes.dataTypeDtSystemPackages(): DataType {
 }
 
 /** Component Builder */
-fun BluePrintTypes.nodeTemplateComponentRemotePythonExecutor(id: String,
-                                                             description: String,
-                                                             block: ComponentRemotePythonExecutorNodeTemplateBuilder.() -> Unit)
-        : NodeTemplate {
+fun BluePrintTypes.nodeTemplateComponentRemotePythonExecutor(
+    id: String,
+    description: String,
+    block: ComponentRemotePythonExecutorNodeTemplateBuilder.() -> Unit
+):
+        NodeTemplate {
     return ComponentRemotePythonExecutorNodeTemplateBuilder(id, description).apply(block).build()
 }
 
@@ -112,9 +114,9 @@ class DtSystemPackageDataTypeBuilder : PropertiesAssignmentBuilder() {
 }
 
 class ComponentRemotePythonExecutorNodeTemplateBuilder(id: String, description: String) :
-        AbstractNodeTemplateOperationImplBuilder<PropertiesAssignmentBuilder, ComponentRemotePythonExecutorNodeTemplateBuilder.InputsBuilder,
-                ComponentRemotePythonExecutorNodeTemplateBuilder.OutputsBuilder>(id, "component-remote-python-executor",
-                "ComponentRemotePythonExecutor", description) {
+    AbstractNodeTemplateOperationImplBuilder<PropertiesAssignmentBuilder, ComponentRemotePythonExecutorNodeTemplateBuilder.InputsBuilder,
+            ComponentRemotePythonExecutorNodeTemplateBuilder.OutputsBuilder>(id, "component-remote-python-executor",
+        "ComponentRemotePythonExecutor", description) {
 
     class InputsBuilder : PropertiesAssignmentBuilder() {
 
@@ -161,5 +163,4 @@ class ComponentRemotePythonExecutorNodeTemplateBuilder(id: String, description: 
     }
 
     class OutputsBuilder : PropertiesAssignmentBuilder()
-
 }

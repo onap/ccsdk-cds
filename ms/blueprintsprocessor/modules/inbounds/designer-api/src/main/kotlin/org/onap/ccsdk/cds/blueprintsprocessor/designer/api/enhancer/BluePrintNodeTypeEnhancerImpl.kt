@@ -34,19 +34,19 @@ import org.springframework.stereotype.Service
 
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-open class BluePrintNodeTypeEnhancerImpl(private val bluePrintRepoService: BluePrintRepoService,
-                                         private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService) : BluePrintNodeTypeEnhancer {
+open class BluePrintNodeTypeEnhancerImpl(
+    private val bluePrintRepoService: BluePrintRepoService,
+    private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService
+) : BluePrintNodeTypeEnhancer {
 
-    private val log= logger(BluePrintNodeTypeEnhancerImpl::class)
+    private val log = logger(BluePrintNodeTypeEnhancerImpl::class)
 
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
     lateinit var bluePrintContext: BluePrintContext
 
-
     override fun enhance(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, nodeType: NodeType) {
         this.bluePrintRuntimeService = bluePrintRuntimeService
         this.bluePrintContext = bluePrintRuntimeService.bluePrintContext()
-
 
         val derivedFrom = nodeType.derivedFrom
 
@@ -62,15 +62,14 @@ open class BluePrintNodeTypeEnhancerImpl(private val bluePrintRepoService: BlueP
         // NodeType Property Definitions
         enrichNodeTypeProperties(name, nodeType)
 
-        //NodeType Requirement
+        // NodeType Requirement
         enrichNodeTypeRequirements(name, nodeType)
 
-        //NodeType Capability
+        // NodeType Capability
         enrichNodeTypeCapabilityProperties(name, nodeType)
 
-        //NodeType Interface
+        // NodeType Interface
         enrichNodeTypeInterfaces(name, nodeType)
-
     }
 
     open fun enrichNodeTypeAttributes(nodeTypeName: String, nodeType: NodeType) {
@@ -92,14 +91,14 @@ open class BluePrintNodeTypeEnhancerImpl(private val bluePrintRepoService: BlueP
             requirementDefinition.node?.let { requirementNodeTypeName ->
                 // Get Requirement NodeType from Repo and Update Service Template
                 val requirementNodeType = BluePrintEnhancerUtils.populateNodeType(bluePrintContext,
-                        bluePrintRepoService, requirementNodeTypeName)
+                    bluePrintRepoService, requirementNodeTypeName)
                 // Enhance Node Type
                 enhance(bluePrintRuntimeService, requirementNodeTypeName, requirementNodeType)
 
                 // Enhance Relationship Type
                 val relationShipTypeName = requirementDefinition.relationship
-                        ?: throw BluePrintException("couldn't get relationship name for the NodeType($nodeTypeName) " +
-                                "Requirement($requirementName)")
+                    ?: throw BluePrintException("couldn't get relationship name for the NodeType($nodeTypeName) " +
+                            "Requirement($requirementName)")
                 enrichRelationShipType(relationShipTypeName)
             }
         }
@@ -118,7 +117,6 @@ open class BluePrintNodeTypeEnhancerImpl(private val bluePrintRepoService: BlueP
             // Populate Node type Interface Operation
             log.debug("Enriching NodeType({}) Interface({})", nodeTypeName, interfaceName)
             populateNodeTypeInterfaceOperation(nodeTypeName, interfaceName, interfaceObj)
-
         }
     }
 
@@ -136,8 +134,11 @@ open class BluePrintNodeTypeEnhancerImpl(private val bluePrintRepoService: BlueP
         }
     }
 
-    open fun enrichNodeTypeInterfaceOperationOutputs(nodeTypeName: String, operationName: String,
-                                                     operation: OperationDefinition) {
+    open fun enrichNodeTypeInterfaceOperationOutputs(
+        nodeTypeName: String,
+        operationName: String,
+        operation: OperationDefinition
+    ) {
         operation.outputs?.let { inputs ->
             bluePrintTypeEnhancerService.enhancePropertyDefinitions(bluePrintRuntimeService, inputs)
         }
@@ -149,5 +150,4 @@ open class BluePrintNodeTypeEnhancerImpl(private val bluePrintRepoService: BlueP
     open fun enrichRelationShipType(relationshipName: String) {
         BluePrintEnhancerUtils.populateRelationshipType(bluePrintContext, bluePrintRepoService, relationshipName)
     }
-
 }

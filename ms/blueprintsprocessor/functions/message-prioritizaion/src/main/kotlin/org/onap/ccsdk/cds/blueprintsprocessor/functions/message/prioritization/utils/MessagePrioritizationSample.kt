@@ -16,12 +16,14 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.utils
 
+import java.util.Calendar
+import java.util.Date
+import java.util.UUID
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.CleanConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.ExpiryConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.PrioritizationConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.ShutDownConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.MessagePrioritization
-import java.util.*
 
 object MessagePrioritizationSample {
 
@@ -58,7 +60,7 @@ object MessagePrioritizationSample {
         val messages: MutableList<MessagePrioritization> = arrayListOf()
         repeat(count) {
             val backPressureMessage = createMessage(groupName, messageState,
-                    "sample-type", null)
+                "sample-type", null)
             messages.add(backPressureMessage)
         }
         return messages
@@ -68,25 +70,32 @@ object MessagePrioritizationSample {
         val messages: MutableList<MessagePrioritization> = arrayListOf()
         repeat(count) {
             val backPressureMessage = createMessage(groupName, messageState, "sample-type",
-                    "key1=value1,key2=value2")
+                "key1=value1,key2=value2")
             messages.add(backPressureMessage)
         }
         return messages
     }
 
-    fun sampleMessageWithDifferentTypeSameCorrelation(groupName: String, messageState: String,
-                                                      count: Int): List<MessagePrioritization> {
+    fun sampleMessageWithDifferentTypeSameCorrelation(
+        groupName: String,
+        messageState: String,
+        count: Int
+    ): List<MessagePrioritization> {
         val messages: MutableList<MessagePrioritization> = arrayListOf()
         repeat(count) {
             val backPressureMessage = createMessage(groupName, messageState, "type-$it",
-                    "key1=value1,key2=value2")
+                "key1=value1,key2=value2")
             messages.add(backPressureMessage)
         }
         return messages
     }
 
-    fun createMessage(groupName: String, messageState: String, messageType: String,
-                      messageCorrelationId: String?): MessagePrioritization {
+    fun createMessage(
+        groupName: String,
+        messageState: String,
+        messageType: String,
+        messageCorrelationId: String?
+    ): MessagePrioritization {
 
         return MessagePrioritization().apply {
             id = UUID.randomUUID().toString()

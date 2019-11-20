@@ -17,11 +17,11 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
-import org.slf4j.LoggerFactory
-import org.junit.Test
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
+import org.junit.Test
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.slf4j.LoggerFactory
 
 /**
  * JacksonUtilsTest
@@ -30,7 +30,7 @@ import kotlin.test.assertTrue
  */
 class JacksonUtilsTest {
 
-    private val log= LoggerFactory.getLogger(this::class.toString())
+    private val log = LoggerFactory.getLogger(this::class.toString())
 
     @Test
     fun testJsonNodeFromClassPathFile() {
@@ -51,7 +51,6 @@ class JacksonUtilsTest {
         assertNotNull(nodeType, "Failed to get String array from content")
     }
 
-
     @Test
     fun testJsonValue() {
         val filePath = "data/alltype-data.json"
@@ -71,7 +70,5 @@ class JacksonUtilsTest {
         assertTrue(JacksonUtils.checkJsonNodeValueOfType(BluePrintConstants.DATA_TYPE_MAP, mapValue), "Failed to get as Map value")
 
         assertTrue(!JacksonUtils.checkJsonNodeValueOfType(BluePrintConstants.DATA_TYPE_LIST, stringValue), "Negative type failed")
-
-
     }
 }

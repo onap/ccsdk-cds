@@ -22,6 +22,9 @@ import com.fasterxml.jackson.databind.node.NullNode
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -44,9 +47,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
@@ -140,9 +140,7 @@ class CapabilityResourceResolutionProcessorTest {
     }
 }
 
-open class MockCapabilityService {
-
-}
+open class MockCapabilityService
 
 open class MockCapabilityScriptRA : ResourceAssignmentProcessor() {
     val log = logger(MockCapabilityScriptRA::class)
@@ -157,6 +155,6 @@ open class MockCapabilityScriptRA : ResourceAssignmentProcessor() {
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ResourceAssignment) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 }

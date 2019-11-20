@@ -21,23 +21,35 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInpu
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.Status
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
-import org.onap.ccsdk.cds.controllerblueprints.core.*
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.asGraph
+import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.data.EdgeLabel
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Graph
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintWorkflowExecutionService
-import org.onap.ccsdk.cds.controllerblueprints.core.service.*
+import org.onap.ccsdk.cds.controllerblueprints.core.logger
+import org.onap.ccsdk.cds.controllerblueprints.core.service.AbstractBluePrintWorkFlowService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintWorkFlowService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.NodeExecuteMessage
+import org.onap.ccsdk.cds.controllerblueprints.core.service.NodeSkipMessage
+import org.onap.ccsdk.cds.controllerblueprints.core.service.WorkflowExecuteMessage
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
 
 @Service("imperativeWorkflowExecutionService")
 class ImperativeWorkflowExecutionService(
-        private val imperativeBluePrintWorkflowService: BluePrintWorkFlowService<ExecutionServiceInput, ExecutionServiceOutput>)
-    : BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput> {
+    private val imperativeBluePrintWorkflowService: BluePrintWorkFlowService<ExecutionServiceInput, ExecutionServiceOutput>
+) :
+    BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput> {
 
-    override suspend fun executeBluePrintWorkflow(bluePrintRuntimeService: BluePrintRuntimeService<*>,
-                                                  executionServiceInput: ExecutionServiceInput,
-                                                  properties: MutableMap<String, Any>): ExecutionServiceOutput {
+    override suspend fun executeBluePrintWorkflow(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        executionServiceInput: ExecutionServiceInput,
+        properties: MutableMap<String, Any>
+    ): ExecutionServiceOutput {
 
         val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
 
@@ -46,22 +58,26 @@ class ImperativeWorkflowExecutionService(
         val graph = bluePrintContext.workflowByName(workflowName).asGraph()
 
         return imperativeBluePrintWorkflowService.executeWorkflow(graph, bluePrintRuntimeService,
-                executionServiceInput)
+            executionServiceInput)
     }
 }
 
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-open class ImperativeBluePrintWorkflowService(private val nodeTemplateExecutionService: NodeTemplateExecutionService)
-    : AbstractBluePrintWorkFlowService<ExecutionServiceInput, ExecutionServiceOutput>() {
+open class ImperativeBluePrintWorkflowService(private val nodeTemplateExecutionService: NodeTemplateExecutionService) :
+    AbstractBluePrintWorkFlowService<ExecutionServiceInput, ExecutionServiceOutput>() {
+
     val log = logger(ImperativeBluePrintWorkflowService::class)
 
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
     lateinit var executionServiceInput: ExecutionServiceInput
     lateinit var workflowName: String
 
-    override suspend fun executeWorkflow(graph: Graph, bluePrintRuntimeService: BluePrintRuntimeService<*>,
-                                         input: ExecutionServiceInput): ExecutionServiceOutput {
+    override suspend fun executeWorkflow(
+        graph: Graph,
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        input: ExecutionServiceInput
+    ): ExecutionServiceOutput {
         this.graph = graph
         this.bluePrintRuntimeService = bluePrintRuntimeService
         this.executionServiceInput = input
@@ -103,8 +119,8 @@ open class ImperativeBluePrintWorkflowService(private val nodeTemplateExecutionS
         }
     }
 
-    override suspend fun prepareNodeExecutionMessage(node: Graph.Node)
-            : NodeExecuteMessage<ExecutionServiceInput, ExecutionServiceOutput> {
+    override suspend fun prepareNodeExecutionMessage(node: Graph.Node):
+            NodeExecuteMessage<ExecutionServiceInput, ExecutionServiceOutput> {
         val nodeOutput = ExecutionServiceOutput().apply {
             commonHeader = executionServiceInput.commonHeader
             actionIdentifiers = executionServiceInput.actionIdentifiers
@@ -112,8 +128,8 @@ open class ImperativeBluePrintWorkflowService(private val nodeTemplateExecutionS
         return NodeExecuteMessage(node, executionServiceInput, nodeOutput)
     }
 
-    override suspend fun prepareNodeSkipMessage(node: Graph.Node)
-            : NodeSkipMessage<ExecutionServiceInput, ExecutionServiceOutput> {
+    override suspend fun prepareNodeSkipMessage(node: Graph.Node):
+            NodeSkipMessage<ExecutionServiceInput, ExecutionServiceOutput> {
         val nodeOutput = ExecutionServiceOutput().apply {
             commonHeader = executionServiceInput.commonHeader
             actionIdentifiers = executionServiceInput.actionIdentifiers
@@ -121,15 +137,18 @@ open class ImperativeBluePrintWorkflowService(private val nodeTemplateExecutionS
         return NodeSkipMessage(node, executionServiceInput, nodeOutput)
     }
 
-    override suspend fun executeNode(node: Graph.Node, nodeInput: ExecutionServiceInput,
-                                     nodeOutput: ExecutionServiceOutput): EdgeLabel {
+    override suspend fun executeNode(
+        node: Graph.Node,
+        nodeInput: ExecutionServiceInput,
+        nodeOutput: ExecutionServiceOutput
+    ): EdgeLabel {
         log.info("Executing workflow($workflowName[${this.workflowId}])'s step($${node.id})")
         val step = bluePrintRuntimeService.bluePrintContext().workflowStepByName(this.workflowName, node.id)
         checkNotEmpty(step.target) { "couldn't get step target for workflow(${this.workflowName})'s step(${node.id})" }
         val nodeTemplateName = step.target!!
         /** execute node template */
         val executionServiceOutput = nodeTemplateExecutionService
-                .executeNodeTemplate(bluePrintRuntimeService, nodeTemplateName, nodeInput)
+            .executeNodeTemplate(bluePrintRuntimeService, nodeTemplateName, nodeInput)
 
         return when (executionServiceOutput.status.message) {
             BluePrintConstants.STATUS_FAILURE -> EdgeLabel.FAILURE
@@ -137,18 +156,27 @@ open class ImperativeBluePrintWorkflowService(private val nodeTemplateExecutionS
         }
     }
 
-    override suspend fun skipNode(node: Graph.Node, nodeInput: ExecutionServiceInput,
-                                  nodeOutput: ExecutionServiceOutput): EdgeLabel {
+    override suspend fun skipNode(
+        node: Graph.Node,
+        nodeInput: ExecutionServiceInput,
+        nodeOutput: ExecutionServiceOutput
+    ): EdgeLabel {
         return EdgeLabel.SUCCESS
     }
 
-    override suspend fun cancelNode(node: Graph.Node, nodeInput: ExecutionServiceInput,
-                                    nodeOutput: ExecutionServiceOutput): EdgeLabel {
+    override suspend fun cancelNode(
+        node: Graph.Node,
+        nodeInput: ExecutionServiceInput,
+        nodeOutput: ExecutionServiceOutput
+    ): EdgeLabel {
         TODO("not implemented")
     }
 
-    override suspend fun restartNode(node: Graph.Node, nodeInput: ExecutionServiceInput,
-                                     nodeOutput: ExecutionServiceOutput): EdgeLabel {
+    override suspend fun restartNode(
+        node: Graph.Node,
+        nodeInput: ExecutionServiceInput,
+        nodeOutput: ExecutionServiceOutput
+    ): EdgeLabel {
         TODO("not implemented")
     }
 }

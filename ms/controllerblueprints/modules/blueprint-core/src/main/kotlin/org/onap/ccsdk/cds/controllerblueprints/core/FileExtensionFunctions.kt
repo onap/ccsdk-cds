@@ -16,15 +16,15 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import org.apache.commons.io.FileUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintArchiveUtils
 import java.io.File
 import java.io.InputStream
 import java.nio.charset.Charset
 import java.nio.file.Path
 import java.nio.file.Paths
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.apache.commons.io.FileUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintArchiveUtils
 
 fun InputStream.toFile(path: String): File {
     val file = File(path)

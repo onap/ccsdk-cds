@@ -16,6 +16,8 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.ssh.service
 
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
@@ -26,9 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [BluePrintSshLibConfiguration::class,
@@ -48,7 +47,7 @@ class BluePrintSshLibPropertyServiceTest {
     @Test
     fun testRestClientProperties() {
         val properties = bluePrintSshLibPropertyService
-                .sshClientProperties("blueprintsprocessor.sshclient.sample") as BasicAuthSshClientProperties
+            .sshClientProperties("blueprintsprocessor.sshclient.sample") as BasicAuthSshClientProperties
         assertNotNull(properties, "failed to create property bean")
         assertEquals(properties.host, "127.0.0.1", "failed to match host property")
         assertEquals(properties.port, 22, "failed to match port property")

@@ -19,12 +19,16 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.google.common.base.Strings
 import com.google.protobuf.Struct
 import com.google.protobuf.util.JsonFormat
-import org.onap.ccsdk.cds.controllerblueprints.common.api.*
+import java.text.SimpleDateFormat
+import java.util.Date
+import org.onap.ccsdk.cds.controllerblueprints.common.api.ActionIdentifiers
+import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader
+import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
+import org.onap.ccsdk.cds.controllerblueprints.common.api.Flag
+import org.onap.ccsdk.cds.controllerblueprints.common.api.Status
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceInput
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceOutput
-import java.text.SimpleDateFormat
-import java.util.*
 
 private val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
 

@@ -19,6 +19,9 @@ package org.onap.ccsdk.cds.blueprintsprocessor.message.service
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
+import java.util.concurrent.Future
+import kotlin.test.Test
+import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.RecordMetadata
@@ -31,10 +34,6 @@ import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import java.util.concurrent.Future
-import kotlin.test.Test
-import kotlin.test.assertTrue
-
 
 @RunWith(SpringRunner::class)
 @DirtiesContext
@@ -55,7 +54,7 @@ open class BlueprintMessageProducerServiceTest {
     fun testKafkaBasicAuthProducertService() {
         runBlocking {
             val blueprintMessageProducerService = bluePrintMessageLibPropertyService
-                    .blueprintMessageProducerService("sample") as KafkaBasicAuthMessageProducerService
+                .blueprintMessageProducerService("sample") as KafkaBasicAuthMessageProducerService
 
             val mockKafkaTemplate = mockk<KafkaProducer<String, ByteArray>>()
 
@@ -72,8 +71,4 @@ open class BlueprintMessageProducerServiceTest {
             assertTrue(response, "failed to get command response")
         }
     }
-
 }
-
-
-

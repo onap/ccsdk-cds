@@ -16,15 +16,16 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core
 
-import kotlinx.coroutines.ThreadContextElement
-import org.slf4j.MDC
 import kotlin.coroutines.AbstractCoroutineContextElement
 import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.ThreadContextElement
+import org.slf4j.MDC
 
 typealias MDCContextMap = Map<String, String>?
 
 class MDCContext(private val contextMap: MDCContextMap = MDC.getCopyOfContextMap()) :
-        ThreadContextElement<MDCContextMap>, AbstractCoroutineContextElement(Key) {
+    ThreadContextElement<MDCContextMap>, AbstractCoroutineContextElement(Key) {
+
     /**
      * Key of [MDCContext] in [CoroutineContext].
      */

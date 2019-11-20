@@ -16,10 +16,9 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.core
 
+import kotlin.reflect.KClass
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.controllerblueprints.core.asType
-import kotlin.reflect.KClass
-
 
 fun <T : Any> ExecutionServiceInput.payloadAsType(clazzType: KClass<T>): T {
     val actionName = this.actionIdentifiers.actionName

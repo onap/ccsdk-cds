@@ -17,17 +17,16 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.scripts
 
-
+import kotlin.script.experimental.jvm.util.classpathFromClass
+import kotlin.script.experimental.jvm.util.classpathFromClassloader
+import kotlin.script.experimental.jvm.util.classpathFromClasspathProperty
+import kotlin.test.assertNotNull
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintDefinitions
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintFunctionNode
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
-import kotlin.script.experimental.jvm.util.classpathFromClass
-import kotlin.script.experimental.jvm.util.classpathFromClassloader
-import kotlin.script.experimental.jvm.util.classpathFromClasspathProperty
-import kotlin.test.assertNotNull
 
 class BluePrintScriptsServiceImplTest {
 
@@ -35,16 +34,16 @@ class BluePrintScriptsServiceImplTest {
 
         println(" *********** classpathFromClass  *********** ")
         classpathFromClass(BluePrintScriptsServiceImplTest::class.java.classLoader,
-                BluePrintScriptsServiceImplTest::class)!!
-                .forEach(::println)
+            BluePrintScriptsServiceImplTest::class)!!
+            .forEach(::println)
 
         println(" *********** classpathFromClassloader  *********** ")
         classpathFromClassloader(BluePrintScriptsServiceImplTest::class.java.classLoader)!!
-                .forEach(::println)
+            .forEach(::println)
 
         println(" *********** classpathFromClasspathProperty  *********** ")
         classpathFromClasspathProperty()!!
-                .forEach(::println)
+            .forEach(::println)
     }
 
     @Test
@@ -56,8 +55,8 @@ class BluePrintScriptsServiceImplTest {
             val basePath = normalizedPathName("src/test/resources/compile")
             /** Load the Definitions */
             val bluePrintDefinitions = bluePrintScriptsService
-                    .scriptInstance<BluePrintDefinitions>(basePath,
-                            "cba.scripts.ActivateBlueprintDefinitions", true)
+                .scriptInstance<BluePrintDefinitions>(basePath,
+                    "cba.scripts.ActivateBlueprintDefinitions", true)
             assertNotNull(bluePrintDefinitions, "failed to get blueprint definitions")
 
             val serviceTemplate = bluePrintDefinitions.serviceTemplate()
@@ -67,15 +66,14 @@ class BluePrintScriptsServiceImplTest {
             assertNotNull(customDataType, "failed to get custom definitions")
 
             val instance = bluePrintScriptsService
-                    .scriptInstance<BlueprintFunctionNode<String, String>>(basePath,
-                            "cba.scripts.SampleBlueprintFunctionNode", false)
+                .scriptInstance<BlueprintFunctionNode<String, String>>(basePath,
+                    "cba.scripts.SampleBlueprintFunctionNode", false)
             assertNotNull(instance, "failed to get compiled instance")
 
             val cachedInstance = bluePrintScriptsService
-                    .scriptInstance<BlueprintFunctionNode<String, String>>(basePath,
-                            "cba.scripts.SampleBlueprintFunctionNode", false)
+                .scriptInstance<BlueprintFunctionNode<String, String>>(basePath,
+                    "cba.scripts.SampleBlueprintFunctionNode", false)
             assertNotNull(cachedInstance, "failed to get cached compile instance")
         }
     }
-
 }

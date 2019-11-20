@@ -27,7 +27,7 @@ class ActivateBlueprintDefinitions : AbstractBluePrintDefinitions() {
     override fun serviceTemplate(): ServiceTemplate {
 
         return serviceTemplate("sample-blue-print", "1.0.0",
-                "brindasanth@onap.com", "sample, blueprints") {
+            "brindasanth@onap.com", "sample, blueprints") {
             topologyTemplate {
                 workflowNodeTemplate("activate", "component-resource-resolution", "") {
                     operation("ResourceResolutionExecutor", "") {
@@ -43,7 +43,7 @@ class ActivateBlueprintDefinitions : AbstractBluePrintDefinitions() {
     override fun loadOtherDefinitions() {
         /** Sample Definitions */
         val customDataType = dataType("custom-datatype", "1.0.0",
-                BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT, "") {
+            BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT, "") {
             property("name", BluePrintConstants.DATA_TYPE_STRING, true, "")
             property("value", BluePrintConstants.DATA_TYPE_STRING, true, "")
         }

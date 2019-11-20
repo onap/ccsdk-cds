@@ -16,9 +16,9 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.resource.dict.utils
 
-import org.slf4j.LoggerFactory
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.NullNode
+import java.io.File
 import org.apache.commons.collections.MapUtils
 import org.apache.commons.lang3.StringUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
@@ -29,15 +29,16 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDictionaryConstants
-import java.io.File
-
+import org.slf4j.LoggerFactory
 
 object ResourceDictionaryUtils {
-    private val log= LoggerFactory.getLogger(ResourceDictionaryUtils::class.java)
+    private val log = LoggerFactory.getLogger(ResourceDictionaryUtils::class.java)
 
     @JvmStatic
-    fun populateSourceMapping(resourceAssignment: ResourceAssignment,
-                              resourceDefinition: ResourceDefinition) {
+    fun populateSourceMapping(
+        resourceAssignment: ResourceAssignment,
+        resourceDefinition: ResourceDefinition
+    ) {
 
         if (StringUtils.isBlank(resourceAssignment.dictionarySource)) {
 
@@ -81,18 +82,17 @@ object ResourceDictionaryUtils {
 
     fun getResourceAssignmentFromFile(filePath: String): List<ResourceAssignment> {
         return JacksonUtils.getListFromFile(filePath, ResourceAssignment::class.java)
-                ?: throw BluePrintProcessorException("couldn't get ResourceAssignment definitions for the file($filePath)")
+            ?: throw BluePrintProcessorException("couldn't get ResourceAssignment definitions for the file($filePath)")
     }
 
     fun writeResourceDefinitionTypes(basePath: String, resourceDefinitions: List<ResourceDefinition>) {
         val resourceDefinitionMap = resourceDefinitions.map { it.name to it }.toMap()
         writeResourceDefinitionTypes(basePath, resourceDefinitionMap)
-
     }
 
     fun writeResourceDefinitionTypes(basePath: String, resourceDefinitionMap: Map<String, ResourceDefinition>) {
         val typePath = basePath.plus(File.separator).plus(BluePrintConstants.TOSCA_DEFINITIONS_DIR)
-                .plus(File.separator).plus("${ResourceDictionaryConstants.PATH_RESOURCE_DEFINITION_TYPE}.json")
+            .plus(File.separator).plus("${ResourceDictionaryConstants.PATH_RESOURCE_DEFINITION_TYPE}.json")
         val resourceDefinitionContent = JacksonUtils.getJson(resourceDefinitionMap.toSortedMap(), true)
         BluePrintFileUtils.writeDefinitionFile(typePath, resourceDefinitionContent)
     }

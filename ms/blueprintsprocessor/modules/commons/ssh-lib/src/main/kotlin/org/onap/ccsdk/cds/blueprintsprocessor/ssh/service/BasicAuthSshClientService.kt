@@ -16,6 +16,9 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.ssh.service
 
+import java.io.ByteArrayOutputStream
+import java.util.Collections
+import java.util.EnumSet
 import org.apache.sshd.client.SshClient
 import org.apache.sshd.client.channel.ChannelExec
 import org.apache.sshd.client.channel.ClientChannel
@@ -25,12 +28,9 @@ import org.apache.sshd.client.session.ClientSession
 import org.onap.ccsdk.cds.blueprintsprocessor.ssh.BasicAuthSshClientProperties
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.slf4j.LoggerFactory
-import java.io.ByteArrayOutputStream
-import java.util.*
 
-
-open class BasicAuthSshClientService(private val basicAuthSshClientProperties: BasicAuthSshClientProperties)
-    : BlueprintSshClientService {
+open class BasicAuthSshClientService(private val basicAuthSshClientProperties: BasicAuthSshClientProperties) :
+    BlueprintSshClientService {
 
     private val log = LoggerFactory.getLogger(BasicAuthSshClientService::class.java)!!
 
@@ -44,9 +44,9 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
         sshClient.start()
         log.debug("SSH Client Service started successfully")
         clientSession = sshClient.connect(basicAuthSshClientProperties.username, basicAuthSshClientProperties.host,
-                basicAuthSshClientProperties.port)
-                .verify(basicAuthSshClientProperties.connectionTimeOut)
-                .session
+            basicAuthSshClientProperties.port)
+            .verify(basicAuthSshClientProperties.connectionTimeOut)
+            .session
 
         clientSession.addPasswordIdentity(basicAuthSshClientProperties.password)
         clientSession.auth().verify(basicAuthSshClientProperties.connectionTimeOut)
@@ -73,7 +73,7 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
         channel = clientSession.createExecChannel(command)
         checkNotNull(channel) { "failed to create Channel for the command : $command" }
 
-        //TODO("Convert to streaming ")
+        // TODO("Convert to streaming ")
         val outputStream = ByteArrayOutputStream()
         channel!!.out = outputStream
         channel!!.err = outputStream

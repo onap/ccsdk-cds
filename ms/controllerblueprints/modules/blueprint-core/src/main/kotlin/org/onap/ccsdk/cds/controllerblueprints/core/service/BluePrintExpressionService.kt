@@ -17,7 +17,6 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
-import org.slf4j.LoggerFactory
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
@@ -25,7 +24,14 @@ import com.fasterxml.jackson.databind.node.TextNode
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
-import org.onap.ccsdk.cds.controllerblueprints.core.data.*
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactExpression
+import org.onap.ccsdk.cds.controllerblueprints.core.data.AttributeExpression
+import org.onap.ccsdk.cds.controllerblueprints.core.data.DSLExpression
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ExpressionData
+import org.onap.ccsdk.cds.controllerblueprints.core.data.InputExpression
+import org.onap.ccsdk.cds.controllerblueprints.core.data.OperationOutputExpression
+import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyExpression
+import org.slf4j.LoggerFactory
 
 /**
  *
@@ -33,16 +39,16 @@ import org.onap.ccsdk.cds.controllerblueprints.core.data.*
  * @author Brinda Santh
  */
 object BluePrintExpressionService {
-    val log= LoggerFactory.getLogger(this::class.toString())
+
+    val log = LoggerFactory.getLogger(this::class.toString())
 
     @JvmStatic
     fun checkContainsExpression(propertyAssignmentNode: JsonNode): Boolean {
         val json = propertyAssignmentNode.toString()
         // FIXME("Check if any Optimisation needed")
-        return (json.contains(BluePrintConstants.EXPRESSION_GET_INPUT)
-                || json.contains(BluePrintConstants.EXPRESSION_GET_ATTRIBUTE)
-                || json.contains(BluePrintConstants.EXPRESSION_GET_PROPERTY))
-
+        return (json.contains(BluePrintConstants.EXPRESSION_GET_INPUT) ||
+                json.contains(BluePrintConstants.EXPRESSION_GET_ATTRIBUTE) ||
+                json.contains(BluePrintConstants.EXPRESSION_GET_PROPERTY))
     }
 
     @JvmStatic
@@ -74,8 +80,8 @@ object BluePrintExpressionService {
                     }
                 }
             }
-        } else if (propertyAssignmentNode is TextNode
-                && propertyAssignmentNode.textValue().startsWith(BluePrintConstants.EXPRESSION_DSL_REFERENCE)) {
+        } else if (propertyAssignmentNode is TextNode &&
+            propertyAssignmentNode.textValue().startsWith(BluePrintConstants.EXPRESSION_DSL_REFERENCE)) {
             expressionData.isExpression = true
             expressionData.command = BluePrintConstants.EXPRESSION_DSL_REFERENCE
             expressionData.dslExpression = populateDSLExpression(propertyAssignmentNode)
@@ -86,7 +92,7 @@ object BluePrintExpressionService {
     @JvmStatic
     fun populateDSLExpression(jsonNode: TextNode): DSLExpression {
         return DSLExpression(propertyName = jsonNode.textValue()
-                .removePrefix(BluePrintConstants.EXPRESSION_DSL_REFERENCE))
+            .removePrefix(BluePrintConstants.EXPRESSION_DSL_REFERENCE))
     }
 
     @JvmStatic
@@ -122,9 +128,9 @@ object BluePrintExpressionService {
         }
 
         return PropertyExpression(modelableEntityName = arrayNode[0].asText(),
-                reqOrCapEntityName = reqOrCapEntityName,
-                propertyName = propertyName,
-                subPropertyName = subProperty
+            reqOrCapEntityName = reqOrCapEntityName,
+            propertyName = propertyName,
+            subPropertyName = subProperty
         )
     }
 
@@ -156,9 +162,9 @@ object BluePrintExpressionService {
             }
         }
         return AttributeExpression(modelableEntityName = arrayNode[0].asText(),
-                reqOrCapEntityName = reqOrCapEntityName,
-                attributeName = attributeName,
-                subAttributeName = subAttributeName
+            reqOrCapEntityName = reqOrCapEntityName,
+            attributeName = attributeName,
+            subAttributeName = subAttributeName
         )
     }
 
@@ -176,10 +182,10 @@ object BluePrintExpressionService {
             subPropertyName = arrayNode[4].asText()
 
         return OperationOutputExpression(modelableEntityName = arrayNode[0].asText(),
-                interfaceName = arrayNode[1].asText(),
-                operationName = arrayNode[2].asText(),
-                propertyName = arrayNode[3].asText(),
-                subPropertyName = subPropertyName
+            interfaceName = arrayNode[1].asText(),
+            operationName = arrayNode[2].asText(),
+            propertyName = arrayNode[3].asText(),
+            subPropertyName = subPropertyName
         )
     }
 
@@ -192,9 +198,9 @@ object BluePrintExpressionService {
                     "it should be [ <modelable_entity_name>, <artifact_name>, <location>, <remove> ] , but present {}", jsonNode))
         }
         return ArtifactExpression(modelableEntityName = arrayNode[0].asText(),
-                artifactName = arrayNode[1].asText(),
-                location = arrayNode[2]?.asText() ?: "LOCAL_FILE",
-                remove = arrayNode[3]?.asBoolean() ?: false
+            artifactName = arrayNode[1].asText(),
+            location = arrayNode[2]?.asText() ?: "LOCAL_FILE",
+            remove = arrayNode[3]?.asBoolean() ?: false
         )
     }
 }

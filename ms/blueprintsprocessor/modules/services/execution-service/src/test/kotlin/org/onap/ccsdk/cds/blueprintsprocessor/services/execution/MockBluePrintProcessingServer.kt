@@ -31,7 +31,6 @@ import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceOu
 
 private val log = logger(MockBluePrintProcessingServer::class)
 
-
 class MockBluePrintProcessingServer : BluePrintProcessingServiceGrpc.BluePrintProcessingServiceImplBase() {
 
     override fun process(responseObserver: StreamObserver<ExecutionServiceOutput>): StreamObserver<ExecutionServiceInput> {
@@ -53,8 +52,8 @@ class MockBluePrintProcessingServer : BluePrintProcessingServiceGrpc.BluePrintPr
             override fun onError(error: Throwable) {
                 log.debug("Fail to process message", error)
                 responseObserver.onError(io.grpc.Status.INTERNAL
-                        .withDescription(error.message)
-                        .asException())
+                    .withDescription(error.message)
+                    .asException())
             }
 
             override fun onCompleted() {
@@ -63,29 +62,27 @@ class MockBluePrintProcessingServer : BluePrintProcessingServiceGrpc.BluePrintPr
         }
     }
 
-
     private fun buildNotification(input: ExecutionServiceInput): ExecutionServiceOutput {
         val status = Status.newBuilder()
-                .setEventType(EventType.EVENT_COMPONENT_NOTIFICATION)
-                .build()
+            .setEventType(EventType.EVENT_COMPONENT_NOTIFICATION)
+            .build()
         return ExecutionServiceOutput.newBuilder()
-                .setCommonHeader(input.commonHeader)
-                .setActionIdentifiers(input.actionIdentifiers)
-                .setStatus(status)
-                .build()
+            .setCommonHeader(input.commonHeader)
+            .setActionIdentifiers(input.actionIdentifiers)
+            .setStatus(status)
+            .build()
     }
 
     private fun buildResponse(input: ExecutionServiceInput): ExecutionServiceOutput {
 
         val status = Status.newBuilder().setCode(200)
-                .setEventType(EventType.EVENT_COMPONENT_EXECUTED)
-                .build()
+            .setEventType(EventType.EVENT_COMPONENT_EXECUTED)
+            .build()
         return ExecutionServiceOutput.newBuilder()
-                .setCommonHeader(input.commonHeader)
-                .setActionIdentifiers(input.actionIdentifiers)
-                .setStatus(status)
-                .build()
-
+            .setCommonHeader(input.commonHeader)
+            .setActionIdentifiers(input.actionIdentifiers)
+            .setStatus(status)
+            .build()
     }
 }
 
@@ -93,15 +90,14 @@ class MockBluePrintProcessingServer : BluePrintProcessingServiceGrpc.BluePrintPr
 fun main() {
     try {
         val server = ServerBuilder
-                .forPort(50052)
-                .intercept(GrpcServerLoggingInterceptor())
-                .addService(MockBluePrintProcessingServer())
-                .build()
+            .forPort(50052)
+            .intercept(GrpcServerLoggingInterceptor())
+            .addService(MockBluePrintProcessingServer())
+            .build()
         server.start()
         log.info("GRPC Serve started(${server.isShutdown}) on port(${server.port})...")
         server.awaitTermination()
     } catch (e: Exception) {
         e.printStackTrace()
     }
-
 }

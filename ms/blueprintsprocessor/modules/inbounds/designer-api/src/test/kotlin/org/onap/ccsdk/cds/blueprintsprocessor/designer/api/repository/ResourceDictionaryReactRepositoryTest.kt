@@ -51,8 +51,8 @@ class ResourceDictionaryReactRepositoryTest {
     @Commit
     fun test01Save() {
         val resourceDefinition = JacksonUtils
-                .readValueFromFile("./../../../../../components/model-catalog/resource-dictionary/starter-dictionary/sample-db-source.json",
-                        ResourceDefinition::class.java)
+            .readValueFromFile("./../../../../../components/model-catalog/resource-dictionary/starter-dictionary/sample-db-source.json",
+                ResourceDefinition::class.java)
         Assert.assertNotNull("Failed to get resourceDefinition from content", resourceDefinition)
         resourceDefinition!!.name = sourceName
 

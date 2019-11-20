@@ -15,6 +15,8 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.security
 
+import java.nio.charset.StandardCharsets
+import java.util.Base64
 import org.springframework.http.HttpHeaders
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -24,12 +26,10 @@ import org.springframework.security.web.server.context.ServerSecurityContextRepo
 import org.springframework.stereotype.Component
 import org.springframework.web.server.ServerWebExchange
 import reactor.core.publisher.Mono
-import java.nio.charset.StandardCharsets
-import java.util.*
 
 @Component
-class SecurityContextRepository(private val authenticationManager: AuthenticationManager)
-    : ServerSecurityContextRepository {
+class SecurityContextRepository(private val authenticationManager: AuthenticationManager) :
+    ServerSecurityContextRepository {
 
     override fun save(swe: ServerWebExchange, sc: SecurityContext): Mono<Void> {
         throw UnsupportedOperationException("Not supported.")
@@ -44,7 +44,7 @@ class SecurityContextRepository(private val authenticationManager: Authenticatio
             val password = tokens[1]
             val auth = UsernamePasswordAuthenticationToken(username, password)
             return this.authenticationManager!!.authenticate(auth)
-                    .map { SecurityContextImpl(it) }
+                .map { SecurityContextImpl(it) }
         } else {
             return Mono.empty()
         }
@@ -54,7 +54,7 @@ class SecurityContextRepository(private val authenticationManager: Authenticatio
         val basicAuth: String
         try {
             basicAuth = String(Base64.getDecoder().decode(authHeader.substring(6).toByteArray(StandardCharsets.UTF_8)),
-                    StandardCharsets.UTF_8)
+                StandardCharsets.UTF_8)
         } catch (e: IllegalArgumentException) {
             throw BadCredentialsException("Failed to decode basic authentication token")
         } catch (e: IndexOutOfBoundsException) {

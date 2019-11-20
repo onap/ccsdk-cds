@@ -17,16 +17,16 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
+import java.io.File
+import java.net.URL
+import java.net.URLDecoder
+import java.nio.charset.Charset
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ImportDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ServiceTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.ServiceTemplateUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.io.File
-import java.net.URL
-import java.net.URLDecoder
-import java.nio.charset.Charset
 
 class BluePrintImportService(private val parentServiceTemplate: ServiceTemplate, private val blueprintBasePath: String) {
     companion object {
@@ -36,7 +36,6 @@ class BluePrintImportService(private val parentServiceTemplate: ServiceTemplate,
     private val log: Logger = LoggerFactory.getLogger(this::class.toString())
 
     private var importServiceTemplateMap: MutableMap<String, ServiceTemplate> = hashMapOf()
-
 
     suspend fun getImportResolvedServiceTemplate(): ServiceTemplate {
         // Populate Imported Service Templates
@@ -70,13 +69,12 @@ class BluePrintImportService(private val parentServiceTemplate: ServiceTemplate,
         val decodedSystemId: String = URLDecoder.decode(file, Charset.defaultCharset().toString())
         log.trace("file ({}), decodedSystemId ({}) ", file, decodedSystemId)
         try {
-            if (decodedSystemId.startsWith("http", true)
-                    || decodedSystemId.startsWith("https", true)) {
+            if (decodedSystemId.startsWith("http", true) ||
+                decodedSystemId.startsWith("https", true)) {
                 val givenUrl: String = URL(decodedSystemId).toString()
                 val systemUrl: String = File(".").toURI().toURL().toString()
                 log.trace("givenUrl ({}), systemUrl ({}) ", givenUrl, systemUrl)
                 if (givenUrl.startsWith(systemUrl)) {
-
                 }
             } else {
                 if (!decodedSystemId.startsWith("/")) {
@@ -92,6 +90,4 @@ class BluePrintImportService(private val parentServiceTemplate: ServiceTemplate,
         }
         return serviceTemplate
     }
-
-
 }

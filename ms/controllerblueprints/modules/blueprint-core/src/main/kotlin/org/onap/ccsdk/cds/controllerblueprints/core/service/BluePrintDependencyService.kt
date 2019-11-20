@@ -16,9 +16,9 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
+import kotlin.reflect.KClass
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.springframework.context.ApplicationContext
-import kotlin.reflect.KClass
 
 /**
  * Generic Bluepring Dependency Service, which will be used mainly in scripts.
@@ -38,16 +38,16 @@ object BluePrintDependencyService {
 
     inline fun <reified T> instance(name: String): T {
         return applicationContext.getBean(name) as? T
-                ?: throw BluePrintProcessorException("failed to get instance($name)")
+            ?: throw BluePrintProcessorException("failed to get instance($name)")
     }
 
     inline fun <reified T> instance(type: Class<T>): T {
         return applicationContext.getBean(type)
-                ?: throw BluePrintProcessorException("failed to get instance($type)")
+            ?: throw BluePrintProcessorException("failed to get instance($type)")
     }
 
     inline fun <reified T> instance(type: KClass<*>): T {
         return applicationContext.getBean(type.java) as? T
-                ?: throw BluePrintProcessorException("failed to get instance($type)")
+            ?: throw BluePrintProcessorException("failed to get instance($type)")
     }
 }

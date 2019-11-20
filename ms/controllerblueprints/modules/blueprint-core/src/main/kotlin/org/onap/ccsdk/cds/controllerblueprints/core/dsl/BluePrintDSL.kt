@@ -20,47 +20,87 @@ import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
-import org.onap.ccsdk.cds.controllerblueprints.core.data.*
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.RelationshipType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ServiceTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.data.Workflow
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 
 // CDS DSLs
-fun blueprint(name: String, version: String, author: String, tags: String,
-              block: DSLBluePrintBuilder.() -> Unit): DSLBluePrint {
+fun blueprint(
+    name: String,
+    version: String,
+    author: String,
+    tags: String,
+    block: DSLBluePrintBuilder.() -> Unit
+): DSLBluePrint {
     return DSLBluePrintBuilder(name, version, author, tags).apply(block).build()
 }
 
 // TOSCA DSLs
-fun serviceTemplate(name: String, version: String, author: String, tags: String,
-                    block: ServiceTemplateBuilder.() -> Unit): ServiceTemplate {
-    return ServiceTemplateBuilder(name, version, author, tags).apply(block).build()
+fun serviceTemplate(
+    name: String,
+    version: String,
+    author: String,
+    tags: String,
+    block: BluePrintServiceDSLBuilder.() -> Unit
+): ServiceTemplate {
+    return BluePrintServiceDSLBuilder(name, version, author, tags).apply(block).build()
 }
 
 fun workflow(id: String, description: String, block: WorkflowBuilder.() -> Unit): Workflow {
     return WorkflowBuilder(id, description).apply(block).build()
 }
 
-fun nodeTemplate(id: String, type: String, description: String,
-                 block: NodeTemplateBuilder.() -> Unit): NodeTemplate {
+fun nodeTemplate(
+    id: String,
+    type: String,
+    description: String,
+    block: NodeTemplateBuilder.() -> Unit
+): NodeTemplate {
     return NodeTemplateBuilder(id, type, description).apply(block).build()
 }
 
-fun nodeType(id: String, version: String, derivedFrom: String, description: String,
-             block: NodeTypeBuilder.() -> Unit): NodeType {
+fun nodeType(
+    id: String,
+    version: String,
+    derivedFrom: String,
+    description: String,
+    block: NodeTypeBuilder.() -> Unit
+): NodeType {
     return NodeTypeBuilder(id, version, derivedFrom, description).apply(block).build()
 }
 
-fun dataType(id: String, version: String, derivedFrom: String, description: String,
-             block: DataTypeBuilder.() -> Unit): DataType {
+fun dataType(
+    id: String,
+    version: String,
+    derivedFrom: String,
+    description: String,
+    block: DataTypeBuilder.() -> Unit
+): DataType {
     return DataTypeBuilder(id, version, derivedFrom, description).apply(block).build()
 }
 
-fun artifactType(id: String, version: String, derivedFrom: String, description: String,
-                 block: ArtifactTypeBuilder.() -> Unit): ArtifactType {
+fun artifactType(
+    id: String,
+    version: String,
+    derivedFrom: String,
+    description: String,
+    block: ArtifactTypeBuilder.() -> Unit
+): ArtifactType {
     return ArtifactTypeBuilder(id, version, derivedFrom, description).apply(block).build()
 }
 
-fun relationshipType(id: String, version: String, derivedFrom: String, description: String,
-                     block: RelationshipTypeBuilder.() -> Unit): RelationshipType {
+fun relationshipType(
+    id: String,
+    version: String,
+    derivedFrom: String,
+    description: String,
+    block: RelationshipTypeBuilder.() -> Unit
+): RelationshipType {
     return RelationshipTypeBuilder(id, version, derivedFrom, description).apply(block).build()
 }
 
@@ -120,8 +160,12 @@ fun getNodeTemplateArtifact(nodeTemplateName: String, artifactId: String): JsonN
 
 // Operation Function
 
-fun getNodeTemplateOperationOutput(nodeTemplateName: String, interfaceName: String, propertyId: String,
-                                   jsonPath: String? = null): JsonNode {
+fun getNodeTemplateOperationOutput(
+    nodeTemplateName: String,
+    interfaceName: String,
+    propertyId: String,
+    jsonPath: String? = null
+): JsonNode {
     return """{"get_operation_output": ["$nodeTemplateName", "$interfaceName", "process","$propertyId","$jsonPath" ]}""".trimMargin().jsonAsJsonType()
 }
 
@@ -129,33 +173,33 @@ fun getNodeTemplateOperationOutput(nodeTemplateName: String, interfaceName: Stri
 
 fun BluePrintTypes.nodeTypeComponent(): NodeType {
     return nodeType(id = BluePrintConstants.MODEL_TYPE_NODE_COMPONENT,
-            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-            derivedFrom = BluePrintConstants.MODEL_TYPE_NODES_ROOT,
-            description = "This is default Component Node") {
+        version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BluePrintConstants.MODEL_TYPE_NODES_ROOT,
+        description = "This is default Component Node") {
     }
 }
 
 fun BluePrintTypes.nodeTypeWorkflow(): NodeType {
     return nodeType(id = BluePrintConstants.MODEL_TYPE_NODE_WORKFLOW,
-            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-            derivedFrom = BluePrintConstants.MODEL_TYPE_NODES_ROOT,
-            description = "This is default Workflow Node") {
+        version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BluePrintConstants.MODEL_TYPE_NODES_ROOT,
+        description = "This is default Workflow Node") {
     }
 }
 
 fun BluePrintTypes.nodeTypeVnf(): NodeType {
     return nodeType(id = BluePrintConstants.MODEL_TYPE_NODE_VNF,
-            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-            derivedFrom = BluePrintConstants.MODEL_TYPE_NODES_ROOT,
-            description = "This is default VNF Node") {
+        version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BluePrintConstants.MODEL_TYPE_NODES_ROOT,
+        description = "This is default VNF Node") {
     }
 }
 
 fun BluePrintTypes.nodeTypeResourceSource(): NodeType {
     return nodeType(id = BluePrintConstants.MODEL_TYPE_NODE_RESOURCE_SOURCE,
-            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-            derivedFrom = BluePrintConstants.MODEL_TYPE_NODES_ROOT,
-            description = "This is default Resource Source Node") {
+        version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BluePrintConstants.MODEL_TYPE_NODES_ROOT,
+        description = "This is default Resource Source Node") {
     }
 }
 
@@ -163,63 +207,63 @@ fun BluePrintTypes.nodeTypeResourceSource(): NodeType {
 
 fun BluePrintTypes.artifactTypeTemplateVelocity(): ArtifactType {
     return artifactType(id = BluePrintConstants.MODEL_TYPE_ARTIFACT_TEMPLATE_VELOCITY,
-            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-            derivedFrom = BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION,
-            description = "Velocity Artifact") {
+        version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION,
+        description = "Velocity Artifact") {
         fileExt("vtl")
     }
 }
 
 fun BluePrintTypes.artifactTypeTempleJinja(): ArtifactType {
     return artifactType(id = BluePrintConstants.MODEL_TYPE_ARTIFACT_TEMPLATE_JINJA,
-            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-            derivedFrom = BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION,
-            description = "Jinja Artifact") {
+        version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION,
+        description = "Jinja Artifact") {
         fileExt("jinja")
     }
 }
 
 fun BluePrintTypes.artifactTypeMappingResource(): ArtifactType {
     return artifactType(id = BluePrintConstants.MODEL_TYPE_ARTIFACT_MAPPING_RESOURCE,
-            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-            derivedFrom = BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION,
-            description = "Mapping Resource Artifact") {
+        version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION,
+        description = "Mapping Resource Artifact") {
         fileExt("json")
     }
 }
 
 fun BluePrintTypes.artifactTypeScriptJython(): ArtifactType {
     return artifactType(id = BluePrintConstants.MODEL_TYPE_ARTIFACT_SCRIPT_JYTHON,
-            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-            derivedFrom = BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION,
-            description = "Jython Script Artifact") {
+        version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION,
+        description = "Jython Script Artifact") {
         fileExt("py")
     }
 }
 
 fun BluePrintTypes.artifactTypeScriptKotlin(): ArtifactType {
     return artifactType(id = BluePrintConstants.MODEL_TYPE_ARTIFACT_SCRIPT_KOTLIN,
-            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-            derivedFrom = BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION,
-            description = "Kotlin Script Artifact") {
+        version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION,
+        description = "Kotlin Script Artifact") {
         fileExt("kts")
     }
 }
 
 fun BluePrintTypes.artifactTypeDirectedGraph(): ArtifactType {
     return artifactType(id = BluePrintConstants.MODEL_TYPE_ARTIFACT_DIRECTED_GRAPH,
-            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-            derivedFrom = BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION,
-            description = "Directed Graph Artifact") {
+        version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION,
+        description = "Directed Graph Artifact") {
         fileExt("xml", "json")
     }
 }
 
 fun BluePrintTypes.artifactTypeComponentJar(): ArtifactType {
     return artifactType(id = BluePrintConstants.MODEL_TYPE_ARTIFACT_COMPONENT_JAR,
-            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-            derivedFrom = BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION,
-            description = "Component Artifact") {
+        version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION,
+        description = "Component Artifact") {
         fileExt("jar")
     }
 }
@@ -228,16 +272,16 @@ fun BluePrintTypes.artifactTypeComponentJar(): ArtifactType {
 
 fun BluePrintTypes.relationshipTypeConnectsTo(): RelationshipType {
     return relationshipType(id = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO,
-            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-            derivedFrom = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_ROOT,
-            description = "Relationship connects to") {
+        version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_ROOT,
+        description = "Relationship connects to") {
     }
 }
 
 fun BluePrintTypes.relationshipTypeDependsOn(): RelationshipType {
     return relationshipType(id = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_DEPENDS_ON,
-            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-            derivedFrom = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_ROOT,
-            description = "Relationship depends on") {
+        version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_ROOT,
+        description = "Relationship depends on") {
     }
 }

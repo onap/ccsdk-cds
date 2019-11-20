@@ -20,6 +20,8 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.uat
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import java.io.File
+import java.util.zip.ZipFile
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.logging.LogColor.COLOR_SERVICES
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.logging.LogColor.resetContextColor
@@ -35,8 +37,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
-import java.io.File
-import java.util.zip.ZipFile
 
 /**
  * Supporting services to help creating UAT specifications.
@@ -72,8 +72,10 @@ open class UatServices(private val uatExecutor: UatExecutor, private val mapper:
     @PostMapping("/spy", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE], produces = ["text/vnd.yaml"])
     @PreAuthorize("hasRole('USER')")
     @Suppress("BlockingMethodInNonBlockingContext")
-    open fun spy(@RequestPart("cba") cbaFile: FilePart,
-                 @RequestPart("uat", required = false) uatFile: FilePart?): String = runBlocking {
+    open fun spy(
+        @RequestPart("cba") cbaFile: FilePart,
+        @RequestPart("uat", required = false) uatFile: FilePart?
+    ): String = runBlocking {
         val tempFile = createTempFile()
         setContextColor(COLOR_SERVICES)
         try {

@@ -18,10 +18,10 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 
-
 import com.google.protobuf.util.JsonFormat
 import io.grpc.stub.StreamObserver
 import io.grpc.testing.GrpcServerRule
+import kotlin.test.BeforeTest
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
@@ -39,7 +39,6 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.BeforeTest
 
 @RunWith(SpringRunner::class)
 @DirtiesContext
@@ -48,6 +47,7 @@ import kotlin.test.BeforeTest
     "org.onap.ccsdk.cds.controllerblueprints"])
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class BluePrintProcessingGRPCHandlerTest {
+
     private val log = LoggerFactory.getLogger(BluePrintProcessingGRPCHandlerTest::class.java)
 
     @get:Rule
@@ -68,7 +68,8 @@ class BluePrintProcessingGRPCHandlerTest {
             override fun onNext(executionServiceOuput: ExecutionServiceOutput) {
                 log.debug("onNext {}", executionServiceOuput)
                 if ("1234".equals(executionServiceOuput.commonHeader.requestId)) {
-                    Assert.assertEquals("Failed to process request, \'actionIdentifiers.mode\' not specified. Valid value are: \'sync\' or \'async\'.", executionServiceOuput.status.errorMessage)
+                    Assert.assertEquals("Failed to process request, \'actionIdentifiers.mode\' not specified. Valid value are: \'sync\' or \'async\'.",
+                        executionServiceOuput.status.errorMessage)
                 }
             }
 
@@ -86,39 +87,38 @@ class BluePrintProcessingGRPCHandlerTest {
     @Test
     fun testSelfServiceGRPCHandler() {
         val commonHeader = CommonHeader.newBuilder()
-                .setTimestamp("2012-04-23T18:25:43.511Z")
-                .setOriginatorId("System")
-                .setRequestId("1234")
-                .setSubRequestId("1234-56").build()
+            .setTimestamp("2012-04-23T18:25:43.511Z")
+            .setOriginatorId("System")
+            .setRequestId("1234")
+            .setSubRequestId("1234-56").build()
 
         val jsonContent = JacksonUtils.getClassPathFileContent("execution-input/sample-payload.json")
         val payloadBuilder = ExecutionServiceInput.newBuilder().payloadBuilder
         JsonFormat.parser().merge(jsonContent, payloadBuilder)
 
         val input = ExecutionServiceInput.newBuilder()
-                .setCommonHeader(commonHeader)
-                .setPayload(payloadBuilder.build())
-                .build()
+            .setCommonHeader(commonHeader)
+            .setPayload(payloadBuilder.build())
+            .build()
 
         requestObs.onNext(input)
 
         val commonHeader2 = CommonHeader.newBuilder()
-                .setTimestamp("2012-04-23T18:25:43.511Z")
-                .setOriginatorId("System")
-                .setRequestId("2345")
-                .setSubRequestId("1234-56").build()
+            .setTimestamp("2012-04-23T18:25:43.511Z")
+            .setOriginatorId("System")
+            .setRequestId("2345")
+            .setSubRequestId("1234-56").build()
 
         val actionIdentifier = ActionIdentifiers.newBuilder().setMode("sync").build()
 
         val input2 = ExecutionServiceInput.newBuilder()
-                .setCommonHeader(commonHeader2)
-                .setActionIdentifiers(actionIdentifier)
-                .setPayload(payloadBuilder.build())
-                .build()
+            .setCommonHeader(commonHeader2)
+            .setActionIdentifiers(actionIdentifier)
+            .setPayload(payloadBuilder.build())
+            .build()
 
         requestObs.onNext(input2)
 
         requestObs.onCompleted()
     }
-
 }

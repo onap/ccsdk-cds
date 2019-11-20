@@ -27,7 +27,14 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.RestController
 
 /**
  * Exposes Template Resolution API to store and retrieve rendered template results.
@@ -75,8 +82,9 @@ open class TemplateController(private val templateResolutionService: TemplateRes
         @ApiParam(value = "Expected format of the template being retrieved.",
             defaultValue = MediaType.TEXT_PLAIN_VALUE,
             required = true)
-        @RequestParam(value = "format", required = false, defaultValue = MediaType.TEXT_PLAIN_VALUE) format: String)
-            : ResponseEntity<String> = runBlocking {
+        @RequestParam(value = "format", required = false, defaultValue = MediaType.TEXT_PLAIN_VALUE) format: String
+    ):
+            ResponseEntity<String> = runBlocking {
 
         var result = ""
 
@@ -100,7 +108,6 @@ open class TemplateController(private val templateResolutionService: TemplateRes
             throw ResolutionException("Missing param. Either retrieve resolved template using artifact name and resolution-key OR using resource-id and resource-type.")
         }
 
-
         var expectedContentType = format
         if (expectedContentType.indexOf('/') < 0) {
             expectedContentType = "application/$expectedContentType"
@@ -109,7 +116,6 @@ open class TemplateController(private val templateResolutionService: TemplateRes
 
         ResponseEntity.ok().contentType(expectedMediaType).body(result)
     }
-
 
     @PostMapping("/{bpName}/{bpVersion}/{artifactName}/{resolutionKey}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ApiOperation(value = "Store a resolved template w/ resolution-key",
@@ -129,7 +135,8 @@ open class TemplateController(private val templateResolutionService: TemplateRes
         @ApiParam(value = "Resolution Key associated with the resolution.", required = true)
         @PathVariable(value = "resolutionKey") resolutionKey: String,
         @ApiParam(value = "Template to store.", required = true)
-        @RequestBody result: String): ResponseEntity<TemplateResolution> = runBlocking {
+        @RequestBody result: String
+    ): ResponseEntity<TemplateResolution> = runBlocking {
 
         val resultStored =
             templateResolutionService.write(bpName, bpVersion, artifactName, result, resolutionKey = resolutionKey)
@@ -158,7 +165,8 @@ open class TemplateController(private val templateResolutionService: TemplateRes
         @ApiParam(value = "Resource Id associated with the resolution.", required = false)
         @PathVariable(value = "resourceId", required = true) resourceId: String,
         @ApiParam(value = "Template to store.", required = true)
-        @RequestBody result: String): ResponseEntity<TemplateResolution> = runBlocking {
+        @RequestBody result: String
+    ): ResponseEntity<TemplateResolution> = runBlocking {
 
         val resultStored =
             templateResolutionService.write(bpName, bpVersion, artifactName, result, resourceId = resourceId, resourceType = resourceType)

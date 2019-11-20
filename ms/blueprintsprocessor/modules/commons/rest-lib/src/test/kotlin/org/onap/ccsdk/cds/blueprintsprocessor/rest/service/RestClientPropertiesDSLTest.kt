@@ -16,15 +16,15 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.rest.service
 
+import kotlin.test.assertNotNull
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.dslBasicAuthRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.dslSSLRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.dslTokenAuthRestClientProperties
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
-import kotlin.test.assertNotNull
 
 class RestClientPropertiesDSLTest {
-    
+
     @Test
     fun testBasicAuthRestClientProperties() {
         val properties = BluePrintTypes.dslBasicAuthRestClientProperties {

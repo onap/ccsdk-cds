@@ -17,81 +17,88 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.onap.ccsdk.cds.controllerblueprints.core.*
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.AbstractNodeTemplateOperationImplBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.PropertiesAssignmentBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.nodeType
+import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 
 /** Component Extensions **/
 fun BluePrintTypes.nodeTypeComponentResourceResolution(): NodeType {
     return nodeType(id = "component-resource-resolution", version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-            derivedFrom = BluePrintConstants.MODEL_TYPE_NODE_COMPONENT,
-            description = "Resource Assignment Component") {
+        derivedFrom = BluePrintConstants.MODEL_TYPE_NODE_COMPONENT,
+        description = "Resource Assignment Component") {
 
         attribute(ResourceResolutionComponent.ATTRIBUTE_ASSIGNMENT_PARAM, BluePrintConstants.DATA_TYPE_STRING,
-                true)
+            true)
         attribute(ResourceResolutionComponent.ATTRIBUTE_STATUS, BluePrintConstants.DATA_TYPE_STRING,
-                true)
+            true)
 
         operation("ResourceResolutionComponent", "ResourceResolutionComponent Operation") {
             inputs {
                 property(ResourceResolutionComponent.INPUT_REQUEST_ID, BluePrintConstants.DATA_TYPE_STRING,
-                        true, "Request Id, Unique Id for the request.")
+                    true, "Request Id, Unique Id for the request.")
 
                 property(ResourceResolutionComponent.INPUT_RESOURCE_ID, BluePrintConstants.DATA_TYPE_STRING,
-                        false, "Resource Id.")
+                    false, "Resource Id.")
 
                 property(ResourceResolutionComponent.INPUT_ACTION_NAME, BluePrintConstants.DATA_TYPE_STRING,
-                        false, "Action Name of the process")
+                    false, "Action Name of the process")
 
                 property(ResourceResolutionComponent.INPUT_DYNAMIC_PROPERTIES, BluePrintConstants.DATA_TYPE_JSON,
-                        false, "Dynamic Json Content or DSL Json reference.")
+                    false, "Dynamic Json Content or DSL Json reference.")
 
                 property(ResourceResolutionComponent.INPUT_RESOLUTION_KEY, BluePrintConstants.DATA_TYPE_STRING,
-                        false, "Key for service instance related correlation.")
+                    false, "Key for service instance related correlation.")
 
                 property(ResourceResolutionComponent.INPUT_OCCURRENCE, BluePrintConstants.DATA_TYPE_INTEGER,
-                        false, "Number of time to perform the resolution.") {
+                    false, "Number of time to perform the resolution.") {
                     defaultValue(1)
                 }
 
                 property(ResourceResolutionComponent.INPUT_STORE_RESULT, BluePrintConstants.DATA_TYPE_BOOLEAN,
-                        false, "Whether or not to store the output.")
+                    false, "Whether or not to store the output.")
 
                 property(ResourceResolutionComponent.INPUT_RESOURCE_TYPE, BluePrintConstants.DATA_TYPE_STRING,
-                        false, "Request type.")
+                    false, "Request type.")
 
                 property(ResourceResolutionComponent.INPUT_ARTIFACT_PREFIX_NAMES, BluePrintConstants.DATA_TYPE_LIST,
-                        true, "Template , Resource Assignment Artifact Prefix names") {
+                    true, "Template , Resource Assignment Artifact Prefix names") {
                     entrySchema(BluePrintConstants.DATA_TYPE_STRING)
                 }
             }
             outputs {
                 property(ResourceResolutionComponent.OUTPUT_RESOURCE_ASSIGNMENT_PARAMS, BluePrintConstants.DATA_TYPE_STRING,
-                        true, "Output Response")
+                    true, "Output Response")
                 property(ResourceResolutionComponent.OUTPUT_STATUS, BluePrintConstants.DATA_TYPE_STRING,
-                        true, "Status of the Component Execution ( success or failure )")
+                    true, "Status of the Component Execution ( success or failure )")
             }
         }
     }
 }
 
 /** Component Builder */
-fun BluePrintTypes.nodeTemplateComponentResourceResolution(id: String,
-                                                           description: String,
-                                                           block: ComponentResourceResolutionNodeTemplateBuilder.() -> Unit)
-        : NodeTemplate {
+fun BluePrintTypes.nodeTemplateComponentResourceResolution(
+    id: String,
+    description: String,
+    block: ComponentResourceResolutionNodeTemplateBuilder.() -> Unit
+):
+        NodeTemplate {
     return ComponentResourceResolutionNodeTemplateBuilder(id, description).apply(block).build()
 }
 
 class ComponentResourceResolutionNodeTemplateBuilder(id: String, description: String) :
-        AbstractNodeTemplateOperationImplBuilder<PropertiesAssignmentBuilder,
-                ComponentResourceResolutionNodeTemplateBuilder.InputsBuilder,
-                ComponentResourceResolutionNodeTemplateBuilder.OutputsBuilder>(id, "component-script-executor",
-                "ComponentResourceResolution",
-                description) {
+    AbstractNodeTemplateOperationImplBuilder<PropertiesAssignmentBuilder,
+            ComponentResourceResolutionNodeTemplateBuilder.InputsBuilder,
+            ComponentResourceResolutionNodeTemplateBuilder.OutputsBuilder>(id, "component-script-executor",
+        "ComponentResourceResolution",
+        description) {
 
     class InputsBuilder : PropertiesAssignmentBuilder() {
 
@@ -146,7 +153,7 @@ class ComponentResourceResolutionNodeTemplateBuilder(id: String, description: St
         fun artifactPrefixNames(artifactPrefixNames: String) = artifactPrefixNames(artifactPrefixNames.jsonAsJsonType())
 
         fun artifactPrefixNames(artifactPrefixNameList: List<String>) =
-                artifactPrefixNames(artifactPrefixNameList.asJsonString())
+            artifactPrefixNames(artifactPrefixNameList.asJsonString())
 
         fun artifactPrefixNames(artifactPrefixNames: JsonNode) {
             property(ResourceResolutionComponent.INPUT_ARTIFACT_PREFIX_NAMES, artifactPrefixNames)
@@ -162,7 +169,7 @@ class ComponentResourceResolutionNodeTemplateBuilder(id: String, description: St
         }
 
         fun resourceAssignmentParams(resourceAssignmentParams: String) =
-                resourceAssignmentParams(resourceAssignmentParams.asJsonType())
+            resourceAssignmentParams(resourceAssignmentParams.asJsonType())
 
         fun resourceAssignmentParams(resourceAssignmentParams: JsonNode) {
             property(ResourceResolutionComponent.OUTPUT_RESOURCE_ASSIGNMENT_PARAMS, resourceAssignmentParams)

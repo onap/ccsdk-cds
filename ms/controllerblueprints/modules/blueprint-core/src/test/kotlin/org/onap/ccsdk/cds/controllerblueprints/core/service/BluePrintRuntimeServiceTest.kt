@@ -19,17 +19,16 @@ package org.onap.ccsdk.cds.controllerblueprints.core.service
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.NullNode
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
-import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintRuntimeUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 /**
  *
@@ -37,6 +36,7 @@ import kotlin.test.assertNotNull
  * @author Brinda Santh
  */
 class BluePrintRuntimeServiceTest {
+
     private val log = LoggerFactory.getLogger(this::class.toString())
 
     @Test
@@ -51,7 +51,7 @@ class BluePrintRuntimeServiceTest {
         bluePrintRuntimeService.assignInputs(inputNode)
 
         val propContext: MutableMap<String, JsonNode> = bluePrintRuntimeService
-                .resolveNodeTemplateProperties("activate-process")
+            .resolveNodeTemplateProperties("activate-process")
 
         assertNotNull(propContext, "Failed to populate interface property values")
     }
@@ -64,7 +64,7 @@ class BluePrintRuntimeServiceTest {
         val executionContext = bluePrintRuntimeService.getExecutionContext()
 
         BluePrintRuntimeUtils.assignInputsFromClassPathFile(bluePrintRuntimeService.bluePrintContext(),
-                "data/default-context.json", executionContext)
+            "data/default-context.json", executionContext)
 
         val assignmentParams = "{\n" +
                 "            \"ipAddress\": \"127.0.0.1\",\n" +
@@ -72,10 +72,10 @@ class BluePrintRuntimeServiceTest {
                 "          }"
 
         bluePrintRuntimeService.setNodeTemplateAttributeValue("resource-assignment", "assignment-params",
-                JacksonUtils.jsonNode(assignmentParams))
+            JacksonUtils.jsonNode(assignmentParams))
 
         val capProperties = bluePrintRuntimeService.resolveNodeTemplateCapabilityProperties("sample-netconf-device",
-                "netconf")
+            "netconf")
         assertNotNull(capProperties, "Failed to populate capability property values")
         assertEquals(capProperties["target-ip-address"], "127.0.0.1".asJsonPrimitive(), "Failed to populate parameter target-ip-address")
         assertEquals(capProperties["port-number"], JacksonUtils.jsonNodeFromObject(830), "Failed to populate parameter port-number")
@@ -90,11 +90,11 @@ class BluePrintRuntimeServiceTest {
         val executionContext = bluePrintRuntimeService.getExecutionContext()
 
         BluePrintRuntimeUtils.assignInputsFromClassPathFile(bluePrintRuntimeService.bluePrintContext(),
-                "data/default-context.json", executionContext)
+            "data/default-context.json", executionContext)
 
         val inContext: MutableMap<String, JsonNode> = bluePrintRuntimeService
-                .resolveNodeTemplateInterfaceOperationInputs("resource-assignment",
-                        "ResourceResolutionComponent", "process")
+            .resolveNodeTemplateInterfaceOperationInputs("resource-assignment",
+                "ResourceResolutionComponent", "process")
 
         assertNotNull(inContext, "Failed to populate interface input property values")
         assertEquals(inContext["action-name"], JacksonUtils.jsonNodeFromObject("sample-action"), "Failed to populate parameter action-name")
@@ -110,16 +110,15 @@ class BluePrintRuntimeServiceTest {
         bluePrintRuntimeService.setNodeTemplateAttributeValue("resource-assignment", "assignment-params", NullNode.getInstance())
 
         bluePrintRuntimeService.resolveNodeTemplateInterfaceOperationOutputs("resource-assignment",
-                "ResourceResolutionComponent", "process")
+            "ResourceResolutionComponent", "process")
 
         val outputStatus = bluePrintRuntimeService.getNodeTemplateOperationOutputValue("resource-assignment",
-                "ResourceResolutionComponent", "process", "status")
+            "ResourceResolutionComponent", "process", "status")
         assertEquals("success".asJsonPrimitive(), outputStatus, "Failed to get operation property status")
 
         val outputParams = bluePrintRuntimeService.getNodeTemplateOperationOutputValue("resource-assignment",
-                "ResourceResolutionComponent", "process", "resource-assignment-params")
+            "ResourceResolutionComponent", "process", "resource-assignment-params")
         assertEquals(NullNode.getInstance(), outputParams, "Failed to get operation property resource-assignment-params")
-
     }
 
     @Test
@@ -128,16 +127,15 @@ class BluePrintRuntimeServiceTest {
         val bluePrintRuntimeService = getBluePrintRuntimeService()
 
         bluePrintRuntimeService.setNodeTemplateAttributeValue("resource-assignment-ra-component", "context1",
-                JacksonUtils.jsonNodeFromObject("context1-value"))
+            JacksonUtils.jsonNodeFromObject("context1-value"))
         bluePrintRuntimeService.setNodeTemplateAttributeValue("resource-assignment-ra-component", "context2",
-                JacksonUtils.jsonNodeFromObject("context2-value"))
+            JacksonUtils.jsonNodeFromObject("context2-value"))
 
         val keys = listOf("context1", "context2")
 
         val jsonValueNode = bluePrintRuntimeService.getJsonForNodeTemplateAttributeProperties("resource-assignment-ra-component", keys)
         assertNotNull(jsonValueNode, "Failed to get Json for Node Template Context Properties")
         log.info("JSON Prepared Value Context {}", jsonValueNode)
-
     }
 
     @Test
@@ -160,7 +158,7 @@ class BluePrintRuntimeServiceTest {
         val assignmentParams = "{\"ipAddress\": \"127.0.0.1\", \"hostName\": \"vnf-host\"}"
 
         bluePrintRuntimeService.setNodeTemplateAttributeValue("resource-assignment", "assignment-params",
-                JacksonUtils.jsonNode(assignmentParams))
+            JacksonUtils.jsonNode(assignmentParams))
 
         val resolvedJsonNode = bluePrintRuntimeService.resolveWorkflowOutputs("resource-assignment")
         assertNotNull(resolvedJsonNode, "Failed to populate workflow output property values")
@@ -173,11 +171,10 @@ class BluePrintRuntimeServiceTest {
         val checkBasePath = blueprintRuntime.get(BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH)
 
         assertEquals("1234".asJsonPrimitive(),
-                checkProcessId, "Failed to get process id after runtime creation")
+            checkProcessId, "Failed to get process id after runtime creation")
         assertEquals(blueprintBasePath.asJsonPrimitive(),
-                checkBasePath, "Failed to get base path after runtime creation")
+            checkBasePath, "Failed to get base path after runtime creation")
 
         return blueprintRuntime
     }
-
 }

@@ -30,6 +30,7 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.nhaarman.mockitokotlin2.whenever
+import java.util.concurrent.ConcurrentHashMap
 import org.apache.http.HttpHeaders
 import org.apache.http.HttpStatus
 import org.apache.http.client.HttpClient
@@ -58,7 +59,6 @@ import org.springframework.core.env.ConfigurableEnvironment
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.util.Base64Utils
-import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Assumptions:
@@ -70,9 +70,9 @@ import java.util.concurrent.ConcurrentHashMap
  */
 @Component
 class UatExecutor(
-        private val environment: ConfigurableEnvironment,
-        private val restClientFactory: BluePrintRestLibPropertyService,
-        private val mapper: ObjectMapper
+    private val environment: ConfigurableEnvironment,
+    private val restClientFactory: BluePrintRestLibPropertyService,
+    private val mapper: ObjectMapper
 ) {
 
     companion object {
@@ -103,8 +103,8 @@ class UatExecutor(
     fun execute(uat: UatDefinition, cbaBytes: ByteArray): UatDefinition {
         val defaultHeaders = listOf(BasicHeader(HttpHeaders.AUTHORIZATION, clientAuthToken()))
         val httpClient = HttpClientBuilder.create()
-                .setDefaultHeaders(defaultHeaders)
-                .build()
+            .setDefaultHeaders(defaultHeaders)
+            .build()
         // Only if externalServices are defined
         val mockInterceptor = MockPreInterceptor()
         // Always defined and used, whatever the case
@@ -113,13 +113,13 @@ class UatExecutor(
         try {
             // Configure mocked external services and save their expected requests for further validation
             val requestsPerClient = uat.externalServices.associateBy(
-                    { service ->
-                        createRestClientMock(service.expectations).also { restClient ->
-                            // side-effect: register restClient to override real instance
-                            mockInterceptor.registerMock(service.selector, restClient)
-                        }
-                    },
-                    { service -> service.expectations.map { it.request } }
+                { service ->
+                    createRestClientMock(service.expectations).also { restClient ->
+                        // side-effect: register restClient to override real instance
+                        mockInterceptor.registerMock(service.selector, restClient)
+                    }
+                },
+                { service -> service.expectations.map { it.request } }
             )
 
             val newProcesses = httpClient.use { client ->
@@ -130,7 +130,7 @@ class UatExecutor(
                     log.info("Executing process '${process.name}'")
                     val responseNormalizer = JsonNormalizer.getNormalizer(mapper, process.responseNormalizerSpec)
                     val actualResponse = processBlueprint(client, process.request,
-                            process.expectedResponse, responseNormalizer)
+                        process.expectedResponse, responseNormalizer)
                     ProcessDefinition(process.name, process.request, actualResponse, process.responseNormalizerSpec)
                 }
             }
@@ -139,10 +139,10 @@ class UatExecutor(
             for ((mockClient, requests) in requestsPerClient) {
                 requests.forEach { request ->
                     verify(mockClient, atLeastOnce()).exchangeResource(
-                            eq(request.method),
-                            eq(request.path),
-                            argThat { assertJsonEquals(request.body, this) },
-                            argThat(RequiredMapEntriesMatcher(request.headers)))
+                        eq(request.method),
+                        eq(request.path),
+                        argThat { assertJsonEquals(request.body, this) },
+                        argThat(RequiredMapEntriesMatcher(request.headers)))
                 }
                 // Don't mind the invocations to the overloaded exchangeResource(String, String, String)
                 verify(mockClient, atLeast(0)).exchangeResource(any(), any(), any())
@@ -150,7 +150,7 @@ class UatExecutor(
             }
 
             val newExternalServices = spyInterceptor.getSpies()
-                    .map(SpyService::asServiceDefinition)
+                .map(SpyService::asServiceDefinition)
 
             return UatDefinition(newProcesses, newExternalServices)
         } finally {
@@ -158,29 +158,29 @@ class UatExecutor(
         }
     }
 
-    private fun createRestClientMock(restExpectations: List<ExpectationDefinition>)
-            : BlueprintWebClientService {
+    private fun createRestClientMock(restExpectations: List<ExpectationDefinition>):
+            BlueprintWebClientService {
         val restClient = mock<BlueprintWebClientService>(
-                defaultAnswer = Answers.RETURNS_SMART_NULLS,
-                // our custom verboseLogging handler
-                invocationListeners = arrayOf(mockLoggingListener)
+            defaultAnswer = Answers.RETURNS_SMART_NULLS,
+            // our custom verboseLogging handler
+            invocationListeners = arrayOf(mockLoggingListener)
         )
 
         // Delegates to overloaded exchangeResource(String, String, String, Map<String, String>)
         whenever(restClient.exchangeResource(any(), any(), any()))
-                .thenAnswer { invocation ->
-                    val method = invocation.arguments[0] as String
-                    val path = invocation.arguments[1] as String
-                    val request = invocation.arguments[2] as String
-                    restClient.exchangeResource(method, path, request, emptyMap())
-                }
+            .thenAnswer { invocation ->
+                val method = invocation.arguments[0] as String
+                val path = invocation.arguments[1] as String
+                val request = invocation.arguments[2] as String
+                restClient.exchangeResource(method, path, request, emptyMap())
+            }
         for (expectation in restExpectations) {
             whenever(restClient.exchangeResource(
-                    eq(expectation.request.method),
-                    eq(expectation.request.path),
-                    any(),
-                    any()))
-                    .thenReturn(WebClientResponse(expectation.response.status, expectation.response.body.toString()))
+                eq(expectation.request.method),
+                eq(expectation.request.path),
+                any(),
+                any()))
+                .thenReturn(WebClientResponse(expectation.response.status, expectation.response.body.toString()))
         }
         return restClient
     }
@@ -188,9 +188,9 @@ class UatExecutor(
     @Throws(AssertionError::class)
     private fun uploadBlueprint(client: HttpClient, cbaBytes: ByteArray) {
         val multipartEntity = MultipartEntityBuilder.create()
-                .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
-                .addBinaryBody("file", cbaBytes, ContentType.DEFAULT_BINARY, "cba.zip")
-                .build()
+            .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
+            .addBinaryBody("file", cbaBytes, ContentType.DEFAULT_BINARY, "cba.zip")
+            .build()
         val request = HttpPost("$baseUrl/api/v1/blueprint-model/publish").apply {
             entity = multipartEntity
         }
@@ -201,8 +201,12 @@ class UatExecutor(
     }
 
     @Throws(AssertionError::class)
-    private fun processBlueprint(client: HttpClient, requestBody: JsonNode,
-                                 expectedResponse: JsonNode?, responseNormalizer: (String) -> String): JsonNode {
+    private fun processBlueprint(
+        client: HttpClient,
+        requestBody: JsonNode,
+        expectedResponse: JsonNode?,
+        responseNormalizer: (String) -> String
+    ): JsonNode {
         val stringEntity = StringEntity(mapper.writeValueAsString(requestBody), ContentType.APPLICATION_JSON)
         val request = HttpPost("$baseUrl/api/v1/execution-service/process").apply {
             entity = stringEntity
@@ -234,8 +238,8 @@ class UatExecutor(
     }
 
     private fun localServerPort(): Int =
-            (environment.getProperty("local.server.port")
-                    ?: environment.getRequiredProperty("blueprint.httpPort")).toInt()
+        (environment.getProperty("local.server.port")
+            ?: environment.getRequiredProperty("blueprint.httpPort")).toInt()
 
     private fun clientAuthToken(): String {
         val username = environment.getRequiredProperty("security.user.name")
@@ -255,7 +259,7 @@ class UatExecutor(
         }
 
         override fun getInstance(selector: String): BlueprintWebClientService? =
-                mocks[selector]
+            mocks[selector]
 
         fun registerMock(selector: String, client: BlueprintWebClientService) {
             mocks[selector] = client
@@ -277,21 +281,27 @@ class UatExecutor(
         }
 
         fun getSpies(): List<SpyService> =
-                spies.values.toList()
+            spies.values.toList()
     }
 
-    private class SpyService(private val mapper: ObjectMapper,
-                             val selector: String,
-                             private val realService: BlueprintWebClientService) :
-            BlueprintWebClientService by realService {
+    private class SpyService(
+        private val mapper: ObjectMapper,
+        val selector: String,
+        private val realService: BlueprintWebClientService
+    ) :
+        BlueprintWebClientService by realService {
 
         private val expectations: MutableList<ExpectationDefinition> = mutableListOf()
 
         override fun exchangeResource(methodType: String, path: String, request: String): WebClientResponse<String> =
-                exchangeResource(methodType, path, request, DEFAULT_HEADERS)
+            exchangeResource(methodType, path, request, DEFAULT_HEADERS)
 
-        override fun exchangeResource(methodType: String, path: String, request: String,
-                                      headers: Map<String, String>): WebClientResponse<String> {
+        override fun exchangeResource(
+            methodType: String,
+            path: String,
+            request: String,
+            headers: Map<String, String>
+        ): WebClientResponse<String> {
             val requestDefinition = RequestDefinition(methodType, path, headers, toJson(request))
             val realAnswer = realService.exchangeResource(methodType, path, request, headers)
             val responseBody = when {
@@ -305,7 +315,7 @@ class UatExecutor(
         }
 
         fun asServiceDefinition() =
-                ServiceDefinition(selector, expectations)
+            ServiceDefinition(selector, expectations)
 
         private fun toJson(str: String): JsonNode? {
             return when {
@@ -316,8 +326,8 @@ class UatExecutor(
 
         companion object {
             private val DEFAULT_HEADERS = mapOf(
-                    HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE,
-                    HttpHeaders.ACCEPT to MediaType.APPLICATION_JSON_VALUE
+                HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE,
+                HttpHeaders.ACCEPT to MediaType.APPLICATION_JSON_VALUE
             )
         }
     }

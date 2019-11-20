@@ -17,6 +17,9 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 
 import io.mockk.mockk
+import kotlin.test.Test
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.runner.RunWith
@@ -31,9 +34,6 @@ import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Service
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.Test
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [MockServiceAction::class])
@@ -73,12 +73,12 @@ class ExecutionServiceHandlerTest {
 
 @Service("mock-service-action")
 class MockServiceAction : AbstractServiceFunction() {
+
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
         val responsePayload = """{"answer" : "correct"}""".jsonAsJsonType()
         setResponsePayloadForAction(responsePayload)
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-
     }
 }

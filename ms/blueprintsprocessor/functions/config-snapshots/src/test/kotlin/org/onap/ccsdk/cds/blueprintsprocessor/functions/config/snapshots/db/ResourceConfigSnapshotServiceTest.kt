@@ -19,9 +19,9 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlin.test.assertEquals
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
-import kotlin.test.assertEquals
 
 class ResourceConfigSnapshotServiceTest {
 
@@ -55,7 +55,7 @@ class ResourceConfigSnapshotServiceTest {
             every {
                 cfgRepository.findByResourceIdAndResourceTypeAndStatus(any(), any(), any())
             } returns null
-            val res = cfgService.write( configSnapshot, resourceId, resourceType, resourceStatus)
+            val res = cfgService.write(configSnapshot, resourceId, resourceType, resourceStatus)
             assertEquals(tr, res)
         }
     }
@@ -71,7 +71,7 @@ class ResourceConfigSnapshotServiceTest {
             every {
                 cfgRepository.deleteByResourceIdAndResourceTypeAndStatus(any(), any(), any())
             } returns Unit
-            val res = cfgService.write( configSnapshot, resourceId, resourceType)
+            val res = cfgService.write(configSnapshot, resourceId, resourceType)
             verify {
                 cfgRepository.deleteByResourceIdAndResourceTypeAndStatus(eq(resourceId), eq(resourceType), eq(resourceStatus))
             }

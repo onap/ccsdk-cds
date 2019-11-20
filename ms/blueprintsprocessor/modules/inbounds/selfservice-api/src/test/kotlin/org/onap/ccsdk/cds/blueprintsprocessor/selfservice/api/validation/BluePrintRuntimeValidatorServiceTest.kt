@@ -16,6 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.validation
 
+import kotlin.test.assertNotNull
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.mock.MockResourceSource
@@ -23,7 +24,6 @@ import org.onap.ccsdk.cds.controllerblueprints.validation.BluePrintValidationCon
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [BluePrintRuntimeValidatorService::class,
@@ -39,6 +39,5 @@ class BluePrintRuntimeValidatorServiceTest {
         assertNotNull(bluePrintRuntimeValidatorService, " failed to initilize bluePrintRuntimeValidatorService")
 
         bluePrintRuntimeValidatorService.validateBluePrints(blueprintBasePath)
-
     }
 }

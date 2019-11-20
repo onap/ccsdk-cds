@@ -22,19 +22,16 @@ import io.grpc.internal.PickFirstLoadBalancerProvider
 import io.grpc.netty.NettyChannelBuilder
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.BasicAuthGrpcClientProperties
 
-
-open class BasicAuthGrpcClientService(private val basicAuthGrpcClientProperties: BasicAuthGrpcClientProperties)
-    : BluePrintGrpcClientService {
+open class BasicAuthGrpcClientService(private val basicAuthGrpcClientProperties: BasicAuthGrpcClientProperties) :
+    BluePrintGrpcClientService {
 
     override suspend fun channel(): ManagedChannel {
         val managedChannel = NettyChannelBuilder
-                .forAddress(basicAuthGrpcClientProperties.host, basicAuthGrpcClientProperties.port)
-                .nameResolverFactory(DnsNameResolverProvider())
-                .loadBalancerFactory(PickFirstLoadBalancerProvider())
-                // .intercept(BasicAuthClientInterceptor(basicAuthGrpcClientProperties)).usePlaintext()
-                .build()
+            .forAddress(basicAuthGrpcClientProperties.host, basicAuthGrpcClientProperties.port)
+            .nameResolverFactory(DnsNameResolverProvider())
+            .loadBalancerFactory(PickFirstLoadBalancerProvider())
+            // .intercept(BasicAuthClientInterceptor(basicAuthGrpcClientProperties)).usePlaintext()
+            .build()
         return managedChannel
     }
-
-
 }

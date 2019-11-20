@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.TextNode
 import io.mockk.every
 import io.mockk.spyk
+import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -31,7 +32,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [InputResourceResolutionProcessor::class])
@@ -46,13 +46,13 @@ class InputResourceResolutionProcessorTest {
         runBlocking {
 
             val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
-                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
             val resourceAssignmentRuntimeService = spyk(ResourceAssignmentRuntimeService("1234", bluePrintContext))
 
             // mocking input for resource resolution
             val textNode: JsonNode = TextNode("any value")
-            every {resourceAssignmentRuntimeService.getInputValue("rr-name") } returns textNode
+            every { resourceAssignmentRuntimeService.getInputValue("rr-name") } returns textNode
 
             inputResourceResolutionProcessor.raRuntimeService = resourceAssignmentRuntimeService
             inputResourceResolutionProcessor.resourceDictionaries = ResourceAssignmentUtils.resourceDefinitions(bluePrintContext.rootPath)

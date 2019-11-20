@@ -16,12 +16,12 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.db.primary
 
+import javax.sql.DataSource
 import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibGenericService
 import org.onap.ccsdk.cds.blueprintsprocessor.db.MySqlDataSourceProperties
 import org.slf4j.LoggerFactory
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.jdbc.datasource.DriverManagerDataSource
-import javax.sql.DataSource
 
 class MySqlDatabaseConfiguration(private val mySqlDataSourceProperties: MySqlDataSourceProperties) : BluePrintDBLibGenericService {
     override fun namedParameterJdbcTemplate(): NamedParameterJdbcTemplate {
@@ -50,6 +50,4 @@ class MySqlDatabaseConfiguration(private val mySqlDataSourceProperties: MySqlDat
     fun mySqlNamedParameterJdbcTemplate(mySqlDataSource: DataSource): NamedParameterJdbcTemplate {
         return NamedParameterJdbcTemplate(mySqlDataSource)
     }
-
-
 }

@@ -16,13 +16,13 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.dsl
 
+import kotlin.reflect.KClass
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asPropertyDefinitionMap
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Activity
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Step
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Workflow
-import kotlin.reflect.KClass
 
 class WorkflowBuilder(private val id: String, private val description: String) {
 
@@ -72,11 +72,13 @@ class WorkflowBuilder(private val id: String, private val description: String) {
         workflow.outputs = outputs
         return workflow
     }
-
 }
 
-class StepBuilder(private val id: String, private val target: String,
-                  private val description: String) {
+class StepBuilder(
+    private val id: String,
+    private val target: String,
+    private val description: String
+) {
 
     private var step = Step()
     private var activities: ArrayList<Activity> = arrayListOf()

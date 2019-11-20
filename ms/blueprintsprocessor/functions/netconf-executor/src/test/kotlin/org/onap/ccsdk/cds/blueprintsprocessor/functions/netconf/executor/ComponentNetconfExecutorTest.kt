@@ -55,15 +55,15 @@ class ComponentNetconfExecutorTest {
             coEvery { blueprintJythonService.jythonComponentInstance(any(), any()) } returns mockAbstractScriptComponentFunction
 
             val componentFunctionScriptingService = ComponentFunctionScriptingService(applicationContext,
-                    blueprintJythonService)
+                blueprintJythonService)
 
             val componentNetconfExecutor = ComponentNetconfExecutor(componentFunctionScriptingService)
 
             val executionServiceInput = JacksonUtils.readValueFromClassPathFile("requests/sample-activate-request.json",
-                    ExecutionServiceInput::class.java)!!
+                ExecutionServiceInput::class.java)!!
 
             val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
             val assignmentParams = """{
                 "ipAddress" : "127.0.0.1",
@@ -78,11 +78,11 @@ class ComponentNetconfExecutorTest {
 
             bluePrintRuntimeService.assignInputs(json.asJsonType())
             bluePrintRuntimeService.setNodeTemplateAttributeValue("resource-assignment", "assignment-params",
-                    JacksonUtils.jsonNode(assignmentParams))
+                JacksonUtils.jsonNode(assignmentParams))
 
             componentNetconfExecutor.bluePrintRuntimeService = bluePrintRuntimeService
 
-            //TODO("Set Attribute properties")
+            // TODO("Set Attribute properties")
             val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
             stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "activate-netconf")
             stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "ComponentNetconfExecutor")
@@ -98,4 +98,3 @@ class ComponentNetconfExecutorTest {
         }
     }
 }
-

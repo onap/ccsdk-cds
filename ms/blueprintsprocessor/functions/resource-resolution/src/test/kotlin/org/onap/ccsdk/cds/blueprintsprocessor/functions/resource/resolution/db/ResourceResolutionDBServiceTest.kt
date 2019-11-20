@@ -18,6 +18,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db
 
 import io.mockk.every
 import io.mockk.mockk
+import kotlin.test.assertEquals
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -28,7 +29,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.springframework.dao.EmptyResultDataAccessException
-import kotlin.test.assertEquals
 
 open class ResourceResolutionDBServiceTest {
 

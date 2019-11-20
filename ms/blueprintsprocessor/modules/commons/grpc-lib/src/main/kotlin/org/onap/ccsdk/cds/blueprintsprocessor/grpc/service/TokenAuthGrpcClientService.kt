@@ -16,36 +16,46 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.grpc.service
 
-import io.grpc.*
+import io.grpc.CallOptions
+import io.grpc.Channel
+import io.grpc.ClientCall
+import io.grpc.ClientInterceptor
+import io.grpc.ForwardingClientCall
+import io.grpc.ManagedChannel
+import io.grpc.Metadata
+import io.grpc.MethodDescriptor
 import io.grpc.internal.DnsNameResolverProvider
 import io.grpc.internal.PickFirstLoadBalancerProvider
 import io.grpc.netty.NettyChannelBuilder
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.TokenAuthGrpcClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.interceptor.GrpcClientLoggingInterceptor
 
-class TokenAuthGrpcClientService(private val tokenAuthGrpcClientProperties: TokenAuthGrpcClientProperties)
-    : BluePrintGrpcClientService {
+class TokenAuthGrpcClientService(private val tokenAuthGrpcClientProperties: TokenAuthGrpcClientProperties) :
+    BluePrintGrpcClientService {
 
     override suspend fun channel(): ManagedChannel {
         val managedChannel = NettyChannelBuilder
-                .forAddress(tokenAuthGrpcClientProperties.host, tokenAuthGrpcClientProperties.port)
-                .nameResolverFactory(DnsNameResolverProvider())
-                .loadBalancerFactory(PickFirstLoadBalancerProvider())
-                .intercept(GrpcClientLoggingInterceptor())
-                .intercept(TokenAuthClientInterceptor(tokenAuthGrpcClientProperties)).usePlaintext().build()
+            .forAddress(tokenAuthGrpcClientProperties.host, tokenAuthGrpcClientProperties.port)
+            .nameResolverFactory(DnsNameResolverProvider())
+            .loadBalancerFactory(PickFirstLoadBalancerProvider())
+            .intercept(GrpcClientLoggingInterceptor())
+            .intercept(TokenAuthClientInterceptor(tokenAuthGrpcClientProperties)).usePlaintext().build()
         return managedChannel
     }
 }
 
 class TokenAuthClientInterceptor(private val tokenAuthGrpcClientProperties: TokenAuthGrpcClientProperties) : ClientInterceptor {
 
-    override fun <ReqT, RespT> interceptCall(method: MethodDescriptor<ReqT, RespT>,
-                                             callOptions: CallOptions, channel: Channel): ClientCall<ReqT, RespT> {
+    override fun <ReqT, RespT> interceptCall(
+        method: MethodDescriptor<ReqT, RespT>,
+        callOptions: CallOptions,
+        channel: Channel
+    ): ClientCall<ReqT, RespT> {
 
         val authHeader = Metadata.Key.of("Authorization", Metadata.ASCII_STRING_MARSHALLER)
 
         return object : ForwardingClientCall
-        .SimpleForwardingClientCall<ReqT, RespT>(channel.newCall(method, callOptions)) {
+                        .SimpleForwardingClientCall<ReqT, RespT>(channel.newCall(method, callOptions)) {
 
             override fun start(responseListener: Listener<RespT>, headers: Metadata) {
                 headers.put(authHeader, tokenAuthGrpcClientProperties.token)

@@ -20,6 +20,11 @@ package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 
 import com.google.protobuf.ByteString
 import io.grpc.testing.GrpcServerRule
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
@@ -32,14 +37,20 @@ import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
-import org.onap.ccsdk.cds.controllerblueprints.management.api.*
+import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintDownloadInput
+import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintManagementServiceGrpc
+import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintRemoveInput
+import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintUploadInput
+import org.onap.ccsdk.cds.controllerblueprints.management.api.DownloadAction
+import org.onap.ccsdk.cds.controllerblueprints.management.api.FileChunk
+import org.onap.ccsdk.cds.controllerblueprints.management.api.RemoveAction
+import org.onap.ccsdk.cds.controllerblueprints.management.api.UploadAction
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.*
 
 @RunWith(SpringRunner::class)
 @EnableAutoConfiguration
@@ -76,7 +87,7 @@ class BluePrintManagementGRPCHandlerTest {
 
         assertEquals(200, output.status.code)
         assertTrue(output.status.message.contentEquals(BluePrintConstants.STATUS_SUCCESS),
-                "failed to get success status")
+            "failed to get success status")
         assertEquals(id, output.commonHeader.requestId)
 
         val downloadId = "123_download"
@@ -85,7 +96,7 @@ class BluePrintManagementGRPCHandlerTest {
         val downloadOutput = blockingStub.downloadBlueprint(downloadReq)
         assertEquals(200, downloadOutput.status.code)
         assertTrue(downloadOutput.status.message.contentEquals(BluePrintConstants.STATUS_SUCCESS),
-                "failed to get success status")
+            "failed to get success status")
         assertNotNull(downloadOutput.fileChunk?.chunk, "failed to get cba file chunks")
         assertEquals(downloadId, downloadOutput.commonHeader.requestId)
     }
@@ -99,7 +110,7 @@ class BluePrintManagementGRPCHandlerTest {
         var output = blockingStub.uploadBlueprint(req)
         assertEquals(200, output.status.code)
         assertTrue(output.status.message.contentEquals(BluePrintConstants.STATUS_SUCCESS),
-                "failed to get success status")
+            "failed to get success status")
         assertEquals(id, output.commonHeader.requestId)
 
         val removeReq = createRemoveInputRequest(id)
@@ -128,65 +139,64 @@ class BluePrintManagementGRPCHandlerTest {
         }
     }
 
-
     private fun createUploadInputRequest(id: String, action: String): BluePrintUploadInput {
         val file = normalizedFile("./src/test/resources/test-cba.zip")
         assertTrue(file.exists(), "couldnt get file ${file.absolutePath}")
 
         val commonHeader = CommonHeader
-                .newBuilder()
-                .setTimestamp("2012-04-23T18:25:43.511Z")
-                .setOriginatorId("System")
-                .setRequestId(id)
-                .setSubRequestId("1234-56").build()
+            .newBuilder()
+            .setTimestamp("2012-04-23T18:25:43.511Z")
+            .setOriginatorId("System")
+            .setRequestId(id)
+            .setSubRequestId("1234-56").build()
 
         val actionIdentifier = ActionIdentifiers.newBuilder()
-                .setActionName(action)
-                .setBlueprintName("sample")
-                .setBlueprintVersion("1.0.0")
-                .build()
+            .setActionName(action)
+            .setBlueprintName("sample")
+            .setBlueprintVersion("1.0.0")
+            .build()
 
         val fileChunk = FileChunk.newBuilder().setChunk(ByteString.copyFrom(file.inputStream().readBytes()))
-                .build()
+            .build()
 
         return BluePrintUploadInput.newBuilder()
-                .setCommonHeader(commonHeader)
-                .setActionIdentifiers(actionIdentifier)
-                .setFileChunk(fileChunk)
-                .build()
+            .setCommonHeader(commonHeader)
+            .setActionIdentifiers(actionIdentifier)
+            .setFileChunk(fileChunk)
+            .build()
     }
 
     private fun createDownloadInputRequest(id: String, action: String): BluePrintDownloadInput {
         val commonHeader = CommonHeader
-                .newBuilder()
-                .setTimestamp("2012-04-23T18:25:43.511Z")
-                .setOriginatorId("System")
-                .setRequestId(id)
-                .setSubRequestId("1234-56").build()
+            .newBuilder()
+            .setTimestamp("2012-04-23T18:25:43.511Z")
+            .setOriginatorId("System")
+            .setRequestId(id)
+            .setSubRequestId("1234-56").build()
 
         return BluePrintDownloadInput.newBuilder()
-                .setCommonHeader(commonHeader)
-                .setActionIdentifiers(ActionIdentifiers.newBuilder()
-                        .setBlueprintName("baseconfiguration")
-                        .setBlueprintVersion("1.0.0")
-                        .setActionName(action).build())
-                .build()
+            .setCommonHeader(commonHeader)
+            .setActionIdentifiers(ActionIdentifiers.newBuilder()
+                .setBlueprintName("baseconfiguration")
+                .setBlueprintVersion("1.0.0")
+                .setActionName(action).build())
+            .build()
     }
 
     private fun createRemoveInputRequest(id: String): BluePrintRemoveInput {
         val commonHeader = CommonHeader
-                .newBuilder()
-                .setTimestamp("2012-04-23T18:25:43.511Z")
-                .setOriginatorId("System")
-                .setRequestId(id)
-                .setSubRequestId("1234-56").build()
+            .newBuilder()
+            .setTimestamp("2012-04-23T18:25:43.511Z")
+            .setOriginatorId("System")
+            .setRequestId(id)
+            .setSubRequestId("1234-56").build()
 
         return BluePrintRemoveInput.newBuilder()
-                .setCommonHeader(commonHeader)
-                .setActionIdentifiers(ActionIdentifiers.newBuilder()
-                        .setBlueprintName("sample")
-                        .setBlueprintVersion("1.0.0")
-                        .setActionName(RemoveAction.DEFAULT.toString()).build())
-                .build()
+            .setCommonHeader(commonHeader)
+            .setActionIdentifiers(ActionIdentifiers.newBuilder()
+                .setBlueprintName("sample")
+                .setBlueprintVersion("1.0.0")
+                .setActionName(RemoveAction.DEFAULT.toString()).build())
+            .build()
     }
 }

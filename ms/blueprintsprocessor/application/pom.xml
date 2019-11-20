@@ -84,7 +84,7 @@
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
             <artifactId>configs-api</artifactId>
         </dependency>
-      <dependency>
+        <dependency>
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
             <artifactId>health-api</artifactId>
             <version>0.7.0-SNAPSHOT</version>

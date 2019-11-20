@@ -16,21 +16,20 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api
 
-
-import org.junit.Test
 import kotlin.test.assertEquals
+import org.junit.Test
 
 class DeviceInfoTest {
     @Test
     fun testToString() {
 
-       val di: DeviceInfo = DeviceInfo().apply {
-           username = "username"
-           password = "password"
-           ipAddress = "localhost"
-           port = 2224
-           connectTimeout = 10
-       }
+        val di: DeviceInfo = DeviceInfo().apply {
+            username = "username"
+            password = "password"
+            ipAddress = "localhost"
+            port = 2224
+            connectTimeout = 10
+        }
         assertEquals("localhost:2224", di.toString())
     }
 }

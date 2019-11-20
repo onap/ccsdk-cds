@@ -16,14 +16,14 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core
 
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.slf4j.MDC
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class MDCContextTest {
     val log = logger(MDCContextTest::class)
@@ -46,7 +46,7 @@ class MDCContextTest {
             }
             launch(MDCContext()) {
                 assertEquals("12345", MDC.get(BluePrintConstants.ONAP_REQUEST_ID),
-                        "couldn't get request id")
+                    "couldn't get request id")
 
                 MDC.put("client_id", "client-1")
                 assertEquals("client-1", MDC.get("client_id"), "couldn't get client id")

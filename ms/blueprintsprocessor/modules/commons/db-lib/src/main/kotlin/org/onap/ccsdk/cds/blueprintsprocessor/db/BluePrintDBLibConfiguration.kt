@@ -17,7 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.db
 
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
-import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.BluePrintDBLibPropertySevice
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.BluePrintDBLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.PrimaryDBLibGenericService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -31,32 +31,31 @@ open class BluePrintDBLibConfiguration(private var bluePrintPropertiesService: B
     @Bean("primary-database-properties")
     open fun getPrimaryProperties(): PrimaryDataSourceProperties {
         return bluePrintPropertiesService.propertyBeanType(DBLibConstants.PREFIX_DB,
-                PrimaryDataSourceProperties::class.java)
+            PrimaryDataSourceProperties::class.java)
     }
 }
 
 /**
  * Exposed Dependency Service by this SSH Lib Module
  */
-fun BluePrintDependencyService.dbLibPropertyService(): BluePrintDBLibPropertySevice =
-        instance(BluePrintDBLibPropertySevice::class)
+fun BluePrintDependencyService.dbLibPropertyService(): BluePrintDBLibPropertyService =
+    instance(BluePrintDBLibPropertyService::class)
 
 fun BluePrintDependencyService.primaryDBLibGenericService(): BluePrintDBLibGenericService =
-        instance(PrimaryDBLibGenericService::class)
-
+    instance(PrimaryDBLibGenericService::class)
 
 class DBLibConstants {
     companion object {
         const val PREFIX_DB: String = "blueprintsprocessor.db"
 
-        //list of database
+        // list of database
         const val MARIA_DB: String = "maria-db"
         const val PRIMARY_DB: String = "processor-db"
         const val MYSQL_DB: String = "mysql-db"
         const val ORACLE_DB: String = "oracle-db"
         const val POSTGRES_DB: String = "postgres-db"
 
-        //List of database drivers
+        // List of database drivers
         const val DRIVER_MARIA_DB = "org.mariadb.jdbc.Driver"
         const val DRIVER_MYSQL_DB = "com.mysql.jdbc.Driver"
         const val DRIVER_ORACLE_DB = "oracle.jdbc.driver.OracleDriver"

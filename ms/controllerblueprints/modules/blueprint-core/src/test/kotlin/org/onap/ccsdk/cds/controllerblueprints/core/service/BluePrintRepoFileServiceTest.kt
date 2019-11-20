@@ -17,9 +17,9 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
+import kotlin.test.assertNotNull
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import kotlin.test.assertNotNull
 
 /**
  * BluePrintRepoFileServiceTest

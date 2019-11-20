@@ -16,6 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.topology
 
+import java.nio.charset.Charset
 import org.apache.kafka.common.serialization.Deserializer
 import org.apache.kafka.common.serialization.Serde
 import org.apache.kafka.common.serialization.Serializer
@@ -23,7 +24,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.d
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-import java.nio.charset.Charset
 
 open class MessagePrioritizationSerde : Serde<MessagePrioritization> {
 
@@ -37,7 +37,7 @@ open class MessagePrioritizationSerde : Serde<MessagePrioritization> {
         return object : Deserializer<MessagePrioritization> {
             override fun deserialize(topic: String, data: ByteArray): MessagePrioritization {
                 return JacksonUtils.readValue(String(data), MessagePrioritization::class.java)
-                        ?: throw BluePrintProcessorException("failed to convert")
+                    ?: throw BluePrintProcessorException("failed to convert")
             }
 
             override fun configure(configs: MutableMap<String, *>?, isKey: Boolean) {

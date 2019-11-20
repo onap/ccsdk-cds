@@ -18,13 +18,16 @@
  * ============LICENSE_END=========================================================
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts;
+package org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
 import io.mockk.every
 import io.mockk.mockk
+import kotlin.test.BeforeTest
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -46,9 +49,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.BeforeTest
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 /**
  * Unit test cases for abstract component function.
@@ -153,13 +153,12 @@ class AbstractComponentFunctionTest {
 
         val operationInputs = hashMapOf<String, JsonNode>()
         operationInputs[BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE] =
-                "activate-restconf".asJsonPrimitive()
+            "activate-restconf".asJsonPrimitive()
         operationInputs[BluePrintConstants.PROPERTY_CURRENT_INTERFACE] =
-                "interfaceName".asJsonPrimitive()
+            "interfaceName".asJsonPrimitive()
         operationInputs[BluePrintConstants.PROPERTY_CURRENT_OPERATION] =
-                "operationName".asJsonPrimitive()
+            "operationName".asJsonPrimitive()
         operationInputs["dynamic-properties"] = rootNode
-
 
         val stepInputData = StepData().apply {
             name = "activate-restconf"
@@ -178,13 +177,13 @@ class AbstractComponentFunctionTest {
 
         every {
             bluePrintRuntime.resolveNodeTemplateInterfaceOperationInputs(
-                    "activate-restconf", "interfaceName", "operationName")
+                "activate-restconf", "interfaceName", "operationName")
         } returns operationInputs
 
         val operationOutputs = hashMapOf<String, JsonNode>()
         every {
             bluePrintRuntime.resolveNodeTemplateInterfaceOperationOutputs(
-                    "activate-restconf", "interfaceName", "operationName")
+                "activate-restconf", "interfaceName", "operationName")
         } returns operationOutputs
         every { bluePrintRuntime.bluePrintContext() } returns blueprintContext
 
@@ -196,6 +195,4 @@ class AbstractComponentFunctionTest {
         val componentScriptExecutor = BluePrintTypes.nodeTypeComponentScriptExecutor()
         assertNotNull(componentScriptExecutor.interfaces, "failed to get interface operations")
     }
-
 }
-

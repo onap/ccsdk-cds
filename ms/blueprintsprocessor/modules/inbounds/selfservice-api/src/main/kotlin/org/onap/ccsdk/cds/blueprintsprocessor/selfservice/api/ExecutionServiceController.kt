@@ -20,6 +20,8 @@ package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
+import java.util.concurrent.Phaser
+import javax.annotation.PreDestroy
 import kotlinx.coroutines.Dispatchers
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ACTION_MODE_ASYNC
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
@@ -32,16 +34,19 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Mono
-import java.util.concurrent.Phaser
-import javax.annotation.PreDestroy
 
 @RestController
 @RequestMapping("/api/v1/execution-service")
 @Api(value = "/api/v1/execution-service",
-        description = "Interaction with CBA.")
+    description = "Interaction with CBA.")
 open class ExecutionServiceController {
+
     val log = logger(ExecutionServiceController::class)
 
     private val ph = Phaser(1)
@@ -50,8 +55,8 @@ open class ExecutionServiceController {
     lateinit var executionServiceHandler: ExecutionServiceHandler
 
     @RequestMapping(path = ["/health-check"],
-            method = [RequestMethod.GET],
-            produces = [MediaType.APPLICATION_JSON_VALUE])
+        method = [RequestMethod.GET],
+        produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     @ApiOperation(value = "Health Check", hidden = true)
     fun executionServiceControllerHealthCheck() = monoMdc(Dispatchers.IO) {
@@ -60,14 +65,16 @@ open class ExecutionServiceController {
 
     @RequestMapping(path = ["/process"], method = [RequestMethod.POST], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ApiOperation(value = "Execute a CBA workflow (action)",
-            notes = "Execute the appropriate CBA's action based on the ExecutionServiceInput object passed as input.",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            response = ExecutionServiceOutput::class)
+        notes = "Execute the appropriate CBA's action based on the ExecutionServiceInput object passed as input.",
+        produces = MediaType.APPLICATION_JSON_VALUE,
+        response = ExecutionServiceOutput::class)
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
-    fun process(@ApiParam(value = "ExecutionServiceInput payload.", required = true)
-                @RequestBody executionServiceInput: ExecutionServiceInput)
-            : Mono<ResponseEntity<ExecutionServiceOutput>> = monoMdc(Dispatchers.IO) {
+    fun process(
+        @ApiParam(value = "ExecutionServiceInput payload.", required = true)
+        @RequestBody executionServiceInput: ExecutionServiceInput
+    ):
+            Mono<ResponseEntity<ExecutionServiceOutput>> = monoMdc(Dispatchers.IO) {
 
         if (executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC) {
             throw IllegalStateException("Can't process async request through the REST endpoint. Use gRPC for async processing.")
@@ -87,4 +94,3 @@ open class ExecutionServiceController {
         log.info("Done waiting in $name")
     }
 }
-

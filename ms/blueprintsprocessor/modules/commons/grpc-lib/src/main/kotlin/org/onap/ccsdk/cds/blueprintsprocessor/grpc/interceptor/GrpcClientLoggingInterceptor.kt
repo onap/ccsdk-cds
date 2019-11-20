@@ -16,21 +16,30 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.grpc.interceptor
 
-import io.grpc.*
+import io.grpc.CallOptions
+import io.grpc.Channel
+import io.grpc.ClientCall
+import io.grpc.ClientInterceptor
+import io.grpc.ForwardingClientCall
+import io.grpc.ForwardingClientCallListener
+import io.grpc.Metadata
+import io.grpc.MethodDescriptor
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.GrpcLoggerService
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
-
 
 class GrpcClientLoggingInterceptor : ClientInterceptor {
     val log = logger(GrpcClientLoggingInterceptor::class)
 
     val loggingService = GrpcLoggerService()
 
-    override fun <ReqT, RespT> interceptCall(method: MethodDescriptor<ReqT, RespT>,
-                                             callOptions: CallOptions, channel: Channel): ClientCall<ReqT, RespT> {
+    override fun <ReqT, RespT> interceptCall(
+        method: MethodDescriptor<ReqT, RespT>,
+        callOptions: CallOptions,
+        channel: Channel
+    ): ClientCall<ReqT, RespT> {
 
         return object : ForwardingClientCall
-        .SimpleForwardingClientCall<ReqT, RespT>(channel.newCall(method, callOptions)) {
+                        .SimpleForwardingClientCall<ReqT, RespT>(channel.newCall(method, callOptions)) {
 
             override fun start(responseListener: Listener<RespT>, headers: Metadata) {
                 val listener = object : ForwardingClientCallListener.SimpleForwardingClientCallListener<RespT>(responseListener) {
@@ -42,6 +51,5 @@ class GrpcClientLoggingInterceptor : ClientInterceptor {
                 super.start(listener, headers)
             }
         }
-
     }
 }

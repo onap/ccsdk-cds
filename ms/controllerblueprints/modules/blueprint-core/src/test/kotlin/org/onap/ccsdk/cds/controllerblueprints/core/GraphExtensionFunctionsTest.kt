@@ -16,9 +16,9 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core
 
+import kotlin.test.assertNotNull
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.data.EdgeLabel
-import kotlin.test.assertNotNull
 
 class GraphExtensionFunctionsTest {
 

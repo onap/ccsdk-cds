@@ -24,14 +24,13 @@ import org.springframework.web.server.WebFilterChain
 import reactor.core.publisher.Mono
 import reactor.util.context.Context
 
-
 open class RestServerLoggingWebFilter : WebFilter {
     override fun filter(serverWebExchange: ServerWebExchange, webFilterChain: WebFilterChain): Mono<Void> {
 
         val loggingService = RestLoggerService()
         loggingService.entering(serverWebExchange.request)
         val filterChain = webFilterChain.filter(serverWebExchange).subscriberContext(
-                Context.of(MDCContext, MDCContext()))
+            Context.of(MDCContext, MDCContext()))
         loggingService.exiting(serverWebExchange.request, serverWebExchange.response)
         return filterChain
     }

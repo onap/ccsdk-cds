@@ -19,7 +19,14 @@ package org.onap.ccsdk.cds.blueprintsprocessor.grpc.service
 
 import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
-import org.onap.ccsdk.cds.blueprintsprocessor.grpc.*
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.BasicAuthGrpcClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.GRPCLibConstants
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.GrpcClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.GrpcServerProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.TLSAuthGrpcClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.TLSAuthGrpcServerProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.TokenAuthGrpcClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.TokenAuthGrpcServerProperties
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.returnNullIfMissing
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -39,7 +46,6 @@ open class BluePrintGrpcLibPropertyService(private var bluePrintPropertiesServic
         return blueprintGrpcServerService(grpcServerProperties)
     }
 
-
     /** GRPC Server Lib Property Service */
     fun grpcServerProperties(jsonNode: JsonNode): GrpcServerProperties {
         return when (val type = jsonNode.get("type").textValue()) {
@@ -57,7 +63,7 @@ open class BluePrintGrpcLibPropertyService(private var bluePrintPropertiesServic
 
     fun grpcServerProperties(prefix: String): GrpcServerProperties {
         val type = bluePrintPropertiesService.propertyBeanType(
-                "$prefix.type", String::class.java)
+            "$prefix.type", String::class.java)
         return when (type) {
             GRPCLibConstants.TYPE_TOKEN_AUTH -> {
                 tokenAuthGrpcServerProperties(prefix)
@@ -79,8 +85,8 @@ open class BluePrintGrpcLibPropertyService(private var bluePrintPropertiesServic
         return bluePrintPropertiesService.propertyBeanType(prefix, TLSAuthGrpcServerProperties::class.java)
     }
 
-    private fun blueprintGrpcServerService(grpcServerProperties: GrpcServerProperties)
-            : BluePrintGrpcServerService {
+    private fun blueprintGrpcServerService(grpcServerProperties: GrpcServerProperties):
+            BluePrintGrpcServerService {
         when (grpcServerProperties) {
             is TLSAuthGrpcServerProperties -> {
                 return TLSAuthGrpcServerService(grpcServerProperties)
@@ -90,7 +96,6 @@ open class BluePrintGrpcLibPropertyService(private var bluePrintPropertiesServic
             }
         }
     }
-
 
     /** GRPC Client Lib Property Service */
 
@@ -105,10 +110,9 @@ open class BluePrintGrpcLibPropertyService(private var bluePrintPropertiesServic
         return blueprintGrpcClientService(restClientProperties)
     }
 
-
     fun grpcClientProperties(jsonNode: JsonNode): GrpcClientProperties {
         val type = jsonNode.get("type").returnNullIfMissing()?.textValue()
-                ?: BluePrintProcessorException("missing type property")
+            ?: BluePrintProcessorException("missing type property")
         return when (type) {
             GRPCLibConstants.TYPE_TOKEN_AUTH -> {
                 JacksonUtils.readValue(jsonNode, TokenAuthGrpcClientProperties::class.java)!!
@@ -127,7 +131,7 @@ open class BluePrintGrpcLibPropertyService(private var bluePrintPropertiesServic
 
     fun grpcClientProperties(prefix: String): GrpcClientProperties {
         val type = bluePrintPropertiesService.propertyBeanType(
-                "$prefix.type", String::class.java)
+            "$prefix.type", String::class.java)
         return when (type) {
             GRPCLibConstants.TYPE_TOKEN_AUTH -> {
                 tokenAuthGrpcClientProperties(prefix)
@@ -140,7 +144,6 @@ open class BluePrintGrpcLibPropertyService(private var bluePrintPropertiesServic
             }
             else -> {
                 throw BluePrintProcessorException("Grpc type($type) not supported")
-
             }
         }
     }

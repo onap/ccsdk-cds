@@ -25,13 +25,14 @@ import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
 
 @Service
-open class BluePrintDatabaseLoadService(private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
-                                        private val modelTypeLoadService: ModelTypeLoadService,
-                                        private val resourceDictionaryLoadService: ResourceDictionaryLoadService,
-                                        private val bluePrintCatalogLoadService: BluePrintCatalogLoadService) {
+open class BluePrintDatabaseLoadService(
+    private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
+    private val modelTypeLoadService: ModelTypeLoadService,
+    private val resourceDictionaryLoadService: ResourceDictionaryLoadService,
+    private val bluePrintCatalogLoadService: BluePrintCatalogLoadService
+) {
 
     private val log = LoggerFactory.getLogger(BluePrintDatabaseLoadService::class.java)
-
 
     @EventListener(ApplicationReadyEvent::class)
     open fun init() = runBlocking {
@@ -42,7 +43,6 @@ open class BluePrintDatabaseLoadService(private val bluePrintLoadConfiguration: 
         } else {
             log.info("Initial data load is disabled")
         }
-
     }
 
     open suspend fun initModelTypes() {

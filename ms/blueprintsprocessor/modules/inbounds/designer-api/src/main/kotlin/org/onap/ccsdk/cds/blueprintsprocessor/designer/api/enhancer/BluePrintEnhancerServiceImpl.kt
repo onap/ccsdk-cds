@@ -17,6 +17,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.enhancer
 
+import java.util.UUID
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintEnhancerService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
@@ -26,11 +27,12 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.utils.ResourceDictionaryUtils
 import org.springframework.stereotype.Service
-import java.util.*
 
 @Service
-open class BluePrintEnhancerServiceImpl(private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService,
-                                        private val resourceDefinitionEnhancerService: ResourceDefinitionEnhancerService) : BluePrintEnhancerService {
+open class BluePrintEnhancerServiceImpl(
+    private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService,
+    private val resourceDefinitionEnhancerService: ResourceDefinitionEnhancerService
+) : BluePrintEnhancerService {
 
     private val log = logger(BluePrintEnhancerServiceImpl::class)
 
@@ -48,16 +50,16 @@ open class BluePrintEnhancerServiceImpl(private val bluePrintTypeEnhancerService
 
         log.info("Enhancing blueprint($basePath)")
         val blueprintRuntimeService = BluePrintMetadataUtils
-                .getBaseEnhancementBluePrintRuntime(UUID.randomUUID().toString(), basePath)
+            .getBaseEnhancementBluePrintRuntime(UUID.randomUUID().toString(), basePath)
 
         try {
 
             bluePrintTypeEnhancerService.enhanceServiceTemplate(blueprintRuntimeService, "service_template",
-                    blueprintRuntimeService.bluePrintContext().serviceTemplate)
+                blueprintRuntimeService.bluePrintContext().serviceTemplate)
 
             log.info("##### Enhancing blueprint Resource Definitions")
             val resourceDefinitions = resourceDefinitionEnhancerService.enhance(bluePrintTypeEnhancerService,
-                    blueprintRuntimeService)
+                blueprintRuntimeService)
 
             // Write the Enhanced Blueprint Definitions
             BluePrintFileUtils.writeEnhancedBluePrint(blueprintRuntimeService.bluePrintContext())
@@ -68,12 +70,9 @@ open class BluePrintEnhancerServiceImpl(private val bluePrintTypeEnhancerService
             if (blueprintRuntimeService.getBluePrintError().errors.isNotEmpty()) {
                 throw BluePrintException(blueprintRuntimeService.getBluePrintError().errors.toString())
             }
-
         } catch (e: Exception) {
             throw e
         }
         return blueprintRuntimeService.bluePrintContext()
     }
-
 }
-

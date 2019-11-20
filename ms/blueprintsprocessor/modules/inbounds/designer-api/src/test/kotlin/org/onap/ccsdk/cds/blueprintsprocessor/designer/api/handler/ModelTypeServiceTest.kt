@@ -26,9 +26,9 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.DesignerApiTestConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ModelType
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ModelType
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.annotation.Commit
@@ -36,13 +36,13 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 
-
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [DesignerApiTestConfiguration::class,
     BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, BluePrintDBLibConfiguration::class])
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class ModelTypeServiceTest {
+
     @Autowired
     private val modelTypeHandler: ModelTypeHandler? = null
 
@@ -65,8 +65,8 @@ class ModelTypeServiceTest {
             modelType.definition = JacksonUtils.jsonNode(content)
             modelType.modelName = modelName
             modelType.version = "1.0.0"
-            modelType.tags = ("test-datatype ," + BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT + ","
-                    + BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)
+            modelType.tags = ("test-datatype ," + BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT + "," +
+                    BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)
             modelType.updatedBy = "xxxxxx@xxx.com"
             modelType = modelTypeHandler!!.saveModel(modelType)
             log.info("Saved Mode {}", modelType.toString())
@@ -75,7 +75,7 @@ class ModelTypeServiceTest {
 
             val dbModelType = modelTypeHandler.getModelTypeByName(modelType.modelName)
             Assert.assertNotNull("Failed to query ResourceMapping for ID (" + dbModelType!!.modelName + ")",
-                    dbModelType)
+                dbModelType)
 
             // Model Update
             modelType.updatedBy = "bs2796@xxx.com"
@@ -83,7 +83,6 @@ class ModelTypeServiceTest {
             Assert.assertNotNull("Failed to get Saved ModelType", modelType)
             Assert.assertEquals("Failed to get Saved getUpdatedBy ", "bs2796@xxx.com", modelType.updatedBy)
         }
-
     }
 
     @Test
@@ -98,7 +97,6 @@ class ModelTypeServiceTest {
             Assert.assertNotNull("Failed to search ResourceMapping by tags", dbModelTypes)
             Assert.assertTrue("Failed to search ResourceMapping by tags count", dbModelTypes.size > 0)
         }
-
     }
 
     @Test
@@ -118,7 +116,6 @@ class ModelTypeServiceTest {
             Assert.assertNotNull("Failed to find getModelTypeByDerivedFrom by tags", dbModelTypeByDerivedFroms)
             Assert.assertTrue("Failed to find getModelTypeByDerivedFrom by count", dbModelTypeByDerivedFroms.size > 0)
         }
-
     }
 
     @Test
@@ -126,7 +123,7 @@ class ModelTypeServiceTest {
     fun test04DeleteModelType() {
         runBlocking {
             log.info(
-                    "************************ test03DeleteModelType  ***********************")
+                "************************ test03DeleteModelType  ***********************")
             val dbResourceMapping = modelTypeHandler!!.getModelTypeByName(modelName)
             Assert.assertNotNull("Failed to get response for api call getModelByName ", dbResourceMapping)
             Assert.assertNotNull("Failed to get Id for api call  getModelByName ", dbResourceMapping!!.modelName)
@@ -134,5 +131,4 @@ class ModelTypeServiceTest {
             modelTypeHandler.deleteByModelName(dbResourceMapping.modelName)
         }
     }
-
 }

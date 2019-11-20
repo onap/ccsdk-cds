@@ -48,6 +48,7 @@ interface ComponentNode {
  * @author Brinda Santh
  */
 open class ComponentNodeFactory : ApplicationContextAware {
+
     private val log = LoggerFactory.getLogger(ComponentNodeFactory::class.java)
 
     var componentNodes: MutableMap<String, ComponentNode> = hashMapOf()

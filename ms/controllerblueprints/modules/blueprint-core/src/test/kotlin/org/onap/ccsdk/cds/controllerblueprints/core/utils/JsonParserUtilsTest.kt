@@ -16,13 +16,13 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonPathParse
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonPaths
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 class JsonParserUtilsTest {
 

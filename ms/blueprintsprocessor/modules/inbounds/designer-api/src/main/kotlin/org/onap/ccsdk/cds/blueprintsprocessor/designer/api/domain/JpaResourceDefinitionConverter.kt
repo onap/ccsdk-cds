@@ -16,17 +16,17 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain
 
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
-
 import javax.persistence.AttributeConverter
 import javax.persistence.Converter
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 
 /**
  * @author Brinda Santh
  */
 @Converter
 class JpaResourceDefinitionConverter : AttributeConverter<ResourceDefinition, String> {
+
     override fun convertToDatabaseColumn(resourceDefinition: ResourceDefinition): String {
         return JacksonUtils.getJson(resourceDefinition)
     }

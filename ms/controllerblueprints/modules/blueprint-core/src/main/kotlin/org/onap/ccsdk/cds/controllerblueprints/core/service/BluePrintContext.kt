@@ -21,7 +21,24 @@ package org.onap.ccsdk.cds.controllerblueprints.core.service
 import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.cds.controllerblueprints.core.data.*
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.CapabilityAssignment
+import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.Implementation
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ImportDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.InterfaceAssignment
+import org.onap.ccsdk.cds.controllerblueprints.core.data.InterfaceDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.OperationAssignment
+import org.onap.ccsdk.cds.controllerblueprints.core.data.OperationDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.PolicyType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.RequirementAssignment
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ServiceTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.data.Step
+import org.onap.ccsdk.cds.controllerblueprints.core.data.Workflow
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 
@@ -67,46 +84,46 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
     }
 
     fun name(): String = metadata?.get(BluePrintConstants.METADATA_TEMPLATE_NAME)
-            ?: throw BluePrintException("could't get template name from meta data")
+        ?: throw BluePrintException("could't get template name from meta data")
 
     fun version(): String = metadata?.get(BluePrintConstants.METADATA_TEMPLATE_VERSION)
-            ?: throw BluePrintException("could't get template version from meta data")
+        ?: throw BluePrintException("could't get template version from meta data")
 
     fun author(): String = metadata?.get(BluePrintConstants.METADATA_TEMPLATE_AUTHOR)
-            ?: throw BluePrintException("could't get template author from meta data")
+        ?: throw BluePrintException("could't get template author from meta data")
 
     // Workflow
     fun workflows(): MutableMap<String, Workflow>? = serviceTemplate.topologyTemplate?.workflows
 
     fun workflowByName(workFlowName: String): Workflow = workflows()?.get(workFlowName)
-            ?: throw BluePrintException("could't get workflow($workFlowName)")
+        ?: throw BluePrintException("could't get workflow($workFlowName)")
 
     fun workflowInputs(workFlowName: String) = workflowByName(workFlowName).inputs
 
     fun workflowStepByName(workFlowName: String, stepName: String): Step {
         return workflowByName(workFlowName).steps?.get(stepName)
-                ?: throw BluePrintException("could't get step($stepName) for workflow($workFlowName)")
+            ?: throw BluePrintException("could't get step($stepName) for workflow($workFlowName)")
     }
 
     fun workflowStepNodeTemplate(workFlowName: String, stepName: String): String {
         return workflowStepByName(workFlowName, stepName).target
-                ?: throw BluePrintException("could't get node template name for workflow($workFlowName)'s step($stepName)")
+            ?: throw BluePrintException("could't get node template name for workflow($workFlowName)'s step($stepName)")
     }
 
     fun workflowFirstStepNodeTemplate(workFlowName: String): String {
         val firstStepName = workflowByName(workFlowName).steps?.keys?.first()
-                ?: throw BluePrintException("could't get first step for workflow($workFlowName)")
+            ?: throw BluePrintException("could't get first step for workflow($workFlowName)")
         return workflowStepNodeTemplate(workFlowName, firstStepName)
     }
 
     fun workflowStepFirstCallOperation(workFlowName: String, stepName: String): String {
         return workflowStepByName(workFlowName, stepName).activities?.filter { it.callOperation != null }?.single()?.callOperation
-                ?: throw BluePrintException("couldn't get first callOperation for WorkFlow($workFlowName) ")
+            ?: throw BluePrintException("couldn't get first callOperation for WorkFlow($workFlowName) ")
     }
 
     // DSL
     fun dslPropertiesByName(name: String): JsonNode = dslDefinitions()?.get(name)
-            ?: throw BluePrintException("couldn't get policy type for the dsl($name)")
+        ?: throw BluePrintException("couldn't get policy type for the dsl($name)")
 
     // Data Type
     fun dataTypeByName(name: String): DataType? = dataTypes()?.get(name)
@@ -118,7 +135,7 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
     fun policyTypes(): MutableMap<String, PolicyType>? = serviceTemplate.policyTypes
 
     fun policyTypeByName(policyName: String) = policyTypes()?.get(policyName)
-            ?: throw BluePrintException("could't get policy type for the name($policyName)")
+        ?: throw BluePrintException("could't get policy type for the name($policyName)")
 
     fun policyTypesDerivedFrom(name: String): MutableMap<String, PolicyType>? {
         return policyTypes()?.filterValues { policyType -> policyType.derivedFrom == name }?.toMutableMap()
@@ -138,8 +155,8 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
     fun nodeTypes(): MutableMap<String, NodeType>? = serviceTemplate.nodeTypes
 
     fun nodeTypeByName(name: String): NodeType =
-            nodeTypes()?.get(name)
-                    ?: throw BluePrintException("could't get node type for the name($name)")
+        nodeTypes()?.get(name)
+            ?: throw BluePrintException("could't get node type for the name($name)")
 
     fun nodeTypeDerivedFrom(name: String): MutableMap<String, NodeType>? {
         return nodeTypes()?.filterValues { nodeType -> nodeType.derivedFrom == name }?.toMutableMap()
@@ -147,24 +164,32 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
 
     fun nodeTypeInterface(nodeTypeName: String, interfaceName: String): InterfaceDefinition {
         return nodeTypeByName(nodeTypeName).interfaces?.get(interfaceName)
-                ?: throw BluePrintException("could't get node type($nodeTypeName)'s interface definition($interfaceName)")
+            ?: throw BluePrintException("could't get node type($nodeTypeName)'s interface definition($interfaceName)")
     }
 
     fun nodeTypeInterfaceOperation(nodeTypeName: String, interfaceName: String, operationName: String): OperationDefinition {
         return nodeTypeInterface(nodeTypeName, interfaceName).operations?.get(operationName)
-                ?: throw BluePrintException("could't get node type($nodeTypeName)'s interface definition($interfaceName) operation definition($operationName)")
+            ?: throw BluePrintException("could't get node type($nodeTypeName)'s interface definition($interfaceName) operation definition($operationName)")
     }
 
     fun interfaceNameForNodeType(nodeTypeName: String): String {
         return nodeTypeByName(nodeTypeName).interfaces?.keys?.first()
-                ?: throw BluePrintException("could't get NodeType($nodeTypeName)'s first InterfaceDefinition name")
+            ?: throw BluePrintException("could't get NodeType($nodeTypeName)'s first InterfaceDefinition name")
     }
 
-    fun nodeTypeInterfaceOperationInputs(nodeTypeName: String, interfaceName: String, operationName: String): MutableMap<String, PropertyDefinition>? {
+    fun nodeTypeInterfaceOperationInputs(
+        nodeTypeName: String,
+        interfaceName: String,
+        operationName: String
+    ): MutableMap<String, PropertyDefinition>? {
         return nodeTypeInterfaceOperation(nodeTypeName, interfaceName, operationName).inputs
     }
 
-    fun nodeTypeInterfaceOperationOutputs(nodeTypeName: String, interfaceName: String, operationName: String): MutableMap<String, PropertyDefinition>? {
+    fun nodeTypeInterfaceOperationOutputs(
+        nodeTypeName: String,
+        interfaceName: String,
+        operationName: String
+    ): MutableMap<String, PropertyDefinition>? {
         return nodeTypeInterfaceOperation(nodeTypeName, interfaceName, operationName).outputs
     }
 
@@ -172,7 +197,7 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
     fun nodeTemplates(): MutableMap<String, NodeTemplate>? = serviceTemplate.topologyTemplate?.nodeTemplates
 
     fun nodeTemplateByName(name: String): NodeTemplate =
-            nodeTemplates()?.get(name) ?: throw BluePrintException("could't get node template for the name($name)")
+        nodeTemplates()?.get(name) ?: throw BluePrintException("could't get node template for the name($name)")
 
     fun nodeTemplateForNodeType(name: String): MutableMap<String, NodeTemplate>? {
         return nodeTemplates()?.filterValues { nodeTemplate -> nodeTemplate.type == name }?.toMutableMap()
@@ -193,31 +218,31 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
 
     fun nodeTemplateArtifact(nodeTemplateName: String, artifactName: String): ArtifactDefinition {
         return nodeTemplateArtifacts(nodeTemplateName)?.get(artifactName)
-                ?: throw BluePrintException("could't get NodeTemplate($nodeTemplateName)'s ArtifactDefinition($artifactName)")
+            ?: throw BluePrintException("could't get NodeTemplate($nodeTemplateName)'s ArtifactDefinition($artifactName)")
     }
 
     fun nodeTemplateArtifactForArtifactType(nodeTemplateName: String, artifactType: String): ArtifactDefinition {
         return nodeTemplateArtifacts(nodeTemplateName)?.filter { it.value.type == artifactType }?.map { it.value }?.get(0)
-                ?: throw BluePrintException("could't get NodeTemplate($nodeTemplateName)'s Artifact Type($artifactType)")
+            ?: throw BluePrintException("could't get NodeTemplate($nodeTemplateName)'s Artifact Type($artifactType)")
     }
 
     fun nodeTemplateFirstInterface(nodeTemplateName: String): InterfaceAssignment {
         return nodeTemplateByName(nodeTemplateName).interfaces?.values?.first()
-                ?: throw BluePrintException("could't get NodeTemplate($nodeTemplateName)'s first InterfaceAssignment")
+            ?: throw BluePrintException("could't get NodeTemplate($nodeTemplateName)'s first InterfaceAssignment")
     }
 
     fun nodeTemplateFirstInterfaceName(nodeTemplateName: String): String {
         return nodeTemplateByName(nodeTemplateName).interfaces?.keys?.first()
-                ?: throw BluePrintException("could't get NodeTemplate($nodeTemplateName)'s first InterfaceAssignment name")
+            ?: throw BluePrintException("could't get NodeTemplate($nodeTemplateName)'s first InterfaceAssignment name")
     }
 
     fun nodeTemplateFirstInterfaceFirstOperationName(nodeTemplateName: String): String {
         return nodeTemplateFirstInterface(nodeTemplateName).operations?.keys?.first()
-                ?: throw BluePrintException("could't get NodeTemplate($nodeTemplateName)'s first InterfaceAssignment's first OperationAssignment name")
+            ?: throw BluePrintException("could't get NodeTemplate($nodeTemplateName)'s first InterfaceAssignment's first OperationAssignment name")
     }
 
-    fun nodeTemplateOperationImplementation(nodeTemplateName: String, interfaceName: String, operationName: String)
-            : Implementation? {
+    fun nodeTemplateOperationImplementation(nodeTemplateName: String, interfaceName: String, operationName: String):
+            Implementation? {
         return nodeTemplateInterfaceOperation(nodeTemplateName, interfaceName, operationName).implementation
     }
 
@@ -231,27 +256,27 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
 
     fun nodeTemplateInterface(nodeTemplateName: String, interfaceName: String): InterfaceAssignment {
         return nodeTemplateByName(nodeTemplateName).interfaces?.get(interfaceName)
-                ?: throw BluePrintException("could't get NodeTemplate($nodeTemplateName)'s InterfaceAssignment($interfaceName)")
+            ?: throw BluePrintException("could't get NodeTemplate($nodeTemplateName)'s InterfaceAssignment($interfaceName)")
     }
 
     fun nodeTemplateInterfaceOperation(nodeTemplateName: String, interfaceName: String, operationName: String): OperationAssignment {
         return nodeTemplateInterface(nodeTemplateName, interfaceName).operations?.get(operationName)
-                ?: throw BluePrintException("could't get NodeTemplate($nodeTemplateName)'s InterfaceAssignment($interfaceName) OperationAssignment($operationName)")
+            ?: throw BluePrintException("could't get NodeTemplate($nodeTemplateName)'s InterfaceAssignment($interfaceName) OperationAssignment($operationName)")
     }
 
     fun nodeTemplateCapability(nodeTemplateName: String, capabilityName: String): CapabilityAssignment {
         return nodeTemplateByName(nodeTemplateName).capabilities?.get(capabilityName)
-                ?: throw BluePrintException("could't get NodeTemplate($nodeTemplateName)'s CapabilityAssignment($capabilityName)")
+            ?: throw BluePrintException("could't get NodeTemplate($nodeTemplateName)'s CapabilityAssignment($capabilityName)")
     }
 
     fun nodeTemplateRequirement(nodeTemplateName: String, requirementName: String): RequirementAssignment {
         return nodeTemplateByName(nodeTemplateName).requirements?.get(requirementName)
-                ?: throw BluePrintException("could't get NodeTemplate($nodeTemplateName)'s first RequirementAssignment($requirementName)")
+            ?: throw BluePrintException("could't get NodeTemplate($nodeTemplateName)'s first RequirementAssignment($requirementName)")
     }
 
     fun nodeTemplateRequirementNode(nodeTemplateName: String, requirementName: String): NodeTemplate {
         val filteredNodeTemplateName: String = nodeTemplateByName(nodeTemplateName).requirements?.get(requirementName)?.node
-                ?: throw BluePrintException("could't NodeTemplate for NodeTemplate's($nodeTemplateName) requirement's ($requirementName) ")
+            ?: throw BluePrintException("could't NodeTemplate for NodeTemplate's($nodeTemplateName) requirement's ($requirementName) ")
         return nodeTemplateByName(filteredNodeTemplateName)
     }
 
@@ -268,5 +293,4 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
     fun nodeTypeChainedProperties(nodeTypeName: String): MutableMap<String, PropertyDefinition>? {
         return BluePrintChainedService(this).nodeTypeChainedProperties(nodeTypeName)
     }
-
 }

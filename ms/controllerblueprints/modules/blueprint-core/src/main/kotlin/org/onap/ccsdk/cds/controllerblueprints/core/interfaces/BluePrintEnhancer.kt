@@ -18,7 +18,15 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.interfaces
 
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.cds.controllerblueprints.core.data.*
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.AttributeDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.PolicyType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ServiceTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.data.TopologyTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.data.Workflow
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 
@@ -43,7 +51,6 @@ interface BluePrintPolicyTypeEnhancer : BluePrintEnhancer<PolicyType>
 interface BluePrintPropertyDefinitionEnhancer : BluePrintEnhancer<PropertyDefinition>
 
 interface BluePrintAttributeDefinitionEnhancer : BluePrintEnhancer<AttributeDefinition>
-
 
 interface BluePrintEnhancerService {
 
@@ -132,7 +139,12 @@ interface BluePrintTypeEnhancerService {
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun <T> doEnhancement(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, definition: Any, enhancers: List<BluePrintEnhancer<T>>) {
+    private fun <T> doEnhancement(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        name: String,
+        definition: Any,
+        enhancers: List<BluePrintEnhancer<T>>
+    ) {
         if (enhancers.isNotEmpty()) {
             enhancers.forEach {
                 it.enhance(bluePrintRuntimeService, name, definition as T)

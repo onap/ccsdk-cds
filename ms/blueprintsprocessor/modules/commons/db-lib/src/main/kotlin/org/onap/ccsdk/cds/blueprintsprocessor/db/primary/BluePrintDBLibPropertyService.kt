@@ -18,13 +18,18 @@ package org.onap.ccsdk.cds.blueprintsprocessor.db.primary
 
 import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
-import org.onap.ccsdk.cds.blueprintsprocessor.db.*
+import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibGenericService
+import org.onap.ccsdk.cds.blueprintsprocessor.db.DBDataSourceProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.db.DBLibConstants
+import org.onap.ccsdk.cds.blueprintsprocessor.db.MariaDataSourceProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.db.MySqlDataSourceProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.db.PrimaryDataSourceProperties
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.stereotype.Service
 
 @Service
-class BluePrintDBLibPropertySevice(private var bluePrintPropertiesService: BluePrintPropertiesService) {
+class BluePrintDBLibPropertyService(private var bluePrintPropertiesService: BluePrintPropertiesService) {
 
     fun JdbcTemplate(jsonNode: JsonNode): BluePrintDBLibGenericService {
         val dBConnetionProperties = dBDataSourceProperties(jsonNode)
@@ -101,5 +106,4 @@ class BluePrintDBLibPropertySevice(private var bluePrintPropertiesService: BlueP
     private fun primaryDBConnectionProperties(prefix: String): PrimaryDataSourceProperties {
         return bluePrintPropertiesService.propertyBeanType(prefix, PrimaryDataSourceProperties::class.java)
     }
-
 }

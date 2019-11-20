@@ -17,12 +17,16 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.core
 
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.*
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicInteger
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceResponse
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfException
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfRpcService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfSession
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.utils.NetconfMessageUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.utils.RpcStatus
 import org.slf4j.LoggerFactory
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicInteger
 
 class NetconfRpcServiceImpl(private var deviceInfo: DeviceInfo) : NetconfRpcService {
 
@@ -58,7 +62,7 @@ class NetconfRpcServiceImpl(private var deviceInfo: DeviceInfo) : NetconfRpcServ
 
     override fun invokeRpc(rpc: String): DeviceResponse {
         var output = DeviceResponse()
-        //Attempt to extract the message-id field from the <rpc call
+        // Attempt to extract the message-id field from the <rpc call
         val updatedMessageId = messageIdInteger.getAndIncrement().toString()
         val origMessageId = NetconfMessageUtils.getMsgId(rpc)
         log.info("$deviceInfo: invokeRpc: updating rpc original message-id:($origMessageId) to messageId($updatedMessageId)")
@@ -197,8 +201,11 @@ class NetconfRpcServiceImpl(private var deviceInfo: DeviceInfo) : NetconfRpcServ
         return output
     }
 
-    override fun editConfig(messageContent: String, configTarget: String,
-                            editDefaultOperation: String): DeviceResponse {
+    override fun editConfig(
+        messageContent: String,
+        configTarget: String,
+        editDefaultOperation: String
+    ): DeviceResponse {
         var response = DeviceResponse()
         val messageId = messageIdInteger.getAndIncrement().toString()
         log.info("$deviceInfo: editConfig: messageId($messageId)")
@@ -252,7 +259,7 @@ class NetconfRpcServiceImpl(private var deviceInfo: DeviceInfo) : NetconfRpcServ
         response.requestMessage = request
 
         val rpcResponse = netconfSession.asyncRpc(request, messageId).get(responseTimeout.toLong(), TimeUnit.SECONDS)
-        //TODO catch TimeoutException and ExecutionException
+        // TODO catch TimeoutException and ExecutionException
         if (!NetconfMessageUtils.checkReply(rpcResponse)) {
             log.error("RPC response didn't pass validation... $rpcResponse")
             throw NetconfException(rpcResponse)

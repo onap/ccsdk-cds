@@ -17,10 +17,9 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-
 import javax.persistence.AttributeConverter
 import javax.persistence.Converter
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 
 /**
  * @author Brinda Santh

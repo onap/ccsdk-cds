@@ -15,6 +15,7 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db
 
+import java.util.UUID
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.apache.logging.log4j.util.Strings
@@ -23,7 +24,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.slf4j.LoggerFactory
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
-import java.util.*
 
 /**
  * ResourceConfigSnapshot managing service.
@@ -36,42 +36,49 @@ class ResourceConfigSnapshotService(private val repository: ResourceConfigSnapsh
 
     private val log = LoggerFactory.getLogger(ResourceConfigSnapshotService::class.toString())
 
-    suspend fun findByResourceIdAndResourceTypeAndStatus(resourceId: String, resourceType: String,
-                                                         status : ResourceConfigSnapshot.Status = RUNNING): String =
-            withContext(Dispatchers.IO) {
-                repository.findByResourceIdAndResourceTypeAndStatus(resourceId, resourceType, status)
-                        ?.config_snapshot ?: Strings.EMPTY
-            }
+    suspend fun findByResourceIdAndResourceTypeAndStatus(
+        resourceId: String,
+        resourceType: String,
+        status: ResourceConfigSnapshot.Status = RUNNING
+    ): String =
+        withContext(Dispatchers.IO) {
+            repository.findByResourceIdAndResourceTypeAndStatus(resourceId, resourceType, status)
+                ?.config_snapshot ?: Strings.EMPTY
+        }
 
-    suspend fun write(snapshot: String, resId: String, resType: String,
-                      status: ResourceConfigSnapshot.Status = RUNNING) : ResourceConfigSnapshot =
-            withContext(Dispatchers.IO) {
+    suspend fun write(
+        snapshot: String,
+        resId: String,
+        resType: String,
+        status: ResourceConfigSnapshot.Status = RUNNING
+    ): ResourceConfigSnapshot =
+        withContext(Dispatchers.IO) {
 
-                val resourceConfigSnapshotEntry = ResourceConfigSnapshot()
-                resourceConfigSnapshotEntry.id = UUID.randomUUID().toString()
-                resourceConfigSnapshotEntry.resourceId = resId
-                resourceConfigSnapshotEntry.resourceType = resType
-                resourceConfigSnapshotEntry.status = status
-                resourceConfigSnapshotEntry.config_snapshot = snapshot
+            val resourceConfigSnapshotEntry = ResourceConfigSnapshot()
+            resourceConfigSnapshotEntry.id = UUID.randomUUID().toString()
+            resourceConfigSnapshotEntry.resourceId = resId
+            resourceConfigSnapshotEntry.resourceType = resType
+            resourceConfigSnapshotEntry.status = status
+            resourceConfigSnapshotEntry.config_snapshot = snapshot
 
-                // Overwrite configuration snapshot entry of resId/resType
-                if (resId.isNotEmpty() && resType.isNotEmpty()) {
-                    repository.findByResourceIdAndResourceTypeAndStatus(resId, resType, status)?.
-                        let {
-                            log.info("Overwriting configuration snapshot entry for resourceId=($resId), " +
+            // Overwrite configuration snapshot entry of resId/resType
+            if (resId.isNotEmpty() && resType.isNotEmpty()) {
+                repository.findByResourceIdAndResourceTypeAndStatus(resId, resType, status)
+                    ?.let {
+                        log.info("Overwriting configuration snapshot entry for resourceId=($resId), " +
                                 "resourceType=($resType), status=($status)")
-                            repository.deleteByResourceIdAndResourceTypeAndStatus(resId, resType, status)
-                        }
-                }
-                var storedSnapshot: ResourceConfigSnapshot
-                try {
-                    storedSnapshot = repository.saveAndFlush(resourceConfigSnapshotEntry)
-                    log.info("Stored configuration snapshot for resourceId=($resId), " +
-                            "resourceType=($resType), status=($status), " +
-                            "dated=(${storedSnapshot.createdDate})")
-                } catch (ex: DataIntegrityViolationException) {
-                    throw BluePrintException("Failed to store configuration snapshot entry.", ex)
-                }
-                storedSnapshot
+                        repository.deleteByResourceIdAndResourceTypeAndStatus(resId, resType, status)
+                    }
             }
+            var storedSnapshot: ResourceConfigSnapshot
+            try {
+                storedSnapshot = repository.saveAndFlush(resourceConfigSnapshotEntry)
+                log.info("Stored configuration snapshot for resourceId=($resId), " +
+                        "resourceType=($resType), status=($status), " +
+                        "dated=(${storedSnapshot.createdDate})")
+            } catch (ex: DataIntegrityViolationException) {
+                throw BluePrintException("Failed to store configuration snapshot entry.", ex)
+            }
+            storedSnapshot
+        }
 }

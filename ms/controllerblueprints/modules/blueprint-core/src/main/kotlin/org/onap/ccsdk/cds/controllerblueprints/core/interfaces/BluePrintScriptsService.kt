@@ -23,8 +23,13 @@ interface BluePrintScriptsService {
 
     suspend fun <T> scriptInstance(bluePrintSourceCode: BluePrintSourceCode, scriptClassName: String): T
 
-    suspend fun <T> scriptInstance(blueprintBasePath: String, artifactName: String, artifactVersion: String,
-                                   scriptClassName: String, reCompile: Boolean): T
+    suspend fun <T> scriptInstance(
+        blueprintBasePath: String,
+        artifactName: String,
+        artifactVersion: String,
+        scriptClassName: String,
+        reCompile: Boolean
+    ): T
 
     suspend fun <T> scriptInstance(blueprintBasePath: String, scriptClassName: String, reCompile: Boolean): T
 

@@ -16,6 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.message.service
 
+import kotlin.test.assertNotNull
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -36,8 +37,6 @@ import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.assertNotNull
-
 
 @RunWith(SpringRunner::class)
 @DirtiesContext
@@ -57,6 +56,7 @@ import kotlin.test.assertNotNull
 
 ])
 class KafkaStreamsBasicAuthConsumerServiceTest {
+
     @Autowired
     lateinit var bluePrintMessageLibPropertyService: BluePrintMessageLibPropertyService
 
@@ -67,15 +67,17 @@ class KafkaStreamsBasicAuthConsumerServiceTest {
     }
 
     /** Integration Kafka Testing, Enable and use this test case only for local desktop testing with real kafka broker */
-    //@Test
+    // @Test
     fun testKafkaStreamingMessageConsumer() {
         runBlocking {
             val streamingConsumerService = bluePrintMessageLibPropertyService.blueprintMessageConsumerService("stream-consumer")
 
             // Dynamic Consumer Function to create Topology
             val consumerFunction = object : KafkaStreamConsumerFunction {
-                override suspend fun createTopology(messageConsumerProperties: MessageConsumerProperties,
-                                                    additionalConfig: Map<String, Any>?): Topology {
+                override suspend fun createTopology(
+                    messageConsumerProperties: MessageConsumerProperties,
+                    additionalConfig: Map<String, Any>?
+                ): Topology {
                     val topology = Topology()
                     val kafkaStreamsBasicAuthConsumerProperties = messageConsumerProperties
                             as KafkaStreamsBasicAuthConsumerProperties
@@ -93,29 +95,29 @@ class KafkaStreamsBasicAuthConsumerServiceTest {
 
                     // Store Buolder
                     val countStoreSupplier = Stores.keyValueStoreBuilder(
-                            Stores.persistentKeyValueStore("PriorityMessageState"),
-                            Serdes.String(),
-                            PriorityMessageSerde())
-                            .withLoggingEnabled(changelogConfig)
+                        Stores.persistentKeyValueStore("PriorityMessageState"),
+                        Serdes.String(),
+                        PriorityMessageSerde())
+                        .withLoggingEnabled(changelogConfig)
 
                     topology.addProcessor("FirstProcessor", firstProcessorSupplier, "Source")
                     topology.addStateStore(countStoreSupplier, "FirstProcessor")
                     topology.addSink("SINK", "default-stream-topic-out", Serdes.String().serializer(),
-                            PriorityMessageSerde().serializer(), "FirstProcessor")
+                        PriorityMessageSerde().serializer(), "FirstProcessor")
                     return topology
                 }
             }
 
             /** Send message with every 1 sec */
             val blueprintMessageProducerService = bluePrintMessageLibPropertyService
-                    .blueprintMessageProducerService("sample") as KafkaBasicAuthMessageProducerService
+                .blueprintMessageProducerService("sample") as KafkaBasicAuthMessageProducerService
             launch {
                 repeat(5) {
                     delay(1000)
                     val headers: MutableMap<String, String> = hashMapOf()
                     headers["id"] = it.toString()
                     blueprintMessageProducerService.sendMessageNB(message = "this is my message($it)",
-                            headers = headers)
+                        headers = headers)
                 }
             }
             streamingConsumerService.consume(null, consumerFunction)

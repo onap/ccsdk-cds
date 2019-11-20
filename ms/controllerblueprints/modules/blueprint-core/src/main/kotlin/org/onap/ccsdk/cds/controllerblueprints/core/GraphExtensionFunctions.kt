@@ -16,11 +16,11 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core
 
+import java.util.regex.Pattern
 import org.onap.ccsdk.cds.controllerblueprints.core.data.EdgeLabel
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Graph
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Workflow
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.WorkflowGraphUtils
-import java.util.regex.Pattern
 
 private val graphTokenSeparators = Pattern.compile("[->/]")
 
@@ -50,16 +50,16 @@ fun Graph.toAdjacencyList(): Graph.AdjacencyList<String, EdgeLabel> {
 fun Graph.findAllPaths(from: String, to: String, path: List<String> = emptyList()): List<List<String>> {
     if (from == to) return listOf(path + to)
     return nodes[from]!!.neighbors()
-            .filter { !path.contains(it.id) }
-            .flatMap { findAllPaths(it.id, to, path + from) }
+        .filter { !path.contains(it.id) }
+        .flatMap { findAllPaths(it.id, to, path + from) }
 }
 
 fun Graph.findCycles(node: String): List<List<String>> {
     fun findCycles(path: List<String>): List<List<String>> {
         if (path.size > 3 && path.first() == path.last()) return listOf(path)
         return nodes[path.last()]!!.neighbors()
-                .filterNot { path.tail().contains(it.id) }
-                .flatMap { findCycles(path + it.id) }
+            .filterNot { path.tail().contains(it.id) }
+            .flatMap { findCycles(path + it.id) }
     }
     return findCycles(listOf(node))
 }
@@ -76,41 +76,40 @@ fun Graph.endNodes(): Set<Graph.Node> = this.nodes.values.filter {
 fun Graph.node(node: String) = this.nodes[node]
 
 fun Graph.edge(label: EdgeLabel) =
-        this.edges.filter { it.label == label }
+    this.edges.filter { it.label == label }
 
 fun Graph.incomingEdges(node: String) =
-        this.edges.filter { it.target.id == node }
+    this.edges.filter { it.target.id == node }
 
 fun Graph.incomingNodes(node: String) =
-        this.incomingEdges(node).map { it.source }
+    this.incomingEdges(node).map { it.source }
 
 fun Graph.outgoingEdges(node: String) =
-        this.edges.filter { it.source.id == node }
+    this.edges.filter { it.source.id == node }
 
 fun Graph.outgoingNodes(node: String) =
-        this.outgoingEdges(node).map { it.target }
+    this.outgoingEdges(node).map { it.target }
 
 fun Graph.outgoingEdges(node: String, label: EdgeLabel) =
-        this.edges.filter { it.source.id == node && it.label == label }
+    this.edges.filter { it.source.id == node && it.label == label }
 
 fun Graph.outgoingNodes(node: String, label: EdgeLabel) =
-        this.outgoingEdges(node, label).map { it.target }
+    this.outgoingEdges(node, label).map { it.target }
 
 fun Graph.outgoingNodesNotInEdgeLabels(node: String, labels: List<EdgeLabel>) =
-        this.outgoingEdgesNotInLabels(node, labels).map { it.target }
+    this.outgoingEdgesNotInLabels(node, labels).map { it.target }
 
 fun Graph.outgoingEdges(node: String, labels: List<EdgeLabel>) =
-        this.edges.filter { it.source.id == node && labels.contains(it.label) }
+    this.edges.filter { it.source.id == node && labels.contains(it.label) }
 
 fun Graph.outgoingEdgesNotInLabels(node: String, labels: List<EdgeLabel>) =
-        this.edges.filter { it.source.id == node && !labels.contains(it.label) }
+    this.edges.filter { it.source.id == node && !labels.contains(it.label) }
 
 fun Graph.outgoingNodes(node: String, labels: List<EdgeLabel>) =
-        this.outgoingEdges(node, labels).map { it.target }
+    this.outgoingEdges(node, labels).map { it.target }
 
 fun Graph.isEndNode(node: Graph.Node): Boolean {
     return this.endNodes().contains(node)
 }
 
 fun <T> List<T>.tail(): List<T> = drop(1)
-

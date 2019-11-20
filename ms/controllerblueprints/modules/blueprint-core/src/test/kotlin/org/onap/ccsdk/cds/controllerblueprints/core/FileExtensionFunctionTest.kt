@@ -16,8 +16,8 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core
 
-import org.junit.Test
 import kotlin.test.assertTrue
+import org.junit.Test
 
 class FileExtensionFunctionTest {
     val blueprintBasePath = "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
@@ -30,5 +30,4 @@ class FileExtensionFunctionTest {
         blueprintFile.compress(targetZip)
         assertTrue(blueprintFile.exists(), "failed to create compressed file(${targetZip.absolutePath} ")
     }
-
 }

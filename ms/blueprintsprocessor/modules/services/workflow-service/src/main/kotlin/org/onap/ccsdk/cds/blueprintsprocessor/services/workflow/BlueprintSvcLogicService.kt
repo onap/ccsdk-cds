@@ -17,16 +17,27 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.services.workflow
 
+import java.util.Properties
+import javax.annotation.PostConstruct
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
-import org.onap.ccsdk.sli.core.sli.*
-import org.onap.ccsdk.sli.core.sli.provider.base.*
+import org.onap.ccsdk.sli.core.sli.ExitNodeException
+import org.onap.ccsdk.sli.core.sli.SvcLogicContext
+import org.onap.ccsdk.sli.core.sli.SvcLogicException
+import org.onap.ccsdk.sli.core.sli.SvcLogicGraph
+import org.onap.ccsdk.sli.core.sli.SvcLogicNode
+import org.onap.ccsdk.sli.core.sli.SvcLogicStore
+import org.onap.ccsdk.sli.core.sli.provider.base.AbstractSvcLogicNodeExecutor
+import org.onap.ccsdk.sli.core.sli.provider.base.BlockNodeExecutor
+import org.onap.ccsdk.sli.core.sli.provider.base.BreakNodeExecutor
+import org.onap.ccsdk.sli.core.sli.provider.base.ExecuteNodeExecutor
+import org.onap.ccsdk.sli.core.sli.provider.base.ExitNodeExecutor
+import org.onap.ccsdk.sli.core.sli.provider.base.ReturnNodeExecutor
+import org.onap.ccsdk.sli.core.sli.provider.base.SvcLogicServiceBase
 import org.slf4j.LoggerFactory
 import org.slf4j.MDC
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Service
-import java.util.*
-import javax.annotation.PostConstruct
 
 interface BlueprintSvcLogicService : SvcLogicServiceBase {
 
@@ -53,7 +64,6 @@ interface BlueprintSvcLogicService : SvcLogicServiceBase {
         TODO("not implemented")
     }
 }
-
 
 @Service
 class DefaultBlueprintSvcLogicService : BlueprintSvcLogicService {
@@ -88,9 +98,12 @@ class DefaultBlueprintSvcLogicService : BlueprintSvcLogicService {
         }
     }
 
-    override suspend fun execute(graph: SvcLogicGraph, bluePrintRuntimeService: BluePrintRuntimeService<*>,
-                                 input: Any): Any {
-        //Initialise BlueprintSvcLogic Context with Blueprint Runtime Service and Input Request
+    override suspend fun execute(
+        graph: SvcLogicGraph,
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        input: Any
+    ): Any {
+        // Initialise BlueprintSvcLogic Context with Blueprint Runtime Service and Input Request
         val blueprintSvcLogicContext = BlueprintSvcLogicContext()
         blueprintSvcLogicContext.setBluePrintRuntimeService(bluePrintRuntimeService)
         blueprintSvcLogicContext.setRequest(input)

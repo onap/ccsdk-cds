@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import io.mockk.every
 import io.mockk.mockk
+import kotlin.test.assertNotNull
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -44,7 +45,6 @@ import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [CliExecutorConfiguration::class,
@@ -81,7 +81,7 @@ class ComponentCliExecutorTest {
             operationInputs[BluePrintConstants.PROPERTY_CURRENT_OPERATION] = "operationName".asJsonPrimitive()
             operationInputs[ComponentScriptExecutor.INPUT_SCRIPT_TYPE] = BluePrintConstants.SCRIPT_INTERNAL.asJsonPrimitive()
             operationInputs[ComponentScriptExecutor.INPUT_SCRIPT_CLASS_REFERENCE] =
-                    "internal.scripts.TestCliScriptFunction".asJsonPrimitive()
+                "internal.scripts.TestCliScriptFunction".asJsonPrimitive()
 
             val stepInputData = StepData().apply {
                 name = "activate-cli"
@@ -93,13 +93,13 @@ class ComponentCliExecutorTest {
             every { bluePrintRuntime.bluePrintContext() } returns blueprintContext
             every {
                 bluePrintRuntime.resolveNodeTemplateInterfaceOperationInputs("activate-cli",
-                        "interfaceName", "operationName")
+                    "interfaceName", "operationName")
             } returns operationInputs
 
             val operationOutputs = hashMapOf<String, JsonNode>()
             every {
                 bluePrintRuntime.resolveNodeTemplateInterfaceOperationOutputs("activate-cli",
-                        "interfaceName", "operationName")
+                    "interfaceName", "operationName")
             } returns operationOutputs
 
             componentScriptExecutor.applyNB(executionServiceInput)

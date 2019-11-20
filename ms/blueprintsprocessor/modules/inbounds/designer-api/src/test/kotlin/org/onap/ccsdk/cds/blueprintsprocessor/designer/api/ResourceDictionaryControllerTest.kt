@@ -16,6 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 
+import kotlin.test.assertNotNull
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -28,7 +29,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -45,5 +45,4 @@ class ResourceDictionaryControllerTest {
     fun testResourceDictionaryControllerPresence() {
         assertNotNull(resourceDictionaryController, "failed to initialise ResourceDictionaryController")
     }
-
 }

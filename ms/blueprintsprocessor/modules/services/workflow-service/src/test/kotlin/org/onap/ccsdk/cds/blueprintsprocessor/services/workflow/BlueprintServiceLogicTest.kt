@@ -17,6 +17,8 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.services.workflow
 
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -33,8 +35,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [WorkflowServiceConfiguration::class, ComponentExecuteNodeExecutor::class])
@@ -55,46 +55,42 @@ class BlueprintServiceLogicTest {
     fun testExecuteGraphWithSingleComponent() {
         runBlocking {
             val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                    "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+                "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
             val executionServiceInput = JacksonReactorUtils
-                    .readValueFromClassPathFile("execution-input/resource-assignment-input.json", ExecutionServiceInput::class.java)!!
+                .readValueFromClassPathFile("execution-input/resource-assignment-input.json", ExecutionServiceInput::class.java)!!
 
             // Assign Workflow inputs Mock
             val input = executionServiceInput.payload.get("resource-assignment-request")
             bluePrintRuntimeService.assignWorkflowInputs("resource-assignment", input)
 
             val executionServiceOutput = dgWorkflowExecutionService
-                    .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, mutableMapOf())
+                .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, mutableMapOf())
             assertNotNull(executionServiceOutput, "failed to get response")
             assertEquals(BluePrintConstants.STATUS_SUCCESS, executionServiceOutput.status.message,
-                    "failed to get successful response")
+                "failed to get successful response")
         }
-
-
     }
 
     @Test
     fun testExecuteGraphWithMultipleComponents() {
         runBlocking {
             val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                    "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+                "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
             val executionServiceInput = JacksonReactorUtils
-                    .readValueFromClassPathFile("execution-input/assign-activate-input.json", ExecutionServiceInput::class.java)!!
+                .readValueFromClassPathFile("execution-input/assign-activate-input.json", ExecutionServiceInput::class.java)!!
 
             // Assign Workflow inputs Mock
             val input = executionServiceInput.payload.get("assign-activate-request")
             bluePrintRuntimeService.assignWorkflowInputs("assign-activate", input)
 
-
             val executionServiceOutput = dgWorkflowExecutionService
-                    .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, mutableMapOf())
+                .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, mutableMapOf())
             assertNotNull(executionServiceOutput, "failed to get response")
             assertEquals(BluePrintConstants.STATUS_SUCCESS, executionServiceOutput.status.message,
-                    "failed to get successful response")
+                "failed to get successful response")
         }
-
     }
 
     @Test
@@ -118,5 +114,4 @@ class BlueprintServiceLogicTest {
         assertEquals(stepName1, proto1.stepName, " Failed to match the step1 name")
         assertEquals(stepName2, proto2.stepName, " Failed to match the step2 name")
     }
-
 }

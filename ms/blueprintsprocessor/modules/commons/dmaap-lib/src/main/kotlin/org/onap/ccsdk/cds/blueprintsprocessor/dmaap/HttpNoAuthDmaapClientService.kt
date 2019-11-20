@@ -27,15 +27,16 @@ import com.att.nsa.mr.client.impl.MRSimplerBatchPublisher
 /**
  * Representation of DMAAP client service for HTTP no auth type.
  */
-class HttpNoAuthDmaapClientService(private val clientProps:
-                                   HttpNoAuthDmaapClientProperties)
-    : BluePrintDmaapClientService {
+class HttpNoAuthDmaapClientService(
+    private val clientProps:
+    HttpNoAuthDmaapClientProperties
+) :
+    BluePrintDmaapClientService {
 
     /**
      * The constructed DMAAP client.
      */
     var clients: MutableList<MRBatchingPublisher> = mutableListOf()
-
 
     /**
      * Returns the DMAAP client after constructing it properly with the data
@@ -58,5 +59,4 @@ class HttpNoAuthDmaapClientService(private val clientProps:
 
         return clients
     }
-
 }

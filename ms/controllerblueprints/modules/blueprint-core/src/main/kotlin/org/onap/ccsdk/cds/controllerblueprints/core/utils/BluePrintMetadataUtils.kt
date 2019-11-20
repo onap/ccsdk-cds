@@ -17,41 +17,44 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
-
 import com.fasterxml.jackson.databind.JsonNode
+import java.io.File
+import java.util.Properties
 import kotlinx.coroutines.runBlocking
-import org.onap.ccsdk.cds.controllerblueprints.core.*
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ToscaMetaData
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintDefinitions
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
+import org.onap.ccsdk.cds.controllerblueprints.core.readNBLines
 import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintScriptsServiceImpl
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintImportService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRuntimeService
 import org.slf4j.LoggerFactory
-import java.io.File
-import java.util.*
 
 class BluePrintMetadataUtils {
     companion object {
         private val log = LoggerFactory.getLogger(this::class.toString())
 
-
         suspend fun toscaMetaData(basePath: String): ToscaMetaData {
             val toscaMetaPath = basePath.plus(BluePrintConstants.PATH_DIVIDER)
-                    .plus(BluePrintConstants.TOSCA_METADATA_ENTRY_DEFINITION_FILE)
+                .plus(BluePrintConstants.TOSCA_METADATA_ENTRY_DEFINITION_FILE)
             return toscaMetaDataFromMetaFile(toscaMetaPath)
         }
 
         suspend fun entryDefinitionFile(basePath: String): String {
             val toscaMetaPath = basePath.plus(BluePrintConstants.PATH_DIVIDER)
-                    .plus(BluePrintConstants.TOSCA_METADATA_ENTRY_DEFINITION_FILE)
+                .plus(BluePrintConstants.TOSCA_METADATA_ENTRY_DEFINITION_FILE)
             return toscaMetaDataFromMetaFile(toscaMetaPath).entityDefinitions
         }
 
         fun bluePrintEnvProperties(basePath: String): Properties {
             val blueprintsEnvFilePath = basePath.plus(File.separator)
-                    .plus(BluePrintConstants.TOSCA_ENVIRONMENTS_DIR)
+                .plus(BluePrintConstants.TOSCA_ENVIRONMENTS_DIR)
             return environmentFileProperties(blueprintsEnvFilePath)
         }
 
@@ -60,14 +63,14 @@ class BluePrintMetadataUtils {
             val envDir = normalizedFile(pathName)
             // Verify if the environment directory exists
             if (envDir.exists() && envDir.isDirectory) {
-                //Find all available environment files
+                // Find all available environment files
                 envDir.listFiles()!!
-                        .filter { it.name.endsWith(".properties") }
-                        .forEach {
-                            val istream = it.inputStream()
-                            properties.load(istream)
-                            istream.close()
-                        }
+                    .filter { it.name.endsWith(".properties") }
+                    .forEach {
+                        val istream = it.inputStream()
+                        properties.load(istream)
+                        istream.close()
+                    }
             }
             return properties
         }
@@ -91,19 +94,18 @@ class BluePrintMetadataUtils {
                         }
                     }
                 }
-
             }
             return toscaMetaData
         }
 
-        fun getBluePrintRuntime(id: String, blueprintBasePath: String)
-                : BluePrintRuntimeService<MutableMap<String, JsonNode>> {
+        fun getBluePrintRuntime(id: String, blueprintBasePath: String):
+                BluePrintRuntimeService<MutableMap<String, JsonNode>> {
             val bluePrintContext: BluePrintContext = getBluePrintContext(blueprintBasePath)
             return getBluePrintRuntime(id, bluePrintContext)
         }
 
-        fun getBluePrintRuntime(id: String, bluePrintContext: BluePrintContext)
-                : BluePrintRuntimeService<MutableMap<String, JsonNode>> {
+        fun getBluePrintRuntime(id: String, bluePrintContext: BluePrintContext):
+                BluePrintRuntimeService<MutableMap<String, JsonNode>> {
             checkNotEmpty(bluePrintContext.rootPath) { "blueprint context root path is missing." }
             checkNotEmpty(bluePrintContext.entryDefinition) { "blueprint context entry definition is missing." }
             val blueprintBasePath = bluePrintContext.rootPath
@@ -113,8 +115,8 @@ class BluePrintMetadataUtils {
             return bluePrintRuntimeService
         }
 
-        suspend fun getBaseEnhancementBluePrintRuntime(id: String, blueprintBasePath: String)
-                : BluePrintRuntimeService<MutableMap<String, JsonNode>> {
+        suspend fun getBaseEnhancementBluePrintRuntime(id: String, blueprintBasePath: String):
+                BluePrintRuntimeService<MutableMap<String, JsonNode>> {
 
             val bluePrintContext: BluePrintContext = getBaseEnhancementBluePrintContext(blueprintBasePath)
 
@@ -191,8 +193,8 @@ class BluePrintMetadataUtils {
 
             val bluePrintScriptsService = BluePrintScriptsServiceImpl()
             val bluePrintDefinitions = bluePrintScriptsService
-                    .scriptInstance<BluePrintDefinitions>(normalizedBasePath, toscaMetaData.templateName!!,
-                            toscaMetaData.templateVersion!!, definitionClassName, false)
+                .scriptInstance<BluePrintDefinitions>(normalizedBasePath, toscaMetaData.templateName!!,
+                    toscaMetaData.templateVersion!!, definitionClassName, false)
             // Get the Service Template
             val serviceTemplate = bluePrintDefinitions.serviceTemplate()
 

@@ -16,9 +16,9 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.interfaces
 
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import java.io.File
 import java.nio.file.Path
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 
 interface BluePrintCatalogService {
 

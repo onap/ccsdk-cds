@@ -19,6 +19,8 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.uat
 
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.logging.LogColor.COLOR_TEST_CLIENT
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.logging.LogColor.resetContextColor
@@ -27,8 +29,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
 
 @RunWith(SpringRunner::class)
 // Also set blueprintsprocessor.httpPort=0

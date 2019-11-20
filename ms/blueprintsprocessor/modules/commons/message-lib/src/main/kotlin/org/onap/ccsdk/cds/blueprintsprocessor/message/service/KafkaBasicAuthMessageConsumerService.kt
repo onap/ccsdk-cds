@@ -17,6 +17,9 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.message.service
 
+import java.nio.charset.Charset
+import java.time.Duration
+import kotlin.concurrent.thread
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -29,13 +32,11 @@ import org.apache.kafka.common.serialization.ByteArrayDeserializer
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.onap.ccsdk.cds.blueprintsprocessor.message.KafkaBasicAuthMessageConsumerProperties
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
-import java.nio.charset.Charset
-import java.time.Duration
-import kotlin.concurrent.thread
 
 open class KafkaBasicAuthMessageConsumerService(
-        private val messageConsumerProperties: KafkaBasicAuthMessageConsumerProperties)
-    : BlueprintMessageConsumerService {
+    private val messageConsumerProperties: KafkaBasicAuthMessageConsumerProperties
+) :
+    BlueprintMessageConsumerService {
 
     val log = logger(KafkaBasicAuthMessageConsumerService::class)
     val channel = Channel<String>()
@@ -75,7 +76,6 @@ open class KafkaBasicAuthMessageConsumerService(
         check(!consumerTopic.isNullOrEmpty()) { "couldn't get topic information" }
         return subscribe(consumerTopic, additionalConfig)
     }
-
 
     override suspend fun subscribe(topics: List<String>, additionalConfig: Map<String, Any>?): Channel<String> {
         /** Create Kafka consumer */
@@ -124,8 +124,11 @@ open class KafkaBasicAuthMessageConsumerService(
         return consume(topics = consumerTopic, additionalConfig = additionalConfig, consumerFunction = consumerFunction)
     }
 
-    override suspend fun consume(topics: List<String>, additionalConfig: Map<String, Any>?,
-                                 consumerFunction: ConsumerFunction) {
+    override suspend fun consume(
+        topics: List<String>,
+        additionalConfig: Map<String, Any>?,
+        consumerFunction: ConsumerFunction
+    ) {
 
         val kafkaConsumerFunction = consumerFunction as KafkaConsumerRecordsFunction
 

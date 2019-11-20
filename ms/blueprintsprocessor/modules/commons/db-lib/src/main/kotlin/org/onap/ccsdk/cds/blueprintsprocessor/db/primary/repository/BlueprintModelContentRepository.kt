@@ -17,12 +17,12 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository
 
+import java.util.Optional
 import org.jetbrains.annotations.NotNull
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModel
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelContent
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
-import java.util.*
 
 /**
  * @param <T> Model
@@ -47,8 +47,8 @@ interface BlueprintModelContentRepository : JpaRepository<BlueprintModelContent,
      * @param contentType contentType
      * @return B?
      */
-    fun findTopByBlueprintModelAndContentType(blueprintModel: BlueprintModel, contentType: String)
-            : BlueprintModelContent?
+    fun findTopByBlueprintModelAndContentType(blueprintModel: BlueprintModel, contentType: String):
+            BlueprintModelContent?
 
     /**
      * This is a findByBlueprintModelAndContentType method
@@ -57,8 +57,8 @@ interface BlueprintModelContentRepository : JpaRepository<BlueprintModelContent,
      * @param contentType contentType
      * @return List<B>
      */
-    fun findByBlueprintModelAndContentType(blueprintModel: BlueprintModel, contentType: String)
-            : List<BlueprintModelContent>
+    fun findByBlueprintModelAndContentType(blueprintModel: BlueprintModel, contentType: String):
+            List<BlueprintModelContent>
 
     /**
      * This is a findByBlueprintModel method
@@ -76,8 +76,11 @@ interface BlueprintModelContentRepository : JpaRepository<BlueprintModelContent,
      * @param name name
      * @return B?
      */
-    fun findByBlueprintModelAndContentTypeAndName(blueprintModel: BlueprintModel,
-                                                  contentType: String, name: String): BlueprintModelContent?
+    fun findByBlueprintModelAndContentTypeAndName(
+        blueprintModel: BlueprintModel,
+        contentType: String,
+        name: String
+    ): BlueprintModelContent?
 
     /**
      * This is a deleteByMdeleteByBlueprintModelodelName method
@@ -92,5 +95,4 @@ interface BlueprintModelContentRepository : JpaRepository<BlueprintModelContent,
      * @param id id
      */
     override fun deleteById(@NotNull id: String)
-
 }

@@ -33,28 +33,28 @@ import springfox.documentation.spring.web.plugins.Docket
  * @author Brinda Santh
  */
 @Configuration
-//@EnableSwagger2WebFlux
+// @EnableSwagger2WebFlux
 open class SwaggerConfig {
 
     @Bean
     open fun api(): Docket {
         return Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.withClassAnnotation(Api::class.java))
-                .paths(PathSelectors.any())
-                .build()
-                .apiInfo(apiInfo())
+            .select()
+            .apis(RequestHandlerSelectors.withClassAnnotation(Api::class.java))
+            .paths(PathSelectors.any())
+            .build()
+            .apiInfo(apiInfo())
     }
 
     private fun apiInfo(): ApiInfo {
         return ApiInfo(
-                "CDS Blueprints Processor APIs",
-                "Provide APIs to interact with CBA, their resolved resources and templates, and stored resource configurations.",
-                "0.7.0",
-                null,
-                Contact("CCSDK Team", "www.onap.org", "onap-discuss@lists.onap.org"),
-                "Apache 2.0",
-                "http://www.apache.org/licenses/LICENSE-2.0",
-                emptyList())
+            "CDS Blueprints Processor APIs",
+            "Provide APIs to interact with CBA, their resolved resources and templates, and stored resource configurations.",
+            "0.7.0",
+            null,
+            Contact("CCSDK Team", "www.onap.org", "onap-discuss@lists.onap.org"),
+            "Apache 2.0",
+            "http://www.apache.org/licenses/LICENSE-2.0",
+            emptyList())
     }
 }

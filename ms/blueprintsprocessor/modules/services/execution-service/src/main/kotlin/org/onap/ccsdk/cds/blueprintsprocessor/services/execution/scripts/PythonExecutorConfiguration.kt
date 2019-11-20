@@ -18,12 +18,12 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts
 
+import java.io.File
+import java.util.Properties
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
-import java.io.File
-import java.util.Properties
 
 @Configuration
 @ComponentScan
@@ -32,6 +32,7 @@ open class PythonExecutorConfiguration
 
 @Configuration
 open class PythonExecutorProperty {
+
     @Value("\${blueprints.processor.functions.python.executor.executionPath}")
     lateinit var executionPath: String
     @Value("#{'\${blueprints.processor.functions.python.executor.modulePaths}'.split(',')}")
@@ -44,8 +45,12 @@ class PythonExecutorConstants {
     }
 }
 
-open class BluePrintPython(executablePath: String, blueprintPythonPlatform: MutableList<String>,
-                           val argv: MutableList<String>){
+open class BluePrintPython(
+    executablePath: String,
+    blueprintPythonPlatform: MutableList<String>,
+    val argv: MutableList<String>
+) {
+
     lateinit var moduleName: String
     lateinit var pythonClassName: String
     lateinit var content: String

@@ -17,6 +17,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.moc
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
+import java.util.HashMap
 import org.apache.commons.collections.MapUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.RestResourceSource
@@ -29,10 +30,11 @@ import org.onap.ccsdk.cds.controllerblueprints.core.nullToEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory
-import java.util.*
 
-class MockRestResourceResolutionProcessor(private val blueprintRestLibPropertyService:
-                                          MockBluePrintRestLibPropertyService) : ResourceAssignmentProcessor() {
+class MockRestResourceResolutionProcessor(
+    private val blueprintRestLibPropertyService:
+    MockBluePrintRestLibPropertyService
+) : ResourceAssignmentProcessor() {
 
     private val logger = LoggerFactory.getLogger(MockRestResourceResolutionProcessor::class.java)
 
@@ -90,7 +92,8 @@ class MockRestResourceResolutionProcessor(private val blueprintRestLibPropertySe
                     populateResource(executionRequest, sourceProperties, responseBody, path)
                     restClientService.tearDown()
                 } else {
-                    val errMsg = "Failed to get $dSource result for dictionary name ($dName) using urlPath ($urlPath) response_code: ($responseStatusCode)"
+                    val errMsg =
+                        "Failed to get $dSource result for dictionary name ($dName) using urlPath ($urlPath) response_code: ($responseStatusCode)"
                     logger.warn(errMsg)
                     throw BluePrintProcessorException(errMsg)
                 }
@@ -110,8 +113,12 @@ class MockRestResourceResolutionProcessor(private val blueprintRestLibPropertySe
     }
 
     @Throws(BluePrintProcessorException::class)
-    private fun populateResource(resourceAssignment: ResourceAssignment, sourceProperties: RestResourceSource,
-                                 restResponse: String, path: String) {
+    private fun populateResource(
+        resourceAssignment: ResourceAssignment,
+        sourceProperties: RestResourceSource,
+        restResponse: String,
+        path: String
+    ) {
         val type = nullToEmpty(resourceAssignment.property?.type)
         lateinit var entrySchemaType: String
 

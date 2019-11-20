@@ -16,12 +16,12 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.service
 
+import javax.annotation.PostConstruct
 import org.apache.commons.collections.CollectionUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.factory.ResourceSourceMappingFactory
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
-import javax.annotation.PostConstruct
 
 @Component
 class ApplicationRegistrationService {

@@ -21,10 +21,19 @@ import com.google.protobuf.Struct
 import com.google.protobuf.Timestamp
 import com.google.protobuf.util.JsonFormat
 import io.grpc.ManagedChannel
-import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.*
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.PrepareRemoteEnvInput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteIdentifier
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteScriptExecutionInput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteScriptExecutionOutput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StatusType
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.BluePrintGrpcClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.BluePrintGrpcLibPropertyService
-import org.onap.ccsdk.cds.controllerblueprints.command.api.*
+import org.onap.ccsdk.cds.controllerblueprints.command.api.CommandExecutorServiceGrpc
+import org.onap.ccsdk.cds.controllerblueprints.command.api.ExecutionInput
+import org.onap.ccsdk.cds.controllerblueprints.command.api.ExecutionOutput
+import org.onap.ccsdk.cds.controllerblueprints.command.api.Identifiers
+import org.onap.ccsdk.cds.controllerblueprints.command.api.Packages
+import org.onap.ccsdk.cds.controllerblueprints.command.api.PrepareEnvInput
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
@@ -42,10 +51,10 @@ interface RemoteScriptExecutionService {
 
 @Service(ExecutionServiceConstant.SERVICE_GRPC_REMOTE_SCRIPT_EXECUTION)
 @ConditionalOnProperty(prefix = "blueprintprocessor.remoteScriptCommand", name = arrayOf("enabled"),
-        havingValue = "true", matchIfMissing = false)
+    havingValue = "true", matchIfMissing = false)
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyService: BluePrintGrpcLibPropertyService)
-    : RemoteScriptExecutionService {
+class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyService: BluePrintGrpcLibPropertyService) :
+    RemoteScriptExecutionService {
 
     private val log = LoggerFactory.getLogger(GrpcRemoteScriptExecutionService::class.java)!!
 
@@ -70,8 +79,8 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
         }
     }
 
-    override suspend fun prepareEnv(prepareEnvInput: PrepareRemoteEnvInput)
-            : RemoteScriptExecutionOutput {
+    override suspend fun prepareEnv(prepareEnvInput: PrepareRemoteEnvInput):
+            RemoteScriptExecutionOutput {
         val grpResponse = commandExecutorServiceGrpc.prepareEnv(prepareEnvInput.asGrpcData())
 
         checkNotNull(grpResponse.status) {
@@ -84,8 +93,8 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
         return remoteScriptExecutionOutput
     }
 
-    override suspend fun executeCommand(remoteExecutionInput: RemoteScriptExecutionInput)
-            : RemoteScriptExecutionOutput {
+    override suspend fun executeCommand(remoteExecutionInput: RemoteScriptExecutionInput):
+            RemoteScriptExecutionOutput {
 
         val grpResponse = commandExecutorServiceGrpc.executeCommand(remoteExecutionInput.asGrpcData())
 
@@ -103,7 +112,6 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
         channel?.shutdownNow()
     }
 
-
     fun PrepareRemoteEnvInput.asGrpcData(): PrepareEnvInput {
         val correlationId = this.correlationId ?: this.requestId
 
@@ -116,33 +124,33 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
         }
 
         return PrepareEnvInput.newBuilder()
-                .setIdentifiers(this.remoteIdentifier!!.asGrpcData())
-                .setRequestId(this.requestId)
-                .setCorrelationId(correlationId)
-                .setTimeOut(this.timeOut.toInt())
-                .addAllPackages(packageList)
-                .setProperties(this.properties.asGrpcData())
-                .build()
+            .setIdentifiers(this.remoteIdentifier!!.asGrpcData())
+            .setRequestId(this.requestId)
+            .setCorrelationId(correlationId)
+            .setTimeOut(this.timeOut.toInt())
+            .addAllPackages(packageList)
+            .setProperties(this.properties.asGrpcData())
+            .build()
     }
 
     fun RemoteScriptExecutionInput.asGrpcData(): ExecutionInput {
         val correlationId = this.correlationId ?: this.requestId
         return ExecutionInput.newBuilder()
-                .setRequestId(this.requestId)
-                .setCorrelationId(correlationId)
-                .setIdentifiers(this.remoteIdentifier!!.asGrpcData())
-                .setCommand(this.command)
-                .setTimeOut(this.timeOut.toInt())
-                .setProperties(this.properties.asGrpcData())
-                .setTimestamp(Timestamp.getDefaultInstance())
-                .build()
+            .setRequestId(this.requestId)
+            .setCorrelationId(correlationId)
+            .setIdentifiers(this.remoteIdentifier!!.asGrpcData())
+            .setCommand(this.command)
+            .setTimeOut(this.timeOut.toInt())
+            .setProperties(this.properties.asGrpcData())
+            .setTimestamp(Timestamp.getDefaultInstance())
+            .build()
     }
 
     fun RemoteIdentifier.asGrpcData(): Identifiers? {
         return Identifiers.newBuilder()
-                .setBlueprintName(this.blueprintName)
-                .setBlueprintVersion(this.blueprintVersion)
-                .build()
+            .setBlueprintName(this.blueprintName)
+            .setBlueprintVersion(this.blueprintVersion)
+            .build()
     }
 
     fun Map<String, JsonNode>.asGrpcData(): Struct {
@@ -153,11 +161,10 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
 
     fun ExecutionOutput.asJavaData(): RemoteScriptExecutionOutput {
         return RemoteScriptExecutionOutput(
-                requestId = this.requestId,
-                response = this.responseList,
-                status = StatusType.valueOf(this.status.name),
-                payload =  payload.jsonAsJsonType()
+            requestId = this.requestId,
+            response = this.responseList,
+            status = StatusType.valueOf(this.status.name),
+            payload = payload.jsonAsJsonType()
         )
     }
-
 }

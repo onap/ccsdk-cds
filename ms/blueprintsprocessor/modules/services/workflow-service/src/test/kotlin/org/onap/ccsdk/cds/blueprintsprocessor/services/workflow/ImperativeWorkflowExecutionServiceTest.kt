@@ -19,6 +19,9 @@ package org.onap.ccsdk.cds.blueprintsprocessor.services.workflow
 import io.mockk.every
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -37,9 +40,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 class ImperativeWorkflowExecutionServiceTest {
     val log = logger(ImperativeWorkflowExecutionServiceTest::class)
@@ -57,17 +57,17 @@ class ImperativeWorkflowExecutionServiceTest {
 
     fun mockServiceTemplate(): ServiceTemplate {
         return serviceTemplate("imperative-test", "1.0.0",
-                "brindasanth@onap.com", "tosca") {
+            "brindasanth@onap.com", "tosca") {
 
             topologyTemplate {
                 nodeTemplate(mockNodeTemplateComponentScriptExecutor("resolve-config",
-                        "cba.wt.imperative.test.ResolveConfig"))
+                    "cba.wt.imperative.test.ResolveConfig"))
                 nodeTemplate(mockNodeTemplateComponentScriptExecutor("activate-config",
-                        "cba.wt.imperative.test.ActivateConfig"))
+                    "cba.wt.imperative.test.ActivateConfig"))
                 nodeTemplate(mockNodeTemplateComponentScriptExecutor("activate-config-rollback",
-                        "cba.wt.imperative.test.ActivateConfigRollback"))
+                    "cba.wt.imperative.test.ActivateConfigRollback"))
                 nodeTemplate(mockNodeTemplateComponentScriptExecutor("activate-licence",
-                        "cba.wt.imperative.test.ActivateLicence"))
+                    "cba.wt.imperative.test.ActivateLicence"))
 
                 workflow("imperative-test-wf", "Test Imperative flow") {
                     step("resolve-config", "resolve-config", "") {
@@ -95,13 +95,13 @@ class ImperativeWorkflowExecutionServiceTest {
             val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("12345", bluePrintContext)
 
             val executionServiceInput = JacksonUtils
-                    .readValueFromClassPathFile("execution-input/imperative-test-input.json",
-                            ExecutionServiceInput::class.java)!!
+                .readValueFromClassPathFile("execution-input/imperative-test-input.json",
+                    ExecutionServiceInput::class.java)!!
 
             val bluePrintWorkFlowService = ImperativeBluePrintWorkflowService(NodeTemplateExecutionService())
             val imperativeWorkflowExecutionService = ImperativeWorkflowExecutionService(bluePrintWorkFlowService)
             val output = imperativeWorkflowExecutionService
-                    .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, hashMapOf())
+                .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, hashMapOf())
             assertNotNull(output, "failed to get imperative workflow output")
             assertNotNull(output.status, "failed to get imperative workflow output status")
             assertEquals(output.status.message, BluePrintConstants.STATUS_SUCCESS)

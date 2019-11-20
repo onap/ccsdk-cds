@@ -17,7 +17,6 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
-
 import com.fasterxml.jackson.databind.JsonNode
 import com.jayway.jsonpath.Configuration
 import com.jayway.jsonpath.JsonPath
@@ -29,9 +28,9 @@ import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
 class JsonParserUtils {
     companion object {
 
-        //TODO("Optimise this")
+        // TODO("Optimise this")
         val JACKSON_JSON_NODE_CONFIGURATION = Configuration.builder()
-                .mappingProvider(JacksonMappingProvider()).jsonProvider(JacksonJsonNodeJsonProvider()).build()
+            .mappingProvider(JacksonMappingProvider()).jsonProvider(JacksonJsonNodeJsonProvider()).build()
 
         val PATH_CONFIGURATION = Configuration.builder().options(Option.AS_PATH_LIST).build()
 

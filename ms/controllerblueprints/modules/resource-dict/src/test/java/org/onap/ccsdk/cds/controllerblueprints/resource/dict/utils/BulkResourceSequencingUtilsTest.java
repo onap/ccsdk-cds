@@ -20,7 +20,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment;
+
 import java.util.List;
+
 /**
  * BulkResourceSequencingUtils.
  *
@@ -29,9 +31,10 @@ import java.util.List;
 public class BulkResourceSequencingUtilsTest {
 
     @Test
-    public void testProcess(){
+    public void testProcess() {
         List<ResourceAssignment> assignments = JacksonUtils.Companion.getListFromClassPathFile("validation/success.json", ResourceAssignment.class);
         Assert.assertNotNull("failed to get ResourceAssignment from validation/success.json ", assignments);
         BulkResourceSequencingUtils.process(assignments);
     }
+
 }

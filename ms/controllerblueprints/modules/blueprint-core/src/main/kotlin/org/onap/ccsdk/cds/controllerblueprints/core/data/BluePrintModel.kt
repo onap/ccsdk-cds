@@ -31,6 +31,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
  * @author Brinda Santh
  */
 open class EntityType {
+
     @get:JsonIgnore
     var id: String? = null
     var description: String? = null
@@ -48,6 +49,7 @@ open class EntityType {
  authorization credentials used to access network accessible resources.
  */
 class Credential {
+
     @get:JsonIgnore
     var id: String? = null
     var protocol: String? = null
@@ -63,6 +65,7 @@ class Credential {
 A constraint clause defines an operation along with one or more compatible values that can be used to define a constraint on a property or parameter’s allowed values when it is defined in a TOSCA Service Template or one of its entities.
  */
 class ConstraintClause {
+
     var equal: JsonNode? = null
     @get:JsonProperty("greater_than")
     var greaterThan: JsonNode? = null
@@ -101,6 +104,7 @@ class NodeFilterDefinition {
  and implementation artifacts that are referenced within the TOSCA Service Template.
 */
 class RepositoryDefinition {
+
     @get:JsonIgnore
     var id: String? = null
     var description: String? = null
@@ -108,13 +112,13 @@ class RepositoryDefinition {
     var credential: Credential? = null
 }
 
-
 /*
 3.5.6 Artifact definition
 An artifact definition defines a named, typed file that can be associated with Node Type
 or Node Template and used by orchestration engine to facilitate deployment and implementation of interface operations.
  */
 class ArtifactDefinition {
+
     @get:JsonIgnore
     var id: String? = null
     lateinit var type: String
@@ -126,7 +130,6 @@ class ArtifactDefinition {
     var properties: MutableMap<String, JsonNode>? = null
 }
 
-
 /*
 3.5.7 Import definition
 An import definition is used within a TOSCA Service Template to locate and uniquely name
@@ -134,6 +137,7 @@ another TOSCA Service Template file which has type and template definitions to b
 and referenced within another Service Template.
  */
 class ImportDefinition {
+
     @get:JsonIgnore
     var id: String? = null
     lateinit var file: String
@@ -151,6 +155,7 @@ Properties are used by template authors to provide input values to TOSCA entitie
 instantiated. The value of a property can be retrieved using the get_property function within TOSCA Service Templates.
  */
 class PropertyDefinition {
+
     @get:JsonIgnore
     var id: String? = null
     var description: String? = null
@@ -169,7 +174,6 @@ class PropertyDefinition {
     @get:ApiModelProperty(notes = "Property Value, It may be Expression or Json type values")
     var value: JsonNode? = null
 }
-
 
 /*
 3.5.10 Attribute definition
@@ -203,6 +207,7 @@ class AttributeDefinition {
 An operation definition defines a named function or procedure that can be bound to an implementation artifact (e.g., a script).
  */
 class OperationDefinition {
+
     @get:JsonIgnore
     var id: String? = null
     var description: String? = null
@@ -216,7 +221,7 @@ class Implementation {
     var dependencies: MutableList<String>? = null
     @get:JsonProperty("operation_host")
     var operationHost: String = BluePrintConstants.PROPERTY_SELF
-    //Timeout value in seconds
+    // Timeout value in seconds
     var timeout: Int = 180
 }
 
@@ -225,6 +230,7 @@ class Implementation {
 An interface definition defines a named interface that can be associated with a Node or Relationship Type
  */
 class InterfaceDefinition {
+
     @get:JsonIgnore
     var id: String? = null
     var type: String? = null
@@ -237,6 +243,7 @@ class InterfaceDefinition {
 An event filter definition defines criteria for selection of an attribute, for the purpose of monitoring it, within a TOSCA entity, or one its capabilities.
  */
 class EventFilterDefinition {
+
     @get:JsonIgnore
     var id: String? = null
     lateinit var node: String
@@ -249,6 +256,7 @@ class EventFilterDefinition {
 A trigger definition defines the event, condition and action that is used to “trigger” a policy it is associated with.
  */
 class TriggerDefinition {
+
     @get:JsonIgnore
     var id: String? = null
     var description: String? = null
@@ -271,6 +279,7 @@ class TriggerDefinition {
     · Inline another workflow defined in the topology (to allow reusability)
  */
 class Activity {
+
     var delegate: String? = null
     @get:JsonProperty("set_state")
     var setState: String? = null
@@ -284,6 +293,7 @@ class Activity {
 A workflow condition can be used as a filter or precondition to check if a workflow can be processed or not based on the state of the instances of a TOSCA topology deployment. When not met, the workflow will not be triggered.
  */
 class PreConditionDefinition {
+
     @get:JsonIgnore
     var id: String? = null
     lateinit var target: String
@@ -297,6 +307,7 @@ class PreConditionDefinition {
 A workflow step allows to define one or multiple sequenced activities in a workflow and how they are connected to other steps in the workflow. They are the building blocks of a declarative workflow.
  */
 class Step {
+
     @get:JsonIgnore
     var id: String? = null
     var description: String? = null
@@ -333,6 +344,7 @@ class CapabilityDefinition {
 The Requirement definition describes a named requirement (dependencies) of a TOSCA Node Type or Node template which needs to be fulfilled by a matching Capability definition declared by another TOSCA modelable entity.  The requirement definition may itself include the specific name of the fulfilling entity (explicitly) or provide an abstract type, along with additional filtering characteristics, that a TOSCA orchestrator can use to fulfill the capability at runtime (implicitly).
  */
 class RequirementDefinition {
+
     @get:JsonIgnore
     var id: String? = null
     var description: String? = null
@@ -347,11 +359,11 @@ class RequirementDefinition {
 An Artifact Type is a reusable entity that defines the type of one or more files that are used to define implementation or deployment artifacts that are referenced by nodes or relationships on their operations.
  */
 class ArtifactType : EntityType() {
+
     @get:JsonProperty("mime_type")
     var mimeType: String? = null
     @get:JsonProperty("file_ext")
     var fileExt: MutableList<String>? = null
-
 }
 
 /*
@@ -415,7 +427,6 @@ class GroupType : EntityType() {
     var requirements: ArrayList<RequirementDefinition>? = null
     var capabilities: MutableMap<String, CapabilityDefinition>? = null
     var interfaces: MutableMap<String, InterfaceDefinition>? = null
-
 }
 
 /*
@@ -425,6 +436,7 @@ class GroupType : EntityType() {
     (i.e., it does not prevent the application or service from being deployed or run if it did not exist).
  */
 class PolicyType : EntityType() {
+
     lateinit var targets: MutableList<String>
 }
 
@@ -433,6 +445,7 @@ class PolicyType : EntityType() {
 A capability assignment allows node template authors to assign values to properties and attributes for a named capability definition that is part of a Node Template’s type definition.
  */
 class CapabilityAssignment {
+
     @get:JsonIgnore
     var id: String? = null
     var attributes: MutableMap<String, JsonNode>? = null
@@ -444,6 +457,7 @@ class CapabilityAssignment {
 A Relationship Template specifies the occurrence of a manageable relationship between node templates as part of an application’s topology model that is defined in a TOSCA Service Template.  A Relationship template is an instance of a specified Relationship Type and can provide customized properties, constraints or operations which override the defaults provided by its Relationship Type and its implementations.
  */
 class GroupDefinition {
+
     @get:JsonIgnore
     var id: String? = null
     lateinit var type: String
@@ -459,6 +473,7 @@ class GroupDefinition {
 A policy definition defines a policy that can be associated with a TOSCA topology or top-level entity definition (e.g., group definition, node template, etc.).
  */
 class PolicyDefinition {
+
     @get:JsonIgnore
     var id: String? = null
     lateinit var type: String
@@ -468,12 +483,12 @@ class PolicyDefinition {
     var targets: MutableList<String>? = null
 }
 
-
 /*
 3.8 Topology Template definition
 This section defines the topology template of a cloud application. The main ingredients of the topology template are node templates representing components of the application and relationship templates representing links between the components. These elements are defined in the nested node_templates section and the nested relationship_templates sections, respectively.  Furthermore, a topology template allows for defining input parameters, output parameters as well as grouping of node templates.
  */
 class TopologyTemplate {
+
     @get:JsonIgnore
     var id: String? = null
     var description: String? = null
@@ -520,7 +535,7 @@ open class NodeTemplate {
     lateinit var type: String
     var metadata: MutableMap<String, String>? = null
     var directives: MutableList<String>? = null
-    //@get:JsonSerialize(using = PropertyDefinitionValueSerializer::class)
+    // @get:JsonSerialize(using = PropertyDefinitionValueSerializer::class)
     var properties: MutableMap<String, JsonNode>? = null
     var attributes: MutableMap<String, JsonNode>? = null
     var capabilities: MutableMap<String, CapabilityAssignment>? = null
@@ -566,10 +581,9 @@ class RequirementAssignment {
     var id: String? = null
     var capability: String? = null
     var node: String? = null
-    //Relationship Type or Relationship Template
+    // Relationship Type or Relationship Template
     var relationship: String? = null
 }
-
 
 class Workflow {
     @get:JsonIgnore
@@ -580,7 +594,6 @@ class Workflow {
     var inputs: MutableMap<String, PropertyDefinition>? = null
     var outputs: MutableMap<String, PropertyDefinition>? = null
 }
-
 
 class ConditionClause {
     var and: ArrayList<MutableMap<String, Any>>? = null
@@ -597,6 +610,7 @@ A TOSCA Service Template (YAML) document contains element definitions of buildin
 @JsonPropertyOrder(value = ["toscaDefinitionsVersion", "description", "metadata", "imports", "dsl_definitions",
     "topologyTemplate"])
 class ServiceTemplate : Cloneable {
+
     @get:JsonIgnore
     var id: String? = null
     @get:JsonProperty("tosca_definitions_version")
@@ -620,7 +634,7 @@ class ServiceTemplate : Cloneable {
     @get:JsonProperty("topology_template")
     var topologyTemplate: TopologyTemplate? = null
 
-    override public fun clone(): ServiceTemplate {
+    public override fun clone(): ServiceTemplate {
         return super.clone() as ServiceTemplate
     }
 }
@@ -634,4 +648,3 @@ class ToscaMetaData {
     var templateVersion: String? = null
     var templateTags: String? = null
 }
-

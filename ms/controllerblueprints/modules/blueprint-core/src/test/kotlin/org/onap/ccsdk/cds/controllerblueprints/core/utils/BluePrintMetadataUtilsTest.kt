@@ -17,16 +17,15 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
-
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ToscaMetaData
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintCompileCache
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
 class BluePrintMetadataUtilsTest {
 
@@ -44,7 +43,6 @@ class BluePrintMetadataUtilsTest {
             assertNotNull(toscaMetaData.entityDefinitions, "Missing Tosca Entity Definition")
             assertNotNull(toscaMetaData.templateTags, "Missing Template Tags")
         }
-
     }
 
     @Test

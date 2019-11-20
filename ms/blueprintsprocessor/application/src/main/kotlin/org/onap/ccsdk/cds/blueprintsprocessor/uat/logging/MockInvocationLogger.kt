@@ -19,11 +19,11 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.uat.logging
 
+import java.util.concurrent.atomic.AtomicInteger
 import org.mockito.listeners.InvocationListener
 import org.mockito.listeners.MethodInvocationReport
 import org.slf4j.LoggerFactory
 import org.slf4j.Marker
-import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * Logs all Mockito's mock/spy invocations.

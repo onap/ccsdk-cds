@@ -16,6 +16,10 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.ssh.service
 
+import java.nio.file.Paths
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlinx.coroutines.runBlocking
 import org.apache.sshd.common.config.keys.KeyUtils.RSA_ALGORITHM
 import org.apache.sshd.common.keyprovider.KeyPairProvider
@@ -33,11 +37,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import java.nio.file.Paths
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [BluePrintSshLibConfiguration::class,
@@ -76,7 +75,7 @@ class BlueprintSshClientServiceTest {
         sshd.keyPairProvider = createTestHostKeyProvider()
         sshd.passwordAuthenticator = BogusPasswordAuthenticator(userName, password)
         sshd.publickeyAuthenticator = AcceptAllPublickeyAuthenticator.INSTANCE
-        //sshd.shellFactory = EchoShellFactory()
+        // sshd.shellFactory = EchoShellFactory()
         sshd.commandFactory = ProcessShellCommandFactory.INSTANCE
         return sshd
     }
@@ -96,5 +95,3 @@ class BogusPasswordAuthenticator(userName: String, password: String) : PasswordA
         return true
     }
 }
-
-

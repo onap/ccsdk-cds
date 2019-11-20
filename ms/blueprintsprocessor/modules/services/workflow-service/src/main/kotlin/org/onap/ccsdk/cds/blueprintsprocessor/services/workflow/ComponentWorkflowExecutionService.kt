@@ -16,7 +16,6 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.services.workflow
 
-
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintWorkflowExecutionService
@@ -24,12 +23,14 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeServ
 import org.springframework.stereotype.Service
 
 @Service("componentWorkflowExecutionService")
-open class ComponentWorkflowExecutionService(private val nodeTemplateExecutionService: NodeTemplateExecutionService)
-    : BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput> {
+open class ComponentWorkflowExecutionService(private val nodeTemplateExecutionService: NodeTemplateExecutionService) :
+    BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput> {
 
-    override suspend fun executeBluePrintWorkflow(bluePrintRuntimeService: BluePrintRuntimeService<*>,
-                                                  executionServiceInput: ExecutionServiceInput,
-                                                  properties: MutableMap<String, Any>): ExecutionServiceOutput {
+    override suspend fun executeBluePrintWorkflow(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        executionServiceInput: ExecutionServiceInput,
+        properties: MutableMap<String, Any>
+    ): ExecutionServiceOutput {
 
         val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
 
@@ -41,5 +42,4 @@ open class ComponentWorkflowExecutionService(private val nodeTemplateExecutionSe
         return nodeTemplateExecutionService.executeNodeTemplate(bluePrintRuntimeService,
             nodeTemplateName, executionServiceInput)
     }
-
 }

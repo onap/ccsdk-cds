@@ -16,7 +16,6 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.healthapi
 
-
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
@@ -52,17 +51,14 @@ class HealthCheckApplicationTests {
     @Test
     fun testHealthApiUp() {
         webTestClient.get().uri("/api/v1/combinedHealth")
-                .exchange()
-                .expectStatus().is2xxSuccessful
-
+            .exchange()
+            .expectStatus().is2xxSuccessful
     }
 
     @Test
     fun testMetricsApiUp() {
         webTestClient.get().uri("/api/v1/combinedMetrics")
-                .exchange()
-                .expectStatus().is2xxSuccessful
+            .exchange()
+            .expectStatus().is2xxSuccessful
     }
-
-
 }

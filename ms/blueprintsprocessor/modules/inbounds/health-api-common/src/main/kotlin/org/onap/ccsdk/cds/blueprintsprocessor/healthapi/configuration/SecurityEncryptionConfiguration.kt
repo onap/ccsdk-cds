@@ -16,17 +16,15 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.healthapi.configuration
 
-
-import org.apache.commons.net.util.Base64
-import org.springframework.stereotype.Component
-import org.springframework.stereotype.Service
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
-
+import org.apache.commons.net.util.Base64
+import org.springframework.stereotype.Component
 
 @Component
 class SecurityEncryptionConfiguration {
+
     private val key = "aesEncryptionKey"
     private val initVector = "encryptionIntVec"
 

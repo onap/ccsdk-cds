@@ -17,7 +17,6 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.config
 
-
 open class BluePrintLoadConfiguration {
     lateinit var blueprintDeployPath: String
     lateinit var blueprintArchivePath: String

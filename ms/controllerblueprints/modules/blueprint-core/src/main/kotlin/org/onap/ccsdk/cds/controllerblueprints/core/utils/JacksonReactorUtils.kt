@@ -17,34 +17,34 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
-import org.slf4j.LoggerFactory
 import com.fasterxml.jackson.databind.JsonNode
+import java.io.File
+import java.nio.charset.Charset
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.apache.commons.io.IOUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
-import java.io.File
-import java.nio.charset.Charset
+import org.slf4j.LoggerFactory
 
 class JacksonReactorUtils {
     companion object {
 
-        private val log= LoggerFactory.getLogger(this::class.toString())
+        private val log = LoggerFactory.getLogger(this::class.toString())
 
         suspend fun getContent(fileName: String): String {
-            //log.info("Reading File($fileName)")
+            // log.info("Reading File($fileName)")
             return getContent(normalizedFile(fileName))
         }
 
-        suspend fun getContent(file: File): String  = withContext(Dispatchers.IO) {
+        suspend fun getContent(file: File): String = withContext(Dispatchers.IO) {
             // log.info("Reading File(${file.absolutePath})")
             file.readText(Charsets.UTF_8)
         }
 
         suspend fun getClassPathFileContent(fileName: String): String = withContext(Dispatchers.IO) {
-            //log.trace("Reading Classpath File($fileName)")
+            // log.trace("Reading Classpath File($fileName)")
             IOUtils.toString(JacksonUtils::class.java.classLoader
-                    .getResourceAsStream(fileName), Charset.defaultCharset())
+                .getResourceAsStream(fileName), Charset.defaultCharset())
         }
 
         suspend fun <T> readValueFromFile(fileName: String, valueType: Class<T>): T? {
@@ -86,6 +86,5 @@ class JacksonReactorUtils {
             val content: String = getClassPathFileContent(fileName)
             return JacksonUtils.getMapFromJson(content, valueType)
         }
-
     }
 }

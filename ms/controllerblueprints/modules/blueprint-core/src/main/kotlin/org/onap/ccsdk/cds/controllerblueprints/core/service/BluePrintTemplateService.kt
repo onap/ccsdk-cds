@@ -25,9 +25,14 @@ import org.springframework.stereotype.Service
 class BluePrintTemplateService(private val bluePrintLoadConfiguration: BluePrintLoadConfiguration) :
     BlueprintTemplateService {
 
-    override suspend fun generateContent(bluePrintRuntimeService: BluePrintRuntimeService<*>,
-                                         nodeTemplateName: String, artifactName: String, jsonData: String,
-                                         ignoreJsonNull: Boolean, additionalContext: MutableMap<String, Any>): String {
+    override suspend fun generateContent(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        nodeTemplateName: String,
+        artifactName: String,
+        jsonData: String,
+        ignoreJsonNull: Boolean,
+        additionalContext: MutableMap<String, Any>
+    ): String {
 
         val artifactDefinition =
             bluePrintRuntimeService.resolveNodeTemplateArtifactDefinition(nodeTemplateName, artifactName)

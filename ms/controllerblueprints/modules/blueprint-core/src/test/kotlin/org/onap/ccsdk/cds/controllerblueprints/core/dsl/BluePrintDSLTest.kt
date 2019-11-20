@@ -17,12 +17,12 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.dsl
 
 import com.fasterxml.jackson.databind.JsonNode
+import kotlin.test.assertNotNull
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
-import kotlin.test.assertNotNull
 
 class BluePrintDSLTest {
 
@@ -30,13 +30,13 @@ class BluePrintDSLTest {
     fun testOperationDSLWorkflow() {
 
         val blueprint = blueprint("sample-bp", "1.0.0",
-                "brindasanth@onap.com", "sample, blueprints") {
+            "brindasanth@onap.com", "sample, blueprints") {
 
             artifactType(BluePrintTypes.artifactTypeTemplateVelocity())
 
             // For New Component Definition
             component("resource-resolution", "component-script-executor", "1.0.0",
-                    "Resource Resolution component.") {
+                "Resource Resolution component.") {
                 implementation(180)
                 // Attributes ( Properties which will be set during execution)
                 attribute("template1-data", "string", true, "")
@@ -55,7 +55,7 @@ class BluePrintDSLTest {
 
             // Already definitions Registered Components
             registryComponent("activate-restconf", "component-resource-resolution", "1.0.0",
-                    "RestconfExecutor", "Resource Resolution component.") {
+                "RestconfExecutor", "Resource Resolution component.") {
                 implementation(180)
                 // Properties
                 property("string-value1", "data")
@@ -65,7 +65,6 @@ class BluePrintDSLTest {
                 output("self-attribute-expression", getAttribute("template1-data"))
                 // Artifacts
                 artifact("template2", "artifact-template-velocity", "Templates/template1.vtl")
-
             }
 
             workflow("resource-resolution-process", "Resource Resolution wf") {
@@ -77,25 +76,25 @@ class BluePrintDSLTest {
         }
         assertNotNull(blueprint.components, "failed to get components")
         assertNotNull(blueprint.workflows, "failed to get workflows")
-        //println(blueprint.asJsonString(true))
+        // println(blueprint.asJsonString(true))
 
         val serviceTemplateGenerator = BluePrintServiceTemplateGenerator(blueprint)
         val serviceTemplate = serviceTemplateGenerator.serviceTemplate()
         assertNotNull(serviceTemplate.topologyTemplate, "failed to get service topology template")
-        //println(serviceTemplate.asJsonString(true))
+        // println(serviceTemplate.asJsonString(true))
     }
 
     @Test
     fun testServiceTemplate() {
         val serviceTemplate = serviceTemplate("sample-bp", "1.0.0",
-                "brindasanth@onap.com", "sample, blueprints") {
+            "brindasanth@onap.com", "sample, blueprints") {
             metadata("release", "1806")
             import("Definition/data_types.json")
             dsl("rest-endpoint", """{ "selector" : "odl-selector"}""")
             dsl("db-endpoint", """{ "selector" : "db-selector"}""")
             topologyTemplate {
                 nodeTemplateOperation(nodeTemplateName = "activate", type = "sample-node-type", interfaceName = "RestconfExecutor",
-                        description = "sample activation") {
+                    description = "sample activation") {
                     implementation(360, "SELF") {
                         primary("Scripts/sample.py")
                         dependencies("one", "two")
@@ -156,7 +155,7 @@ class BluePrintDSLTest {
         assertNotNull(serviceTemplate.topologyTemplate, "failed to get topology template")
         assertNotNull(serviceTemplate.topologyTemplate?.nodeTemplates, "failed to get nodeTypes")
         assertNotNull(serviceTemplate.topologyTemplate?.nodeTemplates!!["activate"], "failed to get nodeTypes(activate)")
-        //println(serviceTemplate.asJsonString(true))
+        // println(serviceTemplate.asJsonString(true))
     }
 
     @Test
@@ -170,7 +169,6 @@ class BluePrintDSLTest {
                     maxLength(20)
                     minLength(10)
                 }
-
             }
             property("disk-space", "string", true, "") {
                 defaultValue(10)
@@ -197,7 +195,7 @@ class BluePrintDSLTest {
     @Test
     fun testServiceTemplateWorkflow() {
         val serviceTemplate = serviceTemplate("sample-bp", "1.0.0",
-                "brindasanth@onap.com", "sample, blueprints") {
+            "brindasanth@onap.com", "sample, blueprints") {
             topologyTemplate {
                 workflowNodeTemplate("activate", "component-resource-resolution", "") {
                     operation("ResourceResolutionExecutor", "") {
@@ -210,14 +208,14 @@ class BluePrintDSLTest {
         }
         assertNotNull(serviceTemplate.topologyTemplate, "failed to get topology template")
         assertNotNull(serviceTemplate.topologyTemplate?.workflows?.get("activate"), "failed to get workflow(activate)")
-        //println(serviceTemplate.asJsonString(true))
+        // println(serviceTemplate.asJsonString(true))
     }
 
     @Test
     fun testNodeTemplateOperationTypes() {
 
         val testNodeTemplateInstance = BluePrintTypes.nodeTemplateComponentTestExecutor(id = "test-node-template",
-                description = "") {
+            description = "") {
             definedProperties {
                 prop1("i am property1")
                 prop2("i am property2")
@@ -233,21 +231,23 @@ class BluePrintDSLTest {
             }
         }
         assertNotNull(testNodeTemplateInstance, "failed to get test node template")
-        //println(testNodeTemplateInstance.asJsonString(true))
+        // println(testNodeTemplateInstance.asJsonString(true))
     }
 }
 
-fun BluePrintTypes.nodeTemplateComponentTestExecutor(id: String,
-                                                     description: String,
-                                                     block: TestNodeTemplateOperationImplBuilder.() -> Unit)
-        : NodeTemplate {
+fun BluePrintTypes.nodeTemplateComponentTestExecutor(
+    id: String,
+    description: String,
+    block: TestNodeTemplateOperationImplBuilder.() -> Unit
+):
+        NodeTemplate {
     return TestNodeTemplateOperationImplBuilder(id, description).apply(block).build()
 }
 
 class TestNodeTemplateOperationImplBuilder(id: String, description: String) :
-        AbstractNodeTemplateOperationImplBuilder<TestProperty, TestInput, TestOutput>(id, "component-test-executor",
-                "ComponentTestExecutor",
-                description)
+    AbstractNodeTemplateOperationImplBuilder<TestProperty, TestInput, TestOutput>(id, "component-test-executor",
+        "ComponentTestExecutor",
+        description)
 
 class TestProperty : PropertiesAssignmentBuilder() {
     fun prop1(prop1: String) {

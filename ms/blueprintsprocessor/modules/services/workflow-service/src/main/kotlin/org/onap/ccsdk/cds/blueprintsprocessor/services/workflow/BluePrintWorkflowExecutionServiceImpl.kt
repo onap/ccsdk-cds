@@ -29,23 +29,25 @@ import org.springframework.stereotype.Service
 
 @Service("bluePrintWorkflowExecutionService")
 open class BluePrintWorkflowExecutionServiceImpl(
-        private val componentWorkflowExecutionService: ComponentWorkflowExecutionService,
-        private val dgWorkflowExecutionService: DGWorkflowExecutionService,
-        private val imperativeWorkflowExecutionService: ImperativeWorkflowExecutionService
+    private val componentWorkflowExecutionService: ComponentWorkflowExecutionService,
+    private val dgWorkflowExecutionService: DGWorkflowExecutionService,
+    private val imperativeWorkflowExecutionService: ImperativeWorkflowExecutionService
 ) : BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput> {
 
     private val log = LoggerFactory.getLogger(BluePrintWorkflowExecutionServiceImpl::class.java)!!
 
-    override suspend fun executeBluePrintWorkflow(bluePrintRuntimeService: BluePrintRuntimeService<*>,
-                                                  executionServiceInput: ExecutionServiceInput,
-                                                  properties: MutableMap<String, Any>): ExecutionServiceOutput {
+    override suspend fun executeBluePrintWorkflow(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        executionServiceInput: ExecutionServiceInput,
+        properties: MutableMap<String, Any>
+    ): ExecutionServiceOutput {
 
         val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
 
         val workflowName = executionServiceInput.actionIdentifiers.actionName
 
         // Assign Workflow inputs
-        //check if request structure exists
+        // check if request structure exists
         if (!executionServiceInput.payload.has("$workflowName-request")) {
             throw BluePrintProcessorException("Input request missing the expected '$workflowName-request' block!")
         }
@@ -59,7 +61,7 @@ open class BluePrintWorkflowExecutionServiceImpl(
         /** If workflow has multiple steps, then it is imperative workflow */
         val executionServiceOutput: ExecutionServiceOutput = if (steps.size > 1) {
             imperativeWorkflowExecutionService
-                    .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, properties)
+                .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, properties)
         } else {
             // Get the DG Node Template
             val nodeTemplateName = bluePrintContext.workflowFirstStepNodeTemplate(workflowName)
@@ -71,11 +73,11 @@ open class BluePrintWorkflowExecutionServiceImpl(
             when {
                 derivedFrom.startsWith(BluePrintConstants.MODEL_TYPE_NODE_COMPONENT, true) -> {
                     componentWorkflowExecutionService
-                            .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, properties)
+                        .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, properties)
                 }
                 derivedFrom.startsWith(BluePrintConstants.MODEL_TYPE_NODE_WORKFLOW, true) -> {
                     dgWorkflowExecutionService
-                            .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, properties)
+                        .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, properties)
                 }
                 else -> {
                     throw BluePrintProcessorException("couldn't execute workflow($workflowName) step mapped " +
@@ -93,5 +95,4 @@ open class BluePrintWorkflowExecutionServiceImpl(
         executionServiceOutput.payload.set("$workflowName-response", workflowOutputs.asObjectNode())
         return executionServiceOutput
     }
-
 }

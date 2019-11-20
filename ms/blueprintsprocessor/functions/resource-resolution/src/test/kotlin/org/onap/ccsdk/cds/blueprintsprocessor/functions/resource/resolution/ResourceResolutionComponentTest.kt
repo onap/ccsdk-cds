@@ -22,6 +22,8 @@ import com.fasterxml.jackson.databind.node.NullNode
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import kotlin.test.assertEquals
+import kotlin.test.fail
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -31,8 +33,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-import kotlin.test.assertEquals
-import kotlin.test.fail
 
 class ResourceResolutionComponentTest {
 
@@ -49,7 +49,6 @@ class ResourceResolutionComponentTest {
     private val nodeTemplateName = "nodeTemplateName"
 
     private val executionRequest = ExecutionServiceInput()
-
 
     @Before
     fun setup() {
@@ -82,7 +81,7 @@ class ResourceResolutionComponentTest {
                 resourceResolutionComponent.processNB(executionRequest)
             } catch (e: BluePrintProcessorException) {
                 assertEquals("Can't proceed with the resolution: either provide resolution-key OR combination of resource-id and resource-type.",
-                        e.message)
+                    e.message)
                 return@runBlocking
             }
             fail()
@@ -99,7 +98,7 @@ class ResourceResolutionComponentTest {
                 resourceResolutionComponent.processNB(executionRequest)
             } catch (e: BluePrintProcessorException) {
                 assertEquals("Can't proceed with the resolution: both resource-id and resource-type should be provided, one of them is missing.",
-                        e.message)
+                    e.message)
                 return@runBlocking
             }
             fail()
@@ -118,7 +117,7 @@ class ResourceResolutionComponentTest {
             } catch (e: BluePrintProcessorException) {
                 assertEquals("Can't proceed with the resolution: can't persist resolution without a correlation key. " +
                         "Either provide a resolution-key OR combination of resource-id and resource-type OR set `storeResult` to false.",
-                        e.message)
+                    e.message)
                 return@runBlocking
             }
             fail()
@@ -137,21 +136,20 @@ class ResourceResolutionComponentTest {
 
         coEvery {
             resourceResolutionService.resolveResources(any(),
-                    any(),
-                    any<List<String>>(),
-                    any<MutableMap<String, Any>>())
+                any(),
+                any<List<String>>(),
+                any<MutableMap<String, Any>>())
         } returns mutableMapOf()
-
 
         runBlocking {
             resourceResolutionComponent.processNB(executionRequest)
         }
 
-// FIXME add verification
-//        coVerify {
-//            resourceResolutionService.resolveResources(eq(bluePrintRuntimeService),
-//                eq(nodeTemplateName), eq(artifactNames), eq(properties))
-//        }
+        // FIXME add verification
+        //        coVerify {
+        //            resourceResolutionService.resolveResources(eq(bluePrintRuntimeService),
+        //                eq(nodeTemplateName), eq(artifactNames), eq(properties))
+        //        }
     }
 
     @Test

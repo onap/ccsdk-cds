@@ -17,6 +17,8 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.load
 
+import java.io.File
+import java.util.UUID
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
@@ -24,8 +26,6 @@ import org.apache.commons.lang.text.StrBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import java.io.File
-import java.util.*
 
 @Service
 open class BluePrintCatalogLoadService(private val controllerBlueprintsCatalogService: BluePrintCatalogService) {
@@ -66,5 +66,4 @@ open class BluePrintCatalogLoadService(private val controllerBlueprintsCatalogSe
             errorBuilder.appendln("Couldn't load BlueprintModel(${file.name}: ${e.message}")
         }
     }
-
 }

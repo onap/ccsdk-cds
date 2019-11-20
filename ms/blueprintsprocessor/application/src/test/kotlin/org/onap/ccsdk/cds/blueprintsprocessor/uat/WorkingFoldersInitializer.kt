@@ -32,16 +32,20 @@ class WorkingFoldersInitializer : ApplicationContextInitializer<ConfigurableAppl
     override fun initialize(context: ConfigurableApplicationContext) {
         val tempFolder = ExtendedTemporaryFolder()
         val properties = listOf("Deploy", "Archive", "Working")
-                .map { "blueprintsprocessor.blueprint${it}Path=${tempFolder.newFolder(it)}" }
-                .toTypedArray()
+            .map { "blueprintsprocessor.blueprint${it}Path=${tempFolder.newFolder(it)}" }
+            .toTypedArray()
         TestPropertySourceUtils.addInlinedPropertiesToEnvironment(context, *properties)
         // Expose tempFolder as a bean so it can be accessed via DI
         registerSingleton(context, "tempFolder", ExtendedTemporaryFolder::class.java, tempFolder)
     }
 
     @Suppress("SameParameterValue")
-    private fun <T> registerSingleton(context: ConfigurableApplicationContext,
-                                      beanName: String, beanClass: Class<T>, instance: T) {
+    private fun <T> registerSingleton(
+        context: ConfigurableApplicationContext,
+        beanName: String,
+        beanClass: Class<T>,
+        instance: T
+    ) {
         val builder = BeanDefinitionBuilder.genericBeanDefinition(beanClass) { instance }
         (context.beanFactory as BeanDefinitionRegistry).registerBeanDefinition(beanName, builder.beanDefinition)
     }

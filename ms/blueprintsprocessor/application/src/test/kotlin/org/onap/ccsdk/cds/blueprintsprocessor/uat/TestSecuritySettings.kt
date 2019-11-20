@@ -30,14 +30,14 @@ class TestSecuritySettings {
         private const val authPassword = "Heisenberg"
 
         fun clientAuthToken() =
-                "Basic " + Base64Utils.encodeToString("$authUsername:$authPassword".toByteArray())
+            "Basic " + Base64Utils.encodeToString("$authUsername:$authPassword".toByteArray())
     }
 
     class ServerContextInitializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
         override fun initialize(context: ConfigurableApplicationContext) {
             TestPropertySourceUtils.addInlinedPropertiesToEnvironment(context,
-                    "security.user.name=$authUsername",
-                    "security.user.password={noop}$authPassword"
+                "security.user.name=$authUsername",
+                "security.user.password={noop}$authPassword"
             )
         }
     }

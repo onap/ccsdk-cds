@@ -16,17 +16,17 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
-import org.onap.ccsdk.cds.controllerblueprints.core.dsl.getAttribute
 import kotlin.test.Test
 import kotlin.test.assertNotNull
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.getAttribute
 
 class ResourceResolutionComponentDSLTest {
 
     @Test
     fun testNodeTypeComponentResourceResolution() {
         val nodeType = BluePrintTypes.nodeTypeComponentResourceResolution()
-        //println(nodeType.asJsonString(true))
+        // println(nodeType.asJsonString(true))
         assertNotNull(nodeType, "failed to generate nodeTypeComponentResourceResolution")
     }
 
@@ -54,7 +54,7 @@ class ResourceResolutionComponentDSLTest {
                 }
             }
         }
-        //println(nodeTemplate.asJsonString(true))
+        // println(nodeTemplate.asJsonString(true))
         assertNotNull(nodeTemplate, "failed to generate nodeTemplateComponentResourceResolution")
     }
 }

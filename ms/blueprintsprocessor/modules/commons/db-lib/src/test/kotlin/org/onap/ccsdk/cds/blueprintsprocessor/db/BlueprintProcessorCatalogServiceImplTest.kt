@@ -17,6 +17,10 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.db
 
+import java.io.File
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -35,10 +39,6 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import java.io.File
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
-import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
 @EnableAutoConfiguration
@@ -62,7 +62,7 @@ class BlueprintProcessorCatalogServiceImplTest {
     fun setup() {
         deleteDir("target", "blueprints")
         bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(blueprintId,
-                "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+            "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
     }
 
     @AfterTest
@@ -72,9 +72,9 @@ class BlueprintProcessorCatalogServiceImplTest {
 
     @Test
     fun `test catalog service`() {
-        //TODO: I thing this test function should be remve and replace by the other one.
+        // TODO: I thing this test function should be remve and replace by the other one.
         runBlocking {
-            //FIXME("Create ZIP from test blueprints")
+            // FIXME("Create ZIP from test blueprints")
 
             val file = normalizedFile("./src/test/resources/test-cba.zip")
             assertTrue(file.exists(), "couldn't get file ${file.absolutePath}")
@@ -111,7 +111,7 @@ class BlueprintProcessorCatalogServiceImplTest {
         }
 
         assertTrue(File(blueprintCoreConfiguration.bluePrintLoadConfiguration().blueprintArchivePath +
-                "/baseconfiguration").deleteRecursively(),"Couldn't get blueprint archive " +
+                "/baseconfiguration").deleteRecursively(), "Couldn't get blueprint archive " +
                 "${blueprintCoreConfiguration.bluePrintLoadConfiguration().blueprintArchivePath}/baseconfiguration " +
                 "from data base.")
     }

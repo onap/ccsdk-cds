@@ -17,14 +17,34 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
-import org.slf4j.LoggerFactory
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.common.base.Preconditions
-import org.apache.commons.lang3.StringUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.*
-import org.onap.ccsdk.cds.controllerblueprints.core.data.*
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import java.io.Serializable
+import org.apache.commons.lang3.StringUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.CapabilityAssignment
+import org.onap.ccsdk.cds.controllerblueprints.core.data.CapabilityDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.Implementation
+import org.onap.ccsdk.cds.controllerblueprints.core.data.InterfaceAssignment
+import org.onap.ccsdk.cds.controllerblueprints.core.data.InterfaceDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.OperationDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.RequirementAssignment
+import org.onap.ccsdk.cds.controllerblueprints.core.data.RequirementDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ServiceTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.data.TopologyTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.data.Workflow
+import org.onap.ccsdk.cds.controllerblueprints.core.format
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.slf4j.LoggerFactory
 
 /**
  *
@@ -43,7 +63,7 @@ interface BluePrintValidatorService : Serializable {
 @Deprecated("Decomposed implementation moved to blueprint-validation module")
 open class BluePrintValidatorDefaultService : BluePrintValidatorService {
 
-    val log= LoggerFactory.getLogger(BluePrintValidatorDefaultService::class.toString())
+    val log = LoggerFactory.getLogger(BluePrintValidatorDefaultService::class.toString())
 
     lateinit var bluePrintContext: BluePrintContext
     lateinit var serviceTemplate: ServiceTemplate
@@ -73,8 +93,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
             log.error("validation failed in the path : {}", paths.joinToString(separator), e)
             log.error("validation trace message :{} ", message)
             throw BluePrintException(e,
-                    format("failed to validate blueprint on path ({}) with message {}"
-                            , paths.joinToString(separator), e.message))
+                format("failed to validate blueprint on path ({}) with message {}", paths.joinToString(separator), e.message))
         }
     }
 
@@ -133,13 +152,13 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
         paths.add(nodeTypeName)
         message.appendln("--> Node Type :" + paths.joinToString(separator))
         val derivedFrom: String = nodeType.derivedFrom
-        //Check Derived From
+        // Check Derived From
         checkValidNodeTypesDerivedFrom(nodeTypeName, derivedFrom)
 
         if (!BluePrintTypes.rootNodeTypes().contains(derivedFrom)) {
             serviceTemplate.nodeTypes?.get(derivedFrom)
-                    ?: throw BluePrintException(format("Failed to get derivedFrom NodeType({})'s for NodeType({}) ",
-                            derivedFrom, nodeTypeName))
+                ?: throw BluePrintException(format("Failed to get derivedFrom NodeType({})'s for NodeType({}) ",
+                    derivedFrom, nodeTypeName))
         }
 
         nodeType.properties?.let { validatePropertyDefinitions(nodeType.properties!!) }
@@ -190,7 +209,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
         val type: String = nodeTemplate.type
 
         val nodeType: NodeType = serviceTemplate.nodeTypes?.get(type)
-                ?: throw BluePrintException(format("Failed to get NodeType({}) definition for NodeTemplate({})", type, nodeTemplateName))
+            ?: throw BluePrintException(format("Failed to get NodeType({}) definition for NodeTemplate({})", type, nodeTemplateName))
 
         nodeTemplate.artifacts?.let { validateArtifactDefinitions(nodeTemplate.artifacts!!) }
         nodeTemplate.properties?.let { validatePropertyAssignments(nodeType.properties!!, nodeTemplate.properties!!) }
@@ -207,12 +226,12 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
             paths.add(artifactDefinitionName)
             message.appendln("Validating artifact " + paths.joinToString(separator))
             val type: String = artifactDefinition.type
-                    ?: throw BluePrintException(format("type is missing for ArtifactDefinition({})", artifactDefinitionName))
+                ?: throw BluePrintException(format("type is missing for ArtifactDefinition({})", artifactDefinitionName))
             // Check Artifact Type
             checkValidArtifactType(artifactDefinitionName, type)
 
             val file: String = artifactDefinition.file
-                    ?: throw BluePrintException(format("file is missing for ArtifactDefinition({})", artifactDefinitionName))
+                ?: throw BluePrintException(format("file is missing for ArtifactDefinition({})", artifactDefinitionName))
 
             paths.removeAt(paths.lastIndex)
         }
@@ -258,7 +277,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
                 }
                 BluePrintTypes.validCollectionTypes().contains(dataType) -> {
                     val entrySchemaType: String = propertyDefinition.entrySchema?.type
-                            ?: throw BluePrintException(format("Entry schema for DataType ({}) for the property ({}) not found", dataType, propertyName))
+                        ?: throw BluePrintException(format("Entry schema for DataType ({}) for the property ({}) not found", dataType, propertyName))
                     checkPrimitiveOrComplex(entrySchemaType, propertyName)
                 }
                 else -> checkPropertyDataType(dataType, propertyName)
@@ -270,20 +289,24 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
     }
 
     @Throws(BluePrintException::class)
-    open fun validatePropertyAssignments(nodeTypeProperties: MutableMap<String, PropertyDefinition>,
-                                         properties: MutableMap<String, JsonNode>) {
+    open fun validatePropertyAssignments(
+        nodeTypeProperties: MutableMap<String, PropertyDefinition>,
+        properties: MutableMap<String, JsonNode>
+    ) {
         properties.forEach { propertyName, propertyAssignment ->
             val propertyDefinition: PropertyDefinition = nodeTypeProperties[propertyName]
-                    ?: throw BluePrintException(format("failed to get definition for the property ({})", propertyName))
+                ?: throw BluePrintException(format("failed to get definition for the property ({})", propertyName))
 
             validatePropertyAssignment(propertyName, propertyDefinition, propertyAssignment)
-
         }
     }
 
     @Throws(BluePrintException::class)
-    open fun validatePropertyAssignment(propertyName: String, propertyDefinition: PropertyDefinition,
-                                        propertyAssignment: JsonNode) {
+    open fun validatePropertyAssignment(
+        propertyName: String,
+        propertyDefinition: PropertyDefinition,
+        propertyAssignment: JsonNode
+    ) {
         // Check and Validate if Expression Node
         val expressionData = BluePrintExpressionService.getExpressionData(propertyAssignment)
         if (!expressionData.isExpression) {
@@ -299,8 +322,8 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
             paths.add(capabilityName)
 
             val capabilityDefinition = nodeType.capabilities?.get(capabilityName)
-                    ?: throw BluePrintException(format("Failed to get NodeTemplate({}) capability definition ({}) " +
-                            "from NodeType({}) ", nodeTemplateName, capabilityName, nodeTemplate.type))
+                ?: throw BluePrintException(format("Failed to get NodeTemplate({}) capability definition ({}) " +
+                        "from NodeType({}) ", nodeTemplateName, capabilityName, nodeTemplate.type))
 
             validateCapabilityAssignment(nodeTemplateName, capabilityName, capabilityDefinition, capabilityAssignment)
 
@@ -310,11 +333,14 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
     }
 
     @Throws(BluePrintException::class)
-    open fun validateCapabilityAssignment(nodeTemplateName: String, capabilityName: String,
-                                          capabilityDefinition: CapabilityDefinition, capabilityAssignment: CapabilityAssignment) {
+    open fun validateCapabilityAssignment(
+        nodeTemplateName: String,
+        capabilityName: String,
+        capabilityDefinition: CapabilityDefinition,
+        capabilityAssignment: CapabilityAssignment
+    ) {
 
         capabilityAssignment.properties?.let { validatePropertyAssignments(capabilityDefinition.properties!!, capabilityAssignment.properties!!) }
-
     }
 
     @Throws(BluePrintException::class)
@@ -324,19 +350,22 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
         requirements?.forEach { requirementName, requirementAssignment ->
             paths.add(requirementName)
             val requirementDefinition = nodeType.requirements?.get(requirementName)
-                    ?: throw BluePrintException(format("Failed to get NodeTemplate({}) requirement definition ({}) from" +
-                            " NodeType({}) ", nodeTemplateName, requirementName, nodeTemplate.type))
+                ?: throw BluePrintException(format("Failed to get NodeTemplate({}) requirement definition ({}) from" +
+                        " NodeType({}) ", nodeTemplateName, requirementName, nodeTemplate.type))
             // Validate Requirement Assignment
             validateRequirementAssignment(nodeTemplateName, requirementName, requirementDefinition, requirementAssignment)
             paths.removeAt(paths.lastIndex)
         }
         paths.removeAt(paths.lastIndex)
-
     }
 
     @Throws(BluePrintException::class)
-    open fun validateRequirementAssignment(nodeTemplateName: String, requirementAssignmentName: String,
-                                           requirementDefinition: RequirementDefinition, requirementAssignment: RequirementAssignment) {
+    open fun validateRequirementAssignment(
+        nodeTemplateName: String,
+        requirementAssignmentName: String,
+        requirementDefinition: RequirementDefinition,
+        requirementAssignment: RequirementAssignment
+    ) {
         log.info("Validating NodeTemplate({}) requirement assignment ({}) ", nodeTemplateName, requirementAssignmentName)
         val requirementNodeTemplateName = requirementAssignment.node!!
         val capabilityName = requirementAssignment.capability
@@ -344,18 +373,16 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
 
         check(BluePrintTypes.validRelationShipDerivedFroms.contains(relationship)) {
             throw BluePrintException(format("Failed to get relationship type ({}) for NodeTemplate({})'s requirement({}) ",
-                    relationship, nodeTemplateName, requirementAssignmentName))
+                relationship, nodeTemplateName, requirementAssignmentName))
         }
 
         val relationShipNodeTemplate = serviceTemplate.topologyTemplate?.nodeTemplates?.get(requirementNodeTemplateName)
-                ?: throw BluePrintException(format("Failed to get requirement NodeTemplate({})'s for NodeTemplate({}) requirement({}) ",
-                        requirementNodeTemplateName, nodeTemplateName, requirementAssignmentName))
+            ?: throw BluePrintException(format("Failed to get requirement NodeTemplate({})'s for NodeTemplate({}) requirement({}) ",
+                requirementNodeTemplateName, nodeTemplateName, requirementAssignmentName))
 
         relationShipNodeTemplate.capabilities?.get(capabilityName)
-                ?: throw BluePrintException(format("Failed to get requirement NodeTemplate({})'s capability({}) for NodeTemplate ({})'s requirement({}) ",
-                        requirementNodeTemplateName, capabilityName, nodeTemplateName, requirementAssignmentName))
-
-
+            ?: throw BluePrintException(format("Failed to get requirement NodeTemplate({})'s capability({}) for NodeTemplate ({})'s requirement({}) ",
+                requirementNodeTemplateName, capabilityName, nodeTemplateName, requirementAssignmentName))
     }
 
     @Throws(BluePrintException::class)
@@ -366,70 +393,71 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
         interfaces?.forEach { interfaceAssignmentName, interfaceAssignment ->
             paths.add(interfaceAssignmentName)
             val interfaceDefinition = nodeType.interfaces?.get(interfaceAssignmentName)
-                    ?: throw BluePrintException(format("Failed to get NodeTemplate({}) interface definition ({}) from" +
-                            " NodeType({}) ", nodeTemplateName, interfaceAssignmentName, nodeTemplate.type))
+                ?: throw BluePrintException(format("Failed to get NodeTemplate({}) interface definition ({}) from" +
+                        " NodeType({}) ", nodeTemplateName, interfaceAssignmentName, nodeTemplate.type))
 
             validateInterfaceAssignment(nodeTemplateName, interfaceAssignmentName, interfaceDefinition,
-                    interfaceAssignment)
+                interfaceAssignment)
             paths.removeAt(paths.lastIndex)
         }
         paths.removeAt(paths.lastIndex)
-
-
     }
 
     @Throws(BluePrintException::class)
-    open fun validateInterfaceAssignment(nodeTemplateName: String, interfaceAssignmentName: String,
-                                         interfaceDefinition: InterfaceDefinition,
-                                         interfaceAssignment: InterfaceAssignment) {
+    open fun validateInterfaceAssignment(
+        nodeTemplateName: String,
+        interfaceAssignmentName: String,
+        interfaceDefinition: InterfaceDefinition,
+        interfaceAssignment: InterfaceAssignment
+    ) {
 
         val operations = interfaceAssignment.operations
         operations?.let {
             validateInterfaceOperationsAssignment(nodeTemplateName, interfaceAssignmentName, interfaceDefinition,
-                    interfaceAssignment)
+                interfaceAssignment)
         }
-
     }
 
     @Throws(BluePrintException::class)
-    open fun validateInterfaceOperationsAssignment(nodeTemplateName: String, interfaceAssignmentName: String,
-                                                   interfaceDefinition: InterfaceDefinition,
-                                                   interfaceAssignment: InterfaceAssignment) {
+    open fun validateInterfaceOperationsAssignment(
+        nodeTemplateName: String,
+        interfaceAssignmentName: String,
+        interfaceDefinition: InterfaceDefinition,
+        interfaceAssignment: InterfaceAssignment
+    ) {
 
         val operations = interfaceAssignment.operations
         operations?.let {
             it.forEach { operationAssignmentName, operationAssignments ->
 
                 val operationDefinition = interfaceDefinition.operations?.get(operationAssignmentName)
-                        ?: throw BluePrintException(format("Failed to get NodeTemplate({}) operation definition ({}) ",
-                                nodeTemplateName, operationAssignmentName))
+                    ?: throw BluePrintException(format("Failed to get NodeTemplate({}) operation definition ({}) ",
+                        nodeTemplateName, operationAssignmentName))
 
                 log.info("Validation NodeTemplate({}) Interface({}) Operation ({})", nodeTemplateName,
-                        interfaceAssignmentName, operationAssignmentName)
+                    interfaceAssignmentName, operationAssignmentName)
 
                 val inputs = operationAssignments.inputs
                 val outputs = operationAssignments.outputs
 
                 inputs?.forEach { propertyName, propertyAssignment ->
                     val propertyDefinition = operationDefinition.inputs?.get(propertyName)
-                            ?: throw BluePrintException(format("Failed to get NodeTemplate({}) operation definition ({}) " +
-                                    "property definition({})", nodeTemplateName, operationAssignmentName, propertyName))
+                        ?: throw BluePrintException(format("Failed to get NodeTemplate({}) operation definition ({}) " +
+                                "property definition({})", nodeTemplateName, operationAssignmentName, propertyName))
                     // Check the property values with property definition
                     validatePropertyAssignment(propertyName, propertyDefinition, propertyAssignment)
                 }
 
                 outputs?.forEach { propertyName, propertyAssignment ->
                     val propertyDefinition = operationDefinition.outputs?.get(propertyName)
-                            ?: throw BluePrintException(format("Failed to get NodeTemplate({}) operation definition ({}) " +
-                                    "output property definition({})", nodeTemplateName, operationAssignmentName,
-                                    propertyName))
+                        ?: throw BluePrintException(format("Failed to get NodeTemplate({}) operation definition ({}) " +
+                                "output property definition({})", nodeTemplateName, operationAssignmentName,
+                            propertyName))
                     // Check the property values with property definition
                     validatePropertyAssignment(propertyName, propertyDefinition, propertyAssignment)
                 }
-
             }
         }
-
     }
 
     @Throws(BluePrintException::class)
@@ -447,12 +475,16 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
     }
 
     @Throws(BluePrintException::class)
-    open fun validateCapabilityDefinition(nodeTypeName: String, nodeType: NodeType, capabilityName: String,
-                                          capabilityDefinition: CapabilityDefinition) {
+    open fun validateCapabilityDefinition(
+        nodeTypeName: String,
+        nodeType: NodeType,
+        capabilityName: String,
+        capabilityDefinition: CapabilityDefinition
+    ) {
         val capabilityType = capabilityDefinition.type
         check(BluePrintTypes.validCapabilityTypes.contains(capabilityType)) {
             throw BluePrintException(format("Failed to get CapabilityType({}) for NodeType({})",
-                    capabilityType, nodeTypeName))
+                capabilityType, nodeTypeName))
         }
     }
 
@@ -471,8 +503,12 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
     }
 
     @Throws(BluePrintException::class)
-    open fun validateRequirementDefinition(nodeTypeName: String, nodeType: NodeType, requirementDefinitionName: String,
-                                           requirementDefinition: RequirementDefinition) {
+    open fun validateRequirementDefinition(
+        nodeTypeName: String,
+        nodeType: NodeType,
+        requirementDefinitionName: String,
+        requirementDefinition: RequirementDefinition
+    ) {
 
         log.info("Validating NodeType({}) RequirementDefinition ({}) ", nodeTypeName, requirementDefinitionName)
         val requirementNodeTypeName = requirementDefinition.node!!
@@ -481,19 +517,17 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
 
         check(BluePrintTypes.validRelationShipDerivedFroms.contains(relationship)) {
             throw BluePrintException(format("Failed to get relationship({}) for NodeType({})'s requirement({}) ",
-                    relationship, nodeTypeName, requirementDefinitionName))
+                relationship, nodeTypeName, requirementDefinitionName))
         }
 
         val relationShipNodeType = serviceTemplate.nodeTypes?.get(requirementNodeTypeName)
-                ?: throw BluePrintException(format("Failed to get requirement NodeType({})'s for requirement({}) ",
-                        requirementNodeTypeName, requirementDefinitionName))
+            ?: throw BluePrintException(format("Failed to get requirement NodeType({})'s for requirement({}) ",
+                requirementNodeTypeName, requirementDefinitionName))
 
         relationShipNodeType.capabilities?.get(capabilityName)
-                ?: throw BluePrintException(format("Failed to get requirement NodeType({})'s capability({}) for NodeType ({})'s requirement({}) ",
-                        requirementNodeTypeName, capabilityName, nodeTypeName, requirementDefinitionName))
-
+            ?: throw BluePrintException(format("Failed to get requirement NodeType({})'s capability({}) for NodeType ({})'s requirement({}) ",
+                requirementNodeTypeName, capabilityName, nodeTypeName, requirementDefinitionName))
     }
-
 
     @Throws(BluePrintException::class)
     open fun validateInterfaceDefinitions(interfaces: MutableMap<String, InterfaceDefinition>) {
@@ -530,7 +564,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
     open fun checkValidArtifactType(artifactDefinitionName: String, artifactTypeName: String) {
 
         val artifactType = serviceTemplate.artifactTypes?.get(artifactTypeName)
-                ?: throw BluePrintException("failed to artifactType($artifactTypeName) for ArtifactDefinition($artifactDefinitionName)")
+            ?: throw BluePrintException("failed to artifactType($artifactTypeName) for ArtifactDefinition($artifactDefinitionName)")
 
         checkValidArtifactTypeDerivedFrom(artifactTypeName, artifactType.derivedFrom)
     }
@@ -562,11 +596,10 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
 
         if (BluePrintTypes.validPrimitiveTypes().contains(propertyType)) {
             isValid = JacksonUtils.checkJsonNodeValueOfPrimitiveType(propertyType, propertyAssignment)
-
         } else if (BluePrintTypes.validCollectionTypes().contains(propertyType)) {
 
             val entrySchemaType = propertyDefinition.entrySchema?.type
-                    ?: throw BluePrintException(format("Failed to get EntrySchema type for the collection property ({})", propertyName))
+                ?: throw BluePrintException(format("Failed to get EntrySchema type for the collection property ({})", propertyName))
 
             if (!BluePrintTypes.validPropertyTypes().contains(entrySchemaType)) {
                 checkPropertyDataType(entrySchemaType, propertyName)
@@ -579,17 +612,16 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
 
         check(isValid) {
             throw BluePrintException(format("property({}) defined of type({}) is not comptable with the value ({})",
-                    propertyName, propertyType, propertyAssignment))
+                propertyName, propertyType, propertyAssignment))
         }
     }
 
     private fun checkPropertyDataType(dataTypeName: String, propertyName: String) {
 
         val dataType = serviceTemplate.dataTypes?.get(dataTypeName)
-                ?: throw BluePrintException(format("DataType ({}) for the property ({}) not found", dataTypeName, propertyName))
+            ?: throw BluePrintException(format("DataType ({}) for the property ({}) not found", dataTypeName, propertyName))
 
         checkValidDataTypeDerivedFrom(propertyName, dataType.derivedFrom)
-
     }
 
     private fun checkPrimitiveOrComplex(dataType: String, propertyName: String): Boolean {
@@ -603,5 +635,4 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
     private fun checkDataType(key: String): Boolean {
         return serviceTemplate.dataTypes?.containsKey(key) ?: false
     }
-
 }

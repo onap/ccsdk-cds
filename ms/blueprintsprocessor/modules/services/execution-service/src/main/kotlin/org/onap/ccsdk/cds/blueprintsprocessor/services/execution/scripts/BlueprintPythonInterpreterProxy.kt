@@ -33,7 +33,7 @@ open class BlueprintPythonInterpreterProxy(private val bluePrintPython: BluePrin
             try {
                 this.exec(bluePrintPython.content)
             } catch (e: PySyntaxError) {
-                throw BluePrintProcessorException("Error executing Jython code! Python error: '${e.toString()}'", e)
+                throw BluePrintProcessorException("Error executing Jython code! Python error: '$e'", e)
             }
         }
 

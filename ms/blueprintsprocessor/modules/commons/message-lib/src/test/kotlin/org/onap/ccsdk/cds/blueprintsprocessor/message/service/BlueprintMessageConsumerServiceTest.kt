@@ -19,11 +19,17 @@ package org.onap.ccsdk.cds.blueprintsprocessor.message.service
 
 import io.mockk.every
 import io.mockk.spyk
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.apache.kafka.clients.consumer.*
+import org.apache.kafka.clients.consumer.Consumer
+import org.apache.kafka.clients.consumer.ConsumerRecord
+import org.apache.kafka.clients.consumer.ConsumerRecords
+import org.apache.kafka.clients.consumer.MockConsumer
+import org.apache.kafka.clients.consumer.OffsetResetStrategy
 import org.apache.kafka.common.TopicPartition
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -37,9 +43,6 @@ import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
-
 
 @RunWith(SpringRunner::class)
 @DirtiesContext
@@ -60,6 +63,7 @@ import kotlin.test.assertTrue
     "blueprintsprocessor.messageproducer.sample.clientId=default-client-id"
 ])
 open class BlueprintMessageConsumerServiceTest {
+
     val log = logger(BlueprintMessageConsumerServiceTest::class)
 
     @Autowired
@@ -69,7 +73,7 @@ open class BlueprintMessageConsumerServiceTest {
     fun testKafkaBasicAuthConsumerService() {
         runBlocking {
             val blueprintMessageConsumerService = bluePrintMessageLibPropertyService
-                    .blueprintMessageConsumerService("sample") as KafkaBasicAuthMessageConsumerService
+                .blueprintMessageConsumerService("sample") as KafkaBasicAuthMessageConsumerService
             assertNotNull(blueprintMessageConsumerService, "failed to get blueprintMessageConsumerService")
 
             val spyBlueprintMessageConsumerService = spyk(blueprintMessageConsumerService, recordPrivateCalls = true)
@@ -94,7 +98,7 @@ open class BlueprintMessageConsumerServiceTest {
             mockKafkaConsumer.updateEndOffsets(partitionsEndMap)
             for (i in 1..10) {
                 val record = ConsumerRecord<String, ByteArray>(topic, 1, i.toLong(), "key_$i",
-                        "I am message $i".toByteArray())
+                    "I am message $i".toByteArray())
                 mockKafkaConsumer.addRecord(record)
             }
 
@@ -114,7 +118,7 @@ open class BlueprintMessageConsumerServiceTest {
     fun testKafkaBasicAuthConsumerWithDynamicFunction() {
         runBlocking {
             val blueprintMessageConsumerService = bluePrintMessageLibPropertyService
-                    .blueprintMessageConsumerService("sample") as KafkaBasicAuthMessageConsumerService
+                .blueprintMessageConsumerService("sample") as KafkaBasicAuthMessageConsumerService
             assertNotNull(blueprintMessageConsumerService, "failed to get blueprintMessageConsumerService")
 
             val spyBlueprintMessageConsumerService = spyk(blueprintMessageConsumerService, recordPrivateCalls = true)
@@ -139,15 +143,18 @@ open class BlueprintMessageConsumerServiceTest {
             mockKafkaConsumer.updateEndOffsets(partitionsEndMap)
             for (i in 1..10) {
                 val record = ConsumerRecord<String, ByteArray>(topic, 1, i.toLong(), "key_$i",
-                        "I am message $i".toByteArray())
+                    "I am message $i".toByteArray())
                 mockKafkaConsumer.addRecord(record)
             }
 
             every { spyBlueprintMessageConsumerService.kafkaConsumer(any()) } returns mockKafkaConsumer
             /** Test Consumer Function implementation */
             val consumerFunction = object : KafkaConsumerRecordsFunction {
-                override suspend fun invoke(messageConsumerProperties: MessageConsumerProperties,
-                                            consumer: Consumer<*, *>, consumerRecords: ConsumerRecords<*, *>) {
+                override suspend fun invoke(
+                    messageConsumerProperties: MessageConsumerProperties,
+                    consumer: Consumer<*, *>,
+                    consumerRecords: ConsumerRecords<*, *>
+                ) {
                     val count = consumerRecords.count()
                     log.trace("Received Message count($count)")
                 }
@@ -159,11 +166,11 @@ open class BlueprintMessageConsumerServiceTest {
     }
 
     /** Integration Kafka Testing, Enable and use this test case only for local desktop testing with real kafka broker */
-    //@Test
+    // @Test
     fun testKafkaIntegration() {
         runBlocking {
             val blueprintMessageConsumerService = bluePrintMessageLibPropertyService
-                    .blueprintMessageConsumerService("sample") as KafkaBasicAuthMessageConsumerService
+                .blueprintMessageConsumerService("sample") as KafkaBasicAuthMessageConsumerService
             assertNotNull(blueprintMessageConsumerService, "failed to get blueprintMessageConsumerService")
 
             val channel = blueprintMessageConsumerService.subscribe(null)
@@ -175,14 +182,14 @@ open class BlueprintMessageConsumerServiceTest {
 
             /** Send message with every 1 sec */
             val blueprintMessageProducerService = bluePrintMessageLibPropertyService
-                    .blueprintMessageProducerService("sample") as KafkaBasicAuthMessageProducerService
+                .blueprintMessageProducerService("sample") as KafkaBasicAuthMessageProducerService
             launch {
                 repeat(5) {
                     delay(100)
                     val headers: MutableMap<String, String> = hashMapOf()
                     headers["id"] = it.toString()
                     blueprintMessageProducerService.sendMessageNB(message = "this is my message($it)",
-                            headers = headers)
+                        headers = headers)
                 }
             }
             delay(5000)

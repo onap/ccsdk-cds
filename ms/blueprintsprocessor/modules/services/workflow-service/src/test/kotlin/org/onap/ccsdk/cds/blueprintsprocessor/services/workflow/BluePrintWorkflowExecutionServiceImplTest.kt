@@ -19,6 +19,9 @@ package org.onap.ccsdk.cds.blueprintsprocessor.services.workflow
 import io.mockk.every
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertNotNull
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -36,10 +39,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
-import kotlin.test.assertNotNull
-
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [WorkflowServiceConfiguration::class])
@@ -63,17 +62,17 @@ class BluePrintWorkflowExecutionServiceImplTest {
     fun testBluePrintWorkflowExecutionService() {
         runBlocking {
             val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                    "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+                "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
             val executionServiceInput = JacksonUtils.readValueFromClassPathFile("execution-input/resource-assignment-input.json",
-                    ExecutionServiceInput::class.java)!!
+                ExecutionServiceInput::class.java)!!
 
             val executionServiceOutput = bluePrintWorkflowExecutionService
-                    .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, hashMapOf())
+                .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, hashMapOf())
 
             assertNotNull(executionServiceOutput, "failed to get response")
             assertEquals(BluePrintConstants.STATUS_SUCCESS, executionServiceOutput.status.message,
-                    "failed to get successful response")
+                "failed to get successful response")
         }
     }
 
@@ -81,17 +80,17 @@ class BluePrintWorkflowExecutionServiceImplTest {
     fun testImperativeBluePrintWorkflowExecutionService() {
         runBlocking {
             val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                    "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+                "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 
             val executionServiceInput = JacksonUtils.readValueFromClassPathFile("execution-input/imperative-test-input.json",
-                    ExecutionServiceInput::class.java)!!
+                ExecutionServiceInput::class.java)!!
 
             val executionServiceOutput = bluePrintWorkflowExecutionService
-                    .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, hashMapOf())
+                .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, hashMapOf())
 
             assertNotNull(executionServiceOutput, "failed to get response")
             assertEquals(BluePrintConstants.STATUS_SUCCESS, executionServiceOutput.status.message,
-                    "failed to get successful response")
+                "failed to get successful response")
         }
     }
 
@@ -100,15 +99,15 @@ class BluePrintWorkflowExecutionServiceImplTest {
         assertFailsWith(exceptionClass = BluePrintProcessorException::class) {
             runBlocking {
                 val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                        "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
-                //service input will have a mislabeled input params, we are expecting to get an error when that happens with a useful error message
-                val executionServiceInput = JacksonUtils.readValueFromClassPathFile("execution-input/resource-assignment-input-missing-resource_assignment_request.json",
+                    "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+                // service input will have a mislabeled input params, we are expecting to get an error when that happens with a useful error message
+                val executionServiceInput =
+                    JacksonUtils.readValueFromClassPathFile("execution-input/resource-assignment-input-missing-resource_assignment_request.json",
                         ExecutionServiceInput::class.java)!!
 
                 val executionServiceOutput = bluePrintWorkflowExecutionService
-                        .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, hashMapOf())
+                    .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, hashMapOf())
             }
         }
     }
-
 }

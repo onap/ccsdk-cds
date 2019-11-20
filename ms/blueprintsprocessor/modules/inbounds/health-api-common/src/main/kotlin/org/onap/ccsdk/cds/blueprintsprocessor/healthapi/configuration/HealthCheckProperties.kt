@@ -54,7 +54,6 @@ open class HealthCheckProperties {
     open fun getCDSListenerServiceInformation(): List<ServiceEndpoint> {
         val serviceName = ServiceName.BLUEPRINT
         return getListOfServiceEndPoints(cdsListenerServiceMapping, serviceName)
-
     }
 
     private fun getListOfServiceEndPoints(serviceMapping: List<String>?, serviceName: ServiceName): MutableList<ServiceEndpoint> {
@@ -67,7 +66,7 @@ open class HealthCheckProperties {
         return serviceEndpoints
     }
 
-    private fun fillListOfService(serviceName: ServiceName , element: String, listOfCDSListenerServiceEndpoint: MutableList<ServiceEndpoint>) {
+    private fun fillListOfService(serviceName: ServiceName, element: String, listOfCDSListenerServiceEndpoint: MutableList<ServiceEndpoint>) {
         val serviceEndpointInfo = element.split(",/")
         val serviceEndpoint = getServiceEndpoint(serviceEndpointInfo)
         if (serviceName.equals(ServiceName.CDSLISTENER))
@@ -77,16 +76,14 @@ open class HealthCheckProperties {
         listOfCDSListenerServiceEndpoint.add(serviceEndpoint)
     }
 
-
     private fun getServiceEndpoint(serviceEndpointInfo: List<String>): ServiceEndpoint {
-        return ServiceEndpoint(removeSpecialCharacter(serviceEndpointInfo.get(0))
-                , removeSpecialCharacter(serviceEndpointInfo.get(1))
+        return ServiceEndpoint(removeSpecialCharacter(serviceEndpointInfo.get(0)), removeSpecialCharacter(serviceEndpointInfo.get(1))
         )
     }
 
-    private fun removeSpecialCharacter(value:String):String{
-        return value.replaceFirst(",[","")
-                .replace("[","")
-                .replace("]","")
+    private fun removeSpecialCharacter(value: String): String {
+        return value.replaceFirst(",[", "")
+            .replace("[", "")
+            .replace("]", "")
     }
 }

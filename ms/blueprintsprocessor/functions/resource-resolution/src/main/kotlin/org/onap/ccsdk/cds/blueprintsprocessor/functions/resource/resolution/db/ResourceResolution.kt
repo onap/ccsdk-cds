@@ -18,12 +18,19 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import io.swagger.annotations.ApiModelProperty
+import java.io.Serializable
+import java.util.Date
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.EntityListeners
+import javax.persistence.Id
+import javax.persistence.Lob
+import javax.persistence.Table
+import javax.persistence.Temporal
+import javax.persistence.TemporalType
 import org.hibernate.annotations.Proxy
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
-import java.io.Serializable
-import java.util.*
-import javax.persistence.*
 
 @EntityListeners(AuditingEntityListener::class)
 @Entity

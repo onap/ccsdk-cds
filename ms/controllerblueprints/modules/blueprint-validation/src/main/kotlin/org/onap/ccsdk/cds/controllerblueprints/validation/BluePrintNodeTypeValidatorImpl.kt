@@ -17,19 +17,23 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.validation
 
-import org.slf4j.LoggerFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
-import org.onap.ccsdk.cds.controllerblueprints.core.data.*
+import org.onap.ccsdk.cds.controllerblueprints.core.data.CapabilityDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.Implementation
+import org.onap.ccsdk.cds.controllerblueprints.core.data.InterfaceDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.OperationDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.RequirementDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintNodeTypeValidator
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
-
 
 @Service("default-node-type-validator")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -49,12 +53,12 @@ open class BluePrintNodeTypeValidatorImpl(private val bluePrintTypeValidatorServ
         paths.add(nodeTypeName)
 
         val derivedFrom: String = nodeType.derivedFrom
-        //Check Derived From
+        // Check Derived From
         checkValidNodeTypesDerivedFrom(nodeTypeName, derivedFrom)
 
         if (!BluePrintTypes.rootNodeTypes().contains(derivedFrom)) {
             bluePrintContext.serviceTemplate.nodeTypes?.get(derivedFrom)
-                    ?: throw BluePrintException("Failed to get derivedFrom NodeType($derivedFrom)'s for NodeType($nodeTypeName)")
+                ?: throw BluePrintException("Failed to get derivedFrom NodeType($derivedFrom)'s for NodeType($nodeTypeName)")
         }
 
         nodeType.attributes?.let {
@@ -91,8 +95,12 @@ open class BluePrintNodeTypeValidatorImpl(private val bluePrintTypeValidatorServ
         paths.removeAt(paths.lastIndex)
     }
 
-    open fun validateCapabilityDefinition(nodeTypeName: String, nodeType: NodeType, capabilityName: String,
-                                          capabilityDefinition: CapabilityDefinition) {
+    open fun validateCapabilityDefinition(
+        nodeTypeName: String,
+        nodeType: NodeType,
+        capabilityName: String,
+        capabilityDefinition: CapabilityDefinition
+    ) {
         val capabilityType = capabilityDefinition.type
         check(BluePrintTypes.validCapabilityTypes.contains(capabilityType)) {
             throw BluePrintException("failed to get CapabilityType($capabilityType) for NodeType($nodeTypeName)")
@@ -111,8 +119,12 @@ open class BluePrintNodeTypeValidatorImpl(private val bluePrintTypeValidatorServ
         paths.removeAt(paths.lastIndex)
     }
 
-    open fun validateRequirementDefinition(nodeTypeName: String, nodeType: NodeType, requirementDefinitionName: String,
-                                           requirementDefinition: RequirementDefinition) {
+    open fun validateRequirementDefinition(
+        nodeTypeName: String,
+        nodeType: NodeType,
+        requirementDefinitionName: String,
+        requirementDefinition: RequirementDefinition
+    ) {
 
         log.info("validating NodeType({}) RequirementDefinition ({}) ", nodeTypeName, requirementDefinitionName)
         val requirementNodeTypeName = requirementDefinition.node!!
@@ -124,12 +136,11 @@ open class BluePrintNodeTypeValidatorImpl(private val bluePrintTypeValidatorServ
         }
 
         val relationShipNodeType = bluePrintContext.serviceTemplate.nodeTypes?.get(requirementNodeTypeName)
-                ?: throw BluePrintException("failed to get requirement NodeType($requirementNodeTypeName)'s for requirement($requirementDefinitionName) ")
+            ?: throw BluePrintException("failed to get requirement NodeType($requirementNodeTypeName)'s for requirement($requirementDefinitionName) ")
 
         relationShipNodeType.capabilities?.get(capabilityName)
-                ?: throw BluePrintException("failed to get requirement NodeType($requirementNodeTypeName)'s " +
-                        "capability($nodeTypeName) for NodeType ($capabilityName)'s requirement($requirementDefinitionName) ")
-
+            ?: throw BluePrintException("failed to get requirement NodeType($requirementNodeTypeName)'s " +
+                    "capability($nodeTypeName) for NodeType ($capabilityName)'s requirement($requirementDefinitionName) ")
     }
 
     open fun validateInterfaceDefinitions(interfaces: MutableMap<String, InterfaceDefinition>) {
@@ -163,5 +174,4 @@ open class BluePrintNodeTypeValidatorImpl(private val bluePrintTypeValidatorServ
     open fun validateImplementation(implementation: Implementation) {
         checkNotEmpty(implementation.primary) { "couldn't get implementation" }
     }
-
 }

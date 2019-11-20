@@ -15,6 +15,7 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db
 
+import java.util.UUID
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
@@ -25,7 +26,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Service
-import java.util.*
 
 @Service
 class TemplateResolutionService(private val templateResolutionRepository: TemplateResolutionRepository) {
@@ -35,7 +35,8 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
     suspend fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
         bluePrintRuntimeService: BluePrintRuntimeService<*>,
         artifactPrefix: String,
-        resolutionKey: String): String =
+        resolutionKey: String
+    ): String =
         withContext(Dispatchers.IO) {
 
             val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
@@ -49,11 +50,13 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
                 resolutionKey)
         }
 
-    suspend fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(blueprintName: String,
-                                                                                      blueprintVersion: String,
-                                                                                      artifactPrefix: String,
-                                                                                      resolutionKey: String,
-                                                                                      occurrence: Int = 1): String =
+    suspend fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
+        blueprintName: String,
+        blueprintVersion: String,
+        artifactPrefix: String,
+        resolutionKey: String,
+        occurrence: Int = 1
+    ): String =
         withContext(Dispatchers.IO) {
 
             templateResolutionRepository.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
@@ -64,12 +67,14 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
                 occurrence)?.result ?: throw EmptyResultDataAccessException(1)
         }
 
-    suspend fun findByResoureIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactName(blueprintName: String,
-                                                                                                 blueprintVersion: String,
-                                                                                                 artifactPrefix: String,
-                                                                                                 resourceId: String,
-                                                                                                 resourceType: String,
-                                                                                                 occurrence: Int = 1): String =
+    suspend fun findByResoureIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactName(
+        blueprintName: String,
+        blueprintVersion: String,
+        artifactPrefix: String,
+        resourceId: String,
+        resourceType: String,
+        occurrence: Int = 1
+    ): String =
         withContext(Dispatchers.IO) {
 
             templateResolutionRepository.findByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
@@ -81,9 +86,12 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
                 occurrence)?.result!!
         }
 
-    suspend fun write(properties: Map<String, Any>,
-                      result: String, bluePrintRuntimeService: BluePrintRuntimeService<*>,
-                      artifactPrefix: String): TemplateResolution = withContext(Dispatchers.IO) {
+    suspend fun write(
+        properties: Map<String, Any>,
+        result: String,
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        artifactPrefix: String
+    ): TemplateResolution = withContext(Dispatchers.IO) {
 
         val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
 
@@ -103,9 +111,16 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
             resourceType)
     }
 
-    suspend fun write(blueprintName: String, blueprintVersion: String, artifactPrefix: String,
-                      template: String, occurrence: Int = 1, resolutionKey: String = "", resourceId: String = "",
-                      resourceType: String = ""): TemplateResolution =
+    suspend fun write(
+        blueprintName: String,
+        blueprintVersion: String,
+        artifactPrefix: String,
+        template: String,
+        occurrence: Int = 1,
+        resolutionKey: String = "",
+        resourceId: String = "",
+        resourceType: String = ""
+    ): TemplateResolution =
         withContext(Dispatchers.IO) {
 
             val resourceResolutionResult = TemplateResolution()
@@ -148,11 +163,11 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
             }
             try {
                 log.info("Writing out template_resolution result: bpName: $blueprintName bpVer $blueprintVersion resKey:$resolutionKey" +
-                    " (resourceId: $resourceId resourceType: $resourceType) occurrence:$occurrence")
+                        " (resourceId: $resourceId resourceType: $resourceType) occurrence:$occurrence")
                 templateResolutionRepository.saveAndFlush(resourceResolutionResult)
             } catch (ex: DataIntegrityViolationException) {
                 log.error("Error writing out template_resolution result: bpName: $blueprintName bpVer $blueprintVersion resKey:$resolutionKey" +
-                    " (resourceId: $resourceId resourceType: $resourceType) occurrence:$occurrence error: {}", ex.message)
+                        " (resourceId: $resourceId resourceType: $resourceType) occurrence:$occurrence error: {}", ex.message)
                 throw BluePrintException("Failed to store resource api result.", ex)
             }
         }

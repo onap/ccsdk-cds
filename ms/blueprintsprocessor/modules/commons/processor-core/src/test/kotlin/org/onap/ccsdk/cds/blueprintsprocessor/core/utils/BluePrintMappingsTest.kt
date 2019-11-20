@@ -1,5 +1,6 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.core.utils
 
+import java.text.SimpleDateFormat
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -9,7 +10,6 @@ import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.common.api.Flag
 import org.springframework.test.context.junit4.SpringRunner
-import java.text.SimpleDateFormat
 
 @RunWith(SpringRunner::class)
 class BluePrintMappingsTest {
@@ -70,7 +70,9 @@ class BluePrintMappingsTest {
     fun commonHeaderToJavaTest() {
         val flag = Flag.newBuilder().setIsForce(true).setTtl(2).build()
 
-        val commonHeader = CommonHeader.newBuilder().setOriginatorId("Origin").setRequestId("requestID").setSubRequestId("subRequestID").setTimestamp(dateString).setFlag(flag).build()
+        val commonHeader =
+            CommonHeader.newBuilder().setOriginatorId("Origin").setRequestId("requestID").setSubRequestId("subRequestID").setTimestamp(dateString)
+                .setFlag(flag).build()
         val commonHeader2 = commonHeader.toJava()
 
         Assert.assertEquals(commonHeader.originatorId, commonHeader2.originatorId)
@@ -101,7 +103,9 @@ class BluePrintMappingsTest {
 
     @Test
     fun actionIdentifierToJavaTest() {
-        val actionIdentifiers = ActionIdentifiers.newBuilder().setActionName("Process Action").setBlueprintName("BlueprintName").setBlueprintVersion("3.0").setMode("Execution").build()
+        val actionIdentifiers =
+            ActionIdentifiers.newBuilder().setActionName("Process Action").setBlueprintName("BlueprintName").setBlueprintVersion("3.0")
+                .setMode("Execution").build()
         val actionIdentifiers2 = actionIdentifiers.toJava()
 
         Assert.assertEquals(actionIdentifiers.actionName, actionIdentifiers2.actionName)

@@ -17,6 +17,11 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 
+import java.io.File
+import java.util.UUID
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -35,11 +40,6 @@ import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.BodyInserters
-import java.io.File
-import java.util.*
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
-import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
 @WebFluxTest
@@ -71,15 +71,15 @@ class ExecutionServiceControllerTest {
             blueprintsProcessorCatalogService.saveToDatabase(UUID.randomUUID().toString(), loadTestCbaFile())
 
             val executionServiceInput = JacksonUtils
-                    .readValueFromClassPathFile("execution-input/default-input.json",
-                            ExecutionServiceInput::class.java)!!
+                .readValueFromClassPathFile("execution-input/default-input.json",
+                    ExecutionServiceInput::class.java)!!
 
             webTestClient
-                    .post()
-                    .uri("/api/v1/execution-service/process")
-                    .body(BodyInserters.fromObject(executionServiceInput))
-                    .exchange()
-                    .expectStatus().isOk
+                .post()
+                .uri("/api/v1/execution-service/process")
+                .body(BodyInserters.fromObject(executionServiceInput))
+                .exchange()
+                .expectStatus().isOk
         }
     }
 
@@ -89,15 +89,15 @@ class ExecutionServiceControllerTest {
             blueprintsProcessorCatalogService.saveToDatabase(UUID.randomUUID().toString(), loadTestCbaFile())
 
             val executionServiceInput = JacksonUtils
-                    .readValueFromClassPathFile("execution-input/faulty-input.json",
-                            ExecutionServiceInput::class.java)!!
+                .readValueFromClassPathFile("execution-input/faulty-input.json",
+                    ExecutionServiceInput::class.java)!!
 
             webTestClient
-                    .post()
-                    .uri("/api/v1/execution-service/process")
-                    .body(BodyInserters.fromObject(executionServiceInput))
-                    .exchange()
-                    .expectStatus().is5xxServerError
+                .post()
+                .uri("/api/v1/execution-service/process")
+                .body(BodyInserters.fromObject(executionServiceInput))
+                .exchange()
+                .expectStatus().is5xxServerError
         }
     }
 

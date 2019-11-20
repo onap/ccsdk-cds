@@ -16,9 +16,9 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.core
 
+import kotlin.test.assertEquals
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.core.NetconfDeviceCommunicator.NetconfMessageState
-import kotlin.test.assertEquals
 
 class NetconfMessageStateTest {
 
@@ -32,7 +32,7 @@ class NetconfMessageStateTest {
         assertEquals(NetconfMessageState.FIRST_LF,
             NetconfMessageState.NO_MATCHING_PATTERN.evaluateChar('\n'))
 
-        charList.minus(listOf(']','\n')).forEach {
+        charList.minus(listOf(']', '\n')).forEach {
             assertEquals(NetconfMessageState.NO_MATCHING_PATTERN,
                 NetconfMessageState.NO_MATCHING_PATTERN.evaluateChar(it))
         }
@@ -43,7 +43,7 @@ class NetconfMessageStateTest {
         assertEquals(NetconfMessageState.SECOND_BRACKET,
             NetconfMessageState.FIRST_BRACKET.evaluateChar(']'))
 
-        charList.minus( ']').forEach {
+        charList.minus(']').forEach {
             assertEquals(NetconfMessageState.NO_MATCHING_PATTERN,
                 NetconfMessageState.FIRST_BRACKET.evaluateChar(it))
         }
@@ -122,7 +122,7 @@ class NetconfMessageStateTest {
         assertEquals(NetconfMessageState.END_CHUNKED_PATTERN,
             NetconfMessageState.SECOND_HASH.evaluateChar('\n'))
 
-        charList.minus( '\n').forEach {
+        charList.minus('\n').forEach {
             assertEquals(NetconfMessageState.NO_MATCHING_PATTERN,
                 NetconfMessageState.SECOND_HASH.evaluateChar(it))
         }
@@ -143,5 +143,4 @@ class NetconfMessageStateTest {
                 NetconfMessageState.END_PATTERN.evaluateChar(it))
         }
     }
-
 }
