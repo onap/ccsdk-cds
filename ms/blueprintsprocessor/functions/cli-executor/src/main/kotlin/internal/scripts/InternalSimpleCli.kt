@@ -1,6 +1,8 @@
 /*
  *  Copyright © 2019 IBM.
  *
+ *  Modifications Copyright © 2019 IBM, Bell Canada
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -23,7 +25,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.cli.executor.cliDeviceIn
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.cli.executor.getSshClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentScriptExecutor
-import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.slf4j.LoggerFactory
 
 open class TestCliScriptFunction : AbstractScriptComponentFunction() {
@@ -70,7 +72,7 @@ open class Check : AbstractScriptComponentFunction() {
         sshClientService.closeSessionNB()
 
         // Set the Response Data
-        setAttribute(ComponentScriptExecutor.ATTRIBUTE_RESPONSE_DATA, responseLog.asJsonPrimitive())
+        setAttribute(ComponentScriptExecutor.ATTRIBUTE_RESPONSE_DATA, responseLog.asJsonType())
 
         log.info("Executing process")
     }
