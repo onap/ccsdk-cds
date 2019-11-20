@@ -1,4 +1,3 @@
-
 /*
 ============LICENSE_START==========================================
 ===================================================================
@@ -22,103 +21,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
 */
-export const GlobalContants = {
-    endpoints: {},
-    cbawizard: {
-        stepsRequired:
-            {
-                stepCount: 4,
-                steps: [{
-                    name: 'CBA Metadata',
-                    componentURL: '/controllerBlueprint/selectTemplate',
-                    label: 'CBA Metadata',
-                    link: '/blueprint/selectTemplate',
-                    index: 0,
-                    component: 'SelectTemplateComponent'
-                },
-                    {
-                        name: 'Controller Blueprint Designer',
-                        componentURL: '/controllerBlueprint/modifyTemplate',
-                        label: 'Controller Blueprint Designer',
-                        link: '/blueprint/modifyTemplate',
-                        index: 1,
-                        component: 'ModifyTemplateComponent'
-                    },
-                    {
-                        name: 'Test',
-                        componentURL: '/controllerBlueprint/testTemplate',
-                        label: 'Test',
-                        link: '/blueprint/testTemplate',
-                        index: 2,
-                        component: 'TestTemplateComponent'
-                    },
-                    {
-                        name: 'Deploy',
-                        componentURL: '/controllerBlueprint/deployTemplate',
-                        label: 'Deploy',
-                        link: '/blueprint/deployTemplate',
-                        index: 3,
-                        component: 'DeployTemplateComponent'
-                    }]
-            }
-    },
-    datadictionary: {
-        stepsRequired:
-            {
-                stepCount: 3,
-                steps: [{
-                    name: 'Resource Creation', componentURL: '/dataDictionary/selectTemplate',
-                    label: 'Resource Creation',
-                    component: 'ResourceCreationComponent'
-
-                },
-                    {
-                        name: 'Edit/Validate', componentURL: '/dataDictionary/modifyTemplate',
-                        label: 'Edit/Validate',
-                        component: 'ResourceEditComponent'
-                    },
-                    {
-                        name: 'Save', componentURL: '/dataDictionary/saveTemplate',
-                        label: 'Save Resource',
-                        component: 'SaveResourceComponent'
-                    }]
-            }
-
-    }
-};
-
-export const BlueprintURLs = {
-    getAllBlueprints: '/controllerblueprint/all',
-    searchByTag: '/controllerblueprint/searchByTags/',
-    save: '/controllerblueprint/create-blueprint',
-    publish: '/controllerblueprint/publish',
-    enrich: '/controllerblueprint/enrich-blueprint',
-    download: '/controllerblueprint/download-blueprint/',
-    deploy: '/controllerblueprint/deploy-blueprint',
-    getMetaDate: '/controllerblueprint/meta-data/'
-};
-
-export const ResourceDictionaryURLs = {
-    saveResourceDictionary: '/resourcedictionary/save',
-    searchResourceDictionaryByTags: '/resourcedictionary/search',
-    searchResourceDictionaryByName: '',
-    getSources: '/resourcedictionary/source-mapping',
-    getModelType: '/resourcedictionary/model-type',
-    getDataType: '/resourcedictionary/model-type/by-definition/data_type'
-};
-
-export const ControllerCatalogURLs = {
-    searchControllerCatalogByTags: '/controllercatalog/search',
-    saveControllerCatalog: '/controllercatalog/save',
-    getDefinition: '/controllercatalog/model-type/by-definition',
-    getDerivedFrom: '/controllercatalog/model-type/by-derivedfrom'
-};
-
-
 
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpResponse, HttpHeaderResponse} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {HttpClient, HttpHeaders, HttpResponse, HttpHeaderResponse, HttpParams} from '@angular/common/http';
+import {Observable, of} from 'rxjs';
 
 @Injectable()
 export class ApiService {
@@ -126,8 +32,16 @@ export class ApiService {
     constructor(private httpClient: HttpClient) {
     }
 
-    get(url: string, params?: any): Observable<any> {
-        return  this.httpClient.get(url, params);
+    get(url: string, params?: {}): Observable<any> {
+        console.log('params', params);
+        let httpParams = new HttpParams();
+        for (const key in params) {
+            if (params.hasOwnProperty(key)) {
+                httpParams = httpParams.append(key, params[key]);
+            }
+        }
+        const options = {params: httpParams};
+        return this.httpClient.get(url, options);
     }
 
     post(url: string, body: any | null, options?: any): Observable<any> {

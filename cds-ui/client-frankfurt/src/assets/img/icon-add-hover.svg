@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 60 (88103) - https://sketch.com -->
+    <title>icon-add-hover</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icon-add-hover">
+            <circle id="Oval" fill="#103D73" cx="10" cy="10" r="10"></circle>
+            <path d="M13.75,9.375 L10.625,9.375 L10.625,6.25 C10.625,5.905 10.345,5.625 10,5.625 C9.655,5.625 9.375,5.905 9.375,6.25 L9.375,9.375 L6.25,9.375 C5.905,9.375 5.625,9.655 5.625,10 C5.625,10.345 5.905,10.625 6.25,10.625 L9.375,10.625 L9.375,13.75 C9.375,14.095 9.655,14.375 10,14.375 C10.345,14.375 10.625,14.095 10.625,13.75 L10.625,10.625 L13.75,10.625 C14.095,10.625 14.375,10.345 14.375,10 C14.375,9.655 14.095,9.375 13.75,9.375 Z" id="Shape" fill="#FFFFFF" fill-rule="nonzero"></path>
+        </g>
+    </g>
+</svg>

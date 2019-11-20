@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="13px" height="6px" viewBox="0 0 13 6" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 60 (88103) - https://sketch.com -->
+    <title>undo</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="3.1.1-Designer" transform="translate(-563.000000, -77.000000)" fill="#1B3E6F" fill-rule="nonzero">
+            <g id="edit-actions" transform="translate(543.000000, 61.000000)">
+                <g id="elements" transform="translate(10.000000, 6.000000)">
+                    <g id="undo/redo">
+                        <g id="icons" transform="translate(10.000000, 10.000000)">
+                            <path d="M6.66361556,0.634620137 C4.98500915,0.634620137 3.45556064,1.25972082 2.28466819,2.28466819 L2.48689958e-14,1.00808251e-13 L2.48689958e-14,5.71167048 L5.71167048,5.71167048 L3.41748284,3.41748284 C4.29645538,2.67814874 5.42290389,2.2212151 6.66361556,2.2212151 C8.91338902,2.2212151 10.8172792,3.68402746 11.4836407,5.71167048 L12.9845309,5.21665904 C12.1119245,2.5575492 9.61464531,0.634620137 6.66361556,0.634620137 Z" id="undo"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

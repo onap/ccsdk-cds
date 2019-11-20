@@ -30,6 +30,9 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {MatTabsModule} from '@angular/material/tabs';
 import {ApiService} from './common/core/services/api.service';
 import {HttpClientModule} from '@angular/common/http';
+import {PackagesModule} from './modules/feature-modules/packages/packages.module';
+import { SidebarModule } from 'ng-sidebar';
+import {SharedModulesModule} from './modules/shared-modules/shared-modules.module';
 
 @NgModule({
     declarations: [
@@ -43,6 +46,8 @@ import {HttpClientModule} from '@angular/common/http';
         NoopAnimationsModule,
         MatTabsModule,
         HttpClientModule,
+        PackagesModule,
+        SharedModulesModule,
     ],
 
     providers: [ApiService],
