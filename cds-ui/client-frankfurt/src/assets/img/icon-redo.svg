@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="13px" height="6px" viewBox="0 0 13 6" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 60 (88103) - https://sketch.com -->
+    <title>redo</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="3.1.1-Designer" transform="translate(-591.000000, -77.000000)" fill="#D9E3EE" fill-rule="nonzero">
+            <g id="edit-actions" transform="translate(543.000000, 61.000000)">
+                <g id="elements" transform="translate(10.000000, 6.000000)">
+                    <g id="undo/redo">
+                        <g id="icons" transform="translate(10.000000, 10.000000)">
+                            <path d="M34.6636156,0.634620137 C32.9850092,0.634620137 31.4555606,1.25972082 30.2846682,2.28466819 L28,1.00808251e-13 L28,5.71167048 L33.7116705,5.71167048 L31.4174828,3.41748284 C32.2964554,2.67814874 33.4229039,2.2212151 34.6636156,2.2212151 C36.913389,2.2212151 38.8172792,3.68402746 39.4836407,5.71167048 L40.9845309,5.21665904 C40.1119245,2.5575492 37.6146453,0.634620137 34.6636156,0.634620137 Z" id="redo" transform="translate(34.492265, 2.855835) scale(-1, 1) translate(-34.492265, -2.855835) "></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

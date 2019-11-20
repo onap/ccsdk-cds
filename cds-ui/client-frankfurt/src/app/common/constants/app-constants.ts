@@ -88,13 +88,16 @@ export const GlobalContants = {
 
 export const BlueprintURLs = {
     getAllBlueprints: '/controllerblueprint/all',
+    getPagedBlueprints: '/controllerblueprint/paged',
     searchByTag: '/controllerblueprint/searchByTags/',
     save: '/controllerblueprint/create-blueprint',
     publish: '/controllerblueprint/publish',
     enrich: '/controllerblueprint/enrich-blueprint',
     download: '/controllerblueprint/download-blueprint/',
     deploy: '/controllerblueprint/deploy-blueprint',
-    getMetaDate: '/controllerblueprint/meta-data/'
+    getMetaDate: '/controllerblueprint/meta-data/',
+    countOfAllBluePrints: '/controllerblueprint/list/count',
+    getMetaDatePageable: '/controllerblueprint/metadata/paged'
 };
 
 export const ResourceDictionaryURLs = {
