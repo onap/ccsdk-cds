@@ -4,7 +4,7 @@
     "template_author" : "Rodrigo Ottero",
     "author-email" : "rodrigo.ottero@est.tech",
     "user-groups" : "ADMIN, OPERATION",
-    "template_name" : "configuration_over_restconf",
+    "template_name" : "pnf_config",
     "template_version" : "1.0.0",
     "template_tags" : "pnf, restconf, config, configuration"
   },

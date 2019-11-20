@@ -3,4 +3,5 @@ CSAR-Version: 1.0
 Created-By: Alexis de Talhouët
 Entry-Definitions: Definitions/golden-blueprint.json
 Template-Tags: test
-Content-Type: application/vnd.oasis.bpmn
+Template-Name: golden
+Template-Version: 1.0.0

@@ -8,7 +8,7 @@ processes:
         requestId: "123456-1000"
         subRequestId: sub-123456-1000
       actionIdentifiers: &assign-ai
-        blueprintName: configuration_over_restconf
+        blueprintName: pnf_config
         blueprintVersion: "1.0.0"
         actionName: config-assign
         mode: sync
@@ -35,7 +35,7 @@ processes:
       commonHeader: *commonHeader
       actionIdentifiers: &deploy-ai
         actionName: config-deploy
-        blueprintName: configuration_over_restconf
+        blueprintName: pnf_config
         blueprintVersion: "1.0.0"
         mode: sync
       payload:
