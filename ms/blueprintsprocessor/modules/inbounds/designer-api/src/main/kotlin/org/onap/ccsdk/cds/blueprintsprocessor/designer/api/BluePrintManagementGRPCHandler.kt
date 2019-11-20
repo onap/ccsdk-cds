@@ -160,6 +160,29 @@ open class BluePrintManagementGRPCHandler(private val bluePrintModelHandler: Blu
         }
     }
 
+    override fun bootstrapBlueprint(request: BluePrintBootstrapInput,
+                                    responseObserver: StreamObserver<BluePrintManagementOutput>) {
+        runBlocking {
+            try {
+                log.info("request(${request.commonHeader.requestId}): Received bootstrap request")
+                val bootstrapRequest = BootstrapRequest().apply {
+                    loadModelType = request.loadModelType
+                    loadResourceDictionary = request.loadResourceDictionary
+                    loadCBA = request.loadCBA
+                }
+                /** Perform bootstrap of Model Types, Resource Definitions and CBA */
+                bluePrintModelHandler.bootstrapBlueprint(bootstrapRequest)
+                responseObserver.onNext(successStatus(request.commonHeader))
+
+            } catch (e: Exception) {
+                responseObserver.onNext(failStatus(request.commonHeader,
+                        "request(${request.commonHeader.requestId}): Failed to bootstrap", e))
+            } finally {
+                responseObserver.onCompleted()
+            }
+        }
+    }
+
     private fun outputWithFileBytes(header: CommonHeader, byteArray: ByteArray): BluePrintManagementOutput =
             BluePrintManagementOutput.newBuilder()
                     .setCommonHeader(header)

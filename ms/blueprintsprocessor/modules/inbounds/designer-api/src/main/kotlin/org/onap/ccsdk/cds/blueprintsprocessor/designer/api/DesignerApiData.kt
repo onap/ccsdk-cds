@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2019 IBM.
+ *  Modifications Copyright © 2018-2019 AT&T Intellectual Property.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,6 +25,13 @@ import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictio
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import java.io.Serializable
 import java.util.*
+
+
+class BootstrapRequest {
+    var loadModelType: Boolean = false
+    var loadResourceDictionary: Boolean = false
+    var loadCBA: Boolean = false
+}
 
 /**
  * ArtifactRequest.java Purpose: Provide Configuration Generator ArtifactRequest Model

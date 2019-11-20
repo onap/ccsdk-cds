@@ -22,14 +22,8 @@ open class BluePrintLoadConfiguration {
     lateinit var blueprintDeployPath: String
     lateinit var blueprintArchivePath: String
     lateinit var blueprintWorkingPath: String
-
-    var loadInitialData: Boolean = false
-    var loadBluePrint: Boolean = false
+    
     var loadBluePrintPaths: String? = null
-
-    var loadModelType: Boolean = false
     var loadModeTypePaths: String? = null
-
-    var loadResourceDictionary: Boolean = false
     var loadResourceDictionaryPaths: String? = null
 }

@@ -20,8 +20,6 @@ package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.load
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.slf4j.LoggerFactory
-import org.springframework.boot.context.event.ApplicationReadyEvent
-import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
 
 @Service
@@ -32,52 +30,36 @@ open class BluePrintDatabaseLoadService(private val bluePrintLoadConfiguration: 
 
     private val log = LoggerFactory.getLogger(BluePrintDatabaseLoadService::class.java)
 
-
-    @EventListener(ApplicationReadyEvent::class)
     open fun init() = runBlocking {
-        if (bluePrintLoadConfiguration.loadInitialData) {
-            initModelTypes()
-            initResourceDictionary()
-            initBluePrintCatalog()
-        } else {
-            log.info("Initial data load is disabled")
-        }
-
+        initModelTypes()
+        initResourceDictionary()
+        initBluePrintCatalog()
     }
 
     open suspend fun initModelTypes() {
-        log.info("model types load configuration(${bluePrintLoadConfiguration.loadModelType}) " +
-                "under paths(${bluePrintLoadConfiguration.loadModeTypePaths})")
+        log.info("model types load from paths(${bluePrintLoadConfiguration.loadModeTypePaths})")
 
-        if (bluePrintLoadConfiguration.loadModelType) {
-            val paths = bluePrintLoadConfiguration.loadModeTypePaths?.split(",")
-            paths?.let {
-                modelTypeLoadService.loadPathsModelType(paths)
-            }
+        val paths = bluePrintLoadConfiguration.loadModeTypePaths?.split(",")
+        paths?.let {
+            modelTypeLoadService.loadPathsModelType(paths)
         }
     }
 
     open suspend fun initResourceDictionary() {
-        log.info("resource dictionary load configuration(${bluePrintLoadConfiguration.loadResourceDictionary}) " +
-                "under paths(${bluePrintLoadConfiguration.loadResourceDictionaryPaths})")
+        log.info("resource dictionary load from paths(${bluePrintLoadConfiguration.loadResourceDictionaryPaths})")
 
-        if (bluePrintLoadConfiguration.loadResourceDictionary) {
-            val paths = bluePrintLoadConfiguration.loadResourceDictionaryPaths?.split(",")
-            paths?.let {
-                resourceDictionaryLoadService.loadPathsResourceDictionary(paths)
-            }
+        val paths = bluePrintLoadConfiguration.loadResourceDictionaryPaths?.split(",")
+        paths?.let {
+            resourceDictionaryLoadService.loadPathsResourceDictionary(paths)
         }
     }
 
     open suspend fun initBluePrintCatalog() {
-        log.info("blueprint load configuration(${bluePrintLoadConfiguration.loadBluePrint}) " +
-                "under paths(${bluePrintLoadConfiguration.loadBluePrintPaths})")
+        log.info("cba load from paths(${bluePrintLoadConfiguration.loadBluePrintPaths})")
 
-        if (bluePrintLoadConfiguration.loadBluePrint) {
-            val paths = bluePrintLoadConfiguration.loadBluePrintPaths?.split(",")
-            paths?.let {
-                bluePrintCatalogLoadService.loadPathsBluePrintModelCatalog(paths)
-            }
+        val paths = bluePrintLoadConfiguration.loadBluePrintPaths?.split(",")
+        paths?.let {
+            bluePrintCatalogLoadService.loadPathsBluePrintModelCatalog(paths)
         }
     }
 }
