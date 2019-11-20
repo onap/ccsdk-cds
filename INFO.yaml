@@ -59,6 +59,11 @@ committers:
       company: 'IBM'
       id: 'kasingal'
       timezone: 'America/New_York'
+    - name: 'Kapil Singal'
+      email: 'ks220y@att.com'
+      company: 'IBM'
+      id: 'ks220y'
+      timezone: 'America/New_York'
 repositories:
     - ccsdk/cds
 tsc:
