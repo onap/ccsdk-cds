@@ -1,6 +1,8 @@
 /*
  *  Copyright © 2019 IBM.
  *
+ *  Modifications Copyright © 2019 IBM, Bell Canada
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -66,7 +68,7 @@ open class Check : AbstractScriptComponentFunction() {
         val commands = readLinesFromArtifact("command-template")
 
         // Execute multiple Commands
-        val responseLog = sshClientService.executeCommandsNB(commands, 5000)
+        val responseLog = sshClientService.executeCommandsNB(commands, 3000)
 
         // Close Session
         sshClientService.closeSessionNB()

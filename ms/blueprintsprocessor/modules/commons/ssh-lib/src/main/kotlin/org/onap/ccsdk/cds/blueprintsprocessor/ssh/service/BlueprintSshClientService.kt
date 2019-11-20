@@ -1,6 +1,8 @@
 /*
  *  Copyright © 2019 IBM.
  *
+ *  Modifications Copyright © 2018-2019 IBM, Bell Canada
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -29,6 +31,10 @@ interface BlueprintSshClientService {
         executeCommandsNB(commands, timeOut)
     }
 
+    fun executeCommandsInDifferentContexts(commands: List<String>, timeOut: Long): String = runBlocking {
+        executeCommandsInDifferentContextsNB(commands, timeOut)
+    }
+
     fun executeCommand(command: String, timeOut: Long): String = runBlocking {
         executeCommandNB(command, timeOut)
     }
@@ -40,6 +46,8 @@ interface BlueprintSshClientService {
     suspend fun startSessionNB(): ClientSession
 
     suspend fun executeCommandsNB(commands: List<String>, timeOut: Long): String
+
+    suspend fun executeCommandsInDifferentContextsNB(commands: List<String>, timeOut: Long): String
 
     suspend fun executeCommandNB(command: String, timeOut: Long): String
 
