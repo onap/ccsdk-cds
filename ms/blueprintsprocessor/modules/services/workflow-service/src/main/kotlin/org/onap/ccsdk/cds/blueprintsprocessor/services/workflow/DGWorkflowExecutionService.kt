@@ -26,16 +26,17 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeServ
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
-
 @Service("dgWorkflowExecutionService")
-open class DGWorkflowExecutionService(private val blueprintSvcLogicService: BlueprintSvcLogicService)
-    : BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput> {
+open class DGWorkflowExecutionService(private val blueprintSvcLogicService: BlueprintSvcLogicService) :
+    BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput> {
 
     private val log = LoggerFactory.getLogger(DGWorkflowExecutionService::class.java)
 
-    override suspend fun executeBluePrintWorkflow(bluePrintRuntimeService: BluePrintRuntimeService<*>,
-                                                  executionServiceInput: ExecutionServiceInput,
-                                                  properties: MutableMap<String, Any>): ExecutionServiceOutput {
+    override suspend fun executeBluePrintWorkflow(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        executionServiceInput: ExecutionServiceInput,
+        properties: MutableMap<String, Any>
+    ): ExecutionServiceOutput {
 
         val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
 
@@ -47,8 +48,10 @@ open class DGWorkflowExecutionService(private val blueprintSvcLogicService: Blue
         log.info("Executing workflow($workflowName) directed graph NodeTemplate($nodeTemplateName)")
 
         // Get the DG file info
-        val artifactDefinition = bluePrintContext.nodeTemplateArtifactForArtifactType(nodeTemplateName,
-            WorkflowServiceConstants.ARTIFACT_TYPE_DIRECTED_GRAPH)
+        val artifactDefinition = bluePrintContext.nodeTemplateArtifactForArtifactType(
+            nodeTemplateName,
+            WorkflowServiceConstants.ARTIFACT_TYPE_DIRECTED_GRAPH
+        )
 
         // Populate the DG Path
         val dgFilePath = normalizedPathName(bluePrintContext.rootPath, artifactDefinition.file)
@@ -59,10 +62,10 @@ open class DGWorkflowExecutionService(private val blueprintSvcLogicService: Blue
         val graph = SvcGraphUtils.getSvcGraphFromFile(dgFilePath)
 
         // Execute the DG
-        return blueprintSvcLogicService.execute(graph,
+        return blueprintSvcLogicService.execute(
+            graph,
             bluePrintRuntimeService,
-            executionServiceInput) as ExecutionServiceOutput
-
+            executionServiceInput
+        ) as ExecutionServiceOutput
     }
-
 }

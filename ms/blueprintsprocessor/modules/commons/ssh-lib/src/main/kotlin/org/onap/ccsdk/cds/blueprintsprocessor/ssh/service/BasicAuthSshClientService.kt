@@ -26,11 +26,11 @@ import org.onap.ccsdk.cds.blueprintsprocessor.ssh.BasicAuthSshClientProperties
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.slf4j.LoggerFactory
 import java.io.ByteArrayOutputStream
-import java.util.*
+import java.util.Collections
+import java.util.EnumSet
 
-
-open class BasicAuthSshClientService(private val basicAuthSshClientProperties: BasicAuthSshClientProperties)
-    : BlueprintSshClientService {
+open class BasicAuthSshClientService(private val basicAuthSshClientProperties: BasicAuthSshClientProperties) :
+    BlueprintSshClientService {
 
     private val log = LoggerFactory.getLogger(BasicAuthSshClientService::class.java)!!
 
@@ -43,10 +43,12 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
         sshClient.serverKeyVerifier = AcceptAllServerKeyVerifier.INSTANCE
         sshClient.start()
         log.debug("SSH Client Service started successfully")
-        clientSession = sshClient.connect(basicAuthSshClientProperties.username, basicAuthSshClientProperties.host,
-                basicAuthSshClientProperties.port)
-                .verify(basicAuthSshClientProperties.connectionTimeOut)
-                .session
+        clientSession = sshClient.connect(
+            basicAuthSshClientProperties.username, basicAuthSshClientProperties.host,
+            basicAuthSshClientProperties.port
+        )
+            .verify(basicAuthSshClientProperties.connectionTimeOut)
+            .session
 
         clientSession.addPasswordIdentity(basicAuthSshClientProperties.password)
         clientSession.auth().verify(basicAuthSshClientProperties.connectionTimeOut)
@@ -73,7 +75,7 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
         channel = clientSession.createExecChannel(command)
         checkNotNull(channel) { "failed to create Channel for the command : $command" }
 
-        //TODO("Convert to streaming ")
+        // TODO("Convert to streaming ")
         val outputStream = ByteArrayOutputStream()
         channel!!.out = outputStream
         channel!!.err = outputStream

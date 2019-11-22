@@ -5,8 +5,8 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRuntimeService
 
-class ResourceAssignmentRuntimeService(private var id: String, private var bluePrintContext: BluePrintContext)
-    : DefaultBluePrintRuntimeService(id, bluePrintContext) {
+class ResourceAssignmentRuntimeService(private var id: String, private var bluePrintContext: BluePrintContext) :
+    DefaultBluePrintRuntimeService(id, bluePrintContext) {
 
     private lateinit var resolutionId: String
     private var resourceStore: MutableMap<String, JsonNode> = hashMapOf()
@@ -25,7 +25,7 @@ class ResourceAssignmentRuntimeService(private var id: String, private var blueP
 
     fun getResolutionStore(key: String): JsonNode {
         return resourceStore[key]
-                ?: throw BluePrintProcessorException("failed to get execution property ($key)")
+            ?: throw BluePrintProcessorException("failed to get execution property ($key)")
     }
 
     fun checkResolutionStore(key: String): Boolean {
@@ -58,7 +58,7 @@ class ResourceAssignmentRuntimeService(private var id: String, private var blueP
 
     fun getDictionaryStore(key: String): JsonNode {
         return resourceStore["dictionary-$key"]
-                ?: throw BluePrintProcessorException("failed to get execution property (dictionary-$key)")
+            ?: throw BluePrintProcessorException("failed to get execution property (dictionary-$key)")
     }
 
     fun checkDictionaryStore(key: String): Boolean {
@@ -84,5 +84,4 @@ class ResourceAssignmentRuntimeService(private var id: String, private var blueP
     fun getDoubleFromDictionaryStore(key: String): Double? {
         return getResolutionStore("dictionary-$key").asDouble()
     }
-
 }

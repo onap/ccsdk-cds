@@ -15,6 +15,7 @@
  */
 
 package org.onap.ccsdk.cds.controllerblueprints.core
+
 /**
  *
  *
@@ -41,9 +42,8 @@ class BluePrintException : Exception {
         this.code = code
     }
 
-    constructor(code: Int, cause: Throwable, message: String, vararg args: Any?)
-            : super(String.format(message, *args), cause) {
+    constructor(code: Int, cause: Throwable, message: String, vararg args: Any?) :
+            super(String.format(message, *args), cause) {
         this.code = code
     }
 }
-

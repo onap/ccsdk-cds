@@ -19,28 +19,35 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface ResourceResolutionRepository : JpaRepository<ResourceResolution, String> {
 
-    fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndName(key: String,
-                                                                                     blueprintName: String?,
-                                                                                     blueprintVersion: String?,
-                                                                                     artifactName: String,
-                                                                                     name: String): ResourceResolution
+    fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndName(
+        key: String,
+        blueprintName: String?,
+        blueprintVersion: String?,
+        artifactName: String,
+        name: String
+    ): ResourceResolution
 
-    fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(resolutionKey: String,
-                                                                              blueprintName: String,
-                                                                              blueprintVersion: String,
-                                                                              artifactPrefix: String): List<ResourceResolution>
+    fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
+        resolutionKey: String,
+        blueprintName: String,
+        blueprintVersion: String,
+        artifactPrefix: String
+    ): List<ResourceResolution>
 
-    fun findByBlueprintNameAndBlueprintVersionAndResourceIdAndResourceType(blueprintName: String,
-                                                                           blueprintVersion: String,
-                                                                           resourceId: String,
-                                                                           resourceType: String): List<ResourceResolution>
+    fun findByBlueprintNameAndBlueprintVersionAndResourceIdAndResourceType(
+        blueprintName: String,
+        blueprintVersion: String,
+        resourceId: String,
+        resourceType: String
+    ): List<ResourceResolution>
 
     fun findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKeyAndOccurrence(
         blueprintName: String?,
         blueprintVersion: String?,
         artifactName: String,
         resolutionKey: String,
-        occurrence: Int): List<ResourceResolution>
+        occurrence: Int
+    ): List<ResourceResolution>
 
     fun findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResourceIdAndResourceTypeAndOccurrence(
         blueprintName: String?,
@@ -48,5 +55,6 @@ interface ResourceResolutionRepository : JpaRepository<ResourceResolution, Strin
         artifactName: String,
         resourceId: String,
         resourceType: String,
-        occurrence: Int): List<ResourceResolution>
+        occurrence: Int
+    ): List<ResourceResolution>
 }

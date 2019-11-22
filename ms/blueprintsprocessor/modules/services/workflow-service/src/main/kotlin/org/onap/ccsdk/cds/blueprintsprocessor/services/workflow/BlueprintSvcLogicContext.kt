@@ -48,5 +48,4 @@ class BlueprintSvcLogicContext : SvcLogicContext() {
     fun getResponse(): Any {
         return this.response!!
     }
-
 }

@@ -21,7 +21,6 @@ import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import java.util.function.Function
 
-
 interface BlueprintFunctionNode<T, R> : Function<T, R> {
 
     fun getName(): String

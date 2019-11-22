@@ -44,7 +44,6 @@ class DGWorkflowExecutionServiceTest {
     @Autowired
     lateinit var dgWorkflowExecutionService: DGWorkflowExecutionService
 
-
     @Before
     fun init() {
         BluePrintDependencyService.inject(applicationContext)
@@ -54,25 +53,28 @@ class DGWorkflowExecutionServiceTest {
     fun testExecuteDirectedGraph() {
         runBlocking {
 
-            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                    "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(
+                "1234",
+                "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+            )
 
             val executionServiceInput = JacksonReactorUtils
-                    .readValueFromClassPathFile("execution-input/resource-assignment-input.json", ExecutionServiceInput::class.java)!!
+                .readValueFromClassPathFile("execution-input/resource-assignment-input.json", ExecutionServiceInput::class.java)!!
 
             // Assign Workflow inputs Mock
             val input = executionServiceInput.payload.get("resource-assignment-request")
             bluePrintRuntimeService.assignWorkflowInputs("resource-assignment", input)
 
-            val executionServiceOutput = dgWorkflowExecutionService.executeBluePrintWorkflow(bluePrintRuntimeService,
-                    executionServiceInput, mutableMapOf())
+            val executionServiceOutput = dgWorkflowExecutionService.executeBluePrintWorkflow(
+                bluePrintRuntimeService,
+                executionServiceInput, mutableMapOf()
+            )
 
             assertNotNull(executionServiceOutput, "failed to get response")
-            assertEquals(BluePrintConstants.STATUS_SUCCESS, executionServiceOutput.status.message,
-                    "failed to get successful response")
+            assertEquals(
+                BluePrintConstants.STATUS_SUCCESS, executionServiceOutput.status.message,
+                "failed to get successful response"
+            )
         }
-
     }
-
-
 }

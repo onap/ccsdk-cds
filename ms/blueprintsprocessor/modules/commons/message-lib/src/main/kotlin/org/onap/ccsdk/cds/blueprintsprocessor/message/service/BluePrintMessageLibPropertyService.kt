@@ -19,7 +19,12 @@ package org.onap.ccsdk.cds.blueprintsprocessor.message.service
 
 import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
-import org.onap.ccsdk.cds.blueprintsprocessor.message.*
+import org.onap.ccsdk.cds.blueprintsprocessor.message.KafkaBasicAuthMessageConsumerProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.message.KafkaBasicAuthMessageProducerProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.message.KafkaStreamsBasicAuthConsumerProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.message.MessageConsumerProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.message.MessageLibConstants
+import org.onap.ccsdk.cds.blueprintsprocessor.message.MessageProducerProperties
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.stereotype.Service
@@ -62,8 +67,8 @@ open class BluePrintMessageLibPropertyService(private var bluePrintPropertiesSer
         }
     }
 
-    private fun blueprintMessageProducerService(MessageProducerProperties: MessageProducerProperties)
-            : BlueprintMessageProducerService {
+    private fun blueprintMessageProducerService(MessageProducerProperties: MessageProducerProperties):
+            BlueprintMessageProducerService {
 
         when (MessageProducerProperties) {
             is KafkaBasicAuthMessageProducerProperties -> {
@@ -77,7 +82,8 @@ open class BluePrintMessageLibPropertyService(private var bluePrintPropertiesSer
 
     private fun kafkaBasicAuthMessageProducerProperties(prefix: String): KafkaBasicAuthMessageProducerProperties {
         return bluePrintPropertiesService.propertyBeanType(
-                prefix, KafkaBasicAuthMessageProducerProperties::class.java)
+            prefix, KafkaBasicAuthMessageProducerProperties::class.java
+        )
     }
 
     /** Consumer Property Lib Service Implementation **/
@@ -126,8 +132,8 @@ open class BluePrintMessageLibPropertyService(private var bluePrintPropertiesSer
         }
     }
 
-    private fun blueprintMessageConsumerService(messageConsumerProperties: MessageConsumerProperties)
-            : BlueprintMessageConsumerService {
+    private fun blueprintMessageConsumerService(messageConsumerProperties: MessageConsumerProperties):
+            BlueprintMessageConsumerService {
 
         when (messageConsumerProperties) {
             is KafkaBasicAuthMessageConsumerProperties -> {
@@ -144,12 +150,13 @@ open class BluePrintMessageLibPropertyService(private var bluePrintPropertiesSer
 
     private fun kafkaBasicAuthMessageConsumerProperties(prefix: String): KafkaBasicAuthMessageConsumerProperties {
         return bluePrintPropertiesService.propertyBeanType(
-                prefix, KafkaBasicAuthMessageConsumerProperties::class.java)
+            prefix, KafkaBasicAuthMessageConsumerProperties::class.java
+        )
     }
 
     private fun kafkaStreamsBasicAuthMessageConsumerProperties(prefix: String): KafkaStreamsBasicAuthConsumerProperties {
         return bluePrintPropertiesService.propertyBeanType(
-                prefix, KafkaStreamsBasicAuthConsumerProperties::class.java)
+            prefix, KafkaStreamsBasicAuthConsumerProperties::class.java
+        )
     }
-
 }

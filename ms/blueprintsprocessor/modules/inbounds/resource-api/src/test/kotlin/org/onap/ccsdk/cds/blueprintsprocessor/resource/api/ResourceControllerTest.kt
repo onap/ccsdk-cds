@@ -22,6 +22,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolution
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolutionDBService
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -35,8 +36,6 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.reactive.server.WebTestClient
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-
 
 @RunWith(SpringRunner::class)
 @WebFluxTest
@@ -88,8 +87,10 @@ class ResourceControllerTest {
                 .consumeWith {
                     val json = String(it.responseBody!!)
                     val typeFactory = JacksonUtils.objectMapper.typeFactory
-                    val list: List<ResourceResolution> = JacksonUtils.objectMapper.readValue(json,
-                        typeFactory.constructCollectionType(List::class.java, ResourceResolution::class.java))
+                    val list: List<ResourceResolution> = JacksonUtils.objectMapper.readValue(
+                        json,
+                        typeFactory.constructCollectionType(List::class.java, ResourceResolution::class.java)
+                    )
                     Assert.assertEquals(2, list.size)
                     assertEqual(ra1, list[0])
                     assertEqual(ra1, list[0])
@@ -119,15 +120,16 @@ class ResourceControllerTest {
                 .consumeWith {
                     val json = String(it.responseBody!!)
                     val typeFactory = JacksonUtils.objectMapper.typeFactory
-                    val list: List<ResourceResolution> = JacksonUtils.objectMapper.readValue(json,
-                        typeFactory.constructCollectionType(List::class.java, ResourceResolution::class.java))
+                    val list: List<ResourceResolution> = JacksonUtils.objectMapper.readValue(
+                        json,
+                        typeFactory.constructCollectionType(List::class.java, ResourceResolution::class.java)
+                    )
                     Assert.assertEquals(2, list.size)
                     assertEqual(ra1, list[0])
                     assertEqual(ra1, list[0])
                 }
         }
     }
-
 
     @Test
     fun getAllFromMissingParamTest() {
@@ -140,8 +142,10 @@ class ResourceControllerTest {
                 .expectBody()
                 .consumeWith {
                     val r = JacksonUtils.objectMapper.readValue(it.responseBody, ErrorMessage::class.java)
-                    Assert.assertEquals("Missing param. Either retrieve resolved value using artifact name and resolution-key OR using resource-id and resource-type.",
-                        r.message)
+                    Assert.assertEquals(
+                        "Missing param. Either retrieve resolved value using artifact name and resolution-key OR using resource-id and resource-type.",
+                        r.message
+                    )
                 }
         }
     }
@@ -157,8 +161,10 @@ class ResourceControllerTest {
                 .expectBody()
                 .consumeWith {
                     val r = JacksonUtils.objectMapper.readValue(it.responseBody, ErrorMessage::class.java)
-                    Assert.assertEquals("Either retrieve resolved value using artifact name and resolution-key OR using resource-id and resource-type.",
-                        r.message)
+                    Assert.assertEquals(
+                        "Either retrieve resolved value using artifact name and resolution-key OR using resource-id and resource-type.",
+                        r.message
+                    )
                 }
         }
     }
@@ -195,15 +201,21 @@ class ResourceControllerTest {
         }
     }
 
-    private suspend fun store(resourceAssignment: ResourceAssignment, resKey: String = "", resId: String = "",
-                              resType: String = "") {
-        resourceResolutionDBService.write(blueprintName,
+    private suspend fun store(
+        resourceAssignment: ResourceAssignment,
+        resKey: String = "",
+        resId: String = "",
+        resType: String = ""
+    ) {
+        resourceResolutionDBService.write(
+            blueprintName,
             blueprintVersion,
             resKey,
             resId,
             resType,
             templatePrefix,
-            resourceAssignment)
+            resourceAssignment
+        )
     }
 
     private fun createRA(prefix: String): ResourceAssignment {
@@ -221,8 +233,10 @@ class ResourceControllerTest {
     }
 
     private fun assertEqual(resourceAssignment: ResourceAssignment, resourceResolution: ResourceResolution) {
-        Assert.assertEquals(JacksonUtils.getValue(resourceAssignment.property?.value!!).toString(),
-            resourceResolution.value)
+        Assert.assertEquals(
+            JacksonUtils.getValue(resourceAssignment.property?.value!!).toString(),
+            resourceResolution.value
+        )
         Assert.assertEquals(resourceAssignment.status, resourceResolution.status)
         Assert.assertEquals(resourceAssignment.dictionarySource, resourceResolution.dictionarySource)
         Assert.assertEquals(resourceAssignment.dictionaryName, resourceResolution.dictionaryName)
@@ -230,6 +244,5 @@ class ResourceControllerTest {
         Assert.assertEquals(resourceAssignment.name, resourceResolution.name)
         Assert.assertEquals(blueprintVersion, resourceResolution.blueprintVersion)
         Assert.assertEquals(blueprintName, resourceResolution.blueprintName)
-
     }
 }

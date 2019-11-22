@@ -41,12 +41,13 @@ open class BluePrintCoreConfiguration(private val bluePrintPropertiesService: Bl
     @Bean
     open fun bluePrintLoadConfiguration(): BluePrintLoadConfiguration {
         return bluePrintPropertiesService
-                .propertyBeanType(PREFIX_BLUEPRINT_PROCESSOR, BluePrintLoadConfiguration::class.java)
+            .propertyBeanType(PREFIX_BLUEPRINT_PROCESSOR, BluePrintLoadConfiguration::class.java)
     }
 }
 
 @Configuration
 open class BluePrintPropertyConfiguration {
+
     @Autowired
     lateinit var environment: Environment
 
@@ -59,6 +60,7 @@ open class BluePrintPropertyConfiguration {
 
 @Service
 open class BluePrintPropertiesService(private var bluePrintPropertyBinder: Binder) {
+
     fun <T> propertyBeanType(prefix: String, type: Class<T>): T {
         return bluePrintPropertyBinder.bind(prefix, Bindable.of(type)).get()
     }
@@ -74,5 +76,4 @@ open class BlueprintDependencyConfiguration : ApplicationContextAware {
         BluePrintDependencyService.inject(applicationContext)
         log.info("Dependency Management module created...")
     }
-
 }

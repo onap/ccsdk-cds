@@ -70,7 +70,9 @@ class BluePrintMappingsTest {
     fun commonHeaderToJavaTest() {
         val flag = Flag.newBuilder().setIsForce(true).setTtl(2).build()
 
-        val commonHeader = CommonHeader.newBuilder().setOriginatorId("Origin").setRequestId("requestID").setSubRequestId("subRequestID").setTimestamp(dateString).setFlag(flag).build()
+        val commonHeader =
+            CommonHeader.newBuilder().setOriginatorId("Origin").setRequestId("requestID").setSubRequestId("subRequestID").setTimestamp(dateString)
+                .setFlag(flag).build()
         val commonHeader2 = commonHeader.toJava()
 
         Assert.assertEquals(commonHeader.originatorId, commonHeader2.originatorId)
@@ -101,7 +103,9 @@ class BluePrintMappingsTest {
 
     @Test
     fun actionIdentifierToJavaTest() {
-        val actionIdentifiers = ActionIdentifiers.newBuilder().setActionName("Process Action").setBlueprintName("BlueprintName").setBlueprintVersion("3.0").setMode("Execution").build()
+        val actionIdentifiers =
+            ActionIdentifiers.newBuilder().setActionName("Process Action").setBlueprintName("BlueprintName").setBlueprintVersion("3.0")
+                .setMode("Execution").build()
         val actionIdentifiers2 = actionIdentifiers.toJava()
 
         Assert.assertEquals(actionIdentifiers.actionName, actionIdentifiers2.actionName)

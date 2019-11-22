@@ -16,7 +16,11 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.healthapi.service.health
 
-import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.*
+import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.HealthApiResponse
+import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.HealthCheckStatus
+import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.ServiceEndpoint
+import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.ServicesCheckResponse
+import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.WebClientEnpointResponse
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.service.EndPointExecution
 import org.slf4j.LoggerFactory
 
@@ -27,7 +31,7 @@ import org.slf4j.LoggerFactory
  * @author Shaaban Ebrahim
  * @version 1.0
  */
-abstract class AbstractHealthCheck (private val  endPointExecution: EndPointExecution) {
+abstract class AbstractHealthCheck(private val endPointExecution: EndPointExecution) {
 
     private var logger = LoggerFactory.getLogger(BluePrintProcessorHealthCheck::class.java)
 
@@ -45,9 +49,7 @@ abstract class AbstractHealthCheck (private val  endPointExecution: EndPointExec
         }
         healthApiResponse = HealthApiResponse(systemStatus, listOfResponse)
         return healthApiResponse
-
     }
-
 
     private fun retrieveServiceStatus(serviceEndpoint: ServiceEndpoint): HealthCheckStatus {
         var serviceStatus: HealthCheckStatus = HealthCheckStatus.UP
@@ -59,16 +61,13 @@ abstract class AbstractHealthCheck (private val  endPointExecution: EndPointExec
         } catch (e: Exception) {
             logger.error("service name ${serviceEndpoint.serviceName} is down ${e.message}")
             serviceStatus = HealthCheckStatus.DOWN
-
         }
         return serviceStatus
     }
-
 
     open fun retrieveEndpointExecutionStatus(): HealthApiResponse {
         return retrieveSystemStatus(setupServiceEndpoint())
     }
 
     abstract fun setupServiceEndpoint(): List<ServiceEndpoint>
-
 }

@@ -16,11 +16,11 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.validation.extension
 
-import org.slf4j.LoggerFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidator
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
@@ -31,10 +31,13 @@ interface ResourceDefinitionValidator : BluePrintValidator<ResourceDefinition>
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class ResourceDefinitionValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : ResourceDefinitionValidator {
 
-    private val log= LoggerFactory.getLogger(ResourceDefinitionValidatorImpl::class.java)
+    private val log = LoggerFactory.getLogger(ResourceDefinitionValidatorImpl::class.java)
 
-    override fun validate(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String,
-                          resourceDefinition: ResourceDefinition) {
+    override fun validate(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        name: String,
+        resourceDefinition: ResourceDefinition
+    ) {
         log.trace("validating resource definition($name)")
         resourceDefinition.sources.forEach { name, nodeTemplate ->
             bluePrintTypeValidatorService.validateNodeTemplate(bluePrintRuntimeService, name, nodeTemplate)

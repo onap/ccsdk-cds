@@ -17,12 +17,22 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.*
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.PrepareRemoteEnvInput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteIdentifier
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteScriptExecutionInput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StatusType
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ExecutionServiceConstant
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.RemoteScriptExecutionService
-import org.onap.ccsdk.cds.controllerblueprints.core.*
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.checkFileExists
+import org.onap.ccsdk.cds.controllerblueprints.core.checkNotBlank
 import org.onap.ccsdk.cds.controllerblueprints.core.data.OperationAssignment
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
+import org.onap.ccsdk.cds.controllerblueprints.core.returnNullIfMissing
+import org.onap.ccsdk.cds.controllerblueprints.core.rootFieldsToMap
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
@@ -33,8 +43,7 @@ import org.springframework.stereotype.Component
 @ConditionalOnBean(name = [ExecutionServiceConstant.SERVICE_GRPC_REMOTE_SCRIPT_EXECUTION])
 @Component("component-remote-python-executor")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-open class ComponentRemotePythonExecutor(private val remoteScriptExecutionService: RemoteScriptExecutionService)
-    : AbstractComponentFunction() {
+open class ComponentRemotePythonExecutor(private val remoteScriptExecutionService: RemoteScriptExecutionService) : AbstractComponentFunction() {
 
     private val log = LoggerFactory.getLogger(ComponentRemotePythonExecutor::class.java)!!
 
@@ -103,9 +112,12 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
 
             // If packages are defined, then install in remote server
             if (packages != null) {
-                val prepareEnvInput = PrepareRemoteEnvInput(requestId = processId,
-                    remoteIdentifier = RemoteIdentifier(blueprintName = blueprintName,
-                        blueprintVersion = blueprintVersion),
+                val prepareEnvInput = PrepareRemoteEnvInput(
+                    requestId = processId,
+                    remoteIdentifier = RemoteIdentifier(
+                        blueprintName = blueprintName,
+                        blueprintVersion = blueprintVersion
+                    ),
                     packages = packages
                 )
                 val prepareEnvOutput = remoteScriptExecutionService.prepareEnv(prepareEnvInput)
@@ -128,18 +140,21 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
                 val properties = dynamicProperties?.returnNullIfMissing()?.rootFieldsToMap() ?: hashMapOf()
 
                 val remoteExecutionInput = RemoteScriptExecutionInput(
-                        requestId = processId,
-                        remoteIdentifier = RemoteIdentifier(blueprintName = blueprintName, blueprintVersion = blueprintVersion),
-                        command = scriptCommand,
-                        properties = properties)
+                    requestId = processId,
+                    remoteIdentifier = RemoteIdentifier(blueprintName = blueprintName, blueprintVersion = blueprintVersion),
+                    command = scriptCommand,
+                    properties = properties
+                )
                 val remoteExecutionOutput = remoteScriptExecutionService.executeCommand(remoteExecutionInput)
 
                 val logs = JacksonUtils.jsonNodeFromObject(remoteExecutionOutput.response)
                 if (remoteExecutionOutput.status != StatusType.SUCCESS) {
                     setNodeOutputErrors(remoteExecutionOutput.status.name, logs, remoteExecutionOutput.payload)
                 } else {
-                    setNodeOutputProperties(remoteExecutionOutput.status.name.asJsonPrimitive(), logs,
-                            remoteExecutionOutput.payload)
+                    setNodeOutputProperties(
+                        remoteExecutionOutput.status.name.asJsonPrimitive(), logs,
+                        remoteExecutionOutput.payload
+                    )
                 }
             }
         } catch (e: Exception) {
@@ -179,7 +194,7 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
     /**
      * Utility function to set the output properties and errors of the executor node, in cas of errors
      */
-    private fun setNodeOutputErrors(status: String, message: JsonNode, artifacts: JsonNode = "".asJsonPrimitive()  ) {
+    private fun setNodeOutputErrors(status: String, message: JsonNode, artifacts: JsonNode = "".asJsonPrimitive()) {
         setAttribute(ATTRIBUTE_EXEC_CMD_STATUS, status.asJsonPrimitive())
         log.info("Executor status   : $status")
         setAttribute(ATTRIBUTE_EXEC_CMD_LOG, message)

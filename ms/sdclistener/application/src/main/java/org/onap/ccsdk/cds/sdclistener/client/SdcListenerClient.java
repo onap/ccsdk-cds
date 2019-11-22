@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.onap.ccsdk.cds.sdclistener.client;
 
-import java.util.Optional;
 import org.onap.ccsdk.cds.sdclistener.SdcListenerConfiguration;
-import org.onap.ccsdk.cds.sdclistener.dto.SdcListenerDto;
 import org.onap.ccsdk.cds.sdclistener.SdcListenerNotificationCallback;
+import org.onap.ccsdk.cds.sdclistener.dto.SdcListenerDto;
 import org.onap.ccsdk.cds.sdclistener.exceptions.SdcListenerException;
 import org.onap.sdc.api.IDistributionClient;
 import org.onap.sdc.api.results.IDistributionClientResult;
@@ -31,6 +31,8 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 @ComponentScan("org.onap.ccsdk.cds.cdssdclistener.dto")
@@ -57,7 +59,7 @@ public class SdcListenerClient {
         LOG.info("Initialize the SDC distribution client");
 
         distributionClient = Optional.of(DistributionClientFactory.createDistributionClient())
-            .orElseThrow(() -> new SdcListenerException("Could not able to create SDC Distribution client"));
+                .orElseThrow(() -> new SdcListenerException("Could not able to create SDC Distribution client"));
 
         listenerDto.setManagedChannelForGrpc();
 
@@ -70,7 +72,7 @@ public class SdcListenerClient {
     private void startSdcClientBasedOnTheResult(IDistributionClientResult result) throws SdcListenerException {
         if (!result.getDistributionActionResult().equals(DistributionActionResultEnum.SUCCESS)) {
             throw new SdcListenerException(
-                "SDC distribution client init failed with reason:" + result.getDistributionMessageResult());
+                    "SDC distribution client init failed with reason:" + result.getDistributionMessageResult());
         }
 
         LOG.info("Initialization of the SDC distribution client is complete");
@@ -80,7 +82,7 @@ public class SdcListenerClient {
 
         if (!result.getDistributionActionResult().equals(DistributionActionResultEnum.SUCCESS)) {
             throw new SdcListenerException(
-                "Startup of the SDC distribution client failed with reason: " + result.getDistributionMessageResult());
+                    "Startup of the SDC distribution client failed with reason: " + result.getDistributionMessageResult());
         }
     }
 
@@ -89,7 +91,8 @@ public class SdcListenerClient {
         IDistributionClientResult status = this.distributionClient.stop();
         if (status.getDistributionActionResult().equals(DistributionActionResultEnum.SUCCESS)) {
             throw new SdcListenerException(
-                "Failed to close the SDC distribution client due to : " + status.getDistributionMessageResult());
+                    "Failed to close the SDC distribution client due to : " + status.getDistributionMessageResult());
         }
     }
+
 }

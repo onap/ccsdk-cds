@@ -31,7 +31,6 @@ import org.springframework.stereotype.Service
 @Service
 class ResourceDictionaryHandler(private val resourceDictionaryRepository: ResourceDictionaryRepository) {
 
-
     /**
      * This is a getDataDictionaryByName service
      *
@@ -85,8 +84,8 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
         val resourceDefinition = resourceDictionary.definition
         Preconditions.checkNotNull(resourceDefinition, "failed to get resource definition from content")
         // Validate the Resource Definitions
-        //TODO( Save Validator)
-        //validate(resourceDefinition)
+        // TODO( Save Validator)
+        // validate(resourceDefinition)
 
         resourceDictionary.tags = resourceDefinition.tags!!
         resourceDefinition.updatedBy = resourceDictionary.updatedBy
@@ -137,11 +136,11 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
     }
 
     private fun validateResourceDictionary(resourceDictionary: ResourceDictionary): Boolean {
-        checkNotEmpty(resourceDictionary.name){ "DataDictionary Definition name is missing."}
+        checkNotEmpty(resourceDictionary.name) { "DataDictionary Definition name is missing." }
         checkNotNull(resourceDictionary.definition) { "DataDictionary Definition Information is missing." }
-        checkNotEmpty(resourceDictionary.description){ "DataDictionary Definition Information is missing."}
-        checkNotEmpty(resourceDictionary.tags){ "DataDictionary Definition tags is missing."}
-        checkNotEmpty(resourceDictionary.updatedBy){ "DataDictionary Definition updatedBy is missing."}
+        checkNotEmpty(resourceDictionary.description) { "DataDictionary Definition Information is missing." }
+        checkNotEmpty(resourceDictionary.tags) { "DataDictionary Definition tags is missing." }
+        checkNotEmpty(resourceDictionary.updatedBy) { "DataDictionary Definition updatedBy is missing." }
         return true
     }
 }

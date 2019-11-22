@@ -17,34 +17,39 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.core.api.data
 
 import com.fasterxml.jackson.databind.JsonNode
-import java.util.*
+import java.util.Date
 
 enum class StatusType {
     SUCCESS, FAILURE
 }
 
-data class RemoteIdentifier(var blueprintName: String,
-                            var blueprintVersion: String)
-
-
-data class RemoteScriptExecutionInput(var requestId: String,
-                                      var correlationId: String? = null,
-                                      var remoteIdentifier: RemoteIdentifier? = null,
-                                      var command: String,
-                                      var timeOut: Long = 30,
-                                      var properties: MutableMap<String, JsonNode> = hashMapOf()
+data class RemoteIdentifier(
+    var blueprintName: String,
+    var blueprintVersion: String
 )
 
+data class RemoteScriptExecutionInput(
+    var requestId: String,
+    var correlationId: String? = null,
+    var remoteIdentifier: RemoteIdentifier? = null,
+    var command: String,
+    var timeOut: Long = 30,
+    var properties: MutableMap<String, JsonNode> = hashMapOf()
+)
 
-data class RemoteScriptExecutionOutput(var requestId: String,
-                                       var response: List<String>,
-                                       var status: StatusType = StatusType.SUCCESS,
-                                       var timestamp: Date = Date(),
-                                       var payload: JsonNode)
+data class RemoteScriptExecutionOutput(
+    var requestId: String,
+    var response: List<String>,
+    var status: StatusType = StatusType.SUCCESS,
+    var timestamp: Date = Date(),
+    var payload: JsonNode
+)
 
-data class PrepareRemoteEnvInput(var requestId: String,
-                                 var correlationId: String? = null,
-                                 var remoteIdentifier: RemoteIdentifier? = null,
-                                 var packages: JsonNode,
-                                 var timeOut: Long = 120,
-                                 var properties: MutableMap<String, JsonNode> = hashMapOf())
+data class PrepareRemoteEnvInput(
+    var requestId: String,
+    var correlationId: String? = null,
+    var remoteIdentifier: RemoteIdentifier? = null,
+    var packages: JsonNode,
+    var timeOut: Long = 120,
+    var properties: MutableMap<String, JsonNode> = hashMapOf()
+)

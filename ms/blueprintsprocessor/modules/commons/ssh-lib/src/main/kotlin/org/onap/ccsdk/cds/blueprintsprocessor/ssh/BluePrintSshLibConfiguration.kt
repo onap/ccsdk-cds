@@ -33,16 +33,13 @@ open class BluePrintSshLibConfiguration
  * Exposed Dependency Service by this SSH Lib Module
  */
 fun BluePrintDependencyService.sshLibPropertyService(): BluePrintSshLibPropertyService =
-        instance(SshLibConstants.SERVICE_BLUEPRINT_SSH_LIB_PROPERTY)
-
+    instance(SshLibConstants.SERVICE_BLUEPRINT_SSH_LIB_PROPERTY)
 
 fun BluePrintDependencyService.sshClientService(selector: String): BlueprintSshClientService =
-        sshLibPropertyService().blueprintSshClientService(selector)
-
+    sshLibPropertyService().blueprintSshClientService(selector)
 
 fun BluePrintDependencyService.sshClientService(jsonNode: JsonNode): BlueprintSshClientService =
-        sshLibPropertyService().blueprintSshClientService(jsonNode)
-
+    sshLibPropertyService().blueprintSshClientService(jsonNode)
 
 class SshLibConstants {
     companion object {

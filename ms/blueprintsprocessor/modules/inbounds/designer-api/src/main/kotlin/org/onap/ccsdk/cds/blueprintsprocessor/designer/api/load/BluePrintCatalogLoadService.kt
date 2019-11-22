@@ -25,7 +25,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogS
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.File
-import java.util.*
+import java.util.UUID
 
 @Service
 open class BluePrintCatalogLoadService(private val controllerBlueprintsCatalogService: BluePrintCatalogService) {
@@ -66,5 +66,4 @@ open class BluePrintCatalogLoadService(private val controllerBlueprintsCatalogSe
             errorBuilder.appendln("Couldn't load BlueprintModel(${file.name}: ${e.message}")
         }
     }
-
 }

@@ -36,17 +36,20 @@ import kotlin.test.BeforeTest
 import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [MockRestResourceResolutionProcessor::class, MockBluePrintRestLibPropertyService::class,
-    BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, RestClientProperties::class])
+@ContextConfiguration(
+    classes = [MockRestResourceResolutionProcessor::class, MockBluePrintRestLibPropertyService::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, RestClientProperties::class]
+)
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class RestResourceResolutionProcessorTest {
+
     @Autowired
     lateinit var bluePrintRestLibPropertyService: MockBluePrintRestLibPropertyService
 
     private lateinit var restResourceResolutionProcessor: MockRestResourceResolutionProcessor
 
     @BeforeTest
-    fun init(){
+    fun init() {
         restResourceResolutionProcessor = MockRestResourceResolutionProcessor(bluePrintRestLibPropertyService)
     }
 
@@ -54,13 +57,14 @@ class RestResourceResolutionProcessorTest {
     fun `test rest resource resolution`() {
         runBlocking {
             val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
-                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+            )
 
             val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)
 
             restResourceResolutionProcessor.raRuntimeService = resourceAssignmentRuntimeService
             restResourceResolutionProcessor.resourceDictionaries = ResourceAssignmentUtils
-                    .resourceDefinitions(bluePrintContext.rootPath)
+                .resourceDefinitions(bluePrintContext.rootPath)
 
             val scriptPropertyInstances: MutableMap<String, Any> = mutableMapOf()
             scriptPropertyInstances["mock-service1"] = MockCapabilityService()
@@ -87,13 +91,14 @@ class RestResourceResolutionProcessorTest {
     fun `test rest aai get resource resolution`() {
         runBlocking {
             val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
-                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+            )
 
             val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)
 
             restResourceResolutionProcessor.raRuntimeService = resourceAssignmentRuntimeService
             restResourceResolutionProcessor.resourceDictionaries = ResourceAssignmentUtils
-                    .resourceDefinitions(bluePrintContext.rootPath)
+                .resourceDefinitions(bluePrintContext.rootPath)
 
             val scriptPropertyInstances: MutableMap<String, Any> = mutableMapOf()
             scriptPropertyInstances["mock-service1"] = MockCapabilityService()
@@ -120,13 +125,14 @@ class RestResourceResolutionProcessorTest {
     fun `test rest aai put resource resolution`() {
         runBlocking {
             val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
-                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+            )
 
             val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)
 
             restResourceResolutionProcessor.raRuntimeService = resourceAssignmentRuntimeService
             restResourceResolutionProcessor.resourceDictionaries = ResourceAssignmentUtils
-                    .resourceDefinitions(bluePrintContext.rootPath)
+                .resourceDefinitions(bluePrintContext.rootPath)
 
             val scriptPropertyInstances: MutableMap<String, Any> = mutableMapOf()
             scriptPropertyInstances["mock-service1"] = MockCapabilityService()

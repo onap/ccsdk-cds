@@ -50,6 +50,4 @@ class MySqlDatabaseConfiguration(private val mySqlDataSourceProperties: MySqlDat
     fun mySqlNamedParameterJdbcTemplate(mySqlDataSource: DataSource): NamedParameterJdbcTemplate {
         return NamedParameterJdbcTemplate(mySqlDataSource)
     }
-
-
 }

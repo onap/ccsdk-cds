@@ -54,47 +54,51 @@ class BlueprintServiceLogicTest {
     @Test
     fun testExecuteGraphWithSingleComponent() {
         runBlocking {
-            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                    "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(
+                "1234",
+                "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+            )
 
             val executionServiceInput = JacksonReactorUtils
-                    .readValueFromClassPathFile("execution-input/resource-assignment-input.json", ExecutionServiceInput::class.java)!!
+                .readValueFromClassPathFile("execution-input/resource-assignment-input.json", ExecutionServiceInput::class.java)!!
 
             // Assign Workflow inputs Mock
             val input = executionServiceInput.payload.get("resource-assignment-request")
             bluePrintRuntimeService.assignWorkflowInputs("resource-assignment", input)
 
             val executionServiceOutput = dgWorkflowExecutionService
-                    .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, mutableMapOf())
+                .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, mutableMapOf())
             assertNotNull(executionServiceOutput, "failed to get response")
-            assertEquals(BluePrintConstants.STATUS_SUCCESS, executionServiceOutput.status.message,
-                    "failed to get successful response")
+            assertEquals(
+                BluePrintConstants.STATUS_SUCCESS, executionServiceOutput.status.message,
+                "failed to get successful response"
+            )
         }
-
-
     }
 
     @Test
     fun testExecuteGraphWithMultipleComponents() {
         runBlocking {
-            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                    "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(
+                "1234",
+                "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+            )
 
             val executionServiceInput = JacksonReactorUtils
-                    .readValueFromClassPathFile("execution-input/assign-activate-input.json", ExecutionServiceInput::class.java)!!
+                .readValueFromClassPathFile("execution-input/assign-activate-input.json", ExecutionServiceInput::class.java)!!
 
             // Assign Workflow inputs Mock
             val input = executionServiceInput.payload.get("assign-activate-request")
             bluePrintRuntimeService.assignWorkflowInputs("assign-activate", input)
 
-
             val executionServiceOutput = dgWorkflowExecutionService
-                    .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, mutableMapOf())
+                .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, mutableMapOf())
             assertNotNull(executionServiceOutput, "failed to get response")
-            assertEquals(BluePrintConstants.STATUS_SUCCESS, executionServiceOutput.status.message,
-                    "failed to get successful response")
+            assertEquals(
+                BluePrintConstants.STATUS_SUCCESS, executionServiceOutput.status.message,
+                "failed to get successful response"
+            )
         }
-
     }
 
     @Test
@@ -118,5 +122,4 @@ class BlueprintServiceLogicTest {
         assertEquals(stepName1, proto1.stepName, " Failed to match the step1 name")
         assertEquals(stepName2, proto2.stepName, " Failed to match the step2 name")
     }
-
 }

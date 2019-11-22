@@ -25,7 +25,6 @@ interface NetconfSession {
      */
     fun connect()
 
-
     /**
      * Disconnect netconf session
      */

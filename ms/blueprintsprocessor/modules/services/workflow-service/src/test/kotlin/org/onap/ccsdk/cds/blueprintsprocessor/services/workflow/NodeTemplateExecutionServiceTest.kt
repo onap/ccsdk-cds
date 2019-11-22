@@ -38,6 +38,7 @@ import kotlin.test.assertNotNull
 @ContextConfiguration(classes = [WorkflowServiceConfiguration::class])
 
 class NodeTemplateExecutionServiceTest {
+
     @Before
     fun init() {
         mockkObject(BluePrintDependencyService)
@@ -52,11 +53,15 @@ class NodeTemplateExecutionServiceTest {
     @Test
     fun testExecuteNodeTemplate() {
         runBlocking {
-            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                    "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(
+                "1234",
+                "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+            )
 
-            val executionServiceInput = JacksonUtils.readValueFromClassPathFile("execution-input/resource-assignment-input.json",
-                    ExecutionServiceInput::class.java)!!
+            val executionServiceInput = JacksonUtils.readValueFromClassPathFile(
+                "execution-input/resource-assignment-input.json",
+                ExecutionServiceInput::class.java
+            )!!
 
             // Assign Workflow inputs Mock
             val input = executionServiceInput.payload.get("resource-assignment-request")
@@ -65,11 +70,13 @@ class NodeTemplateExecutionServiceTest {
             val nodeTemplate = "resource-assignment"
             val nodeTemplateExecutionService = NodeTemplateExecutionService()
             val executionServiceOutput = nodeTemplateExecutionService
-                    .executeNodeTemplate(bluePrintRuntimeService, nodeTemplate, executionServiceInput)
+                .executeNodeTemplate(bluePrintRuntimeService, nodeTemplate, executionServiceInput)
 
             assertNotNull(executionServiceOutput, "failed to get response")
-            assertEquals(BluePrintConstants.STATUS_SUCCESS, executionServiceOutput.status.message,
-                    "failed to get successful response")
+            assertEquals(
+                BluePrintConstants.STATUS_SUCCESS, executionServiceOutput.status.message,
+                "failed to get successful response"
+            )
         }
     }
 }

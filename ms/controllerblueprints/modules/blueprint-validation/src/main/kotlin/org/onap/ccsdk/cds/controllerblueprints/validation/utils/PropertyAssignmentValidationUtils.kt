@@ -48,19 +48,23 @@ open class PropertyAssignmentValidationUtils(private val bluePrintContext: BlueP
         }
     }
 
-    open fun validatePropertyAssignments(nodeTypeProperties: MutableMap<String, PropertyDefinition>,
-                                         properties: MutableMap<String, JsonNode>) {
+    open fun validatePropertyAssignments(
+        nodeTypeProperties: MutableMap<String, PropertyDefinition>,
+        properties: MutableMap<String, JsonNode>
+    ) {
         properties.forEach { propertyName, propertyAssignment ->
             val propertyDefinition: PropertyDefinition = nodeTypeProperties[propertyName]
-                    ?: throw BluePrintException("validatePropertyAssignments failed to get definition for the property ($propertyName)")
+                ?: throw BluePrintException("validatePropertyAssignments failed to get definition for the property ($propertyName)")
 
             validatePropertyAssignment(propertyName, propertyDefinition, propertyAssignment)
-
         }
     }
 
-    open fun validatePropertyAssignment(propertyName: String, propertyDefinition: PropertyDefinition,
-                                        propertyAssignment: JsonNode) {
+    open fun validatePropertyAssignment(
+        propertyName: String,
+        propertyDefinition: PropertyDefinition,
+        propertyAssignment: JsonNode
+    ) {
         // Check and Validate if Expression Node
         val expressionData = BluePrintExpressionService.getExpressionData(propertyAssignment)
         if (!expressionData.isExpression) {
@@ -74,13 +78,12 @@ open class PropertyAssignmentValidationUtils(private val bluePrintContext: BlueP
 
         if (BluePrintTypes.validPrimitiveTypes().contains(propertyType)) {
             isValid = JacksonUtils.checkJsonNodeValueOfPrimitiveType(propertyType, propertyAssignment)
-
         } else if (BluePrintTypes.validComplexTypes().contains(propertyType)) {
             isValid = true
         } else if (BluePrintTypes.validCollectionTypes().contains(propertyType)) {
 
             val entrySchemaType = propertyDefinition.entrySchema?.type
-                    ?: throw BluePrintException(format("Failed to get EntrySchema type for the collection property ({})", propertyName))
+                ?: throw BluePrintException(format("Failed to get EntrySchema type for the collection property ({})", propertyName))
 
             if (!BluePrintTypes.validPropertyTypes().contains(entrySchemaType)) {
                 checkPropertyDataType(entrySchemaType, propertyName)
@@ -99,10 +102,9 @@ open class PropertyAssignmentValidationUtils(private val bluePrintContext: BlueP
     open fun checkPropertyDataType(dataTypeName: String, propertyName: String) {
 
         val dataType = bluePrintContext.serviceTemplate.dataTypes?.get(dataTypeName)
-                ?: throw BluePrintException("DataType ($dataTypeName) for the property ($propertyName) not found")
+            ?: throw BluePrintException("DataType ($dataTypeName) for the property ($propertyName) not found")
 
         checkValidDataTypeDerivedFrom(propertyName, dataType.derivedFrom)
-
     }
 
     open fun checkValidDataTypeDerivedFrom(dataTypeName: String, derivedFrom: String) {

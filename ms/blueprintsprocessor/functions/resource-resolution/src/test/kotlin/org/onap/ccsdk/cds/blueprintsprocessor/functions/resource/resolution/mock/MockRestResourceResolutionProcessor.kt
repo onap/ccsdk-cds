@@ -29,10 +29,12 @@ import org.onap.ccsdk.cds.controllerblueprints.core.nullToEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory
-import java.util.*
+import java.util.HashMap
 
-class MockRestResourceResolutionProcessor(private val blueprintRestLibPropertyService:
-                                          MockBluePrintRestLibPropertyService) : ResourceAssignmentProcessor() {
+class MockRestResourceResolutionProcessor(
+    private val blueprintRestLibPropertyService:
+    MockBluePrintRestLibPropertyService
+) : ResourceAssignmentProcessor() {
 
     private val logger = LoggerFactory.getLogger(MockRestResourceResolutionProcessor::class.java)
 
@@ -77,8 +79,10 @@ class MockRestResourceResolutionProcessor(private val blueprintRestLibPropertySe
                     resolveFromInputKeyMapping(checkNotNull(sourceProperties.urlPath), resolvedInputKeyMapping)
                 val verb = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.verb), resolvedInputKeyMapping)
 
-                logger.info("MockRestResource ($dSource) dictionary information: " +
-                        "URL:($urlPath), input-key-mapping:($inputKeyMapping), output-key-mapping:(${sourceProperties.outputKeyMapping})")
+                logger.info(
+                    "MockRestResource ($dSource) dictionary information: " +
+                            "URL:($urlPath), input-key-mapping:($inputKeyMapping), output-key-mapping:(${sourceProperties.outputKeyMapping})"
+                )
 
                 // Get the Rest Client Service
                 val restClientService = blueprintWebClientService(executionRequest)
@@ -90,7 +94,8 @@ class MockRestResourceResolutionProcessor(private val blueprintRestLibPropertySe
                     populateResource(executionRequest, sourceProperties, responseBody, path)
                     restClientService.tearDown()
                 } else {
-                    val errMsg = "Failed to get $dSource result for dictionary name ($dName) using urlPath ($urlPath) response_code: ($responseStatusCode)"
+                    val errMsg =
+                        "Failed to get $dSource result for dictionary name ($dName) using urlPath ($urlPath) response_code: ($responseStatusCode)"
                     logger.warn(errMsg)
                     throw BluePrintProcessorException(errMsg)
                 }
@@ -110,8 +115,12 @@ class MockRestResourceResolutionProcessor(private val blueprintRestLibPropertySe
     }
 
     @Throws(BluePrintProcessorException::class)
-    private fun populateResource(resourceAssignment: ResourceAssignment, sourceProperties: RestResourceSource,
-                                 restResponse: String, path: String) {
+    private fun populateResource(
+        resourceAssignment: ResourceAssignment,
+        sourceProperties: RestResourceSource,
+        restResponse: String,
+        path: String
+    ) {
         val type = nullToEmpty(resourceAssignment.property?.type)
         lateinit var entrySchemaType: String
 

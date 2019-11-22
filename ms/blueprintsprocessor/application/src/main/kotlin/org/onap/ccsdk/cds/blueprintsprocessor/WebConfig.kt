@@ -34,36 +34,38 @@ import org.springframework.web.reactive.config.WebFluxConfigurer
  * @author Brinda Santh
  */
 @Configuration
-open class WebConfig(private val authenticationManager: AuthenticationManager,
-                     private val securityContextRepository: SecurityContextRepository) : WebFluxConfigurer {
+open class WebConfig(
+    private val authenticationManager: AuthenticationManager,
+    private val securityContextRepository: SecurityContextRepository
+) : WebFluxConfigurer {
 
     override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
 
         registry.addResourceHandler("/swagger-ui.html**")
-                .addResourceLocations("classpath:/META-INF/resources/")
+            .addResourceLocations("classpath:/META-INF/resources/")
 
         registry.addResourceHandler("/webjars/**")
-                .addResourceLocations("classpath:/META-INF/resources/webjars/")
+            .addResourceLocations("classpath:/META-INF/resources/webjars/")
     }
 
     override fun addCorsMappings(corsRegistry: CorsRegistry) {
         corsRegistry.addMapping("/**")
-                .allowedOrigins("*")
-                .allowedMethods("*")
-                .allowedHeaders("*")
-                .maxAge(3600)
+            .allowedOrigins("*")
+            .allowedMethods("*")
+            .allowedHeaders("*")
+            .maxAge(3600)
     }
 
     @Bean
     open fun securityWebFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain {
         return http.csrf().disable()
-                .formLogin().disable()
-                .httpBasic().disable()
-                .authenticationManager(authenticationManager)
-                .securityContextRepository(securityContextRepository!!)
-                .authorizeExchange()
-                .pathMatchers(HttpMethod.OPTIONS).permitAll()
-                .anyExchange().authenticated()
-                .and().build()
+            .formLogin().disable()
+            .httpBasic().disable()
+            .authenticationManager(authenticationManager)
+            .securityContextRepository(securityContextRepository!!)
+            .authorizeExchange()
+            .pathMatchers(HttpMethod.OPTIONS).permitAll()
+            .anyExchange().authenticated()
+            .and().build()
     }
 }

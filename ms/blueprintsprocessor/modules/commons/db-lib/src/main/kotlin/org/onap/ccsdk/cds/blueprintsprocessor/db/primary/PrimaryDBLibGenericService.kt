@@ -21,7 +21,5 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Service
 
 @Service
-open class PrimaryDBLibGenericService(primaryNamedParameterJdbcTemplate: NamedParameterJdbcTemplate)
-    : AbstractDBLibGenericService(primaryNamedParameterJdbcTemplate) {
-
-}
+open class PrimaryDBLibGenericService(primaryNamedParameterJdbcTemplate: NamedParameterJdbcTemplate) :
+    AbstractDBLibGenericService(primaryNamedParameterJdbcTemplate)

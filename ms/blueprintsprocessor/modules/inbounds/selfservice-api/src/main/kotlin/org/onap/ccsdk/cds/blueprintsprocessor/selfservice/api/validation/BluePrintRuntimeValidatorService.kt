@@ -22,6 +22,8 @@ import org.onap.ccsdk.cds.controllerblueprints.validation.extension.ResourceDefi
 import org.springframework.stereotype.Service
 
 @Service("bluePrintRuntimeValidatorService")
-open class BluePrintRuntimeValidatorService(bluePrintTypeValidatorService: BluePrintTypeValidatorService,
-                                            resourceDefinitionValidator: ResourceDefinitionValidator)
-    : BluePrintDesignTimeValidatorService(bluePrintTypeValidatorService, resourceDefinitionValidator)
+open class BluePrintRuntimeValidatorService(
+    bluePrintTypeValidatorService: BluePrintTypeValidatorService,
+    resourceDefinitionValidator: ResourceDefinitionValidator
+) :
+    BluePrintDesignTimeValidatorService(bluePrintTypeValidatorService, resourceDefinitionValidator)

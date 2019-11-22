@@ -72,8 +72,10 @@ open class UatServices(private val uatExecutor: UatExecutor, private val mapper:
     @PostMapping("/spy", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE], produces = ["text/vnd.yaml"])
     @PreAuthorize("hasRole('USER')")
     @Suppress("BlockingMethodInNonBlockingContext")
-    open fun spy(@RequestPart("cba") cbaFile: FilePart,
-                 @RequestPart("uat", required = false) uatFile: FilePart?): String = runBlocking {
+    open fun spy(
+        @RequestPart("cba") cbaFile: FilePart,
+        @RequestPart("uat", required = false) uatFile: FilePart?
+    ): String = runBlocking {
         val tempFile = createTempFile()
         setContextColor(COLOR_SERVICES)
         try {

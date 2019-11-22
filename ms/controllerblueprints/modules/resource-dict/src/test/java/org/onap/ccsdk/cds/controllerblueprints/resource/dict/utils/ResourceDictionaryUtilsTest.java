@@ -56,7 +56,9 @@ public class ResourceDictionaryUtilsTest {
         resourceAssignment.setDictionarySource(null);
         sources.put(ResourceDictionaryConstants.SOURCE_DEFAULT, new NodeTemplate());
         ResourceDictionaryUtils.populateSourceMapping(resourceAssignment, resourceDefinition);
-        Assert.assertEquals("Expected First source Default, but.", ResourceDictionaryConstants.SOURCE_DEFAULT, resourceAssignment.getDictionarySource());
+        Assert.assertEquals("Expected First source Default, but.",
+                ResourceDictionaryConstants.SOURCE_DEFAULT,
+                resourceAssignment.getDictionarySource());
 
         // To Check Assigned Source
         resourceAssignment.setDictionarySource(ResourceDictionaryConstants.PROCESSOR_DB);
@@ -91,9 +93,8 @@ public class ResourceDictionaryUtilsTest {
         ResourceDictionaryUtils.assignInputs(data, context);
         String path = BluePrintConstants.PATH_INPUTS.concat(BluePrintConstants.PATH_DIVIDER).concat("mapValue");
         log.info("populated context {}", context);
-        Assert.assertTrue(String.format("failed to get variable : %s",path),context.containsKey(path));
+        Assert.assertTrue(String.format("failed to get variable : %s", path), context.containsKey(path));
 
     }
-
 
 }

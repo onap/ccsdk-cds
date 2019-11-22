@@ -35,8 +35,10 @@ import org.springframework.web.reactive.function.BodyInserters
 
 @RunWith(SpringRunner::class)
 @WebFluxTest
-@ContextConfiguration(classes = [BluePrintCoreConfiguration::class,
-    BluePrintCatalogService::class, SecurityProperties::class])
+@ContextConfiguration(
+    classes = [BluePrintCoreConfiguration::class,
+        BluePrintCatalogService::class, SecurityProperties::class]
+)
 @ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class ResourceConfigSnapshotControllerTest {
@@ -68,24 +70,24 @@ class ResourceConfigSnapshotControllerTest {
         runBlocking {
 
             webTestClient
-                    .post()
-                    .uri("/api/v1/configs/$resourceType/$resourceId/running")
-                    .body(BodyInserters.fromObject(snapshotData))
-                    .exchange()
-                    .expectStatus().is2xxSuccessful
-                    .expectBody()
-                    .jsonPath("$.createdDate")
-                        .value<String> { println(it) }
+                .post()
+                .uri("/api/v1/configs/$resourceType/$resourceId/running")
+                .body(BodyInserters.fromObject(snapshotData))
+                .exchange()
+                .expectStatus().is2xxSuccessful
+                .expectBody()
+                .jsonPath("$.createdDate")
+                .value<String> { println(it) }
 
             webTestClient
-                    .post()
-                    .uri("/api/v1/configs/$resourceType/$resourceId/running")
-                    .body(BodyInserters.fromObject(snapshotData))
-                    .exchange()
-                    .expectStatus().is2xxSuccessful
-                    .expectBody()
-                    .jsonPath("$.createdDate")
-                        .value<String> { println(it)}
+                .post()
+                .uri("/api/v1/configs/$resourceType/$resourceId/running")
+                .body(BodyInserters.fromObject(snapshotData))
+                .exchange()
+                .expectStatus().is2xxSuccessful
+                .expectBody()
+                .jsonPath("$.createdDate")
+                .value<String> { println(it) }
         }
     }
 
@@ -93,7 +95,7 @@ class ResourceConfigSnapshotControllerTest {
     fun `get returns requested JSON content-type`() {
         runBlocking {
             post(resourceType, "22", "RUNNING")
-            get("json", resourceType,"22", "RUNNING")
+            get("json", resourceType, "22", "RUNNING")
         }
     }
 
@@ -122,8 +124,8 @@ class ResourceConfigSnapshotControllerTest {
             val arguments = "resourceId=MISSING&resourceType=PNF&status=TOTALLY_WRONG"
 
             webTestClient.get().uri("/api/v1/configs?$arguments")
-                    .exchange()
-                    .expectStatus().isBadRequest
+                .exchange()
+                .expectStatus().isBadRequest
         }
     }
 
@@ -140,7 +142,7 @@ class ResourceConfigSnapshotControllerTest {
         }
     }
 
-    private fun post( resourceType: String, resourceId: String, status: String) {
+    private fun post(resourceType: String, resourceId: String, status: String) {
         webTestClient
             .post()
             .uri("/api/v1/configs/$resourceType/$resourceId/$status")
@@ -150,7 +152,7 @@ class ResourceConfigSnapshotControllerTest {
             .expectBody()
     }
 
-    private fun get(expectedType : String, resourceType: String, resourceId: String, status: String) {
+    private fun get(expectedType: String, resourceType: String, resourceId: String, status: String) {
         var requestArguments = "resourceId=$resourceId&resourceType=$resourceType&status=$status"
 
         if (expectedType.isNotEmpty()) {

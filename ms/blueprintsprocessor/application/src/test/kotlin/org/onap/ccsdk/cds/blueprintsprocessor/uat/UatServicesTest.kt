@@ -108,7 +108,7 @@ class UatServicesTest : BaseUatTest() {
     }
 
     private fun inlinedPropertySource(): MutableMap<String, Any> =
-            (environment.propertySources[INLINED_PROPERTIES_PROPERTY_SOURCE_NAME] as MapPropertySource).source
+        (environment.propertySources[INLINED_PROPERTIES_PROPERTY_SOURCE_NAME] as MapPropertySource).source
 
     @LocalServerPort
     var localServerPort: Int = 0
@@ -122,11 +122,15 @@ class UatServicesTest : BaseUatTest() {
 
     @BeforeTest
     fun setupHttpClient() {
-        val defaultHeaders = listOf(BasicHeader(org.apache.http.HttpHeaders.AUTHORIZATION,
-                TestSecuritySettings.clientAuthToken()))
+        val defaultHeaders = listOf(
+            BasicHeader(
+                org.apache.http.HttpHeaders.AUTHORIZATION,
+                TestSecuritySettings.clientAuthToken()
+            )
+        )
         httpClient = HttpClientBuilder.create()
-                .setDefaultHeaders(defaultHeaders)
-                .build()
+            .setDefaultHeaders(defaultHeaders)
+            .build()
     }
 
     @Test
@@ -134,9 +138,9 @@ class UatServicesTest : BaseUatTest() {
         // GIVEN
         val cbaBytes = compressToBytes(BLUEPRINT_BASE_DIR)
         val multipartEntity = MultipartEntityBuilder.create()
-                .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
-                .addBinaryBody("cba", cbaBytes, ContentType.DEFAULT_BINARY, "cba.zip")
-                .build()
+            .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
+            .addBinaryBody("cba", cbaBytes, ContentType.DEFAULT_BINARY, "cba.zip")
+            .build()
         val request = HttpPost("$baseUrl/api/v1/uat/verify").apply {
             entity = multipartEntity
         }
@@ -168,10 +172,10 @@ class UatServicesTest : BaseUatTest() {
 
         val cbaBytes = compressToBytes(BLUEPRINT_BASE_DIR)
         val multipartEntity = MultipartEntityBuilder.create()
-                .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
-                .addBinaryBody("cba", cbaBytes, ContentType.DEFAULT_BINARY, "cba.zip")
-                .addBinaryBody("uat", bareUatBytes, ContentType.DEFAULT_BINARY, "uat.yaml")
-                .build()
+            .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
+            .addBinaryBody("cba", cbaBytes, ContentType.DEFAULT_BINARY, "cba.zip")
+            .addBinaryBody("uat", bareUatBytes, ContentType.DEFAULT_BINARY, "uat.yaml")
+            .build()
         val request = HttpPost("$baseUrl/api/v1/uat/spy").apply {
             entity = multipartEntity
         }
@@ -193,7 +197,8 @@ class UatServicesTest : BaseUatTest() {
     }
 
     private fun createMockServer(service: ServiceDefinition): WireMockServer {
-        val mockServer = WireMockServer(wireMockConfig()
+        val mockServer = WireMockServer(
+            wireMockConfig()
                 .dynamicPort()
                 .notifier(MarkedSlf4jNotifier(wireMockMarker))
         )
@@ -212,10 +217,10 @@ class UatServicesTest : BaseUatTest() {
             }
 
             val responseDefinitionBuilder: ResponseDefinitionBuilder = aResponse()
-                    .withStatus(response.status)
+                .withStatus(response.status)
             if (response.body != null) {
                 responseDefinitionBuilder.withBody(mapper.writeValueAsBytes(response.body))
-                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             }
 
             mappingBuilder.willReturn(responseDefinitionBuilder)
@@ -229,11 +234,11 @@ class UatServicesTest : BaseUatTest() {
         val selector = service.selector
         val httpPort = mockServer.port()
         val properties = mapOf(
-                "blueprintsprocessor.restclient.$selector.type" to "basic-auth",
-                "blueprintsprocessor.restclient.$selector.url" to "http://localhost:$httpPort/",
-                // TODO credentials should be validated
-                "blueprintsprocessor.restclient.$selector.username" to "admin",
-                "blueprintsprocessor.restclient.$selector.password" to "Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U"
+            "blueprintsprocessor.restclient.$selector.type" to "basic-auth",
+            "blueprintsprocessor.restclient.$selector.url" to "http://localhost:$httpPort/",
+            // TODO credentials should be validated
+            "blueprintsprocessor.restclient.$selector.username" to "admin",
+            "blueprintsprocessor.restclient.$selector.password" to "Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U"
         )
         setProperties(properties)
     }

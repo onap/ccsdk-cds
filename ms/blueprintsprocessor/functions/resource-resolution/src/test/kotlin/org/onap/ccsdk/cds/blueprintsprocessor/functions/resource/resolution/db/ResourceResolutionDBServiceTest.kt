@@ -72,13 +72,15 @@ open class ResourceResolutionDBServiceTest {
         val list = listOf(rr1, rr2)
         every {
             resourceResolutionRepository.findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKeyAndOccurrence(
-                any(), any(), any(), any(), any())
+                any(), any(), any(), any(), any()
+            )
         } returns list
         runBlocking {
 
             val res =
                 resourceResolutionDBService.findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKeyAndOccurrence(
-                    bluePrintRuntimeService, resolutionKey, occurrence, artifactPrefix)
+                    bluePrintRuntimeService, resolutionKey, occurrence, artifactPrefix
+                )
 
             assertEquals(2, res.size)
         }
@@ -88,12 +90,14 @@ open class ResourceResolutionDBServiceTest {
     fun findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKeyAndOccurrenceTestException() {
         every {
             resourceResolutionRepository.findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKeyAndOccurrence(
-                any(), any(), any(), any(), any())
+                any(), any(), any(), any(), any()
+            )
         } throws EmptyResultDataAccessException(1)
         runBlocking {
             val res =
                 resourceResolutionDBService.findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKeyAndOccurrence(
-                    bluePrintRuntimeService, resolutionKey, occurrence, artifactPrefix)
+                    bluePrintRuntimeService, resolutionKey, occurrence, artifactPrefix
+                )
 
             assert(res.isEmpty())
         }
@@ -107,13 +111,15 @@ open class ResourceResolutionDBServiceTest {
         val list = listOf(rr1, rr2)
         every {
             resourceResolutionRepository.findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResourceIdAndResourceTypeAndOccurrence(
-                any(), any(), any(), any(), any(), any())
+                any(), any(), any(), any(), any(), any()
+            )
         } returns list
         runBlocking {
 
             val res =
                 resourceResolutionDBService.findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResourceIdAndResourceTypeAndOccurrence(
-                    bluePrintRuntimeService, resourceId, resourceType, occurrence, artifactPrefix)
+                    bluePrintRuntimeService, resourceId, resourceType, occurrence, artifactPrefix
+                )
 
             assertEquals(2, res.size)
         }
@@ -123,12 +129,14 @@ open class ResourceResolutionDBServiceTest {
     fun findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResourceIdAndResourceTypeAndOccurrenceTestException() {
         every {
             resourceResolutionRepository.findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResourceIdAndResourceTypeAndOccurrence(
-                any(), any(), any(), any(), any(), any())
+                any(), any(), any(), any(), any(), any()
+            )
         } throws EmptyResultDataAccessException(1)
         runBlocking {
             val res =
                 resourceResolutionDBService.findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResourceIdAndResourceTypeAndOccurrence(
-                    bluePrintRuntimeService, resourceId, resourceType, occurrence, artifactPrefix)
+                    bluePrintRuntimeService, resourceId, resourceType, occurrence, artifactPrefix
+                )
 
             assert(res.isEmpty())
         }
@@ -141,12 +149,14 @@ open class ResourceResolutionDBServiceTest {
         rr.value = "testValue"
         every {
             resourceResolutionRepository.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndName(
-                any(), any(), any(), any(), any())
+                any(), any(), any(), any(), any()
+            )
         } returns rr
         runBlocking {
             val res =
                 resourceResolutionDBService.readValue(
-                    blueprintName, blueprintVersion, artifactPrefix, resolutionKey, "bob")
+                    blueprintName, blueprintVersion, artifactPrefix, resolutionKey, "bob"
+                )
 
             assertEquals(rr.name, res.name)
             assertEquals(rr.value, res.value)
@@ -160,12 +170,14 @@ open class ResourceResolutionDBServiceTest {
         val list = listOf(rr1, rr2)
         every {
             resourceResolutionRepository.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
-                any(), any(), any(), any())
+                any(), any(), any(), any()
+            )
         } returns list
         runBlocking {
             val res =
                 resourceResolutionDBService.readWithResolutionKey(
-                    blueprintName, blueprintVersion, artifactPrefix, resolutionKey)
+                    blueprintName, blueprintVersion, artifactPrefix, resolutionKey
+                )
             assertEquals(2, res.size)
         }
     }
@@ -177,12 +189,14 @@ open class ResourceResolutionDBServiceTest {
         val list = listOf(rr1, rr2)
         every {
             resourceResolutionRepository.findByBlueprintNameAndBlueprintVersionAndResourceIdAndResourceType(
-                any(), any(), any(), any())
+                any(), any(), any(), any()
+            )
         } returns list
         runBlocking {
             val res =
                 resourceResolutionDBService.readWithResourceIdAndResourceType(
-                    blueprintName, blueprintVersion, resourceId, resourceType)
+                    blueprintName, blueprintVersion, resourceId, resourceType
+                )
             assertEquals(2, res.size)
         }
     }
@@ -203,7 +217,8 @@ open class ResourceResolutionDBServiceTest {
         runBlocking {
             val res =
                 resourceResolutionDBService.write(
-                    props, bluePrintRuntimeService, artifactPrefix, resourceAssignment)
+                    props, bluePrintRuntimeService, artifactPrefix, resourceAssignment
+                )
 
             assertEquals(resourceResolution, res)
         }

@@ -29,7 +29,6 @@ open class SampleTest : AbstractScriptComponentFunction() {
 
     val log = LoggerFactory.getLogger(SampleTest::class.java)!!
 
-
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
         val isPresent = checkDynamicProperties("type")
         assertTrue(isPresent)

@@ -20,7 +20,6 @@ import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 
-
 class PayloadUtils {
 
     companion object {
@@ -39,7 +38,7 @@ class PayloadUtils {
         fun prepareDynamicInputsFromComponentPayload(bluePrintRuntimeService: BluePrintRuntimeService<*>, payload: JsonNode) {
             payload.fields().forEach { property ->
                 val path = StringBuilder(BluePrintConstants.PATH_INPUTS)
-                        .append(BluePrintConstants.PATH_DIVIDER).append(property.key).toString()
+                    .append(BluePrintConstants.PATH_DIVIDER).append(property.key).toString()
                 bluePrintRuntimeService.put(path, property.value)
             }
         }

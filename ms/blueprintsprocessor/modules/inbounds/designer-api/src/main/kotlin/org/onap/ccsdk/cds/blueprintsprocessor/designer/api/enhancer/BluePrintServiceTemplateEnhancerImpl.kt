@@ -28,10 +28,10 @@ import org.springframework.stereotype.Service
 
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-open class BluePrintServiceTemplateEnhancerImpl(private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService)
-    : BluePrintServiceTemplateEnhancer {
-    private val log = logger(BluePrintServiceTemplateEnhancerImpl::class)
+open class BluePrintServiceTemplateEnhancerImpl(private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService) :
+    BluePrintServiceTemplateEnhancer {
 
+    private val log = logger(BluePrintServiceTemplateEnhancerImpl::class)
 
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
     lateinit var bluePrintContext: BluePrintContext
@@ -57,7 +57,6 @@ open class BluePrintServiceTemplateEnhancerImpl(private val bluePrintTypeEnhance
         bluePrintContext.serviceTemplate.policyTypes = mutableMapOf()
         bluePrintContext.serviceTemplate.relationshipTypes = mutableMapOf()
         log.info("reinitialized all type definitions")
-
     }
 
     open fun enhanceTopologyTemplate() {

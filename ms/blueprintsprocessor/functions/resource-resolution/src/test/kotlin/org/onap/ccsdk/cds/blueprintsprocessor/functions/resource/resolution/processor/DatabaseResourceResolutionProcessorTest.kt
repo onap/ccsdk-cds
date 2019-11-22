@@ -22,7 +22,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.BluePrintDBLibPropertySevice
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.BluePrintDBLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.PrimaryDatabaseConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock.MockBlueprintProcessorCatalogServiceImpl
@@ -38,10 +38,12 @@ import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [DatabaseResourceAssignmentProcessor::class, BluePrintPropertyConfiguration::class,
-    BluePrintPropertiesService::class, BluePrintDBLibPropertySevice::class, BluePrintDBLibConfiguration::class,
-    BluePrintCoreConfiguration::class, MockDatabaseConfiguration::class, MockBlueprintProcessorCatalogServiceImpl::class,
-    BluePrintPropertiesService::class, PrimaryDatabaseConfiguration::class])
+@ContextConfiguration(
+    classes = [DatabaseResourceAssignmentProcessor::class, BluePrintPropertyConfiguration::class,
+        BluePrintPropertiesService::class, BluePrintDBLibPropertyService::class, BluePrintDBLibConfiguration::class,
+        BluePrintCoreConfiguration::class, MockDatabaseConfiguration::class, MockBlueprintProcessorCatalogServiceImpl::class,
+        BluePrintPropertiesService::class, PrimaryDatabaseConfiguration::class]
+)
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class DatabaseResourceResolutionProcessorTest {
 
@@ -52,13 +54,14 @@ class DatabaseResourceResolutionProcessorTest {
     fun `test database resource resolution processor db`() {
         runBlocking {
             val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
-                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+            )
 
             val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)
 
             databaseResourceAssignmentProcessor.raRuntimeService = resourceAssignmentRuntimeService
             databaseResourceAssignmentProcessor.resourceDictionaries = ResourceAssignmentUtils
-                    .resourceDefinitions(bluePrintContext.rootPath)
+                .resourceDefinitions(bluePrintContext.rootPath)
 
             val resourceAssignment = ResourceAssignment().apply {
                 name = "service-instance-id"

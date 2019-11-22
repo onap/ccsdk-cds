@@ -26,14 +26,16 @@ interface TemplateResolutionRepository : JpaRepository<TemplateResolution, Strin
         blueprintName: String?,
         blueprintVersion: String?,
         artifactName: String,
-        occurrence: Int): TemplateResolution ?
+        occurrence: Int
+    ): TemplateResolution?
 
     fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
         key: String,
         blueprintName: String?,
         blueprintVersion: String?,
         artifactName: String,
-        occurrence: Int): TemplateResolution ?
+        occurrence: Int
+    ): TemplateResolution?
 
     @Transactional
     fun deleteByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
@@ -42,7 +44,8 @@ interface TemplateResolutionRepository : JpaRepository<TemplateResolution, Strin
         blueprintName: String?,
         blueprintVersion: String?,
         artifactName: String,
-        occurrence: Int)
+        occurrence: Int
+    )
 
     @Transactional
     fun deleteByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
@@ -50,5 +53,6 @@ interface TemplateResolutionRepository : JpaRepository<TemplateResolution, Strin
         blueprintName: String?,
         blueprintVersion: String?,
         artifactName: String,
-        occurrence: Int)
+        occurrence: Int
+    )
 }

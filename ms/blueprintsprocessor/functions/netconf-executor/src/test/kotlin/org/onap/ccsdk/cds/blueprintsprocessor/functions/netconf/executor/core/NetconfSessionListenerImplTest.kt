@@ -16,16 +16,16 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.core
 
-import org.junit.Test
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verifyAll
 import org.junit.Before
+import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfReceivedEvent
 
 class NetconfSessionListenerImplTest {
-    //Note: mockk's verifyAll is akin to verify with verifyNoMoreInteractions in Mockito
+    // Note: mockk's verifyAll is akin to verify with verifyNoMoreInteractions in Mockito
     private val netconSession = mockk<NetconfSessionImpl>()
 
     @Before
@@ -36,7 +36,7 @@ class NetconfSessionListenerImplTest {
     }
 
     @Test
-    //NetconfReceivedEvent wth DEVICE_UNREGISTERED TYPE should call disconnect() on the NetconfSession
+    // NetconfReceivedEvent wth DEVICE_UNREGISTERED TYPE should call disconnect() on the NetconfSession
     fun deviceUnregisteredMessageShouldCallSessionDisconnect() {
         val netconfSessionListener = NetconfSessionListenerImpl(netconSession)
         val event: NetconfReceivedEvent = genEventByType(NetconfReceivedEvent.Type.DEVICE_UNREGISTERED)
@@ -45,7 +45,7 @@ class NetconfSessionListenerImplTest {
     }
 
     @Test
-    //NetconfReceivedEvent wth SESSION_CLOSED TYPE should ALSO call disconnect() on the NetconfSession
+    // NetconfReceivedEvent wth SESSION_CLOSED TYPE should ALSO call disconnect() on the NetconfSession
     fun sessionClosedMessageShouldCallSesionDisconnect() {
         val netconfSessionListener = NetconfSessionListenerImpl(netconSession)
         val event: NetconfReceivedEvent = genEventByType(NetconfReceivedEvent.Type.SESSION_CLOSED)
@@ -54,8 +54,8 @@ class NetconfSessionListenerImplTest {
     }
 
     @Test
-    //NetconfReceivedEvent wth DEVICE_ERROR TYPE should call addDeviceErrorReply() on the NetconfSession
-    //with the event message payload
+    // NetconfReceivedEvent wth DEVICE_ERROR TYPE should call addDeviceErrorReply() on the NetconfSession
+    // with the event message payload
     fun deviceErrorMessageShouldCallAddDeviceErrorReply() {
         val netconfSessionListener = NetconfSessionListenerImpl(netconSession)
         val event: NetconfReceivedEvent = genEventByType(NetconfReceivedEvent.Type.DEVICE_ERROR)
@@ -64,7 +64,7 @@ class NetconfSessionListenerImplTest {
     }
 
     @Test
-    //NetconfReceivedEvent wth DEVICE_REPLY TYPE should call addDeviceReply(messageId, payload) on the NetconfSession
+    // NetconfReceivedEvent wth DEVICE_REPLY TYPE should call addDeviceReply(messageId, payload) on the NetconfSession
     fun deviceReplyMessageShouldCallAddDeviceReply() {
         val netconfSessionListener = NetconfSessionListenerImpl(netconSession)
         val event: NetconfReceivedEvent = genEventByType(NetconfReceivedEvent.Type.DEVICE_REPLY)
@@ -74,14 +74,14 @@ class NetconfSessionListenerImplTest {
 
     /**
      * Helper to generate {@link NetconfReceivedEvent} object based on the {@link NetconfReceivedEvent.Type}
-     * @param type  {@link NetconfReceivedEvent.Type} of event
+     * @param type {@link NetconfReceivedEvent.Type} of event
      */
     private fun genEventByType(type: NetconfReceivedEvent.Type): NetconfReceivedEvent {
         return NetconfReceivedEvent(
-                type,
-                "messagePayload",
-                "messageId",
-                DeviceInfo()
+            type,
+            "messagePayload",
+            "messageId",
+            DeviceInfo()
         )
     }
 }

@@ -29,5 +29,4 @@ open class JythonComponentFunction : AbstractScriptComponentFunction() {
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         throw BluePrintException("Not Implemented required")
     }
-
 }

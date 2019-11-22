@@ -16,27 +16,33 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
-import org.slf4j.LoggerFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.cds.controllerblueprints.core.data.*
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.CapabilityDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.RelationshipType
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintRepoService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.slf4j.LoggerFactory
 
 open class BluePrintRepoFileService(modelTypePath: String) : BluePrintRepoService {
 
-    private val log= LoggerFactory.getLogger(BluePrintRepoFileService::class.toString())
+    private val log = LoggerFactory.getLogger(BluePrintRepoFileService::class.toString())
 
     private val dataTypePath = modelTypePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)
     private val nodeTypePath = modelTypePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TYPE)
     private val artifactTypePath = modelTypePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_ARTIFACT_TYPE)
-    private val capabilityTypePath = modelTypePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_CAPABILITY_TYPE)
-    private val relationshipTypePath = modelTypePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TYPE)
+    private val capabilityTypePath =
+        modelTypePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_CAPABILITY_TYPE)
+    private val relationshipTypePath =
+        modelTypePath.plus(BluePrintConstants.PATH_DIVIDER).plus(BluePrintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TYPE)
     private val extension = ".json"
 
     override fun getDataType(dataTypeName: String): DataType {
         val fileName = dataTypePath.plus(BluePrintConstants.PATH_DIVIDER)
-                .plus(dataTypeName).plus(extension)
+            .plus(dataTypeName).plus(extension)
         return getModelType(fileName, DataType::class.java)
     }
 
@@ -47,24 +53,24 @@ open class BluePrintRepoFileService(modelTypePath: String) : BluePrintRepoServic
 
     override fun getArtifactType(artifactTypeName: String): ArtifactType {
         val fileName = artifactTypePath.plus(BluePrintConstants.PATH_DIVIDER)
-                .plus(artifactTypeName).plus(extension)
+            .plus(artifactTypeName).plus(extension)
         return getModelType(fileName, ArtifactType::class.java)
     }
 
     override fun getRelationshipType(relationshipTypeName: String): RelationshipType {
         val fileName = relationshipTypePath.plus(BluePrintConstants.PATH_DIVIDER)
-                .plus(relationshipTypeName).plus(extension)
+            .plus(relationshipTypeName).plus(extension)
         return getModelType(fileName, RelationshipType::class.java)
     }
 
     override fun getCapabilityDefinition(capabilityDefinitionName: String): CapabilityDefinition {
         val fileName = capabilityTypePath.plus(BluePrintConstants.PATH_DIVIDER)
-                .plus(capabilityDefinitionName).plus(extension)
+            .plus(capabilityDefinitionName).plus(extension)
         return getModelType(fileName, CapabilityDefinition::class.java)
     }
 
     private fun <T> getModelType(fileName: String, valueType: Class<T>): T {
         return JacksonUtils.readValueFromFile(fileName, valueType)
-                ?: throw BluePrintException("couldn't get file($fileName) for type(${valueType.name}")
+            ?: throw BluePrintException("couldn't get file($fileName) for type(${valueType.name}")
     }
 }

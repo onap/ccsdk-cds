@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.core.scheduler.Schedulers
+
 // TODO("Convert into coroutines")
 /**
  * ModelTypeReactRepository.
@@ -40,37 +41,36 @@ open class ModelTypeReactRepository(private val modelTypeRepository: ModelTypeRe
 
     fun findByModelNameIn(modelNames: List<String>): Flux<ModelType> {
         return Flux.fromIterable(modelTypeRepository.findByModelNameIn(modelNames))
-                .subscribeOn(Schedulers.elastic())
+            .subscribeOn(Schedulers.elastic())
     }
 
     fun findByDerivedFrom(derivedFrom: String): Flux<ModelType> {
         return Flux.fromIterable(modelTypeRepository.findByDerivedFrom(derivedFrom))
-                .subscribeOn(Schedulers.elastic())
+            .subscribeOn(Schedulers.elastic())
     }
 
     fun findByDerivedFromIn(derivedFroms: List<String>): Flux<ModelType> {
         return Flux.fromIterable(modelTypeRepository.findByDerivedFromIn(derivedFroms))
-                .subscribeOn(Schedulers.elastic())
+            .subscribeOn(Schedulers.elastic())
     }
 
     fun findByDefinitionType(definitionType: String): Flux<ModelType> {
         return Flux.fromIterable(modelTypeRepository.findByDefinitionType(definitionType))
-                .subscribeOn(Schedulers.elastic())
+            .subscribeOn(Schedulers.elastic())
     }
 
     fun findByDefinitionTypeIn(definitionTypes: List<String>): Flux<ModelType> {
         return Flux.fromIterable(modelTypeRepository.findByDefinitionTypeIn(definitionTypes))
-                .subscribeOn(Schedulers.elastic())
+            .subscribeOn(Schedulers.elastic())
     }
 
     fun findByTagsContainingIgnoreCase(tags: String): Flux<ModelType> {
         return Flux.fromIterable(modelTypeRepository.findByTagsContainingIgnoreCase(tags))
-                .subscribeOn(Schedulers.elastic())
+            .subscribeOn(Schedulers.elastic())
     }
 
     fun deleteByModelName(modelName: String): Mono<Void> {
         modelTypeRepository.deleteByModelName(modelName)
         return Mono.empty()
     }
-
 }

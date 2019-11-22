@@ -28,7 +28,7 @@ open class MockDatabaseConfiguration {
 
     @Bean(name = ["MariaDatabaseConfiguration", "MySqlDatabaseConfiguration", "PrimaryDatabaseConfiguration"])
     open fun createDatabaseConfiguration(): BluePrintDBLibGenericService {
-       return mockk<BluePrintDBLibGenericService>()
+        return mockk<BluePrintDBLibGenericService>()
     }
 }
 
@@ -42,6 +42,4 @@ open class MockBlueprintProcessorCatalogServiceImpl {
         every { bluePrintValidatorService.validateBluePrints(any<BluePrintRuntimeService<*>>()) } returns true
         return bluePrintValidatorService
     }
-
-
 }

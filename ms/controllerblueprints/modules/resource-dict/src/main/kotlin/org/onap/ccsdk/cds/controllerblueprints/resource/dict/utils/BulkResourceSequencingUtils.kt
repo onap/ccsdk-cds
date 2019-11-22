@@ -21,7 +21,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.asListOfString
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.TopologicalSortingUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory
-import java.util.*
+import java.util.ArrayList
 
 /**
  * BulkResourceSequencingUtils.
@@ -29,6 +29,7 @@ import java.util.*
  * @author Brinda Santh
  */
 object BulkResourceSequencingUtils {
+
     private val log = LoggerFactory.getLogger(BulkResourceSequencingUtils::class.java)
 
     @JvmStatic
@@ -83,12 +84,15 @@ object BulkResourceSequencingUtils {
                 dependencyPresence = CollectionUtils.containsAny(batchAssignmentName, resourceAssignment.dependencies)
             }
 
-            log.trace("({}) -> Checking ({}), with ({}), result ({})", resourceAssignment.name,
-                    batchAssignmentName, resourceAssignment.dependencies, dependencyPresence)
+            log.trace(
+                "({}) -> Checking ({}), with ({}), result ({})", resourceAssignment.name,
+                batchAssignmentName, resourceAssignment.dependencies, dependencyPresence
+            )
 
-            if (previousResourceAssignment != null && resourceAssignment.dictionarySource != null
-                    && resourceAssignment.dictionarySource!!.equals(previousResourceAssignment.dictionarySource, true)
-                    && !dependencyPresence) {
+            if (previousResourceAssignment != null && resourceAssignment.dictionarySource != null &&
+                resourceAssignment.dictionarySource!!.equals(previousResourceAssignment.dictionarySource, true) &&
+                !dependencyPresence
+            ) {
                 batchResourceAssignment!!.add(resourceAssignment)
                 batchAssignmentName!!.add(resourceAssignment.name)
             } else {
@@ -112,5 +116,4 @@ object BulkResourceSequencingUtils {
 
         return sequenceBatchResourceAssignment
     }
-
 }

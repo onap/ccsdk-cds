@@ -23,11 +23,12 @@ import java.util.HashMap
  * @author Steve Siani
  * @version 1.0
  */
-enum class ErrorCode (val value: Int, val httpCode: Int) {
+enum class ErrorCode(val value: Int, val httpCode: Int) {
 
-    /// TODO: Add more attribute for each needed application protocol
+    // / TODO: Add more attribute for each needed application protocol
     // TODO: Example: INVALID_FILE_EXTENSION(2, 415, 25)
     GENERIC_FAILURE(1, 500) {
+
         override fun message(detailMsg: String): String {
             return "Generic failure. Details : {$detailMsg}"
         }

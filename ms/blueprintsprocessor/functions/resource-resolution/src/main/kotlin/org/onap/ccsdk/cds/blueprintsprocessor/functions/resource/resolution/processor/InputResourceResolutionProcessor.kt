@@ -17,10 +17,12 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor
 
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.DatabaseResourceSource
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.isNotEmpty
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
@@ -41,8 +43,8 @@ open class InputResourceResolutionProcessor : ResourceAssignmentProcessor() {
 
     override suspend fun processNB(resourceAssignment: ResourceAssignment) {
         try {
-            if (isNotEmpty(resourceAssignment.name)) {
-                setFromInput(resourceAssignment)
+            if (isNotEmpty(resourceAssignment.name) && !setFromInput(resourceAssignment)) {
+                setFromKeyDependencies(resourceAssignment)
             }
             // Check the value has populated for mandatory case
             ResourceAssignmentUtils.assertTemplateKeyValueNotNull(resourceAssignment)
@@ -50,6 +52,29 @@ open class InputResourceResolutionProcessor : ResourceAssignmentProcessor() {
             ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, e.message)
             throw BluePrintProcessorException("Failed in template key ($resourceAssignment) assignments with : (${e.message})", e)
         }
+    }
+
+    // usecase: where input data attribute doesn't match with resourceName, and needs an alternate mapping provided under key-dependencies.
+    private fun setFromKeyDependencies(resourceAssignment: ResourceAssignment) {
+        val dName = resourceAssignment.dictionaryName!!
+        val dSource = resourceAssignment.dictionarySource!!
+        val resourceDefinition = resourceDefinition(dName)
+
+        /** Check Resource Assignment has the source definitions, If not get from Resource Definition **/
+        val resourceSource = resourceAssignment.dictionarySourceDefinition
+            ?: resourceDefinition?.sources?.get(dSource)
+            ?: throw BluePrintProcessorException("couldn't get resource definition $dName source($dSource)")
+        val resourceSourceProperties = checkNotNull(resourceSource.properties) {
+            "failed to get source properties for $dName "
+        }
+        val sourceProperties =
+            JacksonUtils.getInstanceFromMap(resourceSourceProperties, DatabaseResourceSource::class.java)
+
+        val keyDependency = checkNotNull(sourceProperties.keyDependencies) {
+            "failed to get input-key-mappings for $dName under $dSource properties"
+        }
+        // keyDependency = service-instance.service-instance-id
+        setFromInputKeyDependencies(keyDependency, resourceAssignment); // New API which picks arrtibute from Input
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {

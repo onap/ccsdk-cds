@@ -30,7 +30,6 @@ abstract class AbstractBluePrintMessageProcessor<K, V> : Processor<K, V> {
 
     lateinit var processorContext: ProcessorContext
 
-
     override fun process(key: K, value: V) = runBlocking(Dispatchers.IO) {
         try {
             processNB(key, value)
@@ -42,7 +41,6 @@ abstract class AbstractBluePrintMessageProcessor<K, V> : Processor<K, V> {
     override fun init(context: ProcessorContext) {
         log.info("initializing processor (${this.javaClass.simpleName})")
         this.processorContext = context
-
     }
 
     override fun close() {
@@ -54,8 +52,8 @@ abstract class AbstractBluePrintMessageProcessor<K, V> : Processor<K, V> {
 
 /** CDS Kafka Stream Punctuator abstract class to implement */
 abstract class AbstractBluePrintMessagePunctuator : Punctuator {
-    lateinit var processorContext: ProcessorContext
 
+    lateinit var processorContext: ProcessorContext
 
     override fun punctuate(timestamp: Long) = runBlocking(Dispatchers.IO) {
         punctuateNB(timestamp)

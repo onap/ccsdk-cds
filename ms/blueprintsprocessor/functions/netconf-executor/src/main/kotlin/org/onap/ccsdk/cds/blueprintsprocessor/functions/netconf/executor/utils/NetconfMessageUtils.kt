@@ -28,7 +28,6 @@ import javax.xml.XMLConstants
 import javax.xml.parsers.DocumentBuilderFactory
 import kotlin.text.Charsets.UTF_8
 
-
 class NetconfMessageUtils {
 
     companion object {
@@ -91,8 +90,12 @@ class NetconfMessageUtils {
             return rpc.toString()
         }
 
-        fun editConfig(messageId: String, configType: String, defaultOperation: String?,
-                       newConfiguration: String): String {
+        fun editConfig(
+            messageId: String,
+            configType: String,
+            defaultOperation: String?,
+            newConfiguration: String
+        ): String {
             val request = StringBuilder()
             request.append("<edit-config>").append(NEW_LINE)
             request.append(RpcMessageUtils.TARGET_OPEN).append(NEW_LINE)
@@ -127,16 +130,25 @@ class NetconfMessageUtils {
             return doWrappedRpc(messageId, request.toString())
         }
 
-        fun commit(messageId: String, confirmed: Boolean, confirmTimeout: Int, persist: String,
-                   persistId: String): String {
+        fun commit(
+            messageId: String,
+            confirmed: Boolean,
+            confirmTimeout: Int,
+            persist: String,
+            persistId: String
+        ): String {
 
             if (!persist.isEmpty() && !persistId.isEmpty()) {
-                throw NetconfException("Can't proceed <commit> with both persist($persist) and " +
-                        "persistId($persistId) specified. Only one should be specified.")
+                throw NetconfException(
+                    "Can't proceed <commit> with both persist($persist) and " +
+                            "persistId($persistId) specified. Only one should be specified."
+                )
             }
             if (confirmed && !persistId.isEmpty()) {
-                throw NetconfException("Can't proceed <commit> with both confirmed flag and " +
-                        "persistId($persistId) specified. Only one should be specified.")
+                throw NetconfException(
+                    "Can't proceed <commit> with both confirmed flag and " +
+                            "persistId($persistId) specified. Only one should be specified."
+                )
             }
 
             val request = StringBuilder()
@@ -221,15 +233,15 @@ class NetconfMessageUtils {
 
         fun closeSession(messageId: String, force: Boolean): String {
             val request = StringBuilder()
-            //TODO: kill-session without session-id is a cisco-only variant.
-            //will fail on JUNIPER device.
-            //netconf RFC for kill-session requires session-id
-            //Cisco can accept <kill-session/> for current session
-            //or <kill-session><session-id>####</session-id></kill-session>
-            //as long as session ID is not the same as the current session.
+            // TODO: kill-session without session-id is a cisco-only variant.
+            // will fail on JUNIPER device.
+            // netconf RFC for kill-session requires session-id
+            // Cisco can accept <kill-session/> for current session
+            // or <kill-session><session-id>####</session-id></kill-session>
+            // as long as session ID is not the same as the current session.
 
-            //Juniperhttps://www.juniper.net/documentation/en_US/junos/topics/task/operational/netconf-session-terminating.html
-            //will accept only with session-id
+            // Juniperhttps://www.juniper.net/documentation/en_US/junos/topics/task/operational/netconf-session-terminating.html
+            // will accept only with session-id
             if (force) {
                 request.append("<kill-session/>")
             } else {
@@ -254,7 +266,6 @@ class NetconfMessageUtils {
             } catch (e: Exception) {
                 return false
             }
-
         }
 
         fun getMsgId(message: String): String {
@@ -355,8 +366,8 @@ class NetconfMessageUtils {
             if (!message.startsWith(RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH)) {
                 // chunk encode message
                 message =
-                    (RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH + message.toByteArray(UTF_8).size + RpcMessageUtils.NEW_LINE + message + RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH + RpcMessageUtils.HASH
-                            + RpcMessageUtils.NEW_LINE)
+                    (RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH + message.toByteArray(UTF_8).size + RpcMessageUtils.NEW_LINE + message + RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH + RpcMessageUtils.HASH +
+                            RpcMessageUtils.NEW_LINE)
             }
             return message
         }
@@ -373,7 +384,8 @@ class NetconfMessageUtils {
                 if (request.startsWith(RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH)) {
                     request =
                         request.split("<".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0] + RpcMessageUtils.XML_HEADER + request.substring(
-                            request.split("<".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0].length)
+                            request.split("<".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0].length
+                        )
                 } else {
                     request = RpcMessageUtils.XML_HEADER + "\n" + request
                 }
@@ -385,12 +397,18 @@ class NetconfMessageUtils {
             var request = request
             if (request.contains(RpcMessageUtils.MESSAGE_ID_STRING)) {
                 request =
-                    request.replaceFirst((RpcMessageUtils.MESSAGE_ID_STRING + RpcMessageUtils.EQUAL + RpcMessageUtils.NUMBER_BETWEEN_QUOTES_MATCHER).toRegex(),
-                        RpcMessageUtils.MESSAGE_ID_STRING + RpcMessageUtils.EQUAL + RpcMessageUtils.QUOTE + messageId + RpcMessageUtils.QUOTE)
+                    request.replaceFirst(
+                        (RpcMessageUtils.MESSAGE_ID_STRING + RpcMessageUtils.EQUAL + RpcMessageUtils.NUMBER_BETWEEN_QUOTES_MATCHER).toRegex(),
+                        RpcMessageUtils.MESSAGE_ID_STRING + RpcMessageUtils.EQUAL + RpcMessageUtils.QUOTE + messageId + RpcMessageUtils.QUOTE
+                    )
             } else if (!request.contains(RpcMessageUtils.MESSAGE_ID_STRING) && !request.contains(
-                    RpcMessageUtils.HELLO)) {
-                request = request.replaceFirst(RpcMessageUtils.END_OF_RPC_OPEN_TAG.toRegex(),
-                    RpcMessageUtils.QUOTE_SPACE + RpcMessageUtils.MESSAGE_ID_STRING + RpcMessageUtils.EQUAL + RpcMessageUtils.QUOTE + messageId + RpcMessageUtils.QUOTE + ">")
+                    RpcMessageUtils.HELLO
+                )
+            ) {
+                request = request.replaceFirst(
+                    RpcMessageUtils.END_OF_RPC_OPEN_TAG.toRegex(),
+                    RpcMessageUtils.QUOTE_SPACE + RpcMessageUtils.MESSAGE_ID_STRING + RpcMessageUtils.EQUAL + RpcMessageUtils.QUOTE + messageId + RpcMessageUtils.QUOTE + ">"
+                )
             }
             return updateRequestLength(request)
         }
@@ -398,12 +416,16 @@ class NetconfMessageUtils {
         fun updateRequestLength(request: String): String {
             if (request.contains(NEW_LINE + RpcMessageUtils.HASH + RpcMessageUtils.HASH + NEW_LINE)) {
                 val oldLen =
-                    Integer.parseInt(request.split(RpcMessageUtils.HASH.toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()[1].split(
-                        NEW_LINE.toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()[0])
+                    Integer.parseInt(
+                        request.split(RpcMessageUtils.HASH.toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()[1].split(
+                            NEW_LINE.toRegex()
+                        ).dropLastWhile({ it.isEmpty() }).toTypedArray()[0]
+                    )
                 val rpcWithEnding = request.substring(request.indexOf('<'))
                 val firstBlock =
                     request.split(RpcMessageUtils.MSGLEN_REGEX_PATTERN.toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()[1].split(
-                        (NEW_LINE + RpcMessageUtils.HASH + RpcMessageUtils.HASH + NEW_LINE).toRegex()).dropLastWhile(
+                        (NEW_LINE + RpcMessageUtils.HASH + RpcMessageUtils.HASH + NEW_LINE).toRegex()
+                    ).dropLastWhile(
                         { it.isEmpty() }).toTypedArray()[0]
                 var newLen = 0
                 newLen = firstBlock.toByteArray(UTF_8).size
@@ -420,5 +442,4 @@ class NetconfMessageUtils {
             } else false
         }
     }
-
 }
