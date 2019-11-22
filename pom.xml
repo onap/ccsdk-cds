@@ -98,6 +98,56 @@ limitations under the License.
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Plugin to Format/Validate Kotlin Files -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>validate-kotlin</id>
+                        <phase>validate</phase>
+                        <configuration>
+                            <target name="ktlint">
+                                <java taskname="ktlint" dir="${project.basedir}" fork="true" failonerror="true"
+                                      classname="com.pinterest.ktlint.Main" classpathref="maven.plugin.classpath">
+                                    <arg value="src/**/*.kt"/>
+                                </java>
+                            </target>
+                            <skip>${format.skipValidate}</skip>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <!-- Built-in formatter So that you wouldn't have to fix all style violations by hand.-->
+                        <id>format-kotlin</id>
+                        <phase>process-sources</phase>
+                        <configuration>
+                            <target name="ktlint">
+                                <java taskname="ktlint" dir="${project.basedir}" fork="true" failonerror="true"
+                                      classname="com.pinterest.ktlint.Main" classpathref="maven.plugin.classpath">
+                                    <arg value="-F"/>
+                                    <arg value="src/**/*.kt"/>
+                                </java>
+                            </target>
+                            <skip>${format.skipExecute}</skip>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.pinterest</groupId>
+                        <artifactId>ktlint</artifactId>
+                        <version>0.35.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
 
@@ -142,5 +192,6 @@ limitations under the License.
                 <format.skipExecute>false</format.skipExecute>
             </properties>
         </profile>
+
     </profiles>
 </project>

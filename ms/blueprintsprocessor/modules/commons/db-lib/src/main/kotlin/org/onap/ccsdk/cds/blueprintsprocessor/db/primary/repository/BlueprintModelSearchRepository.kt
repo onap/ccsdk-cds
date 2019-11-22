@@ -19,7 +19,6 @@ package org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository
 
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelSearch
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
@@ -77,9 +76,13 @@ interface BlueprintModelSearchRepository : JpaRepository<BlueprintModelSearch, L
      * @return Optional<BlueprintModelSearch>
     </BlueprintModelSearch>
      */
-    fun findByUpdatedByOrTagsOrOrArtifactNameOrOrArtifactVersionOrArtifactType(updatedBy: String, tags: String, artifactName: String, artifactVersion: String,
-                                                                               artifactType: String): List<BlueprintModelSearch>
-
+    fun findByUpdatedByOrTagsOrOrArtifactNameOrOrArtifactVersionOrArtifactType(
+        updatedBy: String,
+        tags: String,
+        artifactName: String,
+        artifactVersion: String,
+        artifactType: String
+    ): List<BlueprintModelSearch>
 
     /**
      * This is a findby some attributes method
@@ -94,10 +97,12 @@ interface BlueprintModelSearchRepository : JpaRepository<BlueprintModelSearch, L
      * @param pageRequest
      * @return Page<BlueprintModelSearch>
      */
-    fun findByUpdatedByOrTagsOrOrArtifactNameOrOrArtifactVersionOrArtifactType(updatedBy: String, tags: String, artifactName: String, artifactVersion: String,
-                                                                               artifactType: String,pageRequest: Pageable): Page<BlueprintModelSearch>
-
-
-
-
+    fun findByUpdatedByOrTagsOrOrArtifactNameOrOrArtifactVersionOrArtifactType(
+        updatedBy: String,
+        tags: String,
+        artifactName: String,
+        artifactVersion: String,
+        artifactType: String,
+        pageRequest: Pageable
+    ): Page<BlueprintModelSearch>
 }

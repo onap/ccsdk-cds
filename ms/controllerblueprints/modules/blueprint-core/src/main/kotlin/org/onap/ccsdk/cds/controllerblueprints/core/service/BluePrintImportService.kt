@@ -37,7 +37,6 @@ class BluePrintImportService(private val parentServiceTemplate: ServiceTemplate,
 
     private var importServiceTemplateMap: MutableMap<String, ServiceTemplate> = hashMapOf()
 
-
     suspend fun getImportResolvedServiceTemplate(): ServiceTemplate {
         // Populate Imported Service Templates
         traverseSchema(PARENT_SERVICE_TEMPLATE, parentServiceTemplate)
@@ -70,13 +69,13 @@ class BluePrintImportService(private val parentServiceTemplate: ServiceTemplate,
         val decodedSystemId: String = URLDecoder.decode(file, Charset.defaultCharset().toString())
         log.trace("file ({}), decodedSystemId ({}) ", file, decodedSystemId)
         try {
-            if (decodedSystemId.startsWith("http", true)
-                    || decodedSystemId.startsWith("https", true)) {
+            if (decodedSystemId.startsWith("http", true) ||
+                decodedSystemId.startsWith("https", true)
+            ) {
                 val givenUrl: String = URL(decodedSystemId).toString()
                 val systemUrl: String = File(".").toURI().toURL().toString()
                 log.trace("givenUrl ({}), systemUrl ({}) ", givenUrl, systemUrl)
                 if (givenUrl.startsWith(systemUrl)) {
-
                 }
             } else {
                 if (!decodedSystemId.startsWith("/")) {
@@ -92,6 +91,4 @@ class BluePrintImportService(private val parentServiceTemplate: ServiceTemplate,
         }
         return serviceTemplate
     }
-
-
 }

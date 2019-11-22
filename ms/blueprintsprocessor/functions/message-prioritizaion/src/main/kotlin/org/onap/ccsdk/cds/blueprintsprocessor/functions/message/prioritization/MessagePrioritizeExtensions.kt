@@ -21,30 +21,29 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.s
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 
-
 /**
  * Register the MessagePrioritizationStateService and exposed dependency
  */
 fun BluePrintDependencyService.messagePrioritizationStateService(): MessagePrioritizationStateService =
-        instance(MessagePrioritizationStateService::class)
+    instance(MessagePrioritizationStateService::class)
 
 /**
  * Expose messagePrioritizationStateService to AbstractComponentFunction
  */
 fun AbstractComponentFunction.messagePrioritizationStateService() =
-        BluePrintDependencyService.messagePrioritizationStateService()
+    BluePrintDependencyService.messagePrioritizationStateService()
 
 /**
  * MessagePrioritization correlation extensions
  */
 fun MessagePrioritization.toFormatedCorrelation(): String {
     val ascendingKey = this.correlationId!!.split(",")
-            .map { it.trim() }.sorted().joinToString(",")
+        .map { it.trim() }.sorted().joinToString(",")
     return ascendingKey
 }
 
 fun MessagePrioritization.toTypeNCorrelation(): TypeCorrelationKey {
     val ascendingKey = this.correlationId!!.split(",")
-            .map { it.trim() }.sorted().joinToString(",")
+        .map { it.trim() }.sorted().joinToString(",")
     return TypeCorrelationKey(this.type, ascendingKey)
 }

@@ -19,13 +19,26 @@ package org.onap.ccsdk.cds.controllerblueprints.core.utils
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.databind.node.*
+import com.fasterxml.jackson.databind.node.ArrayNode
+import com.fasterxml.jackson.databind.node.BooleanNode
+import com.fasterxml.jackson.databind.node.DoubleNode
+import com.fasterxml.jackson.databind.node.FloatNode
+import com.fasterxml.jackson.databind.node.IntNode
+import com.fasterxml.jackson.databind.node.MissingNode
+import com.fasterxml.jackson.databind.node.NullNode
+import com.fasterxml.jackson.databind.node.ObjectNode
+import com.fasterxml.jackson.databind.node.TextNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.apache.commons.io.IOUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.*
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
+import org.onap.ccsdk.cds.controllerblueprints.core.readNBText
 import java.io.File
 import java.io.InputStream
 import java.nio.charset.Charset
@@ -36,15 +49,16 @@ import java.nio.charset.Charset
  * @author Brinda Santh
  */
 class JacksonUtils {
+
     companion object {
 
         val objectMapper = jacksonObjectMapper()
 
         inline fun <reified T : Any> readValue(content: String): T =
-                objectMapper.readValue(content, T::class.java)
+            objectMapper.readValue(content, T::class.java)
 
         inline fun <reified T : Any> readValue(stream: InputStream): T =
-                objectMapper.readValue(stream, T::class.java)
+            objectMapper.readValue(stream, T::class.java)
 
         fun <T> readValue(content: String, valueType: Class<T>): T? {
             return objectMapper.readValue(content, valueType)
@@ -69,8 +83,10 @@ class JacksonUtils {
         fun getClassPathFileContent(fileName: String): String {
             return runBlocking {
                 withContext(Dispatchers.Default) {
-                    IOUtils.toString(JacksonUtils::class.java.classLoader
-                            .getResourceAsStream(fileName), Charset.defaultCharset())
+                    IOUtils.toString(
+                        JacksonUtils::class.java.classLoader
+                            .getResourceAsStream(fileName), Charset.defaultCharset()
+                    )
                 }
             }
         }
@@ -170,7 +186,7 @@ class JacksonUtils {
 
         fun <T> getInstanceFromMap(properties: MutableMap<String, JsonNode>, classType: Class<T>): T {
             return readValue(getJson(properties), classType)
-                    ?: throw BluePrintProcessorException("failed to transform content ($properties) to type ($classType)")
+                ?: throw BluePrintProcessorException("failed to transform content ($properties) to type ($classType)")
         }
 
         fun checkJsonNodeValueOfType(type: String, jsonNode: JsonNode): Boolean {
@@ -265,14 +281,14 @@ class JacksonUtils {
         }
 
         fun populatePrimitiveDefaultValues(key: String, primitiveType: String, objectNode: ObjectNode) {
-            val defaultValue = getDefaultValueOfPrimitiveAsJsonNode(primitiveType) ?:
-                throw BluePrintException("populatePrimitiveDefaultValues expected only primitive values! Received type ($primitiveType)")
+            val defaultValue = getDefaultValueOfPrimitiveAsJsonNode(primitiveType)
+                ?: throw BluePrintException("populatePrimitiveDefaultValues expected only primitive values! Received type ($primitiveType)")
             objectNode.set(key, defaultValue)
         }
 
         fun populatePrimitiveDefaultValuesForArrayNode(primitiveType: String, arrayNode: ArrayNode) {
-            val defaultValue = getDefaultValueOfPrimitiveAsJsonNode(primitiveType) ?:
-                throw BluePrintException("populatePrimitiveDefaultValuesForArrayNode expected only primitive values! Received type ($primitiveType)")
+            val defaultValue = getDefaultValueOfPrimitiveAsJsonNode(primitiveType)
+                ?: throw BluePrintException("populatePrimitiveDefaultValuesForArrayNode expected only primitive values! Received type ($primitiveType)")
             arrayNode.add(defaultValue)
         }
 

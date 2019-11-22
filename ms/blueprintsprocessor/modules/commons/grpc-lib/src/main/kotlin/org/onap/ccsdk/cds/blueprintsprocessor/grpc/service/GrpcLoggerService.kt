@@ -36,35 +36,45 @@ import java.net.InetSocketAddress
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.UUID
 
 class GrpcLoggerService {
 
     private val log = logger(GrpcLoggerService::class)
 
     /** Used when server receives request */
-    fun <ReqT : Any, RespT : Any> grpcRequesting(call: ServerCall<ReqT, RespT>,
-                                                 headers: Metadata, next: ServerCallHandler<ReqT, RespT>) {
+    fun <ReqT : Any, RespT : Any> grpcRequesting(
+        call: ServerCall<ReqT, RespT>,
+        headers: Metadata,
+        next: ServerCallHandler<ReqT, RespT>
+    ) {
         val requestID = headers.getStringKey(ONAP_REQUEST_ID).defaultToUUID()
         val invocationID = headers.getStringKey(ONAP_INVOCATION_ID).defaultToUUID()
         val partnerName = headers.getStringKey(ONAP_PARTNER_NAME) ?: "UNKNOWN"
         grpcRequesting(requestID, invocationID, partnerName, call)
     }
 
-    fun <ReqT : Any, RespT : Any> grpcRequesting(call: ServerCall<ReqT, RespT>,
-                                                 headers: CommonHeader, next: ServerCallHandler<ReqT, RespT>) {
+    fun <ReqT : Any, RespT : Any> grpcRequesting(
+        call: ServerCall<ReqT, RespT>,
+        headers: CommonHeader,
+        next: ServerCallHandler<ReqT, RespT>
+    ) {
         val requestID = headers.requestId.defaultToUUID()
         val invocationID = headers.subRequestId.defaultToUUID()
         val partnerName = headers.originatorId ?: "UNKNOWN"
         grpcRequesting(requestID, invocationID, partnerName, call)
     }
 
-    fun <ReqT : Any, RespT : Any> grpcRequesting(requestID: String, invocationID: String, partnerName: String,
-                                                 call: ServerCall<ReqT, RespT>) {
+    fun <ReqT : Any, RespT : Any> grpcRequesting(
+        requestID: String,
+        invocationID: String,
+        partnerName: String,
+        call: ServerCall<ReqT, RespT>
+    ) {
         val localhost = InetAddress.getLocalHost()
 
         val clientSocketAddress = call.attributes.get(Grpc.TRANSPORT_ATTR_REMOTE_ADDR) as? InetSocketAddress
-                ?: throw BluePrintProcessorException("failed to get client address")
+            ?: throw BluePrintProcessorException("failed to get client address")
         val serviceName = call.methodDescriptor.fullMethodName
 
         MDC.put("InvokeTimestamp", ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT))
@@ -76,7 +86,6 @@ class GrpcLoggerService {
         MDC.put("ServiceName", serviceName)
         log.trace("MDC Properties : ${MDC.getCopyOfContextMap()}")
     }
-
 
     /** Used before invoking any GRPC outbound request, Inbound Invocation ID is used as request Id
      * for outbound Request, If invocation Id is missing then default Request Id will be generated.

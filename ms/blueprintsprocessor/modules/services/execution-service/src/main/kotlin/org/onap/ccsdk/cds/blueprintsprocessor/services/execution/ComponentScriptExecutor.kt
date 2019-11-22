@@ -28,8 +28,8 @@ import org.springframework.stereotype.Component
  */
 @Component("component-script-executor")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-open class ComponentScriptExecutor(private var componentFunctionScriptingService: ComponentFunctionScriptingService)
-    : AbstractComponentFunction() {
+open class ComponentScriptExecutor(private var componentFunctionScriptingService: ComponentFunctionScriptingService) :
+    AbstractComponentFunction() {
 
     companion object {
         const val INPUT_SCRIPT_TYPE = "script-type"
@@ -53,8 +53,10 @@ open class ComponentScriptExecutor(private var componentFunctionScriptingService
         val scriptDependencies: MutableList<String> = arrayListOf()
         populateScriptDependencies(scriptDependencies)
 
-        scriptComponentFunction = componentFunctionScriptingService.scriptInstance(this, scriptType,
-                scriptClassReference, scriptDependencies)
+        scriptComponentFunction = componentFunctionScriptingService.scriptInstance(
+            this, scriptType,
+            scriptClassReference, scriptDependencies
+        )
 
         // Handles both script processing and error handling
         scriptComponentFunction.executeScript(executionServiceInput)
@@ -62,8 +64,7 @@ open class ComponentScriptExecutor(private var componentFunctionScriptingService
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         bluePrintRuntimeService.getBluePrintError()
-                .addError("Failed in ComponentCliExecutor : ${runtimeException.message}")
-
+            .addError("Failed in ComponentCliExecutor : ${runtimeException.message}")
     }
 
     open fun populateScriptDependencies(scriptDependencies: MutableList<String>) {

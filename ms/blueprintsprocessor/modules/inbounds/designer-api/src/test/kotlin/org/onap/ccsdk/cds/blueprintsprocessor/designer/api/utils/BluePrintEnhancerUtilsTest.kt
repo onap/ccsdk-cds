@@ -21,8 +21,12 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.mock.MockFilePart
-import org.onap.ccsdk.cds.controllerblueprints.core.*
-import java.util.*
+import org.onap.ccsdk.cds.controllerblueprints.core.compress
+import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
+import org.onap.ccsdk.cds.controllerblueprints.core.reCreateDirs
+import java.util.UUID
 import kotlin.test.assertTrue
 
 class BluePrintEnhancerUtilsTest {
@@ -30,7 +34,7 @@ class BluePrintEnhancerUtilsTest {
     private val blueprintDir = "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
     private val blueprintArchivePath: String = "./target/blueprints/archive"
     private val blueprintEnrichmentPath: String = "./target/blueprints/enrichment"
-    private var zipBlueprintFileName =  normalizedPathName(blueprintArchivePath, "test.zip")
+    private var zipBlueprintFileName = normalizedPathName(blueprintArchivePath, "test.zip")
 
     @Before
     fun setUp() {
@@ -62,4 +66,3 @@ class BluePrintEnhancerUtilsTest {
         }
     }
 }
-

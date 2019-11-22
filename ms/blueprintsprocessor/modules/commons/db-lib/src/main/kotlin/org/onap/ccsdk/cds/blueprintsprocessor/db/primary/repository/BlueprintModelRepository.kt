@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModel
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
-import java.util.*
+import java.util.Optional
 import javax.transaction.Transactional
 
 /**
@@ -86,5 +86,4 @@ interface BlueprintModelRepository : JpaRepository<BlueprintModel, String> {
      * @param id id
      */
     override fun deleteById(@NotNull id: String)
-
 }

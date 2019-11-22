@@ -37,8 +37,10 @@ import kotlin.test.AfterTest
 
 @RunWith(SpringRunner::class)
 @WebFluxTest
-@ContextConfiguration(classes = [BluePrintCoreConfiguration::class,
-    BluePrintCatalogService::class, SecurityProperties::class])
+@ContextConfiguration(
+    classes = [BluePrintCoreConfiguration::class,
+        BluePrintCatalogService::class, SecurityProperties::class]
+)
 @ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class TemplateControllerTest {
@@ -129,8 +131,10 @@ class TemplateControllerTest {
 
             webTestClient
                 .get()
-                .uri("/api/v1/template?bpName=$blueprintName&bpVersion=$blueprintVersion" +
-                        "&artifactName=$templatePrefix&resolutionKey=notFound")
+                .uri(
+                    "/api/v1/template?bpName=$blueprintName&bpVersion=$blueprintVersion" +
+                            "&artifactName=$templatePrefix&resolutionKey=notFound"
+                )
                 .exchange()
                 .expectStatus().isNotFound
         }

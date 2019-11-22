@@ -34,8 +34,9 @@ import java.time.Duration
 import kotlin.concurrent.thread
 
 open class KafkaBasicAuthMessageConsumerService(
-        private val messageConsumerProperties: KafkaBasicAuthMessageConsumerProperties)
-    : BlueprintMessageConsumerService {
+    private val messageConsumerProperties: KafkaBasicAuthMessageConsumerProperties
+) :
+    BlueprintMessageConsumerService {
 
     val log = logger(KafkaBasicAuthMessageConsumerService::class)
     val channel = Channel<String>()
@@ -75,7 +76,6 @@ open class KafkaBasicAuthMessageConsumerService(
         check(!consumerTopic.isNullOrEmpty()) { "couldn't get topic information" }
         return subscribe(consumerTopic, additionalConfig)
     }
-
 
     override suspend fun subscribe(topics: List<String>, additionalConfig: Map<String, Any>?): Channel<String> {
         /** Create Kafka consumer */
@@ -124,8 +124,11 @@ open class KafkaBasicAuthMessageConsumerService(
         return consume(topics = consumerTopic, additionalConfig = additionalConfig, consumerFunction = consumerFunction)
     }
 
-    override suspend fun consume(topics: List<String>, additionalConfig: Map<String, Any>?,
-                                 consumerFunction: ConsumerFunction) {
+    override suspend fun consume(
+        topics: List<String>,
+        additionalConfig: Map<String, Any>?,
+        consumerFunction: ConsumerFunction
+    ) {
 
         val kafkaConsumerFunction = consumerFunction as KafkaConsumerRecordsFunction
 

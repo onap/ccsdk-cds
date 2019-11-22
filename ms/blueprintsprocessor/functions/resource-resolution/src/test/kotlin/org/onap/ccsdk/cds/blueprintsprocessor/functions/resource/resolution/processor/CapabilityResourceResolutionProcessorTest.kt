@@ -140,9 +140,7 @@ class CapabilityResourceResolutionProcessorTest {
     }
 }
 
-open class MockCapabilityService {
-
-}
+open class MockCapabilityService
 
 open class MockCapabilityScriptRA : ResourceAssignmentProcessor() {
     val log = logger(MockCapabilityScriptRA::class)
@@ -157,6 +155,6 @@ open class MockCapabilityScriptRA : ResourceAssignmentProcessor() {
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ResourceAssignment) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 }

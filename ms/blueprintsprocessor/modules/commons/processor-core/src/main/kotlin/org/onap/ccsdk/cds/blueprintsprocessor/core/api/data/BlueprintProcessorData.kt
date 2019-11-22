@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import io.swagger.annotations.ApiModelProperty
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import java.util.*
+import java.util.Date
 
 /**
  * BlueprintProcessorData
@@ -33,14 +33,17 @@ import java.util.*
  */
 
 open class ExecutionServiceInput {
+
     @get:ApiModelProperty(required = true, value = "Headers providing request context.")
     lateinit var commonHeader: CommonHeader
     @get:ApiModelProperty(required = true, value = "Provide information about the action to execute.")
     lateinit var actionIdentifiers: ActionIdentifiers
-    @get:ApiModelProperty(required = true,
-            value = "Contain the information to be passed as input to the action." +
-                    "The payload is constituted of two section: the workflow input which is the higher level block (xxx-request)" +
-                    " and the input for resource resolution located within the xxx-request block, contained within xxx-properties")
+    @get:ApiModelProperty(
+        required = true,
+        value = "Contain the information to be passed as input to the action." +
+                "The payload is constituted of two section: the workflow input which is the higher level block (xxx-request)" +
+                " and the input for resource resolution located within the xxx-request block, contained within xxx-properties"
+    )
     lateinit var payload: ObjectNode
     @get:ApiModelProperty(hidden = true)
     @get:JsonIgnore
@@ -54,10 +57,12 @@ open class ExecutionServiceOutput {
     lateinit var actionIdentifiers: ActionIdentifiers
     @get:ApiModelProperty(required = true, value = "Status of the request.")
     lateinit var status: Status
-    @get:ApiModelProperty(required = true,
-            value = "Contain the information to be passed as input to the action." +
-                    "The payload is constituted of two section: the workflow input which is the higher level block (xxx-request)" +
-                    " and the input for resource resolution located within the xxx-request block, contained within xxx-properties")
+    @get:ApiModelProperty(
+        required = true,
+        value = "Contain the information to be passed as input to the action." +
+                "The payload is constituted of two section: the workflow input which is the higher level block (xxx-request)" +
+                " and the input for resource resolution located within the xxx-request block, contained within xxx-properties"
+    )
     lateinit var payload: ObjectNode
     @get:ApiModelProperty(hidden = true)
     @get:JsonIgnore
@@ -74,9 +79,11 @@ open class ActionIdentifiers {
     lateinit var blueprintVersion: String
     @get:ApiModelProperty(required = true, value = "Name of the workflow to execute.")
     lateinit var actionName: String
-    @get:ApiModelProperty(required = true,
-            value = "Async processing is only supported for gRPC client.",
-            allowableValues = "sync, async")
+    @get:ApiModelProperty(
+        required = true,
+        value = "Async processing is only supported for gRPC client.",
+        allowableValues = "sync, async"
+    )
     lateinit var mode: String
 }
 
@@ -106,9 +113,11 @@ open class Status {
     var code: Int = 200
     @get:ApiModelProperty(required = true, value = "Type of the event being emitted by CDS.")
     var eventType: String = EventType.EVENT_COMPONENT_EXECUTED.name
-    @get:ApiModelProperty(required = true,
-            value = "Time when the execution ended.",
-            example = "2012-04-23T18:25:43.511Z")
+    @get:ApiModelProperty(
+        required = true,
+        value = "Time when the execution ended.",
+        example = "2012-04-23T18:25:43.511Z"
+    )
     @get:JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     var timestamp: Date = Date()
     @get:ApiModelProperty(required = false, value = "Error message when system failed")

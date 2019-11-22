@@ -41,50 +41,59 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [BluePrintRestLibConfiguration::class, BluePrintPropertyConfiguration::class,
-    BluePrintPropertiesService::class])
-@TestPropertySource(properties =
-["blueprintsprocessor.restclient.sample.type=basic-auth",
-    "blueprintsprocessor.restclient.sample.url=http://localhost:8080",
-    "blueprintsprocessor.restclient.sample.userId=sampleuser",
-    "blueprintsprocessor.restclient.sslbasic.type=ssl-basic-auth",
-    "blueprintsprocessor.restclient.sslbasic.url=https://localhost:8443",
-    "blueprintsprocessor.restclient.sslbasic.username=admin",
-    "blueprintsprocessor.restclient.sslbasic.password=cds",
-    "blueprintsprocessor.restclient.sslbasic.keyStoreInstance=PKCS12",
-    "blueprintsprocessor.restclient.sslbasic.sslTrust=src/test/resources/keystore.p12",
-    "blueprintsprocessor.restclient.sslbasic.sslTrustPassword=changeit",
-    "blueprintsprocessor.restclient.ssltoken.type=ssl-token-auth",
-    "blueprintsprocessor.restclient.ssltoken.url=https://localhost:8443",
-    "blueprintsprocessor.restclient.ssltoken.token=72178473kjshdkjgvbsdkjv903274908",
-    "blueprintsprocessor.restclient.ssltoken.keyStoreInstance=PKCS12",
-    "blueprintsprocessor.restclient.ssltoken.sslTrust=src/test/resources/keystore.p12",
-    "blueprintsprocessor.restclient.ssltoken.sslTrustPassword=changeit",
-    "blueprintsprocessor.restclient.ssl.type=ssl-no-auth",
-    "blueprintsprocessor.restclient.ssl.url=https://localhost:8443",
-    "blueprintsprocessor.restclient.ssl.keyStoreInstance=PKCS12",
-    "blueprintsprocessor.restclient.ssl.sslTrust=src/test/resources/keystore.p12",
-    "blueprintsprocessor.restclient.ssl.sslTrustPassword=changeit",
-    "blueprintsprocessor.restclient.ssl.sslKey=src/test/resources/keystore.p12",
-    "blueprintsprocessor.restclient.ssl.sslKeyPassword=changeit"
-])
+@ContextConfiguration(
+    classes = [BluePrintRestLibConfiguration::class, BluePrintPropertyConfiguration::class,
+        BluePrintPropertiesService::class]
+)
+@TestPropertySource(
+    properties =
+    ["blueprintsprocessor.restclient.sample.type=basic-auth",
+        "blueprintsprocessor.restclient.sample.url=http://localhost:8080",
+        "blueprintsprocessor.restclient.sample.userId=sampleuser",
+        "blueprintsprocessor.restclient.sslbasic.type=ssl-basic-auth",
+        "blueprintsprocessor.restclient.sslbasic.url=https://localhost:8443",
+        "blueprintsprocessor.restclient.sslbasic.username=admin",
+        "blueprintsprocessor.restclient.sslbasic.password=cds",
+        "blueprintsprocessor.restclient.sslbasic.keyStoreInstance=PKCS12",
+        "blueprintsprocessor.restclient.sslbasic.sslTrust=src/test/resources/keystore.p12",
+        "blueprintsprocessor.restclient.sslbasic.sslTrustPassword=changeit",
+        "blueprintsprocessor.restclient.ssltoken.type=ssl-token-auth",
+        "blueprintsprocessor.restclient.ssltoken.url=https://localhost:8443",
+        "blueprintsprocessor.restclient.ssltoken.token=72178473kjshdkjgvbsdkjv903274908",
+        "blueprintsprocessor.restclient.ssltoken.keyStoreInstance=PKCS12",
+        "blueprintsprocessor.restclient.ssltoken.sslTrust=src/test/resources/keystore.p12",
+        "blueprintsprocessor.restclient.ssltoken.sslTrustPassword=changeit",
+        "blueprintsprocessor.restclient.ssl.type=ssl-no-auth",
+        "blueprintsprocessor.restclient.ssl.url=https://localhost:8443",
+        "blueprintsprocessor.restclient.ssl.keyStoreInstance=PKCS12",
+        "blueprintsprocessor.restclient.ssl.sslTrust=src/test/resources/keystore.p12",
+        "blueprintsprocessor.restclient.ssl.sslTrustPassword=changeit",
+        "blueprintsprocessor.restclient.ssl.sslKey=src/test/resources/keystore.p12",
+        "blueprintsprocessor.restclient.ssl.sslKeyPassword=changeit"
+    ]
+)
 class BluePrintRestLibPropertyServiceTest {
+
     @Autowired
     lateinit var bluePrintRestLibPropertyService: BluePrintRestLibPropertyService
 
     @Test
     fun testRestClientProperties() {
         val properties = bluePrintRestLibPropertyService.restClientProperties(
-            "blueprintsprocessor.restclient.sample")
+            "blueprintsprocessor.restclient.sample"
+        )
         assertNotNull(properties, "failed to create property bean")
-        assertNotNull(properties.url, "failed to get url property in" +
-            " property bean")
+        assertNotNull(
+            properties.url, "failed to get url property in" +
+                    " property bean"
+        )
     }
 
     @Test
     fun testSSLBasicProperties() {
         val properties = bluePrintRestLibPropertyService.restClientProperties(
-            "blueprintsprocessor.restclient.sslbasic")
+            "blueprintsprocessor.restclient.sslbasic"
+        )
         assertNotNull(properties, "failed to create property bean")
         val p: SSLBasicAuthRestClientProperties =
             properties as SSLBasicAuthRestClientProperties
@@ -99,7 +108,8 @@ class BluePrintRestLibPropertyServiceTest {
     @Test
     fun testSSLTokenProperties() {
         val properties = bluePrintRestLibPropertyService.restClientProperties(
-            "blueprintsprocessor.restclient.ssltoken")
+            "blueprintsprocessor.restclient.ssltoken"
+        )
         assertNotNull(properties, "failed to create property bean")
 
         val p: SSLTokenAuthRestClientProperties =
@@ -114,7 +124,8 @@ class BluePrintRestLibPropertyServiceTest {
     @Test
     fun testSSLNoAuthProperties() {
         val properties = bluePrintRestLibPropertyService.restClientProperties(
-            "blueprintsprocessor.restclient.ssl")
+            "blueprintsprocessor.restclient.ssl"
+        )
         assertNotNull(properties, "failed to create property bean")
 
         val p: SSLRestClientProperties =
@@ -127,12 +138,12 @@ class BluePrintRestLibPropertyServiceTest {
         assertEquals(p.sslKeyPassword, "changeit")
     }
 
-
     @Test
     fun testSSLBasicPropertiesAsJson() {
         val actualObj: JsonNode = defaultMapper.readTree(sslBasicAuthEndpointWithHeadersField())
         val properties = bluePrintRestLibPropertyService.restClientProperties(
-            actualObj)
+            actualObj
+        )
         assertNotNull(properties, "failed to create property bean")
         val p: SSLBasicAuthRestClientProperties = properties as SSLBasicAuthRestClientProperties
 
@@ -166,7 +177,8 @@ class BluePrintRestLibPropertyServiceTest {
     fun testSSLNoAuthPropertiesAsJson() {
         val actualObj: JsonNode = defaultMapper.readTree(sslNoAuthEndpointWithHeadersField())
         val properties = bluePrintRestLibPropertyService.restClientProperties(
-            actualObj)
+            actualObj
+        )
         assertNotNull(properties, "failed to create property bean")
 
         val p: SSLRestClientProperties =
@@ -185,8 +197,10 @@ class BluePrintRestLibPropertyServiceTest {
     fun testBlueprintWebClientService() {
         val blueprintWebClientService = bluePrintRestLibPropertyService
             .blueprintWebClientService("sample")
-        assertNotNull(blueprintWebClientService,
-            "failed to create blueprintWebClientService")
+        assertNotNull(
+            blueprintWebClientService,
+            "failed to create blueprintWebClientService"
+        )
     }
 
     @Test
@@ -197,7 +211,7 @@ class BluePrintRestLibPropertyServiceTest {
         assertNotNull(blueprintWebClientService, "failed to create blueprintWebClientService")
     }
 
-    //pass the result of $typeEndpointWithHeadersField() output with and without headers to compare.
+    // pass the result of $typeEndpointWithHeadersField() output with and without headers to compare.
     private fun validateHeadersDidNotChangeWithEmptyAdditionalHeaders(noHeaders: String, withHeaders: String) {
         val parsedObj: JsonNode = defaultMapper.readTree(noHeaders)
         val bpWebClientService =
@@ -208,7 +222,7 @@ class BluePrintRestLibPropertyServiceTest {
         val bpWebClientServiceWithHeaders =
             bluePrintRestLibPropertyService.blueprintWebClientService(parsedObjWithHeaders)
         val extractedHeadersWithAdditionalHeaders = bpWebClientServiceWithHeaders.convertToBasicHeaders(mapOf())
-        //Array<BasicHeader<>> -> Map<String,String>
+        // Array<BasicHeader<>> -> Map<String,String>
         val headersMap = extractedHeaders.map { it.name to it.value }.toMap()
         val additionalHeadersMap = extractedHeadersWithAdditionalHeaders.map { it.name to it.value }.toMap()
         assertEquals(headersMap, additionalHeadersMap)
@@ -256,18 +270,20 @@ class BluePrintRestLibPropertyServiceTest {
         val bpWebClientService =
             bluePrintRestLibPropertyService.blueprintWebClientService(parsedObj)
         val extractedHeaders = bpWebClientService.convertToBasicHeaders(mapOf())
-        assertEquals(MediaType.APPLICATION_XML.toString(),
-            extractedHeaders.filter { it.name == HttpHeaders.CONTENT_TYPE }[0].value!!)
+        assertEquals(
+            MediaType.APPLICATION_XML.toString(),
+            extractedHeaders.filter { it.name == HttpHeaders.CONTENT_TYPE }[0].value!!
+        )
     }
 
     @Test
     fun `BasicAuth WebClientService additionalHeaders can overwrite default Content-Type`() {
-        //default content type is application/json
+        // default content type is application/json
         val endPointWithHeadersJson = basicAuthEndpointWithHeadersField(contentTypeAdditionalHeader)
         additionalHeadersChangedContentTypeToAPPLICATION_XML(endPointWithHeadersJson)
     }
 
-    //called from within "assertFailsWith(exceptionClass = BluePrintProcessorException::class) {"
+    // called from within "assertFailsWith(exceptionClass = BluePrintProcessorException::class) {"
     private fun attemptToPutAuthorizationHeaderIntoAdditionalHeaders(endPointWithHeadersJson: String) {
         val parsedObj: JsonNode = defaultMapper.readTree(endPointWithHeadersJson)
         val bpWebClientService =
@@ -281,7 +297,7 @@ class BluePrintRestLibPropertyServiceTest {
             val endPointWithHeadersJson = basicAuthEndpointWithHeadersField(additionalHeadersWithAuth)
             attemptToPutAuthorizationHeaderIntoAdditionalHeaders(endPointWithHeadersJson)
         }
-        //spec says headers are case insensitive...
+        // spec says headers are case insensitive...
         assertFailsWith(exceptionClass = BluePrintProcessorException::class) {
             val endPointWithHeadersJson = basicAuthEndpointWithHeadersField(additionalHeadersWithAuthLowercased)
             attemptToPutAuthorizationHeaderIntoAdditionalHeaders(endPointWithHeadersJson)
@@ -309,7 +325,7 @@ class BluePrintRestLibPropertyServiceTest {
 
     @Test
     fun `TokenAuth WebClientService additionalHeaders can overwrite default Content-Type`() {
-        //default content type is application/json
+        // default content type is application/json
         val endPointWithHeadersJson = sslTokenAuthEndpointWithHeadersField(contentTypeAdditionalHeader)
         additionalHeadersChangedContentTypeToAPPLICATION_XML(endPointWithHeadersJson)
     }
@@ -320,14 +336,14 @@ class BluePrintRestLibPropertyServiceTest {
             val endPointWithHeadersJson = sslTokenAuthEndpointWithHeadersField(additionalHeadersWithAuth)
             attemptToPutAuthorizationHeaderIntoAdditionalHeaders(endPointWithHeadersJson)
         }
-        //spec says headers are case insensitive...
+        // spec says headers are case insensitive...
         assertFailsWith(exceptionClass = BluePrintProcessorException::class) {
             val endPointWithHeadersJson = sslTokenAuthEndpointWithHeadersField(additionalHeadersWithAuthLowercased)
             attemptToPutAuthorizationHeaderIntoAdditionalHeaders(endPointWithHeadersJson)
         }
     }
 
-    //TESTS FOR SSL BASIC AUTH headers
+    // TESTS FOR SSL BASIC AUTH headers
     @Test
     fun `SSLBasicAuth WebClientService with empty additionalHeaders does not modify headers`() {
         val endPointJson = sslBasicAuthEndpointWithHeadersField()
@@ -349,7 +365,7 @@ class BluePrintRestLibPropertyServiceTest {
 
     @Test
     fun `SSLBasicAuth WebClientService additionalHeaders can overwrite default Content-Type`() {
-        //default content type is application/json
+        // default content type is application/json
         val endPointWithHeadersJson = sslBasicAuthEndpointWithHeadersField(contentTypeAdditionalHeader)
         additionalHeadersChangedContentTypeToAPPLICATION_XML(endPointWithHeadersJson)
     }
@@ -360,14 +376,14 @@ class BluePrintRestLibPropertyServiceTest {
             val endPointWithHeadersJson = sslBasicAuthEndpointWithHeadersField(additionalHeadersWithAuth)
             attemptToPutAuthorizationHeaderIntoAdditionalHeaders(endPointWithHeadersJson)
         }
-        //spec says headers are case insensitive...
+        // spec says headers are case insensitive...
         assertFailsWith(exceptionClass = BluePrintProcessorException::class) {
             val endPointWithHeadersJson = sslBasicAuthEndpointWithHeadersField(additionalHeadersWithAuthLowercased)
             attemptToPutAuthorizationHeaderIntoAdditionalHeaders(endPointWithHeadersJson)
         }
     }
 
-    //SSL-NO-AUTH headers tests
+    // SSL-NO-AUTH headers tests
     @Test
     fun `SSLNoAuth WebClientService with empty additionalHeaders does not modify headers`() {
         val endPointJson = sslNoAuthEndpointWithHeadersField()
@@ -389,7 +405,7 @@ class BluePrintRestLibPropertyServiceTest {
 
     @Test
     fun `SSLNoAuth WebClientService additionalHeaders can overwrite default Content-Type`() {
-        //default content type is application/json
+        // default content type is application/json
         val endPointWithHeadersJson = sslNoAuthEndpointWithHeadersField(contentTypeAdditionalHeader)
         additionalHeadersChangedContentTypeToAPPLICATION_XML(endPointWithHeadersJson)
     }
@@ -400,7 +416,7 @@ class BluePrintRestLibPropertyServiceTest {
             val endPointWithHeadersJson = sslNoAuthEndpointWithHeadersField(additionalHeadersWithAuth)
             attemptToPutAuthorizationHeaderIntoAdditionalHeaders(endPointWithHeadersJson)
         }
-        //spec says headers are case insensitive...
+        // spec says headers are case insensitive...
         assertFailsWith(exceptionClass = BluePrintProcessorException::class) {
             val endPointWithHeadersJson = sslNoAuthEndpointWithHeadersField(additionalHeadersWithAuthLowercased)
             attemptToPutAuthorizationHeaderIntoAdditionalHeaders(endPointWithHeadersJson)
@@ -412,12 +428,15 @@ class BluePrintRestLibPropertyServiceTest {
         val expectedTokenAuthDefaultHeaders = mapOf<String, String>(
             "Content-Type" to "application/json",
             "Accept" to "application/json",
-            "Authorization" to "72178473kjshdkjgvbsdkjv903274908")
+            "Authorization" to "72178473kjshdkjgvbsdkjv903274908"
+        )
 
-        val endPointWithHeadersJsonWithBasicAuthHeader = basicAuthEndpointWithHeadersField(""",
+        val endPointWithHeadersJsonWithBasicAuthHeader = basicAuthEndpointWithHeadersField(
+            """,
               "additionalHeaders" : {
                  "authorization": "Basic aGF2ZTphbmljZWRheQo="
-              }""".trimIndent())
+              }""".trimIndent()
+        )
 
         private fun sslTokenAuthEndpointWithHeadersField(headers: String = ""): String =
             """{
@@ -455,7 +474,7 @@ class BluePrintRestLibPropertyServiceTest {
           "sslKeyPassword" : "changeit"$headers
         }""".trimIndent()
 
-        //Don't forget to supply "," as the first char to make valid JSON
+        // Don't forget to supply "," as the first char to make valid JSON
         private fun basicAuthEndpointWithHeadersField(headers: String = ""): String =
             """{
               "type": "basic-auth",
@@ -496,4 +515,3 @@ class BluePrintRestLibPropertyServiceTest {
           }""".trimIndent()
     }
 }
-

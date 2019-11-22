@@ -30,7 +30,7 @@ import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.BluePrintProcessingServiceGrpc
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceInput
-import java.util.*
+import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 
@@ -62,14 +62,16 @@ class BluePrintGrpcServerTest {
     }
 
     /** TLS Client Integration testing, GRPC TLS Junit testing is not supported. */
-    //@Test
+    // @Test
     fun testGrpcTLSServerIntegration() {
         runBlocking {
             val tlsAuthGrpcClientService = TLSAuthGrpcClientService(tlsAuthGrpcClientProperties)
             val grpcChannel = tlsAuthGrpcClientService.channel()
             /** Get Send and Receive Channel for bidirectional process method*/
-            val (reqChannel, resChannel) = clientCallBidiStreaming(BluePrintProcessingServiceGrpc.getProcessMethod(),
-                    grpcChannel)
+            val (reqChannel, resChannel) = clientCallBidiStreaming(
+                BluePrintProcessingServiceGrpc.getProcessMethod(),
+                grpcChannel
+            )
             launch {
                 resChannel.consumeEach {
                     log.info("Received Response")
@@ -85,25 +87,24 @@ class BluePrintGrpcServerTest {
 
     private fun getRequest(requestId: String): ExecutionServiceInput {
         val commonHeader = CommonHeader.newBuilder()
-                .setTimestamp("2012-04-23T18:25:43.511Z")
-                .setOriginatorId("System")
-                .setRequestId(requestId)
-                .setSubRequestId("$requestId-" + UUID.randomUUID().toString()).build()
+            .setTimestamp("2012-04-23T18:25:43.511Z")
+            .setOriginatorId("System")
+            .setRequestId(requestId)
+            .setSubRequestId("$requestId-" + UUID.randomUUID().toString()).build()
         val actionIdentifier = ActionIdentifiers.newBuilder()
-                .setActionName("SampleScript")
-                .setBlueprintName("sample-cba")
-                .setBlueprintVersion("1.0.0")
-                .setMode(ACTION_MODE_SYNC)
-                .build()
+            .setActionName("SampleScript")
+            .setBlueprintName("sample-cba")
+            .setBlueprintVersion("1.0.0")
+            .setMode(ACTION_MODE_SYNC)
+            .build()
         val jsonContent = """{ "key1" : "value1" }"""
         val payloadBuilder = ExecutionServiceInput.newBuilder().payloadBuilder
         JsonFormat.parser().merge(jsonContent, payloadBuilder)
 
         return ExecutionServiceInput.newBuilder()
-                .setCommonHeader(commonHeader)
-                .setActionIdentifiers(actionIdentifier)
-                .setPayload(payloadBuilder.build())
-                .build()
+            .setCommonHeader(commonHeader)
+            .setActionIdentifiers(actionIdentifier)
+            .setPayload(payloadBuilder.build())
+            .build()
     }
-
 }

@@ -24,7 +24,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.cli.executor.getSshClien
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentScriptExecutor
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
-
 import org.slf4j.LoggerFactory
 
 open class TestCliScriptFunction : AbstractScriptComponentFunction() {
@@ -43,7 +42,6 @@ open class TestCliScriptFunction : AbstractScriptComponentFunction() {
         log.info("Executing Recovery")
     }
 }
-
 
 open class Check : AbstractScriptComponentFunction() {
 

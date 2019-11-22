@@ -19,7 +19,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.python.core.PyObject
 import org.python.util.PythonInterpreter
 
-open class BlueprintPythonHost(private val bluePrintPython: BluePrintPython){
+open class BlueprintPythonHost(private val bluePrintPython: BluePrintPython) {
     private val blueprintPythonInterpreterProxy: BlueprintPythonInterpreterProxy
 
     init {
@@ -42,9 +42,9 @@ open class BlueprintPythonHost(private val bluePrintPython: BluePrintPython){
         try {
             return blueprintPythonInterpreterProxy.getPythonInstance(properties)
         } catch (e: Exception) {
-            throw BluePrintProcessorException("Failed to execute Jython component ${e.toString()}", e)
+            throw BluePrintProcessorException("Failed to execute Jython component $e", e)
         }
     }
 
-    //TODO Check potential errors in python scripts
+    // TODO Check potential errors in python scripts
 }

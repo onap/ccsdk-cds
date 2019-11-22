@@ -17,12 +17,11 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.config
 
-
 open class BluePrintLoadConfiguration {
     lateinit var blueprintDeployPath: String
     lateinit var blueprintArchivePath: String
     lateinit var blueprintWorkingPath: String
-    
+
     var loadBluePrintPaths: String? = null
     var loadModeTypePaths: String? = null
     var loadResourceDictionaryPaths: String? = null

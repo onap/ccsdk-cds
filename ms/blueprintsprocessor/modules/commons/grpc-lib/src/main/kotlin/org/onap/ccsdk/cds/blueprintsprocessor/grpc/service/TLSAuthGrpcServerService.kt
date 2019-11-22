@@ -24,20 +24,21 @@ import io.netty.handler.ssl.SslContextBuilder
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.TLSAuthGrpcServerProperties
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 
-
-class TLSAuthGrpcServerService(private val tlsAuthGrpcServerProperties: TLSAuthGrpcServerProperties)
-    : BluePrintGrpcServerService {
+class TLSAuthGrpcServerService(private val tlsAuthGrpcServerProperties: TLSAuthGrpcServerProperties) :
+    BluePrintGrpcServerService {
 
     override fun serverBuilder(): NettyServerBuilder {
         return NettyServerBuilder
-                .forPort(tlsAuthGrpcServerProperties.port)
-                .sslContext(sslContext())
+            .forPort(tlsAuthGrpcServerProperties.port)
+            .sslContext(sslContext())
     }
 
     fun sslContext(): SslContext {
         val sslClientContextBuilder = SslContextBuilder
-                .forServer(normalizedFile(tlsAuthGrpcServerProperties.certChain),
-                        normalizedFile(tlsAuthGrpcServerProperties.privateKey))
+            .forServer(
+                normalizedFile(tlsAuthGrpcServerProperties.certChain),
+                normalizedFile(tlsAuthGrpcServerProperties.privateKey)
+            )
 
         tlsAuthGrpcServerProperties.trustCertCollection?.let { trustCertFile ->
             sslClientContextBuilder.trustManager(normalizedFile(trustCertFile))
@@ -45,5 +46,4 @@ class TLSAuthGrpcServerService(private val tlsAuthGrpcServerProperties: TLSAuthG
         }
         return GrpcSslContexts.configure(sslClientContextBuilder).build()
     }
-
 }

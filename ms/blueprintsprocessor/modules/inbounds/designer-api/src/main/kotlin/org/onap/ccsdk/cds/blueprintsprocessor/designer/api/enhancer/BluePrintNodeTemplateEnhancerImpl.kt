@@ -31,21 +31,21 @@ import org.springframework.stereotype.Service
 
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-open class BluePrintNodeTemplateEnhancerImpl(private val bluePrintRepoService: BluePrintRepoService,
-                                             private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService)
-    : BluePrintNodeTemplateEnhancer {
+open class BluePrintNodeTemplateEnhancerImpl(
+    private val bluePrintRepoService: BluePrintRepoService,
+    private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService
+) :
+    BluePrintNodeTemplateEnhancer {
 
-    private val log= logger(BluePrintNodeTemplateEnhancerImpl::class)
+    private val log = logger(BluePrintNodeTemplateEnhancerImpl::class)
 
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
     lateinit var bluePrintContext: BluePrintContext
-
 
     override fun enhance(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, nodeTemplate: NodeTemplate) {
         log.info("***** Enhancing NodeTemplate($name)")
         this.bluePrintRuntimeService = bluePrintRuntimeService
         this.bluePrintContext = bluePrintRuntimeService.bluePrintContext()
-
 
         val nodeTypeName = nodeTemplate.type
         // Get NodeType from Repo and Update Service Template
@@ -54,7 +54,7 @@ open class BluePrintNodeTemplateEnhancerImpl(private val bluePrintRepoService: B
         // Enrich NodeType
         bluePrintTypeEnhancerService.enhanceNodeType(bluePrintRuntimeService, nodeTypeName, nodeType)
 
-        //Enrich Node Template Artifacts
+        // Enrich Node Template Artifacts
         enhanceNodeTemplateArtifactDefinition(name, nodeTemplate)
     }
 
@@ -65,5 +65,4 @@ open class BluePrintNodeTemplateEnhancerImpl(private val bluePrintRepoService: B
             bluePrintTypeEnhancerService.enhanceArtifactDefinition(bluePrintRuntimeService, artifactDefinitionName, artifactDefinition)
         }
     }
-
 }

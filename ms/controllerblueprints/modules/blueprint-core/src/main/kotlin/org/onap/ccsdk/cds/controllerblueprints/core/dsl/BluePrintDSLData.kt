@@ -18,7 +18,13 @@ package org.onap.ccsdk.cds.controllerblueprints.core.dsl
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.JsonNode
-import org.onap.ccsdk.cds.controllerblueprints.core.data.*
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.AttributeDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.Implementation
+import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.Step
 
 /**
  * This is simplified version of DSL, which is used for generating the Service template
@@ -26,6 +32,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.data.*
  */
 
 class DSLBluePrint {
+
     var metadata: MutableMap<String, String> = hashMapOf()
     var properties: MutableMap<String, JsonNode>? = null
     var dataTypes: MutableMap<String, DataType> = hashMapOf()
@@ -58,7 +65,6 @@ class DSLComponent {
     var inputs: MutableMap<String, PropertyDefinition>? = null
     var outputs: MutableMap<String, PropertyDefinition>? = null
 }
-
 
 class DSLRegistryComponent {
     lateinit var id: String

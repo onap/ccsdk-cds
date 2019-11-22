@@ -27,8 +27,8 @@ interface BluePrintDBLibGenericService {
     fun update(sql: String, params: Map<String, Any>): Int
 }
 
-abstract class AbstractDBLibGenericService(private val namedParameterJdbcTemplate: NamedParameterJdbcTemplate)
-    : BluePrintDBLibGenericService {
+abstract class AbstractDBLibGenericService(private val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) :
+    BluePrintDBLibGenericService {
 
     override fun namedParameterJdbcTemplate(): NamedParameterJdbcTemplate {
         return namedParameterJdbcTemplate

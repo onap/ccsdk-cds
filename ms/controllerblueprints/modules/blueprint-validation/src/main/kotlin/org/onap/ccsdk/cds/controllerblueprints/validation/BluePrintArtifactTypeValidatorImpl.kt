@@ -24,7 +24,8 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeServ
 import org.springframework.stereotype.Service
 
 @Service("default-artifact-type-validator")
-open class BluePrintArtifactTypeValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintArtifactTypeValidator {
+open class BluePrintArtifactTypeValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) :
+    BluePrintArtifactTypeValidator {
 
     override fun validate(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, artifactType: ArtifactType) {
 

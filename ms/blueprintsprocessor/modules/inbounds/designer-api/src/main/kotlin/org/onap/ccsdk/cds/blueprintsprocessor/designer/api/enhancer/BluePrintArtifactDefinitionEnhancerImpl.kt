@@ -32,21 +32,21 @@ import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.springframework.stereotype.Service
 
 @Service
-open class BluePrintArtifactDefinitionEnhancerImpl(private val bluePrintRepoService: BluePrintRepoService,
-                                                   private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService,
-                                                   private val resourceAssignmentEnhancerService: ResourceAssignmentEnhancerService)
-    : BluePrintArtifactDefinitionEnhancer {
+open class BluePrintArtifactDefinitionEnhancerImpl(
+    private val bluePrintRepoService: BluePrintRepoService,
+    private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService,
+    private val resourceAssignmentEnhancerService: ResourceAssignmentEnhancerService
+) :
+    BluePrintArtifactDefinitionEnhancer {
 
     companion object {
         const val ARTIFACT_TYPE_MAPPING_SOURCE: String = "artifact-mapping-resource"
     }
 
-
     private val log = logger(BluePrintArtifactDefinitionEnhancerImpl::class)
 
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
     lateinit var bluePrintContext: BluePrintContext
-
 
     override fun enhance(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, artifactDefinition: ArtifactDefinition) {
         log.info("enhancing ArtifactDefinition($name)")
@@ -55,7 +55,7 @@ open class BluePrintArtifactDefinitionEnhancerImpl(private val bluePrintRepoServ
         this.bluePrintContext = bluePrintRuntimeService.bluePrintContext()
 
         val artifactTypeName = artifactDefinition.type
-                ?: throw BluePrintException("artifact type is missing for ArtifactDefinition($name)")
+            ?: throw BluePrintException("artifact type is missing for ArtifactDefinition($name)")
 
         // Populate Artifact Type
         BluePrintEnhancerUtils.populateArtifactType(bluePrintContext, bluePrintRepoService, artifactTypeName)
@@ -80,7 +80,7 @@ open class BluePrintArtifactDefinitionEnhancerImpl(private val bluePrintRepoServ
         if (!alreadyEnhanced) {
             val resourceAssignments: MutableList<ResourceAssignment> = JacksonUtils.getListFromFile(artifactFilePath, ResourceAssignment::class.java)
                     as? MutableList<ResourceAssignment>
-                    ?: throw BluePrintProcessorException("couldn't get ResourceAssignment definitions for the file($artifactFilePath)")
+                ?: throw BluePrintProcessorException("couldn't get ResourceAssignment definitions for the file($artifactFilePath)")
 
             // Call Resource Assignment Enhancer
             resourceAssignmentEnhancerService.enhanceBluePrint(bluePrintTypeEnhancerService, bluePrintRuntimeService, resourceAssignments)
@@ -88,5 +88,4 @@ open class BluePrintArtifactDefinitionEnhancerImpl(private val bluePrintRepoServ
             bluePrintRuntimeService.put(alreadyEnhancedKey, true.asJsonPrimitive())
         }
     }
-
 }

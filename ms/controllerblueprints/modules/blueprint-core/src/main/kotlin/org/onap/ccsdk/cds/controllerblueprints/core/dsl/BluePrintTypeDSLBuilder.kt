@@ -18,14 +18,34 @@ package org.onap.ccsdk.cds.controllerblueprints.core.dsl
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
-import org.onap.ccsdk.cds.controllerblueprints.core.*
-import org.onap.ccsdk.cds.controllerblueprints.core.data.*
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
+import org.onap.ccsdk.cds.controllerblueprints.core.asListOfString
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.AttributeDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.CapabilityDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ConstraintClause
+import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.EntityType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.EntrySchema
+import org.onap.ccsdk.cds.controllerblueprints.core.data.InterfaceDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.OperationDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.PolicyType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.RelationshipType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.RequirementDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 
+open class EntityTypeBuilder(
+    private val id: String,
+    private val version: String,
+    private val derivedFrom: String,
+    private val description: String? = ""
+) {
 
-open class EntityTypeBuilder(private val id: String,
-                             private val version: String,
-                             private val derivedFrom: String,
-                             private val description: String? = "") {
     var metadata: MutableMap<String, String>? = null
     var properties: MutableMap<String, PropertyDefinition>? = null
     var attributes: MutableMap<String, AttributeDefinition>? = null
@@ -43,8 +63,13 @@ open class EntityTypeBuilder(private val id: String,
         attributes!![id] = attribute
     }
 
-    fun attribute(id: String, type: String, required: Boolean, description: String? = "",
-                  block: AttributeDefinitionBuilder.() -> Unit) {
+    fun attribute(
+        id: String,
+        type: String,
+        required: Boolean,
+        description: String? = "",
+        block: AttributeDefinitionBuilder.() -> Unit
+    ) {
         if (attributes == null)
             attributes = hashMapOf()
         val attribute = AttributeDefinitionBuilder(id, type, required, description).apply(block).build()
@@ -58,8 +83,13 @@ open class EntityTypeBuilder(private val id: String,
         properties!![id] = property
     }
 
-    fun property(id: String, type: String, required: Boolean, description: String? = "",
-                 block: PropertyDefinitionBuilder.() -> Unit) {
+    fun property(
+        id: String,
+        type: String,
+        required: Boolean,
+        description: String? = "",
+        block: PropertyDefinitionBuilder.() -> Unit
+    ) {
         if (properties == null)
             properties = hashMapOf()
         val property = PropertyDefinitionBuilder(id, type, required, description).apply(block).build()
@@ -77,8 +107,13 @@ open class EntityTypeBuilder(private val id: String,
     }
 }
 
-class NodeTypeBuilder(id: String, version: String, derivedFrom: String,
-                      description: String?) : EntityTypeBuilder(id, version, derivedFrom, description) {
+class NodeTypeBuilder(
+    id: String,
+    version: String,
+    derivedFrom: String,
+    description: String?
+) : EntityTypeBuilder(id, version, derivedFrom, description) {
+
     private var nodeType = NodeType()
     private var capabilities: MutableMap<String, CapabilityDefinition>? = null
     private var requirements: MutableMap<String, RequirementDefinition>? = null
@@ -97,12 +132,18 @@ class NodeTypeBuilder(id: String, version: String, derivedFrom: String,
         requirements!![id] = RequirementDefinitionBuilder(id, capability, node, relationship, description).build()
     }
 
-    fun requirement(id: String, capability: String, node: String, relationship: String, description: String,
-                    block: RequirementDefinitionBuilder.() -> Unit) {
+    fun requirement(
+        id: String,
+        capability: String,
+        node: String,
+        relationship: String,
+        description: String,
+        block: RequirementDefinitionBuilder.() -> Unit
+    ) {
         if (requirements == null)
             requirements = hashMapOf()
         requirements!![id] = RequirementDefinitionBuilder(id, capability, node, relationship, description)
-                .apply(block).build()
+            .apply(block).build()
     }
 
     fun artifact(id: String, type: String, file: String) {
@@ -125,7 +166,7 @@ class NodeTypeBuilder(id: String, version: String, derivedFrom: String,
         val defaultOperationName = "process"
         interfaceDefinition.operations = hashMapOf()
         interfaceDefinition.operations!![defaultOperationName] =
-                OperationDefinitionBuilder(defaultOperationName, description).apply(block).build()
+            OperationDefinitionBuilder(defaultOperationName, description).apply(block).build()
         interfaces!![interfaceName] = interfaceDefinition
     }
 
@@ -139,8 +180,13 @@ class NodeTypeBuilder(id: String, version: String, derivedFrom: String,
     }
 }
 
-class ArtifactTypeBuilder(id: String, version: String, derivedFrom: String,
-                          description: String?) : EntityTypeBuilder(id, version, derivedFrom, description) {
+class ArtifactTypeBuilder(
+    id: String,
+    version: String,
+    derivedFrom: String,
+    description: String?
+) : EntityTypeBuilder(id, version, derivedFrom, description) {
+
     private var artifactType = ArtifactType()
     private var fileExt: MutableList<String>? = null
 
@@ -159,8 +205,13 @@ class ArtifactTypeBuilder(id: String, version: String, derivedFrom: String,
     }
 }
 
-class PolicyTypeBuilder(id: String, version: String, derivedFrom: String,
-                        description: String?) : EntityTypeBuilder(id, version, derivedFrom, description) {
+class PolicyTypeBuilder(
+    id: String,
+    version: String,
+    derivedFrom: String,
+    description: String?
+) : EntityTypeBuilder(id, version, derivedFrom, description) {
+
     private var policyType = PolicyType()
 
     fun targets(targetsStr: String) {
@@ -178,9 +229,13 @@ class PolicyTypeBuilder(id: String, version: String, derivedFrom: String,
     }
 }
 
-class RelationshipTypeBuilder(private val id: String, private val version: String,
-                              derivedFrom: String, private val description: String?)
-    : EntityTypeBuilder(id, version, derivedFrom, description) {
+class RelationshipTypeBuilder(
+    private val id: String,
+    private val version: String,
+    derivedFrom: String,
+    private val description: String?
+) :
+    EntityTypeBuilder(id, version, derivedFrom, description) {
 
     private var relationshipType = RelationshipType()
 
@@ -202,8 +257,13 @@ class RelationshipTypeBuilder(private val id: String, private val version: Strin
     }
 }
 
-class DataTypeBuilder(id: String, version: String, derivedFrom: String,
-                      description: String?) : EntityTypeBuilder(id, version, derivedFrom, description) {
+class DataTypeBuilder(
+    id: String,
+    version: String,
+    derivedFrom: String,
+    description: String?
+) : EntityTypeBuilder(id, version, derivedFrom, description) {
+
     private var dataType = DataType()
 
     fun constrain(block: ConstraintClauseBuilder.() -> Unit) {
@@ -239,8 +299,14 @@ class CapabilityDefinitionBuilder(private val id: String, private val type: Stri
     }
 }
 
-class RequirementDefinitionBuilder(private val id: String, private val capability: String, private val node: String,
-                                   private val relationship: String, private val description: String? = "") {
+class RequirementDefinitionBuilder(
+    private val id: String,
+    private val capability: String,
+    private val node: String,
+    private val relationship: String,
+    private val description: String? = ""
+) {
+
     private var requirementDefinition = RequirementDefinition()
 
     fun build(): RequirementDefinition {
@@ -271,8 +337,11 @@ class InterfaceDefinitionBuilder(private val id: String) {
     }
 }
 
-class OperationDefinitionBuilder(private val id: String,
-                                 private val description: String? = "") {
+class OperationDefinitionBuilder(
+    private val id: String,
+    private val description: String? = ""
+) {
+
     private var operationDefinition: OperationDefinition = OperationDefinition()
 
     fun inputs(block: PropertiesDefinitionBuilder.() -> Unit) {
@@ -290,10 +359,12 @@ class OperationDefinitionBuilder(private val id: String,
     }
 }
 
-class AttributeDefinitionBuilder(private val id: String,
-                                 private val type: String? = BluePrintConstants.DATA_TYPE_STRING,
-                                 private val required: Boolean? = false,
-                                 private val description: String? = "") {
+class AttributeDefinitionBuilder(
+    private val id: String,
+    private val type: String? = BluePrintConstants.DATA_TYPE_STRING,
+    private val required: Boolean? = false,
+    private val description: String? = ""
+) {
 
     private var attributeDefinition: AttributeDefinition = AttributeDefinition()
 
@@ -342,8 +413,13 @@ class PropertiesDefinitionBuilder {
         properties[id] = property
     }
 
-    fun property(id: String, type: String?, required: Boolean?, description: String? = "",
-                 block: PropertyDefinitionBuilder.() -> Unit) {
+    fun property(
+        id: String,
+        type: String?,
+        required: Boolean?,
+        description: String? = "",
+        block: PropertyDefinitionBuilder.() -> Unit
+    ) {
         val property = PropertyDefinitionBuilder(id, type, required, description).apply(block).build()
         properties[id] = property
     }
@@ -353,10 +429,12 @@ class PropertiesDefinitionBuilder {
     }
 }
 
-class PropertyDefinitionBuilder(private val id: String,
-                                private val type: String? = BluePrintConstants.DATA_TYPE_STRING,
-                                private val required: Boolean? = false,
-                                private val description: String? = "") {
+class PropertyDefinitionBuilder(
+    private val id: String,
+    private val type: String? = BluePrintConstants.DATA_TYPE_STRING,
+    private val required: Boolean? = false,
+    private val description: String? = ""
+) {
 
     private var propertyDefinition: PropertyDefinition = PropertyDefinition()
 
@@ -484,7 +562,6 @@ class ConstraintClauseBuilder {
         return constraintClause
     }
 }
-
 
 class EntrySchemaBuilder(private val type: String) {
     private var entrySchema: EntrySchema = EntrySchema()

@@ -16,24 +16,29 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.validation
 
-import org.slf4j.LoggerFactory
 import com.google.common.base.Preconditions
 import org.apache.commons.lang3.StringUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintError
-import org.onap.ccsdk.cds.controllerblueprints.core.data.*
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ServiceTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.data.TopologyTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintServiceTemplateValidator
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
 
 @Service("default-service-template-validator")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-open class BluePrintServiceTemplateValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintServiceTemplateValidator {
+open class BluePrintServiceTemplateValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) :
+    BluePrintServiceTemplateValidator {
 
-    private val log= LoggerFactory.getLogger(BluePrintServiceTemplateValidatorImpl::class.toString())
+    private val log = LoggerFactory.getLogger(BluePrintServiceTemplateValidatorImpl::class.toString())
 
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
     lateinit var error: BluePrintError
@@ -73,7 +78,6 @@ open class BluePrintServiceTemplateValidatorImpl(private val bluePrintTypeValida
 
         paths.removeAt(paths.lastIndex)
     }
-
 
     fun validateDataTypes(dataTypes: MutableMap<String, DataType>) {
 

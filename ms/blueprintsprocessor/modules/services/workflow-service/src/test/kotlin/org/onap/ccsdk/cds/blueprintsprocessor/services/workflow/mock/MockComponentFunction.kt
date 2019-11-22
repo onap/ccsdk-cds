@@ -29,8 +29,10 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
 
-fun mockNodeTemplateComponentScriptExecutor(id: String, script: String) = BluePrintTypes.nodeTemplateComponentScriptExecutor(id,
-        "mock($id) component function") {
+fun mockNodeTemplateComponentScriptExecutor(id: String, script: String) = BluePrintTypes.nodeTemplateComponentScriptExecutor(
+    id,
+    "mock($id) component function"
+) {
     definedOperation("") {
         inputs {
             type("kotlin")
@@ -55,8 +57,10 @@ class MockComponentFunction : AbstractComponentFunction() {
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
         log.info("Processing component : $operationInputs")
 
-        bluePrintRuntimeService.setNodeTemplateAttributeValue(nodeTemplateName,
-                "assignment-params", "params".asJsonPrimitive())
+        bluePrintRuntimeService.setNodeTemplateAttributeValue(
+            nodeTemplateName,
+            "assignment-params", "params".asJsonPrimitive()
+        )
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {

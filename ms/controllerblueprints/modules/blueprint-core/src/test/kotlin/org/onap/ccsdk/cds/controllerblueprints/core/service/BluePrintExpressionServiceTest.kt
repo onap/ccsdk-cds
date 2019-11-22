@@ -31,6 +31,7 @@ import kotlin.test.assertNotNull
  * @author Brinda Santh
  */
 class BluePrintExpressionServiceTest {
+
     @Test
     fun testInputExpression() {
         val node: JsonNode = jacksonObjectMapper().readTree("{ \"get_input\" : \"input-name\" }")
@@ -58,7 +59,11 @@ class BluePrintExpressionServiceTest {
         assertNotNull(expressionData1.propertyExpression, " Failed to populate nested property expression data")
         assertEquals("SELF", expressionData1.propertyExpression?.modelableEntityName, " Failed to get expected modelableEntityName")
         assertEquals("property-name", expressionData1.propertyExpression?.propertyName, " Failed to get expected propertyName")
-        assertEquals("resource/name", expressionData1.propertyExpression?.subPropertyName, " Failed to populate nested subPropertyName expression data")
+        assertEquals(
+            "resource/name",
+            expressionData1.propertyExpression?.subPropertyName,
+            " Failed to populate nested subPropertyName expression data"
+        )
     }
 
     @Test
@@ -78,13 +83,17 @@ class BluePrintExpressionServiceTest {
         assertNotNull(expressionData1.attributeExpression, " Failed to populate attribute expression data")
         assertEquals("SELF", expressionData1.attributeExpression?.modelableEntityName, " Failed to get expected modelableEntityName")
         assertEquals("attribute-name", expressionData1.attributeExpression?.attributeName, " Failed to get expected attributeName")
-        assertEquals("resource/name", expressionData1.attributeExpression?.subAttributeName, " Failed to populate nested subAttributeName expression data")
+        assertEquals(
+            "resource/name",
+            expressionData1.attributeExpression?.subAttributeName,
+            " Failed to populate nested subAttributeName expression data"
+        )
     }
-
 
     @Test
     fun testOutputOperationExpression() {
-        val node: JsonNode = jacksonObjectMapper().readTree("{ \"get_operation_output\": [\"SELF\", \"interface-name\", \"operation-name\", \"output-property-name\"] }")
+        val node: JsonNode =
+            jacksonObjectMapper().readTree("{ \"get_operation_output\": [\"SELF\", \"interface-name\", \"operation-name\", \"output-property-name\"] }")
         val expressionData: ExpressionData = BluePrintExpressionService.getExpressionData(node)
         assertNotNull(expressionData, " Failed to populate expression data")
         assertEquals(expressionData.isExpression, true, "Failed to identify as expression")
@@ -95,7 +104,6 @@ class BluePrintExpressionServiceTest {
         assertEquals("output-property-name", expressionData.operationOutputExpression?.propertyName, " Failed to get expected propertyName")
     }
 
-
     @Test
     fun testArtifactExpression() {
         val node: JsonNode = jacksonObjectMapper().readTree("{ \"get_artifact\" : [\"SELF\", \"artifact-template\"] }")
@@ -105,7 +113,6 @@ class BluePrintExpressionServiceTest {
         assertNotNull(expressionData.artifactExpression, " Failed to populate Artifact expression data")
         assertEquals("SELF", expressionData.artifactExpression?.modelableEntityName, " Failed to get expected modelableEntityName")
         assertEquals("artifact-template", expressionData.artifactExpression?.artifactName, " Failed to get expected artifactName")
-
 
         val node1: JsonNode = jacksonObjectMapper().readTree("{ \"get_artifact\" : [\"SELF\", \"artifact-template\", \"location\", true] }")
         val expressionData1: ExpressionData = BluePrintExpressionService.getExpressionData(node1)
@@ -125,7 +132,9 @@ class BluePrintExpressionServiceTest {
         assertNotNull(expressionData, " Failed to populate expression data")
         assertEquals(expressionData.isExpression, true, "Failed to identify as expression")
         assertNotNull(expressionData.dslExpression, " Failed to populate dsl expression data")
-        assertEquals("dynamic-rest-source", expressionData.dslExpression!!.propertyName,
-                " Failed to populate dsl property name")
+        assertEquals(
+            "dynamic-rest-source", expressionData.dslExpression!!.propertyName,
+            " Failed to populate dsl property name"
+        )
     }
 }

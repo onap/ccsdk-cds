@@ -37,6 +37,7 @@ open class BluePrintDmaapLibConfiguration
  * Util constants required for DMAAP library to use.
  */
 class DmaapLibConstants {
+
     companion object {
         const val SERVICE_BLUEPRINT_DMAAP_LIB_PROPERTY = "blueprint" +
                 "-dmaap-lib-property-service"

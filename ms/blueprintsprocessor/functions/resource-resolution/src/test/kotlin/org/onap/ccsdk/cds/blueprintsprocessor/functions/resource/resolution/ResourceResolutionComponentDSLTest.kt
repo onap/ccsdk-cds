@@ -26,7 +26,7 @@ class ResourceResolutionComponentDSLTest {
     @Test
     fun testNodeTypeComponentResourceResolution() {
         val nodeType = BluePrintTypes.nodeTypeComponentResourceResolution()
-        //println(nodeType.asJsonString(true))
+        // println(nodeType.asJsonString(true))
         assertNotNull(nodeType, "failed to generate nodeTypeComponentResourceResolution")
     }
 
@@ -42,11 +42,13 @@ class ResourceResolutionComponentDSLTest {
                     resourceType("vnf")
                     storeResult(false)
                     artifactPrefixNames(arrayListOf("template1", "template2"))
-                    dynamicProperties("""{
+                    dynamicProperties(
+                        """{
                         "prop1" : "1234",
                         "prop2" : true,
                         "prop3" : 23
-                    }""".trimIndent())
+                    }""".trimIndent()
+                    )
                 }
                 outputs {
                     resourceAssignmentParams(getAttribute("assignment-params"))
@@ -54,7 +56,7 @@ class ResourceResolutionComponentDSLTest {
                 }
             }
         }
-        //println(nodeTemplate.asJsonString(true))
+        // println(nodeTemplate.asJsonString(true))
         assertNotNull(nodeTemplate, "failed to generate nodeTemplateComponentResourceResolution")
     }
 }

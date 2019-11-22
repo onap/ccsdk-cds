@@ -14,6 +14,7 @@
  *  limitations under the License.
  */
 @file:Suppress("unused")
+
 package internal.scripts
 
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
@@ -29,12 +30,12 @@ open class EditConfigure : AbstractScriptComponentFunction() {
     }
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
-        //val webClientService = restClientService("odlparent")
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        // val webClientService = restClientService("odlparent")
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 }
 
@@ -53,7 +54,6 @@ open class MountNEditConfigure : AbstractScriptComponentFunction() {
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         addError("failed in restconf execution : ${runtimeException.message}")
     }
-
 }
 
 /**

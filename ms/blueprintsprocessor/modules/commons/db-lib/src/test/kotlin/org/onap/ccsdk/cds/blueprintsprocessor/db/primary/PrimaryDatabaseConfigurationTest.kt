@@ -32,8 +32,10 @@ import javax.sql.DataSource
 import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class,
-    BluePrintDBLibConfiguration::class, BluePrintLoadConfiguration::class])
+@ContextConfiguration(
+    classes = [BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class,
+        BluePrintDBLibConfiguration::class, BluePrintLoadConfiguration::class]
+)
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 @ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
 @EnableAutoConfiguration

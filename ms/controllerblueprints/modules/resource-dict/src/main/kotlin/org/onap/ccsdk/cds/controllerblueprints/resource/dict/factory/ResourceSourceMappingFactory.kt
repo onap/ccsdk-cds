@@ -35,7 +35,7 @@ object ResourceSourceMappingFactory {
 
     fun getRegisterSourceMapping(sourceInstance: String): String {
         return resourceSourceMappings[sourceInstance]
-                ?: throw BluePrintException(format("failed to get source({}) mapping", sourceInstance))
+            ?: throw BluePrintException(format("failed to get source({}) mapping", sourceInstance))
     }
 
     fun getRegisterSourceMapping(): ResourceSourceMapping {
@@ -44,4 +44,3 @@ object ResourceSourceMappingFactory {
         return resourceSourceMapping
     }
 }
-

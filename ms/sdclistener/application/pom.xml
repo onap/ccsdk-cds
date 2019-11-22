@@ -53,8 +53,6 @@
             <scope>test</scope>
         </dependency>
 
-
-
         <dependency>
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
             <artifactId>health-api-common</artifactId>

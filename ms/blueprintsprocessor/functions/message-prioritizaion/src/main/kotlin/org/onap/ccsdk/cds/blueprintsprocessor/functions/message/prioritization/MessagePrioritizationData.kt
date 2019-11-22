@@ -61,8 +61,9 @@ open class UpdateStateRequest : Serializable {
     var state: String? = null
 }
 
-data class CorrelationCheckResponse(var message: String? = null,
-                                    var correlated: Boolean = false)
+data class CorrelationCheckResponse(
+    var message: String? = null,
+    var correlated: Boolean = false
+)
 
 data class TypeCorrelationKey(val type: String, val correlationId: String)
-

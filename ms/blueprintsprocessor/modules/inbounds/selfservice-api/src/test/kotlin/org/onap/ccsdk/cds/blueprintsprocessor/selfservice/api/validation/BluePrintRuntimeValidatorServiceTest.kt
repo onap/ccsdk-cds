@@ -26,8 +26,10 @@ import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [BluePrintRuntimeValidatorService::class,
-    BluePrintValidationConfiguration::class, MockResourceSource::class])
+@ContextConfiguration(
+    classes = [BluePrintRuntimeValidatorService::class,
+        BluePrintValidationConfiguration::class, MockResourceSource::class]
+)
 class BluePrintRuntimeValidatorServiceTest {
 
     @Autowired
@@ -39,6 +41,5 @@ class BluePrintRuntimeValidatorServiceTest {
         assertNotNull(bluePrintRuntimeValidatorService, " failed to initilize bluePrintRuntimeValidatorService")
 
         bluePrintRuntimeValidatorService.validateBluePrints(blueprintBasePath)
-
     }
 }

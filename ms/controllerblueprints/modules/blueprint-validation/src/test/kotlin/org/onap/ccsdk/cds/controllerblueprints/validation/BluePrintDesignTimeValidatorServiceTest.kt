@@ -60,7 +60,10 @@ class BluePrintDesignTimeValidatorServiceTest {
         workflowValidator.validate(bluePrintRuntime, workflowName, workflow)
 
         assertEquals(1, bluePrintRuntime.getBluePrintError().errors.size)
-        assertEquals("Failed to validate Workflow(resource-assignment)'s step(test)'s definition : resource-assignment/steps/test : could't get node template for the name(TestCaseFailNoNodeTemplate)", bluePrintRuntime.getBluePrintError().errors[0])
+        assertEquals(
+            "Failed to validate Workflow(resource-assignment)'s step(test)'s definition : resource-assignment/steps/test : could't get node template for the name(TestCaseFailNoNodeTemplate)",
+            bluePrintRuntime.getBluePrintError().errors[0]
+        )
     }
 
     @Test
@@ -90,9 +93,11 @@ class BluePrintDesignTimeValidatorServiceTest {
         workflowValidator.validate(bluePrintRuntime, workflowName, workflow)
 
         assertEquals(1, bluePrintRuntime.getBluePrintError().errors.size)
-        assertEquals("Failed to validate Workflow(resource-assignment)'s step(test)'s definition : " +
-                "resource-assignment/steps/test : NodeType(TestNodeType) derived from is 'tosca.nodes.TEST', " +
-                "Expected 'tosca.nodes.Workflow' or 'tosca.nodes.Component'", bluePrintRuntime.getBluePrintError().errors[0])
+        assertEquals(
+            "Failed to validate Workflow(resource-assignment)'s step(test)'s definition : " +
+                    "resource-assignment/steps/test : NodeType(TestNodeType) derived from is 'tosca.nodes.TEST', " +
+                    "Expected 'tosca.nodes.Workflow' or 'tosca.nodes.Component'", bluePrintRuntime.getBluePrintError().errors[0]
+        )
     }
 
     @Test
@@ -100,6 +105,4 @@ class BluePrintDesignTimeValidatorServiceTest {
         val workflowName = "resource-assignment"
         workflowValidator.validate(bluePrintRuntime, workflowName, bluePrintRuntime.bluePrintContext().workflowByName(workflowName))
     }
-
 }
-

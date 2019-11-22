@@ -66,7 +66,6 @@ open class ResourceDictionaryLoadService(private val resourceDictionaryHandler: 
         if (!errorBuilder.isEmpty) {
             log.error(errorBuilder.toString())
         }
-
     }
 
     private suspend fun loadResourceDictionary(errorBuilder: StrBuilder, file: File) {
@@ -91,9 +90,8 @@ open class ResourceDictionaryLoadService(private val resourceDictionaryHandler: 
                 resourceDictionary.updatedBy = resourceDefinition.updatedBy
 
                 if (StringUtils.isBlank(resourceDefinition.tags)) {
-                    resourceDictionary.tags = (resourceDefinition.name + ", " + resourceDefinition.updatedBy
-                            + ", " + resourceDefinition.updatedBy)
-
+                    resourceDictionary.tags = (resourceDefinition.name + ", " + resourceDefinition.updatedBy +
+                            ", " + resourceDefinition.updatedBy)
                 } else {
                     resourceDictionary.tags = resourceDefinition.tags!!
                 }
@@ -107,5 +105,4 @@ open class ResourceDictionaryLoadService(private val resourceDictionaryHandler: 
             errorBuilder.appendln("Couldn't load Resource dictionary (${file.name}: ${e.message}")
         }
     }
-
 }

@@ -23,10 +23,12 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
-open class BluePrintDatabaseLoadService(private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
-                                        private val modelTypeLoadService: ModelTypeLoadService,
-                                        private val resourceDictionaryLoadService: ResourceDictionaryLoadService,
-                                        private val bluePrintCatalogLoadService: BluePrintCatalogLoadService) {
+open class BluePrintDatabaseLoadService(
+    private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
+    private val modelTypeLoadService: ModelTypeLoadService,
+    private val resourceDictionaryLoadService: ResourceDictionaryLoadService,
+    private val bluePrintCatalogLoadService: BluePrintCatalogLoadService
+) {
 
     private val log = LoggerFactory.getLogger(BluePrintDatabaseLoadService::class.java)
 

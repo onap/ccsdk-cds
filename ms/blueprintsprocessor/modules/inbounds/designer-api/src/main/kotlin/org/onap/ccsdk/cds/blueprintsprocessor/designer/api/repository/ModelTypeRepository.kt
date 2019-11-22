@@ -23,6 +23,7 @@ import javax.transaction.Transactional
 
 @Repository
 interface ModelTypeRepository : JpaRepository<ModelType, String> {
+
     /**
      * This is a findByModelName method
      *
@@ -30,6 +31,7 @@ interface ModelTypeRepository : JpaRepository<ModelType, String> {
      * @return Optional<ModelType>
      */
     fun findByModelName(modelName: String): ModelType?
+
     /**
      * This is a findByModelNameIn method
      *
@@ -37,19 +39,21 @@ interface ModelTypeRepository : JpaRepository<ModelType, String> {
      * @return List<ModelType>
      */
     fun findByModelNameIn(modelNames: List<String>): List<ModelType>
+
     /**
      * This is a findByDerivedFrom method
      *
      * @param derivedFrom Derived From
      * @return List<ModelType>
-    */
+     */
     fun findByDerivedFrom(derivedFrom: String): List<ModelType>
+
     /**
      * This is a findByDerivedFromIn method
      *
      * @param derivedFroms Derived Froms
      * @return List<ModelType>
-    */
+     */
     fun findByDerivedFromIn(derivedFroms: List<String>): List<ModelType>
 
     /**
@@ -59,12 +63,13 @@ interface ModelTypeRepository : JpaRepository<ModelType, String> {
      * @return List<ModelType>
      */
     fun findByDefinitionType(definitionType: String): List<ModelType>
+
     /**
      * This is a findByDefinitionTypeIn method
      *
      * @param definitionTypes Definition Types
      * @return List<ModelType>
-    */
+     */
     fun findByDefinitionTypeIn(definitionTypes: List<String>): List<ModelType>
 
     /**
