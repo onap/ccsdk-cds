@@ -22,8 +22,19 @@ import org.hibernate.annotations.Proxy
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.io.Serializable
-import java.util.*
-import javax.persistence.*
+import java.util.Date
+import javax.persistence.CascadeType
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.EntityListeners
+import javax.persistence.FetchType
+import javax.persistence.Id
+import javax.persistence.Lob
+import javax.persistence.OneToOne
+import javax.persistence.Table
+import javax.persistence.Temporal
+import javax.persistence.TemporalType
+import javax.persistence.UniqueConstraint
 
 /**
  *  Provide BlueprintModel Entity
@@ -37,6 +48,7 @@ import javax.persistence.*
 @Table(name = "BLUEPRINT_MODEL", uniqueConstraints = [UniqueConstraint(columnNames = ["artifact_name", "artifact_version"])])
 @Proxy(lazy = false)
 class BlueprintModel : Serializable {
+
     @Id
     @Column(name = "blueprint_model_id")
     var id: String? = null

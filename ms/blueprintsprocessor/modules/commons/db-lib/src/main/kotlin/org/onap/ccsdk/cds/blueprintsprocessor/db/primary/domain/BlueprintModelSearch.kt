@@ -21,8 +21,14 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.annotation.JsonTypeName
 import org.springframework.data.annotation.LastModifiedDate
 import java.io.Serializable
-import java.util.*
-import javax.persistence.*
+import java.util.Date
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.Id
+import javax.persistence.Lob
+import javax.persistence.Table
+import javax.persistence.Temporal
+import javax.persistence.TemporalType
 
 /**
  * Provide Blueprint Model Search Entity

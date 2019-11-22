@@ -20,7 +20,6 @@ import org.apache.kafka.common.header.Headers
 import org.apache.kafka.common.header.internals.RecordHeader
 import java.nio.charset.Charset
 
-
 fun <T : Headers> T?.toMap(): MutableMap<String, String> {
     val map: MutableMap<String, String> = hashMapOf()
     this?.forEach { map[it.key()] = String(it.value(), Charset.defaultCharset()) }

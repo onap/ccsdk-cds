@@ -32,7 +32,7 @@ open class BluePrintGrpcLibConfiguration
  * Exposed Dependency Service by this GRPC Lib Module
  */
 fun BluePrintDependencyService.grpcLibPropertyService(): BluePrintGrpcLibPropertyService =
-        instance(GRPCLibConstants.SERVICE_BLUEPRINT_GRPC_LIB_PROPERTY)
+    instance(GRPCLibConstants.SERVICE_BLUEPRINT_GRPC_LIB_PROPERTY)
 
 fun BluePrintDependencyService.grpcClientService(selector: String): BluePrintGrpcClientService {
     return grpcLibPropertyService().blueprintGrpcClientService(selector)

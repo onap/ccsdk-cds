@@ -30,5 +30,4 @@ class FileExtensionFunctionTest {
         blueprintFile.compress(targetZip)
         assertTrue(blueprintFile.exists(), "failed to create compressed file(${targetZip.absolutePath} ")
     }
-
 }

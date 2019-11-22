@@ -36,8 +36,10 @@ import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.transaction.annotation.Transactional
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [DesignerApiTestConfiguration::class,
-    BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, BluePrintDBLibConfiguration::class])
+@ContextConfiguration(
+    classes = [DesignerApiTestConfiguration::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, BluePrintDBLibConfiguration::class]
+)
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class ResourceDictionaryReactRepositoryTest {
@@ -51,8 +53,10 @@ class ResourceDictionaryReactRepositoryTest {
     @Commit
     fun test01Save() {
         val resourceDefinition = JacksonUtils
-                .readValueFromFile("./../../../../../components/model-catalog/resource-dictionary/starter-dictionary/sample-db-source.json",
-                        ResourceDefinition::class.java)
+            .readValueFromFile(
+                "./../../../../../components/model-catalog/resource-dictionary/starter-dictionary/sample-db-source.json",
+                ResourceDefinition::class.java
+            )
         Assert.assertNotNull("Failed to get resourceDefinition from content", resourceDefinition)
         resourceDefinition!!.name = sourceName
 

@@ -36,17 +36,21 @@ import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.BodyInserters
 import java.io.File
-import java.util.*
+import java.util.UUID
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
 @WebFluxTest
-@ContextConfiguration(classes = [ExecutionServiceHandler::class, BluePrintCoreConfiguration::class,
-    BluePrintCatalogService::class, SecurityProperties::class])
-@ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor",
-    "org.onap.ccsdk.cds.controllerblueprints"])
+@ContextConfiguration(
+    classes = [ExecutionServiceHandler::class, BluePrintCoreConfiguration::class,
+        BluePrintCatalogService::class, SecurityProperties::class]
+)
+@ComponentScan(
+    basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor",
+        "org.onap.ccsdk.cds.controllerblueprints"]
+)
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class ExecutionServiceControllerTest {
 
@@ -71,15 +75,17 @@ class ExecutionServiceControllerTest {
             blueprintsProcessorCatalogService.saveToDatabase(UUID.randomUUID().toString(), loadTestCbaFile())
 
             val executionServiceInput = JacksonUtils
-                    .readValueFromClassPathFile("execution-input/default-input.json",
-                            ExecutionServiceInput::class.java)!!
+                .readValueFromClassPathFile(
+                    "execution-input/default-input.json",
+                    ExecutionServiceInput::class.java
+                )!!
 
             webTestClient
-                    .post()
-                    .uri("/api/v1/execution-service/process")
-                    .body(BodyInserters.fromObject(executionServiceInput))
-                    .exchange()
-                    .expectStatus().isOk
+                .post()
+                .uri("/api/v1/execution-service/process")
+                .body(BodyInserters.fromObject(executionServiceInput))
+                .exchange()
+                .expectStatus().isOk
         }
     }
 
@@ -89,15 +95,17 @@ class ExecutionServiceControllerTest {
             blueprintsProcessorCatalogService.saveToDatabase(UUID.randomUUID().toString(), loadTestCbaFile())
 
             val executionServiceInput = JacksonUtils
-                    .readValueFromClassPathFile("execution-input/faulty-input.json",
-                            ExecutionServiceInput::class.java)!!
+                .readValueFromClassPathFile(
+                    "execution-input/faulty-input.json",
+                    ExecutionServiceInput::class.java
+                )!!
 
             webTestClient
-                    .post()
-                    .uri("/api/v1/execution-service/process")
-                    .body(BodyInserters.fromObject(executionServiceInput))
-                    .exchange()
-                    .expectStatus().is5xxServerError
+                .post()
+                .uri("/api/v1/execution-service/process")
+                .body(BodyInserters.fromObject(executionServiceInput))
+                .exchange()
+                .expectStatus().is5xxServerError
         }
     }
 

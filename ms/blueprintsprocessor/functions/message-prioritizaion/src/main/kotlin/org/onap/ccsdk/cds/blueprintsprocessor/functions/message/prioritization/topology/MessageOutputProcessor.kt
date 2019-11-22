@@ -22,7 +22,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.M
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.MessageState
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 
-
 open class MessageOutputProcessor : AbstractMessagePrioritizeProcessor<String, String>() {
 
     private val log = logger(MessageOutputProcessor::class)

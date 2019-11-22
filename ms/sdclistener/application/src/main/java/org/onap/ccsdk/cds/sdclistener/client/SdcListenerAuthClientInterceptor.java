@@ -13,10 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.onap.ccsdk.cds.sdclistener.client;
 
-import io.grpc.*;
+import io.grpc.CallOptions;
+import io.grpc.Channel;
+import io.grpc.ClientCall;
+import io.grpc.ClientInterceptor;
+import io.grpc.ForwardingClientCall;
+import io.grpc.Metadata;
 import io.grpc.Metadata.Key;
+import io.grpc.MethodDescriptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -36,7 +43,7 @@ public class SdcListenerAuthClientInterceptor implements ClientInterceptor {
                                                                CallOptions callOptions, Channel channel) {
         Key<String> authHeader = Key.of("Authorization", Metadata.ASCII_STRING_MARSHALLER);
         return new ForwardingClientCall.SimpleForwardingClientCall<ReqT, RespT>(
-            channel.newCall(methodDescriptor, callOptions)) {
+                channel.newCall(methodDescriptor, callOptions)) {
             @Override
             public void start(Listener<RespT> responseListener, Metadata headers) {
                 headers.put(authHeader, basicAuth);
@@ -44,4 +51,5 @@ public class SdcListenerAuthClientInterceptor implements ClientInterceptor {
             }
         };
     }
+
 }

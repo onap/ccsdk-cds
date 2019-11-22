@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.onap.ccsdk.cds.sdclistener.handler;
 
 import io.grpc.ManagedChannel;
@@ -37,8 +38,9 @@ public class BluePrintProcesssorHandler implements AutoCloseable {
     /**
      * Sending CBA archive to CDS backend to store into its Database.
      *
-     * @param request BluePrintManagementInput object holds CBA archive, its version and blueprints.
+     * @param request        BluePrintManagementInput object holds CBA archive, its version and blueprints.
      * @param managedChannel - ManagedChannel object helps to access the server or application end point.
+     *
      * @return A response object
      */
     public Status sendRequest(BluePrintUploadInput request, ManagedChannel managedChannel) {
@@ -61,4 +63,5 @@ public class BluePrintProcesssorHandler implements AutoCloseable {
         }
         LOGGER.info("Stopping GRPC connection to CDS backend");
     }
+
 }

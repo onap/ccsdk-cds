@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
-
 /**
  * Abstraction of DMAAP client services that could form DMAAP client from the
  * properties provided. This abstraction also provides a mechanism to send
@@ -38,14 +37,16 @@ interface BluePrintDmaapClientService {
      * Static variable for logging.
      */
     companion object {
+
         var log = LoggerFactory.getLogger(
-            BluePrintDmaapClientService::class.java)!!
+            BluePrintDmaapClientService::class.java
+        )!!
     }
 
     /**
      * Returns the properly constructed DMAAP client with the type.
      */
-    fun  getDmaapClient(): MutableList<MRBatchingPublisher>
+    fun getDmaapClient(): MutableList<MRBatchingPublisher>
 
     /**
      * Sends messages to the sessions created by the information provided from
@@ -93,8 +94,10 @@ interface BluePrintDmaapClientService {
                 var ms = client.close(timeout, TimeUnit.SECONDS)
                 msgs.add(ms)
             } catch (e: IOException) {
-                log.warn("Unable to cleanly close the connection from the " +
-                        "client $client", e)
+                log.warn(
+                    "Unable to cleanly close the connection from the " +
+                            "client $client", e
+                )
             }
         }
         return msgs

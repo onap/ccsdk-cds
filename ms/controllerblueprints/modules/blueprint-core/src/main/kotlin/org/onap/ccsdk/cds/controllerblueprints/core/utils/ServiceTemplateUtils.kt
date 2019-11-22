@@ -76,31 +76,31 @@ object ServiceTemplateUtils {
 
         toMerge.topologyTemplate?.inputs?.let {
             parentServiceTemplate.topologyTemplate?.inputs = parentServiceTemplate.topologyTemplate?.inputs
-                    ?: hashMapOf()
+                ?: hashMapOf()
             parentServiceTemplate.topologyTemplate?.inputs?.putAll(parentServiceTemplate.topologyTemplate?.inputs as MutableMap)
         }
 
         toMerge.topologyTemplate?.nodeTemplates?.let {
             parentServiceTemplate.topologyTemplate?.nodeTemplates = parentServiceTemplate.topologyTemplate?.nodeTemplates
-                    ?: hashMapOf()
+                ?: hashMapOf()
             parentServiceTemplate.topologyTemplate?.nodeTemplates?.putAll(parentServiceTemplate.topologyTemplate?.nodeTemplates as MutableMap)
         }
 
         toMerge.topologyTemplate?.relationshipTemplates?.let {
             parentServiceTemplate.topologyTemplate?.relationshipTemplates = parentServiceTemplate.topologyTemplate?.relationshipTemplates
-                    ?: hashMapOf()
+                ?: hashMapOf()
             parentServiceTemplate.topologyTemplate?.relationshipTemplates?.putAll(parentServiceTemplate.topologyTemplate?.relationshipTemplates as MutableMap)
         }
 
         toMerge.topologyTemplate?.policies?.let {
             parentServiceTemplate.topologyTemplate?.policies = parentServiceTemplate.topologyTemplate?.policies
-                    ?: hashMapOf()
+                ?: hashMapOf()
             parentServiceTemplate.topologyTemplate?.policies?.putAll(parentServiceTemplate.topologyTemplate?.policies as MutableMap)
         }
 
         toMerge.topologyTemplate?.workflows?.let {
             parentServiceTemplate.topologyTemplate?.workflows = parentServiceTemplate.topologyTemplate?.workflows
-                    ?: hashMapOf()
+                ?: hashMapOf()
             parentServiceTemplate.topologyTemplate?.workflows?.putAll(parentServiceTemplate.topologyTemplate?.workflows as MutableMap)
         }
         return parentServiceTemplate

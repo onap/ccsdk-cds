@@ -16,15 +16,27 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.channels.consumeEach
-import org.onap.ccsdk.cds.controllerblueprints.core.*
+import kotlinx.coroutines.launch
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.data.EdgeLabel
 import org.onap.ccsdk.cds.controllerblueprints.core.data.EdgeStatus
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Graph
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeStatus
+import org.onap.ccsdk.cds.controllerblueprints.core.incomingEdges
+import org.onap.ccsdk.cds.controllerblueprints.core.isEndNode
+import org.onap.ccsdk.cds.controllerblueprints.core.logger
+import org.onap.ccsdk.cds.controllerblueprints.core.outgoingEdges
+import org.onap.ccsdk.cds.controllerblueprints.core.outgoingEdgesNotInLabels
+import org.onap.ccsdk.cds.controllerblueprints.core.startNodes
 import kotlin.coroutines.CoroutineContext
 
 interface BluePrintWorkFlowService<In, Out> {
@@ -49,7 +61,6 @@ interface BluePrintWorkFlowService<In, Out> {
     suspend fun cancelNode(node: Graph.Node, nodeInput: In, nodeOutput: Out): EdgeLabel
 
     suspend fun restartNode(node: Graph.Node, nodeInput: In, nodeOutput: Out): EdgeLabel
-
 }
 
 /** Workflow Message Types */
@@ -155,7 +166,6 @@ abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BlueP
         }
     }
 
-
     private suspend fun nodeActor() = actor<NodeMessage<In, Out>>(coroutineContext, Channel.UNLIMITED) {
 
         /** Send message to process from one state to other state */
@@ -225,8 +235,9 @@ abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BlueP
         suspend fun executeNodeWorker(message: NodeExecuteMessage<In, Out>) {
             val node = message.node
             node.status = NodeStatus.EXECUTING
-            val nodeState = if (node.id == BluePrintConstants.GRAPH_START_NODE_NAME
-                    || node.id == BluePrintConstants.GRAPH_END_NODE_NAME) {
+            val nodeState = if (node.id == BluePrintConstants.GRAPH_START_NODE_NAME ||
+                node.id == BluePrintConstants.GRAPH_END_NODE_NAME
+            ) {
                 EdgeLabel.SUCCESS
             } else {
                 log.debug("##### Processing workflow($workflowId) node($node) #####")

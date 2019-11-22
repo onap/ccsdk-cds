@@ -54,11 +54,13 @@ class TemplateResolutionServiceTest {
         runBlocking {
             every {
                 templateResolutionRepository.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
-                    any(), any(), any(), any(), any())
+                    any(), any(), any(), any(), any()
+                )
             } returns tr
             val res =
                 templateResolutionService.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
-                    bluePrintRuntimeService, artifactPrefix, resolutionKey)
+                    bluePrintRuntimeService, artifactPrefix, resolutionKey
+                )
             assertEquals(tr.result, res)
         }
     }
@@ -69,10 +71,12 @@ class TemplateResolutionServiceTest {
         runBlocking {
             every {
                 templateResolutionRepository.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
-                    any(), any(), any(), any(), any())
+                    any(), any(), any(), any(), any()
+                )
             } returns tr
             templateResolutionService.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
-                bluePrintRuntimeService, artifactPrefix, resolutionKey)
+                bluePrintRuntimeService, artifactPrefix, resolutionKey
+            )
         }
     }
 
@@ -83,7 +87,8 @@ class TemplateResolutionServiceTest {
             every { templateResolutionRepository.saveAndFlush(any<TemplateResolution>()) } returns tr
             every {
                 templateResolutionRepository.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
-                    any(), any(), any(), any(), any())
+                    any(), any(), any(), any(), any()
+                )
             } returns null
             val res = templateResolutionService.write(props, result, bluePrintRuntimeService, artifactPrefix)
             assertEquals(tr, res)
@@ -97,16 +102,19 @@ class TemplateResolutionServiceTest {
             every { templateResolutionRepository.saveAndFlush(any<TemplateResolution>()) } returns tr
             every {
                 templateResolutionRepository.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
-                    any(), any(), any(), any(), any())
+                    any(), any(), any(), any(), any()
+                )
             } returns tr
             every {
                 templateResolutionRepository.deleteByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
-                    any(), any(), any(), any(), any())
+                    any(), any(), any(), any(), any()
+                )
             } returns Unit
             val res = templateResolutionService.write(props, result, bluePrintRuntimeService, artifactPrefix)
             verify {
                 templateResolutionRepository.deleteByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
-                    eq(resolutionKey), eq(blueprintName), eq(blueprintVersion), eq(artifactPrefix), eq(occurrence))
+                    eq(resolutionKey), eq(blueprintName), eq(blueprintVersion), eq(artifactPrefix), eq(occurrence)
+                )
             }
             assertEquals(tr, res)
         }
@@ -120,16 +128,19 @@ class TemplateResolutionServiceTest {
             every { templateResolutionRepository.saveAndFlush(any<TemplateResolution>()) } returns tr
             every {
                 templateResolutionRepository.findByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
-                    any(), any(), any(), any(), any(), any())
+                    any(), any(), any(), any(), any(), any()
+                )
             } returns tr
             every {
                 templateResolutionRepository.deleteByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
-                    any(), any(), any(), any(), any(), any())
+                    any(), any(), any(), any(), any(), any()
+                )
             } returns Unit
             val res = templateResolutionService.write(props, result, bluePrintRuntimeService, artifactPrefix)
             verify {
                 templateResolutionRepository.deleteByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
-                    eq(resourceId), eq(resourceType), eq(blueprintName), eq(blueprintVersion), eq(artifactPrefix), eq(occurrence))
+                    eq(resourceId), eq(resourceType), eq(blueprintName), eq(blueprintVersion), eq(artifactPrefix), eq(occurrence)
+                )
             }
             assertEquals(tr, res)
         }

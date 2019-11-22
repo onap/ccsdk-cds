@@ -34,8 +34,10 @@ import kotlin.test.Test
 import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [BluePrintMessageLibConfiguration::class,
-    BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class])
+@ContextConfiguration(
+    classes = [BluePrintMessageLibConfiguration::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class]
+)
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class BluePrintProcessingKafkaConsumerTest {
 
@@ -45,15 +47,19 @@ class BluePrintProcessingKafkaConsumerTest {
     @Test
     fun testExecutionInputMessageConsumer() {
         runBlocking {
-            assertNotNull(bluePrintMessageLibPropertyService,
-                    "failed to initialise bluePrintMessageLibPropertyService")
+            assertNotNull(
+                bluePrintMessageLibPropertyService,
+                "failed to initialise bluePrintMessageLibPropertyService"
+            )
 
             val executionServiceHandle = mockk<ExecutionServiceHandler>()
 
             coEvery { executionServiceHandle.doProcess(any()) } returns mockk()
 
-            val bluePrintProcessingKafkaConsumer = BluePrintProcessingKafkaConsumer(bluePrintMessageLibPropertyService,
-                    executionServiceHandle)
+            val bluePrintProcessingKafkaConsumer = BluePrintProcessingKafkaConsumer(
+                bluePrintMessageLibPropertyService,
+                executionServiceHandle
+            )
 
             launch {
                 bluePrintProcessingKafkaConsumer.setupMessageListener()
@@ -62,5 +68,4 @@ class BluePrintProcessingKafkaConsumerTest {
             bluePrintProcessingKafkaConsumer.shutdownMessageListener()
         }
     }
-
 }

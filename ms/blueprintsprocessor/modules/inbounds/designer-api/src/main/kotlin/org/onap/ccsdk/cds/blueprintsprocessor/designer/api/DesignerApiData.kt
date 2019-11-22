@@ -24,8 +24,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictionary
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import java.io.Serializable
-import java.util.*
-
+import java.util.Date
 
 class BootstrapRequest {
     var loadModelType: Boolean = false
@@ -40,15 +39,16 @@ class BootstrapRequest {
  * @version 1.0
  */
 class AutoMapResponse {
+
     var resourceAssignments: List<ResourceAssignment>? = null
     var dataDictionaries: List<ResourceDictionary>? = null
 }
-
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonTypeName("errorMessage")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 class ErrorMessage(var message: String?, var code: Int?, var debugMessage: String?) : Serializable {
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     var timestamp = Date()
 }

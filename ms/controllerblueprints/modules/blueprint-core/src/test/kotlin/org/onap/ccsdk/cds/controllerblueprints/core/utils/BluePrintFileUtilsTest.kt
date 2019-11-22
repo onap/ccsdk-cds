@@ -23,14 +23,12 @@ import java.io.File
 import java.nio.file.Paths
 import kotlin.test.assertTrue
 
-
 class BluePrintFileUtilsTest {
 
     @Test
     fun testNewBlueprint() = runBlocking {
         val targetPath: String = Paths.get("target").toUri().toURL().path.plus("/bp-new-test")
         BluePrintFileUtils.createEmptyBluePrint(targetPath)
-
     }
 
     @Test
@@ -54,7 +52,5 @@ class BluePrintFileUtilsTest {
         bluePrintContext.rootPath = targetDir.absolutePath
 
         BluePrintFileUtils.writeBluePrintTypes(bluePrintContext)
-
-
     }
 }

@@ -33,10 +33,12 @@ import kotlin.test.BeforeTest
 @RunWith(SpringRunner::class)
 // Also set blueprintsprocessor.httpPort=0
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(initializers = [
-    WorkingFoldersInitializer::class,
-    TestSecuritySettings.ServerContextInitializer::class
-])
+@ContextConfiguration(
+    initializers = [
+        WorkingFoldersInitializer::class,
+        TestSecuritySettings.ServerContextInitializer::class
+    ]
+)
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 abstract class BaseUatTest {
 

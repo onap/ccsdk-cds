@@ -17,7 +17,6 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.validation
 
-import org.slf4j.LoggerFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
@@ -25,22 +24,22 @@ import org.onap.ccsdk.cds.controllerblueprints.core.format
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintPropertyDefinitionValidator
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
 
 @Service("default-property-definition-validator")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-open class BluePrintPropertyDefinitionValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintPropertyDefinitionValidator {
+open class BluePrintPropertyDefinitionValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) :
+    BluePrintPropertyDefinitionValidator {
 
-    private val log= LoggerFactory.getLogger(BluePrintServiceTemplateValidatorImpl::class.toString())
+    private val log = LoggerFactory.getLogger(BluePrintServiceTemplateValidatorImpl::class.toString())
 
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
 
-
     override fun validate(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, propertyDefinition: PropertyDefinition) {
         this.bluePrintRuntimeService = bluePrintRuntimeService
-
 
         log.trace("Validating PropertyDefinition($name)")
 
@@ -55,13 +54,12 @@ open class BluePrintPropertyDefinitionValidatorImpl(private val bluePrintTypeVal
             }
             BluePrintTypes.validCollectionTypes().contains(dataType) -> {
                 val entrySchemaType: String = propertyDefinition.entrySchema?.type
-                        ?: throw BluePrintException(format("Entry schema for DataType ({}) for the property ({}) not found", dataType, name))
+                    ?: throw BluePrintException(format("Entry schema for DataType ({}) for the property ({}) not found", dataType, name))
                 checkPrimitiveOrComplex(entrySchemaType, name)
             }
             else -> checkPropertyDataType(dataType, name)
         }
     }
-
 
     private fun checkPrimitiveOrComplex(dataType: String, propertyName: String): Boolean {
         if (BluePrintTypes.validPrimitiveTypes().contains(dataType) || checkDataType(dataType)) {
@@ -74,7 +72,7 @@ open class BluePrintPropertyDefinitionValidatorImpl(private val bluePrintTypeVal
     private fun checkPropertyDataType(dataTypeName: String, propertyName: String) {
 
         val dataType = bluePrintRuntimeService.bluePrintContext().serviceTemplate.dataTypes?.get(dataTypeName)
-                ?: throw BluePrintException(format("DataType ({}) for the property ({}) not found", dataTypeName, propertyName))
+            ?: throw BluePrintException(format("DataType ({}) for the property ({}) not found", dataTypeName, propertyName))
 
         checkValidDataTypeDerivedFrom(propertyName, dataType.derivedFrom)
     }

@@ -25,40 +25,62 @@ import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptC
 @Deprecated("Methods defined as extension function of AbstractComponentFunction")
 abstract class NetconfComponentFunction : AbstractScriptComponentFunction() {
 
-    @Deprecated(" Use resourceResolutionService method directly",
-            replaceWith = ReplaceWith("resourceResolutionService()",
-                    "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.resourceResolutionService"))
+    @Deprecated(
+        " Use resourceResolutionService method directly",
+        replaceWith = ReplaceWith(
+            "resourceResolutionService()",
+            "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.resourceResolutionService"
+        )
+    )
     open fun resourceResolutionService(): ResourceResolutionService =
-            functionDependencyInstanceAsType(ResourceResolutionConstants.SERVICE_RESOURCE_RESOLUTION)
+        functionDependencyInstanceAsType(ResourceResolutionConstants.SERVICE_RESOURCE_RESOLUTION)
 
     // Called from python script
-    @Deprecated(" Use netconfDeviceInfo method directly",
-            replaceWith = ReplaceWith("netconfDeviceInfo(requirementName)",
-                    "org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.netconfDeviceInfo"))
+    @Deprecated(
+        " Use netconfDeviceInfo method directly",
+        replaceWith = ReplaceWith(
+            "netconfDeviceInfo(requirementName)",
+            "org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.netconfDeviceInfo"
+        )
+    )
     fun initializeNetconfConnection(requirementName: String): NetconfDevice {
         val deviceInfo = netconfDeviceInfo(requirementName)
         return NetconfDevice(deviceInfo)
     }
 
-    @Deprecated(" Use artifactContent method directly",
-            replaceWith = ReplaceWith("artifactContent(artifactName)",
-                    "org.onap.ccsdk.cds.blueprintsprocessor.services.execution.artifactContent"))
+    @Deprecated(
+        " Use artifactContent method directly",
+        replaceWith = ReplaceWith(
+            "artifactContent(artifactName)",
+            "org.onap.ccsdk.cds.blueprintsprocessor.services.execution.artifactContent"
+        )
+    )
     fun generateMessage(artifactName: String): String {
         return bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactName)
     }
 
-    @Deprecated(" Use storedContentFromResolvedArtifact method directly",
-            replaceWith = ReplaceWith("storedContentFromResolvedArtifact(resolutionKey, artifactName)",
-                    "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.storedContentFromResolvedArtifact"))
+    @Deprecated(
+        " Use storedContentFromResolvedArtifact method directly",
+        replaceWith = ReplaceWith(
+            "storedContentFromResolvedArtifact(resolutionKey, artifactName)",
+            "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.storedContentFromResolvedArtifact"
+        )
+    )
     fun resolveFromDatabase(resolutionKey: String, artifactName: String): String = runBlocking {
         resourceResolutionService().resolveFromDatabase(bluePrintRuntimeService, artifactName, resolutionKey)
     }
 
-    @Deprecated(" Use contentFromResolvedArtifact method directly",
-            replaceWith = ReplaceWith("resolveAndGenerateMessage(artifactPrefix)",
-                    "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.resolveAndGenerateMessage"))
+    @Deprecated(
+        " Use contentFromResolvedArtifact method directly",
+        replaceWith = ReplaceWith(
+            "resolveAndGenerateMessage(artifactPrefix)",
+            "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.resolveAndGenerateMessage"
+        )
+    )
     fun resolveAndGenerateMessage(artifactPrefix: String): String = runBlocking {
-        resourceResolutionService().resolveResources(bluePrintRuntimeService, nodeTemplateName,
-                artifactPrefix, mapOf())
+        resourceResolutionService().resolveResources(
+            bluePrintRuntimeService, nodeTemplateName,
+            artifactPrefix, mapOf()
+        )
     }
 }

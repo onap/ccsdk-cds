@@ -28,21 +28,29 @@ import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Service
 
 @Service
-class ComponentFunctionScriptingService(private val applicationContext: ApplicationContext,
-                                        private val blueprintJythonService: BlueprintJythonService) {
+class ComponentFunctionScriptingService(
+    private val applicationContext: ApplicationContext,
+    private val blueprintJythonService: BlueprintJythonService
+) {
 
     private val log = LoggerFactory.getLogger(ComponentFunctionScriptingService::class.java)
 
-    suspend fun <T : AbstractScriptComponentFunction> scriptInstance(componentFunction: AbstractComponentFunction,
-                                                                     scriptType: String,
-                                                                     scriptClassReference: String,
-                                                                     instanceDependencies: List<String>): T {
+    suspend fun <T : AbstractScriptComponentFunction> scriptInstance(
+        componentFunction: AbstractComponentFunction,
+        scriptType: String,
+        scriptClassReference: String,
+        instanceDependencies: List<String>
+    ): T {
 
-        log.info("creating component function of script type($scriptType), reference name($scriptClassReference) and " +
-                "instanceDependencies($instanceDependencies)")
+        log.info(
+            "creating component function of script type($scriptType), reference name($scriptClassReference) and " +
+                    "instanceDependencies($instanceDependencies)"
+        )
 
-        val scriptComponent: T = scriptInstance(componentFunction.bluePrintRuntimeService.bluePrintContext(),
-                scriptType, scriptClassReference)
+        val scriptComponent: T = scriptInstance(
+            componentFunction.bluePrintRuntimeService.bluePrintContext(),
+            scriptType, scriptClassReference
+        )
 
         checkNotNull(scriptComponent) { "failed to initialize script component" }
 
@@ -60,14 +68,16 @@ class ComponentFunctionScriptingService(private val applicationContext: Applicat
         // Populate Instance Properties
         instanceDependencies.forEach { instanceDependency ->
             scriptComponent.functionDependencyInstances[instanceDependency] = applicationContext
-                    .getBean(instanceDependency)
+                .getBean(instanceDependency)
         }
         return scriptComponent
     }
 
-
-    suspend fun <T : BlueprintFunctionNode<*, *>> scriptInstance(bluePrintContext: BluePrintContext, scriptType: String,
-                                                                 scriptClassReference: String): T {
+    suspend fun <T : BlueprintFunctionNode<*, *>> scriptInstance(
+        bluePrintContext: BluePrintContext,
+        scriptType: String,
+        scriptClassReference: String
+    ): T {
         var scriptComponent: T? = null
 
         when (scriptType) {
@@ -77,8 +87,10 @@ class ComponentFunctionScriptingService(private val applicationContext: Applicat
             }
             BluePrintConstants.SCRIPT_KOTLIN -> {
                 val bluePrintScriptsService: BluePrintScriptsService = BluePrintScriptsServiceImpl()
-                scriptComponent = bluePrintScriptsService.scriptInstance<T>(bluePrintContext.rootPath,
-                        bluePrintContext.name(), bluePrintContext.version(), scriptClassReference, false)
+                scriptComponent = bluePrintScriptsService.scriptInstance<T>(
+                    bluePrintContext.rootPath,
+                    bluePrintContext.name(), bluePrintContext.version(), scriptClassReference, false
+                )
             }
             BluePrintConstants.SCRIPT_JYTHON -> {
                 scriptComponent = blueprintJythonService.jythonComponentInstance(bluePrintContext, scriptClassReference) as T
@@ -89,5 +101,4 @@ class ComponentFunctionScriptingService(private val applicationContext: Applicat
         }
         return scriptComponent
     }
-
 }

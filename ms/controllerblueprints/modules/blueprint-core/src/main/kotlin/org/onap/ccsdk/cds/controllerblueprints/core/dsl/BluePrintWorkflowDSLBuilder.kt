@@ -72,11 +72,13 @@ class WorkflowBuilder(private val id: String, private val description: String) {
         workflow.outputs = outputs
         return workflow
     }
-
 }
 
-class StepBuilder(private val id: String, private val target: String,
-                  private val description: String) {
+class StepBuilder(
+    private val id: String,
+    private val target: String,
+    private val description: String
+) {
 
     private var step = Step()
     private var activities: ArrayList<Activity> = arrayListOf()

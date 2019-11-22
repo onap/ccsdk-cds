@@ -26,17 +26,17 @@ import org.onap.ccsdk.cds.blueprintsprocessor.grpc.TLSAuthGrpcClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.interceptor.GrpcClientLoggingInterceptor
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 
-class TLSAuthGrpcClientService(private val tlsAuthGrpcClientProperties: TLSAuthGrpcClientProperties)
-    : BluePrintGrpcClientService {
+class TLSAuthGrpcClientService(private val tlsAuthGrpcClientProperties: TLSAuthGrpcClientProperties) :
+    BluePrintGrpcClientService {
 
     override suspend fun channel(): ManagedChannel {
         return NettyChannelBuilder
-                .forAddress(tlsAuthGrpcClientProperties.host, tlsAuthGrpcClientProperties.port)
-                .nameResolverFactory(DnsNameResolverProvider())
-                .loadBalancerFactory(PickFirstLoadBalancerProvider())
-                .intercept(GrpcClientLoggingInterceptor())
-                .sslContext(sslContext())
-                .build()
+            .forAddress(tlsAuthGrpcClientProperties.host, tlsAuthGrpcClientProperties.port)
+            .nameResolverFactory(DnsNameResolverProvider())
+            .loadBalancerFactory(PickFirstLoadBalancerProvider())
+            .intercept(GrpcClientLoggingInterceptor())
+            .sslContext(sslContext())
+            .build()
     }
 
     fun sslContext(): SslContext {
@@ -44,10 +44,13 @@ class TLSAuthGrpcClientService(private val tlsAuthGrpcClientProperties: TLSAuthG
         if (tlsAuthGrpcClientProperties.trustCertCollection != null) {
             builder.trustManager(normalizedFile(tlsAuthGrpcClientProperties.trustCertCollection!!))
         }
-        if (tlsAuthGrpcClientProperties.clientCertChain != null
-                && tlsAuthGrpcClientProperties.clientPrivateKey != null) {
-            builder.keyManager(normalizedFile(tlsAuthGrpcClientProperties.clientCertChain!!),
-                    normalizedFile(tlsAuthGrpcClientProperties.clientPrivateKey!!))
+        if (tlsAuthGrpcClientProperties.clientCertChain != null &&
+            tlsAuthGrpcClientProperties.clientPrivateKey != null
+        ) {
+            builder.keyManager(
+                normalizedFile(tlsAuthGrpcClientProperties.clientCertChain!!),
+                normalizedFile(tlsAuthGrpcClientProperties.clientPrivateKey!!)
+            )
         }
         return builder.build()
     }

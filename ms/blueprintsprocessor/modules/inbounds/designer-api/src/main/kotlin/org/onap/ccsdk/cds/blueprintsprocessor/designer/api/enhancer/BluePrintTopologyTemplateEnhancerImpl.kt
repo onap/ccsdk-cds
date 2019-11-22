@@ -27,8 +27,11 @@ import org.springframework.stereotype.Service
 
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-open class BluePrintTopologyTemplateEnhancerImpl(private val bluePrintRepoService: BluePrintRepoService,
-                                                 private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService) : BluePrintTopologyTemplateEnhancer {
+open class BluePrintTopologyTemplateEnhancerImpl(
+    private val bluePrintRepoService: BluePrintRepoService,
+    private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService
+) :
+    BluePrintTopologyTemplateEnhancer {
 
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
 
@@ -57,5 +60,4 @@ open class BluePrintTopologyTemplateEnhancerImpl(private val bluePrintRepoServic
             bluePrintTypeEnhancerService.enhanceWorkflow(bluePrintRuntimeService, workflowName, workflow)
         }
     }
-
 }

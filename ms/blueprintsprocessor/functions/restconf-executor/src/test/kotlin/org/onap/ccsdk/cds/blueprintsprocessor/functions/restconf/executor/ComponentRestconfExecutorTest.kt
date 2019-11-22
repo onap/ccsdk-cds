@@ -67,7 +67,7 @@ class ComponentRestconfExecutorTest {
             operationInputs[BluePrintConstants.PROPERTY_CURRENT_OPERATION] = "operationName".asJsonPrimitive()
             operationInputs[ComponentScriptExecutor.INPUT_SCRIPT_TYPE] = BluePrintConstants.SCRIPT_INTERNAL.asJsonPrimitive()
             operationInputs[ComponentScriptExecutor.INPUT_SCRIPT_CLASS_REFERENCE] =
-                    "internal.scripts.TestRestconfConfigure".asJsonPrimitive()
+                "internal.scripts.TestRestconfConfigure".asJsonPrimitive()
 
             val stepInputData = StepData().apply {
                 name = "activate-restconf"
@@ -78,14 +78,18 @@ class ComponentRestconfExecutorTest {
             val blueprintContext = mockk<BluePrintContext>()
             every { bluePrintRuntime.bluePrintContext() } returns blueprintContext
             every {
-                bluePrintRuntime.resolveNodeTemplateInterfaceOperationInputs("activate-restconf",
-                        "interfaceName", "operationName")
+                bluePrintRuntime.resolveNodeTemplateInterfaceOperationInputs(
+                    "activate-restconf",
+                    "interfaceName", "operationName"
+                )
             } returns operationInputs
 
             val operationOutputs = hashMapOf<String, JsonNode>()
             every {
-                bluePrintRuntime.resolveNodeTemplateInterfaceOperationOutputs("activate-restconf",
-                        "interfaceName", "operationName")
+                bluePrintRuntime.resolveNodeTemplateInterfaceOperationOutputs(
+                    "activate-restconf",
+                    "interfaceName", "operationName"
+                )
             } returns operationOutputs
 
             componentScriptExecutor.applyNB(executionServiceInput)

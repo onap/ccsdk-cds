@@ -46,7 +46,6 @@ class BluePrintTemplateServiceTest {
             val content = BluePrintVelocityTemplateService.generateContent(template, json)
             assertNotNull(content, "failed to generate content for velocity template")
         }
-
     }
 
     @Test
@@ -56,15 +55,15 @@ class BluePrintTemplateServiceTest {
             val json = JacksonUtils.getClassPathFileContent("templates/base-config-data-jinja.json")
 
             val element: MutableMap<String, Any> = mutableMapOf()
-            element["additional_array"] = arrayListOf(hashMapOf("name" to "Element1", "location" to "Region0"),
-                hashMapOf("name" to "Element2", "location" to "Region1"))
+            element["additional_array"] = arrayListOf(
+                hashMapOf("name" to "Element1", "location" to "Region0"),
+                hashMapOf("name" to "Element2", "location" to "Region1")
+            )
 
             val content = BluePrintJinjaTemplateService.generateContent(template, json, false, element)
             assertNotNull(content, "failed to generate content for velocity template")
         }
-
     }
-
 
     @Test
     fun `no value variable should evaluate to default value - standalone template mesh test`() {
@@ -74,12 +73,10 @@ class BluePrintTemplateServiceTest {
             val json = JacksonUtils.getClassPathFileContent("templates/default-variable-value-data.json")
 
             val content = BluePrintVelocityTemplateService.generateContent(template, json)
-            //first line represents a variable whose value was successfully retrieved, second line contains a variable
+            // first line represents a variable whose value was successfully retrieved, second line contains a variable
             // whose value could not be evaluated
             val expected = "sample-hostname\n\${node0_backup_router_address}"
             assertEquals(expected, content, "No value variable should use default value")
         }
     }
-
 }
-

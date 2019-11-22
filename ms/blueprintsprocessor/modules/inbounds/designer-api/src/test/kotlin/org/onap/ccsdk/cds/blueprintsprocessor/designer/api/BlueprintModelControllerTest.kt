@@ -30,8 +30,13 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelSearch
-import org.onap.ccsdk.cds.controllerblueprints.core.*
+import org.onap.ccsdk.cds.controllerblueprints.core.compress
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
+import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
+import org.onap.ccsdk.cds.controllerblueprints.core.logger
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
+import org.onap.ccsdk.cds.controllerblueprints.core.reCreateDirs
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.core.io.ByteArrayResource
@@ -60,8 +65,10 @@ import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes = [DesignerApiTestConfiguration::class,
-    BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, BluePrintDBLibConfiguration::class])
+@ContextConfiguration(
+    classes = [DesignerApiTestConfiguration::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, BluePrintDBLibConfiguration::class]
+)
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class BlueprintModelControllerTest {
@@ -81,7 +88,6 @@ class BlueprintModelControllerTest {
     private var zipBlueprintFileName: String? = null
 
     private var testZipFile: File? = null
-
 
     @Before
     fun setUp() {
@@ -121,14 +127,14 @@ class BlueprintModelControllerTest {
             }.build()
 
             val saveBP = webTestClient
-                    .post()
-                    .uri("/api/v1/blueprint-model")
-                    .body(BodyInserters.fromMultipartData(body))
-                    .exchange()
-                    .expectStatus().isOk
-                    .returnResult<BlueprintModelSearch>()
-                    .responseBody
-                    .awaitSingle()
+                .post()
+                .uri("/api/v1/blueprint-model")
+                .body(BodyInserters.fromMultipartData(body))
+                .exchange()
+                .expectStatus().isOk
+                .returnResult<BlueprintModelSearch>()
+                .responseBody
+                .awaitSingle()
 
             assertNotNull(saveBP, "failed to get response")
             assertEquals("baseconfiguration", saveBP.artifactName, "mismatch artifact name")
@@ -141,18 +147,21 @@ class BlueprintModelControllerTest {
     @Test
     @Throws(JSONException::class)
     fun test02_getBluePrintByNameAndVersion() {
-        webTestClient(HttpMethod.GET, null,
-                "/api/v1/blueprint-model/by-name/${bp!!.artifactName}/version/${bp!!.artifactVersion}",
-                HttpStatus.OK, false)
+        webTestClient(
+            HttpMethod.GET, null,
+            "/api/v1/blueprint-model/by-name/${bp!!.artifactName}/version/${bp!!.artifactVersion}",
+            HttpStatus.OK, false
+        )
     }
-
 
     @Test
     @Throws(JSONException::class)
     fun test03_getBlueprintModel() {
-        webTestClient(HttpMethod.GET, null,
-                "/api/v1/blueprint-model/${bp!!.id}",
-                HttpStatus.OK, false)
+        webTestClient(
+            HttpMethod.GET, null,
+            "/api/v1/blueprint-model/${bp!!.id}",
+            HttpStatus.OK, false
+        )
     }
 
     @Test
@@ -164,9 +173,11 @@ class BlueprintModelControllerTest {
     @Test
     @Throws(JSONException::class)
     fun test05_downloadBluePrint() {
-        webTestClient(HttpMethod.GET, null,
-                "/api/v1/blueprint-model/download/${bp!!.id}",
-                HttpStatus.OK, false)
+        webTestClient(
+            HttpMethod.GET, null,
+            "/api/v1/blueprint-model/download/${bp!!.id}",
+            HttpStatus.OK, false
+        )
     }
 
     @Test
@@ -185,14 +196,14 @@ class BlueprintModelControllerTest {
             }.build()
 
             val publishBP = webTestClient
-                    .post()
-                    .uri("/api/v1/blueprint-model/publish")
-                    .body(BodyInserters.fromMultipartData(body))
-                    .exchange()
-                    .expectStatus().isOk
-                    .returnResult<BlueprintModelSearch>()
-                    .responseBody
-                    .awaitSingle()
+                .post()
+                .uri("/api/v1/blueprint-model/publish")
+                .body(BodyInserters.fromMultipartData(body))
+                .exchange()
+                .expectStatus().isOk
+                .returnResult<BlueprintModelSearch>()
+                .responseBody
+                .awaitSingle()
 
             assertNotNull(publishBP, "failed to get response")
             assertEquals("baseconfiguration", publishBP.artifactName, "mismatch artifact name")
@@ -205,49 +216,60 @@ class BlueprintModelControllerTest {
     @Test
     @Throws(JSONException::class)
     fun test08_searchBlueprintModels() {
-        webTestClient(HttpMethod.GET, null,
-                "/api/v1/blueprint-model/search/${bp!!.artifactName}",
-                HttpStatus.OK, false)
+        webTestClient(
+            HttpMethod.GET, null,
+            "/api/v1/blueprint-model/search/${bp!!.artifactName}",
+            HttpStatus.OK, false
+        )
     }
 
     @Test
     @Throws(JSONException::class)
     fun test09_downloadBlueprintByNameAndVersion() {
-        webTestClient(HttpMethod.GET, null,
-                "/api/v1/blueprint-model/download/by-name/${bp!!.artifactName}/version/${bp!!.artifactVersion}",
-                HttpStatus.OK, false)
+        webTestClient(
+            HttpMethod.GET, null,
+            "/api/v1/blueprint-model/download/by-name/${bp!!.artifactName}/version/${bp!!.artifactVersion}",
+            HttpStatus.OK, false
+        )
     }
 
     @Test
     fun test10_deleteBluePrint() {
-//        webTestClient.delete().uri("/api/v1/blueprint-model/${bp!!.id}")
-//                .header("Authorization", "Basic " + Base64Utils
-//                        .encodeToString(("ccsdkapps" + ":" + "ccsdkapps").toByteArray(UTF_8)))
-//                .exchange()
-//                .expectStatus().is2xxSuccessful
+        //        webTestClient.delete().uri("/api/v1/blueprint-model/${bp!!.id}")
+        //                .header("Authorization", "Basic " + Base64Utils
+        //                        .encodeToString(("ccsdkapps" + ":" + "ccsdkapps").toByteArray(UTF_8)))
+        //                .exchange()
+        //                .expectStatus().is2xxSuccessful
 
         webTestClient.delete().uri("/api/v1/blueprint-model/name/${bp!!.artifactName}/version/${bp!!.artifactVersion}")
-                .header("Authorization", "Basic " + Base64Utils
-                        .encodeToString(("ccsdkapps" + ":" + "ccsdkapps").toByteArray(UTF_8)))
-                .exchange()
-                .expectStatus().is2xxSuccessful
+            .header(
+                "Authorization", "Basic " + Base64Utils
+                    .encodeToString(("ccsdkapps" + ":" + "ccsdkapps").toByteArray(UTF_8))
+            )
+            .exchange()
+            .expectStatus().is2xxSuccessful
     }
 
     @Throws(JSONException::class)
-    private fun webTestClient(requestMethod: HttpMethod, body: BodyInserters.MultipartInserter?, uri: String,
-                              expectedResponceStatus: HttpStatus, setParam: Boolean) {
+    private fun webTestClient(
+        requestMethod: HttpMethod,
+        body: BodyInserters.MultipartInserter?,
+        uri: String,
+        expectedResponceStatus: HttpStatus,
+        setParam: Boolean
+    ) {
 
         log.info("Requesting($uri): Method(${requestMethod.name})")
 
         webTestClient.method(requestMethod).uri(uri)
-                .header("Authorization", "Basic " + Base64Utils
-                        .encodeToString(("ccsdkapps" + ":" + "ccsdkapps").toByteArray(UTF_8)))
-                .body(body)
-                .exchange()
-                .expectStatus().isEqualTo(expectedResponceStatus)
-                .expectBody()
-                .returnResult().responseBody!!
-
+            .header(
+                "Authorization", "Basic " + Base64Utils
+                    .encodeToString(("ccsdkapps" + ":" + "ccsdkapps").toByteArray(UTF_8))
+            )
+            .body(body)
+            .exchange()
+            .expectStatus().isEqualTo(expectedResponceStatus)
+            .expectBody()
+            .returnResult().responseBody!!
     }
-
 }

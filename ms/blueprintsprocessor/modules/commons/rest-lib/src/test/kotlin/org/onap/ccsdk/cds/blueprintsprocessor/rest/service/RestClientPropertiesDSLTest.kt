@@ -24,7 +24,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import kotlin.test.assertNotNull
 
 class RestClientPropertiesDSLTest {
-    
+
     @Test
     fun testBasicAuthRestClientProperties() {
         val properties = BluePrintTypes.dslBasicAuthRestClientProperties {

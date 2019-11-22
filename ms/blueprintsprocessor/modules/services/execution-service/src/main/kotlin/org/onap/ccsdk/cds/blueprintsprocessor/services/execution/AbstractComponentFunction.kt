@@ -17,7 +17,6 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.services.execution
 
-
 import com.fasterxml.jackson.databind.JsonNode
 import kotlinx.coroutines.withTimeout
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
@@ -25,8 +24,15 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutp
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.Status
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
-import org.onap.ccsdk.cds.controllerblueprints.core.*
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
+import org.onap.ccsdk.cds.controllerblueprints.core.getAsString
+import org.onap.ccsdk.cds.controllerblueprints.core.getOptionalAsInt
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintFunctionNode
+import org.onap.ccsdk.cds.controllerblueprints.core.jsonPathParse
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
+import org.onap.ccsdk.cds.controllerblueprints.core.readNBLines
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintVelocityTemplateService
 import org.slf4j.LoggerFactory
@@ -36,6 +42,7 @@ import org.slf4j.LoggerFactory
  * @author Brinda Santh
  */
 abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServiceInput, ExecutionServiceOutput> {
+
     @Transient
     private val log = LoggerFactory.getLogger(AbstractComponentFunction::class.java)
 
@@ -85,7 +92,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         check(operationName.isNotEmpty()) { "couldn't get Operation name for step($stepName)" }
 
         val operationResolvedProperties = bluePrintRuntimeService
-                .resolveNodeTemplateInterfaceOperationInputs(nodeTemplateName, interfaceName, operationName)
+            .resolveNodeTemplateInterfaceOperationInputs(nodeTemplateName, interfaceName, operationName)
 
         this.operationInputs.putAll(operationResolvedProperties)
 
@@ -103,7 +110,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         try {
             // Resolve the Output Expression
             val stepOutputs = bluePrintRuntimeService
-                    .resolveNodeTemplateInterfaceOperationOutputs(nodeTemplateName, interfaceName, operationName)
+                .resolveNodeTemplateInterfaceOperationOutputs(nodeTemplateName, interfaceName, operationName)
 
             val stepOutputData = StepData().apply {
                 name = stepName
@@ -135,7 +142,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
 
     fun getOperationInput(key: String): JsonNode {
         return operationInputs[key]
-                ?: throw BluePrintProcessorException("couldn't get the operation input($key) value.")
+            ?: throw BluePrintProcessorException("couldn't get the operation input($key) value.")
     }
 
     fun getOptionalOperationInput(key: String): JsonNode? {
@@ -188,5 +195,4 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         val file = normalizedFile(bluePrintRuntimeService.bluePrintContext().rootPath, artifactDefinition.file)
         return file.readNBLines()
     }
-
 }

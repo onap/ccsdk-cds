@@ -26,10 +26,14 @@ class MessageCorrelationUtilsTest {
     @Test
     fun testCorrelationKeysReordered() {
 
-        val message1 = MessagePrioritizationSample.createMessage("sample-group", MessageState.NEW.name,
-                "type-0", "key1=value1,key2=value2")
-        val message2 = MessagePrioritizationSample.createMessage("sample-group", MessageState.NEW.name,
-                "type-0", "key2=value2,key1=value1")
+        val message1 = MessagePrioritizationSample.createMessage(
+            "sample-group", MessageState.NEW.name,
+            "type-0", "key1=value1,key2=value2"
+        )
+        val message2 = MessagePrioritizationSample.createMessage(
+            "sample-group", MessageState.NEW.name,
+            "type-0", "key2=value2,key1=value1"
+        )
 
         val multipleMessages: MutableList<MessagePrioritization> = arrayListOf()
         multipleMessages.add(message1)
@@ -43,20 +47,26 @@ class MessageCorrelationUtilsTest {
         /** With Types **/
         /* Assumption is Same group with different types */
         val differentTypesWithSameCorrelationMessages = MessagePrioritizationSample
-                .sampleMessageWithDifferentTypeSameCorrelation("sample-group", MessageState.NEW.name, 3)
+            .sampleMessageWithDifferentTypeSameCorrelation("sample-group", MessageState.NEW.name, 3)
         val differentTypesWithSameCorrelationMessagesResponse = MessageCorrelationUtils.correlatedMessagesWithTypes(
-                differentTypesWithSameCorrelationMessages,
-                arrayListOf("type-0", "type-1", "type-2"))
-        assertTrue(differentTypesWithSameCorrelationMessagesResponse.correlated,
-                "failed to correlate differentTypesWithSameCorrelationMessagesResponse")
+            differentTypesWithSameCorrelationMessages,
+            arrayListOf("type-0", "type-1", "type-2")
+        )
+        assertTrue(
+            differentTypesWithSameCorrelationMessagesResponse.correlated,
+            "failed to correlate differentTypesWithSameCorrelationMessagesResponse"
+        )
 
         /* Assumption is Same group with different types and one missing expected types,
         In this case type-3 message is missing */
         val differentTypesWithSameCorrelationMessagesResWithMissingType = MessageCorrelationUtils.correlatedMessagesWithTypes(
-                differentTypesWithSameCorrelationMessages,
-                arrayListOf("type-0", "type-1", "type-2", "type-3"))
-        assertTrue(!differentTypesWithSameCorrelationMessagesResWithMissingType.correlated,
-                "failed to correlate differentTypesWithSameCorrelationMessagesResWithMissingType")
+            differentTypesWithSameCorrelationMessages,
+            arrayListOf("type-0", "type-1", "type-2", "type-3")
+        )
+        assertTrue(
+            !differentTypesWithSameCorrelationMessagesResWithMissingType.correlated,
+            "failed to correlate differentTypesWithSameCorrelationMessagesResWithMissingType"
+        )
     }
 
     @Test
@@ -64,35 +74,48 @@ class MessageCorrelationUtilsTest {
         /** With ignoring Types */
         /** Assumption is only one message received */
         val withSameCorrelationOneMessages = MessagePrioritizationSample
-                .sampleMessageWithSameCorrelation("sample-group", MessageState.NEW.name, 1)
+            .sampleMessageWithSameCorrelation("sample-group", MessageState.NEW.name, 1)
         val withSameCorrelationOneMessagesResp = MessageCorrelationUtils.correlatedMessagesWithTypes(
-                withSameCorrelationOneMessages, null)
-        assertTrue(!withSameCorrelationOneMessagesResp.correlated,
-                "failed to correlate withSameCorrelationMessagesResp")
+            withSameCorrelationOneMessages, null
+        )
+        assertTrue(
+            !withSameCorrelationOneMessagesResp.correlated,
+            "failed to correlate withSameCorrelationMessagesResp"
+        )
 
         /** Assumption is two message received for same group with same correlation */
         val withSameCorrelationMessages = MessagePrioritizationSample
-                .sampleMessageWithSameCorrelation("sample-group", MessageState.NEW.name, 2)
+            .sampleMessageWithSameCorrelation("sample-group", MessageState.NEW.name, 2)
         val withSameCorrelationMessagesResp = MessageCorrelationUtils.correlatedMessagesWithTypes(
-                withSameCorrelationMessages, null)
-        assertTrue(withSameCorrelationMessagesResp.correlated,
-                "failed to correlate withSameCorrelationMessagesResp")
+            withSameCorrelationMessages, null
+        )
+        assertTrue(
+            withSameCorrelationMessagesResp.correlated,
+            "failed to correlate withSameCorrelationMessagesResp"
+        )
     }
 
     @Test
     fun differentTypesWithDifferentCorrelationMessage() {
         /** Assumption is two message received for same group with different expected types and different correlation */
-        val message1 = MessagePrioritizationSample.createMessage("sample-group", MessageState.NEW.name,
-                "type-0", "key1=value1,key2=value2")
-        val message2 = MessagePrioritizationSample.createMessage("sample-group", MessageState.NEW.name,
-                "type-1", "key1=value1,key2=value3")
+        val message1 = MessagePrioritizationSample.createMessage(
+            "sample-group", MessageState.NEW.name,
+            "type-0", "key1=value1,key2=value2"
+        )
+        val message2 = MessagePrioritizationSample.createMessage(
+            "sample-group", MessageState.NEW.name,
+            "type-1", "key1=value1,key2=value3"
+        )
         val differentTypesWithDifferentCorrelationMessage: MutableList<MessagePrioritization> = arrayListOf()
         differentTypesWithDifferentCorrelationMessage.add(message1)
         differentTypesWithDifferentCorrelationMessage.add(message2)
         val differentTypesWithDifferentCorrelationMessageResp = MessageCorrelationUtils.correlatedMessagesWithTypes(
-                differentTypesWithDifferentCorrelationMessage,
-                arrayListOf("type-0", "type-1"))
-        assertTrue(!differentTypesWithDifferentCorrelationMessageResp.correlated,
-                "failed to correlate differentTypesWithDifferentCorrelationMessageResp")
+            differentTypesWithDifferentCorrelationMessage,
+            arrayListOf("type-0", "type-1")
+        )
+        assertTrue(
+            !differentTypesWithDifferentCorrelationMessageResp.correlated,
+            "failed to correlate differentTypesWithDifferentCorrelationMessageResp"
+        )
     }
 }

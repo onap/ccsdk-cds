@@ -26,9 +26,11 @@ import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeEnha
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 
-class BluePrintAttributeDefinitionEnhancerImpl(private val bluePrintRepoService: BluePrintRepoService,
-                                               private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService)
-    : BluePrintAttributeDefinitionEnhancer {
+class BluePrintAttributeDefinitionEnhancerImpl(
+    private val bluePrintRepoService: BluePrintRepoService,
+    private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService
+) :
+    BluePrintAttributeDefinitionEnhancer {
 
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
     lateinit var bluePrintContext: BluePrintContext
@@ -39,10 +41,9 @@ class BluePrintAttributeDefinitionEnhancerImpl(private val bluePrintRepoService:
 
         val propertyType = attributeDefinition.type
         if (BluePrintTypes.validPrimitiveTypes().contains(propertyType)) {
-
         } else if (BluePrintTypes.validCollectionTypes().contains(propertyType)) {
             val entrySchema = attributeDefinition.entrySchema
-                    ?: throw BluePrintException("Entry Schema is missing for collection property($name)")
+                ?: throw BluePrintException("Entry Schema is missing for collection property($name)")
 
             if (!BluePrintTypes.validPrimitiveTypes().contains(entrySchema.type)) {
                 BluePrintEnhancerUtils.populateDataTypes(bluePrintContext, bluePrintRepoService, entrySchema.type)
@@ -51,5 +52,4 @@ class BluePrintAttributeDefinitionEnhancerImpl(private val bluePrintRepoService:
             BluePrintEnhancerUtils.populateDataTypes(bluePrintContext, bluePrintRepoService, propertyType)
         }
     }
-
 }

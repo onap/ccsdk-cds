@@ -44,29 +44,32 @@ import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 
-
 @RunWith(SpringRunner::class)
 @DataJpaTest
 @DirtiesContext
-@ContextConfiguration(classes = [BluePrintMessageLibConfiguration::class,
-    BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class,
-    MessagePrioritizationConfiguration::class, TestDatabaseConfiguration::class])
-@TestPropertySource(properties =
-[
-    "spring.jpa.show-sql=true",
-    "spring.jpa.properties.hibernate.show_sql=true",
-    "spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl",
+@ContextConfiguration(
+    classes = [BluePrintMessageLibConfiguration::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class,
+        MessagePrioritizationConfiguration::class, TestDatabaseConfiguration::class]
+)
+@TestPropertySource(
+    properties =
+    [
+        "spring.jpa.show-sql=true",
+        "spring.jpa.properties.hibernate.show_sql=true",
+        "spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl",
 
-    "blueprintsprocessor.messageconsumer.prioritize-input.type=kafka-streams-basic-auth",
-    "blueprintsprocessor.messageconsumer.prioritize-input.bootstrapServers=127.0.0.1:9092",
-    "blueprintsprocessor.messageconsumer.prioritize-input.applicationId=test-prioritize-application",
-    "blueprintsprocessor.messageconsumer.prioritize-input.topic=prioritize-input-topic",
+        "blueprintsprocessor.messageconsumer.prioritize-input.type=kafka-streams-basic-auth",
+        "blueprintsprocessor.messageconsumer.prioritize-input.bootstrapServers=127.0.0.1:9092",
+        "blueprintsprocessor.messageconsumer.prioritize-input.applicationId=test-prioritize-application",
+        "blueprintsprocessor.messageconsumer.prioritize-input.topic=prioritize-input-topic",
 
-    // To send initial test message
-    "blueprintsprocessor.messageproducer.prioritize-input.type=kafka-basic-auth",
-    "blueprintsprocessor.messageproducer.prioritize-input.bootstrapServers=127.0.0.1:9092",
-    "blueprintsprocessor.messageproducer.prioritize-input.topic=prioritize-input-topic"
-])
+        // To send initial test message
+        "blueprintsprocessor.messageproducer.prioritize-input.type=kafka-basic-auth",
+        "blueprintsprocessor.messageproducer.prioritize-input.bootstrapServers=127.0.0.1:9092",
+        "blueprintsprocessor.messageproducer.prioritize-input.topic=prioritize-input-topic"
+    ]
+)
 open class MessagePrioritizationConsumerTest {
 
     @Autowired
@@ -89,7 +92,7 @@ open class MessagePrioritizationConsumerTest {
             assertNotNull(prioritizationMessageRepository, "failed to get prioritizationMessageRepository")
 
             val messagePrioritizationService: MessagePrioritizationStateService = BluePrintDependencyService
-                    .instance(MessagePrioritizationStateService::class)
+                .instance(MessagePrioritizationStateService::class)
             assertNotNull(messagePrioritizationService, "failed to get messagePrioritizationService")
 
             MessagePrioritizationSample.sampleMessages(MessageState.NEW.name, 1).forEach {
@@ -106,7 +109,7 @@ open class MessagePrioritizationConsumerTest {
             val configuration = MessagePrioritizationSample.samplePrioritizationConfiguration()
 
             val streamingConsumerService = bluePrintMessageLibPropertyService
-                    .blueprintMessageConsumerService(configuration.inputTopicSelector)
+                .blueprintMessageConsumerService(configuration.inputTopicSelector)
             assertNotNull(streamingConsumerService, "failed to get blueprintMessageConsumerService")
 
             val spyStreamingConsumerService = spyk(streamingConsumerService)
@@ -115,11 +118,10 @@ open class MessagePrioritizationConsumerTest {
             val messagePrioritizationConsumer = MessagePrioritizationConsumer(bluePrintMessageLibPropertyService)
             val spyMessagePrioritizationConsumer = spyk(messagePrioritizationConsumer)
 
-
             // Test Topology
             val kafkaStreamConsumerFunction = spyMessagePrioritizationConsumer.kafkaStreamConsumerFunction(configuration)
             val messageConsumerProperties = bluePrintMessageLibPropertyService
-                    .messageConsumerProperties("blueprintsprocessor.messageconsumer.prioritize-input")
+                .messageConsumerProperties("blueprintsprocessor.messageconsumer.prioritize-input")
             val topology = kafkaStreamConsumerFunction.createTopology(messageConsumerProperties, null)
             assertNotNull(topology, "failed to get create topology")
 
@@ -130,7 +132,7 @@ open class MessagePrioritizationConsumerTest {
     }
 
     /** Integration Kafka Testing, Enable and use this test case only for local desktop testing with real kafka broker */
-    //@Test
+    // @Test
     fun testMessagePrioritizationConsumer() {
         runBlocking {
             val messagePrioritizationConsumer = MessagePrioritizationConsumer(bluePrintMessageLibPropertyService)
@@ -138,35 +140,41 @@ open class MessagePrioritizationConsumerTest {
 
             /** Send sample message with every 1 sec */
             val blueprintMessageProducerService = bluePrintMessageLibPropertyService
-                    .blueprintMessageProducerService("prioritize-input") as KafkaBasicAuthMessageProducerService
+                .blueprintMessageProducerService("prioritize-input") as KafkaBasicAuthMessageProducerService
             launch {
-             MessagePrioritizationSample.sampleMessages(MessageState.NEW.name, 2).forEach {
+                MessagePrioritizationSample.sampleMessages(MessageState.NEW.name, 2).forEach {
                     delay(100)
                     val headers: MutableMap<String, String> = hashMapOf()
                     headers["id"] = it.id
-                    blueprintMessageProducerService.sendMessageNB(message = it.asJsonString(false),
-                            headers = headers)
+                    blueprintMessageProducerService.sendMessageNB(
+                        message = it.asJsonString(false),
+                        headers = headers
+                    )
                 }
 
                 MessagePrioritizationSample
-                        .sampleMessageWithSameCorrelation("same-group", MessageState.NEW.name, 2)
-                        .forEach {
-                            delay(100)
-                            val headers: MutableMap<String, String> = hashMapOf()
-                            headers["id"] = it.id
-                            blueprintMessageProducerService.sendMessageNB(message = it.asJsonString(false),
-                                    headers = headers)
-                        }
+                    .sampleMessageWithSameCorrelation("same-group", MessageState.NEW.name, 2)
+                    .forEach {
+                        delay(100)
+                        val headers: MutableMap<String, String> = hashMapOf()
+                        headers["id"] = it.id
+                        blueprintMessageProducerService.sendMessageNB(
+                            message = it.asJsonString(false),
+                            headers = headers
+                        )
+                    }
 
                 MessagePrioritizationSample
-                        .sampleMessageWithDifferentTypeSameCorrelation("group-typed", MessageState.NEW.name, 3)
-                        .forEach {
-                            delay(2000)
-                            val headers: MutableMap<String, String> = hashMapOf()
-                            headers["id"] = it.id
-                            blueprintMessageProducerService.sendMessageNB(message = it.asJsonString(false),
-                                    headers = headers)
-                        }
+                    .sampleMessageWithDifferentTypeSameCorrelation("group-typed", MessageState.NEW.name, 3)
+                    .forEach {
+                        delay(2000)
+                        val headers: MutableMap<String, String> = hashMapOf()
+                        headers["id"] = it.id
+                        blueprintMessageProducerService.sendMessageNB(
+                            message = it.asJsonString(false),
+                            headers = headers
+                        )
+                    }
             }
             delay(10000)
             messagePrioritizationConsumer.shutDown()

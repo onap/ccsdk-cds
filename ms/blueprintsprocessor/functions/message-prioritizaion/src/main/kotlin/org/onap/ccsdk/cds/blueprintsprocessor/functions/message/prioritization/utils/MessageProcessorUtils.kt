@@ -23,8 +23,8 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyS
 
 object MessageProcessorUtils {
 
-    fun <K, V> bluePrintProcessorSupplier(name: String, prioritizationConfiguration: PrioritizationConfiguration)
-            : ProcessorSupplier<K, V> {
+    fun <K, V> bluePrintProcessorSupplier(name: String, prioritizationConfiguration: PrioritizationConfiguration):
+            ProcessorSupplier<K, V> {
         return ProcessorSupplier<K, V> {
             // Dynamically resolve the Prioritization Processor
             val processorInstance = BluePrintDependencyService.instance<AbstractMessagePrioritizeProcessor<K, V>>(name)
@@ -32,5 +32,4 @@ object MessageProcessorUtils {
             processorInstance
         }
     }
-
 }

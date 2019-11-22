@@ -20,9 +20,9 @@ import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
 
 class MockBluePrintRestLibPropertyService(bluePrintProperties: BluePrintPropertiesService) :
-        BluePrintRestLibPropertyService(bluePrintProperties) {
+    BluePrintRestLibPropertyService(bluePrintProperties) {
 
-    fun mockBlueprintWebClientService (selector: String):
+    fun mockBlueprintWebClientService(selector: String):
             MockBlueprintWebClientService {
         val prefix = "blueprintsprocessor.restclient.$selector"
         val restClientProperties = restClientProperties(prefix)

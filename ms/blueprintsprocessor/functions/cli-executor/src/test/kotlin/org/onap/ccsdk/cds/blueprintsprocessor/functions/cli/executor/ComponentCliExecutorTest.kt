@@ -47,10 +47,12 @@ import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [CliExecutorConfiguration::class,
-    ExecutionServiceConfiguration::class,
-    BluePrintSshLibConfiguration::class, BluePrintScriptsServiceImpl::class,
-    BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, BluePrintDependencyService::class])
+@ContextConfiguration(
+    classes = [CliExecutorConfiguration::class,
+        ExecutionServiceConfiguration::class,
+        BluePrintSshLibConfiguration::class, BluePrintScriptsServiceImpl::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, BluePrintDependencyService::class]
+)
 @DirtiesContext
 @TestPropertySource(properties = [], locations = ["classpath:application-test.properties"])
 class ComponentCliExecutorTest {
@@ -81,7 +83,7 @@ class ComponentCliExecutorTest {
             operationInputs[BluePrintConstants.PROPERTY_CURRENT_OPERATION] = "operationName".asJsonPrimitive()
             operationInputs[ComponentScriptExecutor.INPUT_SCRIPT_TYPE] = BluePrintConstants.SCRIPT_INTERNAL.asJsonPrimitive()
             operationInputs[ComponentScriptExecutor.INPUT_SCRIPT_CLASS_REFERENCE] =
-                    "internal.scripts.TestCliScriptFunction".asJsonPrimitive()
+                "internal.scripts.TestCliScriptFunction".asJsonPrimitive()
 
             val stepInputData = StepData().apply {
                 name = "activate-cli"
@@ -92,14 +94,18 @@ class ComponentCliExecutorTest {
             val blueprintContext = mockk<BluePrintContext>()
             every { bluePrintRuntime.bluePrintContext() } returns blueprintContext
             every {
-                bluePrintRuntime.resolveNodeTemplateInterfaceOperationInputs("activate-cli",
-                        "interfaceName", "operationName")
+                bluePrintRuntime.resolveNodeTemplateInterfaceOperationInputs(
+                    "activate-cli",
+                    "interfaceName", "operationName"
+                )
             } returns operationInputs
 
             val operationOutputs = hashMapOf<String, JsonNode>()
             every {
-                bluePrintRuntime.resolveNodeTemplateInterfaceOperationOutputs("activate-cli",
-                        "interfaceName", "operationName")
+                bluePrintRuntime.resolveNodeTemplateInterfaceOperationOutputs(
+                    "activate-cli",
+                    "interfaceName", "operationName"
+                )
             } returns operationOutputs
 
             componentScriptExecutor.applyNB(executionServiceInput)

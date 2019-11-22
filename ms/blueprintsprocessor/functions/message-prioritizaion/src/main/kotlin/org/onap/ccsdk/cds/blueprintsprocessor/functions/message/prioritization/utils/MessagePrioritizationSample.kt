@@ -21,7 +21,9 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.E
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.PrioritizationConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.ShutDownConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.MessagePrioritization
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.UUID
 
 object MessagePrioritizationSample {
 
@@ -57,8 +59,10 @@ object MessagePrioritizationSample {
     fun sampleMessages(groupName: String, messageState: String, count: Int): List<MessagePrioritization> {
         val messages: MutableList<MessagePrioritization> = arrayListOf()
         repeat(count) {
-            val backPressureMessage = createMessage(groupName, messageState,
-                    "sample-type", null)
+            val backPressureMessage = createMessage(
+                groupName, messageState,
+                "sample-type", null
+            )
             messages.add(backPressureMessage)
         }
         return messages
@@ -67,26 +71,37 @@ object MessagePrioritizationSample {
     fun sampleMessageWithSameCorrelation(groupName: String, messageState: String, count: Int): List<MessagePrioritization> {
         val messages: MutableList<MessagePrioritization> = arrayListOf()
         repeat(count) {
-            val backPressureMessage = createMessage(groupName, messageState, "sample-type",
-                    "key1=value1,key2=value2")
+            val backPressureMessage = createMessage(
+                groupName, messageState, "sample-type",
+                "key1=value1,key2=value2"
+            )
             messages.add(backPressureMessage)
         }
         return messages
     }
 
-    fun sampleMessageWithDifferentTypeSameCorrelation(groupName: String, messageState: String,
-                                                      count: Int): List<MessagePrioritization> {
+    fun sampleMessageWithDifferentTypeSameCorrelation(
+        groupName: String,
+        messageState: String,
+        count: Int
+    ): List<MessagePrioritization> {
         val messages: MutableList<MessagePrioritization> = arrayListOf()
         repeat(count) {
-            val backPressureMessage = createMessage(groupName, messageState, "type-$it",
-                    "key1=value1,key2=value2")
+            val backPressureMessage = createMessage(
+                groupName, messageState, "type-$it",
+                "key1=value1,key2=value2"
+            )
             messages.add(backPressureMessage)
         }
         return messages
     }
 
-    fun createMessage(groupName: String, messageState: String, messageType: String,
-                      messageCorrelationId: String?): MessagePrioritization {
+    fun createMessage(
+        groupName: String,
+        messageState: String,
+        messageType: String,
+        messageCorrelationId: String?
+    ): MessagePrioritization {
 
         return MessagePrioritization().apply {
             id = UUID.randomUUID().toString()

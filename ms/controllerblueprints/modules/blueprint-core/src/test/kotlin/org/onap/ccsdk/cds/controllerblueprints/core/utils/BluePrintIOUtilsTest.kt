@@ -20,7 +20,6 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintRetryException
 
-
 class BluePrintIOUtilsTest {
 
     @Test

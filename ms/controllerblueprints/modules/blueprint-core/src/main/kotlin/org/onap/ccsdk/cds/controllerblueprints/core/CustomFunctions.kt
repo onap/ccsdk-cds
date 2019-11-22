@@ -18,13 +18,20 @@
 package org.onap.ccsdk.cds.controllerblueprints.core
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.*
+import com.fasterxml.jackson.databind.node.ArrayNode
+import com.fasterxml.jackson.databind.node.BooleanNode
+import com.fasterxml.jackson.databind.node.DoubleNode
+import com.fasterxml.jackson.databind.node.IntNode
+import com.fasterxml.jackson.databind.node.MissingNode
+import com.fasterxml.jackson.databind.node.NullNode
+import com.fasterxml.jackson.databind.node.ObjectNode
+import com.fasterxml.jackson.databind.node.TextNode
 import org.apache.commons.lang3.ObjectUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JsonParserUtils
 import org.slf4j.LoggerFactory
 import org.slf4j.helpers.MessageFormatter
-import java.util.*
+import java.util.UUID
 import kotlin.reflect.KClass
 
 /**
@@ -50,8 +57,8 @@ fun <T : Any> T.bpClone(): T {
 }
 
 fun String.isJson(): Boolean {
-    return ((this.trim().startsWith("{") && this.trim().endsWith("}"))
-            || (this.trim().startsWith("[") && this.trim().endsWith("]")))
+    return ((this.trim().startsWith("{") && this.trim().endsWith("}")) ||
+            (this.trim().startsWith("[") && this.trim().endsWith("]")))
 }
 
 fun Any.asJsonString(intend: Boolean? = false): String {
@@ -183,7 +190,7 @@ fun ArrayNode.asListOfString(): List<String> {
 
 fun <T> JsonNode.asType(clazzType: Class<T>): T {
     return JacksonUtils.readValue(this, clazzType)
-            ?: throw BluePrintException("couldn't convert JsonNode of type $clazzType")
+        ?: throw BluePrintException("couldn't convert JsonNode of type $clazzType")
 }
 
 fun JsonNode.asListOfString(): List<String> {
@@ -227,7 +234,6 @@ fun JsonNode.removeNullNode() {
         }
     }
 }
-
 
 fun MutableMap<String, JsonNode>.putJsonElement(key: String, value: Any) {
     val convertedValue = value.asJsonType()
@@ -325,5 +331,3 @@ fun JsonNode.jsonPaths(expression: String): List<String> {
     check(this.isComplexType()) { "$this is not complex or array node to apply expression" }
     return JsonParserUtils.paths(this, expression)
 }
-
-

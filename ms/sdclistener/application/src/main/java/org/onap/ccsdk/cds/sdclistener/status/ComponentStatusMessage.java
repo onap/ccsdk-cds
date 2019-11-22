@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.onap.ccsdk.cds.sdclistener.status;
 
 import org.onap.sdc.api.consumer.IComponentDoneStatusMessage;
 import org.onap.sdc.api.consumer.IDistributionStatusMessage;
 import org.onap.sdc.utils.DistributionStatusEnum;
 
-public class ComponentStatusMessage  implements IComponentDoneStatusMessage, IDistributionStatusMessage {
+public class ComponentStatusMessage implements IComponentDoneStatusMessage, IDistributionStatusMessage {
 
     private String componentName;
 
@@ -94,4 +95,5 @@ public class ComponentStatusMessage  implements IComponentDoneStatusMessage, IDi
     public void setArtifactUrl(String artifactUrl) {
         this.artifactUrl = artifactUrl;
     }
+
 }

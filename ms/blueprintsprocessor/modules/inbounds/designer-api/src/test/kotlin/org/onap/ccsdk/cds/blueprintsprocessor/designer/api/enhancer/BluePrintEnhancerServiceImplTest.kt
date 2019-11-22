@@ -37,8 +37,10 @@ import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [DesignerApiTestConfiguration::class,
-    BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, BluePrintDBLibConfiguration::class])
+@ContextConfiguration(
+    classes = [DesignerApiTestConfiguration::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, BluePrintDBLibConfiguration::class]
+)
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class BluePrintEnhancerServiceImplTest {
 
@@ -53,7 +55,6 @@ class BluePrintEnhancerServiceImplTest {
 
     @Autowired
     lateinit var bluePrintValidatorService: BluePrintValidatorService
-
 
     @Test
     @Throws(Exception::class)
@@ -93,7 +94,6 @@ class BluePrintEnhancerServiceImplTest {
     fun testRemoteScriptsEnhancementAndValidation() {
         val basePath = "./../../../../../components/model-catalog/blueprint-model/test-blueprint/remote_scripts"
         testComponentInvokeEnhancementAndValidation(basePath, "remote_scripts-enhance")
-
     }
 
     fun testCapabilityCliEnhancementAndValidation() {
@@ -115,12 +115,10 @@ class BluePrintEnhancerServiceImplTest {
             Assert.assertTrue("blueprint($basePath) validation failed ", valid)
 
             // Enable this to get the enhanced zip file
-//            val compressFile = normalizedFile("target/blueprints/enrichment", "$targetDirName.zip")
-//            normalizedFile(targetPath).compress(compressFile)
+            //            val compressFile = normalizedFile("target/blueprints/enrichment", "$targetDirName.zip")
+            //            normalizedFile(targetPath).compress(compressFile)
 
             deleteDir(targetPath)
         }
     }
-
-
 }

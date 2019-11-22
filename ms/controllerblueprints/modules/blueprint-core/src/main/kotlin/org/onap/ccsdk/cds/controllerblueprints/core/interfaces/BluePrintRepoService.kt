@@ -18,7 +18,11 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.interfaces
 
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.cds.controllerblueprints.core.data.*
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.CapabilityDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.RelationshipType
 import java.io.Serializable
 
 /**
@@ -43,5 +47,4 @@ interface BluePrintRepoService : Serializable {
 
     @Throws(BluePrintException::class)
     fun getCapabilityDefinition(capabilityDefinitionName: String): CapabilityDefinition
-
 }

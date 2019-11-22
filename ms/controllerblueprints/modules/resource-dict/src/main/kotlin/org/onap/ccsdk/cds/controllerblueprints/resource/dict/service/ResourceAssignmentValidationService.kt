@@ -17,13 +17,13 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.resource.dict.service
 
-import org.slf4j.LoggerFactory
 import org.apache.commons.collections.CollectionUtils
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.text.StrBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.TopologicalSortingUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
+import org.slf4j.LoggerFactory
 import java.io.Serializable
 
 /**
@@ -43,7 +43,8 @@ interface ResourceAssignmentValidationService : Serializable {
  * @author Brinda Santh
  */
 open class ResourceAssignmentValidationServiceImpl : ResourceAssignmentValidationService {
-    private val log= LoggerFactory.getLogger(ResourceAssignmentValidationServiceImpl::class.java)
+
+    private val log = LoggerFactory.getLogger(ResourceAssignmentValidationServiceImpl::class.java)
 
     open var resourceAssignmentMap: Map<String, ResourceAssignment> = hashMapOf()
     open val validationMessage = StrBuilder()
@@ -61,15 +62,14 @@ open class ResourceAssignmentValidationServiceImpl : ResourceAssignmentValidatio
         return true
     }
 
-
     open fun validateTemplateNDictionaryKeys(resourceAssignments: List<ResourceAssignment>) {
 
         resourceAssignmentMap = resourceAssignments.map { it.name to it }.toMap()
 
         // Check the Resource Assignment has Duplicate Key Names
         val duplicateKeyNames = resourceAssignments.groupBy { it.name }
-                .filter { it.value.size > 1 }
-                .map { it.key }
+            .filter { it.value.size > 1 }
+            .map { it.key }
 
         if (duplicateKeyNames.isNotEmpty()) {
             validationMessage.appendln(String.format("Duplicate Assignment Template Keys (%s) is Present", duplicateKeyNames))
@@ -120,21 +120,23 @@ open class ResourceAssignmentValidationServiceImpl : ResourceAssignmentValidatio
             if (v.name == "*") {
                 s.append("\n    * -> [")
                 for (resourceAssignment in vs) {
-                    s.append("(" + resourceAssignment.dictionaryName + ":" + resourceAssignment.name
-                            + "),")
+                    s.append(
+                        "(" + resourceAssignment.dictionaryName + ":" + resourceAssignment.name +
+                                "),"
+                    )
                 }
                 s.append("]")
             } else {
                 s.append("\n    (" + v.dictionaryName + ":" + v.name + ") -> [")
                 for (resourceAssignment in vs) {
-                    s.append("(" + resourceAssignment.dictionaryName + ":" + resourceAssignment.name
-                            + "),")
+                    s.append(
+                        "(" + resourceAssignment.dictionaryName + ":" + resourceAssignment.name +
+                                "),"
+                    )
                 }
                 s.append("]")
             }
         }
         return s.toString()
     }
-
-
 }

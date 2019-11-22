@@ -50,7 +50,6 @@ class ResourceResolutionComponentTest {
 
     private val executionRequest = ExecutionServiceInput()
 
-
     @Before
     fun setup() {
 
@@ -81,8 +80,10 @@ class ResourceResolutionComponentTest {
             try {
                 resourceResolutionComponent.processNB(executionRequest)
             } catch (e: BluePrintProcessorException) {
-                assertEquals("Can't proceed with the resolution: either provide resolution-key OR combination of resource-id and resource-type.",
-                        e.message)
+                assertEquals(
+                    "Can't proceed with the resolution: either provide resolution-key OR combination of resource-id and resource-type.",
+                    e.message
+                )
                 return@runBlocking
             }
             fail()
@@ -98,8 +99,10 @@ class ResourceResolutionComponentTest {
             try {
                 resourceResolutionComponent.processNB(executionRequest)
             } catch (e: BluePrintProcessorException) {
-                assertEquals("Can't proceed with the resolution: both resource-id and resource-type should be provided, one of them is missing.",
-                        e.message)
+                assertEquals(
+                    "Can't proceed with the resolution: both resource-id and resource-type should be provided, one of them is missing.",
+                    e.message
+                )
                 return@runBlocking
             }
             fail()
@@ -116,9 +119,11 @@ class ResourceResolutionComponentTest {
             try {
                 resourceResolutionComponent.processNB(executionRequest)
             } catch (e: BluePrintProcessorException) {
-                assertEquals("Can't proceed with the resolution: can't persist resolution without a correlation key. " +
-                        "Either provide a resolution-key OR combination of resource-id and resource-type OR set `storeResult` to false.",
-                        e.message)
+                assertEquals(
+                    "Can't proceed with the resolution: can't persist resolution without a correlation key. " +
+                            "Either provide a resolution-key OR combination of resource-id and resource-type OR set `storeResult` to false.",
+                    e.message
+                )
                 return@runBlocking
             }
             fail()
@@ -136,22 +141,23 @@ class ResourceResolutionComponentTest {
         properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] = occurrence
 
         coEvery {
-            resourceResolutionService.resolveResources(any(),
-                    any(),
-                    any<List<String>>(),
-                    any<MutableMap<String, Any>>())
+            resourceResolutionService.resolveResources(
+                any(),
+                any(),
+                any<List<String>>(),
+                any<MutableMap<String, Any>>()
+            )
         } returns mutableMapOf()
-
 
         runBlocking {
             resourceResolutionComponent.processNB(executionRequest)
         }
 
-// FIXME add verification
-//        coVerify {
-//            resourceResolutionService.resolveResources(eq(bluePrintRuntimeService),
-//                eq(nodeTemplateName), eq(artifactNames), eq(properties))
-//        }
+        // FIXME add verification
+        //        coVerify {
+        //            resourceResolutionService.resolveResources(eq(bluePrintRuntimeService),
+        //                eq(nodeTemplateName), eq(artifactNames), eq(properties))
+        //        }
     }
 
     @Test

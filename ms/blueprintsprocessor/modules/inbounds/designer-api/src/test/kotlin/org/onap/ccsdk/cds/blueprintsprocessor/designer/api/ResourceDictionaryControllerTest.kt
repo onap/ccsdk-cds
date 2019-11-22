@@ -32,8 +32,10 @@ import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes = [DesignerApiTestConfiguration::class,
-    BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, BluePrintDBLibConfiguration::class])
+@ContextConfiguration(
+    classes = [DesignerApiTestConfiguration::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, BluePrintDBLibConfiguration::class]
+)
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class ResourceDictionaryControllerTest {
@@ -45,5 +47,4 @@ class ResourceDictionaryControllerTest {
     fun testResourceDictionaryControllerPresence() {
         assertNotNull(resourceDictionaryController, "failed to initialise ResourceDictionaryController")
     }
-
 }

@@ -64,11 +64,12 @@ class ResourceAssignmentUtilsTest {
     fun setup() {
 
         val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
-                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+            "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+        )
 
         resourceAssignmentRuntimeService = spyk(ResourceAssignmentRuntimeService("1234", bluePrintContext))
 
-        //Init input map and expected values for tests
+        // Init input map and expected values for tests
         initInputMapAndExpectedValuesForPrimitiveType()
         initInputMapAndExpectedValuesForCollection()
         initInputMapAndExpectedValuesForComplexType()
@@ -120,35 +121,34 @@ class ResourceAssignmentUtilsTest {
 
     @Test
     fun `generateResourceDataForAssignments - positive test`() {
-        //given a valid resource assignment
+        // given a valid resource assignment
         val validResourceAssignment = createResourceAssignmentForTest("valid_value")
 
-        //and a list containing that resource assignment
+        // and a list containing that resource assignment
         val resourceAssignmentList = listOf<ResourceAssignment>(validResourceAssignment)
 
-        //when the values of the resources are evaluated
+        // when the values of the resources are evaluated
         val outcome = ResourceAssignmentUtils.generateResourceDataForAssignments(resourceAssignmentList)
 
-        //then the assignment should produce a valid result
+        // then the assignment should produce a valid result
         val expected = "{\n" + "  \"pnf-id\" : \"valid_value\"\n" + "}"
-        assertEquals(expected, outcome.replace("\r\n","\n"), "unexpected outcome generated")
+        assertEquals(expected, outcome.replace("\r\n", "\n"), "unexpected outcome generated")
     }
 
     @Test
     fun `generateResourceDataForAssignments - resource without value is not resolved as null`() {
-        //given a valid resource assignment
+        // given a valid resource assignment
         val resourceAssignmentWithNullValue = createResourceAssignmentForTest(null)
 
-        //and a list containing that resource assignment
+        // and a list containing that resource assignment
         val resourceAssignmentList = listOf<ResourceAssignment>(resourceAssignmentWithNullValue)
 
-        //when the values of the resources are evaluated
+        // when the values of the resources are evaluated
         val outcome = ResourceAssignmentUtils.generateResourceDataForAssignments(resourceAssignmentList)
 
-        //then the assignment should produce a valid result
+        // then the assignment should produce a valid result
         val expected = "{\n" + "  \"pnf-id\" : \"\${pnf-id}\"\n" + "}"
-        assertEquals(expected, outcome.replace("\r\n","\n"), "unexpected outcome generated")
-
+        assertEquals(expected, outcome.replace("\r\n", "\n"), "unexpected outcome generated")
     }
 
     private fun createResourceAssignmentForTest(resourceValue: String?): ResourceAssignment {
@@ -166,61 +166,77 @@ class ResourceAssignmentUtilsTest {
     }
 
     @Test
-    fun parseResponseNodeTestForPrimitivesTypes(){
-        var outcome = prepareResponseNodeForTest("sample-value", "string", "",
-                inputMapToTestPrimitiveTypeWithValue)
+    fun parseResponseNodeTestForPrimitivesTypes() {
+        var outcome = prepareResponseNodeForTest(
+            "sample-value", "string", "",
+            inputMapToTestPrimitiveTypeWithValue
+        )
         assertEquals(expectedValueToTestPrimitiveType, outcome, "Unexpected outcome returned for primitive type of simple String")
 
-        outcome = prepareResponseNodeForTest("sample-key-value", "string", "",
-                inputMapToTestPrimitiveTypeWithKeyValue)
+        outcome = prepareResponseNodeForTest(
+            "sample-key-value", "string", "",
+            inputMapToTestPrimitiveTypeWithKeyValue
+        )
         assertEquals(expectedValueToTestPrimitiveType, outcome, "Unexpected outcome returned for primitive type of key-value String")
     }
 
     @Test
-    fun parseResponseNodeTestForCollectionsOfString(){
-        var outcome = prepareResponseNodeForTest("listOfString", "list",
-                "string", inputMapToTestCollectionOfPrimitiveType)
+    fun parseResponseNodeTestForCollectionsOfString() {
+        var outcome = prepareResponseNodeForTest(
+            "listOfString", "list",
+            "string", inputMapToTestCollectionOfPrimitiveType
+        )
         assertEquals(expectedValueToTesCollectionOfPrimitiveType, outcome, "unexpected outcome returned for list of String")
 
-        outcome = prepareResponseNodeForTest("mapOfString", "map", "string",
-                inputMapToTestCollectionOfPrimitiveType)
+        outcome = prepareResponseNodeForTest(
+            "mapOfString", "map", "string",
+            inputMapToTestCollectionOfPrimitiveType
+        )
         assertEquals(expectedValueToTesCollectionOfPrimitiveType, outcome, "unexpected outcome returned for map of String")
     }
 
     @Test
-    fun parseResponseNodeTestForCollectionsOfComplexType(){
-        var outcome = prepareResponseNodeForTest("listOfMyDataTypeWithOneOutputKeyMapping", "list",
-                "ip-address", inputMapToTestCollectionOfComplexTypeWithOneOutputKeyMapping)
+    fun parseResponseNodeTestForCollectionsOfComplexType() {
+        var outcome = prepareResponseNodeForTest(
+            "listOfMyDataTypeWithOneOutputKeyMapping", "list",
+            "ip-address", inputMapToTestCollectionOfComplexTypeWithOneOutputKeyMapping
+        )
         assertEquals(expectedValueToTestCollectionOfComplexTypeWithOneOutputKeyMapping, outcome, "unexpected outcome returned for list of String")
 
-        outcome = prepareResponseNodeForTest("listOfMyDataTypeWithAllOutputKeyMapping", "list",
-                "ip-address", inputMapToTestCollectionOfComplexTypeWithAllOutputKeyMapping)
+        outcome = prepareResponseNodeForTest(
+            "listOfMyDataTypeWithAllOutputKeyMapping", "list",
+            "ip-address", inputMapToTestCollectionOfComplexTypeWithAllOutputKeyMapping
+        )
         assertEquals(expectedValueToTestCollectionOfComplexTypeWithAllOutputKeyMapping, outcome, "unexpected outcome returned for list of String")
     }
 
     @Test
-    fun `parseResponseNodeTestForComplexType find one output key mapping`(){
-        val outcome = prepareResponseNodeForTest("complexTypeOneKeys", "host",
-                "", inputMapToTestComplexTypeWithOneOutputKeyMapping)
+    fun `parseResponseNodeTestForComplexType find one output key mapping`() {
+        val outcome = prepareResponseNodeForTest(
+            "complexTypeOneKeys", "host",
+            "", inputMapToTestComplexTypeWithOneOutputKeyMapping
+        )
         assertEquals(expectedValueToTestComplexTypeWithOneOutputKeyMapping, outcome, "Unexpected outcome returned for complex type")
     }
 
     @Test
-    fun `parseResponseNodeTestForComplexType find all output key mapping`(){
-        val outcome = prepareResponseNodeForTest("complexTypeAllKeys", "host",
-                "", inputMapToTestComplexTypeWithAllOutputKeyMapping)
+    fun `parseResponseNodeTestForComplexType find all output key mapping`() {
+        val outcome = prepareResponseNodeForTest(
+            "complexTypeAllKeys", "host",
+            "", inputMapToTestComplexTypeWithAllOutputKeyMapping
+        )
         assertEquals(expectedValueToTestComplexTypeWithAllOutputKeyMapping, outcome, "Unexpected outcome returned for complex type")
     }
 
     private fun initInputMapAndExpectedValuesForPrimitiveType() {
         inputMapToTestPrimitiveTypeWithValue = "1.2.3.1".asJsonType()
         val keyValue = mutableMapOf<String, String>()
-        keyValue["value"]= "1.2.3.1"
+        keyValue["value"] = "1.2.3.1"
         inputMapToTestPrimitiveTypeWithKeyValue = keyValue.asJsonType()
         expectedValueToTestPrimitiveType = TextNode("1.2.3.1")
     }
 
-    private fun initInputMapAndExpectedValuesForCollection(){
+    private fun initInputMapAndExpectedValuesForCollection() {
         val listOfIps = arrayListOf("1.2.3.1", "1.2.3.2", "1.2.3.3")
         val arrayNodeForList1 = JacksonUtils.objectMapper.createArrayNode()
         listOfIps.forEach {
@@ -230,12 +246,15 @@ class ResourceAssignmentUtilsTest {
         }
         inputMapToTestCollectionOfPrimitiveType = arrayNodeForList1
 
-        expectedValueToTesCollectionOfPrimitiveType = arrayListOf(ExpectedResponseIp("1.2.3.1"),
-                ExpectedResponseIp( "1.2.3.2"), ExpectedResponseIp("1.2.3.3")).asJsonType()
+        expectedValueToTesCollectionOfPrimitiveType = arrayListOf(
+            ExpectedResponseIp("1.2.3.1"),
+            ExpectedResponseIp("1.2.3.2"), ExpectedResponseIp("1.2.3.3")
+        ).asJsonType()
 
-
-        val listOfIpAddresses = arrayListOf(IpAddress("1111", "1.2.3.1").asJsonType(),
-                IpAddress("2222", "1.2.3.2").asJsonType(), IpAddress("3333", "1.2.3.3").asJsonType())
+        val listOfIpAddresses = arrayListOf(
+            IpAddress("1111", "1.2.3.1").asJsonType(),
+            IpAddress("2222", "1.2.3.2").asJsonType(), IpAddress("3333", "1.2.3.3").asJsonType()
+        )
         val arrayNodeForList2 = JacksonUtils.objectMapper.createArrayNode()
         listOfIpAddresses.forEach {
             val arrayChildNode = JacksonUtils.objectMapper.createObjectNode()
@@ -259,15 +278,20 @@ class ResourceAssignmentUtilsTest {
         arrayNodeForList3.add(childNode)
         inputMapToTestCollectionOfComplexTypeWithAllOutputKeyMapping = arrayNodeForList3
 
-        expectedValueToTestCollectionOfComplexTypeWithOneOutputKeyMapping = arrayListOf(ExpectedResponseIpAddress(IpAddress("1111", "1.2.3.1")),
-                ExpectedResponseIpAddress(IpAddress("2222", "1.2.3.2")), ExpectedResponseIpAddress(
-                IpAddress("3333", "1.2.3.3"))).asJsonType()
-        expectedValueToTestCollectionOfComplexTypeWithAllOutputKeyMapping = arrayListOf(IpAddress("1111", "1.2.3.1"),
-                IpAddress("2222", "1.2.3.2"),
-                IpAddress("3333", "1.2.3.3")).asJsonType()
+        expectedValueToTestCollectionOfComplexTypeWithOneOutputKeyMapping = arrayListOf(
+            ExpectedResponseIpAddress(IpAddress("1111", "1.2.3.1")),
+            ExpectedResponseIpAddress(IpAddress("2222", "1.2.3.2")), ExpectedResponseIpAddress(
+                IpAddress("3333", "1.2.3.3")
+            )
+        ).asJsonType()
+        expectedValueToTestCollectionOfComplexTypeWithAllOutputKeyMapping = arrayListOf(
+            IpAddress("1111", "1.2.3.1"),
+            IpAddress("2222", "1.2.3.2"),
+            IpAddress("3333", "1.2.3.3")
+        ).asJsonType()
     }
 
-    private fun initInputMapAndExpectedValuesForComplexType(){
+    private fun initInputMapAndExpectedValuesForComplexType() {
         val mapOfComplexType = mutableMapOf<String, JsonNode>()
         mapOfComplexType["value"] = Host("my-ipAddress", IpAddress("1111", "1.2.3.1")).asJsonType()
         mapOfComplexType["port"] = "8888".asJsonType()
@@ -275,7 +299,8 @@ class ResourceAssignmentUtilsTest {
         inputMapToTestComplexTypeWithOneOutputKeyMapping = mapOfComplexType.asJsonType()
 
         val objectNode = JacksonUtils.objectMapper.createObjectNode()
-        expectedValueToTestComplexTypeWithOneOutputKeyMapping = objectNode.set("host", Host("my-ipAddress", IpAddress("1111", "1.2.3.1")).asJsonType())
+        expectedValueToTestComplexTypeWithOneOutputKeyMapping =
+            objectNode.set("host", Host("my-ipAddress", IpAddress("1111", "1.2.3.1")).asJsonType())
 
         val childNode1 = JacksonUtils.objectMapper.createObjectNode()
         childNode1.set("name", "my-ipAddress".asJsonPrimitive())
@@ -290,8 +315,12 @@ class ResourceAssignmentUtilsTest {
         expectedValueToTestComplexTypeWithAllOutputKeyMapping = childNode2
     }
 
-    private fun prepareResponseNodeForTest(dictionary_source: String, sourceType: String, entrySchema: String,
-                                           response: Any): JsonNode {
+    private fun prepareResponseNodeForTest(
+        dictionary_source: String,
+        sourceType: String,
+        entrySchema: String,
+        response: Any
+    ): JsonNode {
 
         val resourceAssignment = when (sourceType) {
             "list", "map" -> {
@@ -355,16 +384,16 @@ class ResourceAssignmentUtilsTest {
 
         when (dictionary_source) {
             "sample-key-value", "sample-value" -> {
-                //Primary Type
-                if (dictionary_source=="sample-key-value")
+                // Primary Type
+                if (dictionary_source == "sample-key-value")
                     outputMapping["sample-ip"] = "value"
             }
             "listOfString", "mapOfString" -> {
-                //List of string
+                // List of string
                 outputMapping["ip"] = "value"
             }
             "listOfMyDataTypeWithOneOutputKeyMapping", "listOfMyDataTypeWithAllOutputKeyMapping" -> {
-                //List or map of complex Type
+                // List or map of complex Type
                 if (dictionary_source == "listOfMyDataTypeWithOneOutputKeyMapping")
                     outputMapping["ipAddress"] = "value"
                 else {
@@ -373,14 +402,13 @@ class ResourceAssignmentUtilsTest {
                 }
             }
             else -> {
-                //Complex Type
+                // Complex Type
                 if (dictionary_source == "complexTypeOneKeys")
                     outputMapping["host"] = "value"
                 else {
                     outputMapping["name"] = "name"
                     outputMapping["ipAddress"] = "ipAddress"
                 }
-
             }
         }
         return outputMapping

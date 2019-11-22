@@ -23,5 +23,4 @@ class UtilsTest {
         val nonExistentHttpStatusCode = determineHttpStatusCode(999999)
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, nonExistentHttpStatusCode)
     }
-
 }

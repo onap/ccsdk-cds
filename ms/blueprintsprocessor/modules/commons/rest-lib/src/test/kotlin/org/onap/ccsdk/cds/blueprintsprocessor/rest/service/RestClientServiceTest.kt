@@ -48,45 +48,56 @@ import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestHeader
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
 @EnableAutoConfiguration(exclude = [DataSourceAutoConfiguration::class])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@ContextConfiguration(classes = [BluePrintRestLibConfiguration::class, SampleController::class,
-    SecurityConfiguration::class,
-    BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class])
-@TestPropertySource(properties =
-[
-    "server.port=8443",
-    "server.ssl.enabled=true",
-    "server.ssl.key-store=classpath:keystore.p12",
-    "server.ssl.key-store-password=changeit",
-    "server.ssl.keyStoreType=PKCS12",
-    "server.ssl.keyAlias=tomcat",
-    "blueprintsprocessor.restclient.sample.type=basic-auth",
-    "blueprintsprocessor.restclient.sample.url=http://127.0.0.1:8081",
-    "blueprintsprocessor.restclient.sample.username=admin",
-    "blueprintsprocessor.restclient.sample.password=jans",
-    "blueprintsprocessor.restclient.test.type=ssl-basic-auth",
-    "blueprintsprocessor.restclient.test.url=https://localhost:8443",
-    "blueprintsprocessor.restclient.test.username=admin",
-    "blueprintsprocessor.restclient.test.password=jans",
-    "blueprintsprocessor.restclient.test.keyStoreInstance=PKCS12",
-    "blueprintsprocessor.restclient.test.sslTrust=src/test/resources/keystore.p12",
-    "blueprintsprocessor.restclient.test.sslTrustPassword=changeit"
-])
+@ContextConfiguration(
+    classes = [BluePrintRestLibConfiguration::class, SampleController::class,
+        SecurityConfiguration::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class]
+)
+@TestPropertySource(
+    properties =
+    [
+        "server.port=8443",
+        "server.ssl.enabled=true",
+        "server.ssl.key-store=classpath:keystore.p12",
+        "server.ssl.key-store-password=changeit",
+        "server.ssl.keyStoreType=PKCS12",
+        "server.ssl.keyAlias=tomcat",
+        "blueprintsprocessor.restclient.sample.type=basic-auth",
+        "blueprintsprocessor.restclient.sample.url=http://127.0.0.1:8081",
+        "blueprintsprocessor.restclient.sample.username=admin",
+        "blueprintsprocessor.restclient.sample.password=jans",
+        "blueprintsprocessor.restclient.test.type=ssl-basic-auth",
+        "blueprintsprocessor.restclient.test.url=https://localhost:8443",
+        "blueprintsprocessor.restclient.test.username=admin",
+        "blueprintsprocessor.restclient.test.password=jans",
+        "blueprintsprocessor.restclient.test.keyStoreInstance=PKCS12",
+        "blueprintsprocessor.restclient.test.sslTrust=src/test/resources/keystore.p12",
+        "blueprintsprocessor.restclient.test.sslTrustPassword=changeit"
+    ]
+)
 class RestClientServiceTest {
 
     @Autowired
     lateinit var bluePrintRestLibPropertyService: BluePrintRestLibPropertyService
 
     @Autowired
-    lateinit var httpHandler : HttpHandler
+    lateinit var httpHandler: HttpHandler
 
-    lateinit var http : WebServer
+    lateinit var http: WebServer
 
     fun localPort() = http.port
 
@@ -106,21 +117,26 @@ class RestClientServiceTest {
     @Test
     fun testPatch() {
         val restClientService = bluePrintRestLibPropertyService
-                .blueprintWebClientService("sample")
+            .blueprintWebClientService("sample")
         val response = restClientService.exchangeResource(
-                HttpMethod.PATCH.name, "/sample/name", "")
-        assertEquals("Patch request successful", response.body,
-                "failed to get patch response")
+            HttpMethod.PATCH.name, "/sample/name", ""
+        )
+        assertEquals(
+            "Patch request successful", response.body,
+            "failed to get patch response"
+        )
     }
 
     @Test
     fun testBaseAuth() {
         val restClientService = bluePrintRestLibPropertyService
-                .blueprintWebClientService("sample")
+            .blueprintWebClientService("sample")
         val headers = mutableMapOf<String, String>()
         headers["X-Transaction-Id"] = "1234"
-        val response = restClientService.exchangeResource(HttpMethod.GET.name,
-                "/sample/name", "")
+        val response = restClientService.exchangeResource(
+            HttpMethod.GET.name,
+            "/sample/name", ""
+        )
         assertNotNull(response.body, "failed to get response")
     }
 
@@ -135,12 +151,15 @@ class RestClientServiceTest {
         val mapper = ObjectMapper()
         val actualObj: JsonNode = mapper.readTree(json)
         val restClientService = bluePrintRestLibPropertyService
-                .blueprintWebClientService(actualObj)
-        lateinit var res:String
+            .blueprintWebClientService(actualObj)
+        lateinit var res: String
         runBlocking {
             val get = async(start = CoroutineStart.LAZY) {
-                restClientService.exchangeNB(HttpMethod.GET.name,
-                        "/sample/basic", "").body}
+                restClientService.exchangeNB(
+                    HttpMethod.GET.name,
+                    "/sample/basic", ""
+                ).body
+            }
             get.start()
             res = get.await()
         }
@@ -151,7 +170,7 @@ class RestClientServiceTest {
     @Test
     fun testSampleAaiReq() {
         val restClientService = bluePrintRestLibPropertyService
-                .blueprintWebClientService("test")
+            .blueprintWebClientService("test")
         val headers = mutableMapOf<String, String>()
         headers["X-TransactionId"] = "9999"
         headers["X-FromAppId"] = "AAI"
@@ -171,34 +190,52 @@ class RestClientServiceTest {
         lateinit var res6: String
         runBlocking {
             val get1 = async(start = CoroutineStart.LAZY) {
-                restClientService.exchangeNB(HttpMethod.GET.name,
-                        "/sample/aai/v14/business/customers", "", headers,
-                        Customer::class.java).body}
+                restClientService.exchangeNB(
+                    HttpMethod.GET.name,
+                    "/sample/aai/v14/business/customers", "", headers,
+                    Customer::class.java
+                ).body
+            }
 
             val get2 = async(start = CoroutineStart.LAZY) {
-                restClientService.exchangeNB(HttpMethod.GET.name,
-                        "/sample/aai/v14/business/customers", "", headers,
-                        Customer::class.java).body}
+                restClientService.exchangeNB(
+                    HttpMethod.GET.name,
+                    "/sample/aai/v14/business/customers", "", headers,
+                    Customer::class.java
+                ).body
+            }
 
             val post = async(start = CoroutineStart.LAZY) {
-                restClientService.exchangeNB(HttpMethod.POST.name,
-                        "/sample/aai/v14/business/customers", post1, headers,
-                        String::class.java).body}
+                restClientService.exchangeNB(
+                    HttpMethod.POST.name,
+                    "/sample/aai/v14/business/customers", post1, headers,
+                    String::class.java
+                ).body
+            }
 
             val put = async(start = CoroutineStart.LAZY) {
-                restClientService.exchangeNB(HttpMethod.PUT.name,
-                        "/sample/aai/v14/business/customers", post1, headers,
-                        String::class.java).body}
+                restClientService.exchangeNB(
+                    HttpMethod.PUT.name,
+                    "/sample/aai/v14/business/customers", post1, headers,
+                    String::class.java
+                ).body
+            }
 
             val patch = async(start = CoroutineStart.LAZY) {
-                restClientService.exchangeNB(HttpMethod.PATCH.name,
-                        "/sample/aai/v14/business/customers", post1, headers,
-                        String::class.java).body}
+                restClientService.exchangeNB(
+                    HttpMethod.PATCH.name,
+                    "/sample/aai/v14/business/customers", post1, headers,
+                    String::class.java
+                ).body
+            }
 
             val delete = async(start = CoroutineStart.LAZY) {
-                restClientService.exchangeNB(HttpMethod.DELETE.name,
-                        "/sample/aai/v14/business/customers", "", headers,
-                        String::class.java).body}
+                restClientService.exchangeNB(
+                    HttpMethod.DELETE.name,
+                    "/sample/aai/v14/business/customers", "", headers,
+                    String::class.java
+                ).body
+            }
 
             get1.start()
             get2.start()
@@ -246,13 +283,13 @@ open class SampleController {
     @GetMapping("/basic")
     fun getBasic(): String = "Basic request arrived successfully"
 
-
     @GetMapping("/aai/v14/business/customers")
     fun getAaiCustomers(
-            @RequestHeader(name = "X-TransactionId", required = true)
-            transId: String,
-            @RequestHeader(name = "X-FromAppId", required = true)
-            appId: String) : String {
+        @RequestHeader(name = "X-TransactionId", required = true)
+        transId: String,
+        @RequestHeader(name = "X-FromAppId", required = true)
+        appId: String
+    ): String {
         if (transId != "9999" || appId != "AAI") {
             return ""
         }
@@ -266,23 +303,24 @@ open class SampleController {
 
     @PostMapping("/aai/v14/business/customers")
     fun postAaiCustomers(
-            @RequestHeader(name = "X-TransactionId", required = true)
-            transId: String,
-            @RequestHeader(name = "X-FromAppId", required = true)
-            appId: String) : String {
+        @RequestHeader(name = "X-TransactionId", required = true)
+        transId: String,
+        @RequestHeader(name = "X-FromAppId", required = true)
+        appId: String
+    ): String {
         if (transId != "9999" || appId != "AAI") {
             return ""
         }
         return "The message is successfully posted"
     }
 
-
     @PutMapping("/aai/v14/business/customers")
     fun putAaiCustomers(
-            @RequestHeader(name = "X-TransactionId", required = true)
-            transId: String,
-            @RequestHeader(name = "X-FromAppId", required = true)
-            appId: String) : String {
+        @RequestHeader(name = "X-TransactionId", required = true)
+        transId: String,
+        @RequestHeader(name = "X-FromAppId", required = true)
+        appId: String
+    ): String {
         if (transId != "9999" || appId != "AAI") {
             return ""
         }
@@ -291,10 +329,11 @@ open class SampleController {
 
     @PatchMapping("/aai/v14/business/customers")
     fun patchAaiCustomers(
-            @RequestHeader(name = "X-TransactionId", required = true)
-            transId: String,
-            @RequestHeader(name = "X-FromAppId", required = true)
-            appId: String) : String {
+        @RequestHeader(name = "X-TransactionId", required = true)
+        transId: String,
+        @RequestHeader(name = "X-FromAppId", required = true)
+        appId: String
+    ): String {
         if (transId != "9999" || appId != "AAI") {
             return ""
         }
@@ -303,10 +342,11 @@ open class SampleController {
 
     @DeleteMapping("/aai/v14/business/customers")
     fun deleteAaiCustomers(
-            @RequestHeader(name = "X-TransactionId", required = true)
-            transId: String,
-            @RequestHeader(name = "X-FromAppId", required = true)
-            appId: String) : String {
+        @RequestHeader(name = "X-TransactionId", required = true)
+        transId: String,
+        @RequestHeader(name = "X-FromAppId", required = true)
+        appId: String
+    ): String {
         if (transId != "9999" || appId != "AAI") {
             return ""
         }
@@ -323,20 +363,20 @@ open class SecurityConfiguration {
     @Bean
     open fun userDetailsService(): MapReactiveUserDetailsService {
         val user: UserDetails = User.withDefaultPasswordEncoder()
-                .username("admin")
-                .password("jans")
-                .roles("USER")
-                .build()
+            .username("admin")
+            .password("jans")
+            .roles("USER")
+            .build()
         return MapReactiveUserDetailsService(user)
     }
 
     @Bean
     open fun springSecurityFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain {
         return http
-                .csrf().disable()
-                .authorizeExchange().anyExchange().authenticated()
-                .and().httpBasic()
-                .and().build()
+            .csrf().disable()
+            .authorizeExchange().anyExchange().authenticated()
+            .and().httpBasic()
+            .and().build()
     }
 }
 
@@ -344,7 +384,8 @@ open class SecurityConfiguration {
  * Data class required for response
  */
 data class Customer(
-       val id: String,
-       val name: String,
-       val type: String,
-       val resource: String)
+    val id: String,
+    val name: String,
+    val type: String,
+    val resource: String
+)
