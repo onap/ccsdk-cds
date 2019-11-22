@@ -45,8 +45,10 @@ class MDCContextTest {
                 assertEquals(null, MDC.get(BluePrintConstants.ONAP_REQUEST_ID))
             }
             launch(MDCContext()) {
-                assertEquals("12345", MDC.get(BluePrintConstants.ONAP_REQUEST_ID),
-                        "couldn't get request id")
+                assertEquals(
+                    "12345", MDC.get(BluePrintConstants.ONAP_REQUEST_ID),
+                    "couldn't get request id"
+                )
 
                 MDC.put("client_id", "client-1")
                 assertEquals("client-1", MDC.get("client_id"), "couldn't get client id")

@@ -17,15 +17,28 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
-
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.slf4j.LoggerFactory
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.cds.controllerblueprints.core.data.*
+import org.onap.ccsdk.cds.controllerblueprints.core.data.Activity
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.CapabilityAssignment
+import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.InterfaceAssignment
+import org.onap.ccsdk.cds.controllerblueprints.core.data.InterfaceDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.OperationAssignment
+import org.onap.ccsdk.cds.controllerblueprints.core.data.PolicyType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.RequirementAssignment
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ServiceTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.data.Step
+import org.onap.ccsdk.cds.controllerblueprints.core.data.TopologyTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.data.Workflow
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.slf4j.LoggerFactory
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -38,7 +51,7 @@ import kotlin.test.assertTrue
  */
 class BluePrintContextTest {
 
-    private val log= LoggerFactory.getLogger(this::class.toString())
+    private val log = LoggerFactory.getLogger(this::class.toString())
 
     val blueprintBasePath: String = ("./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
 

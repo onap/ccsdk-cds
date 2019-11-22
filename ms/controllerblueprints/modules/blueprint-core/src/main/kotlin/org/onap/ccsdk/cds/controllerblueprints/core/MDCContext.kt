@@ -24,7 +24,8 @@ import kotlin.coroutines.CoroutineContext
 typealias MDCContextMap = Map<String, String>?
 
 class MDCContext(private val contextMap: MDCContextMap = MDC.getCopyOfContextMap()) :
-        ThreadContextElement<MDCContextMap>, AbstractCoroutineContextElement(Key) {
+    ThreadContextElement<MDCContextMap>, AbstractCoroutineContextElement(Key) {
+
     /**
      * Key of [MDCContext] in [CoroutineContext].
      */

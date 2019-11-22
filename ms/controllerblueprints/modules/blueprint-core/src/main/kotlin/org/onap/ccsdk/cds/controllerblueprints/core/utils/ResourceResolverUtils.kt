@@ -29,19 +29,20 @@ import java.net.URL
  * @author Brinda Santh
  */
 object ResourceResolverUtils {
-    private val log= LoggerFactory.getLogger(this::class.toString())
+
+    private val log = LoggerFactory.getLogger(this::class.toString())
 
     fun getFileContent(filename: String, basePath: String?): String {
         log.trace("file ({}), basePath ({}) ", filename, basePath)
         try {
             var resolvedFileName: String = filename
-            if (filename.startsWith("http", true)
-                    || filename.startsWith("https", true)) {
+            if (filename.startsWith("http", true) ||
+                filename.startsWith("https", true)
+            ) {
                 val givenUrl: String = URL(filename).toString()
                 val systemUrl: String = File(".").toURI().toURL().toString()
                 log.trace("givenUrl ({}), systemUrl ({}) ", givenUrl, systemUrl)
                 if (givenUrl.startsWith(systemUrl)) {
-
                 }
             } else {
                 if (!filename.startsWith("/")) {
@@ -52,7 +53,7 @@ object ResourceResolverUtils {
                     }
                 }
             }
-            //FIXME("Convert into reactive")
+            // FIXME("Convert into reactive")
             return JacksonUtils.getContent(resolvedFileName)
         } catch (e: Exception) {
             throw BluePrintException(e, "failed to file (%s), basePath (%s) ", filename, basePath)

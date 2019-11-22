@@ -27,15 +27,16 @@ import com.att.nsa.mr.client.impl.MRSimplerBatchPublisher
 /**
  * Representation of DMAAP client service for AAF auth type.
  */
-class AafAuthDmaapClientService(private val clientProps:
-                                AafAuthDmaapClientProperties)
-    : BluePrintDmaapClientService {
+class AafAuthDmaapClientService(
+    private val clientProps:
+    AafAuthDmaapClientProperties
+) :
+    BluePrintDmaapClientService {
 
     /**
      * The constructed DMAAP client.
      */
     var clients: MutableList<MRBatchingPublisher> = mutableListOf()
-
 
     /**
      * Returns the DMAAP client after constructing it properly with the data
@@ -52,12 +53,12 @@ class AafAuthDmaapClientService(private val clientProps:
             val client = MRClientFactory.createBatchingPublisher(
                 clientProps.host, t, clientProps.username,
                 clientProps.password, 1, 1, false,
-                clientProps.type, "")
+                clientProps.type, ""
+            )
             val batchPublisher = client as MRSimplerBatchPublisher
             batchPublisher.props = clientProps.props
             clients.add(client)
         }
         return clients
     }
-
 }

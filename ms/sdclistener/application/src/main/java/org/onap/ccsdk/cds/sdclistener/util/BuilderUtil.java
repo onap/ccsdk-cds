@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.onap.ccsdk.cds.sdclistener.util;
 
 import java.util.function.Consumer;
@@ -38,4 +39,5 @@ public class BuilderUtil<T> {
     public T create() {
         return object;
     }
+
 }

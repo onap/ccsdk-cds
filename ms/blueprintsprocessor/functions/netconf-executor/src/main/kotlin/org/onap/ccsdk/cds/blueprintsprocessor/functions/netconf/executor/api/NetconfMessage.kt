@@ -18,16 +18,17 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api
 
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.utils.RpcStatus
 
-data class DeviceResponse(var status: String? = null,
-                          var errorMessage: String? = null,
-                          var responseMessage: String? = null,
-                          var requestMessage: String? = null) {
+data class DeviceResponse(
+    var status: String? = null,
+    var errorMessage: String? = null,
+    var responseMessage: String? = null,
+    var requestMessage: String? = null
+) {
 
     fun isSuccess(): Boolean {
         return this.status == RpcStatus.SUCCESS && this.errorMessage.isNullOrEmpty()
     }
 }
-
 
 /**
  * Creates an event of a given type and for the specified subject and the current time.
@@ -37,10 +38,12 @@ data class DeviceResponse(var status: String? = null,
  * @param messageId id of the message related to the event
  * @param deviceInfo device of event
  */
-class NetconfReceivedEvent(val type: Type,
-                           val messagePayload: String = "",
-                           val messageId: String = "",
-                           val deviceInfo: DeviceInfo) {
+class NetconfReceivedEvent(
+    val type: Type,
+    val messagePayload: String = "",
+    val messageId: String = "",
+    val deviceInfo: DeviceInfo
+) {
 
     enum class Type {
         DEVICE_REPLY,

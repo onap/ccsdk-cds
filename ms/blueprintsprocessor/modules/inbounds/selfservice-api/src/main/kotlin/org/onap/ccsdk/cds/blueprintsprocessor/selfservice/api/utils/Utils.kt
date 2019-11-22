@@ -22,7 +22,7 @@ import org.springframework.util.StringUtils
 import java.io.File
 import java.io.IOException
 import java.nio.file.Path
-import java.util.*
+import java.util.UUID
 
 const val INTERNAL_SERVER_ERROR_HTTP_STATUS_CODE = 500
 
@@ -55,7 +55,7 @@ fun determineHttpStatusCode(statusCode: Int): HttpStatus {
     try {
         return HttpStatus.valueOf(statusCode)
     } catch (exception: Exception) {
-        //if statusCode cannot be converted to a proper HttpStatus, the resource still needs to assign a HTTP status
+        // if statusCode cannot be converted to a proper HttpStatus, the resource still needs to assign a HTTP status
         // code to the response. In this case, a 500 Internal Server Error will be returned as default.
         return HttpStatus.valueOf(INTERNAL_SERVER_ERROR_HTTP_STATUS_CODE)
     }

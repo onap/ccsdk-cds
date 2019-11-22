@@ -16,7 +16,6 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.healthapi.service
 
-
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.ApplicationHealth
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.ServiceEndpoint
@@ -35,8 +34,10 @@ import org.springframework.stereotype.Service
  * @version 1.0
  */
 @Service
-open class EndPointExecution(private val basicAuthRestClientService: BasicAuthRestClientService
-                             , private val restClientProperties: BasicAuthRestClientProperties) {
+open class EndPointExecution(
+    private val basicAuthRestClientService: BasicAuthRestClientService,
+    private val restClientProperties: BasicAuthRestClientProperties
+) {
 
     private var logger = LoggerFactory.getLogger(EndPointExecution::class.java)
 
@@ -46,25 +47,21 @@ open class EndPointExecution(private val basicAuthRestClientService: BasicAuthRe
             val result = basicAuthRestClientService.exchangeResource(HttpMethod.GET.name, "", "")
             if (result.status == 200)
                 return WebClientEnpointResponse(result)
-
         } catch (e: Exception) {
             logger.error("service name ${serviceEndpoint.serviceName} is down ${e.message}")
         }
-        return WebClientEnpointResponse(BlueprintWebClientService.WebClientResponse(500,""))
+        return WebClientEnpointResponse(BlueprintWebClientService.WebClientResponse(500, ""))
     }
 
     private fun addClientPropertiesConfiguration(serviceEndpoint: ServiceEndpoint) {
         restClientProperties.url = serviceEndpoint.serviceLink
     }
 
-
     open fun getHealthFromWebClientEnpointResponse(webClientEnpointResponse: WebClientEnpointResponse): ApplicationHealth? {
         return mappingMetricsToDTO(webClientEnpointResponse?.response?.body.toString())
-
     }
 
     private fun mappingMetricsToDTO(body: String): ApplicationHealth {
         return ObjectMapper().readValue(body, ApplicationHealth::class.java)
     }
 }
-

@@ -31,15 +31,17 @@ import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.UUID
 
 class MessageLoggerService {
 
     private val log = logger(MessageLoggerService::class)
 
     fun messageConsuming(headers: CommonHeader, consumerRecord: ConsumerRecord<*, *>) {
-        messageConsuming(headers.requestId, headers.subRequestId,
-                headers.originatorId, consumerRecord)
+        messageConsuming(
+            headers.requestId, headers.subRequestId,
+            headers.originatorId, consumerRecord
+        )
     }
 
     fun messageConsuming(consumerRecord: ConsumerRecord<*, *>) {
@@ -50,14 +52,19 @@ class MessageLoggerService {
         messageConsuming(requestID, invocationID, partnerName, consumerRecord)
     }
 
-
-    fun messageConsuming(requestID: String, invocationID: String, partnerName: String,
-                         consumerRecord: ConsumerRecord<*, *>) {
+    fun messageConsuming(
+        requestID: String,
+        invocationID: String,
+        partnerName: String,
+        consumerRecord: ConsumerRecord<*, *>
+    ) {
         val headers = consumerRecord.headers().toMap()
         val localhost = InetAddress.getLocalHost()
-        MDC.put("InvokeTimestamp", ZonedDateTime
+        MDC.put(
+            "InvokeTimestamp", ZonedDateTime
                 .ofInstant(Instant.ofEpochMilli(consumerRecord.timestamp()), ZoneOffset.UTC)
-                .format(DateTimeFormatter.ISO_INSTANT))
+                .format(DateTimeFormatter.ISO_INSTANT)
+        )
         MDC.put("RequestID", requestID)
         MDC.put("InvocationID", invocationID)
         MDC.put("PartnerName", partnerName)

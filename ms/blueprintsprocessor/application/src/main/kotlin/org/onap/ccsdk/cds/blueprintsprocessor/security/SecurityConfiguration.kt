@@ -38,8 +38,10 @@ open class SecurityConfiguration {
 
     @Bean
     open fun inMemoryUserService(): UserDetailsService {
-        val user = User(username, password,
-                listOf(SimpleGrantedAuthority("USER")))
+        val user = User(
+            username, password,
+            listOf(SimpleGrantedAuthority("USER"))
+        )
         return InMemoryUserDetailsManager(user)
     }
 

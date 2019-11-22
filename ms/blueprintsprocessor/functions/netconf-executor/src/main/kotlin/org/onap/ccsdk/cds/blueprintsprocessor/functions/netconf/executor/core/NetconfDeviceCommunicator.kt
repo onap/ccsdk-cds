@@ -22,15 +22,26 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.Net
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.utils.NetconfMessageUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.utils.RpcMessageUtils
 import org.slf4j.LoggerFactory
-import java.io.*
-import java.nio.charset.*
-import java.util.concurrent.*
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.io.OutputStream
+import java.io.OutputStreamWriter
+import java.nio.charset.StandardCharsets
+import java.util.concurrent.CancellationException
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.ExecutionException
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 
-class NetconfDeviceCommunicator(private var inputStream: InputStream,
-                                private var out: OutputStream,
-                                private val deviceInfo: DeviceInfo,
-                                private val sessionListener: NetconfSessionListener,
-                                private var replies: MutableMap<String, CompletableFuture<String>>) : Thread() {
+class NetconfDeviceCommunicator(
+    private var inputStream: InputStream,
+    private var out: OutputStream,
+    private val deviceInfo: DeviceInfo,
+    private val sessionListener: NetconfSessionListener,
+    private var replies: MutableMap<String, CompletableFuture<String>>
+) : Thread() {
 
     private val log = LoggerFactory.getLogger(NetconfDeviceCommunicator::class.java)
     private var state = NetconfMessageState.NO_MATCHING_PATTERN
@@ -62,9 +73,12 @@ class NetconfDeviceCommunicator(private var inputStream: InputStream,
                     if (deviceReply == RpcMessageUtils.END_PATTERN) {
                         socketClosed = true
                         bufferReader.close()
-                        sessionListener.accept(NetconfReceivedEvent(
-                            NetconfReceivedEvent.Type.DEVICE_UNREGISTERED,
-                            deviceInfo = deviceInfo))
+                        sessionListener.accept(
+                            NetconfReceivedEvent(
+                                NetconfReceivedEvent.Type.DEVICE_UNREGISTERED,
+                                deviceInfo = deviceInfo
+                            )
+                        )
                     } else {
                         deviceReply = deviceReply.replace(RpcMessageUtils.END_PATTERN, "")
                         receivedMessage(deviceReply)
@@ -75,9 +89,12 @@ class NetconfDeviceCommunicator(private var inputStream: InputStream,
                     if (!NetconfMessageUtils.validateChunkedFraming(deviceReply)) {
                         log.debug("$deviceInfo: Received badly framed message $deviceReply")
                         socketClosed = true
-                        sessionListener.accept(NetconfReceivedEvent(
-                            NetconfReceivedEvent.Type.DEVICE_ERROR,
-                            deviceInfo = deviceInfo))
+                        sessionListener.accept(
+                            NetconfReceivedEvent(
+                                NetconfReceivedEvent.Type.DEVICE_ERROR,
+                                deviceInfo = deviceInfo
+                            )
+                        )
                     } else {
                         deviceReply = deviceReply.replace(RpcMessageUtils.MSGLEN_REGEX_PATTERN.toRegex(), "")
                         deviceReply = deviceReply.replace(NetconfMessageUtils.CHUNKED_END_REGEX_PATTERN.toRegex(), "")
@@ -86,20 +103,22 @@ class NetconfDeviceCommunicator(private var inputStream: InputStream,
                     }
                 }
             }
-
         } catch (e: IOException) {
             log.warn("$deviceInfo: Fail while reading from channel", e)
-            sessionListener.accept(NetconfReceivedEvent(
-                NetconfReceivedEvent.Type.DEVICE_ERROR,
-                deviceInfo = deviceInfo))
+            sessionListener.accept(
+                NetconfReceivedEvent(
+                    NetconfReceivedEvent.Type.DEVICE_ERROR,
+                    deviceInfo = deviceInfo
+                )
+            )
         }
-
     }
 
     /**
      * State machine for the Netconf message parser
      */
     internal enum class NetconfMessageState {
+
         NO_MATCHING_PATTERN {
             override fun evaluateChar(c: Char): NetconfMessageState {
                 return when (c) {
@@ -207,25 +226,29 @@ class NetconfDeviceCommunicator(private var inputStream: InputStream,
                 log.error("$deviceInfo: Failed to send message : \n $request", e)
                 future.completeExceptionally(e)
             }
-
         }
         return future
     }
 
     private fun receivedMessage(deviceReply: String) {
-        if (deviceReply.contains(RpcMessageUtils.RPC_REPLY) || deviceReply.contains(RpcMessageUtils.RPC_ERROR)
-            || deviceReply.contains(RpcMessageUtils.HELLO)) {
-            log.info("$deviceInfo: Received message with messageId: {}  \n $deviceReply",
-                NetconfMessageUtils.getMsgId(deviceReply))
-
+        if (deviceReply.contains(RpcMessageUtils.RPC_REPLY) || deviceReply.contains(RpcMessageUtils.RPC_ERROR) ||
+            deviceReply.contains(RpcMessageUtils.HELLO)
+        ) {
+            log.info(
+                "$deviceInfo: Received message with messageId: {}  \n $deviceReply",
+                NetconfMessageUtils.getMsgId(deviceReply)
+            )
         } else {
             log.error("$deviceInfo: Invalid message received: \n $deviceReply")
         }
-        sessionListener.accept(NetconfReceivedEvent(
-            NetconfReceivedEvent.Type.DEVICE_REPLY,
-            deviceReply,
-            NetconfMessageUtils.getMsgId(deviceReply),
-            deviceInfo))
+        sessionListener.accept(
+            NetconfReceivedEvent(
+                NetconfReceivedEvent.Type.DEVICE_REPLY,
+                deviceReply,
+                NetconfMessageUtils.getMsgId(deviceReply),
+                deviceInfo
+            )
+        )
     }
 
     /**
@@ -241,7 +264,10 @@ class NetconfDeviceCommunicator(private var inputStream: InputStream,
      * @throws TimeoutException if the wait timed outStream
      */
     internal fun getFutureFromSendMessage(
-        fut: CompletableFuture<String>, timeout: Long, timeUnit: TimeUnit): String {
+        fut: CompletableFuture<String>,
+        timeout: Long,
+        timeUnit: TimeUnit
+    ): String {
         return fut.get(timeout, timeUnit)
     }
 }

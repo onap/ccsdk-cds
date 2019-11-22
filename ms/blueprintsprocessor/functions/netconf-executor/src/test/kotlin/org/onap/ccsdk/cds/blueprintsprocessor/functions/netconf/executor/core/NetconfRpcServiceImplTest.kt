@@ -21,7 +21,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import org.junit.Before
-
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceResponse
@@ -39,11 +38,15 @@ class NetconfRpcServiceImplTest {
     companion object {
         private const val someString = "someString"
         private const val replyStr = "this is a reply"
-        private val failedDeviceResponse = DeviceResponse(status = RpcStatus.FAILURE,
-            requestMessage = "request message", responseMessage = replyStr) //responseMessage will be null in this POJO
-        private val successfulDeviceResponse = DeviceResponse(status = RpcStatus.SUCCESS,
-            requestMessage = "request message", responseMessage = replyStr) //responseMessage will be null in this POJO
-        //but will be set later from mockSession
+        private val failedDeviceResponse = DeviceResponse(
+            status = RpcStatus.FAILURE,
+            requestMessage = "request message", responseMessage = replyStr
+        ) // responseMessage will be null in this POJO
+        private val successfulDeviceResponse = DeviceResponse(
+            status = RpcStatus.SUCCESS,
+            requestMessage = "request message", responseMessage = replyStr
+        ) // responseMessage will be null in this POJO
+        // but will be set later from mockSession
         private const val msgId = "100"
         private const val timeout = 5
         private val deviceInfo: DeviceInfo = DeviceInfo().apply {

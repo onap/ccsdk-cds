@@ -40,7 +40,8 @@ class DefaultResourceResolutionProcessorTest {
     fun `test default resource resolution`() {
         runBlocking {
             val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
-                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+            )
 
             val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)
 

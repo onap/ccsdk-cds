@@ -20,7 +20,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInpu
 import org.onap.ccsdk.cds.controllerblueprints.core.asType
 import kotlin.reflect.KClass
 
-
 fun <T : Any> ExecutionServiceInput.payloadAsType(clazzType: KClass<T>): T {
     val actionName = this.actionIdentifiers.actionName
     val requestJsonNode = this.payload.get("$actionName-request")

@@ -28,7 +28,7 @@ public class ResourceDefinitionTest {
     private String basePath = "./../../../../components/model-catalog/resource-dictionary/starter-dictionary";
 
     @Test
-    public void testDictionaryDefinitionInputSource(){
+    public void testDictionaryDefinitionInputSource() {
 
         String fileName = basePath + "/input-source.json";
         ResourceDefinition resourceDefinition = JacksonUtils.Companion.readValueFromFile(fileName, ResourceDefinition.class);
@@ -36,7 +36,7 @@ public class ResourceDefinitionTest {
     }
 
     @Test
-    public void testDictionaryDefinitionDefaultSource(){
+    public void testDictionaryDefinitionDefaultSource() {
 
         String fileName = basePath + "/default-source.json";
         ResourceDefinition resourceDefinition = JacksonUtils.Companion.readValueFromFile(fileName, ResourceDefinition.class);
@@ -44,7 +44,7 @@ public class ResourceDefinitionTest {
     }
 
     @Test
-    public void testDictionaryDefinitionDBSource(){
+    public void testDictionaryDefinitionDBSource() {
 
         String fileName = basePath + "/db-source.json";
         ResourceDefinition resourceDefinition = JacksonUtils.Companion.readValueFromFile(fileName, ResourceDefinition.class);
@@ -52,9 +52,10 @@ public class ResourceDefinitionTest {
     }
 
     @Test
-    public void testDictionaryDefinitionMDSALSource(){
+    public void testDictionaryDefinitionMDSALSource() {
         String fileName = basePath + "/mdsal-source.json";
         ResourceDefinition resourceDefinition = JacksonUtils.Companion.readValueFromFile(fileName, ResourceDefinition.class);
         Assert.assertNotNull("Failed to populate dictionaryDefinition for mdsal type", resourceDefinition);
     }
+
 }

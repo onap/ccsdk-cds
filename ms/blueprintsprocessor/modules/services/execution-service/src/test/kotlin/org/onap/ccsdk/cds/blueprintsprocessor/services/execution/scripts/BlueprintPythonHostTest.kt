@@ -16,21 +16,22 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts
 
 import org.junit.Test
-
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.assertNotNull
 import kotlin.test.BeforeTest
+import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [BluePrintPython::class, PythonExecutorProperty::class, String::class])
-@TestPropertySource(properties =
-["blueprints.processor.functions.python.executor.modulePaths=./../../../../../components/scripts/python/ccsdk_blueprints",
-    "blueprints.processor.functions.python.executor.executionPath=./../../../../../components/scripts/python/ccsdk_blueprints"])
+@TestPropertySource(
+    properties =
+    ["blueprints.processor.functions.python.executor.modulePaths=./../../../../../components/scripts/python/ccsdk_blueprints",
+        "blueprints.processor.functions.python.executor.executionPath=./../../../../../components/scripts/python/ccsdk_blueprints"]
+)
 class BlueprintPythonHostTest {
 
     lateinit var blueprintPythonHost: BlueprintPythonHost

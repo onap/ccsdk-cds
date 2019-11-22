@@ -45,5 +45,4 @@ open class BasicAuthRestClientServiceConfiguration(private val securityConfigura
     open fun getBasicAuthRestClientService(): BasicAuthRestClientService {
         return BasicAuthRestClientService(getBasicAuthRestClientProperties())
     }
-
 }

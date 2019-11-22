@@ -31,14 +31,14 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
-open class ComponentExecuteNodeExecutor(private val nodeTemplateExecutionService: NodeTemplateExecutionService)
-    : ExecuteNodeExecutor() {
+open class ComponentExecuteNodeExecutor(private val nodeTemplateExecutionService: NodeTemplateExecutionService) :
+    ExecuteNodeExecutor() {
 
     private val log = LoggerFactory.getLogger(ComponentExecuteNodeExecutor::class.java)
 
     @Throws(SvcLogicException::class)
-    override fun execute(svc: SvcLogicServiceBase, node: SvcLogicNode, svcLogicContext: SvcLogicContext)
-            : SvcLogicNode = runBlocking {
+    override fun execute(svc: SvcLogicServiceBase, node: SvcLogicNode, svcLogicContext: SvcLogicContext):
+            SvcLogicNode = runBlocking {
 
         var outValue: String
 
@@ -48,15 +48,16 @@ open class ComponentExecuteNodeExecutor(private val nodeTemplateExecutionService
 
         val executionInput = ctx.getRequest() as ExecutionServiceInput
 
-        try {            // Get the Request from the Context and Set to the Function Input and Invoke the function
-            val executionOutput = nodeTemplateExecutionService.executeNodeTemplate(ctx.getBluePrintService(),
-                nodeTemplateName, executionInput)
+        try { // Get the Request from the Context and Set to the Function Input and Invoke the function
+            val executionOutput = nodeTemplateExecutionService.executeNodeTemplate(
+                ctx.getBluePrintService(),
+                nodeTemplateName, executionInput
+            )
 
             ctx.setResponse(executionOutput)
 
             outValue = executionOutput.status.message
             ctx.status = executionOutput.status.message
-
         } catch (e: Exception) {
             log.error("Could not execute plugin($nodeTemplateName) : ", e)
             outValue = "failure"
@@ -65,5 +66,4 @@ open class ComponentExecuteNodeExecutor(private val nodeTemplateExecutionService
 
         getNextNode(node, outValue)
     }
-
 }

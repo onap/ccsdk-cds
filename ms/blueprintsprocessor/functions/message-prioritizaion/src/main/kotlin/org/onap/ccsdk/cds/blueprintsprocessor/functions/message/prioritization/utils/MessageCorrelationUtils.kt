@@ -43,8 +43,8 @@ object MessageCorrelationUtils {
     }
 
     /** Assumption is message is of same group and checking for required types **/
-    fun correlatedMessagesWithTypes(collectedMessages: List<MessagePrioritization>, types: List<String>?)
-            : CorrelationCheckResponse {
+    fun correlatedMessagesWithTypes(collectedMessages: List<MessagePrioritization>, types: List<String>?):
+            CorrelationCheckResponse {
 
         return if (!types.isNullOrEmpty() && collectedMessages.size > 1) {
 
@@ -56,8 +56,8 @@ object MessageCorrelationUtils {
             val copyTypes = types.toTypedArray().copyOf().toMutableList()
 
             val filteredMessage = collectedMessages.filter {
-                !it.correlationId.isNullOrBlank()
-                        && types.contains(it.type)
+                !it.correlationId.isNullOrBlank() &&
+                        types.contains(it.type)
             }
             var correlatedKeys: MutableSet<String> = mutableSetOf()
             if (filteredMessage.isNotEmpty()) {

@@ -57,5 +57,4 @@ abstract class AbstractBluePrintDefinitions : BluePrintDefinitions {
     override fun otherDefinitions(): MutableMap<String, Any> {
         return otherDefinitionMap
     }
-
 }

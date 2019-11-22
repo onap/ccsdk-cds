@@ -42,6 +42,7 @@ open class TestDatabaseConfiguration {
 
 @Service(MessagePrioritizationConstants.PROCESSOR_PRIORITIZE)
 open class TestMessagePrioritizeProcessor : MessagePrioritizeProcessor() {
+
     override fun getGroupCorrelationTypes(messagePrioritization: MessagePrioritization): List<String>? {
         return when (messagePrioritization.group) {
             "group-typed" -> arrayListOf("type-0", "type-1", "type-2")

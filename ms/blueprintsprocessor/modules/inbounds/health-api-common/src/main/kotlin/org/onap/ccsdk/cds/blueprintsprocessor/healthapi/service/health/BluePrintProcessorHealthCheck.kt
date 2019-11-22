@@ -28,9 +28,11 @@ import org.springframework.stereotype.Service
  * @version 1.0
  */
 @Service
-open class BluePrintProcessorHealthCheck(private val endPointExecution: EndPointExecution
-                                         , private val healthCheckProperties: HealthCheckProperties)
-    : AbstractHealthCheck(endPointExecution) {
+open class BluePrintProcessorHealthCheck(
+    private val endPointExecution: EndPointExecution,
+    private val healthCheckProperties: HealthCheckProperties
+) :
+    AbstractHealthCheck(endPointExecution) {
 
     override fun setupServiceEndpoint(): List<ServiceEndpoint> {
         return healthCheckProperties.getBluePrintServiceInformation()

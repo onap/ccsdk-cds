@@ -19,6 +19,4 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor
 import org.springframework.stereotype.Service
 
 @Service("json-parser-service")
-class JsonParserService {
-
-}
+class JsonParserService

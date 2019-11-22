@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.onap.ccsdk.cds.sdclistener.handler;
 
 import com.google.protobuf.ByteString;
@@ -107,7 +108,6 @@ public class BluePrintProcessorHandlerTest {
         byte[] bytes = FileUtils.readFileToByteArray(file);
         FileChunk fileChunk = FileChunk.newBuilder().setChunk(ByteString.copyFrom(bytes)).build();
 
-
         return BluePrintUploadInput.newBuilder()
                 .setCommonHeader(CommonHeader.newBuilder()
                         .setRequestId(UUID.randomUUID().toString())
@@ -124,4 +124,5 @@ public class BluePrintProcessorHandlerTest {
                 .setStatus(Status.newBuilder().setMessage(SUCCESS_MSG).setCode(200).build())
                 .build();
     }
+
 }

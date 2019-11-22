@@ -21,7 +21,13 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.d
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.service.MessagePrioritizationStateService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.monoMdc
 import org.springframework.http.MediaType
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping(value = ["/api/v1/message-prioritization"])
@@ -31,25 +37,30 @@ open class MessagePrioritizationApi(private val messagePrioritizationStateServic
     @ResponseBody
     fun ping(): String = "Success"
 
-
     @GetMapping(path = ["/{id}"], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     fun messagePrioritization(@PathVariable(value = "id") id: String) = monoMdc {
         messagePrioritizationStateService.getMessage(id)
     }
 
-    @PostMapping(path = ["/"], produces = [MediaType.APPLICATION_JSON_VALUE],
-            consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping(
+        path = ["/"], produces = [MediaType.APPLICATION_JSON_VALUE],
+        consumes = [MediaType.APPLICATION_JSON_VALUE]
+    )
     @ResponseBody
     fun saveMessagePrioritization(@RequestBody messagePrioritization: MessagePrioritization) = monoMdc {
         messagePrioritizationStateService.saveMessage(messagePrioritization)
     }
 
-    @PostMapping(path = ["/update-state"], produces = [MediaType.APPLICATION_JSON_VALUE],
-            consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping(
+        path = ["/update-state"], produces = [MediaType.APPLICATION_JSON_VALUE],
+        consumes = [MediaType.APPLICATION_JSON_VALUE]
+    )
     fun updateMessagePrioritizationState(@RequestBody updateMessageState: UpdateStateRequest) =
-            monoMdc {
-                messagePrioritizationStateService.setMessageState(updateMessageState.id,
-                        updateMessageState.state!!)
-            }
+        monoMdc {
+            messagePrioritizationStateService.setMessageState(
+                updateMessageState.id,
+                updateMessageState.state!!
+            )
+        }
 }

@@ -40,7 +40,8 @@ class DeviceInfo {
     override fun toString(): String {
         return "$ipAddress:$port"
     }
-    //TODO: should this be a data class instead? Is anything using the JSON serdes?
+
+    // TODO: should this be a data class instead? Is anything using the JSON serdes?
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

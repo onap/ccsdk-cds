@@ -21,7 +21,11 @@ import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ModelType
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
-import org.onap.ccsdk.cds.controllerblueprints.core.data.*
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.CapabilityDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.RelationshipType
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 
 class ModelTypeValidator {
@@ -38,23 +42,23 @@ class ModelTypeValidator {
             when (definitionType) {
                 BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE -> {
                     JacksonUtils.readValue(definitionContent, DataType::class.java)
-                            ?: throw BluePrintException("Model type definition is not DataType valid content $definitionContent")
+                        ?: throw BluePrintException("Model type definition is not DataType valid content $definitionContent")
                 }
                 BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TYPE -> {
                     JacksonUtils.readValue(definitionContent, NodeType::class.java)
-                            ?: throw BluePrintException("Model type definition is not NodeType valid content $definitionContent")
+                        ?: throw BluePrintException("Model type definition is not NodeType valid content $definitionContent")
                 }
                 BluePrintConstants.MODEL_DEFINITION_TYPE_ARTIFACT_TYPE -> {
                     JacksonUtils.readValue(definitionContent, ArtifactType::class.java)
-                            ?: throw BluePrintException("Model type definition is not ArtifactType valid content $definitionContent")
+                        ?: throw BluePrintException("Model type definition is not ArtifactType valid content $definitionContent")
                 }
                 BluePrintConstants.MODEL_DEFINITION_TYPE_CAPABILITY_TYPE -> {
                     JacksonUtils.readValue(definitionContent, CapabilityDefinition::class.java)
-                            ?: throw BluePrintException("Model type definition is not CapabilityDefinition valid content $definitionContent")
+                        ?: throw BluePrintException("Model type definition is not CapabilityDefinition valid content $definitionContent")
                 }
                 BluePrintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TYPE -> {
                     JacksonUtils.readValue(definitionContent, RelationshipType::class.java)
-                            ?: throw BluePrintException("Model type definition is not RelationshipType valid content $definitionContent")
+                        ?: throw BluePrintException("Model type definition is not RelationshipType valid content $definitionContent")
                 }
             }
             return true
@@ -79,5 +83,4 @@ class ModelTypeValidator {
             return true
         }
     }
-
 }

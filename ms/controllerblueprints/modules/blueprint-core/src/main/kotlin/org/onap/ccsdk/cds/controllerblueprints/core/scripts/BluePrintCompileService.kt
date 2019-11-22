@@ -30,11 +30,10 @@ import org.onap.ccsdk.cds.controllerblueprints.core.checkFileExists
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import java.io.File
 import java.net.URLClassLoader
-import java.util.*
+import java.util.ArrayList
 import kotlin.script.experimental.api.SourceCode
 import kotlin.script.experimental.jvm.util.classpathFromClasspathProperty
 import kotlin.system.measureTimeMillis
-
 
 open class BluePrintCompileService {
     val log = logger(BluePrintCompileService::class)
@@ -46,8 +45,11 @@ open class BluePrintCompileService {
     }
 
     /** Compile the [bluePrintSourceCode] and get the [kClassName] instance for the constructor [args] */
-    suspend fun <T> eval(bluePrintSourceCode: BluePrintSourceCode, kClassName: String,
-                         args: ArrayList<Any?>?): T {
+    suspend fun <T> eval(
+        bluePrintSourceCode: BluePrintSourceCode,
+        kClassName: String,
+        args: ArrayList<Any?>?
+    ): T {
         /** Compile the source code */
         compile(bluePrintSourceCode)
         /** Get the class loader with compiled jar */
@@ -58,15 +60,17 @@ open class BluePrintCompileService {
 
     /** Compile [bluePrintSourceCode] and put into cache */
     suspend fun compile(bluePrintSourceCode: BluePrintSourceCode) {
-        //TODO("Include Multiple folders")
+        // TODO("Include Multiple folders")
         val sourcePath = bluePrintSourceCode.blueprintKotlinSources.first()
         val compiledJarFile = bluePrintSourceCode.targetJarFile
 
         /** Check cache is present for the blueprint scripts */
         val hasCompiledCache = BluePrintCompileCache.hasClassLoader(bluePrintSourceCode.cacheKey)
 
-        log.debug("Jar Exists : ${compiledJarFile.exists()}, Regenerate : ${bluePrintSourceCode.regenerate}," +
-                " Compiled hash(${bluePrintSourceCode.cacheKey}) : $hasCompiledCache")
+        log.debug(
+            "Jar Exists : ${compiledJarFile.exists()}, Regenerate : ${bluePrintSourceCode.regenerate}," +
+                    " Compiled hash(${bluePrintSourceCode.cacheKey}) : $hasCompiledCache"
+        )
 
         if (!compiledJarFile.exists() || bluePrintSourceCode.regenerate || !hasCompiledCache) {
             log.info("compiling for cache key(${bluePrintSourceCode.cacheKey})")
@@ -94,8 +98,7 @@ open class BluePrintCompileService {
                         val exitCode: ExitCode = k2jvmCompiler.exec(messageCollector, Services.EMPTY, arguments)
                         when (exitCode) {
                             ExitCode.OK -> {
-                                checkFileExists(compiledJarFile)
-                                { "couldn't generate compiled jar(${compiledJarFile.absolutePath})" }
+                                checkFileExists(compiledJarFile) { "couldn't generate compiled jar(${compiledJarFile.absolutePath})" }
                             }
                             else -> {
                                 throw BluePrintException("$exitCode :${messageCollector.errors().joinToString("\n")}")
@@ -112,13 +115,13 @@ open class BluePrintCompileService {
     /** create class [kClassName] instance from [classLoader] */
     fun <T> instance(classLoader: URLClassLoader, kClassName: String, args: ArrayList<Any?>? = arrayListOf()): T {
         val kClazz = classLoader.loadClass(kClassName)
-                ?: throw BluePrintException("failed to load class($kClassName) from current class loader.")
+            ?: throw BluePrintException("failed to load class($kClassName) from current class loader.")
 
         val instance = if (args.isNullOrEmpty()) {
             kClazz.newInstance()
         } else {
             kClazz.constructors
-                    .single().newInstance(*args.toArray())
+                .single().newInstance(*args.toArray())
         } ?: throw BluePrintException("failed to create class($kClassName) instance for constructor argument($args).")
         return instance as T
     }
@@ -126,6 +129,7 @@ open class BluePrintCompileService {
 
 /** Compile source code information */
 open class BluePrintSourceCode : SourceCode {
+
     lateinit var blueprintKotlinSources: MutableList<String>
     lateinit var moduleName: String
     lateinit var targetJarFile: File
@@ -143,9 +147,9 @@ open class BluePrintSourceCode : SourceCode {
 
 /** Class to collect compilation Data */
 data class CompiledMessageData(
-        val severity: CompilerMessageSeverity,
-        val message: String,
-        val location: CompilerMessageLocation?
+    val severity: CompilerMessageSeverity,
+    val message: String,
+    val location: CompilerMessageLocation?
 )
 
 /** Class to collect compilation results */
@@ -160,9 +164,9 @@ class CompilationMessageCollector : MessageCollector {
     }
 
     override fun hasErrors() =
-            synchronized(compiledMessages) {
-                compiledMessages.any { it.severity.isError }
-            }
+        synchronized(compiledMessages) {
+            compiledMessages.any { it.severity.isError }
+        }
 
     override fun clear() {
         synchronized(compiledMessages) {

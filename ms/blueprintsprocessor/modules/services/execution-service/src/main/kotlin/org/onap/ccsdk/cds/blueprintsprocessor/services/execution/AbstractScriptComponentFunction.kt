@@ -45,7 +45,7 @@ abstract class AbstractScriptComponentFunction : AbstractComponentFunction() {
     @Deprecated("Dependencies will be resolved dynamically")
     open fun <T> functionDependencyInstanceAsType(name: String): T {
         return functionDependencyInstances[name] as? T
-                ?: throw BluePrintProcessorException("couldn't get script property instance ($name)")
+            ?: throw BluePrintProcessorException("couldn't get script property instance ($name)")
     }
 
     fun checkDynamicProperties(key: String): Boolean {

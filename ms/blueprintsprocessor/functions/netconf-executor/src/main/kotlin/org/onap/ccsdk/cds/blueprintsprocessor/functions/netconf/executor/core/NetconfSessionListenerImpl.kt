@@ -28,6 +28,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.Net
  */
 
 internal class NetconfSessionListenerImpl(private val session: NetconfSessionImpl) : NetconfSessionListener {
+
     override fun accept(event: NetconfReceivedEvent) {
         when (event.type) {
             NetconfReceivedEvent.Type.DEVICE_UNREGISTERED -> session.disconnect()

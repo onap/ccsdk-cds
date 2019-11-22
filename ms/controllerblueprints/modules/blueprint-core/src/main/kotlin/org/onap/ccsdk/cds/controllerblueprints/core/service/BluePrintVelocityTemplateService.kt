@@ -34,8 +34,12 @@ object BluePrintVelocityTemplateService {
     /**
      * Generate Content from Velocity Template and JSON Content with injected API
      */
-    fun generateContent(template: String, json: String, ignoreJsonNull: Boolean = false,
-                        additionalContext: MutableMap<String, Any> = mutableMapOf()): String {
+    fun generateContent(
+        template: String,
+        json: String,
+        ignoreJsonNull: Boolean = false,
+        additionalContext: MutableMap<String, Any> = mutableMapOf()
+    ): String {
 
         // Customized Object Mapper to remove String double quotes
         val mapper = ObjectMapper()
@@ -44,7 +48,7 @@ object BluePrintVelocityTemplateService {
 
         val jsonNode: JsonNode? = if (json.isNotEmpty()) {
             mapper.readValue(json, JsonNode::class.java)
-                    ?: throw BluePrintProcessorException("couldn't get json node from json")
+                ?: throw BluePrintProcessorException("couldn't get json node from json")
         } else {
             null
         }
@@ -54,8 +58,12 @@ object BluePrintVelocityTemplateService {
     /**
      * Generate Content from Velocity Template and JSON Node with injected API
      */
-    fun generateContent(template: String, jsonNode: JsonNode?, ignoreJsonNull: Boolean = false,
-                        additionalContext: MutableMap<String, Any> = mutableMapOf()): String {
+    fun generateContent(
+        template: String,
+        jsonNode: JsonNode?,
+        ignoreJsonNull: Boolean = false,
+        additionalContext: MutableMap<String, Any> = mutableMapOf()
+    ): String {
 
         /*
          *  create a new instance of the velocity engine

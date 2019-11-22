@@ -16,7 +16,6 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.healthapi
 
-
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
@@ -40,8 +39,10 @@ import org.springframework.test.web.reactive.server.WebTestClient
  */
 @RunWith(SpringRunner::class)
 @WebFluxTest
-@ContextConfiguration(classes = [BluePrintRuntimeService::class, BluePrintCoreConfiguration::class,
-    BluePrintCatalogService::class, SecurityProperties::class, ComponentScriptExecutor::class])
+@ContextConfiguration(
+    classes = [BluePrintRuntimeService::class, BluePrintCoreConfiguration::class,
+        BluePrintCatalogService::class, SecurityProperties::class, ComponentScriptExecutor::class]
+)
 @ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class HealthCheckApplicationTests {
@@ -52,17 +53,14 @@ class HealthCheckApplicationTests {
     @Test
     fun testHealthApiUp() {
         webTestClient.get().uri("/api/v1/combinedHealth")
-                .exchange()
-                .expectStatus().is2xxSuccessful
-
+            .exchange()
+            .expectStatus().is2xxSuccessful
     }
 
     @Test
     fun testMetricsApiUp() {
         webTestClient.get().uri("/api/v1/combinedMetrics")
-                .exchange()
-                .expectStatus().is2xxSuccessful
+            .exchange()
+            .expectStatus().is2xxSuccessful
     }
-
-
 }

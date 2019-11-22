@@ -25,23 +25,27 @@ class ComponentRemotePythonExecutorDSLTest {
     @Test
     fun testNodeTypeComponentRemotePythonExecutor() {
         val nodeType = BluePrintTypes.nodeTypeComponentRemotePythonExecutor()
-        //println(nodeType.asJsonString(true))
+        // println(nodeType.asJsonString(true))
         assertNotNull(nodeType, "failed to generate nodeTypeComponentRemotePythonExecutor")
     }
 
     @Test
     fun testNodeTemplateComponentRemotePythonExecutor() {
-        val nodeTemplate = BluePrintTypes.nodeTemplateComponentRemotePythonExecutor("test-nodetemplate",
-                "test nodetemplate") {
+        val nodeTemplate = BluePrintTypes.nodeTemplateComponentRemotePythonExecutor(
+            "test-nodetemplate",
+            "test nodetemplate"
+        ) {
             definedOperation("test operation") {
                 inputs {
                     endpointSelector("remote-container")
                     command("python sample.py")
-                    dynamicProperties("""{
+                    dynamicProperties(
+                        """{
                         "prop1" : "1234",
                         "prop2" : true,
                         "prop3" : 23
-                    }""".trimIndent())
+                    }""".trimIndent()
+                    )
                     argumentProperties("""["one", "two"]""")
                     packages {
                         type("pip")
@@ -50,7 +54,7 @@ class ComponentRemotePythonExecutorDSLTest {
                 }
             }
         }
-        //println(nodeTemplate.asJsonString(true))
+        // println(nodeTemplate.asJsonString(true))
         assertNotNull(nodeTemplate, "failed to generate nodeTemplateComponentRemotePythonExecutor")
     }
 }

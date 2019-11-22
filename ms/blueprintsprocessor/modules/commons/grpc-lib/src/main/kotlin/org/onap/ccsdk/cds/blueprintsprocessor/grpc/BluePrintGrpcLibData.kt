@@ -19,6 +19,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.grpc
 
 /** GRPC Server Properties */
 open class GrpcServerProperties {
+
     lateinit var type: String
     var port: Int = -1
 }
@@ -36,6 +37,7 @@ open class TLSAuthGrpcServerProperties : GrpcServerProperties() {
 
 /** GRPC Client Properties */
 open class GrpcClientProperties {
+
     lateinit var type: String
     lateinit var host: String
     var port: Int = -1

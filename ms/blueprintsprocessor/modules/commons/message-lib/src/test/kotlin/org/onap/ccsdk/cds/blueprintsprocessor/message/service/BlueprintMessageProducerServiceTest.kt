@@ -35,17 +35,20 @@ import java.util.concurrent.Future
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-
 @RunWith(SpringRunner::class)
 @DirtiesContext
-@ContextConfiguration(classes = [BluePrintMessageLibConfiguration::class,
-    BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class])
-@TestPropertySource(properties =
-["blueprintsprocessor.messageproducer.sample.type=kafka-basic-auth",
-    "blueprintsprocessor.messageproducer.sample.bootstrapServers=127.0.0.1:9092",
-    "blueprintsprocessor.messageproducer.sample.topic=default-topic",
-    "blueprintsprocessor.messageproducer.sample.clientId=default-client-id"
-])
+@ContextConfiguration(
+    classes = [BluePrintMessageLibConfiguration::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class]
+)
+@TestPropertySource(
+    properties =
+    ["blueprintsprocessor.messageproducer.sample.type=kafka-basic-auth",
+        "blueprintsprocessor.messageproducer.sample.bootstrapServers=127.0.0.1:9092",
+        "blueprintsprocessor.messageproducer.sample.topic=default-topic",
+        "blueprintsprocessor.messageproducer.sample.clientId=default-client-id"
+    ]
+)
 open class BlueprintMessageProducerServiceTest {
 
     @Autowired
@@ -55,7 +58,7 @@ open class BlueprintMessageProducerServiceTest {
     fun testKafkaBasicAuthProducertService() {
         runBlocking {
             val blueprintMessageProducerService = bluePrintMessageLibPropertyService
-                    .blueprintMessageProducerService("sample") as KafkaBasicAuthMessageProducerService
+                .blueprintMessageProducerService("sample") as KafkaBasicAuthMessageProducerService
 
             val mockKafkaTemplate = mockk<KafkaProducer<String, ByteArray>>()
 
@@ -72,8 +75,4 @@ open class BlueprintMessageProducerServiceTest {
             assertTrue(response, "failed to get command response")
         }
     }
-
 }
-
-
-

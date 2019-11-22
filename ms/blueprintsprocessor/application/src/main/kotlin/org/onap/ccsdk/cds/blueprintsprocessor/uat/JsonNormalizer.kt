@@ -52,10 +52,10 @@ internal class JsonNormalizer {
         private fun expandJstlSpec(jstlSpec: JsonNode): String {
             val extendedJstlSpec = updateObjectNodes(jstlSpec, "*", ".")
             return extendedJstlSpec.toString()
-                    // Handle the "?" as a prefix to literal/non-quoted values
-                    .replace("\"\\?([^\"]+)\"".toRegex(), "$1")
-                    // Also, remove the quotes added by Jackson for key and value of the wildcard matcher
-                    .replace("\"([.*])\"".toRegex(), "$1")
+                // Handle the "?" as a prefix to literal/non-quoted values
+                .replace("\"\\?([^\"]+)\"".toRegex(), "$1")
+                // Also, remove the quotes added by Jackson for key and value of the wildcard matcher
+                .replace("\"([.*])\"".toRegex(), "$1")
         }
 
         /**

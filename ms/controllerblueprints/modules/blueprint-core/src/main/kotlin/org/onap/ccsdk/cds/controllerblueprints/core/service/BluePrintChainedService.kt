@@ -17,16 +17,25 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
-import org.onap.ccsdk.cds.controllerblueprints.core.data.*
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.AttributeDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.CapabilityDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.InterfaceDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.RequirementDefinition
+
 /**
  *
  *
  * @author Brinda Santh
  */
 class BluePrintChainedService {
-    var bpc : BluePrintContext
 
-    constructor(bpc : BluePrintContext){
+    var bpc: BluePrintContext
+
+    constructor(bpc: BluePrintContext) {
         this.bpc = bpc
     }
 
@@ -42,30 +51,30 @@ class BluePrintChainedService {
 
         recNodeTypesChained(nodeTypeName).forEach { nodeType ->
 
-            val subAttributes =  bpc.nodeTypeByName(nodeType.id!!).attributes
+            val subAttributes = bpc.nodeTypeByName(nodeType.id!!).attributes
             if (subAttributes != null) {
                 attributes.putAll(subAttributes)
             }
 
-            val subProperties =  bpc.nodeTypeByName(nodeType.id!!).properties
+            val subProperties = bpc.nodeTypeByName(nodeType.id!!).properties
             if (subProperties != null) {
                 properties.putAll(subProperties)
             }
 
-            val subRequirements =  bpc.nodeTypeByName(nodeType.id!!).requirements
+            val subRequirements = bpc.nodeTypeByName(nodeType.id!!).requirements
             if (subRequirements != null) {
                 requirements.putAll(subRequirements)
             }
-            val subCapabilities =  bpc.nodeTypeByName(nodeType.id!!).capabilities
+            val subCapabilities = bpc.nodeTypeByName(nodeType.id!!).capabilities
             if (subCapabilities != null) {
                 capabilities.putAll(subCapabilities)
             }
-            val subInterfaces =  bpc.nodeTypeByName(nodeType.id!!).interfaces
+            val subInterfaces = bpc.nodeTypeByName(nodeType.id!!).interfaces
             if (subInterfaces != null) {
                 interfaces.putAll(subInterfaces)
             }
 
-            val subArtifacts =  bpc.nodeTypeByName(nodeType.id!!).artifacts
+            val subArtifacts = bpc.nodeTypeByName(nodeType.id!!).artifacts
             if (subArtifacts != null) {
                 artifacts.putAll(subArtifacts)
             }
@@ -80,11 +89,11 @@ class BluePrintChainedService {
     }
 
     fun nodeTypeChainedProperties(nodeTypeName: String): MutableMap<String, PropertyDefinition>? {
-        val nodeType =  bpc.nodeTypeByName(nodeTypeName)
+        val nodeType = bpc.nodeTypeByName(nodeTypeName)
         val properties = hashMapOf<String, PropertyDefinition>()
 
         recNodeTypesChained(nodeTypeName).forEach { nodeType ->
-            val subProperties =  bpc.nodeTypeByName(nodeType.id!!).properties
+            val subProperties = bpc.nodeTypeByName(nodeType.id!!).properties
             if (subProperties != null) {
                 properties.putAll(subProperties)
             }
@@ -93,7 +102,7 @@ class BluePrintChainedService {
     }
 
     private fun recNodeTypesChained(nodeTypeName: String, nodeTypes: MutableList<NodeType>? = arrayListOf()): MutableList<NodeType> {
-        val nodeType: NodeType =  bpc.nodeTypeByName(nodeTypeName)
+        val nodeType: NodeType = bpc.nodeTypeByName(nodeTypeName)
         nodeType.id = nodeTypeName
         val derivedFrom: String = nodeType.derivedFrom
         if (!BluePrintTypes.rootNodeTypes().contains(derivedFrom)) {
@@ -104,7 +113,7 @@ class BluePrintChainedService {
     }
 
     private fun recDataTypesChained(dataTypeName: String, dataTypes: MutableList<DataType>? = arrayListOf()): MutableList<DataType> {
-        val dataType: DataType =  bpc.dataTypeByName(dataTypeName)!!
+        val dataType: DataType = bpc.dataTypeByName(dataTypeName)!!
         dataType.id = dataTypeName
         val derivedFrom: String = dataType.derivedFrom
         if (!BluePrintTypes.rootDataTypes().contains(derivedFrom)) {
@@ -113,5 +122,4 @@ class BluePrintChainedService {
         dataTypes!!.add(dataType)
         return dataTypes
     }
-
 }

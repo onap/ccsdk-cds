@@ -29,8 +29,8 @@ import org.springframework.stereotype.Component
  * @version 1.0
  */
 @Component
-open class BluePrintCustomIndicator(private val bluePrintProcessorHealthCheck: BluePrintProcessorHealthCheck)
-    : AbstractHealthIndicator() {
+open class BluePrintCustomIndicator(private val bluePrintProcessorHealthCheck: BluePrintProcessorHealthCheck) :
+    AbstractHealthIndicator() {
 
     @Throws(Exception::class)
     override fun doHealthCheck(builder: Health.Builder) {
@@ -42,6 +42,4 @@ open class BluePrintCustomIndicator(private val bluePrintProcessorHealthCheck: B
         }
         builder.withDetail("Services", result?.checks)
     }
-
-
 }

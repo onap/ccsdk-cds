@@ -23,6 +23,7 @@ package org.onap.ccsdk.cds.controllerblueprints.core
  * @author Brinda Santh
  */
 class BluePrintProcessorException : RuntimeException {
+
     var code: Int = 100
 
     constructor(message: String, cause: Throwable) : super(message, cause)
@@ -42,8 +43,8 @@ class BluePrintProcessorException : RuntimeException {
         this.code = code
     }
 
-    constructor(code: Int, cause: Throwable, message: String, vararg args: Any?)
-            : super(String.format(message, *args), cause) {
+    constructor(code: Int, cause: Throwable, message: String, vararg args: Any?) :
+            super(String.format(message, *args), cause) {
         this.code = code
     }
 }

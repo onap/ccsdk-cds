@@ -22,8 +22,15 @@ import org.hibernate.annotations.Proxy
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.io.Serializable
-import java.util.*
-import javax.persistence.*
+import java.util.Date
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.EntityListeners
+import javax.persistence.Id
+import javax.persistence.Lob
+import javax.persistence.Table
+import javax.persistence.Temporal
+import javax.persistence.TemporalType
 
 @EntityListeners(AuditingEntityListener::class)
 @Entity
@@ -48,8 +55,10 @@ class TemplateResolution : Serializable {
     @Column(name = "result", nullable = false)
     var result: String? = null
 
-    @get:ApiModelProperty(value = "Resolution Key uniquely identifying the resolution of a given artifact within a CBA.",
-        required = true)
+    @get:ApiModelProperty(
+        value = "Resolution Key uniquely identifying the resolution of a given artifact within a CBA.",
+        required = true
+    )
     @Column(name = "resolution_key", nullable = false)
     var resolutionKey: String? = null
 
@@ -61,8 +70,10 @@ class TemplateResolution : Serializable {
     @Column(name = "resource_id", nullable = false)
     var resourceId: String? = null
 
-    @get:ApiModelProperty(value = "If resolution occurred multiple time, this field provides the index.",
-        required = true)
+    @get:ApiModelProperty(
+        value = "If resolution occurred multiple time, this field provides the index.",
+        required = true
+    )
     @Column(name = "occurrence", nullable = false)
     var occurrence: Int = 1
 

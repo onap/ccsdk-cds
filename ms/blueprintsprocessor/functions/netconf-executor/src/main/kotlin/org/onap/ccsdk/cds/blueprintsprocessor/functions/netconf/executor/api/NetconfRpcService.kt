@@ -54,8 +54,11 @@ interface NetconfRpcService {
      * @param editDefaultOperation, default set to none. Valid values: merge, replace, create, delete, none
      * @return Device response
      */
-    fun editConfig(messageContent: String, configTarget: String = NetconfDatastore.CANDIDATE.datastore,
-                   editDefaultOperation: String = ModifyAction.NONE.action): DeviceResponse
+    fun editConfig(
+        messageContent: String,
+        configTarget: String = NetconfDatastore.CANDIDATE.datastore,
+        editDefaultOperation: String = ModifyAction.NONE.action
+    ): DeviceResponse
 
     /**
      * Invoke custom RPC as provided as input.
@@ -96,8 +99,12 @@ interface NetconfRpcService {
      * If unspecified, the confirm timeout defaults to 600 seconds.
      * @return Device response
      */
-    fun commit(confirmed: Boolean = false, confirmTimeout: Int = 60, persist: String = "",
-               persistId: String = ""): DeviceResponse
+    fun commit(
+        confirmed: Boolean = false,
+        confirmTimeout: Int = 60,
+        persist: String = "",
+        persistId: String = ""
+    ): DeviceResponse
 
     /**
      * Cancels an ongoing confirmed commit.  If the <persist-id> parameter is not given,

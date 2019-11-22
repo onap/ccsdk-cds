@@ -15,7 +15,11 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.security
 
-import io.grpc.*
+import io.grpc.Metadata
+import io.grpc.ServerCall
+import io.grpc.ServerCallHandler
+import io.grpc.ServerInterceptor
+import io.grpc.Status
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -23,23 +27,24 @@ import org.springframework.security.core.AuthenticationException
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import java.nio.charset.StandardCharsets
-import java.util.*
+import java.util.Base64
 
 @Component
-class BasicAuthServerInterceptor(private val authenticationManager: AuthenticationManager)
-    : ServerInterceptor {
+class BasicAuthServerInterceptor(private val authenticationManager: AuthenticationManager) :
+    ServerInterceptor {
 
     private val log = logger(BasicAuthServerInterceptor::class)
 
     override fun <ReqT, RespT> interceptCall(
-            call: ServerCall<ReqT, RespT>,
-            headers: Metadata,
-            next: ServerCallHandler<ReqT, RespT>): ServerCall.Listener<ReqT> {
+        call: ServerCall<ReqT, RespT>,
+        headers: Metadata,
+        next: ServerCallHandler<ReqT, RespT>
+    ): ServerCall.Listener<ReqT> {
         val authHeader = headers.get(Metadata.Key.of("Authorization", Metadata.ASCII_STRING_MARSHALLER))
 
         if (authHeader.isNullOrEmpty()) {
             throw Status.UNAUTHENTICATED.withDescription("Missing required authentication")
-                    .asRuntimeException()
+                .asRuntimeException()
         }
 
         try {
@@ -54,7 +59,6 @@ class BasicAuthServerInterceptor(private val authenticationManager: Authenticati
             log.info("Authentication success: {}", authResult)
 
             SecurityContextHolder.getContext().authentication = authResult
-
         } catch (e: AuthenticationException) {
             SecurityContextHolder.clearContext()
 
@@ -69,8 +73,10 @@ class BasicAuthServerInterceptor(private val authenticationManager: Authenticati
     private fun decodeBasicAuth(authHeader: String): Array<String> {
         val basicAuth: String
         try {
-            basicAuth = String(Base64.getDecoder().decode(authHeader.substring(6).toByteArray(StandardCharsets.UTF_8)),
-                    StandardCharsets.UTF_8)
+            basicAuth = String(
+                Base64.getDecoder().decode(authHeader.substring(6).toByteArray(StandardCharsets.UTF_8)),
+                StandardCharsets.UTF_8
+            )
         } catch (e: IllegalArgumentException) {
             throw BadCredentialsException("Failed to decode basic authentication token")
         } catch (e: IndexOutOfBoundsException) {

@@ -25,27 +25,26 @@ import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import java.net.URL
 import java.net.URLClassLoader
 
-
 object BluePrintCompileCache {
     val log = logger(BluePrintCompileCache::class)
 
     private val classLoaderCache: LoadingCache<String, URLClassLoader> = CacheBuilder.newBuilder()
-            .maximumSize(50)
-            .build(BluePrintClassLoader)
+        .maximumSize(50)
+        .build(BluePrintClassLoader)
 
     fun classLoader(key: String): URLClassLoader {
         return classLoaderCache.get(key)
     }
 
     fun cleanClassLoader(key: String) {
-        if(hasClassLoader(key)){
+        if (hasClassLoader(key)) {
             // Make sure to close all classloader loaded resources before we let go of it.
             // This fixes a Delete failure message on filesystem that keeps locks on opened jars;
             // like Windows and NFS.
             classLoaderCache.get(key).close()
             classLoaderCache.invalidate(key)
             log.info("Cleaned compiled cache($key)")
-        }else{
+        } else {
             log.warn("No compiled cache($key) present to clean.")
         }
     }
@@ -67,11 +66,11 @@ object BluePrintClassLoader : CacheLoader<String, URLClassLoader>() {
         }
         val urls = arrayListOf<URL>()
         keyPath.walkTopDown()
-                .filter { it.name.endsWith("cba-kts.jar") }
-                .forEach {
-                    log.debug("Adding (${it.absolutePath}) to cache($key)")
-                    urls.add(it.toURI().toURL())
-                }
+            .filter { it.name.endsWith("cba-kts.jar") }
+            .forEach {
+                log.debug("Adding (${it.absolutePath}) to cache($key)")
+                urls.add(it.toURI().toURL())
+            }
         return URLClassLoader(urls.toTypedArray(), this.javaClass.classLoader)
     }
 }

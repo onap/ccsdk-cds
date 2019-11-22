@@ -33,8 +33,11 @@ open class NodeTemplateExecutionService {
 
     private val log = LoggerFactory.getLogger(NodeTemplateExecutionService::class.java)!!
 
-    suspend fun executeNodeTemplate(bluePrintRuntimeService: BluePrintRuntimeService<*>, nodeTemplateName: String,
-                                    executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
+    suspend fun executeNodeTemplate(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        nodeTemplateName: String,
+        executionServiceInput: ExecutionServiceInput
+    ): ExecutionServiceOutput {
         // Get the Blueprint Context
         val blueprintContext = bluePrintRuntimeService.bluePrintContext()
 
@@ -47,12 +50,14 @@ open class NodeTemplateExecutionService {
         val operationName = blueprintContext.nodeTemplateFirstInterfaceFirstOperationName(nodeTemplateName)
 
         val nodeTemplateImplementation = blueprintContext
-                .nodeTemplateOperationImplementation(nodeTemplateName, interfaceName, operationName)
+            .nodeTemplateOperationImplementation(nodeTemplateName, interfaceName, operationName)
 
         val timeout: Int = nodeTemplateImplementation?.timeout ?: 180
 
-        log.info("executing node template($nodeTemplateName) component($componentName) " +
-                "interface($interfaceName) operation($operationName) with timeout($timeout) sec.")
+        log.info(
+            "executing node template($nodeTemplateName) component($componentName) " +
+                    "interface($interfaceName) operation($operationName) with timeout($timeout) sec."
+        )
 
         // Get the Component Instance
         val plugin = BluePrintDependencyService.instance<AbstractComponentFunction>(componentName)
@@ -82,5 +87,4 @@ open class NodeTemplateExecutionService {
         // Get the Request from the Context and Set to the Function Input and Invoke the function
         return plugin.applyNB(clonedExecutionServiceInput)
     }
-
 }
