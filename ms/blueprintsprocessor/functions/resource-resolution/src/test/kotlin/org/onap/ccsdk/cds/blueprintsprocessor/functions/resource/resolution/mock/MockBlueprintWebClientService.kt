@@ -25,32 +25,37 @@ import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientSer
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import java.nio.charset.Charset
-import java.util.*
+import java.util.Base64
 
-class MockBlueprintWebClientService(private var restClientProperties: RestClientProperties): BlueprintWebClientService {
+class MockBlueprintWebClientService(private var restClientProperties: RestClientProperties) : BlueprintWebClientService {
     private var mockServer: ClientAndServer
     private var port: String = if (restClientProperties.url.split(":")[2].isEmpty()) "8080"
-                            else restClientProperties.url.split(":")[2]
+    else restClientProperties.url.split(":")[2]
     private var headers: Map<String, String>
 
     init {
-        mockServer  = ClientAndServer.startClientAndServer(port.toInt())
-        headers =  defaultHeaders()
+        mockServer = ClientAndServer.startClientAndServer(port.toInt())
+        headers = defaultHeaders()
 
         // Create expected requests and responses
         setRequest("GET", "/aai/v14/network/generic-vnfs/generic-vnf/123456")
-        setRequest("GET", "/config/GENERIC-RESOURCE-API:services/service/10/service-data/vnfs/vnf/123456/" +
-                "vnf-data/vnf-topology/vnf-parameters-data/param/vnf_name")
-        setRequestWithPayload("PUT", "/query",
-                "{\r\n\"start\": \"\\/nodes\\/vf-modules?vf-module-name=vf-module-name\",\r\n\"query\": \"\\/query\\/related-to?startingNodeType=vf-module&relatedToNodeType=generic-vnf\"\r\n}")
+        setRequest(
+            "GET", "/config/GENERIC-RESOURCE-API:services/service/10/service-data/vnfs/vnf/123456/" +
+                    "vnf-data/vnf-topology/vnf-parameters-data/param/vnf_name"
+        )
+        setRequestWithPayload(
+            "PUT", "/query",
+            "{\r\n\"start\": \"\\/nodes\\/vf-modules?vf-module-name=vf-module-name\",\r\n\"query\": \"\\/query\\/related-to?startingNodeType=vf-module&relatedToNodeType=generic-vnf\"\r\n}"
+        )
     }
 
     override fun defaultHeaders(): Map<String, String> {
         val encodedCredentials = this.setBasicAuth("admin", "aaiTest")
         return mapOf(
-                HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE,
-                HttpHeaders.ACCEPT to MediaType.APPLICATION_JSON_VALUE,
-                HttpHeaders.AUTHORIZATION to "Basic $encodedCredentials")
+            HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE,
+            HttpHeaders.ACCEPT to MediaType.APPLICATION_JSON_VALUE,
+            HttpHeaders.AUTHORIZATION to "Basic $encodedCredentials"
+        )
     }
 
     override fun host(uri: String): String {
@@ -87,11 +92,11 @@ class MockBlueprintWebClientService(private var restClientProperties: RestClient
             else -> {
                 "Get response"
             }
-
         }
-        mockServer.`when`(request().withHeaders(Header(HttpHeaders.AUTHORIZATION, headers[HttpHeaders.AUTHORIZATION]))
-                        .withMethod(method)
-                        .withPath(path)
+        mockServer.`when`(
+            request().withHeaders(Header(HttpHeaders.AUTHORIZATION, headers[HttpHeaders.AUTHORIZATION]))
+                .withMethod(method)
+                .withPath(path)
         ).respond(response().withStatusCode(200).withBody("{\"aai-resource\":\"$requestResponse\"}"))
     }
 
@@ -106,9 +111,9 @@ class MockBlueprintWebClientService(private var restClientProperties: RestClient
             else -> {
                 "Get response"
             }
-
         }
-        mockServer.`when`(request().withHeaders(Header(HttpHeaders.AUTHORIZATION, headers[HttpHeaders.AUTHORIZATION]))
+        mockServer.`when`(
+            request().withHeaders(Header(HttpHeaders.AUTHORIZATION, headers[HttpHeaders.AUTHORIZATION]))
                 .withMethod(method)
                 .withPath(path)
                 .withQueryStringParameter("format", "resource")
@@ -119,6 +124,7 @@ class MockBlueprintWebClientService(private var restClientProperties: RestClient
     private fun setBasicAuth(username: String, password: String): String {
         val credentialsString = "$username:$password"
         return Base64.getEncoder().encodeToString(
-                credentialsString.toByteArray(Charset.defaultCharset()))
+            credentialsString.toByteArray(Charset.defaultCharset())
+        )
     }
 }

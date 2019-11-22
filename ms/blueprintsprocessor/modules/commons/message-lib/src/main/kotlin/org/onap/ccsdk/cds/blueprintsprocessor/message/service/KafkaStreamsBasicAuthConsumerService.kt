@@ -23,10 +23,10 @@ import org.apache.kafka.streams.StreamsConfig
 import org.onap.ccsdk.cds.blueprintsprocessor.message.KafkaStreamsBasicAuthConsumerProperties
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
-import java.util.*
+import java.util.Properties
 
-open class KafkaStreamsBasicAuthConsumerService(private val messageConsumerProperties: KafkaStreamsBasicAuthConsumerProperties)
-    : BlueprintMessageConsumerService {
+open class KafkaStreamsBasicAuthConsumerService(private val messageConsumerProperties: KafkaStreamsBasicAuthConsumerProperties) :
+    BlueprintMessageConsumerService {
 
     val log = logger(KafkaStreamsBasicAuthConsumerService::class)
     lateinit var kafkaStreams: KafkaStreams

@@ -31,16 +31,18 @@ import org.springframework.stereotype.Service
 
 @Service("default-attribute-definition-validator")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-open class BluePrintAttributeDefinitionValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : BluePrintAttributeDefinitionValidator {
+open class BluePrintAttributeDefinitionValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) :
+    BluePrintAttributeDefinitionValidator {
 
-
-    private val log= LoggerFactory.getLogger(BluePrintServiceTemplateValidatorImpl::class.toString())
+    private val log = LoggerFactory.getLogger(BluePrintServiceTemplateValidatorImpl::class.toString())
 
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
 
-
-    override fun validate(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String,
-                          attributeDefinition: AttributeDefinition) {
+    override fun validate(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        name: String,
+        attributeDefinition: AttributeDefinition
+    ) {
 
         log.trace("Validating AttributeDefinition($name)")
         this.bluePrintRuntimeService = bluePrintRuntimeService
@@ -55,7 +57,7 @@ open class BluePrintAttributeDefinitionValidatorImpl(private val bluePrintTypeVa
             }
             BluePrintTypes.validCollectionTypes().contains(dataType) -> {
                 val entrySchemaType: String = attributeDefinition.entrySchema?.type
-                        ?: throw BluePrintException("Entry schema for DataType ($dataType) for the property ($name) not found")
+                    ?: throw BluePrintException("Entry schema for DataType ($dataType) for the property ($name) not found")
                 checkPrimitiveOrComplex(entrySchemaType, name)
             }
             else -> checkPropertyDataType(dataType, name)
@@ -73,7 +75,7 @@ open class BluePrintAttributeDefinitionValidatorImpl(private val bluePrintTypeVa
     private fun checkPropertyDataType(dataTypeName: String, propertyName: String) {
 
         val dataType = bluePrintRuntimeService.bluePrintContext().serviceTemplate.dataTypes?.get(dataTypeName)
-                ?: throw BluePrintException(format("DataType ({}) for the property ({}) not found", dataTypeName, propertyName))
+            ?: throw BluePrintException(format("DataType ({}) for the property ({}) not found", dataTypeName, propertyName))
 
         checkValidDataTypeDerivedFrom(propertyName, dataType.derivedFrom)
     }

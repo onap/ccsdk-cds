@@ -23,7 +23,6 @@ import org.springframework.context.annotation.Configuration
 @ComponentScan
 open class ExecutionServiceConfiguration
 
-
 object ExecutionServiceConstant {
     const val SERVICE_GRPC_REMOTE_SCRIPT_EXECUTION = "grpc-remote-script-execution-service"
 }

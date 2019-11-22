@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.onap.ccsdk.cds.sdclistener.exceptions;
 
 public class SdcListenerException extends Exception {
@@ -26,9 +27,10 @@ public class SdcListenerException extends Exception {
 
     /**
      * @param message The message to dump
-     * @param cause The Throwable cause object
+     * @param cause   The Throwable cause object
      */
     public SdcListenerException(final String message, final Throwable cause) {
         super(message, cause);
     }
+
 }

@@ -37,7 +37,7 @@ open class MessagePrioritizationSerde : Serde<MessagePrioritization> {
         return object : Deserializer<MessagePrioritization> {
             override fun deserialize(topic: String, data: ByteArray): MessagePrioritization {
                 return JacksonUtils.readValue(String(data), MessagePrioritization::class.java)
-                        ?: throw BluePrintProcessorException("failed to convert")
+                    ?: throw BluePrintProcessorException("failed to convert")
             }
 
             override fun configure(configs: MutableMap<String, *>?, isKey: Boolean) {

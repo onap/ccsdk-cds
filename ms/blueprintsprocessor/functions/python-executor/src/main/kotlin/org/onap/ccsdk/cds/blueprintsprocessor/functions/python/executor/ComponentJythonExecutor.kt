@@ -36,8 +36,10 @@ import org.springframework.stereotype.Component
 
 @Component("component-jython-executor")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-open class ComponentJythonExecutor(private var applicationContext: ApplicationContext,
-                                   private val blueprintJythonService: BlueprintJythonService) : AbstractComponentFunction() {
+open class ComponentJythonExecutor(
+    private var applicationContext: ApplicationContext,
+    private val blueprintJythonService: BlueprintJythonService
+) : AbstractComponentFunction() {
 
     private val log = LoggerFactory.getLogger(ComponentJythonExecutor::class.java)
 
@@ -51,27 +53,26 @@ open class ComponentJythonExecutor(private var applicationContext: ApplicationCo
 
         // Invoke Jython Component Script
         componentFunction.executeScript(executionServiceInput)
-
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         bluePrintRuntimeService.getBluePrintError()
-                .addError("Failed in ComponentJythonExecutor : ${runtimeException.message}")
+            .addError("Failed in ComponentJythonExecutor : ${runtimeException.message}")
     }
 
     private fun populateJythonComponentInstance() {
         val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
 
         val operationAssignment: OperationAssignment = bluePrintContext
-                .nodeTemplateInterfaceOperation(nodeTemplateName, interfaceName, operationName)
+            .nodeTemplateInterfaceOperation(nodeTemplateName, interfaceName, operationName)
 
         val artifactName: String = operationAssignment.implementation?.primary
-                ?: throw BluePrintProcessorException("missing primary field to get artifact name for node template ($nodeTemplateName)")
+            ?: throw BluePrintProcessorException("missing primary field to get artifact name for node template ($nodeTemplateName)")
 
         val artifactDefinition = bluePrintRuntimeService.resolveNodeTemplateArtifactDefinition(nodeTemplateName, artifactName)
 
         val pythonFileName = artifactDefinition.file
-                ?: throw BluePrintProcessorException("missing file name for node template ($nodeTemplateName)'s artifactName($artifactName)")
+            ?: throw BluePrintProcessorException("missing file name for node template ($nodeTemplateName)'s artifactName($artifactName)")
 
         val pythonClassName = FilenameUtils.getBaseName(pythonFileName)
 
@@ -80,7 +81,7 @@ open class ComponentJythonExecutor(private var applicationContext: ApplicationCo
         checkNotEmpty(content) { "artifact ($artifactName) content is empty" }
 
         val instanceDependenciesNode: ArrayNode = operationInputs[PythonExecutorConstants.INPUT_INSTANCE_DEPENDENCIES] as? ArrayNode
-                ?: throw BluePrintProcessorException("Failed to get property(${PythonExecutorConstants.INPUT_INSTANCE_DEPENDENCIES})")
+            ?: throw BluePrintProcessorException("Failed to get property(${PythonExecutorConstants.INPUT_INSTANCE_DEPENDENCIES})")
 
         val jythonInstance: MutableMap<String, Any> = hashMapOf()
         jythonInstance["log"] = LoggerFactory.getLogger(pythonClassName)

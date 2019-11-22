@@ -17,7 +17,6 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
-
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ToscaMetaData
@@ -44,7 +43,6 @@ class BluePrintMetadataUtilsTest {
             assertNotNull(toscaMetaData.entityDefinitions, "Missing Tosca Entity Definition")
             assertNotNull(toscaMetaData.templateTags, "Missing Template Tags")
         }
-
     }
 
     @Test

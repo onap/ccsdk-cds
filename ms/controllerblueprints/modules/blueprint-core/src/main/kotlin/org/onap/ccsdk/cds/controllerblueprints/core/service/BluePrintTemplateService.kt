@@ -25,9 +25,14 @@ import org.springframework.stereotype.Service
 class BluePrintTemplateService(private val bluePrintLoadConfiguration: BluePrintLoadConfiguration) :
     BlueprintTemplateService {
 
-    override suspend fun generateContent(bluePrintRuntimeService: BluePrintRuntimeService<*>,
-                                         nodeTemplateName: String, artifactName: String, jsonData: String,
-                                         ignoreJsonNull: Boolean, additionalContext: MutableMap<String, Any>): String {
+    override suspend fun generateContent(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        nodeTemplateName: String,
+        artifactName: String,
+        jsonData: String,
+        ignoreJsonNull: Boolean,
+        additionalContext: MutableMap<String, Any>
+    ): String {
 
         val artifactDefinition =
             bluePrintRuntimeService.resolveNodeTemplateArtifactDefinition(nodeTemplateName, artifactName)
@@ -36,20 +41,24 @@ class BluePrintTemplateService(private val bluePrintLoadConfiguration: BluePrint
 
         return when (templateType) {
             BluePrintConstants.ARTIFACT_JINJA_TYPE_NAME -> {
-                BluePrintJinjaTemplateService.generateContent(template,
+                BluePrintJinjaTemplateService.generateContent(
+                    template,
                     jsonData,
                     ignoreJsonNull,
                     additionalContext,
                     bluePrintLoadConfiguration,
                     bluePrintRuntimeService.bluePrintContext().name(),
-                    bluePrintRuntimeService.bluePrintContext().version())
+                    bluePrintRuntimeService.bluePrintContext().version()
+                )
             }
             BluePrintConstants.ARTIFACT_VELOCITY_TYPE_NAME -> {
                 BluePrintVelocityTemplateService.generateContent(template, jsonData, ignoreJsonNull, additionalContext)
             }
             else -> {
-                throw BluePrintProcessorException("Unknown Artifact type, expecting ${BluePrintConstants.ARTIFACT_JINJA_TYPE_NAME}" +
-                        "or ${BluePrintConstants.ARTIFACT_VELOCITY_TYPE_NAME}")
+                throw BluePrintProcessorException(
+                    "Unknown Artifact type, expecting ${BluePrintConstants.ARTIFACT_JINJA_TYPE_NAME}" +
+                            "or ${BluePrintConstants.ARTIFACT_VELOCITY_TYPE_NAME}"
+                )
             }
         }
     }

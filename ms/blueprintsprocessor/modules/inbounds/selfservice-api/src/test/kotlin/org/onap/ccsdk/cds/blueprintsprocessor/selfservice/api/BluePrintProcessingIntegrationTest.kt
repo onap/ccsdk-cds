@@ -36,7 +36,7 @@ class BluePrintProcessingIntegrationTest {
     private val log = logger(BluePrintProcessingIntegrationTest::class)
 
     /** This is Integration test sample, Do not enable this test case in server build, this is for local desktop testing*/
-    //@Test
+    // @Test
     fun integrationTestGrpcManagement() {
         runBlocking {
             val tokenAuthGrpcClientProperties = TokenAuthGrpcClientProperties().apply {
@@ -65,26 +65,26 @@ class BluePrintProcessingIntegrationTest {
                 })
 
                 val commonHeader = CommonHeader.newBuilder()
-                        .setTimestamp("2012-04-23T18:25:43.511Z")
-                        .setOriginatorId("System")
-                        .setRequestId("1234-$it")
-                        .setSubRequestId("1234-56").build()
+                    .setTimestamp("2012-04-23T18:25:43.511Z")
+                    .setOriginatorId("System")
+                    .setRequestId("1234-$it")
+                    .setSubRequestId("1234-56").build()
 
                 val jsonContent = JacksonUtils.getClassPathFileContent("execution-input/sample-payload.json")
                 val payloadBuilder = ExecutionServiceInput.newBuilder().payloadBuilder
                 JsonFormat.parser().merge(jsonContent, payloadBuilder)
 
                 val actionIdentifier = ActionIdentifiers.newBuilder()
-                        .setActionName("SampleScript")
-                        .setBlueprintName("sample-cba")
-                        .setBlueprintVersion("1.0.0")
-                        .build()
+                    .setActionName("SampleScript")
+                    .setBlueprintName("sample-cba")
+                    .setBlueprintVersion("1.0.0")
+                    .build()
 
                 val input = ExecutionServiceInput.newBuilder()
-                        .setCommonHeader(commonHeader)
-                        .setActionIdentifiers(actionIdentifier)
-                        .setPayload(payloadBuilder.build())
-                        .build()
+                    .setCommonHeader(commonHeader)
+                    .setActionIdentifiers(actionIdentifier)
+                    .setPayload(payloadBuilder.build())
+                    .build()
 
                 requestObs.onNext(input)
                 requestObs.onCompleted()

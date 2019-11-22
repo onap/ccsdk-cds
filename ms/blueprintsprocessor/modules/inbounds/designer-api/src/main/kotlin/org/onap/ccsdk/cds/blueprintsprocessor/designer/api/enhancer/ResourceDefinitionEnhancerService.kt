@@ -20,6 +20,8 @@ package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.enhancer
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.service.ResourceDefinitionRepoService
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.utils.BluePrintEnhancerUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
@@ -28,20 +30,20 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeServ
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.utils.ResourceDictionaryUtils
-import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.service.ResourceDefinitionRepoService
-import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.utils.BluePrintEnhancerUtils
 import org.springframework.stereotype.Service
 
 interface ResourceDefinitionEnhancerService {
 
     @Throws(BluePrintException::class)
-    fun enhance(bluePrintTypeEnhancerService: BluePrintTypeEnhancerService,
-                bluePrintRuntimeService: BluePrintRuntimeService<*>): List<ResourceDefinition>
+    fun enhance(
+        bluePrintTypeEnhancerService: BluePrintTypeEnhancerService,
+        bluePrintRuntimeService: BluePrintRuntimeService<*>
+    ): List<ResourceDefinition>
 }
 
 @Service
 class ResourceDefinitionEnhancerServiceImpl(private val resourceDefinitionRepoService: ResourceDefinitionRepoService) :
-        ResourceDefinitionEnhancerService {
+    ResourceDefinitionEnhancerService {
 
     private val log = logger(ResourceDefinitionEnhancerService::class)
 
@@ -54,8 +56,10 @@ class ResourceDefinitionEnhancerServiceImpl(private val resourceDefinitionRepoSe
     // 2. Get all the Unique Resource assignments from all mapping files
     // 3. Collect the Resource Definition for Resource Assignment names from database.
     // 4. Create the Resource Definition under blueprint base path.
-    override fun enhance(bluePrintTypeEnhancerService: BluePrintTypeEnhancerService,
-                         bluePrintRuntimeService: BluePrintRuntimeService<*>): List<ResourceDefinition> {
+    override fun enhance(
+        bluePrintTypeEnhancerService: BluePrintTypeEnhancerService,
+        bluePrintRuntimeService: BluePrintRuntimeService<*>
+    ): List<ResourceDefinition> {
 
         var resourceDefinitions: List<ResourceDefinition> = mutableListOf()
 
@@ -82,7 +86,6 @@ class ResourceDefinitionEnhancerServiceImpl(private val resourceDefinitionRepoSe
             }?.mapNotNull { artifactDefinitionMap ->
                 artifactDefinitionMap.value.file
             }
-
         }?.flatten()?.distinct()
     }
 
@@ -104,33 +107,34 @@ class ResourceDefinitionEnhancerServiceImpl(private val resourceDefinitionRepoSe
 
         val distinctResourceAssignments = resourceAssignments.distinctBy { it.name }
         generateResourceDictionary(blueprintBasePath, distinctResourceAssignments)
-        //log.info("distinct Resource assignment ($distinctResourceAssignments)")
+        // log.info("distinct Resource assignment ($distinctResourceAssignments)")
     }
 
-
     // Read the Resource Definitions from the Database and write to type file.
-    private fun generateResourceDictionary(blueprintBasePath: String, resourceAssignments: List<ResourceAssignment>)
-            : List<ResourceDefinition> {
+    private fun generateResourceDictionary(blueprintBasePath: String, resourceAssignments: List<ResourceAssignment>):
+            List<ResourceDefinition> {
         val resourceKeys = resourceAssignments.mapNotNull { it.dictionaryName }.distinct().sorted()
         log.info("distinct resource keys ($resourceKeys)")
 
-        //TODO("Optimise DB single Query to multiple Query")
+        // TODO("Optimise DB single Query to multiple Query")
         return resourceKeys.map { resourceKey ->
             getResourceDefinition(resourceKey)
         }
     }
 
-    private fun enrichResourceDefinitionSources(bluePrintContext: BluePrintContext,
-                                                resourceDefinitions: List<ResourceDefinition>) {
+    private fun enrichResourceDefinitionSources(
+        bluePrintContext: BluePrintContext,
+        resourceDefinitions: List<ResourceDefinition>
+    ) {
         val sources = resourceDefinitions
-                .map { it.sources }
-                .map {
-                    it.values
-                            .map { nodeTemplate ->
-                                nodeTemplate.type
-                            }
-                }
-                .flatten().distinct()
+            .map { it.sources }
+            .map {
+                it.values
+                    .map { nodeTemplate ->
+                        nodeTemplate.type
+                    }
+            }
+            .flatten().distinct()
         log.info("Enriching Resource Definition sources Node Template: $sources")
         sources.forEach {
             BluePrintEnhancerUtils.populateNodeType(bluePrintContext, resourceDefinitionRepoService, it)

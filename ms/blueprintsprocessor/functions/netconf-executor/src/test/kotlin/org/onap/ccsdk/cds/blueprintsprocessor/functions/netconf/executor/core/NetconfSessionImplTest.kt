@@ -16,7 +16,13 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.core
 
-import io.mockk.*
+import io.mockk.CapturingSlot
+import io.mockk.Runs
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.spyk
+import io.mockk.verify
 import org.apache.sshd.client.SshClient
 import org.apache.sshd.client.channel.ChannelSubsystem
 import org.apache.sshd.client.channel.ClientChannel
@@ -37,8 +43,10 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
-import java.nio.charset.*
-import java.util.concurrent.*
+import java.nio.charset.StandardCharsets
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.ExecutionException
+import java.util.concurrent.TimeoutException
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
@@ -106,7 +114,7 @@ class NetconfSessionImplTest {
         verify { session["startClient"]() }
     }
 
-    //look for NetconfException being thrown when cannot connect
+    // look for NetconfException being thrown when cannot connect
     @Test
     fun `connect throws NetconfException on error`() {
         val errMsg = "$deviceInfo: Failed to establish SSH session"
@@ -119,7 +127,7 @@ class NetconfSessionImplTest {
 
     @Test
     fun `disconnect without force option for rpcService succeeds`() {
-        //rpcService.closeSession succeeds with status not RpcStatus.FAILURE
+        // rpcService.closeSession succeeds with status not RpcStatus.FAILURE
         every { rpcService.closeSession(false) } returns SUCCESSFUL_DEVICE_RESPONSE
         every { mockClientSession.close() } just Runs
         every { mockSshClient.close() } just Runs
@@ -128,9 +136,9 @@ class NetconfSessionImplTest {
         netconfSessionSpy.setSession(mockClientSession)
         netconfSessionSpy.setClient(mockSshClient)
         netconfSessionSpy.setChannel(mockClientChannel)
-        //RUN
+        // RUN
         netconfSessionSpy.disconnect()
-        //make sure that rpcService.close session is not called again.
+        // make sure that rpcService.close session is not called again.
         verify(exactly = 0) { rpcService.closeSession(true) }
         verify { mockClientSession.close() }
         verify { mockSshClient.close() }
@@ -139,24 +147,23 @@ class NetconfSessionImplTest {
 
     @Test
     fun `disconnect with force option for rpcService succeeds`() {
-        //rpcService.closeSession succeeds with status not RpcStatus.FAILURE
+        // rpcService.closeSession succeeds with status not RpcStatus.FAILURE
         val netconfSessionSpy = spyk(netconfSession, recordPrivateCalls = true)
         every { rpcService.closeSession(any()) } returns
-            FAILED_DEVICE_RESPONSE andThen SUCCESSFUL_DEVICE_RESPONSE
+                FAILED_DEVICE_RESPONSE andThen SUCCESSFUL_DEVICE_RESPONSE
         every { mockClientSession.close() } just Runs
         every { mockSshClient.close() } just Runs
         every { mockClientChannel.close() } just Runs
         netconfSessionSpy.setSession(mockClientSession)
         netconfSessionSpy.setClient(mockSshClient)
         netconfSessionSpy.setChannel(mockClientChannel)
-        //RUN
+        // RUN
         netconfSessionSpy.disconnect()
-        //VERIFY
+        // VERIFY
         verify(exactly = 2) { rpcService.closeSession(any()) }
         verify { mockClientSession.close() }
         verify { mockSshClient.close() }
         verify { mockClientChannel.close() }
-
     }
 
     @Test
@@ -185,9 +192,9 @@ class NetconfSessionImplTest {
         every { mockSshClient.isClosed } returns true
         netconfSessionSpy.setClient(mockSshClient)
         every { netconfSessionSpy["startConnection"]() as Unit } just Runs
-        //Call method
+        // Call method
         netconfSessionSpy.checkAndReestablish()
-        //Verify
+        // Verify
         verify { netconfSessionSpy.clearReplies() }
         verify { netconfSessionSpy["startConnection"]() }
     }
@@ -200,9 +207,9 @@ class NetconfSessionImplTest {
         every { netconfSessionSpy["startSession"]() as Unit } just Runs
         netconfSessionSpy.setClient(mockSshClient)
         netconfSessionSpy.setSession(mockClientSession)
-        //Call method
+        // Call method
         netconfSessionSpy.checkAndReestablish()
-        //Verify
+        // Verify
         verify { netconfSessionSpy.clearReplies() }
         verify { netconfSessionSpy["startSession"]() }
     }
@@ -217,59 +224,57 @@ class NetconfSessionImplTest {
         netconfSessionSpy.setClient(mockSshClient)
         netconfSessionSpy.setSession(mockClientSession)
         netconfSessionSpy.setChannel(mockClientChannel)
-        //Call method
+        // Call method
         netconfSessionSpy.checkAndReestablish()
-        //Verify
+        // Verify
         verify { netconfSessionSpy.clearReplies() }
         verify { netconfSessionSpy["openChannel"]() }
     }
-
 
     @Test
     fun `syncRpc runs normally`() {
         val netconfSessionSpy = spyk(netconfSession)
         val futureRet: CompletableFuture<String> = CompletableFuture.completedFuture(futureMsg)
 
-        //test the case where SSH connection did not need to be re-established.
-        //put an existing item into the replies
+        // test the case where SSH connection did not need to be re-established.
+        // put an existing item into the replies
         netconfSessionSpy.getReplies()["somekey"] = CompletableFuture.completedFuture("${futureMsg}2")
         every { netconfCommunicator.sendMessage(any(), any()) } returns futureRet
         every { netconfCommunicator.getFutureFromSendMessage(any(), any(), any()) } returns futureRet.get()
         every { netconfSessionSpy.checkAndReestablish() } just Runs
-        //call the method
+        // call the method
         assertEquals(futureMsg, netconfSessionSpy.syncRpc("0", "0"))
-        //make sure the replies didn't change
+        // make sure the replies didn't change
         assertTrue {
             netconfSessionSpy.getReplies().size == 1 &&
-                netconfSessionSpy.getReplies().containsKey("somekey")
+                    netconfSessionSpy.getReplies().containsKey("somekey")
         }
         verify(exactly = 0) { netconfSessionSpy.clearReplies() }
     }
-
 
     @Test
     fun `syncRpc still succeeds and replies are cleared on client disconnect`() {
         val netconfSessionSpy = spyk(netconfSession, recordPrivateCalls = true)
         val futureRet: CompletableFuture<String> = CompletableFuture.completedFuture(futureMsg)
 
-        //put an item into the replies
+        // put an item into the replies
         netconfSessionSpy.getReplies()["somekey"] = CompletableFuture.completedFuture("${futureMsg}2")
 
-        //tests the case where SSH session needs to be re-established.
+        // tests the case where SSH session needs to be re-established.
         every { netconfCommunicator.sendMessage(any(), any()) } returns futureRet
         every { netconfSessionSpy["startClient"]() as Unit } just Runs
         every { netconfCommunicator.getFutureFromSendMessage(any(), any(), any()) } returns futureRet.get()
         every { mockSshClient.isClosed } returns true
         netconfSessionSpy.setClient(mockSshClient)
 
-        //call the method
+        // call the method
         assertEquals(futureMsg, netconfSessionSpy.syncRpc("0", "0"))
-        //make sure the replies got cleared out
+        // make sure the replies got cleared out
         assertTrue { netconfSessionSpy.getReplies().isEmpty() }
         verify(exactly = 1) { netconfSessionSpy.clearReplies() }
     }
 
-    //Test for handling CompletableFuture.get returns InterruptedException inside NetconfDeviceCommunicator
+    // Test for handling CompletableFuture.get returns InterruptedException inside NetconfDeviceCommunicator
     @Test
     fun `syncRpc throws NetconfException if InterruptedException is caught`() {
         val expectedExceptionMsg = "$deviceInfo: Interrupted while waiting for reply for request: $formattedRequest"
@@ -279,21 +284,22 @@ class NetconfSessionImplTest {
             every { netconfCommunicator.sendMessage(any(), any()) } returns futureRet
             every { netconfCommunicator.getFutureFromSendMessage(any(), any(), any()) } throws InterruptedException("interrupted")
             every { netconfSessionSpy.checkAndReestablish() } just Runs
-            //call the method
+            // call the method
             netconfSessionSpy.syncRpc("0", "0")
         }
     }
 
     @Test
     fun `syncRpc throws NetconfException if TimeoutException is caught`() {
-        val expectedExceptionMsg = "$deviceInfo: Timed out while waiting for reply for request $formattedRequest after ${deviceInfo.replyTimeout} sec."
+        val expectedExceptionMsg =
+            "$deviceInfo: Timed out while waiting for reply for request $formattedRequest after ${deviceInfo.replyTimeout} sec."
         assertFailsWith(exceptionClass = NetconfException::class, message = expectedExceptionMsg) {
             val netconfSessionSpy = spyk(netconfSession)
             val futureRet: CompletableFuture<String> = CompletableFuture.completedFuture(futureMsg)
             every { netconfCommunicator.sendMessage(any(), any()) } returns futureRet
             every { netconfCommunicator.getFutureFromSendMessage(any(), any(), any()) } throws TimeoutException("timed out")
             every { netconfSessionSpy.checkAndReestablish() } just Runs
-            //call the method
+            // call the method
             netconfSessionSpy.syncRpc("0", "0")
         }
     }
@@ -306,11 +312,11 @@ class NetconfSessionImplTest {
             val futureRet: CompletableFuture<String> = CompletableFuture.completedFuture(futureMsg)
             every { netconfCommunicator.sendMessage(any(), any()) } returns futureRet
             every { netconfCommunicator.getFutureFromSendMessage(any(), any(), any()) } throws
-                ExecutionException("exec exception", Exception("nested exception"))
+                    ExecutionException("exec exception", Exception("nested exception"))
             every { netconfSessionSpy["close"]() as Unit } just Runs
             every { netconfSessionSpy.checkAndReestablish() } just Runs
             netconfSessionSpy.setSession(mockClientSession)
-            //call the method
+            // call the method
             netconfSessionSpy.syncRpc("0", "0")
         }
     }
@@ -323,12 +329,12 @@ class NetconfSessionImplTest {
             val futureRet: CompletableFuture<String> = CompletableFuture.completedFuture(futureMsg)
             every { netconfCommunicator.sendMessage(any(), any()) } returns futureRet
             every { netconfCommunicator.getFutureFromSendMessage(any(), any(), any()) } throws
-                ExecutionException("exec exception", Exception("nested exception"))
+                    ExecutionException("exec exception", Exception("nested exception"))
             every { netconfSessionSpy["close"]() as Unit } throws IOException("got an IO exception")
             every { netconfSessionSpy.checkAndReestablish() } just Runs
-            //call the method
+            // call the method
             netconfSessionSpy.syncRpc("0", "0")
-            //make sure replies are cleared...
+            // make sure replies are cleared...
             verify(exactly = 1) { netconfSessionSpy.clearReplies() }
             verify(exactly = 1) { netconfSessionSpy.clearErrorReplies() }
         }
@@ -340,12 +346,12 @@ class NetconfSessionImplTest {
         every { netconfSessionSpy.checkAndReestablish() } just Runs
         val futureRet: CompletableFuture<String> = CompletableFuture.completedFuture(futureMsg)
         every { netconfCommunicator.sendMessage(any(), any()) } returns futureRet
-        //run the method
+        // run the method
         val rpcResultFuture = netconfSessionSpy.asyncRpc("0", "0")
         every { netconfSessionSpy.checkAndReestablish() } just Runs
-        //make sure the future gets resolved
+        // make sure the future gets resolved
         assertTrue { rpcResultFuture.get() == futureMsg }
-        //make sure that clearReplies wasn't called (reestablishConnection check)
+        // make sure that clearReplies wasn't called (reestablishConnection check)
         verify(exactly = 0) { netconfSessionSpy.clearReplies() }
     }
 
@@ -357,7 +363,7 @@ class NetconfSessionImplTest {
             throw Exception("blah")
         }
         every { netconfCommunicator.sendMessage(any(), any()) } returns futureRet
-        //run the method
+        // run the method
         val rpcResultFuture = netconfSessionSpy.asyncRpc("0", "0")
         every { netconfSessionSpy.checkAndReestablish() } just Runs
         val e = assertFailsWith(exceptionClass = ExecutionException::class, message = futureMsg) {
@@ -386,11 +392,11 @@ class NetconfSessionImplTest {
     fun `startSession tries to connect to user supplied device`() {
         every { mockSshClient.start() } just Runs
         every { mockSshClient.properties } returns hashMapOf<String, Any>()
-        //setup slots to capture values from the invocations
+        // setup slots to capture values from the invocations
         val userSlot = CapturingSlot<String>()
         val ipSlot = CapturingSlot<String>()
         val portSlot = CapturingSlot<Int>()
-        //create a future that succeeded
+        // create a future that succeeded
         val succeededFuture = DefaultConnectFuture(Any(), Any())
         succeededFuture.value = mockClientSession
         every { mockSshClient.connect(capture(userSlot), capture(ipSlot), capture(portSlot)) } returns succeededFuture
@@ -398,9 +404,9 @@ class NetconfSessionImplTest {
         every { netconfSessionSpy["authSession"]() as Unit } just Runs
         every { netconfSessionSpy["setupNewSSHClient"]() as Unit } just Runs
         netconfSessionSpy.setClient(mockSshClient)
-        //RUN
+        // RUN
         netconfSessionSpy.connect()
-        //Verify
+        // Verify
         verify { mockSshClient.connect(deviceInfo.username, deviceInfo.ipAddress, deviceInfo.port) }
         assertEquals(deviceInfo.username, userSlot.captured)
         assertEquals(deviceInfo.ipAddress, ipSlot.captured)
@@ -411,11 +417,11 @@ class NetconfSessionImplTest {
     @Test
     fun `authSession throws exception if ClientSession is not AUTHED`() {
         assertFailsWith(exceptionClass = NetconfException::class) {
-            //after client session connects,
+            // after client session connects,
             every { mockSshClient.start() } just Runs
             every { mockSshClient.properties } returns hashMapOf<String, Any>()
             val succeededAuthFuture = DefaultAuthFuture(Any(), Any())
-            succeededAuthFuture.value = true //AuthFuture's value is Boolean
+            succeededAuthFuture.value = true // AuthFuture's value is Boolean
             val passSlot = CapturingSlot<String>()
             every { mockClientSession.addPasswordIdentity(capture(passSlot)) } just Runs
             every { mockClientSession.auth() } returns succeededAuthFuture
@@ -423,21 +429,21 @@ class NetconfSessionImplTest {
             succeededSessionFuture.value = mockClientSession
             every { mockSshClient.connect(deviceInfo.username, deviceInfo.ipAddress, deviceInfo.port) } returns succeededSessionFuture
             every { mockClientSession.waitFor(any(), any()) } returns
-                setOf(ClientSession.ClientSessionEvent.WAIT_AUTH, ClientSession.ClientSessionEvent.CLOSED)
+                    setOf(ClientSession.ClientSessionEvent.WAIT_AUTH, ClientSession.ClientSessionEvent.CLOSED)
             val netconfSessionSpy = spyk(netconfSession, recordPrivateCalls = true)
             every { netconfSessionSpy["setupNewSSHClient"]() as Unit } just Runs
             netconfSessionSpy.setClient(mockSshClient)
-            //RUN
+            // RUN
             netconfSessionSpy.connect()
         }
     }
 
-    //common mock initializer for more weird tests.
-    private fun setupOpenChannelMocks(): Unit {
+    // common mock initializer for more weird tests.
+    private fun setupOpenChannelMocks() {
         every { mockSshClient.start() } just Runs
         every { mockSshClient.properties } returns hashMapOf<String, Any>()
         val succeededAuthFuture = DefaultAuthFuture(Any(), Any())
-        succeededAuthFuture.value = true //AuthFuture's value is Boolean
+        succeededAuthFuture.value = true // AuthFuture's value is Boolean
         val passSlot = CapturingSlot<String>()
         every { mockClientSession.addPasswordIdentity(capture(passSlot)) } just Runs
         every { mockClientSession.auth() } returns succeededAuthFuture
@@ -445,9 +451,11 @@ class NetconfSessionImplTest {
         succeededSessionFuture.value = mockClientSession
         every { mockSshClient.connect(deviceInfo.username, deviceInfo.ipAddress, deviceInfo.port) } returns succeededSessionFuture
         every { mockClientSession.waitFor(any(), any()) } returns
-            setOf(ClientSession.ClientSessionEvent.WAIT_AUTH,
-                ClientSession.ClientSessionEvent.CLOSED,
-                ClientSession.ClientSessionEvent.AUTHED)
+                setOf(
+                    ClientSession.ClientSessionEvent.WAIT_AUTH,
+                    ClientSession.ClientSessionEvent.CLOSED,
+                    ClientSession.ClientSessionEvent.AUTHED
+                )
 
         every { mockClientSession.createSubsystemChannel(any()) } returns mockSubsystem
         every { mockClientChannel.invertedOut } returns sampleInputStream
@@ -456,7 +464,7 @@ class NetconfSessionImplTest {
 
     @Test
     fun `authSession opensChannel if ClientSession is AUTHED and session can be opened`() {
-        //after client session connects, make sure the client receives authentication
+        // after client session connects, make sure the client receives authentication
         setupOpenChannelMocks()
         val channelFuture = DefaultOpenFuture(Any(), Any())
         channelFuture.value = true
@@ -471,17 +479,16 @@ class NetconfSessionImplTest {
         every { netconfSessionSpy["setupNewSSHClient"]() as Unit } just Runs
         every { netconfSessionSpy["setupHandler"]() as Unit } just Runs
         netconfSessionSpy.setClient(mockSshClient)
-        //Run
+        // Run
         netconfSessionSpy.connect()
-        //Verify
+        // Verify
         verify { mockSubsystem.open() }
     }
-
 
     @Test
     fun `authSession throws NetconfException if ClientSession is AUTHED but channelFuture timed out or not open`() {
         assertFailsWith(exceptionClass = NetconfException::class) {
-            //after client session connects, make sure the client receives authentication
+            // after client session connects, make sure the client receives authentication
             setupOpenChannelMocks()
             val channelFuture = DefaultOpenFuture(Any(), Any())
             every { mockSubsystem.open() } returns channelFuture
@@ -489,13 +496,12 @@ class NetconfSessionImplTest {
             every { netconfSessionSpy["setupNewSSHClient"]() as Unit } just Runs
             every { netconfSessionSpy["setupHandler"]() as Unit } just Runs
             netconfSessionSpy.setClient(mockSshClient)
-            //Run
+            // Run
             netconfSessionSpy.connect()
-            //Verify
+            // Verify
             verify { mockSubsystem.open() }
         }
     }
-
 
     @Test
     fun `disconnect closes session, channel, and client`() {
@@ -507,16 +513,16 @@ class NetconfSessionImplTest {
         netconfSessionSpy.setChannel(mockClientChannel)
         netconfSessionSpy.setClient(mockSshClient)
         netconfSessionSpy.setSession(mockClientSession)
-        //RUN
+        // RUN
         netconfSessionSpy.disconnect()
-        //VERIFY
+        // VERIFY
         verify { mockClientSession.close() }
         verify { mockClientChannel.close() }
         verify { mockSshClient.close() }
     }
 
     @Test
-    fun `disconnect wraps IOException if channel doesn't close`() { //this test is equivalent to others
+    fun `disconnect wraps IOException if channel doesn't close`() { // this test is equivalent to others
         every { rpcService.closeSession(false) } returns SUCCESSFUL_DEVICE_RESPONSE
         every { mockClientSession.close() } just Runs
         every { mockClientChannel.close() } throws IOException("channel doesn't want to close!")
@@ -524,9 +530,9 @@ class NetconfSessionImplTest {
         netconfSessionSpy.setChannel(mockClientChannel)
         netconfSessionSpy.setClient(mockSshClient)
         netconfSessionSpy.setSession(mockClientSession)
-        //RUN
+        // RUN
         netconfSessionSpy.disconnect()
-        //VERIFY
+        // VERIFY
         verify { mockClientSession.close() }
     }
 }

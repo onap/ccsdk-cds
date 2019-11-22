@@ -35,11 +35,13 @@ open class SSLRestClientProperties : RestClientProperties() {
 
 // FIXME("Define basic auth userName and password properties")
 open class SSLBasicAuthRestClientProperties : SSLRestClientProperties() {
+
     var basicAuth: BasicAuthRestClientProperties? = null
 }
 
 // FIXME("Define token properties")
 open class SSLTokenAuthRestClientProperties : SSLRestClientProperties() {
+
     var tokenAuth: TokenAuthRestClientProperties? = null
 }
 

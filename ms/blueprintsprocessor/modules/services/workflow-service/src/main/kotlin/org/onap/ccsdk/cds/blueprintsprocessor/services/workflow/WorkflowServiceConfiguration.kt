@@ -23,7 +23,6 @@ import org.springframework.context.annotation.Configuration
 @ComponentScan
 open class WorkflowServiceConfiguration
 
-
 class WorkflowServiceConstants {
     companion object {
         const val ARTIFACT_TYPE_DIRECTED_GRAPH = "artifact-directed-graph"

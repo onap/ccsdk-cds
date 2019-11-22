@@ -17,10 +17,10 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler
 
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ModelType
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.repository.ModelTypeRepository
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.utils.ModelTypeValidator
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ModelType
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
@@ -46,7 +46,6 @@ open class ModelTypeHandler(private val modelTypeRepository: ModelTypeRepository
         }
     }
 
-
     /**
      * This is a searchModelTypes service
      *
@@ -66,7 +65,7 @@ open class ModelTypeHandler(private val modelTypeRepository: ModelTypeRepository
      * @throws BluePrintException BluePrintException
      */
     @Throws(BluePrintException::class)
-    suspend open fun saveModel(modelType: ModelType): ModelType {
+    open suspend fun saveModel(modelType: ModelType): ModelType {
         lateinit var dbModel: ModelType
         ModelTypeValidator.validateModelType(modelType)
         val dbModelType: ModelType? = modelTypeRepository.findByModelName(modelType.modelName)
@@ -86,16 +85,14 @@ open class ModelTypeHandler(private val modelTypeRepository: ModelTypeRepository
         return dbModel
     }
 
-
     /**
      * This is a deleteByModelName service
      *
      * @param modelName modelName
      */
-    suspend open fun deleteByModelName(modelName: String) {
+    open suspend fun deleteByModelName(modelName: String) {
         check(modelName.isNotBlank()) { "Model Name Information is missing." }
         modelTypeRepository.deleteByModelName(modelName)
-
     }
 
     /**

@@ -35,18 +35,15 @@ open class BluePrintRestLibConfiguration
  * Exposed Dependency Service by this Rest Lib Module
  */
 fun BluePrintDependencyService.restLibPropertyService(): BluePrintRestLibPropertyService =
-        instance(RestLibConstants.SERVICE_BLUEPRINT_REST_LIB_PROPERTY)
-
+    instance(RestLibConstants.SERVICE_BLUEPRINT_REST_LIB_PROPERTY)
 
 fun BluePrintDependencyService.restClientService(selector: String): BlueprintWebClientService {
     return restLibPropertyService().blueprintWebClientService(selector)
 }
 
-
 fun BluePrintDependencyService.restClientService(jsonNode: JsonNode): BlueprintWebClientService {
     return restLibPropertyService().blueprintWebClientService(jsonNode)
 }
-
 
 class RestLibConstants {
     companion object {

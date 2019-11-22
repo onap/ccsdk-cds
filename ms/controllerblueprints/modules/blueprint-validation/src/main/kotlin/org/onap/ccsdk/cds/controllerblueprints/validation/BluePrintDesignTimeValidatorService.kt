@@ -30,15 +30,16 @@ import org.onap.ccsdk.cds.controllerblueprints.validation.extension.ResourceDefi
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.File
-import java.util.*
-
+import java.util.UUID
 
 @Service("bluePrintDesignTimeValidatorService")
-open class BluePrintDesignTimeValidatorService(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService,
-                                               private val resourceDefinitionValidator: ResourceDefinitionValidator)
-    : BluePrintValidatorService {
+open class BluePrintDesignTimeValidatorService(
+    private val bluePrintTypeValidatorService: BluePrintTypeValidatorService,
+    private val resourceDefinitionValidator: ResourceDefinitionValidator
+) :
+    BluePrintValidatorService {
 
-    private val log= LoggerFactory.getLogger(BluePrintDesignTimeValidatorService::class.toString())
+    private val log = LoggerFactory.getLogger(BluePrintDesignTimeValidatorService::class.toString())
 
     override fun validateBluePrints(basePath: String): Boolean {
 
@@ -48,8 +49,10 @@ open class BluePrintDesignTimeValidatorService(private val bluePrintTypeValidato
 
     override fun validateBluePrints(bluePrintRuntimeService: BluePrintRuntimeService<*>): Boolean {
 
-        bluePrintTypeValidatorService.validateServiceTemplate(bluePrintRuntimeService, "service_template",
-                bluePrintRuntimeService.bluePrintContext().serviceTemplate)
+        bluePrintTypeValidatorService.validateServiceTemplate(
+            bluePrintRuntimeService, "service_template",
+            bluePrintRuntimeService.bluePrintContext().serviceTemplate
+        )
 
         // Validate Resource Definitions
         validateResourceDefinitions(bluePrintRuntimeService)
@@ -65,8 +68,8 @@ open class BluePrintDesignTimeValidatorService(private val bluePrintTypeValidato
         val blueprintBasePath = bluePrintRuntimeService.bluePrintContext().rootPath
 
         val resourceDefinitionsPath = blueprintBasePath.plus(File.separator)
-                .plus(BluePrintConstants.TOSCA_DEFINITIONS_DIR).plus(File.separator)
-                .plus("${ResourceDictionaryConstants.PATH_RESOURCE_DEFINITION_TYPE}.json")
+            .plus(BluePrintConstants.TOSCA_DEFINITIONS_DIR).plus(File.separator)
+            .plus("${ResourceDictionaryConstants.PATH_RESOURCE_DEFINITION_TYPE}.json")
 
         val resourceDefinitionFile = File(resourceDefinitionsPath)
 

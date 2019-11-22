@@ -17,13 +17,17 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.enhancer
 
-import org.onap.ccsdk.cds.controllerblueprints.core.*
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Workflow
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintRepoService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintWorkflowEnhancer
+import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -34,11 +38,14 @@ import org.springframework.stereotype.Service
 
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-open class BluePrintWorkflowEnhancerImpl(private val bluePrintRepoService: BluePrintRepoService,
-                                         private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService,
-                                         private val resourceAssignmentEnhancerService: ResourceAssignmentEnhancerService)
-    : BluePrintWorkflowEnhancer {
-    private val log= logger(BluePrintWorkflowEnhancerImpl::class)
+open class BluePrintWorkflowEnhancerImpl(
+    private val bluePrintRepoService: BluePrintRepoService,
+    private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService,
+    private val resourceAssignmentEnhancerService: ResourceAssignmentEnhancerService
+) :
+    BluePrintWorkflowEnhancer {
+
+    private val log = logger(BluePrintWorkflowEnhancerImpl::class)
 
     companion object {
         const val ARTIFACT_TYPE_MAPPING_SOURCE: String = "artifact-mapping-resource"
@@ -70,8 +77,6 @@ open class BluePrintWorkflowEnhancerImpl(private val bluePrintRepoService: BlueP
 
         // Enrich Only for Resource Assignment and Dynamic Input Properties if any
         enhanceStepTargets(name, workflow)
-
-
     }
 
     open fun enhanceWorkflowInputs(name: String, workflow: Workflow) {
@@ -102,11 +107,12 @@ open class BluePrintWorkflowEnhancerImpl(private val bluePrintRepoService: BlueP
                 enhanceStepTargets(name, workflow, firstNodeTemplateName, true)
             }
             else -> {
-                throw BluePrintProcessorException("couldn't execute workflow($name) step mapped " +
-                        "to node template($firstNodeTemplateName) derived from($derivedFrom)")
+                throw BluePrintProcessorException(
+                    "couldn't execute workflow($name) step mapped " +
+                            "to node template($firstNodeTemplateName) derived from($derivedFrom)"
+                )
             }
         }
-
     }
 
     private fun enhanceStepTargets(name: String, workflow: Workflow, nodeTemplateName: String, isDG: Boolean) {
@@ -132,10 +138,10 @@ open class BluePrintWorkflowEnhancerImpl(private val bluePrintRepoService: BlueP
             log.info("identified workflow($name) targets($componentNodeTemplateName)")
 
             val resourceAssignmentArtifacts = bluePrintContext.nodeTemplateByName(componentNodeTemplateName)
-                    .artifacts?.filter {
+                .artifacts?.filter {
                 it.value.type == ARTIFACT_TYPE_MAPPING_SOURCE
             }?.map {
-                log.info("resource assignment artifacts(${it.key}) for NodeType(${componentNodeTemplateName})")
+                log.info("resource assignment artifacts(${it.key}) for NodeType($componentNodeTemplateName)")
                 it.value.file
             }
             resourceAssignmentArtifacts
@@ -162,13 +168,13 @@ open class BluePrintWorkflowEnhancerImpl(private val bluePrintRepoService: BlueP
 
         val filePath = "${bluePrintContext.rootPath}/$fileName"
 
-        log.info("enriching artifacts file(${filePath}")
+        log.info("enriching artifacts file($filePath")
 
         val resourceAssignmentProperties: MutableMap<String, PropertyDefinition> = hashMapOf()
 
         val resourceAssignments: MutableList<ResourceAssignment> = JacksonUtils.getListFromFile(filePath, ResourceAssignment::class.java)
                 as? MutableList<ResourceAssignment>
-                ?: throw BluePrintProcessorException("couldn't get ResourceAssignment definitions for the file($filePath)")
+            ?: throw BluePrintProcessorException("couldn't get ResourceAssignment definitions for the file($filePath)")
 
         val alreadyEnhancedKey = "enhanced-$fileName"
         val alreadyEnhanced = bluePrintRuntimeService.check(alreadyEnhancedKey)
@@ -215,7 +221,6 @@ open class BluePrintWorkflowEnhancerImpl(private val bluePrintRepoService: BlueP
 
             // Overwrite WorkFlow DataType
             bluePrintContext.serviceTemplate.dataTypes?.put(dataTypeName, dynamicDataType)
-
         } else {
             log.info("dynamic dataType($dataTypeName) already present for workflow($workflowName).")
         }

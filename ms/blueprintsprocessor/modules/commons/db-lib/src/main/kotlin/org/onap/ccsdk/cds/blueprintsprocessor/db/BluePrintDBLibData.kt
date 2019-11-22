@@ -16,7 +16,6 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.db
 
-
 open class DBDataSourceProperties {
     lateinit var url: String
     lateinit var username: String
@@ -24,14 +23,14 @@ open class DBDataSourceProperties {
     open lateinit var driverClassName: String
 }
 
-open class PrimaryDataSourceProperties: DBDataSourceProperties() {
+open class PrimaryDataSourceProperties : DBDataSourceProperties() {
     lateinit var hibernateHbm2ddlAuto: String
     lateinit var hibernateDDLAuto: String
     lateinit var hibernateNamingStrategy: String
     lateinit var hibernateDialect: String
 }
 
-open class MariaDataSourceProperties: DBDataSourceProperties() {
+open class MariaDataSourceProperties : DBDataSourceProperties() {
     lateinit var hibernateHbm2ddlAuto: String
     lateinit var hibernateDDLAuto: String
     lateinit var hibernateNamingStrategy: String
@@ -40,7 +39,7 @@ open class MariaDataSourceProperties: DBDataSourceProperties() {
     override var driverClassName = DBLibConstants.DRIVER_MARIA_DB
 }
 
-open class MySqlDataSourceProperties: DBDataSourceProperties() {
+open class MySqlDataSourceProperties : DBDataSourceProperties() {
     lateinit var hibernateHbm2ddlAuto: String
     lateinit var hibernateDDLAuto: String
     lateinit var hibernateNamingStrategy: String

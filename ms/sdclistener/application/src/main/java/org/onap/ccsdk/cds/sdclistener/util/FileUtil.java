@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.onap.ccsdk.cds.sdclistener.util;
 
 import org.apache.commons.io.FileUtils;
@@ -54,18 +55,20 @@ public final class FileUtil {
      * Extract files from the given path
      *
      * @param path where files reside.
+     *
      * @return list of files.
      */
     public static List<File> getFilesFromDisk(Path path) {
 
         try (Stream<Path> fileTree = walk(path)) {
             // Get the list of files from the path
-            return fileTree.filter(Files::isRegularFile)
-                           .map(Path::toFile)
-                           .collect(Collectors.toList());
+            return fileTree.filter(Files :: isRegularFile)
+                    .map(Path :: toFile)
+                    .collect(Collectors.toList());
         } catch (IOException e) {
             LOGGER.error("Failed to find the file due to", e);
         }
         return new ArrayList<>();
     }
+
 }

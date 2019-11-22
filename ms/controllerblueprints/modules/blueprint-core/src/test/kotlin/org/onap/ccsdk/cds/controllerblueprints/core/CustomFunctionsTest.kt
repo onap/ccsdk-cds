@@ -18,9 +18,20 @@ package org.onap.ccsdk.cds.controllerblueprints.core
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.node.*
+import com.fasterxml.jackson.databind.node.ArrayNode
+import com.fasterxml.jackson.databind.node.BooleanNode
+import com.fasterxml.jackson.databind.node.IntNode
+import com.fasterxml.jackson.databind.node.JsonNodeType
+import com.fasterxml.jackson.databind.node.MissingNode
+import com.fasterxml.jackson.databind.node.NullNode
+import com.fasterxml.jackson.databind.node.ObjectNode
+import com.fasterxml.jackson.databind.node.TextNode
 import org.junit.Test
-import kotlin.test.*
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 /**
  *
@@ -28,12 +39,13 @@ import kotlin.test.*
  * @author Brinda Santh
  */
 class CustomFunctionsTest {
+
     @Test
     fun testFormat() {
-        val returnValue : String = format("This is {} for times {}", "test", 2)
+        val returnValue: String = format("This is {} for times {}", "test", 2)
         assertEquals("This is test for times 2", returnValue, "Failed to format String")
 
-        val returnValue1 : String = format("This is test for times 2")
+        val returnValue1: String = format("This is test for times 2")
         assertEquals("This is test for times 2", returnValue1, "Failed to format empty args")
     }
 
@@ -198,23 +210,23 @@ class CustomFunctionsTest {
 
     @Test(expected = BluePrintException::class)
     fun testCheckEquals() {
-        assertTrue(checkEquals("hello", "hello", { -> "error"}))
+        assertTrue(checkEquals("hello", "hello", { -> "error" }))
 
-        checkEquals("hello", "test", { -> "error"})
+        checkEquals("hello", "test", { -> "error" })
     }
 
     @Test(expected = IllegalStateException::class)
     fun testCheckNotEmpty() {
-        assertEquals("hello", checkNotEmpty("hello", { -> "error"}))
+        assertEquals("hello", checkNotEmpty("hello", { -> "error" }))
 
-        checkNotEmpty("", { -> "error"})
+        checkNotEmpty("", { -> "error" })
     }
 
     @Test(expected = IllegalStateException::class)
     fun testCheckNotBlank() {
-        assertEquals("hello", checkNotBlank("hello", { -> "error"}))
+        assertEquals("hello", checkNotBlank("hello", { -> "error" }))
 
-        checkNotBlank("  ", { -> "error"})
+        checkNotBlank("  ", { -> "error" })
     }
 
     @Test

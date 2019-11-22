@@ -17,5 +17,5 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain
 
 enum class ServiceName(s: String) {
-    BLUEPRINT("Blue Print service"),CDSLISTENER("CDS Listener service")
+    BLUEPRINT("Blue Print service"), CDSLISTENER("CDS Listener service")
 }

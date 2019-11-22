@@ -16,7 +16,10 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
-import java.util.*
+import java.util.ArrayList
+import java.util.HashMap
+import java.util.LinkedList
+import java.util.Stack
 
 /**
  *
@@ -70,14 +73,13 @@ class TopologicalSortingUtils<V> {
         return result
     }
 
-
     fun inDegree(): MutableMap<V, Int> {
         val result = HashMap<V, Int>()
         for (v in neighbors.keys)
-            result[v] = 0       // All in-degrees are 0
+            result[v] = 0 // All in-degrees are 0
         for (from in neighbors.keys) {
             for (to in neighbors[from]!!) {
-                result[to] = result[to]!! + 1           // Increment in-degree
+                result[to] = result[to]!! + 1 // Increment in-degree
             }
         }
         return result
@@ -86,15 +88,15 @@ class TopologicalSortingUtils<V> {
     fun topSort(): List<V>? {
         val degree = inDegree()
         // Determine all vertices with zero in-degree
-        val zeroVerts = Stack<V>()        // Stack as good as any here
+        val zeroVerts = Stack<V>() // Stack as good as any here
         for (v in degree.keys) {
             if (degree[v] == 0) zeroVerts.push(v)
         }
         // Determine the topological order
         val result = ArrayList<V>()
         while (!zeroVerts.isEmpty()) {
-            val v = zeroVerts.pop()                  // Choose a vertex with zero in-degree
-            result.add(v)                          // Vertex v is next in topol order
+            val v = zeroVerts.pop() // Choose a vertex with zero in-degree
+            result.add(v) // Vertex v is next in topol order
             // "Remove" vertex v by updating its neighbors
             for (neighbor in neighbors[v]!!) {
                 degree[neighbor] = degree[neighbor]!! - 1
@@ -106,7 +108,6 @@ class TopologicalSortingUtils<V> {
         return if (result.size != neighbors.size) null else result
     }
 
-
     fun bfsDistance(start: V): Map<*, *> {
         val distance: MutableMap<V, Int> = hashMapOf()
         // Initially, all distance are infinity, except start node
@@ -115,13 +116,13 @@ class TopologicalSortingUtils<V> {
         distance[start] = 0
         // Process nodes in queue order
         val queue = LinkedList<V>()
-        queue.offer(start)                                    // Place start node in queue
+        queue.offer(start) // Place start node in queue
         while (!queue.isEmpty()) {
             val v = queue.remove()
             val vDist = distance[v]!!
             // Update neighbors
             for (neighbor in neighbors[v]!!) {
-                if (distance[neighbor] != null) continue  // Ignore if already done
+                if (distance[neighbor] != null) continue // Ignore if already done
                 distance[neighbor] = vDist + 1
                 queue.offer(neighbor)
             }

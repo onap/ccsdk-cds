@@ -129,9 +129,9 @@ open class SSLRestClientPropertiesBuilder : RestClientPropertiesBuilder() {
 }
 
 open class SSLBasicAuthRestClientPropertiesBuilder : SSLRestClientPropertiesBuilder() {
-    //TODO()
+    // TODO()
 }
 
 open class SSLTokenAuthRestClientPropertiesBuilder : SSLRestClientPropertiesBuilder() {
-    //TODO()
+    // TODO()
 }

@@ -17,7 +17,18 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.validation
 
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.*
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintArtifactDefinitionValidator
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintArtifactTypeValidator
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintAttributeDefinitionValidator
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintDataTypeValidator
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintNodeTemplateValidator
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintNodeTypeValidator
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintPropertyDefinitionValidator
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintServiceTemplateValidator
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTopologyTemplateValidator
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidator
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintWorkflowValidator
 
 class MockBluePrintTypeValidatorService : BluePrintTypeValidatorService {
 
@@ -26,11 +37,11 @@ class MockBluePrintTypeValidatorService : BluePrintTypeValidatorService {
     }
 
     override fun <T : BluePrintValidator<*>> bluePrintValidators(referenceNamePrefix: String, classType: Class<T>): List<T>? {
-       return null
+        return null
     }
 
     override fun <T : BluePrintValidator<*>> bluePrintValidators(classType: Class<T>): List<T>? {
-       return null
+        return null
     }
 
     override fun getServiceTemplateValidators(): List<BluePrintServiceTemplateValidator> {

@@ -27,16 +27,17 @@ import org.springframework.stereotype.Service
 
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-class BluePrintPolicyTypeEnhancerImpl(private val bluePrintRepoService: BluePrintRepoService,
-                                      private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService)
-    : BluePrintPolicyTypeEnhancer {
+class BluePrintPolicyTypeEnhancerImpl(
+    private val bluePrintRepoService: BluePrintRepoService,
+    private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService
+) :
+    BluePrintPolicyTypeEnhancer {
 
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
 
-
     override fun enhance(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, type: PolicyType) {
 
-       this.bluePrintRuntimeService = bluePrintRuntimeService
+        this.bluePrintRuntimeService = bluePrintRuntimeService
 
         // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

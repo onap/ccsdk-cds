@@ -23,8 +23,8 @@ import org.springframework.security.core.AuthenticationException
 import reactor.core.publisher.Mono
 
 @Configuration
-open class AuthenticationManager(private val authenticationProvider: AuthenticationProvider)
-    : ReactiveAuthenticationManager {
+open class AuthenticationManager(private val authenticationProvider: AuthenticationProvider) :
+    ReactiveAuthenticationManager {
 
     override fun authenticate(authentication: Authentication): Mono<Authentication> {
         try {
@@ -32,6 +32,5 @@ open class AuthenticationManager(private val authenticationProvider: Authenticat
         } catch (e: AuthenticationException) {
             return Mono.error(e)
         }
-
     }
 }

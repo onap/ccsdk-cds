@@ -13,14 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.onap.ccsdk.cds.sdclistener;
 
-import static org.onap.sdc.utils.DistributionActionResultEnum.SUCCESS;
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Objects;
 import org.onap.ccsdk.cds.sdclistener.dto.SdcListenerDto;
 import org.onap.ccsdk.cds.sdclistener.service.ListenerService;
 import org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus;
@@ -39,6 +34,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
+
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Objects;
+
+import static org.onap.sdc.utils.DistributionActionResultEnum.SUCCESS;
 
 @ConfigurationProperties("listenerservice")
 @Component
@@ -70,13 +73,13 @@ public class SdcListenerNotificationCallback implements INotificationCallback {
     private void processNotification(INotificationData notificationData) {
         final IDistributionClient distributionClient = sdcListenerDto.getDistributionClient();
         notificationData.getServiceArtifacts()
-            .forEach(artifactInfo -> downloadCsarArtifacts(artifactInfo, distributionClient));
+                .forEach(artifactInfo -> downloadCsarArtifacts(artifactInfo, distributionClient));
     }
 
     /**
      * Download the TOSCA CSAR artifact and process it.
      *
-     * @param info - Artifact information
+     * @param info               - Artifact information
      * @param distributionClient - SDC distribution client
      */
     private void downloadCsarArtifacts(IArtifactInfo info, IDistributionClient distributionClient) {
@@ -93,14 +96,14 @@ public class SdcListenerNotificationCallback implements INotificationCallback {
 
             if (!Objects.equals(result.getDistributionActionResult(), SUCCESS)) {
                 final String errorMessage = String.format("Failed to download the artifact from : %s due to %s ", url,
-                    result.getDistributionActionResult());
+                        result.getDistributionActionResult());
                 listenerStatus
-                    .sendResponseBackToSdc(distributionId, DistributionStatusEnum.DOWNLOAD_ERROR, errorMessage,
-                        url, NotificationType.DOWNLOAD);
+                        .sendResponseBackToSdc(distributionId, DistributionStatusEnum.DOWNLOAD_ERROR, errorMessage,
+                                url, NotificationType.DOWNLOAD);
                 LOGGER.error(errorMessage);
             } else {
                 listenerStatus.sendResponseBackToSdc(distributionId, DistributionStatusEnum.DOWNLOAD_OK, null, url,
-                    NotificationType.DOWNLOAD);
+                        NotificationType.DOWNLOAD);
                 LOGGER.info("Trying to write CSAR artifact to file  with URL {} and UUID {}", url, id);
                 processCsarArtifact(result);
             }
@@ -128,4 +131,5 @@ public class SdcListenerNotificationCallback implements INotificationCallback {
 
         listenerService.saveBluePrintToCdsDatabase(cbaArchivePath, sdcListenerDto.getManagedChannelForGrpc());
     }
+
 }

@@ -17,7 +17,6 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.message
 
-
 import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BluePrintMessageLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BlueprintMessageConsumerService
@@ -36,13 +35,12 @@ open class BluePrintMessageLibConfiguration
  * Exposed Dependency Service by this Message Lib Module
  */
 fun BluePrintDependencyService.messageLibPropertyService(): BluePrintMessageLibPropertyService =
-        instance(MessageLibConstants.SERVICE_BLUEPRINT_MESSAGE_LIB_PROPERTY)
+    instance(MessageLibConstants.SERVICE_BLUEPRINT_MESSAGE_LIB_PROPERTY)
 
 /** Extension functions for message producer service **/
 fun BluePrintDependencyService.messageProducerService(selector: String): BlueprintMessageProducerService {
     return messageLibPropertyService().blueprintMessageProducerService(selector)
 }
-
 
 fun BluePrintDependencyService.messageProducerService(jsonNode: JsonNode): BlueprintMessageProducerService {
     return messageLibPropertyService().blueprintMessageProducerService(jsonNode)

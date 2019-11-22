@@ -29,11 +29,13 @@ interface ResourceConfigSnapshotRepository : JpaRepository<ResourceConfigSnapsho
     fun findByResourceIdAndResourceTypeAndStatus(
         resourceId: String,
         resourceType: String,
-        status : ResourceConfigSnapshot.Status): ResourceConfigSnapshot?
+        status: ResourceConfigSnapshot.Status
+    ): ResourceConfigSnapshot?
 
     @Transactional
     fun deleteByResourceIdAndResourceTypeAndStatus(
         resourceId: String,
         resourceType: String,
-        status : ResourceConfigSnapshot.Status)
+        status: ResourceConfigSnapshot.Status
+    )
 }

@@ -43,8 +43,10 @@ import kotlin.test.assertTrue
 @RunWith(SpringRunner::class)
 @EnableAutoConfiguration
 @ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor"])
-@ContextConfiguration(classes = [BlueprintProcessorCatalogServiceImpl::class, BluePrintCoreConfiguration::class,
-    MockBlueprintProcessorCatalogServiceImpl::class])
+@ContextConfiguration(
+    classes = [BlueprintProcessorCatalogServiceImpl::class, BluePrintCoreConfiguration::class,
+        MockBlueprintProcessorCatalogServiceImpl::class]
+)
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class BlueprintProcessorCatalogServiceImplTest {
 
@@ -61,8 +63,10 @@ class BlueprintProcessorCatalogServiceImplTest {
     @BeforeTest
     fun setup() {
         deleteDir("target", "blueprints")
-        bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(blueprintId,
-                "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+        bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(
+            blueprintId,
+            "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+        )
     }
 
     @AfterTest
@@ -72,9 +76,9 @@ class BlueprintProcessorCatalogServiceImplTest {
 
     @Test
     fun `test catalog service`() {
-        //TODO: I thing this test function should be remve and replace by the other one.
+        // TODO: I thing this test function should be remve and replace by the other one.
         runBlocking {
-            //FIXME("Create ZIP from test blueprints")
+            // FIXME("Create ZIP from test blueprints")
 
             val file = normalizedFile("./src/test/resources/test-cba.zip")
             assertTrue(file.exists(), "couldn't get file ${file.absolutePath}")
@@ -110,10 +114,14 @@ class BlueprintProcessorCatalogServiceImplTest {
             blueprintsProcessorCatalogService.get("baseconfiguration", "1.0.0", true)
         }
 
-        assertTrue(File(blueprintCoreConfiguration.bluePrintLoadConfiguration().blueprintArchivePath +
-                "/baseconfiguration").deleteRecursively(),"Couldn't get blueprint archive " +
-                "${blueprintCoreConfiguration.bluePrintLoadConfiguration().blueprintArchivePath}/baseconfiguration " +
-                "from data base.")
+        assertTrue(
+            File(
+                blueprintCoreConfiguration.bluePrintLoadConfiguration().blueprintArchivePath +
+                        "/baseconfiguration"
+            ).deleteRecursively(), "Couldn't get blueprint archive " +
+                    "${blueprintCoreConfiguration.bluePrintLoadConfiguration().blueprintArchivePath}/baseconfiguration " +
+                    "from data base."
+        )
     }
 
     @Test

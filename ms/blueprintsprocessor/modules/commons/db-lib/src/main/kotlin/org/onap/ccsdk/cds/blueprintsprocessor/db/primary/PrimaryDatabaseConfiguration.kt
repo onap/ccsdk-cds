@@ -30,29 +30,34 @@ import org.springframework.orm.jpa.JpaTransactionManager
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter
 import org.springframework.transaction.PlatformTransactionManager
-import java.util.*
+import java.util.HashMap
 import javax.sql.DataSource
 
 @Configuration
-@ConditionalOnProperty(name = ["blueprintsprocessor.db.primary.defaultConfig"], havingValue = "true",
-        matchIfMissing = true)
+@ConditionalOnProperty(
+    name = ["blueprintsprocessor.db.primary.defaultConfig"], havingValue = "true",
+    matchIfMissing = true
+)
 @ComponentScan
 @EnableJpaRepositories(
-        basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor.*",
-            "org.onap.ccsdk.cds.controllerblueprints.*"],
-        entityManagerFactoryRef = "primaryEntityManager",
-        transactionManagerRef = "primaryTransactionManager"
+    basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor.*",
+        "org.onap.ccsdk.cds.controllerblueprints.*"],
+    entityManagerFactoryRef = "primaryEntityManager",
+    transactionManagerRef = "primaryTransactionManager"
 )
 @EnableJpaAuditing
 open class PrimaryDatabaseConfiguration(private val primaryDataSourceProperties: PrimaryDataSourceProperties) {
+
     private val log = LoggerFactory.getLogger(PrimaryDatabaseConfiguration::class.java)!!
 
     @Bean("primaryEntityManager")
     open fun primaryEntityManager(): LocalContainerEntityManagerFactoryBean {
         val em = LocalContainerEntityManagerFactoryBean()
         em.dataSource = primaryDataSource()
-        em.setPackagesToScan("org.onap.ccsdk.cds.blueprintsprocessor.*",
-                "org.onap.ccsdk.cds.controllerblueprints.*")
+        em.setPackagesToScan(
+            "org.onap.ccsdk.cds.blueprintsprocessor.*",
+            "org.onap.ccsdk.cds.controllerblueprints.*"
+        )
         em.jpaVendorAdapter = HibernateJpaVendorAdapter()
         val properties = HashMap<String, Any>()
         properties["hibernate.hbm2ddl.auto"] = primaryDataSourceProperties.hibernateHbm2ddlAuto
@@ -83,5 +88,4 @@ open class PrimaryDatabaseConfiguration(private val primaryDataSourceProperties:
     open fun primaryNamedParameterJdbcTemplate(primaryDataSource: DataSource): NamedParameterJdbcTemplate {
         return NamedParameterJdbcTemplate(primaryDataSource)
     }
-
 }

@@ -24,7 +24,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.grpc.*
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.BasicAuthGrpcClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.BluePrintGrpcLibConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.TLSAuthGrpcClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.TLSAuthGrpcServerProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.TokenAuthGrpcClientProperties
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
@@ -35,34 +39,38 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [BluePrintGrpcLibConfiguration::class,
-    BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class])
-@TestPropertySource(properties =
-["blueprintsprocessor.grpcclient.sample.type=basic-auth",
-    "blueprintsprocessor.grpcclient.sample.host=127.0.0.1",
-    "blueprintsprocessor.grpcclient.sample.port=50505",
-    "blueprintsprocessor.grpcclient.sample.username=sampleuser",
-    "blueprintsprocessor.grpcclient.sample.password=sampleuser",
+@ContextConfiguration(
+    classes = [BluePrintGrpcLibConfiguration::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class]
+)
+@TestPropertySource(
+    properties =
+    ["blueprintsprocessor.grpcclient.sample.type=basic-auth",
+        "blueprintsprocessor.grpcclient.sample.host=127.0.0.1",
+        "blueprintsprocessor.grpcclient.sample.port=50505",
+        "blueprintsprocessor.grpcclient.sample.username=sampleuser",
+        "blueprintsprocessor.grpcclient.sample.password=sampleuser",
 
-    "blueprintsprocessor.grpcclient.token.type=token-auth",
-    "blueprintsprocessor.grpcclient.token.host=127.0.0.1",
-    "blueprintsprocessor.grpcclient.token.port=50505",
-    "blueprintsprocessor.grpcclient.token.username=sampleuser",
-    "blueprintsprocessor.grpcclient.token.password=sampleuser",
+        "blueprintsprocessor.grpcclient.token.type=token-auth",
+        "blueprintsprocessor.grpcclient.token.host=127.0.0.1",
+        "blueprintsprocessor.grpcclient.token.port=50505",
+        "blueprintsprocessor.grpcclient.token.username=sampleuser",
+        "blueprintsprocessor.grpcclient.token.password=sampleuser",
 
-    "blueprintsprocessor.grpcserver.tls-sample.type=tls-auth",
-    "blueprintsprocessor.grpcserver.tls-sample.port=50505",
-    "blueprintsprocessor.grpcserver.tls-sample.certChain=server1.pem",
-    "blueprintsprocessor.grpcserver.tls-sample.privateKey=server1.key",
-    "blueprintsprocessor.grpcserver.tls-sample.trustCertCollection=ca.pem",
+        "blueprintsprocessor.grpcserver.tls-sample.type=tls-auth",
+        "blueprintsprocessor.grpcserver.tls-sample.port=50505",
+        "blueprintsprocessor.grpcserver.tls-sample.certChain=server1.pem",
+        "blueprintsprocessor.grpcserver.tls-sample.privateKey=server1.key",
+        "blueprintsprocessor.grpcserver.tls-sample.trustCertCollection=ca.pem",
 
-    "blueprintsprocessor.grpcclient.tls-sample.type=tls-auth",
-    "blueprintsprocessor.grpcclient.tls-sample.host=127.0.0.1",
-    "blueprintsprocessor.grpcclient.tls-sample.port=50505",
-    "blueprintsprocessor.grpcclient.tls-sample.trustCertCollection=ca.pem",
-    "blueprintsprocessor.grpcclient.tls-sample.clientCertChain=client.pem",
-    "blueprintsprocessor.grpcclient.tls-sample.clientPrivateKey=client.key"
-])
+        "blueprintsprocessor.grpcclient.tls-sample.type=tls-auth",
+        "blueprintsprocessor.grpcclient.tls-sample.host=127.0.0.1",
+        "blueprintsprocessor.grpcclient.tls-sample.port=50505",
+        "blueprintsprocessor.grpcclient.tls-sample.trustCertCollection=ca.pem",
+        "blueprintsprocessor.grpcclient.tls-sample.clientCertChain=client.pem",
+        "blueprintsprocessor.grpcclient.tls-sample.clientPrivateKey=client.key"
+    ]
+)
 class BluePrintGrpcLibPropertyServiceTest {
 
     @Autowired
@@ -74,17 +82,26 @@ class BluePrintGrpcLibPropertyServiceTest {
     @Test
     fun testGrpcClientProperties() {
         val properties = bluePrintGrpcLibPropertyService.grpcClientProperties(
-                "blueprintsprocessor.grpcclient.sample")
+            "blueprintsprocessor.grpcclient.sample"
+        )
                 as BasicAuthGrpcClientProperties
         assertNotNull(properties, "failed to create property bean")
-        assertNotNull(properties.host, "failed to get host property" +
-                " in property bean")
-        assertNotNull(properties.port, "failed to get host property" +
-                " in property bean")
-        assertNotNull(properties.username, "failed to get host pro" +
-                "perty in property bean")
-        assertNotNull(properties.password, "failed to get host pr" +
-                "operty in property bean")
+        assertNotNull(
+            properties.host, "failed to get host property" +
+                    " in property bean"
+        )
+        assertNotNull(
+            properties.port, "failed to get host property" +
+                    " in property bean"
+        )
+        assertNotNull(
+            properties.username, "failed to get host pro" +
+                    "perty in property bean"
+        )
+        assertNotNull(
+            properties.password, "failed to get host pr" +
+                    "operty in property bean"
+        )
     }
 
     /**
@@ -100,7 +117,8 @@ class BluePrintGrpcLibPropertyServiceTest {
         val mapper = ObjectMapper()
         val actualObj: JsonNode = mapper.readTree(json)
         val properties = bluePrintGrpcLibPropertyService.grpcClientProperties(
-                actualObj) as TokenAuthGrpcClientProperties
+            actualObj
+        ) as TokenAuthGrpcClientProperties
         assertNotNull(properties, "failed to create property bean")
         assertEquals(properties.host, "127.0.0.1")
         assertNotNull(properties.port, "50505")
@@ -112,7 +130,8 @@ class BluePrintGrpcLibPropertyServiceTest {
     @Test
     fun testGrpcClientServiceBasic() {
         val svc = bluePrintGrpcLibPropertyService.blueprintGrpcClientService(
-                "sample")
+            "sample"
+        )
         assertTrue(svc is BasicAuthGrpcClientService)
     }
 
@@ -122,7 +141,8 @@ class BluePrintGrpcLibPropertyServiceTest {
     @Test
     fun testGrpcClientServiceToken() {
         val svc = bluePrintGrpcLibPropertyService.blueprintGrpcClientService(
-                "token")
+            "token"
+        )
         assertTrue(svc is TokenAuthGrpcClientService)
     }
 
@@ -141,14 +161,14 @@ class BluePrintGrpcLibPropertyServiceTest {
         val mapper = ObjectMapper()
         val actualObj: JsonNode = mapper.readTree(json)
         val svc = bluePrintGrpcLibPropertyService
-                .blueprintGrpcClientService(actualObj)
+            .blueprintGrpcClientService(actualObj)
         assertTrue(svc is BasicAuthGrpcClientService)
     }
 
     @Test
     fun testGrpcClientTLSProperties() {
         val properties = bluePrintGrpcLibPropertyService
-                .grpcClientProperties("blueprintsprocessor.grpcclient.tls-sample") as TLSAuthGrpcClientProperties
+            .grpcClientProperties("blueprintsprocessor.grpcclient.tls-sample") as TLSAuthGrpcClientProperties
         assertNotNull(properties, "failed to create property bean")
         assertNotNull(properties.host, "failed to get host property in property bean")
         assertNotNull(properties.port, "failed to get host property in property bean")
@@ -166,14 +186,14 @@ class BluePrintGrpcLibPropertyServiceTest {
             }           
         """.trimIndent()
         val jsonProperties = bluePrintGrpcLibPropertyService
-                .grpcClientProperties(configDsl.jsonAsJsonType()) as TLSAuthGrpcClientProperties
+            .grpcClientProperties(configDsl.jsonAsJsonType()) as TLSAuthGrpcClientProperties
         assertNotNull(jsonProperties, "failed to create property bean from json")
     }
 
     @Test
     fun testGrpcServerTLSProperties() {
         val properties = bluePrintGrpcLibPropertyService
-                .grpcServerProperties("blueprintsprocessor.grpcserver.tls-sample") as TLSAuthGrpcServerProperties
+            .grpcServerProperties("blueprintsprocessor.grpcserver.tls-sample") as TLSAuthGrpcServerProperties
         assertNotNull(properties, "failed to create property bean")
         assertNotNull(properties.port, "failed to get host property in property bean")
         assertNotNull(properties.trustCertCollection, "failed to get trustCertCollection property in property bean")
@@ -189,7 +209,7 @@ class BluePrintGrpcLibPropertyServiceTest {
             }           
         """.trimIndent()
         val jsonProperties = bluePrintGrpcLibPropertyService
-                .grpcServerProperties(configDsl.jsonAsJsonType()) as TLSAuthGrpcServerProperties
+            .grpcServerProperties(configDsl.jsonAsJsonType()) as TLSAuthGrpcServerProperties
         assertNotNull(jsonProperties, "failed to create property bean from json")
 
         val grpcServerService = bluePrintGrpcLibPropertyService.blueprintGrpcServerService("tls-sample")

@@ -18,16 +18,22 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.interfaces
 
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.cds.controllerblueprints.core.data.*
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.AttributeDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ServiceTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.data.TopologyTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.data.Workflow
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
-
 
 interface BluePrintValidator<T> {
 
     fun validate(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, type: T)
-
 }
-
 
 interface BluePrintServiceTemplateValidator : BluePrintValidator<ServiceTemplate>
 
@@ -60,7 +66,6 @@ interface BluePrintValidatorService {
     @Throws(BluePrintException::class)
     fun validateBluePrints(bluePrintRuntimeService: BluePrintRuntimeService<*>): Boolean
 }
-
 
 interface BluePrintTypeValidatorService {
 
@@ -100,8 +105,11 @@ interface BluePrintTypeValidatorService {
         doValidation(bluePrintRuntimeService, name, artifactType, validators)
     }
 
-    fun validateArtifactDefinition(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String,
-                                   artifactDefinition: ArtifactDefinition) {
+    fun validateArtifactDefinition(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        name: String,
+        artifactDefinition: ArtifactDefinition
+    ) {
         val validators = getArtifactDefinitionsValidators()
         doValidation(bluePrintRuntimeService, name, artifactDefinition, validators)
     }
@@ -154,12 +162,14 @@ interface BluePrintTypeValidatorService {
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun <T> doValidation(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, definition: Any, validators: List<BluePrintValidator<T>>) {
+    private fun <T> doValidation(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        name: String,
+        definition: Any,
+        validators: List<BluePrintValidator<T>>
+    ) {
         validators.forEach {
             it.validate(bluePrintRuntimeService, name, definition as T)
         }
     }
 }
-
-
-

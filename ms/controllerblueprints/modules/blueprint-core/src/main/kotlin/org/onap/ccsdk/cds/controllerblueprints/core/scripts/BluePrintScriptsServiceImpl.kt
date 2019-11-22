@@ -23,8 +23,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
-import java.util.*
-
+import java.util.ArrayList
 
 open class BluePrintScriptsServiceImpl : BluePrintScriptsService {
 
@@ -35,8 +34,13 @@ open class BluePrintScriptsServiceImpl : BluePrintScriptsService {
         return bluePrintCompileService.eval(bluePrintSourceCode, scriptClassName, null)
     }
 
-    override suspend fun <T> scriptInstance(blueprintBasePath: String, artifactName: String, artifactVersion: String,
-                                            scriptClassName: String, reCompile: Boolean): T {
+    override suspend fun <T> scriptInstance(
+        blueprintBasePath: String,
+        artifactName: String,
+        artifactVersion: String,
+        scriptClassName: String,
+        reCompile: Boolean
+    ): T {
 
         val sources: MutableList<String> = arrayListOf()
         sources.add(normalizedPathName(blueprintBasePath, BluePrintConstants.TOSCA_SCRIPTS_KOTLIN_DIR))
@@ -50,24 +54,29 @@ open class BluePrintScriptsServiceImpl : BluePrintScriptsService {
         return scriptInstance(scriptSource, scriptClassName)
     }
 
-    override suspend fun <T> scriptInstance(blueprintBasePath: String, scriptClassName: String,
-                                            reCompile: Boolean): T {
+    override suspend fun <T> scriptInstance(
+        blueprintBasePath: String,
+        scriptClassName: String,
+        reCompile: Boolean
+    ): T {
         val toscaMetaData = BluePrintMetadataUtils.toscaMetaData(blueprintBasePath)
         checkNotNull(toscaMetaData.templateName) { "couldn't find 'Template-Name' key in TOSCA.meta" }
         checkNotNull(toscaMetaData.templateVersion) { "couldn't find 'Template-Version' key in TOSCA.meta" }
-        return scriptInstance(blueprintBasePath, toscaMetaData.templateName!!, toscaMetaData.templateVersion!!,
-                scriptClassName, reCompile)
+        return scriptInstance(
+            blueprintBasePath, toscaMetaData.templateName!!, toscaMetaData.templateVersion!!,
+            scriptClassName, reCompile
+        )
     }
 
     override suspend fun <T> scriptInstance(cacheKey: String, scriptClassName: String): T {
         val args = ArrayList<Any?>()
         return BluePrintCompileCache.classLoader(cacheKey).loadClass(scriptClassName).constructors
-                .single().newInstance(*args.toArray()) as T
+            .single().newInstance(*args.toArray()) as T
     }
 
     override suspend fun <T> scriptInstance(scriptClassName: String): T {
         val args = ArrayList<Any?>()
         return Thread.currentThread().contextClassLoader.loadClass(scriptClassName).constructors
-                .single().newInstance(*args.toArray()) as T
+            .single().newInstance(*args.toArray()) as T
     }
 }

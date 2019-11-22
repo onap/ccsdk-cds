@@ -33,4 +33,3 @@ fun AbstractComponentFunction.cliDeviceInfo(requirementName: String): JsonNode {
 fun AbstractComponentFunction.getSshClientService(cliDeviceInfo: JsonNode): BlueprintSshClientService {
     return BluePrintDependencyService.sshClientService(cliDeviceInfo)
 }
-

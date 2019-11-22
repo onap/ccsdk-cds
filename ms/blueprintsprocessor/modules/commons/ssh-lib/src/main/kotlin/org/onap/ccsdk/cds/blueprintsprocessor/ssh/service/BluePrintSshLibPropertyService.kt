@@ -53,11 +53,13 @@ open class BluePrintSshLibPropertyService(private var bluePrintProperties: BlueP
 
     fun sshClientProperties(jsonNode: JsonNode): SshClientProperties {
         val type = jsonNode.get("type")?.textValue()
-                ?: throw BluePrintProcessorException("missing type field in ssh client properties")
+            ?: throw BluePrintProcessorException("missing type field in ssh client properties")
         return when (type) {
             SshLibConstants.TYPE_BASIC_AUTH -> {
-                JacksonUtils.readValue(jsonNode,
-                        BasicAuthSshClientProperties::class.java)!!
+                JacksonUtils.readValue(
+                    jsonNode,
+                    BasicAuthSshClientProperties::class.java
+                )!!
             }
             else -> {
                 throw BluePrintProcessorException("SSH adaptor($type) is not supported")
@@ -79,7 +81,7 @@ open class BluePrintSshLibPropertyService(private var bluePrintProperties: BlueP
 
     private fun basicAuthSshClientProperties(prefix: String): BasicAuthSshClientProperties {
         return bluePrintProperties.propertyBeanType(
-                prefix, BasicAuthSshClientProperties::class.java)
+            prefix, BasicAuthSshClientProperties::class.java
+        )
     }
-
 }

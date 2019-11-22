@@ -98,7 +98,7 @@ class Graph {
         fun neighbors(): List<Node> = edges.map { edge -> edge.target(this) }
 
         fun neighbors(label: EdgeLabel): List<Node> = edges.filter { it.label == label }
-                .map { edge -> edge.target(this) }
+            .map { edge -> edge.target(this) }
 
         fun labelEdges(label: EdgeLabel): List<Edge> = edges.filter { it.label == label }
 
@@ -106,19 +106,20 @@ class Graph {
     }
 
     data class Edge(
-            val source: Node,
-            val target: Node,
-            val label: EdgeLabel,
-            var status: EdgeStatus = EdgeStatus.NOT_STARTED) {
+        val source: Node,
+        val target: Node,
+        val label: EdgeLabel,
+        var status: EdgeStatus = EdgeStatus.NOT_STARTED
+    ) {
 
         fun target(node: Node): Node = target
 
         fun equivalentTo(other: Edge) =
-                (source == other.source && target == other.target)
-                        || (source == other.target && target == other.source)
+            (source == other.source && target == other.target) ||
+                    (source == other.target && target == other.source)
 
         override fun toString() =
-                "${source.id}>${target.id}/$label($status)"
+            "${source.id}>${target.id}/$label($status)"
     }
 
     data class TermForm(val nodes: Collection<String>, val edges: List<Term>) {
@@ -147,23 +148,27 @@ class Graph {
     companion object {
 
         fun labeledDirectedTerms(termForm: TermForm): Graph =
-                createFromTerms(termForm) { graph, n1, n2, value -> graph.addEdge(n1, n2, value) }
+            createFromTerms(termForm) { graph, n1, n2, value -> graph.addEdge(n1, n2, value) }
 
         fun labeledDirectedAdjacent(adjacencyList: AdjacencyList<String, EdgeLabel>): Graph =
-                fromAdjacencyList(adjacencyList) { graph, n1, n2, value ->
-                    graph.addEdge(n1, n2, value)
-                }
+            fromAdjacencyList(adjacencyList) { graph, n1, n2, value ->
+                graph.addEdge(n1, n2, value)
+            }
 
-        private fun createFromTerms(termForm: TermForm,
-                                    addFunction: (Graph, String, String, EdgeLabel) -> Unit): Graph {
+        private fun createFromTerms(
+            termForm: TermForm,
+            addFunction: (Graph, String, String, EdgeLabel) -> Unit
+        ): Graph {
             val graph = Graph()
             termForm.nodes.forEach { graph.addNode(it) }
             termForm.edges.forEach { addFunction(graph, it.source, it.target, it.label) }
             return graph
         }
 
-        private fun fromAdjacencyList(adjacencyList: AdjacencyList<String, EdgeLabel>,
-                                      addFunction: (Graph, String, String, EdgeLabel) -> Unit): Graph {
+        private fun fromAdjacencyList(
+            adjacencyList: AdjacencyList<String, EdgeLabel>,
+            addFunction: (Graph, String, String, EdgeLabel) -> Unit
+        ): Graph {
             val graph = Graph()
             adjacencyList.entries.forEach { graph.addNode(it.node) }
             adjacencyList.entries.forEach { (node, links) ->

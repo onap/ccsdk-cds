@@ -25,17 +25,17 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.DesignerApiTestConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ModelType
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ModelType
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.annotation.Commit
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import java.nio.charset.Charset
-import java.util.*
+import java.util.Arrays
 
 /**
  * ModelTypeReactRepositoryTest.
@@ -44,8 +44,10 @@ import java.util.*
  */
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [DesignerApiTestConfiguration::class,
-    BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, BluePrintDBLibConfiguration::class])
+@ContextConfiguration(
+    classes = [DesignerApiTestConfiguration::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, BluePrintDBLibConfiguration::class]
+)
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class ModelTypeReactRepositoryTest {
@@ -59,7 +61,7 @@ class ModelTypeReactRepositoryTest {
     @Commit
     fun test01Save() {
         val content = normalizedFile("./src/test/resources/model_type/data_type/datatype-property.json")
-                .readText(Charset.defaultCharset())
+            .readText(Charset.defaultCharset())
         val modelType = ModelType()
         modelType.definitionType = BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE
         modelType.derivedFrom = BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT
@@ -67,8 +69,8 @@ class ModelTypeReactRepositoryTest {
         modelType.definition = JacksonUtils.jsonNode(content)
         modelType.modelName = modelName
         modelType.version = "1.0.0"
-        modelType.tags = ("test-datatype ," + BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT + ","
-                + BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)
+        modelType.tags = ("test-datatype ," + BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT + "," +
+                BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)
         modelType.updatedBy = "xxxxxx@xxx.com"
 
         val dbModelType = modelTypeReactRepository!!.save(modelType).block()
@@ -80,7 +82,8 @@ class ModelTypeReactRepositoryTest {
         val dbFindByModelName = modelTypeReactRepository!!.findByModelName(modelName).block()
         Assert.assertNotNull("Failed to findByModelName ", dbFindByModelName)
 
-        val dbFindByDefinitionType = modelTypeReactRepository.findByDefinitionType(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE).collectList().block()
+        val dbFindByDefinitionType =
+            modelTypeReactRepository.findByDefinitionType(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE).collectList().block()
         Assert.assertNotNull("Failed to findByDefinitionType ", dbFindByDefinitionType)
         Assert.assertTrue("Failed to findByDefinitionType count", dbFindByDefinitionType!!.size > 0)
 
@@ -92,11 +95,13 @@ class ModelTypeReactRepositoryTest {
         Assert.assertNotNull("Failed to findByModelNameIn ", dbFindByModelNameIn)
         Assert.assertTrue("Failed to findByModelNameIn by count", dbFindByModelNameIn!!.size > 0)
 
-        val dbFindByDefinitionTypeIn = modelTypeReactRepository.findByDefinitionTypeIn(Arrays.asList(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)).collectList().block()
+        val dbFindByDefinitionTypeIn =
+            modelTypeReactRepository.findByDefinitionTypeIn(Arrays.asList(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)).collectList().block()
         Assert.assertNotNull("Failed to findByDefinitionTypeIn", dbFindByDefinitionTypeIn)
         Assert.assertTrue("Failed to findByDefinitionTypeIn by count", dbFindByDefinitionTypeIn!!.size > 0)
 
-        val dbFindByDerivedFromIn = modelTypeReactRepository.findByDerivedFromIn(Arrays.asList(BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT)).collectList().block()
+        val dbFindByDerivedFromIn =
+            modelTypeReactRepository.findByDerivedFromIn(Arrays.asList(BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT)).collectList().block()
         Assert.assertNotNull("Failed to find findByDerivedFromIn", dbFindByDerivedFromIn)
         Assert.assertTrue("Failed to find findByDerivedFromIn by count", dbFindByDerivedFromIn!!.size > 0)
     }
@@ -106,5 +111,4 @@ class ModelTypeReactRepositoryTest {
     fun test03Delete() {
         modelTypeReactRepository!!.deleteByModelName(modelName).block()
     }
-
 }

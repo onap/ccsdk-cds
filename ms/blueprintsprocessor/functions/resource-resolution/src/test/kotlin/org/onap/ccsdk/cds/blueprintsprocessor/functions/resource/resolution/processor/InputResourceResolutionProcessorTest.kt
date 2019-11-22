@@ -46,13 +46,14 @@ class InputResourceResolutionProcessorTest {
         runBlocking {
 
             val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
-                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+            )
 
             val resourceAssignmentRuntimeService = spyk(ResourceAssignmentRuntimeService("1234", bluePrintContext))
 
             // mocking input for resource resolution
             val textNode: JsonNode = TextNode("any value")
-            every {resourceAssignmentRuntimeService.getInputValue("rr-name") } returns textNode
+            every { resourceAssignmentRuntimeService.getInputValue("rr-name") } returns textNode
 
             inputResourceResolutionProcessor.raRuntimeService = resourceAssignmentRuntimeService
             inputResourceResolutionProcessor.resourceDictionaries = ResourceAssignmentUtils.resourceDefinitions(bluePrintContext.rootPath)

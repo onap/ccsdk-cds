@@ -26,6 +26,7 @@ import java.util.Properties
  * Representation of data required for all DMAAP client.
  */
 open class DmaapClientProperties {
+
     lateinit var props: Properties
     lateinit var type: String
     lateinit var host: String
@@ -41,6 +42,7 @@ open class HttpNoAuthDmaapClientProperties : DmaapClientProperties()
  * Representation of data required for AAF auth DMAAP client.
  */
 open class AafAuthDmaapClientProperties : DmaapClientProperties() {
+
     lateinit var username: String
     lateinit var password: String
 }

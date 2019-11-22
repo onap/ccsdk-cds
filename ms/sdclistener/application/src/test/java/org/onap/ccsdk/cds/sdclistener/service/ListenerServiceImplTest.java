@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.onap.ccsdk.cds.sdclistener.service;
 
 import org.apache.commons.io.FileUtils;
@@ -50,8 +51,8 @@ import static org.onap.sdc.utils.DistributionStatusEnum.COMPONENT_DONE_OK;
 
 @RunWith(SpringRunner.class)
 @EnableConfigurationProperties({SdcListenerAuthClientInterceptor.class,
-    BluePrintProcesssorHandler.class, SdcListenerDto.class, ListenerServiceImpl.class, SdcListenerStatus.class,
-    SdcListenerConfiguration.class})
+                                BluePrintProcesssorHandler.class, SdcListenerDto.class, ListenerServiceImpl.class, SdcListenerStatus.class,
+                                SdcListenerConfiguration.class})
 @SpringBootTest(classes = {ListenerServiceImplTest.class})
 public class ListenerServiceImplTest {
 
@@ -62,7 +63,6 @@ public class ListenerServiceImplTest {
     private static final String CSAR_FILE = ".csar";
     private static final String DISTRIBUTION_ID = "1";
     private static final String URL = "/sdc/v1/artifact";
-
 
     private String csarArchivePath;
     private Path tempDirectoryPath;
@@ -105,18 +105,18 @@ public class ListenerServiceImplTest {
         Mockito.when(listenerDto.getDistributionId()).thenReturn(DISTRIBUTION_ID);
         Mockito.when(listenerDto.getArtifactUrl()).thenReturn(URL);
         Mockito.doCallRealMethod().when(status)
-            .sendResponseBackToSdc(DISTRIBUTION_ID, COMPONENT_DONE_OK, null, URL, SDC_LISTENER_COMPONENT);
+                .sendResponseBackToSdc(DISTRIBUTION_ID, COMPONENT_DONE_OK, null, URL, SDC_LISTENER_COMPONENT);
 
         // Act
         listenerService.extractBluePrint(WRONG_CSAR_SAMPLE, tempDirectoryPath.toString());
 
         // Verify
         Mockito.verify(status)
-            .sendResponseBackToSdc(DISTRIBUTION_ID, COMPONENT_DONE_OK, null, URL, SDC_LISTENER_COMPONENT);
+                .sendResponseBackToSdc(DISTRIBUTION_ID, COMPONENT_DONE_OK, null, URL, SDC_LISTENER_COMPONENT);
     }
 
     @Test
-    public void storeCsarArtifactToFileSuccessfully() throws  IOException {
+    public void storeCsarArtifactToFileSuccessfully() throws IOException {
         // Arrange
         DistributionClientDownloadResultStubImpl resultStub = new DistributionClientDownloadResultStubImpl();
 
@@ -130,11 +130,11 @@ public class ListenerServiceImplTest {
 
     private String checkFileExists(Path path) throws IOException {
         return Files.walk(path)
-            .filter(Files::isRegularFile)
-            .map(Path::toFile)
-            .findAny()
-            .get()
-            .getName();
+                .filter(Files :: isRegularFile)
+                .map(Path :: toFile)
+                .findAny()
+                .get()
+                .getName();
     }
 
     public byte[] convertFileToByteArray(File file) {
@@ -147,7 +147,7 @@ public class ListenerServiceImplTest {
     }
 
     public class DistributionClientDownloadResultStubImpl extends DistributionClientResultStubImpl implements
-        IDistributionClientDownloadResult {
+            IDistributionClientDownloadResult {
 
         public DistributionClientDownloadResultStubImpl() {
         }
@@ -164,5 +164,7 @@ public class ListenerServiceImplTest {
         public String getArtifactFilename() {
             return "MackArtifactName.csar";
         }
+
     }
+
 }

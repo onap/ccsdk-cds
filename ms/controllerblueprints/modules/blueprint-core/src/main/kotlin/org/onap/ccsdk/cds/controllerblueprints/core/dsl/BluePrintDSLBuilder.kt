@@ -19,15 +19,23 @@ package org.onap.ccsdk.cds.controllerblueprints.core.dsl
 import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
-import org.onap.ccsdk.cds.controllerblueprints.core.data.*
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.AttributeDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.Implementation
+import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.Step
 
 /**
  * @author Brinda Santh
  */
-class DSLBluePrintBuilder(private val name: String,
-                          private val version: String,
-                          private val author: String,
-                          private val tags: String) {
+class DSLBluePrintBuilder(
+    private val name: String,
+    private val version: String,
+    private val author: String,
+    private val tags: String
+) {
 
     private var dslBluePrint = DSLBluePrint()
     private var metadata: MutableMap<String, String> = hashMapOf()
@@ -59,8 +67,13 @@ class DSLBluePrintBuilder(private val name: String,
         dataTypes[dataType.id!!] = dataType
     }
 
-    fun dataType(id: String, version: String, derivedFrom: String, description: String,
-                 block: DataTypeBuilder.() -> Unit) {
+    fun dataType(
+        id: String,
+        version: String,
+        derivedFrom: String,
+        description: String,
+        block: DataTypeBuilder.() -> Unit
+    ) {
         dataTypes[id] = DataTypeBuilder(id, version, derivedFrom, description).apply(block).build()
     }
 
@@ -68,20 +81,36 @@ class DSLBluePrintBuilder(private val name: String,
         artifactTypes[artifactType.id!!] = artifactType
     }
 
-    fun artifactType(id: String, version: String, derivedFrom: String, description: String,
-                     block: ArtifactTypeBuilder.() -> Unit) {
+    fun artifactType(
+        id: String,
+        version: String,
+        derivedFrom: String,
+        description: String,
+        block: ArtifactTypeBuilder.() -> Unit
+    ) {
         artifactTypes[id] = ArtifactTypeBuilder(id, version, derivedFrom, description).apply(block).build()
     }
 
-    fun component(id: String, type: String, version: String, description: String,
-                  block: DSLComponentBuilder.() -> Unit) {
+    fun component(
+        id: String,
+        type: String,
+        version: String,
+        description: String,
+        block: DSLComponentBuilder.() -> Unit
+    ) {
         components[id] = DSLComponentBuilder(id, type, version, description).apply(block).build()
     }
 
-    fun registryComponent(id: String, type: String, version: String, interfaceName: String, description: String,
-                          block: DSLRegistryComponentBuilder.() -> Unit) {
+    fun registryComponent(
+        id: String,
+        type: String,
+        version: String,
+        interfaceName: String,
+        description: String,
+        block: DSLRegistryComponentBuilder.() -> Unit
+    ) {
         registryComponents[id] = DSLRegistryComponentBuilder(id, type, version, interfaceName, description)
-                .apply(block).build()
+            .apply(block).build()
     }
 
     fun workflow(id: String, description: String, block: DSLWorkflowBuilder.() -> Unit) {
@@ -101,8 +130,13 @@ class DSLBluePrintBuilder(private val name: String,
     }
 }
 
-class DSLComponentBuilder(private val id: String, private val type: String,
-                          private val version: String, private val description: String) {
+class DSLComponentBuilder(
+    private val id: String,
+    private val type: String,
+    private val version: String,
+    private val description: String
+) {
+
     private val dslComponent = DSLComponent()
     var properties: MutableMap<String, PropertyDefinition>? = null
     var attributes: MutableMap<String, AttributeDefinition>? = null
@@ -119,12 +153,18 @@ class DSLComponentBuilder(private val id: String, private val type: String,
         attributes!![id] = attribute
     }
 
-    fun attribute(id: String, type: String, required: Boolean, expression: Any, description: String? = "",
-                  block: DSLAttributeDefinitionBuilder.() -> Unit) {
+    fun attribute(
+        id: String,
+        type: String,
+        required: Boolean,
+        expression: Any,
+        description: String? = "",
+        block: DSLAttributeDefinitionBuilder.() -> Unit
+    ) {
         if (attributes == null)
             attributes = hashMapOf()
         val attribute = DSLAttributeDefinitionBuilder(id, type, required, expression.asJsonType(), description)
-                .apply(block).build()
+            .apply(block).build()
         attributes!![id] = attribute
     }
 
@@ -135,12 +175,18 @@ class DSLComponentBuilder(private val id: String, private val type: String,
         properties!![id] = property
     }
 
-    fun property(id: String, type: String, required: Boolean, expression: Any, description: String? = "",
-                 block: DSLPropertyDefinitionBuilder.() -> Unit) {
+    fun property(
+        id: String,
+        type: String,
+        required: Boolean,
+        expression: Any,
+        description: String? = "",
+        block: DSLPropertyDefinitionBuilder.() -> Unit
+    ) {
         if (properties == null)
             properties = hashMapOf()
         val property = DSLPropertyDefinitionBuilder(id, type, required, expression.asJsonType(), description)
-                .apply(block).build()
+            .apply(block).build()
         properties!![id] = property
     }
 
@@ -163,7 +209,6 @@ class DSLComponentBuilder(private val id: String, private val type: String,
         artifacts!![id] = ArtifactDefinitionBuilder(id, type, file).apply(block).build()
     }
 
-
     fun input(id: String, type: String, required: Boolean, expression: Any, description: String? = "") {
         if (inputs == null)
             inputs = hashMapOf()
@@ -171,12 +216,18 @@ class DSLComponentBuilder(private val id: String, private val type: String,
         inputs!![id] = property.build()
     }
 
-    fun input(id: String, type: String, required: Boolean, expression: Any, description: String? = "",
-              block: DSLPropertyDefinitionBuilder.() -> Unit) {
+    fun input(
+        id: String,
+        type: String,
+        required: Boolean,
+        expression: Any,
+        description: String? = "",
+        block: DSLPropertyDefinitionBuilder.() -> Unit
+    ) {
         if (inputs == null)
             inputs = hashMapOf()
         val property = DSLPropertyDefinitionBuilder(id, type, required, expression.asJsonType(), description)
-                .apply(block).build()
+            .apply(block).build()
         inputs!![id] = property
     }
 
@@ -187,12 +238,18 @@ class DSLComponentBuilder(private val id: String, private val type: String,
         outputs!![id] = property.build()
     }
 
-    fun output(id: String, type: String, required: Boolean, expression: Any, description: String? = "",
-               block: DSLPropertyDefinitionBuilder.() -> Unit) {
+    fun output(
+        id: String,
+        type: String,
+        required: Boolean,
+        expression: Any,
+        description: String? = "",
+        block: DSLPropertyDefinitionBuilder.() -> Unit
+    ) {
         if (outputs == null)
             outputs = hashMapOf()
         val property = DSLPropertyDefinitionBuilder(id, type, required, expression.asJsonType(), description)
-                .apply(block).build()
+            .apply(block).build()
         outputs!![id] = property
     }
 
@@ -212,10 +269,14 @@ class DSLComponentBuilder(private val id: String, private val type: String,
     }
 }
 
-class DSLRegistryComponentBuilder(private val id: String, private val type: String,
-                                  private val version: String,
-                                  private val interfaceName: String,
-                                  private val description: String) {
+class DSLRegistryComponentBuilder(
+    private val id: String,
+    private val type: String,
+    private val version: String,
+    private val interfaceName: String,
+    private val description: String
+) {
+
     private val dslComponent = DSLRegistryComponent()
     var properties: MutableMap<String, JsonNode>? = null
 
@@ -289,8 +350,14 @@ class DSLWorkflowBuilder(private val actionName: String, private val description
         inputs!![id] = property.build()
     }
 
-    fun input(id: String, type: String, required: Boolean, description: String, defaultValue: Any?,
-              block: PropertyDefinitionBuilder.() -> Unit) {
+    fun input(
+        id: String,
+        type: String,
+        required: Boolean,
+        description: String,
+        defaultValue: Any?,
+        block: PropertyDefinitionBuilder.() -> Unit
+    ) {
         if (inputs == null)
             inputs = hashMapOf()
         val property = PropertyDefinitionBuilder(id, type, required, description).apply(block).build()
@@ -306,12 +373,18 @@ class DSLWorkflowBuilder(private val actionName: String, private val description
         outputs!![id] = property.build()
     }
 
-    fun output(id: String, type: String, required: Boolean, expression: Any, description: String? = "",
-               block: DSLPropertyDefinitionBuilder.() -> Unit) {
+    fun output(
+        id: String,
+        type: String,
+        required: Boolean,
+        expression: Any,
+        description: String? = "",
+        block: DSLPropertyDefinitionBuilder.() -> Unit
+    ) {
         if (outputs == null)
             outputs = hashMapOf()
         val property = DSLPropertyDefinitionBuilder(id, type, required, expression.asJsonType(), description)
-                .apply(block).build()
+            .apply(block).build()
         outputs!![id] = property
     }
 
@@ -337,11 +410,13 @@ class DSLWorkflowBuilder(private val actionName: String, private val description
     }
 }
 
-class DSLAttributeDefinitionBuilder(private val id: String,
-                                    private val type: String? = BluePrintConstants.DATA_TYPE_STRING,
-                                    private val required: Boolean? = false,
-                                    private val expression: JsonNode,
-                                    private val description: String? = "") {
+class DSLAttributeDefinitionBuilder(
+    private val id: String,
+    private val type: String? = BluePrintConstants.DATA_TYPE_STRING,
+    private val required: Boolean? = false,
+    private val expression: JsonNode,
+    private val description: String? = ""
+) {
 
     private var attributeDefinition = AttributeDefinition()
 
@@ -368,11 +443,13 @@ class DSLAttributeDefinitionBuilder(private val id: String,
     }
 }
 
-class DSLPropertyDefinitionBuilder(private val id: String,
-                                   private val type: String? = BluePrintConstants.DATA_TYPE_STRING,
-                                   private val required: Boolean? = false,
-                                   private val expression: JsonNode,
-                                   private val description: String? = "") {
+class DSLPropertyDefinitionBuilder(
+    private val id: String,
+    private val type: String? = BluePrintConstants.DATA_TYPE_STRING,
+    private val required: Boolean? = false,
+    private val expression: JsonNode,
+    private val description: String? = ""
+) {
 
     private var propertyDefinition: PropertyDefinition = PropertyDefinition()
 

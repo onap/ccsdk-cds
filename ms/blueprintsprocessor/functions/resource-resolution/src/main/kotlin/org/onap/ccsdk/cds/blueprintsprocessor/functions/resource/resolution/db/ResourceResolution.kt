@@ -22,8 +22,15 @@ import org.hibernate.annotations.Proxy
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.io.Serializable
-import java.util.*
-import javax.persistence.*
+import java.util.Date
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.EntityListeners
+import javax.persistence.Id
+import javax.persistence.Lob
+import javax.persistence.Table
+import javax.persistence.Temporal
+import javax.persistence.TemporalType
 
 @EntityListeners(AuditingEntityListener::class)
 @Entity
@@ -56,8 +63,10 @@ class ResourceResolution : Serializable {
     @Column(name = "status", nullable = false)
     var status: String? = null
 
-    @get:ApiModelProperty(value = "Resolution Key uniquely identifying the resolution of a given artifact within a CBA.",
-        required = true)
+    @get:ApiModelProperty(
+        value = "Resolution Key uniquely identifying the resolution of a given artifact within a CBA.",
+        required = true
+    )
     @Column(name = "resolution_key", nullable = false)
     var resolutionKey: String? = null
 
@@ -69,8 +78,10 @@ class ResourceResolution : Serializable {
     @Column(name = "resource_id", nullable = false)
     var resourceId: String? = null
 
-    @get:ApiModelProperty(value = "If resolution occurred multiple time, this field provides the index.",
-        required = true)
+    @get:ApiModelProperty(
+        value = "If resolution occurred multiple time, this field provides the index.",
+        required = true
+    )
     @Column(name = "occurrence", nullable = false)
     var occurrence: Int = 0
 
@@ -78,8 +89,10 @@ class ResourceResolution : Serializable {
     @Column(name = "dictionary_name", nullable = false)
     var dictionaryName: String? = null
 
-    @get:ApiModelProperty(value = "Source associated with the data dictionary used for the resolution.",
-        required = true)
+    @get:ApiModelProperty(
+        value = "Source associated with the data dictionary used for the resolution.",
+        required = true
+    )
     @Column(name = "dictionary_status", nullable = false)
     var dictionarySource: String? = null
 

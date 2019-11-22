@@ -29,8 +29,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
  * Register the Netconf module exposed dependency
  */
 fun BluePrintDependencyService.netconfClientService(): ResourceResolutionService =
-        instance(ResourceResolutionConstants.SERVICE_RESOURCE_RESOLUTION)
-
+    instance(ResourceResolutionConstants.SERVICE_RESOURCE_RESOLUTION)
 
 fun AbstractComponentFunction.netconfDevice(requirementName: String): NetconfDevice {
     val deviceInfo = netconfDeviceInfo(requirementName)
@@ -43,8 +42,10 @@ fun AbstractComponentFunction.netconfDeviceInfo(requirementName: String): Device
 
     val requirement = blueprintContext.nodeTemplateRequirement(nodeTemplateName, requirementName)
 
-    val capabilityProperties = bluePrintRuntimeService.resolveNodeTemplateCapabilityProperties(requirement
-            .node!!, requirement.capability!!)
+    val capabilityProperties = bluePrintRuntimeService.resolveNodeTemplateCapabilityProperties(
+        requirement
+            .node!!, requirement.capability!!
+    )
 
     return netconfDeviceInfo(capabilityProperties)
 }

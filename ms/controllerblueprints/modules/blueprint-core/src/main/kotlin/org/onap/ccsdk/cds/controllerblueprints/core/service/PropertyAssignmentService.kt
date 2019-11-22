@@ -17,14 +17,25 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
-
-import org.slf4j.LoggerFactory
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.NullNode
-import org.onap.ccsdk.cds.controllerblueprints.core.*
-import org.onap.ccsdk.cds.controllerblueprints.core.data.*
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactExpression
+import org.onap.ccsdk.cds.controllerblueprints.core.data.AttributeDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.AttributeExpression
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ExpressionData
+import org.onap.ccsdk.cds.controllerblueprints.core.data.OperationOutputExpression
+import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyExpression
+import org.onap.ccsdk.cds.controllerblueprints.core.format
+import org.onap.ccsdk.cds.controllerblueprints.core.isComplexType
+import org.onap.ccsdk.cds.controllerblueprints.core.jsonPathParse
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.ResourceResolverUtils
+import org.slf4j.LoggerFactory
 
 /**
  *
@@ -32,19 +43,23 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.ResourceResolverUtils
  * @author Brinda Santh
  */
 class PropertyAssignmentService(var bluePrintRuntimeService: BluePrintRuntimeService<MutableMap<String, JsonNode>>) {
-    private val log= LoggerFactory.getLogger(this::class.toString())
+
+    private val log = LoggerFactory.getLogger(this::class.toString())
 
     private var bluePrintContext: BluePrintContext = bluePrintRuntimeService.bluePrintContext()
 
-/*
+    /*
 
-If Property Assignment is Expression.
-    Get the Expression
-    Recursively resolve the expression
- */
+    If Property Assignment is Expression.
+        Get the Expression
+        Recursively resolve the expression
+     */
 
-    fun resolveAssignmentExpression(nodeTemplateName: String, assignmentName: String,
-                                    assignment: JsonNode): JsonNode {
+    fun resolveAssignmentExpression(
+        nodeTemplateName: String,
+        assignmentName: String,
+        assignment: JsonNode
+    ): JsonNode {
         val valueNode: JsonNode
         log.trace("Assignment ({})", assignment)
         val expressionData = BluePrintExpressionService.getExpressionData(assignment)
@@ -84,7 +99,6 @@ If Property Assignment is Expression.
                     valueNode = bluePrintRuntimeService.resolveDSLExpression(expressionData.dslExpression!!.propertyName)
                 }
                 BluePrintConstants.EXPRESSION_GET_NODE_OF_TYPE -> {
-
                 }
                 else -> {
                     throw BluePrintException(format("for property ({}), command ({}) is not supported ", propName, command))
@@ -122,7 +136,7 @@ If Property Assignment is Expression.
             }
             BluePrintConstants.PROPERTY_BPP -> {
                 valueNode = bluePrintRuntimeService.getNodeTemplateAttributeValue(BluePrintConstants.PROPERTY_BPP, attributeName)
-                        ?: throw BluePrintException("failed to get env attribute name ($attributeName) ")
+                    ?: throw BluePrintException("failed to get env attribute name ($attributeName) ")
             }
             else -> {
                 if (!attributeExpression.modelableEntityName.equals(BluePrintConstants.PROPERTY_SELF, true)) {
@@ -130,13 +144,12 @@ If Property Assignment is Expression.
                 }
 
                 var attributeDefinition: AttributeDefinition = bluePrintContext
-                        .nodeTemplateNodeType(attributeNodeTemplateName).attributes?.get(attributeName)
-                        ?: throw BluePrintException("failed to get attribute definitions for node template ($attributeNodeTemplateName)'s attribute name ($attributeName) ")
+                    .nodeTemplateNodeType(attributeNodeTemplateName).attributes?.get(attributeName)
+                    ?: throw BluePrintException("failed to get attribute definitions for node template ($attributeNodeTemplateName)'s attribute name ($attributeName) ")
 
                 valueNode = bluePrintRuntimeService.getNodeTemplateAttributeValue(attributeNodeTemplateName, attributeName)
-                        ?: throw BluePrintException("failed to get node template ($attributeNodeTemplateName)'s attribute name ($attributeName) ")
+                    ?: throw BluePrintException("failed to get node template ($attributeNodeTemplateName)'s attribute name ($attributeName) ")
             }
-
         }
         if (subAttributeName != null) {
             if (valueNode.isComplexType())
@@ -162,11 +175,22 @@ If Property Assignment is Expression.
         }
 
         val nodeTemplatePropertyExpression = bluePrintContext.nodeTemplateByName(propertyNodeTemplateName).properties?.get(propertyName)
-                ?: throw BluePrintException(format("failed to get property definitions for node template ({})'s property name ({}) ", nodeTemplateName, propertyName))
+            ?: throw BluePrintException(
+                format(
+                    "failed to get property definitions for node template ({})'s property name ({}) ",
+                    nodeTemplateName,
+                    propertyName
+                )
+            )
 
         var propertyDefinition: PropertyDefinition = bluePrintContext.nodeTemplateNodeType(propertyNodeTemplateName).properties?.get(propertyName)!!
 
-        log.info("node template name ({}), property Name ({}) resolved value ({})", propertyNodeTemplateName, propertyName, nodeTemplatePropertyExpression)
+        log.info(
+            "node template name ({}), property Name ({}) resolved value ({})",
+            propertyNodeTemplateName,
+            propertyName,
+            nodeTemplatePropertyExpression
+        )
 
         // Check it it is a nested expression
         valueNode = resolveAssignmentExpression(propertyNodeTemplateName, propertyName, nodeTemplatePropertyExpression)
@@ -187,9 +211,11 @@ If Property Assignment is Expression.
             outputNodeTemplateName = operationOutputExpression.modelableEntityName
         }
 
-        var valueNode = bluePrintRuntimeService.getNodeTemplateOperationOutputValue(outputNodeTemplateName,
-                operationOutputExpression.interfaceName, operationOutputExpression.operationName,
-                operationOutputExpression.propertyName)
+        var valueNode = bluePrintRuntimeService.getNodeTemplateOperationOutputValue(
+            outputNodeTemplateName,
+            operationOutputExpression.interfaceName, operationOutputExpression.operationName,
+            operationOutputExpression.propertyName
+        )
 
         val subPropertyName: String? = operationOutputExpression.subPropertyName
         if (subPropertyName != null) {
@@ -209,9 +235,13 @@ If Property Assignment is Expression.
             artifactNodeTemplateName = artifactExpression.modelableEntityName
         }
         val artifactDefinition: ArtifactDefinition = bluePrintContext.nodeTemplateByName(artifactNodeTemplateName)
-                .artifacts?.get(artifactExpression.artifactName)
-                ?: throw BluePrintException(format("failed to get artifact definitions for node template ({})'s " +
-                        "artifact name ({}) ", nodeTemplateName, artifactExpression.artifactName))
+            .artifacts?.get(artifactExpression.artifactName)
+            ?: throw BluePrintException(
+                format(
+                    "failed to get artifact definitions for node template ({})'s " +
+                            "artifact name ({}) ", nodeTemplateName, artifactExpression.artifactName
+                )
+            )
 
         return JacksonUtils.jsonNodeFromObject(artifactContent(artifactDefinition))
     }
@@ -227,4 +257,3 @@ If Property Assignment is Expression.
         return ""
     }
 }
-

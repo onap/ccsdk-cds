@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.onap.ccsdk.cds.sdclistener.service;
 
 import com.google.protobuf.ByteString;
@@ -38,7 +39,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -101,16 +106,16 @@ public class ListenerServiceImpl implements ListenerService {
 
             if (validPathCount == 0) {
                 LOGGER
-                    .info("CBA archive doesn't exist in the CSAR Package or it doesn't exist as per the given path {}",
-                        CBA_ZIP_PATH);
+                        .info("CBA archive doesn't exist in the CSAR Package or it doesn't exist as per the given path {}",
+                                CBA_ZIP_PATH);
                 listenerStatus.sendResponseBackToSdc(distributionId, COMPONENT_DONE_OK, null,
-                    artifactUrl, SDC_LISTENER_COMPONENT);
+                        artifactUrl, SDC_LISTENER_COMPONENT);
             }
 
         } catch (Exception e) {
             final String errorMessage = format("Failed to extract blueprint %s", e.getMessage());
             listenerStatus.sendResponseBackToSdc(distributionId, COMPONENT_DONE_ERROR, errorMessage,
-                artifactUrl, SDC_LISTENER_COMPONENT);
+                    artifactUrl, SDC_LISTENER_COMPONENT);
             LOGGER.error(errorMessage);
         }
     }
@@ -121,7 +126,7 @@ public class ListenerServiceImpl implements ListenerService {
         File targetZipFile = new File(targetLocation.toString());
 
         try {
-            if (! targetZipFile.createNewFile()) {
+            if (!targetZipFile.createNewFile()) {
                 LOGGER.warn("Overwriting zip file {}", targetLocation);
             }
         } catch (IOException e) {
@@ -129,7 +134,7 @@ public class ListenerServiceImpl implements ListenerService {
         }
 
         try (InputStream inputStream = zipFile.getInputStream(entry); OutputStream out = new FileOutputStream(
-            targetZipFile)) {
+                targetZipFile)) {
             IOUtils.copy(inputStream, out);
             LOGGER.info("Successfully store the CBA archive {} at this location", targetZipFile);
         } catch (Exception e) {
@@ -194,20 +199,20 @@ public class ListenerServiceImpl implements ListenerService {
 
                 if (responseStatus.getCode() != SUCCESS_CODE) {
                     final String errorMessage = format("Failed to store the CBA archive into CDS DB due to %s",
-                        responseStatus.getErrorMessage());
+                            responseStatus.getErrorMessage());
                     listenerStatus.sendResponseBackToSdc(distributionId, COMPONENT_DONE_ERROR, errorMessage, artifactUrl,
-                        SDC_LISTENER_COMPONENT);
+                            SDC_LISTENER_COMPONENT);
                     LOGGER.error(errorMessage);
                 } else {
                     LOGGER.info(responseStatus.getMessage());
                     listenerStatus.sendResponseBackToSdc(distributionId, COMPONENT_DONE_OK, null, artifactUrl,
-                        SDC_LISTENER_COMPONENT);
+                            SDC_LISTENER_COMPONENT);
                 }
 
             } catch (Exception e) {
                 final String errorMessage = format("Failure due to %s", e.getMessage());
                 listenerStatus.sendResponseBackToSdc(distributionId, COMPONENT_DONE_ERROR, errorMessage, artifactUrl,
-                   SDC_LISTENER_COMPONENT);
+                        SDC_LISTENER_COMPONENT);
                 LOGGER.error(errorMessage);
             }
         });
@@ -236,4 +241,5 @@ public class ListenerServiceImpl implements ListenerService {
     private String getArtifactUrl() {
         return sdcListenerDto.getArtifactUrl();
     }
+
 }
