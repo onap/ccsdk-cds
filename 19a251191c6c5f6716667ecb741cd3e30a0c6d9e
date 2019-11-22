@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "81284956_8b599abe",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_config/Definitions/pnf_config.json",
+        "patchSetId": 6
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 5053
+      },
+      "writtenOn": "2019-11-22T18:19:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f0bc250_616c62f4",
+      "range": {
+        "startLine": 128,
+        "startChar": 45,
+        "endLine": 128,
+        "endChar": 129
+      },
+      "revId": "19a251191c6c5f6716667ecb741cd3e30a0c6d9e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "490f3359_3e3c033d",
         "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_config_aai/Definitions/pnf_config_aai.json",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2019-11-22T14:29:38Z",
       "side": 1,
       "message": "Please follow the package naming standards Package Name : cab.\u003cblueprintName\u003e.XXX",
+      "range": {
+        "startLine": 128,
+        "startChar": 46,
+        "endLine": 128,
+        "endChar": 132
+      },
+      "revId": "19a251191c6c5f6716667ecb741cd3e30a0c6d9e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "878aad5a_d17a0301",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_config_aai/Definitions/pnf_config_aai.json",
+        "patchSetId": 6
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 5053
+      },
+      "writtenOn": "2019-11-22T18:19:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "490f3359_3e3c033d",
       "range": {
         "startLine": 128,
         "startChar": 46,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "2ed213ed_09d3d119",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_config_aai/Scripts/kotlin/RestconfConfigDeploy.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 5053
+      },
+      "writtenOn": "2019-11-22T18:19:45Z",
+      "side": 1,
+      "message": "Can\u0027t use const as it\u0027s not a top level object. Companion Object didn\u0027t work either",
+      "parentUuid": "3977f02d_6bf91b84",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 37,
+        "endChar": 51
+      },
+      "revId": "19a251191c6c5f6716667ecb741cd3e30a0c6d9e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "51059891_9d956539",
         "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_config_aai/Scripts/kotlin/RestconfConfigDeploy.kt",
         "patchSetId": 6
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "3fb4d9f6_8d828ff6",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_config_aai/Scripts/kotlin/RestconfConfigDeploy.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 5053
+      },
+      "writtenOn": "2019-11-22T18:19:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "51059891_9d956539",
+      "range": {
+        "startLine": 38,
+        "startChar": 22,
+        "endLine": 38,
+        "endChar": 45
+      },
+      "revId": "19a251191c6c5f6716667ecb741cd3e30a0c6d9e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c67e9b14_5564de80",
         "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_config_aai/Scripts/kotlin/RestconfConfigDeploy.kt",
         "patchSetId": 6
@@ -105,6 +201,30 @@
       "writtenOn": "2019-11-22T14:29:38Z",
       "side": 1,
       "message": "use requestPayloadActionProperty AbstractComponentFunction method.",
+      "range": {
+        "startLine": 46,
+        "startChar": 34,
+        "endLine": 46,
+        "endChar": 145
+      },
+      "revId": "19a251191c6c5f6716667ecb741cd3e30a0c6d9e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36cd337e_5744fbf6",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_config_aai/Scripts/kotlin/RestconfConfigDeploy.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 5053
+      },
+      "writtenOn": "2019-11-22T18:19:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c67e9b14_5564de80",
       "range": {
         "startLine": 46,
         "startChar": 34,
