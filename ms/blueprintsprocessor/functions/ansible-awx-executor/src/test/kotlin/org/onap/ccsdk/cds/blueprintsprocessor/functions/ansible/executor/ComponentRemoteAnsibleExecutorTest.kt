@@ -73,20 +73,24 @@ class ComponentRemoteAnsibleExecutorTest {
             webClientService.exchangeResource("GET", "/api/v2/inventories/?name=Demo+Inventory", "")
         } returns WebClientResponse(200, getInventory())
         every {
-            webClientService.exchangeResource("POST", "/api/v2/job_templates/$jtId/launch/",
-                    """{"inventory":1,"extra_vars":{"site_id":"3 - Belmont","tor_group":"vEPC"}}""")
+            webClientService.exchangeResource(
+                "POST", "/api/v2/job_templates/$jtId/launch/",
+                """{"inventory":1,"extra_vars":{"site_id":"3 - Belmont","tor_group":"vEPC"}}"""
+            )
         } returns WebClientResponse(201, newJobTemplateLaunch(jtId, jobId))
         every {
             webClientService.exchangeResource("GET", "/api/v2/jobs/$jobId/", "")
         } returnsMany listOf(
-                WebClientResponse(200, getJobStatus1(jtId, jobId)),
-                WebClientResponse(200, getJobStatus2(jtId, jobId)),
-                WebClientResponse(200, getJobStatus3(jtId, jobId)),
-                WebClientResponse(200, getJobStatus4(jtId, jobId))
+            WebClientResponse(200, getJobStatus1(jtId, jobId)),
+            WebClientResponse(200, getJobStatus2(jtId, jobId)),
+            WebClientResponse(200, getJobStatus3(jtId, jobId)),
+            WebClientResponse(200, getJobStatus4(jtId, jobId))
         )
         every {
-            webClientService.exchangeResource("GET", "/api/v2/jobs/$jobId/stdout/?format=txt", "",
-                    mapOf("Accept" to "text/plain"))
+            webClientService.exchangeResource(
+                "GET", "/api/v2/jobs/$jobId/stdout/?format=txt", "",
+                mapOf("Accept" to "text/plain")
+            )
         } returns WebClientResponse(200, getReport())
         val selector = mapper.readTree(endpointSelector)
         val bluePrintRestLibPropertyService = mockk<BluePrintRestLibPropertyService>()
@@ -95,8 +99,9 @@ class ComponentRemoteAnsibleExecutorTest {
         awxRemoteExecutor.checkDelay = 1
 
         val executionServiceInput = JacksonUtils.readValueFromClassPathFile(
-                "payload/requests/sample-remote-ansible-request.json",
-                ExecutionServiceInput::class.java)!!
+            "payload/requests/sample-remote-ansible-request.json",
+            ExecutionServiceInput::class.java
+        )!!
 
         val bluePrintRuntimeService = createBlueprintRuntimeService(awxRemoteExecutor, executionServiceInput)
 
@@ -128,8 +133,9 @@ class ComponentRemoteAnsibleExecutorTest {
         awxRemoteExecutor.checkDelay = 1
 
         val executionServiceInput = JacksonUtils.readValueFromClassPathFile(
-                "payload/requests/remote-ansible-request-full.json",
-                ExecutionServiceInput::class.java)!!
+            "payload/requests/remote-ansible-request-full.json",
+            ExecutionServiceInput::class.java
+        )!!
 
         val bluePrintRuntimeService = createBlueprintRuntimeService(awxRemoteExecutor, executionServiceInput)
 
@@ -156,8 +162,10 @@ class ComponentRemoteAnsibleExecutorTest {
             webClientService.exchangeResource("GET", "/api/v2/inventories/?name=Demo+Inventory", "")
         } returns WebClientResponse(200, getInventory())
         every {
-            webClientService.exchangeResource("POST", "/api/v2/job_templates/$jtId/launch/",
-                    """{"limit":"123","tags":"some-tag","skip_tags":"some-skip-tag","inventory":1,"extra_vars":{"site_id":"3 - Belmont","tor_group":"vEPC"}}""")
+            webClientService.exchangeResource(
+                "POST", "/api/v2/job_templates/$jtId/launch/",
+                """{"limit":"123","tags":"some-tag","skip_tags":"some-skip-tag","inventory":1,"extra_vars":{"site_id":"3 - Belmont","tor_group":"vEPC"}}"""
+            )
         } returns WebClientResponse(500, "")
         val selector = mapper.readTree(endpointSelector)
         val bluePrintRestLibPropertyService = mockk<BluePrintRestLibPropertyService>()
@@ -166,8 +174,9 @@ class ComponentRemoteAnsibleExecutorTest {
         awxRemoteExecutor.checkDelay = 1
 
         val executionServiceInput = JacksonUtils.readValueFromClassPathFile(
-                "payload/requests/remote-ansible-request-full.json",
-                ExecutionServiceInput::class.java)!!
+            "payload/requests/remote-ansible-request-full.json",
+            ExecutionServiceInput::class.java
+        )!!
 
         val bluePrintRuntimeService = createBlueprintRuntimeService(awxRemoteExecutor, executionServiceInput)
 
@@ -181,9 +190,14 @@ class ComponentRemoteAnsibleExecutorTest {
         assertEquals(1, errors.size)
     }
 
-    private fun createBlueprintRuntimeService(awxRemoteExecutor: ComponentRemoteAnsibleExecutor, executionServiceInput: ExecutionServiceInput): BluePrintRuntimeService<MutableMap<String, JsonNode>> {
-        val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("123456-1000",
-                "./../../../../components/model-catalog/blueprint-model/test-blueprint/remote_ansible")
+    private fun createBlueprintRuntimeService(
+        awxRemoteExecutor: ComponentRemoteAnsibleExecutor,
+        executionServiceInput: ExecutionServiceInput
+    ): BluePrintRuntimeService<MutableMap<String, JsonNode>> {
+        val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(
+            "123456-1000",
+            "./../../../../components/model-catalog/blueprint-model/test-blueprint/remote_ansible"
+        )
         awxRemoteExecutor.bluePrintRuntimeService = bluePrintRuntimeService
 
         val workflowName = executionServiceInput.actionIdentifiers.actionName

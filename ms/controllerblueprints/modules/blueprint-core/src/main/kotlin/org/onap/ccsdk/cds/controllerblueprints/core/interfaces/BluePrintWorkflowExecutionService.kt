@@ -20,7 +20,9 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeServ
 
 interface BluePrintWorkflowExecutionService<Input, Output> {
 
-    suspend fun executeBluePrintWorkflow(bluePrintRuntimeService: BluePrintRuntimeService<*>,
-                                         executionServiceInput: Input,
-                                         properties: MutableMap<String, Any> = hashMapOf()): Output
+    suspend fun executeBluePrintWorkflow(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        executionServiceInput: Input,
+        properties: MutableMap<String, Any> = hashMapOf()
+    ): Output
 }

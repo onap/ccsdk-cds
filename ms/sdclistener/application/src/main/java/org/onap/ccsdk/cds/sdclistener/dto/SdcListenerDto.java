@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.onap.ccsdk.cds.sdclistener.dto;
 
 import io.grpc.ManagedChannel;
@@ -61,9 +62,9 @@ public class SdcListenerDto {
 
     public void setManagedChannelForGrpc() {
         managedChannel = ManagedChannelBuilder.forAddress(grpcAddress, grpcPort)
-            .usePlaintext()
-            .intercept(sdcListenerAuthClientInterceptor)
-            .build();
+                .usePlaintext()
+                .intercept(sdcListenerAuthClientInterceptor)
+                .build();
     }
 
     public ManagedChannel getManagedChannelForGrpc() {
@@ -77,4 +78,5 @@ public class SdcListenerDto {
     public void setArtifactUrl(String artifactUrl) {
         this.artifactUrl = artifactUrl;
     }
+
 }

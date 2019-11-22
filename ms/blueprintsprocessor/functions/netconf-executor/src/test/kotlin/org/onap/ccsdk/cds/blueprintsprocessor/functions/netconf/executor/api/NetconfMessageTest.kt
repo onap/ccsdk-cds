@@ -37,13 +37,13 @@ class NetconfMessageTest {
         val dr: DeviceResponse = genUnsuccessfulEmptyDeviceResponse()
         assertFalse(dr.isSuccess())
 
-        //case 2: Success, but with error message
+        // case 2: Success, but with error message
         val dr2: DeviceResponse = genUnsuccessfulEmptyDeviceResponse()
         dr2.errorMessage = "Some error message."
         assertFalse(dr2.isSuccess())
     }
 
-    //helper function to generate a device response
+    // helper function to generate a device response
     private fun genSuccessfulEmptyDeviceResponse(): DeviceResponse {
         return DeviceResponse().apply {
             status = RpcStatus.SUCCESS
@@ -61,5 +61,4 @@ class NetconfMessageTest {
             requestMessage = ""
         }
     }
-
 }

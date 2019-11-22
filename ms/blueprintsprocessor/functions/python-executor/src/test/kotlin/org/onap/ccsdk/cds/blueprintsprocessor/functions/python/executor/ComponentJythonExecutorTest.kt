@@ -36,11 +36,15 @@ import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [PythonExecutorConfiguration::class, PythonExecutorProperty::class,
-    ComponentJythonExecutor::class, MockInstanceConfiguration::class])
-@TestPropertySource(properties =
-["blueprints.processor.functions.python.executor.modulePaths=./../../../../components/scripts/python/ccsdk_blueprints",
-    "blueprints.processor.functions.python.executor.executionPath=./../../../../components/scripts/python/ccsdk_blueprints"])
+@ContextConfiguration(
+    classes = [PythonExecutorConfiguration::class, PythonExecutorProperty::class,
+        ComponentJythonExecutor::class, MockInstanceConfiguration::class]
+)
+@TestPropertySource(
+    properties =
+    ["blueprints.processor.functions.python.executor.modulePaths=./../../../../components/scripts/python/ccsdk_blueprints",
+        "blueprints.processor.functions.python.executor.executionPath=./../../../../components/scripts/python/ccsdk_blueprints"]
+)
 class ComponentJythonExecutorTest {
 
     @Autowired
@@ -50,11 +54,15 @@ class ComponentJythonExecutorTest {
     fun testPythonComponentInjection() {
         runBlocking {
 
-            val executionServiceInput = JacksonUtils.readValueFromClassPathFile("payload/requests/sample-activate-request.json",
-                    ExecutionServiceInput::class.java)!!
+            val executionServiceInput = JacksonUtils.readValueFromClassPathFile(
+                "payload/requests/sample-activate-request.json",
+                ExecutionServiceInput::class.java
+            )!!
 
-            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("1234",
-                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(
+                "1234",
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+            )
 
             val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
             stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "activate-jython")
@@ -68,6 +76,5 @@ class ComponentJythonExecutorTest {
             executionServiceInput.stepData = stepInputData
             componentJythonExecutor.applyNB(executionServiceInput)
         }
-
     }
 }

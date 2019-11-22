@@ -81,8 +81,10 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                     resolveFromInputKeyMapping(checkNotNull(sourceProperties.urlPath), resolvedInputKeyMapping)
                 val verb = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.verb), resolvedInputKeyMapping)
 
-                logger.info("RestResource ($dSource) dictionary information: " +
-                        "URL:($urlPath), input-key-mapping:($inputKeyMapping), output-key-mapping:(${sourceProperties.outputKeyMapping})")
+                logger.info(
+                    "RestResource ($dSource) dictionary information: " +
+                            "URL:($urlPath), input-key-mapping:($inputKeyMapping), output-key-mapping:(${sourceProperties.outputKeyMapping})"
+                )
                 val requestHeaders = sourceProperties.headers
                 logger.info("$dSource dictionary information : ($urlPath), ($inputKeyMapping), (${sourceProperties.outputKeyMapping})")
                 // Get the Rest Client Service
@@ -125,8 +127,10 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
 
     @Throws(BluePrintProcessorException::class)
     private fun populateResource(
-        resourceAssignment: ResourceAssignment, sourceProperties: RestResourceSource,
-        restResponse: String, path: String
+        resourceAssignment: ResourceAssignment,
+        sourceProperties: RestResourceSource,
+        restResponse: String,
+        path: String
     ) {
         val dName = resourceAssignment.dictionaryName
         val dSource = resourceAssignment.dictionarySource
@@ -168,5 +172,4 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
     override suspend fun recoverNB(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
         raRuntimeService.getBluePrintError().addError(runtimeException.message!!)
     }
-
 }

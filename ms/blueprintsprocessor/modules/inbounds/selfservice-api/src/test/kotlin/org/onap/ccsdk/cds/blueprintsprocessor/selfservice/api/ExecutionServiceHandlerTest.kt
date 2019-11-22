@@ -73,12 +73,12 @@ class ExecutionServiceHandlerTest {
 
 @Service("mock-service-action")
 class MockServiceAction : AbstractServiceFunction() {
+
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
         val responsePayload = """{"answer" : "correct"}""".jsonAsJsonType()
         setResponsePayloadForAction(responsePayload)
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-
     }
 }

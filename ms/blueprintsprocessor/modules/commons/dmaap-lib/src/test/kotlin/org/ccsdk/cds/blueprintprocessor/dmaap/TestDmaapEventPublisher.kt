@@ -49,19 +49,23 @@ import kotlin.test.assertNotNull
 @RunWith(SpringRunner::class)
 @EnableAutoConfiguration(exclude = [DataSourceAutoConfiguration::class])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@ContextConfiguration(classes = [BluePrintDmaapLibConfiguration::class, TestController::class,
-    BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class])
-@TestPropertySource(properties = ["server.port=9111",
-    "blueprintsprocessor.dmaapclient.aai.topic=cds_aai",
-    "blueprintsprocessor.dmaapclient.aai.type=HTTPNOAUTH",
-    "blueprintsprocessor.dmaapclient.aai.host=127.0.0.1:9111",
-    "blueprintsprocessor.dmaapclient.multi.topic=cds_multi1,cds_multi2",
-    "blueprintsprocessor.dmaapclient.multi.type=HTTPNOAUTH",
-    "blueprintsprocessor.dmaapclient.multi.host=127.0.0.1:9111"])
+@ContextConfiguration(
+    classes = [BluePrintDmaapLibConfiguration::class, TestController::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class]
+)
+@TestPropertySource(
+    properties = ["server.port=9111",
+        "blueprintsprocessor.dmaapclient.aai.topic=cds_aai",
+        "blueprintsprocessor.dmaapclient.aai.type=HTTPNOAUTH",
+        "blueprintsprocessor.dmaapclient.aai.host=127.0.0.1:9111",
+        "blueprintsprocessor.dmaapclient.multi.topic=cds_multi1,cds_multi2",
+        "blueprintsprocessor.dmaapclient.multi.type=HTTPNOAUTH",
+        "blueprintsprocessor.dmaapclient.multi.host=127.0.0.1:9111"]
+)
 class TestDmaapEventPublisher {
 
     @Autowired
-    lateinit var dmaapService : BluePrintDmaapLibPropertyService
+    lateinit var dmaapService: BluePrintDmaapLibPropertyService
 
     /**
      * Tests the event properties being set properly and sent as request.
@@ -71,9 +75,11 @@ class TestDmaapEventPublisher {
         val strList = mutableListOf<String>()
         val dmaapClient = dmaapService.blueprintDmaapClientService("aai")
 
-        strList.add("{\n" +
-                "    \"a\" : \"hello\"\n" +
-                "}")
+        strList.add(
+            "{\n" +
+                    "    \"a\" : \"hello\"\n" +
+                    "}"
+        )
         dmaapClient.sendMessage(strList)
         val msgs = dmaapClient.close(2)
         assertEquals(msgs!!.size, 1)
@@ -88,7 +94,7 @@ class TestDmaapEventPublisher {
     @Test
     fun testEventPropertiesWithSingleMsg() {
         val dmaapClient = dmaapService.blueprintDmaapClientService("aai")
-        val str : String = "{\n" +
+        val str: String = "{\n" +
                 "    \"a\" : \"hello\"\n" +
                 "}"
         dmaapClient.sendMessage(str)
@@ -106,9 +112,11 @@ class TestDmaapEventPublisher {
         val strList = mutableListOf<String>()
         val dmaapClient = dmaapService.blueprintDmaapClientService("multi")
 
-        strList.add("{\n" +
-                "    \"a\" : \"hello\"\n" +
-                "}")
+        strList.add(
+            "{\n" +
+                    "    \"a\" : \"hello\"\n" +
+                    "}"
+        )
         dmaapClient.sendMessage(strList)
         val msgs = dmaapClient.close(2)
         assertEquals(msgs!!.size, 2)
@@ -117,7 +125,6 @@ class TestDmaapEventPublisher {
         val topic2 = msgs.get(1)
         assertEquals(topic2!!.size, 0)
     }
-
 
     /**
      * Tests the event properties with multiple topics with JSON node as input.
@@ -134,9 +141,11 @@ class TestDmaapEventPublisher {
         val strList = mutableListOf<String>()
         val dmaapClient = dmaapService.blueprintDmaapClientService(node)
 
-        strList.add("{\n" +
-                "    \"a\" : \"hello\"\n" +
-                "}")
+        strList.add(
+            "{\n" +
+                    "    \"a\" : \"hello\"\n" +
+                    "}"
+        )
         dmaapClient.sendMessage(strList)
         val msgs = dmaapClient.close(2)
         assertEquals(msgs!!.size, 2)
@@ -146,7 +155,6 @@ class TestDmaapEventPublisher {
         assertEquals(topic2!!.size, 0)
     }
 
-
     /**
      * Tests the event properties with multiple messages.
      */
@@ -155,12 +163,16 @@ class TestDmaapEventPublisher {
         val strList = mutableListOf<String>()
         val dmaapClient = dmaapService.blueprintDmaapClientService("aai")
 
-        strList.add("{\n" +
-                "    \"a\" : \"hello\"\n" +
-                "}")
-        strList.add("{\n" +
-                "    \"a\" : \"second\"\n" +
-                "}")
+        strList.add(
+            "{\n" +
+                    "    \"a\" : \"hello\"\n" +
+                    "}"
+        )
+        strList.add(
+            "{\n" +
+                    "    \"a\" : \"second\"\n" +
+                    "}"
+        )
         dmaapClient.sendMessage(strList)
         val msgs = dmaapClient.close(2)
         assertEquals(msgs!!.size, 1)
@@ -174,10 +186,13 @@ class TestDmaapEventPublisher {
     @Test
     fun testDmaapClientProperties() {
         val properties = dmaapService.dmaapClientProperties(
-            "blueprintsprocessor.dmaapclient.aai")
+            "blueprintsprocessor.dmaapclient.aai"
+        )
         assertNotNull(properties, "failed to create property bean")
-        assertNotNull(properties.host, "failed to get url property" +
-                " in property bean")
+        assertNotNull(
+            properties.host, "failed to get url property" +
+                    " in property bean"
+        )
     }
 
     /**
@@ -187,10 +202,11 @@ class TestDmaapEventPublisher {
     fun testBlueprintDmaapClientService() {
         val blueprintDmaapClientService =
             dmaapService.blueprintDmaapClientService("aai")
-        assertNotNull(blueprintDmaapClientService,
-            "failed to create blueprintDmaapClientService")
+        assertNotNull(
+            blueprintDmaapClientService,
+            "failed to create blueprintDmaapClientService"
+        )
     }
-
 }
 
 /**
@@ -204,7 +220,7 @@ open class TestController {
      * Accepts request for a topic and sends a message as response.
      */
     @PostMapping(path = ["/{topic}"])
-    fun postTopic(@PathVariable(value = "topic") topic : String):
+    fun postTopic(@PathVariable(value = "topic") topic: String):
             ResponseEntity<Any> {
         var a = "{\n" +
                 "    \"message\" : \"The message is published into $topic " +

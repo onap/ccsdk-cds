@@ -22,7 +22,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.WebClientEnpointR
 import org.springframework.boot.actuate.health.Status
 import org.springframework.stereotype.Service
 
-
 /**
  *Service for combined health (BluePrintProcessor and CDSListener)
  *
@@ -30,13 +29,15 @@ import org.springframework.stereotype.Service
  * @version 1.0
  */
 @Service
-open class CombinedHealthService(private val endPointExecution: EndPointExecution
-                                 , private val healthCheckProperties: HealthCheckProperties) {
+open class CombinedHealthService(
+    private val endPointExecution: EndPointExecution,
+    private val healthCheckProperties: HealthCheckProperties
+) {
 
     private fun setupServiceEndpoint(): List<ServiceEndpoint> {
         return listOf(
-                ServiceEndpoint("BluePrintProcessor Health Check ", healthCheckProperties.getBluePrintBaseURL() + "actuator/health")
-                , ServiceEndpoint("CDSListener Health Check", healthCheckProperties.getCDSListenerBaseURL() + "actuator/health")
+            ServiceEndpoint("BluePrintProcessor Health Check ", healthCheckProperties.getBluePrintBaseURL() + "actuator/health"),
+            ServiceEndpoint("CDSListener Health Check", healthCheckProperties.getCDSListenerBaseURL() + "actuator/health")
         )
     }
 
@@ -45,14 +46,18 @@ open class CombinedHealthService(private val endPointExecution: EndPointExecutio
         for (serviceEndpoint in setupServiceEndpoint().parallelStream()) {
             val result: WebClientEnpointResponse? = endPointExecution?.retrieveWebClientResponse(serviceEndpoint)
             if (result?.response != null &&
-                    result.response!!.status?.equals(200)!!) {
+                result.response!!.status?.equals(200)!!
+            ) {
                 listOfResponse.add(endPointExecution?.getHealthFromWebClientEnpointResponse(result))
             } else {
-                listOfResponse.add(ApplicationHealth(Status.DOWN,
-                        hashMapOf(serviceEndpoint.serviceLink to serviceEndpoint.serviceLink)))
+                listOfResponse.add(
+                    ApplicationHealth(
+                        Status.DOWN,
+                        hashMapOf(serviceEndpoint.serviceLink to serviceEndpoint.serviceLink)
+                    )
+                )
             }
         }
         return listOfResponse
     }
-
 }

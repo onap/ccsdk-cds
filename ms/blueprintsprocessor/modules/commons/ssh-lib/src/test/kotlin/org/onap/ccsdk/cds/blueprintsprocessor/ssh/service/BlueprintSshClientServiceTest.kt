@@ -38,17 +38,20 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [BluePrintSshLibConfiguration::class,
-    BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class])
-@TestPropertySource(properties =
-["blueprintsprocessor.sshclient.sample.type=basic-auth",
-    "blueprintsprocessor.sshclient.sample.host=localhost",
-    "blueprintsprocessor.sshclient.sample.port=52815",
-    "blueprintsprocessor.sshclient.sample.username=root",
-    "blueprintsprocessor.sshclient.sample.password=dummyps"
-])
+@ContextConfiguration(
+    classes = [BluePrintSshLibConfiguration::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class]
+)
+@TestPropertySource(
+    properties =
+    ["blueprintsprocessor.sshclient.sample.type=basic-auth",
+        "blueprintsprocessor.sshclient.sample.host=localhost",
+        "blueprintsprocessor.sshclient.sample.port=52815",
+        "blueprintsprocessor.sshclient.sample.username=root",
+        "blueprintsprocessor.sshclient.sample.password=dummyps"
+    ]
+)
 class BlueprintSshClientServiceTest {
 
     @Autowired
@@ -76,7 +79,7 @@ class BlueprintSshClientServiceTest {
         sshd.keyPairProvider = createTestHostKeyProvider()
         sshd.passwordAuthenticator = BogusPasswordAuthenticator(userName, password)
         sshd.publickeyAuthenticator = AcceptAllPublickeyAuthenticator.INSTANCE
-        //sshd.shellFactory = EchoShellFactory()
+        // sshd.shellFactory = EchoShellFactory()
         sshd.commandFactory = ProcessShellCommandFactory.INSTANCE
         return sshd
     }
@@ -96,5 +99,3 @@ class BogusPasswordAuthenticator(userName: String, password: String) : PasswordA
         return true
     }
 }
-
-

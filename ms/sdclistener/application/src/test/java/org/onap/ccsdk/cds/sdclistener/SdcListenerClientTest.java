@@ -13,9 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.onap.ccsdk.cds.sdclistener;
 
-import mockit.*;
+import mockit.Expectations;
+import mockit.Injectable;
+import mockit.Mock;
+import mockit.MockUp;
+import mockit.Tested;
+import mockit.VerificationsInOrder;
 import mockit.integration.junit4.JMockit;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,11 +42,11 @@ public class SdcListenerClientTest {
 
     @Test
     public void testInitCdsClientSuccesfully(@Injectable IDistributionClient distributionClient,
-        @Injectable SdcListenerConfiguration configuration,
-        @Injectable SdcListenerNotificationCallback notification,
-        @Injectable SdcListenerDto sdcListenerDto) throws SdcListenerException {
+                                             @Injectable SdcListenerConfiguration configuration,
+                                             @Injectable SdcListenerNotificationCallback notification,
+                                             @Injectable SdcListenerDto sdcListenerDto) throws SdcListenerException {
 
-         //Arrange
+        //Arrange
         new MockUp<DistributionClientFactory>() {
             @Mock
             public IDistributionClient createDistributionClient() {
@@ -70,6 +76,7 @@ public class SdcListenerClientTest {
 
     public IDistributionClientResult getResult() {
         return new DistributionClientResultImpl(DistributionActionResultEnum.SUCCESS,
-            DistributionActionResultEnum.SUCCESS.name());
+                DistributionActionResultEnum.SUCCESS.name());
     }
+
 }

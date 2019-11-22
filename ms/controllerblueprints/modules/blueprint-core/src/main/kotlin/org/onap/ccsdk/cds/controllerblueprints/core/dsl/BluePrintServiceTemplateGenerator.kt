@@ -20,7 +20,19 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.NullNode
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.bpClone
-import org.onap.ccsdk.cds.controllerblueprints.core.data.*
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.AttributeDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.InterfaceAssignment
+import org.onap.ccsdk.cds.controllerblueprints.core.data.InterfaceDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.OperationAssignment
+import org.onap.ccsdk.cds.controllerblueprints.core.data.OperationDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ServiceTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.data.TopologyTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.data.Workflow
 
 /**
  * Generate Service Template for the simplified DSL.
@@ -87,7 +99,6 @@ class BluePrintServiceTemplateGenerator(private val dslBluePrint: DSLBluePrint) 
         }
         return nodeTemplates
     }
-
 
     private fun populateWorkflow(): MutableMap<String, Workflow>? {
         var workflows: MutableMap<String, Workflow>? = null

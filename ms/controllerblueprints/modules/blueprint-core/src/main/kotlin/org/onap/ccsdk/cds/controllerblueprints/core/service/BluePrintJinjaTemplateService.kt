@@ -39,41 +39,56 @@ object BluePrintJinjaTemplateService {
     /**
      * To enable inheritance within CBA, we need Jinja runtime to know where to load the templates.
      */
-    class BlueprintRelatedTemplateLocator(private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
-                                          private val artifactName: String,
-                                          private val artifactVersion: String) : ResourceLocator {
+    class BlueprintRelatedTemplateLocator(
+        private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
+        private val artifactName: String,
+        private val artifactVersion: String
+    ) : ResourceLocator {
 
         @Throws(IOException::class)
         override fun getString(fullName: String, encoding: Charset, interpreter: JinjavaInterpreter): String {
             try {
                 val deployFile =
-                    normalizedPathName(bluePrintLoadConfiguration.blueprintDeployPath,
+                    normalizedPathName(
+                        bluePrintLoadConfiguration.blueprintDeployPath,
                         artifactName,
                         artifactVersion,
-                        fullName)
+                        fullName
+                    )
 
                 return String(readAllBytes(Paths.get(deployFile)))
             } catch (var5: IllegalArgumentException) {
                 throw ResourceNotFoundException("Couldn't find resource: $fullName")
             }
-
         }
     }
 
-    fun generateContent(template: String, json: String, ignoreJsonNull: Boolean,
-                        additionalContext: MutableMap<String, Any>,
-                        bluePrintLoadConfiguration: BluePrintLoadConfiguration, artifactName: String,
-                        artifactVersion: String): String {
-        
-        return generateContent(template,
+    fun generateContent(
+        template: String,
+        json: String,
+        ignoreJsonNull: Boolean,
+        additionalContext: MutableMap<String, Any>,
+        bluePrintLoadConfiguration: BluePrintLoadConfiguration,
+        artifactName: String,
+        artifactVersion: String
+    ): String {
+
+        return generateContent(
+            template,
             json,
             ignoreJsonNull,
             additionalContext,
-            BlueprintRelatedTemplateLocator(bluePrintLoadConfiguration, artifactName, artifactVersion))
+            BlueprintRelatedTemplateLocator(bluePrintLoadConfiguration, artifactName, artifactVersion)
+        )
     }
 
-    fun generateContent(template: String, json: String, ignoreJsonNull: Boolean,
-                        additionalContext: MutableMap<String, Any>, resourceLocator: ResourceLocator? = null): String {
+    fun generateContent(
+        template: String,
+        json: String,
+        ignoreJsonNull: Boolean,
+        additionalContext: MutableMap<String, Any>,
+        resourceLocator: ResourceLocator? = null
+    ): String {
         val jinJava = Jinjava(JinjavaConfig())
         if (resourceLocator != null) {
             jinJava.resourceLocator = resourceLocator
@@ -98,4 +113,3 @@ object BluePrintJinjaTemplateService {
         return jinJava.render(template, additionalContext)
     }
 }
-

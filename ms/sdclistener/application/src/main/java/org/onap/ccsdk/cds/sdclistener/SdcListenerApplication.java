@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.onap.ccsdk.cds.sdclistener;
 
 import org.springframework.boot.SpringApplication;
@@ -25,4 +26,5 @@ public class SdcListenerApplication {
     public static void main(String[] args) {
         SpringApplication.run(SdcListenerApplication.class, args);
     }
+
 }

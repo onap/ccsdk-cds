@@ -41,8 +41,10 @@ class MockComponentFunction : AbstractComponentFunction() {
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
         log.info("Processing component : $operationInputs")
 
-        bluePrintRuntimeService.setNodeTemplateAttributeValue(nodeTemplateName,
-                "assignment-params", "params".asJsonPrimitive())
+        bluePrintRuntimeService.setNodeTemplateAttributeValue(
+            nodeTemplateName,
+            "assignment-params", "params".asJsonPrimitive()
+        )
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
@@ -51,13 +53,14 @@ class MockComponentFunction : AbstractComponentFunction() {
 }
 
 open class MockResourceSource {
-    @Bean(name = [
-        "rr-processor-source-input",
-        "rr-processor-source-default",
-        "rr-processor-source-db",
-        "rr-processor-source-rest"])
+    @Bean(
+        name = [
+            "rr-processor-source-input",
+            "rr-processor-source-default",
+            "rr-processor-source-db",
+            "rr-processor-source-rest"]
+    )
     open fun sourceInstance(): ResourceAssignmentProcessor {
         return mockk<ResourceAssignmentProcessor>()
     }
-
 }

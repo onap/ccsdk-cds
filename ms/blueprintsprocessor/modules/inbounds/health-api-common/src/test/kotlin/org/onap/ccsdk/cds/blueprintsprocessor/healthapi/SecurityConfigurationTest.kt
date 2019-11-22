@@ -20,7 +20,6 @@ import org.junit.Assert
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.configuration.SecurityEncryptionConfiguration
 
-
 class SecurityConfigurationTest {
 
     @Test

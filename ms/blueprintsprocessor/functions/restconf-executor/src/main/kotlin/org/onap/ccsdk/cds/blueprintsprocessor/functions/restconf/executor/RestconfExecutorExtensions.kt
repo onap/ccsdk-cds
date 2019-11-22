@@ -38,10 +38,12 @@ fun AbstractScriptComponentFunction.restconfClientService(selector: String): Blu
  * Generic Mount function
  */
 
-suspend fun AbstractScriptComponentFunction.restconfMountDevice(webClientService: BlueprintWebClientService,
-                                                                deviceId: String,
-                                                                payload: Any,
-                                                                headers: Map<String, String> = mutableMapOf("Content-Type" to "application/xml")) {
+suspend fun AbstractScriptComponentFunction.restconfMountDevice(
+    webClientService: BlueprintWebClientService,
+    deviceId: String,
+    payload: Any,
+    headers: Map<String, String> = mutableMapOf("Content-Type" to "application/xml")
+) {
 
     val mountUrl = "restconf/config/network-topology:network-topology/topology/topology-netconf/node/$deviceId"
     log.info("sending mount request, url: $mountUrl")
@@ -68,23 +70,28 @@ suspend fun AbstractScriptComponentFunction.restconfMountDevice(webClientService
 /**
  * Generic Configure function
  */
-suspend fun AbstractScriptComponentFunction.restconfApplyDeviceConfig(webClientService: BlueprintWebClientService,
-                                                                      deviceId: String, configletResourcePath: String,
-                                                                      configletToApply: Any,
-                                                                      additionalHeaders: Map<String, String > = mutableMapOf("Content-Type" to "application/yang.patch+xml")) {
+suspend fun AbstractScriptComponentFunction.restconfApplyDeviceConfig(
+    webClientService: BlueprintWebClientService,
+    deviceId: String,
+    configletResourcePath: String,
+    configletToApply: Any,
+    additionalHeaders: Map<String, String> = mutableMapOf("Content-Type" to "application/yang.patch+xml")
+) {
 
     log.debug("headers: $additionalHeaders")
     log.info("configuring device: $deviceId, Configlet: $configletToApply")
     val applyConfigUrl = "restconf/config/network-topology:network-topology/topology/topology-netconf/node/" +
             "$deviceId/$configletResourcePath"
-    val result:Any = webClientService.exchangeResource("PATCH", applyConfigUrl, configletToApply as String, additionalHeaders)
+    val result: Any = webClientService.exchangeResource("PATCH", applyConfigUrl, configletToApply as String, additionalHeaders)
     log.info("Configuration application result: $result")
 }
 
-
-suspend fun AbstractScriptComponentFunction.restconfDeviceConfig(webClientService: BlueprintWebClientService,
-                                                                 deviceId: String, configletResourcePath: String)
-        : BlueprintWebClientService.WebClientResponse<String> {
+suspend fun AbstractScriptComponentFunction.restconfDeviceConfig(
+    webClientService: BlueprintWebClientService,
+    deviceId: String,
+    configletResourcePath: String
+):
+        BlueprintWebClientService.WebClientResponse<String> {
 
     val configPathUrl = "restconf/config/network-topology:network-topology/topology/topology-netconf/node/" +
             "$deviceId/$configletResourcePath"
@@ -95,8 +102,11 @@ suspend fun AbstractScriptComponentFunction.restconfDeviceConfig(webClientServic
 /**
  * Generic UnMount function
  */
-suspend fun AbstractScriptComponentFunction.restconfUnMountDevice(webClientService: BlueprintWebClientService,
-                                                                  deviceId: String, payload: String) {
+suspend fun AbstractScriptComponentFunction.restconfUnMountDevice(
+    webClientService: BlueprintWebClientService,
+    deviceId: String,
+    payload: String
+) {
     val unMountUrl = "restconf/config/network-topology:network-topology/topology/topology-netconf/node/$deviceId"
     log.info("sending unMount request, url: $unMountUrl")
     webClientService.exchangeResource("DELETE", unMountUrl, "")

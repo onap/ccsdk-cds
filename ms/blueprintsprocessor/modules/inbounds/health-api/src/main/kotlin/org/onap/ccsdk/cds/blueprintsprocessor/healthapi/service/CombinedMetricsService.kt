@@ -16,7 +16,12 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.healthapi.service
 
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.configuration.HealthCheckProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.*
+import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.ActuatorCheckResponse
+import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.HealthCheckStatus
+import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.Metrics
+import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.MetricsInfo
+import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.MetricsResponse
+import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.ServiceEndpoint
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.utils.ObjectMappingUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.springframework.stereotype.Service
@@ -28,14 +33,16 @@ import org.springframework.stereotype.Service
  * @version 1.0
  */
 @Service
-open class CombinedMetricsService(private val endPointExecution: EndPointExecution
-                                  , private val healthCheckProperties: HealthCheckProperties
-                                  , private val objectMappingUtils: ObjectMappingUtils<Metrics>) {
+open class CombinedMetricsService(
+    private val endPointExecution: EndPointExecution,
+    private val healthCheckProperties: HealthCheckProperties,
+    private val objectMappingUtils: ObjectMappingUtils<Metrics>
+) {
 
     private fun setupServiceEndpoint(): List<ServiceEndpoint> {
         return listOf(
-                ServiceEndpoint("BluePrintProcessor metrics", healthCheckProperties.getBluePrintBaseURL() + "/actuator/metrics")
-                , ServiceEndpoint("CDS Listener metrics", healthCheckProperties.getCDSListenerBaseURL() + "/actuator/metrics")
+            ServiceEndpoint("BluePrintProcessor metrics", healthCheckProperties.getBluePrintBaseURL() + "/actuator/metrics"),
+            ServiceEndpoint("CDS Listener metrics", healthCheckProperties.getCDSListenerBaseURL() + "/actuator/metrics")
         )
     }
 
@@ -46,7 +53,8 @@ open class CombinedMetricsService(private val endPointExecution: EndPointExecuti
                 val webClientResponse = endPointExecution?.retrieveWebClientResponse(serviceEndpoint)
                 var actuatorsHealthResponse: ActuatorCheckResponse? = null
                 actuatorsHealthResponse = if (webClientResponse?.response != null &&
-                        webClientResponse.response!!.status?.equals(200)!!) {
+                    webClientResponse.response!!.status?.equals(200)!!
+                ) {
                     var body = gettingCustomizedBody(serviceEndpoint, webClientResponse.response!!)
                     ActuatorCheckResponse(serviceEndpoint.serviceName, body)
                 } else {
@@ -57,7 +65,10 @@ open class CombinedMetricsService(private val endPointExecution: EndPointExecuti
             return MetricsInfo(containerHealthChecks)
         }
 
-    private fun gettingCustomizedBody(serviceEndpoint: ServiceEndpoint?, webClientResponse: BlueprintWebClientService.WebClientResponse<String>): Any {
+    private fun gettingCustomizedBody(
+        serviceEndpoint: ServiceEndpoint?,
+        webClientResponse: BlueprintWebClientService.WebClientResponse<String>
+    ): Any {
         var body: Any
         val metrics: Metrics = objectMappingUtils.getObjectFromBody(webClientResponse.body, Metrics::class.java)
         val mapOfMetricsInfo = HashMap<String, String>()
@@ -69,4 +80,3 @@ open class CombinedMetricsService(private val endPointExecution: EndPointExecuti
         return body
     }
 }
-

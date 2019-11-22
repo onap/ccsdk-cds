@@ -35,18 +35,20 @@ import org.springframework.web.bind.annotation.RestController
  */
 @RestController
 @RequestMapping("/api/v1/combinedHealth")
-@Api(value = "/api/v1/combinedHealth",
-        description = "gather all HealthCheckResponses for HealthChecks known to the runtime")
+@Api(
+    value = "/api/v1/combinedHealth",
+    description = "gather all HealthCheckResponses for HealthChecks known to the runtime"
+)
 open class CombinedHealth(private val combinedHealthService: CombinedHealthService) {
 
-    @RequestMapping(path = [""],
-            method = [RequestMethod.GET],
-            produces = [MediaType.APPLICATION_JSON_VALUE])
+    @RequestMapping(
+        path = [""],
+        method = [RequestMethod.GET],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
     @ResponseBody
     @ApiOperation(value = "Health Check", hidden = true)
     fun getSystemHealthCheckResponse(): ResponseEntity<List<ApplicationHealth?>> {
         return ResponseEntity.ok().body(combinedHealthService.getCombinedHealthCheck())
-
     }
 }
-

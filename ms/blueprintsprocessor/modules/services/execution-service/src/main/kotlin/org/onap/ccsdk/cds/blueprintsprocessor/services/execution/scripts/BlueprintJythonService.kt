@@ -32,13 +32,19 @@ import org.springframework.stereotype.Service
 import java.io.File
 
 @Service
-class BlueprintJythonService(val pythonExecutorProperty: PythonExecutorProperty,
-                                  private val applicationContext: ApplicationContext) {
+class BlueprintJythonService(
+    val pythonExecutorProperty: PythonExecutorProperty,
+    private val applicationContext: ApplicationContext
+) {
 
     val log: Logger = LoggerFactory.getLogger(BlueprintJythonService::class.java)
 
-    inline fun <reified T> jythonInstance(blueprintContext: BluePrintContext, pythonClassName: String, content: String,
-                                          dependencyInstanceNames: MutableMap<String, Any>?): T {
+    inline fun <reified T> jythonInstance(
+        blueprintContext: BluePrintContext,
+        pythonClassName: String,
+        content: String,
+        dependencyInstanceNames: MutableMap<String, Any>?
+    ): T {
 
         val blueprintBasePath: String = blueprintContext.rootPath
         val pythonPath: MutableList<String> = arrayListOf()
@@ -59,8 +65,8 @@ class BlueprintJythonService(val pythonExecutorProperty: PythonExecutorProperty,
             BlueprintFunctionNode<*, *> {
 
         val pythonFileName = bluePrintContext.rootPath
-                .plus(File.separator)
-                .plus(scriptClassReference)
+            .plus(File.separator)
+            .plus(scriptClassReference)
 
         val pythonClassName = FilenameUtils.getBaseName(pythonFileName)
         log.info("Getting Jython Script Class($pythonClassName)")
@@ -70,8 +76,10 @@ class BlueprintJythonService(val pythonExecutorProperty: PythonExecutorProperty,
         val jythonInstances: MutableMap<String, Any> = hashMapOf()
         jythonInstances["log"] = LoggerFactory.getLogger(pythonClassName)
 
-        return jythonInstance<BlueprintFunctionNode<*, *>>(bluePrintContext, pythonClassName,
-                content, jythonInstances)
+        return jythonInstance<BlueprintFunctionNode<*, *>>(
+            bluePrintContext, pythonClassName,
+            content, jythonInstances
+        )
     }
 
     fun jythonComponentInstance(abstractComponentFunction: AbstractComponentFunction): AbstractComponentFunction {
@@ -82,25 +90,27 @@ class BlueprintJythonService(val pythonExecutorProperty: PythonExecutorProperty,
         val operationInputs: MutableMap<String, JsonNode> = abstractComponentFunction.operationInputs
 
         val operationAssignment: OperationAssignment = bluePrintContext
-                .nodeTemplateInterfaceOperation(abstractComponentFunction.nodeTemplateName,
-                        abstractComponentFunction.interfaceName, abstractComponentFunction.operationName)
+            .nodeTemplateInterfaceOperation(
+                abstractComponentFunction.nodeTemplateName,
+                abstractComponentFunction.interfaceName, abstractComponentFunction.operationName
+            )
 
         val blueprintBasePath: String = bluePrintContext.rootPath
 
         val artifactName: String = operationAssignment.implementation?.primary
-                ?: throw BluePrintProcessorException("missing primary field to get artifact name for node template ($nodeTemplateName)")
+            ?: throw BluePrintProcessorException("missing primary field to get artifact name for node template ($nodeTemplateName)")
 
         val artifactDefinition = bluePrintRuntimeService.resolveNodeTemplateArtifactDefinition(nodeTemplateName, artifactName)
 
         val pythonFileName = artifactDefinition.file
-                ?: throw BluePrintProcessorException("missing file name for node template ($nodeTemplateName)'s artifactName($artifactName)")
+            ?: throw BluePrintProcessorException("missing file name for node template ($nodeTemplateName)'s artifactName($artifactName)")
 
         val pythonClassName = FilenameUtils.getBaseName(pythonFileName)
         log.info("Getting Jython Script Class($pythonClassName)")
 
         val content: String? = bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactName)
 
-        checkNotEmpty(content){ "artifact ($artifactName) content is empty"}
+        checkNotEmpty(content) { "artifact ($artifactName) content is empty" }
 
         val pythonPath: MutableList<String> = operationAssignment.implementation?.dependencies ?: arrayListOf()
         pythonPath.add(blueprintBasePath)
@@ -110,17 +120,17 @@ class BlueprintJythonService(val pythonExecutorProperty: PythonExecutorProperty,
         jythonInstances["log"] = LoggerFactory.getLogger(nodeTemplateName)
 
         val instanceDependenciesNode: ArrayNode = operationInputs[PythonExecutorConstants.INPUT_INSTANCE_DEPENDENCIES] as? ArrayNode
-                ?: throw BluePrintProcessorException("Failed to get property(${PythonExecutorConstants.INPUT_INSTANCE_DEPENDENCIES})")
+            ?: throw BluePrintProcessorException("Failed to get property(${PythonExecutorConstants.INPUT_INSTANCE_DEPENDENCIES})")
 
         instanceDependenciesNode.forEach { instanceName ->
             jythonInstances[instanceName.textValue()] = applicationContext.getBean(instanceName.textValue())
         }
 
-        val scriptComponentFunction = jythonInstance<AbstractComponentFunction>(bluePrintContext, pythonClassName,
-                content!!, jythonInstances)
+        val scriptComponentFunction = jythonInstance<AbstractComponentFunction>(
+            bluePrintContext, pythonClassName,
+            content!!, jythonInstances
+        )
 
         return scriptComponentFunction
-
     }
-
 }

@@ -29,17 +29,20 @@ import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [BluePrintSshLibConfiguration::class,
-    BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class])
-@TestPropertySource(properties =
-["blueprintsprocessor.sshclient.sample.type=basic-auth",
-    "blueprintsprocessor.sshclient.sample.host=127.0.0.1",
-    "blueprintsprocessor.sshclient.sample.port=22",
-    "blueprintsprocessor.sshclient.sample.password=1234",
-    "blueprintsprocessor.sshclient.sample.username=dummy"
-])
+@ContextConfiguration(
+    classes = [BluePrintSshLibConfiguration::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class]
+)
+@TestPropertySource(
+    properties =
+    ["blueprintsprocessor.sshclient.sample.type=basic-auth",
+        "blueprintsprocessor.sshclient.sample.host=127.0.0.1",
+        "blueprintsprocessor.sshclient.sample.port=22",
+        "blueprintsprocessor.sshclient.sample.password=1234",
+        "blueprintsprocessor.sshclient.sample.username=dummy"
+    ]
+)
 class BluePrintSshLibPropertyServiceTest {
 
     @Autowired
@@ -48,7 +51,7 @@ class BluePrintSshLibPropertyServiceTest {
     @Test
     fun testRestClientProperties() {
         val properties = bluePrintSshLibPropertyService
-                .sshClientProperties("blueprintsprocessor.sshclient.sample") as BasicAuthSshClientProperties
+            .sshClientProperties("blueprintsprocessor.sshclient.sample") as BasicAuthSshClientProperties
         assertNotNull(properties, "failed to create property bean")
         assertEquals(properties.host, "127.0.0.1", "failed to match host property")
         assertEquals(properties.port, 22, "failed to match port property")

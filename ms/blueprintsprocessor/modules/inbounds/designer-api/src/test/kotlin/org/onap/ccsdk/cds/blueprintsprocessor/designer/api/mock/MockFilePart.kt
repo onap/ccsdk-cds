@@ -30,11 +30,11 @@ import java.nio.file.Path
 class MockFilePart(private val fileName: String) : FilePart {
     val log = LoggerFactory.getLogger(MockFilePart::class.java)!!
     override fun content(): Flux<DataBuffer> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     override fun headers(): HttpHeaders {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     override fun filename(): String {
@@ -46,7 +46,7 @@ class MockFilePart(private val fileName: String) : FilePart {
     }
 
     override fun transferTo(path: Path): Mono<Void> {
-        log.info("Copying file($fileName to ${path}")
+        log.info("Copying file($fileName to $path")
         FileCopyUtils.copy(File(fileName), path.toFile())
         return Mono.empty()
     }

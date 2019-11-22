@@ -38,8 +38,10 @@ import kotlin.test.Test
 // Only one runner can be configured with jUnit 4. We had to replace the SpringRunner by equivalent jUnit rules.
 // See more on https://docs.spring.io/autorepo/docs/spring-framework/current/spring-framework-reference/testing.html#testcontext-junit4-rules
 @RunWith(Parameterized::class)
-class BlueprintsAcceptanceTest(@Suppress("unused") private val blueprintName: String, // readable test description
-                               private val rootFs: FileSystem) : BaseUatTest() {
+class BlueprintsAcceptanceTest(
+    @Suppress("unused") private val blueprintName: String, // readable test description
+    private val rootFs: FileSystem
+) : BaseUatTest() {
 
     companion object {
 
@@ -55,14 +57,14 @@ class BlueprintsAcceptanceTest(@Suppress("unused") private val blueprintName: St
         @JvmStatic
         fun scanUatEmpoweredBlueprints(): List<Array<Any>> {
             return (File(UAT_BLUEPRINTS_BASE_DIR)
-                    .listFiles { file -> file.isDirectory && File(file, UAT_SPECIFICATION_FILE).isFile }
-                    ?: throw RuntimeException("Failed to scan $UAT_BLUEPRINTS_BASE_DIR"))
-                    .map { file ->
-                        arrayOf(
-                                file.nameWithoutExtension,
-                                FileSystems.newFileSystem(file.canonicalFile.toPath(), null)
-                        )
-                    }
+                .listFiles { file -> file.isDirectory && File(file, UAT_SPECIFICATION_FILE).isFile }
+                ?: throw RuntimeException("Failed to scan $UAT_BLUEPRINTS_BASE_DIR"))
+                .map { file ->
+                    arrayOf(
+                        file.nameWithoutExtension,
+                        FileSystems.newFileSystem(file.canonicalFile.toPath(), null)
+                    )
+                }
         }
     }
 

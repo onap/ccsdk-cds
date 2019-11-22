@@ -23,7 +23,6 @@ import org.springframework.context.annotation.Configuration
 @ComponentScan
 open class MessagePrioritizationConfiguration
 
-
 object MessagePrioritizationConstants {
 
     const val SOURCE_INPUT = "source-prioritization-input"

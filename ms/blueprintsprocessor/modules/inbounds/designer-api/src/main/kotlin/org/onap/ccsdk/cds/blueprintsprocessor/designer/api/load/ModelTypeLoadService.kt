@@ -26,7 +26,11 @@ import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ModelType
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.ModelTypeHandler
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.cds.controllerblueprints.core.data.*
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.EntityType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.RelationshipType
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.readNBText
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -108,7 +112,7 @@ open class ModelTypeLoadService(private val modelTypeHandler: ModelTypeHandler) 
             val dataKey = FilenameUtils.getBaseName(file.name)
             val definitionContent = file.readNBText()
             val definition = JacksonUtils.readValue(definitionContent, classType) as EntityType
-            //checkNotNull(definition) { "failed to get data type from file : ${file.name}" }
+            // checkNotNull(definition) { "failed to get data type from file : ${file.name}" }
 
             val modelType = ModelType()
             val definitionType: String?

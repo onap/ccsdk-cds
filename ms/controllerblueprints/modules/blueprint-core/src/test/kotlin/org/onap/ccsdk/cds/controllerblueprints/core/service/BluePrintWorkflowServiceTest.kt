@@ -18,7 +18,12 @@ package org.onap.ccsdk.cds.controllerblueprints.core.service
 
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
@@ -33,7 +38,7 @@ class BluePrintWorkflowServiceTest {
     fun testSimpleFlow() {
         runBlocking {
             val graph = "[START>A/SUCCESS, A>B/SUCCESS, B>C/SUCCESS, C>D/SUCCESS, D>E/SUCCESS, E>END/SUCCESS]"
-                    .toGraph()
+                .toGraph()
             val simpleWorkflow = TestBluePrintWorkFlowService()
             simpleWorkflow.simulatedState = prepareSimulation(arrayListOf("A", "B", "C", "D", "E"), null)
             val input = "123456"
@@ -49,7 +54,7 @@ class BluePrintWorkflowServiceTest {
                 val wfs = listOf("12345", "12346").map {
                     async {
                         val graph = "[START>A/SUCCESS, A>B/SUCCESS, B>C/SUCCESS, C>D/SUCCESS, D>END/SUCCESS]"
-                                .toGraph()
+                            .toGraph()
                         val simpleWorkflow = TestBluePrintWorkFlowService()
                         simpleWorkflow.simulatedState = prepareSimulation(arrayListOf("A", "B", "C", "D"), null)
                         val response = simpleWorkflow.executeWorkflow(graph, mockBluePrintRuntimeService(it), it)
@@ -65,7 +70,7 @@ class BluePrintWorkflowServiceTest {
     fun testMissingEdgeForBFailureState() {
         runBlocking {
             val graph = "[START>A/SUCCESS, A>B/SUCCESS, B>C/SUCCESS, C>D/SUCCESS, D>END/SUCCESS]"
-                    .toGraph()
+                .toGraph()
             val simpleWorkflow = TestBluePrintWorkFlowService()
             simpleWorkflow.simulatedState = prepareSimulation(arrayListOf("A", "C", "D", "E"), arrayListOf("B"))
             val input = "123456"
@@ -78,7 +83,7 @@ class BluePrintWorkflowServiceTest {
     fun testBExceptionFlow() {
         runBlocking {
             val graph = "[START>A/SUCCESS, A>B/SUCCESS, B>C/SUCCESS, C>D/SUCCESS, D>END/SUCCESS]"
-                    .toGraph()
+                .toGraph()
             val simpleWorkflow = TestBluePrintWorkFlowService()
             simpleWorkflow.simulatedState = prepareSimulation(arrayListOf("A", "C", "D", "E"), null)
             val input = "123456"
@@ -91,7 +96,7 @@ class BluePrintWorkflowServiceTest {
     fun testTimeoutExceptionFlow() {
         runBlocking {
             val graph = "[START>A/SUCCESS, A>TO/SUCCESS, TO>C/SUCCESS, C>D/SUCCESS, D>END/SUCCESS]"
-                    .toGraph()
+                .toGraph()
             val simpleWorkflow = TestBluePrintWorkFlowService()
             simpleWorkflow.simulatedState = prepareSimulation(arrayListOf("A", "TO", "C", "D", "E"), null)
             val input = "123456"
@@ -104,7 +109,7 @@ class BluePrintWorkflowServiceTest {
     fun testConditionalFlow() {
         runBlocking {
             val graph = "[START>A/SUCCESS, A>B/SUCCESS, A>C/FAILURE, B>D/SUCCESS, C>D/SUCCESS, D>END/SUCCESS]"
-                    .toGraph()
+                .toGraph()
             val simpleWorkflow = TestBluePrintWorkFlowService()
             simpleWorkflow.simulatedState = prepareSimulation(arrayListOf("A", "B", "C", "D", "E"), null)
             val input = "123456"
@@ -118,10 +123,12 @@ class BluePrintWorkflowServiceTest {
         runBlocking {
             // Failure Flow
             val failurePatGraph = "[START>A/SUCCESS, A>B/SUCCESS, A>C/FAILURE, B>D/SUCCESS, C>D/SUCCESS, D>END/SUCCESS]"
-                    .toGraph()
+                .toGraph()
             val failurePathWorkflow = TestBluePrintWorkFlowService()
-            failurePathWorkflow.simulatedState = prepareSimulation(arrayListOf("B", "C", "D", "E"),
-                    arrayListOf("A"))
+            failurePathWorkflow.simulatedState = prepareSimulation(
+                arrayListOf("B", "C", "D", "E"),
+                arrayListOf("A")
+            )
             val failurePathWorkflowInput = "123456"
             val failurePathResponse = failurePathWorkflow.executeWorkflow(failurePatGraph, mockBluePrintRuntimeService(), failurePathWorkflowInput)
             assertNotNull(failurePathResponse, "failed to get response")
@@ -132,7 +139,7 @@ class BluePrintWorkflowServiceTest {
     fun testMultipleSkipFlow() {
         runBlocking {
             val graph = "[START>A/SUCCESS, A>B/SUCCESS, A>C/FAILURE, C>D/SUCCESS, D>E/SUCCESS, B>E/SUCCESS, E>END/SUCCESS]"
-                    .toGraph()
+                .toGraph()
             val simpleWorkflow = TestBluePrintWorkFlowService()
             simpleWorkflow.simulatedState = prepareSimulation(arrayListOf("A", "B", "C", "D", "E"), null)
             val input = "123456"
@@ -145,7 +152,7 @@ class BluePrintWorkflowServiceTest {
     fun testParallelFlow() {
         runBlocking {
             val graph = "[START>A/SUCCESS, A>B/SUCCESS, A>C/SUCCESS, B>D/SUCCESS, C>D/SUCCESS, D>END/SUCCESS]"
-                    .toGraph()
+                .toGraph()
             val simpleWorkflow = TestBluePrintWorkFlowService()
             simpleWorkflow.simulatedState = prepareSimulation(arrayListOf("A", "B", "C", "D"), null)
             val input = "123456"
@@ -176,8 +183,9 @@ class BluePrintWorkflowServiceTest {
     }
 }
 
-class TestBluePrintWorkFlowService
-    : AbstractBluePrintWorkFlowService<String, String>() {
+class TestBluePrintWorkFlowService :
+    AbstractBluePrintWorkFlowService<String, String>() {
+
     val log = logger(TestBluePrintWorkFlowService::class)
 
     lateinit var simulatedState: MutableMap<String, EdgeLabel>
@@ -201,17 +209,20 @@ class TestBluePrintWorkFlowService
         return startMessage.output.await()
     }
 
-    override suspend fun prepareNodeExecutionMessage(node: Graph.Node)
-            : NodeExecuteMessage<String, String> {
+    override suspend fun prepareNodeExecutionMessage(node: Graph.Node):
+            NodeExecuteMessage<String, String> {
         return NodeExecuteMessage(node, "$node Input", "")
     }
 
-    override suspend fun executeNode(node: Graph.Node, nodeInput: String,
-                                     nodeOutput: String): EdgeLabel {
-//        val random = (1..10).random() * 100
-//        log.info("workflow($workflowId) node(${node.id}) will reply in $random ms")
-//        kotlinx.coroutines.delay(random.toLong())
-//        //Simulation for timeout
+    override suspend fun executeNode(
+        node: Graph.Node,
+        nodeInput: String,
+        nodeOutput: String
+    ): EdgeLabel {
+        //        val random = (1..10).random() * 100
+        //        log.info("workflow($workflowId) node(${node.id}) will reply in $random ms")
+        //        kotlinx.coroutines.delay(random.toLong())
+        //        //Simulation for timeout
         if (node.id == "TO") {
             withTimeout(1) {
                 kotlinx.coroutines.delay(2)
@@ -225,19 +236,28 @@ class TestBluePrintWorkFlowService
         return NodeSkipMessage(node, "$node Skip Input", nodeOutput)
     }
 
-    override suspend fun skipNode(node: Graph.Node, nodeInput: String,
-                                  nodeOutput: String): EdgeLabel {
+    override suspend fun skipNode(
+        node: Graph.Node,
+        nodeInput: String,
+        nodeOutput: String
+    ): EdgeLabel {
         return simulatedState[node.id] ?: throw BluePrintException("failed to get status for the node($node)")
     }
 
-    override suspend fun cancelNode(node: Graph.Node, nodeInput: String,
-                                    nodeOutput: String): EdgeLabel {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override suspend fun cancelNode(
+        node: Graph.Node,
+        nodeInput: String,
+        nodeOutput: String
+    ): EdgeLabel {
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
-    override suspend fun restartNode(node: Graph.Node, nodeInput: String,
-                                     nodeOutput: String): EdgeLabel {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override suspend fun restartNode(
+        node: Graph.Node,
+        nodeInput: String,
+        nodeOutput: String
+    ): EdgeLabel {
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     override suspend fun prepareWorkflowOutput(): String {

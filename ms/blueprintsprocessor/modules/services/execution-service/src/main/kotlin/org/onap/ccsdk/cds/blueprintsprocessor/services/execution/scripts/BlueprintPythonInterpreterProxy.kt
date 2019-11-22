@@ -33,12 +33,13 @@ open class BlueprintPythonInterpreterProxy(private val bluePrintPython: BluePrin
             try {
                 this.exec(bluePrintPython.content)
             } catch (e: PySyntaxError) {
-                throw BluePrintProcessorException("Error executing Jython code! Python error: '${e.toString()}'", e)
+                throw BluePrintProcessorException("Error executing Jython code! Python error: '$e'", e)
             }
         }
 
         val initCommand = bluePrintPython.pythonClassName.plus(" = ").plus(
-            bluePrintPython.pythonClassName).plus("()")
+            bluePrintPython.pythonClassName
+        ).plus("()")
         this.exec(initCommand)
 
         return this.get(bluePrintPython.pythonClassName)

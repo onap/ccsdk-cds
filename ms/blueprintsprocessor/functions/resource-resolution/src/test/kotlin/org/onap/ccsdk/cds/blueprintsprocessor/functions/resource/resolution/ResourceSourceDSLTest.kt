@@ -25,53 +25,51 @@ class ResourceSourceDSLTest {
     @Test
     fun testNodeTypeSourceInput() {
         val nodeType = BluePrintTypes.nodeTypeSourceInput()
-        //println(nodeType.asJsonString(true))
+        // println(nodeType.asJsonString(true))
         assertNotNull(nodeType, "failed to generate nodeTypeSourceInput")
     }
 
     @Test
     fun testNodeTypeSourceDefault() {
         val nodeType = BluePrintTypes.nodeTypeSourceDefault()
-        //println(nodeType.asJsonString(true))
+        // println(nodeType.asJsonString(true))
         assertNotNull(nodeType, "failed to generate nodeTypeSourceDefault")
     }
 
     @Test
     fun testNodeTypeSourceDb() {
         val nodeType = BluePrintTypes.nodeTypeSourceDb()
-        //println(nodeType.asJsonString(true))
+        // println(nodeType.asJsonString(true))
         assertNotNull(nodeType, "failed to generate nodeTypeSourceDb")
     }
 
     @Test
     fun testNodeTypeSourceRest() {
         val nodeType = BluePrintTypes.nodeTypeSourceRest()
-        //println(nodeType.asJsonString(true))
+        // println(nodeType.asJsonString(true))
         assertNotNull(nodeType, "failed to generate nodeTypeSourceRest")
     }
 
     @Test
     fun testNodeTypeSourceCapability() {
         val nodeType = BluePrintTypes.nodeTypeSourceCapability()
-        //println(nodeType.asJsonString(true))
+        // println(nodeType.asJsonString(true))
         assertNotNull(nodeType, "failed to generate nodeTypeSourceCapability")
     }
 
     @Test
     fun testNodeTemplateSourceInput() {
         val nodeTemplate = BluePrintTypes.nodeTemplateSourceInput("InputSystem", "") {
-
         }
-        //println(nodeTemplate.asJsonString(true))
+        // println(nodeTemplate.asJsonString(true))
         assertNotNull(nodeTemplate, "failed to generate nodeTemplateSourceInput")
     }
 
     @Test
     fun testNodeTemplateSourceDefault() {
         val nodeTemplate = BluePrintTypes.nodeTemplateSourceDefault("DefaultSystem", "") {
-
         }
-        //println(nodeTemplate.asJsonString(true))
+        // println(nodeTemplate.asJsonString(true))
         assertNotNull(nodeTemplate, "failed to generate nodeTemplateSourceDefault")
     }
 
@@ -91,7 +89,7 @@ class ResourceSourceDSLTest {
                 keyDependencies(arrayListOf("name"))
             }
         }
-        //println(nodeTemplate.asJsonString(true))
+        // println(nodeTemplate.asJsonString(true))
         assertNotNull(nodeTemplate, "failed to generate nodeTemplateSourceDb")
     }
 
@@ -115,7 +113,7 @@ class ResourceSourceDSLTest {
                 keyDependencies(arrayListOf("name"))
             }
         }
-        //println(nodeTemplate.asJsonString(true))
+        // println(nodeTemplate.asJsonString(true))
         assertNotNull(nodeTemplate, "failed to generate nodeTemplateSourceRest")
     }
 
@@ -128,7 +126,7 @@ class ResourceSourceDSLTest {
                 keyDependencies(arrayListOf("name"))
             }
         }
-        //println(nodeTemplate.asJsonString(true))
+        // println(nodeTemplate.asJsonString(true))
         assertNotNull(nodeTemplate, "failed to generate nodeTemplateSourceCapability")
     }
 }

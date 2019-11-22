@@ -16,7 +16,16 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.enhancer
 
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.*
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintArtifactDefinitionEnhancer
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintAttributeDefinitionEnhancer
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintNodeTemplateEnhancer
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintNodeTypeEnhancer
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintPolicyTypeEnhancer
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintPropertyDefinitionEnhancer
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintServiceTemplateEnhancer
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTopologyTemplateEnhancer
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintWorkflowEnhancer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Service

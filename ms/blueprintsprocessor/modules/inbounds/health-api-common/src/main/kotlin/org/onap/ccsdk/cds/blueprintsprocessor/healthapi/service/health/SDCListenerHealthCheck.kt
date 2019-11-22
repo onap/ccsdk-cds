@@ -17,14 +17,8 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.healthapi.service.health
 
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.configuration.HealthCheckProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.HealthApiResponse
-import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.HealthCheckStatus
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.ServiceEndpoint
-import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.ServicesCheckResponse
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.service.EndPointExecution
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
-import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 /**
@@ -34,13 +28,13 @@ import org.springframework.stereotype.Service
  * @version 1.0
  */
 @Service
-open class SDCListenerHealthCheck (private val endPointExecution: EndPointExecution
-                                   ,private val healthCheckProperties: HealthCheckProperties)
-    : AbstractHealthCheck(endPointExecution) {
+open class SDCListenerHealthCheck(
+    private val endPointExecution: EndPointExecution,
+    private val healthCheckProperties: HealthCheckProperties
+) :
+    AbstractHealthCheck(endPointExecution) {
 
     override fun setupServiceEndpoint(): List<ServiceEndpoint> {
         return healthCheckProperties.getCDSListenerServiceInformation()
     }
-
-
 }

@@ -23,7 +23,11 @@ import org.apache.commons.lang3.StringUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.repository.ModelTypeRepository
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.repository.ResourceDictionaryRepository
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.cds.controllerblueprints.core.data.*
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.CapabilityDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.RelationshipType
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintRepoService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
@@ -36,37 +40,39 @@ interface ResourceDefinitionRepoService : BluePrintRepoService {
 }
 
 @Service
-open class BluePrintRepoFileService(private val modelTypeRepository: ModelTypeRepository,
-                                    private val resourceDictionaryRepository: ResourceDictionaryRepository) : ResourceDefinitionRepoService {
+open class BluePrintRepoFileService(
+    private val modelTypeRepository: ModelTypeRepository,
+    private val resourceDictionaryRepository: ResourceDictionaryRepository
+) : ResourceDefinitionRepoService {
 
     @Throws(BluePrintException::class)
     override fun getNodeType(nodeTypeName: String): NodeType {
         return getModelType(nodeTypeName, NodeType::class.java)
-                ?: throw BluePrintException("couldn't get NodeType($nodeTypeName)")
+            ?: throw BluePrintException("couldn't get NodeType($nodeTypeName)")
     }
 
     @Throws(BluePrintException::class)
     override fun getDataType(dataTypeName: String): DataType {
         return getModelType(dataTypeName, DataType::class.java)
-                ?: throw BluePrintException("couldn't get DataType($dataTypeName)")
+            ?: throw BluePrintException("couldn't get DataType($dataTypeName)")
     }
 
     @Throws(BluePrintException::class)
     override fun getArtifactType(artifactTypeName: String): ArtifactType {
         return getModelType(artifactTypeName, ArtifactType::class.java)
-                ?: throw BluePrintException("couldn't get ArtifactType($artifactTypeName)")
+            ?: throw BluePrintException("couldn't get ArtifactType($artifactTypeName)")
     }
 
     @Throws(BluePrintException::class)
     override fun getRelationshipType(relationshipTypeName: String): RelationshipType {
         return getModelType(relationshipTypeName, RelationshipType::class.java)
-                ?: throw BluePrintException("couldn't get RelationshipType($relationshipTypeName)")
+            ?: throw BluePrintException("couldn't get RelationshipType($relationshipTypeName)")
     }
 
     @Throws(BluePrintException::class)
     override fun getCapabilityDefinition(capabilityDefinitionName: String): CapabilityDefinition {
         return getModelType(capabilityDefinitionName, CapabilityDefinition::class.java)
-                ?: throw BluePrintException("couldn't get CapabilityDefinition($capabilityDefinitionName)")
+            ?: throw BluePrintException("couldn't get CapabilityDefinition($capabilityDefinitionName)")
     }
 
     @Throws(BluePrintException::class)
@@ -81,12 +87,16 @@ open class BluePrintRepoFileService(private val modelTypeRepository: ModelTypeRe
 
     @Throws(BluePrintException::class)
     private fun <T> getModelType(modelName: String, valueClass: Class<T>): T? {
-        Preconditions.checkArgument(StringUtils.isNotBlank(modelName),
-                "Failed to get model from repo, model name is missing")
+        Preconditions.checkArgument(
+            StringUtils.isNotBlank(modelName),
+            "Failed to get model from repo, model name is missing"
+        )
 
         val modelDefinition = getModelDefinition(modelName)
-        Preconditions.checkNotNull(modelDefinition,
-                String.format("Failed to get model content for model name (%s)", modelName))
+        Preconditions.checkNotNull(
+            modelDefinition,
+            String.format("Failed to get model content for model name (%s)", modelName)
+        )
 
         return JacksonUtils.readValue(modelDefinition, valueClass)
     }

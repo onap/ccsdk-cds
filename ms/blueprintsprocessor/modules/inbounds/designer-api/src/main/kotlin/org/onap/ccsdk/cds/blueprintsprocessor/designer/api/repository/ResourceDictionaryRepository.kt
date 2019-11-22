@@ -20,7 +20,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictio
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
-
 /**
  * ResourceMappingRepository.java Purpose: Provide Configuration Generator ResourceMappingRepository
  *
@@ -29,7 +28,6 @@ import org.springframework.stereotype.Repository
  */
 @Repository
 interface ResourceDictionaryRepository : JpaRepository<ResourceDictionary, String> {
-
 
     /**
      * This is a findByName method
@@ -61,6 +59,4 @@ interface ResourceDictionaryRepository : JpaRepository<ResourceDictionary, Strin
      * @param name name
      */
     fun deleteByName(name: String)
-
-
 }

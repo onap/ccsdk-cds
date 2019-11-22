@@ -21,11 +21,18 @@ package org.onap.ccsdk.cds.blueprintsprocessor.db.primary.service
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModel
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelContent
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.BlueprintModelRepository
-import org.onap.ccsdk.cds.controllerblueprints.core.*
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.common.ApplicationConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ErrorCode
+import org.onap.ccsdk.cds.controllerblueprints.core.deCompress
+import org.onap.ccsdk.cds.controllerblueprints.core.deleteNBDir
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidatorService
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
+import org.onap.ccsdk.cds.controllerblueprints.core.reCreateNBDirs
 import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintCompileCache
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
 import org.slf4j.LoggerFactory
@@ -33,24 +40,26 @@ import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
 import java.io.File
 import java.nio.file.Path
-import java.util.*
+import java.util.UUID
 
 // TODO("Duplicate : Merge BlueprintProcessorCatalogServiceImpl and ControllerBlueprintCatalogServiceImpl")
 /**
  * Similar/Duplicate implementation in [org.onap.ccsdk.cds.controllerblueprints.service.load.ControllerBlueprintCatalogServiceImpl]
  */
 @Service("blueprintsProcessorCatalogService")
-class BlueprintProcessorCatalogServiceImpl(bluePrintRuntimeValidatorService: BluePrintValidatorService,
-                                           private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
-                                           private val blueprintModelRepository: BlueprintModelRepository)
-    : BlueprintCatalogServiceImpl(bluePrintLoadConfiguration, bluePrintRuntimeValidatorService) {
+class BlueprintProcessorCatalogServiceImpl(
+    bluePrintRuntimeValidatorService: BluePrintValidatorService,
+    private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
+    private val blueprintModelRepository: BlueprintModelRepository
+) :
+    BlueprintCatalogServiceImpl(bluePrintLoadConfiguration, bluePrintRuntimeValidatorService) {
 
     private val log = LoggerFactory.getLogger(BlueprintProcessorCatalogServiceImpl::class.toString())
 
     override suspend fun delete(name: String, version: String) {
         // Clean blueprint script cache
         val cacheKey = BluePrintFileUtils
-                .compileCacheKey(normalizedPathName(bluePrintLoadConfiguration.blueprintDeployPath, name, version))
+            .compileCacheKey(normalizedPathName(bluePrintLoadConfiguration.blueprintDeployPath, name, version))
         BluePrintCompileCache.cleanClassLoader(cacheKey)
         log.info("removed cba file name($name), version($version) from cache")
         // Cleaning Deployed Blueprint
@@ -58,16 +67,17 @@ class BlueprintProcessorCatalogServiceImpl(bluePrintRuntimeValidatorService: Blu
         log.info("removed cba file name($name), version($version) from deploy location")
         // Cleaning Data Base
         blueprintModelRepository
-                .deleteByArtifactNameAndArtifactVersion(name, version)
+            .deleteByArtifactNameAndArtifactVersion(name, version)
         log.info("removed cba file name($name), version($version) from database")
     }
-
 
     override suspend fun get(name: String, version: String, extract: Boolean): Path? {
 
         val deployFile = normalizedFile(bluePrintLoadConfiguration.blueprintDeployPath, name, version)
-        val cbaFile = normalizedFile(bluePrintLoadConfiguration.blueprintArchivePath,
-                UUID.randomUUID().toString(), "cba.zip")
+        val cbaFile = normalizedFile(
+            bluePrintLoadConfiguration.blueprintArchivePath,
+            UUID.randomUUID().toString(), "cba.zip"
+        )
 
         if (extract && deployFile.exists()) {
             log.info("cba file name($name), version($version) already present(${deployFile.absolutePath})")
@@ -91,8 +101,10 @@ class BlueprintProcessorCatalogServiceImpl(bluePrintRuntimeValidatorService: Blu
                 }
             } catch (e: Exception) {
                 deleteNBDir(deployFile.absolutePath)
-                throw BluePrintProcessorException("failed to get  get cba file name($name), version($version) from db" +
-                        " : ${e.message}")
+                throw BluePrintProcessorException(
+                    "failed to get  get cba file name($name), version($version) from db" +
+                            " : ${e.message}"
+                )
             } finally {
                 deleteNBDir(cbaFile.parentFile.absolutePath)
             }
@@ -117,7 +129,7 @@ class BlueprintProcessorCatalogServiceImpl(bluePrintRuntimeValidatorService: Blu
             log.info("Overwriting blueprint model :$artifactName::$artifactVersion")
             blueprintModelRepository.deleteByArtifactNameAndArtifactVersion(artifactName, artifactVersion)
             val deployFile =
-                    normalizedPathName(bluePrintLoadConfiguration.blueprintDeployPath, artifactName, artifactVersion)
+                normalizedPathName(bluePrintLoadConfiguration.blueprintDeployPath, artifactName, artifactVersion)
 
             val cacheKey = BluePrintFileUtils.compileCacheKey(deployFile)
             BluePrintCompileCache.cleanClassLoader(cacheKey)
@@ -132,7 +144,7 @@ class BlueprintProcessorCatalogServiceImpl(bluePrintRuntimeValidatorService: Blu
         blueprintModel.id = metadata[BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID]
         blueprintModel.artifactType = ApplicationConstants.ASDC_ARTIFACT_TYPE_SDNC_MODEL
         blueprintModel.published = metadata[BluePrintConstants.PROPERTY_BLUEPRINT_VALID]
-                ?: BluePrintConstants.FLAG_N
+            ?: BluePrintConstants.FLAG_N
         blueprintModel.artifactName = artifactName
         blueprintModel.artifactVersion = artifactVersion
         blueprintModel.updatedBy = metadata[BluePrintConstants.METADATA_TEMPLATE_AUTHOR]!!
@@ -152,8 +164,10 @@ class BlueprintProcessorCatalogServiceImpl(bluePrintRuntimeValidatorService: Blu
         try {
             blueprintModelRepository.saveAndFlush(blueprintModel)
         } catch (ex: DataIntegrityViolationException) {
-            throw BluePrintException(ErrorCode.CONFLICT_ADDING_RESOURCE.value, "The blueprint entry " +
-                    "is already exist in database: ${ex.message}", ex)
+            throw BluePrintException(
+                ErrorCode.CONFLICT_ADDING_RESOURCE.value, "The blueprint entry " +
+                        "is already exist in database: ${ex.message}", ex
+            )
         }
     }
 }

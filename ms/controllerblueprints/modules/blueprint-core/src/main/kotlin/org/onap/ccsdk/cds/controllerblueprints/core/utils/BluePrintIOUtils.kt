@@ -18,8 +18,13 @@ package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
 object BluePrintIOUtils {
 
-    suspend fun <T> retry(times: Int = 1, initialDelay: Long = 0, delay: Long = 1000,
-                          block: suspend (Int) -> T, exceptionBlock: (e: Exception) -> Unit): T {
+    suspend fun <T> retry(
+        times: Int = 1,
+        initialDelay: Long = 0,
+        delay: Long = 1000,
+        block: suspend (Int) -> T,
+        exceptionBlock: (e: Exception) -> Unit
+    ): T {
         var currentDelay = initialDelay
         val currentTimes = times - 1
         repeat(currentTimes) { count ->

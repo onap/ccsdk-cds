@@ -16,7 +16,12 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.grpc.interceptor
 
-import io.grpc.*
+import io.grpc.ForwardingServerCall
+import io.grpc.ForwardingServerCallListener
+import io.grpc.Metadata
+import io.grpc.ServerCall
+import io.grpc.ServerCallHandler
+import io.grpc.ServerInterceptor
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.GrpcLoggerService
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
@@ -30,9 +35,12 @@ class GrpcServerLoggingInterceptor : ServerInterceptor {
     val log = logger(GrpcServerLoggingInterceptor::class)
     val loggingService = GrpcLoggerService()
 
-    override fun <ReqT : Any, RespT : Any> interceptCall(call: ServerCall<ReqT, RespT>,
-                                                         requestHeaders: Metadata, next: ServerCallHandler<ReqT, RespT>)
-            : ServerCall.Listener<ReqT> {
+    override fun <ReqT : Any, RespT : Any> interceptCall(
+        call: ServerCall<ReqT, RespT>,
+        requestHeaders: Metadata,
+        next: ServerCallHandler<ReqT, RespT>
+    ):
+            ServerCall.Listener<ReqT> {
 
         val forwardingServerCall = object : ForwardingServerCall.SimpleForwardingServerCall<ReqT, RespT>(call) {
             override fun sendHeaders(responseHeaders: Metadata) {
@@ -41,9 +49,10 @@ class GrpcServerLoggingInterceptor : ServerInterceptor {
             }
         }
 
-        return object
-            : ForwardingServerCallListener.SimpleForwardingServerCallListener<ReqT>(
-                next.startCall(forwardingServerCall, requestHeaders)) {
+        return object :
+            ForwardingServerCallListener.SimpleForwardingServerCallListener<ReqT>(
+                next.startCall(forwardingServerCall, requestHeaders)
+            ) {
 
             override fun onMessage(message: ReqT) {
                 /** Get the requestId, SubRequestId and Originator Id and set in MDS context
@@ -52,22 +61,22 @@ class GrpcServerLoggingInterceptor : ServerInterceptor {
                 when (message) {
                     is ExecutionServiceInput -> {
                         val commonHeader = message.commonHeader
-                                ?: throw BluePrintProcessorException("missing common header in request")
+                            ?: throw BluePrintProcessorException("missing common header in request")
                         loggingService.grpcRequesting(call, commonHeader, next)
                     }
                     is BluePrintUploadInput -> {
                         val commonHeader = message.commonHeader
-                                ?: throw BluePrintProcessorException("missing common header in request")
+                            ?: throw BluePrintProcessorException("missing common header in request")
                         loggingService.grpcRequesting(call, commonHeader, next)
                     }
                     is BluePrintDownloadInput -> {
                         val commonHeader = message.commonHeader
-                                ?: throw BluePrintProcessorException("missing common header in request")
+                            ?: throw BluePrintProcessorException("missing common header in request")
                         loggingService.grpcRequesting(call, commonHeader, next)
                     }
                     is BluePrintRemoveInput -> {
                         val commonHeader = message.commonHeader
-                                ?: throw BluePrintProcessorException("missing common header in request")
+                            ?: throw BluePrintProcessorException("missing common header in request")
                         loggingService.grpcRequesting(call, commonHeader, next)
                     }
                     else -> {
@@ -86,7 +95,6 @@ class GrpcServerLoggingInterceptor : ServerInterceptor {
                 MDC.clear()
                 super.onCancel()
             }
-
         }
     }
 }

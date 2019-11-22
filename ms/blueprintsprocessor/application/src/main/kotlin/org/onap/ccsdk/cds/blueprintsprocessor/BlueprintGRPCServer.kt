@@ -30,10 +30,12 @@ import org.springframework.stereotype.Component
 
 @ConditionalOnProperty(name = ["blueprintsprocessor.grpcEnable"], havingValue = "true")
 @Component
-open class BlueprintGRPCServer(private val bluePrintProcessingGRPCHandler: BluePrintProcessingGRPCHandler,
-                               private val bluePrintManagementGRPCHandler: BluePrintManagementGRPCHandler,
-                               private val authInterceptor: BasicAuthServerInterceptor)
-    : ApplicationListener<ContextRefreshedEvent> {
+open class BlueprintGRPCServer(
+    private val bluePrintProcessingGRPCHandler: BluePrintProcessingGRPCHandler,
+    private val bluePrintManagementGRPCHandler: BluePrintManagementGRPCHandler,
+    private val authInterceptor: BasicAuthServerInterceptor
+) :
+    ApplicationListener<ContextRefreshedEvent> {
 
     private val log = logger(BlueprintGRPCServer::class)
 
@@ -44,12 +46,12 @@ open class BlueprintGRPCServer(private val bluePrintProcessingGRPCHandler: BlueP
         try {
             log.info("Starting Blueprint Processor GRPC Starting..")
             val server = ServerBuilder
-                    .forPort(grpcPort!!)
-                    .intercept(GrpcServerLoggingInterceptor())
-                    .intercept(authInterceptor)
-                    .addService(bluePrintProcessingGRPCHandler)
-                    .addService(bluePrintManagementGRPCHandler)
-                    .build()
+                .forPort(grpcPort!!)
+                .intercept(GrpcServerLoggingInterceptor())
+                .intercept(authInterceptor)
+                .addService(bluePrintProcessingGRPCHandler)
+                .addService(bluePrintManagementGRPCHandler)
+                .build()
 
             server.start()
             log.info("Blueprint Processor GRPC server started and ready to serve on port({})...", server.port)

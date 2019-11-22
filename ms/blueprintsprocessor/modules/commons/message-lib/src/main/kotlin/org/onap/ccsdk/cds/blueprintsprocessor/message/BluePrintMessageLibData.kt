@@ -22,7 +22,6 @@ import org.apache.kafka.streams.StreamsConfig
 /** Producer Properties **/
 open class MessageProducerProperties
 
-
 open class KafkaBasicAuthMessageProducerProperties : MessageProducerProperties() {
     lateinit var bootstrapServers: String
     var topic: String? = null

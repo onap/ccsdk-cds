@@ -31,52 +31,72 @@ import kotlin.reflect.KClass
 /** Component Extensions **/
 
 fun BluePrintTypes.nodeTypeComponentScriptExecutor(): NodeType {
-    return nodeType(id = "component-script-executor", version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-            derivedFrom = BluePrintConstants.MODEL_TYPE_NODE_COMPONENT,
-            description = "Generic Script Component Executor") {
+    return nodeType(
+        id = "component-script-executor", version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BluePrintConstants.MODEL_TYPE_NODE_COMPONENT,
+        description = "Generic Script Component Executor"
+    ) {
         attribute(ComponentScriptExecutor.ATTRIBUTE_RESPONSE_DATA, BluePrintConstants.DATA_TYPE_JSON, false)
         attribute(ComponentScriptExecutor.ATTRIBUTE_STATUS, BluePrintConstants.DATA_TYPE_STRING, true)
 
         operation("ComponentScriptExecutor", "ComponentScriptExecutor Operation") {
             inputs {
-                property(ComponentScriptExecutor.INPUT_SCRIPT_TYPE, BluePrintConstants.DATA_TYPE_STRING,
-                        true, "Script Type") {
+                property(
+                    ComponentScriptExecutor.INPUT_SCRIPT_TYPE, BluePrintConstants.DATA_TYPE_STRING,
+                    true, "Script Type"
+                ) {
                     defaultValue(BluePrintConstants.SCRIPT_INTERNAL)
                     constrain {
-                        validValues(listOf(BluePrintConstants.SCRIPT_INTERNAL.asJsonPrimitive(),
+                        validValues(
+                            listOf(
+                                BluePrintConstants.SCRIPT_INTERNAL.asJsonPrimitive(),
                                 BluePrintConstants.SCRIPT_JYTHON.asJsonPrimitive(),
-                                BluePrintConstants.SCRIPT_KOTLIN.asJsonPrimitive()))
+                                BluePrintConstants.SCRIPT_KOTLIN.asJsonPrimitive()
+                            )
+                        )
                     }
                 }
-                property(ComponentScriptExecutor.INPUT_SCRIPT_CLASS_REFERENCE, BluePrintConstants.DATA_TYPE_STRING,
-                        true, "Kotlin Script class name or jython script name.")
-                property(ComponentScriptExecutor.INPUT_DYNAMIC_PROPERTIES, BluePrintConstants.DATA_TYPE_JSON,
-                        false, "Dynamic Json Content or DSL Json reference.")
+                property(
+                    ComponentScriptExecutor.INPUT_SCRIPT_CLASS_REFERENCE, BluePrintConstants.DATA_TYPE_STRING,
+                    true, "Kotlin Script class name or jython script name."
+                )
+                property(
+                    ComponentScriptExecutor.INPUT_DYNAMIC_PROPERTIES, BluePrintConstants.DATA_TYPE_JSON,
+                    false, "Dynamic Json Content or DSL Json reference."
+                )
             }
             outputs {
-                property(ComponentScriptExecutor.OUTPUT_RESPONSE_DATA, BluePrintConstants.DATA_TYPE_JSON,
-                        false, "Output Response")
-                property(ComponentScriptExecutor.OUTPUT_STATUS, BluePrintConstants.DATA_TYPE_STRING,
-                        true, "Status of the Component Execution ( success or failure )")
+                property(
+                    ComponentScriptExecutor.OUTPUT_RESPONSE_DATA, BluePrintConstants.DATA_TYPE_JSON,
+                    false, "Output Response"
+                )
+                property(
+                    ComponentScriptExecutor.OUTPUT_STATUS, BluePrintConstants.DATA_TYPE_STRING,
+                    true, "Status of the Component Execution ( success or failure )"
+                )
             }
         }
     }
 }
 
 /** Component Builder */
-fun BluePrintTypes.nodeTemplateComponentScriptExecutor(id: String,
-                                                       description: String,
-                                                       block: ComponentScriptExecutorNodeTemplateBuilder.() -> Unit)
-        : NodeTemplate {
+fun BluePrintTypes.nodeTemplateComponentScriptExecutor(
+    id: String,
+    description: String,
+    block: ComponentScriptExecutorNodeTemplateBuilder.() -> Unit
+):
+        NodeTemplate {
     return ComponentScriptExecutorNodeTemplateBuilder(id, description).apply(block).build()
 }
 
 class ComponentScriptExecutorNodeTemplateBuilder(id: String, description: String) :
-        AbstractNodeTemplateOperationImplBuilder<PropertiesAssignmentBuilder,
-                ComponentScriptExecutorNodeTemplateBuilder.InputsBuilder,
-                ComponentScriptExecutorNodeTemplateBuilder.OutputsBuilder>(id, "component-script-executor",
-                "ComponentScriptExecutor",
-                description) {
+    AbstractNodeTemplateOperationImplBuilder<PropertiesAssignmentBuilder,
+            ComponentScriptExecutorNodeTemplateBuilder.InputsBuilder,
+            ComponentScriptExecutorNodeTemplateBuilder.OutputsBuilder>(
+        id, "component-script-executor",
+        "ComponentScriptExecutor",
+        description
+    ) {
 
     class InputsBuilder : PropertiesAssignmentBuilder() {
 

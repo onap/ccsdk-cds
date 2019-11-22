@@ -17,14 +17,28 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.dsl
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.onap.ccsdk.cds.controllerblueprints.core.*
-import org.onap.ccsdk.cds.controllerblueprints.core.data.*
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.asBluePrintsDataTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
+import org.onap.ccsdk.cds.controllerblueprints.core.asPropertyDefinitionMap
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ImportDefinition
+import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.PolicyType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.RelationshipType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.ServiceTemplate
+import org.onap.ccsdk.cds.controllerblueprints.core.data.TopologyTemplate
 import kotlin.reflect.KClass
 
-class ServiceTemplateBuilder(private val name: String,
-                             private val version: String,
-                             private val author: String,
-                             private val tags: String) {
+class BluePrintServiceDSLBuilder(
+    private val name: String,
+    private val version: String,
+    private val author: String,
+    private val tags: String
+) {
+
     private var serviceTemplate = ServiceTemplate()
     private var topologyTemplate: TopologyTemplate? = null
     private var metadata: MutableMap<String, String> = hashMapOf()
@@ -138,36 +152,61 @@ class ServiceTemplateBuilder(private val name: String,
         nodeTypes!![nodeType.id!!] = nodeType
     }
 
-    fun dataType(id: String, version: String, derivedFrom: String, description: String,
-                 block: DataTypeBuilder.() -> Unit) {
+    fun dataType(
+        id: String,
+        version: String,
+        derivedFrom: String,
+        description: String,
+        block: DataTypeBuilder.() -> Unit
+    ) {
         if (dataTypes == null)
             dataTypes = hashMapOf()
         dataTypes!![id] = DataTypeBuilder(id, version, derivedFrom, description).apply(block).build()
     }
 
-    fun artifactType(id: String, version: String, derivedFrom: String, description: String,
-                     block: ArtifactTypeBuilder.() -> Unit) {
+    fun artifactType(
+        id: String,
+        version: String,
+        derivedFrom: String,
+        description: String,
+        block: ArtifactTypeBuilder.() -> Unit
+    ) {
         if (artifactTypes == null)
             artifactTypes = hashMapOf()
         artifactTypes!![id] = ArtifactTypeBuilder(id, version, derivedFrom, description).apply(block).build()
     }
 
-    fun relationshipType(id: String, version: String, derivedFrom: String, description: String,
-                         block: RelationshipTypeBuilder.() -> Unit) {
+    fun relationshipType(
+        id: String,
+        version: String,
+        derivedFrom: String,
+        description: String,
+        block: RelationshipTypeBuilder.() -> Unit
+    ) {
         if (relationshipTypes == null)
             relationshipTypes = hashMapOf()
         relationshipTypes!![id] = RelationshipTypeBuilder(id, version, derivedFrom, description).apply(block).build()
     }
 
-    fun policyType(id: String, version: String, derivedFrom: String, description: String,
-                   block: PolicyTypeBuilder.() -> Unit) {
+    fun policyType(
+        id: String,
+        version: String,
+        derivedFrom: String,
+        description: String,
+        block: PolicyTypeBuilder.() -> Unit
+    ) {
         if (policyTypes == null)
             policyTypes = hashMapOf()
         policyTypes!![id] = PolicyTypeBuilder(id, version, derivedFrom, description).apply(block).build()
     }
 
-    fun nodeType(id: String, version: String, derivedFrom: String, description: String,
-                 block: NodeTypeBuilder.() -> Unit) {
+    fun nodeType(
+        id: String,
+        version: String,
+        derivedFrom: String,
+        description: String,
+        block: NodeTypeBuilder.() -> Unit
+    ) {
         if (nodeTypes == null)
             nodeTypes = hashMapOf()
         nodeTypes!![id] = NodeTypeBuilder(id, version, derivedFrom, description).apply(block).build()

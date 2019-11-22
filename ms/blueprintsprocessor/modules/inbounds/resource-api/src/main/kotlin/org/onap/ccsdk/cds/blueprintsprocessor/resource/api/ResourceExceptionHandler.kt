@@ -23,16 +23,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ErrorCode
 import org.slf4j.LoggerFactory
+import org.springframework.dao.EmptyResultDataAccessException
+import org.springframework.dao.IncorrectResultSizeDataAccessException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException
-import org.springframework.dao.EmptyResultDataAccessException
-import org.springframework.dao.IncorrectResultSizeDataAccessException
-import org.springframework.web.server.ServerWebInputException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import org.springframework.web.server.ServerWebInputException
 import java.io.Serializable
-import java.util.*
+import java.util.Date
 
 /**
  * Handle exceptions in Resolution API and provide relevant HTTP status codes and messages
@@ -86,9 +86,11 @@ open class ResourceExceptionHandler {
     fun returnError(e: Exception, errorCode: ErrorCode): ResponseEntity<ErrorMessage> {
         log.error(e.message, e)
         val errorMessage =
-            ErrorMessage(errorCode.message(e.message!!),
+            ErrorMessage(
+                errorCode.message(e.message!!),
                 errorCode.value,
-                debugMsg)
+                debugMsg
+            )
         return ResponseEntity(errorMessage, HttpStatus.resolve(errorCode.httpCode)!!)
     }
 
@@ -103,6 +105,7 @@ open class ResourceExceptionHandler {
 @JsonTypeName("errorMessage")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 class ErrorMessage(var message: String?, var code: Int?, var debugMessage: String?) : Serializable {
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     var timestamp = Date()
 }

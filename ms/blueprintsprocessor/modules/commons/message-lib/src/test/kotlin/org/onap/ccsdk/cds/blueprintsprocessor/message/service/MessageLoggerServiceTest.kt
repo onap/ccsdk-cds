@@ -29,7 +29,6 @@ import kotlin.test.assertEquals
 
 class MessageLoggerServiceTest {
 
-
     @Test
     fun testMessagingHeaders() {
         val messageLoggerService = MessageLoggerService()
@@ -55,7 +54,5 @@ class MessageLoggerServiceTest {
         assertEquals("1234-12", map[BluePrintConstants.ONAP_REQUEST_ID])
 
         messageLoggerService.messageConsumingExisting()
-
     }
-
 }
