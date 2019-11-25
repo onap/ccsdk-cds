@@ -18,7 +18,6 @@ package org.onap.ccsdk.cds.blueprintsprocessor.grpc.service
 
 import io.grpc.ManagedChannel
 import io.grpc.internal.DnsNameResolverProvider
-import io.grpc.internal.PickFirstLoadBalancerProvider
 import io.grpc.netty.GrpcSslContexts
 import io.grpc.netty.NettyChannelBuilder
 import io.netty.handler.ssl.SslContext
@@ -33,7 +32,6 @@ class TLSAuthGrpcClientService(private val tlsAuthGrpcClientProperties: TLSAuthG
         return NettyChannelBuilder
                 .forAddress(tlsAuthGrpcClientProperties.host, tlsAuthGrpcClientProperties.port)
                 .nameResolverFactory(DnsNameResolverProvider())
-                .loadBalancerFactory(PickFirstLoadBalancerProvider())
                 .intercept(GrpcClientLoggingInterceptor())
                 .sslContext(sslContext())
                 .build()
