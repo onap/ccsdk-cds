@@ -40,7 +40,7 @@ class GrpcServerLoggingInterceptor : ServerInterceptor {
         requestHeaders: Metadata,
         next: ServerCallHandler<ReqT, RespT>
     ):
-            ServerCall.Listener<ReqT> {
+        ServerCall.Listener<ReqT> {
 
         val forwardingServerCall = object : ForwardingServerCall.SimpleForwardingServerCall<ReqT, RespT>(call) {
             override fun sendHeaders(responseHeaders: Metadata) {

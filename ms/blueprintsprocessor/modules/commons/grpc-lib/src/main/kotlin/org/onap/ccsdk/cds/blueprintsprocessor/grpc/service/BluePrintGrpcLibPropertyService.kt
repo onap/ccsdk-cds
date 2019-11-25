@@ -87,7 +87,7 @@ open class BluePrintGrpcLibPropertyService(private var bluePrintPropertiesServic
     }
 
     private fun blueprintGrpcServerService(grpcServerProperties: GrpcServerProperties):
-            BluePrintGrpcServerService {
+        BluePrintGrpcServerService {
         when (grpcServerProperties) {
             is TLSAuthGrpcServerProperties -> {
                 return TLSAuthGrpcServerService(grpcServerProperties)
@@ -151,7 +151,7 @@ open class BluePrintGrpcLibPropertyService(private var bluePrintPropertiesServic
     }
 
     fun blueprintGrpcClientService(grpcClientProperties: GrpcClientProperties):
-            BluePrintGrpcClientService {
+        BluePrintGrpcClientService {
         return when (grpcClientProperties) {
             is TokenAuthGrpcClientProperties -> {
                 TokenAuthGrpcClientService(grpcClientProperties)

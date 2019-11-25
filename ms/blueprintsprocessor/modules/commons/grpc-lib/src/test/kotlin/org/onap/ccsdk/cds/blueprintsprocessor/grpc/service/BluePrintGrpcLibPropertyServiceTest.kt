@@ -84,23 +84,19 @@ class BluePrintGrpcLibPropertyServiceTest {
         val properties = bluePrintGrpcLibPropertyService.grpcClientProperties(
             "blueprintsprocessor.grpcclient.sample"
         )
-                as BasicAuthGrpcClientProperties
+            as BasicAuthGrpcClientProperties
         assertNotNull(properties, "failed to create property bean")
         assertNotNull(
-            properties.host, "failed to get host property" +
-                    " in property bean"
+            properties.host, "failed to get host property in property bean"
         )
         assertNotNull(
-            properties.port, "failed to get host property" +
-                    " in property bean"
+            properties.port, "failed to get host property in property bean"
         )
         assertNotNull(
-            properties.username, "failed to get host pro" +
-                    "perty in property bean"
+            properties.username, "failed to get host property in property bean"
         )
         assertNotNull(
-            properties.password, "failed to get host pr" +
-                    "operty in property bean"
+            properties.password, "failed to get host property in property bean"
         )
     }
 
@@ -110,10 +106,10 @@ class BluePrintGrpcLibPropertyServiceTest {
     @Test
     fun testGrpcClientPropertiesWithJson() {
         val json: String = "{\n" +
-                "  \"type\" : \"token-auth\",\n" +
-                "  \"host\" : \"127.0.0.1\",\n" +
-                "  \"port\" : \"50505\"\n" +
-                "}"
+            "  \"type\" : \"token-auth\",\n" +
+            "  \"host\" : \"127.0.0.1\",\n" +
+            "  \"port\" : \"50505\"\n" +
+            "}"
         val mapper = ObjectMapper()
         val actualObj: JsonNode = mapper.readTree(json)
         val properties = bluePrintGrpcLibPropertyService.grpcClientProperties(
@@ -152,12 +148,12 @@ class BluePrintGrpcLibPropertyServiceTest {
     @Test
     fun testGrpcClientServiceWithJson() {
         val json: String = "{\n" +
-                "  \"type\" : \"basic-auth\",\n" +
-                "  \"host\" : \"127.0.0.1\",\n" +
-                "  \"port\" : \"50505\",\n" +
-                "  \"username\" : \"sampleuser\",\n" +
-                "  \"password\" : \"samplepwd\"\n" +
-                "}"
+            "  \"type\" : \"basic-auth\",\n" +
+            "  \"host\" : \"127.0.0.1\",\n" +
+            "  \"port\" : \"50505\",\n" +
+            "  \"username\" : \"sampleuser\",\n" +
+            "  \"password\" : \"samplepwd\"\n" +
+            "}"
         val mapper = ObjectMapper()
         val actualObj: JsonNode = mapper.readTree(json)
         val svc = bluePrintGrpcLibPropertyService

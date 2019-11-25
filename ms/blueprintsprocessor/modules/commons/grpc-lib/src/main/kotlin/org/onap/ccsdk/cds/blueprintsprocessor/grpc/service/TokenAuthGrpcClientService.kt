@@ -25,7 +25,6 @@ import io.grpc.ManagedChannel
 import io.grpc.Metadata
 import io.grpc.MethodDescriptor
 import io.grpc.internal.DnsNameResolverProvider
-import io.grpc.internal.PickFirstLoadBalancerProvider
 import io.grpc.netty.NettyChannelBuilder
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.TokenAuthGrpcClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.interceptor.GrpcClientLoggingInterceptor
@@ -34,17 +33,21 @@ class TokenAuthGrpcClientService(private val tokenAuthGrpcClientProperties: Toke
     BluePrintGrpcClientService {
 
     override suspend fun channel(): ManagedChannel {
+        val target =
+            if (tokenAuthGrpcClientProperties.port == -1) tokenAuthGrpcClientProperties.host
+            else "${tokenAuthGrpcClientProperties.host}:${tokenAuthGrpcClientProperties.port}"
+
         val managedChannel = NettyChannelBuilder
-            .forAddress(tokenAuthGrpcClientProperties.host, tokenAuthGrpcClientProperties.port)
+            .forTarget(target)
             .nameResolverFactory(DnsNameResolverProvider())
-            .loadBalancerFactory(PickFirstLoadBalancerProvider())
             .intercept(GrpcClientLoggingInterceptor())
             .intercept(TokenAuthClientInterceptor(tokenAuthGrpcClientProperties)).usePlaintext().build()
         return managedChannel
     }
 }
 
-class TokenAuthClientInterceptor(private val tokenAuthGrpcClientProperties: TokenAuthGrpcClientProperties) : ClientInterceptor {
+class TokenAuthClientInterceptor(private val tokenAuthGrpcClientProperties: TokenAuthGrpcClientProperties) :
+    ClientInterceptor {
 
     override fun <ReqT, RespT> interceptCall(
         method: MethodDescriptor<ReqT, RespT>,

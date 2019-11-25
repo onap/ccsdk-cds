@@ -42,12 +42,13 @@ class GrpcClientLoggingInterceptor : ClientInterceptor {
         .SimpleForwardingClientCall<ReqT, RespT>(channel.newCall(method, callOptions)) {
 
             override fun start(responseListener: Listener<RespT>, headers: Metadata) {
-                val listener = object : ForwardingClientCallListener.SimpleForwardingClientCallListener<RespT>(responseListener) {
-                    override fun onMessage(message: RespT) {
-                        loggingService.grpcInvoking(headers)
-                        super.onMessage(message)
+                val listener =
+                    object : ForwardingClientCallListener.SimpleForwardingClientCallListener<RespT>(responseListener) {
+                        override fun onMessage(message: RespT) {
+                            loggingService.grpcInvoking(headers)
+                            super.onMessage(message)
+                        }
                     }
-                }
                 super.start(listener, headers)
             }
         }

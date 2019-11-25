@@ -57,7 +57,7 @@ class MockTLSBluePrintProcessingServer : BluePrintProcessingServiceGrpc.BluePrin
             override fun onNext(executionServiceInput: ExecutionServiceInput) {
                 log.info(
                     "Received requestId(${executionServiceInput.commonHeader.requestId})  " +
-                            "subRequestId(${executionServiceInput.commonHeader.subRequestId})"
+                        "subRequestId(${executionServiceInput.commonHeader.subRequestId})"
                 )
                 responseObserver.onNext(buildResponse(executionServiceInput))
                 responseObserver.onCompleted()

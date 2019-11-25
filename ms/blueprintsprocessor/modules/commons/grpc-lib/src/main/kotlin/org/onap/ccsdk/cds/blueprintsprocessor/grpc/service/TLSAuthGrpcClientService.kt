@@ -18,7 +18,6 @@ package org.onap.ccsdk.cds.blueprintsprocessor.grpc.service
 
 import io.grpc.ManagedChannel
 import io.grpc.internal.DnsNameResolverProvider
-import io.grpc.internal.PickFirstLoadBalancerProvider
 import io.grpc.netty.GrpcSslContexts
 import io.grpc.netty.NettyChannelBuilder
 import io.netty.handler.ssl.SslContext
@@ -30,10 +29,14 @@ class TLSAuthGrpcClientService(private val tlsAuthGrpcClientProperties: TLSAuthG
     BluePrintGrpcClientService {
 
     override suspend fun channel(): ManagedChannel {
+
+        val target =
+            if (tlsAuthGrpcClientProperties.port == -1) tlsAuthGrpcClientProperties.host
+            else "${tlsAuthGrpcClientProperties.host}:${tlsAuthGrpcClientProperties.port}"
+
         return NettyChannelBuilder
-            .forAddress(tlsAuthGrpcClientProperties.host, tlsAuthGrpcClientProperties.port)
+            .forTarget(target)
             .nameResolverFactory(DnsNameResolverProvider())
-            .loadBalancerFactory(PickFirstLoadBalancerProvider())
             .intercept(GrpcClientLoggingInterceptor())
             .sslContext(sslContext())
             .build()
