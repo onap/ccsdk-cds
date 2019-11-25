@@ -31,7 +31,11 @@
     "ng-sidebar": "^9.1.1",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
-    "zone.js": "~0.9.1"
+    "zone.js": "~0.9.1",
+    "jquery": "^3.1.1",
+    "backbone": "^1.4.0",
+    "jointjs": "^3.0.4",
+    "lodash": "^3.10.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.803.9",
@@ -41,6 +45,10 @@
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
+    "@types/backbone": "^1.4.1",
+    "@types/jointjs": "^2.0.0",
+    "@types/jquery": "^3.3.31",
+    "@types/lodash": "^3.10.1",
     "codelyzer": "^5.0.0",
     "jasmine-core": "~3.4.0",
     "jasmine-marbles": "^0.6.0",
