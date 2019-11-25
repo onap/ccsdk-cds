@@ -72,7 +72,7 @@ class StreamingRemoteExecutionServiceTest {
             val streamingRemoteExecutionService = StreamingRemoteExecutionServiceImpl(bluePrintGrpcLibPropertyService)
 
             val spyStreamingRemoteExecutionService = spyk(streamingRemoteExecutionService)
-            /** To test with real server, uncomment below line */
+            /** To test with real server, comment below line */
             coEvery() { spyStreamingRemoteExecutionService.createGrpcChannel(any()) } returns channel
 
             /** Test Send and Receive non interactive transaction */

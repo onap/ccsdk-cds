@@ -18,7 +18,6 @@ package org.onap.ccsdk.cds.blueprintsprocessor.grpc.service
 
 import io.grpc.ManagedChannel
 import io.grpc.internal.DnsNameResolverProvider
-import io.grpc.internal.PickFirstLoadBalancerProvider
 import io.grpc.netty.NettyChannelBuilder
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.BasicAuthGrpcClientProperties
 
@@ -30,7 +29,6 @@ open class BasicAuthGrpcClientService(private val basicAuthGrpcClientProperties:
         val managedChannel = NettyChannelBuilder
                 .forAddress(basicAuthGrpcClientProperties.host, basicAuthGrpcClientProperties.port)
                 .nameResolverFactory(DnsNameResolverProvider())
-                .loadBalancerFactory(PickFirstLoadBalancerProvider())
                 // .intercept(BasicAuthClientInterceptor(basicAuthGrpcClientProperties)).usePlaintext()
                 .build()
         return managedChannel
