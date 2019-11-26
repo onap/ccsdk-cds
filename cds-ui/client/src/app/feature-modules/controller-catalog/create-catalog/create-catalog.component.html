@@ -23,26 +23,26 @@
   <mat-card-content>
 <form [formGroup]="CatalogFormData" (ngSubmit)="CreateCatalog()">
   <mat-form-field class="form-field">
-   <input matInput placeholder="Model Name" formControlName="Model_Name">
+   <input matInput placeholder="Model Name" formControlName="modelName">
  </mat-form-field>
  <mat-form-field class="form-field" >
-  <input matInput placeholder="User Id" formControlName="User_id">
+  <input matInput placeholder="User Id" formControlName="updatedBy">
 </mat-form-field>
  <mat-form-field class="form-field">
-   <input matInput placeholder="Tags" formControlName="_tags">
+   <input matInput placeholder="Tags" formControlName="tags">
  </mat-form-field>
  <mat-form-field class="form-field">
-   <mat-select matInput placeholder="Definition Type" formControlName="_type">
-     <mat-option [value]="item" *ngFor="let item of definitionType">{{item.definitionType}}</mat-option>
+   <mat-select matInput placeholder="Definition Type" formControlName="definitionType">
+     <mat-option [value]="item" *ngFor="let item of definitionType">{{item}}</mat-option>
    </mat-select>
  </mat-form-field>
  <mat-form-field class="form-field" >
-   <mat-select matInput placeholder="Derived From" formControlName="Derived_From">
-    <mat-option [value]="item" *ngFor="let item of derivedFrom">{{item.derivedFrom}}</mat-option>
+   <mat-select matInput placeholder="Derived From" formControlName="derivedFrom">
+    <mat-option [value]="item" *ngFor="let item of derivedFrom">{{item}}</mat-option>
    </mat-select>
  </mat-form-field>
  <mat-form-field class="form-field" >
-   <textarea matInput placeholder="Description" formControlName="_description"></textarea>
+   <textarea matInput placeholder="Description" formControlName="description"></textarea>
  </mat-form-field>
   <br>
   <div >

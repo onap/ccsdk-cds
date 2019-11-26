@@ -109,19 +109,20 @@ export class SearchCatalogComponent implements OnInit {
         if(result == undefined || result == null){
           console.log("dialogbox is closed");
         }else{
-          this.catalog.Model_Name=result['Model_Name'];
-          this.catalog.User_id=result['User_id'];
-          this.catalog._tags=result['_tags'];
-          this.catalog._type=result['_type'];
-          this.catalog.Derived_From=result['Derived_From'];
-          console.log(this.catalog);
-          this.catalogCreateService.saveCatalog(this.catalog)
-          .subscribe(response=>{
+        	this.catalog.modelName=result['modelName'];
+            this.catalog.derivedFrom=result['derivedFrom'];
+            this.catalog.definitionType=result['definitionType'];
+            this.catalog.definition=result['definition'];
+            this.catalog.tags=result['tags'];
+            this.catalog.updatedBy=result['updatedBy'];
+            console.log(this.catalog);
+            this.catalogCreateService.saveCatalog(this.catalog)
+            .subscribe(response=>{
               this.alertService.success("save success"+ response)
-          },
-          error=>{
-          this.alertService.error('Error saving resources');
-          })  
+            },
+	          error=>{
+	          this.alertService.error('Error saving resources');
+	          })  
         } 
       });
   }

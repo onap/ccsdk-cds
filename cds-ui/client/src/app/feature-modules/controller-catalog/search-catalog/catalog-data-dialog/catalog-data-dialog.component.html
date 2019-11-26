@@ -21,27 +21,30 @@
 <div>
   <h1 mat-dialog-title>Details</h1>
   <mat-dialog-content [formGroup]="CatalogFormData">
-  <mat-form-field class="form-field">
-   <input matInput placeholder="Model Name" formControlName="Model_Name">
-  </mat-form-field>
-  <mat-form-field class="form-field" >
-  	<input matInput placeholder="User Id" formControlName="User_id">
-  </mat-form-field>
-  <mat-form-field class="form-field">
-   <input matInput placeholder="Tags" formControlName="_tags">
-  </mat-form-field>
-  <mat-form-field class="form-field">
+   <mat-form-field class="form-field">
+    <input matInput placeholder="Model Name" formControlName="modelName">
+   </mat-form-field>
+   <mat-form-field class="form-field" >
+    <input matInput placeholder="User Id" formControlName="updatedBy">
+   </mat-form-field>
+   <mat-form-field class="form-field">
+    <input matInput placeholder="Tags" formControlName="tags">
+   </mat-form-field>
+   <mat-form-field class="form-field">
    <!-- <mat-select matInput placeholder="Definition Type" formControlName="_type">
      <mat-option [value]="item" *ngFor="let item of definitionType">{{item.definitionType}}</mat-option>
    </mat-select> -->
-   <input matInput placeholder="Definition Type" formControlName="_type">
-  </mat-form-field>
-  <mat-form-field class="form-field" >
+   <input matInput placeholder="Definition Type" formControlName="definitionType">
+   </mat-form-field>
+   <mat-form-field class="form-field" >
    <!-- <mat-select matInput placeholder="Derived From" formControlName="Derived_From">
     <mat-option [value]="item" *ngFor="let item of derivedFrom">{{item.derivedFrom}}</mat-option>
    </mat-select> -->
-   <input matInput placeholder="Derived From" formControlName="Derived_From">
-  </mat-form-field>
+    <input matInput placeholder="Derived From" formControlName="derivedFrom">
+   </mat-form-field>
+   <mat-form-field class="form-field" >
+    <textarea matInput placeholder="Definition" formControlName="definition"></textarea>
+   </mat-form-field>
   <br>
   </mat-dialog-content>
   <mat-dialog-actions *ngIf="!isDisabled">

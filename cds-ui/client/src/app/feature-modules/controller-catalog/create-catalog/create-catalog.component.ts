@@ -41,21 +41,21 @@ export class CreateCatalogComponent implements OnInit {
   @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
   options = new JsonEditorOptions();
   data:any;
-  derivedFrom: any[] = [{derivedFrom: 'tosca.nodes.Component'},{derivedFrom:'tosca.nodes.VNF'},{derivedFrom:'tosca.nodes.Artifact'},{derivedFrom:'tosca.nodes.ResourceSource'}, {derivedFrom:'tosca.nodes.Workflow'},{derivedFrom:'tosca.nodes.Root'}];
-  definitionType: any[] = [{definitionType: 'node_type'}];
+  derivedFrom: any[] = ['tosca.nodes.Component','tosca.nodes.VNF','tosca.nodes.Artifact','tosca.nodes.ResourceSource','tosca.nodes.Workflow','tosca.nodes.Root'];
+  definitionType: any[] = ['node_type'];
   ccState: Observable<ICatalogState>;
   catalog: ICatalog;
 
   constructor(private formBuilder: FormBuilder, private store: Store<IAppState>, private catalogCreateService: CreateCatalogService, private alertService: NotificationHandlerService) { 
     this.ccState = this.store.select('catalog');
     this.CatalogFormData = this.formBuilder.group({
-      Model_Name: ['', Validators.required],
-      User_id: ['', Validators.required],
-      _tags: ['', Validators.required],
-      _type: ['', Validators.required],
-      Derived_From: ['', Validators.required],
-      _description : ['', Validators.required]
-    });   
+        modelName: ['', Validators.required],
+        updatedBy: ['', Validators.required],
+        tags: ['', Validators.required],
+        definitionType: ['', Validators.required],
+        derivedFrom: ['', Validators.required],
+        description : ['', Validators.required]
+      });    
   }
   ngOnInit() {
     this.options.mode = 'text';
@@ -90,8 +90,14 @@ export class CreateCatalogComponent implements OnInit {
 //    })
   }
   CreateCatalog(){
-    this.catalog = Object.assign({}, this.CatalogFormData.value);
-    this.catalog.definition=this.data;
+	  this.catalog.modelName=this.CatalogFormData.controls['modelName'].value;
+	    this.catalog.updatedBy=this.CatalogFormData.controls['updatedBy'].value
+	    this.catalog.tags=this.CatalogFormData.controls['tags'].value
+	    this.catalog.definitionType=this.CatalogFormData.controls['definitionType'].value
+	    this.catalog.derivedFrom=this.CatalogFormData.controls['derivedFrom'].value
+	    this.catalog.description=this.CatalogFormData.controls['description'].value
+	    this.catalog.definition=this.data;
+	    console.log(this.catalog);
     let catalogState = {
       catalog: this.catalog
     }

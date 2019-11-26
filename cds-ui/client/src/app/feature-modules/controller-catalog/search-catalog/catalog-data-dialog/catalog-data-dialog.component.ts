@@ -62,12 +62,13 @@ export class CatalogDataDialogComponent implements OnInit{
 
     this.ccState = this.store.select('catalog');
     this.CatalogFormData = this.formBuilder.group({
-      Model_Name: [{value:this.property[0], disabled: this.isDisabled}, Validators.required],
-      User_id: [{value:this.property[8], disabled: this.isDisabled}, Validators.required],
-      _tags: [{value:this.property[6], disabled: this.isDisabled}, Validators.required],
-      _type: [{value:this.property[2], disabled: this.isDisabled}, Validators.required],
-      Derived_From: [{value:this.property[1], disabled: this.isDisabled}, Validators.required],
-    });   
+        modelName: [{value:this.property[0], disabled: this.isDisabled}, Validators.required],
+        derivedFrom: [{value:this.property[1], disabled: this.isDisabled}, Validators.required],
+        definitionType: [{value:this.property[2], disabled: this.isDisabled}, Validators.required],
+        definition: [{value:JSON.stringify(this.property[3]), disabled: this.isDisabled}, Validators.required],
+        tags: [{value:this.property[6], disabled: this.isDisabled}, Validators.required],
+        updatedBy: [{value:this.property[8], disabled: this.isDisabled}, Validators.required],    
+      });  
   }
   
   ngOnInit(){
