@@ -21,11 +21,10 @@ export default {
             "getAllblueprints": []
 
         }
-    },
-    {
+    }, {
         "template": {
             "method": "GET",
-            "url": processorApiConfig.http.url + "/blueprint-model/search/{tags}",
+            "url": processorApiConfig.http.url + "/blueprint-model/{id}",
             "headers": {
                 "accepts": "application/json",
                 "content-type": "application/json",
@@ -34,41 +33,58 @@ export default {
             "responsePath": "$.*"
         },
         "functions": {
-            "getByTags": ["tags"]
+            "getOneBluePrint": ["id"]
 
         }
     },
-    {
-        "template": {
-            "method": "GET",
-            "url": processorApiConfig.http.url + "/blueprint-model/meta-data/{keyword}",
-            "headers": {
-                "accepts": "application/json",
-                "content-type": "application/json",
-                "authorization": processorApiConfig.http.authToken
-            },
-            "responsePath": "$.*"
-        },
-        "functions": {
-            "getBlueprintsByKeyword": ["keyword"]
 
-        }
-    },
-    {
-        "template": {
-            "method": "GET",
-            "url": processorApiConfig.http.url + "/blueprint-model/paged?limit={limit}&offset={offset}&sort={sort}",
-            "headers": {
-                "accepts": "application/json",
-                "content-type": "application/json",
-                "authorization": processorApiConfig.http.authToken
+        {
+            "template": {
+                "method": "GET",
+                "url": processorApiConfig.http.url + "/blueprint-model/search/{tags}",
+                "headers": {
+                    "accepts": "application/json",
+                    "content-type": "application/json",
+                    "authorization": processorApiConfig.http.authToken
+                },
+                "responsePath": "$.*"
             },
-            "responsePath": "$",
+            "functions": {
+                "getByTags": ["tags"]
+
+            }
         },
-        "functions": {
-            "getPagedBueprints": ["limit","offset", "sort"],
-        }
-    },
+        {
+            "template": {
+                "method": "GET",
+                "url": processorApiConfig.http.url + "/blueprint-model/meta-data/{keyword}",
+                "headers": {
+                    "accepts": "application/json",
+                    "content-type": "application/json",
+                    "authorization": processorApiConfig.http.authToken
+                },
+                "responsePath": "$.*"
+            },
+            "functions": {
+                "getBlueprintsByKeyword": ["keyword"]
+
+            }
+        },
+        {
+            "template": {
+                "method": "GET",
+                "url": processorApiConfig.http.url + "/blueprint-model/paged?limit={limit}&offset={offset}&sort={sort}",
+                "headers": {
+                    "accepts": "application/json",
+                    "content-type": "application/json",
+                    "authorization": processorApiConfig.http.authToken
+                },
+                "responsePath": "$",
+            },
+            "functions": {
+                "getPagedBueprints": ["limit", "offset", "sort"],
+            }
+        },
         {
             "template": {
                 "method": "GET",
@@ -81,8 +97,9 @@ export default {
                 "responsePath": "$",
             },
             "functions": {
-                "getMetaDataPagedBlueprints": ["limit","offset", "sort","keyword"],
+                "getMetaDataPagedBlueprints": ["limit", "offset", "sort", "keyword"],
             }
         },
-]
+    ]
+
 };

@@ -3,6 +3,7 @@ import {inject, Provider} from '@loopback/core';
 import {BlueprintDataSource} from '../datasources';
 
 export interface BlueprintService {
+    getOneBluePrint(id: string): any;
    getAllblueprints(): Promise<any>;
    getBlueprintsByKeyword(keyword: string): Promise<any>;
    getByTags(tags: string): Promise<JSON>;
