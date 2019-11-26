@@ -50,6 +50,7 @@ import * as multiparty from 'multiparty';
 import * as request_lib from 'request';
 import { processorApiConfig, appConfig } from '../config/app-config';
 import { bluePrintManagementServiceGrpcClient } from '../clients/blueprint-management-service-grpc-client';
+import {BlueprintDetail} from '../models/blueprint.detail.model';
 
 export class BlueprintRestController {
   constructor(
@@ -68,6 +69,18 @@ export class BlueprintRestController {
   async getall() {
     return await this.bpservice.getAllblueprints();
   }
+    @get('/controllerblueprint/{id}', {
+        responses: {
+            '200': {
+                description: 'Blueprint model instance',
+                content: { 'application/json': { schema: { 'x-ts-type': BlueprintDetail } } },
+            },
+        },
+    })
+    async getOneBluePrint(@param.path.string('id') id: string) {
+        return await this.bpservice.getOneBluePrint(id);
+    }
+
 
   @get('/controllerblueprint/paged', {
     responses: {

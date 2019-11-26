@@ -17,6 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.annotations.ApiModelProperty
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
@@ -49,6 +50,7 @@ class BlueprintModelContent : Serializable {
 
     @OneToOne
     @JoinColumn(name = "blueprint_model_id")
+    @JsonIgnore
     var blueprintModel: BlueprintModel? = null
 
     @Lob

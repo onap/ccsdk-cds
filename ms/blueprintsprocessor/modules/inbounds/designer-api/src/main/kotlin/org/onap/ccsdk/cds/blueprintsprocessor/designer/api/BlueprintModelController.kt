@@ -21,6 +21,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import org.jetbrains.annotations.NotNull
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModel
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelSearch
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.BluePrintModelHandler
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.utils.BlueprintSortByOption
@@ -36,6 +37,7 @@ import org.springframework.http.codec.multipart.FilePart
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Mono
+import java.util.*
 
 /**
  * BlueprintModelController Purpose: Handle controllerBlueprint API request
@@ -133,8 +135,8 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @ResponseBody
     @Throws(BluePrintException::class)
     @PreAuthorize("hasRole('USER')")
-    fun getBlueprintModel(@PathVariable(value = "id") id: String): BlueprintModelSearch {
-        return this.bluePrintModelHandler.getBlueprintModelSearch(id)
+    fun getBlueprintModel(@PathVariable(value = "id") id: String): List<BlueprintModel> {
+        return Arrays.asList(this.bluePrintModelHandler.getBlueprintModel(id))
     }
 
     @GetMapping("/download/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
