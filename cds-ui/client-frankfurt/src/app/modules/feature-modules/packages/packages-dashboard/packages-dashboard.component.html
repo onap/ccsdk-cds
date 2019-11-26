@@ -1,0 +1,67 @@
+<app-header>
+</app-header>
+<div class="new-wrapper">
+    <div class="container-fluid main-container">
+        <!-- <router-outlet></router-outlet> -->
+        <!--Page Title-->
+        <header class="page-title">
+            <div class="row">
+                <h2 class="col m-0">CBA Packages
+                    <span>(20 packages)</span>
+                </h2>
+                <div class="col">
+                </div>
+            </div>
+        </header>
+
+        <div class="container-fluid body-container">
+            <nav class="row">
+                <!--Nav Tabs-->
+                <div class="col pr-0">
+                    <div class="nav nav-tabs " id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home"
+                            aria-selected="true">All</a>
+                        <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile"
+                            aria-selected="false">Deployed</a>
+                        <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact"
+                            aria-selected="false">Under Construction</a>
+                        <a class="nav-item nav-link" id="nav-contact1-tab" data-toggle="tab" href="#nav-contact1" role="tab" aria-controls="nav-contact1"
+                            aria-selected="false">Archived</a>
+                    </div>
+                </div>
+                <app-search-by-tags class="w-50"></app-search-by-tags>
+            </nav>
+            <div class="row mt-4">
+                <div class="col">
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <div class="row">
+                                <!--Package Sort-->
+                                <div class="col sort-packages">
+                                    Sort by:
+                                    <div class="dropdown">
+                                        <input class="dropdown-toggle" type="text">
+                                        <div class="dropdown-text">Recent</div>
+                                        <ul class="dropdown-content">
+                                            <li>
+                                                <a href="#">Name</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Recent</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!--Package Paginator-->
+                                <app-package-pagination></app-package-pagination>
+                            </div>
+                            <app-packages-list></app-packages-list>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>

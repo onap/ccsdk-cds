@@ -24,6 +24,7 @@ import {Routes, RouterModule} from '@angular/router';
 
 const routes: Routes = [
     {path: 'packages', loadChildren: './modules/feature-modules/packages/packages.module#PackagesModule'},
+    // { path: '', component: MainAppComponent },
     {
         path: '',
         redirectTo: 'packages',

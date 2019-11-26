@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="4px" height="11px" viewBox="0 0 4 11" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 60 (88103) - https://sketch.com -->
+    <title>drag menu</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="3.1.1-Designer" transform="translate(-40.000000, -687.000000)" fill="#C3CDDB" fill-rule="nonzero">
+            <g id="controller" transform="translate(0.000000, 60.000000)">
+                <g id="functions" transform="translate(0.000000, 479.000000)">
+                    <g id="list" transform="translate(8.000000, 51.000000)">
+                        <g id="2" transform="translate(12.000000, 82.000000)">
+                            <g id="drag-menu" transform="translate(20.000000, 15.000000)">
+                                <g id="left">
+                                    <circle id="1" cx="0.8" cy="0.8" r="1"></circle>
+                                    <circle id="2" cx="0.8" cy="3.8" r="1"></circle>
+                                    <circle id="3" cx="0.8" cy="6.8" r="1"></circle>
+                                    <circle id="4" cx="0.8" cy="9.8" r="1"></circle>
+                                </g>
+                                <g id="right" transform="translate(2.400000, 0.000000)">
+                                    <circle id="1" cx="0.8" cy="0.8" r="1"></circle>
+                                    <circle id="2" cx="0.8" cy="3.8" r="1"></circle>
+                                    <circle id="3" cx="0.8" cy="6.8" r="1"></circle>
+                                    <circle id="4" cx="0.8" cy="9.8" r="1"></circle>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
