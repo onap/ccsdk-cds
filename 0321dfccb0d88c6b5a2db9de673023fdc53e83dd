@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c8d3ef7_f13735ef",
+        "filename": "ms/blueprintsprocessor/application/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/actuator/indicator/BluePrintCustomIndicator.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-11-26T15:30:42Z",
+      "side": 1,
+      "message": "Shall we define this fun as suspend fun ?, So that we can better performance, back pressure  and non blocking capabilities.",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 18
+      },
+      "revId": "0321dfccb0d88c6b5a2db9de673023fdc53e83dd",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
