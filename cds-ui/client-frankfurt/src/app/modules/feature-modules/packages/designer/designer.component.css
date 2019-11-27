@@ -184,7 +184,7 @@ button.rotate{
 .input-search-controller{
   height: 50px;
   padding-left: 30px;
-  background: url(/assets/img/icon-search-light.svg) #fff 10px center no-repeat;
+  background: url(src/assets/img/icon-search-light.svg) #fff 10px center no-repeat;
   border-radius: 0;
   border: 0;
   border-bottom: solid 1px #D7E7F9;
@@ -333,7 +333,7 @@ p.compType-4{
   padding-left: 36px;
   border: 0;
   font-size: 14px;
-  background: url(/assets/img/icon-drag.svg) #fff 20px center no-repeat;
+  background: url(src/assets/img/icon-drag.svg) #fff 20px center no-repeat;
 }
  
 /*CANVAS*/
@@ -365,10 +365,10 @@ p.compType-4{
   padding-left: 30px;
 }
 .viewBtns .topologySource{
-  background-image: url(/assets/img/icon-topologyView-active.svg);
+  background-image: url(src/assets/img/icon-topologyView-active.svg);
 }
 .viewBtns .topologyView{
-  background-image: url(/assets/img/icon-topologySource.svg);
+  background-image: url(src/assets/img/icon-topologySource.svg);
 }
 .card.actionContainer{
   margin: 20px 20px 40px 60px;
@@ -391,6 +391,7 @@ p.compType-4{
   background: #C3CDDB;
 }
 .actionContainer .card-body{
+  min-height: 170px;
   padding: 15px 20px !important;
   border: solid 1px #C3CDDB;
   background: #fff;

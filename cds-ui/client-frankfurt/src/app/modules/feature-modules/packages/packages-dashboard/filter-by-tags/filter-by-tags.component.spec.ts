@@ -18,20 +18,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
 */
-import {Component, OnInit} from '@angular/core';
-import {PackagesStore} from '../packages.store';
 
-@Component({
-    selector: 'app-packages-dashboard',
-    templateUrl: './packages-dashboard.component.html',
-    styleUrls: ['./packages-dashboard.component.css']
-})
-export class PackagesDashboardComponent implements OnInit {
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { TagsFilteringComponent } from './filter-by-tags.component';
 
-    constructor() { }
+describe('SearchByTagsComponent', () => {
+  let component: TagsFilteringComponent;
+  let fixture: ComponentFixture<TagsFilteringComponent>;
 
-    ngOnInit() {
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [ TagsFilteringComponent ]
+    })
+    .compileComponents();
+  }));
 
-        console.log('PackagesDashboardComponent');
-    }
-}
+  beforeEach(() => {
+    fixture = TestBed.createComponent(TagsFilteringComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

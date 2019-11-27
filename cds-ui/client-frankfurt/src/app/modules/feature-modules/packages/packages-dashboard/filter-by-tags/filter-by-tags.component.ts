@@ -24,12 +24,12 @@ import {PackagesStore} from '../../packages.store';
 import {BlueprintModel, BluePrintPage} from '../../model/BluePrint.model';
 
 @Component({
-    selector: 'app-search-by-tags',
-    templateUrl: './search-by-tags.component.html',
-    styleUrls: ['./search-by-tags.component.css']
+    selector: 'app-filter-by-tags',
+    templateUrl: './filter-by-tags.component.html',
+    styleUrls: ['./filter-by-tags.component.css']
 })
 
-export class SearchByTagsComponent implements OnInit {
+export class TagsFilteringComponent implements OnInit {
 
     page: BluePrintPage;
     tags: string[] = [];
@@ -37,10 +37,24 @@ export class SearchByTagsComponent implements OnInit {
     searchTag = '';
     viewedPackages: BlueprintModel[] = [];
     private checkBoxTages = '';
-    private searchPackage = '';
+
 
     constructor(private packagesStore: PackagesStore,
     ) {
+        this.packagesStore.state$.subscribe(state => {
+            console.log(state);
+            if (state.page) {
+                this.viewedPackages = state.page.content;
+                this.viewedPackages.forEach(element => {
+                    element.tags.split(',').forEach(tag => {
+                        this.tags.push(tag.trim());
+                    });
+                    this.tags = this.tags.filter((value, index, self) => self.indexOf(value) === index);
+                    this.assignTags();
+
+                });
+            }
+        });
     }
 
     ngOnInit() {
@@ -78,17 +92,9 @@ export class SearchByTagsComponent implements OnInit {
             return;
         }
         this.viewedPackages = [];
-        this.viewedPackages = this.viewedPackages.filter((value, index, self) => self.indexOf(value) === index);
+        // this.packagesStore.getPagesFilterByTags(this.checkBoxTages);
+        //   this.viewedPackages = this.viewedPackages.filter((value, index, self) => self.indexOf(value) === index);
     }
 
-    searchPackages(event: any) {
-        this.searchPackage = event.target.value;
-        this.searchPackage = this.searchPackage.trim();
-        if (this.searchPackage) {
-            this.packagesStore.getPagedPackagesByKeyWord(this.searchPackage, 0, 2);
 
-        } else {
-            this.packagesStore.getPagedPackages(0, 2);
-        }
-    }
 }
