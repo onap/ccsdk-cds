@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "257bbc45_01d2445a",
+        "filename": "ms/command-executor/src/main/python/command_executor_handler.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 5732
+      },
+      "writtenOn": "2019-11-27T14:53:53Z",
+      "side": 1,
+      "message": "Why not name it CDS_CORRELATION_ID since this is the name of the variable in the request payload? Correlation Id should be used to group multiple requests together, calling it subrequest makes it confusing compared to it\u0027s intended behaviour.",
+      "range": {
+        "startLine": 89,
+        "startChar": 56,
+        "endLine": 89,
+        "endChar": 73
+      },
+      "revId": "c290f3b306449e6fc33e994f30058aabb7406e0b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
