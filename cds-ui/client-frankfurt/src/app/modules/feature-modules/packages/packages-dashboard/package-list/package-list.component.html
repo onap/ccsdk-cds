@@ -1,92 +1,104 @@
-<div class="row packages-card"><div class="col-lg-3 col-md-6 p-0">
-    <!--Add Package Card-->
-    <div class="card addPaackage-card">
-        <div class="card-body text-center">
-            <img src="/assets/img/icon-addPackage.svg">
-        </div>
-        <div class="card-footer row">
-            <div class="col text-right pr-0">
-                <a href="#" role="button" aria-pressed="true" class="btn-create-package float">Create Package
-                </a>
+<div class="row packages-card">
+    <div class="col-lg-3 col-md-6">
+        <!--Add Package Card-->
+        <div class="card addPaackage-card">
+            <div class="card-body text-center">
+                <img src="/assets/img/icon-addPackage.svg">
             </div>
-            <div class="col pr-0">
-                <a href="#" role="button" aria-pressed="true" class="btn-import-package float">Import Package
-                </a>
+            <div class="card-footer row">
+                <div class="col">
+                    <a href="#" role="button" aria-pressed="true" class="btn-create-package float">Create Package
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="#" role="button" aria-pressed="true" class="btn-import-package float">Import Package
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="col-lg-3 col-md-6 p-0" *ngFor="let bluePrint of viewedPackages">
+    <div class="col-lg-3 col-md-6" *ngFor="let bluePrint of viewedPackages">
 
-    <!--Card 1-->
-    <div>
-        <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-9 pr-0">
-                        <h5 class="card-title">{{bluePrint.artifactName}}</h5>
-                        <p>Last modified {{bluePrint.createdDate}} by {{bluePrint.updatedBy}}</p>
-                        <ul class="package-contributers">
-                            <li>
-                                <button type="button" class="border-fade" data-toggle="tooltip" data-placement="bottom"
-                                    title="User name">
-                                    <img src="/assets/img/img-user1.jpeg">
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" data-toggle="tooltip" data-placement="bottom" title="User name">
-                                    <img src="/assets/img/img-user2.jpg">
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" data-toggle="tooltip" data-placement="bottom" title="User name">
-                                    <img src="/assets/img/img-user3.jpg">
-                                </button>
-                            </li>
-                            <li>
-                                <a href="">5 contributors</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-3">
-                        <img class="icon-deployed" src="/assets/img/icon-deploy.svg">
-                        <div class="dropdown">
-                            <input class="dropdown-toggle" type="text">
-                            <div class="dropdown-text">
-                                <img src="/assets/img/icon-menuDots.svg" title="Actions">
+        <!--Card 1-->
+        <div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-9 pr-0">
+                            <h5 class="card-title" [routerLink]="['/packages/package', bluePrint.id]" (click)="testDispatch(bluePrint)">
+                                <img class="icon-deployed" src="/assets/img/icon-deploy.svg">
+                                {{bluePrint.artifactName}}
+                            </h5>
+
+                        </div>
+                        <div class="col-3">
+
+                            <div class="dropdown">
+                                <input class="dropdown-toggle" type="text">
+                                <div class="dropdown-text">
+                                    <img src="/assets/img/icon-menuDots.svg" title="Actions">
+                                </div>
+                                <ul class="dropdown-content">
+                                    <li class="action-clone">
+                                        <a href="#">Clone</a>
+                                    </li>
+                                    <li class="action-archive">
+                                        <a href="#">Archive</a>
+                                    </li>
+                                    <li class="action-delete">
+                                        <a href="#">Delete</a>
+                                    </li>
+                                </ul>
                             </div>
-                            <ul class="dropdown-content">
-                                <li class="action-clone">
-                                    <a href="#">Clone</a>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p class="mb-0">Last modified {{ bluePrint.createdDate | date:'short' }}
+                         </p>
+                         <p>By {{bluePrint.updatedBy}}</p>
+                            <ul class="package-contributers">
+                                <li>
+                                    <button type="button" class="border-fade" data-toggle="tooltip"
+                                            data-placement="bottom"
+                                            title="User name">
+                                        <img src="/assets/img/img-user1.jpeg">
+                                    </button>
                                 </li>
-                                <li class="action-archive">
-                                    <a href="#">Archive</a>
+                                <li>
+                                    <button type="button" data-toggle="tooltip" data-placement="bottom"
+                                            title="User name">
+                                        <img src="/assets/img/img-user2.jpg">
+                                    </button>
                                 </li>
-                                <li class="action-delete">
-                                    <a href="#">Delete</a>
+                                <li>
+                                    <button type="button" data-toggle="tooltip" data-placement="bottom"
+                                            title="User name">
+                                        <img src="/assets/img/img-user3.jpg">
+                                    </button>
+                                </li>
+                                <li>
+                                    <a href="">5 contributors</a>
                                 </li>
                             </ul>
                         </div>
                     </div>
-                </div>
-                <div class="card-footer">
-                    <div class="row">
-                        <div class="col">
-                            <button type="button" class="btn btn-card-topology">Topology View
-                            </button>
-                        </div>
-                        <div class="col">
-                            <button type="button" class="btn btn-card-config">Configuration</button>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col">
+                                <button type="button" class="btn btn-card-topology">Topology View
+                                </button>
+                            </div>
+                            <div class="col">
+                                <button type="button" class="btn btn-card-config">Configuration</button>
+                            </div>
                         </div>
                     </div>
                 </div>
+
             </div>
 
         </div>
-        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
-        <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
-        <div class="tab-pane fade" id="nav-contact1" role="tabpanel" aria-labelledby="nav-contact1-tab">...
-        </div>
     </div>
-</div>
 </div>

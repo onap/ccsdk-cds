@@ -31,31 +31,22 @@ import {BlueprintModel, BluePrintPage} from './model/BluePrint.model';
 })
 export class PackagesListService {
     packages: BlueprintModel[] = [];
-    originalPackage: BlueprintModel[] = [];
-    private bluePrintModel: BlueprintModel;
     private numberOfPackages: number;
 
     constructor(private api: ApiService<BluePrintPage>) {
     }
 
-    getPagedPackages(pageNumber: number, pageSize: number): Observable<BluePrintPage[]> {
+    getPagedPackages(pageNumber: number, pageSize: number, sortBy: string): Observable<BluePrintPage[]> {
         return this.api.get(BlueprintURLs.getPagedBlueprints, {
             offset: pageNumber,
             limit: pageSize,
-            sort: 'DATE'
+            sort: sortBy
         });
     }
 
     searchByTags(keyword: string): Observable<any> {
         return this.api.get(BlueprintURLs.getMetaDate + '/' + keyword);
     }
-
-
-    // getPackageNumber(): number {
-    //     this.getCountOfAllPackages(this.api.get(BlueprintURLs.countOfAllBluePrints));
-    //     return this.numberOfPackages;
-
-    // }
 
     getCountOfAllPackages(observable: Observable<number>) {
         observable.subscribe(data => {
@@ -64,11 +55,12 @@ export class PackagesListService {
         });
     }
 
-    getPagedPackagesByKeyWord(keyWord: string, pageNumber: number, pageSize: number) {
+    getPagedPackagesByKeyWord(keyWord: string, pageNumber: number, pageSize: number, sortBy: string) {
+
         return this.api.get(BlueprintURLs.getMetaDatePageable + '/' + keyWord, {
             offset: pageNumber,
             limit: pageSize,
-            sort: 'DATE'
+            sort: sortBy
         });
     }
 }

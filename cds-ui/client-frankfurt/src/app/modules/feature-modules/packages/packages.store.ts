@@ -23,35 +23,82 @@ import {Injectable} from '@angular/core';
 import {BluePrintPage} from './model/BluePrint.model';
 import {Store} from '../../../common/core/stores/Store';
 import {PackagesListService} from './packages-list.service';
+import {PackagesDashboardState} from './model/packages-dashboard.state';
 
 
 @Injectable({
     providedIn: 'root'
 })
-export class PackagesStore extends Store<BluePrintPage> {
-    private bluePrintModels: BluePrintPage;
-
+export class PackagesStore extends Store<PackagesDashboardState> {
     // TDOD fixed for now as there is no requirement to change it from UI
-    public pageSize = 2;
+    public pageSize = 5;
 
     constructor(private packagesServiceList: PackagesListService) {
-        super(new BluePrintPage());
+        super(new PackagesDashboardState());
     }
 
-    getPagedPackages(pageNumber: number, pageSize: number) {
-        this.packagesServiceList.getPagedPackages(pageNumber, pageSize)
+    public getAll() {
+        console.log('getting all packages...');
+        this.getPagedPackages(0, this.pageSize);
+    }
+
+    public search(command: string) {
+        if (command) {
+            this.searchPagedPackages(command, 0, this.pageSize);
+        } else {
+            this.getPagedPackages(0, this.pageSize);
+        }
+    }
+
+    public getPage(pageNumber: number, pageSize: number) {
+        if (this.isCommandExist()) {
+            this.searchPagedPackages(this.state.command, pageNumber, pageSize);
+        } else {
+            this.getPagedPackages(pageNumber, pageSize);
+        }
+    }
+
+    public sortPagedPackages(sortBy: string) {
+        if (this.isCommandExist()) {
+            this.searchPagedPackages(this.state.command, this.state.currentPage, this.pageSize, sortBy);
+        } else {
+            this.getPagedPackages(this.state.currentPage, this.pageSize, sortBy);
+        }
+
+    }
+
+    private getPagedPackages(pageNumber: number, pageSize: number, sortBy: string = this.state.sortBy) {
+
+        this.packagesServiceList.getPagedPackages(pageNumber, pageSize, sortBy)
             .subscribe((pages: BluePrintPage[]) => {
-                this.setState(pages[0]);
+                this.setState({
+                    ...this.state,
+                    page: pages[0],
+                    command: '',
+                    totalPackages: pages[0].totalElements,
+                    currentPage: pageNumber,
+                    // this param is set only in get all as it represents the total number of pacakges in the server
+                    totalPackagesWithoutSearchorFilters: pages[0].totalElements,
+                    sortBy
+                });
             });
     }
 
-    getPagedPackagesByKeyWord(keyWord: string, pageNumber: number, pageSize: number) {
-        this.packagesServiceList.getPagedPackagesByKeyWord(keyWord, pageNumber, pageSize)
+    private searchPagedPackages(keyWord: string, pageNumber: number, pageSize: number, sortBy: string = this.state.sortBy) {
+        this.packagesServiceList.getPagedPackagesByKeyWord(keyWord, pageNumber, pageSize, sortBy)
             .subscribe((pages: BluePrintPage[]) => {
-                this.setState(pages[0]);
+                this.setState({
+                    ...this.state,
+                    page: pages[0],
+                    command: keyWord,
+                    totalPackages: pages[0].totalElements,
+                    currentPage: pageNumber,
+                    sortBy
+                });
             });
-
     }
 
-
+    private isCommandExist() {
+        return this.state.command;
+    }
 }
