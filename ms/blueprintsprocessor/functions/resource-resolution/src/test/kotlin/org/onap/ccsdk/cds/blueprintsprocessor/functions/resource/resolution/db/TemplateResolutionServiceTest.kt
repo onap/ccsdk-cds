@@ -139,7 +139,12 @@ class TemplateResolutionServiceTest {
             val res = templateResolutionService.write(props, result, bluePrintRuntimeService, artifactPrefix)
             verify {
                 templateResolutionRepository.deleteByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
-                    eq(resourceId), eq(resourceType), eq(blueprintName), eq(blueprintVersion), eq(artifactPrefix), eq(occurrence)
+                    eq(resourceId),
+                    eq(resourceType),
+                    eq(blueprintName),
+                    eq(blueprintVersion),
+                    eq(artifactPrefix),
+                    eq(occurrence)
                 )
             }
             assertEquals(tr, res)

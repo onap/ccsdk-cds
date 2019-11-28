@@ -25,6 +25,8 @@ import javax.sql.DataSource
 
 class MariaDatabaseConfiguration(private val mariaDataSourceProperties: MariaDataSourceProperties) : BluePrintDBLibGenericService {
 
+    val log = LoggerFactory.getLogger(MariaDatabaseConfiguration::class.java)!!
+
     override fun namedParameterJdbcTemplate(): NamedParameterJdbcTemplate {
         return mariaNamedParameterJdbcTemplate(mariaDataSource())
     }
@@ -36,8 +38,6 @@ class MariaDatabaseConfiguration(private val mariaDataSourceProperties: MariaDat
     override fun update(sql: String, params: Map<String, Any>): Int {
         return mariaNamedParameterJdbcTemplate(mariaDataSource()).update(sql, params)
     }
-
-    val log = LoggerFactory.getLogger(PrimaryDatabaseConfiguration::class.java)!!
 
     fun mariaDataSource(): DataSource {
         val dataSource = DriverManagerDataSource()

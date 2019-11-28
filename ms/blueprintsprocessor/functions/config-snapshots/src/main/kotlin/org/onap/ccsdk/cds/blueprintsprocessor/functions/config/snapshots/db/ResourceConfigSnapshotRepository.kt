@@ -16,6 +16,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db
 
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
 import javax.transaction.Transactional
 
 /**
@@ -24,6 +25,7 @@ import javax.transaction.Transactional
  * @author Serge Simard
  * @version 1.0
  */
+@Repository
 interface ResourceConfigSnapshotRepository : JpaRepository<ResourceConfigSnapshot, String> {
 
     fun findByResourceIdAndResourceTypeAndStatus(

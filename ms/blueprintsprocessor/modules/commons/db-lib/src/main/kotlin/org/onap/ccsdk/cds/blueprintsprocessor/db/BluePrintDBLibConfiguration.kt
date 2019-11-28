@@ -16,15 +16,24 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.db
 
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.BluePrintDBLibPropertyService
-import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.PrimaryDBLibGenericService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Import
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
+import javax.sql.DataSource
 
 @Configuration
+@Import(
+    BluePrintPropertyConfiguration::class,
+    BluePrintPropertiesService::class,
+    BluePrintCoreConfiguration::class
+)
 @EnableConfigurationProperties
 open class BluePrintDBLibConfiguration(private var bluePrintPropertiesService: BluePrintPropertiesService) {
 
@@ -34,6 +43,11 @@ open class BluePrintDBLibConfiguration(private var bluePrintPropertiesService: B
             DBLibConstants.PREFIX_DB,
             PrimaryDataSourceProperties::class.java
         )
+    }
+
+    @Bean("primaryNamedParameterJdbcTemplate")
+    open fun primaryNamedParameterJdbcTemplate(primaryDataSource: DataSource): NamedParameterJdbcTemplate {
+        return NamedParameterJdbcTemplate(primaryDataSource)
     }
 }
 

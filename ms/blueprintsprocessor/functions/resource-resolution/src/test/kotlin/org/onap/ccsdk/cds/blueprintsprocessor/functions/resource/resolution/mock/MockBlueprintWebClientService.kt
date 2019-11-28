@@ -27,7 +27,8 @@ import org.springframework.http.MediaType
 import java.nio.charset.Charset
 import java.util.Base64
 
-class MockBlueprintWebClientService(private var restClientProperties: RestClientProperties) : BlueprintWebClientService {
+class MockBlueprintWebClientService(private var restClientProperties: RestClientProperties) :
+    BlueprintWebClientService {
     private var mockServer: ClientAndServer
     private var port: String = if (restClientProperties.url.split(":")[2].isEmpty()) "8080"
     else restClientProperties.url.split(":")[2]
@@ -41,7 +42,7 @@ class MockBlueprintWebClientService(private var restClientProperties: RestClient
         setRequest("GET", "/aai/v14/network/generic-vnfs/generic-vnf/123456")
         setRequest(
             "GET", "/config/GENERIC-RESOURCE-API:services/service/10/service-data/vnfs/vnf/123456/" +
-                    "vnf-data/vnf-topology/vnf-parameters-data/param/vnf_name"
+                "vnf-data/vnf-topology/vnf-parameters-data/param/vnf_name"
         )
         setRequestWithPayload(
             "PUT", "/query",
@@ -66,7 +67,11 @@ class MockBlueprintWebClientService(private var restClientProperties: RestClient
         mockServer.close()
     }
 
-    override fun exchangeResource(method: String, path: String, payload: String): BlueprintWebClientService.WebClientResponse<String> {
+    override fun exchangeResource(
+        method: String,
+        path: String,
+        payload: String
+    ): BlueprintWebClientService.WebClientResponse<String> {
         val header = arrayOf(BasicHeader(HttpHeaders.AUTHORIZATION, headers[HttpHeaders.AUTHORIZATION]))
         return when (method) {
             "POST" -> {

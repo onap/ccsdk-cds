@@ -16,7 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization
 
-import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.PrimaryDBLibGenericService
+import org.onap.ccsdk.cds.blueprintsprocessor.db.PrimaryDBLibGenericService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.MessagePrioritization
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.topology.MessageAggregateProcessor
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.topology.MessageOutputProcessor
@@ -36,7 +36,9 @@ open class TestDatabaseConfiguration {
 
     @Bean("primaryDBLibGenericService")
     open fun primaryDBLibGenericService(dataSource: DataSource): PrimaryDBLibGenericService {
-        return PrimaryDBLibGenericService(NamedParameterJdbcTemplate(dataSource))
+        return PrimaryDBLibGenericService(
+            NamedParameterJdbcTemplate(dataSource)
+        )
     }
 }
 

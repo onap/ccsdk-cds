@@ -81,7 +81,7 @@ class MockRestResourceResolutionProcessor(
 
                 logger.info(
                     "MockRestResource ($dSource) dictionary information: " +
-                            "URL:($urlPath), input-key-mapping:($inputKeyMapping), output-key-mapping:(${sourceProperties.outputKeyMapping})"
+                        "URL:($urlPath), input-key-mapping:($inputKeyMapping), output-key-mapping:(${sourceProperties.outputKeyMapping})"
                 )
 
                 // Get the Rest Client Service
@@ -102,7 +102,10 @@ class MockRestResourceResolutionProcessor(
             }
         } catch (e: Exception) {
             ResourceAssignmentUtils.setFailedResourceDataValue(executionRequest, e.message)
-            throw BluePrintProcessorException("Failed in template resolutionKey ($executionRequest) assignments with: ${e.message}", e)
+            throw BluePrintProcessorException(
+                "Failed in template resolutionKey ($executionRequest) assignments with: ${e.message}",
+                e
+            )
         }
     }
 

@@ -18,13 +18,8 @@ package org.onap.ccsdk.cds.blueprintsprocessor.db.primary
 
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibConfiguration
-import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.db.TestDatabaseConfiguration
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration
-import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
@@ -33,12 +28,9 @@ import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
-    classes = [BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class,
-        BluePrintDBLibConfiguration::class, BluePrintLoadConfiguration::class]
+    classes = [TestDatabaseConfiguration::class]
 )
 @TestPropertySource(locations = ["classpath:application-test.properties"])
-@ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
-@EnableAutoConfiguration
 class PrimaryDatabaseConfigurationTest {
 
     @Autowired

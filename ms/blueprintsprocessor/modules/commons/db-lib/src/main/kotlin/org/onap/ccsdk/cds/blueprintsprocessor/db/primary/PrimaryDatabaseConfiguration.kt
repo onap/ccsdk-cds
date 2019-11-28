@@ -18,13 +18,6 @@ package org.onap.ccsdk.cds.blueprintsprocessor.db.primary
 
 import org.onap.ccsdk.cds.blueprintsprocessor.db.PrimaryDataSourceProperties
 import org.slf4j.LoggerFactory
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.ComponentScan
-import org.springframework.context.annotation.Configuration
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.jdbc.datasource.DriverManagerDataSource
 import org.springframework.orm.jpa.JpaTransactionManager
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean
@@ -33,31 +26,15 @@ import org.springframework.transaction.PlatformTransactionManager
 import java.util.HashMap
 import javax.sql.DataSource
 
-@Configuration
-@ConditionalOnProperty(
-    name = ["blueprintsprocessor.db.primary.defaultConfig"], havingValue = "true",
-    matchIfMissing = true
-)
-@ComponentScan
-@EnableJpaRepositories(
-    basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor.*",
-        "org.onap.ccsdk.cds.controllerblueprints.*"],
-    entityManagerFactoryRef = "primaryEntityManager",
-    transactionManagerRef = "primaryTransactionManager"
-)
-@EnableJpaAuditing
 open class PrimaryDatabaseConfiguration(private val primaryDataSourceProperties: PrimaryDataSourceProperties) {
 
     private val log = LoggerFactory.getLogger(PrimaryDatabaseConfiguration::class.java)!!
 
-    @Bean("primaryEntityManager")
-    open fun primaryEntityManager(): LocalContainerEntityManagerFactoryBean {
+    /** Child class will override with spring bean annotation 'primaryEntityManager' and passing entity [packagesToScan]*/
+    open fun primaryEntityManager(vararg packagesToScan: String): LocalContainerEntityManagerFactoryBean {
         val em = LocalContainerEntityManagerFactoryBean()
         em.dataSource = primaryDataSource()
-        em.setPackagesToScan(
-            "org.onap.ccsdk.cds.blueprintsprocessor.*",
-            "org.onap.ccsdk.cds.controllerblueprints.*"
-        )
+        em.setPackagesToScan(*packagesToScan)
         em.jpaVendorAdapter = HibernateJpaVendorAdapter()
         val properties = HashMap<String, Any>()
         properties["hibernate.hbm2ddl.auto"] = primaryDataSourceProperties.hibernateHbm2ddlAuto
@@ -66,7 +43,7 @@ open class PrimaryDatabaseConfiguration(private val primaryDataSourceProperties:
         return em
     }
 
-    @Bean("primaryDataSource")
+    /** Child class will override with spring bean annotation 'primaryDataSource' */
     open fun primaryDataSource(): DataSource {
         val dataSource = DriverManagerDataSource()
         dataSource.setDriverClassName(primaryDataSourceProperties.driverClassName)
@@ -76,16 +53,11 @@ open class PrimaryDatabaseConfiguration(private val primaryDataSourceProperties:
         return dataSource
     }
 
-    @Bean("primaryTransactionManager")
+    /** Child class will override with spring bean annotation 'primaryTransactionManager' */
     open fun primaryTransactionManager(): PlatformTransactionManager {
         val transactionManager = JpaTransactionManager()
         transactionManager.entityManagerFactory = primaryEntityManager().getObject()
         log.info("Initialised Primary Transaction Manager for url ${primaryDataSourceProperties.url}")
         return transactionManager
-    }
-
-    @Bean("primaryNamedParameterJdbcTemplate")
-    open fun primaryNamedParameterJdbcTemplate(primaryDataSource: DataSource): NamedParameterJdbcTemplate {
-        return NamedParameterJdbcTemplate(primaryDataSource)
     }
 }

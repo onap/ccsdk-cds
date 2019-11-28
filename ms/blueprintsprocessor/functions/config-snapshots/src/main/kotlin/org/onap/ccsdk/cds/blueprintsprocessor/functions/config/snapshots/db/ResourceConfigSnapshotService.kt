@@ -32,7 +32,7 @@ import java.util.UUID
  * @version 1.0
  */
 @Service
-class ResourceConfigSnapshotService(private val repository: ResourceConfigSnapshotRepository) {
+open class ResourceConfigSnapshotService(private val resourceConfigSnapshotRepository: ResourceConfigSnapshotRepository) {
 
     private val log = LoggerFactory.getLogger(ResourceConfigSnapshotService::class.toString())
 
@@ -42,7 +42,7 @@ class ResourceConfigSnapshotService(private val repository: ResourceConfigSnapsh
         status: ResourceConfigSnapshot.Status = RUNNING
     ): String =
         withContext(Dispatchers.IO) {
-            repository.findByResourceIdAndResourceTypeAndStatus(resourceId, resourceType, status)
+            resourceConfigSnapshotRepository.findByResourceIdAndResourceTypeAndStatus(resourceId, resourceType, status)
                 ?.config_snapshot ?: Strings.EMPTY
         }
 
@@ -63,18 +63,18 @@ class ResourceConfigSnapshotService(private val repository: ResourceConfigSnapsh
 
             // Overwrite configuration snapshot entry of resId/resType
             if (resId.isNotEmpty() && resType.isNotEmpty()) {
-                repository.findByResourceIdAndResourceTypeAndStatus(resId, resType, status)
+                resourceConfigSnapshotRepository.findByResourceIdAndResourceTypeAndStatus(resId, resType, status)
                     ?.let {
                         log.info(
                             "Overwriting configuration snapshot entry for resourceId=($resId), " +
                                     "resourceType=($resType), status=($status)"
                         )
-                        repository.deleteByResourceIdAndResourceTypeAndStatus(resId, resType, status)
+                        resourceConfigSnapshotRepository.deleteByResourceIdAndResourceTypeAndStatus(resId, resType, status)
                     }
             }
             var storedSnapshot: ResourceConfigSnapshot
             try {
-                storedSnapshot = repository.saveAndFlush(resourceConfigSnapshotEntry)
+                storedSnapshot = resourceConfigSnapshotRepository.saveAndFlush(resourceConfigSnapshotEntry)
                 log.info(
                     "Stored configuration snapshot for resourceId=($resId), " +
                             "resourceType=($resType), status=($status), " +

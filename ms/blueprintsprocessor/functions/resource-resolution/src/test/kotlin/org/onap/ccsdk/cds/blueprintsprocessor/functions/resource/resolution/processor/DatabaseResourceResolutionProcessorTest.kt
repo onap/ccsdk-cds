@@ -18,15 +18,12 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.pro
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.db.PrimaryDBLibGenericService
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.BluePrintDBLibPropertyService
-import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.PrimaryDatabaseConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.TestDatabaseConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock.MockBlueprintProcessorCatalogServiceImpl
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock.MockDatabaseConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock.MockDBLibGenericService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
@@ -39,10 +36,10 @@ import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
-    classes = [DatabaseResourceAssignmentProcessor::class, BluePrintPropertyConfiguration::class,
-        BluePrintPropertiesService::class, BluePrintDBLibPropertyService::class, BluePrintDBLibConfiguration::class,
-        BluePrintCoreConfiguration::class, MockDatabaseConfiguration::class, MockBlueprintProcessorCatalogServiceImpl::class,
-        BluePrintPropertiesService::class, PrimaryDatabaseConfiguration::class]
+    classes = [TestDatabaseConfiguration::class,
+        PrimaryDBLibGenericService::class, BluePrintDBLibPropertyService::class,
+        DatabaseResourceAssignmentProcessor::class, MockDBLibGenericService::class,
+        MockBlueprintProcessorCatalogServiceImpl::class]
 )
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class DatabaseResourceResolutionProcessorTest {
