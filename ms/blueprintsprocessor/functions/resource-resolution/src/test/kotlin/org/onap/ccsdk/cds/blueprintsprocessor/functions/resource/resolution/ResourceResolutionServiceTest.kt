@@ -25,23 +25,14 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.utils.PayloadUtils
-import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.CapabilityResourceResolutionProcessor
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.DatabaseResourceAssignmentProcessor
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.DefaultResourceResolutionProcessor
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.InputResourceResolutionProcessor
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.MockCapabilityScriptRA
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.RestResourceResolutionProcessor
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
-import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -63,12 +54,7 @@ import kotlin.test.assertTrue
  */
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
-    classes = [ResourceResolutionServiceImpl::class,
-        InputResourceResolutionProcessor::class, DefaultResourceResolutionProcessor::class,
-        DatabaseResourceAssignmentProcessor::class, RestResourceResolutionProcessor::class,
-        CapabilityResourceResolutionProcessor::class,
-        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class,
-        BluePrintDBLibConfiguration::class, BluePrintLoadConfiguration::class]
+    classes = [TestDatabaseConfiguration::class]
 )
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 @ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])

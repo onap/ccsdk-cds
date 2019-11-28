@@ -33,19 +33,16 @@ import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceIn
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceOutput
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration
-import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.annotation.DirtiesContext
+import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.BeforeTest
 
 @RunWith(SpringRunner::class)
 @DirtiesContext
-@EnableAutoConfiguration
-@ComponentScan(
-    basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor",
-        "org.onap.ccsdk.cds.controllerblueprints"]
+@ContextConfiguration(
+    classes = [SelfServiceApiTestConfiguration::class, TestDatabaseConfiguration::class]
 )
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class BluePrintProcessingGRPCHandlerTest {
@@ -69,7 +66,7 @@ class BluePrintProcessingGRPCHandlerTest {
         requestObs = blockingStub.process(object : StreamObserver<ExecutionServiceOutput> {
             override fun onNext(executionServiceOuput: ExecutionServiceOutput) {
                 log.debug("onNext {}", executionServiceOuput)
-                if ("1234".equals(executionServiceOuput.commonHeader.requestId)) {
+                if ("1234" == executionServiceOuput.commonHeader.requestId) {
                     Assert.assertEquals(
                         "Failed to process request, \'actionIdentifiers.mode\' not specified. Valid value are: \'sync\' or \'async\'.",
                         executionServiceOuput.status.errorMessage

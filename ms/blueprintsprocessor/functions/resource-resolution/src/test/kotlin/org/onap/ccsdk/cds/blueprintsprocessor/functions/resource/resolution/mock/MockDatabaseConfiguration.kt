@@ -24,9 +24,9 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-open class MockDatabaseConfiguration {
+open class MockDBLibGenericService {
 
-    @Bean(name = ["MariaDatabaseConfiguration", "MySqlDatabaseConfiguration", "PrimaryDatabaseConfiguration"])
+    @Bean(name = ["MariaDatabaseConfiguration", "MySqlDatabaseConfiguration"])
     open fun createDatabaseConfiguration(): BluePrintDBLibGenericService {
         return mockk<BluePrintDBLibGenericService>()
     }

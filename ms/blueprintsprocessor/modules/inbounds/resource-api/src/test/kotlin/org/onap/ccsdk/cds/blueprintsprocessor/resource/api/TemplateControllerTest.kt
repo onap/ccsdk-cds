@@ -38,7 +38,7 @@ import kotlin.test.AfterTest
 @RunWith(SpringRunner::class)
 @WebFluxTest
 @ContextConfiguration(
-    classes = [BluePrintCoreConfiguration::class,
+    classes = [TestDatabaseConfiguration::class, BluePrintCoreConfiguration::class,
         BluePrintCatalogService::class, SecurityProperties::class]
 )
 @ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
@@ -57,7 +57,7 @@ class TemplateControllerTest {
     val payloadDummyTemplateData = "PAYLOAD DATA"
 
     var requestArguments = "bpName=$blueprintName&bpVersion=$blueprintVersion" +
-            "&artifactName=$templatePrefix&resolutionKey=$resolutionKey"
+        "&artifactName=$templatePrefix&resolutionKey=$resolutionKey"
 
     @AfterTest
     fun cleanDir() {
@@ -115,9 +115,9 @@ class TemplateControllerTest {
     fun `get returns 400 error if missing arg`() {
         runBlocking {
             val arguments = "bpBADName=$blueprintName" +
-                    "&bpBADVersion=$blueprintVersion" +
-                    "&artifactName=$templatePrefix" +
-                    "&resolutionKey=$resolutionKey"
+                "&bpBADVersion=$blueprintVersion" +
+                "&artifactName=$templatePrefix" +
+                "&resolutionKey=$resolutionKey"
 
             webTestClient.get().uri("/api/v1/template?$arguments")
                 .exchange()
@@ -133,7 +133,7 @@ class TemplateControllerTest {
                 .get()
                 .uri(
                     "/api/v1/template?bpName=$blueprintName&bpVersion=$blueprintVersion" +
-                            "&artifactName=$templatePrefix&resolutionKey=notFound"
+                        "&artifactName=$templatePrefix&resolutionKey=notFound"
                 )
                 .exchange()
                 .expectStatus().isNotFound
@@ -155,7 +155,7 @@ class TemplateControllerTest {
 
     private fun get(expectedType: String, resKey: String) {
         var requestArguments = "bpName=$blueprintName&bpVersion=$blueprintVersion" +
-                "&artifactName=$templatePrefix&resolutionKey=$resKey"
+            "&artifactName=$templatePrefix&resolutionKey=$resKey"
 
         if (expectedType.isNotEmpty()) {
             requestArguments = "$requestArguments&format=$expectedType"

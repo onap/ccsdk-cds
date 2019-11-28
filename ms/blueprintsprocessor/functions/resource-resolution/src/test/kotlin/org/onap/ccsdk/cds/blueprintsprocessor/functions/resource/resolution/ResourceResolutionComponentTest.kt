@@ -121,7 +121,7 @@ class ResourceResolutionComponentTest {
             } catch (e: BluePrintProcessorException) {
                 assertEquals(
                     "Can't proceed with the resolution: can't persist resolution without a correlation key. " +
-                            "Either provide a resolution-key OR combination of resource-id and resource-type OR set `storeResult` to false.",
+                        "Either provide a resolution-key OR combination of resource-id and resource-type OR set `storeResult` to false.",
                     e.message
                 )
                 return@runBlocking

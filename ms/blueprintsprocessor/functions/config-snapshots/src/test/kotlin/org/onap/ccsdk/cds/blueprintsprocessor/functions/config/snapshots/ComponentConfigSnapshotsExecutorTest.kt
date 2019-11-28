@@ -23,10 +23,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
-import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.ComponentConfigSnapshotsExecutor.Companion.DIFF_JSON
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.ComponentConfigSnapshotsExecutor.Companion.DIFF_XML
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.ComponentConfigSnapshotsExecutor.Companion.OPERATION_DIFF
@@ -36,11 +33,9 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db.Reso
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db.ResourceConfigSnapshotService
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
-import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
@@ -48,13 +43,12 @@ import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
-    classes = [ResourceConfigSnapshotService::class,
-        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class,
-        BluePrintDBLibConfiguration::class, BluePrintLoadConfiguration::class]
+    classes = [ResourceConfigSnapshotService::class, TestDatabaseConfiguration::class]
 )
 @TestPropertySource(locations = ["classpath:application-test.properties"])
-@ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
-@EnableAutoConfiguration
+@ComponentScan(
+    basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots"]
+)
 @Suppress("SameParameterValue")
 class ComponentConfigSnapshotsExecutorTest {
 
@@ -346,9 +340,9 @@ class ComponentConfigSnapshotsExecutorTest {
             // then; we should get JSON-patches differences in our response property
             val diffJson =
                 "[{\"op\":\"add\",\"path\":\"/system-uptime-information/last-configured-time/new-child-object\",\"value\":{\"property\":\"value\"}}," +
-                        "{\"op\":\"replace\",\"path\":\"/system-uptime-information/system-booted-time/time-length\",\"value\":\"14:52:54\"}," +
-                        "{\"op\":\"replace\",\"path\":\"/system-uptime-information/time-source\",\"value\":\" DNS CLOCK \"}," +
-                        "{\"op\":\"add\",\"path\":\"/system-uptime-information/uptime-information/load-average-10\",\"value\":\"0.05\"}]"
+                    "{\"op\":\"replace\",\"path\":\"/system-uptime-information/system-booted-time/time-length\",\"value\":\"14:52:54\"}," +
+                    "{\"op\":\"replace\",\"path\":\"/system-uptime-information/time-source\",\"value\":\" DNS CLOCK \"}," +
+                    "{\"op\":\"add\",\"path\":\"/system-uptime-information/uptime-information/load-average-10\",\"value\":\"0.05\"}]"
             assertEquals(
                 diffJson.asJsonPrimitive(),
                 bluePrintRuntimeService.getNodeTemplateAttributeValue(
@@ -394,13 +388,13 @@ class ComponentConfigSnapshotsExecutorTest {
 
             // then; we should get XML-patches differences in our response property
             val diffXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-                    "<diff>" +
-                    "<replace sel=\"/output[1]/interface-information[1]/interface-flapped[1]/@seconds\">2343</replace>" +
-                    "<replace sel=\"/output[1]/interface-information[1]/interface-flapped[1]/text()[1]\">34</replace>" +
-                    "<replace sel=\"/output[1]/interface-information[1]/traffic-statistics[1]/input-packets[1]/text()[1]\">09098789</replace>" +
-                    "<replace sel=\"/output[1]/interface-information[1]/traffic-statistics[1]/output-packets[1]/text()[1]\">2828828</replace>" +
-                    "<add sel=\"/output[1]/interface-information[1]/physical-interface[1]\"><interface-name>TEGig400-int01</interface-name></add>" +
-                    "</diff>"
+                "<diff>" +
+                "<replace sel=\"/output[1]/interface-information[1]/interface-flapped[1]/@seconds\">2343</replace>" +
+                "<replace sel=\"/output[1]/interface-information[1]/interface-flapped[1]/text()[1]\">34</replace>" +
+                "<replace sel=\"/output[1]/interface-information[1]/traffic-statistics[1]/input-packets[1]/text()[1]\">09098789</replace>" +
+                "<replace sel=\"/output[1]/interface-information[1]/traffic-statistics[1]/output-packets[1]/text()[1]\">2828828</replace>" +
+                "<add sel=\"/output[1]/interface-information[1]/physical-interface[1]\"><interface-name>TEGig400-int01</interface-name></add>" +
+                "</diff>"
             assertEquals(
                 diffXml.asJsonPrimitive(),
                 bluePrintRuntimeService.getNodeTemplateAttributeValue(
@@ -411,30 +405,47 @@ class ComponentConfigSnapshotsExecutorTest {
         }
     }
 
-    private fun preparePayload(filename: String, resId: String, resType: String, status: ResourceConfigSnapshot.Status) {
+    private fun preparePayload(
+        filename: String,
+        resId: String,
+        resType: String,
+        status: ResourceConfigSnapshot.Status
+    ) {
         runBlocking {
-            cfgSnapshotService.write(JacksonUtils.getClassPathFileContent("payload/requests/$filename"), resId, resType, status)
+            cfgSnapshotService.write(
+                JacksonUtils.getClassPathFileContent("payload/requests/$filename"),
+                resId,
+                resType,
+                status
+            )
         }
     }
 
     private fun prepareRequestProperties(oper: String, resId: String, resType: String, optional: String = "") {
         cfgSnapshotComponent.operationInputs[ComponentConfigSnapshotsExecutor.INPUT_OPERATION] = oper.asJsonPrimitive()
-        cfgSnapshotComponent.operationInputs[ComponentConfigSnapshotsExecutor.INPUT_RESOURCE_ID] = resId.asJsonPrimitive()
-        cfgSnapshotComponent.operationInputs[ComponentConfigSnapshotsExecutor.INPUT_RESOURCE_TYPE] = resType.asJsonPrimitive()
+        cfgSnapshotComponent.operationInputs[ComponentConfigSnapshotsExecutor.INPUT_RESOURCE_ID] =
+            resId.asJsonPrimitive()
+        cfgSnapshotComponent.operationInputs[ComponentConfigSnapshotsExecutor.INPUT_RESOURCE_TYPE] =
+            resType.asJsonPrimitive()
 
         // Optional inputs
-        cfgSnapshotComponent.operationInputs[ComponentConfigSnapshotsExecutor.INPUT_DIFF_CONTENT_TYPE] = "".asJsonPrimitive()
-        cfgSnapshotComponent.operationInputs[ComponentConfigSnapshotsExecutor.INPUT_RESOURCE_SNAPSHOT] = "".asJsonPrimitive()
+        cfgSnapshotComponent.operationInputs[ComponentConfigSnapshotsExecutor.INPUT_DIFF_CONTENT_TYPE] =
+            "".asJsonPrimitive()
+        cfgSnapshotComponent.operationInputs[ComponentConfigSnapshotsExecutor.INPUT_RESOURCE_SNAPSHOT] =
+            "".asJsonPrimitive()
         cfgSnapshotComponent.operationInputs[ComponentConfigSnapshotsExecutor.INPUT_RESOURCE_STATUS] =
             ResourceConfigSnapshot.Status.RUNNING.name.asJsonPrimitive()
 
         when (oper) {
             OPERATION_DIFF ->
-                cfgSnapshotComponent.operationInputs[ComponentConfigSnapshotsExecutor.INPUT_DIFF_CONTENT_TYPE] = optional.asJsonPrimitive()
+                cfgSnapshotComponent.operationInputs[ComponentConfigSnapshotsExecutor.INPUT_DIFF_CONTENT_TYPE] =
+                    optional.asJsonPrimitive()
             OPERATION_STORE ->
-                cfgSnapshotComponent.operationInputs[ComponentConfigSnapshotsExecutor.INPUT_RESOURCE_SNAPSHOT] = optional.asJsonPrimitive()
+                cfgSnapshotComponent.operationInputs[ComponentConfigSnapshotsExecutor.INPUT_RESOURCE_SNAPSHOT] =
+                    optional.asJsonPrimitive()
             OPERATION_FETCH ->
-                cfgSnapshotComponent.operationInputs[ComponentConfigSnapshotsExecutor.INPUT_RESOURCE_STATUS] = optional.asJsonPrimitive()
+                cfgSnapshotComponent.operationInputs[ComponentConfigSnapshotsExecutor.INPUT_RESOURCE_STATUS] =
+                    optional.asJsonPrimitive()
         }
     }
 }

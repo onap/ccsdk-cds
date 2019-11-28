@@ -112,7 +112,9 @@ class ResourceAssignmentUtilsTest {
             properties = mapOfPropertiesHost
         }
 
-        every { resourceAssignmentRuntimeService.bluePrintContext().dataTypeByName("ip-address") } returns myDataTypeIpaddress
+        every {
+            resourceAssignmentRuntimeService.bluePrintContext().dataTypeByName("ip-address")
+        } returns myDataTypeIpaddress
 
         every { resourceAssignmentRuntimeService.bluePrintContext().dataTypeByName("host") } returns myDataTypeHost
 
@@ -171,13 +173,21 @@ class ResourceAssignmentUtilsTest {
             "sample-value", "string", "",
             inputMapToTestPrimitiveTypeWithValue
         )
-        assertEquals(expectedValueToTestPrimitiveType, outcome, "Unexpected outcome returned for primitive type of simple String")
+        assertEquals(
+            expectedValueToTestPrimitiveType,
+            outcome,
+            "Unexpected outcome returned for primitive type of simple String"
+        )
 
         outcome = prepareResponseNodeForTest(
             "sample-key-value", "string", "",
             inputMapToTestPrimitiveTypeWithKeyValue
         )
-        assertEquals(expectedValueToTestPrimitiveType, outcome, "Unexpected outcome returned for primitive type of key-value String")
+        assertEquals(
+            expectedValueToTestPrimitiveType,
+            outcome,
+            "Unexpected outcome returned for primitive type of key-value String"
+        )
     }
 
     @Test
@@ -186,13 +196,21 @@ class ResourceAssignmentUtilsTest {
             "listOfString", "list",
             "string", inputMapToTestCollectionOfPrimitiveType
         )
-        assertEquals(expectedValueToTesCollectionOfPrimitiveType, outcome, "unexpected outcome returned for list of String")
+        assertEquals(
+            expectedValueToTesCollectionOfPrimitiveType,
+            outcome,
+            "unexpected outcome returned for list of String"
+        )
 
         outcome = prepareResponseNodeForTest(
             "mapOfString", "map", "string",
             inputMapToTestCollectionOfPrimitiveType
         )
-        assertEquals(expectedValueToTesCollectionOfPrimitiveType, outcome, "unexpected outcome returned for map of String")
+        assertEquals(
+            expectedValueToTesCollectionOfPrimitiveType,
+            outcome,
+            "unexpected outcome returned for map of String"
+        )
     }
 
     @Test
@@ -201,13 +219,21 @@ class ResourceAssignmentUtilsTest {
             "listOfMyDataTypeWithOneOutputKeyMapping", "list",
             "ip-address", inputMapToTestCollectionOfComplexTypeWithOneOutputKeyMapping
         )
-        assertEquals(expectedValueToTestCollectionOfComplexTypeWithOneOutputKeyMapping, outcome, "unexpected outcome returned for list of String")
+        assertEquals(
+            expectedValueToTestCollectionOfComplexTypeWithOneOutputKeyMapping,
+            outcome,
+            "unexpected outcome returned for list of String"
+        )
 
         outcome = prepareResponseNodeForTest(
             "listOfMyDataTypeWithAllOutputKeyMapping", "list",
             "ip-address", inputMapToTestCollectionOfComplexTypeWithAllOutputKeyMapping
         )
-        assertEquals(expectedValueToTestCollectionOfComplexTypeWithAllOutputKeyMapping, outcome, "unexpected outcome returned for list of String")
+        assertEquals(
+            expectedValueToTestCollectionOfComplexTypeWithAllOutputKeyMapping,
+            outcome,
+            "unexpected outcome returned for list of String"
+        )
     }
 
     @Test
@@ -216,7 +242,11 @@ class ResourceAssignmentUtilsTest {
             "complexTypeOneKeys", "host",
             "", inputMapToTestComplexTypeWithOneOutputKeyMapping
         )
-        assertEquals(expectedValueToTestComplexTypeWithOneOutputKeyMapping, outcome, "Unexpected outcome returned for complex type")
+        assertEquals(
+            expectedValueToTestComplexTypeWithOneOutputKeyMapping,
+            outcome,
+            "Unexpected outcome returned for complex type"
+        )
     }
 
     @Test
@@ -225,7 +255,11 @@ class ResourceAssignmentUtilsTest {
             "complexTypeAllKeys", "host",
             "", inputMapToTestComplexTypeWithAllOutputKeyMapping
         )
-        assertEquals(expectedValueToTestComplexTypeWithAllOutputKeyMapping, outcome, "Unexpected outcome returned for complex type")
+        assertEquals(
+            expectedValueToTestComplexTypeWithAllOutputKeyMapping,
+            outcome,
+            "Unexpected outcome returned for complex type"
+        )
     }
 
     private fun initInputMapAndExpectedValuesForPrimitiveType() {
@@ -340,7 +374,12 @@ class ResourceAssignmentUtilsTest {
 
         val outputKeyMapping = prepareOutputKeyMapping(dictionary_source)
 
-        return ResourceAssignmentUtils.parseResponseNode(responseNode, resourceAssignment, resourceAssignmentRuntimeService, outputKeyMapping)
+        return ResourceAssignmentUtils.parseResponseNode(
+            responseNode,
+            resourceAssignment,
+            resourceAssignmentRuntimeService,
+            outputKeyMapping
+        )
     }
 
     private fun prepareRADataDictionaryOfPrimaryType(dictionary_source: String): ResourceAssignment {
@@ -354,7 +393,11 @@ class ResourceAssignmentUtilsTest {
         }
     }
 
-    private fun prepareRADataDictionaryCollection(dictionary_source: String, sourceType: String, schema: String): ResourceAssignment {
+    private fun prepareRADataDictionaryCollection(
+        dictionary_source: String,
+        sourceType: String,
+        schema: String
+    ): ResourceAssignment {
         return ResourceAssignment().apply {
             name = "ipAddress-list"
             dictionaryName = "sample-licenses"
@@ -368,7 +411,11 @@ class ResourceAssignmentUtilsTest {
         }
     }
 
-    private fun prepareRADataDictionaryComplexType(dictionary_source: String, sourceType: String, schema: String): ResourceAssignment {
+    private fun prepareRADataDictionaryComplexType(
+        dictionary_source: String,
+        sourceType: String,
+        schema: String
+    ): ResourceAssignment {
         return ResourceAssignment().apply {
             name = "ipAddress-complexType"
             dictionaryName = "sample-licenses"

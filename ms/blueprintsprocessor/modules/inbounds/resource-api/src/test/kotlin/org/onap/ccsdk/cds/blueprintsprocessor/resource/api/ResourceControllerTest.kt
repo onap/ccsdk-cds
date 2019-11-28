@@ -39,8 +39,15 @@ import org.springframework.test.web.reactive.server.WebTestClient
 
 @RunWith(SpringRunner::class)
 @WebFluxTest
-@ContextConfiguration(classes = [ResourceController::class, ResourceResolutionDBService::class, SecurityProperties::class])
-@ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
+@ContextConfiguration(
+    classes = [TestDatabaseConfiguration::class,
+        ResourceController::class, ResourceResolutionDBService::class, SecurityProperties::class]
+)
+@ComponentScan(
+    basePackages = ["org.onap.ccsdk.cds.controllerblueprints.core.service",
+        "org.onap.ccsdk.cds.blueprintsprocessor.resource.api",
+        "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution"]
+)
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class ResourceControllerTest {
 

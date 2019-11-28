@@ -56,7 +56,8 @@ class InputResourceResolutionProcessorTest {
             every { resourceAssignmentRuntimeService.getInputValue("rr-name") } returns textNode
 
             inputResourceResolutionProcessor.raRuntimeService = resourceAssignmentRuntimeService
-            inputResourceResolutionProcessor.resourceDictionaries = ResourceAssignmentUtils.resourceDefinitions(bluePrintContext.rootPath)
+            inputResourceResolutionProcessor.resourceDictionaries =
+                ResourceAssignmentUtils.resourceDefinitions(bluePrintContext.rootPath)
 
             val resourceAssignment = ResourceAssignment().apply {
                 name = "rr-name"

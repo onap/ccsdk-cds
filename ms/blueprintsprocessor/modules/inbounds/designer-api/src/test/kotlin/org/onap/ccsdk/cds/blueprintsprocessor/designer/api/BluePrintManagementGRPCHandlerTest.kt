@@ -42,9 +42,7 @@ import org.onap.ccsdk.cds.controllerblueprints.management.api.FileChunk
 import org.onap.ccsdk.cds.controllerblueprints.management.api.RemoveAction
 import org.onap.ccsdk.cds.controllerblueprints.management.api.UploadAction
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration
-import org.springframework.context.annotation.ComponentScan
-import org.springframework.test.annotation.DirtiesContext
+import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.AfterTest
@@ -54,11 +52,8 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
-@EnableAutoConfiguration
-@DirtiesContext
-@ComponentScan(
-    basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor",
-        "org.onap.ccsdk.cds.controllerblueprints"]
+@ContextConfiguration(
+    classes = [DesignerApiTestConfiguration::class]
 )
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class BluePrintManagementGRPCHandlerTest {

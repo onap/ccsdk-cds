@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Copyright © 2018-2019 AT&T Intellectual Property.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.db.primary
+package org.onap.ccsdk.cds.blueprintsprocessor.db
 
-import org.onap.ccsdk.cds.blueprintsprocessor.db.AbstractDBLibGenericService
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Service
 

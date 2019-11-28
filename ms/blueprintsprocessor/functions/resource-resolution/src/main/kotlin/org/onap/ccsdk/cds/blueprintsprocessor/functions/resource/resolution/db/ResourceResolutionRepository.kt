@@ -16,7 +16,9 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db
 
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
 
+@Repository
 interface ResourceResolutionRepository : JpaRepository<ResourceResolution, String> {
 
     fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndName(
