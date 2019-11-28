@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5b4a1fb6_07ae123b",
+        "filename": "ms/blueprintsprocessor/modules/commons/ssh-lib/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/ssh/service/BlueprintSshClientServiceTest.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-11-28T15:01:35Z",
+      "side": 1,
+      "message": "EchoShellServer dependency is needed to complete unit test with ShellChannel. I will temporaly skip this test.",
+      "parentUuid": "899d9d74_0b8b95f2",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 63,
+        "endChar": 11
+      },
+      "revId": "15a15f94563f1e17bcc8d3f0aed78cf9e93f3da9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "89652a5f_4e53583c",
         "filename": "ms/blueprintsprocessor/modules/commons/ssh-lib/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/ssh/service/BlueprintSshClientServiceTest.kt",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2019-11-28T14:41:48Z",
       "side": 1,
       "message": "Is this unwanted ?",
+      "range": {
+        "startLine": 79,
+        "startChar": 8,
+        "endLine": 79,
+        "endChar": 9
+      },
+      "revId": "15a15f94563f1e17bcc8d3f0aed78cf9e93f3da9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "145b5de6_700ce88d",
+        "filename": "ms/blueprintsprocessor/modules/commons/ssh-lib/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/ssh/service/BlueprintSshClientServiceTest.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-11-28T15:01:35Z",
+      "side": 1,
+      "message": "Yes, to have a composite function name in Kotlin we place this.",
+      "parentUuid": "89652a5f_4e53583c",
       "range": {
         "startLine": 79,
         "startChar": 8,
