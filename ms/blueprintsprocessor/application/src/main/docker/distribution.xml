@@ -45,6 +45,11 @@
             <useDefaultExcludes>true</useDefaultExcludes>
         </fileSet>
         <fileSet>
+            <directory>${project.basedir}/src/main/resources/certs</directory>
+            <outputDirectory>opt/app/onap/config/certs</outputDirectory>
+            <useDefaultExcludes>true</useDefaultExcludes>
+        </fileSet>
+        <fileSet>
             <directory>${project.basedir}/../../../components/model-catalog</directory>
             <outputDirectory>opt/app/onap/model-catalog</outputDirectory>
             <includes>
