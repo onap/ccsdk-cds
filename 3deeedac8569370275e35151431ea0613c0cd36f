@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "080b26e0_36330b64",
+        "filename": "ms/blueprintsprocessor/modules/commons/ssh-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/ssh/service/BasicAuthSshClientService.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2019-11-29T16:31:18Z",
+      "side": 1,
+      "message": "Get rid of unused vriables and import !",
+      "revId": "3deeedac8569370275e35151431ea0613c0cd36f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec3408cd_ee41b6cb",
+        "filename": "ms/blueprintsprocessor/modules/commons/ssh-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/ssh/service/BlueprintSshClientService.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2019-11-29T16:31:18Z",
+      "side": 1,
+      "message": "how it is different than existing executeCommands method (#30) ?",
+      "revId": "3deeedac8569370275e35151431ea0613c0cd36f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
