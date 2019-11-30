@@ -22,6 +22,30 @@
       "revId": "539ac9576f2f60ac830ae7d24663eb802a0c77e1",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bae7fde_03b1b319",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/designer-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/designer/api/BlueprintModelController.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 5989
+      },
+      "writtenOn": "2019-11-30T16:18:48Z",
+      "side": 1,
+      "message": "you are right,we don\u0027t need it \n\n in BluePrintModelHandler getBluePrintModel method if it finds id it will return it \nelse it will throw exception, I think i have to change implementation of it  to return empty object not throwing exception",
+      "parentUuid": "d8d5fe8c_fc87111c",
+      "range": {
+        "startLine": 138,
+        "startChar": 66,
+        "endLine": 138,
+        "endChar": 88
+      },
+      "revId": "539ac9576f2f60ac830ae7d24663eb802a0c77e1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
