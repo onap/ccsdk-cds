@@ -46,6 +46,30 @@
       "revId": "539ac9576f2f60ac830ae7d24663eb802a0c77e1",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b525af6_7b51b06b",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/designer-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/designer/api/BlueprintModelController.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-12-01T15:43:46Z",
+      "side": 1,
+      "message": "Is there any issue in using BlueprintModelSearch return type ? which is performant read only JPA.",
+      "parentUuid": "2bae7fde_03b1b319",
+      "range": {
+        "startLine": 138,
+        "startChar": 66,
+        "endLine": 138,
+        "endChar": 88
+      },
+      "revId": "539ac9576f2f60ac830ae7d24663eb802a0c77e1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
