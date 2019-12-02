@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "f17788c2_e597449d",
+        "filename": "ms/blueprintsprocessor/modules/commons/ssh-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/ssh/service/BasicAuthSshClientService.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2019-12-02T15:09:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "001995b3_7b3f4ed3",
+      "revId": "3deeedac8569370275e35151431ea0613c0cd36f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ec3408cd_ee41b6cb",
         "filename": "ms/blueprintsprocessor/modules/commons/ssh-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/ssh/service/BlueprintSshClientService.kt",
         "patchSetId": 4
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "It was implemented that way. \nThe API executeCommandsInDifferentContexts calls executeCommand() function to execute single command.",
       "parentUuid": "ec3408cd_ee41b6cb",
+      "revId": "3deeedac8569370275e35151431ea0613c0cd36f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74c4318a_f4c860a8",
+        "filename": "ms/blueprintsprocessor/modules/commons/ssh-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/ssh/service/BlueprintSshClientService.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2019-12-02T15:09:43Z",
+      "side": 1,
+      "message": "for single command we have another executeCommand (#38)\nExisting executeCommands (list of commands) wasn\u0027t working, which is being fixed as per this patch \n\nSo I assume we don\u0027t need executeCommandsInDifferentContextsNB, just have existing executeCommands replaced with your new API.",
+      "parentUuid": "09a3bf08_4c3d872c",
       "revId": "3deeedac8569370275e35151431ea0613c0cd36f",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
