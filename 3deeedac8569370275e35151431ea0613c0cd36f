@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "001995b3_7b3f4ed3",
+        "filename": "ms/blueprintsprocessor/modules/commons/ssh-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/ssh/service/BasicAuthSshClientService.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-12-02T14:58:44Z",
+      "side": 1,
+      "message": "ChannelExec is still used to execute commands in different contexts.",
+      "parentUuid": "080b26e0_36330b64",
+      "revId": "3deeedac8569370275e35151431ea0613c0cd36f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ec3408cd_ee41b6cb",
         "filename": "ms/blueprintsprocessor/modules/commons/ssh-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/ssh/service/BlueprintSshClientService.kt",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2019-11-29T16:31:18Z",
       "side": 1,
       "message": "how it is different than existing executeCommands method (#30) ?",
+      "revId": "3deeedac8569370275e35151431ea0613c0cd36f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09a3bf08_4c3d872c",
+        "filename": "ms/blueprintsprocessor/modules/commons/ssh-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/ssh/service/BlueprintSshClientService.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2019-12-02T14:58:44Z",
+      "side": 1,
+      "message": "It was implemented that way. \nThe API executeCommandsInDifferentContexts calls executeCommand() function to execute single command.",
+      "parentUuid": "ec3408cd_ee41b6cb",
       "revId": "3deeedac8569370275e35151431ea0613c0cd36f",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
