@@ -16,6 +16,6 @@ exec java -classpath "/etc:${APP_HOME}/lib/*:/lib/*:/src:/schema:/generated-sour
 -Dms_name=org.onap.ccsdk.cds.blueprintsprocessor \
 -Dlogging.config=${APP_CONFIG_HOME}/logback.xml \
 -Djava.security.egd=file:/dev/./urandom \
--DAPPNAME=${APP_NAME} -DAPPENV=${APP_ENV} -DAPPVERSION=${APP_VERSION} -DNAMESPACE=${NAMESPACE} \
+-DAPPNAME=${APPLICATIONNAME} -DAPPENV=${APP_ENV} -DAPPVERSION=${APP_VERSION} -DNAMESPACE=${NAMESPACE} \
 -Dspring.config.location=${APP_CONFIG_HOME}/ \
 org.onap.ccsdk.cds.blueprintsprocessor.BlueprintProcessorApplicationKt

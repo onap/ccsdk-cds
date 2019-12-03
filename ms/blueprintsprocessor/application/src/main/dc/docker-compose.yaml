@@ -5,9 +5,9 @@ services:
     image: mariadb:latest
     container_name: ccsdk-mariadb
     ports:
-    - "3306:3306"
+      - "3306:3306"
     volumes:
-    - ~/vm_mysql:/var/lib/mysql
+      - ~/vm_mysql:/var/lib/mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: sdnctl
@@ -19,6 +19,7 @@ services:
       - db
     image: onap/ccsdk-blueprintsprocessor:latest
     container_name: cds-controller-default
+    hostname: cds-controller-default
     ports:
       - "8000:8080"
       - "9111:9111"
@@ -26,7 +27,7 @@ services:
     volumes:
       - blueprints-deploy:/opt/app/onap/blueprints/deploy
     environment:
-      APPLICATIONNAME: BlueprintsProcessor
+      APPLICATIONNAME: cds-controller
       BUNDLEVERSION: 1.0.0
       APP_CONFIG_HOME: /opt/app/onap/config
       STICKYSELECTORKEY:
@@ -46,13 +47,14 @@ services:
       - db
     image: onap/ccsdk-py-executor
     container_name: py-executor-default
+    hostname: py-executor-default
     ports:
       - "50052:50052"
     restart: always
     volumes:
       - blueprints-deploy:/opt/app/onap/blueprints/deploy
     environment:
-      APPLICATIONNAME: PythonExecutor
+      APPLICATIONNAME: py-executor
       BUNDLEVERSION: 1.0.0
       APP_CONFIG_HOME: /opt/app/onap/config
       STICKYSELECTORKEY:

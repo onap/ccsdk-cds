@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~  Copyright © 2019 IBM.
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+       <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+       <artifactId>blueprints</artifactId>
+       <version>0.7.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>blueprint-proto</artifactId>
+
+    <name>Controller Blueprints Proto</name>
+    <description>Controller Blueprints Proto</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.marcoferrer.krotoplus</groupId>
+            <artifactId>kroto-plus-coroutines</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.xolstice.maven.plugins</groupId>
+                <artifactId>protobuf-maven-plugin</artifactId>
+                <version>0.6.1</version>
+                <configuration>
+                    <protocArtifact>
+                        com.google.protobuf:protoc:3.10.0:exe:${os.detected.classifier}
+                    </protocArtifact>
+                    <protoSourceRoot>${project.basedir}/../../../../../components/model-catalog/proto-definition/proto
+                    </protoSourceRoot>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>grpc-java</id>
+                        <goals>
+                            <goal>compile-custom</goal>
+                        </goals>
+                        <configuration>
+                            <pluginId>grpc-java</pluginId>
+                            <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}
+                            </pluginArtifact>
+                        </configuration>
+                    </execution>
+                    <!--
+                    <execution>
+                        <id>grpc-coroutines</id>
+                        <goals>
+                            <goal>compile-custom</goal>
+                        </goals>
+                        <configuration>
+                            <pluginId>kroto-plus</pluginId>
+                            <pluginArtifact>
+                                com.github.marcoferrer.krotoplus:protoc-gen-kroto-plus:${kroto-plus.version}:jar:jvm8
+                            </pluginArtifact>
+                            <pluginParameter>ConfigPath=${project.basedir}/krotoPlusConfig.asciipb</pluginParameter>
+                        </configuration>
+                    </execution>
+                    -->
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.maven.version}</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>${project.basedir}/target/generated-sources/protobuf/java</sourceDir>
+                                <sourceDir>${project.basedir}/target/generated-sources/protobuf/grpc-java</sourceDir>
+                                <!--<sourceDir>${project.basedir}/target/generated-sources/protobuf/kroto-plus</sourceDir>-->
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <extensions>
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>1.6.2</version>
+            </extension>
+        </extensions>
+    </build>
+</project>

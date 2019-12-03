@@ -33,8 +33,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
-            <artifactId>blueprint-proto</artifactId>
+           <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+           <artifactId>blueprint-proto</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
