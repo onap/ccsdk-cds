@@ -70,6 +70,30 @@
       "revId": "539ac9576f2f60ac830ae7d24663eb802a0c77e1",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75b8f1b6_f5152299",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/designer-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/designer/api/BlueprintModelController.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 5989
+      },
+      "writtenOn": "2019-12-03T11:27:56Z",
+      "side": 1,
+      "message": "I will have to get more detailed object that contains as example \u0027blueprint_model_content\u0027",
+      "parentUuid": "4b525af6_7b51b06b",
+      "range": {
+        "startLine": 138,
+        "startChar": 66,
+        "endLine": 138,
+        "endChar": 88
+      },
+      "revId": "539ac9576f2f60ac830ae7d24663eb802a0c77e1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
