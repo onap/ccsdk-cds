@@ -128,7 +128,7 @@
                 <version>${protobuff.java.utils.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>blueprint-proto</artifactId>
                 <version>${project.version}</version>
                 <exclusions>
@@ -198,27 +198,27 @@
 
             <!-- Controller Blueprints Application Dependency -->
             <dependency>
-                <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>resource-dict</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>blueprint-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>blueprint-scripts</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>db-resources</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>blueprint-validation</artifactId>
                 <version>${project.version}</version>
             </dependency>

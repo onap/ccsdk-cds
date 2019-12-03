@@ -32,7 +32,6 @@
     <description>Micro-services</description>
 
     <modules>
-        <module>controllerblueprints</module>
         <module>blueprintsprocessor</module>
         <module>py-executor</module>
         <module>command-executor</module>

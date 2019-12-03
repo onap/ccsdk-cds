@@ -36,8 +36,8 @@
             <artifactId>jython-standalone</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
-            <artifactId>blueprint-core</artifactId>
+           <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+           <artifactId>blueprint-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
@@ -56,8 +56,8 @@
             <artifactId>grpc-lib</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
-            <artifactId>resource-dict</artifactId>
+           <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+           <artifactId>resource-dict</artifactId>
         </dependency>
 
         <dependency>

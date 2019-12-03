@@ -35,8 +35,8 @@
             <artifactId>spring-security-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
-            <artifactId>blueprint-core</artifactId>
+           <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+           <artifactId>blueprint-core</artifactId>
         </dependency>
     </dependencies>
 </project>

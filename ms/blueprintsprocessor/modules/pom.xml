@@ -33,6 +33,7 @@
     <description>Blueprints Processor Modules</description>
 
     <modules>
+        <module>blueprints</module>
         <module>commons</module>
         <module>outbounds</module>
         <module>services</module>

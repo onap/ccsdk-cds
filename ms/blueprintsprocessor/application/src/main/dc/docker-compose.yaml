@@ -26,7 +26,7 @@ services:
     volumes:
       - blueprints-deploy:/opt/app/onap/blueprints/deploy
     environment:
-      APPLICATIONNAME: BlueprintsProcessor
+      APP_NAME: cds-controller
       BUNDLEVERSION: 1.0.0
       APP_CONFIG_HOME: /opt/app/onap/config
       STICKYSELECTORKEY:
@@ -52,7 +52,7 @@ services:
     volumes:
       - blueprints-deploy:/opt/app/onap/blueprints/deploy
     environment:
-      APPLICATIONNAME: PythonExecutor
+      APP_NAME: py-executor
       BUNDLEVERSION: 1.0.0
       APP_CONFIG_HOME: /opt/app/onap/config
       STICKYSELECTORKEY:

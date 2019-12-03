@@ -44,8 +44,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.onap.ccsdk.cds.controllerblueprints</groupId>
-            <artifactId>resource-dict</artifactId>
+           <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+           <artifactId>resource-dict</artifactId>
         </dependency>
         <!-- Test Dependencies -->
         <dependency>

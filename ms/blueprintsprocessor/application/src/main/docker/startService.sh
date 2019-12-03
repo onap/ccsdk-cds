@@ -8,7 +8,7 @@ export APP_HOME=/opt/app/onap
 keytool -import -noprompt -trustcacerts -keystore $JAVA_HOME/jre/lib/security/cacerts -storepass changeit -alias ONAP -import -file $APP_CONFIG_HOME/ONAP_RootCA.cer
 
 exec java -classpath "/etc:${APP_HOME}/lib/*:/lib/*:/src:/schema:/generated-sources:${APP_CONFIG_HOME}:${APP_HOME}" \
--DappName=${APPLICATIONNAME} -DappVersion=${BUNDLEVERSION} \
+-DappName=${APP_NAME} -DappVersion=${BUNDLEVERSION} \
 -DrouteOffer=${ROUTEOFFER} \
 -DVERSION_ROUTEOFFER_ENVCONTEXT=${BUNDLEVERSION}/${STICKYSELECTORKEY}/${ENVCONTEXT} \
 -DSecurityFilePath=/etc \
