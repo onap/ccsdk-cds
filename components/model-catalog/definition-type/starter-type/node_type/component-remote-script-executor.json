@@ -1,0 +1,66 @@
+{
+  "description": "Generic Remote Script Component Executor",
+  "version": "1.0.0",
+  "attributes": {
+    "response-data": {
+      "description": "Remote executed response data.",
+      "required": false,
+      "type": "json"
+    },
+    "status": {
+      "description": "Remote execution status.",
+      "required": true,
+      "type": "string"
+    }
+  },
+  "interfaces": {
+    "ComponentRemoteScriptExecutor": {
+      "operations": {
+        "process": {
+          "description": "ComponentRemoteScriptExecutor Operation",
+          "inputs": {
+            "blueprint-version": {
+              "description": "Blueprint version.",
+              "required": true,
+              "type": "string"
+            },
+            "blueprint-name": {
+              "description": "Blueprint name.",
+              "required": true,
+              "type": "string"
+            },
+            "selector": {
+              "description": "Remote GRPC selector or DSL reference or GRPC Json config.",
+              "required": true,
+              "type": "json"
+            },
+            "blueprint-action": {
+              "description": "Blueprint action name.",
+              "required": true,
+              "type": "string"
+            },
+            "timeout": {
+              "description": "Remote execution timeout in sec.",
+              "required": true,
+              "type": "integer",
+              "default": 180
+            },
+            "request-data": {
+              "description": "Dynamic Json Content or DSL Json reference.",
+              "required": false,
+              "type": "json"
+            }
+          },
+          "outputs": {
+            "status": {
+              "description": "Status of the Component Execution ( success or failure )",
+              "required": true,
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "derived_from": "tosca.nodes.Component"
+}

@@ -18,29 +18,56 @@ package org.onap.ccsdk.cds.blueprintsprocessor.core.utils
 
 import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
+import org.onap.ccsdk.cds.controllerblueprints.core.returnNullIfMissing
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 
-class PayloadUtils {
+object PayloadUtils {
 
-    companion object {
+    fun prepareRequestPayloadStr(workflowName: String, jsonNode: JsonNode): String {
+        return prepareRequestPayload(workflowName, jsonNode).asJsonString(false)
+    }
 
-        fun prepareInputsFromWorkflowPayload(bluePrintRuntimeService: BluePrintRuntimeService<*>, payload: JsonNode, workflowName: String) {
-            val input = payload.get("$workflowName-request")
-            bluePrintRuntimeService.assignWorkflowInputs(workflowName, input)
-        }
+    fun prepareRequestPayload(workflowName: String, jsonNode: JsonNode): JsonNode {
+        val objectNode = JacksonUtils.objectMapper.createObjectNode()
+        objectNode["$workflowName-request"] = jsonNode
+        return objectNode
+    }
 
-        fun prepareDynamicInputsFromWorkflowPayload(bluePrintRuntimeService: BluePrintRuntimeService<*>, payload: JsonNode, workflowName: String) {
-            val input = payload.get("$workflowName-request")
-            val propertyFields = input.get("$workflowName-properties")
-            prepareDynamicInputsFromComponentPayload(bluePrintRuntimeService, propertyFields)
-        }
+    fun getResponseDataFromPayload(workflowName: String, responsePayload: JsonNode): JsonNode {
+        return responsePayload.get("$workflowName-response").returnNullIfMissing()
+            ?: throw BluePrintProcessorException("failed to get property($workflowName-response)")
+    }
 
-        fun prepareDynamicInputsFromComponentPayload(bluePrintRuntimeService: BluePrintRuntimeService<*>, payload: JsonNode) {
-            payload.fields().forEach { property ->
-                val path = StringBuilder(BluePrintConstants.PATH_INPUTS)
-                    .append(BluePrintConstants.PATH_DIVIDER).append(property.key).toString()
-                bluePrintRuntimeService.put(path, property.value)
-            }
+    fun prepareInputsFromWorkflowPayload(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        payload: JsonNode,
+        workflowName: String
+    ) {
+        val input = payload.get("$workflowName-request")
+        bluePrintRuntimeService.assignWorkflowInputs(workflowName, input)
+    }
+
+    fun prepareDynamicInputsFromWorkflowPayload(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        payload: JsonNode,
+        workflowName: String
+    ) {
+        val input = payload.get("$workflowName-request")
+        val propertyFields = input.get("$workflowName-properties")
+        prepareDynamicInputsFromComponentPayload(bluePrintRuntimeService, propertyFields)
+    }
+
+    fun prepareDynamicInputsFromComponentPayload(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        payload: JsonNode
+    ) {
+        payload.fields().forEach { property ->
+            val path = StringBuilder(BluePrintConstants.PATH_INPUTS)
+                .append(BluePrintConstants.PATH_DIVIDER).append(property.key).toString()
+            bluePrintRuntimeService.put(path, property.value)
         }
     }
 }

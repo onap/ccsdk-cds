@@ -84,8 +84,7 @@ class MessageLoggerService {
         val localhost = InetAddress.getLocalHost()
         requestHeader.addHeader(BluePrintConstants.ONAP_REQUEST_ID, MDC.get("InvocationID").defaultToUUID())
         requestHeader.addHeader(BluePrintConstants.ONAP_INVOCATION_ID, UUID.randomUUID().toString())
-        val partnerName = System.getProperty("APPNAME") ?: "BlueprintsProcessor"
-        requestHeader.addHeader(BluePrintConstants.ONAP_PARTNER_NAME, partnerName)
+        requestHeader.addHeader(BluePrintConstants.ONAP_PARTNER_NAME, BluePrintConstants.APP_NAME)
         requestHeader.addHeader("ClientIPAddress", localhost.hostAddress)
     }
 

@@ -23,6 +23,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.data.Implementation
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.slf4j.LoggerFactory
@@ -51,12 +52,12 @@ open class NodeTemplateExecutionService {
 
         val nodeTemplateImplementation = blueprintContext
             .nodeTemplateOperationImplementation(nodeTemplateName, interfaceName, operationName)
-
-        val timeout: Int = nodeTemplateImplementation?.timeout ?: 180
+            ?: Implementation()
 
         log.info(
             "executing node template($nodeTemplateName) component($componentName) " +
-                    "interface($interfaceName) operation($operationName) with timeout($timeout) sec."
+                "interface($interfaceName) operation($operationName) on host (${nodeTemplateImplementation.operationHost}) " +
+                "with timeout(${nodeTemplateImplementation.timeout}) sec."
         )
 
         // Get the Component Instance
@@ -77,7 +78,6 @@ open class NodeTemplateExecutionService {
         stepInputs[BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE] = nodeTemplateName.asJsonPrimitive()
         stepInputs[BluePrintConstants.PROPERTY_CURRENT_INTERFACE] = interfaceName.asJsonPrimitive()
         stepInputs[BluePrintConstants.PROPERTY_CURRENT_OPERATION] = operationName.asJsonPrimitive()
-        stepInputs[BluePrintConstants.PROPERTY_CURRENT_TIMEOUT] = timeout.asJsonPrimitive()
         val stepInputData = StepData().apply {
             name = nodeTemplateName
             properties = stepInputs

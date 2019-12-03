@@ -38,6 +38,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.nodeTypeCompone
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.data.Implementation
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintScriptsServiceImpl
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
@@ -70,6 +71,11 @@ class AbstractComponentFunctionTest {
     fun init() {
         blueprintContext = mockk<BluePrintContext>()
         every { blueprintContext.rootPath } returns normalizedPathName("target")
+        every {
+            blueprintContext.nodeTemplateOperationImplementation(
+                any(), any(), any()
+            )
+        } returns Implementation()
     }
 
     @Test
@@ -147,7 +153,7 @@ class AbstractComponentFunctionTest {
      * Mocked input for abstract function test.
      */
     private fun getMockedInput(bluePrintRuntime: DefaultBluePrintRuntimeService):
-            ExecutionServiceInput {
+        ExecutionServiceInput {
 
         val mapper = ObjectMapper()
         val rootNode = mapper.createObjectNode()

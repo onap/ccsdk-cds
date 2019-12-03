@@ -27,8 +27,8 @@ import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
+import org.onap.ccsdk.cds.controllerblueprints.core.data.Implementation
 import org.onap.ccsdk.cds.controllerblueprints.core.getAsString
-import org.onap.ccsdk.cds.controllerblueprints.core.getOptionalAsInt
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintFunctionNode
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonPathParse
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
@@ -49,13 +49,13 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     lateinit var executionServiceInput: ExecutionServiceInput
     var executionServiceOutput = ExecutionServiceOutput()
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
+    lateinit var implementation: Implementation
     lateinit var processId: String
     lateinit var workflowName: String
     lateinit var stepName: String
     lateinit var interfaceName: String
     lateinit var operationName: String
     lateinit var nodeTemplateName: String
-    var timeout: Int = 180
     var operationInputs: MutableMap<String, JsonNode> = hashMapOf()
 
     override fun getName(): String {
@@ -63,7 +63,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     }
 
     override suspend fun prepareRequestNB(executionRequest: ExecutionServiceInput): ExecutionServiceInput {
-        checkNotNull(bluePrintRuntimeService) { "failed to prepare blueprint runtime" }
+        check(this::bluePrintRuntimeService.isInitialized) { "failed to prepare blueprint runtime" }
         checkNotNull(executionRequest.stepData) { "failed to get step info" }
 
         // Get the Step Name and Step Inputs
@@ -91,13 +91,16 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         operationName = this.operationInputs.getAsString(BluePrintConstants.PROPERTY_CURRENT_OPERATION)
         check(operationName.isNotEmpty()) { "couldn't get Operation name for step($stepName)" }
 
+        /** Get the Implementation Details */
+        implementation = bluePrintRuntimeService.bluePrintContext()
+            .nodeTemplateOperationImplementation(nodeTemplateName, interfaceName, operationName)
+            ?: Implementation()
+        check(this::implementation.isInitialized) { "failed to prepare implementation" }
+
         val operationResolvedProperties = bluePrintRuntimeService
             .resolveNodeTemplateInterfaceOperationInputs(nodeTemplateName, interfaceName, operationName)
 
         this.operationInputs.putAll(operationResolvedProperties)
-
-        val timeout = this.operationInputs.getOptionalAsInt(BluePrintConstants.PROPERTY_CURRENT_TIMEOUT)
-        timeout?.let { this.timeout = timeout }
 
         return executionRequest
     }
@@ -106,7 +109,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         log.info("Preparing Response...")
         executionServiceOutput.commonHeader = executionServiceInput.commonHeader
         executionServiceOutput.actionIdentifiers = executionServiceInput.actionIdentifiers
-        var status = Status()
+        val status = Status()
         try {
             // Resolve the Output Expression
             val stepOutputs = bluePrintRuntimeService
@@ -130,7 +133,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     override suspend fun applyNB(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
         try {
             prepareRequestNB(executionServiceInput)
-            withTimeout((timeout * 1000).toLong()) {
+            withTimeout((implementation.timeout * 1000).toLong()) {
                 processNB(executionServiceInput)
             }
         } catch (runtimeException: RuntimeException) {
@@ -191,7 +194,8 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     }
 
     suspend fun readLinesFromArtifact(artifactName: String): List<String> {
-        val artifactDefinition = bluePrintRuntimeService.resolveNodeTemplateArtifactDefinition(nodeTemplateName, artifactName)
+        val artifactDefinition =
+            bluePrintRuntimeService.resolveNodeTemplateArtifactDefinition(nodeTemplateName, artifactName)
         val file = normalizedFile(bluePrintRuntimeService.bluePrintContext().rootPath, artifactDefinition.file)
         return file.readNBLines()
     }

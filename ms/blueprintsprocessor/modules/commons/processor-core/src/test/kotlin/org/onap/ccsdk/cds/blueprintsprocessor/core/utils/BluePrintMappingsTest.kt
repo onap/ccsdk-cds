@@ -8,6 +8,7 @@ import org.onap.ccsdk.cds.controllerblueprints.common.api.ActionIdentifiers
 import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.common.api.Flag
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.currentTimestamp
 import org.springframework.test.context.junit4.SpringRunner
 import java.text.SimpleDateFormat
 
@@ -98,7 +99,7 @@ class BluePrintMappingsTest {
         Assert.assertEquals(commonHeader.originatorId, commonHeader2.originatorId)
         Assert.assertEquals(commonHeader.requestId, commonHeader2.requestId)
         Assert.assertEquals(commonHeader.subRequestId, commonHeader2.subRequestId)
-        Assert.assertEquals(commonHeader.timestamp.toString(), commonHeader2.timestamp)
+        Assert.assertEquals(commonHeader.timestamp.currentTimestamp(), commonHeader2.timestamp)
     }
 
     @Test

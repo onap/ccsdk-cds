@@ -16,12 +16,32 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Date
+
+fun controllerDate(): Date {
+    val localDateTime = LocalDateTime.now(ZoneId.systemDefault())
+    return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant())
+}
 
 fun currentTimestamp(): String {
-    val now = LocalDateTime.now(ZoneId.systemDefault())
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    return formatter.format(now)
+    val localDateTime = LocalDateTime.now(ZoneId.systemDefault())
+    val formatter = DateTimeFormatter.ofPattern(BluePrintConstants.DATE_TIME_PATTERN)
+    return formatter.format(localDateTime)
+}
+
+/** Parse string date in CDS string format */
+fun String.toControllerDate(): Date {
+    val formatter = SimpleDateFormat(BluePrintConstants.DATE_TIME_PATTERN)
+    return formatter.parse(this)
+}
+
+/** Return date to CDS string format */
+fun Date.currentTimestamp(): String {
+    val formatter = SimpleDateFormat(BluePrintConstants.DATE_TIME_PATTERN)
+    return formatter.format(this)
 }
