@@ -94,6 +94,30 @@
       "revId": "539ac9576f2f60ac830ae7d24663eb802a0c77e1",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a2800cf_ff5fb60d",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/designer-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/designer/api/BlueprintModelController.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-12-03T14:37:28Z",
+      "side": 1,
+      "message": "Model content is binary zip file, while will be accessed by separate request, download.",
+      "parentUuid": "75b8f1b6_f5152299",
+      "range": {
+        "startLine": 138,
+        "startChar": 66,
+        "endLine": 138,
+        "endChar": 88
+      },
+      "revId": "539ac9576f2f60ac830ae7d24663eb802a0c77e1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
