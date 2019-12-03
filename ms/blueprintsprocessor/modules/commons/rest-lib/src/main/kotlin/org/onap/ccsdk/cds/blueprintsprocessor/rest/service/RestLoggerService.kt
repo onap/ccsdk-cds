@@ -26,6 +26,7 @@ import kotlinx.coroutines.newCoroutineContext
 import kotlinx.coroutines.reactor.ReactorContext
 import kotlinx.coroutines.reactor.asCoroutineContext
 import org.apache.http.message.BasicHeader
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_INVOCATION_ID
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_PARTNER_NAME
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_REQUEST_ID
@@ -57,8 +58,7 @@ class RestLoggerService {
         fun httpInvoking(headers: Array<BasicHeader>) {
             headers.plusElement(BasicHeader(ONAP_REQUEST_ID, MDC.get("InvocationID").defaultToUUID()))
             headers.plusElement(BasicHeader(ONAP_INVOCATION_ID, UUID.randomUUID().toString()))
-            val partnerName = System.getProperty("APPNAME") ?: "BlueprintsProcessor"
-            headers.plusElement(BasicHeader(ONAP_PARTNER_NAME, partnerName))
+            headers.plusElement(BasicHeader(ONAP_PARTNER_NAME, BluePrintConstants.APP_NAME))
         }
     }
 
@@ -85,8 +85,7 @@ class RestLoggerService {
             val resHeaders = response.headers
             resHeaders[ONAP_REQUEST_ID] = MDC.get("RequestID")
             resHeaders[ONAP_INVOCATION_ID] = MDC.get("InvocationID")
-            val partnerName = System.getProperty("APPNAME") ?: "BlueprintsProcessor"
-            resHeaders[ONAP_PARTNER_NAME] = partnerName
+            resHeaders[ONAP_PARTNER_NAME] = BluePrintConstants.APP_NAME
         } catch (e: Exception) {
             log.warn("couldn't set response headers", e)
         } finally {

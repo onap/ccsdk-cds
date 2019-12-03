@@ -34,6 +34,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ExecutionServic
 import org.onap.ccsdk.cds.blueprintsprocessor.ssh.BluePrintSshLibConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.data.Implementation
 import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintScriptsServiceImpl
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
@@ -92,6 +93,12 @@ class ComponentCliExecutorTest {
             executionServiceInput.stepData = stepInputData
 
             val blueprintContext = mockk<BluePrintContext>()
+            every {
+                blueprintContext.nodeTemplateOperationImplementation(
+                    any(), any(), any()
+                )
+            } returns Implementation()
+
             every { bluePrintRuntime.bluePrintContext() } returns blueprintContext
             every {
                 bluePrintRuntime.resolveNodeTemplateInterfaceOperationInputs(
