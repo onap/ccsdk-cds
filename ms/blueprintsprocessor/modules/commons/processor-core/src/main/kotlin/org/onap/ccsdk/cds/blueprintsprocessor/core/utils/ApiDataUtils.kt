@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2019 Bell Canada.
+ * Modifications Copyright © 2018-2019 AT&T Intellectual Property.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.onap.ccsdk.cds.blueprintsprocessor.core.utils
 
 import com.fasterxml.jackson.databind.node.ObjectNode
-import com.google.common.base.Strings
 import com.google.protobuf.Struct
 import com.google.protobuf.util.JsonFormat
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ACTION_MODE_SYNC
 import org.onap.ccsdk.cds.controllerblueprints.common.api.ActionIdentifiers
 import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.common.api.Flag
 import org.onap.ccsdk.cds.controllerblueprints.common.api.Status
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.controllerDate
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.currentTimestamp
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.toControllerDate
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceInput
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceOutput
-import java.text.SimpleDateFormat
-import java.util.Date
-
-private val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
 
 // ACTION IDENTIFIER
 
@@ -59,8 +60,10 @@ fun org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.CommonHeader.toProto():
     commonHeader.originatorId = this.originatorId
     commonHeader.requestId = this.requestId
     commonHeader.subRequestId = this.subRequestId
-    commonHeader.timestamp = this.timestamp.toString()
-    commonHeader.flag = this.flags?.toProto()
+    commonHeader.timestamp = this.timestamp.currentTimestamp()
+    if (this.flags != null) {
+        commonHeader.flag = this.flags!!.toProto()
+    }
     return commonHeader.build()
 }
 
@@ -69,10 +72,10 @@ fun CommonHeader.toJava(): org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.
     commonHeader.originatorId = this.originatorId
     commonHeader.requestId = this.requestId
     commonHeader.subRequestId = this.subRequestId
-    commonHeader.timestamp = if (!Strings.isNullOrEmpty(this.timestamp)) {
-        formatter.parse(this.timestamp)
+    commonHeader.timestamp = if (!this.timestamp.isNullOrEmpty()) {
+        this.timestamp!!.toControllerDate()
     } else {
-        Date()
+        controllerDate()
     }
     commonHeader.flags = this.flag?.toJava()
     return commonHeader
@@ -127,4 +130,75 @@ fun org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput.
     JsonFormat.parser().merge(JacksonUtils.getJson(this.payload), struct)
     executionServiceOuput.payload = struct.build()
     return executionServiceOuput.build()
+}
+
+/** Create proto common header with [requestId] [subRequestId] and [originator] */
+fun createCommonHeaderProto(
+    requestId: String,
+    subRequestId: String,
+    originator: String
+) = CommonHeader.newBuilder()
+    .setTimestamp(currentTimestamp())
+    .setOriginatorId(originator)
+    .setRequestId(requestId)
+    .setSubRequestId(subRequestId).build()!!
+
+/** Create proto action identifiers with [name] [version] and [action] */
+fun createActionIdentifiersProto(
+    name: String,
+    version: String,
+    action: String
+) = ActionIdentifiers.newBuilder()
+    .setBlueprintName(name)
+    .setBlueprintVersion(version)
+    .setActionName(action)
+    .setMode(ACTION_MODE_SYNC)
+    .build()!!
+
+/** Create proto status with [message] and [code] */
+fun createStatus(
+    message: String,
+    code: Int
+) = Status.newBuilder()
+    .setTimestamp(currentTimestamp())
+    .setMessage(message)
+    .setCode(code)
+    .build()!!
+
+/** Create ExecutionServiceInput using [commonHeader], [actionIdentifier] and response payload [jsonContent] */
+fun createExecutionServiceInputProto(
+    commonHeader: CommonHeader,
+    actionIdentifier: ActionIdentifiers,
+    jsonContent: String
+): ExecutionServiceInput {
+
+    val payloadBuilder = ExecutionServiceInput.newBuilder().payloadBuilder
+    JsonFormat.parser().merge(jsonContent, payloadBuilder)
+
+    return ExecutionServiceInput.newBuilder()
+        .setCommonHeader(commonHeader)
+        .setActionIdentifiers(actionIdentifier)
+        .setPayload(payloadBuilder.build())
+        .build()
+}
+
+/** Create ExecutionServiceOutput using [commonHeader], [actionIdentifier] [status]and
+ * response payload [jsonContent]
+ * */
+fun createExecutionServiceOutputProto(
+    commonHeader: CommonHeader,
+    actionIdentifier: ActionIdentifiers,
+    status: Status,
+    jsonContent: String
+): ExecutionServiceOutput {
+
+    val payloadBuilder = ExecutionServiceOutput.newBuilder().payloadBuilder
+    JsonFormat.parser().merge(jsonContent, payloadBuilder)
+
+    return ExecutionServiceOutput.newBuilder()
+        .setCommonHeader(commonHeader)
+        .setActionIdentifiers(actionIdentifier)
+        .setStatus(status)
+        .setPayload(payloadBuilder.build())
+        .build()
 }

@@ -23,6 +23,7 @@ import io.grpc.ServerCallHandler
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.getStringKey
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.putStringKeyValue
 import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_INVOCATION_ID
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_PARTNER_NAME
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_REQUEST_ID
@@ -93,8 +94,7 @@ class GrpcLoggerService {
     fun grpcInvoking(requestHeader: Metadata) {
         requestHeader.putStringKeyValue(ONAP_REQUEST_ID, MDC.get("InvocationID").defaultToUUID())
         requestHeader.putStringKeyValue(ONAP_INVOCATION_ID, UUID.randomUUID().toString())
-        val partnerName = System.getProperty("APPNAME") ?: "BlueprintsProcessor"
-        requestHeader.putStringKeyValue(ONAP_PARTNER_NAME, partnerName)
+        requestHeader.putStringKeyValue(ONAP_PARTNER_NAME, BluePrintConstants.APP_NAME)
     }
 
     /** Used when server returns response */

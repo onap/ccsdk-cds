@@ -24,6 +24,13 @@ package org.onap.ccsdk.cds.controllerblueprints.core
  */
 object BluePrintConstants {
 
+    var APP_NAME = System.getProperty("APPNAME")
+        ?: System.getProperty("APP_NAME")
+        ?: System.getProperty("APPLICATION_NAME")
+        ?: "cds-controller-default"
+
+    const val DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+
     const val RESPONSE_HEADER_MINOR_VERSION: String = "X-MinorVersion"
     const val RESPONSE_HEADER_PATCH_VERSION: String = "X-PatchVersion"
     const val RESPONSE_HEADER_LATEST_VERSION: String = "X-LatestVersion"
