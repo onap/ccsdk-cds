@@ -119,6 +119,22 @@ export default {
                 "getDataTypes": []
 
             }
+        },
+        {
+            "template": {
+                "method": "GET",
+                "url": processorApiConfig.http.url + "/model-type/by-definition/{type}",
+                "headers": {
+                    "accepts": "application/json",
+                    "content-type": "application/json",
+                    "authorization": processorApiConfig.http.authToken
+                },
+                "responsePath": "$.*"
+            },
+            "functions": {
+                "getResourceDictionaryByType": ["type"]
+
+            }
         }
     ]
 };
