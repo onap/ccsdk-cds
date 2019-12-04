@@ -96,6 +96,9 @@ export class DataDictionaryController {
     return await this.rdservice.getModelType(source);
   }
 
+  /**
+   * @deprecated   use getResourceDictionaryByType Instead.
+   */
   @get('/resourcedictionary/model-type/by-definition/data_type', {
     responses: {
       '200': {
@@ -104,6 +107,19 @@ export class DataDictionaryController {
     },
   })
   async getDataTypes() {
+    console.warn("Calling deprecated function!");
     return await this.rdservice.getDataTypes();
   }
+
+  @get('/resourcedictionary/model-type/by-definition/{type}', {
+    responses: {
+      '200': {
+        content: {'application/json': {}},
+      },
+    },
+  })
+  async getResourceDictionaryByType(@param.path.string('type') type: string) {
+    return await this.rdservice.getResourceDictionaryByType(type);
+  }
+
 }
