@@ -26,16 +26,16 @@ import org.springframework.context.annotation.PropertySource
 @PropertySource("classpath:application.properties")
 open class HealthCheckProperties {
 
-    @Value("\${blueprintprocessor.healthcheck.baseUrl}")
+    @Value("\${blueprintprocessor.healthcheck.baseUrl:}")
     private val bluePrintProcessorBaseURL: String? = null
 
-    @Value("#{'\${blueprintprocessor.healthcheck.mapping-service-name-with-service-link}'.split(']')}")
+    @Value("#{'\${blueprintprocessor.healthcheck.mapping-service-name-with-service-link:}'.split(']')}")
     private val blueprintprocessorServiceMapping: List<String>? = null
 
-    @Value("\${cdslistener.healthcheck.baseUrl}")
+    @Value("\${cdslistener.healthcheck.baseUrl:}")
     private val cdsListenerBaseURL: String? = null
 
-    @Value("#{'\${cdslistener.healthcheck.mapping-service-name-with-service-link}'.split(']')}")
+    @Value("#{'\${cdslistener.healthcheck.mapping-service-name-with-service-link:}'.split(']')}")
     private val cdsListenerServiceMapping: List<String>? = null
 
     open fun getBluePrintBaseURL(): String? {
