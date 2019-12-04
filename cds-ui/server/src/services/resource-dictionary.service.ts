@@ -7,9 +7,10 @@ export interface ResourceDictionaryService {
   getSourceMapping(): Promise<JSON>;
   getByTags(tags: string): Promise<JSON>;
   save(resourceDictionary: JSON): Promise<JSON>;
-  searchbyNames(resourceDictionaryList: JSON): Promise<JSON>;  
+  searchbyNames(resourceDictionaryList: JSON): Promise<JSON>;
   getModelType(source: string): Promise<JSON>;
   getDataTypes(): Promise<JSON>;
+  getResourceDictionaryByType(type: string): Promise<JSON>;
 }
 
 export class ResourceDictionaryServiceProvider implements Provider<ResourceDictionaryService> {
