@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb6b1cc0_7a41b932",
+        "filename": "README",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2019-12-05T23:20:21Z",
+      "side": 1,
+      "message": "Please rename file to README.md",
+      "revId": "00d0f493733e847ef0baa0cb9bbc10f61d7e6c0a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
