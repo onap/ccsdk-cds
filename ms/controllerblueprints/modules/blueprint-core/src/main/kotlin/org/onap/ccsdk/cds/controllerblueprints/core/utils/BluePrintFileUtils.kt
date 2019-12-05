@@ -32,13 +32,19 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.FileFilter
+import java.io.FileNotFoundException
+import java.net.URL
+import java.net.URLClassLoader
 import java.nio.file.Files
+import java.nio.file.NotDirectoryException
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
 
 class BluePrintFileUtils {
     companion object {
+
+        const val COMPILED_JAR_SUFFIX = "cba-kts.jar"
 
         private val log = LoggerFactory.getLogger(this::class.toString())
 
@@ -263,7 +269,7 @@ class BluePrintFileUtils {
         }
 
         private fun compileJarFileName(artifactName: String, artifactVersion: String): String {
-            return "$artifactName-$artifactVersion-cba-kts.jar"
+            return "$artifactName-$artifactVersion-$COMPILED_JAR_SUFFIX"
         }
 
         fun compileJarFilePathName(basePath: String, artifactName: String, artifactVersion: String): String {
@@ -287,6 +293,29 @@ class BluePrintFileUtils {
 
             // In case dot is in first position, we are dealing with a hidden file rather than an extension
             return if (dotIndexe > 0) fileName.substring(0, dotIndexe) else fileName
+        }
+
+        fun getURLClassLoaderFromDirectory(directory: File): URLClassLoader {
+            if (!directory.exists()) {
+                throw FileNotFoundException(directory.absolutePath)
+            } else if (!directory.isDirectory) {
+                throw NotDirectoryException(directory.absolutePath)
+            }
+
+            val urls = arrayListOf<URL>()
+            directory.walkTopDown()
+                    .filter { it.name.endsWith(COMPILED_JAR_SUFFIX) }
+                    .forEach {
+                        log.debug("Adding (${it.absolutePath}) to classLoader (${directory.absolutePath})")
+
+                        urls.add(it.toURI().toURL())
+                    }
+            return URLClassLoader(urls.toTypedArray(), this.javaClass.classLoader)
+        }
+
+        fun getURLClassLoaderFromDirectory(path: String): URLClassLoader {
+            val directory = normalizedFile(path)
+            return getURLClassLoaderFromDirectory(directory)
         }
     }
 }
