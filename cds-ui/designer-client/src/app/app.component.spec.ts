@@ -41,16 +41,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'client-frankfurt'`, () => {
+  it(`should have as title 'designer-client'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('client-frankfurt');
+    expect(app.title).toEqual('designer-client');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('client-frankfurt app is running!');
+    expect(compiled.querySelector('.content span').textContent).toContain('designer-client app is running!');
   });
 });
