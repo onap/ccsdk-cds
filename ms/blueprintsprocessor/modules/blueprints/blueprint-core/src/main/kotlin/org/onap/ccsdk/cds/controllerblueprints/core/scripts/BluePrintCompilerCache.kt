@@ -21,8 +21,7 @@ import com.google.common.cache.CacheLoader
 import com.google.common.cache.LoadingCache
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
-import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
-import java.net.URL
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
 import java.net.URLClassLoader
 
 object BluePrintCompileCache {
@@ -58,19 +57,10 @@ object BluePrintClassLoader : CacheLoader<String, URLClassLoader>() {
 
     val log = logger(BluePrintClassLoader::class)
 
-    override fun load(key: String): URLClassLoader {
+    override fun load(key: String) = try {
         log.info("loading compiled cache($key)")
-        val keyPath = normalizedFile(key)
-        if (!keyPath.exists()) {
-            throw BluePrintException("failed to load cache($key), missing files.")
-        }
-        val urls = arrayListOf<URL>()
-        keyPath.walkTopDown()
-            .filter { it.name.endsWith("cba-kts.jar") }
-            .forEach {
-                log.debug("Adding (${it.absolutePath}) to cache($key)")
-                urls.add(it.toURI().toURL())
-            }
-        return URLClassLoader(urls.toTypedArray(), this.javaClass.classLoader)
+        BluePrintFileUtils.getURLClassLoaderFromDirectory(key)
+    } catch (e: Exception) {
+        throw BluePrintException("failed to load cache($key) with Exception($e)")
     }
 }
