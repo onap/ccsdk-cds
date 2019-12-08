@@ -19,23 +19,24 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Page } from 'src/app/common/model/page';
+import {Page} from 'src/app/common/model/page';
+import {BlueprintModel} from './BluePrint.model';
 
-export class BlueprintModel {
+export class BluePrintDetailModel extends BlueprintModel {
+    blueprintModelContent: BlueprintModelContent;
+}
 
-
+export class BlueprintModelContent {
     id: string;
-    artifactUUId?: null;
-    artifactType: string;
-    artifactVersion: string;
-    artifactDescription: string;
-    internalVersion?: null;
-    createdDate: string;
-    artifactName: string;
-    published: string;
-    updatedBy: string;
-    tags: string;
+    name: string;
+    description: string;
+    fileContent: any;
+
+
 }
 
-export class BluePrintPage extends Page<BlueprintModel> {
-}
+/*
+export class BluePrintDetailModelContent   {
+    bluePrintDetailsModels: BluePrintDetailModel[];
+
+}*/
