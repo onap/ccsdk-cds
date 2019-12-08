@@ -1,6 +1,8 @@
 TOSCA-Meta-File-Version: 1.0.0
 CSAR-Version: 1.0
-Created-By: Alexis de Talhouët
-Entry-Definitions: Definitions/vFW_spinup.json
-Template-Tags: test
+Created-By: PLATANIA, MARCO <platania@research.att.com>
+Entry-Definitions: Definitions/vFW_CDS.json
+Template-Tags: vFW-CDS
+Template-Name: vFW-CDS
+Template-Version: 1.0.0
 Content-Type: application/vnd.oasis.bpmn
