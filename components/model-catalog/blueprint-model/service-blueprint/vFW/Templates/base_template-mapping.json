@@ -3,13 +3,11 @@
     "name": "service-instance-id",
     "property": {
       "description": "",
-      "required": true,
+      "required": false,
       "type": "string",
       "status": "",
       "constraints": [
-        {
-          
-        }
+        {}
       ],
       "entry_schema": {
         "type": ""
@@ -18,22 +16,84 @@
     "input-param": false,
     "dictionary-name": "service-instance-id",
     "dictionary-source": "input",
+    "dependencies": [],
+    "version": 0
+  },
+    {
+    "name": "vf-module-name",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      },
+      "default": "${vf-module-name}"
+    },
+    "input-param": false,
+    "dictionary-name": "vf-module-name",
+    "dictionary-source": "default",
+    "dependencies": [],
+    "version": 0
+  },
+  {
+    "name": "vf-module-label",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      }
+    },
+    "input-param": false,
+    "dictionary-name": "vf-module-label",
+    "dictionary-source": "processor-db",
     "dependencies": [
-      
+      "vf-module-model-customization-uuid"
     ],
+    "version": 0
+  },
+  {
+    "name": "vf-naming-policy",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      }
+	  },
+    "input-param": false,
+    "dictionary-name": "vf-naming-policy",
+    "dictionary-source": "sdnc",
+    "dependencies": [
+	  "service-instance-id",
+      "vnf-id"
+	],
     "version": 0
   },
   {
     "name": "vf-module-type",
     "property": {
       "description": "",
-      "required": true,
+      "required": false,
       "type": "string",
       "status": "",
       "constraints": [
-        {
-          
-        }
+        {}
       ],
       "entry_schema": {
         "type": ""
@@ -51,13 +111,11 @@
     "name": "vf-module-model-customization-uuid",
     "property": {
       "description": "",
-      "required": true,
+      "required": false,
       "type": "string",
       "status": "",
       "constraints": [
-        {
-          
-        }
+        {}
       ],
       "entry_schema": {
         "type": ""
@@ -66,22 +124,18 @@
     "input-param": false,
     "dictionary-name": "vf-module-model-customization-uuid",
     "dictionary-source": "input",
-    "dependencies": [
-      
-    ],
+    "dependencies": [],
     "version": 0
   },
   {
     "name": "vnf-id",
     "property": {
       "description": "",
-      "required": true,
+      "required": false,
       "type": "string",
       "status": "",
       "constraints": [
-        {
-          
-        }
+        {}
       ],
       "entry_schema": {
         "type": ""
@@ -90,22 +144,18 @@
     "input-param": false,
     "dictionary-name": "vnf-id",
     "dictionary-source": "input",
-    "dependencies": [
-      
-    ],
+    "dependencies": [],
     "version": 0
   },
   {
     "name": "vf-module-id",
     "property": {
       "description": "",
-      "required": true,
+      "required": false,
       "type": "string",
       "status": "",
       "constraints": [
-        {
-          
-        }
+        {}
       ],
       "entry_schema": {
         "type": ""
@@ -114,22 +164,18 @@
     "input-param": false,
     "dictionary-name": "vf-module-id",
     "dictionary-source": "input",
-    "dependencies": [
-      
-    ],
+    "dependencies": [],
     "version": 0
   },
   {
     "name": "vnf-model-customization-uuid",
     "property": {
       "description": "",
-      "required": true,
+      "required": false,
       "type": "string",
       "status": "",
       "constraints": [
-        {
-          
-        }
+        {}
       ],
       "entry_schema": {
         "type": ""
@@ -138,22 +184,18 @@
     "input-param": false,
     "dictionary-name": "vnf-model-customization-uuid",
     "dictionary-source": "input",
-    "dependencies": [
-      
-    ],
+    "dependencies": [],
     "version": 0
   },
   {
     "name": "aic-cloud-region",
     "property": {
       "description": "",
-      "required": true,
+      "required": false,
       "type": "string",
       "status": "",
       "constraints": [
-        {
-          
-        }
+        {}
       ],
       "entry_schema": {
         "type": ""
@@ -162,53 +204,25 @@
     "input-param": false,
     "dictionary-name": "aic-cloud-region",
     "dictionary-source": "input",
-    "dependencies": [
-      
-    ],
+    "dependencies": [],
     "version": 0
   },
   {
-    "name": "nf-role",
+    "name": "int_private1_net_cidr",
     "property": {
       "description": "",
-      "required": true,
+      "required": false,
       "type": "string",
       "status": "",
       "constraints": [
-        {
-          
-        }
+        {}
       ],
       "entry_schema": {
         "type": ""
       }
     },
     "input-param": false,
-    "dictionary-name": "nf-role",
-    "dictionary-source": "processor-db",
-    "dependencies": [
-      "vnf-model-customization-uuid"
-    ],
-    "version": 0
-  },
-  {
-    "name": "vnf-name",
-    "property": {
-      "description": "",
-      "required": true,
-      "type": "string",
-      "status": "",
-      "constraints": [
-        {
-          
-        }
-      ],
-      "entry_schema": {
-        "type": ""
-      }
-    },
-    "input-param": false,
-    "dictionary-name": "vnf-name",
+    "dictionary-name": "int_private1_net_cidr",
     "dictionary-source": "sdnc",
     "dependencies": [
       "service-instance-id",
@@ -217,51 +231,74 @@
     "version": 0
   },
   {
-    "name": "unprotected_private_net_cidr",
+    "name": "int_private2_net_cidr",
     "property": {
       "description": "",
-      "required": true,
+      "required": false,
       "type": "string",
       "status": "",
       "constraints": [
-        {
-          
-        }
+        {}
       ],
       "entry_schema": {
         "type": ""
       }
     },
     "input-param": false,
-    "dictionary-name": "unprotected_private_net_cidr",
-    "dictionary-source": "processor-db",
+    "dictionary-name": "int_private2_net_cidr",
+    "dictionary-source": "sdnc",
     "dependencies": [
-      
+      "service-instance-id",
+      "vnf-id"
     ],
     "version": 0
   },
   {
-    "name": "protected_private_net_cidr",
+    "name": "vnf_name",
     "property": {
       "description": "",
-      "required": true,
+      "required": false,
       "type": "string",
       "status": "",
       "constraints": [
-        {
-          
-        }
+        {}
       ],
       "entry_schema": {
         "type": ""
       }
     },
     "input-param": false,
-    "dictionary-name": "protected_private_net_cidr",
-    "dictionary-source": "processor-db",
+    "dictionary-name": "vnf_name",
+    "dictionary-source": "sdnc",
     "dependencies": [
-      
+      "service-instance-id",
+      "vnf-id"
+    ],
+    "version": 0
+  },
+  {
+    "name": "pub_key",
+    "property": {
+      "description": "",
+      "required": false,
+      "type": "string",
+      "status": "",
+      "constraints": [
+        {}
+      ],
+      "entry_schema": {
+        "type": ""
+      }
+    },
+    "input-param": false,
+    "dictionary-name": "pub_key",
+    "dictionary-source": "sdnc",
+    "dependencies": [
+      "service-instance-id",
+      "vnf-id"
     ],
     "version": 0
   }
+  
+ 
 ]
