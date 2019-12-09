@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a57d965e_6f5d30d0",
+        "filename": "components/model-catalog/blueprint-model/service-blueprint/vFW/Definitions/resources_definition_types.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 1321,
+      "author": {
+        "id": 3957
+      },
+      "writtenOn": "2019-12-09T07:30:01Z",
+      "side": 1,
+      "message": "Remove sdnc source. vnf-id cannot be dependent on vnf-id. This bug was already ones fixed.",
+      "range": {
+        "startLine": 1306,
+        "startChar": 0,
+        "endLine": 1321,
+        "endChar": 9
+      },
+      "revId": "4bf5785a79c251d271dbfa3feba42059f4e68d72",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
