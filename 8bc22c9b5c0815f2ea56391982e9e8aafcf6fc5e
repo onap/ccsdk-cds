@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e67123f4_279aa078",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/scripts/BluePrintCompileService.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-12-09T15:52:57Z",
+      "side": 1,
+      "message": "Is this needed ? Do we need to manage here ?",
+      "range": {
+        "startLine": 128,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 9
+      },
+      "revId": "8bc22c9b5c0815f2ea56391982e9e8aafcf6fc5e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
