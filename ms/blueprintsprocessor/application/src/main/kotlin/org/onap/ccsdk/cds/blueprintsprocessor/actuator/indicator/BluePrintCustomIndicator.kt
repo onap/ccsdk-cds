@@ -16,9 +16,11 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.actuator.indicator
 
+import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.HealthApiResponse
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.HealthCheckStatus
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.service.health.BluePrintProcessorHealthCheck
+import org.slf4j.LoggerFactory
 import org.springframework.boot.actuate.health.AbstractHealthIndicator
 import org.springframework.boot.actuate.health.Health
 import org.springframework.stereotype.Component
@@ -30,16 +32,25 @@ import org.springframework.stereotype.Component
  */
 @Component
 open class BluePrintCustomIndicator(private val bluePrintProcessorHealthCheck: BluePrintProcessorHealthCheck) :
-    AbstractHealthIndicator() {
+        AbstractHealthIndicator() {
+
+    private var logger = LoggerFactory.getLogger(BluePrintCustomIndicator::class.java)
 
     @Throws(Exception::class)
     override fun doHealthCheck(builder: Health.Builder) {
-        var result: HealthApiResponse? = bluePrintProcessorHealthCheck!!.retrieveEndpointExecutionStatus()
-        if (result?.status == HealthCheckStatus.UP) {
-            builder.up()
-        } else {
-            builder.down()
+        runBlocking {
+            var result: HealthApiResponse? = null
+            try {
+                result = bluePrintProcessorHealthCheck!!.retrieveEndpointExecutionStatus()
+                if (result?.status == HealthCheckStatus.UP) {
+                    builder.up()
+                } else {
+                    builder.down()
+                }
+                builder.withDetail("Services", result?.checks)
+            } catch (exception: IllegalArgumentException) {
+                logger.error(exception.message)
+            }
         }
-        builder.withDetail("Services", result?.checks)
     }
 }
