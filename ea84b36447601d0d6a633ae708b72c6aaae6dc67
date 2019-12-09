@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a02271e_23f43293",
+        "filename": "components/model-catalog/blueprint-model/service-blueprint/vFW/Definitions/resources_definition_types.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 944,
+      "author": {
+        "id": 3957
+      },
+      "writtenOn": "2019-12-09T07:32:23Z",
+      "side": 0,
+      "message": "not sure if anybody needs it, but why aai-data source is removed?",
+      "range": {
+        "startLine": 929,
+        "startChar": 3,
+        "endLine": 944,
+        "endChar": 7
+      },
+      "revId": "ea84b36447601d0d6a633ae708b72c6aaae6dc67",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
