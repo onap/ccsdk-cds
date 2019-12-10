@@ -22,6 +22,30 @@
       "revId": "ea84b36447601d0d6a633ae708b72c6aaae6dc67",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "026c31af_0f1635ad",
+        "filename": "components/model-catalog/blueprint-model/service-blueprint/vFW/Definitions/resources_definition_types.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 944,
+      "author": {
+        "id": 4567
+      },
+      "writtenOn": "2019-12-10T10:32:12Z",
+      "side": 0,
+      "message": "this was part of the vnf-name defintion which is not used here. vnf_name didnt havent aai-data however it can be include with a minor change: \n\n   \"aai-data\" : {\n        \"type\" : \"source-rest\",\n        \"properties\" : {\n          \"type\" : \"JSON\",\n          \"verb\" : \"GET\",\n          \"url-path\" : \"/aai/v14/network/generic-vnfs/generic-vnf/$vnf-id\",\n          \"path\" : \"\",\n          \"input-key-mapping\" : {\n            \"vnf-id\" : \"vnf-id\"\n          },\n          \"output-key-mapping\" : {\n            \"vnf_name\" : \"vnf-name\"\n          },\n          \"key-dependencies\" : [ \"vnf-id\" ]\n        }\n      }",
+      "parentUuid": "2a02271e_23f43293",
+      "range": {
+        "startLine": 929,
+        "startChar": 3,
+        "endLine": 944,
+        "endChar": 7
+      },
+      "revId": "ea84b36447601d0d6a633ae708b72c6aaae6dc67",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }

@@ -22,6 +22,30 @@
       "revId": "4bf5785a79c251d271dbfa3feba42059f4e68d72",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8c9b44e_6ae5cbaa",
+        "filename": "components/model-catalog/blueprint-model/service-blueprint/vFW/Definitions/resources_definition_types.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 1321,
+      "author": {
+        "id": 4567
+      },
+      "writtenOn": "2019-12-10T10:32:12Z",
+      "side": 1,
+      "message": "correct, this should be removed",
+      "parentUuid": "a57d965e_6f5d30d0",
+      "range": {
+        "startLine": 1306,
+        "startChar": 0,
+        "endLine": 1321,
+        "endChar": 9
+      },
+      "revId": "4bf5785a79c251d271dbfa3feba42059f4e68d72",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
