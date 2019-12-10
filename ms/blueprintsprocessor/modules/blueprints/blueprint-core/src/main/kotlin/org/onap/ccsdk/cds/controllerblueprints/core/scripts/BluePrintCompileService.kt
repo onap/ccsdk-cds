@@ -25,9 +25,11 @@ import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.jvm.K2JVMCompiler
 import org.jetbrains.kotlin.config.Services
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.checkFileExists
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
 import java.io.File
 import java.net.URLClassLoader
 import java.util.ArrayList
@@ -50,11 +52,21 @@ open class BluePrintCompileService {
         kClassName: String,
         args: ArrayList<Any?>?
     ): T {
-        /** Compile the source code */
-        compile(bluePrintSourceCode)
-        /** Get the class loader with compiled jar */
-        val classLoaderWithDependencies = BluePrintCompileCache.classLoader(bluePrintSourceCode.cacheKey)
-        /* Create the instance from the class loader */
+        /** Compile the source code if needed */
+        log.debug("Jar Exists : ${bluePrintSourceCode.targetJarFile.exists()}, Regenerate : ${bluePrintSourceCode.regenerate}")
+        if (!bluePrintSourceCode.targetJarFile.exists() || bluePrintSourceCode.regenerate) {
+            compile(bluePrintSourceCode)
+        }
+
+        val classLoaderWithDependencies = if (BluePrintConstants.USE_SCRIPT_COMPILE_CACHE) {
+            /** Get the class loader with compiled jar from cache */
+            BluePrintCompileCache.classLoader(bluePrintSourceCode.cacheKey)
+        } else {
+            /** Get the class loader with compiled jar from disk */
+            BluePrintFileUtils.getURLClassLoaderFromDirectory(bluePrintSourceCode.cacheKey)
+        }
+
+        /** Create the instance from the class loader */
         return instance(classLoaderWithDependencies, kClassName, args)
     }
 
@@ -64,51 +76,41 @@ open class BluePrintCompileService {
         val sourcePath = bluePrintSourceCode.blueprintKotlinSources.first()
         val compiledJarFile = bluePrintSourceCode.targetJarFile
 
-        /** Check cache is present for the blueprint scripts */
-        val hasCompiledCache = BluePrintCompileCache.hasClassLoader(bluePrintSourceCode.cacheKey)
-
-        log.debug(
-            "Jar Exists : ${compiledJarFile.exists()}, Regenerate : ${bluePrintSourceCode.regenerate}," +
-                    " Compiled hash(${bluePrintSourceCode.cacheKey}) : $hasCompiledCache"
-        )
-
-        if (!compiledJarFile.exists() || bluePrintSourceCode.regenerate || !hasCompiledCache) {
-            log.info("compiling for cache key(${bluePrintSourceCode.cacheKey})")
-            coroutineScope {
-                val timeTaken = measureTimeMillis {
-                    /** Create compile arguments */
-                    val args = mutableListOf<String>().apply {
-                        add("-no-stdlib")
-                        add("-no-reflect")
-                        add("-module-name")
-                        add(bluePrintSourceCode.moduleName)
-                        add("-cp")
-                        add(classPaths!!)
-                        add(sourcePath)
-                        add("-d")
-                        add(compiledJarFile.absolutePath)
-                    }
-                    val deferredCompile = async {
-                        val k2jvmCompiler = K2JVMCompiler()
-                        /** Construct Arguments */
-                        val arguments = k2jvmCompiler.createArguments()
-                        parseCommandLineArguments(args, arguments)
-                        val messageCollector = CompilationMessageCollector()
-                        /** Compile with arguments */
-                        val exitCode: ExitCode = k2jvmCompiler.exec(messageCollector, Services.EMPTY, arguments)
-                        when (exitCode) {
-                            ExitCode.OK -> {
-                                checkFileExists(compiledJarFile) { "couldn't generate compiled jar(${compiledJarFile.absolutePath})" }
-                            }
-                            else -> {
-                                throw BluePrintException("$exitCode :${messageCollector.errors().joinToString("\n")}")
-                            }
+        log.info("compiling for cache key(${bluePrintSourceCode.cacheKey})")
+        coroutineScope {
+            val timeTaken = measureTimeMillis {
+                /** Create compile arguments */
+                val args = mutableListOf<String>().apply {
+                    add("-no-stdlib")
+                    add("-no-reflect")
+                    add("-module-name")
+                    add(bluePrintSourceCode.moduleName)
+                    add("-cp")
+                    add(classPaths!!)
+                    add(sourcePath)
+                    add("-d")
+                    add(compiledJarFile.absolutePath)
+                }
+                val deferredCompile = async {
+                    val k2jvmCompiler = K2JVMCompiler()
+                    /** Construct Arguments */
+                    val arguments = k2jvmCompiler.createArguments()
+                    parseCommandLineArguments(args, arguments)
+                    val messageCollector = CompilationMessageCollector()
+                    /** Compile with arguments */
+                    val exitCode: ExitCode = k2jvmCompiler.exec(messageCollector, Services.EMPTY, arguments)
+                    when (exitCode) {
+                        ExitCode.OK -> {
+                            checkFileExists(compiledJarFile) { "couldn't generate compiled jar(${compiledJarFile.absolutePath})" }
+                        }
+                        else -> {
+                            throw BluePrintException("$exitCode :${messageCollector.errors().joinToString("\n")}")
                         }
                     }
-                    deferredCompile.await()
                 }
-                log.info("compiled in ($timeTaken)mSec for cache key(${bluePrintSourceCode.cacheKey})")
+                deferredCompile.await()
             }
+            log.info("compiled in ($timeTaken)mSec for cache key(${bluePrintSourceCode.cacheKey})")
         }
     }
 
@@ -123,6 +125,10 @@ open class BluePrintCompileService {
             kClazz.constructors
                 .single().newInstance(*args.toArray())
         } ?: throw BluePrintException("failed to create class($kClassName) instance for constructor argument($args).")
+
+        if (!BluePrintConstants.USE_SCRIPT_COMPILE_CACHE) {
+            classLoader.close()
+        }
         return instance as T
     }
 }
