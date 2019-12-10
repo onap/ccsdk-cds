@@ -1,7 +1,4 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import * as $ from 'jquery';
-import * as _ from 'lodash';
-import * as joint from '../../../../../../node_modules/jointjs/dist/joint.js';
 
 @Component({
   selector: 'app-designer',
@@ -13,9 +10,6 @@ export class DesignerComponent implements OnInit {
 
   private controllerSideBar: boolean;
   private attributesSideBar: boolean;
-  public graph: any;
-  public paper: any;
-
   constructor() {
     this.controllerSideBar = true;
     this.attributesSideBar = false;
@@ -29,6 +23,7 @@ export class DesignerComponent implements OnInit {
 
 
   ngOnInit() {
+
     this.attachEditorBarToCanvas();
   }
 
@@ -123,6 +118,5 @@ export class DesignerComponent implements OnInit {
 
   var el1 = new joint.shapes["html"].Element({});
   this.graph.addCells([el1]);
-  }
-  
+  }  
 }
