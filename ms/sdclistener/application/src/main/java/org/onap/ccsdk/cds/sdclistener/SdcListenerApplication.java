@@ -19,11 +19,14 @@ package org.onap.ccsdk.cds.sdclistener;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @EnableConfigurationProperties(SdcListenerConfiguration.class)
+@ComponentScan(basePackages = {"org.onap.ccsdk.cds.blueprintsprocessor.healthapi","org.onap.ccsdk.cds.sdclistener"})
 public class SdcListenerApplication {
     public static void main(String[] args) {
+
         SpringApplication.run(SdcListenerApplication.class, args);
     }
 

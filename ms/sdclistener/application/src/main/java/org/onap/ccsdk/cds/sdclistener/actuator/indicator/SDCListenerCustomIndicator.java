@@ -20,8 +20,8 @@ import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.HealthApiResponse
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.HealthCheckStatus;
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.service.health.SDCListenerHealthCheck;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.health.AbstractHealthIndicator;
-import org.springframework.boot.actuate.health.Health.Builder;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.stereotype.Component;
 
 /**
@@ -31,20 +31,18 @@ import org.springframework.stereotype.Component;
  * @version 1.0
  */
 @Component
-public class SDCListenerCustomIndicator extends AbstractHealthIndicator {
+public class SDCListenerCustomIndicator implements HealthIndicator {
 
     @Autowired
     private SDCListenerHealthCheck sDCListenerHealthCheck;
 
     @Override
-    protected void doHealthCheck(Builder builder) {
+    public Health health() {
         HealthApiResponse healthAPIResponse = sDCListenerHealthCheck.retrieveEndpointExecutionStatus();
         if (healthAPIResponse.getStatus() == HealthCheckStatus.UP) {
-            builder.up();
-        } else {
-            builder.down();
-        }
-        builder.withDetail("Services", healthAPIResponse.getChecks());
-    }
 
+            return Health.up().withDetail("Services", healthAPIResponse.getChecks()).build();
+        }
+        return Health.down().build();
+    }
 }
