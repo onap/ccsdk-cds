@@ -19,23 +19,9 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Page } from 'src/app/common/model/page';
+export class DesignerDashboardState {
 
-export class BlueprintModel {
+    functions: ModelType[];
+    actions: string[];
 
-
-    id: string;
-    artifactUUId?: null;
-    artifactType: string;
-    artifactVersion: string;
-    artifactDescription: string;
-    internalVersion?: null;
-    createdDate: string;
-    artifactName: string;
-    published: string;
-    updatedBy: string;
-    tags: string;
-}
-
-export class BluePrintPage extends Page<BlueprintModel> {
 }

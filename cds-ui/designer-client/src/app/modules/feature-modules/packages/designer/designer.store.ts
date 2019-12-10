@@ -19,23 +19,30 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Page } from 'src/app/common/model/page';
+import {Injectable} from '@angular/core';
+import {Store} from '../../../../common/core/stores/Store';
+import {DesignerService} from './designer.service';
+import {DesignerDashboardState} from '../model/designer-dashboard.state';
 
-export class BlueprintModel {
 
+@Injectable({
+    providedIn: 'root'
+})
+export class DesignerStore extends Store<DesignerDashboardState> {
 
-    id: string;
-    artifactUUId?: null;
-    artifactType: string;
-    artifactVersion: string;
-    artifactDescription: string;
-    internalVersion?: null;
-    createdDate: string;
-    artifactName: string;
-    published: string;
-    updatedBy: string;
-    tags: string;
-}
+    constructor(private designerService: DesignerService) {
+        super(new DesignerDashboardState());
+    }
 
-export class BluePrintPage extends Page<BlueprintModel> {
+    public getFuntions() {
+        const modelDefinitionType = 'node_type';
+        this.designerService.getFunctions(modelDefinitionType).subscribe(
+            (modelType: ModelType[]) => {
+                console.log(modelType);
+                this.setState({
+                    ...this.state,
+                    functions: modelType,
+                });
+            });
+    }
 }
