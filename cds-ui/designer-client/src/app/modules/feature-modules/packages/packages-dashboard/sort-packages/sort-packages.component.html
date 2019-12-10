@@ -1,0 +1,33 @@
+<div class="row mt-4">
+    <div class="col">
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                <div class="row">
+                    <!--Package Sort-->
+                    <div class="col sort-packages">
+                        Sort by:
+                        <div class="dropdown">
+                            <input class="dropdown-toggle" type="text">
+                            <div class="dropdown-text">{{selected}}</div>
+                            <ul class="dropdown-content">
+                                <li  *ngFor="let sortType of sortTypes">
+                                    <a (click)="sortPackages($event)" name={{sortType}}>{{sortType}}</a>
+                                </li>
+                                
+                            </ul>
+                        </div>
+                    </div>
+                    <!--Package Paginator-->
+                    <app-package-pagination></app-package-pagination>
+                </div>
+                <app-packages-list></app-packages-list>
+
+            </div>
+            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
+            <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
+            <div class="tab-pane fade" id="nav-contact1" role="tabpanel" aria-labelledby="nav-contact1-tab">...
+            </div>
+        </div>
+    </div>
+</div>
+

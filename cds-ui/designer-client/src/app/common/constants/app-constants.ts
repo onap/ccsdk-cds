@@ -88,6 +88,7 @@ export const GlobalContants = {
 
 export const BlueprintURLs = {
     getAllBlueprints: '/controllerblueprint/all',
+    getOneBlueprint: '/controllerblueprint',
     getPagedBlueprints: '/controllerblueprint/paged',
     searchByTag: '/controllerblueprint/searchByTags/',
     save: '/controllerblueprint/create-blueprint',
@@ -106,7 +107,7 @@ export const ResourceDictionaryURLs = {
     searchResourceDictionaryByName: '',
     getSources: '/resourcedictionary/source-mapping',
     getModelType: '/resourcedictionary/model-type',
-    getDataType: '/resourcedictionary/model-type/by-definition/data_type'
+    getResourceDictionary: '/resourcedictionary/model-type/by-definition'
 };
 
 export const ControllerCatalogURLs = {

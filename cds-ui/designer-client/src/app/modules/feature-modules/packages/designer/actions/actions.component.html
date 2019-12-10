@@ -1,0 +1,15 @@
+<div>
+    <b>Select from other packages:</b>
+    <div class="actions-scroll">
+        <div class="custom-control custom-checkbox" *ngFor="let action of actions">
+            <input type="checkbox" class="custom-control-input" id="customCheck1">
+            <label class="custom-control-label" for="customCheck1">Action name
+                <p class="m-0">{{action}}</p>
+            </label>
+        </div>
+    </div>
+    <div class="btn-group inserActionBtns" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-secondary mr-3">Insert</button>
+        <button type="button" class="btn btn-secondary">Cancel</button>
+    </div>
+</div>
