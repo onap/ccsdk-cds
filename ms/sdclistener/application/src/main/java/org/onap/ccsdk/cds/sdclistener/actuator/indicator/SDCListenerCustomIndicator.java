@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
  * @author Shaaban Ebrahim
  * @version 1.0
  */
-@Component
+//@Component
 public class SDCListenerCustomIndicator extends AbstractHealthIndicator {
 
     @Autowired
