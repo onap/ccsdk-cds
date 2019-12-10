@@ -46,6 +46,30 @@
       "revId": "ea84b36447601d0d6a633ae708b72c6aaae6dc67",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8bfadcb_0ce879d1",
+        "filename": "components/model-catalog/blueprint-model/service-blueprint/vFW/Definitions/resources_definition_types.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 944,
+      "author": {
+        "id": 3957
+      },
+      "writtenOn": "2019-12-10T11:35:16Z",
+      "side": 0,
+      "message": "right. I also did that change in my version vnf-name --\u003e vnf_name.\n\nIn general, I wonder why namings are in many places in this cba changed from xx-yy to xx_yy? I guess in CBA xx-yy naming has been the dominant? Anyway maybe only one naming way should be kept?",
+      "parentUuid": "026c31af_0f1635ad",
+      "range": {
+        "startLine": 929,
+        "startChar": 3,
+        "endLine": 944,
+        "endChar": 7
+      },
+      "revId": "ea84b36447601d0d6a633ae708b72c6aaae6dc67",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
