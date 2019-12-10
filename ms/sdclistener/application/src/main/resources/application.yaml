@@ -25,3 +25,28 @@ server:
 spring:
   main:
     web-environment: ${sprintWebListenerEnabled:true}
+
+
+
+cdslistener:
+  healthcheck:
+    baseUrl: http://localhost:9000/
+#servicename = SDC Listener service and service link = /api/v1/sdclistener/healthcheck (this is used to check if sdclistener is up depending on all services status)
+#if you want to add more service it will like [service-name,service-link],[],[]
+    mapping-service-name-with-service-link: "[SDC Listener service,/api/v1/sdclistener/healthcheck]"
+
+management:
+  endpoint:
+    health:
+      show-details: always
+
+
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+endpoints:
+  user:
+    name: eHbVUbJAj4AG2522cSbrOQ==
+    password: eHbVUbJAj4AG2522cSbrOQ==
