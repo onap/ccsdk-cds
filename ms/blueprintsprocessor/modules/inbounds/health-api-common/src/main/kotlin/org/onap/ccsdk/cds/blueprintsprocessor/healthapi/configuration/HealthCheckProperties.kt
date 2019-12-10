@@ -52,7 +52,7 @@ open class HealthCheckProperties {
     }
 
     open fun getCDSListenerServiceInformation(): List<ServiceEndpoint> {
-        val serviceName = ServiceName.BLUEPRINT
+        val serviceName = ServiceName.CDSLISTENER
         return getListOfServiceEndPoints(cdsListenerServiceMapping, serviceName)
     }
 
@@ -78,7 +78,7 @@ open class HealthCheckProperties {
 
     private fun getServiceEndpoint(serviceEndpointInfo: List<String>): ServiceEndpoint {
         return ServiceEndpoint(
-            removeSpecialCharacter(serviceEndpointInfo.get(0)), removeSpecialCharacter(serviceEndpointInfo.get(1))
+            removeSpecialCharacter(serviceEndpointInfo[0]), removeSpecialCharacter(serviceEndpointInfo[1])
         )
     }
 
