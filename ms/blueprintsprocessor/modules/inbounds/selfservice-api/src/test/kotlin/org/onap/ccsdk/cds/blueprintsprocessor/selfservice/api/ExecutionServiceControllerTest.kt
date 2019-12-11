@@ -22,6 +22,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.controllerblueprints.core.compress
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
@@ -62,6 +63,10 @@ class ExecutionServiceControllerTest {
     @BeforeTest
     fun init() {
         deleteDir("target", "blueprints")
+
+        // Create sample CBA zip
+        normalizedFile("./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+            .compress(normalizedFile("./target/blueprints/generated-cba.zip"))
     }
 
     @AfterTest
@@ -110,7 +115,7 @@ class ExecutionServiceControllerTest {
     }
 
     private fun loadTestCbaFile(): File {
-        val testCbaFile = normalizedFile("./src/test/resources/test-cba.zip")
+        val testCbaFile = normalizedFile("./target/blueprints/generated-cba.zip")
         assertTrue(testCbaFile.exists(), "couldn't get file ${testCbaFile.absolutePath}")
         return testCbaFile
     }

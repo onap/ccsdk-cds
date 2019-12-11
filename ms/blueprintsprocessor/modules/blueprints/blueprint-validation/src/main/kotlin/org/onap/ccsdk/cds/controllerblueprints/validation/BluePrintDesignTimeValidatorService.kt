@@ -41,13 +41,13 @@ open class BluePrintDesignTimeValidatorService(
 
     private val log = LoggerFactory.getLogger(BluePrintDesignTimeValidatorService::class.toString())
 
-    override fun validateBluePrints(basePath: String): Boolean {
+    override suspend fun validateBluePrints(basePath: String): Boolean {
 
         val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(UUID.randomUUID().toString(), basePath)
         return validateBluePrints(bluePrintRuntimeService)
     }
 
-    override fun validateBluePrints(bluePrintRuntimeService: BluePrintRuntimeService<*>): Boolean {
+    override suspend fun validateBluePrints(bluePrintRuntimeService: BluePrintRuntimeService<*>): Boolean {
 
         bluePrintTypeValidatorService.validateServiceTemplate(
             bluePrintRuntimeService, "service_template",
@@ -76,7 +76,7 @@ open class BluePrintDesignTimeValidatorService(
         if (resourceDefinitionFile.exists()) {
             val resourceDefinitionMap = JacksonUtils.getMapFromFile(resourceDefinitionFile, ResourceDefinition::class.java)
 
-            resourceDefinitionMap?.forEach { resourceDefinitionName, resourceDefinition ->
+            resourceDefinitionMap.forEach { resourceDefinitionName, resourceDefinition ->
                 resourceDefinitionValidator.validate(bluePrintRuntimeService, resourceDefinitionName, resourceDefinition)
             }
         }

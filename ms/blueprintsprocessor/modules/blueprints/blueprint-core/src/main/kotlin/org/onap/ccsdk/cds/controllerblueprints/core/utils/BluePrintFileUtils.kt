@@ -232,7 +232,8 @@ class BluePrintFileUtils {
                     "\nCreated-By: <AUTHOR NAME>" +
                     "\nEntry-Definitions: Definitions/<BLUEPRINT_NAME>.json" +
                     "\nTemplate-Name: <BLUEPRINT_NAME>" +
-                    "\nTemplate-Tags: <BLUEPRINT_VERSION>" +
+                    "\nTemplate-Version: <BLUEPRINT_VERSION>" +
+                    "\nTemplate-Type: <BLUEPRINT_TYPE>" +
                     "\nTemplate-Tags: <TAGS>"
         }
 

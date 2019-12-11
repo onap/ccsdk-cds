@@ -19,6 +19,7 @@ package org.onap.ccsdk.cds.controllerblueprints.validation
 
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
@@ -35,18 +36,21 @@ import kotlin.test.assertTrue
 class BluePrintDesignTimeValidatorServiceTest {
 
     private val blueprintBasePath = "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
-    private val bluePrintRuntime = BluePrintMetadataUtils.getBluePrintRuntime("1234", blueprintBasePath)
+    private val bluePrintRuntime = BluePrintMetadataUtils.bluePrintRuntime("1234", blueprintBasePath)
     private val mockBluePrintTypeValidatorService = MockBluePrintTypeValidatorService()
     private val resourceDefinitionValidator = mockk<ResourceDefinitionValidator>()
-    private val defaultBluePrintValidatorService = BluePrintDesignTimeValidatorService(mockBluePrintTypeValidatorService, resourceDefinitionValidator)
+    private val defaultBluePrintValidatorService =
+        BluePrintDesignTimeValidatorService(mockBluePrintTypeValidatorService, resourceDefinitionValidator)
     private val workflowValidator = BluePrintWorkflowValidatorImpl(mockBluePrintTypeValidatorService)
 
     @Test
     fun testValidateOfType() {
-        every { resourceDefinitionValidator.validate(bluePrintRuntime, any(), any()) } returns Unit
+        runBlocking {
+            every { resourceDefinitionValidator.validate(bluePrintRuntime, any(), any()) } returns Unit
 
-        val valid = defaultBluePrintValidatorService.validateBluePrints(bluePrintRuntime)
-        assertTrue(valid, "failed in blueprint Validation")
+            val valid = defaultBluePrintValidatorService.validateBluePrints(bluePrintRuntime)
+            assertTrue(valid, "failed in blueprint Validation")
+        }
     }
 
     @Test
@@ -95,14 +99,19 @@ class BluePrintDesignTimeValidatorServiceTest {
         assertEquals(1, bluePrintRuntime.getBluePrintError().errors.size)
         assertEquals(
             "Failed to validate Workflow(resource-assignment)'s step(test)'s definition : " +
-                    "resource-assignment/steps/test : NodeType(TestNodeType) derived from is 'tosca.nodes.TEST', " +
-                    "Expected 'tosca.nodes.Workflow' or 'tosca.nodes.Component'", bluePrintRuntime.getBluePrintError().errors[0]
+                "resource-assignment/steps/test : NodeType(TestNodeType) derived from is 'tosca.nodes.TEST', " +
+                "Expected 'tosca.nodes.Workflow' or 'tosca.nodes.Component'",
+            bluePrintRuntime.getBluePrintError().errors[0]
         )
     }
 
     @Test
     fun testValidateWorkflowSuccess() {
         val workflowName = "resource-assignment"
-        workflowValidator.validate(bluePrintRuntime, workflowName, bluePrintRuntime.bluePrintContext().workflowByName(workflowName))
+        workflowValidator.validate(
+            bluePrintRuntime,
+            workflowName,
+            bluePrintRuntime.bluePrintContext().workflowByName(workflowName)
+        )
     }
 }

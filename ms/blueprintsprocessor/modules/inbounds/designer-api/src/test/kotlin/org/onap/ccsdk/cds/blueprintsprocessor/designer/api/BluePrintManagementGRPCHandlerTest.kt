@@ -30,6 +30,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.TokenAuthGrpcClientSe
 import org.onap.ccsdk.cds.controllerblueprints.common.api.ActionIdentifiers
 import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.compress
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintBootstrapInput
@@ -66,9 +67,15 @@ class BluePrintManagementGRPCHandlerTest {
 
     @BeforeTest
     fun init() {
+
+        deleteDir("target", "blueprints")
+
+        // Create sample CBA zip
+        normalizedFile("./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+            .compress(normalizedFile("./target/blueprints/generated-cba.zip"))
+
         // Create a server, add service, start, and register for automatic graceful shutdown.
         grpcServerRule.serviceRegistry.addService(bluePrintManagementGRPCHandler)
-        deleteDir("target", "blueprints")
     }
 
     @AfterTest
@@ -84,7 +91,7 @@ class BluePrintManagementGRPCHandlerTest {
         val bootstrapOutput = blockingStub.bootstrapBlueprint(req)
         assertEquals(200, bootstrapOutput.status.code)
         assertTrue(
-            bootstrapOutput.status.message.contentEquals(BluePrintConstants.STATUS_SUCCESS),
+            bootstrapOutput.status.message!!.contentEquals(BluePrintConstants.STATUS_SUCCESS),
             "failed to get success status"
         )
         assertEquals(id, bootstrapOutput.commonHeader.requestId)
@@ -99,7 +106,7 @@ class BluePrintManagementGRPCHandlerTest {
 
         assertEquals(200, output.status.code)
         assertTrue(
-            output.status.message.contentEquals(BluePrintConstants.STATUS_SUCCESS),
+            output.status.message!!.contentEquals(BluePrintConstants.STATUS_SUCCESS),
             "failed to get success status"
         )
         assertEquals(id, output.commonHeader.requestId)
@@ -110,7 +117,7 @@ class BluePrintManagementGRPCHandlerTest {
         val downloadOutput = blockingStub.downloadBlueprint(downloadReq)
         assertEquals(200, downloadOutput.status.code)
         assertTrue(
-            downloadOutput.status.message.contentEquals(BluePrintConstants.STATUS_SUCCESS),
+            downloadOutput.status.message!!.contentEquals(BluePrintConstants.STATUS_SUCCESS),
             "failed to get success status"
         )
         assertNotNull(downloadOutput.fileChunk?.chunk, "failed to get cba file chunks")
@@ -126,7 +133,7 @@ class BluePrintManagementGRPCHandlerTest {
         var output = blockingStub.uploadBlueprint(req)
         assertEquals(200, output.status.code)
         assertTrue(
-            output.status.message.contentEquals(BluePrintConstants.STATUS_SUCCESS),
+            output.status.message!!.contentEquals(BluePrintConstants.STATUS_SUCCESS),
             "failed to get success status"
         )
         assertEquals(id, output.commonHeader.requestId)
@@ -174,7 +181,7 @@ class BluePrintManagementGRPCHandlerTest {
     }
 
     private fun createUploadInputRequest(id: String, action: String): BluePrintUploadInput {
-        val file = normalizedFile("./src/test/resources/test-cba.zip")
+        val file = normalizedFile("./target/blueprints/generated-cba.zip")
         assertTrue(file.exists(), "couldnt get file ${file.absolutePath}")
 
         val commonHeader = CommonHeader

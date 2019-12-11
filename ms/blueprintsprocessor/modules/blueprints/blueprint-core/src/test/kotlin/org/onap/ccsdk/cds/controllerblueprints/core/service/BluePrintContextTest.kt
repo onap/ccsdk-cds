@@ -18,6 +18,7 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
@@ -58,16 +59,20 @@ class BluePrintContextTest {
 
     @Test
     fun testBluePrintContextCreation() {
-        val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(blueprintBasePath)
-        assertNotNull(bluePrintContext, "Failed to populate Blueprint context")
+        runBlocking {
+            val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(blueprintBasePath)
+            assertNotNull(bluePrintContext, "Failed to populate Blueprint context")
+        }
     }
 
     @Test
     fun testChainedProperty() {
-        val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(blueprintBasePath)
-        val nodeType = bluePrintContext.nodeTypeChained("component-resource-resolution")
-        assertNotNull(nodeType, "Failed to get chained node type")
-        log.trace("Properties {}", JacksonUtils.getJson(nodeType, true))
+        runBlocking {
+            val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(blueprintBasePath)
+            val nodeType = bluePrintContext.nodeTypeChained("component-resource-resolution")
+            assertNotNull(nodeType, "Failed to get chained node type")
+            log.trace("Properties {}", JacksonUtils.getJson(nodeType, true))
+        }
     }
 
     @Test

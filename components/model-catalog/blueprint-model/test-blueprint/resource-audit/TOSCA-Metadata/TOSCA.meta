@@ -4,4 +4,5 @@ Created-By: Brinda Santh
 Entry-Definitions: cba.resource.audit.ResourceAuditDefinitions.kt
 Template-Name: resource-audit
 Template-Version: 1.0.0
+Template-Type: KOTLIN_DSL
 Template-Tags: resource-audit

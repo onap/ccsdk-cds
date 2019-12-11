@@ -25,6 +25,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.db.mock.MockBlueprintProcessorCata
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.service.BlueprintCatalogServiceImpl
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.service.BlueprintProcessorCatalogServiceImpl
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.compress
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
@@ -62,8 +63,14 @@ class BlueprintProcessorCatalogServiceImplTest {
 
     @BeforeTest
     fun setup() {
+
         deleteDir("target", "blueprints")
-        bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(
+
+        // Create sample CBA zip
+        normalizedFile("./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
+            .compress(normalizedFile("./target/blueprints/generated-cba.zip"))
+
+        bluePrintRuntimeService = BluePrintMetadataUtils.bluePrintRuntime(
             blueprintId,
             "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
         )
@@ -76,11 +83,9 @@ class BlueprintProcessorCatalogServiceImplTest {
 
     @Test
     fun `test catalog service`() {
-        // TODO: I thing this test function should be remve and replace by the other one.
-        runBlocking {
-            // FIXME("Create ZIP from test blueprints")
 
-            val file = normalizedFile("./src/test/resources/test-cba.zip")
+        runBlocking {
+            val file = normalizedFile("./target/blueprints/generated-cba.zip")
             assertTrue(file.exists(), "couldn't get file ${file.absolutePath}")
 
             blueprintsProcessorCatalogService.saveToDatabase("1234", file)
@@ -93,7 +98,7 @@ class BlueprintProcessorCatalogServiceImplTest {
     @Test
     fun `test save function`() {
         runBlocking {
-            val file = normalizedFile("./src/test/resources/test-cba.zip")
+            val file = normalizedFile("./target/blueprints/generated-cba.zip")
             assertTrue(file.exists(), "couldnt get file ${file.absolutePath}")
             val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
             metadata[BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID] = blueprintId
@@ -105,7 +110,7 @@ class BlueprintProcessorCatalogServiceImplTest {
     @Test
     fun `test get function`() {
         runBlocking {
-            val file = normalizedFile("./src/test/resources/test-cba.zip")
+            val file = normalizedFile("./target/blueprints/generated-cba.zip")
             assertTrue(file.exists(), "couldnt get file ${file.absolutePath}")
             val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
             metadata[BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID] = blueprintId
@@ -117,10 +122,10 @@ class BlueprintProcessorCatalogServiceImplTest {
         assertTrue(
             File(
                 blueprintCoreConfiguration.bluePrintLoadConfiguration().blueprintArchivePath +
-                        "/baseconfiguration"
+                    "/baseconfiguration"
             ).deleteRecursively(), "Couldn't get blueprint archive " +
-                    "${blueprintCoreConfiguration.bluePrintLoadConfiguration().blueprintArchivePath}/baseconfiguration " +
-                    "from data base."
+                "${blueprintCoreConfiguration.bluePrintLoadConfiguration().blueprintArchivePath}/baseconfiguration " +
+                "from data base."
         )
     }
 

@@ -194,7 +194,7 @@ class ComponentRemoteAnsibleExecutorTest {
         awxRemoteExecutor: ComponentRemoteAnsibleExecutor,
         executionServiceInput: ExecutionServiceInput
     ): BluePrintRuntimeService<MutableMap<String, JsonNode>> {
-        val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(
+        val bluePrintRuntimeService = BluePrintMetadataUtils.bluePrintRuntime(
             "123456-1000",
             "./../../../../components/model-catalog/blueprint-model/test-blueprint/remote_ansible"
         )

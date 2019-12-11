@@ -65,34 +65,28 @@ class BluePrintEnhancerServiceImplTest {
             resourceDictionaryLoadService.loadPathsResourceDictionary(dictPaths)
 
             testBaseConfigEnhancementAndValidation()
-            testVFWEnhancementAndValidation()
             testGoldenEnhancementAndValidation()
             testRemoteScriptsEnhancementAndValidation()
             testCapabilityCliEnhancementAndValidation()
         }
     }
 
-    fun testBaseConfigEnhancementAndValidation() {
+    private fun testBaseConfigEnhancementAndValidation() {
         val basePath = "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
         testComponentInvokeEnhancementAndValidation(basePath, "base-enhance")
     }
 
-    fun testVFWEnhancementAndValidation() {
-        val basePath = "./../../../../../components/model-catalog/blueprint-model/service-blueprint/vFW"
-        testComponentInvokeEnhancementAndValidation(basePath, "vFW-enhance")
-    }
-
-    fun testGoldenEnhancementAndValidation() {
+    private fun testGoldenEnhancementAndValidation() {
         val basePath = "./../../../../../components/model-catalog/blueprint-model/test-blueprint/golden"
         testComponentInvokeEnhancementAndValidation(basePath, "golden-enhance")
     }
 
-    fun testRemoteScriptsEnhancementAndValidation() {
+    private fun testRemoteScriptsEnhancementAndValidation() {
         val basePath = "./../../../../../components/model-catalog/blueprint-model/test-blueprint/remote_scripts"
         testComponentInvokeEnhancementAndValidation(basePath, "remote_scripts-enhance")
     }
 
-    fun testCapabilityCliEnhancementAndValidation() {
+    private fun testCapabilityCliEnhancementAndValidation() {
         val basePath = "./../../../../../components/model-catalog/blueprint-model/test-blueprint/capability_cli"
         testComponentInvokeEnhancementAndValidation(basePath, "capability_cli-enhance")
     }
@@ -111,8 +105,8 @@ class BluePrintEnhancerServiceImplTest {
             Assert.assertTrue("blueprint($basePath) validation failed ", valid)
 
             // Enable this to get the enhanced zip file
-            //            val compressFile = normalizedFile("target/blueprints/enrichment", "$targetDirName.zip")
-            //            normalizedFile(targetPath).compress(compressFile)
+            // val compressFile = normalizedFile("target/blueprints/enrichment", "$targetDirName.zip")
+            // normalizedFile(targetPath).compress(compressFile)
 
             deleteDir(targetPath)
         }

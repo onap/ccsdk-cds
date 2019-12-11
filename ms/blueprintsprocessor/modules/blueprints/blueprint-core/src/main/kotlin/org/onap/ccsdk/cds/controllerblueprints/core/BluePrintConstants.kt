@@ -59,6 +59,10 @@ object BluePrintConstants {
     const val DATA_TYPE_MAP: String = "map"
     const val DATA_TYPE_JSON: String = "json"
 
+    const val BLUEPRINT_TYPE_DEFAULT = "DEFAULT"
+    const val BLUEPRINT_TYPE_KOTLIN_DSL = "KOTLIN_DSL"
+    const val BLUEPRINT_TYPE_GENERIC_SCRIPT = "GENERIC_SCRIPT"
+
     const val SCRIPT_KOTLIN = "kotlin"
     const val SCRIPT_JYTHON = "jython"
     const val SCRIPT_INTERNAL = "internal"
@@ -183,6 +187,7 @@ object BluePrintConstants {
 
     const val METADATA_TEMPLATE_NAME = "template_name"
     const val METADATA_TEMPLATE_VERSION = "template_version"
+    const val METADATA_TEMPLATE_TYPE = "template_type"
     const val METADATA_TEMPLATE_AUTHOR = "template_author"
     const val METADATA_TEMPLATE_TAGS = "template_tags"
     const val METADATA_WORKFLOW_NAME = "workflow_name"

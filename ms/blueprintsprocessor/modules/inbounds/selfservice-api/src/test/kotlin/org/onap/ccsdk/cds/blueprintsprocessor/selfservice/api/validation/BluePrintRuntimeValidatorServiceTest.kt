@@ -16,6 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.validation
 
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.mock.MockResourceSource
@@ -37,10 +38,12 @@ class BluePrintRuntimeValidatorServiceTest {
 
     @Test
     fun testBlueprintRuntimeValidation() {
-        val blueprintBasePath =
-            "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
-        assertNotNull(bluePrintRuntimeValidatorService, " failed to initilize bluePrintRuntimeValidatorService")
+        runBlocking {
+            val blueprintBasePath =
+                "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+            assertNotNull(bluePrintRuntimeValidatorService, " failed to initilize bluePrintRuntimeValidatorService")
 
-        bluePrintRuntimeValidatorService.validateBluePrints(blueprintBasePath)
+            bluePrintRuntimeValidatorService.validateBluePrints(blueprintBasePath)
+        }
     }
 }

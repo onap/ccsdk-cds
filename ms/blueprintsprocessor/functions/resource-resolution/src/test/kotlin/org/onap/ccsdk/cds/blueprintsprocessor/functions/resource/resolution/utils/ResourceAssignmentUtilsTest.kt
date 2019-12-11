@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.TextNode
 import io.mockk.every
 import io.mockk.spyk
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
@@ -63,9 +64,11 @@ class ResourceAssignmentUtilsTest {
     @Before
     fun setup() {
 
-        val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
-            "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
-        )
+        val bluePrintContext = runBlocking {
+            BluePrintMetadataUtils.getBluePrintContext(
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+            )
+        }
 
         resourceAssignmentRuntimeService = spyk(ResourceAssignmentRuntimeService("1234", bluePrintContext))
 
@@ -94,11 +97,11 @@ class ResourceAssignmentUtilsTest {
             id = "ipAddress"
         }
 
-        var mapOfPropertiesIpAddress = mutableMapOf<String, PropertyDefinition>()
+        val mapOfPropertiesIpAddress = mutableMapOf<String, PropertyDefinition>()
         mapOfPropertiesIpAddress["port"] = propertiesDefinition1
         mapOfPropertiesIpAddress["ip"] = propertiesDefinition2
 
-        var mapOfPropertiesHost = mutableMapOf<String, PropertyDefinition>()
+        val mapOfPropertiesHost = mutableMapOf<String, PropertyDefinition>()
         mapOfPropertiesHost["name"] = propertiesDefinition3
         mapOfPropertiesHost["ipAddress"] = propertiesDefinition4
 

@@ -61,10 +61,10 @@ interface BluePrintAttributeDefinitionValidator : BluePrintValidator<AttributeDe
 interface BluePrintValidatorService {
 
     @Throws(BluePrintException::class)
-    fun validateBluePrints(basePath: String): Boolean
+    suspend fun validateBluePrints(basePath: String): Boolean
 
     @Throws(BluePrintException::class)
-    fun validateBluePrints(bluePrintRuntimeService: BluePrintRuntimeService<*>): Boolean
+    suspend fun validateBluePrints(bluePrintRuntimeService: BluePrintRuntimeService<*>): Boolean
 }
 
 interface BluePrintTypeValidatorService {

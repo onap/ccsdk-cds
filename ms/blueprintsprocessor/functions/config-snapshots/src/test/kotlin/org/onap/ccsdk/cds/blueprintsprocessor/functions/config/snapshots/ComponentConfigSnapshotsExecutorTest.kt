@@ -55,7 +55,7 @@ class ComponentConfigSnapshotsExecutorTest {
     @Autowired
     lateinit var cfgSnapshotService: ResourceConfigSnapshotService
     lateinit var cfgSnapshotComponent: ComponentConfigSnapshotsExecutor
-    private var bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(
+    private var bluePrintRuntimeService = BluePrintMetadataUtils.bluePrintRuntime(
         "123456-1000",
         "./../../../../components/model-catalog/blueprint-model/test-blueprint/remote_scripts"
     )

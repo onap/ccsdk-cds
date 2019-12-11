@@ -34,7 +34,7 @@ class BluePrintTemplateServiceTest {
     @BeforeTest
     fun setup() {
         val blueprintBasePath = TestConstants.PATH_TEST_BLUEPRINTS_BASECONFIG
-        blueprintRuntime = BluePrintMetadataUtils.getBluePrintRuntime("1234", blueprintBasePath)
+        blueprintRuntime = BluePrintMetadataUtils.bluePrintRuntime("1234", blueprintBasePath)
     }
 
     @Test

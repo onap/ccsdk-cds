@@ -102,7 +102,7 @@ class ComponentRemotePythonExecutorTest {
      * Mocked input information for remote python executor.
      */
     fun getMockedOutput(svc: DefaultBluePrintRuntimeService):
-            ExecutionServiceInput {
+        ExecutionServiceInput {
         val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
 
         stepMetaData.putJsonElement(
@@ -165,13 +165,12 @@ class ComponentRemotePythonExecutorTest {
                 "ComponentRemotePythonExecutor", "process"
             )
         } returns operationOutputs
-        val bluePrintRuntimeService = BluePrintMetadataUtils
-            .getBluePrintRuntime(
-                "123456-1000",
-                "./../../../../components/model-" +
-                        "catalog/blueprint-model/test-blueprint/" +
-                        "remote_scripts"
-            )
+        val bluePrintRuntimeService = BluePrintMetadataUtils.bluePrintRuntime(
+            "123456-1000",
+            "./../../../../components/model-" +
+                "catalog/blueprint-model/test-blueprint/" +
+                "remote_scripts"
+        )
         every {
             svc.resolveNodeTemplateArtifactDefinition(
                 "execute-remote-python", "component-script"
