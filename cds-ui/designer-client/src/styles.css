@@ -6,7 +6,7 @@ body{
   /* background-image: linear-gradient(-45deg, #000 10%, #fff 0);
   background-size: 6px 6px; */
   margin: 0;
-  font-family: 'HelvNeueOrange', 'Helvetica Neue', sans-serif !important;
+  font-family: 'Nunito' !important;
   color: #1B3E6F !important;
 }
 *:focus{

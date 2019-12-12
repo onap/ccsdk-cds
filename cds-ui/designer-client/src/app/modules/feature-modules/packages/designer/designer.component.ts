@@ -123,6 +123,5 @@ export class DesignerComponent implements OnInit {
 
   var el1 = new joint.shapes["html"].Element({});
   this.graph.addCells([el1]);
-  }
-  
+  }  
 }
