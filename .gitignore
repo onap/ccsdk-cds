@@ -156,3 +156,5 @@ MacOS
 **/application/blueprints
 /target/
 
+# Generated dependency list
+direct-dependencies.txt
