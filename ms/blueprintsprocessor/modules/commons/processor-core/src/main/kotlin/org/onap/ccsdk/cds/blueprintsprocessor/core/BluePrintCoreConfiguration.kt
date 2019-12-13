@@ -61,8 +61,18 @@ open class BluePrintPropertyConfiguration {
 @Service
 open class BluePrintPropertiesService(private var bluePrintPropertyBinder: Binder) {
 
+    companion object BluePrintPropertiesService {
+        val LOG = LoggerFactory.getLogger(BluePrintPropertiesService::class.java)
+    }
+
     fun <T> propertyBeanType(prefix: String, type: Class<T>): T {
-        return bluePrintPropertyBinder.bind(prefix, Bindable.of(type)).get()
+        val boundValue = try {
+            bluePrintPropertyBinder.bind(prefix, Bindable.of(type)).get()
+        } catch (e: NoSuchElementException) {
+            LOG.error("Error: missing property \"$prefix\"... Check the application.properties file.")
+            throw e
+        }
+        return boundValue
     }
 }
 
