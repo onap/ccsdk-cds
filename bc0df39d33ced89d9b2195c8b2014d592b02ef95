@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a55d6c66_f7fbcf0c",
+        "filename": "components/model-catalog/blueprint-model/service-blueprint/vFW/TOSCA-Metadata/TOSCA.meta",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2019-12-13T10:07:54Z",
+      "side": 1,
+      "message": "Please add new meta info here:\nTemplate-Name: vFW_CDS\nTemplate-Version: 1.0.0",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 22
+      },
+      "revId": "bc0df39d33ced89d9b2195c8b2014d592b02ef95",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
