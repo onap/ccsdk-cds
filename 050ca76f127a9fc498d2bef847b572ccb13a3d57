@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d723f19a_7b3ec81c",
+        "filename": "ms/sdclistener/application/src/main/resources/application.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-12-16T13:45:37Z",
+      "side": 1,
+      "message": "insert a comment on the format of this above.",
+      "range": {
+        "startLine": 34,
+        "startChar": 4,
+        "endLine": 34,
+        "endChar": 42
+      },
+      "revId": "050ca76f127a9fc498d2bef847b572ccb13a3d57",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
