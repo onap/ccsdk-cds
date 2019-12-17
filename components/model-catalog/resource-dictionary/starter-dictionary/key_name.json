@@ -1,6 +1,7 @@
 {
 	"tags": "key_name",
 	"name": "key_name",
+	"group":"default",
 	"property": {
 		"description": "key_name",
 		"type": "string"

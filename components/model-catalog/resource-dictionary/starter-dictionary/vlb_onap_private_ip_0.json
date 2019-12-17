@@ -1,6 +1,7 @@
 {
 	"tags": "vlb_onap_private_ip_0",
 	"name": "vlb_onap_private_ip_0",
+	"group":"default",
 	"property": {
 		"description": "vlb_onap_private_ip_0",
 		"type": "string"

@@ -1,6 +1,7 @@
 {
 	"tags": "vsn_image_name",
 	"name": "vsn_image_name",
+	"group":"default",
 	"property": {
 		"description": "vsn_image_name",
 		"type": "string"

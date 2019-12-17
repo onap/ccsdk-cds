@@ -1,6 +1,7 @@
 {
 	"tags": "service-instance-id, tosca.datatypes.Root, data_type",
 	"name": "service-instance-id",
+	"group":"default",
 	"property": {
 		"description": "To be provided",
 		"type": "string"
@@ -37,22 +38,6 @@
 				"script-type": "jython",
 				"script-class-reference": "SampleRAProcessor",
 				"instance-dependencies": []
-			}
-		},
-		"sdnc": {
-			"type": "source-rest",
-			"properties": {
-				"verb": "GET",
-				"type": "JSON",
-				"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id",
-				"path": "/service/0/service-instance-id",
-				"input-key-mapping": {
-					"service-instance-id": "service-instance.service-instance-id"
-				},
-				"output-key-mapping": {
-					"service-instance-id": "service-instance-id"
-				},
-				"key-dependencies": ["service-instance.service-instance-id"]
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 {
   "tags": "sample-mdsal-source",
   "name": "sample-mdsal-source",
+  "group":"default",
   "property": {
     "description": "Sample sample-mdsal-source",
     "type": "string"

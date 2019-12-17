@@ -1,6 +1,7 @@
 {
 	"tags": "image_name",
 	"name": "image_name",
+	"group":"default",
 	"property": {
 		"description": "image_name",
 		"type": "string"

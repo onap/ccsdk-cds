@@ -1,6 +1,7 @@
 {
 	"tags": "vfw_flavor_name",
 	"name": "vfw_flavor_name",
+	"group":"default",
 	"property": {
 		"description": "vfw_flavor_name",
 		"type": "string"

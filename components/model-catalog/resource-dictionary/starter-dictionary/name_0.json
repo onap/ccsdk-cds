@@ -1,6 +1,7 @@
 {
 	"tags": "name_0",
 	"name": "name_0",
+	"group":"default",
 	"property": {
 		"description": "name_0",
 		"type": "string"

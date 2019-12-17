@@ -2,6 +2,7 @@
   "name": "properties-capability-source",
   "updated-by": "Steve Alphonse Siani, alphonse.steve.siani.djissitchi@ibm.com",
   "tags": "properties-capability-source",
+  "group":"default",
   "property" :{
     "description": "Data dictionary used to read properties.",
     "type": "string"

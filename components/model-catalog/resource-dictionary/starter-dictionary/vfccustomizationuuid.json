@@ -1,6 +1,7 @@
 {
 	"tags": "vfccustomizationuuid",
 	"name": "vfccustomizationuuid",
+	"group":"default",
 	"property": {
 		"description": "vfccustomizationuuid",
 		"type": "string"

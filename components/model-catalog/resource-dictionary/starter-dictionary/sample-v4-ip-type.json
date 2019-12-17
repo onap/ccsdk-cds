@@ -1,5 +1,6 @@
 {
   "name": "sample-v4-ip-type",
+  "group":"default",
   "property": {
     "description": "sample-v4-ip-type",
     "type": "string"

@@ -1,6 +1,7 @@
 {
   "tags": "sample-licenses",
   "name": "sample-licenses",
+  "group":"default",
   "property": {
     "description" : " Sample Data for licences",
     "required": true,

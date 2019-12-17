@@ -1,6 +1,7 @@
 {
   "name" : "protected-prefix-id",
   "tags" : "protected-prefix-id",
+  "group":"default",
   "updated-by" : "Singal, Kapil <ks220y@att.com>",
   "property" : {
     "description" : "protected-prefix-id",

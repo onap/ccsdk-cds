@@ -1,6 +1,7 @@
 {
 	"tags": "gre_ipaddr",
 	"name": "gre_ipaddr",
+	"group":"default",
 	"property": {
 		"description": "gre_ipaddr",
 		"type": "string"

@@ -1,6 +1,7 @@
 {
   "name" : "vsn_private_ip_0",
   "tags" : "vsn_private_ip_0",
+  "group":"default",
   "updated-by" : "Singal, Kapil <ks220y@att.com>",
   "property" : {
     "description" : "vsn_private_ip_0",
