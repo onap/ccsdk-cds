@@ -1,6 +1,7 @@
 {
 	"tags": "vf-naming-policy",
 	"name": "vf-naming-policy",
+	"group":"default",
 	"property": {
 		"description": "vf-naming-policy",
 		"type": "string"

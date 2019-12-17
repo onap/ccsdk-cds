@@ -1,6 +1,7 @@
 {
   "name": "vf-module-type",
   "tags": "vf-module-type",
+  "group":"default",
   "property": {
     "description": "vf-module-type",
     "type": "string"

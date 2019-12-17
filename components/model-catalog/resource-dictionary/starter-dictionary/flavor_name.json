@@ -1,6 +1,7 @@
 {
 	"tags": "flavor_name",
 	"name": "flavor_name",
+	"group":"default",
 	"property": {
 		"description": "flavor_name",
 		"type": "string"

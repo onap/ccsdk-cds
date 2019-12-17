@@ -1,6 +1,7 @@
 {
     "tags": "hostname",
     "name": "hostname",
+    "group":"default",
     "property": {
       "description": "hostname",
       "type": "string"

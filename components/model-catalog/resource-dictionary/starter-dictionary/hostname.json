@@ -1,6 +1,7 @@
 {
 		"name": "hostname",
 		"tags": "hostname",
+	        "group":"default",
 		"updated-by" : "Singal, Kapil <ks220y@att.com>",
 		"property": {
 			"description" : "hostname",

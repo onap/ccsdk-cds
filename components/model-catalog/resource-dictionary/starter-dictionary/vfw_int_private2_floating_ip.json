@@ -1,6 +1,7 @@
 {
 	"tags": "vfw_int_private2_floating_ip",
 	"name": "vfw_int_private2_floating_ip",
+	"group":"default",
 	"property": {
 		"description": "vfw_int_private2_floating_ip",
 		"type": "string"

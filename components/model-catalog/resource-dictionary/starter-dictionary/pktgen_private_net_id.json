@@ -1,6 +1,7 @@
 {
 	"tags": "pktgen_private_net_id",
 	"name": "pktgen_private_net_id",
+	"group":"default",
 	"property": {
 		"description": "pktgen_private_net_id",
 		"type": "string"

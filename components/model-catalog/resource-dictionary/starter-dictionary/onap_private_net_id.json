@@ -1,6 +1,7 @@
 {
 	"tags": "onap_private_net_id",
 	"name": "onap_private_net_id",
+	"group":"default",
 	"property": {
 		"description": "onap_private_net_id",
 		"type": "string"
