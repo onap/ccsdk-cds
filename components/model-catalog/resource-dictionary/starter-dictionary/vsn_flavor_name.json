@@ -1,6 +1,7 @@
 {
 	"tags": "vsn_flavor_name",
 	"name": "vsn_flavor_name",
+	"group":"default",
 	"property": {
 		"description": "vsn_flavor_name",
 		"type": "string"

@@ -1,6 +1,7 @@
 {
 	"tags": "vdns_int_private_ip_0",
 	"name": "vdns_int_private_ip_0",
+	"group":"default",
 	"property": {
 		"description": "vdns_int_private_ip_0",
 		"type": "string"

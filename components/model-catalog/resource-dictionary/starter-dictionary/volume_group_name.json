@@ -1,6 +1,7 @@
 {
   "name" : "volume_group_name",
   "tags" : "volume_group_name",
+  "group":"default",
   "updated-by" : "Singal, Kapil <ks220y@att.com>",
   "property" : {
     "description" : "volume_group_name",

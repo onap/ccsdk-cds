@@ -1,6 +1,7 @@
 {
 	"tags": "dcae_collector_port",
 	"name": "dcae_collector_port",
+	"group":"default",
 	"property": {
 		"description": "dcae_collector_port",
 		"type": "string"

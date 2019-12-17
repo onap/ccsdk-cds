@@ -1,6 +1,7 @@
 {
     "tags": "vnf-id",
     "name": "vnf-id",
+    "group":"default",
     "property": {
       "description": "vnf-id",
       "type": "string"

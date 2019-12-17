@@ -1,6 +1,7 @@
 {
   "tags": "aai-get",
   "name": "pnf-ipaddress-aai",
+  "group":"default",
   "property": {
     "description": "primary aai data to get resource",
     "type": "string"

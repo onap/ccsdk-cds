@@ -1,6 +1,7 @@
 {
 	"tags": "vnf-model-customization-uuid",
 	"name": "vnf-model-customization-uuid",
+	"group":"default",
 	"property": {
 		"description": "vnf-model-customization-uuid",
 		"type": "string"

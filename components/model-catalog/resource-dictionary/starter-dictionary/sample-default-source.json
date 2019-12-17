@@ -1,6 +1,7 @@
 {
   "tags": "sample-default-source",
   "name": "sample-default-source",
+  "group":"default",
   "property" :{
     "description": "name of the ",
     "type": "string"

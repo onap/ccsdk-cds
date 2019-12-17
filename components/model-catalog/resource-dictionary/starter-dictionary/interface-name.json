@@ -1,6 +1,7 @@
 {
   "name" : "interface-name",
   "tags" : "interface-name",
+  "group":"default",
   "updated-by" : "adetalhouet",
   "property" : {
     "description" : "interface-name",

@@ -1,6 +1,7 @@
 {
 	"tags": "vf-module-model-customization-uuid",
 	"name": "vf-module-model-customization-uuid",
+	"group":"default",
 	"property": {
 		"description": "vf-module-model-customization-uuid",
 		"type": "string"

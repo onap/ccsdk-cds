@@ -1,6 +1,7 @@
 {
   "tags" : "golden-vf-module-type",
   "name" : "golden-vf-module-type",
+  "group":"default",
   "property" : {
     "description" : "golden-vf-module-type",
     "type" : "string"

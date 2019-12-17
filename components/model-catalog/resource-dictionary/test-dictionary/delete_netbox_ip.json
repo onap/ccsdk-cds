@@ -1,6 +1,7 @@
 {
   "tags": "oam-local-ipv4-address",
   "name": "delete_netbox_ip",
+  "group":"default",
   "property": {
     "description": "delete netbox ip",
     "type": "string"
