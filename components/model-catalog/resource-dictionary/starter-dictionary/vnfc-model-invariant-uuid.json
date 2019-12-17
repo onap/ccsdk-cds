@@ -1,6 +1,7 @@
 {
 	"tags": "vnfc-model-invariant-uuid",
 	"name": "vnfc-model-invariant-uuid",
+	"group":"default",
 	"property": {
 		"description": "vnfc-model-invariant-uuid",
 		"type": "string"

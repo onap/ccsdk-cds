@@ -1,6 +1,7 @@
 {
 	"tags": "dcae_collector_ip",
 	"name": "dcae_collector_ip",
+	"group":"default",
 	"property": {
 		"description": "dcae_collector_ip",
 		"type": "string"

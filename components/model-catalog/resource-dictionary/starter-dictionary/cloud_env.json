@@ -1,6 +1,7 @@
 {
 	"tags": "cloud_env",
 	"name": "cloud_env",
+	"group":"default",
 	"property": {
 		"description": "cloud_env",
 		"type": "string"

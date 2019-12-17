@@ -1,6 +1,7 @@
 {
 	"tags": "vip",
 	"name": "vip",
+	"group":"default",
 	"property": {
 		"description": "vip",
 		"type": "string"

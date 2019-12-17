@@ -1,6 +1,7 @@
 {
 	"tags": "vdns_flavor_name",
 	"name": "vdns_flavor_name",
+	"group":"default",
 	"property": {
 		"description": "vdns_flavor_name",
 		"type": "string"

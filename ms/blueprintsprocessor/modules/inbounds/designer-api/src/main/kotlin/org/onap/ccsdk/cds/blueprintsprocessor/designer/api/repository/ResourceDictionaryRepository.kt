@@ -18,6 +18,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.repository
 
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictionary
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 /**
@@ -59,4 +60,12 @@ interface ResourceDictionaryRepository : JpaRepository<ResourceDictionary, Strin
      * @param name name
      */
     fun deleteByName(name: String)
+
+    /**
+     *this method for getting resource dictionary group distinct
+     * (Dictionary library instances)
+     *
+     * */
+    @Query("SELECT distinct resourceDictionary.resourceDictionaryGroup FROM ResourceDictionary resourceDictionary")
+    fun findDistinctByResourceDictionaryGroup(): List<String>
 }

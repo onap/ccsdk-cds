@@ -1,6 +1,7 @@
 {
 	"tags": "nfc-naming-code",
 	"name": "nfc-naming-code",
+	"group":"default",
 	"property": {
 		"description": "nfc-naming-code",
 		"type": "string"

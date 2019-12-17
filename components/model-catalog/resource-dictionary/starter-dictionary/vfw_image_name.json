@@ -1,6 +1,7 @@
 {
 	"tags": "vfw_image_name",
 	"name": "vfw_image_name",
+	"group":"default",
 	"property": {
 		"description": "vfw_image_name",
 		"type": "string"

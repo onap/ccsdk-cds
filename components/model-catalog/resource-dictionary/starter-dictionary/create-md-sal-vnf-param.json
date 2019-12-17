@@ -1,6 +1,7 @@
 {
 	"tags": "create-md-sal-vnf-param",
 	"name": "create-md-sal-vnf-param",
+	"group":"default",
 	"property": {
 		"description": "create-md-sal-vnf-param",
 		"type": "string"
