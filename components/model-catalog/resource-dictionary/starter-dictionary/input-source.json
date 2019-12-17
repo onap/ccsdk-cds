@@ -1,5 +1,6 @@
 {
 	"name": "input-source",
+	"group":"default",
 	"property" :{
 		"description": "name of the ",
 		"type": "string"

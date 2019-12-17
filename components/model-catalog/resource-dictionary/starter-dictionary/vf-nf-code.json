@@ -1,6 +1,7 @@
 {
 	"tags": "vf-nf-code",
 	"name": "vf-nf-code",
+	"group":"default",
 	"property": {
 		"description": "vf-nf-code",
 		"type": "string"

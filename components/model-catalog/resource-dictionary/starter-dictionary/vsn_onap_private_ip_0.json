@@ -1,6 +1,7 @@
 {
 	"tags": "vsn_onap_private_ip_0",
 	"name": "vsn_onap_private_ip_0",
+	"group":"default",
 	"property": {
 		"description": "vsn_onap_private_ip_0",
 		"type": "string"

@@ -1,6 +1,7 @@
 {
   "name" : "pnf-id",
   "tags" : "pnf-id",
+  "group":"default",
   "updated-by" : "Rodrigo Ottero <rodrigo.ottero@est.tech>",
   "property" : {
     "description" : "pnf-id",

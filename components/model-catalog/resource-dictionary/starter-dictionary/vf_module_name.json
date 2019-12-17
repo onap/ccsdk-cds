@@ -1,6 +1,7 @@
 {
   "name" : "vf_module_name",
   "tags" : "vf_module_name",
+  "group":"default",
   "updated-by" : "Singal, Kapil <ks220y@att.com>",
   "property" : {
     "description" : "vf_module_name",

@@ -1,6 +1,7 @@
 {
 	"tags": "vfw_int_private2_ip_0",
 	"name": "vfw_int_private2_ip_0",
+	"group":"default",
 	"property": {
 		"description": "vfw_int_private2_ip_0",
 		"type": "string"

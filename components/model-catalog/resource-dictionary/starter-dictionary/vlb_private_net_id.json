@@ -1,6 +1,7 @@
 {
 	"tags": "vlb_private_net_id",
 	"name": "vlb_private_net_id",
+	"group":"default",
 	"property": {
 		"description": "vlb_private_net_id",
 		"type": "string"

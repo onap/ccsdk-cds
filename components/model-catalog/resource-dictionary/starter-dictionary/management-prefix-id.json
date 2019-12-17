@@ -1,6 +1,7 @@
 {
 	"tags": "management-prefix-id",
 	"name": "management-prefix-id",
+	"group":"default",
 	"property": {
 		"description": "management-prefix-id",
 		"type": "string"

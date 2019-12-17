@@ -1,6 +1,7 @@
 {
 	"tags": "onap_private_net_cidr",
 	"name": "onap_private_net_cidr",
+	"group":"default",
 	"property": {
 		"description": "onap_private_net_cidr",
 		"type": "string"

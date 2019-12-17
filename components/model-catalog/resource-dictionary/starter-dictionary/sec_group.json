@@ -1,6 +1,7 @@
 {
 	"tags": "sec_group",
 	"name": "sec_group",
+	"group":"default",
 	"property": {
 		"description": "sec_group",
 		"type": "string"

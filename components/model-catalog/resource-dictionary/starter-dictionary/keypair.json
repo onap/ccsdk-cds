@@ -1,6 +1,7 @@
 {
 	"tags": "keypair",
 	"name": "keypair",
+	"group":"default",
 	"property": {
 		"description": "keypair",
 		"type": "string"

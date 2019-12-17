@@ -1,6 +1,7 @@
 {
 	"tags": "nf-role",
 	"name": "nf-role",
+	"group":"default",
 	"property": {
 		"description": "vnf/nf-role",
 		"type": "string"

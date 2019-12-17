@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
+import reactor.core.publisher.Flux
 
 @RestController
 @RequestMapping(value = ["/api/v1/dictionary"])
@@ -71,4 +72,11 @@ open class ResourceDictionaryController(private val resourceDictionaryHandler: R
     fun getResourceSourceMapping(): ResourceSourceMapping = runBlocking {
         resourceDictionaryHandler.getResourceSourceMapping()
     }
+
+    @GetMapping(path = ["/resource_dictionary_group"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseBody
+    fun getResourceDictionaryDistinct(): List<String> = runBlocking {
+        resourceDictionaryHandler.getResourceDictionaryDistinct()
+    }
+
 }

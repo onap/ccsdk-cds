@@ -56,6 +56,10 @@ class ResourceDictionary : Serializable {
     @Column(name = "entry_schema")
     var entrySchema: String? = null
 
+    @Column(name = "resource_dictionary_group")
+    @ApiModelProperty(required = true)
+    var resourceDictionaryGroup: String? =null
+
     @Lob
     @Convert(converter = JpaResourceDefinitionConverter::class)
     @Column(name = "definition", nullable = false)
@@ -86,6 +90,7 @@ class ResourceDictionary : Serializable {
         return "[" + ", name = " + name +
                 ", dataType = " + dataType +
                 ", entrySchema = " + entrySchema +
+                ", resourceDictionaryGroup = " + resourceDictionaryGroup +
                 ", definition =" + definition +
                 ", description = " + description +
                 ", updatedBy = " + updatedBy +

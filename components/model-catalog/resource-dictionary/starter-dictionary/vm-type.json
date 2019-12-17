@@ -1,6 +1,7 @@
 {
 	"tags": "vm-type",
 	"name": "vm-type",
+	"group":"default",
 	"property": {
 		"description": "vm-type",
 		"type": "string"
