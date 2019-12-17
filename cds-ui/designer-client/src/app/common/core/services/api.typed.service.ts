@@ -48,4 +48,16 @@ export class ApiService<T> {
 
         return this.httpClient.post(url, body, options);
     }
+
+    getOne(url: string, params?: {}): Observable<T> {
+        console.log('params', params);
+        let httpParams = new HttpParams();
+        for (const key in params) {
+            if (params.hasOwnProperty(key)) {
+                httpParams = httpParams.append(key, params[key]);
+            }
+        }
+        const options = {params: httpParams};
+        return this.httpClient.get<T>(url, options);
+    }
 }

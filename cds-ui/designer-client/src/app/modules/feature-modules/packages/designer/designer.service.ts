@@ -19,23 +19,22 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Page } from 'src/app/common/model/page';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {ApiService} from '../../../../common/core/services/api.typed.service';
+import {ResourceDictionaryURLs} from '../../../../common/constants/app-constants';
 
-export class BlueprintModel {
 
+@Injectable({
+    providedIn: 'root'
+})
+export class DesignerService {
 
-    id: string;
-    artifactUUId?: null;
-    artifactType: string;
-    artifactVersion: string;
-    artifactDescription: string;
-    internalVersion?: null;
-    createdDate: string;
-    artifactName: string;
-    published: string;
-    updatedBy: string;
-    tags: string;
-}
+    constructor(private api: ApiService<ModelType>) {
+    }
 
-export class BluePrintPage extends Page<BlueprintModel> {
+    getFunctions(modelDefinitionType: string): Observable<ModelType[]> {
+        return this.api.get(ResourceDictionaryURLs.getResourceDictionary + '/' + modelDefinitionType);
+    }
+
 }
