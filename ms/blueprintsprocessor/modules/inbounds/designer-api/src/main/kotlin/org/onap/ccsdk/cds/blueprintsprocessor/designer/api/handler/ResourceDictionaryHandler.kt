@@ -89,6 +89,7 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
 
         resourceDictionary.tags = resourceDefinition.tags!!
         resourceDefinition.updatedBy = resourceDictionary.updatedBy
+        resourceDictionary.resourceDictionaryGroup =resourceDefinition.group
         // Set the Property Definitions
         val propertyDefinition = resourceDefinition.property
         resourceDictionary.description = propertyDefinition.description!!
@@ -107,6 +108,7 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
             dbResourceDictionary.definition = resourceDictionary.definition
             dbResourceDictionary.description = resourceDictionary.description
             dbResourceDictionary.tags = resourceDictionary.tags
+            dbResourceDictionary.resourceDictionaryGroup = resourceDictionary.resourceDictionaryGroup
             dbResourceDictionary.updatedBy = resourceDictionary.updatedBy
             dbResourceDictionary.dataType = resourceDictionary.dataType
             dbResourceDictionary.entrySchema = resourceDictionary.entrySchema
@@ -142,5 +144,9 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
         checkNotEmpty(resourceDictionary.tags) { "DataDictionary Definition tags is missing." }
         checkNotEmpty(resourceDictionary.updatedBy) { "DataDictionary Definition updatedBy is missing." }
         return true
+    }
+
+    fun getResourceDictionaryDistinct(): List<String> {
+        return resourceDictionaryRepository.findDistinctByResourceDictionaryGroup()
     }
 }

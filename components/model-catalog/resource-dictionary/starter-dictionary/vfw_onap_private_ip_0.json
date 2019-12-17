@@ -1,6 +1,7 @@
 {
 	"tags": "vfw_onap_private_ip_0",
 	"name": "vfw_onap_private_ip_0",
+	"group":"default",
 	"property": {
 		"description": "vfw_onap_private_ip_0",
 		"type": "string"

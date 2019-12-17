@@ -1,6 +1,7 @@
 {
 	"tags": "int_private1_net_cidr",
 	"name": "int_private1_net_cidr",
+	"group":"default",
 	"property": {
 		"description": "int_private1_net_cidr",
 		"type": "string"

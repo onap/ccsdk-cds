@@ -34,6 +34,9 @@ open class ResourceDefinition {
 
     var tags: String? = null
 
+    @JsonProperty(value = "group")
+    lateinit var group: String
+
     @JsonProperty(value = "updated-by")
     lateinit var updatedBy: String
 

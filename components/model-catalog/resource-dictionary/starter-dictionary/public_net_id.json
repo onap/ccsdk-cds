@@ -1,6 +1,7 @@
 {
 	"tags": "public_net_id",
 	"name": "public_net_id",
+	"group":"default",
 	"property": {
 		"description": "public_net_id",
 		"type": "string"

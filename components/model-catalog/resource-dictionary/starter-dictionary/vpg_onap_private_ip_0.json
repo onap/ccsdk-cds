@@ -1,6 +1,7 @@
 {
 	"tags": "vpg_onap_private_ip_0",
 	"name": "vpg_onap_private_ip_0",
+	"group":"default",
 	"property": {
 		"description": "vpg_onap_private_ip_0",
 		"type": "string"

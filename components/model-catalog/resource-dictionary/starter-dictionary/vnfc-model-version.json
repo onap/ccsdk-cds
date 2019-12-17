@@ -1,6 +1,7 @@
 {
 	"tags": "vnfc-model-version",
 	"name": "vnfc-model-version",
+	"group":"default",
 	"property": {
 		"description": "vnfc-model-version",
 		"type": "string"

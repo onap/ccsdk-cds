@@ -1,6 +1,7 @@
 {
   "tags": "private-prefix-id",
   "name": "private-prefix-id",
+  "group":"default",
   "property": {
     "description": "private-prefix-id",
     "type": "string"

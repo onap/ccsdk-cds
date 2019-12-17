@@ -1,6 +1,7 @@
 {
 	"tags": "vlb_0_int_pktgen_private_port_0_mac",
 	"name": "vlb_0_int_pktgen_private_port_0_mac",
+	"group":"default",
 	"property": {
 		"description": "vlb_0_int_pktgen_private_port_0_mac",
 		"type": "string"

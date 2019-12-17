@@ -1,6 +1,7 @@
 {
 	"tags": "vlb_flavor_name",
 	"name": "vlb_flavor_name",
+	"group":"default",
 	"property": {
 		"description": "vlb_flavor_name",
 		"type": "string"

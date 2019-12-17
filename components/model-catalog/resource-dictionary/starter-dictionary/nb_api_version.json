@@ -1,6 +1,7 @@
 {
 	"tags": "nb_api_version",
 	"name": "nb_api_version",
+	"group":"default",
 	"property": {
 		"description": "nb_api_version",
 		"type": "string"

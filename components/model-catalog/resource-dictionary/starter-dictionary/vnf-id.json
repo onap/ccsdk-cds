@@ -1,14 +1,20 @@
+
 {
     "tags": "vnf-id",
     "name": "vnf-id",
+    "group":"default",
     "property": {
       "description": "vnf-id",
       "type": "string"
     },
     "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+		
     "sources": {
+		
       "input": {
+		
         "type": "source-input"
+		
       },
       "default": {
         "type": "source-default",
@@ -36,4 +42,3 @@
       }
     }
 }
-  

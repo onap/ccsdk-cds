@@ -1,6 +1,7 @@
 {
   "name" : "pnf-id",
   "tags" : "pnf-id",
+  "group":"default",
   "updated-by" : "Rodrigo Ottero <rodrigo.ottero@est.tech>",
   "property" : {
     "description" : "pnf-id",
@@ -10,29 +11,50 @@
     "input" : {
       "type" : "source-input",
       "properties" : { }
-    },
+        },
     "aai-data": {
       "type": "source-rest",
       "properties": {
         "verb": "GET",
+		
         "type": "JSON",
+		
         "url-path": "/aai/v14/network/pnfs/pnf/$pnf-id",
+		
         "path": "/pnf-name",
+		
         "headers" : {
+		
           "Accept": "application/json",
+		
           "X-TransactionId": "AAI-Temp-Tool",
+		
           "X-FromAppId": "AAI-Temp-Tool"
+		
         },
+		
         "input-key-mapping": {
+		
           "pnf-id": "pnf.pnf-id"
+		
         },
+		
         "output-key-mapping": {
+		
           "pnf-id": "pnf-name"
+		
         },
+		
         "key-dependencies": [
+		
           "pnf.pnf-id"
+		
         ]
+		
       }
+		
     }
+		
   }
+		
 }

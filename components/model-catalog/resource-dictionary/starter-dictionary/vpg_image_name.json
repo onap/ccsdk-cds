@@ -1,6 +1,7 @@
 {
 	"tags": "vpg_image_name",
 	"name": "vpg_image_name",
+	"group":"default",
 	"property": {
 		"description": "vpg_image_name",
 		"type": "string"

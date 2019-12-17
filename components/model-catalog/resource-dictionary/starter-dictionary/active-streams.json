@@ -1,6 +1,7 @@
 {
   "tags": "active-streams",
   "name": "active-streams",
+  "group":"default",
   "property": {
     "description": "active-streams",
     "type": "string"

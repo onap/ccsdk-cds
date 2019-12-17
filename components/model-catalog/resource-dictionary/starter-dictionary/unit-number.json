@@ -1,6 +1,7 @@
 {
     "tags": "unit-number",
     "name": "unit-number",
+    "group":"default",
     "property": {
       "description": "unit-number",
       "type": "string"

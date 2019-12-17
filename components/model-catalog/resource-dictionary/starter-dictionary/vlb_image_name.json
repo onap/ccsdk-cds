@@ -1,6 +1,7 @@
 {
 	"tags": "vlb_image_name",
 	"name": "vlb_image_name",
+	"group":"default",
 	"property": {
 		"description": "vlb_image_name",
 		"type": "string"

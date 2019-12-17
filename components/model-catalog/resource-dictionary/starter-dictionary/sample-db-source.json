@@ -1,5 +1,6 @@
 {
   "name": "sample-db-source",
+  "group":"default",
   "property" :{
     "description": "name of the ",
     "type": "string"
