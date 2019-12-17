@@ -1,6 +1,7 @@
 {
 	"tags": "vdns_vf_module_id",
 	"name": "vdns_vf_module_id",
+	"group":"default",
 	"property": {
 		"description": "vdns_vf_module_id",
 		"type": "string"

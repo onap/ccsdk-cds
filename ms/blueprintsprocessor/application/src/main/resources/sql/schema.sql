@@ -69,6 +69,7 @@ CREATE TABLE IF NOT EXISTS configurator.RESOURCE_DICTIONARY (
   data_type 		VARCHAR(100) NOT NULL,
   entry_schema 		VARCHAR(100) NULL DEFAULT NULL,
   definition 		LONGTEXT NOT NULL,
+  resource_dictionary_group             VARCHAR(10) NOT NULL,
   description 		LONGTEXT NOT NULL,
   tags 			LONGTEXT NOT NULL,  
   creation_date 	DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

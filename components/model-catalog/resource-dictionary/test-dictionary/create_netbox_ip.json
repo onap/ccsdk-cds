@@ -1,6 +1,7 @@
 {
     "tags" : "oam-local-ipv4-address",
     "name" : "create_netbox_ip",
+    "group":"default",
     "property" : {
       "description" : "netbox ip",
       "type" : "dt-netbox-ip"

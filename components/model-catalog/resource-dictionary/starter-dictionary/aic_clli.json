@@ -1,6 +1,7 @@
 {
   "name" : "aic_clli",
   "tags" : "aic_clli",
+  "group":"default",
   "updated-by" : "Singal, Kapil <ks220y@att.com>",
   "property" : {
     "description" : "aic_clli",

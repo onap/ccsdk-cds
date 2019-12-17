@@ -1,6 +1,7 @@
 {
 	"tags": "pub_key",
 	"name": "pub_key",
+	"group":"default",
 	"property": {
 		"description": "pub_key",
 		"type": "string"

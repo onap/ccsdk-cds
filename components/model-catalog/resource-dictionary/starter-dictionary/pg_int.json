@@ -1,6 +1,7 @@
 {
 	"tags": "pg_int",
 	"name": "pg_int",
+	"group":"default",
 	"property": {
 		"description": "pg_int",
 		"type": "string"

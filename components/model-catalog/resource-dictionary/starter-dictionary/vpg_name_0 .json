@@ -1,6 +1,7 @@
 {
 	"tags": "vpg_name_0",
 	"name": "vpg_name_0",
+	"group":"default",
 	"property": {
 		"description": "vlb_name_0",
 		"type": "string"

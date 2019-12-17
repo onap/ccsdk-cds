@@ -1,6 +1,7 @@
 {
 	"tags": "vsn_int_private2_ip_0",
 	"name": "vsn_int_private2_ip_0",
+	"group":"default",
 	"property": {
 		"description": "vsn_int_private2_ip_0",
 		"type": "string"

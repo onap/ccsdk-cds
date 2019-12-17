@@ -1,6 +1,7 @@
 {
 	"tags": "vlb_name_0",
 	"name": "vlb_name_0",
+	"group":"default",
 	"property": {
 		"description": "vlb_name_0",
 		"type": "string"

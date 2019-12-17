@@ -1,6 +1,7 @@
 {
 	"tags": "nexus_artifact_repo",
 	"name": "nexus_artifact_repo",
+	"group":"default",
 	"property": {
 		"description": "nexus_artifact_repo",
 		"type": "string"

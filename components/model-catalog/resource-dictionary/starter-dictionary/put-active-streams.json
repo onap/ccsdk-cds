@@ -1,6 +1,7 @@
 {
   "name": "put-active-streams",
   "tags": "put-active-streams",
+  "group":"default",
   "property": {
     "description": "put-active-streams",
     "type": "string"
