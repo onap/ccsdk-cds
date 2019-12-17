@@ -25,6 +25,7 @@
 
     <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
     <artifactId>parent</artifactId>
+    <version>0.7.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Blueprints Processor Parent</name>
@@ -296,6 +297,28 @@
                 <version>${netty-ssl}</version>
             </dependency>
 
+            <!-- Atomix -->
+            <dependency>
+                <groupId>io.atomix</groupId>
+                <artifactId>atomix</artifactId>
+                <version>${atomix.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.atomix</groupId>
+                <artifactId>atomix-raft</artifactId>
+                <version>${atomix.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.atomix</groupId>
+                <artifactId>atomix-primary-backup</artifactId>
+                <version>${atomix.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.atomix</groupId>
+                <artifactId>atomix-gossip</artifactId>
+                <version>${atomix.version}</version>
+            </dependency>
+
             <!-- Adaptors -->
             <dependency>
                 <groupId>org.apache.sshd</groupId>
@@ -374,6 +397,11 @@
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>processor-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>atomix-lib</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

@@ -1,0 +1,85 @@
+version: '3.7'
+
+services:
+  db:
+    image: mariadb:latest
+    container_name: ccsdk-mariadb
+    networks:
+      - cds-network
+    ports:
+      - "3306:3306"
+    volumes:
+      - ~/vm_mysql:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: sdnctl
+      MYSQL_DATABASE: sdnctl
+      MYSQL_USER: sdnctl
+      MYSQL_PASSWORD: sdnctl
+  cds-controller-1:
+    depends_on:
+      - db
+    image: onap/ccsdk-blueprintsprocessor:latest
+    container_name: cds-controller-1
+    hostname: cds-controller-1
+    networks:
+      - cds-network
+    ports:
+      - "8000:8080"
+      - "9111:9111"
+    restart: always
+    volumes:
+      - target: /opt/app/onap/blueprints/deploy
+        type: volume
+        source: blueprints-deploy
+      - target: /opt/app/onap/config
+        type: bind
+        source: ./config
+    environment:
+      # Same as hostname and container name
+      CLUSTER_ID: cds-cluster
+      CLUSTER_NODE_ID: cds-controller-1
+      CLUSTER_MEMBERS: cds-controller-1,resource-resolution-1
+      CLUSTER_STORAGE_PATH: /opt/app/onap/config/cluster
+      #CLUSTER_CONFIG_FILE: /opt/app/onap/config/atomix/atomix-multicast.conf
+      APPLICATIONNAME: cds-controller
+      BUNDLEVERSION: 1.0.0
+      APP_CONFIG_HOME: /opt/app/onap/config
+      STICKYSELECTORKEY:
+      ENVCONTEXT: dev
+  resource-resolution-1:
+    depends_on:
+      - db
+    image: onap/ccsdk-blueprintsprocessor:latest
+    container_name: resource-resolution-1
+    hostname: resource-resolution-1
+    networks:
+      - cds-network
+    ports:
+      - "8001:8080"
+      - "9112:9111"
+    restart: always
+    volumes:
+      - target: /opt/app/onap/blueprints/deploy
+        type: volume
+        source: blueprints-deploy
+      - target: /opt/app/onap/config
+        type: bind
+        source: ./config
+    environment:
+      CLUSTER_ID: cds-cluster
+      CLUSTER_NODE_ID: resource-resolution-1
+      CLUSTER_MEMBERS: cds-controller-1,resource-resolution-1
+      CLUSTER_STORAGE_PATH: /opt/app/onap/config/cluster
+      #CLUSTER_CONFIG_FILE: /opt/app/onap/config/atomix/atomix-multicast.conf
+      APPLICATIONNAME: resource-resolution
+      BUNDLEVERSION: 1.0.0
+      APP_CONFIG_HOME: /opt/app/onap/config
+      STICKYSELECTORKEY:
+      ENVCONTEXT: dev
+volumes:
+  blueprints-deploy:
+
+networks:
+  cds-network:
+    driver: bridge

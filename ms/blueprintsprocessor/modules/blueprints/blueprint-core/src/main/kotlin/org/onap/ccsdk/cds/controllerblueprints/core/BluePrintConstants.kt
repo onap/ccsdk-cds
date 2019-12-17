@@ -217,4 +217,12 @@ object BluePrintConstants {
     const val MODEL_TYPE_ARTIFACT_COMPONENT_JAR = "artifact-component-jar"
 
     val USE_SCRIPT_COMPILE_CACHE: Boolean = (System.getenv("USE_SCRIPT_COMPILE_CACHE") ?: "true").toBoolean()
+
+    /** Cluster Properties */
+    const val PROPERTY_CLUSTER_ID = "CLUSTER_ID"
+    const val PROPERTY_CLUSTER_NODE_ID = "CLUSTER_NODE_ID"
+    const val PROPERTY_CLUSTER_NODE_ADDRESS = "CLUSTER_NODE_ADDRESS"
+    const val PROPERTY_CLUSTER_MEMBERS = "CLUSTER_MEMBERS"
+    const val PROPERTY_CLUSTER_STORAGE_PATH = "CLUSTER_STORAGE_PATH"
+    const val PROPERTY_CLUSTER_CONFIG_FILE = "CLUSTER_CONFIG_FILE"
 }

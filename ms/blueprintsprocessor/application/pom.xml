@@ -95,6 +95,12 @@
             <version>0.7.0-SNAPSHOT</version>
         </dependency>
 
+        <!-- Libs -->
+        <dependency>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <artifactId>atomix-lib</artifactId>
+        </dependency>
+
         <!-- Functions -->
         <dependency>
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>

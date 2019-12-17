@@ -1,9 +1,11 @@
-version: '3.3'
+version: '3.7'
 
 services:
   db:
     image: mariadb:latest
     container_name: ccsdk-mariadb
+    networks:
+      - cds-network
     ports:
       - "3306:3306"
     volumes:
@@ -20,6 +22,8 @@ services:
     image: onap/ccsdk-blueprintsprocessor:latest
     container_name: cds-controller-default
     hostname: cds-controller-default
+    networks:
+      - cds-network
     ports:
       - "8000:8080"
       - "9111:9111"
@@ -37,6 +41,8 @@ services:
       - db
     image: onap/ccsdk-commandexecutor:latest
     container_name: bp-command-executor
+    networks:
+      - cds-network
     ports:
       - "50051:50051"
     restart: always
@@ -48,6 +54,8 @@ services:
     image: onap/ccsdk-py-executor
     container_name: py-executor-default
     hostname: py-executor-default
+    networks:
+      - cds-network
     ports:
       - "50052:50052"
     restart: always
@@ -65,3 +73,7 @@ services:
 
 volumes:
   blueprints-deploy:
+
+networks:
+  cds-network:
+    driver: bridge
