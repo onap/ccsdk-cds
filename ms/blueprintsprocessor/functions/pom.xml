@@ -35,6 +35,7 @@
         <module>resource-resolution</module>
         <module>ansible-awx-executor</module>
         <module>python-executor</module>
+        <module>nrm-restful</module>
         <module>netconf-executor</module>
         <module>restconf-executor</module>
         <module>cli-executor</module>

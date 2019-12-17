@@ -461,6 +461,11 @@
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
+                <artifactId>nrm-restful</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
                 <artifactId>python-executor</artifactId>
                 <version>${project.version}</version>
             </dependency>
