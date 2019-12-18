@@ -41,6 +41,7 @@
         <module>grpc-lib</module>
         <module>message-lib</module>
         <module>ssh-lib</module>
+        <module>nats-lib</module>
     </modules>
 
     <dependencies>

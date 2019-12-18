@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.controllerblueprints.core.utils
+package org.onap.ccsdk.cds.blueprintsprocessor.nats
 
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import java.net.InetAddress
+import com.fasterxml.jackson.databind.JsonNode
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 
-object ClusterUtils {
+fun io.nats.client.Message.strData(): String {
+    return String(this.data)
+}
 
-    /** get the local host name  */
-    fun hostname(): String {
-        val ip = InetAddress.getLocalHost()
-        return ip.hostName
-    }
+fun io.nats.streaming.Message.strData(): String {
+    return String(this.data)
+}
 
-    fun clusterId(): String {
-        return System.getProperty(BluePrintConstants.PROPERTY_CLUSTER_ID) ?: "cds-cluster"
-    }
+fun io.nats.client.Message.asJsonType(): JsonNode {
+    return this.data.asJsonType()
+}
 
-    fun clusterNodeId(): String {
-        return System.getProperty(BluePrintConstants.PROPERTY_CLUSTER_NODE_ID) ?: "cds-controller"
-    }
+fun io.nats.streaming.Message.asJsonType(): JsonNode {
+    return this.data.asJsonType()
 }

@@ -68,6 +68,17 @@ class CustomFunctionsTest {
     }
 
     @Test
+    fun testByteArrayJsonType() {
+        val jsonNode = """{"Name" :"Value"}""".jsonAsJsonType()
+
+        val byteArray = jsonNode.asByteArray()
+        assertNotNull(byteArray, "failed to get ByteArray form Json")
+
+        val reverseJsonNode = byteArray.asJsonType()
+        assertNotNull(reverseJsonNode, "failed to get Json type from ByteArray")
+    }
+
+    @Test
     fun testAsJsonType() {
         val nullReturnValue: JsonNode = null.asJsonType()
         assertEquals(NullNode.instance, nullReturnValue)

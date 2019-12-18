@@ -14,24 +14,19 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.controllerblueprints.core.utils
+package org.onap.ccsdk.cds.blueprintsprocessor.nats.utils
 
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import java.net.InetAddress
+import io.nats.streaming.SubscriptionOptions
 
-object ClusterUtils {
+object SubscriptionOptionsUtils {
 
-    /** get the local host name  */
-    fun hostname(): String {
-        val ip = InetAddress.getLocalHost()
-        return ip.hostName
+    /** Subscribe with a durable [name] and client can re subscribe with  durable [name] */
+    fun durable(name: String): SubscriptionOptions {
+        return SubscriptionOptions.Builder().durableName(name).build()
     }
 
-    fun clusterId(): String {
-        return System.getProperty(BluePrintConstants.PROPERTY_CLUSTER_ID) ?: "cds-cluster"
-    }
-
-    fun clusterNodeId(): String {
-        return System.getProperty(BluePrintConstants.PROPERTY_CLUSTER_NODE_ID) ?: "cds-controller"
+    /** Subscribe with manual ack mode and a max in-flight [limit] */
+    fun manualAckWithRateLimit(limit: Int): SubscriptionOptions {
+        return SubscriptionOptions.Builder().manualAcks().maxInFlight(limit).build()
     }
 }

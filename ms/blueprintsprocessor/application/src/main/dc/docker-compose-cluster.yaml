@@ -16,9 +16,21 @@ services:
       MYSQL_DATABASE: sdnctl
       MYSQL_USER: sdnctl
       MYSQL_PASSWORD: sdnctl
+  nats:
+    image: nats-streaming:latest
+    container_name: nats
+    hostname: nats
+    command: "-cid cds-cluster --auth tokenAuth -store file -dir store-nats-1 --cluster_node_id nats-1"
+    networks:
+      - cds-network
+    ports:
+      - "8222:8222"
+      - "4222:4222"
+    restart: always
   cds-controller-1:
     depends_on:
       - db
+      - nats
     image: onap/ccsdk-blueprintsprocessor:latest
     container_name: cds-controller-1
     hostname: cds-controller-1
@@ -42,6 +54,7 @@ services:
       CLUSTER_MEMBERS: cds-controller-1,resource-resolution-1
       CLUSTER_STORAGE_PATH: /opt/app/onap/config/cluster
       #CLUSTER_CONFIG_FILE: /opt/app/onap/config/atomix/atomix-multicast.conf
+      NATS_HOSTS: nats://nats:4222
       APPLICATIONNAME: cds-controller
       BUNDLEVERSION: 1.0.0
       APP_CONFIG_HOME: /opt/app/onap/config
@@ -50,6 +63,7 @@ services:
   resource-resolution-1:
     depends_on:
       - db
+      - nats
     image: onap/ccsdk-blueprintsprocessor:latest
     container_name: resource-resolution-1
     hostname: resource-resolution-1
@@ -72,6 +86,7 @@ services:
       CLUSTER_MEMBERS: cds-controller-1,resource-resolution-1
       CLUSTER_STORAGE_PATH: /opt/app/onap/config/cluster
       #CLUSTER_CONFIG_FILE: /opt/app/onap/config/atomix/atomix-multicast.conf
+      NATS_HOSTS: nats://nats:4222
       APPLICATIONNAME: resource-resolution
       BUNDLEVERSION: 1.0.0
       APP_CONFIG_HOME: /opt/app/onap/config

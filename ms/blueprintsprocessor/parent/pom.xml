@@ -34,6 +34,8 @@
     <properties>
         <sli.version>${ccsdk.sli.core.version}</sli.version>
         <dmaap.client.version>1.1.5</dmaap.client.version>
+        <nats.version>2.6.6</nats.version>
+        <nats.streaming.version>2.2.3</nats.streaming.version>
 
         <!-- Should be using released artifact as soon as available: -->
         <!-- https://github.com/springfox/springfox/milestone/44 -->
@@ -297,6 +299,18 @@
                 <version>${netty-ssl}</version>
             </dependency>
 
+            <!-- NATS -->
+            <dependency>
+                <groupId>io.nats</groupId>
+                <artifactId>jnats</artifactId>
+                <version>${nats.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.nats</groupId>
+                <artifactId>java-nats-streaming</artifactId>
+                <version>${nats.streaming.version}</version>
+            </dependency>
+
             <!-- Atomix -->
             <dependency>
                 <groupId>io.atomix</groupId>
@@ -412,6 +426,11 @@
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>rest-lib</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>nats-lib</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -537,24 +556,24 @@
 
             <!-- Controller Blueprints Application Dependency -->
             <dependency>
-               <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-               <artifactId>resource-dict</artifactId>
-               <version>${project.version}</version>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>resource-dict</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
-               <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-               <artifactId>blueprint-core</artifactId>
-               <version>${project.version}</version>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>blueprint-core</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
-               <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-               <artifactId>blueprint-proto</artifactId>
-               <version>${project.version}</version>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>blueprint-proto</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
-               <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-               <artifactId>blueprint-validation</artifactId>
-               <version>${project.version}</version>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>blueprint-validation</artifactId>
+                <version>${project.version}</version>
             </dependency>
 
             <!-- Database -->
