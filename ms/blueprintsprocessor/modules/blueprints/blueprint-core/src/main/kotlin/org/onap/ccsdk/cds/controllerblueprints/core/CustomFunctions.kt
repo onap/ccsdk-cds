@@ -56,9 +56,13 @@ fun <T : Any> T.bpClone(): T {
     return ObjectUtils.clone(this)
 }
 
+fun String.splitCommaAsList(): List<String> {
+    return this.split(",").map { it.trim() }.toList()
+}
+
 fun String.isJson(): Boolean {
     return ((this.trim().startsWith("{") && this.trim().endsWith("}")) ||
-            (this.trim().startsWith("[") && this.trim().endsWith("]")))
+        (this.trim().startsWith("[") && this.trim().endsWith("]")))
 }
 
 fun Any.asJsonString(intend: Boolean? = false): String {
@@ -126,29 +130,25 @@ fun String.asJsonType(bpDataType: String): JsonNode {
 }
 
 /**
- * Utility to convert Complex or Primitive object to Json Type.
+ * Utility to convert Complex or Primitive object or ByteArray to Json Type.
  */
 fun <T : Any?> T.asJsonType(): JsonNode {
     return if (this == null || this is MissingNode || this is NullNode) {
         NullNode.instance
     } else {
         when (this) {
-            is JsonNode ->
-                this
+            is JsonNode -> this
+            is ByteArray -> JacksonUtils.objectMapper.reader().readTree(this.inputStream())
             is String -> {
                 if (this.isJson())
                     this.jsonAsJsonType()
                 else
                     TextNode(this)
             }
-            is Boolean ->
-                BooleanNode.valueOf(this)
-            is Int ->
-                IntNode.valueOf(this.toInt())
-            is Double ->
-                DoubleNode.valueOf(this.toDouble())
-            else ->
-                JacksonUtils.jsonNodeFromObject(this)
+            is Boolean -> BooleanNode.valueOf(this)
+            is Int -> IntNode.valueOf(this.toInt())
+            is Double -> DoubleNode.valueOf(this.toDouble())
+            else -> JacksonUtils.jsonNodeFromObject(this)
         }
     }
 }
@@ -186,6 +186,11 @@ fun <T : Any> Map<String, *>.castValue(key: String, valueType: KClass<T>): T {
 
 fun ArrayNode.asListOfString(): List<String> {
     return JacksonUtils.getListFromJsonNode(this, String::class.java)
+}
+
+fun JsonNode.asByteArray(): ByteArray {
+    val writer = JacksonUtils.objectMapper.writer()
+    return writer.writeValueAsBytes(this)
 }
 
 fun <T> JsonNode.asType(clazzType: Class<T>): T {

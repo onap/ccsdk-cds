@@ -1,5 +1,0 @@
-
-Generate Certifactes & Keys
-----------------------------
-
-openssl req -x509 -newkey rsa:4096 -keyout my-private-key.pem -out my-public-key-cert.pem -days 3650 -nodes -subj '/CN=localhost'

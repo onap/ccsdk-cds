@@ -52,6 +52,10 @@
             <artifactId>grpc-lib</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <artifactId>nats-lib</artifactId>
+        </dependency>
+        <dependency>
            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
            <artifactId>resource-dict</artifactId>
         </dependency>
