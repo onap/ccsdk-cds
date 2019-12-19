@@ -29,5 +29,4 @@ object ResourceResolutionConstants {
     const val RESOURCE_RESOLUTION_INPUT_OCCURRENCE = "occurrence"
     const val RESOURCE_RESOLUTION_INPUT_RESOURCE_ID = "resource-id"
     const val RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE = "resource-type"
-    const val RESOURCE_RESOLUTION_LOG_PROTECTED_METADATA = "log-protect"
 }
