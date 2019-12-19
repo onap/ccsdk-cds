@@ -35,6 +35,9 @@ interface BluePrintClusterService {
     /** Create and get or get the distributed data map store with [name] */
     suspend fun <T> clusterMapStore(name: String): MutableMap<String, T>
 
+    /** Create and get the distributed lock with [name] */
+    suspend fun clusterLock(name: String): ClusterLock
+
     /** Shut down the cluster with [duration] */
     suspend fun shutDown(duration: Duration)
 }
@@ -48,4 +51,11 @@ data class ClusterInfo(
     var storagePath: String
 )
 
-data class ClusterMember(val id: String, val memberAddress: String?)
+data class ClusterMember(val id: String, val memberAddress: String?, val state: String? = null)
+
+interface ClusterLock {
+    suspend fun lock()
+    suspend fun tryLock(timeout: Long): Boolean
+    suspend fun unLock()
+    fun isLocked(): Boolean
+}

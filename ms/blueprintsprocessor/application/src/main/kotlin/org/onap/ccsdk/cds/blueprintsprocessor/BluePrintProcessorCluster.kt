@@ -22,6 +22,8 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterInfo
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
+import org.onap.ccsdk.cds.controllerblueprints.core.splitCommaAsList
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.ClusterUtils
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
@@ -52,7 +54,7 @@ import javax.annotation.PreDestroy
  *      CLUSTER_STORAGE_PATH: /opt/app/onap/config/cluster
  *      CLUSTER_CONFIG_FILE:  /opt/app/onap/config/atomix/atomix-multicast.conf
  * 4. Cluster will be enabled only all the above properties present in the environments.
- * if CLUSTER_ID is present, then it will try to create cluster.
+ * if CLUSTER_ENABLED is present, then it will try to create cluster.
  */
 @Component
 open class BluePrintProcessorCluster(private val bluePrintClusterService: BluePrintClusterService) {
@@ -61,25 +63,22 @@ open class BluePrintProcessorCluster(private val bluePrintClusterService: BluePr
 
     @EventListener(ApplicationReadyEvent::class)
     fun startAndJoinCluster() = runBlocking {
-        val clusterId = System.getProperty(BluePrintConstants.PROPERTY_CLUSTER_ID)
 
-        if (!clusterId.isNullOrEmpty()) {
+        if (BluePrintConstants.CLUSTER_ENABLED) {
 
-            val nodeId = System.getProperty(BluePrintConstants.PROPERTY_CLUSTER_NODE_ID)
-                ?: throw BluePrintProcessorException("couldn't get environment variable ${BluePrintConstants.PROPERTY_CLUSTER_NODE_ID}")
+            val clusterId = ClusterUtils.clusterId()
+            val nodeId = ClusterUtils.clusterNodeId()
+            val nodeAddress = ClusterUtils.clusterNodeAddress()
 
-            val nodeAddress = System.getProperty(BluePrintConstants.PROPERTY_CLUSTER_NODE_ADDRESS)
-                ?: throw BluePrintProcessorException("couldn't get environment variable ${BluePrintConstants.PROPERTY_CLUSTER_NODE_ADDRESS}")
-
-            val clusterMembers = System.getProperty(BluePrintConstants.PROPERTY_CLUSTER_MEMBERS)
+            val clusterMembers = System.getenv(BluePrintConstants.PROPERTY_CLUSTER_MEMBERS)
                 ?: throw BluePrintProcessorException("couldn't get environment variable ${BluePrintConstants.PROPERTY_CLUSTER_MEMBERS}")
 
-            val clusterMemberList = clusterMembers.split(",").map { it.trim() }.toList()
+            val clusterMemberList = clusterMembers.splitCommaAsList()
 
-            val clusterStorage = System.getProperty(BluePrintConstants.PROPERTY_CLUSTER_STORAGE_PATH)
+            val clusterStorage = System.getenv(BluePrintConstants.PROPERTY_CLUSTER_STORAGE_PATH)
                 ?: throw BluePrintProcessorException("couldn't get environment variable ${BluePrintConstants.PROPERTY_CLUSTER_STORAGE_PATH}")
 
-            val clusterConfigFile = System.getProperty(BluePrintConstants.PROPERTY_CLUSTER_CONFIG_FILE)
+            val clusterConfigFile = System.getenv(BluePrintConstants.PROPERTY_CLUSTER_CONFIG_FILE)
 
             val clusterInfo = ClusterInfo(
                 id = clusterId, nodeId = nodeId,
@@ -89,10 +88,7 @@ open class BluePrintProcessorCluster(private val bluePrintClusterService: BluePr
             )
             bluePrintClusterService.startCluster(clusterInfo)
         } else {
-            log.info(
-                "Cluster is disabled, to enable cluster set the environment " +
-                    "properties[CLUSTER_ID,CLUSTER_NODE_ID, CLUSTER_NODE_ADDRESS, CLUSTER_MEMBERS,CLUSTER_CONFIG_FILE]"
-            )
+            log.info("Cluster is disabled, to enable cluster set the environment CLUSTER_* properties.")
         }
     }
 

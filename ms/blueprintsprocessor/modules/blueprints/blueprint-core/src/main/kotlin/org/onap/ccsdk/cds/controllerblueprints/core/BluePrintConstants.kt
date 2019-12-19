@@ -27,7 +27,7 @@ object BluePrintConstants {
     val APP_NAME = System.getProperty("APPLICATION_NAME")
         ?: System.getProperty("APP_NAME")
         ?: System.getProperty("APPNAME")
-        ?: "cds-controller-default"
+        ?: "cds-controller"
 
     const val DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
 
@@ -219,6 +219,7 @@ object BluePrintConstants {
     val USE_SCRIPT_COMPILE_CACHE: Boolean = (System.getenv("USE_SCRIPT_COMPILE_CACHE") ?: "true").toBoolean()
 
     /** Cluster Properties */
+    val CLUSTER_ENABLED = (System.getenv("CLUSTER_ENABLED") ?: "false").toBoolean()
     const val PROPERTY_CLUSTER_ID = "CLUSTER_ID"
     const val PROPERTY_CLUSTER_NODE_ID = "CLUSTER_NODE_ID"
     const val PROPERTY_CLUSTER_NODE_ADDRESS = "CLUSTER_NODE_ADDRESS"
