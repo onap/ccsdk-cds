@@ -51,7 +51,7 @@ interface RemoteScriptExecutionService {
 
 @Service(ExecutionServiceConstant.SERVICE_GRPC_REMOTE_SCRIPT_EXECUTION)
 @ConditionalOnProperty(
-    prefix = "blueprintprocessor.remoteScriptCommand", name = arrayOf("enabled"),
+    prefix = "blueprintsprocessor.remoteScriptCommand", name = arrayOf("enabled"),
     havingValue = "true", matchIfMissing = false
 )
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
