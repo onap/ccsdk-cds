@@ -19,6 +19,8 @@ package org.onap.ccsdk.cds.blueprintsprocessor.services.execution
 
 
 import com.fasterxml.jackson.databind.JsonNode
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
@@ -90,6 +92,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         this.operationInputs.putAll(operationResolvedProperties)
 
         val timeout = this.operationInputs.getOptionalAsInt(BluePrintConstants.PROPERTY_CURRENT_TIMEOUT)
+        log.debug("DEBUG::: AbstractComponentFunction timeout ($timeout)")
         timeout?.let { this.timeout = timeout }
 
         return executionRequest
@@ -124,7 +127,10 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         try {
             prepareRequestNB(executionServiceInput)
             withTimeout((timeout * 1000).toLong()) {
-                processNB(executionServiceInput)
+                log.debug("DEBUG::: AbstractComponentFunction.withTimeout section $timeout seconds")
+                launch(Dispatchers.IO) {
+                    processNB(executionServiceInput)
+                }
             }
         } catch (runtimeException: RuntimeException) {
             log.error("failed in ${getName()} : ${runtimeException.message}", runtimeException)

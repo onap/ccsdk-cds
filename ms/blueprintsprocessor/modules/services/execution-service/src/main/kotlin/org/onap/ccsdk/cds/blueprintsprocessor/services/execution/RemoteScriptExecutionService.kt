@@ -55,10 +55,11 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
     override suspend fun init(selector: Any) {
         // Get the GRPC Client Service based on selector
         val grpcClientService: BluePrintGrpcClientService
-        if (selector is JsonNode) {
-            grpcClientService = bluePrintGrpcLibPropertyService.blueprintGrpcClientService(selector)
+
+        grpcClientService = if (selector is JsonNode) {
+            bluePrintGrpcLibPropertyService.blueprintGrpcClientService(selector)
         } else {
-            grpcClientService = bluePrintGrpcLibPropertyService.blueprintGrpcClientService(selector.toString())
+            bluePrintGrpcLibPropertyService.blueprintGrpcClientService(selector.toString())
         }
         // Get the GRPC Channel
         channel = grpcClientService.channel()
@@ -86,7 +87,6 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
 
     override suspend fun executeCommand(remoteExecutionInput: RemoteScriptExecutionInput)
             : RemoteScriptExecutionOutput {
-
         val grpResponse = commandExecutorServiceGrpc.executeCommand(remoteExecutionInput.asGrpcData())
 
         checkNotNull(grpResponse.status) {
