@@ -19,6 +19,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.core.api.data
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import io.swagger.annotations.ApiModelProperty
@@ -41,8 +42,8 @@ open class ExecutionServiceInput {
     @get:ApiModelProperty(
         required = true,
         value = "Contain the information to be passed as input to the action." +
-                "The payload is constituted of two section: the workflow input which is the higher level block (xxx-request)" +
-                " and the input for resource resolution located within the xxx-request block, contained within xxx-properties"
+            "The payload is constituted of two section: the workflow input which is the higher level block (xxx-request)" +
+            " and the input for resource resolution located within the xxx-request block, contained within xxx-properties"
     )
     lateinit var payload: ObjectNode
     @get:ApiModelProperty(hidden = true)
@@ -60,8 +61,8 @@ open class ExecutionServiceOutput {
     @get:ApiModelProperty(
         required = true,
         value = "Contain the information to be passed as input to the action." +
-                "The payload is constituted of two section: the workflow input which is the higher level block (xxx-request)" +
-                " and the input for resource resolution located within the xxx-request block, contained within xxx-properties"
+            "The payload is constituted of two section: the workflow input which is the higher level block (xxx-request)" +
+            " and the input for resource resolution located within the xxx-request block, contained within xxx-properties"
     )
     lateinit var payload: ObjectNode
     @get:ApiModelProperty(hidden = true)
@@ -99,6 +100,12 @@ open class CommonHeader {
     lateinit var subRequestId: String
     @get:ApiModelProperty(required = false, hidden = true)
     var flags: Flags? = null
+    @get:ApiModelProperty(required = false, value = "Specify the resource model-id")
+    @JsonProperty("resourceModelId")
+    var resourceModelId: String? = null
+    @get:ApiModelProperty(required = false, value = "Specify the resource model-type")
+    @JsonProperty("resourceModelType")
+    var resourceModelType: String? = null
 }
 
 open class Flags {
@@ -130,3 +137,7 @@ open class StepData {
     lateinit var name: String
     var properties: MutableMap<String, JsonNode> = mutableMapOf()
 }
+
+// Define a composite key for the locking of the CDS requests.
+data class ResourceModelIdType(val resourceId: String, val resourceType: String)
+

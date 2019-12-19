@@ -20,7 +20,10 @@ package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 import io.grpc.stub.StreamObserver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ACTION_MODE_ASYNC
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ACTION_MODE_SYNC
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
@@ -30,12 +33,15 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.utils.toProto
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractServiceFunction
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintWorkflowExecutionService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.stream.Collectors
 
@@ -47,7 +53,12 @@ class ExecutionServiceHandler(
     BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput>
 ) {
 
+    @Autowired
+    private lateinit var lockingManager: CDSRequestLockingManager
+
     private val log = LoggerFactory.getLogger(ExecutionServiceHandler::class.toString())
+    private val maxEnqueuedSeconds: Long = 5000 // maximum seconds to wait while being enqueued.
+    // TODO push this into application properties...
 
     suspend fun process(
         executionServiceInput: ExecutionServiceInput,
@@ -83,7 +94,40 @@ class ExecutionServiceHandler(
         val actionIdentifiers = executionServiceInput.actionIdentifiers
         val blueprintName = actionIdentifiers.blueprintName
         val blueprintVersion = actionIdentifiers.blueprintVersion
+
+        // attempt to enqueue this process...
+        val enqueueStatus = lockingManager.canExecutionStartOrEnqueued(executionServiceInput)
+
+        val resourceModelId: String? = executionServiceInput.commonHeader.resourceModelId
+        val resourceModelType: String? = executionServiceInput.commonHeader.resourceModelType
+
         try {
+            when (enqueueStatus) {
+                CDSRequestLockingManager.EnqueueStatus.INVALID_KEY ->
+                    throw BluePrintProcessorException("Locking feature requires both resource-model-id($resourceModelId) and resource-model-type ($resourceModelType) to be specified.")
+                CDSRequestLockingManager.EnqueueStatus.CAN_PROCESS -> {
+                    log.info("Request $requestId specified resourceModelId/Type ($resourceModelId/$resourceModelType). No other service requests were enqueued - first in line!")
+                }
+                CDSRequestLockingManager.EnqueueStatus.NO_QUEUEING_NEEDED -> {
+                    log.info("Request $requestId didn't specify any resourceModelId/Type, hence the request will start executing right away.")
+                }
+                CDSRequestLockingManager.EnqueueStatus.ENQUEUED -> {
+                    // wait for maxEnqueuedSeconds then timeout and remove from the queue...
+                    log.info("Request $requestId with resourceModelId/Type ($resourceModelId/$resourceModelType is placed in queue... waiting up to $maxEnqueuedSeconds sec.")
+                    try {
+                        withTimeout(maxEnqueuedSeconds * 1000) {
+                            while (!lockingManager.isCurrentServiceInputFirstInLine(executionServiceInput)) {
+                                delay(100)
+                            }
+                        }
+                    } catch (timeoutEx: TimeoutCancellationException) {
+                        val errMsg = "Timed out while waiting on the queue for requestId ($requestId). $maxEnqueuedSeconds has elapsed."
+                        log.error(errMsg)
+                        throw BluePrintException(timeoutEx, errMsg)
+                    }
+                }
+            }
+
             /** Check Blueprint is needed for this request */
             if (checkServiceFunction(executionServiceInput)) {
                 return executeServiceFunction(executionServiceInput)
@@ -106,8 +150,15 @@ class ExecutionServiceHandler(
                 return output
             }
         } catch (e: Exception) {
-            log.error("fail processing request id $requestId", e)
+            log.error("failed processing request id $requestId", e)
             return response(executionServiceInput, e.localizedMessage ?: e.message ?: e.toString(), true)
+        } finally {
+            // If this is a queued request (ResourceID/Type present), then remove it from the queue.
+            if (resourceModelId != null && resourceModelType != null) {
+                log.info("Trying to remove request $requestId with key ($resourceModelId/$resourceModelType).")
+                // release the current cds request from the queue
+                lockingManager.remove(executionServiceInput)
+            }
         }
     }
 
@@ -156,3 +207,4 @@ class ExecutionServiceHandler(
         return executionServiceOutput
     }
 }
+
