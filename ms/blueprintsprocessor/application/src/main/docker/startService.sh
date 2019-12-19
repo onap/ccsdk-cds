@@ -18,10 +18,4 @@ exec java -classpath "/etc:${APP_HOME}/lib/*:/lib/*:/src:/schema:/generated-sour
 -Djava.security.egd=file:/dev/./urandom \
 -DAPPNAME=${APPLICATIONNAME} -DAPPENV=${APP_ENV} -DAPPVERSION=${APP_VERSION} -DNAMESPACE=${NAMESPACE} \
 -Dspring.config.location=${APP_CONFIG_HOME}/ \
--DCLUSTER_ID=${CLUSTER_ID} \
--DCLUSTER_NODE_ID=${CLUSTER_NODE_ID} \
--DCLUSTER_NODE_ADDRESS=${CLUSTER_NODE_ID} \
--DCLUSTER_MEMBERS=${CLUSTER_MEMBERS} \
--DCLUSTER_STORAGE_PATH=${CLUSTER_STORAGE_PATH} \
--DCLUSTER_CONFIG_FILE=${CLUSTER_CONFIG_FILE} \
 org.onap.ccsdk.cds.blueprintsprocessor.BlueprintProcessorApplicationKt

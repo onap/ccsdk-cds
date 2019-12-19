@@ -28,10 +28,15 @@ object ClusterUtils {
     }
 
     fun clusterId(): String {
-        return System.getProperty(BluePrintConstants.PROPERTY_CLUSTER_ID) ?: "cds-cluster"
+        return System.getenv(BluePrintConstants.PROPERTY_CLUSTER_ID) ?: "cds-cluster"
     }
 
     fun clusterNodeId(): String {
-        return System.getProperty(BluePrintConstants.PROPERTY_CLUSTER_NODE_ID) ?: "cds-controller"
+        return System.getenv(BluePrintConstants.PROPERTY_CLUSTER_NODE_ID) ?: "cds-controller-0"
+    }
+
+    fun clusterNodeAddress(): String {
+        return System.getenv(BluePrintConstants.PROPERTY_CLUSTER_NODE_ADDRESS)
+            ?: clusterNodeId()
     }
 }

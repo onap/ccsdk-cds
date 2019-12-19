@@ -20,20 +20,20 @@ services:
     image: nats-streaming:latest
     container_name: nats
     hostname: nats
-    command: "-cid cds-cluster --auth tokenAuth -store file -dir store-nats-1 --cluster_node_id nats-1"
+    command: "-cid cds-cluster --auth tokenAuth -store file -dir store-nats-0 --cluster_node_id nats-0"
     networks:
       - cds-network
     ports:
       - "8222:8222"
       - "4222:4222"
     restart: always
-  cds-controller-1:
+  cds-controller-0:
     depends_on:
       - db
       - nats
     image: onap/ccsdk-blueprintsprocessor:latest
-    container_name: cds-controller-1
-    hostname: cds-controller-1
+    container_name: cds-controller-0
+    hostname: cds-controller-0
     networks:
       - cds-network
     ports:
@@ -49,9 +49,10 @@ services:
         source: ./config
     environment:
       # Same as hostname and container name
+      CLUSTER_ENABLED: "true"
       CLUSTER_ID: cds-cluster
-      CLUSTER_NODE_ID: cds-controller-1
-      CLUSTER_MEMBERS: cds-controller-1,resource-resolution-1
+      CLUSTER_NODE_ID: cds-controller-0
+      CLUSTER_MEMBERS: cds-controller-0,resource-resolution-0
       CLUSTER_STORAGE_PATH: /opt/app/onap/config/cluster
       #CLUSTER_CONFIG_FILE: /opt/app/onap/config/atomix/atomix-multicast.conf
       NATS_HOSTS: nats://nats:4222
@@ -60,13 +61,13 @@ services:
       APP_CONFIG_HOME: /opt/app/onap/config
       STICKYSELECTORKEY:
       ENVCONTEXT: dev
-  resource-resolution-1:
+  resource-resolution-0:
     depends_on:
       - db
       - nats
     image: onap/ccsdk-blueprintsprocessor:latest
-    container_name: resource-resolution-1
-    hostname: resource-resolution-1
+    container_name: resource-resolution-0
+    hostname: resource-resolution-0
     networks:
       - cds-network
     ports:
@@ -81,9 +82,10 @@ services:
         type: bind
         source: ./config
     environment:
+      CLUSTER_ENABLED: "true"
       CLUSTER_ID: cds-cluster
-      CLUSTER_NODE_ID: resource-resolution-1
-      CLUSTER_MEMBERS: cds-controller-1,resource-resolution-1
+      CLUSTER_NODE_ID: resource-resolution-0
+      CLUSTER_MEMBERS: cds-controller-0,resource-resolution-0
       CLUSTER_STORAGE_PATH: /opt/app/onap/config/cluster
       #CLUSTER_CONFIG_FILE: /opt/app/onap/config/atomix/atomix-multicast.conf
       NATS_HOSTS: nats://nats:4222
