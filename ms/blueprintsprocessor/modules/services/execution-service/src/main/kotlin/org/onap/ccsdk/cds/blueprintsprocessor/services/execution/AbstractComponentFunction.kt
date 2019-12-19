@@ -134,6 +134,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         try {
             prepareRequestNB(executionServiceInput)
             withTimeout((implementation.timeout * 1000).toLong()) {
+                log.debug("DEBUG::: AbstractComponentFunction.withTimeout section ${implementation.timeout} seconds")
                 processNB(executionServiceInput)
             }
         } catch (runtimeException: RuntimeException) {
