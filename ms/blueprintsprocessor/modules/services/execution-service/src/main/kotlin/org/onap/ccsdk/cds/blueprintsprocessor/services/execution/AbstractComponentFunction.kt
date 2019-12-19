@@ -85,12 +85,13 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         check(operationName.isNotEmpty()) { "couldn't get Operation name for step($stepName)" }
 
         val operationResolvedProperties = bluePrintRuntimeService
-                .resolveNodeTemplateInterfaceOperationInputs(nodeTemplateName, interfaceName, operationName)
+            .resolveNodeTemplateInterfaceOperationInputs(nodeTemplateName, interfaceName, operationName)
 
         this.operationInputs.putAll(operationResolvedProperties)
 
         val timeout = this.operationInputs.getOptionalAsInt(BluePrintConstants.PROPERTY_CURRENT_TIMEOUT)
         timeout?.let { this.timeout = timeout }
+        log.debug("DEBUG::: AbstractComponentFunction prepareRequestNB.timeout ($timeout)")
 
         return executionRequest
     }
@@ -99,11 +100,11 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         log.info("Preparing Response...")
         executionServiceOutput.commonHeader = executionServiceInput.commonHeader
         executionServiceOutput.actionIdentifiers = executionServiceInput.actionIdentifiers
-        var status = Status()
+        val status = Status()
         try {
             // Resolve the Output Expression
             val stepOutputs = bluePrintRuntimeService
-                    .resolveNodeTemplateInterfaceOperationOutputs(nodeTemplateName, interfaceName, operationName)
+                .resolveNodeTemplateInterfaceOperationOutputs(nodeTemplateName, interfaceName, operationName)
 
             val stepOutputData = StepData().apply {
                 name = stepName
@@ -123,7 +124,8 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     override suspend fun applyNB(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
         try {
             prepareRequestNB(executionServiceInput)
-            withTimeout((timeout * 1000).toLong()) {
+            withTimeout(timeout * 1000L) {
+                log.debug("DEBUG::: AbstractComponentFunction.withTimeout section $timeout seconds")
                 processNB(executionServiceInput)
             }
         } catch (runtimeException: RuntimeException) {
@@ -135,7 +137,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
 
     fun getOperationInput(key: String): JsonNode {
         return operationInputs[key]
-                ?: throw BluePrintProcessorException("couldn't get the operation input($key) value.")
+            ?: throw BluePrintProcessorException("couldn't get the operation input($key) value.")
     }
 
     fun getOptionalOperationInput(key: String): JsonNode? {
