@@ -22,6 +22,29 @@
       "revId": "1dea98ae71bd842ef8d966e80889fc82d4199d0f",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5532999_524a4571",
+        "filename": "ms/blueprintsprocessor/modules/services/execution-service/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/services/execution/RemoteScriptExecutionService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2019-12-19T22:21:43Z",
+      "side": 1,
+      "message": "Should have combined as single.\nEx :\n val grpcClientService: BluePrintGrpcClientService \u003d if(...).....",
+      "range": {
+        "startLine": 57,
+        "startChar": 8,
+        "endLine": 59,
+        "endChar": 55
+      },
+      "revId": "1dea98ae71bd842ef8d966e80889fc82d4199d0f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
