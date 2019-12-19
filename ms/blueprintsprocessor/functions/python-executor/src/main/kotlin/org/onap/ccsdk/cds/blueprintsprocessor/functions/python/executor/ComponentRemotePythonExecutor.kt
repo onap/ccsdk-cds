@@ -17,6 +17,10 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor
 
 import com.fasterxml.jackson.databind.JsonNode
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withTimeout
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.*
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ExecutionServiceConstant
@@ -128,17 +132,36 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
                 requestId = processId,
                 remoteIdentifier = RemoteIdentifier(blueprintName = blueprintName, blueprintVersion = blueprintVersion),
                 command = scriptCommand,
-                properties = properties)
-            val remoteExecutionOutput = remoteScriptExecutionService.executeCommand(remoteExecutionInput)
+                properties = properties,
+                timeOut = timeout.toLong())
+
+
+            val remoteExecutionOutputDeferred = GlobalScope.async {
+                remoteScriptExecutionService.executeCommand(remoteExecutionInput)
+            }
+
+            val remoteExecutionOutput = withTimeout(timeout * 1000L) {
+                remoteExecutionOutputDeferred.await()
+            }
+
+            checkNotNull(remoteExecutionOutput) {
+                "Remote command execution timed out after $timeout seconds."
+            }
 
             val logs = JacksonUtils.jsonNodeFromObject(remoteExecutionOutput.response)
             if (remoteExecutionOutput.status != StatusType.SUCCESS) {
-                setNodeOutputErrors(remoteExecutionOutput.status.name,logs, remoteExecutionOutput.payload)
+                setNodeOutputErrors(remoteExecutionOutput.status.name, logs, remoteExecutionOutput.payload)
             } else {
                 setNodeOutputProperties(remoteExecutionOutput.status.name.asJsonPrimitive(), logs,
-                                        remoteExecutionOutput.payload)
+                    remoteExecutionOutput.payload)
             }
 
+        } catch (timeoutEx: TimeoutCancellationException) {
+            setNodeOutputErrors(status = "Command executor timed out after $timeout seconds", message = "".asJsonPrimitive())
+            log.error("Command executor timed out after $timeout seconds", timeoutEx)
+        } catch (grpcEx: io.grpc.StatusRuntimeException) {
+            setNodeOutputErrors(status = "Command executor timed out in GRPC call", message = "${grpcEx.status}".asJsonPrimitive())
+            log.error("Command executor time out during GRPC call", grpcEx)
         } catch (e: Exception) {
             log.error("Failed to process on remote executor", e)
         } finally {
@@ -176,7 +199,7 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
     /**
      * Utility function to set the output properties and errors of the executor node, in cas of errors
      */
-    private fun setNodeOutputErrors(status: String, message: JsonNode, artifacts: JsonNode = "".asJsonPrimitive()  ) {
+    private fun setNodeOutputErrors(status: String, message: JsonNode, artifacts: JsonNode = "".asJsonPrimitive()) {
         setAttribute(ATTRIBUTE_EXEC_CMD_STATUS, status.asJsonPrimitive())
         setAttribute(ATTRIBUTE_EXEC_CMD_LOG, message)
         setAttribute(ATTRIBUTE_RESPONSE_DATA, artifacts)
