@@ -26,12 +26,14 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
+import org.onap.ccsdk.cds.controllerblueprints.core.common.ApplicationConstants.LOG_REDACTED
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.returnNullIfMissing
 import org.onap.ccsdk.cds.controllerblueprints.core.rootFieldsToMap
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.PropertyDefinitionUtils.Companion.hasLogProtect
 import org.slf4j.LoggerFactory
 import java.io.File
 
@@ -452,7 +454,6 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
 
     override fun setInputValue(propertyName: String, value: JsonNode) {
         val path = """${BluePrintConstants.PATH_INPUTS}${BluePrintConstants.PATH_DIVIDER}$propertyName"""
-        log.trace("setting input path ({}), values ({})", path, value)
         put(path, value)
     }
 
@@ -594,32 +595,29 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
     }
 
     override fun assignWorkflowInputs(workflowName: String, jsonNode: JsonNode) {
-        log.info("For workflow ($workflowName) driving input data from ($jsonNode)")
+        log.info("Deriving input data for workflow: ($workflowName)")
+
         val dynamicInputPropertiesName = "$workflowName-properties"
 
         bluePrintContext.workflowByName(workflowName).inputs
-            ?.forEach { propertyName, property ->
-                if (propertyName != dynamicInputPropertiesName) {
-                    val valueNode: JsonNode =
-                        jsonNode.at(BluePrintConstants.PATH_DIVIDER + propertyName).returnNullIfMissing()
-                            ?: property.defaultValue
-                            ?: NullNode.getInstance()
-                    log.trace("Setting input data - attribute:($propertyName) value:($valueNode)")
-                    setInputValue(propertyName, valueNode)
-                }
-            }
+                ?.filter { (propertyName, property) -> propertyName != dynamicInputPropertiesName }
+                ?.forEach { propertyName, property -> findAndSetInputValue(propertyName, property, jsonNode) }
         // Load Dynamic data Types
         jsonNode.get(dynamicInputPropertiesName)?.let {
-            bluePrintContext.dataTypeByName("dt-$dynamicInputPropertiesName")?.properties
-                ?.forEach { propertyName, property ->
-                    val valueNode: JsonNode =
-                        it.at(BluePrintConstants.PATH_DIVIDER + propertyName).returnNullIfMissing()
-                            ?: property.defaultValue
-                            ?: NullNode.getInstance()
-                    log.trace("Setting input data - attribute:($propertyName) value:($valueNode)")
-                    setInputValue(propertyName, valueNode)
-                }
+            bluePrintContext.dataTypeByName("dt-$dynamicInputPropertiesName")
+                    ?.properties
+                    ?.forEach { propertyName, property -> findAndSetInputValue(propertyName, property, it) }
         }
+    }
+
+    private fun findAndSetInputValue(propertyName: String, property: PropertyDefinition, jsonNode: JsonNode) {
+        val valueNode = jsonNode.at(BluePrintConstants.PATH_DIVIDER + propertyName)
+                .returnNullIfMissing()
+                ?: property.defaultValue
+                ?: NullNode.getInstance()
+        val loggableValue = if (hasLogProtect(property)) LOG_REDACTED else valueNode.toString()
+        log.info("Setting input data - attribute:($propertyName) value:($loggableValue)")
+        setInputValue(propertyName, valueNode)
     }
 
     override fun resolveWorkflowOutputs(workflowName: String): MutableMap<String, JsonNode> {

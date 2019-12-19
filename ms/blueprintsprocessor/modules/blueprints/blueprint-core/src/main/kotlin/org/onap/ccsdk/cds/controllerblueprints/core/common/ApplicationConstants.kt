@@ -20,4 +20,5 @@ object ApplicationConstants {
     const val ACTIVE_Y = "Y"
     const val ACTIVE_N = "N"
     const val ASDC_ARTIFACT_TYPE_SDNC_MODEL = "SDNC_MODEL"
+    const val LOG_REDACTED = "****REDACTED****"
 }
