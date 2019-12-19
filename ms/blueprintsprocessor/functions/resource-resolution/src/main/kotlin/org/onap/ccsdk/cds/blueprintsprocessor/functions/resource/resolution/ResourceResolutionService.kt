@@ -32,9 +32,11 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
+import org.onap.ccsdk.cds.controllerblueprints.core.common.ApplicationConstants.LOG_REDACTED
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintTemplateService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.PropertyDefinitionUtils.Companion.hasLogProtect
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.utils.BulkResourceSequencingUtils
@@ -395,7 +397,8 @@ open class ResourceResolutionServiceImpl(
             if (resourceResolution.status == BluePrintConstants.STATUS_SUCCESS) {
                 resourceAssignmentList.forEach {
                     if (compareOne(resourceResolution, it)) {
-                        log.info("Resource ({}) already resolve: value=({})", it.name, resourceResolution.value)
+                        log.info("Resource ({}) already resolved: value=({})", it.name,
+                            if (hasLogProtect(it.property)) LOG_REDACTED else resourceResolution.value)
 
                         // Make sure to recreate value as per the defined type.
                         val value = resourceResolution.value!!.asJsonType(it.property!!.type)
