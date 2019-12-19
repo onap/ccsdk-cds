@@ -102,6 +102,13 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
 
         this.operationInputs.putAll(operationResolvedProperties)
 
+<<<<<<< HEAD   (73746b Merge "Release Frankfurt M4 dockers")
+=======
+        val timeout = this.operationInputs.getOptionalAsInt(BluePrintConstants.PROPERTY_CURRENT_TIMEOUT)
+        timeout?.let { this.timeout = timeout }
+        log.debug("DEBUG::: AbstractComponentFunction prepareRequestNB.timeout ($timeout)")
+
+>>>>>>> CHANGE (3f56fc execution timeout not respected...)
         return executionRequest
     }
 
@@ -133,7 +140,12 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     override suspend fun applyNB(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
         try {
             prepareRequestNB(executionServiceInput)
+<<<<<<< HEAD   (73746b Merge "Release Frankfurt M4 dockers")
             withTimeout((implementation.timeout * 1000).toLong()) {
+=======
+            withTimeout(timeout * 1000L) {
+                log.debug("DEBUG::: AbstractComponentFunction.withTimeout section $timeout seconds")
+>>>>>>> CHANGE (3f56fc execution timeout not respected...)
                 processNB(executionServiceInput)
             }
         } catch (runtimeException: RuntimeException) {
@@ -204,4 +216,8 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         val file = normalizedFile(bluePrintRuntimeService.bluePrintContext().rootPath, artifactDefinition.file)
         return file.readNBLines()
     }
+<<<<<<< HEAD   (73746b Merge "Release Frankfurt M4 dockers")
+=======
+
+>>>>>>> CHANGE (3f56fc execution timeout not respected...)
 }

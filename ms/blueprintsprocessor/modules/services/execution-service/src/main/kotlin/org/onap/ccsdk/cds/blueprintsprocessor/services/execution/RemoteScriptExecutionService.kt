@@ -41,6 +41,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
+import java.util.concurrent.TimeUnit
 
 interface RemoteScriptExecutionService {
     suspend fun init(selector: Any)
@@ -50,10 +51,15 @@ interface RemoteScriptExecutionService {
 }
 
 @Service(ExecutionServiceConstant.SERVICE_GRPC_REMOTE_SCRIPT_EXECUTION)
+<<<<<<< HEAD   (73746b Merge "Release Frankfurt M4 dockers")
 @ConditionalOnProperty(
     prefix = "blueprintprocessor.remoteScriptCommand", name = arrayOf("enabled"),
     havingValue = "true", matchIfMissing = false
 )
+=======
+@ConditionalOnProperty(prefix = "blueprintprocessor.remoteScriptCommand", name = arrayOf("enabled"),
+    havingValue = "true", matchIfMissing = false)
+>>>>>>> CHANGE (3f56fc execution timeout not respected...)
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyService: BluePrintGrpcLibPropertyService) :
     RemoteScriptExecutionService {
@@ -65,12 +71,12 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
 
     override suspend fun init(selector: Any) {
         // Get the GRPC Client Service based on selector
-        val grpcClientService: BluePrintGrpcClientService
-        if (selector is JsonNode) {
-            grpcClientService = bluePrintGrpcLibPropertyService.blueprintGrpcClientService(selector)
+        val grpcClientService: BluePrintGrpcClientService = if (selector is JsonNode) {
+            bluePrintGrpcLibPropertyService.blueprintGrpcClientService(selector)
         } else {
-            grpcClientService = bluePrintGrpcLibPropertyService.blueprintGrpcClientService(selector.toString())
+            bluePrintGrpcLibPropertyService.blueprintGrpcClientService(selector.toString())
         }
+
         // Get the GRPC Channel
         channel = grpcClientService.channel()
         // Create Non Blocking Stub
@@ -81,9 +87,16 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
         }
     }
 
+<<<<<<< HEAD   (73746b Merge "Release Frankfurt M4 dockers")
     override suspend fun prepareEnv(prepareEnvInput: PrepareRemoteEnvInput):
             RemoteScriptExecutionOutput {
         val grpResponse = commandExecutorServiceGrpc.prepareEnv(prepareEnvInput.asGrpcData())
+=======
+    override suspend fun prepareEnv(prepareEnvInput: PrepareRemoteEnvInput): RemoteScriptExecutionOutput {
+        val grpResponse = commandExecutorServiceGrpc
+            .withDeadlineAfter(prepareEnvInput.timeOut * 1000, TimeUnit.MILLISECONDS)
+            .prepareEnv(prepareEnvInput.asGrpcData())
+>>>>>>> CHANGE (3f56fc execution timeout not respected...)
 
         checkNotNull(grpResponse.status) {
             "failed to get GRPC prepare env response status for requestId(${prepareEnvInput.requestId})"
@@ -95,19 +108,27 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
         return remoteScriptExecutionOutput
     }
 
+<<<<<<< HEAD   (73746b Merge "Release Frankfurt M4 dockers")
     override suspend fun executeCommand(remoteExecutionInput: RemoteScriptExecutionInput):
             RemoteScriptExecutionOutput {
 
         val grpResponse = commandExecutorServiceGrpc.executeCommand(remoteExecutionInput.asGrpcData())
+=======
+    override suspend fun executeCommand(remoteExecutionInput: RemoteScriptExecutionInput)
+        : RemoteScriptExecutionOutput {
+        val grpResponse =
+            commandExecutorServiceGrpc
+                .withDeadlineAfter(remoteExecutionInput.timeOut * 1000, TimeUnit.MILLISECONDS)
+                .executeCommand(remoteExecutionInput.asGrpcData())
+>>>>>>> CHANGE (3f56fc execution timeout not respected...)
 
         checkNotNull(grpResponse.status) {
             "failed to get GRPC response status for requestId(${remoteExecutionInput.requestId})"
         }
 
-        val remoteScriptExecutionOutput = grpResponse.asJavaData()
         log.debug("Received response from command server for requestId(${remoteExecutionInput.requestId})")
+        return grpResponse.asJavaData()
 
-        return remoteScriptExecutionOutput
     }
 
     override suspend fun close() {
