@@ -31,6 +31,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.checkFileExists
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
+import org.onap.ccsdk.cds.controllerblueprints.core.common.ApplicationConstants.LOG_REDACTED
 import org.onap.ccsdk.cds.controllerblueprints.core.isComplexType
 import org.onap.ccsdk.cds.controllerblueprints.core.isNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.isNullOrMissing
@@ -40,6 +41,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.rootFieldsToMap
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonReactorUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.PropertyDefinitionUtils.Companion.hasLogProtect
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.slf4j.LoggerFactory
@@ -159,9 +161,7 @@ class ResourceAssignmentUtils {
                         val type = nullToEmpty(it.property?.type).toLowerCase()
                         val value = useDefaultValueIfNull(it, rName)
                         val valueToPrint = getValueToLog(metadata, value)
-                        if (checkIfLogIsProtected(metadata)) {
-                            containsLogProtected = true
-                        }
+                        containsLogProtected = hasLogProtect(metadata)
                         logger.trace("Generating Resource name ($rName), type ($type), value ($valueToPrint)")
                         root.set(rName, value)
                     }
@@ -593,25 +593,7 @@ class ResourceAssignmentUtils {
             return (outputKeyMapping.size == 1)
         }
 
-        fun getValueToLog(metadata: MutableMap<String, String>?, value: Any): Any {
-            return if (checkIfLogIsProtected(metadata)) {
-                "******REDACTED******"
-            } else {
-                value
-            }
-        }
-
-        private fun checkIfLogIsProtected(metadata: MutableMap<String, String>?): Boolean {
-            var checkProtected = false
-            if (metadata != null &&
-                metadata.containsKey(ResourceResolutionConstants.RESOURCE_RESOLUTION_LOG_PROTECTED_METADATA)
-            ) {
-                val protectedMetadata = metadata[ResourceResolutionConstants.RESOURCE_RESOLUTION_LOG_PROTECTED_METADATA]
-                if (protectedMetadata == "yes" || protectedMetadata == "y") {
-                    checkProtected = true
-                }
-            }
-            return checkProtected
-        }
+        fun getValueToLog(metadata: MutableMap<String, String>?, value: Any): Any =
+                if (hasLogProtect(metadata)) LOG_REDACTED else value
     }
 }

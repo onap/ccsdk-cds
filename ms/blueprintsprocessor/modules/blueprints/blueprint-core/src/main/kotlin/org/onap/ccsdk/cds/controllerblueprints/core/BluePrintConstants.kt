@@ -218,6 +218,8 @@ object BluePrintConstants {
 
     val USE_SCRIPT_COMPILE_CACHE: Boolean = (System.getenv("USE_SCRIPT_COMPILE_CACHE") ?: "true").toBoolean()
 
+    const val LOG_PROTECT: String = "log-protect"
+
     /** Cluster Properties */
     val CLUSTER_ENABLED = (System.getenv("CLUSTER_ENABLED") ?: "false").toBoolean()
     const val PROPERTY_CLUSTER_ID = "CLUSTER_ID"
