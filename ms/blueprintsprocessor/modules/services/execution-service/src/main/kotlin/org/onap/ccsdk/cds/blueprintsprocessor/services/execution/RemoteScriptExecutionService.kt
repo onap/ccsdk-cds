@@ -32,6 +32,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
+import java.util.concurrent.TimeUnit
 
 interface RemoteScriptExecutionService {
     suspend fun init(selector: Any)
@@ -42,7 +43,7 @@ interface RemoteScriptExecutionService {
 
 @Service(ExecutionServiceConstant.SERVICE_GRPC_REMOTE_SCRIPT_EXECUTION)
 @ConditionalOnProperty(prefix = "blueprintprocessor.remoteScriptCommand", name = arrayOf("enabled"),
-        havingValue = "true", matchIfMissing = false)
+    havingValue = "true", matchIfMissing = false)
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyService: BluePrintGrpcLibPropertyService)
     : RemoteScriptExecutionService {
@@ -54,12 +55,12 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
 
     override suspend fun init(selector: Any) {
         // Get the GRPC Client Service based on selector
-        val grpcClientService: BluePrintGrpcClientService
-        if (selector is JsonNode) {
-            grpcClientService = bluePrintGrpcLibPropertyService.blueprintGrpcClientService(selector)
+        val grpcClientService: BluePrintGrpcClientService = if (selector is JsonNode) {
+            bluePrintGrpcLibPropertyService.blueprintGrpcClientService(selector)
         } else {
-            grpcClientService = bluePrintGrpcLibPropertyService.blueprintGrpcClientService(selector.toString())
+            bluePrintGrpcLibPropertyService.blueprintGrpcClientService(selector.toString())
         }
+
         // Get the GRPC Channel
         channel = grpcClientService.channel()
         // Create Non Blocking Stub
@@ -70,9 +71,10 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
         }
     }
 
-    override suspend fun prepareEnv(prepareEnvInput: PrepareRemoteEnvInput)
-            : RemoteScriptExecutionOutput {
-        val grpResponse = commandExecutorServiceGrpc.prepareEnv(prepareEnvInput.asGrpcData())
+    override suspend fun prepareEnv(prepareEnvInput: PrepareRemoteEnvInput): RemoteScriptExecutionOutput {
+        val grpResponse = commandExecutorServiceGrpc
+            .withDeadlineAfter(prepareEnvInput.timeOut, TimeUnit.SECONDS)
+            .prepareEnv(prepareEnvInput.asGrpcData())
 
         checkNotNull(grpResponse.status) {
             "failed to get GRPC prepare env response status for requestId(${prepareEnvInput.requestId})"
@@ -85,18 +87,19 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
     }
 
     override suspend fun executeCommand(remoteExecutionInput: RemoteScriptExecutionInput)
-            : RemoteScriptExecutionOutput {
-
-        val grpResponse = commandExecutorServiceGrpc.executeCommand(remoteExecutionInput.asGrpcData())
+        : RemoteScriptExecutionOutput {
+        val grpResponse =
+            commandExecutorServiceGrpc
+                .withDeadlineAfter(remoteExecutionInput.timeOut, TimeUnit.SECONDS)
+                .executeCommand(remoteExecutionInput.asGrpcData())
 
         checkNotNull(grpResponse.status) {
             "failed to get GRPC response status for requestId(${remoteExecutionInput.requestId})"
         }
 
-        val remoteScriptExecutionOutput = grpResponse.asJavaData()
         log.debug("Received response from command server for requestId(${remoteExecutionInput.requestId})")
+        return grpResponse.asJavaData()
 
-        return remoteScriptExecutionOutput
     }
 
     override suspend fun close() {
@@ -116,33 +119,33 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
         }
 
         return PrepareEnvInput.newBuilder()
-                .setIdentifiers(this.remoteIdentifier!!.asGrpcData())
-                .setRequestId(this.requestId)
-                .setCorrelationId(correlationId)
-                .setTimeOut(this.timeOut.toInt())
-                .addAllPackages(packageList)
-                .setProperties(this.properties.asGrpcData())
-                .build()
+            .setIdentifiers(this.remoteIdentifier!!.asGrpcData())
+            .setRequestId(this.requestId)
+            .setCorrelationId(correlationId)
+            .setTimeOut(this.timeOut.toInt())
+            .addAllPackages(packageList)
+            .setProperties(this.properties.asGrpcData())
+            .build()
     }
 
     fun RemoteScriptExecutionInput.asGrpcData(): ExecutionInput {
         val correlationId = this.correlationId ?: this.requestId
         return ExecutionInput.newBuilder()
-                .setRequestId(this.requestId)
-                .setCorrelationId(correlationId)
-                .setIdentifiers(this.remoteIdentifier!!.asGrpcData())
-                .setCommand(this.command)
-                .setTimeOut(this.timeOut.toInt())
-                .setProperties(this.properties.asGrpcData())
-                .setTimestamp(Timestamp.getDefaultInstance())
-                .build()
+            .setRequestId(this.requestId)
+            .setCorrelationId(correlationId)
+            .setIdentifiers(this.remoteIdentifier!!.asGrpcData())
+            .setCommand(this.command)
+            .setTimeOut(this.timeOut.toInt())
+            .setProperties(this.properties.asGrpcData())
+            .setTimestamp(Timestamp.getDefaultInstance())
+            .build()
     }
 
     fun RemoteIdentifier.asGrpcData(): Identifiers? {
         return Identifiers.newBuilder()
-                .setBlueprintName(this.blueprintName)
-                .setBlueprintVersion(this.blueprintVersion)
-                .build()
+            .setBlueprintName(this.blueprintName)
+            .setBlueprintVersion(this.blueprintVersion)
+            .build()
     }
 
     fun Map<String, JsonNode>.asGrpcData(): Struct {
@@ -153,10 +156,10 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
 
     fun ExecutionOutput.asJavaData(): RemoteScriptExecutionOutput {
         return RemoteScriptExecutionOutput(
-                requestId = this.requestId,
-                response = this.responseList,
-                status = StatusType.valueOf(this.status.name),
-                payload =  payload.jsonAsJsonType()
+            requestId = this.requestId,
+            response = this.responseList,
+            status = StatusType.valueOf(this.status.name),
+            payload = payload.jsonAsJsonType()
         )
     }
 
