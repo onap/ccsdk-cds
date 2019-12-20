@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "cdcc8b9d_a9238610",
+        "filename": "ms/blueprintsprocessor/modules/commons/nats-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/nats/service/BluePrintNatsLibPropertyService.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2019-12-20T15:31:22Z",
+      "side": 1,
+      "message": "This is meant to be public, So that each organization shall include their own or alter or modify the default NatService Implementation classes, If needed.",
+      "parentUuid": "6394b7d0_689268b1",
+      "range": {
+        "startLine": 83,
+        "startChar": 8,
+        "endLine": 83,
+        "endChar": 28
+      },
+      "revId": "10c2988b51c764e62d8eeed52b254d363512eb24",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ae457fa3_5be788e5",
         "filename": "ms/blueprintsprocessor/modules/commons/nats-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/nats/service/BluePrintNatsService.kt",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "21041cea_57fa7024",
+        "filename": "ms/blueprintsprocessor/modules/commons/nats-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/nats/service/BluePrintNatsService.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2019-12-20T15:31:22Z",
+      "side": 1,
+      "message": "I don\u0027t want to disturb the defaults provided by the API implementation. And there are so many combinations with subscriber options, Consumer will know what combinations will be used. SubscriberUtils are provide for their selection easily.",
+      "parentUuid": "ae457fa3_5be788e5",
+      "range": {
+        "startLine": 107,
+        "startChar": 16,
+        "endLine": 107,
+        "endChar": 25
+      },
+      "revId": "10c2988b51c764e62d8eeed52b254d363512eb24",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "56d20fd7_2ff1a96c",
         "filename": "ms/blueprintsprocessor/modules/commons/nats-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/nats/service/BluePrintNatsService.kt",
         "patchSetId": 2
@@ -59,6 +107,30 @@
       "writtenOn": "2019-12-20T14:22:41Z",
       "side": 1,
       "message": "Same",
+      "range": {
+        "startLine": 135,
+        "startChar": 16,
+        "endLine": 135,
+        "endChar": 36
+      },
+      "revId": "10c2988b51c764e62d8eeed52b254d363512eb24",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95388658_f2486582",
+        "filename": "ms/blueprintsprocessor/modules/commons/nats-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/nats/service/BluePrintNatsService.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2019-12-20T15:31:22Z",
+      "side": 1,
+      "message": "I don\u0027t want to disturb the defaults provided by the API implementation. And there are so many combinations with subscriber options, Consumer will know what combinations will be used. SubscriberUtils are provide for their selection easily.",
+      "parentUuid": "56d20fd7_2ff1a96c",
       "range": {
         "startLine": 135,
         "startChar": 16,
