@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6394b7d0_689268b1",
+        "filename": "ms/blueprintsprocessor/modules/commons/nats-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/nats/service/BluePrintNatsLibPropertyService.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 5732
+      },
+      "writtenOn": "2019-12-20T14:22:41Z",
+      "side": 1,
+      "message": "Is this meant to be private? If not maybe move above with the other bluePrintNatsService overloading methods",
+      "range": {
+        "startLine": 83,
+        "startChar": 8,
+        "endLine": 83,
+        "endChar": 28
+      },
+      "revId": "10c2988b51c764e62d8eeed52b254d363512eb24",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae457fa3_5be788e5",
+        "filename": "ms/blueprintsprocessor/modules/commons/nats-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/nats/service/BluePrintNatsService.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 5732
+      },
+      "writtenOn": "2019-12-20T14:22:41Z",
+      "side": 1,
+      "message": "Can\u0027t we use default parameters instead of overloading?",
+      "range": {
+        "startLine": 107,
+        "startChar": 16,
+        "endLine": 107,
+        "endChar": 25
+      },
+      "revId": "10c2988b51c764e62d8eeed52b254d363512eb24",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56d20fd7_2ff1a96c",
+        "filename": "ms/blueprintsprocessor/modules/commons/nats-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/nats/service/BluePrintNatsService.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 5732
+      },
+      "writtenOn": "2019-12-20T14:22:41Z",
+      "side": 1,
+      "message": "Same",
+      "range": {
+        "startLine": 135,
+        "startChar": 16,
+        "endLine": 135,
+        "endChar": 36
+      },
+      "revId": "10c2988b51c764e62d8eeed52b254d363512eb24",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
