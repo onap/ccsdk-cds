@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7a472b7c_de773777",
+        "filename": "ms/blueprintsprocessor/modules/services/execution-service/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/services/execution/AbstractComponentFunction.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-12-23T15:24:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7310e8bd_38172eda",
+      "range": {
+        "startLine": 93,
+        "startChar": 8,
+        "endLine": 93,
+        "endChar": 91
+      },
+      "revId": "42eff01c153658d4c71e9d4b12d7420818157026",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b7ccd2ff_e4a9205a",
         "filename": "ms/blueprintsprocessor/modules/services/execution-service/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/services/execution/RemoteScriptExecutionService.kt",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "42eff01c153658d4c71e9d4b12d7420818157026",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c77c1cc_30631e2f",
+        "filename": "ms/blueprintsprocessor/modules/services/execution-service/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/services/execution/RemoteScriptExecutionService.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-12-23T15:24:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b7ccd2ff_e4a9205a",
+      "range": {
+        "startLine": 76,
+        "startChar": 56,
+        "endLine": 76,
+        "endChar": 72
+      },
+      "revId": "42eff01c153658d4c71e9d4b12d7420818157026",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
