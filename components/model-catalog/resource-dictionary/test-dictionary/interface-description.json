@@ -1,6 +1,7 @@
 {
   "tags": "interface-description",
   "name": "interface-description",
+  "group":"default",
   "property": {
     "description": "interface-description",
     "type": "string"

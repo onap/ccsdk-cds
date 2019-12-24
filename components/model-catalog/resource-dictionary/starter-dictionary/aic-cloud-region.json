@@ -1,6 +1,7 @@
 {
   "name" : "aic-cloud-region",
   "tags" : "aic-cloud-region",
+  "group":"default",
   "updated-by" : "Singal, Kapil <ks220y@att.com>",
   "property" : {
     "description" : "aic-cloud-region",

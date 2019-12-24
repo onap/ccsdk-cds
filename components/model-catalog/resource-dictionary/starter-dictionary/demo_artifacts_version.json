@@ -1,6 +1,7 @@
 {
 	"tags": "demo_artifacts_version",
 	"name": "demo_artifacts_version",
+	"group":"default",
 	"property": {
 		"description": "demo_artifacts_version",
 		"type": "string"

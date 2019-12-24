@@ -1,6 +1,7 @@
 {
 	"tags": "vlb_private_net_cidr",
 	"name": "vlb_private_net_cidr",
+	"group":"default",
 	"property": {
 		"description": "vlb_private_net_cidr",
 		"type": "string"

@@ -71,4 +71,10 @@ open class ResourceDictionaryController(private val resourceDictionaryHandler: R
     fun getResourceSourceMapping(): ResourceSourceMapping = runBlocking {
         resourceDictionaryHandler.getResourceSourceMapping()
     }
+
+    @GetMapping(path = ["/resource_dictionary_group"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseBody
+    fun getResourceDictionaryDistinct(): List<String> = runBlocking {
+        resourceDictionaryHandler.getResourceDictionaryDistinct()
+    }
 }

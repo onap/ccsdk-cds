@@ -1,6 +1,7 @@
 {
 	"tags": "int_private1_subnet_id",
 	"name": "int_private1_subnet_id",
+	"group":"default",
 	"property": {
 		"description": "int_private1_subnet_id",
 		"type": "string"

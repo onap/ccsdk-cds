@@ -1,6 +1,7 @@
 {
 	"tags": "install_script_version",
 	"name": "install_script_version",
+	"group":"default",
 	"property": {
 		"description": "install_script_version",
 		"type": "string"

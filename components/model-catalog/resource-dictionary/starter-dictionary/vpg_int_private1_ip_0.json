@@ -1,6 +1,7 @@
 {
 	"tags": "vpg_int_private1_ip_0",
 	"name": "vpg_int_private1_ip_0",
+	"group":"default",
 	"property": {
 		"description": "vpg_int_private1_ip_0",
 		"type": "string"

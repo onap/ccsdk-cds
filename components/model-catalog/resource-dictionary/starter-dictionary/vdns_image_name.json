@@ -1,6 +1,7 @@
 {
 	"tags": "vdns_image_name",
 	"name": "vdns_image_name",
+	"group":"default",
 	"property": {
 		"description": "vdns_image_name",
 		"type": "string"

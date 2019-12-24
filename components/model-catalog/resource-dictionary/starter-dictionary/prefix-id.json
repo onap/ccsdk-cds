@@ -1,6 +1,7 @@
 {
   "tags": "prefix-id",
   "name": "prefix-id",
+  "group":"default",
   "property" :{
     "description": "prefix-id",
     "type": "integer"
