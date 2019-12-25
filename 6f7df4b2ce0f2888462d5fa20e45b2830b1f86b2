@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "477182b8_ea89ea99",
+        "filename": "ms/blueprintsprocessor/functions/nrm-restful/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/nrm/restful/RestfulNRMServiceClient.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-12-25T01:33:20Z",
+      "side": 1,
+      "message": "Use logger() construct org.onap.ccsdk.cds.controllerblueprints.core.logger",
+      "range": {
+        "startLine": 31,
+        "startChar": 22,
+        "endLine": 31,
+        "endChar": 45
+      },
+      "revId": "6f7df4b2ce0f2888462d5fa20e45b2830b1f86b2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9a89dec_3c3edc31",
+        "filename": "ms/blueprintsprocessor/functions/nrm-restful/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/nrm/restful/RestfulNRMServiceClient.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-12-25T01:33:20Z",
+      "side": 1,
+      "message": "are you using this anywhere?",
+      "range": {
+        "startLine": 34,
+        "startChar": 8,
+        "endLine": 34,
+        "endChar": 33
+      },
+      "revId": "6f7df4b2ce0f2888462d5fa20e45b2830b1f86b2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71ed99b5_45ad2c5b",
+        "filename": "ms/blueprintsprocessor/functions/nrm-restful/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/nrm/restful/RestfulNRMServiceClient.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-12-25T01:33:20Z",
+      "side": 1,
+      "message": "are you using the headers anywhere?",
+      "range": {
+        "startLine": 47,
+        "startChar": 8,
+        "endLine": 48,
+        "endChar": 52
+      },
+      "revId": "6f7df4b2ce0f2888462d5fa20e45b2830b1f86b2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b05fbb00_861dc4d4",
+        "filename": "ms/blueprintsprocessor/functions/nrm-restful/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/nrm/restful/RestfulNRMServiceClient.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-12-25T01:33:20Z",
+      "side": 1,
+      "message": "Can the return data contain any sensitive information you many not want to log?",
+      "range": {
+        "startLine": 52,
+        "startChar": 8,
+        "endLine": 52,
+        "endChar": 55
+      },
+      "revId": "6f7df4b2ce0f2888462d5fa20e45b2830b1f86b2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7be37bb9_f7b8e542",
+        "filename": "ms/blueprintsprocessor/functions/nrm-restful/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/nrm/restful/RestfulNRMServiceClient.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-12-25T01:33:20Z",
+      "side": 1,
+      "message": "code duplication: could this be a function which logs and generates your \n{\"status\":....., \"body\":....... } object to be returned?",
+      "range": {
+        "startLine": 53,
+        "startChar": 9,
+        "endLine": 56,
+        "endChar": 50
+      },
+      "revId": "6f7df4b2ce0f2888462d5fa20e45b2830b1f86b2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1985525d_c4eb2905",
+        "filename": "ms/blueprintsprocessor/functions/nrm-restful/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/nrm/restful/RestfulNRMServiceClient.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-12-25T01:33:20Z",
+      "side": 1,
+      "message": "is this a use-case requirement to not have dashes?\notherwise, why alter UUID format",
+      "range": {
+        "startLine": 123,
+        "startChar": 33,
+        "endLine": 124,
+        "endChar": 60
+      },
+      "revId": "6f7df4b2ce0f2888462d5fa20e45b2830b1f86b2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
