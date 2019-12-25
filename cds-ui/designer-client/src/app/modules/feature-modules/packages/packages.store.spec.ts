@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { PackagesStore } from './packages.store';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { PackagesListService } from './packages-list.service';
+import { PackagesApiService } from './packages-api.service';
 import { of } from 'rxjs';
 import { BluePrintPage } from './model/BluePrint.model';
 import { getBluePrintPageMock } from './blueprint.page.mock';
@@ -20,7 +20,7 @@ describe('PackagesStore', () => {
             ],
             providers: [
                 PackagesStore,
-                PackagesListService
+                PackagesApiService
             ]
         });
         httpMock = TestBed.get(HttpTestingController);
