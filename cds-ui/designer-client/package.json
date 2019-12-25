@@ -26,16 +26,18 @@
     "angular-animations": "0.0.10",
     "angular-font-awesome": "^3.1.2",
     "angular-material-expansion-panel": "^0.7.2",
+    "backbone": "^1.4.0",
     "bootstrap": "^4.3.1",
+    "file-saver": "^2.0.2",
     "font-awesome": "^4.7.0",
+    "jointjs": "^3.0.4",
+    "jquery": "^3.1.1",
+    "json2typescript": "^1.2.3",
+    "lodash": "^4.17.15",
     "ng-sidebar": "^9.1.1",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
-    "zone.js": "~0.9.1",
-    "jquery": "^3.1.1",
-    "backbone": "^1.4.0",
-    "jointjs": "^3.0.4",
-    "lodash": "^3.10.1"
+    "zone.js": "~0.9.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.803.9",

@@ -1,0 +1,47 @@
+<app-header></app-header>
+<div class="alert-dark" style="padding: 100px">
+    <div>
+        <label>mode</label>
+        <label name="trst" *ngFor="let mode of modes; let i = index">
+            <input type="checkbox" value={{mode}} [(ngModel)]="metaDataTab.mode">
+            {{mode}}
+        </label>
+        <br>
+        <label>dictionary Library Instances</label>
+        <label>
+            <select name="cars">
+                <option value="audi"
+                        *ngFor="let dictionaryLibraryInstance of dictionaryLibraryInstances; let i = index">{{dictionaryLibraryInstance}}</option>
+            </select>
+        </label>
+    </div>
+    <div>
+        <label>Name</label>
+        <label>
+            <input type="input" [(ngModel)]="metaDataTab.name">
+        </label>
+        <br>
+        <label>Description</label>
+        <label>
+            <input type="input">
+        </label>
+        <br>
+        <label>Version</label>
+        <label>
+            <input type="input">
+        </label>
+        <br>
+        <label>tags</label>
+        <label>
+            <input type="input">
+        </label>
+        <br>
+    </div>
+    <div>
+        <div name="custom key">
+            <button (click)="createAnotherCustomKeyDiv()"></button>
+            <div id="target"></div>
+
+        </div>
+    </div>
+</div>

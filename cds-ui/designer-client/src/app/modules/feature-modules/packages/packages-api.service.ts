@@ -44,8 +44,8 @@ export class PackagesListService {
         });
     }
 
-    searchByTags(keyword: string): Observable<any> {
-        return this.api.get(BlueprintURLs.getMetaDate + '/' + keyword);
+    checkBluePrintIfItExists(keyword: string) {//: Observable<any> {
+        // return this.api.get(BlueprintURLs.get + '/' + keyword);
     }
 
     getCountOfAllPackages(observable: Observable<number>) {
