@@ -20,7 +20,6 @@ limitations under the License.
 */
 
 
-
 import {
   Count,
   CountSchema,
@@ -42,82 +41,84 @@ import {
   Response,
   RestBindings,
 } from '@loopback/rest';
-import { Blueprint } from '../models';
-import { inject } from '@loopback/core';
-import { BlueprintService } from '../services';
+import {Blueprint} from '../models';
+import {inject} from '@loopback/core';
+import {BlueprintService} from '../services';
 import * as fs from 'fs';
 import * as multiparty from 'multiparty';
 import * as request_lib from 'request';
-import { processorApiConfig, appConfig } from '../config/app-config';
-import { bluePrintManagementServiceGrpcClient } from '../clients/blueprint-management-service-grpc-client';
+import {processorApiConfig, appConfig} from '../config/app-config';
+import {bluePrintManagementServiceGrpcClient} from '../clients/blueprint-management-service-grpc-client';
 import {BlueprintDetail} from '../models/blueprint.detail.model';
 
 export class BlueprintRestController {
   constructor(
     @inject('services.BlueprintService')
     public bpservice: BlueprintService,
-  ) { }
+  ) {
+  }
 
   @get('/controllerblueprint/all', {
     responses: {
       '200': {
         description: 'Blueprint model instance',
-        content: { 'application/json': { schema: { 'x-ts-type': Blueprint } } },
+        content: {'application/json': {schema: {'x-ts-type': Blueprint}}},
       },
     },
   })
   async getall() {
     return await this.bpservice.getAllblueprints();
   }
-    @get('/controllerblueprint/{id}', {
-        responses: {
-            '200': {
-                description: 'Blueprint model instance',
-                content: { 'application/json': { schema: { 'x-ts-type': BlueprintDetail } } },
-            },
-        },
-    })
-    async getOneBluePrint(@param.path.string('id') id: string) {
-        return await this.bpservice.getOneBluePrint(id);
-    }
+
+  @get('/controllerblueprint/{id}', {
+    responses: {
+      '200': {
+        description: 'Blueprint model instance',
+        content: {'application/json': {schema: {'x-ts-type': BlueprintDetail}}},
+      },
+    },
+  })
+  async getOneBluePrint(@param.path.string('id') id: string) {
+    return await this.bpservice.getOneBluePrint(id);
+  }
 
 
   @get('/controllerblueprint/paged', {
     responses: {
       '200': {
         description: 'Blueprint model instance with pagination',
-        content: { 'application/json': { schema: { 'x-ts-type': Blueprint } } },
+        content: {'application/json': {schema: {'x-ts-type': Blueprint}}},
       },
     },
   })
   async getPagedBlueprints(
-    @param.query.number('limit') limit: number, 
-    @param.query.number('offset') offset: number, 
+    @param.query.number('limit') limit: number,
+    @param.query.number('offset') offset: number,
     @param.query.string('sort') sort: string) {
     return await this.bpservice.getPagedBueprints(limit, offset, sort);
   }
 
-    @get('/controllerblueprint/metadata/paged/{keyword}', {
-        responses: {
-            '200': {
-                description: 'Blueprint model instance with pagination',
-                content: { 'application/json': { schema: { 'x-ts-type': Blueprint } } },
-            },
-        },
-    })
-    async getMetaDataPagedBlueprints(
-        @param.path.string('keyword') keyword: string,
-        @param.query.number('limit') limit: number,
-        @param.query.number('offset') offset: number,
-        @param.query.string('sort') sort: string) {
-        return await this.bpservice.getMetaDataPagedBlueprints(limit, offset, sort,keyword);
-    }
+  @get('/controllerblueprint/metadata/paged/{keyword}', {
+    responses: {
+      '200': {
+        description: 'Blueprint model instance with pagination',
+        content: {'application/json': {schema: {'x-ts-type': Blueprint}}},
+      },
+    },
+  })
+  async getMetaDataPagedBlueprints(
+    @param.path.string('keyword') keyword: string,
+    @param.query.number('limit') limit: number,
+    @param.query.number('offset') offset: number,
+    @param.query.string('sort') sort: string) {
+    return await this.bpservice.getMetaDataPagedBlueprints(limit, offset, sort, keyword);
+  }
 
- @get('/controllerblueprint/meta-data/{keyword}', {
+  @get('/controllerblueprint/meta-data/{keyword}', {
     responses: {
       '200': {
         description: 'Blueprint model instance',
-        content: { 'application/json': { schema: { 'x-ts-type': Blueprint } } },
+        content: {'application/json': {schema: {'x-ts-type': Blueprint}}},
       },
     },
   })
@@ -125,12 +126,22 @@ export class BlueprintRestController {
     return await this.bpservice.getBlueprintsByKeyword(keyword);
   }
 
-
+  @get('/controllerblueprint/by-name/{name}/version/{version}', {
+    responses: {
+      '200': {
+        description: 'Blueprint model instance',
+        content: {'application/json': {schema: {'x-ts-type': Blueprint}}},
+      },
+    },
+  })
+  async getPacakgesByNameAndVersion(@param.path.string('name') name: string, @param.path.string('version') version: string) {
+    return await this.bpservice.getBlueprintByNameAndVersion(name, version);
+  }
 
   @get('/controllerblueprint/searchByTags/{tags}', {
     responses: {
       '200': {
-        content: { 'application/json': {} },
+        content: {'application/json': {}},
       },
     },
   })
@@ -147,20 +158,20 @@ export class BlueprintRestController {
         'multipart/form-data': {
           // Skip body parsing
           'x-parser': 'stream',
-          schema: { type: 'object' },
+          schema: {type: 'object'},
         },
       },
     })
-    request: Request,
+      request: Request,
     @inject(RestBindings.Http.RESPONSE) response: Response,
   ): Promise<Response> {
     return new Promise((resolve, reject) => {
       this.getFileFromMultiPartForm(request).then(file => {
         // if (appConfig.action.deployBlueprint.grpcEnabled)
         if (appConfig.action.grpcEnabled)
-          return this.uploadFileToBlueprintProcessorGrpc(file, "DRAFT", response);
+          return this.uploadFileToBlueprintProcessorGrpc(file, 'DRAFT', response);
         else
-          return this.uploadFileToBlueprintController(file, "/blueprint-model/", response);
+          return this.uploadFileToBlueprintController(file, '/blueprint-model/', response);
       }, err => {
         reject(err);
       });
@@ -187,20 +198,20 @@ export class BlueprintRestController {
         'multipart/form-data': {
           // Skip body parsing
           'x-parser': 'stream',
-          schema: { type: 'object' },
+          schema: {type: 'object'},
         },
       },
     })
-    request: Request,
+      request: Request,
     @inject(RestBindings.Http.RESPONSE) response: Response,
   ): Promise<Response> {
     return new Promise((resolve, reject) => {
       this.getFileFromMultiPartForm(request).then(file => {
         // if (appConfig.action.deployBlueprint.grpcEnabled)
         if (appConfig.action.grpcEnabled)
-          return this.uploadFileToBlueprintProcessorGrpc(file, "PUBLISH", response);
+          return this.uploadFileToBlueprintProcessorGrpc(file, 'PUBLISH', response);
         else
-          return this.uploadFileToBlueprintController(file, "/blueprint-model/publish/", response);
+          return this.uploadFileToBlueprintController(file, '/blueprint-model/publish/', response);
       }, err => {
         reject(err);
       });
@@ -227,19 +238,19 @@ export class BlueprintRestController {
         'multipart/form-data': {
           // Skip body parsing
           'x-parser': 'stream',
-          schema: { type: 'object' },
+          schema: {type: 'object'},
         },
       },
     })
-    request: Request,
+      request: Request,
     @inject(RestBindings.Http.RESPONSE) response: Response,
   ): Promise<Response> {
     return new Promise((resolve, reject) => {
       this.getFileFromMultiPartForm(request).then(file => {
         if (appConfig.action.grpcEnabled)
-          return this.uploadFileToBlueprintProcessorGrpc(file, "ENRICH", response);
+          return this.uploadFileToBlueprintProcessorGrpc(file, 'ENRICH', response);
         else
-          return this.uploadFileToBlueprintController(file, "/blueprint-model/enrich/", response)
+          return this.uploadFileToBlueprintController(file, '/blueprint-model/enrich/', response);
         //   this.uploadFileToBlueprintController(file, "/blueprint-model/enrich/", response).then(resp => {
         //     resolve(resp);
         //   }, err => {
@@ -261,14 +272,14 @@ export class BlueprintRestController {
     if (appConfig.action.grpcEnabled)
       return this.downloadFileFromBlueprintProcessorGrpc(name, version, response);
     else
-      return this.downloadFileFromBlueprintController("/blueprint-model/download/by-name/" + name + "/version/" + version, response);
+      return this.downloadFileFromBlueprintController('/blueprint-model/download/by-name/' + name + '/version/' + version, response);
   }
 
 
   async getFileFromMultiPartForm(request: Request): Promise<multiparty.File> {
     return new Promise((resolve, reject) => {
       let form = new multiparty.Form();
-      form.parse(request, (err: any, fields: any, files: { [x: string]: any[]; }) => {
+      form.parse(request, (err: any, fields: any, files: {[x: string]: any[];}) => {
         if (err) reject(err);
         let file = files['file'][0]; // get the file from the returned files object
         if (!file) {
@@ -277,7 +288,7 @@ export class BlueprintRestController {
           resolve(file);
         }
       });
-    })
+    });
   }
 
   @post('/controllerblueprint/deploy-blueprint')
@@ -289,20 +300,20 @@ export class BlueprintRestController {
         'multipart/form-data': {
           // Skip body parsing
           'x-parser': 'stream',
-          schema: { type: 'object' },
+          schema: {type: 'object'},
         },
       },
     })
-    request: Request,
+      request: Request,
     @inject(RestBindings.Http.RESPONSE) response: Response,
   ): Promise<Response> {
     return new Promise((resolve, reject) => {
       this.getFileFromMultiPartForm(request).then(file => {
         // if (appConfig.action.deployBlueprint.grpcEnabled)
         if (appConfig.action.grpcEnabled)
-          return this.uploadFileToBlueprintProcessorGrpc(file, "PUBLISH", response);
+          return this.uploadFileToBlueprintProcessorGrpc(file, 'PUBLISH', response);
         else
-          return this.uploadFileToBlueprintProcessor(file, "/execution-service/upload/", response);
+          return this.uploadFileToBlueprintProcessor(file, '/execution-service/upload/', response);
       }, err => {
         reject(err);
       });
@@ -322,17 +333,17 @@ export class BlueprintRestController {
       url: url,
       headers: {
         Authorization: authToken,
-        'content-type': 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW'
+        'content-type': 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW',
       },
       formData: {
         file: {
           value: fs.createReadStream(file.path),
           options: {
             filename: 'cba.zip',
-            contentType: 'application/zip'
-          }
-        }
-      }
+            contentType: 'application/zip',
+          },
+        },
+      },
     };
 
     var removeTempFile = () => {
@@ -341,19 +352,19 @@ export class BlueprintRestController {
           console.error(err);
         }
       });
-    }
+    };
 
     return new Promise((resolve, reject) => {
       request_lib.post(options)
-        .on("error", err => {
+        .on('error', err => {
           reject(err);
         })
         .pipe(response)
-        .once("finish", () => {
+        .once('finish', () => {
           removeTempFile();
           resolve(response);
         });
-    })
+    });
   }
 
   async downloadFileFromBlueprintController(uri: string, response: Response): Promise<Response> {
@@ -365,18 +376,18 @@ export class BlueprintRestController {
       url: url,
       headers: {
         Authorization: authToken,
-      }
+      },
     };
     return new Promise((resolve, reject) => {
       request_lib.get(options)
-        .on("error", err => {
+        .on('error', err => {
           reject(err);
         })
         .pipe(response)
-        .once("finish", () => {
+        .once('finish', () => {
           resolve(response);
         });
-    })
+    });
   }
 
   async uploadFileToBlueprintProcessorGrpc(file: multiparty.File, actionName: string, response: Response): Promise<Response> {
@@ -390,6 +401,7 @@ export class BlueprintRestController {
       });
     });
   }
+
   async downloadFileFromBlueprintProcessorGrpc(blueprintName: string, blueprintVersion: string, response: Response): Promise<Response> {
     return new Promise<Response>((resolve, reject) => {
       bluePrintManagementServiceGrpcClient.downloadBlueprint(blueprintName, blueprintVersion)

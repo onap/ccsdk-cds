@@ -30,6 +30,7 @@ import org.springframework.core.io.Resource
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.http.codec.multipart.FilePart
@@ -129,8 +130,12 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
         @PathVariable(value = "name") name: String,
         @PathVariable(value = "version") version: String
     ):
-            Mono<BlueprintModelSearch> = monoMdc {
-        bluePrintModelHandler.getBlueprintModelSearchByNameAndVersion(name, version)
+            Mono<ResponseEntity<BlueprintModelSearch>> = monoMdc {
+        var bluePrintModel: BlueprintModelSearch? = bluePrintModelHandler.getBlueprintModelSearchByNameAndVersion(name, version)
+        if (bluePrintModel != null)
+            ResponseEntity(bluePrintModel, HttpStatus.FOUND)
+        else
+            ResponseEntity(HttpStatus.NOT_FOUND)
     }
 
     @GetMapping("/download/by-name/{name}/version/{version}", produces = [MediaType.APPLICATION_JSON_VALUE])

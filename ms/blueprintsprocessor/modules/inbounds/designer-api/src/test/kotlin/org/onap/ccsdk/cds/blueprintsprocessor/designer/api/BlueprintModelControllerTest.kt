@@ -146,7 +146,7 @@ class BlueprintModelControllerTest {
         webTestClient(
             HttpMethod.GET, null,
             "/api/v1/blueprint-model/by-name/${bp!!.artifactName}/version/${bp!!.artifactVersion}",
-            HttpStatus.OK, false
+            HttpStatus.FOUND, false
         )
     }
 

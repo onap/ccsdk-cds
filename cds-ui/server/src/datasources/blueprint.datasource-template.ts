@@ -100,6 +100,21 @@ export default {
                 "getMetaDataPagedBlueprints": ["limit", "offset", "sort", "keyword"],
             }
         },
+        {
+            "template": {
+                "method": "GET",
+                "url": processorApiConfig.http.url + "/blueprint-model/by-name/{name}/version/{version}",
+                "headers": {
+                    "accepts": "application/json",
+                    "content-type": "application/json",
+                    "authorization": processorApiConfig.http.authToken
+                },
+                "responsePath": "$",
+            },
+            "functions": {
+                "getBlueprintByNameAndVersion": ["name", "version"],
+            }
+        },
     ]
 
 };
