@@ -30,6 +30,7 @@ import org.springframework.core.io.Resource
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.http.codec.multipart.FilePart
@@ -57,8 +58,8 @@ import reactor.core.publisher.Mono
 open class BlueprintModelController(private val bluePrintModelHandler: BluePrintModelHandler) {
 
     @PostMapping(
-        path = arrayOf("/bootstrap"), produces = arrayOf(MediaType.APPLICATION_JSON_VALUE),
-        consumes = arrayOf(MediaType.APPLICATION_JSON_VALUE)
+            path = arrayOf("/bootstrap"), produces = arrayOf(MediaType.APPLICATION_JSON_VALUE),
+            consumes = arrayOf(MediaType.APPLICATION_JSON_VALUE)
     )
     @ResponseBody
     @Throws(BluePrintException::class)
@@ -86,9 +87,9 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     fun allBlueprintModel(
-        @RequestParam(defaultValue = "20") limit: Int,
-        @RequestParam(defaultValue = "0") offset: Int,
-        @RequestParam(defaultValue = "DATE") sort: BlueprintSortByOption
+            @RequestParam(defaultValue = "20") limit: Int,
+            @RequestParam(defaultValue = "0") offset: Int,
+            @RequestParam(defaultValue = "DATE") sort: BlueprintSortByOption
     ): Page<BlueprintModelSearch> {
         val pageRequest = PageRequest.of(offset, limit, Sort.Direction.ASC, sort.columnName)
         return this.bluePrintModelHandler.allBlueprintModel(pageRequest)
@@ -105,10 +106,10 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     fun allBlueprintModelMetaDataPaged(
-        @NotNull @PathVariable(value = "keyword") keyWord: String,
-        @RequestParam(defaultValue = "20") limit: Int,
-        @RequestParam(defaultValue = "0") offset: Int,
-        @RequestParam(defaultValue = "DATE") sort: BlueprintSortByOption
+            @NotNull @PathVariable(value = "keyword") keyWord: String,
+            @RequestParam(defaultValue = "20") limit: Int,
+            @RequestParam(defaultValue = "0") offset: Int,
+            @RequestParam(defaultValue = "DATE") sort: BlueprintSortByOption
     ): Page<BlueprintModelSearch> {
         val pageRequest = PageRequest.of(offset, limit, Sort.Direction.ASC, sort.columnName)
         return this.bluePrintModelHandler.searchBluePrintModelsByKeyWordPaged(keyWord, pageRequest)
@@ -126,11 +127,15 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @Throws(BluePrintException::class)
     @PreAuthorize("hasRole('USER')")
     fun getBlueprintByNameAndVersion(
-        @PathVariable(value = "name") name: String,
-        @PathVariable(value = "version") version: String
+            @PathVariable(value = "name") name: String,
+            @PathVariable(value = "version") version: String
     ):
-            Mono<BlueprintModelSearch> = monoMdc {
-        bluePrintModelHandler.getBlueprintModelSearchByNameAndVersion(name, version)
+            Mono<ResponseEntity<BlueprintModelSearch>> = monoMdc {
+        var bluePrintModel: BlueprintModelSearch? = bluePrintModelHandler.getBlueprintModelSearchByNameAndVersion(name, version)
+        if (bluePrintModel != null)
+            ResponseEntity(bluePrintModel, HttpStatus.FOUND)
+        else
+            ResponseEntity(HttpStatus.NOT_FOUND)
     }
 
     @GetMapping("/download/by-name/{name}/version/{version}", produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -138,8 +143,8 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @Throws(BluePrintException::class)
     @PreAuthorize("hasRole('USER')")
     fun downloadBlueprintByNameAndVersion(
-        @PathVariable(value = "name") name: String,
-        @PathVariable(value = "version") version: String
+            @PathVariable(value = "name") name: String,
+            @PathVariable(value = "version") version: String
     ):
             Mono<ResponseEntity<Resource>> = monoMdc {
         bluePrintModelHandler.downloadBlueprintModelFileByNameAndVersion(name, version)
@@ -162,7 +167,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     }
 
     @PostMapping(
-        "/enrich", produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
+            "/enrich", produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
             .MULTIPART_FORM_DATA_VALUE]
     )
     @ResponseBody
@@ -189,16 +194,16 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
 
     @DeleteMapping("/name/{name}/version/{version}")
     @ApiOperation(
-        value = "Delete a CBA",
-        notes = "Delete the CBA package identified by its name and version.",
-        produces = MediaType.APPLICATION_JSON_VALUE
+            value = "Delete a CBA",
+            notes = "Delete the CBA package identified by its name and version.",
+            produces = MediaType.APPLICATION_JSON_VALUE
     )
     @PreAuthorize("hasRole('USER')")
     fun deleteBlueprint(
-        @ApiParam(value = "Name of the CBA.", required = true)
-        @PathVariable(value = "name") name: String,
-        @ApiParam(value = "Version of the CBA.", required = true)
-        @PathVariable(value = "version") version: String
+            @ApiParam(value = "Name of the CBA.", required = true)
+            @PathVariable(value = "name") name: String,
+            @ApiParam(value = "Version of the CBA.", required = true)
+            @PathVariable(value = "version") version: String
     ) = monoMdc {
         bluePrintModelHandler.deleteBlueprintModel(name, version)
     }
