@@ -145,12 +145,12 @@ open class BluePrintModelHandler(
      * @throws BluePrintException BluePrintException
      */
     @Throws(BluePrintException::class)
-    open fun getBlueprintModelSearchByNameAndVersion(name: String, version: String): BlueprintModelSearch {
+    open fun getBlueprintModelSearchByNameAndVersion(name: String, version: String): BlueprintModelSearch? {
         return blueprintModelSearchRepository.findByArtifactNameAndArtifactVersion(name, version)
-            ?: throw BluePrintException(
+            /*?: throw BluePrintException(
                 ErrorCode.RESOURCE_NOT_FOUND.value,
                 String.format(BLUEPRINT_MODEL_NAME_VERSION_FAILURE_MSG, name, version)
-            )
+            )*/
     }
 
     /**
