@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, JsonPipe} from '@angular/common';
 import {ApiService} from '../../../common/core/services/api.typed.service';
 import {PackagesRoutingModule} from './packages.routing.module';
 import {NgbPaginationModule} from '@ng-bootstrap/ng-bootstrap';
@@ -16,6 +16,7 @@ import {TagsFilteringComponent} from './packages-dashboard/filter-by-tags/filter
 import {ConfigurationDashboardComponent} from './configuration-dashboard/configuration-dashboard.component';
 import {FunctionsComponent} from './designer/functions/functions.component';
 import {ActionsComponent} from './designer/actions/actions.component';
+import {PackageCreationComponent} from './package-creation/package-creation.component';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import {ActionsComponent} from './designer/actions/actions.component';
         PackagesHeaderComponent,
         FunctionsComponent,
         ActionsComponent,
+        PackageCreationComponent,
     ],
     imports: [
         CommonModule,
@@ -38,7 +40,7 @@ import {ActionsComponent} from './designer/actions/actions.component';
         SharedModulesModule,
         SidebarModule.forRoot(),
     ],
-    providers: [ApiService],
+    providers: [ApiService, JsonPipe],
     bootstrap: []
 })
 export class PackagesModule {
