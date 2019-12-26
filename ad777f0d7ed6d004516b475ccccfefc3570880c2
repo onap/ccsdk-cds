@@ -22,6 +22,29 @@
       "revId": "ad777f0d7ed6d004516b475ccccfefc3570880c2",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82b1a09b_d99a71dd",
+        "filename": "ms/blueprintsprocessor/functions/nrm-restful/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/nrm/restful/RestfulNRMServiceClientTest.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-12-26T14:53:14Z",
+      "side": 1,
+      "message": "this test doesn\u0027t assert anything",
+      "range": {
+        "startLine": 33,
+        "startChar": 9,
+        "endLine": 50,
+        "endChar": 55
+      },
+      "revId": "ad777f0d7ed6d004516b475ccccfefc3570880c2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
