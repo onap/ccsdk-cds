@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "29f4ceaf_736a68b1",
+        "filename": "ms/blueprintsprocessor/functions/nrm-restful/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/nrm/restful/RestfulNRMServiceClient.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2019-12-26T14:51:05Z",
+      "side": 1,
+      "message": "\"/ProvisioningMnS/v1500/$classNameStr/$idStr\" construct is supported in kotlin",
+      "range": {
+        "startLine": 35,
+        "startChar": 21,
+        "endLine": 35,
+        "endChar": 81
+      },
+      "revId": "ad777f0d7ed6d004516b475ccccfefc3570880c2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
