@@ -33,6 +33,7 @@ open class TokenAuthNatsService(private val natsConnectionProperties: TokenAuthN
             val serverList = natsConnectionProperties.host.splitCommaAsList()
 
             val options = Options.Builder()
+                .connectionName(natsConnectionProperties.clientId)
                 .servers(serverList.toTypedArray())
                 .token(natsConnectionProperties.token.toCharArray())
                 .build()

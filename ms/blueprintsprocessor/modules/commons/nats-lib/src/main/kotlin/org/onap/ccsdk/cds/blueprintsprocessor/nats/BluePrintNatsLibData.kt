@@ -23,6 +23,8 @@ open class NatsConnectionProperties {
     var clusterId: String = ClusterUtils.clusterId()
     var clientId: String = ClusterUtils.clusterNodeId()
     lateinit var host: String
+    /** Rest endpoint selector to access Monitoring API */
+    var monitoringSelector: String? = null
 }
 
 open class TokenAuthNatsConnectionProperties : NatsConnectionProperties() {

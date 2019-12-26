@@ -26,6 +26,9 @@ interface BluePrintClusterService {
 
     fun clusterJoined(): Boolean
 
+    /** Returns [partitionGroup] master member */
+    suspend fun masterMember(partitionGroup: String): ClusterMember
+
     /** Returns all the data cluster members */
     suspend fun allMembers(): Set<ClusterMember>
 
@@ -58,4 +61,5 @@ interface ClusterLock {
     suspend fun tryLock(timeout: Long): Boolean
     suspend fun unLock()
     fun isLocked(): Boolean
+    fun close()
 }

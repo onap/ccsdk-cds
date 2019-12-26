@@ -16,10 +16,11 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.atomix
 
+import com.fasterxml.jackson.databind.JsonNode
 import io.atomix.core.map.DistributedMap
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 
-fun <T : Map<*, *>> T.toDistributedMap(): DistributedMap<*, *> {
-    return if (this != null && this is DistributedMap<*, *>) this
+fun <T : Map<String, JsonNode>> T.toDistributedMap(): DistributedMap<String, JsonNode> {
+    return if (this != null && this is DistributedMap<*, *>) this as DistributedMap<String, JsonNode>
     else throw BluePrintProcessorException("map is not of type DistributedMap")
 }

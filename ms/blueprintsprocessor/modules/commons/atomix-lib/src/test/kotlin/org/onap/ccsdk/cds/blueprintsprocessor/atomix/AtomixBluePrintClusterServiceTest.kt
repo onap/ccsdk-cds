@@ -17,7 +17,6 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.atomix
 
 import com.fasterxml.jackson.databind.JsonNode
-import io.atomix.core.Atomix
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -27,7 +26,7 @@ import kotlinx.coroutines.withContext
 import org.junit.Before
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.atomix.service.AtomixBluePrintClusterService
-import org.onap.ccsdk.cds.blueprintsprocessor.atomix.utils.AtomixLibUtils
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterInfo
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteNBDir
@@ -45,12 +44,25 @@ class AtomixBluePrintClusterServiceTest {
         }
     }
 
-    /** Testing two cluster with distributed map store creation, This is time consuming test casetake around 10s **/
+    /** Testing two cluster with distributed map store creation, This is time consuming test case, taks around 10s **/
     @Test
     fun testClusterJoin() {
         runBlocking {
-            val members = arrayListOf("node-5679", "node-5680")
-            val deferred = arrayListOf(5679, 5680).map { port ->
+            val bluePrintClusterServiceOne = createCluster(arrayListOf(5679, 5680))
+            // val bluePrintClusterServiceTwo = createCluster(arrayListOf(5681, 5682))
+            val bluePrintClusterService = bluePrintClusterServiceOne.get(0)
+            log.info("Members : ${bluePrintClusterService.allMembers()}")
+            log.info("Master(System) Members : ${bluePrintClusterService.masterMember("system")}")
+            log.info("Master(Data) Members : ${bluePrintClusterService.masterMember("data")}")
+            testDistributedStore(bluePrintClusterServiceOne)
+            testDistributedLock(bluePrintClusterServiceOne)
+        }
+    }
+
+    private suspend fun createCluster(ports: List<Int>): List<BluePrintClusterService> {
+        return withContext(Dispatchers.Default) {
+            val members = ports.map { "node-$it" }
+            val deferred = ports.map { port ->
                 async(Dispatchers.IO) {
                     val nodeId = "node-$port"
                     log.info("********** Starting node($nodeId) on port($port)")
@@ -60,43 +72,46 @@ class AtomixBluePrintClusterServiceTest {
                     )
                     val atomixClusterService = AtomixBluePrintClusterService()
                     atomixClusterService.startCluster(clusterInfo)
-                    atomixClusterService.atomix
+                    atomixClusterService
                 }
             }
-            val atomixs = deferred.awaitAll()
-            testDistributedStore(atomixs)
-            testDistributedLock(atomixs)
+            deferred.awaitAll()
         }
     }
 
-    private suspend fun testDistributedStore(atomix: List<Atomix>) {
+    private suspend fun testDistributedStore(bluePrintClusterServices: List<BluePrintClusterService>) {
         /** Test Distributed store creation */
         repeat(2) { storeId ->
-            val store = AtomixLibUtils.distributedMapStore<JsonNode>(atomix.get(0), "blueprint-runtime-$storeId")
+            val store = bluePrintClusterServices.get(0).clusterMapStore<JsonNode>(
+                "blueprint-runtime-$storeId"
+            ).toDistributedMap()
             assertNotNull(store, "failed to get store")
-            val store1 = AtomixLibUtils.distributedMapStore<JsonNode>(atomix.get(1), "blueprint-runtime-$storeId")
+            val store1 = bluePrintClusterServices.get(0).clusterMapStore<JsonNode>(
+                "blueprint-runtime-$storeId"
+            ).toDistributedMap()
+
             store1.addListener {
                 log.info("Received map event : $it")
             }
-            repeat(10) {
+            repeat(5) {
                 store["key-$storeId-$it"] = "value-$it".asJsonPrimitive()
             }
-            delay(100)
+            delay(10)
             store.close()
         }
     }
 
-    private suspend fun testDistributedLock(atomix: List<Atomix>) {
+    private suspend fun testDistributedLock(bluePrintClusterServices: List<BluePrintClusterService>) {
         val lockName = "sample-lock"
         withContext(Dispatchers.IO) {
             val deferred = async {
-                executeLock(atomix.get(0), "first", lockName)
+                executeLock(bluePrintClusterServices.get(0), "first", lockName)
             }
             val deferred2 = async {
-                executeLock(atomix.get(1), "second", lockName)
+                executeLock(bluePrintClusterServices.get(0), "second", lockName)
             }
             val deferred3 = async {
-                executeLock(atomix.get(1), "third", lockName)
+                executeLock(bluePrintClusterServices.get(0), "third", lockName)
             }
             deferred.start()
             deferred2.start()
@@ -104,17 +119,21 @@ class AtomixBluePrintClusterServiceTest {
         }
     }
 
-    private suspend fun executeLock(atomix: Atomix, lockId: String, lockName: String) {
+    private suspend fun executeLock(
+        bluePrintClusterService: BluePrintClusterService,
+        lockId: String,
+        lockName: String
+    ) {
         log.info("initialising $lockId lock...")
-        val distributedLock = AtomixLibUtils.distributedLock(atomix, lockName)
+        val distributedLock = bluePrintClusterService.clusterLock(lockName)
         assertNotNull(distributedLock, "failed to create distributed $lockId lock")
         distributedLock.lock()
-        assertTrue(distributedLock.isLocked, "failed to lock $lockId")
+        assertTrue(distributedLock.isLocked(), "failed to lock $lockId")
         try {
             log.info("locked $lockId process for 5mSec")
             delay(5)
         } finally {
-            distributedLock.unlock()
+            distributedLock.unLock()
             log.info("$lockId lock released")
         }
         distributedLock.close()

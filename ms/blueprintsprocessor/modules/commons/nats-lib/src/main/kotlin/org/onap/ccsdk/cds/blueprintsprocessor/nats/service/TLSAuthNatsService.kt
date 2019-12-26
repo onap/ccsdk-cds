@@ -34,6 +34,7 @@ open class TLSAuthNatsService(private val natsConnectionProperties: TLSAuthNatsC
             val serverList = natsConnectionProperties.host.splitCommaAsList()
 
             val options = Options.Builder()
+                .connectionName(natsConnectionProperties.clientId)
                 .servers(serverList.toTypedArray())
                 // .sslContext(sslContext())
                 .build()

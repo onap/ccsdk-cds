@@ -55,10 +55,12 @@ open class AtomixBluePrintClusterService : BluePrintClusterService {
             when (membershipEvent.type()) {
                 ClusterMembershipEvent.Type.MEMBER_ADDED -> log.info("Member Added : ${membershipEvent.subject()}")
                 ClusterMembershipEvent.Type.MEMBER_REMOVED -> log.info("Member Removed: ${membershipEvent.subject()}")
+                ClusterMembershipEvent.Type.REACHABILITY_CHANGED -> log.info("Reachability Changed : ${membershipEvent.subject()}")
                 ClusterMembershipEvent.Type.METADATA_CHANGED -> log.info("Changed : ${membershipEvent.subject()}")
                 else -> log.info("Member event unknown")
             }
         }
+        /** Start and Join the Cluster */
         atomix.start().join()
         log.info(
             "Cluster(${clusterInfo.id}) node(${clusterInfo.nodeId}), node address(${clusterInfo.nodeAddress}) " +
@@ -83,6 +85,19 @@ open class AtomixBluePrintClusterService : BluePrintClusterService {
         return atomix.isRunning
     }
 
+    override suspend fun masterMember(partitionGroup: String): ClusterMember {
+        check(::atomix.isInitialized) { "failed to start and join cluster" }
+        check(atomix.isRunning) { "cluster is not running" }
+        val masterId = atomix.partitionService
+            .getPartitionGroup(partitionGroup)
+            .getPartition("1").primary()
+        val masterMember = atomix.membershipService.getMember(masterId)
+        return ClusterMember(
+            id = masterMember.id().id(),
+            memberAddress = masterMember.address().toString()
+        )
+    }
+
     override suspend fun allMembers(): Set<ClusterMember> {
         check(::atomix.isInitialized) { "failed to start and join cluster" }
         check(atomix.isRunning) { "cluster is not running" }
@@ -90,7 +105,7 @@ open class AtomixBluePrintClusterService : BluePrintClusterService {
         return atomix.membershipService.members.map {
             ClusterMember(
                 id = it.id().id(),
-                memberAddress = it.host()
+                memberAddress = it.address().toString()
             )
         }.toSet()
     }
@@ -152,5 +167,11 @@ open class ClusterLockImpl(private val atomix: Atomix, private val name: String)
 
     override fun isLocked(): Boolean {
         return distributedLock.isLocked
+    }
+
+    override fun close() {
+        if (::distributedLock.isInitialized) {
+            distributedLock.close()
+        }
     }
 }
