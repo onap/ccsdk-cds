@@ -1,0 +1,101 @@
+/*
+ * Copyright © 2018-2019 AT&T Intellectual Property.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.onap.ccsdk.cds.blueprintsprocessor.ssh
+
+import com.fasterxml.jackson.databind.JsonNode
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.RelationshipType
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.PropertiesAssignmentBuilder
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.RelationshipTemplateBuilder
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.TopologyTemplateBuilder
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.relationshipType
+
+/** Relationships Types DSL for Message Producer */
+fun BluePrintTypes.relationshipTypeConnectsToSshClient(): RelationshipType {
+    return relationshipType(
+        id = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_SSH_CLIENT,
+        version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO,
+        description = "Relationship connects to through SSH Client."
+    ) {
+        property(
+            BluePrintConstants.PROPERTY_CONNECTION_CONFIG,
+            BluePrintConstants.DATA_TYPE_MAP,
+            true,
+            "Connection Config details."
+        )
+        validTargetTypes(arrayListOf(BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT))
+    }
+}
+
+/** Relationships Templates for Ssh */
+fun TopologyTemplateBuilder.sshRelationshipTemplate(
+    name: String,
+    description: String,
+    block: SshRelationshipTemplateBuilder.() -> Unit
+) {
+    if (relationshipTemplates == null) relationshipTemplates = hashMapOf()
+    val relationshipTemplate = SshRelationshipTemplateBuilder(name, description).apply(block).build()
+    relationshipTemplates!![relationshipTemplate.id!!] = relationshipTemplate
+}
+
+open class SshRelationshipTemplateBuilder(name: String, description: String) :
+    RelationshipTemplateBuilder(
+        name,
+        BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_SSH_CLIENT, description
+    ) {
+
+    fun basicAuth(block: BasicAuthSshClientPropertiesAssignmentBuilder.() -> Unit) {
+        property(BluePrintConstants.PROPERTY_CONNECTION_CONFIG, BluePrintTypes.basicAuthSshProperties(block))
+    }
+}
+
+fun BluePrintTypes.basicAuthSshProperties(block: BasicAuthSshClientPropertiesAssignmentBuilder.() -> Unit): JsonNode {
+    val sshProperties = BasicAuthSshClientPropertiesAssignmentBuilder().apply(block).build()
+    sshProperties[SshClientProperties::type.name] = SshLibConstants.TYPE_BASIC_AUTH.asJsonPrimitive()
+    return sshProperties.asJsonType()
+}
+
+open class SshClientPropertiesAssignmentBuilder : PropertiesAssignmentBuilder() {
+
+    fun connectionTimeOut(connectionTimeOut: Int) = connectionTimeOut(connectionTimeOut.asJsonPrimitive())
+
+    fun connectionTimeOut(connectionTimeOut: JsonNode) =
+        property(SshClientProperties::connectionTimeOut.name, connectionTimeOut)
+
+    fun port(port: Int) = port(port.asJsonPrimitive())
+
+    fun port(port: JsonNode) = property(SshClientProperties::port.name, port)
+
+    fun host(host: String) = host(host.asJsonPrimitive())
+
+    fun host(host: JsonNode) = property(SshClientProperties::host.name, host)
+}
+
+class BasicAuthSshClientPropertiesAssignmentBuilder : SshClientPropertiesAssignmentBuilder() {
+
+    fun username(username: String) = username(username.asJsonPrimitive())
+
+    fun username(username: JsonNode) = property(BasicAuthSshClientProperties::username.name, username)
+
+    fun password(password: String) = password(password.asJsonPrimitive())
+
+    fun password(password: JsonNode) = property(BasicAuthSshClientProperties::password.name, password)
+}

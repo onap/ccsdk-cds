@@ -17,54 +17,100 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.rest
 
 import com.fasterxml.jackson.databind.JsonNode
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.RelationshipType
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.PropertiesAssignmentBuilder
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.RelationshipTemplateBuilder
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.TopologyTemplateBuilder
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.relationshipType
 
-fun BluePrintTypes.dslBasicAuthRestClientProperties(block: BasicAuthRestClientPropertiesBuilder.() -> Unit): JsonNode {
-    val assignments = BasicAuthRestClientPropertiesBuilder().apply(block).build()
-    assignments[RestLibConstants.PROPERTY_TYPE] = RestLibConstants.TYPE_BASIC_AUTH.asJsonPrimitive()
-    return assignments.asJsonType()
+/** Relationships Type DSL for Rest */
+fun BluePrintTypes.relationshipTypeConnectsToRestClient(): RelationshipType {
+    return relationshipType(
+        id = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_REST_CLIENT,
+        version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO,
+        description = "Relationship connects to through"
+    ) {
+        property(
+            BluePrintConstants.PROPERTY_CONNECTION_CONFIG,
+            BluePrintConstants.DATA_TYPE_MAP,
+            true,
+            "Connection Config details."
+        )
+        validTargetTypes(arrayListOf(BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT))
+    }
 }
 
-fun BluePrintTypes.dslTokenAuthRestClientProperties(block: TokenAuthRestClientPropertiesBuilder.() -> Unit): JsonNode {
-    val assignments = TokenAuthRestClientPropertiesBuilder().apply(block).build()
-    assignments[RestLibConstants.PROPERTY_TYPE] = RestLibConstants.TYPE_TOKEN_AUTH.asJsonPrimitive()
-    return assignments.asJsonType()
+/** Relationships Templates DSL for Rest */
+fun TopologyTemplateBuilder.restClientRelationshipTemplate(
+    name: String,
+    description: String,
+    block: RestClientRelationshipTemplateBuilder.() -> Unit
+) {
+    if (relationshipTemplates == null) relationshipTemplates = hashMapOf()
+    val relationshipTemplate = RestClientRelationshipTemplateBuilder(name, description).apply(block).build()
+    relationshipTemplates!![relationshipTemplate.id!!] = relationshipTemplate
 }
 
-fun BluePrintTypes.dslSSLRestClientProperties(block: SSLRestClientPropertiesBuilder.() -> Unit): JsonNode {
-    val assignments = SSLRestClientPropertiesBuilder().apply(block).build()
-    assignments[RestLibConstants.PROPERTY_TYPE] = RestLibConstants.TYPE_SSL_NO_AUTH.asJsonPrimitive()
-    return assignments.asJsonType()
-}
+open class RestClientRelationshipTemplateBuilder(name: String, description: String) :
+    RelationshipTemplateBuilder(
+        name,
+        BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_REST_CLIENT, description
+    ) {
 
-open class RestClientPropertiesBuilder : PropertiesAssignmentBuilder() {
-    fun type(type: String) {
-        type(type.asJsonPrimitive())
+    fun basicAuth(block: BasicAuthRestClientPropertiesAssignmentBuilder.() -> Unit) {
+        property(BluePrintConstants.PROPERTY_CONNECTION_CONFIG, BluePrintTypes.basicAuthRestClientProperties(block))
     }
 
-    fun type(type: JsonNode) {
-        property(RestLibConstants.PROPERTY_TYPE, type)
+    fun tokenAuth(block: TokenAuthRestClientPropertiesAssignmentBuilder.() -> Unit) {
+        property(BluePrintConstants.PROPERTY_CONNECTION_CONFIG, BluePrintTypes.tokenAuthRestClientProperties(block))
     }
+
+    fun sslAuth(block: SslAuthRestClientPropertiesAssignmentBuilder.() -> Unit) {
+        property(BluePrintConstants.PROPERTY_CONNECTION_CONFIG, BluePrintTypes.sslRestClientProperties(block))
+    }
+}
+
+fun BluePrintTypes.basicAuthRestClientProperties(block: BasicAuthRestClientPropertiesAssignmentBuilder.() -> Unit): JsonNode {
+    val assignments = BasicAuthRestClientPropertiesAssignmentBuilder().apply(block).build()
+    assignments[RestClientProperties::type.name] = RestLibConstants.TYPE_BASIC_AUTH.asJsonPrimitive()
+    return assignments.asJsonType()
+}
+
+fun BluePrintTypes.tokenAuthRestClientProperties(block: TokenAuthRestClientPropertiesAssignmentBuilder.() -> Unit): JsonNode {
+    val assignments = TokenAuthRestClientPropertiesAssignmentBuilder().apply(block).build()
+    assignments[RestClientProperties::type.name] = RestLibConstants.TYPE_TOKEN_AUTH.asJsonPrimitive()
+    return assignments.asJsonType()
+}
+
+fun BluePrintTypes.sslRestClientProperties(block: SslAuthRestClientPropertiesAssignmentBuilder.() -> Unit): JsonNode {
+    val assignments = SslAuthRestClientPropertiesAssignmentBuilder().apply(block).build()
+    assignments[RestClientProperties::type.name] = RestLibConstants.TYPE_SSL_NO_AUTH.asJsonPrimitive()
+    return assignments.asJsonType()
+}
+
+open class RestClientPropertiesAssignmentBuilder : PropertiesAssignmentBuilder() {
 
     open fun url(url: String) {
         url(url.asJsonPrimitive())
     }
 
     open fun url(url: JsonNode) {
-        property("url", url)
+        property(RestClientProperties::url, url)
     }
 }
 
-open class BasicAuthRestClientPropertiesBuilder : RestClientPropertiesBuilder() {
+open class BasicAuthRestClientPropertiesAssignmentBuilder : RestClientPropertiesAssignmentBuilder() {
     open fun password(password: String) {
         password(password.asJsonPrimitive())
     }
 
     open fun password(password: JsonNode) {
-        property("password", password)
+        property(BasicAuthRestClientProperties::password, password)
     }
 
     open fun username(username: String) {
@@ -72,27 +118,27 @@ open class BasicAuthRestClientPropertiesBuilder : RestClientPropertiesBuilder() 
     }
 
     open fun username(username: JsonNode) {
-        property("username", username)
+        property(BasicAuthRestClientProperties::username, username)
     }
 }
 
-open class TokenAuthRestClientPropertiesBuilder : RestClientPropertiesBuilder() {
+open class TokenAuthRestClientPropertiesAssignmentBuilder : RestClientPropertiesAssignmentBuilder() {
     open fun token(token: String) {
         token(token.asJsonPrimitive())
     }
 
     open fun token(token: JsonNode) {
-        property("token", token)
+        property(TokenAuthRestClientProperties::token, token)
     }
 }
 
-open class SSLRestClientPropertiesBuilder : RestClientPropertiesBuilder() {
+open class SslAuthRestClientPropertiesAssignmentBuilder : RestClientPropertiesAssignmentBuilder() {
     open fun keyStoreInstance(keyStoreInstance: String) {
         keyStoreInstance(keyStoreInstance.asJsonPrimitive())
     }
 
     open fun keyStoreInstance(keyStoreInstance: JsonNode) {
-        property("keyStoreInstance", keyStoreInstance)
+        property(SSLRestClientProperties::keyStoreInstance, keyStoreInstance)
     }
 
     open fun sslTrust(sslTrust: String) {
@@ -100,7 +146,7 @@ open class SSLRestClientPropertiesBuilder : RestClientPropertiesBuilder() {
     }
 
     open fun sslTrust(sslTrust: JsonNode) {
-        property("sslTrust", sslTrust)
+        property(SSLRestClientProperties::sslTrust, sslTrust)
     }
 
     open fun sslTrustPassword(sslTrustPassword: String) {
@@ -108,7 +154,7 @@ open class SSLRestClientPropertiesBuilder : RestClientPropertiesBuilder() {
     }
 
     open fun sslTrustPassword(sslTrustPassword: JsonNode) {
-        property("sslTrustPassword", sslTrustPassword)
+        property(SSLRestClientProperties::sslTrustPassword, sslTrustPassword)
     }
 
     open fun sslKey(sslKey: String) {
@@ -116,7 +162,7 @@ open class SSLRestClientPropertiesBuilder : RestClientPropertiesBuilder() {
     }
 
     open fun sslKey(sslKey: JsonNode) {
-        property("sslKey", sslKey)
+        property(SSLRestClientProperties::sslKey, sslKey)
     }
 
     open fun sslKeyPassword(sslKeyPassword: String) {
@@ -124,14 +170,14 @@ open class SSLRestClientPropertiesBuilder : RestClientPropertiesBuilder() {
     }
 
     open fun sslKeyPassword(sslKeyPassword: JsonNode) {
-        property("sslKeyPassword", sslKeyPassword)
+        property(SSLRestClientProperties::sslKeyPassword, sslKeyPassword)
     }
 }
 
-open class SSLBasicAuthRestClientPropertiesBuilder : SSLRestClientPropertiesBuilder() {
+open class SSLBasicAuthRestClientPropertiesBuilder : SslAuthRestClientPropertiesAssignmentBuilder() {
     // TODO()
 }
 
-open class SSLTokenAuthRestClientPropertiesBuilder : SSLRestClientPropertiesBuilder() {
+open class SSLTokenAuthRestClientPropertiesBuilder : SslAuthRestClientPropertiesAssignmentBuilder() {
     // TODO()
 }

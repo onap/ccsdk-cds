@@ -166,7 +166,8 @@ fun getNodeTemplateOperationOutput(
     propertyId: String,
     jsonPath: String? = null
 ): JsonNode {
-    return """{"get_operation_output": ["$nodeTemplateName", "$interfaceName", "process","$propertyId","$jsonPath" ]}""".trimMargin().jsonAsJsonType()
+    return """{"get_operation_output": ["$nodeTemplateName", "$interfaceName", "process","$propertyId","$jsonPath" ]}""".trimMargin()
+        .jsonAsJsonType()
 }
 
 /** Blueprint Type Extensions */
@@ -246,6 +247,7 @@ fun BluePrintTypes.artifactTypeMappingResource(): ArtifactType {
     }
 }
 
+@Deprecated("CDS won't support", replaceWith = ReplaceWith("artifactTypeScriptKotlin"))
 fun BluePrintTypes.artifactTypeScriptJython(): ArtifactType {
     return artifactType(
         id = BluePrintConstants.MODEL_TYPE_ARTIFACT_SCRIPT_JYTHON,
@@ -268,6 +270,7 @@ fun BluePrintTypes.artifactTypeScriptKotlin(): ArtifactType {
     }
 }
 
+@Deprecated("CDS won't support, use implerative workflow definitions.")
 fun BluePrintTypes.artifactTypeDirectedGraph(): ArtifactType {
     return artifactType(
         id = BluePrintConstants.MODEL_TYPE_ARTIFACT_DIRECTED_GRAPH,
@@ -299,6 +302,7 @@ fun BluePrintTypes.relationshipTypeConnectsTo(): RelationshipType {
         derivedFrom = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_ROOT,
         description = "Relationship connects to"
     ) {
+        validTargetTypes(arrayListOf(BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT))
     }
 }
 
@@ -308,6 +312,16 @@ fun BluePrintTypes.relationshipTypeDependsOn(): RelationshipType {
         version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
         derivedFrom = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_ROOT,
         description = "Relationship depends on"
+    ) {
+    }
+}
+
+fun BluePrintTypes.relationshipTypeHostedOn(): RelationshipType {
+    return relationshipType(
+        id = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_HOSTED_ON,
+        version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_ROOT,
+        description = "Relationship hosted on"
     ) {
     }
 }

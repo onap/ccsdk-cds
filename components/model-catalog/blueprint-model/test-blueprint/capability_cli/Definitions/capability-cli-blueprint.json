@@ -1,12 +1,13 @@
 {
   "tosca_definitions_version": "controller_blueprint_1_0_0",
   "metadata": {
-    "template_author": "Brinda Santh Muthuramalingam",
+    "template_author": "Brinda Santh",
     "author-email": "brindasanth@in.ibm.com",
     "user-groups": "ADMIN, OPERATION",
     "template_name": "capability-cli",
     "template_version": "1.0.0",
-    "template_tags": "brinda, tosca"
+    "template_tags": "capability-cli-blueprint",
+    "template_type": "DEFAULT"
   },
   "imports": [
     {
@@ -47,6 +48,17 @@
   "topology_template": {
     "workflows": {
       "check": {
+        "steps": {
+          "activate-process": {
+            "description": "Check CLI",
+            "target": "check",
+            "activities": [
+              {
+                "call_operation": "ComponentScriptExecutor.process"
+              }
+            ]
+          }
+        },
         "inputs": {
           "hostname": {
             "required": true,
@@ -64,17 +76,6 @@
             "required": true,
             "type": "json"
           }
-        },
-        "steps": {
-          "activate-process": {
-            "description": "Check CLI",
-            "target": "check",
-            "activities": [
-              {
-                "call_operation": "ComponentScriptExecutor.process"
-              }
-            ]
-          }
         }
       }
     },
@@ -86,7 +87,9 @@
             "operations": {
               "process": {
                 "implementation": {
-                  "primary": "component-script"
+                  "primary": "component-script",
+                  "timeout": 180,
+                  "operation_host": "SELF"
                 },
                 "inputs": {
                   "script-type": "kotlin",
@@ -104,6 +107,21 @@
           "command-template": {
             "type": "artifact-template-velocity",
             "file": "Templates/check-command-template.vtl"
+          }
+        }
+      }
+    },
+    "relationship_templates": {
+      "cli-device-properties": {
+        "type": "tosca.relationships.ConnectsTo.SshClient",
+        "description": "SSH Connection",
+        "properties": {
+          "connection-config": {
+            "password": "sample-password",
+            "host": "sample-host",
+            "type": "basic-auth",
+            "connectionTimeOut": 30,
+            "username": "sample-user"
           }
         }
       }

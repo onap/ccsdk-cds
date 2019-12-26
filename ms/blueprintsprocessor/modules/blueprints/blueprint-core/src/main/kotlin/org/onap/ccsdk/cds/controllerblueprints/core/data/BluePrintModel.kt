@@ -562,10 +562,12 @@ A Relationship Template specifies the occurrence of a manageable relationship be
  */
 
 class RelationshipTemplate {
-    var type: String? = null
+    @get:JsonIgnore
+    var id: String? = null
+    lateinit var type: String
     var description: String? = null
     var metadata: MutableMap<String, String>? = null
-    var properties: MutableMap<String, PropertyDefinition>? = null
+    var properties: MutableMap<String, JsonNode>? = null
     var attributes: MutableMap<String, JsonNode>? = null
     var interfaces: MutableMap<String, InterfaceDefinition>? = null
     var copy: String? = null

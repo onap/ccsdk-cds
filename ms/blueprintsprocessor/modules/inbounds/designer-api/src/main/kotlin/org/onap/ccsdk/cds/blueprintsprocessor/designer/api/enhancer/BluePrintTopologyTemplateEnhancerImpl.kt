@@ -40,6 +40,7 @@ open class BluePrintTopologyTemplateEnhancerImpl(
 
         enhanceTopologyTemplateInputs(type)
         enhanceTopologyTemplateNodeTemplates(type)
+        enhanceTopologyTemplateRelationshipTemplates(type)
         enhanceTopologyTemplateWorkflows(type)
     }
 
@@ -52,6 +53,16 @@ open class BluePrintTopologyTemplateEnhancerImpl(
     open fun enhanceTopologyTemplateNodeTemplates(topologyTemplate: TopologyTemplate) {
         topologyTemplate.nodeTemplates?.forEach { nodeTemplateName, nodeTemplate ->
             bluePrintTypeEnhancerService.enhanceNodeTemplate(bluePrintRuntimeService, nodeTemplateName, nodeTemplate)
+        }
+    }
+
+    open fun enhanceTopologyTemplateRelationshipTemplates(topologyTemplate: TopologyTemplate) {
+        topologyTemplate.relationshipTemplates?.forEach { relationshipTemplateName, relationshipTemplate ->
+            bluePrintTypeEnhancerService.enhanceRelationshipTemplate(
+                bluePrintRuntimeService,
+                relationshipTemplateName,
+                relationshipTemplate
+            )
         }
     }
 

@@ -20,7 +20,9 @@ package org.onap.ccsdk.cds.blueprintsprocessor.message
 import org.apache.kafka.streams.StreamsConfig
 
 /** Producer Properties **/
-open class MessageProducerProperties
+open class MessageProducerProperties {
+    lateinit var type: String
+}
 
 open class KafkaBasicAuthMessageProducerProperties : MessageProducerProperties() {
     lateinit var bootstrapServers: String
@@ -35,7 +37,9 @@ open class KafkaBasicAuthMessageProducerProperties : MessageProducerProperties()
 
 /** Consumer Properties **/
 
-open class MessageConsumerProperties
+open class MessageConsumerProperties {
+    lateinit var type: String
+}
 
 open class KafkaStreamsConsumerProperties : MessageConsumerProperties() {
     lateinit var bootstrapServers: String

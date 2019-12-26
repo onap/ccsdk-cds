@@ -81,75 +81,78 @@ class BluePrintServiceDSLBuilder(
     }
 
     fun dsl(id: String, json: JsonNode) {
-        if (dslDefinitions == null)
-            dslDefinitions = hashMapOf()
+        if (dslDefinitions == null) dslDefinitions = hashMapOf()
         dslDefinitions!![id] = json
     }
 
     fun dataTypes(dataTypes: MutableMap<String, DataType>) {
-        if (this.dataTypes == null)
-            this.dataTypes = hashMapOf()
+        if (this.dataTypes == null) this.dataTypes = hashMapOf()
 
         this.dataTypes!!.putAll(dataTypes)
     }
 
     fun artifactTypes(artifactTypes: MutableMap<String, ArtifactType>) {
-        if (this.artifactTypes == null)
-            this.artifactTypes = hashMapOf()
+        if (this.artifactTypes == null) this.artifactTypes = hashMapOf()
 
         this.artifactTypes!!.putAll(artifactTypes)
     }
 
     fun relationshipTypes(relationshipTypes: MutableMap<String, RelationshipType>) {
-        if (this.relationshipTypes == null)
-            this.relationshipTypes = hashMapOf()
+        if (this.relationshipTypes == null) this.relationshipTypes = hashMapOf()
 
         this.relationshipTypes!!.putAll(relationshipTypes)
     }
 
     fun policyTypes(policyTypes: MutableMap<String, PolicyType>) {
-        if (this.policyTypes == null)
-            this.policyTypes = hashMapOf()
+        if (this.policyTypes == null) this.policyTypes = hashMapOf()
 
         this.policyTypes!!.putAll(policyTypes)
     }
 
     fun nodeType(nodeTypes: MutableMap<String, NodeType>) {
-        if (this.nodeTypes == null)
-            this.nodeTypes = hashMapOf()
+        if (this.nodeTypes == null) this.nodeTypes = hashMapOf()
 
         this.nodeTypes!!.putAll(nodeTypes)
     }
 
     fun dataType(dataType: DataType) {
-        if (dataTypes == null)
-            dataTypes = hashMapOf()
+        if (dataTypes == null) dataTypes = hashMapOf()
         dataTypes!![dataType.id!!] = dataType
     }
 
     fun artifactType(artifactType: ArtifactType) {
-        if (artifactTypes == null)
-            artifactTypes = hashMapOf()
+        if (artifactTypes == null) artifactTypes = hashMapOf()
         artifactTypes!![artifactType.id!!] = artifactType
     }
 
     fun relationshipType(relationshipType: RelationshipType) {
-        if (relationshipTypes == null)
-            relationshipTypes = hashMapOf()
+        if (relationshipTypes == null) relationshipTypes = hashMapOf()
         relationshipTypes!![relationshipType.id!!] = relationshipType
     }
 
+    fun relationshipTypes(relationshipTypes: List<RelationshipType>) {
+        if (this.relationshipTypes == null) this.relationshipTypes = hashMapOf()
+        relationshipTypes.forEach { relationshipType ->
+            this.relationshipTypes!![relationshipType.id!!] = relationshipType
+        }
+    }
+
     fun policyType(policyType: PolicyType) {
-        if (policyTypes == null)
-            policyTypes = hashMapOf()
+        if (policyTypes == null) policyTypes = hashMapOf()
 
         policyTypes!![policyType.id!!] = policyType
     }
 
     fun nodeType(nodeType: NodeType) {
-        if (nodeTypes == null)
-            nodeTypes = hashMapOf()
+        if (nodeTypes == null) nodeTypes = hashMapOf()
         nodeTypes!![nodeType.id!!] = nodeType
+    }
+
+    fun nodeTypes(nodeTypes: List<NodeType>) {
+        if (this.nodeTypes == null) this.nodeTypes = hashMapOf()
+        nodeTypes.forEach { nodeType ->
+            this.nodeTypes!![nodeType.id!!] = nodeType
+        }
     }
 
     fun dataType(
@@ -159,8 +162,7 @@ class BluePrintServiceDSLBuilder(
         description: String,
         block: DataTypeBuilder.() -> Unit
     ) {
-        if (dataTypes == null)
-            dataTypes = hashMapOf()
+        if (dataTypes == null) dataTypes = hashMapOf()
         dataTypes!![id] = DataTypeBuilder(id, version, derivedFrom, description).apply(block).build()
     }
 
@@ -171,8 +173,7 @@ class BluePrintServiceDSLBuilder(
         description: String,
         block: ArtifactTypeBuilder.() -> Unit
     ) {
-        if (artifactTypes == null)
-            artifactTypes = hashMapOf()
+        if (artifactTypes == null) artifactTypes = hashMapOf()
         artifactTypes!![id] = ArtifactTypeBuilder(id, version, derivedFrom, description).apply(block).build()
     }
 
@@ -183,8 +184,7 @@ class BluePrintServiceDSLBuilder(
         description: String,
         block: RelationshipTypeBuilder.() -> Unit
     ) {
-        if (relationshipTypes == null)
-            relationshipTypes = hashMapOf()
+        if (relationshipTypes == null) relationshipTypes = hashMapOf()
         relationshipTypes!![id] = RelationshipTypeBuilder(id, version, derivedFrom, description).apply(block).build()
     }
 
@@ -195,8 +195,7 @@ class BluePrintServiceDSLBuilder(
         description: String,
         block: PolicyTypeBuilder.() -> Unit
     ) {
-        if (policyTypes == null)
-            policyTypes = hashMapOf()
+        if (policyTypes == null) policyTypes = hashMapOf()
         policyTypes!![id] = PolicyTypeBuilder(id, version, derivedFrom, description).apply(block).build()
     }
 
@@ -207,8 +206,7 @@ class BluePrintServiceDSLBuilder(
         description: String,
         block: NodeTypeBuilder.() -> Unit
     ) {
-        if (nodeTypes == null)
-            nodeTypes = hashMapOf()
+        if (nodeTypes == null) nodeTypes = hashMapOf()
         nodeTypes!![id] = NodeTypeBuilder(id, version, derivedFrom, description).apply(block).build()
     }
 

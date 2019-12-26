@@ -48,6 +48,7 @@ fun BluePrintDependencyService.restClientService(jsonNode: JsonNode): BlueprintW
 class RestLibConstants {
     companion object {
         const val SERVICE_BLUEPRINT_REST_LIB_PROPERTY = "blueprint-rest-lib-property-service"
+        const val PROPERTY_REST_CLIENT_PREFIX = "blueprintsprocessor.restclient."
         const val PROPERTY_TYPE = "type"
         const val TYPE_TOKEN_AUTH = "token-auth"
         const val TYPE_BASIC_AUTH = "basic-auth"

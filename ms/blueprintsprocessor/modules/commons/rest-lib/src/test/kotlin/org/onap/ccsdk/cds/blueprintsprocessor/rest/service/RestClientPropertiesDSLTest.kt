@@ -17,43 +17,61 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.rest.service
 
 import org.junit.Test
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.dslBasicAuthRestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.dslSSLRestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.dslTokenAuthRestClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.relationshipTypeConnectsToRestClient
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.restClientRelationshipTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.relationshipTypeConnectsTo
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.serviceTemplate
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 class RestClientPropertiesDSLTest {
 
     @Test
-    fun testBasicAuthRestClientProperties() {
-        val properties = BluePrintTypes.dslBasicAuthRestClientProperties {
-            url("http://localhost:8080")
-            username("xxxxx")
-            password("******")
-        }
-        assertNotNull(properties, "failed to get dslBasicAuthRestClientProperties")
-    }
+    fun testRestClientProperties() {
 
-    @Test
-    fun testBasicTokenAuthRestClientProperties() {
-        val properties = BluePrintTypes.dslTokenAuthRestClientProperties {
-            url("http://localhost:8080")
-            token("sdfgfsadgsgf")
+        val serviceTemplate = serviceTemplate("rest-properties-test", "1.0.0", "xxx.@xx.com", "rest") {
+            topologyTemplate {
+                restClientRelationshipTemplate("sample-basic-auth", "") {
+                    basicAuth {
+                        url("http://localhost:8080")
+                        username("xxxxx")
+                        password("******")
+                    }
+                }
+                restClientRelationshipTemplate("sample-token-auth", "") {
+                    tokenAuth {
+                        url("http://localhost:8080")
+                        token("sdfgfsadgsgf")
+                    }
+                }
+                restClientRelationshipTemplate("sample-ssl-auth", "") {
+                    sslAuth {
+                        url("http://localhost:8080")
+                        keyStoreInstance("instance")
+                        sslTrust("sample-trust")
+                        sslTrustPassword("sample-trust-password")
+                        sslKey("sample-sslkey")
+                        sslKeyPassword("sample-key-password")
+                    }
+                }
+            }
+            relationshipTypes(
+                arrayListOf(
+                    BluePrintTypes.relationshipTypeConnectsToRestClient(),
+                    BluePrintTypes.relationshipTypeConnectsTo()
+                )
+            )
         }
-        assertNotNull(properties, "failed to get dslTokenAuthRestClientProperties")
-    }
 
-    @Test
-    fun testDslSSLRestClientProperties() {
-        val properties = BluePrintTypes.dslSSLRestClientProperties {
-            url("http://localhost:8080")
-            keyStoreInstance("instance")
-            sslTrust("sample-trust")
-            sslTrustPassword("sample-trust-password")
-            sslKey("sample-sslkey")
-            sslKeyPassword("sample-key-password")
-        }
-        assertNotNull(properties, "failed to get dslSSLRestClientProperties")
+        println(serviceTemplate.asJsonString(true))
+        assertNotNull(serviceTemplate, "failed to create service template")
+        val relationshipTemplates = serviceTemplate.topologyTemplate?.relationshipTemplates
+        assertNotNull(relationshipTemplates, "failed to get relationship templates")
+        assertEquals(3, relationshipTemplates.size, "relationshipTemplates doesn't match")
+        assertNotNull(relationshipTemplates["sample-basic-auth"], "failed to get sample-basic-auth")
+        assertNotNull(relationshipTemplates["sample-token-auth"], "failed to get sample-token-auth")
+        assertNotNull(relationshipTemplates["sample-ssl-auth"], "failed to get sample-ssl-auth")
     }
 }
