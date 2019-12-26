@@ -17,7 +17,9 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.core
 
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
+import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -60,9 +62,16 @@ open class BluePrintPropertyConfiguration {
 
 @Service
 open class BluePrintPropertiesService(private var bluePrintPropertyBinder: Binder) {
+    private val log = logger(BluePrintPropertiesService::class)
 
     fun <T> propertyBeanType(prefix: String, type: Class<T>): T {
-        return bluePrintPropertyBinder.bind(prefix, Bindable.of(type)).get()
+        return try {
+            bluePrintPropertyBinder.bind(prefix, Bindable.of(type)).get()
+        } catch (e: NoSuchElementException) {
+            val errMsg = "Error: missing property \"$prefix\"... Check the application.properties file."
+            log.error(errMsg)
+            throw BluePrintProcessorException(e, errMsg)
+        }
     }
 }
 
