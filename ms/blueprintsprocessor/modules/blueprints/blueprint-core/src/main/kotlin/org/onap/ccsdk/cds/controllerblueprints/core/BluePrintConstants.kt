@@ -111,6 +111,15 @@ object BluePrintConstants {
     const val MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO = "tosca.relationships.ConnectsTo"
     const val MODEL_TYPE_RELATIONSHIPS_ATTACH_TO = "tosca.relationships.AttachesTo"
     const val MODEL_TYPE_RELATIONSHIPS_ROUTES_TO = "tosca.relationships.RoutesTo"
+    // CDS Defined Relationship Types
+    const val MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_DB = "tosca.relationships.ConnectsTo.Db"
+    const val MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_REST_CLIENT = "tosca.relationships.ConnectsTo.RestClient"
+    const val MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_SSH_CLIENT = "tosca.relationships.ConnectsTo.SshClient"
+    const val MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_MESSAGE_PRODUCER = "tosca.relationships.ConnectsTo.MessageProducer"
+    const val MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_MESSAGE_CONSUMER = "tosca.relationships.ConnectsTo.MessageConsumer"
+    const val MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_GRPC_SERVER = "tosca.relationships.ConnectsTo.GrpcServer"
+    const val MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_GRPC_CLIENT = "tosca.relationships.ConnectsTo.GrpcClient"
+    const val MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_NATS = "tosca.relationships.ConnectsTo.Nats"
 
     const val MODEL_TYPE_NODE_WORKFLOW = "tosca.nodes.Workflow"
     const val MODEL_TYPE_NODE_COMPONENT = "tosca.nodes.Component"
@@ -200,6 +209,7 @@ object BluePrintConstants {
     const val PROPERTY_CURRENT_TIMEOUT = "current-timeout"
     const val PROPERTY_CURRENT_IMPLEMENTATION = "current-implementation"
     const val PROPERTY_EXECUTION_REQUEST = "execution-request"
+    const val PROPERTY_CONNECTION_CONFIG = "connection-config"
 
     const val DEFAULT_VERSION_NUMBER = "1.0.0"
     const val DEFAULT_STEP_OPERATION = "process"
