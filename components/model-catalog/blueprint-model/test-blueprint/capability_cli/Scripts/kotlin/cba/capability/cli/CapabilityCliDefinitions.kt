@@ -18,11 +18,14 @@ package cba.capability.cli
 
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.nodeTemplateComponentScriptExecutor
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.nodeTypeComponentScriptExecutor
+import org.onap.ccsdk.cds.blueprintsprocessor.ssh.basicAuthSshProperties
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ServiceTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.artifactTypeTemplateVelocity
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.getAttribute
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.getInput
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.nodeTypeComponent
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.relationshipTypeConnectsTo
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.serviceTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.AbstractBluePrintDefinitions
 
@@ -34,54 +37,60 @@ class CapabilityCliDefinitions : AbstractBluePrintDefinitions() {
 }
 
 fun CapabilityCliDefinitions.defaultServiceTemplate() =
-        serviceTemplate(name = "capability-cli",
-                version = "1.0.0",
-                author = "Brinda Santh Muthuramalingam",
-                tags = "brinda, tosca") {
+    serviceTemplate(
+        name = "capability-cli",
+        version = "1.0.0",
+        author = "Brinda Santh Muthuramalingam",
+        tags = "brinda, tosca"
+    ) {
 
-            dsl("device-properties", """{
-                  "type": "basic-auth",
-                  "host": { "get_input": "hostname"  },
-                  "username": { "get_input": "username" },
-                  "password": { "get_input": "password" }
-                }""".trimIndent())
+        dsl("device-properties", BluePrintTypes.basicAuthSshProperties {
+            host(getInput("hostname"))
+            password(getInput("password"))
+            username(getInput("username"))
+        })
 
-            topologyTemplate {
-
-                workflow(id = "check", description = "CLI Check Workflow") {
-                    inputs {
-                        property(id = "hostname", type = "string", required = true, description = "")
-                        property(id = "username", type = "string", required = true, description = "")
-                        property(id = "password", type = "string", required = true, description = "")
-                        property(id = "data", type = "json", required = true, description = "")
-                    }
-                    outputs {
-                        property(id = "status", required = true, type = "string", description = "") {
-                            value("success")
-                        }
-                    }
-                    step(id = "check", target = "check", description = "Calling check script node")
+        topologyTemplate {
+            workflow(id = "check", description = "CLI Check Workflow") {
+                inputs {
+                    property(id = "hostname", type = "string", required = true, description = "")
+                    property(id = "username", type = "string", required = true, description = "")
+                    property(id = "password", type = "string", required = true, description = "")
+                    property(id = "data", type = "json", required = true, description = "")
                 }
-
-                val checkComponent = BluePrintTypes.nodeTemplateComponentScriptExecutor(id = "check", description = "") {
-                    definedOperation(description = "") {
-                        inputs {
-                            type("kotlin")
-                            scriptClassReference("cba.capability.cli.Check")
-                        }
-                        outputs {
-                            status(getAttribute("status"))
-                            responseData("""{ "data" : "Here I am "}""")
-                        }
+                outputs {
+                    property(id = "status", required = true, type = "string", description = "") {
+                        value("success")
                     }
-                    artifact(id = "command-template", type = "artifact-template-velocity",
-                            file = "Templates/check-command-template.vtl")
                 }
-                nodeTemplate(checkComponent)
+                step(id = "check", target = "check", description = "Calling check script node")
             }
 
-            artifactType(BluePrintTypes.artifactTypeTemplateVelocity())
-            nodeType(BluePrintTypes.nodeTypeComponent())
-            nodeType(BluePrintTypes.nodeTypeComponentScriptExecutor())
-
+            val checkComponent = BluePrintTypes.nodeTemplateComponentScriptExecutor(id = "check", description = "") {
+                definedOperation(description = "") {
+                    inputs {
+                        type("kotlin")
+                        scriptClassReference("cba.capability.cli.Check")
+                    }
+                    outputs {
+                        status(getAttribute("status"))
+                        responseData("""{ "data" : "Here I am "}""")
+                    }
+                }
+                artifact(
+                    id = "command-template", type = "artifact-template-velocity",
+                    file = "Templates/check-command-template.vtl"
+                )
+            }
+            nodeTemplate(checkComponent)
         }
+
+        /** Artifact Types */
+        artifactType(BluePrintTypes.artifactTypeTemplateVelocity())
+        /** Node Types */
+        nodeType(BluePrintTypes.nodeTypeComponent())
+        nodeType(BluePrintTypes.nodeTypeComponentScriptExecutor())
+        /** Relationship Types */
+        relationshipType(BluePrintTypes.relationshipTypeConnectsTo())
+
+    }

@@ -25,28 +25,44 @@ import org.onap.ccsdk.cds.controllerblueprints.core.data.Implementation
 import org.onap.ccsdk.cds.controllerblueprints.core.data.InterfaceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.data.OperationAssignment
+import org.onap.ccsdk.cds.controllerblueprints.core.data.RelationshipTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.data.RequirementAssignment
 import org.onap.ccsdk.cds.controllerblueprints.core.data.TopologyTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Workflow
 import kotlin.reflect.KClass
+import kotlin.reflect.KMutableProperty1
 import kotlin.reflect.full.createInstance
 import kotlin.reflect.jvm.reflect
 
-class TopologyTemplateBuilder {
+open class TopologyTemplateBuilder {
     private var topologyTemplate = TopologyTemplate()
     private var nodeTemplates: MutableMap<String, NodeTemplate>? = null
+    var relationshipTemplates: MutableMap<String, RelationshipTemplate>? = null
     private var workflows: MutableMap<String, Workflow>? = null
 
     fun nodeTemplate(id: String, type: String, description: String, block: NodeTemplateBuilder.() -> Unit) {
-        if (nodeTemplates == null)
-            nodeTemplates = hashMapOf()
+        if (nodeTemplates == null) nodeTemplates = hashMapOf()
         nodeTemplates!![id] = NodeTemplateBuilder(id, type, description).apply(block).build()
     }
 
     fun nodeTemplate(nodeTemplate: NodeTemplate) {
-        if (nodeTemplates == null)
-            nodeTemplates = hashMapOf()
+        if (nodeTemplates == null) nodeTemplates = hashMapOf()
         nodeTemplates!![nodeTemplate.id!!] = nodeTemplate
+    }
+
+    fun relationshipTemplate(
+        id: String,
+        type: String,
+        description: String,
+        block: RelationshipTemplateBuilder.() -> Unit
+    ) {
+        if (relationshipTemplates == null) relationshipTemplates = hashMapOf()
+        relationshipTemplates!![id] = RelationshipTemplateBuilder(id, type, description).apply(block).build()
+    }
+
+    fun relationshipTemplate(relationshipTemplate: RelationshipTemplate) {
+        if (relationshipTemplates == null) relationshipTemplates = hashMapOf()
+        relationshipTemplates!![relationshipTemplate.id!!] = relationshipTemplate
     }
 
     fun nodeTemplateOperation(
@@ -55,10 +71,9 @@ class TopologyTemplateBuilder {
         interfaceName: String,
         description: String,
         operationBlock: OperationAssignmentBuilder<PropertiesAssignmentBuilder,
-                PropertiesAssignmentBuilder>.() -> Unit
+            PropertiesAssignmentBuilder>.() -> Unit
     ) {
-        if (nodeTemplates == null)
-            nodeTemplates = hashMapOf()
+        if (nodeTemplates == null) nodeTemplates = hashMapOf()
 
         val nodeTemplateBuilder = NodeTemplateBuilder(nodeTemplateName, type, description)
         nodeTemplateBuilder.operation(interfaceName, "$description operation", operationBlock)
@@ -66,14 +81,12 @@ class TopologyTemplateBuilder {
     }
 
     fun workflow(id: String, description: String, block: WorkflowBuilder.() -> Unit) {
-        if (workflows == null)
-            workflows = hashMapOf()
+        if (workflows == null) workflows = hashMapOf()
         workflows!![id] = WorkflowBuilder(id, description).apply(block).build()
     }
 
     fun workflow(workflow: Workflow) {
-        if (workflows == null)
-            workflows = hashMapOf()
+        if (workflows == null) workflows = hashMapOf()
         workflows!![workflow.id!!] = workflow
     }
 
@@ -84,22 +97,22 @@ class TopologyTemplateBuilder {
         description: String,
         block: NodeTemplateBuilder.() -> Unit
     ) {
-        if (nodeTemplates == null)
-            nodeTemplates = hashMapOf()
+        if (nodeTemplates == null) nodeTemplates = hashMapOf()
 
-        if (workflows == null)
-            workflows = hashMapOf()
+        if (workflows == null) workflows = hashMapOf()
 
         val workflowBuilder = WorkflowBuilder(actionName, description)
         workflowBuilder.nodeTemplateStep(actionName, description)
         // Workflow name is NodeTemplate name
         workflows!![actionName] = workflowBuilder.build()
 
-        nodeTemplates!![actionName] = NodeTemplateBuilder(actionName, nodeTemplateType, description).apply(block).build()
+        nodeTemplates!![actionName] =
+            NodeTemplateBuilder(actionName, nodeTemplateType, description).apply(block).build()
     }
 
     fun build(): TopologyTemplate {
         topologyTemplate.nodeTemplates = nodeTemplates
+        topologyTemplate.relationshipTemplates = relationshipTemplates
         topologyTemplate.workflows = workflows
         return topologyTemplate
     }
@@ -111,26 +124,25 @@ open class NodeTemplateBuilder(
     private val description: String? = ""
 ) {
 
-    private var nodeTemplate: NodeTemplate = NodeTemplate()
-    private var properties: MutableMap<String, JsonNode>? = null
-    private var interfaces: MutableMap<String, InterfaceAssignment>? = null
-    private var artifacts: MutableMap<String, ArtifactDefinition>? = null
-    private var capabilities: MutableMap<String, CapabilityAssignment>? = null
-    private var requirements: MutableMap<String, RequirementAssignment>? = null
+    var nodeTemplate: NodeTemplate = NodeTemplate()
+    var properties: MutableMap<String, JsonNode>? = null
+    var interfaces: MutableMap<String, InterfaceAssignment>? = null
+    var artifacts: MutableMap<String, ArtifactDefinition>? = null
+    var capabilities: MutableMap<String, CapabilityAssignment>? = null
+    var requirements: MutableMap<String, RequirementAssignment>? = null
 
-    fun properties(properties: MutableMap<String, JsonNode>?) {
-        this.properties = properties
+    fun properties(properties: Map<String, JsonNode>) {
+        if (this.properties == null) this.properties = hashMapOf()
+        this.properties!!.putAll(properties)
     }
 
     fun properties(block: PropertiesAssignmentBuilder.() -> Unit) {
-        if (properties == null)
-            properties = hashMapOf()
+        if (properties == null) properties = hashMapOf()
         properties = PropertiesAssignmentBuilder().apply(block).build()
     }
 
     open fun <Prop : PropertiesAssignmentBuilder> typedProperties(block: Prop.() -> Unit) {
-        if (properties == null)
-            properties = hashMapOf()
+        if (properties == null) properties = hashMapOf()
         val instance: Prop = (block.reflect()?.parameters?.get(0)?.type?.classifier as KClass<Prop>).createInstance()
         properties = instance.apply(block).build()
     }
@@ -140,8 +152,7 @@ open class NodeTemplateBuilder(
         description: String = "",
         block: OperationAssignmentBuilder<In, Out>.() -> Unit
     ) {
-        if (interfaces == null)
-            interfaces = hashMapOf()
+        if (interfaces == null) interfaces = hashMapOf()
 
         val interfaceAssignment = InterfaceAssignment()
         val defaultOperationName = BluePrintConstants.DEFAULT_STEP_OPERATION
@@ -160,14 +171,12 @@ open class NodeTemplateBuilder(
     }
 
     fun artifact(id: String, type: String, file: String) {
-        if (artifacts == null)
-            artifacts = hashMapOf()
+        if (artifacts == null) artifacts = hashMapOf()
         artifacts!![id] = ArtifactDefinitionBuilder(id, type, file).build()
     }
 
     fun artifact(id: String, type: String, file: String, block: ArtifactDefinitionBuilder.() -> Unit) {
-        if (artifacts == null)
-            artifacts = hashMapOf()
+        if (artifacts == null) artifacts = hashMapOf()
         artifacts!![id] = ArtifactDefinitionBuilder(id, type, file).apply(block).build()
     }
 
@@ -176,26 +185,26 @@ open class NodeTemplateBuilder(
     }
 
     fun capability(id: String, block: CapabilityAssignmentBuilder.() -> Unit) {
-        if (capabilities == null)
-            capabilities = hashMapOf()
+        if (capabilities == null) capabilities = hashMapOf()
         capabilities!![id] = CapabilityAssignmentBuilder(id).apply(block).build()
     }
 
-    fun capabilities(capabilities: MutableMap<String, CapabilityAssignment>?) {
-        this.capabilities = capabilities
+    fun capabilities(capabilities: MutableMap<String, CapabilityAssignment>) {
+        if (this.capabilities == null) this.capabilities = hashMapOf()
+        this.capabilities!!.putAll(capabilities)
     }
 
     fun requirement(id: String, capability: String, node: String, relationship: String) {
-        if (requirements == null)
-            requirements = hashMapOf()
+        if (requirements == null) requirements = hashMapOf()
         requirements!![id] = RequirementAssignmentBuilder(id, capability, node, relationship).build()
     }
 
-    fun requirements(requirements: MutableMap<String, RequirementAssignment>?) {
-        this.requirements = requirements
+    fun requirements(requirements: MutableMap<String, RequirementAssignment>) {
+        if (this.requirements == null) this.requirements = hashMapOf()
+        this.requirements!!.putAll(requirements)
     }
 
-    fun build(): NodeTemplate {
+    open fun build(): NodeTemplate {
         nodeTemplate.id = id
         nodeTemplate.type = type
         nodeTemplate.description = description
@@ -205,6 +214,53 @@ open class NodeTemplateBuilder(
         nodeTemplate.capabilities = capabilities
         nodeTemplate.requirements = requirements
         return nodeTemplate
+    }
+}
+
+open class RelationshipTemplateBuilder(
+    private val id: String,
+    private val type: String,
+    private val description: String? = ""
+) {
+    var relationshipTemplate: RelationshipTemplate = RelationshipTemplate()
+    var properties: MutableMap<String, JsonNode>? = null
+
+    fun properties(properties: Map<String, JsonNode>) {
+        if (this.properties == null) this.properties = hashMapOf()
+        this.properties!!.putAll(properties)
+    }
+
+    fun properties(block: PropertiesAssignmentBuilder.() -> Unit) {
+        if (properties == null) properties = hashMapOf()
+        properties = PropertiesAssignmentBuilder().apply(block).build()
+    }
+
+    fun property(id: String, value: Any) {
+        if (properties == null) properties = hashMapOf()
+        properties!![id] = value.asJsonType()
+    }
+
+    fun property(id: String, value: JsonNode) {
+        if (properties == null) properties = hashMapOf()
+        properties!![id] = value
+    }
+
+    fun copy(copy: String) {
+        relationshipTemplate.copy = copy
+    }
+
+    open fun <Prop : PropertiesAssignmentBuilder> typedProperties(block: Prop.() -> Unit) {
+        if (properties == null) properties = hashMapOf()
+        val instance: Prop = (block.reflect()?.parameters?.get(0)?.type?.classifier as KClass<Prop>).createInstance()
+        properties = instance.apply(block).build()
+    }
+
+    open fun build(): RelationshipTemplate {
+        relationshipTemplate.id = id
+        relationshipTemplate.type = type
+        relationshipTemplate.description = description
+        relationshipTemplate.properties = properties
+        return relationshipTemplate
     }
 }
 
@@ -242,18 +298,26 @@ open class CapabilityAssignmentBuilder(private val id: String) {
     var properties: MutableMap<String, JsonNode>? = null
 
     fun attributes(block: AttributesAssignmentBuilder.() -> Unit) {
-        if (attributes == null)
-            attributes = hashMapOf()
+        if (attributes == null) attributes = hashMapOf()
         attributes = AttributesAssignmentBuilder().apply(block).build()
     }
 
     fun properties(block: PropertiesAssignmentBuilder.() -> Unit) {
-        if (properties == null)
-            properties = hashMapOf()
+        if (properties == null) properties = hashMapOf()
         properties = PropertiesAssignmentBuilder().apply(block).build()
     }
 
-    fun build(): CapabilityAssignment {
+    fun property(id: String, value: Any) {
+        if (properties == null) properties = hashMapOf()
+        properties!![id] = value.asJsonType()
+    }
+
+    fun property(id: String, value: JsonNode) {
+        if (properties == null) properties = hashMapOf()
+        properties!![id] = value
+    }
+
+    open fun build(): CapabilityAssignment {
         capabilityAssignment.properties = properties
         capabilityAssignment.attributes = attributes
         return capabilityAssignment
@@ -384,6 +448,10 @@ open class PropertiesAssignmentBuilder {
 
     fun property(id: String, value: JsonNode) {
         properties[id] = value
+    }
+
+    fun property(kProperty: KMutableProperty1<*, *>, value: JsonNode) {
+        properties[kProperty.name] = value
     }
 
     open fun build(): MutableMap<String, JsonNode> {

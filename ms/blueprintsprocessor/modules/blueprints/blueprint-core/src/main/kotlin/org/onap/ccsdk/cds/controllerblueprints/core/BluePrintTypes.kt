@@ -121,6 +121,7 @@ object BluePrintTypes {
     fun validComplexTypes(): List<String> {
         val validTypes: MutableList<String> = arrayListOf()
         validTypes.add(BluePrintConstants.DATA_TYPE_JSON)
+        validTypes.add(BluePrintConstants.DATA_TYPE_MAP)
         return validTypes
     }
 
@@ -128,7 +129,6 @@ object BluePrintTypes {
     fun validCollectionTypes(): List<String> {
         val validTypes: MutableList<String> = arrayListOf()
         validTypes.add(BluePrintConstants.DATA_TYPE_LIST)
-        validTypes.add(BluePrintConstants.DATA_TYPE_MAP)
         return validTypes
     }
 
@@ -136,7 +136,7 @@ object BluePrintTypes {
     fun validPrimitiveOrCollectionPrimitive(propertyDefinition: PropertyDefinition): Boolean {
         val entrySchema = propertyDefinition.entrySchema?.type ?: BluePrintConstants.DATA_TYPE_NULL
         return BluePrintTypes.validPropertyTypes().contains(propertyDefinition.type) &&
-                BluePrintTypes.validPrimitiveTypes().contains(entrySchema)
+            BluePrintTypes.validPrimitiveTypes().contains(entrySchema)
     }
 
     @JvmStatic
@@ -155,6 +155,11 @@ object BluePrintTypes {
     @JvmStatic
     fun rootNodeTypes(): List<String> {
         return listOf(BluePrintConstants.MODEL_TYPE_NODES_ROOT)
+    }
+
+    @JvmStatic
+    fun rootRelationshipTypes(): List<String> {
+        return listOf(BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_ROOT)
     }
 
     @JvmStatic

@@ -22,6 +22,8 @@ import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintNodeTemp
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintNodeTypeEnhancer
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintPolicyTypeEnhancer
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintPropertyDefinitionEnhancer
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintRelationshipTemplateEnhancer
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintRelationshipTypeEnhancer
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintServiceTemplateEnhancer
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTopologyTemplateEnhancer
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
@@ -54,6 +56,14 @@ open class BluePrintTypeEnhancerServiceImpl : BluePrintTypeEnhancerService {
 
     override fun getNodeTypeEnhancers(): List<BluePrintNodeTypeEnhancer> {
         return context.getBeansOfType(BluePrintNodeTypeEnhancer::class.java).map { it.value }
+    }
+
+    override fun getRelationshipTemplateEnhancers(): List<BluePrintRelationshipTemplateEnhancer> {
+        return context.getBeansOfType(BluePrintRelationshipTemplateEnhancer::class.java).map { it.value }
+    }
+
+    override fun getRelationshipTypeEnhancers(): List<BluePrintRelationshipTypeEnhancer> {
+        return context.getBeansOfType(BluePrintRelationshipTypeEnhancer::class.java).map { it.value }
     }
 
     override fun getArtifactDefinitionEnhancers(): List<BluePrintArtifactDefinitionEnhancer> {

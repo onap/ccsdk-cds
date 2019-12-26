@@ -225,7 +225,6 @@ class JacksonUtils {
         fun checkJsonNodeValueOfCollectionType(type: String, jsonNode: JsonNode): Boolean {
             return when (type.toLowerCase()) {
                 BluePrintConstants.DATA_TYPE_LIST -> jsonNode.isArray
-                BluePrintConstants.DATA_TYPE_MAP -> jsonNode.isContainerNode
                 else -> false
             }
         }
