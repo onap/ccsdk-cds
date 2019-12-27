@@ -34,8 +34,9 @@ open class ResourceDefinition {
 
     var tags: String? = null
 
-    @JsonProperty(value = "group")
-    lateinit var group: String
+    /** The default group for Resource Definition is "default" */
+    @JsonProperty(value = "group", required = true)
+    var group: String = "default"
 
     @JsonProperty(value = "updated-by")
     lateinit var updatedBy: String

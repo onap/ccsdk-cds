@@ -58,6 +58,28 @@ class BluePrintRuntimeServiceTest {
     }
 
     @Test
+    fun `test Resolve Relationship Properties`() {
+        log.info("************************ testResolveRelationshipTemplateProperties **********************")
+
+        val bluePrintRuntimeService = getBluePrintRuntimeService()
+
+        val inputDataPath = "src/test/resources/data/default-context.json"
+
+        val inputNode: JsonNode = JacksonUtils.jsonNodeFromFile(inputDataPath)
+        bluePrintRuntimeService.assignInputs(inputNode)
+
+        val propContext: MutableMap<String, JsonNode> = bluePrintRuntimeService
+            .resolveRelationshipTemplateProperties("cli-device-properties")
+
+        assertNotNull(propContext, "Failed to populate relationship property values")
+        assertEquals(
+            "localhost".asJsonPrimitive(),
+            propContext["connection-config"]!!.get("host"),
+            "failed to resolve expression"
+        )
+    }
+
+    @Test
     fun `test resolve NodeTemplate Capability Properties`() {
         log.info("************************ testResolveNodeTemplateRequirementProperties **********************")
         val bluePrintRuntimeService = getBluePrintRuntimeService()

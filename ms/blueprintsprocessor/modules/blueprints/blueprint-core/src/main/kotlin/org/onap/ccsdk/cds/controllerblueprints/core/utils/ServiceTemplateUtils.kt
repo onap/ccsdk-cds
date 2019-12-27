@@ -36,7 +36,11 @@ object ServiceTemplateUtils {
         return JacksonUtils.readValue(content)
     }
 
-    fun merge(parentServiceTemplate: ServiceTemplate, toMerge: ServiceTemplate, removeImports: Boolean? = true): ServiceTemplate {
+    fun merge(
+        parentServiceTemplate: ServiceTemplate,
+        toMerge: ServiceTemplate,
+        removeImports: Boolean? = true
+    ): ServiceTemplate {
         if (removeImports!!) {
             parentServiceTemplate.imports = null
             toMerge.imports = null
@@ -62,6 +66,11 @@ object ServiceTemplateUtils {
             parentServiceTemplate.nodeTypes?.putAll(toMerge.nodeTypes as MutableMap)
         }
 
+        toMerge.relationshipTypes?.let {
+            parentServiceTemplate.relationshipTypes = parentServiceTemplate.relationshipTypes ?: hashMapOf()
+            parentServiceTemplate.relationshipTypes?.putAll(toMerge.relationshipTypes as MutableMap)
+        }
+
         toMerge.artifactTypes?.let {
             parentServiceTemplate.artifactTypes = parentServiceTemplate.artifactTypes ?: hashMapOf()
             parentServiceTemplate.artifactTypes?.putAll(toMerge.artifactTypes as MutableMap)
@@ -81,14 +90,16 @@ object ServiceTemplateUtils {
         }
 
         toMerge.topologyTemplate?.nodeTemplates?.let {
-            parentServiceTemplate.topologyTemplate?.nodeTemplates = parentServiceTemplate.topologyTemplate?.nodeTemplates
-                ?: hashMapOf()
+            parentServiceTemplate.topologyTemplate?.nodeTemplates =
+                parentServiceTemplate.topologyTemplate?.nodeTemplates
+                    ?: hashMapOf()
             parentServiceTemplate.topologyTemplate?.nodeTemplates?.putAll(parentServiceTemplate.topologyTemplate?.nodeTemplates as MutableMap)
         }
 
         toMerge.topologyTemplate?.relationshipTemplates?.let {
-            parentServiceTemplate.topologyTemplate?.relationshipTemplates = parentServiceTemplate.topologyTemplate?.relationshipTemplates
-                ?: hashMapOf()
+            parentServiceTemplate.topologyTemplate?.relationshipTemplates =
+                parentServiceTemplate.topologyTemplate?.relationshipTemplates
+                    ?: hashMapOf()
             parentServiceTemplate.topologyTemplate?.relationshipTemplates?.putAll(parentServiceTemplate.topologyTemplate?.relationshipTemplates as MutableMap)
         }
 

@@ -1,0 +1,15 @@
+{
+  "description": "Relationship connects to through NATS Client.",
+  "version": "1.0.0",
+  "properties": {
+    "connection-config": {
+      "description": "Connection Config details.",
+      "required": true,
+      "type": "map"
+    }
+  },
+  "derived_from": "tosca.relationships.ConnectsTo",
+  "valid_target_types": [
+    "tosca.capabilities.Endpoint"
+  ]
+}

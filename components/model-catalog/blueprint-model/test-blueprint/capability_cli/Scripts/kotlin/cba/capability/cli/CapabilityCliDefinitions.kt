@@ -18,8 +18,11 @@ package cba.capability.cli
 
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.nodeTemplateComponentScriptExecutor
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.nodeTypeComponentScriptExecutor
-import org.onap.ccsdk.cds.blueprintsprocessor.ssh.basicAuthSshProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.ssh.relationshipTemplateSshClient
+import org.onap.ccsdk.cds.blueprintsprocessor.ssh.relationshipTypeConnectsToSshClient
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ServiceTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.artifactTypeTemplateVelocity
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.getAttribute
@@ -43,13 +46,6 @@ fun CapabilityCliDefinitions.defaultServiceTemplate() =
         author = "Brinda Santh Muthuramalingam",
         tags = "brinda, tosca"
     ) {
-
-        dsl("device-properties", BluePrintTypes.basicAuthSshProperties {
-            host(getInput("hostname"))
-            password(getInput("password"))
-            username(getInput("username"))
-        })
-
         topologyTemplate {
             workflow(id = "check", description = "CLI Check Workflow") {
                 inputs {
@@ -69,8 +65,8 @@ fun CapabilityCliDefinitions.defaultServiceTemplate() =
             val checkComponent = BluePrintTypes.nodeTemplateComponentScriptExecutor(id = "check", description = "") {
                 definedOperation(description = "") {
                     inputs {
-                        type("kotlin")
-                        scriptClassReference("cba.capability.cli.Check")
+                        type(BluePrintConstants.SCRIPT_KOTLIN)
+                        scriptClassReference(Check::class)
                     }
                     outputs {
                         status(getAttribute("status"))
@@ -83,6 +79,15 @@ fun CapabilityCliDefinitions.defaultServiceTemplate() =
                 )
             }
             nodeTemplate(checkComponent)
+
+            /** Connection Configuration through Relationship **/
+            relationshipTemplateSshClient("ssh-connection-config", "Device connection config") {
+                basicAuth {
+                    host(getInput("hostname"))
+                    password(getInput("password"))
+                    username(getInput("username"))
+                }
+            }
         }
 
         /** Artifact Types */
@@ -91,6 +96,6 @@ fun CapabilityCliDefinitions.defaultServiceTemplate() =
         nodeType(BluePrintTypes.nodeTypeComponent())
         nodeType(BluePrintTypes.nodeTypeComponentScriptExecutor())
         /** Relationship Types */
+        relationshipType(BluePrintTypes.relationshipTypeConnectsToSshClient())
         relationshipType(BluePrintTypes.relationshipTypeConnectsTo())
-
     }

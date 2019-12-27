@@ -81,6 +81,7 @@ object BluePrintConstants {
     const val PATH_INPUTS: String = "inputs"
     const val PATH_NODE_WORKFLOWS: String = "workflows"
     const val PATH_NODE_TEMPLATES: String = "node_templates"
+    const val PATH_RELATIONSHIP_TEMPLATES: String = "relationship_templates"
     const val PATH_CAPABILITIES: String = "capabilities"
     const val PATH_REQUIREMENTS: String = "requirements"
     const val PATH_INTERFACES: String = "interfaces"
@@ -97,6 +98,10 @@ object BluePrintConstants {
     const val MODEL_DEFINITION_TYPE_CAPABILITY_TYPE: String = "capability_type"
     const val MODEL_DEFINITION_TYPE_RELATIONSHIP_TYPE: String = "relationship_type"
     const val MODEL_DEFINITION_TYPE_DATA_TYPE: String = "data_type"
+    const val MODEL_DEFINITION_TYPE_NODE_TEMPLATE: String = "node_template"
+    const val MODEL_DEFINITION_TYPE_RELATIONSHIP_TEMPLATE: String = "relationship_template"
+    const val MODEL_DEFINITION_TYPE_WORKFLOW: String = "workflow"
+    const val MODEL_DEFINITION_TYPE_DSL: String = "dsl"
 
     const val MODEL_TYPE_DATATYPES_ROOT: String = "tosca.datatypes.Root"
     const val MODEL_TYPE_NODES_ROOT: String = "tosca.nodes.Root"

@@ -31,7 +31,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.data.RequirementDefinition
  *
  * @author Brinda Santh
  */
-class BluePrintChainedService {
+internal class BluePrintChainedService {
 
     var bpc: BluePrintContext
 
