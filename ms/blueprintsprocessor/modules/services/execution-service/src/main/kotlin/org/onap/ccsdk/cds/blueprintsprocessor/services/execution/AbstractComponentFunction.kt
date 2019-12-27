@@ -184,8 +184,13 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         return executionServiceInput.payload.jsonPathParse(".$requestExpression")
     }
 
-    fun artifactContent(artifactName: String): String {
+    suspend fun artifactContent(artifactName: String): String {
         return bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactName)
+    }
+
+    suspend fun relationshipProperty(relationshipName: String, propertyName: String): JsonNode {
+        return bluePrintRuntimeService.resolveRelationshipTemplateProperties(relationshipName).get(propertyName)
+            ?: throw BluePrintProcessorException("failed to get relationship($relationshipName) property($propertyName)")
     }
 
     suspend fun mashTemplateNData(artifactName: String, json: String): String {

@@ -352,6 +352,23 @@
         }
       }
     },
+    "relationship_templates": {
+      "cli-device-properties": {
+        "type": "tosca.relationships.ConnectsTo.SshClient",
+        "description": "SSH Connection",
+        "properties": {
+          "connection-config": {
+            "password": "sample-password",
+            "host": {
+              "get_input": "hostname"
+            },
+            "type": "basic-auth",
+            "connectionTimeOut": 30,
+            "username": "sample-user"
+          }
+        }
+      }
+    },
     "workflows": {
       "resource-assignment": {
         "inputs": {

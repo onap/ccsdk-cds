@@ -325,6 +325,16 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
         return nodeTemplateByName(relationshipTemplateName).properties?.get(propertyName)
     }
 
+    fun relationshipTemplateForRelationshipType(name: String): MutableMap<String, RelationshipTemplate>? {
+        return relationshipTemplates()?.filterValues { relationshipTemplate -> relationshipTemplate.type == name }
+            ?.toMutableMap()
+    }
+
+    fun relationshipTemplateRelationshipType(relationshipName: String): RelationshipType {
+        val relationshipTemplateType: String = relationshipTemplateByName(relationshipName).type
+        return relationshipTypeByName(relationshipTemplateType)
+    }
+
     // Chained Functions
 
     fun nodeTypeChained(nodeTypeName: String): NodeType {

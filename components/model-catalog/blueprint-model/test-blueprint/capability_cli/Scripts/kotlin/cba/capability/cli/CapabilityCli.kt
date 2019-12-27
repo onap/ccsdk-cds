@@ -24,7 +24,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 
-
 open class Check : AbstractScriptComponentFunction() {
 
     private val log = logger(Check::class)
@@ -45,8 +44,8 @@ open class Check : AbstractScriptComponentFunction() {
 
         log.info("Check Commands :$checkCommands")
 
-        // Get the Device Information from the DSL Model
-        val deviceInformation = bluePrintRuntimeService.resolveDSLExpression("device-properties")
+        // Get the Device Information from the Relationship Model
+        val deviceInformation = relationshipProperty("ssh-connection-config", "connection-config")
 
         log.info("Device Info :$deviceInformation")
 
@@ -54,7 +53,6 @@ open class Check : AbstractScriptComponentFunction() {
         val sshClientService = BluePrintDependencyService.sshClientService(deviceInformation)
 
         log.info("Client service is ready")
-
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {

@@ -24,11 +24,9 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactExpression
-import org.onap.ccsdk.cds.controllerblueprints.core.data.AttributeDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.data.AttributeExpression
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ExpressionData
 import org.onap.ccsdk.cds.controllerblueprints.core.data.OperationOutputExpression
-import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyExpression
 import org.onap.ccsdk.cds.controllerblueprints.core.format
 import org.onap.ccsdk.cds.controllerblueprints.core.isComplexType
@@ -42,7 +40,7 @@ import org.slf4j.LoggerFactory
  *
  * @author Brinda Santh
  */
-class PropertyAssignmentService(var bluePrintRuntimeService: BluePrintRuntimeService<MutableMap<String, JsonNode>>) {
+internal class PropertyAssignmentService(var bluePrintRuntimeService: BluePrintRuntimeService<MutableMap<String, JsonNode>>) {
 
     private val log = LoggerFactory.getLogger(this::class.toString())
 
@@ -56,23 +54,27 @@ class PropertyAssignmentService(var bluePrintRuntimeService: BluePrintRuntimeSer
      */
 
     fun resolveAssignmentExpression(
-        nodeTemplateName: String,
+        definitionType: String,
+        definitionName: String,
         assignmentName: String,
         assignment: JsonNode
     ): JsonNode {
-        val valueNode: JsonNode
         log.trace("Assignment ({})", assignment)
         val expressionData = BluePrintExpressionService.getExpressionData(assignment)
 
-        if (expressionData.isExpression) {
-            valueNode = resolveExpression(nodeTemplateName, assignmentName, expressionData)
+        return if (expressionData.isExpression) {
+            resolveExpression(definitionType, definitionName, assignmentName, expressionData)
         } else {
-            valueNode = expressionData.valueNode
+            expressionData.valueNode
         }
-        return valueNode
     }
 
-    fun resolveExpression(nodeTemplateName: String, propName: String, expressionData: ExpressionData): JsonNode {
+    fun resolveExpression(
+        definitionType: String,
+        definitionName: String,
+        propName: String,
+        expressionData: ExpressionData
+    ): JsonNode {
 
         var valueNode: JsonNode = NullNode.getInstance()
 
@@ -84,24 +86,31 @@ class PropertyAssignmentService(var bluePrintRuntimeService: BluePrintRuntimeSer
                     valueNode = bluePrintRuntimeService.getInputValue(expressionData.inputExpression?.propertyName!!)
                 }
                 BluePrintConstants.EXPRESSION_GET_ATTRIBUTE -> {
-                    valueNode = resolveAttributeExpression(nodeTemplateName, expressionData.attributeExpression!!)
+                    valueNode =
+                        resolveAttributeExpression(definitionType, definitionName, expressionData.attributeExpression!!)
                 }
                 BluePrintConstants.EXPRESSION_GET_PROPERTY -> {
-                    valueNode = resolvePropertyExpression(nodeTemplateName, expressionData.propertyExpression!!)
+                    valueNode =
+                        resolvePropertyExpression(definitionType, definitionName, expressionData.propertyExpression!!)
                 }
                 BluePrintConstants.EXPRESSION_GET_OPERATION_OUTPUT -> {
-                    valueNode = resolveOperationOutputExpression(nodeTemplateName, expressionData.operationOutputExpression!!)
+                    valueNode =
+                        resolveOperationOutputExpression(definitionName, expressionData.operationOutputExpression!!)
                 }
                 BluePrintConstants.EXPRESSION_GET_ARTIFACT -> {
-                    valueNode = resolveArtifactExpression(nodeTemplateName, expressionData.artifactExpression!!)
+                    valueNode = resolveArtifactExpression(definitionName, expressionData.artifactExpression!!)
                 }
                 BluePrintConstants.EXPRESSION_DSL_REFERENCE -> {
-                    valueNode = bluePrintRuntimeService.resolveDSLExpression(expressionData.dslExpression!!.propertyName)
+                    valueNode =
+                        bluePrintRuntimeService.resolveDSLExpression(expressionData.dslExpression!!.propertyName)
                 }
                 BluePrintConstants.EXPRESSION_GET_NODE_OF_TYPE -> {
                 }
                 else -> {
-                    throw BluePrintException(format("for property ({}), command ({}) is not supported ", propName, command))
+                    throw BluePrintException(
+                        "for $definitionType($definitionName) property ($propName), " +
+                            "command ($command) is not supported "
+                    )
                 }
             }
         }
@@ -112,13 +121,17 @@ class PropertyAssignmentService(var bluePrintRuntimeService: BluePrintRuntimeSer
     get_attribute: [ <modelable_entity_name>, <optional_req_or_cap_name>, <property_name>,
     <nested_property_name_or_index_1>, ..., <nested_property_name_or_index_n> ]
  */
-    fun resolveAttributeExpression(nodeTemplateName: String, attributeExpression: AttributeExpression): JsonNode {
+    fun resolveAttributeExpression(
+        definitionType: String,
+        definitionName: String,
+        attributeExpression: AttributeExpression
+    ): JsonNode {
         var valueNode: JsonNode
 
         val attributeName = attributeExpression.attributeName
         val subAttributeName: String? = attributeExpression.subAttributeName
 
-        var attributeNodeTemplateName = nodeTemplateName
+        var attributeDefinitionName = definitionName
         /**
          * Attributes are dynamic runtime properties information. There are multiple types of Attributes,
          * ENV : Environment Variables
@@ -128,27 +141,52 @@ class PropertyAssignmentService(var bluePrintRuntimeService: BluePrintRuntimeSer
          */
         when (attributeExpression.modelableEntityName) {
             BluePrintConstants.PROPERTY_ENV -> {
-                val environmentValue = System.getProperty(attributeName)
+                val environmentValue = System.getenv(attributeName)
                 valueNode = environmentValue.asJsonPrimitive()
             }
             BluePrintConstants.PROPERTY_APP -> {
-                TODO("Get property from application properties")
+                val environmentValue = System.getProperty(attributeName)
+                valueNode = environmentValue.asJsonPrimitive()
             }
             BluePrintConstants.PROPERTY_BPP -> {
-                valueNode = bluePrintRuntimeService.getNodeTemplateAttributeValue(BluePrintConstants.PROPERTY_BPP, attributeName)
-                    ?: throw BluePrintException("failed to get env attribute name ($attributeName) ")
+                valueNode = bluePrintRuntimeService.getNodeTemplateAttributeValue(
+                    BluePrintConstants.PROPERTY_BPP,
+                    attributeName
+                ) ?: throw BluePrintException("failed to get env attribute name ($attributeName) ")
             }
             else -> {
                 if (!attributeExpression.modelableEntityName.equals(BluePrintConstants.PROPERTY_SELF, true)) {
-                    attributeNodeTemplateName = attributeExpression.modelableEntityName
+                    attributeDefinitionName = attributeExpression.modelableEntityName
                 }
 
-                var attributeDefinition: AttributeDefinition = bluePrintContext
-                    .nodeTemplateNodeType(attributeNodeTemplateName).attributes?.get(attributeName)
-                    ?: throw BluePrintException("failed to get attribute definitions for node template ($attributeNodeTemplateName)'s attribute name ($attributeName) ")
+                /** This block is to Validate, if Attribute definition is present */
+                when (definitionType) {
+                    BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TEMPLATE,
+                    BluePrintConstants.MODEL_DEFINITION_TYPE_WORKFLOW,
+                    BluePrintConstants.MODEL_DEFINITION_TYPE_DSL ->
+                        bluePrintContext.nodeTemplateNodeType(attributeDefinitionName).attributes
+                    BluePrintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TEMPLATE ->
+                        bluePrintContext.relationshipTemplateRelationshipType(attributeDefinitionName).attributes
+                    else -> throw BluePrintException("failed to understand template type($definitionType), it is not supported")
+                }?.get(attributeName)
+                    ?: throw BluePrintException(
+                        "failed to get attribute definitions for " +
+                            "$definitionType ($attributeDefinitionName)'s attribute name ($attributeName) "
+                    )
 
-                valueNode = bluePrintRuntimeService.getNodeTemplateAttributeValue(attributeNodeTemplateName, attributeName)
-                    ?: throw BluePrintException("failed to get node template ($attributeNodeTemplateName)'s attribute name ($attributeName) ")
+                valueNode = when (definitionType) {
+                    BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TEMPLATE,
+                    BluePrintConstants.MODEL_DEFINITION_TYPE_WORKFLOW,
+                    BluePrintConstants.MODEL_DEFINITION_TYPE_DSL ->
+                        bluePrintRuntimeService.getNodeTemplateAttributeValue(attributeDefinitionName, attributeName)
+                    BluePrintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TEMPLATE ->
+                        bluePrintRuntimeService.getRelationshipTemplateAttributeValue(
+                            attributeDefinitionName,
+                            attributeName
+                        )
+                    else -> throw BluePrintException("failed to understand template type($definitionType), it is not supported")
+                }
+                    ?: throw BluePrintException("failed to get node template ($attributeDefinitionName)'s attribute name ($attributeName) ")
             }
         }
         if (subAttributeName != null) {
@@ -162,38 +200,56 @@ class PropertyAssignmentService(var bluePrintRuntimeService: BluePrintRuntimeSer
         get_property: [ <modelable_entity_name>, <optional_req_or_cap_name>, <property_name>,
         <nested_property_name_or_index_1>, ..., <nested_property_name_or_index_n> ]
      */
-    fun resolvePropertyExpression(nodeTemplateName: String, propertyExpression: PropertyExpression): JsonNode {
+    fun resolvePropertyExpression(
+        definitionType: String,
+        definitionName: String,
+        propertyExpression: PropertyExpression
+    ): JsonNode {
         var valueNode: JsonNode
 
         val propertyName = propertyExpression.propertyName
         val subPropertyName: String? = propertyExpression.subPropertyName
 
-        var propertyNodeTemplateName = nodeTemplateName
+        var propertyDefinitionName = definitionName
 
         if (!propertyExpression.modelableEntityName.equals(BluePrintConstants.PROPERTY_SELF, true)) {
-            propertyNodeTemplateName = propertyExpression.modelableEntityName
+            propertyDefinitionName = propertyExpression.modelableEntityName
         }
 
-        val nodeTemplatePropertyExpression = bluePrintContext.nodeTemplateByName(propertyNodeTemplateName).properties?.get(propertyName)
-            ?: throw BluePrintException(
-                format(
-                    "failed to get property definitions for node template ({})'s property name ({}) ",
-                    nodeTemplateName,
-                    propertyName
-                )
-            )
+        val nodeTemplatePropertyExpression = when (definitionType) {
+            BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TEMPLATE,
+            BluePrintConstants.MODEL_DEFINITION_TYPE_WORKFLOW,
+            BluePrintConstants.MODEL_DEFINITION_TYPE_DSL ->
+                bluePrintContext.nodeTemplateByName(propertyDefinitionName).properties
+            BluePrintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TEMPLATE ->
+                bluePrintContext.relationshipTemplateByName(propertyDefinitionName).properties
+            else -> throw BluePrintException("failed to understand template type($definitionType), it is not supported")
+        }?.get(propertyName)
+            ?: throw BluePrintException("failed to get property assignment for node template ($definitionName)'s property name ($propertyName).")
 
-        var propertyDefinition: PropertyDefinition = bluePrintContext.nodeTemplateNodeType(propertyNodeTemplateName).properties?.get(propertyName)!!
+        /** This block is to Validate, if Property definition is present */
+        when (definitionType) {
+            BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TEMPLATE,
+            BluePrintConstants.MODEL_DEFINITION_TYPE_WORKFLOW,
+            BluePrintConstants.MODEL_DEFINITION_TYPE_DSL ->
+                bluePrintContext.nodeTemplateNodeType(propertyDefinitionName).properties
+            BluePrintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TEMPLATE ->
+                bluePrintContext.relationshipTemplateRelationshipType(propertyDefinitionName).properties
+            else -> throw BluePrintException("failed to understand template type($definitionType), it is not supported")
+        }?.get(propertyName)
+            ?: throw BluePrintException("failed to get property definition for node template ($definitionName)'s property name ($propertyName).")
 
         log.info(
-            "node template name ({}), property Name ({}) resolved value ({})",
-            propertyNodeTemplateName,
-            propertyName,
-            nodeTemplatePropertyExpression
+            "$definitionType($propertyDefinitionName), property($propertyName) resolved value ($nodeTemplatePropertyExpression)"
         )
 
         // Check it it is a nested expression
-        valueNode = resolveAssignmentExpression(propertyNodeTemplateName, propertyName, nodeTemplatePropertyExpression)
+        valueNode = resolveAssignmentExpression(
+            definitionType,
+            propertyDefinitionName,
+            propertyName,
+            nodeTemplatePropertyExpression
+        )
 
         if (subPropertyName != null) {
             if (valueNode.isComplexType())
@@ -205,7 +261,10 @@ class PropertyAssignmentService(var bluePrintRuntimeService: BluePrintRuntimeSer
     /*
     get_operation_output: <modelable_entity_name>, <interface_name>, <operation_name>, <output_variable_name>
      */
-    fun resolveOperationOutputExpression(nodeTemplateName: String, operationOutputExpression: OperationOutputExpression): JsonNode {
+    fun resolveOperationOutputExpression(
+        nodeTemplateName: String,
+        operationOutputExpression: OperationOutputExpression
+    ): JsonNode {
         var outputNodeTemplateName = nodeTemplateName
         if (!operationOutputExpression.modelableEntityName.equals("SELF", true)) {
             outputNodeTemplateName = operationOutputExpression.modelableEntityName
@@ -239,7 +298,7 @@ class PropertyAssignmentService(var bluePrintRuntimeService: BluePrintRuntimeSer
             ?: throw BluePrintException(
                 format(
                     "failed to get artifact definitions for node template ({})'s " +
-                            "artifact name ({}) ", nodeTemplateName, artifactExpression.artifactName
+                        "artifact name ({}) ", nodeTemplateName, artifactExpression.artifactName
                 )
             )
 

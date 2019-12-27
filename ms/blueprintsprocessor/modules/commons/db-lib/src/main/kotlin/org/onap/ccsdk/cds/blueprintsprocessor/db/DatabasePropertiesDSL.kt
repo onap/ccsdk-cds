@@ -15,3 +15,109 @@
  */
 
 package org.onap.ccsdk.cds.blueprintsprocessor.db
+
+import com.fasterxml.jackson.databind.JsonNode
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.data.RelationshipType
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.PropertiesAssignmentBuilder
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.RelationshipTemplateBuilder
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.TopologyTemplateBuilder
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.relationshipType
+
+/** Relationships Types DSL for Database Producer */
+fun BluePrintTypes.relationshipTypeConnectsToDb(): RelationshipType {
+    return relationshipType(
+        id = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_DB,
+        version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO,
+        description = "Relationship connects to through Database."
+    ) {
+        property(
+            BluePrintConstants.PROPERTY_CONNECTION_CONFIG,
+            BluePrintConstants.DATA_TYPE_MAP,
+            true,
+            "Connection Config details."
+        )
+        validTargetTypes(arrayListOf(BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT))
+    }
+}
+
+/** Relationships Templates for Database Server */
+fun TopologyTemplateBuilder.relationshipTemplateDb(
+    name: String,
+    description: String,
+    block: DbRelationshipTemplateBuilder.() -> Unit
+) {
+    if (relationshipTemplates == null) relationshipTemplates = hashMapOf()
+    val relationshipTemplate = DbRelationshipTemplateBuilder(name, description).apply(block).build()
+    relationshipTemplates!![relationshipTemplate.id!!] = relationshipTemplate
+}
+
+class DbRelationshipTemplateBuilder(name: String, description: String) :
+    RelationshipTemplateBuilder(
+        name,
+        BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_DB, description
+    ) {
+
+    fun mariaDb(block: DbMariaDataSourcePropertiesAssignmentBuilder.() -> Unit) {
+        property(BluePrintConstants.PROPERTY_CONNECTION_CONFIG, BluePrintTypes.mariaDbProperties(block))
+    }
+
+    fun mySqlDb(block: DbMySqlDataSourcePropertiesAssignmentBuilder.() -> Unit) {
+        property(BluePrintConstants.PROPERTY_CONNECTION_CONFIG, BluePrintTypes.mySqlDbProperties(block))
+    }
+}
+
+fun BluePrintTypes.mariaDbProperties(block: DbMariaDataSourcePropertiesAssignmentBuilder.() -> Unit): JsonNode {
+    val assignments = DbMariaDataSourcePropertiesAssignmentBuilder().apply(block).build()
+    assignments[DBDataSourceProperties::type.name] = DBLibConstants.MARIA_DB.asJsonPrimitive()
+    return assignments.asJsonNode()
+}
+
+fun BluePrintTypes.mySqlDbProperties(block: DbMySqlDataSourcePropertiesAssignmentBuilder.() -> Unit): JsonNode {
+    val assignments = DbMySqlDataSourcePropertiesAssignmentBuilder().apply(block).build()
+    assignments[DBDataSourceProperties::type.name] = DBLibConstants.MYSQL_DB.asJsonPrimitive()
+    return assignments.asJsonNode()
+}
+
+open class DbPropertiesAssignmentBuilder : PropertiesAssignmentBuilder() {
+
+    fun url(url: String) = url(url.asJsonPrimitive())
+
+    fun url(url: JsonNode) =
+        property(DBDataSourceProperties::url, url)
+
+    fun username(username: String) = username(username.asJsonPrimitive())
+
+    fun username(username: JsonNode) = property(DBDataSourceProperties::username, username)
+
+    fun password(password: String) = password(password.asJsonPrimitive())
+
+    fun password(password: JsonNode) = property(DBDataSourceProperties::password, password)
+}
+
+open class DbMariaDataSourcePropertiesAssignmentBuilder : DbPropertiesAssignmentBuilder() {
+
+    fun hibernateHbm2ddlAuto(hibernateHbm2ddlAuto: String) =
+        hibernateHbm2ddlAuto(hibernateHbm2ddlAuto.asJsonPrimitive())
+
+    fun hibernateHbm2ddlAuto(hibernateHbm2ddlAuto: JsonNode) =
+        property(MariaDataSourceProperties::hibernateHbm2ddlAuto, hibernateHbm2ddlAuto)
+
+    fun hibernateDDLAuto(hibernateDDLAuto: String) =
+        hibernateDDLAuto(hibernateDDLAuto.asJsonPrimitive())
+
+    fun hibernateDDLAuto(hibernateDDLAuto: JsonNode) =
+        property(MariaDataSourceProperties::hibernateDDLAuto, hibernateDDLAuto)
+
+    fun hibernateNamingStrategy(hibernateNamingStrategy: String) =
+        hibernateNamingStrategy(hibernateNamingStrategy.asJsonPrimitive())
+
+    fun hibernateNamingStrategy(hibernateNamingStrategy: JsonNode) =
+        property(MariaDataSourceProperties::hibernateNamingStrategy, hibernateNamingStrategy)
+}
+
+open class DbMySqlDataSourcePropertiesAssignmentBuilder : DbMariaDataSourcePropertiesAssignmentBuilder()

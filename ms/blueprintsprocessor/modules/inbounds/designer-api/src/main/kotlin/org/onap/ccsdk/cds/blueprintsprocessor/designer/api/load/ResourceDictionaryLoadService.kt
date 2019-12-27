@@ -70,7 +70,7 @@ open class ResourceDictionaryLoadService(private val resourceDictionaryHandler: 
 
     private suspend fun loadResourceDictionary(errorBuilder: StrBuilder, file: File) {
         try {
-            log.trace("Loading NodeType(${file.name}}")
+            log.trace("Loading Resource Dictionary(${file.name}}")
             val definitionContent = file.readNBText()
             val resourceDefinition = JacksonUtils.readValue(definitionContent, ResourceDefinition::class.java)
             if (resourceDefinition != null) {
@@ -102,7 +102,7 @@ open class ResourceDictionaryLoadService(private val resourceDictionaryHandler: 
                 throw BluePrintException("couldn't get dictionary from content information")
             }
         } catch (e: Exception) {
-            errorBuilder.appendln("Couldn't load Resource dictionary (${file.name}: ${e.message}")
+            errorBuilder.appendln("Couldn't load Resource dictionary (${file.name}: ${e.message})")
         }
     }
 }

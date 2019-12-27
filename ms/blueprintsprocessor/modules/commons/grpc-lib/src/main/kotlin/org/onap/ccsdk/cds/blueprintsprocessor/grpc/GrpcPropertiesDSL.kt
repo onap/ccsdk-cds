@@ -15,3 +15,215 @@
  */
 
 package org.onap.ccsdk.cds.blueprintsprocessor.grpc
+
+import com.fasterxml.jackson.databind.JsonNode
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.data.RelationshipType
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.PropertiesAssignmentBuilder
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.RelationshipTemplateBuilder
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.TopologyTemplateBuilder
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.relationshipType
+
+/** Relationships Types DSL for GRPC Server Producer */
+fun BluePrintTypes.relationshipTypeConnectsToGrpcServer(): RelationshipType {
+    return relationshipType(
+        id = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_GRPC_SERVER,
+        version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO,
+        description = "Relationship connects to through GRPC Server."
+    ) {
+        property(
+            BluePrintConstants.PROPERTY_CONNECTION_CONFIG,
+            BluePrintConstants.DATA_TYPE_MAP,
+            true,
+            "Connection Config details."
+        )
+        validTargetTypes(arrayListOf(BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT))
+    }
+}
+
+fun BluePrintTypes.relationshipTypeConnectsToGrpcClient(): RelationshipType {
+    return relationshipType(
+        id = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_GRPC_CLIENT,
+        version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO,
+        description = "Relationship connects to through GRPC Client."
+    ) {
+        property(
+            BluePrintConstants.PROPERTY_CONNECTION_CONFIG,
+            BluePrintConstants.DATA_TYPE_MAP,
+            true,
+            "Connection Config details."
+        )
+        validTargetTypes(arrayListOf(BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT))
+    }
+}
+
+/** Relationships Templates for GRPC Server */
+fun TopologyTemplateBuilder.relationshipTemplateGrpcServer(
+    name: String,
+    description: String,
+    block: GrpcServerRelationshipTemplateBuilder.() -> Unit
+) {
+    if (relationshipTemplates == null) relationshipTemplates = hashMapOf()
+    val relationshipTemplate = GrpcServerRelationshipTemplateBuilder(name, description).apply(block).build()
+    relationshipTemplates!![relationshipTemplate.id!!] = relationshipTemplate
+}
+
+class GrpcServerRelationshipTemplateBuilder(name: String, description: String) :
+    RelationshipTemplateBuilder(
+        name,
+        BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_GRPC_SERVER, description
+    ) {
+
+    fun tokenAuth(block: GrpcServerTokenAuthPropertiesAssignmentBuilder.() -> Unit) {
+        property(BluePrintConstants.PROPERTY_CONNECTION_CONFIG, BluePrintTypes.tokenAuthGrpcServerProperties(block))
+    }
+
+    fun tlsAuth(block: GrpcServerTLSAuthPropertiesAssignmentBuilder.() -> Unit) {
+        property(BluePrintConstants.PROPERTY_CONNECTION_CONFIG, BluePrintTypes.tlsAuthGrpcServerProperties(block))
+    }
+}
+
+fun BluePrintTypes.tokenAuthGrpcServerProperties(block: GrpcServerTokenAuthPropertiesAssignmentBuilder.() -> Unit): JsonNode {
+    val assignments = GrpcServerTokenAuthPropertiesAssignmentBuilder().apply(block).build()
+    assignments[GrpcServerProperties::type.name] = GRPCLibConstants.TYPE_TOKEN_AUTH.asJsonPrimitive()
+    return assignments.asJsonNode()
+}
+
+fun BluePrintTypes.tlsAuthGrpcServerProperties(block: GrpcServerTLSAuthPropertiesAssignmentBuilder.() -> Unit): JsonNode {
+    val assignments = GrpcServerTLSAuthPropertiesAssignmentBuilder().apply(block).build()
+    assignments[GrpcServerProperties::type.name] = GRPCLibConstants.TYPE_TLS_AUTH.asJsonPrimitive()
+    return assignments.asJsonNode()
+}
+
+open class GrpcServerPropertiesAssignmentBuilder : PropertiesAssignmentBuilder() {
+
+    fun port(port: Int) = port(port.asJsonPrimitive())
+
+    fun port(port: JsonNode) =
+        property(GrpcServerProperties::port, port)
+}
+
+open class GrpcServerTokenAuthPropertiesAssignmentBuilder : GrpcServerPropertiesAssignmentBuilder() {
+
+    fun token(selector: String) = token(selector.asJsonPrimitive())
+
+    fun token(selector: JsonNode) = property(TokenAuthGrpcServerProperties::token, selector)
+}
+
+open class GrpcServerTLSAuthPropertiesAssignmentBuilder : GrpcServerPropertiesAssignmentBuilder() {
+
+    fun certChain(certChain: String) = certChain(certChain.asJsonPrimitive())
+
+    fun certChain(certChain: JsonNode) = property(TLSAuthGrpcServerProperties::certChain, certChain)
+
+    fun privateKey(privateKey: String) = privateKey(privateKey.asJsonPrimitive())
+
+    fun privateKey(privateKey: JsonNode) = property(TLSAuthGrpcServerProperties::privateKey, privateKey)
+
+    fun trustCertCollection(trustCertCollection: String) = trustCertCollection(trustCertCollection.asJsonPrimitive())
+
+    fun trustCertCollection(trustCertCollection: JsonNode) =
+        property(TLSAuthGrpcServerProperties::trustCertCollection, trustCertCollection)
+}
+
+/** Relationships Templates for GRPC Client */
+fun TopologyTemplateBuilder.relationshipTemplateGrpcClient(
+    name: String,
+    description: String,
+    block: GrpcClientRelationshipTemplateBuilder.() -> Unit
+) {
+    if (relationshipTemplates == null) relationshipTemplates = hashMapOf()
+    val relationshipTemplate = GrpcClientRelationshipTemplateBuilder(name, description).apply(block).build()
+    relationshipTemplates!![relationshipTemplate.id!!] = relationshipTemplate
+}
+
+class GrpcClientRelationshipTemplateBuilder(name: String, description: String) :
+    RelationshipTemplateBuilder(
+        name,
+        BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_GRPC_CLIENT, description
+    ) {
+
+    fun basicAuth(block: GrpcClientBasicAuthPropertiesAssignmentBuilder.() -> Unit) {
+        property(BluePrintConstants.PROPERTY_CONNECTION_CONFIG, BluePrintTypes.basicAuthGrpcClientProperties(block))
+    }
+
+    fun tokenAuth(block: GrpcClientTokenAuthPropertiesAssignmentBuilder.() -> Unit) {
+        property(BluePrintConstants.PROPERTY_CONNECTION_CONFIG, BluePrintTypes.tokenAuthGrpcClientProperties(block))
+    }
+
+    fun tlsAuth(block: GrpcClientTLSAuthPropertiesAssignmentBuilder.() -> Unit) {
+        property(BluePrintConstants.PROPERTY_CONNECTION_CONFIG, BluePrintTypes.tlsAuthGrpcClientProperties(block))
+    }
+}
+
+fun BluePrintTypes.basicAuthGrpcClientProperties(block: GrpcClientBasicAuthPropertiesAssignmentBuilder.() -> Unit): JsonNode {
+    val assignments = GrpcClientBasicAuthPropertiesAssignmentBuilder().apply(block).build()
+    assignments[GrpcClientProperties::type.name] = GRPCLibConstants.TYPE_BASIC_AUTH.asJsonPrimitive()
+    return assignments.asJsonNode()
+}
+
+fun BluePrintTypes.tokenAuthGrpcClientProperties(block: GrpcClientTokenAuthPropertiesAssignmentBuilder.() -> Unit): JsonNode {
+    val assignments = GrpcClientTokenAuthPropertiesAssignmentBuilder().apply(block).build()
+    assignments[GrpcClientProperties::type.name] = GRPCLibConstants.TYPE_TOKEN_AUTH.asJsonPrimitive()
+    return assignments.asJsonNode()
+}
+
+fun BluePrintTypes.tlsAuthGrpcClientProperties(block: GrpcClientTLSAuthPropertiesAssignmentBuilder.() -> Unit): JsonNode {
+    val assignments = GrpcClientTLSAuthPropertiesAssignmentBuilder().apply(block).build()
+    assignments[GrpcClientProperties::type.name] = GRPCLibConstants.TYPE_TLS_AUTH.asJsonPrimitive()
+    return assignments.asJsonNode()
+}
+
+open class GrpcClientPropertiesAssignmentBuilder : PropertiesAssignmentBuilder() {
+
+    fun host(host: String) = host(host.asJsonPrimitive())
+
+    fun host(host: JsonNode) =
+        property(GrpcClientProperties::host, host)
+
+    fun port(port: Int) = port(port.asJsonPrimitive())
+
+    fun port(port: JsonNode) =
+        property(GrpcClientProperties::port, port)
+}
+
+open class GrpcClientBasicAuthPropertiesAssignmentBuilder : GrpcClientPropertiesAssignmentBuilder() {
+
+    fun username(username: String) = username(username.asJsonPrimitive())
+
+    fun username(username: JsonNode) = property(BasicAuthGrpcClientProperties::username, username)
+
+    fun password(password: String) = password(password.asJsonPrimitive())
+
+    fun password(password: JsonNode) = property(BasicAuthGrpcClientProperties::password, password)
+}
+
+open class GrpcClientTokenAuthPropertiesAssignmentBuilder : GrpcClientPropertiesAssignmentBuilder() {
+
+    fun token(selector: String) = token(selector.asJsonPrimitive())
+
+    fun token(selector: JsonNode) = property(TokenAuthGrpcClientProperties::token, selector)
+}
+
+open class GrpcClientTLSAuthPropertiesAssignmentBuilder : GrpcClientPropertiesAssignmentBuilder() {
+
+    fun trustCertCollection(trustCertCollection: String) = trustCertCollection(trustCertCollection.asJsonPrimitive())
+
+    fun trustCertCollection(trustCertCollection: JsonNode) =
+        property(TLSAuthGrpcClientProperties::trustCertCollection, trustCertCollection)
+
+    fun clientCertChain(clientCertChain: String) = clientCertChain(clientCertChain.asJsonPrimitive())
+
+    fun clientCertChain(clientCertChain: JsonNode) =
+        property(TLSAuthGrpcClientProperties::clientCertChain, clientCertChain)
+
+    fun clientPrivateKey(clientPrivateKey: String) = clientPrivateKey(clientPrivateKey.asJsonPrimitive())
+
+    fun clientPrivateKey(clientPrivateKey: JsonNode) =
+        property(TLSAuthGrpcClientProperties::clientPrivateKey, clientPrivateKey)
+}

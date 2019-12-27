@@ -69,19 +69,49 @@ interface BluePrintRuntimeService<T> {
 
     fun loadEnvironments(type: String, fileName: String)
 
+    fun resolveWorkflowOutputs(workflowName: String): MutableMap<String, JsonNode>
+
+    fun resolveDSLExpression(dslPropertyName: String): JsonNode
+
+    /** Resolve Property Definition [definitionName] for type [definitionType] with [propertyDefinitions]
+     * Definition Type may be : node_template, relationship_template, dsl, workflow
+     * Assumption is Definition holds the expressions or value assigned in it. Mainly used for workflow outputs.
+     */
+    fun resolvePropertyDefinitions(
+        definitionType: String,
+        definitionName: String,
+        propertyDefinitions: MutableMap<String, PropertyDefinition>
+    ): MutableMap<String, JsonNode>
+
+    /** Resolve Property Assignments [definitionName] for type [definitionType] with [propertyDefinitions]
+     * and [propertyAssignments]
+     * Definition Type may be : node_template, relationship_template, dsl, workflow
+     */
+    fun resolvePropertyAssignments(
+        definitionType: String,
+        definitionName: String,
+        propertyDefinitions: MutableMap<String, PropertyDefinition>,
+        propertyAssignments: MutableMap<String, JsonNode>
+    ): MutableMap<String, JsonNode>
+
+    /** Resolve Property Assignments [definitionName] for type [definitionType] with  [propertyAssignments]
+     *  Definition Type may be : node_template, relationship_template, dsl, workflow
+     */
+    fun resolvePropertyAssignments(
+        definitionType: String,
+        definitionName: String,
+        propertyAssignments: MutableMap<String, JsonNode>
+    ): MutableMap<String, JsonNode>
+
+    /** Resolve Node Template [nodeTemplateName] Property Assignments */
+    fun resolveNodeTemplateProperties(nodeTemplateName: String): MutableMap<String, JsonNode>
+
+    /** Resolve Node Template [nodeTemplateName] Property Assignments with [propertyDefinitions] and  [propertyAssignments]*/
     fun resolveNodeTemplatePropertyAssignments(
         nodeTemplateName: String,
         propertyDefinitions: MutableMap<String, PropertyDefinition>,
         propertyAssignments: MutableMap<String, JsonNode>
     ): MutableMap<String, JsonNode>
-
-    fun resolvePropertyDefinitions(name: String, propertyDefinitions: MutableMap<String, PropertyDefinition>):
-        MutableMap<String, JsonNode>
-
-    fun resolvePropertyAssignments(name: String, propertyAssignments: MutableMap<String, JsonNode>):
-        MutableMap<String, JsonNode>
-
-    fun resolveNodeTemplateProperties(nodeTemplateName: String): MutableMap<String, JsonNode>
 
     fun resolveNodeTemplateCapabilityProperties(nodeTemplateName: String, capabilityName: String): MutableMap<String,
         JsonNode>
@@ -98,13 +128,20 @@ interface BluePrintRuntimeService<T> {
         operationName: String
     ): MutableMap<String, JsonNode>
 
-    fun resolveNodeTemplateArtifact(nodeTemplateName: String, artifactName: String): String
+    suspend fun resolveNodeTemplateArtifact(nodeTemplateName: String, artifactName: String): String
 
     fun resolveNodeTemplateArtifactDefinition(nodeTemplateName: String, artifactName: String): ArtifactDefinition
 
+    /** Resolve Node Template [relationshipTemplateName] Property Assignments */
     fun resolveRelationshipTemplateProperties(relationshipTemplateName: String): MutableMap<String, JsonNode>
 
-    fun resolveDSLExpression(dslPropertyName: String): JsonNode
+    /** Resolve Relationship Template [relationshipTemplateName] Property Assignments with
+     * [propertyDefinitions] and  [propertyAssignments] */
+    fun resolveRelationshipTemplatePropertyAssignments(
+        relationshipTemplateName: String,
+        propertyDefinitions: MutableMap<String, PropertyDefinition>,
+        propertyAssignments: MutableMap<String, JsonNode>
+    ): MutableMap<String, JsonNode>
 
     fun setInputValue(propertyName: String, value: JsonNode)
 
@@ -156,13 +193,17 @@ interface BluePrintRuntimeService<T> {
 
     fun getNodeTemplateAttributeValue(nodeTemplateName: String, attributeName: String): JsonNode?
 
+    fun getRelationshipTemplatePropertyValue(relationshipTemplateName: String, propertyName: String): JsonNode?
+
+    fun getRelationshipTemplateAttributeValue(relationshipTemplateName: String, attributeName: String): JsonNode?
+
     fun assignInputs(jsonNode: JsonNode)
 
     fun assignWorkflowInputs(workflowName: String, jsonNode: JsonNode)
 
-    fun resolveWorkflowOutputs(workflowName: String): MutableMap<String, JsonNode>
-
     fun getJsonForNodeTemplateAttributeProperties(nodeTemplateName: String, keys: List<String>): JsonNode
+
+    suspend fun close()
 }
 
 /**
@@ -256,15 +297,68 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
         }
     }
 
+    override fun resolveWorkflowOutputs(workflowName: String): MutableMap<String, JsonNode> {
+        log.info("resolveWorkflowOutputs for workflow($workflowName)")
+        val outputs = bluePrintContext.workflowByName(workflowName).outputs ?: mutableMapOf()
+        return resolvePropertyDefinitions(BluePrintConstants.MODEL_DEFINITION_TYPE_WORKFLOW, "WORKFLOW", outputs)
+    }
+
     /**
-     * Resolve any property assignments for the node
+     * Read the DSL Property reference, If there is any expression, then resolve those expression and return as Json
+     * Type
      */
-    override fun resolveNodeTemplatePropertyAssignments(
-        nodeTemplateName: String,
+    override fun resolveDSLExpression(dslPropertyName: String): JsonNode {
+        val propertyAssignments = bluePrintContext.dslPropertiesByName(dslPropertyName)
+        return if (BluePrintExpressionService.checkContainsExpression(propertyAssignments) &&
+            propertyAssignments is ObjectNode
+        ) {
+            val rootKeyMap = propertyAssignments.rootFieldsToMap()
+            val propertyAssignmentValue: MutableMap<String, JsonNode> = hashMapOf()
+            rootKeyMap.forEach { (propertyName, propertyValue) ->
+                val propertyAssignmentExpression = PropertyAssignmentService(this)
+                propertyAssignmentValue[propertyName] = propertyAssignmentExpression
+                    .resolveAssignmentExpression(
+                        BluePrintConstants.MODEL_DEFINITION_TYPE_DSL,
+                        "DSL",
+                        propertyName,
+                        propertyValue
+                    )
+            }
+            propertyAssignmentValue.asJsonNode()
+        } else {
+            propertyAssignments
+        }
+    }
+
+    override fun resolvePropertyDefinitions(
+        definitionType: String,
+        definitionName: String,
+        propertyDefinitions: MutableMap<String, PropertyDefinition>
+    ): MutableMap<String, JsonNode> {
+        val propertyAssignmentValue: MutableMap<String, JsonNode> = hashMapOf()
+
+        propertyDefinitions.forEach { (propertyName, propertyDefinition) ->
+            val propertyAssignmentExpression = PropertyAssignmentService(this)
+            val expression = propertyDefinition.value ?: propertyDefinition.defaultValue
+            if (expression != null) {
+                propertyAssignmentValue[propertyName] =
+                    propertyAssignmentExpression.resolveAssignmentExpression(
+                        definitionType,
+                        definitionName,
+                        propertyName,
+                        expression
+                    )
+            }
+        }
+        return propertyAssignmentValue
+    }
+
+    override fun resolvePropertyAssignments(
+        definitionType: String,
+        definitionName: String,
         propertyDefinitions: MutableMap<String, PropertyDefinition>,
         propertyAssignments: MutableMap<String, JsonNode>
-    ):
-        MutableMap<String, JsonNode> {
+    ): MutableMap<String, JsonNode> {
 
         val propertyAssignmentValue: MutableMap<String, JsonNode> = hashMapOf()
 
@@ -277,7 +371,7 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
                 // Resolve the Expressing
                 val propertyAssignmentExpression = PropertyAssignmentService(this)
                 resolvedValue = propertyAssignmentExpression.resolveAssignmentExpression(
-                    nodeTemplateName, nodeTypePropertyName, propertyAssignment
+                    definitionType, definitionName, nodeTypePropertyName, propertyAssignment
                 )
             }
 
@@ -286,11 +380,13 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
                 nodeTypeProperty.defaultValue?.let { resolvedValue = nodeTypeProperty.defaultValue!! }
             }
 
-            /** If property is Map type, then resolve the property value, It may have expressiong */
+            /** If property is Map type, then resolve the property value, It may have expressions */
             if (nodeTypeProperty.type == BluePrintConstants.DATA_TYPE_MAP &&
                 resolvedValue.returnNullIfMissing() != null
             ) {
-                val mapResolvedValue = resolvePropertyAssignments(nodeTemplateName, resolvedValue.rootFieldsToMap())
+                val mapResolvedValue = resolvePropertyAssignments(
+                    definitionType, definitionName, resolvedValue.rootFieldsToMap()
+                )
                 resolvedValue = mapResolvedValue.asJsonNode()
             }
 
@@ -300,29 +396,19 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
         return propertyAssignmentValue
     }
 
-    override fun resolvePropertyDefinitions(name: String, propertyDefinitions: MutableMap<String, PropertyDefinition>):
-        MutableMap<String, JsonNode> {
-        val propertyAssignmentValue: MutableMap<String, JsonNode> = hashMapOf()
-
-        propertyDefinitions.forEach { propertyName, propertyDefinition ->
-            val propertyAssignmentExpression = PropertyAssignmentService(this)
-            val expression = propertyDefinition.value ?: propertyDefinition.defaultValue
-            if (expression != null) {
-                propertyAssignmentValue[propertyName] =
-                    propertyAssignmentExpression.resolveAssignmentExpression(name, propertyName, expression)
-            }
-        }
-        return propertyAssignmentValue
-    }
-
-    override fun resolvePropertyAssignments(name: String, propertyAssignments: MutableMap<String, JsonNode>):
-        MutableMap<String, JsonNode> {
+    override fun resolvePropertyAssignments(
+        definitionType: String,
+        definitionName: String,
+        propertyAssignments: MutableMap<String, JsonNode>
+    ): MutableMap<String, JsonNode> {
         val propertyAssignmentValue: MutableMap<String, JsonNode> = hashMapOf()
 
         propertyAssignments.forEach { (propertyName, propertyExpression) ->
             val propertyAssignmentExpression = PropertyAssignmentService(this)
             propertyAssignmentValue[propertyName] =
-                propertyAssignmentExpression.resolveAssignmentExpression(name, propertyName, propertyExpression)
+                propertyAssignmentExpression.resolveAssignmentExpression(
+                    definitionType, definitionName, propertyName, propertyExpression
+                )
         }
         return propertyAssignmentValue
     }
@@ -345,6 +431,20 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
             nodeTemplateName,
             nodeTypePropertiesDefinitions,
             propertyAssignments
+        )
+    }
+
+    /**
+     * Resolve any property assignments for the node
+     */
+    override fun resolveNodeTemplatePropertyAssignments(
+        nodeTemplateName: String,
+        propertyDefinitions: MutableMap<String, PropertyDefinition>,
+        propertyAssignments: MutableMap<String, JsonNode>
+    ): MutableMap<String, JsonNode> {
+        return resolvePropertyAssignments(
+            BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TEMPLATE,
+            nodeTemplateName, propertyDefinitions, propertyAssignments
         )
     }
 
@@ -432,7 +532,7 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
         return propertyAssignmentValue
     }
 
-    override fun resolveNodeTemplateArtifact(nodeTemplateName: String, artifactName: String): String {
+    override suspend fun resolveNodeTemplateArtifact(nodeTemplateName: String, artifactName: String): String {
         val artifactDefinition: ArtifactDefinition =
             resolveNodeTemplateArtifactDefinition(nodeTemplateName, artifactName)
         val propertyAssignmentExpression = PropertyAssignmentService(this)
@@ -464,36 +564,23 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
 
         /**
          * Resolve the RelationshipTemplate Property Assignment Values.
-         * TODO("Now it supports only input, node not SELF(propert, attribute, artifact) expressions, later it will support SELF expressions")
          */
-        return resolveNodeTemplatePropertyAssignments(
-            "DSL",
+        return resolveRelationshipTemplatePropertyAssignments(
+            relationshipTemplateName,
             propertiesDefinitions,
             propertyAssignments
         )
     }
 
-    /**
-     * Read the DSL Property reference, If there is any expression, then resolve those expression and return as Json
-     * Type
-     */
-    override fun resolveDSLExpression(dslPropertyName: String): JsonNode {
-        val propertyAssignments = bluePrintContext.dslPropertiesByName(dslPropertyName)
-        return if (BluePrintExpressionService.checkContainsExpression(propertyAssignments) &&
-            propertyAssignments is ObjectNode
-        ) {
-
-            val rootKeyMap = propertyAssignments.rootFieldsToMap()
-            val propertyAssignmentValue: MutableMap<String, JsonNode> = hashMapOf()
-            rootKeyMap.forEach { (propertyName, propertyValue) ->
-                val propertyAssignmentExpression = PropertyAssignmentService(this)
-                propertyAssignmentValue[propertyName] = propertyAssignmentExpression
-                    .resolveAssignmentExpression("DSL", propertyName, propertyValue)
-            }
-            propertyAssignmentValue.asJsonNode()
-        } else {
-            propertyAssignments
-        }
+    override fun resolveRelationshipTemplatePropertyAssignments(
+        relationshipTemplateName: String,
+        propertyDefinitions: MutableMap<String, PropertyDefinition>,
+        propertyAssignments: MutableMap<String, JsonNode>
+    ): MutableMap<String, JsonNode> {
+        return resolvePropertyAssignments(
+            BluePrintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TYPE,
+            relationshipTemplateName, propertyDefinitions, propertyAssignments
+        )
     }
 
     override fun setInputValue(propertyName: String, value: JsonNode) {
@@ -628,6 +715,28 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
         return getJsonNode(path)
     }
 
+    override fun getRelationshipTemplatePropertyValue(
+        relationshipTemplateName: String,
+        propertyName: String
+    ): JsonNode? {
+        val path: String = StringBuilder(BluePrintConstants.PATH_RELATIONSHIP_TEMPLATES)
+            .append(BluePrintConstants.PATH_DIVIDER).append(relationshipTemplateName)
+            .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_PROPERTIES)
+            .append(BluePrintConstants.PATH_DIVIDER).append(propertyName).toString()
+        return getJsonNode(path)
+    }
+
+    override fun getRelationshipTemplateAttributeValue(
+        relationshipTemplateName: String,
+        attributeName: String
+    ): JsonNode? {
+        val path: String = StringBuilder(BluePrintConstants.PATH_RELATIONSHIP_TEMPLATES)
+            .append(BluePrintConstants.PATH_DIVIDER).append(relationshipTemplateName)
+            .append(BluePrintConstants.PATH_DIVIDER).append(BluePrintConstants.PATH_ATTRIBUTES)
+            .append(BluePrintConstants.PATH_DIVIDER).append(attributeName).toString()
+        return getJsonNode(path)
+    }
+
     override fun assignInputs(jsonNode: JsonNode) {
         log.info("assignInputs from input JSON ({})", jsonNode.toString())
         bluePrintContext.inputs()?.forEach { propertyName, property ->
@@ -644,30 +753,24 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
         val dynamicInputPropertiesName = "$workflowName-properties"
 
         bluePrintContext.workflowByName(workflowName).inputs
-                ?.filter { (propertyName, property) -> propertyName != dynamicInputPropertiesName }
-                ?.forEach { propertyName, property -> findAndSetInputValue(propertyName, property, jsonNode) }
+            ?.filter { (propertyName, property) -> propertyName != dynamicInputPropertiesName }
+            ?.forEach { propertyName, property -> findAndSetInputValue(propertyName, property, jsonNode) }
         // Load Dynamic data Types
         jsonNode.get(dynamicInputPropertiesName)?.let {
             bluePrintContext.dataTypeByName("dt-$dynamicInputPropertiesName")
-                    ?.properties
-                    ?.forEach { propertyName, property -> findAndSetInputValue(propertyName, property, it) }
+                ?.properties
+                ?.forEach { propertyName, property -> findAndSetInputValue(propertyName, property, it) }
         }
     }
 
     private fun findAndSetInputValue(propertyName: String, property: PropertyDefinition, jsonNode: JsonNode) {
         val valueNode = jsonNode.at(BluePrintConstants.PATH_DIVIDER + propertyName)
-                .returnNullIfMissing()
-                ?: property.defaultValue
-                ?: NullNode.getInstance()
+            .returnNullIfMissing()
+            ?: property.defaultValue
+            ?: NullNode.getInstance()
         val loggableValue = if (hasLogProtect(property)) LOG_REDACTED else valueNode.toString()
-        log.info("Setting input data - attribute:($propertyName) value:($loggableValue)")
+        log.trace("Setting input data - attribute:($propertyName) value:($loggableValue)")
         setInputValue(propertyName, valueNode)
-    }
-
-    override fun resolveWorkflowOutputs(workflowName: String): MutableMap<String, JsonNode> {
-        log.info("resolveWorkflowOutputs for workflow($workflowName)")
-        val outputs = bluePrintContext.workflowByName(workflowName).outputs ?: mutableMapOf()
-        return resolvePropertyDefinitions("WORKFLOW", outputs)
     }
 
     override fun getJsonForNodeTemplateAttributeProperties(nodeTemplateName: String, keys: List<String>): JsonNode {
@@ -687,5 +790,9 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
             }
         }
         return jsonNode
+    }
+
+    override suspend fun close() {
+        store.clear()
     }
 }

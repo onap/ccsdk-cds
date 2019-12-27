@@ -55,8 +55,8 @@ abstract class NetconfComponentFunction : AbstractScriptComponentFunction() {
             "org.onap.ccsdk.cds.blueprintsprocessor.services.execution.artifactContent"
         )
     )
-    fun generateMessage(artifactName: String): String {
-        return bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactName)
+    fun generateMessage(artifactName: String): String = runBlocking {
+        bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactName)
     }
 
     @Deprecated(

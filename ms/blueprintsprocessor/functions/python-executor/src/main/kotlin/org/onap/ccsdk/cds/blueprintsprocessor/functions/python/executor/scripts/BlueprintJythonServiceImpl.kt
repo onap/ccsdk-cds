@@ -85,7 +85,7 @@ class BlueprintJythonServiceImpl(
         )
     }
 
-    fun jythonComponentInstance(abstractComponentFunction: AbstractComponentFunction): AbstractComponentFunction {
+    suspend fun jythonComponentInstance(abstractComponentFunction: AbstractComponentFunction): AbstractComponentFunction {
 
         val bluePrintRuntimeService = abstractComponentFunction.bluePrintRuntimeService
         val bluePrintContext = bluePrintRuntimeService.bluePrintContext()

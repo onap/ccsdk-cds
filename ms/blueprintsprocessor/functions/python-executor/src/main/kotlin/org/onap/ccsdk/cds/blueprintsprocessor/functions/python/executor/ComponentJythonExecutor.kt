@@ -60,7 +60,7 @@ open class ComponentJythonExecutor(
                 .addError("Failed in ComponentJythonExecutor : ${runtimeException.message}")
     }
 
-    private fun populateJythonComponentInstance() {
+    private suspend fun populateJythonComponentInstance() {
         val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
 
         val operationAssignment: OperationAssignment = bluePrintContext
