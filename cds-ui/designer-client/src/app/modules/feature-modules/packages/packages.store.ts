@@ -22,7 +22,7 @@ limitations under the License.
 import {Injectable} from '@angular/core';
 import {BluePrintPage} from './model/BluePrint.model';
 import {Store} from '../../../common/core/stores/Store';
-import {PackagesListService} from './packages-list.service';
+import {PackagesApiService} from './packages-api.service';
 import {PackagesDashboardState} from './model/packages-dashboard.state';
 
 
@@ -33,7 +33,7 @@ export class PackagesStore extends Store<PackagesDashboardState> {
     // TDOD fixed for now as there is no requirement to change it from UI
     public pageSize = 5;
 
-    constructor(private packagesServiceList: PackagesListService) {
+    constructor(private packagesServiceList: PackagesApiService) {
         super(new PackagesDashboardState());
     }
 

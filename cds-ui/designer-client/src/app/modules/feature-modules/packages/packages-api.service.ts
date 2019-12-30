@@ -29,7 +29,7 @@ import {BlueprintModel, BluePrintPage} from './model/BluePrint.model';
 @Injectable({
     providedIn: 'root'
 })
-export class PackagesListService {
+export class PackagesApiService {
     packages: BlueprintModel[] = [];
     private numberOfPackages: number;
 
@@ -44,8 +44,8 @@ export class PackagesListService {
         });
     }
 
-    searchByTags(keyword: string): Observable<any> {
-        return this.api.get(BlueprintURLs.getMetaDate + '/' + keyword);
+    checkBluePrintIfItExists(keyword: string) {// : Observable<any> {
+        // return this.api.get(BlueprintURLs.get + '/' + keyword);
     }
 
     getCountOfAllPackages(observable: Observable<number>) {
