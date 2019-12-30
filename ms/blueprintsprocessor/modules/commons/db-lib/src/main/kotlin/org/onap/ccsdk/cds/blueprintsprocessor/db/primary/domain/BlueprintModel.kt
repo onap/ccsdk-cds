@@ -107,6 +107,10 @@ class BlueprintModel : Serializable {
     @ApiModelProperty(required = true)
     lateinit var artifactName: String
 
+    @Column(name = "dictionary_group", nullable = false)
+    @ApiModelProperty(required = true)
+    var dictionaryGroup: String? = null
+
     @Column(name = "published", nullable = false)
     @ApiModelProperty(required = true)
     lateinit var published: String

@@ -3,5 +3,6 @@ CSAR-Version: 1.0
 Created-By: Rodrigo Ottero
 Entry-Definitions: Definitions/echo-test.json
 Template-Name: echo_test
+Dictionary-Group: default
 Template-Version: 1.0.0
 Template-Tags: echo-test

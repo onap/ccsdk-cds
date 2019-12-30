@@ -72,6 +72,9 @@ class BlueprintModelSearch : Serializable {
     @Column(name = "artifact_name", nullable = false)
     var artifactName: String? = null
 
+    @Column(name = "dictionary_group", nullable = false)
+    var dictionaryGroup: String? = null
+
     @Column(name = "published", nullable = false)
     var published: String? = null
 

@@ -4,4 +4,5 @@ Created-By: Alexis de Talhouët
 Entry-Definitions: Definitions/golden-blueprint.json
 Template-Tags: test
 Template-Name: golden
+Dictionary-Group: default
 Template-Version: 1.0.0
