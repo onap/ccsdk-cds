@@ -73,7 +73,7 @@
                     <button type="button" class="btn">Insert Custom</button>
                     <button type="button" class="btn">Import Action</button>
                 </div>
-            </div><!--
+            </div>
       <div class="col-12 actionsList">
         <b>Select from other packages:</b>
         <div class="actions-scroll">
@@ -107,13 +107,32 @@
           <button type="button" class="btn btn-secondary">Cancel</button>
         </div>
       </div>
--->
-            <app-actions class="col-12 actionsList"></app-actions>
-            <app-functions></app-functions>
+
+        <h1 class="col-12">Functions</h1>
+        <div id="palette-paper" class="col-12 componentsList">
+            <b>Drag and drop function to Action’s box</b>
+            <ul class="list-group actions-scroll">
+                <!-- <li class="list-group-item" *ngFor="let function of viewedFunctions">
+                    <p class="compType-1">{{function.modelName}}</p>
+                </li> -->
+                <li class="list-group-item">
+                    <p class="compType-2">component-netconf-executor</p>
+                </li>
+                <li class="list-group-item">
+                    <p class="compType-3">component-remote-ansible-executor</p>
+                </li>
+                <li class="list-group-item">
+                    <p class="compType-4">dg-generic</p>
+                </li>
+                <li class="list-group-item">
+                    <p class="compType-1">component-resource-resolution</p>
+                </li>
+            </ul>
+        </div>
         </div>
     </ng-sidebar>
     <!-- Page content -->
-    <div ng-sidebar-content>
+    <div ng-sidebar-content id="board-paper">
         <button class="rotate" (click)="_toggleSidebar1()">
       <span>
         Controller
@@ -144,7 +163,7 @@
                 <button type="button" class="btn btn-secondary topologyView">Source</button>
             </div>
         </div>
-        <div class="card actionContainer">
+        <!-- <div class="card actionContainer">
             <div class="card-header">
                 <span>Action 1</span>
             </div>
@@ -170,7 +189,7 @@
                     <p>component-netconf-executor</p>
                 </a>
             </div>
-        </div>
+        </div> -->
         <!-- <button (click)="_toggleSidebar2()" style="float:right;">Toggle sidebar right</button> -->
     </div>
     <!-- Attribute SideBar -->
