@@ -3,5 +3,7 @@ CSAR-Version: 1.0
 Created-By: Rahul Tyagi
 Entry-Definitions: Definitions/pnf_config_aai.json
 Template-Name: pnf_config_aai
+Template-Group: default
+Template-Mode: Script
 Template-Version: 1.0.0
 Template-Tags: pnf_config_aai

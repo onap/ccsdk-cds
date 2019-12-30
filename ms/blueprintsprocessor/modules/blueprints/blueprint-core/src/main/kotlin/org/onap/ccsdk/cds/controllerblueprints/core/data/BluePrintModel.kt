@@ -647,6 +647,8 @@ class ToscaMetaData {
     lateinit var createdBy: String
     lateinit var entityDefinitions: String
     lateinit var templateName: String
+    lateinit var templateGroup: String
+    lateinit var templateMode: String
     lateinit var templateVersion: String
     lateinit var templateTags: String
     var templateType: String = BluePrintConstants.BLUEPRINT_TYPE_DEFAULT

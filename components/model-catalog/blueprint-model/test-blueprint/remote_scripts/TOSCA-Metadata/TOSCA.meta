@@ -4,4 +4,6 @@ Created-By: Brinda Santh <brindasanth@in.ibm.com>
 Entry-Definitions: Definitions/remote_scripts.json
 Template-Tags: Brinda Santh, remote_scripts
 Template-Name: remote_scripts
+Template-Group: default
+Template-Mode: Script
 Template-Version: 1.0.0

@@ -4,4 +4,6 @@ Created-By: Brinda Santh M
 Entry-Definitions: Definitions/activation-blueprint.json
 Template-Tags: Brinda Santh, activation-blueprint
 Template-Name: capability_python
+Template-Group: default
+Template-Mode: Script
 Template-Version: 1.0.0

@@ -72,6 +72,12 @@ class BlueprintModelSearch : Serializable {
     @Column(name = "artifact_name", nullable = false)
     var artifactName: String? = null
 
+    @Column(name = "artifcat_group", nullable = false)
+    var group: String? = null
+
+    @Column(name = "artifcat_mode", nullable = false)
+    var mode: String? = null
+
     @Column(name = "published", nullable = false)
     var published: String? = null
 

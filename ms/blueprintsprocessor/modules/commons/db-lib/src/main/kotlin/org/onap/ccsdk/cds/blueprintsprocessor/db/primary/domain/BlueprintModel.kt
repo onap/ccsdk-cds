@@ -107,6 +107,14 @@ class BlueprintModel : Serializable {
     @ApiModelProperty(required = true)
     lateinit var artifactName: String
 
+    @Column(name = "artifcat_group", nullable = false)
+    @ApiModelProperty(required = true)
+    var group: String? = null
+
+    @Column(name = "artifcat_mode", nullable = false)
+    @ApiModelProperty(required = true)
+    var mode: String? = null
+
     @Column(name = "published", nullable = false)
     @ApiModelProperty(required = true)
     lateinit var published: String

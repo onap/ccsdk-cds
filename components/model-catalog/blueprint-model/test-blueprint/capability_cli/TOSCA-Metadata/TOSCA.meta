@@ -3,6 +3,8 @@ CSAR-Version: 1.0
 Created-By: Brinda Santh
 Entry-Definitions: Definitions/capability-cli-blueprint.json
 Template-Name: capability-cli
+Template-Group: default
+Template-Mode: Script
 Template-Version: 1.0.0
 Template-Type: DEFAULT
 Template-Tags: capability-cli-blueprint

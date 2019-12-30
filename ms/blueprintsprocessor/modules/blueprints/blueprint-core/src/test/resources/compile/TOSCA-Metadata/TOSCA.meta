@@ -3,6 +3,8 @@ CSAR-Version: 1.0
 Created-By: Brinda Santh <brindasanth@in.ibm.com>
 Entry-Definitions: cba.scripts.ActivateBlueprintDefinitions.kt
 Template-Name: activate-blueprint
+Template-Group: default
+Template-Mode: Script
 Template-Version: 1.0.0
 Template-Type: KOTLIN_DSL
 Template-Tags: Brinda Santh, activation-blueprint

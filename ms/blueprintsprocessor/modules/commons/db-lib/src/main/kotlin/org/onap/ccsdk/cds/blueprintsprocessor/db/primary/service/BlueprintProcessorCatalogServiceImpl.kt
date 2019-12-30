@@ -146,6 +146,8 @@ class BlueprintProcessorCatalogServiceImpl(
         blueprintModel.published = metadata[BluePrintConstants.PROPERTY_BLUEPRINT_VALID]
             ?: BluePrintConstants.FLAG_N
         blueprintModel.artifactName = artifactName
+        blueprintModel.mode = metadata[BluePrintConstants.METADATA_TEMPLATE_MODE]
+        blueprintModel.group = metadata[BluePrintConstants.METADATA_TEMPLATE_GROUP]
         blueprintModel.artifactVersion = artifactVersion
         blueprintModel.updatedBy = metadata[BluePrintConstants.METADATA_TEMPLATE_AUTHOR]!!
         blueprintModel.tags = metadata[BluePrintConstants.METADATA_TEMPLATE_TAGS]!!

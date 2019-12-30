@@ -186,6 +186,8 @@ object BluePrintConstants {
     const val PROPERTY_SELF = "SELF"
 
     const val METADATA_TEMPLATE_NAME = "template_name"
+    const val METADATA_TEMPLATE_GROUP = "template_group"
+    const val METADATA_TEMPLATE_MODE = "template_mode"
     const val METADATA_TEMPLATE_VERSION = "template_version"
     const val METADATA_TEMPLATE_TYPE = "template_type"
     const val METADATA_TEMPLATE_AUTHOR = "template_author"
