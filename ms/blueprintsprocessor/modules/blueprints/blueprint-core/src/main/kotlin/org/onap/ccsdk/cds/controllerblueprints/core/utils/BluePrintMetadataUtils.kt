@@ -91,6 +91,7 @@ class BluePrintMetadataUtils {
                             "Created-By" -> toscaMetaData.createdBy = value
                             "Entry-Definitions" -> toscaMetaData.entityDefinitions = value
                             "Template-Name" -> toscaMetaData.templateName = value
+                            "Dictionary-Group" -> toscaMetaData.dictionaryGroup = value
                             "Template-Version" -> toscaMetaData.templateVersion = value
                             "Template-Tags" -> toscaMetaData.templateTags = value
                             "Template-Type" -> toscaMetaData.templateType = value
@@ -227,6 +228,7 @@ class BluePrintMetadataUtils {
             val metadata = serviceTemplate.metadata!!
             metadata[BluePrintConstants.METADATA_TEMPLATE_AUTHOR] = toscaMetaData.createdBy
             metadata[BluePrintConstants.METADATA_TEMPLATE_NAME] = toscaMetaData.templateName
+            metadata[BluePrintConstants.METADATA_DICTIONARY_GROUP] = toscaMetaData.dictionaryGroup
             metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION] = toscaMetaData.templateVersion
             metadata[BluePrintConstants.METADATA_TEMPLATE_TAGS] = toscaMetaData.templateTags
             metadata[BluePrintConstants.METADATA_TEMPLATE_TYPE] = toscaMetaData.templateType

@@ -3,5 +3,7 @@ CSAR-Version: 1.0
 Created-By: Rodrigo Ottero
 Entry-Definitions: Definitions/pnf_config.json
 Template-Name: pnf_config
+Template-Group: default
+Template-Mode: Script
 Template-Version: 1.0.0
 Template-Tags: activation-blueprint
