@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "224b5cc1_2121a5a4",
+        "filename": "components/model-catalog/blueprint-model/test-blueprint/baseconfiguration/TOSCA-Metadata/TOSCA.meta",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2019-12-31T13:51:49Z",
+      "side": 1,
+      "message": "Shouldn\u0027t it be \u0027Script\u0027 instead scripting ?",
+      "revId": "30cad9b8e4a2cfe4e36724c5a4dec913d9a92c18",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "851aaf0e_4c0964ce",
+        "filename": "ms/blueprintsprocessor/application/src/main/resources/sql/schema.sql",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2019-12-31T13:51:49Z",
+      "side": 1,
+      "message": "please add \u0027group\u0027 as well.",
+      "revId": "30cad9b8e4a2cfe4e36724c5a4dec913d9a92c18",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
