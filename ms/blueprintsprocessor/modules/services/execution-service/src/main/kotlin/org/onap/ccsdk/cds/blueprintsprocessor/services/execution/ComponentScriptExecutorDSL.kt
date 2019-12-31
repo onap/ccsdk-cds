@@ -25,10 +25,17 @@ import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.AbstractNodeTemplateOperationImplBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.PropertiesAssignmentBuilder
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.ServiceTemplateBuilder
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.TopologyTemplateBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.nodeType
 import kotlin.reflect.KClass
 
 /** Component Extensions **/
+fun ServiceTemplateBuilder.nodeTypeComponentScriptExecutor() {
+    val nodeType = BluePrintTypes.nodeTypeComponentScriptExecutor()
+    if (this.nodeTypes == null) this.nodeTypes = hashMapOf()
+    this.nodeTypes!![nodeType.id!!] = nodeType
+}
 
 fun BluePrintTypes.nodeTypeComponentScriptExecutor(): NodeType {
     return nodeType(
@@ -80,19 +87,31 @@ fun BluePrintTypes.nodeTypeComponentScriptExecutor(): NodeType {
 }
 
 /** Component Builder */
+fun TopologyTemplateBuilder.nodeTemplateComponentScriptExecutor(
+    id: String,
+    description: String,
+    block: ComponentScriptExecutorNodeTemplateBuilder.() -> Unit
+) {
+    val nodeTemplate = BluePrintTypes.nodeTemplateComponentScriptExecutor(
+        id, description,
+        block
+    )
+    if (nodeTemplates == null) nodeTemplates = hashMapOf()
+    nodeTemplates!![nodeTemplate.id!!] = nodeTemplate
+}
+
 fun BluePrintTypes.nodeTemplateComponentScriptExecutor(
     id: String,
     description: String,
     block: ComponentScriptExecutorNodeTemplateBuilder.() -> Unit
-):
-        NodeTemplate {
+): NodeTemplate {
     return ComponentScriptExecutorNodeTemplateBuilder(id, description).apply(block).build()
 }
 
 class ComponentScriptExecutorNodeTemplateBuilder(id: String, description: String) :
     AbstractNodeTemplateOperationImplBuilder<PropertiesAssignmentBuilder,
-            ComponentScriptExecutorNodeTemplateBuilder.InputsBuilder,
-            ComponentScriptExecutorNodeTemplateBuilder.OutputsBuilder>(
+        ComponentScriptExecutorNodeTemplateBuilder.InputsBuilder,
+        ComponentScriptExecutorNodeTemplateBuilder.OutputsBuilder>(
         id, "component-script-executor",
         "ComponentScriptExecutor",
         description
@@ -110,7 +129,8 @@ class ComponentScriptExecutorNodeTemplateBuilder(id: String, description: String
             scriptClassReference(scriptClassReference.qualifiedName!!)
         }
 
-        fun scriptClassReference(scriptClassReference: String) = scriptClassReference(scriptClassReference.asJsonPrimitive())
+        fun scriptClassReference(scriptClassReference: String) =
+            scriptClassReference(scriptClassReference.asJsonPrimitive())
 
         fun scriptClassReference(scriptClassReference: JsonNode) {
             property(ComponentScriptExecutor.INPUT_SCRIPT_CLASS_REFERENCE, scriptClassReference)

@@ -24,10 +24,17 @@ import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.RelationshipType
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.PropertiesAssignmentBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.RelationshipTemplateBuilder
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.ServiceTemplateBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.TopologyTemplateBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.relationshipType
 
 /** Relationships Types DSL for GRPC Server Producer */
+fun ServiceTemplateBuilder.relationshipTypeConnectsToGrpcServer() {
+    val relationshipType = BluePrintTypes.relationshipTypeConnectsToGrpcServer()
+    if (this.relationshipTypes == null) this.relationshipTypes = hashMapOf()
+    this.relationshipTypes!![relationshipType.id!!] = relationshipType
+}
+
 fun BluePrintTypes.relationshipTypeConnectsToGrpcServer(): RelationshipType {
     return relationshipType(
         id = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_GRPC_SERVER,
@@ -43,6 +50,12 @@ fun BluePrintTypes.relationshipTypeConnectsToGrpcServer(): RelationshipType {
         )
         validTargetTypes(arrayListOf(BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT))
     }
+}
+
+fun ServiceTemplateBuilder.relationshipTypeConnectsToGrpcClient() {
+    val relationshipType = BluePrintTypes.relationshipTypeConnectsToGrpcClient()
+    if (this.relationshipTypes == null) this.relationshipTypes = hashMapOf()
+    this.relationshipTypes!![relationshipType.id!!] = relationshipType
 }
 
 fun BluePrintTypes.relationshipTypeConnectsToGrpcClient(): RelationshipType {

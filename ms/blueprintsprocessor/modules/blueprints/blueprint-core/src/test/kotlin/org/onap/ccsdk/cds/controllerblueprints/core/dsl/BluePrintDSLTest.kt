@@ -100,6 +100,21 @@ class BluePrintDSLTest {
             import("Definition/data_types.json")
             dsl("rest-endpoint", """{ "selector" : "odl-selector"}""")
             dsl("db-endpoint", """{ "selector" : "db-selector"}""")
+
+            nodeTypeComponent()
+            nodeTypeResourceSource()
+            nodeTypeVnf()
+
+            artifactTypeTemplateVelocity()
+            artifactTypeTempleJinja()
+            artifactTypeScriptKotlin()
+            artifactTypeMappingResource()
+            artifactTypeComponentJar()
+
+            relationshipTypeConnectsTo()
+            relationshipTypeDependsOn()
+            relationshipTypeHostedOn()
+
             topologyTemplate {
                 nodeTemplateOperation(
                     nodeTemplateName = "activate", type = "sample-node-type", interfaceName = "RestconfExecutor",
@@ -162,10 +177,16 @@ class BluePrintDSLTest {
             }
         }
 
+        // println(serviceTemplate.asJsonString(true))
+        assertNotNull(serviceTemplate.artifactTypes, "failed to get artifactTypes")
+        assertNotNull(serviceTemplate.nodeTypes, "failed to get nodeTypes")
+        assertNotNull(serviceTemplate.relationshipTypes, "failed to get relationshipTypes")
         assertNotNull(serviceTemplate.topologyTemplate, "failed to get topology template")
         assertNotNull(serviceTemplate.topologyTemplate?.nodeTemplates, "failed to get nodeTypes")
-        assertNotNull(serviceTemplate.topologyTemplate?.nodeTemplates!!["activate"], "failed to get nodeTypes(activate)")
-        // println(serviceTemplate.asJsonString(true))
+        assertNotNull(
+            serviceTemplate.topologyTemplate?.nodeTemplates!!["activate"],
+            "failed to get nodeTypes(activate)"
+        )
     }
 
     @Test
@@ -254,7 +275,7 @@ fun BluePrintTypes.nodeTemplateComponentTestExecutor(
     description: String,
     block: TestNodeTemplateOperationImplBuilder.() -> Unit
 ):
-        NodeTemplate {
+    NodeTemplate {
     return TestNodeTemplateOperationImplBuilder(id, description).apply(block).build()
 }
 

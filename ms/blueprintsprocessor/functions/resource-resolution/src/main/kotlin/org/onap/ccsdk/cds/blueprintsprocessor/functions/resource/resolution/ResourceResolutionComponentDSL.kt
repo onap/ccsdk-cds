@@ -26,10 +26,18 @@ import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.AbstractNodeTemplateOperationImplBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.PropertiesAssignmentBuilder
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.ServiceTemplateBuilder
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.TopologyTemplateBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.nodeType
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 
 /** Component Extensions **/
+fun ServiceTemplateBuilder.nodeTypeComponentResourceResolution() {
+    val nodeType = BluePrintTypes.nodeTypeComponentResourceResolution()
+    if (this.nodeTypes == null) this.nodeTypes = hashMapOf()
+    this.nodeTypes!![nodeType.id!!] = nodeType
+}
+
 fun BluePrintTypes.nodeTypeComponentResourceResolution(): NodeType {
     return nodeType(
         id = "component-resource-resolution", version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
@@ -112,19 +120,31 @@ fun BluePrintTypes.nodeTypeComponentResourceResolution(): NodeType {
 }
 
 /** Component Builder */
+fun TopologyTemplateBuilder.nodeTemplateComponentResourceResolution(
+    id: String,
+    description: String,
+    block: ComponentResourceResolutionNodeTemplateBuilder.() -> Unit
+) {
+    val nodeTemplate = BluePrintTypes.nodeTemplateComponentResourceResolution(
+        id, description,
+        block
+    )
+    if (nodeTemplates == null) nodeTemplates = hashMapOf()
+    nodeTemplates!![nodeTemplate.id!!] = nodeTemplate
+}
+
 fun BluePrintTypes.nodeTemplateComponentResourceResolution(
     id: String,
     description: String,
     block: ComponentResourceResolutionNodeTemplateBuilder.() -> Unit
-):
-        NodeTemplate {
+): NodeTemplate {
     return ComponentResourceResolutionNodeTemplateBuilder(id, description).apply(block).build()
 }
 
 class ComponentResourceResolutionNodeTemplateBuilder(id: String, description: String) :
     AbstractNodeTemplateOperationImplBuilder<PropertiesAssignmentBuilder,
-            ComponentResourceResolutionNodeTemplateBuilder.InputsBuilder,
-            ComponentResourceResolutionNodeTemplateBuilder.OutputsBuilder>(
+        ComponentResourceResolutionNodeTemplateBuilder.InputsBuilder,
+        ComponentResourceResolutionNodeTemplateBuilder.OutputsBuilder>(
         id, "component-script-executor",
         "ComponentResourceResolution",
         description

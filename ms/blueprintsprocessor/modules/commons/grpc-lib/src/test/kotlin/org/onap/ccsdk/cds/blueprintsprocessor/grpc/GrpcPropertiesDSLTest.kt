@@ -17,7 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.grpc
 
 import org.junit.Test
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.relationshipTypeConnectsTo
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.serviceTemplate
 import kotlin.test.assertEquals
@@ -44,20 +44,29 @@ class GrpcPropertiesDSLTest {
                     }
                 }
             }
-            relationshipTypes(
-                arrayListOf(
-                    BluePrintTypes.relationshipTypeConnectsToGrpcServer(),
-                    BluePrintTypes.relationshipTypeConnectsTo()
-                )
-            )
+            relationshipTypeConnectsToGrpcServer()
+            relationshipTypeConnectsTo()
         }
+
+        // println(serviceTemplate.asJsonString(true))
         assertNotNull(serviceTemplate, "failed to create service template")
         val relationshipTemplates = serviceTemplate.topologyTemplate?.relationshipTemplates
         assertNotNull(relationshipTemplates, "failed to get relationship templates")
         assertEquals(2, relationshipTemplates.size, "relationshipTemplates doesn't match")
         assertNotNull(relationshipTemplates["sample-tls-auth"], "failed to get sample-tls-auth")
         assertNotNull(relationshipTemplates["sample-token-auth"], "failed to get sample-token-auth")
-        // println(serviceTemplate.asJsonString(true))
+
+        val relationshipTypes = serviceTemplate.relationshipTypes
+        assertNotNull(relationshipTypes, "failed to get relationship types")
+        assertEquals(2, relationshipTypes.size, "relationshipTypes doesn't match")
+        assertNotNull(
+            relationshipTypes[BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO],
+            "failed to get ${BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO}"
+        )
+        assertNotNull(
+            relationshipTypes[BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_GRPC_SERVER],
+            "failed to get ${BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_GRPC_SERVER}"
+        )
     }
 
     @Test
@@ -89,13 +98,11 @@ class GrpcPropertiesDSLTest {
                     }
                 }
             }
-            relationshipTypes(
-                arrayListOf(
-                    BluePrintTypes.relationshipTypeConnectsToGrpcClient(),
-                    BluePrintTypes.relationshipTypeConnectsTo()
-                )
-            )
+            relationshipTypeConnectsToGrpcClient()
+            relationshipTypeConnectsTo()
         }
+
+        // println(serviceTemplate.asJsonString(true))
         assertNotNull(serviceTemplate, "failed to create service template")
         val relationshipTemplates = serviceTemplate.topologyTemplate?.relationshipTemplates
         assertNotNull(relationshipTemplates, "failed to get relationship templates")
@@ -103,6 +110,17 @@ class GrpcPropertiesDSLTest {
         assertNotNull(relationshipTemplates["sample-tls-auth"], "failed to get sample-tls-auth")
         assertNotNull(relationshipTemplates["sample-basic-auth"], "failed to get sample-basic-auth")
         assertNotNull(relationshipTemplates["sample-token-auth"], "failed to get sample-token-auth")
-        // println(serviceTemplate.asJsonString(true))
+
+        val relationshipTypes = serviceTemplate.relationshipTypes
+        assertNotNull(relationshipTypes, "failed to get relationship types")
+        assertEquals(2, relationshipTypes.size, "relationshipTypes doesn't match")
+        assertNotNull(
+            relationshipTypes[BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO],
+            "failed to get ${BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO}"
+        )
+        assertNotNull(
+            relationshipTypes[BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_GRPC_CLIENT],
+            "failed to get ${BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_GRPC_CLIENT}"
+        )
     }
 }

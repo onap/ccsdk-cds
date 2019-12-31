@@ -46,9 +46,9 @@ fun serviceTemplate(
     version: String,
     author: String,
     tags: String,
-    block: BluePrintServiceDSLBuilder.() -> Unit
+    block: ServiceTemplateBuilder.() -> Unit
 ): ServiceTemplate {
-    return BluePrintServiceDSLBuilder(name, version, author, tags).apply(block).build()
+    return ServiceTemplateBuilder(name, version, author, tags).apply(block).build()
 }
 
 fun workflow(id: String, description: String, block: WorkflowBuilder.() -> Unit): Workflow {
@@ -171,6 +171,11 @@ fun getNodeTemplateOperationOutput(
 }
 
 /** Blueprint Type Extensions */
+fun ServiceTemplateBuilder.nodeTypeComponent() {
+    val nodeType = BluePrintTypes.nodeTypeComponent()
+    if (this.nodeTypes == null) this.nodeTypes = hashMapOf()
+    this.nodeTypes!![nodeType.id!!] = nodeType
+}
 
 fun BluePrintTypes.nodeTypeComponent(): NodeType {
     return nodeType(
@@ -182,6 +187,7 @@ fun BluePrintTypes.nodeTypeComponent(): NodeType {
     }
 }
 
+@Deprecated("CDS won't support, use implerative workflow definitions.")
 fun BluePrintTypes.nodeTypeWorkflow(): NodeType {
     return nodeType(
         id = BluePrintConstants.MODEL_TYPE_NODE_WORKFLOW,
@@ -192,6 +198,12 @@ fun BluePrintTypes.nodeTypeWorkflow(): NodeType {
     }
 }
 
+fun ServiceTemplateBuilder.nodeTypeVnf() {
+    val nodeType = BluePrintTypes.nodeTypeVnf()
+    if (this.nodeTypes == null) this.nodeTypes = hashMapOf()
+    this.nodeTypes!![nodeType.id!!] = nodeType
+}
+
 fun BluePrintTypes.nodeTypeVnf(): NodeType {
     return nodeType(
         id = BluePrintConstants.MODEL_TYPE_NODE_VNF,
@@ -200,6 +212,12 @@ fun BluePrintTypes.nodeTypeVnf(): NodeType {
         description = "This is default VNF Node"
     ) {
     }
+}
+
+fun ServiceTemplateBuilder.nodeTypeResourceSource() {
+    val nodeType = BluePrintTypes.nodeTypeResourceSource()
+    if (this.nodeTypes == null) this.nodeTypes = hashMapOf()
+    this.nodeTypes!![nodeType.id!!] = nodeType
 }
 
 fun BluePrintTypes.nodeTypeResourceSource(): NodeType {
@@ -213,6 +231,11 @@ fun BluePrintTypes.nodeTypeResourceSource(): NodeType {
 }
 
 /** Artifacts */
+fun ServiceTemplateBuilder.artifactTypeTemplateVelocity() {
+    val artifactType = BluePrintTypes.artifactTypeTemplateVelocity()
+    if (this.artifactTypes == null) this.artifactTypes = hashMapOf()
+    this.artifactTypes!![artifactType.id!!] = artifactType
+}
 
 fun BluePrintTypes.artifactTypeTemplateVelocity(): ArtifactType {
     return artifactType(
@@ -225,6 +248,12 @@ fun BluePrintTypes.artifactTypeTemplateVelocity(): ArtifactType {
     }
 }
 
+fun ServiceTemplateBuilder.artifactTypeTempleJinja() {
+    val artifactType = BluePrintTypes.artifactTypeTempleJinja()
+    if (this.artifactTypes == null) this.artifactTypes = hashMapOf()
+    this.artifactTypes!![artifactType.id!!] = artifactType
+}
+
 fun BluePrintTypes.artifactTypeTempleJinja(): ArtifactType {
     return artifactType(
         id = BluePrintConstants.MODEL_TYPE_ARTIFACT_TEMPLATE_JINJA,
@@ -234,6 +263,12 @@ fun BluePrintTypes.artifactTypeTempleJinja(): ArtifactType {
     ) {
         fileExt("jinja")
     }
+}
+
+fun ServiceTemplateBuilder.artifactTypeMappingResource() {
+    val artifactType = BluePrintTypes.artifactTypeMappingResource()
+    if (this.artifactTypes == null) this.artifactTypes = hashMapOf()
+    this.artifactTypes!![artifactType.id!!] = artifactType
 }
 
 fun BluePrintTypes.artifactTypeMappingResource(): ArtifactType {
@@ -259,6 +294,12 @@ fun BluePrintTypes.artifactTypeScriptJython(): ArtifactType {
     }
 }
 
+fun ServiceTemplateBuilder.artifactTypeScriptKotlin() {
+    val artifactType = BluePrintTypes.artifactTypeScriptKotlin()
+    if (this.artifactTypes == null) this.artifactTypes = hashMapOf()
+    this.artifactTypes!![artifactType.id!!] = artifactType
+}
+
 fun BluePrintTypes.artifactTypeScriptKotlin(): ArtifactType {
     return artifactType(
         id = BluePrintConstants.MODEL_TYPE_ARTIFACT_SCRIPT_KOTLIN,
@@ -282,6 +323,12 @@ fun BluePrintTypes.artifactTypeDirectedGraph(): ArtifactType {
     }
 }
 
+fun ServiceTemplateBuilder.artifactTypeComponentJar() {
+    val artifactType = BluePrintTypes.artifactTypeComponentJar()
+    if (this.artifactTypes == null) this.artifactTypes = hashMapOf()
+    this.artifactTypes!![artifactType.id!!] = artifactType
+}
+
 fun BluePrintTypes.artifactTypeComponentJar(): ArtifactType {
     return artifactType(
         id = BluePrintConstants.MODEL_TYPE_ARTIFACT_COMPONENT_JAR,
@@ -295,6 +342,12 @@ fun BluePrintTypes.artifactTypeComponentJar(): ArtifactType {
 
 /** Relationship Types */
 
+fun ServiceTemplateBuilder.relationshipTypeConnectsTo() {
+    val relationshipType = BluePrintTypes.relationshipTypeConnectsTo()
+    if (this.relationshipTypes == null) this.relationshipTypes = hashMapOf()
+    this.relationshipTypes!![relationshipType.id!!] = relationshipType
+}
+
 fun BluePrintTypes.relationshipTypeConnectsTo(): RelationshipType {
     return relationshipType(
         id = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO,
@@ -306,6 +359,12 @@ fun BluePrintTypes.relationshipTypeConnectsTo(): RelationshipType {
     }
 }
 
+fun ServiceTemplateBuilder.relationshipTypeDependsOn() {
+    val relationshipType = BluePrintTypes.relationshipTypeDependsOn()
+    if (this.relationshipTypes == null) this.relationshipTypes = hashMapOf()
+    this.relationshipTypes!![relationshipType.id!!] = relationshipType
+}
+
 fun BluePrintTypes.relationshipTypeDependsOn(): RelationshipType {
     return relationshipType(
         id = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_DEPENDS_ON,
@@ -314,6 +373,12 @@ fun BluePrintTypes.relationshipTypeDependsOn(): RelationshipType {
         description = "Relationship depends on"
     ) {
     }
+}
+
+fun ServiceTemplateBuilder.relationshipTypeHostedOn() {
+    val relationshipType = BluePrintTypes.relationshipTypeHostedOn()
+    if (this.relationshipTypes == null) this.relationshipTypes = hashMapOf()
+    this.relationshipTypes!![relationshipType.id!!] = relationshipType
 }
 
 fun BluePrintTypes.relationshipTypeHostedOn(): RelationshipType {

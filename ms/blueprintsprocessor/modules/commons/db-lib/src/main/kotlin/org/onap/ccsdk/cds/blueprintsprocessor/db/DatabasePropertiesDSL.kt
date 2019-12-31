@@ -24,10 +24,17 @@ import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.RelationshipType
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.PropertiesAssignmentBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.RelationshipTemplateBuilder
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.ServiceTemplateBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.TopologyTemplateBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.relationshipType
 
 /** Relationships Types DSL for Database Producer */
+fun ServiceTemplateBuilder.relationshipTypeConnectsToDb() {
+    val relationshipType = BluePrintTypes.relationshipTypeConnectsToDb()
+    if (this.relationshipTypes == null) this.relationshipTypes = hashMapOf()
+    this.relationshipTypes!![relationshipType.id!!] = relationshipType
+}
+
 fun BluePrintTypes.relationshipTypeConnectsToDb(): RelationshipType {
     return relationshipType(
         id = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_DB,

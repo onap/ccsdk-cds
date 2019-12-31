@@ -19,7 +19,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.rest.service
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.relationshipTemplateRestClient
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.relationshipTypeConnectsToRestClient
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.relationshipTypeConnectsTo
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.serviceTemplate
 import kotlin.test.assertEquals
@@ -56,12 +56,8 @@ class RestClientPropertiesDSLTest {
                     }
                 }
             }
-            relationshipTypes(
-                arrayListOf(
-                    BluePrintTypes.relationshipTypeConnectsToRestClient(),
-                    BluePrintTypes.relationshipTypeConnectsTo()
-                )
-            )
+            relationshipTypeConnectsToRestClient()
+            relationshipTypeConnectsTo()
         }
 
         // println(serviceTemplate.asJsonString(true))
@@ -72,5 +68,17 @@ class RestClientPropertiesDSLTest {
         assertNotNull(relationshipTemplates["sample-basic-auth"], "failed to get sample-basic-auth")
         assertNotNull(relationshipTemplates["sample-token-auth"], "failed to get sample-token-auth")
         assertNotNull(relationshipTemplates["sample-ssl-auth"], "failed to get sample-ssl-auth")
+
+        val relationshipTypes = serviceTemplate.relationshipTypes
+        assertNotNull(relationshipTypes, "failed to get relationship types")
+        assertEquals(2, relationshipTypes.size, "relationshipTypes doesn't match")
+        assertNotNull(
+            relationshipTypes[BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO],
+            "failed to get ${BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO}"
+        )
+        assertNotNull(
+            relationshipTypes[BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_REST_CLIENT],
+            "failed to get ${BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_REST_CLIENT}"
+        )
     }
 }

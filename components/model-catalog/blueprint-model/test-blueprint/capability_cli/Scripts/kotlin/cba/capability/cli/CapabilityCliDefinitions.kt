@@ -21,8 +21,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.nodeTypeCompone
 import org.onap.ccsdk.cds.blueprintsprocessor.ssh.relationshipTemplateSshClient
 import org.onap.ccsdk.cds.blueprintsprocessor.ssh.relationshipTypeConnectsToSshClient
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
-import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ServiceTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.artifactTypeTemplateVelocity
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.getAttribute
@@ -62,7 +60,8 @@ fun CapabilityCliDefinitions.defaultServiceTemplate() =
                 step(id = "check", target = "check", description = "Calling check script node")
             }
 
-            val checkComponent = BluePrintTypes.nodeTemplateComponentScriptExecutor(id = "check", description = "") {
+            /** Check component Node Template */
+            nodeTemplateComponentScriptExecutor(id = "check", description = "") {
                 definedOperation(description = "") {
                     inputs {
                         type(BluePrintConstants.SCRIPT_KOTLIN)
@@ -78,7 +77,6 @@ fun CapabilityCliDefinitions.defaultServiceTemplate() =
                     file = "Templates/check-command-template.vtl"
                 )
             }
-            nodeTemplate(checkComponent)
 
             /** Connection Configuration through Relationship **/
             relationshipTemplateSshClient("ssh-connection-config", "Device connection config") {
@@ -91,11 +89,11 @@ fun CapabilityCliDefinitions.defaultServiceTemplate() =
         }
 
         /** Artifact Types */
-        artifactType(BluePrintTypes.artifactTypeTemplateVelocity())
+        artifactTypeTemplateVelocity()
         /** Node Types */
-        nodeType(BluePrintTypes.nodeTypeComponent())
-        nodeType(BluePrintTypes.nodeTypeComponentScriptExecutor())
+        nodeTypeComponent()
+        nodeTypeComponentScriptExecutor()
         /** Relationship Types */
-        relationshipType(BluePrintTypes.relationshipTypeConnectsToSshClient())
-        relationshipType(BluePrintTypes.relationshipTypeConnectsTo())
+        relationshipTypeConnectsToSshClient()
+        relationshipTypeConnectsTo()
     }

@@ -24,10 +24,17 @@ import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.RelationshipType
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.PropertiesAssignmentBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.RelationshipTemplateBuilder
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.ServiceTemplateBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.TopologyTemplateBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.relationshipType
 
 /** Relationships Type DSL for Rest */
+fun ServiceTemplateBuilder.relationshipTypeConnectsToRestClient() {
+    val relationshipType = BluePrintTypes.relationshipTypeConnectsToRestClient()
+    if (this.relationshipTypes == null) this.relationshipTypes = hashMapOf()
+    this.relationshipTypes!![relationshipType.id!!] = relationshipType
+}
+
 fun BluePrintTypes.relationshipTypeConnectsToRestClient(): RelationshipType {
     return relationshipType(
         id = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_REST_CLIENT,

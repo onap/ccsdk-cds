@@ -17,7 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.nats
 
 import org.junit.Test
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.getInput
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.relationshipTypeConnectsTo
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.serviceTemplate
@@ -43,21 +43,28 @@ class NatsPropertiesDSLTest {
                     }
                 }
             }
-
-            relationshipTypes(
-                arrayListOf(
-                    BluePrintTypes.relationshipTypeConnectsToNats(),
-                    BluePrintTypes.relationshipTypeConnectsTo()
-                )
-            )
+            relationshipTypeConnectsToNats()
+            relationshipTypeConnectsTo()
         }
 
+        // println(serviceTemplate.asJsonString(true))
         assertNotNull(serviceTemplate, "failed to create service template")
         val relationshipTemplates = serviceTemplate.topologyTemplate?.relationshipTemplates
         assertNotNull(relationshipTemplates, "failed to get relationship templates")
         assertEquals(2, relationshipTemplates.size, "relationshipTemplates doesn't match")
         assertNotNull(relationshipTemplates["sample-token-auth"], "failed to get sample-token-auth")
         assertNotNull(relationshipTemplates["sample-tls-auth"], "failed to get sample-tls-auth")
-        // println(serviceTemplate.asJsonString(true))
+
+        val relationshipTypes = serviceTemplate.relationshipTypes
+        assertNotNull(relationshipTypes, "failed to get relationship types")
+        assertEquals(2, relationshipTypes.size, "relationshipTypes doesn't match")
+        assertNotNull(
+            relationshipTypes[BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO],
+            "failed to get ${BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO}"
+        )
+        assertNotNull(
+            relationshipTypes[BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_NATS],
+            "failed to get ${BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_NATS}"
+        )
     }
 }

@@ -32,7 +32,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.data.ServiceTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.data.TopologyTemplate
 import kotlin.reflect.KClass
 
-class BluePrintServiceDSLBuilder(
+class ServiceTemplateBuilder(
     private val name: String,
     private val version: String,
     private val author: String,
@@ -44,11 +44,11 @@ class BluePrintServiceDSLBuilder(
     private var metadata: MutableMap<String, String> = hashMapOf()
     private var dslDefinitions: MutableMap<String, JsonNode>? = null
     private var imports: MutableList<ImportDefinition> = mutableListOf()
-    private var nodeTypes: MutableMap<String, NodeType>? = null
-    private var artifactTypes: MutableMap<String, ArtifactType>? = null
-    private var dataTypes: MutableMap<String, DataType>? = null
-    private var relationshipTypes: MutableMap<String, RelationshipType>? = null
-    private var policyTypes: MutableMap<String, PolicyType>? = null
+    var nodeTypes: MutableMap<String, NodeType>? = null
+    var artifactTypes: MutableMap<String, ArtifactType>? = null
+    var dataTypes: MutableMap<String, DataType>? = null
+    var relationshipTypes: MutableMap<String, RelationshipType>? = null
+    var policyTypes: MutableMap<String, PolicyType>? = null
 
     private fun initMetaData() {
         metadata[BluePrintConstants.METADATA_TEMPLATE_NAME] = name
@@ -93,25 +93,21 @@ class BluePrintServiceDSLBuilder(
 
     fun artifactTypes(artifactTypes: MutableMap<String, ArtifactType>) {
         if (this.artifactTypes == null) this.artifactTypes = hashMapOf()
-
         this.artifactTypes!!.putAll(artifactTypes)
     }
 
     fun relationshipTypes(relationshipTypes: MutableMap<String, RelationshipType>) {
         if (this.relationshipTypes == null) this.relationshipTypes = hashMapOf()
-
         this.relationshipTypes!!.putAll(relationshipTypes)
     }
 
     fun policyTypes(policyTypes: MutableMap<String, PolicyType>) {
         if (this.policyTypes == null) this.policyTypes = hashMapOf()
-
         this.policyTypes!!.putAll(policyTypes)
     }
 
     fun nodeType(nodeTypes: MutableMap<String, NodeType>) {
         if (this.nodeTypes == null) this.nodeTypes = hashMapOf()
-
         this.nodeTypes!!.putAll(nodeTypes)
     }
 
@@ -139,7 +135,6 @@ class BluePrintServiceDSLBuilder(
 
     fun policyType(policyType: PolicyType) {
         if (policyTypes == null) policyTypes = hashMapOf()
-
         policyTypes!![policyType.id!!] = policyType
     }
 

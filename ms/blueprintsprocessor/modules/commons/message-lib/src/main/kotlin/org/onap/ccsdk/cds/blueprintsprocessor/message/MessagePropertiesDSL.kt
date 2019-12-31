@@ -24,10 +24,17 @@ import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.RelationshipType
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.PropertiesAssignmentBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.RelationshipTemplateBuilder
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.ServiceTemplateBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.TopologyTemplateBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.relationshipType
 
 /** Relationships Types DSL for Message Producer */
+fun ServiceTemplateBuilder.relationshipTypeConnectsToMessageProducer() {
+    val relationshipType = BluePrintTypes.relationshipTypeConnectsToMessageProducer()
+    if (this.relationshipTypes == null) this.relationshipTypes = hashMapOf()
+    this.relationshipTypes!![relationshipType.id!!] = relationshipType
+}
+
 fun BluePrintTypes.relationshipTypeConnectsToMessageProducer(): RelationshipType {
     return relationshipType(
         id = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_MESSAGE_PRODUCER,
@@ -43,6 +50,12 @@ fun BluePrintTypes.relationshipTypeConnectsToMessageProducer(): RelationshipType
         )
         validTargetTypes(arrayListOf(BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT))
     }
+}
+
+fun ServiceTemplateBuilder.relationshipTypeConnectsToMessageConsumer() {
+    val relationshipType = BluePrintTypes.relationshipTypeConnectsToMessageConsumer()
+    if (this.relationshipTypes == null) this.relationshipTypes = hashMapOf()
+    this.relationshipTypes!![relationshipType.id!!] = relationshipType
 }
 
 fun BluePrintTypes.relationshipTypeConnectsToMessageConsumer(): RelationshipType {

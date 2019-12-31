@@ -17,7 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.ssh
 
 import org.junit.Test
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.relationshipTypeConnectsTo
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.serviceTemplate
 import kotlin.test.assertEquals
@@ -38,19 +38,27 @@ class SshPropertiesDSLTest {
                     }
                 }
             }
-            relationshipTypes(
-                arrayListOf(
-                    BluePrintTypes.relationshipTypeConnectsToSshClient(),
-                    BluePrintTypes.relationshipTypeConnectsTo()
-                )
-            )
+            relationshipTypeConnectsToSshClient()
+            relationshipTypeConnectsTo()
         }
 
+        // println(serviceTemplate.asJsonString(true))
         assertNotNull(serviceTemplate, "failed to create service template")
         val relationshipTemplates = serviceTemplate.topologyTemplate?.relationshipTemplates
         assertNotNull(relationshipTemplates, "failed to get relationship templates")
         assertEquals(1, relationshipTemplates.size, "relationshipTemplates doesn't match")
         assertNotNull(relationshipTemplates["sample-basic-auth"], "failed to get sample-basic-auth")
-        // println(serviceTemplate.asJsonString(true))
+
+        val relationshipTypes = serviceTemplate.relationshipTypes
+        assertNotNull(relationshipTypes, "failed to get relationship types")
+        assertEquals(2, relationshipTypes.size, "relationshipTypes doesn't match")
+        assertNotNull(
+            relationshipTypes[BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO],
+            "failed to get ${BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO}"
+        )
+        assertNotNull(
+            relationshipTypes[BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_SSH_CLIENT],
+            "failed to get ${BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_SSH_CLIENT}"
+        )
     }
 }

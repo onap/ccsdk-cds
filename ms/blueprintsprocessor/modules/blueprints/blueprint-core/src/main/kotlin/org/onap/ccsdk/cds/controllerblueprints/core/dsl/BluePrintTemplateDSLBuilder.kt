@@ -36,7 +36,7 @@ import kotlin.reflect.jvm.reflect
 
 open class TopologyTemplateBuilder {
     private var topologyTemplate = TopologyTemplate()
-    private var nodeTemplates: MutableMap<String, NodeTemplate>? = null
+    var nodeTemplates: MutableMap<String, NodeTemplate>? = null
     var relationshipTemplates: MutableMap<String, RelationshipTemplate>? = null
     private var workflows: MutableMap<String, Workflow>? = null
 

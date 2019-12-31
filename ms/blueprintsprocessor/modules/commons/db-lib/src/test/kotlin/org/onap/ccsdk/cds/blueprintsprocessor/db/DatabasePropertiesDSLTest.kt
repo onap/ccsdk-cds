@@ -17,7 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.db
 
 import org.junit.Test
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.relationshipTypeConnectsTo
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.serviceTemplate
 import kotlin.test.assertEquals
@@ -52,19 +52,28 @@ class DatabasePropertiesDSLTest {
                     }
                 }
             }
-            relationshipTypes(
-                arrayListOf(
-                    BluePrintTypes.relationshipTypeConnectsToDb(),
-                    BluePrintTypes.relationshipTypeConnectsTo()
-                )
-            )
+            relationshipTypeConnectsToDb()
+            relationshipTypeConnectsTo()
         }
+
+        // println(serviceTemplate.asJsonString(true))
         assertNotNull(serviceTemplate, "failed to create service template")
         val relationshipTemplates = serviceTemplate.topologyTemplate?.relationshipTemplates
         assertNotNull(relationshipTemplates, "failed to get relationship templates")
         assertEquals(2, relationshipTemplates.size, "relationshipTemplates doesn't match")
         assertNotNull(relationshipTemplates["sample-maria-db"], "failed to get sample-maria-db")
         assertNotNull(relationshipTemplates["sample-mysql-db"], "failed to get sample-mysql-db")
-        // println(serviceTemplate.asJsonString(true))
+
+        val relationshipTypes = serviceTemplate.relationshipTypes
+        assertNotNull(relationshipTypes, "failed to get relationship types")
+        assertEquals(2, relationshipTypes.size, "relationshipTypes doesn't match")
+        assertNotNull(
+            relationshipTypes[BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO],
+            "failed to get ${BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO}"
+        )
+        assertNotNull(
+            relationshipTypes[BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_DB],
+            "failed to get ${BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_DB}"
+        )
     }
 }

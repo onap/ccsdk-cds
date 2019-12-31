@@ -36,6 +36,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Implementation
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.serviceTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
@@ -54,26 +55,41 @@ class ComponentRemoteScriptExecutorTest {
     @Test
     fun testNodeTemplateComponentRemoteScriptExecutor() {
 
-        val nodeTemplate = BluePrintTypes.nodeTemplateComponentRemoteScriptExecutor(
-            "remote-sample",
-            "This is sample node template"
-        ) {
-            definedOperation(" Sample Operation") {
-                implementation(180, "SELF")
-                inputs {
-                    selector("remote-script-executor")
-                    blueprintName("sample")
-                    blueprintVersion("1.0.0")
-                    blueprintAction("sample-action")
-                    timeout(120)
-                    requestData("""{"key" :"value"}""")
-                }
-                outputs {
-                    status("success")
+        val serviceTemplate = serviceTemplate("remote-script-dsl", "1.0.0", "xx@xx.com", "remote-script-ds") {
+            topologyTemplate {
+                nodeTemplateComponentRemoteScriptExecutor(
+                    "remote-sample",
+                    "This is sample node template"
+                ) {
+                    definedOperation(" Sample Operation") {
+                        implementation(180, "SELF")
+                        inputs {
+                            selector("remote-script-executor")
+                            blueprintName("sample")
+                            blueprintVersion("1.0.0")
+                            blueprintAction("sample-action")
+                            timeout(120)
+                            requestData("""{"key" :"value"}""")
+                        }
+                        outputs {
+                            status("success")
+                        }
+                    }
                 }
             }
+            nodeTypeComponentRemoteScriptExecutor()
         }
-        assertNotNull(nodeTemplate, "failed to generate nodeTemplate Component Remote Script Executor")
+        // println(serviceTemplate.asJsonString(true))
+        assertNotNull(serviceTemplate, "failed to service template")
+        assertNotNull(serviceTemplate.nodeTypes, "failed to service template node Types")
+        assertNotNull(
+            serviceTemplate.nodeTypes!!["component-remote-script-executor"],
+            "failed to service template nodeType(component-remote-script-executor)"
+        )
+        assertNotNull(
+            serviceTemplate.topologyTemplate?.nodeTemplates?.get("remote-sample"),
+            "failed to nodeTemplate(remote-sample)"
+        )
     }
 
     @Test
@@ -95,7 +111,7 @@ class ComponentRemoteScriptExecutorTest {
 
             val mockStreamingRemoteExecutionService = mockk<StreamingRemoteExecutionService<
                 org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceInput,
-                org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceOutput>>()
+                ExecutionServiceOutput>>()
 
             coEvery {
                 mockStreamingRemoteExecutionService.sendNonInteractive(

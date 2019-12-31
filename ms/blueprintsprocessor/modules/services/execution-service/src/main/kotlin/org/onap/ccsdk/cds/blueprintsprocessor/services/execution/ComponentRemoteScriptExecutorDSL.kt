@@ -25,9 +25,16 @@ import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeType
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.AbstractNodeTemplateOperationImplBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.PropertiesAssignmentBuilder
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.ServiceTemplateBuilder
+import org.onap.ccsdk.cds.controllerblueprints.core.dsl.TopologyTemplateBuilder
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.nodeType
 
 /** Component Extensions **/
+fun ServiceTemplateBuilder.nodeTypeComponentRemoteScriptExecutor() {
+    val nodeType = BluePrintTypes.nodeTypeComponentRemoteScriptExecutor()
+    if (this.nodeTypes == null) this.nodeTypes = hashMapOf()
+    this.nodeTypes!![nodeType.id!!] = nodeType
+}
 
 fun BluePrintTypes.nodeTypeComponentRemoteScriptExecutor(): NodeType {
     return nodeType(
@@ -86,12 +93,24 @@ fun BluePrintTypes.nodeTypeComponentRemoteScriptExecutor(): NodeType {
 }
 
 /** Component Builder */
+fun TopologyTemplateBuilder.nodeTemplateComponentRemoteScriptExecutor(
+    id: String,
+    description: String,
+    block: ComponentRemoteScriptExecutorNodeTemplateBuilder.() -> Unit
+) {
+    val nodeTemplate = BluePrintTypes.nodeTemplateComponentRemoteScriptExecutor(
+        id, description,
+        block
+    )
+    if (nodeTemplates == null) nodeTemplates = hashMapOf()
+    nodeTemplates!![nodeTemplate.id!!] = nodeTemplate
+}
+
 fun BluePrintTypes.nodeTemplateComponentRemoteScriptExecutor(
     id: String,
     description: String,
     block: ComponentRemoteScriptExecutorNodeTemplateBuilder.() -> Unit
-):
-    NodeTemplate {
+): NodeTemplate {
     return ComponentRemoteScriptExecutorNodeTemplateBuilder(id, description).apply(block).build()
 }
 
