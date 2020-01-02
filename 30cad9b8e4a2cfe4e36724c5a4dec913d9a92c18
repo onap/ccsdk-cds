@@ -33,6 +33,167 @@
       "revId": "30cad9b8e4a2cfe4e36724c5a4dec913d9a92c18",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d6a7c3b_be038df5",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/BluePrintConstants.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2020-01-02T17:28:46Z",
+      "side": 1,
+      "message": "Try to avoid template group, use Resource Definition Group,",
+      "range": {
+        "startLine": 189,
+        "startChar": 3,
+        "endLine": 189,
+        "endChar": 56
+      },
+      "revId": "30cad9b8e4a2cfe4e36724c5a4dec913d9a92c18",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43108e40_73eb7dbf",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/BluePrintConstants.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2020-01-02T17:28:46Z",
+      "side": 1,
+      "message": "Use template_type",
+      "range": {
+        "startLine": 190,
+        "startChar": 1,
+        "endLine": 190,
+        "endChar": 54
+      },
+      "revId": "30cad9b8e4a2cfe4e36724c5a4dec913d9a92c18",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17bd5350_3f58816f",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/data/BluePrintModel.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2020-01-02T17:28:46Z",
+      "side": 1,
+      "message": "Not needed",
+      "range": {
+        "startLine": 650,
+        "startChar": 0,
+        "endLine": 651,
+        "endChar": 37
+      },
+      "revId": "30cad9b8e4a2cfe4e36724c5a4dec913d9a92c18",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c90aacf_d4e98133",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/utils/BluePrintMetadataUtils.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2020-01-02T17:28:46Z",
+      "side": 1,
+      "message": "Not needed",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 81
+      },
+      "revId": "30cad9b8e4a2cfe4e36724c5a4dec913d9a92c18",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecbd9355_e7c2c4e1",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/utils/BluePrintMetadataUtils.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2020-01-02T17:28:46Z",
+      "side": 1,
+      "message": "Not Needed",
+      "range": {
+        "startLine": 232,
+        "startChar": 0,
+        "endLine": 233,
+        "endChar": 92
+      },
+      "revId": "30cad9b8e4a2cfe4e36724c5a4dec913d9a92c18",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49567554_d78b5eb0",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/src/test/resources/compile/TOSCA-Metadata/TOSCA.meta",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2020-01-02T17:28:46Z",
+      "side": 1,
+      "message": "Not Needed",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 21
+      },
+      "revId": "30cad9b8e4a2cfe4e36724c5a4dec913d9a92c18",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da201fce_42ff6e8b",
+        "filename": "ms/blueprintsprocessor/modules/commons/db-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/db/primary/domain/BlueprintModel.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2020-01-02T17:28:46Z",
+      "side": 1,
+      "message": "Not Needed",
+      "range": {
+        "startLine": 110,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 28
+      },
+      "revId": "30cad9b8e4a2cfe4e36724c5a4dec913d9a92c18",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
