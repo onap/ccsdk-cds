@@ -81,6 +81,9 @@ open class MessagePrioritizationConsumerTest {
     @Autowired
     lateinit var bluePrintMessageLibPropertyService: BluePrintMessageLibPropertyService
 
+    @Autowired
+    lateinit var messagePrioritizationConsumer: MessagePrioritizationConsumer
+
     @Before
     fun setup() {
         BluePrintDependencyService.inject(applicationContext)
@@ -119,7 +122,8 @@ open class MessagePrioritizationConsumerTest {
             val spyMessagePrioritizationConsumer = spyk(messagePrioritizationConsumer)
 
             // Test Topology
-            val kafkaStreamConsumerFunction = spyMessagePrioritizationConsumer.kafkaStreamConsumerFunction(configuration)
+            val kafkaStreamConsumerFunction =
+                spyMessagePrioritizationConsumer.kafkaStreamConsumerFunction(configuration)
             val messageConsumerProperties = bluePrintMessageLibPropertyService
                 .messageConsumerProperties("blueprintsprocessor.messageconsumer.prioritize-input")
             val topology = kafkaStreamConsumerFunction.createTopology(messageConsumerProperties, null)
@@ -135,7 +139,6 @@ open class MessagePrioritizationConsumerTest {
     // @Test
     fun testMessagePrioritizationConsumer() {
         runBlocking {
-            val messagePrioritizationConsumer = MessagePrioritizationConsumer(bluePrintMessageLibPropertyService)
             messagePrioritizationConsumer.startConsuming(MessagePrioritizationSample.samplePrioritizationConfiguration())
 
             /** Send sample message with every 1 sec */

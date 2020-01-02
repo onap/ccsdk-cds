@@ -148,12 +148,18 @@ open class AtomixBluePrintClusterService : BluePrintClusterService {
 }
 
 open class ClusterLockImpl(private val atomix: Atomix, private val name: String) : ClusterLock {
+    val log = logger(ClusterLockImpl::class)
 
     lateinit var distributedLock: DistributedLock
+
+    override fun name(): String {
+        return distributedLock.name()
+    }
 
     override suspend fun lock() {
         distributedLock = AtomixLibUtils.distributedLock(atomix, name)
         distributedLock.lock()
+        log.debug("Cluster lock($name) created..")
     }
 
     override suspend fun tryLock(timeout: Long): Boolean {
@@ -163,6 +169,7 @@ open class ClusterLockImpl(private val atomix: Atomix, private val name: String)
 
     override suspend fun unLock() {
         distributedLock.unlock()
+        log.debug("Cluster unlock(${name()}) successfully..")
     }
 
     override fun isLocked(): Boolean {

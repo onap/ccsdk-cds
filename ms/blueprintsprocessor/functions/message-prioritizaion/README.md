@@ -17,6 +17,9 @@ To List topics
 ----------------
 kafka-topics --list --bootstrap-server localhost:9092
 
+To publish message
+--------------------
+kafka-console-producer --broker-list localhost:9092 --topic prioritize-input-topic
 
 To Listen for Output
 ----------------------

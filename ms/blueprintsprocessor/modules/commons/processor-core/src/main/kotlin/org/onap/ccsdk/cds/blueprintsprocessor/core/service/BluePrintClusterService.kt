@@ -57,6 +57,7 @@ data class ClusterInfo(
 data class ClusterMember(val id: String, val memberAddress: String?, val state: String? = null)
 
 interface ClusterLock {
+    fun name(): String
     suspend fun lock()
     suspend fun tryLock(timeout: Long): Boolean
     suspend fun unLock()

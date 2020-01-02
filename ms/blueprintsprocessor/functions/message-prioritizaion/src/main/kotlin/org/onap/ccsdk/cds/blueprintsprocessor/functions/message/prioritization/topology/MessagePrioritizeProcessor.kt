@@ -25,6 +25,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.M
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.MessageState
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.MessagePrioritization
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.utils.MessageCorrelationUtils
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.utils.MessageProcessorUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -43,9 +44,13 @@ open class MessagePrioritizeProcessor : AbstractMessagePrioritizeProcessor<ByteA
         val messagePrioritize = JacksonUtils.readValue(String(value), MessagePrioritization::class.java)
             ?: throw BluePrintProcessorException("failed to convert")
         try {
+            /** Get the cluster lock for message group */
+            val clusterLock = MessageProcessorUtils.prioritizationGrouplock(clusterService, messagePrioritize)
             // Save the Message
             messagePrioritizationStateService.saveMessage(messagePrioritize)
             handleCorrelationAndNextStep(messagePrioritize)
+            /** Cluster unLock for message group */
+            MessageProcessorUtils.prioritizationGroupUnLock(clusterService, clusterLock)
         } catch (e: Exception) {
             messagePrioritize.error = "failed in Prioritize message(${messagePrioritize.id}) : ${e.message}"
             log.error(messagePrioritize.error)
@@ -68,12 +73,14 @@ open class MessagePrioritizeProcessor : AbstractMessagePrioritizeProcessor<ByteA
         initializeExpiryPunctuator()
         /** Set up cleaning records cron */
         initializeCleanPunctuator()
+        /** Set up Cluster Service */
+        initializeClusterService()
     }
 
     override fun close() {
         log.info(
             "closing prioritization processor applicationId(${processorContext.applicationId()}), " +
-                    "taskId(${processorContext.taskId()})"
+                "taskId(${processorContext.taskId()})"
         )
         expiryCancellable.cancel()
         cleanCancellable.cancel()
@@ -102,7 +109,7 @@ open class MessagePrioritizeProcessor : AbstractMessagePrioritizeProcessor<ByteA
         )
         log.info(
             "Clean punctuator setup complete with expiry " +
-                    "hold(${cleanConfiguration.expiredRecordsHoldDays})days"
+                "hold(${cleanConfiguration.expiredRecordsHoldDays})days"
         )
     }
 
@@ -115,7 +122,7 @@ open class MessagePrioritizeProcessor : AbstractMessagePrioritizeProcessor<ByteA
             val types = getGroupCorrelationTypes(messagePrioritization)
             log.info(
                 "checking correlation for message($id), group($group), types($types), " +
-                        "correlation id($correlationId)"
+                    "correlation id($correlationId)"
             )
 
             /** Get all previously received messages from database for group and optional types and correlation Id */

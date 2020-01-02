@@ -21,6 +21,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.d
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.topology.MessageAggregateProcessor
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.topology.MessageOutputProcessor
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.topology.MessagePrioritizeProcessor
+import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BluePrintMessageLibPropertyService
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
@@ -42,9 +43,34 @@ open class TestDatabaseConfiguration {
     }
 }
 
-@Service(MessagePrioritizationConstants.PROCESSOR_PRIORITIZE)
-open class TestMessagePrioritizeProcessor : MessagePrioritizeProcessor() {
+/* Sample Prioritization Listener, used during Application startup
+@Component
+open class SamplePrioritizationListeners(private val defaultMessagePrioritizationConsumer: MessagePrioritizationConsumer) {
 
+    private val log = logger(SamplePrioritizationListeners::class)
+
+    @EventListener(ApplicationReadyEvent::class)
+    open fun init() = runBlocking {
+        log.info("Starting PrioritizationListeners...")
+        defaultMessagePrioritizationConsumer
+            .startConsuming(MessagePrioritizationSample.samplePrioritizationConfiguration())
+    }
+
+    @PreDestroy
+    open fun destroy() = runBlocking {
+        log.info("Shutting down PrioritizationListeners...")
+        defaultMessagePrioritizationConsumer.shutDown()
+    }
+}
+ */
+
+@Service
+open class SampleMessagePrioritizationConsumer(
+    bluePrintMessageLibPropertyService: BluePrintMessageLibPropertyService
+) : MessagePrioritizationConsumer(bluePrintMessageLibPropertyService)
+
+@Service(MessagePrioritizationConstants.PROCESSOR_PRIORITIZE)
+open class SampleMessagePrioritizeProcessor : MessagePrioritizeProcessor() {
     override fun getGroupCorrelationTypes(messagePrioritization: MessagePrioritization): List<String>? {
         return when (messagePrioritization.group) {
             "group-typed" -> arrayListOf("type-0", "type-1", "type-2")
@@ -54,7 +80,7 @@ open class TestMessagePrioritizeProcessor : MessagePrioritizeProcessor() {
 }
 
 @Service(MessagePrioritizationConstants.PROCESSOR_AGGREGATE)
-open class DefaultMessageAggregateProcessor() : MessageAggregateProcessor()
+open class SampleMessageAggregateProcessor() : MessageAggregateProcessor()
 
 @Service(MessagePrioritizationConstants.PROCESSOR_OUTPUT)
-open class DefaultMessageOutputProcessor : MessageOutputProcessor()
+open class SampleMessageOutputProcessor : MessageOutputProcessor()

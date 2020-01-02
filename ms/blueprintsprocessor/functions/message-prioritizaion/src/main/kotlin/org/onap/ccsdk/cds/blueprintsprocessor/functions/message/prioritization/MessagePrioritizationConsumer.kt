@@ -26,6 +26,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BluePrintMessageLi
 import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BlueprintMessageConsumerService
 import org.onap.ccsdk.cds.blueprintsprocessor.message.service.KafkaStreamConsumerFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
+import org.onap.ccsdk.cds.controllerblueprints.core.splitCommaAsList
 
 open class MessagePrioritizationConsumer(
     private val bluePrintMessageLibPropertyService: BluePrintMessageLibPropertyService
@@ -53,7 +54,7 @@ open class MessagePrioritizationConsumer(
                 val kafkaStreamsBasicAuthConsumerProperties = messageConsumerProperties
                         as KafkaStreamsBasicAuthConsumerProperties
 
-                val topics = kafkaStreamsBasicAuthConsumerProperties.topic.split(",")
+                val topics = kafkaStreamsBasicAuthConsumerProperties.topic.splitCommaAsList()
                 log.info("Consuming prioritization topics($topics)")
 
                 topology.addSource(MessagePrioritizationConstants.SOURCE_INPUT, *topics.toTypedArray())
