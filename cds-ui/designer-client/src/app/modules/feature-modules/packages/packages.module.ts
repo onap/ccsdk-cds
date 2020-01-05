@@ -18,7 +18,8 @@ import {FunctionsComponent} from './designer/functions/functions.component';
 import {ActionsComponent} from './designer/actions/actions.component';
 import {PackageCreationComponent} from './package-creation/package-creation.component';
 import {FormsModule} from '@angular/forms';
-
+import { ImportsTabComponent } from './package-creation/imports-tab/imports-tab.component';
+import { NgxFileDropModule } from 'ngx-file-drop';
 
 @NgModule({
     declarations: [PackagesDashboardComponent,
@@ -33,6 +34,7 @@ import {FormsModule} from '@angular/forms';
         FunctionsComponent,
         ActionsComponent,
         PackageCreationComponent,
+        ImportsTabComponent,
     ],
     imports: [
         CommonModule,
@@ -41,6 +43,7 @@ import {FormsModule} from '@angular/forms';
         SharedModulesModule,
         SidebarModule.forRoot(),
         FormsModule,
+        NgxFileDropModule,
     ],
     providers: [ApiService, JsonPipe],
     bootstrap: []

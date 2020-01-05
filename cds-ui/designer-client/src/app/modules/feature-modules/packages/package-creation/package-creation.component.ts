@@ -160,8 +160,8 @@ export class PackageCreationComponent implements OnInit {
 
 
     searchPackages($event: Event) {
-        const searchQuery = event.target.value;
+       /* const searchQuery = event.target.value;
         searchQuery = searchQuery.trim();
-        this.packagesStore.search(searchQuery);
+        this.packagesStore.search(searchQuery);*/
     }
 }

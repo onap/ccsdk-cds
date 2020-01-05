@@ -21,23 +21,20 @@ limitations under the License.
 
 import {Injectable} from '@angular/core';
 
-import {Observable} from 'rxjs';
-import {ApiService} from '../../../../common/core/services/api.service';
-import {BlueprintURLs} from '../../../../common/constants/app-constants';
 import {Store} from '../../../../common/core/stores/Store';
-import {PackagesDashboardState} from '../model/packages-dashboard.state';
-import {PackagesApiService} from '../packages-api.service';
-import {CBAPacakge} from './mapping-models/CBAPacakge.model';
+
+import {CBAPackage, Definition} from './mapping-models/CBAPacakge.model';
 import {Metadata} from './mapping-models/definitions/VlbDefinition';
-import {BluePrintPage} from '../model/BluePrint.model';
+import {PackageCreationService} from './package-creation.service';
+
 
 @Injectable({
     providedIn: 'root'
 })
-export class PackageCreationService extends Store<CBAPacakge> {
+export class PackageCreationStore extends Store<CBAPackage> {
 
     constructor(private packageCreationService: PackageCreationService) {
-        super(new CBAPacakge());
+        super(new CBAPackage());
     }
 
     changeMetaData(metaDataObject: Metadata) {
@@ -45,6 +42,14 @@ export class PackageCreationService extends Store<CBAPacakge> {
         this.setState({
             ...this.state,
             metaData: metaDataObject
+        });
+    }
+
+    addDefinition(name: string, content: string) {
+
+        this.setState({
+            ...this.state,
+            definitions: new Definition(this.state.definitions.files.set(name, content))
         });
     }
 }
