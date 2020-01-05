@@ -33,6 +33,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {PackagesModule} from './modules/feature-modules/packages/packages.module';
 import { SidebarModule } from 'ng-sidebar';
 import {SharedModulesModule} from './modules/shared-modules/shared-modules.module';
+import { NgxFileDropModule } from 'ngx-file-drop';
 
 @NgModule({
     declarations: [
@@ -48,6 +49,7 @@ import {SharedModulesModule} from './modules/shared-modules/shared-modules.modul
         HttpClientModule,
         PackagesModule,
         SharedModulesModule,
+        NgxFileDropModule,
     ],
 
     providers: [ApiService],
