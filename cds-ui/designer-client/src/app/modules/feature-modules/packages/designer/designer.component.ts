@@ -1,7 +1,10 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import * as _ from 'lodash';
 import * as joint from 'jointjs';
-import './palette.function.element';
+import './jointjs/elements/palette.function.element';
+import './jointjs/elements/action.element';
+import './jointjs/elements/board.function.element';
+
+
 
 @Component({
   selector: 'app-designer',
@@ -13,6 +16,9 @@ export class DesignerComponent implements OnInit {
 
   private controllerSideBar: boolean;
   private attributesSideBar: boolean;
+  //to generate Ids for dragged function elements
+  private fuctionIdCounter=0;
+  private actionIdCounter=0;
 
   boardGraph: joint.dia.Graph;
   boardPaper: joint.dia.Paper;
@@ -90,9 +96,9 @@ export class DesignerComponent implements OnInit {
           width: 1200,
           gridSize: 10,
           drawGrid: true,
-          background: {
-            color: 'rgba(0, 255, 0, 0.3)'
-          },
+          // background: {
+          //   color: 'rgba(0, 255, 0, 0.3)'
+          // },
           cellViewNamespace: joint.shapes
         });
 
@@ -111,7 +117,48 @@ export class DesignerComponent implements OnInit {
       this.boardPaper.on('blank:pointerclick', () => {
         // this.selectedModel = undefined;
       });
+
+      this.boardGraph.on('change:position', (cell) => {
+
+        var parentId = cell.get('parent');
+        if (!parentId) return;
+
+        var parent = this.boardGraph.getCell(parentId);
+        
+        var parentBbox = parent.getBBox();
+        var cellBbox = cell.getBBox();
+
+        console.log("parent ", parentBbox);
+        console.log("cell ", cellBbox);
+        if (parentBbox.containsPoint(cellBbox.origin()) &&
+          parentBbox.containsPoint(cellBbox.topRight()) &&
+          parentBbox.containsPoint(cellBbox.corner()) &&
+          parentBbox.containsPoint(cellBbox.bottomLeft())) {
+
+          
+          // All the four corners of the child are inside
+          // the parent area.
+          return;
+        }
+
+        // Revert the child position.
+        cell.set('position', cell.previous('position'));
+      });
     }
+  }
+
+  insertCustomActionIntoBoard() {
+    this.actionIdCounter++;
+    const element = this.createCustomAction("action_"+ this.actionIdCounter, 'Action' + this.actionIdCounter);
+    this.boardGraph.addCell(element);
+  }
+
+  createCustomAction(id: string, label: string) {
+    const element = new joint.shapes.app.ActionElement({
+      id: id
+    });
+    element.attr('#label/text', label);
+    return element;
   }
 
   buildPaletteGraphFromList(list: any) {
@@ -125,12 +172,22 @@ export class DesignerComponent implements OnInit {
     return elements;
   }
 
-
   createFuctionElementForPalette(label: string) {
-    const element = new joint.shapes.app.FunctionElement({
-      id: label});
-    element.attr('#label/text', label);
-    return element;
+      const element = new joint.shapes.palette.FunctionElement({
+        id: label
+      });
+      element.attr('#label/text', label);
+      element.attr('type', label);
+      return element;
+    }
+
+  createFuctionElementForBoard(id :String, label :string, type :string) {
+    const boardElement = new joint.shapes.board.FunctionElement({
+      id: id
+    });
+    boardElement.attr('#label/text', label);
+    boardElement.attr('#type/text', type);
+    return boardElement;
   }
 
   stencilPaperEventListeners() {
@@ -175,24 +232,36 @@ export class DesignerComponent implements OnInit {
         if (mouseupX > target.left &&
           mouseupX < target.left + this.boardPaper.$el.width() &&
           mouseupY > target.top && y < target.top + this.boardPaper.$el.height()) {
-          const clonedShape = flyShape.clone();
+          // const clonedShape = flyShape.clone();
+          const type = flyShape.attributes.attrs.type;
+          console.log(type);
 
-          clonedShape.position(mouseupX - target.left - offset.x, mouseupY - target.top - offset.y);
-          this.boardGraph.addCell(clonedShape);
+          //create board function element of the same type of palette function
+          //board function element is different in design from the palette function element
+          this.fuctionIdCounter++;
+          console.log(this.fuctionIdCounter);
+          const functionElementForBoard = 
+            this.createFuctionElementForBoard("fucntion_" + this.fuctionIdCounter, 'execute', type);
+
+          functionElementForBoard.position(mouseupX - target.left - offset.x, mouseupY - target.top - offset.y);
+          this.boardGraph.addCell(functionElementForBoard);
           const cellViewsBelow =
-            this.boardPaper.findViewsFromPoint(clonedShape.getBBox().center());
-
+            this.boardPaper.findViewsFromPoint(functionElementForBoard.getBBox().center());
+          console.log(cellViewsBelow);
           if (cellViewsBelow.length) {
             let cellViewBelow;
             cellViewsBelow.forEach( cellItem => {
-              if (cellItem.model.id !== clonedShape.id) {
+              if (cellItem.model.id !== functionElementForBoard.id) {
                 cellViewBelow = cellItem;
               }
             });
+
             // Prevent recursive embedding.
-            if (cellViewBelow && cellViewBelow.model.get('parent') !== clonedShape.id) {
-              cellViewBelow.model.embed(clonedShape);
+            if (cellViewBelow && cellViewBelow.model.get('parent') !== functionElementForBoard.id) {
+              console.log(cellViewBelow);
+              cellViewBelow.model.embed(functionElementForBoard);
             }
+            console.log(this.boardGraph);
           }
 
         }
