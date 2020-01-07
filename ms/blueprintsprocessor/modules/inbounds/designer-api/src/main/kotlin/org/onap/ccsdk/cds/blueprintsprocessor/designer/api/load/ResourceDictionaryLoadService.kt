@@ -20,9 +20,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.load
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
-import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.text.StrBuilder
-import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictionary
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.ResourceDictionaryHandler
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
@@ -74,29 +72,7 @@ open class ResourceDictionaryLoadService(private val resourceDictionaryHandler: 
             val definitionContent = file.readNBText()
             val resourceDefinition = JacksonUtils.readValue(definitionContent, ResourceDefinition::class.java)
             if (resourceDefinition != null) {
-
-                checkNotNull(resourceDefinition.property) { "Failed to get Property Definition" }
-                val resourceDictionary = ResourceDictionary()
-                resourceDictionary.name = resourceDefinition.name
-                resourceDictionary.definition = resourceDefinition
-
-                checkNotNull(resourceDefinition.property) { "Property field is missing" }
-                resourceDictionary.description = resourceDefinition.property.description!!
-                resourceDictionary.dataType = resourceDefinition.property.type
-
-                if (resourceDefinition.property.entrySchema != null) {
-                    resourceDictionary.entrySchema = resourceDefinition.property.entrySchema!!.type
-                }
-                resourceDictionary.updatedBy = resourceDefinition.updatedBy
-
-                if (StringUtils.isBlank(resourceDefinition.tags)) {
-                    resourceDictionary.tags = (resourceDefinition.name + ", " + resourceDefinition.updatedBy +
-                            ", " + resourceDefinition.updatedBy)
-                } else {
-                    resourceDictionary.tags = resourceDefinition.tags!!
-                }
-                resourceDictionaryHandler.saveResourceDictionary(resourceDictionary)
-
+                resourceDictionaryHandler.saveResourceDefinition(resourceDefinition)
                 log.trace("Resource dictionary(${file.name}) loaded successfully ")
             } else {
                 throw BluePrintException("couldn't get dictionary from content information")
