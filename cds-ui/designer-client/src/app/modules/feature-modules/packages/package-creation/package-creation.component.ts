@@ -39,9 +39,13 @@ import {PackageCreationUtils} from './package-creation.utils';
 })
 export class PackageCreationComponent implements OnInit {
 
-    modes: string[] = ['Designer Mode', 'Scripting Mode'];
+    modes: object[] = [
+        {name: 'Designer Mode', style: 'mode-icon icon-designer-mode'},
+        {name: 'Scripting Mode', style: 'mode-icon icon-scripting-mode'}];
+
     dictionaryLibraryInstances: string[] = ['x', 'y'];
-    private target: HTMLElement;
+    private container: HTMLElement;
+    private elements: HTMLCollection;
     private newElement: HTMLElement;
     private metaDataTab: MetaDataTab = new MetaDataTab();
 
@@ -61,11 +65,13 @@ export class PackageCreationComponent implements OnInit {
 
     createAnotherCustomKeyDiv() {
         console.log(this.metaDataTab);
-        this.newElement = document.createElement('div');
-        this.newElement.setAttribute('class', 'alert-dark');
-        this.target = document.getElementById('target');
-        this.target.appendChild(this.newElement);
-        this.metaDataTab = new MetaDataTab();
+        this.newElement = document.getElementById('target');
+        const copiedElement = this.newElement.cloneNode(true);
+        /* this.newElement.setAttribute('class', 'alert-dark');*/
+        this.container = document.getElementById('container');
+        this.container.appendChild(copiedElement);
+        this.elements = this.container.children;
+        /*this.metaDataTab = new MetaDataTab();
         this.metaDataTab.name = 'klfdj';
         this.metaDataTab.entryFileName = 'Definitions/vLB_CDS.json';
         this.metaDataTab.description = 'rere';
@@ -74,7 +80,7 @@ export class PackageCreationComponent implements OnInit {
         this.metaDataTab.templateName = 'test';
 
 
-        this.saveToFileSystem(MetaDataFile.getObjectInstance(this.metaDataTab));
+        this.saveToFileSystem(MetaDataFile.getObjectInstance(this.metaDataTab));*/
     }
 
     validatePacakgeName() {
@@ -160,8 +166,15 @@ export class PackageCreationComponent implements OnInit {
 
 
     searchPackages($event: Event) {
-       /* const searchQuery = event.target.value;
-        searchQuery = searchQuery.trim();
-        this.packagesStore.search(searchQuery);*/
+        /* const searchQuery = event.target.value;
+         searchQuery = searchQuery.trim();
+         this.packagesStore.search(searchQuery);*/
+    }
+
+    deleteCustomKey(event) {
+        this.container = document.getElementById('container');
+        const element = event.parentElement.parentElement.parentElement;
+        this.container.removeChild(element);
+        console.log('removed');
     }
 }

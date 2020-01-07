@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="9px" height="5px" viewBox="0 0 9 5" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 61 (89581) - https://sketch.com -->
+    <title>Path</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="2.1.1-MetaData---Create" transform="translate(-668.000000, -332.000000)" fill="#1E4171" fill-rule="nonzero">
+            <g id="TABS" transform="translate(150.000000, 182.000000)">
+                <g id="tab-content" transform="translate(0.000000, 62.000000)">
+                    <g id="1">
+                        <g id="mapping" transform="translate(0.000000, 81.000000)">
+                            <path d="M524.622177,9.18203373 L520.237097,5.03647696 C520.190675,4.99274134 520.130494,4.98818123 520.080897,5.02362574 C520.031149,5.0594848 520,5.12995927 520,5.20706662 L520,13.4981802 C520,13.5752875 520.031149,13.6459693 520.080897,13.6818283 C520.102974,13.6975814 520.127167,13.705458 520.15121,13.705458 C520.1813,13.705458 520.21124,13.6930213 520.237097,13.6687698 L524.622177,9.52321305 C524.663155,9.4844521 524.6875,9.4208178 524.6875,9.35262339 C524.6875,9.28442898 524.663004,9.22079469 524.622177,9.18203373 Z" id="Path" transform="translate(522.343750, 9.352729) rotate(90.000000) translate(-522.343750, -9.352729) "></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
