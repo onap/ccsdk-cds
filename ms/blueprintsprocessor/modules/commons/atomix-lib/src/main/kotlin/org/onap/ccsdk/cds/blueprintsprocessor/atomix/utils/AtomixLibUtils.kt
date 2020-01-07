@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.node.MissingNode
 import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import io.atomix.core.Atomix
+import io.atomix.core.lock.AtomicLock
 import io.atomix.core.lock.DistributedLock
 import io.atomix.core.map.DistributedMap
 import io.atomix.protocols.backup.MultiPrimaryProtocol
@@ -93,10 +94,21 @@ object AtomixLibUtils {
         val protocol = MultiPrimaryProtocol.builder()
             .withBackups(numBackups)
             .build()
-
-        val lock = atomix.lockBuilder(lockName)
+        return atomix.lockBuilder(lockName)
             .withProtocol(protocol)
             .build()
-        return lock
+    }
+
+    /** get Atomic distributed lock, to get lock fence information */
+    fun atomicLock(atomix: Atomix, lockName: String, numBackups: Int = 2): AtomicLock {
+        check(atomix.isRunning) { "Cluster is not running, couldn't create atomic lock($lockName)" }
+
+        val protocol = MultiPrimaryProtocol.builder()
+            .withBackups(numBackups)
+            .build()
+
+        return atomix.atomicLockBuilder(lockName)
+            .withProtocol(protocol)
+            .build()
     }
 }
