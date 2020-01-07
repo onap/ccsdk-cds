@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b037416e_276450bb",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/designer-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/designer/api/handler/ResourceDictionaryHandler.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2020-01-07T19:49:20Z",
+      "side": 1,
+      "message": "Where did the check for nonNull resourceDefinition.property go?",
+      "range": {
+        "startLine": 131,
+        "startChar": 5,
+        "endLine": 138,
+        "endChar": 102
+      },
+      "revId": "2dff6266bb115d5851295803bf5a7a2db89e6af1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
