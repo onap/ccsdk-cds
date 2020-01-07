@@ -24,6 +24,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictio
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.repository.ResourceDictionaryRepository
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
+import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceSourceMapping
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.factory.ResourceSourceMappingFactory
 import org.springframework.stereotype.Service
@@ -118,6 +119,34 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
         }
 
         return resourceDictionary
+    }
+
+    /**
+     * This is a saveDataDictionary service
+     *
+     * @param resourceDefinition ResourceDefinition
+     * @return ResourceDefinition
+     */
+    @Throws(BluePrintException::class)
+    suspend fun saveResourceDefinition(resourceDefinition: ResourceDefinition): ResourceDefinition {
+        val resourceDictionary = ResourceDictionary()
+        resourceDictionary.name = resourceDefinition.name
+        resourceDictionary.updatedBy = resourceDefinition.updatedBy
+        resourceDictionary.resourceDictionaryGroup = resourceDefinition.group
+        resourceDictionary.entrySchema = resourceDefinition.property.entrySchema?.type
+        if (StringUtils.isBlank(resourceDefinition.tags)) {
+            resourceDictionary.tags = (resourceDefinition.name + ", " + resourceDefinition.updatedBy +
+                    ", " + resourceDefinition.updatedBy)
+        } else {
+            resourceDictionary.tags = resourceDefinition.tags!!
+        }
+        resourceDictionary.description = resourceDefinition.property.description!!
+        resourceDictionary.dataType = resourceDefinition.property.type
+        resourceDictionary.definition = resourceDefinition
+
+        validateResourceDictionary(resourceDictionary)
+
+        return resourceDictionaryRepository.save(resourceDictionary).definition
     }
 
     /**
