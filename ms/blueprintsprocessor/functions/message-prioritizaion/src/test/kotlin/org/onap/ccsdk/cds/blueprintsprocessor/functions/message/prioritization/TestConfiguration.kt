@@ -17,10 +17,9 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization
 
 import org.onap.ccsdk.cds.blueprintsprocessor.db.PrimaryDBLibGenericService
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.MessagePrioritization
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.topology.MessageAggregateProcessor
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.topology.MessageOutputProcessor
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.topology.MessagePrioritizeProcessor
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.kafka.DefaultMessagePrioritizeProcessor
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.kafka.MessagePrioritizationConsumer
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.service.SampleMessagePrioritizationService
 import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BluePrintMessageLibPropertyService
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.context.annotation.Bean
@@ -65,22 +64,17 @@ open class SamplePrioritizationListeners(private val defaultMessagePrioritizatio
  */
 
 @Service
-open class SampleMessagePrioritizationConsumer(
+open class TestMessagePrioritizationService(messagePrioritizationStateService: MessagePrioritizationStateService) :
+    SampleMessagePrioritizationService(messagePrioritizationStateService)
+
+/** For Kafka Consumer  **/
+@Service
+open class TestMessagePrioritizationConsumer(
     bluePrintMessageLibPropertyService: BluePrintMessageLibPropertyService
 ) : MessagePrioritizationConsumer(bluePrintMessageLibPropertyService)
 
 @Service(MessagePrioritizationConstants.PROCESSOR_PRIORITIZE)
-open class SampleMessagePrioritizeProcessor : MessagePrioritizeProcessor() {
-    override fun getGroupCorrelationTypes(messagePrioritization: MessagePrioritization): List<String>? {
-        return when (messagePrioritization.group) {
-            "group-typed" -> arrayListOf("type-0", "type-1", "type-2")
-            else -> null
-        }
-    }
-}
-
-@Service(MessagePrioritizationConstants.PROCESSOR_AGGREGATE)
-open class SampleMessageAggregateProcessor() : MessageAggregateProcessor()
-
-@Service(MessagePrioritizationConstants.PROCESSOR_OUTPUT)
-open class SampleMessageOutputProcessor : MessageOutputProcessor()
+open class TestMessagePrioritizeProcessor(
+    messagePrioritizationStateService: MessagePrioritizationStateService,
+    messagePrioritizationService: MessagePrioritizationService
+) : DefaultMessagePrioritizeProcessor(messagePrioritizationStateService, messagePrioritizationService)

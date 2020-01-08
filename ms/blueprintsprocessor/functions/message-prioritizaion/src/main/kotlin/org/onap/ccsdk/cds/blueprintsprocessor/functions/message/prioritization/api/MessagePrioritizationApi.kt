@@ -16,9 +16,10 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.api
 
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.MessagePrioritizationService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.MessagePrioritizationStateService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.UpdateStateRequest
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.MessagePrioritization
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.service.MessagePrioritizationStateService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.monoMdc
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
@@ -31,7 +32,10 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping(value = ["/api/v1/message-prioritization"])
-open class MessagePrioritizationApi(private val messagePrioritizationStateService: MessagePrioritizationStateService) {
+open class MessagePrioritizationApi(
+    private val messagePrioritizationStateService: MessagePrioritizationStateService,
+    private val messagePrioritizationService: MessagePrioritizationService
+) {
 
     @GetMapping(path = ["/ping"], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
@@ -50,6 +54,15 @@ open class MessagePrioritizationApi(private val messagePrioritizationStateServic
     @ResponseBody
     fun saveMessagePrioritization(@RequestBody messagePrioritization: MessagePrioritization) = monoMdc {
         messagePrioritizationStateService.saveMessage(messagePrioritization)
+    }
+
+    @PostMapping(
+        path = ["/prioritize"], produces = [MediaType.APPLICATION_JSON_VALUE],
+        consumes = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    @ResponseBody
+    fun prioritize(@RequestBody messagePrioritization: MessagePrioritization) = monoMdc {
+        messagePrioritizationService.prioritize(messagePrioritization)
     }
 
     @PostMapping(
