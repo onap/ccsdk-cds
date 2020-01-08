@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "97c518eb_016fdc3f",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/designer-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/designer/api/ResourceDictionaryController.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2020-01-08T03:42:01Z",
+      "side": 1,
+      "message": "Can you add a test case for this ?",
+      "range": {
+        "startLine": 53,
+        "startChar": 2,
+        "endLine": 58,
+        "endChar": 5
+      },
+      "revId": "2dff6266bb115d5851295803bf5a7a2db89e6af1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b037416e_276450bb",
         "filename": "ms/blueprintsprocessor/modules/inbounds/designer-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/designer/api/handler/ResourceDictionaryHandler.kt",
         "patchSetId": 1
