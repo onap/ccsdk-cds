@@ -35,6 +35,7 @@
     "json2typescript": "^1.2.3",
     "lodash": "^4.17.15",
     "ng-sidebar": "^9.1.1",
+    "ngx-file-drop": "^8.0.8",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"
