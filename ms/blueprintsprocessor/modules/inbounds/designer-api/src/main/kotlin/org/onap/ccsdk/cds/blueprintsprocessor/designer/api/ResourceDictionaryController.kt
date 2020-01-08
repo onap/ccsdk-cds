@@ -20,6 +20,7 @@ import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictionary
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.ResourceDictionaryHandler
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceSourceMapping
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -47,6 +48,13 @@ open class ResourceDictionaryController(private val resourceDictionaryHandler: R
     @Throws(BluePrintException::class)
     fun saveResourceDictionary(@RequestBody dataDictionary: ResourceDictionary): ResourceDictionary = runBlocking {
         resourceDictionaryHandler.saveResourceDictionary(dataDictionary)
+    }
+
+    @PostMapping(path = ["/definition"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseBody
+    @Throws(BluePrintException::class)
+    fun saveResourceDictionary(@RequestBody resourceDefinition: ResourceDefinition): ResourceDefinition = runBlocking {
+        resourceDictionaryHandler.saveResourceDefinition(resourceDefinition)
     }
 
     @DeleteMapping(path = ["/{name}"])
