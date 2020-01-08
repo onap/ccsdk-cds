@@ -16,6 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.service
 
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.MessagePrioritizationStateService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.MessageState
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.MessagePrioritization
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.PrioritizationMessageRepository
@@ -27,59 +28,10 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.Date
 
-interface MessagePrioritizationStateService {
-
-    suspend fun saveMessage(message: MessagePrioritization): MessagePrioritization
-
-    suspend fun getMessage(id: String): MessagePrioritization
-
-    suspend fun getMessages(ids: List<String>): List<MessagePrioritization>?
-
-    suspend fun getExpiryEligibleMessages(count: Int): List<MessagePrioritization>?
-
-    suspend fun getMessageForStatesNotExpiredIn(group: String, states: List<String>, count: Int):
-            List<MessagePrioritization>?
-
-    suspend fun getMessageForStatesExpired(group: String, states: List<String>, count: Int):
-            List<MessagePrioritization>?
-
-    suspend fun getExpiredMessages(group: String, expiryDate: Date, count: Int): List<MessagePrioritization>?
-
-    suspend fun getCorrelatedMessages(
-        group: String,
-        states: List<String>,
-        types: List<String>?,
-        correlationIds: String
-    ): List<MessagePrioritization>?
-
-    suspend fun updateMessagesState(ids: List<String>, state: String)
-
-    suspend fun updateMessageState(id: String, state: String): MessagePrioritization
-
-    suspend fun setMessageState(id: String, state: String)
-
-    suspend fun setMessagesPriority(ids: List<String>, priority: String)
-
-    suspend fun setMessagesState(ids: List<String>, state: String)
-
-    suspend fun setMessageStateANdError(id: String, state: String, error: String)
-
-    suspend fun setMessageStateAndAggregatedIds(id: String, state: String, aggregatedIds: List<String>)
-
-    suspend fun deleteMessage(id: String)
-
-    suspend fun deleteMessageByGroup(group: String)
-
-    suspend fun deleteMessageStates(group: String, states: List<String>)
-
-    suspend fun deleteExpiredMessage(group: String, retentionDays: Int)
-}
-
 @Service
 open class MessagePrioritizationStateServiceImpl(
     private val prioritizationMessageRepository: PrioritizationMessageRepository
-) :
-    MessagePrioritizationStateService {
+) : MessagePrioritizationStateService {
 
     private val log = logger(MessagePrioritizationStateServiceImpl::class)
 
@@ -110,7 +62,7 @@ open class MessagePrioritizationStateServiceImpl(
     }
 
     override suspend fun getMessageForStatesNotExpiredIn(group: String, states: List<String>, count: Int):
-            List<MessagePrioritization>? {
+        List<MessagePrioritization>? {
         return prioritizationMessageRepository.findByGroupAndStateInAndNotExpiredDate(
             group,
             states, Date(), PageRequest.of(0, count)
@@ -118,7 +70,7 @@ open class MessagePrioritizationStateServiceImpl(
     }
 
     override suspend fun getMessageForStatesExpired(group: String, states: List<String>, count: Int):
-            List<MessagePrioritization>? {
+        List<MessagePrioritization>? {
         return prioritizationMessageRepository.findByGroupAndStateInAndExpiredDate(
             group,
             states, Date(), PageRequest.of(0, count)
@@ -126,7 +78,7 @@ open class MessagePrioritizationStateServiceImpl(
     }
 
     override suspend fun getExpiredMessages(group: String, expiryDate: Date, count: Int):
-            List<MessagePrioritization>? {
+        List<MessagePrioritization>? {
         return prioritizationMessageRepository.findByByGroupAndExpiredDate(
             group,
             expiryDate, PageRequest.of(0, count)

@@ -17,28 +17,27 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.utils
 
 import org.apache.kafka.streams.processor.ProcessorSupplier
-import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterService
+import org.onap.ccsdk.cds.blueprintsprocessor.atomix.optionalClusterService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterLock
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.AbstractMessagePrioritizeProcessor
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.PrioritizationConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.MessagePrioritization
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.kafka.AbstractMessagePrioritizeProcessor
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.toFormatedCorrelation
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 
 object MessageProcessorUtils {
 
-    /** Utility to create the cluster lock for message [messagePrioritization] */
-    suspend fun prioritizationGrouplock(
-        clusterService: BluePrintClusterService?,
-        messagePrioritization: MessagePrioritization
-    ): ClusterLock? {
+    /** Utility to create the cluster lock for message [messagePrioritization] prioritization procssing.*/
+    suspend fun prioritizationGrouplock(messagePrioritization: MessagePrioritization): ClusterLock? {
+        val clusterService = BluePrintDependencyService.optionalClusterService()
+
         return if (clusterService != null && clusterService.clusterJoined() &&
             !messagePrioritization.correlationId.isNullOrBlank()
         ) {
             // Get the correlation key in ascending order, even it it is misplaced
             val correlationId = messagePrioritization.toFormatedCorrelation()
-            val lockName = "prioritization-${messagePrioritization.group}-$correlationId"
+            val lockName = "prioritize::${messagePrioritization.group}::$correlationId"
             val clusterLock = clusterService.clusterLock(lockName)
             clusterLock.lock()
             if (!clusterLock.isLocked()) throw BluePrintProcessorException("failed to lock($lockName)")
@@ -46,14 +45,15 @@ object MessageProcessorUtils {
         } else null
     }
 
-    /** Utility used to cluster unlock for message [messagePrioritization] */
-    suspend fun prioritizationGroupUnLock(clusterService: BluePrintClusterService?, clusterLock: ClusterLock?) {
-        if (clusterService != null && clusterService.clusterJoined() && clusterLock != null) {
+    /** Utility used to cluster unlock for message [clusterLock] */
+    suspend fun prioritizationGroupUnLock(clusterLock: ClusterLock?) {
+        if (clusterLock != null) {
             clusterLock.unLock()
             clusterLock.close()
         }
     }
 
+    /** Get the Kafka Supplier for processor lookup [name] and [prioritizationConfiguration] **/
     fun <K, V> bluePrintProcessorSupplier(name: String, prioritizationConfiguration: PrioritizationConfiguration):
         ProcessorSupplier<K, V> {
         return ProcessorSupplier<K, V> {

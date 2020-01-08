@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.topology
+package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.kafka
 
 import org.apache.kafka.streams.processor.To
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.MessagePrioritizationConstants
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.MessagePrioritizationStateService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.MessageState
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.PrioritizationConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.service.MessagePrioritizationStateService
 import org.onap.ccsdk.cds.blueprintsprocessor.message.kafka.AbstractBluePrintMessagePunctuator
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 
@@ -46,7 +46,7 @@ class MessagePriorityExpiryPunctuator(private val messagePrioritizationStateServ
             fetchMessages.forEach { expired ->
                 processorContext.forward(
                     expired.id, expired,
-                    To.child(MessagePrioritizationConstants.SINK_EXPIRED)
+                    To.child(MessagePrioritizationConstants.SINK_OUTPUT)
                 )
             }
         }

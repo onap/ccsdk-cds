@@ -18,6 +18,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.atomix
 
 import org.onap.ccsdk.cds.blueprintsprocessor.atomix.service.AtomixBluePrintClusterService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterService
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.springframework.context.annotation.Configuration
 
@@ -29,3 +30,10 @@ open class BluePrintAtomixLibConfiguration
  */
 fun BluePrintDependencyService.clusterService(): BluePrintClusterService =
     instance(AtomixBluePrintClusterService::class)
+
+/** Optional Cluster Service, returns only if Cluster is enabled */
+fun BluePrintDependencyService.optionalClusterService(): BluePrintClusterService? {
+    return if (BluePrintConstants.CLUSTER_ENABLED) {
+        BluePrintDependencyService.clusterService()
+    } else null
+}

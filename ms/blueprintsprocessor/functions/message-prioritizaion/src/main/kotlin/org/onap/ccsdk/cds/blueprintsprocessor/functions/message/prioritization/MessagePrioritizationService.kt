@@ -16,18 +16,14 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization
 
-import org.springframework.context.annotation.ComponentScan
-import org.springframework.context.annotation.Configuration
+import org.apache.kafka.streams.processor.ProcessorContext
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.MessagePrioritization
 
-@Configuration
-@ComponentScan
-open class MessagePrioritizationConfiguration
+interface MessagePrioritizationService {
 
-object MessagePrioritizationConstants {
+    fun setKafkaProcessorContext(processorContext: ProcessorContext?)
 
-    const val SOURCE_INPUT = "source-prioritization-input"
+    suspend fun prioritize(messagePrioritization: MessagePrioritization)
 
-    const val PROCESSOR_PRIORITIZE = "processor-prioritization-prioritize"
-
-    const val SINK_OUTPUT = "sink-prioritization-output"
+    suspend fun output(id: String)
 }
