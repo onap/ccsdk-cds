@@ -9,7 +9,9 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ~/vm_mysql:/var/lib/mysql
+      - target: /var/lib/mysql
+        type: volume
+        source: mysql-data
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: sdnctl
@@ -29,7 +31,12 @@ services:
       - "9111:9111"
     restart: always
     volumes:
-      - blueprints-deploy:/opt/app/onap/blueprints/deploy
+      - target: /opt/app/onap/blueprints/deploy
+        type: volume
+        source: blueprints-deploy
+      - target: /opt/app/onap/config
+        type: volume
+        source: controller-config
     environment:
       APPLICATIONNAME: cds-controller
       BUNDLEVERSION: 1.0.0
@@ -47,7 +54,9 @@ services:
       - "50051:50051"
     restart: always
     volumes:
-      - blueprints-deploy:/opt/app/onap/blueprints/deploy
+      - target: /opt/app/onap/blueprints/deploy
+        type: volume
+        source: blueprints-deploy
   py-executor-default:
     depends_on:
       - db
@@ -60,7 +69,9 @@ services:
       - "50052:50052"
     restart: always
     volumes:
-      - blueprints-deploy:/opt/app/onap/blueprints/deploy
+      - target: /opt/app/onap/blueprints/deploy
+        type: volume
+        source: blueprints-deploy
     environment:
       APPLICATIONNAME: py-executor
       BUNDLEVERSION: 1.0.0
@@ -72,7 +83,24 @@ services:
       LOG_FILE: /opt/app/onap/logs/application.log
 
 volumes:
+  mysql-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/app/cds/mysql/data
+      o: bind
   blueprints-deploy:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/app/cds/blueprints/deploy
+      o: bind
+  controller-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/app/cds/cds-controller/config
+      o: bind
 
 networks:
   cds-network:

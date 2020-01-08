@@ -22,6 +22,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterLock
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.AbstractMessagePrioritizeProcessor
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.PrioritizationConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.MessagePrioritization
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.toFormatedCorrelation
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 
@@ -32,8 +33,12 @@ object MessageProcessorUtils {
         clusterService: BluePrintClusterService?,
         messagePrioritization: MessagePrioritization
     ): ClusterLock? {
-        return if (clusterService != null && clusterService.clusterJoined()) {
-            val lockName = "prioritization-${messagePrioritization.group}"
+        return if (clusterService != null && clusterService.clusterJoined() &&
+            !messagePrioritization.correlationId.isNullOrBlank()
+        ) {
+            // Get the correlation key in ascending order, even it it is misplaced
+            val correlationId = messagePrioritization.toFormatedCorrelation()
+            val lockName = "prioritization-${messagePrioritization.group}-$correlationId"
             val clusterLock = clusterService.clusterLock(lockName)
             clusterLock.lock()
             if (!clusterLock.isLocked()) throw BluePrintProcessorException("failed to lock($lockName)")

@@ -9,7 +9,9 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ~/vm_mysql:/var/lib/mysql
+      - target: /var/lib/mysql
+        type: volume
+        source: mysql-data
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: sdnctl
@@ -45,8 +47,8 @@ services:
         type: volume
         source: blueprints-deploy
       - target: /opt/app/onap/config
-        type: bind
-        source: ./config
+        type: volume
+        source: controller-config
     environment:
       # Same as hostname and container name
       CLUSTER_ENABLED: "true"
@@ -79,8 +81,8 @@ services:
         type: volume
         source: blueprints-deploy
       - target: /opt/app/onap/config
-        type: bind
-        source: ./config
+        type: volume
+        source: resource-resolution-config
     environment:
       CLUSTER_ENABLED: "true"
       CLUSTER_ID: cds-cluster
@@ -94,8 +96,60 @@ services:
       APP_CONFIG_HOME: /opt/app/onap/config
       STICKYSELECTORKEY:
       ENVCONTEXT: dev
+  py-executor-0:
+    depends_on:
+      - db
+      - nats
+    image: onap/ccsdk-py-executor
+    container_name: py-executor-0
+    hostname: py-executor-0
+    networks:
+      - cds-network
+    ports:
+      - "50052:50052"
+    restart: always
+    volumes:
+      - target: /opt/app/onap/blueprints/deploy
+        type: volume
+        source: blueprints-deploy
+    environment:
+      CLUSTER_ID: cds-cluster
+      CLUSTER_NODE_ID: py-executor-0
+      CLUSTER_MEMBERS: cds-controller-0,resource-resolution-0,py-executor-0
+      NATS_HOSTS: nats://nats:4222
+      APPLICATIONNAME: py-executor
+      BUNDLEVERSION: 1.0.0
+      APP_CONFIG_HOME: /opt/app/onap/config
+      STICKYSELECTORKEY:
+      ENVCONTEXT: dev
+      APP_PORT: 50052
+      AUTH_TYPE: tls-auth
+      LOG_FILE: /opt/app/onap/logs/application.log
 volumes:
+  mysql-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/app/cds/mysql/data
+      o: bind
   blueprints-deploy:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/app/cds/blueprints/deploy
+      o: bind
+  controller-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/app/cds/cds-controller/config
+      o: bind
+  resource-resolution-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/app/cds/resource-resolution/config
+      o: bind
 
 networks:
   cds-network:

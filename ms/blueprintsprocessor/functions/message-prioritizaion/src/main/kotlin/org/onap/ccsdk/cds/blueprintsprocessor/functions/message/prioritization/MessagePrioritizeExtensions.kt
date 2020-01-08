@@ -36,14 +36,18 @@ fun AbstractComponentFunction.messagePrioritizationStateService() =
 /**
  * MessagePrioritization correlation extensions
  */
+
+/**
+ * Arrange comma separated correlation keys in ascending order.
+ */
 fun MessagePrioritization.toFormatedCorrelation(): String {
-    val ascendingKey = this.correlationId!!.split(",")
+    return this.correlationId!!.split(",")
         .map { it.trim() }.sorted().joinToString(",")
-    return ascendingKey
 }
 
+/**
+ * Used to group the correlation with respect to types.
+ */
 fun MessagePrioritization.toTypeNCorrelation(): TypeCorrelationKey {
-    val ascendingKey = this.correlationId!!.split(",")
-        .map { it.trim() }.sorted().joinToString(",")
-    return TypeCorrelationKey(this.type, ascendingKey)
+    return TypeCorrelationKey(this.type, this.toFormatedCorrelation())
 }
