@@ -32,6 +32,7 @@ import { CreateCatalogService } from '../create-catalog/create-catalog.service';
 import { NotificationHandlerService } from 'src/app/common/core/services/notification-handler.service';
 import { ICatalogState } from 'src/app/common/core/store/models/catalogState.model';
 import { IAppState } from 'src/app/common/core/store/state/app.state';
+import { SetCatalogState } from 'src/app/common/core/store/actions/catalog.action';
 
 
 @Component({
@@ -67,63 +68,89 @@ export class SearchCatalogComponent implements OnInit {
       search_input: ['', Validators.required]
     });
   }
-  fetchCatalogByName() {
-    // this.searchCatalogService.searchByTags(this.searchText)
-    // .subscribe(data=>{
-    //     console.log(data);
-    //     data.forEach(element => {
-    //       this.options.push(element)
-    //     });          
-    //   this.catalogSelect.openPanel();
-    // }, error=>{
-    //   window.alert('Catalog not matching the search tag' + error);
-    // })
+   fetchCatalogByName(search_input) {
+      console.log(search_input);
+      this.options=[];
+      this.searchCatalogService.searchByTags(search_input)
+      .subscribe(data=>{
+        console.log(data);
+        data.forEach(element => {
+          this.options.push(element);
+        });
+        console.log(this.options);
+      //this.catalogSelect.openPanel();
+    }, error=>{
+      window.alert('Catalog not matching the search tag' + error);
+    })
 
-    this.options=[  {
-      "modelName": "tosca.nodes.Artifact",
-      "derivedFrom": "tosca.nodes.Root",
-      "definitionType": "node_type",
-      "definition": {
-        "description": "This is Deprecated Artifact Node Type.",
-        "version": "1.0.0",
-        "derived_from": "tosca.nodes.Root"
-      },
-      "description": "This is Deprecated Artifact Node Type.",
-      "version": "1.0.0",
-      "tags": "tosca.nodes.Artifact,tosca.nodes.Root,node_type",
-      "creationDate": "2019-09-16T07:35:24.000Z",
-      "updatedBy": "System"
-    }];
+//     this.options=[  {
+//       "modelName": "tosca.nodes.Artifact",
+//       "derivedFrom": "tosca.nodes.Root",
+//       "definitionType": "node_type",
+//       "definition": {
+//         "description": "This is Deprecated Artifact Node Type.",
+//         "version": "1.0.0",
+//         "derived_from": "tosca.nodes.Root"
+//       },
+//       "description": "This is Deprecated Artifact Node Type.",
+//       "version": "1.0.0",
+//       "tags": "tosca.nodes.Artifact,tosca.nodes.Root,node_type",
+//       "creationDate": "2019-09-16T07:35:24.000Z",
+//       "updatedBy": "System"
+//     }];
    }
 
    editInfo(item: ICatalog, option: string) {
 
-      this.dialogRef = this.dialog.open(CatalogDataDialogComponent, {
-        height: '500px',
-        width: '700px',
-        disableClose: true,
-        data: {item, option}
-      });
+	   if(option == 'Delete'){
+//           this.catalogCreateService.deleteCatalog(item.modelName)
+//           .subscribe(response=>{
+//              this.alertService.success("Delete Success"+ response)
+//             },
+//      	    error=>{
+//      	    console.log(error);
+//      	       this.alertService.error('Error while deleting catalog'+ error);
+//
+//      	     })
+       }
+       else{
+       this.dialogRef = this.dialog.open(CatalogDataDialogComponent, {
+            height: '500px',
+            width: '700px',
+            disableClose: true,
+            data: {item, option}
+        });
 
-      this.dialogRef.afterClosed().subscribe(result => {
-        if(result == undefined || result == null){
-          console.log("dialogbox is closed");
-        }else{
-        	this.catalog.modelName=result['modelName'];
-            this.catalog.derivedFrom=result['derivedFrom'];
-            this.catalog.definitionType=result['definitionType'];
-            this.catalog.definition=result['definition'];
-            this.catalog.tags=result['tags'];
-            this.catalog.updatedBy=result['updatedBy'];
-            console.log(this.catalog);
-            this.catalogCreateService.saveCatalog(this.catalog)
-            .subscribe(response=>{
-              this.alertService.success("save success"+ response)
-            },
-	          error=>{
-	          this.alertService.error('Error saving resources');
-	          })  
-        } 
-      });
+        this.dialogRef.afterClosed().subscribe(result => {
+           if(result == undefined || result == null){
+              console.log("dialogbox is closed");
+           }else{
+                   this.catalog.modelName=result['modelName'];
+                   this.catalog.derivedFrom=result['derivedFrom'];
+                   this.catalog.definitionType=result['definitionType'];
+                   this.catalog.definition=JSON.parse(result['definition']);
+                   this.catalog.tags=result['tags'];
+                   this.catalog.updatedBy=result['updatedBy'];
+                   this.catalog.description= "";
+                   this.catalog.version= "";
+                   this.catalog.creationDate="";
+                   console.log(this.catalog);
+                   let catalogState = {
+                       catalog: this.catalog,
+                       isLoadSuccess: true,
+                       isUpdateSuccess:true,
+                       isSaveSuccess:true
+                   }
+                   this.store.dispatch(new SetCatalogState(catalogState));
+                   this.catalogCreateService.saveCatalog(this.catalog)
+                   .subscribe(response=>{
+                     this.alertService.success("save success"+ response)
+                   },
+       	          error=>{
+       	          this.alertService.error('Error saving resources');
+       	         })
+             }
+          });
+       }
   }
 }
