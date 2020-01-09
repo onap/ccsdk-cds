@@ -97,20 +97,23 @@ export class CreateCatalogComponent implements OnInit {
 	    this.catalog.derivedFrom=this.CatalogFormData.controls['derivedFrom'].value
 	    this.catalog.description=this.CatalogFormData.controls['description'].value
 	    this.catalog.definition=this.data;
+	    this.catalog.version="";
+	    this.catalog.creationDate="";
 	    console.log(this.catalog);
-    let catalogState = {
-      catalog: this.catalog
-    }
-    this.store.dispatch(new SetCatalogState(catalogState));
-    
-      this.catalogCreateService.saveCatalog(this.catalog)
-      .subscribe(response=>{
-        this.alertService.success("save success")
-      },
-      error=>{
-        this.alertService.error('Error saving resources');
-      })
- 
+	    let catalogState = {
+	    	catalog: this.catalog
+	    }
+	    this.store.dispatch(new SetCatalogState(catalogState));
+
+	    this.catalogCreateService.saveCatalog(this.catalog)
+	    	.subscribe(response=>{
+	    	   this.alertService.success("save success")
+	    	 },
+	    	 error=>{
+	    	   console.log(error);
+	    	   this.alertService.error('Error saving resources');
+	    	  })
+
   }
 
   onChange($event) {
