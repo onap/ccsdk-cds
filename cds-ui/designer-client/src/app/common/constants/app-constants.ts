@@ -98,7 +98,8 @@ export const BlueprintURLs = {
     deploy: '/controllerblueprint/deploy-blueprint',
     getMetaDate: '/controllerblueprint/meta-data/',
     countOfAllBluePrints: '/controllerblueprint/list/count',
-    getMetaDatePageable: '/controllerblueprint/metadata/paged'
+    getMetaDatePageable: '/controllerblueprint/metadata/paged',
+    getBlueprintByName: '/controllerblueprint/by-name/'
 };
 
 export const ResourceDictionaryURLs = {

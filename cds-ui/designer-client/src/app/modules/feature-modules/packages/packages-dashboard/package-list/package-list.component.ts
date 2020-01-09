@@ -16,8 +16,8 @@ export class PackageListComponent implements OnInit {
         console.log('PackageListComponent');
         this.packagesStore.state$.subscribe(state => {
             console.log(state);
-            if (state.page) {
-                this.viewedPackages = state.page.content;
+            if (state.filteredPackages) {
+                this.viewedPackages = state.filteredPackages.content;
             }
         });
     }
