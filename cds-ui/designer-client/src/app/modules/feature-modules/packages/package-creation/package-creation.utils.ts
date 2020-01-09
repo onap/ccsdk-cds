@@ -21,6 +21,7 @@ limitations under the License.
 
 import {JsonPipe} from '@angular/common';
 import {Injectable} from '@angular/core';
+import {JsonConvert} from 'json2typescript';
 
 
 @Injectable({
@@ -32,6 +33,7 @@ export class PackageCreationUtils {
     }
 
     public transformToJson(object: any): string {
+
         return this.pipe.transform(object);
     }
 

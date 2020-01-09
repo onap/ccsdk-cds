@@ -34,7 +34,7 @@
                 </div>
                 <nav class="row">
                     <div class="col pr-0">
-                        <button class="float btn btn-sm btn-primary">Save</button>
+                        <button class="float btn btn-sm btn-primary" (click)="saveMetaData()">Save</button>
                         <button class="float btn btn-sm btn-outline-secondary" disabled>Cancel</button>
                     </div>
                 </nav>
@@ -73,32 +73,21 @@
                                         <label class="label-name">Mode</label>
                                         <label name="trst" *ngFor="let mode of modes; let i = index">
                                             <input class="form-check-input" [(ngModel)]="metaDataTab.mode" type="radio"
-                                                   name="exampleRadios" id="exampleRadios1" value={{mode}}>
+                                                   name="exampleRadios" id="exampleRadios1" value={{mode.name}}>
 
                                             <span>
-                                            <i [className]="mode.style" aria-hidden="true"></i>
-                                                <!-- <i class="mode-icon green icon-scripting-mode" aria-hidden="true"></i> -->
+                                            <i [className]="mode.style" aria-hidden="true" [id]="mode.name"></i>
                                                 {{mode.name}}
                                             </span>
                                         </label>
                                     </div>
-                                  <!--  <div class="single-line">
-                                        <label class="label-name">Dictionary Library Instances</label>
-                                        <div class="label-input">
-                                            <select name="cars">
-                                                <option class="select-placeholder">Select library</option>
-                                                <option value="audi"
-                                                        *ngFor="let dictionaryLibraryInstance of dictionaryLibraryInstances; let i = index">{{dictionaryLibraryInstance}}</option>
-                                            </select>
-                                        </div>
-                                    </div>-->
 
                                 </div>
                                 <div class="card creat-card">
                                     <div class="single-line">
                                         <label class="label-name">Name</label>
                                         <div class="label-input">
-                                            <input type="input" (input)="searchPackages($event)"
+                                            <input type="input"
                                                    [(ngModel)]="metaDataTab.name" placeholder="Topology name.vLB.CDS">
                                         </div>
                                     </div>
@@ -106,21 +95,26 @@
                                     <div class="single-line">
                                         <label class="label-name">Description</label>
                                         <div class="label-input">
-                                            <input type="input" placeholder="Descripe the package">
+                                            <input type="input" [(ngModel)]="metaDataTab.description"
+                                                   placeholder="Descripe the package">
                                         </div>
                                     </div>
                                     <hr/>
                                     <div class="single-line">
                                         <label class="label-name">Version</label>
                                         <div class="label-input">
-                                            <input type="input" placeholder="Example: 1.0.0">
+                                            <input type="input" [(ngModel)]="metaDataTab.version"
+                                                   (input)="validatePackageNameAndVersion()"
+                                                   placeholder="Example: 1.0.0">
                                         </div>
+                                        <div><label style="color: red">{{errorMessage}}</label></div>
                                     </div>
                                     <hr/>
                                     <div class="single-line">
                                         <label class="label-name">tags</label>
                                         <div class="label-input">
-                                            <input type="input" placeholder="Ex., vDNS-CDS">
+                                            <input type="input" [(ngModel)]="metaDataTab.tags"
+                                                   placeholder="Ex., vDNS-CDS">
                                         </div>
                                     </div>
                                 </div>
@@ -129,21 +123,22 @@
                                         <div class="card creat-card">
                                             <div class="single-line">
                                                 <h5 class="label-name">
-                                                    Custom key <a class="delete-key" (click)="deleteCustomKey($event)" >Delete</a>
+                                                    Custom key <a class="delete-key" (click)="deleteCustomKey($event)">Delete</a>
                                                 </h5>
 
                                             </div>
                                             <div class="single-line">
                                                 <label class="label-name">Name</label>
                                                 <div class="label-input">
-                                                    <input type="input" placeholder="Enter Name">
+                                                    <input name="key" type="input" placeholder="Enter Name">
                                                 </div>
                                             </div>
                                             <hr/>
                                             <div class="single-line">
                                                 <label class="label-name">Value</label>
                                                 <div class="label-input">
-                                                    <input type="input" placeholder="Enter Value">
+                                                    <input name="value" type="input"
+                                                           placeholder="Enter Value">
                                                 </div>
                                             </div>
 
@@ -165,110 +160,8 @@
                             </div>
                             <div class="tab-pane fade" id="nav-imports" role="tabpanel"
                                  aria-labelledby="nav-imports-tab">
-                                <div class="import-container-all">
-                                    <div class="import-container">
-                                        <div class="import-container-input">
-                                            <input placeholder="Enter file URL" type="input"
-                                                   class="ng-pristine ng-valid ng-touched">
-                                            <a class="enter-link" href="#"><i class="icon-enter"></i></a>
-                                        </div>
-                                        <span class="import-container-span">Or you can also <a href="#"
-                                                                                               data-toggle="modal"
-                                                                                               data-target="#exampleModal">Import File</a></span>
+                                <app-imports-tab></app-imports-tab>
 
-                                    </div>
-
-                                    <div class="accordion">
-                                        <div class="card creat-card">
-                                            <div class="single-line">
-                                                <label class="label-name">File</label>
-                                            </div>
-                                        </div>
-                                        <div id="accordion">
-                                            <div class="card">
-                                                <div class="card-header" id="headingOne">
-                                                    <h5 class="mb-0 d-flex justify-content-between">
-                                                        <button class="btn btn-link" data-toggle="collapse"
-                                                                data-target="#collapseOne" aria-expanded="true"
-                                                                aria-controls="collapseOne">
-                                                            <i class="icon-file-code"></i> Definitions/data_types.json
-                                                        </button>
-                                                        <a class="accordion-delete" href="#"><i class="icon-delete"></i></a>
-                                                    </h5>
-                                                </div>
-
-                                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                                     data-parent="#accordion">
-                                                    <div class="card-body">
-                                                        Anim pariatur cliche reprehenderit, enim eiusmod high life
-                                                        accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                                                        non cupidatat skateboard dolor brunch. Food truck quinoa
-                                                        nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua
-                                                        put a bird on it squid single-origin coffee nulla assumenda
-                                                        shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore
-                                                        wes anderson cred nesciunt sapiente ea proident. Ad vegan
-                                                        excepteur butcher vice lomo. Leggings occaecat craft beer
-                                                        farm-to-table, raw denim aesthetic synth nesciunt you probably
-                                                        haven't heard of them accusamus labore sustainable VHS.
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="card">
-                                                <div class="card-header" id="headingTwo">
-                                                    <h5 class="mb-0">
-                                                        <button class="btn btn-link collapsed" data-toggle="collapse"
-                                                                data-target="#collapseTwo" aria-expanded="false"
-                                                                aria-controls="collapseTwo">
-                                                            Definitions/relationship_types.json
-                                                        </button>
-                                                    </h5>
-                                                </div>
-                                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
-                                                     data-parent="#accordion">
-                                                    <div class="card-body">
-                                                        Anim pariatur cliche reprehenderit, enim eiusmod high life
-                                                        accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                                                        non cupidatat skateboard dolor brunch. Food truck quinoa
-                                                        nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua
-                                                        put a bird on it squid single-origin coffee nulla assumenda
-                                                        shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore
-                                                        wes anderson cred nesciunt sapiente ea proident. Ad vegan
-                                                        excepteur butcher vice lomo. Leggings occaecat craft beer
-                                                        farm-to-table, raw denim aesthetic synth nesciunt you probably
-                                                        haven't heard of them accusamus labore sustainable VHS.
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="card">
-                                                <div class="card-header" id="headingThree">
-                                                    <h5 class="mb-0">
-                                                        <button class="btn btn-link collapsed" data-toggle="collapse"
-                                                                data-target="#collapseThree" aria-expanded="false"
-                                                                aria-controls="collapseThree">
-                                                            Definitions/artifact_types.json
-                                                        </button>
-                                                    </h5>
-                                                </div>
-                                                <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
-                                                     data-parent="#accordion">
-                                                    <div class="card-body">
-                                                        Anim pariatur cliche reprehenderit, enim eiusmod high life
-                                                        accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                                                        non cupidatat skateboard dolor brunch. Food truck quinoa
-                                                        nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua
-                                                        put a bird on it squid single-origin coffee nulla assumenda
-                                                        shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore
-                                                        wes anderson cred nesciunt sapiente ea proident. Ad vegan
-                                                        excepteur butcher vice lomo. Leggings occaecat craft beer
-                                                        farm-to-table, raw denim aesthetic synth nesciunt you probably
-                                                        haven't heard of them accusamus labore sustainable VHS.
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
                             </div>
                             <div class="tab-pane fade" id="nav-authentication" role="tabpanel"
                                  aria-labelledby="nav-authentication-tab">...
@@ -282,27 +175,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Import File</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary">Import</button>
             </div>
         </div>
     </div>

@@ -44,8 +44,8 @@ export class PackagesApiService {
         });
     }
 
-    checkBluePrintIfItExists(keyword: string) {// : Observable<any> {
-        // return this.api.get(BlueprintURLs.get + '/' + keyword);
+    async checkBluePrintIfItExists(name: string, version: string): Promise<BluePrintPage[]> {
+        return await this.api.get(BlueprintURLs.getBlueprintByName + '/' + name + '/version/' + version).toPromise();
     }
 
     getCountOfAllPackages(observable: Observable<number>) {
