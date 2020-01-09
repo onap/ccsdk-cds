@@ -40,8 +40,6 @@ export class CatalogDataDialogComponent implements OnInit{
   ccState: Observable<ICatalogState>;
   isDisabled: boolean=true;
   optionSelected:string;
-  // derivedFrom: any[] = [{derivedFrom: 'tosca.nodes.Component'},{derivedFrom:'tosca.nodes.VNF'},{derivedFrom:'tosca.nodes.Artifact'},{derivedFrom:'tosca.nodes.ResourceSource'}, {derivedFrom:'tosca.nodes.Workflow'},{derivedFrom:'tosca.nodes.Root'}];
-  // definitionType: any[] = [{definitionType: 'node_type'}];
   property:any=[];
   constructor(public dialogRef: MatDialogRef<CatalogDataDialogComponent>, @Inject(MAT_DIALOG_DATA) public item: any,private formBuilder: FormBuilder, private store: Store<IAppState> ) {
     console.log(item);
@@ -79,7 +77,6 @@ export class CatalogDataDialogComponent implements OnInit{
   }
 
   onClickSave(){
-    //this.catalog = Object.assign({}, this.CatalogFormData.value);
     this.dialogRef.close(this.CatalogFormData.value);
   }
 }
