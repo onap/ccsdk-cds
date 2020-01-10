@@ -22,3 +22,4 @@ limitations under the License.
 export * from './ping.controller';
 export * from './blueprint-rest.controller';
 export * from './data-dictionary.controller';
+export * from './controller-catalog.controller';
