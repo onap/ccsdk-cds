@@ -32,7 +32,7 @@
 
     <properties>
         <protobuf.version>3.6.1</protobuf.version>
-        <project.version>${parent.version}</project.version>
+        <project.version>${project.parent.version}</project.version>
     </properties>
 
     <dependencies>
