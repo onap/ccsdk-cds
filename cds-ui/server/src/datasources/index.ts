@@ -23,3 +23,4 @@ limitations under the License.
 export * from './db.datasource';
 export * from './blueprint.datasource';
 export * from './resource-dictionary.datasource';
+export * from './controller-catalog.datasource';
