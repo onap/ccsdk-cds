@@ -23,6 +23,8 @@ import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.logging.LogColor.COLOR_TEST_CLIENT
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.logging.LogColor.resetContextColor
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.logging.LogColor.setContextColor
+import org.onap.ccsdk.cds.blueprintsprocessor.uat.utils.TestSecuritySettings
+import org.onap.ccsdk.cds.blueprintsprocessor.uat.utils.WorkingFoldersInitializer
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource

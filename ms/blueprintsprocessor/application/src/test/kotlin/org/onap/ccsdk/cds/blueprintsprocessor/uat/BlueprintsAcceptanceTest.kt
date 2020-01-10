@@ -24,6 +24,8 @@ import org.junit.ClassRule
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
+import org.onap.ccsdk.cds.blueprintsprocessor.uat.utils.ExtendedTemporaryFolder
+import org.onap.ccsdk.cds.blueprintsprocessor.uat.utils.UatExecutor
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.UAT_SPECIFICATION_FILE
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintArchiveUtils.Companion.compressToBytes
 import org.springframework.beans.factory.annotation.Autowired
