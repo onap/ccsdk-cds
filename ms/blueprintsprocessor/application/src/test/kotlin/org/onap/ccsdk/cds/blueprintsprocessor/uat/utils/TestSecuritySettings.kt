@@ -17,7 +17,7 @@
  * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
-package org.onap.ccsdk.cds.blueprintsprocessor.uat
+package org.onap.ccsdk.cds.blueprintsprocessor.uat.utils
 
 import org.springframework.context.ApplicationContextInitializer
 import org.springframework.context.ConfigurableApplicationContext

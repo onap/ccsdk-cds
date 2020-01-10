@@ -17,7 +17,7 @@
  * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
-package org.onap.ccsdk.cds.blueprintsprocessor.uat
+package org.onap.ccsdk.cds.blueprintsprocessor.uat.utils
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -35,7 +35,8 @@ internal class JsonNormalizer {
             }
             return { s: String ->
                 val input = mapper.readTree(s)
-                val expandedJstlSpec = expandJstlSpec(jsltSpec)
+                val expandedJstlSpec =
+                    expandJstlSpec(jsltSpec)
                 val jslt = Parser.compileString(expandedJstlSpec)
                 val output = jslt.apply(input)
                 output.toString()
@@ -50,7 +51,8 @@ internal class JsonNormalizer {
          * @return the string representation of the extended JSTL spec.
          */
         private fun expandJstlSpec(jstlSpec: JsonNode): String {
-            val extendedJstlSpec = updateObjectNodes(jstlSpec, "*", ".")
+            val extendedJstlSpec =
+                updateObjectNodes(jstlSpec, "*", ".")
             return extendedJstlSpec.toString()
                 // Handle the "?" as a prefix to literal/non-quoted values
                 .replace("\"\\?([^\"]+)\"".toRegex(), "$1")
@@ -69,7 +71,11 @@ internal class JsonNormalizer {
             if (jsonNode is ContainerNode<*>) {
                 (jsonNode as? ObjectNode)?.put(fieldName, fieldValue)
                 jsonNode.forEach { child ->
-                    updateObjectNodes(child, fieldName, fieldValue)
+                    updateObjectNodes(
+                        child,
+                        fieldName,
+                        fieldValue
+                    )
                 }
             }
             return jsonNode

@@ -17,7 +17,7 @@
  * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
-package org.onap.ccsdk.cds.blueprintsprocessor.uat
+package org.onap.ccsdk.cds.blueprintsprocessor.uat.utils
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import kotlinx.coroutines.runBlocking
@@ -87,7 +87,9 @@ open class UatServices(private val uatExecutor: UatExecutor, private val mapper:
             val uat = UatDefinition.load(mapper, uatSpec)
             val cbaBytes = tempFile.readBytes()
             val updatedUat = uatExecutor.execute(uat, cbaBytes)
-            return@runBlocking updatedUat.dump(mapper, FIELDS_TO_EXCLUDE)
+            return@runBlocking updatedUat.dump(mapper,
+                FIELDS_TO_EXCLUDE
+            )
         } catch (t: Throwable) {
             throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, t.message, t)
         } finally {

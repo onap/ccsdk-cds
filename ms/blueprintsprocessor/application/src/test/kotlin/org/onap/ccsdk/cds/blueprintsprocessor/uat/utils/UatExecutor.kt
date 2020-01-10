@@ -17,7 +17,7 @@
  * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
-package org.onap.ccsdk.cds.blueprintsprocessor.uat
+package org.onap.ccsdk.cds.blueprintsprocessor.uat.utils
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -133,7 +133,12 @@ class UatExecutor(
                         client, process.request,
                         process.expectedResponse, responseNormalizer
                     )
-                    ProcessDefinition(process.name, process.request, actualResponse, process.responseNormalizerSpec)
+                    ProcessDefinition(
+                        process.name,
+                        process.request,
+                        actualResponse,
+                        process.responseNormalizerSpec
+                    )
                 }
             }
 
@@ -251,7 +256,8 @@ class UatExecutor(
         val username = environment.getRequiredProperty("security.user.name")
         val password = environment.getRequiredProperty("security.user.password")
         val plainPassword = when {
-            password.startsWith(NOOP_PASSWORD_PREFIX) -> password.substring(NOOP_PASSWORD_PREFIX.length)
+            password.startsWith(NOOP_PASSWORD_PREFIX) -> password.substring(
+                NOOP_PASSWORD_PREFIX.length)
             else -> username
         }
         return "Basic " + Base64Utils.encodeToString("$username:$plainPassword".toByteArray())
@@ -300,7 +306,9 @@ class UatExecutor(
         private val expectations: MutableList<ExpectationDefinition> = mutableListOf()
 
         override fun exchangeResource(methodType: String, path: String, request: String): WebClientResponse<String> =
-            exchangeResource(methodType, path, request, DEFAULT_HEADERS)
+            exchangeResource(methodType, path, request,
+                DEFAULT_HEADERS
+            )
 
         override fun exchangeResource(
             methodType: String,
@@ -308,15 +316,22 @@ class UatExecutor(
             request: String,
             headers: Map<String, String>
         ): WebClientResponse<String> {
-            val requestDefinition = RequestDefinition(methodType, path, headers, toJson(request))
+            val requestDefinition =
+                RequestDefinition(methodType, path, headers, toJson(request))
             val realAnswer = realService.exchangeResource(methodType, path, request, headers)
             val responseBody = when {
                 // TODO: confirm if we need to normalize the response here
                 realAnswer.status == HttpStatus.SC_OK -> toJson(realAnswer.body)
                 else -> null
             }
-            val responseDefinition = ResponseDefinition(realAnswer.status, responseBody)
-            expectations.add(ExpectationDefinition(requestDefinition, responseDefinition))
+            val responseDefinition =
+                ResponseDefinition(realAnswer.status, responseBody)
+            expectations.add(
+                ExpectationDefinition(
+                    requestDefinition,
+                    responseDefinition
+                )
+            )
             return realAnswer
         }
 

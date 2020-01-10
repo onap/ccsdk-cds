@@ -54,6 +54,7 @@
         <netty-ssl>2.0.26.Final</netty-ssl>
         <sshd.version>2.2.0</sshd.version>
         <jsch.version>0.1.55</jsch.version>
+        <jslt.version>0.1.8</jslt.version>
         <jython.version>2.7.1</jython.version>
         <jinja.version>2.5.1</jinja.version>
         <velocity.version>1.7</velocity.version>
@@ -159,6 +160,11 @@
                 <groupId>com.hubspot.jinjava</groupId>
                 <artifactId>jinjava</artifactId>
                 <version>${jinja.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.schibsted.spt.data</groupId>
+                <artifactId>jslt</artifactId>
+                <version>${jslt.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
@@ -411,135 +417,138 @@
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>processor-core</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>atomix-lib</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>db-lib</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>rest-lib</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>nats-lib</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>ssh-lib</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
+
             <!-- message-lib dependency -->
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>message-lib</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>dmaap-lib</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>grpc-lib</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>execution-service</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>workflow-service</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
-
-            <!--
-            <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-                <artifactId>health-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            -->
 
             <!-- North Bound -->
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>configs-api</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>designer-api</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>resource-api</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>selfservice-api</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>application</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
 
             <!-- Functions -->
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
                 <artifactId>resource-resolution</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
                 <artifactId>python-executor</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
                 <artifactId>ansible-awx-executor</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
                 <artifactId>netconf-executor</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
                 <artifactId>restconf-executor</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
                 <artifactId>cli-executor</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
                 <artifactId>config-snapshots</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
                 <artifactId>message-prioritizaion</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>health-api</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>health-api-common</artifactId>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
 
             <!-- Diff capability providers for config-snapshots -->
@@ -558,22 +567,22 @@
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>resource-dict</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>blueprint-core</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>blueprint-proto</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>blueprint-validation</artifactId>
-                <version>${project.version}</version>
+                <version>${ccsdk.cds.version}</version>
             </dependency>
 
             <!-- Database -->
@@ -604,6 +613,12 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
+                <groupId>com.nhaarman.mockitokotlin2</groupId>
+                <artifactId>mockito-kotlin</artifactId>
+                <version>2.2.0</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-test-junit</artifactId>
                 <version>${kotlin.version}</version>
@@ -615,6 +630,7 @@
                 <version>${kotlin.couroutines.version}</version>
                 <scope>test</scope>
             </dependency>
+
             <dependency>
                 <groupId>io.grpc</groupId>
                 <artifactId>grpc-testing</artifactId>

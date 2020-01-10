@@ -17,7 +17,7 @@
  * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
-package org.onap.ccsdk.cds.blueprintsprocessor.uat
+package org.onap.ccsdk.cds.blueprintsprocessor.uat.utils
 
 import org.springframework.beans.factory.support.BeanDefinitionBuilder
 import org.springframework.beans.factory.support.BeanDefinitionRegistry
@@ -32,7 +32,7 @@ class WorkingFoldersInitializer : ApplicationContextInitializer<ConfigurableAppl
     override fun initialize(context: ConfigurableApplicationContext) {
         val tempFolder = ExtendedTemporaryFolder()
         val properties = listOf("Deploy", "Archive", "Working")
-            .map { "blueprintsprocessor.blueprint${it}Path=${tempFolder.newFolder(it)}" }
+            .map { "blueprintsprocessor.blueprint${it}Path=${tempFolder.newFolder(it).absolutePath.replace("\\", "/")}" }
             .toTypedArray()
         TestPropertySourceUtils.addInlinedPropertiesToEnvironment(context, *properties)
         // Expose tempFolder as a bean so it can be accessed via DI

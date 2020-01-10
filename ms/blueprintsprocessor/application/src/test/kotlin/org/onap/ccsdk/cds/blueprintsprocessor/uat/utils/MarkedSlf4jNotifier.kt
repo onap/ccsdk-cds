@@ -17,18 +17,27 @@
  * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
-package org.onap.ccsdk.cds.blueprintsprocessor.uat
+package org.onap.ccsdk.cds.blueprintsprocessor.uat.utils
 
-import com.google.common.collect.Maps
-import org.mockito.ArgumentMatcher
+import com.github.tomakehurst.wiremock.common.Notifier
+import org.slf4j.LoggerFactory
+import org.slf4j.Marker
 
-class RequiredMapEntriesMatcher<K, V>(private val requiredEntries: Map<K, V>) : ArgumentMatcher<Map<K, V>> {
-    override fun matches(argument: Map<K, V>?): Boolean {
-        val missingEntries = Maps.difference(requiredEntries, argument).entriesOnlyOnLeft()
-        return missingEntries.isEmpty()
+class MarkedSlf4jNotifier(private val marker: Marker) : Notifier {
+
+    override fun info(message: String) {
+        log.info(marker, message)
     }
 
-    override fun toString(): String {
-        return requiredEntries.toString()
+    override fun error(message: String) {
+        log.error(marker, message)
+    }
+
+    override fun error(message: String, t: Throwable) {
+        log.error(marker, message, t)
+    }
+
+    companion object {
+        private val log = LoggerFactory.getLogger("uat.WireMock")
     }
 }
