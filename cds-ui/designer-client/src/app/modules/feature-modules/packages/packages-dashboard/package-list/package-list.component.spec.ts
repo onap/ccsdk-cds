@@ -4,6 +4,7 @@ import { PackageListComponent } from './package-list.component';
 import { PackagesStore } from '../../packages.store';
 import { getBluePrintPageMock } from '../../blueprint.page.mock';
 import { of } from 'rxjs';
+import {PackagesDashboardState} from '../../model/packages-dashboard.state';
 
 describe('PackageListComponent', () => {
   let component: PackageListComponent;
@@ -12,7 +13,9 @@ describe('PackageListComponent', () => {
 
   beforeEach(async(() => {
 
-    store = { state$: of(getBluePrintPageMock()) };
+    const dashBoard = new PackagesDashboardState();
+    dashBoard.page = getBluePrintPageMock();
+    store = { state$: of(dashBoard) };
 
     TestBed.configureTestingModule({
       declarations: [ PackageListComponent ],

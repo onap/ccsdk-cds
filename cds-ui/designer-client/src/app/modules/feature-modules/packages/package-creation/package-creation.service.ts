@@ -24,6 +24,8 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {ApiService} from '../../../../common/core/services/api.service';
 import {BlueprintURLs} from '../../../../common/constants/app-constants';
+import {PackagesApiService} from '../packages-api.service';
+import {PackagesStore} from '../packages.store';
 
 @Injectable({
     providedIn: 'root'
@@ -31,10 +33,19 @@ import {BlueprintURLs} from '../../../../common/constants/app-constants';
 export class PackageCreationService {
 
 
-    constructor(private api: ApiService) {
+    constructor(private api: ApiService, private packagesListService: PackagesApiService, private packagesStore: PackagesStore) {
     }
 
     saveBlueprint(body: any | null, options?: any): Observable<any> {
         return this.api.post(BlueprintURLs.save, body, {responseType: 'text'});
+    }
+
+    async checkBluePrintNameAndVersion(name: string, version: string): Promise<boolean> {
+        return await this.packagesListService.checkBluePrintIfItExists(name, version)
+            .then(bluePrintModelsResult => bluePrintModelsResult != null && bluePrintModelsResult.length > 0);
+    }
+
+    refreshPackages() {
+        this.packagesStore.getAll();
     }
 }

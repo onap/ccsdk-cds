@@ -3,6 +3,7 @@ import {Routes, RouterModule} from '@angular/router';
 import {PackagesDashboardComponent} from './packages-dashboard/packages-dashboard.component';
 import {DesignerComponent} from './designer/designer.component';
 import {PackageCreationComponent} from './package-creation/package-creation.component';
+import {ConfigurationDashboardComponent} from './configuration-dashboard/configuration-dashboard.component';
 
 
 const routes: Routes = [
@@ -11,6 +12,7 @@ const routes: Routes = [
         component: PackagesDashboardComponent
     },
     {path: 'designer', component: DesignerComponent},
+    {path: 'package/:id', component: ConfigurationDashboardComponent},
     {path: 'createPackage', component: PackageCreationComponent},
 ];
 

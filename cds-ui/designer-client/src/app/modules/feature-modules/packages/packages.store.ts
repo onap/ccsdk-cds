@@ -24,7 +24,7 @@ import {BluePrintPage} from './model/BluePrint.model';
 import {Store} from '../../../common/core/stores/Store';
 import {PackagesApiService} from './packages-api.service';
 import {PackagesDashboardState} from './model/packages-dashboard.state';
-
+import {Observable, of} from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -32,6 +32,7 @@ import {PackagesDashboardState} from './model/packages-dashboard.state';
 export class PackagesStore extends Store<PackagesDashboardState> {
     // TDOD fixed for now as there is no requirement to change it from UI
     public pageSize = 5;
+    private bluePrintContent: BluePrintPage = new BluePrintPage();
 
     constructor(private packagesServiceList: PackagesApiService) {
         super(new PackagesDashboardState());
@@ -48,6 +49,13 @@ export class PackagesStore extends Store<PackagesDashboardState> {
         } else {
             this.getPagedPackages(0, this.pageSize);
         }
+    }
+
+    public filterByTags(tags: string[]) {
+        console.log(this.state.currentPage);
+        this.getPagedPackagesByTags(this.state.command, this.state.currentPage,
+            this.pageSize, this.state.sortBy, tags);
+
     }
 
     public getPage(pageNumber: number, pageSize: number) {
@@ -74,11 +82,13 @@ export class PackagesStore extends Store<PackagesDashboardState> {
                 this.setState({
                     ...this.state,
                     page: pages[0],
+                    filteredPackages: pages[0],
                     command: '',
                     totalPackages: pages[0].totalElements,
                     currentPage: pageNumber,
                     // this param is set only in get all as it represents the total number of pacakges in the server
                     totalPackagesWithoutSearchorFilters: pages[0].totalElements,
+                    tags: [],
                     sortBy
                 });
             });
@@ -90,9 +100,11 @@ export class PackagesStore extends Store<PackagesDashboardState> {
                 this.setState({
                     ...this.state,
                     page: pages[0],
+                    filteredPackages: pages[0],
                     command: keyWord,
                     totalPackages: pages[0].totalElements,
                     currentPage: pageNumber,
+                    tags: [],
                     sortBy
                 });
             });
@@ -101,4 +113,52 @@ export class PackagesStore extends Store<PackagesDashboardState> {
     private isCommandExist() {
         return this.state.command;
     }
+
+    private getPagedPackagesByTags(keyWord: string, currentPage1: number, pageSize: number, sortBy1: string, tagsSearchable: string[]) {
+        this.getPagedPackagesByKeyWordFilteredByTags(tagsSearchable)
+            .subscribe((pages: BluePrintPage) => {
+                this.setState({
+                    ...this.state,
+                    page: this.state.page,
+                    filteredPackages: pages,
+                    command: keyWord,
+                    tags: tagsSearchable,
+                    //  totalPackages: pages.totalElements,
+                    currentPage: currentPage1,
+                    sortBy: sortBy1,
+                    totalPackages: this.state.page.totalElements,
+                });
+            });
+    }
+
+    private getPagedPackagesByKeyWordFilteredByTags(tagsSearchable: string[]): Observable<any> {
+        this.bluePrintContent.content = [];
+        if (tagsSearchable && tagsSearchable.length !== 0 && !tagsSearchable.includes('All')) {
+            tagsSearchable.forEach(tag => {
+                if (tag) {
+                    this.state.page.content.forEach(bluePrintModel => {
+                        if (tag.endsWith(',')) {
+                            tag = tag.replace(',', '');
+                        }
+                        bluePrintModel.tags.split(',').forEach(bluePrintModelTag => {
+                            if (bluePrintModelTag === tag) {
+                                this.bluePrintContent.content.push(bluePrintModel);
+                            }
+                        });
+                    });
+                } else {
+                    this.getPagedPackages(this.state.currentPage, this.pageSize);
+                    return of(this.state.page);
+                }
+            });
+            this.bluePrintContent.content = this.bluePrintContent.content.filter((value, index, self) => self.indexOf(value) === index);
+            console.log('the lenght is ' + this.bluePrintContent.content.length);
+            return of(this.bluePrintContent);
+        } else {
+            this.getPagedPackages(this.state.currentPage, this.pageSize);
+            return of(this.state.page);
+        }
+    }
+
+
 }

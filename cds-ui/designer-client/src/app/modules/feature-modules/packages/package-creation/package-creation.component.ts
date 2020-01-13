@@ -31,6 +31,8 @@ import {JsonConvert} from 'json2typescript';
 import {JsonPipe} from '@angular/common';
 import {PackageCreationService} from './package-creation.service';
 import {PackageCreationUtils} from './package-creation.utils';
+import List = _.List;
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-package-creation',
@@ -38,10 +40,11 @@ import {PackageCreationUtils} from './package-creation.utils';
     styleUrls: ['./package-creation.component.css']
 })
 export class PackageCreationComponent implements OnInit {
-
+    counter = 0;
     modes: object[] = [
         {name: 'Designer Mode', style: 'mode-icon icon-designer-mode'},
         {name: 'Scripting Mode', style: 'mode-icon icon-scripting-mode'}];
+    customKeysAndValues: Map<string, string> = new Map<string, string>();
 
     dictionaryLibraryInstances: string[] = ['x', 'y'];
     private container: HTMLElement;
@@ -54,23 +57,34 @@ export class PackageCreationComponent implements OnInit {
     private folder: FolderNodeElement = new FolderNodeElement();
     private zipFile: JSZip = new JSZip();
     private filesData: any = [];
+    private errorMessage: string;
+    private keys: NodeListOf<HTMLElement>;
+    private values: NodeListOf<HTMLElement>;
 
 
-    constructor(private packageCreationService: PackageCreationService, private packageCreationUtils: PackageCreationUtils) {
+    constructor(private packageCreationService: PackageCreationService, private packageCreationUtils: PackageCreationUtils,
+                private router: Router) {
     }
 
     ngOnInit() {
+        // this.customKeysAndValues.set('Dictionary Library Instances', ' ');
+        this.keys = document.getElementsByName('key');
+        this.values = document.getElementsByName('value');
     }
 
 
     createAnotherCustomKeyDiv() {
-        console.log(this.metaDataTab);
         this.newElement = document.getElementById('target');
+        const id = this.newElement.getAttribute('id');
+        this.newElement.setAttribute('id', 'target' + this.counter++);
         const copiedElement = this.newElement.cloneNode(true);
-        /* this.newElement.setAttribute('class', 'alert-dark');*/
         this.container = document.getElementById('container');
         this.container.appendChild(copiedElement);
         this.elements = this.container.children;
+        this.newElement.setAttribute('id', id);
+        this.clearCopiedElement();
+
+        // console.log(this.packageCreationService.checkBluePrintNameAndVersion(this.metaDataTab.name, this.metaDataTab.version));
         /*this.metaDataTab = new MetaDataTab();
         this.metaDataTab.name = 'klfdj';
         this.metaDataTab.entryFileName = 'Definitions/vLB_CDS.json';
@@ -83,65 +97,95 @@ export class PackageCreationComponent implements OnInit {
         this.saveToFileSystem(MetaDataFile.getObjectInstance(this.metaDataTab));*/
     }
 
-    validatePacakgeName() {
+    private clearCopiedElement() {
+        const newCopiedElement: HTMLInputElement = document.getElementById('target' + (this.counter - 1)) as HTMLInputElement;
+        const inputElements = newCopiedElement.getElementsByTagName('input');
+        for (let i = 0; i < inputElements.length; i++) {
+            const element: HTMLInputElement = inputElements.item(i) as HTMLInputElement;
+            element.value = '';
+        }
+    }
+
+
+    validatePackageNameAndVersion() {
+        if (this.metaDataTab.name && this.metaDataTab.version) {
+            this.packageCreationService.checkBluePrintNameAndVersion(this.metaDataTab.name, this.metaDataTab.version).then(element => {
+                if (element) {
+                    this.errorMessage = 'the package with name and version is exists';
+                } else {
+                    this.errorMessage = ' ';
+                }
+            });
+        }
 
     }
 
     getDictionaryLibraryInstances() {
 
+
     }
 
     saveMetaData() {
+        for (let i = 0; i < this.values.length; i++) {
+            const inputKeyElement: HTMLInputElement = this.keys.item(i) as HTMLInputElement;
+            const inputKey: string = inputKeyElement.value;
+            const inputValueElement: HTMLInputElement = this.values.item(i) as HTMLInputElement;
+            const inputValue: string = inputValueElement.value;
+            this.customKeysAndValues.set(inputKey, inputValue);
+        }
 
+        this.metaDataTab.mapOfCustomKey = this.customKeysAndValues;
+        this.setModeType(this.metaDataTab);
+        this.setEntryPoint(this.metaDataTab);
 
-    }
+        this.addToscaMetaDataFile(this.metaDataTab);
 
-    private saveToFileSystem(response) {
-
-        const filename = 'TOSCA.meta';
-        FilesContent.putData(filename, response);
-
-        const filenameEntry = 'vLB_CDS.json';
         const vlbDefinition: VlbDefinition = new VlbDefinition();
-        const metadata: Metadata = new Metadata();
-
-        metadata.templateAuthor = ' lldkslds';
-        metadata.templateName = ' lldkslds';
-        metadata.templateTags = ' lldkslds';
-        metadata.templateVersion = ' lldkslds';
-        metadata['author-email'] = ' lldkslds';
-        metadata['user-groups'] = ' lldkslds';
-        vlbDefinition.metadata = metadata;
-
-        vlbDefinition.imports = [{
-            file: 'Definitions/data_types.json'
-        }];
-
-        const value = this.packageCreationUtils.transformToJson(vlbDefinition);
-        FilesContent.putData(filenameEntry, value);
+        this.fillVLBDefinition(vlbDefinition, this.metaDataTab);
 
         this.filesData.push(this.folder.TREE_DATA);
         this.saveToBackend();
+        this.packageCreationService.refreshPackages();
+        this.router.navigate(['/packages']);
+
     }
 
+    addToscaMetaDataFile(metaDataTab: MetaDataTab) {
+        const filename = 'TOSCA.meta';
+        FilesContent.putData(filename, MetaDataFile.getObjectInstance(this.metaDataTab));
+    }
+
+    private setModeType(metaDataTab: MetaDataTab) {
+        if (metaDataTab.mode.startsWith('Scripting')) {
+            metaDataTab.mode = 'KOTLIN_SCRIPT';
+        } else if (metaDataTab.mode.startsWith('Designer')) {
+            metaDataTab.mode = 'DEFAULT';
+        } else {
+            metaDataTab.mode = 'GENERIC_SCRIPT';
+        }
+    }
 
     saveToBackend() {
         this.create();
         this.zipFile.generateAsync({type: 'blob'})
             .then(blob => {
-                const formData = new FormData();
-                formData.append('file', blob);
-                this.packageCreationService.saveBlueprint(formData)
-                    .subscribe(
-                        data => {
-                            console.log('Success:' + JSON.stringify(data));
-                        }, error => {
-                            console.log('Error -' + error.message);
-                        });
+                this.saveBluePrint(blob);
 
             });
     }
 
+
+    private saveBluePrint(blob) {
+        const formData = new FormData();
+        formData.append('file', blob);
+        this.packageCreationService.saveBlueprint(formData)
+            .subscribe(
+                data => {
+                    console.log('Success:' + JSON.stringify(data));
+                }, error => {
+                    console.log('Error -' + error.message);
+                });
+    }
 
     create() {
         this.folder.TREE_DATA.forEach((path) => {
@@ -151,8 +195,6 @@ export class PackageCreationComponent implements OnInit {
                 this.zipFile.folder(name);
                 path.children.forEach(children => {
                     const name2 = children.name;
-                    console.log(FilesContent.getMapOfFilesNamesAndContent());
-                    console.log(name2);
                     if (FilesContent.getMapOfFilesNamesAndContent().has(name2)) {
                         this.zipFile.file(name + '/' + name2, FilesContent.getMapOfFilesNamesAndContent().get(name2));
                     } else {
@@ -165,16 +207,41 @@ export class PackageCreationComponent implements OnInit {
     }
 
 
-    searchPackages($event: Event) {
-        /* const searchQuery = event.target.value;
-         searchQuery = searchQuery.trim();
-         this.packagesStore.search(searchQuery);*/
-    }
-
     deleteCustomKey(event) {
         this.container = document.getElementById('container');
         const element = event.parentElement.parentElement.parentElement;
         this.container.removeChild(element);
-        console.log('removed');
+    }
+
+
+    private setEntryPoint(metaDataTab: MetaDataTab) {
+        if (metaDataTab.mode.startsWith('DEFAULT')) {
+            metaDataTab.entryFileName = 'Definitions/vLB_CDS.json';
+        } else {
+            metaDataTab.entryFileName = '';
+        }
+
+
+    }
+
+    private fillVLBDefinition(vlbDefinition: VlbDefinition, metaDataTab: MetaDataTab) {
+
+        const metadata: Metadata = new Metadata();
+        metadata.template_author = 'Shaaban';
+        metadata.template_name = metaDataTab.templateName;
+        metadata.template_tags = metaDataTab.tags;
+
+        metadata.dictionary_group = 'default';
+        metadata.template_version = metaDataTab.version;
+        metadata['author-email'] = 'shaaban.altanany.ext@orange.com';
+        metadata['user-groups'] = 'ADMIN';
+        // metadata.mapOfCustomKeys = this.metaDataTab.mapOfCustomKey;
+        vlbDefinition.tosca_definitions_version = metaDataTab.version;
+        vlbDefinition.metadata = metadata;
+
+        // console.log(vlbDefinition.metadata.mapOfCustomKeys);
+        const value = this.packageCreationUtils.transformToJson(vlbDefinition);
+        console.log(value);
+        FilesContent.putData('vLB_CDS.json', value);
     }
 }

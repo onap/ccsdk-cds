@@ -24,6 +24,7 @@ import {BluePrintPage} from './BluePrint.model';
 export class PackagesDashboardState {
 
     page: BluePrintPage;
+    filteredPackages: BluePrintPage;
     command: string;
     currentPage = 0;
     totalPackages: number;

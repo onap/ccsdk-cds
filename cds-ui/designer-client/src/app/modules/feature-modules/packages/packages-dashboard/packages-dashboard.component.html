@@ -2,7 +2,7 @@
 </app-header>
 <div class="new-wrapper">
     <div class="container-fluid main-container">
-
+        <app-packages-header></app-packages-header>
         <div class="container-fluid body-container">
             <nav class="row">
                 <!--Nav Tabs-->
@@ -31,31 +31,11 @@
                         <div class="col-5 pl-2">
                             <app-filter-by-tags class="w-100"></app-filter-by-tags>
                         </div>
-                        
+
                     </div>
                 </div>
             </nav>
-            <div class="row mt-4">
-                <div class="col">
-                    <div class="tab-content" id="nav-tabContent">
-                        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                            <div class="row">
-                                <div class="col sort-packages">
-                                    
-                                </div>
-                                <app-package-pagination></app-package-pagination>
-            
-                            </div>
-                            <app-packages-list></app-packages-list>
-            
-                        </div>
-                        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
-                        <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
-                        <div class="tab-pane fade" id="nav-contact1" role="tabpanel" aria-labelledby="nav-contact1-tab">...
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <app-sort-packages></app-sort-packages>
         </div>
     </div>
 </div>

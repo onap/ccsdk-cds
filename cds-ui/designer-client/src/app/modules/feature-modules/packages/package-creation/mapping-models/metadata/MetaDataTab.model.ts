@@ -51,9 +51,9 @@ export class MetaDataFile {
             'CSAR-Version: 1.0\n' +
             'Created-By: Shaaban Ebrahim <shaaban.eltanany.ext@orange.con>\n' +
             'Entry-Definitions:' + metaDataTab.entryFileName + '\n' +
-            'Template-Name:' + metaDataTab.templateName + '\n' +
-            'Template-Version: 1.0.0\n' +
-            'Template-Type: DEFAULT\n' +
+            'Template-Name:' + metaDataTab.name + '\n' +
+            'Template-Version:' + metaDataTab.version + '\n' +
+            'Template-Type: ' + metaDataTab.mode + '\n' +
             'Template-Tags:' + metaDataTab.tags;
 
     }

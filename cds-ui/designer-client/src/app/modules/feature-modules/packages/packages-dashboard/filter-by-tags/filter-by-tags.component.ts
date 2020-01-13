@@ -37,7 +37,7 @@ export class TagsFilteringComponent implements OnInit {
     searchTag = '';
     viewedPackages: BlueprintModel[] = [];
     private checkBoxTages = '';
-
+    currentPage = 0;
 
     constructor(private packagesStore: PackagesStore,
     ) {
@@ -45,13 +45,18 @@ export class TagsFilteringComponent implements OnInit {
             console.log(state);
             if (state.page) {
                 this.viewedPackages = state.page.content;
+                this.tags = [];
+                if (state.currentPage !== this.currentPage) {
+                    this.checkBoxTages = '';
+                    this.currentPage = state.currentPage;
+                }
                 this.viewedPackages.forEach(element => {
                     element.tags.split(',').forEach(tag => {
                         this.tags.push(tag.trim());
                     });
+                    this.tags.push('All');
                     this.tags = this.tags.filter((value, index, self) => self.indexOf(value) === index);
                     this.assignTags();
-
                 });
             }
         });
@@ -80,20 +85,20 @@ export class TagsFilteringComponent implements OnInit {
     }
 
     reloadPackages(event: any) {
-
         if (!event.target.checked) {
             this.checkBoxTages = this.checkBoxTages.replace(event.target.id + ',', '')
                 .replace(event.target.id, '');
         } else {
             this.checkBoxTages += event.target.id.trim() + ',';
         }
-        console.log(this.checkBoxTages);
-        if (!this.checkBoxTages.includes(',')) {
-            return;
-        }
-        this.viewedPackages = [];
-        // this.packagesStore.getPagesFilterByTags(this.checkBoxTages);
-        //   this.viewedPackages = this.viewedPackages.filter((value, index, self) => self.indexOf(value) === index);
+        const tagsSelected = this.checkBoxTages.split(',').filter(item => {
+            if (item) {
+                return true;
+            }
+        }).map((item) => {
+            return item.trim();
+        });
+        this.packagesStore.filterByTags(tagsSelected);
     }
 
 
