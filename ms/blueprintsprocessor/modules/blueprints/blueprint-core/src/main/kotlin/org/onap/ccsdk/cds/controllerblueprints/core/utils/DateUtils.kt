@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
 import java.util.Date
 
 fun controllerDate(): Date {
@@ -44,4 +45,12 @@ fun String.toControllerDate(): Date {
 fun Date.currentTimestamp(): String {
     val formatter = SimpleDateFormat(BluePrintConstants.DATE_TIME_PATTERN)
     return formatter.format(this)
+}
+
+/** Return incremented date for [number] of days */
+fun Date.addDate(number: Int): Date {
+    val calendar = Calendar.getInstance()
+    calendar.time = this
+    calendar.add(Calendar.DATE, number)
+    return calendar.time
 }

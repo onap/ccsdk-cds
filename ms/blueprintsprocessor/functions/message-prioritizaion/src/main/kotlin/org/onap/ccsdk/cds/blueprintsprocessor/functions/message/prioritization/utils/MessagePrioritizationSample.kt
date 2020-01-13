@@ -18,6 +18,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.
 
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.CleanConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.ExpiryConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.KafkaConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.PrioritizationConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.ShutDownConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.MessagePrioritization
@@ -29,9 +30,11 @@ object MessagePrioritizationSample {
 
     fun samplePrioritizationConfiguration(): PrioritizationConfiguration {
         return PrioritizationConfiguration().apply {
-            inputTopicSelector = "prioritize-input"
-            outputTopic = "prioritize-output-topic"
-            expiredTopic = "prioritize-expired-topic"
+            kafkaConfiguration = KafkaConfiguration().apply {
+                inputTopicSelector = "prioritize-input"
+                outputTopic = "prioritize-output-topic"
+                expiredTopic = "prioritize-expired-topic"
+            }
             expiryConfiguration = ExpiryConfiguration().apply {
                 frequencyMilli = 10000L
                 maxPollRecord = 2000
@@ -41,6 +44,22 @@ object MessagePrioritizationSample {
             }
             cleanConfiguration = CleanConfiguration().apply {
                 frequencyMilli = 10000L
+                expiredRecordsHoldDays = 5
+            }
+        }
+    }
+
+    fun sampleSchedulerPrioritizationConfiguration(): PrioritizationConfiguration {
+        return PrioritizationConfiguration().apply {
+            expiryConfiguration = ExpiryConfiguration().apply {
+                frequencyMilli = 10L
+                maxPollRecord = 2000
+            }
+            shutDownConfiguration = ShutDownConfiguration().apply {
+                waitMill = 20L
+            }
+            cleanConfiguration = CleanConfiguration().apply {
+                frequencyMilli = 10L
                 expiredRecordsHoldDays = 5
             }
         }
@@ -68,7 +87,11 @@ object MessagePrioritizationSample {
         return messages
     }
 
-    fun sampleMessageWithSameCorrelation(groupName: String, messageState: String, count: Int): List<MessagePrioritization> {
+    fun sampleMessageWithSameCorrelation(
+        groupName: String,
+        messageState: String,
+        count: Int
+    ): List<MessagePrioritization> {
         val messages: MutableList<MessagePrioritization> = arrayListOf()
         repeat(count) {
             val backPressureMessage = createMessage(
@@ -108,7 +131,7 @@ object MessagePrioritizationSample {
             group = groupName
             type = messageType
             state = messageState
-            priority = 5
+            priority = (1..10).shuffled().first()
             correlationId = messageCorrelationId
             message = "I am the Message"
             createdDate = Date()
