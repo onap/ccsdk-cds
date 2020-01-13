@@ -36,6 +36,10 @@ open class PrioritizationConfiguration : Serializable {
     lateinit var expiryConfiguration: ExpiryConfiguration
     lateinit var shutDownConfiguration: ShutDownConfiguration
     lateinit var cleanConfiguration: CleanConfiguration
+    var kafkaConfiguration: KafkaConfiguration? = null // Optional Kafka Consumer Configuration
+}
+
+open class KafkaConfiguration : Serializable {
     lateinit var inputTopicSelector: String // Consumer Configuration Selector
     lateinit var expiredTopic: String // Publish Configuration Selector
     lateinit var outputTopic: String // Publish Configuration Selector

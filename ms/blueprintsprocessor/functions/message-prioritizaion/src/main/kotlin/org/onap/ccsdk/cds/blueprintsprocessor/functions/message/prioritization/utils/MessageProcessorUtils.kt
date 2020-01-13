@@ -45,8 +45,32 @@ object MessageProcessorUtils {
         } else null
     }
 
+    /** Utility to create the cluster lock for expiry scheduler*/
+    suspend fun prioritizationExpiryLock(): ClusterLock? {
+        val clusterService = BluePrintDependencyService.optionalClusterService()
+        return if (clusterService != null && clusterService.clusterJoined()) {
+            val lockName = "prioritize-expiry"
+            val clusterLock = clusterService.clusterLock(lockName)
+            clusterLock.lock()
+            if (!clusterLock.isLocked()) throw BluePrintProcessorException("failed to lock($lockName)")
+            clusterLock
+        } else null
+    }
+
+    /** Utility to create the cluster lock for expiry scheduler*/
+    suspend fun prioritizationCleanLock(): ClusterLock? {
+        val clusterService = BluePrintDependencyService.optionalClusterService()
+        return if (clusterService != null && clusterService.clusterJoined()) {
+            val lockName = "prioritize-clean"
+            val clusterLock = clusterService.clusterLock(lockName)
+            clusterLock.lock()
+            if (!clusterLock.isLocked()) throw BluePrintProcessorException("failed to lock($lockName)")
+            clusterLock
+        } else null
+    }
+
     /** Utility used to cluster unlock for message [clusterLock] */
-    suspend fun prioritizationGroupUnLock(clusterLock: ClusterLock?) {
+    suspend fun prioritizationUnLock(clusterLock: ClusterLock?) {
         if (clusterLock != null) {
             clusterLock.unLock()
             clusterLock.close()

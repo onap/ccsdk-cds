@@ -33,20 +33,20 @@ interface PrioritizationMessageRepository : JpaRepository<MessagePrioritization,
 
     @Query(
         "FROM MessagePrioritization pm WHERE pm.group = :group AND pm.state in :states " +
-                "ORDER BY pm.createdDate asc"
+            "ORDER BY pm.createdDate asc"
     )
     fun findByGroupAndStateIn(group: String, states: List<String>, count: Pageable): List<MessagePrioritization>?
 
     @Query(
         "FROM MessagePrioritization pm WHERE pm.group = :group AND pm.state in :states " +
-                "ORDER BY pm.updatedDate asc"
+            "ORDER BY pm.updatedDate asc"
     )
     fun findByGroupAndStateInOrderByUpdatedDate(group: String, states: List<String>, count: Pageable):
-            List<MessagePrioritization>?
+        List<MessagePrioritization>?
 
     @Query(
         "FROM MessagePrioritization pm WHERE pm.group = :group AND pm.state in :states " +
-                "AND pm.expiryDate > :expiryCheckDate ORDER BY pm.createdDate asc"
+            "AND pm.expiryDate > :expiryCheckDate ORDER BY pm.createdDate asc"
     )
     fun findByGroupAndStateInAndNotExpiredDate(
         group: String,
@@ -57,7 +57,7 @@ interface PrioritizationMessageRepository : JpaRepository<MessagePrioritization,
 
     @Query(
         "FROM MessagePrioritization pm WHERE pm.state in :states " +
-                "AND pm.expiryDate < :expiryCheckDate ORDER BY pm.createdDate asc"
+            "AND pm.expiryDate < :expiryCheckDate ORDER BY pm.createdDate asc"
     )
     fun findByStateInAndExpiredDate(
         states: List<String>,
@@ -67,7 +67,7 @@ interface PrioritizationMessageRepository : JpaRepository<MessagePrioritization,
 
     @Query(
         "FROM MessagePrioritization pm WHERE pm.group = :group AND pm.state in :states " +
-                "AND pm.expiryDate < :expiryCheckDate ORDER BY pm.createdDate asc"
+            "AND pm.expiryDate < :expiryCheckDate ORDER BY pm.createdDate asc"
     )
     fun findByGroupAndStateInAndExpiredDate(
         group: String,
@@ -78,20 +78,25 @@ interface PrioritizationMessageRepository : JpaRepository<MessagePrioritization,
 
     @Query(
         "FROM MessagePrioritization pm WHERE pm.group = :group " +
-                "AND pm.expiryDate < :expiryCheckDate ORDER BY pm.createdDate asc"
+            "AND pm.expiryDate < :expiryCheckDate ORDER BY pm.createdDate asc"
     )
-    fun findByByGroupAndExpiredDate(group: String, expiryCheckDate: Date, count: Pageable): List<MessagePrioritization>?
+    fun findByGroupAndExpiredDate(group: String, expiryCheckDate: Date, count: Pageable): List<MessagePrioritization>?
+
+    @Query(
+        "FROM MessagePrioritization pm WHERE  pm.expiryDate < :expiryCheckDate ORDER BY pm.createdDate asc"
+    )
+    fun findByExpiredDate(expiryCheckDate: Date, count: Pageable): List<MessagePrioritization>?
 
     @Query(
         "FROM MessagePrioritization pm WHERE pm.group = :group AND pm.state in :states " +
-                "AND pm.correlationId = :correlationId ORDER BY pm.createdDate asc"
+            "AND pm.correlationId = :correlationId ORDER BY pm.createdDate asc"
     )
     fun findByGroupAndCorrelationId(group: String, states: List<String>, correlationId: String):
-            List<MessagePrioritization>?
+        List<MessagePrioritization>?
 
     @Query(
         "FROM MessagePrioritization pm WHERE pm.group = :group AND pm.state in :states " +
-                "AND pm.type in :types AND pm.correlationId = :correlationId ORDER BY pm.createdDate asc"
+            "AND pm.type in :types AND pm.correlationId = :correlationId ORDER BY pm.createdDate asc"
     )
     fun findByGroupAndTypesAndCorrelationId(
         group: String,
@@ -104,7 +109,7 @@ interface PrioritizationMessageRepository : JpaRepository<MessagePrioritization,
     @Transactional
     @Query(
         "UPDATE MessagePrioritization SET state = :state, updatedDate = :currentDate " +
-                "WHERE id = :id"
+            "WHERE id = :id"
     )
     fun setStateForMessageId(id: String, state: String, currentDate: Date): Int
 
@@ -112,7 +117,7 @@ interface PrioritizationMessageRepository : JpaRepository<MessagePrioritization,
     @Transactional
     @Query(
         "UPDATE MessagePrioritization SET priority = :priority, updatedDate = :currentDate " +
-                "WHERE id = :id"
+            "WHERE id = :id"
     )
     fun setPriorityForMessageId(id: String, priority: String, currentDate: Date): Int
 
@@ -120,7 +125,7 @@ interface PrioritizationMessageRepository : JpaRepository<MessagePrioritization,
     @Transactional
     @Query(
         "UPDATE MessagePrioritization SET state = :state, updatedDate = :currentDate " +
-                "WHERE id IN :ids"
+            "WHERE id IN :ids"
     )
     fun setStateForMessageIds(ids: List<String>, state: String, currentDate: Date): Int
 
@@ -128,7 +133,7 @@ interface PrioritizationMessageRepository : JpaRepository<MessagePrioritization,
     @Transactional
     @Query(
         "UPDATE MessagePrioritization SET priority = :priority, updatedDate = :currentDate " +
-                "WHERE id IN :ids"
+            "WHERE id IN :ids"
     )
     fun setPriorityForMessageIds(ids: List<String>, priority: String, currentDate: Date): Int
 
@@ -136,7 +141,7 @@ interface PrioritizationMessageRepository : JpaRepository<MessagePrioritization,
     @Transactional
     @Query(
         "UPDATE MessagePrioritization SET state = :state, error = :error, updatedDate = :currentDate " +
-                "WHERE id = :id"
+            "WHERE id = :id"
     )
     fun setStateAndErrorForMessageId(id: String, state: String, error: String, currentDate: Date): Int
 
@@ -144,17 +149,27 @@ interface PrioritizationMessageRepository : JpaRepository<MessagePrioritization,
     @Transactional
     @Query(
         "UPDATE MessagePrioritization SET state = :state, " +
-                "aggregatedMessageIds = :aggregatedMessageIds, updatedDate = :currentDate WHERE id = :id"
+            "aggregatedMessageIds = :aggregatedMessageIds, updatedDate = :currentDate WHERE id = :id"
     )
     fun setStateAndAggregatedMessageIds(id: String, state: String, aggregatedMessageIds: String, currentDate: Date): Int
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM MessagePrioritization pm WHERE pm.group = :group")
+    @Query("DELETE FROM MessagePrioritization WHERE id IN :ids")
+    fun deleteByIds(ids: List<String>)
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM MessagePrioritization WHERE expiryDate > :expiryCheckDate ")
+    fun deleteByExpiryDate(expiryCheckDate: Date)
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM MessagePrioritization WHERE group = :group")
     fun deleteGroup(group: String)
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM MessagePrioritization pm WHERE pm.group = :group AND pm.state IN :states")
+    @Query("DELETE FROM MessagePrioritization WHERE group = :group AND state IN :states")
     fun deleteGroupAndStateIn(group: String, states: List<String>)
 }

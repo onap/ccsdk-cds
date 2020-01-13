@@ -17,21 +17,27 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.service
 
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.MessagePrioritizationStateService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.MessageState
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.MessagePrioritization
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.ids
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.kafka.DefaultMessagePrioritizeProcessor
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.orderByHighestPriority
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 
-open class SampleMessagePrioritizationService(messagePrioritizationStateService: MessagePrioritizationStateService) :
+/** Sample Prioritization Service, Define spring service injector to register in application*/
+open class SampleMessagePrioritizationService(private val messagePrioritizationStateService: MessagePrioritizationStateService) :
     AbstractMessagePrioritizationService(messagePrioritizationStateService) {
 
     private val log = logger(DefaultMessagePrioritizeProcessor::class)
 
     /** Child overriding this implementation , if necessary */
-    override suspend fun handleAggregation(messageIds: List<String>) {
-        log.info("messages($messageIds) aggregated")
-        messageIds.forEach { id ->
-            output(id)
-        }
+    override suspend fun handleAggregation(messages: List<MessagePrioritization>) {
+        log.info("messages(${messages.ids()}) aggregated")
+        /** Sequence based on Priority and Updated Date */
+        val sequencedMessage = messages.orderByHighestPriority()
+        /** Update all messages to aggregated state */
+        messagePrioritizationStateService.setMessagesState(sequencedMessage.ids(), MessageState.AGGREGATED.name)
+        output(sequencedMessage)
     }
 
     /** If consumer wants specific correlation with respect to group and types, then populate the specific types,
