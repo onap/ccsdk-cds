@@ -43,6 +43,10 @@
         <module>message-prioritizaion</module>
     </modules>
 
+    <properties>
+        <kotlin.compiler.jvmTarget>11</kotlin.compiler.jvmTarget>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
