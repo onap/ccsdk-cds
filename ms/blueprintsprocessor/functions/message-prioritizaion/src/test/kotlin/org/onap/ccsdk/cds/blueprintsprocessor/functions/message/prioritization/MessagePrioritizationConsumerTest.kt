@@ -28,6 +28,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.PrioritizationMessageRepository
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.kafka.MessagePrioritizationConsumer
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.service.MessagePrioritizationSchedulerService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.utils.MessagePrioritizationSample
 import org.onap.ccsdk.cds.blueprintsprocessor.message.BluePrintMessageLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BluePrintMessageLibPropertyService
@@ -87,6 +88,9 @@ open class MessagePrioritizationConsumerTest {
 
     @Autowired
     lateinit var messagePrioritizationService: MessagePrioritizationService
+
+    @Autowired
+    lateinit var messagePrioritizationSchedulerService: MessagePrioritizationSchedulerService
 
     @Autowired
     lateinit var messagePrioritizationConsumer: MessagePrioritizationConsumer
@@ -151,7 +155,7 @@ open class MessagePrioritizationConsumerTest {
             val configuration = MessagePrioritizationSample.samplePrioritizationConfiguration()
 
             val streamingConsumerService = bluePrintMessageLibPropertyService
-                .blueprintMessageConsumerService(configuration.inputTopicSelector)
+                .blueprintMessageConsumerService(configuration.kafkaConfiguration!!.inputTopicSelector)
             assertNotNull(streamingConsumerService, "failed to get blueprintMessageConsumerService")
 
             val spyStreamingConsumerService = spyk(streamingConsumerService)
@@ -173,6 +177,25 @@ open class MessagePrioritizationConsumerTest {
             every { spyMessagePrioritizationConsumer.consumerService(any()) } returns spyStreamingConsumerService
             spyMessagePrioritizationConsumer.startConsuming(configuration)
             spyMessagePrioritizationConsumer.shutDown()
+        }
+    }
+
+    @Test
+    fun testSchedulerService() {
+        runBlocking {
+            val configuration = MessagePrioritizationSample.sampleSchedulerPrioritizationConfiguration()
+            assertTrue(
+                ::messagePrioritizationSchedulerService.isInitialized,
+                "failed to initialize messagePrioritizationSchedulerService"
+            )
+            launch {
+                messagePrioritizationSchedulerService.startScheduling(configuration)
+            }
+            launch {
+                /** To debug increase the delay time */
+                delay(20)
+                messagePrioritizationSchedulerService.shutdownScheduling(configuration)
+            }
         }
     }
 

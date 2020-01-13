@@ -19,6 +19,8 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.MessageState
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.MessagePrioritization
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.orderByHighestPriority
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class MessageCorrelationUtilsTest {
@@ -59,10 +61,11 @@ class MessageCorrelationUtilsTest {
 
         /* Assumption is Same group with different types and one missing expected types,
         In this case type-3 message is missing */
-        val differentTypesWithSameCorrelationMessagesResWithMissingType = MessageCorrelationUtils.correlatedMessagesWithTypes(
-            differentTypesWithSameCorrelationMessages,
-            arrayListOf("type-0", "type-1", "type-2", "type-3")
-        )
+        val differentTypesWithSameCorrelationMessagesResWithMissingType =
+            MessageCorrelationUtils.correlatedMessagesWithTypes(
+                differentTypesWithSameCorrelationMessages,
+                arrayListOf("type-0", "type-1", "type-2", "type-3")
+            )
         assertTrue(
             !differentTypesWithSameCorrelationMessagesResWithMissingType.correlated,
             "failed to correlate differentTypesWithSameCorrelationMessagesResWithMissingType"
@@ -117,5 +120,13 @@ class MessageCorrelationUtilsTest {
             !differentTypesWithDifferentCorrelationMessageResp.correlated,
             "failed to correlate differentTypesWithDifferentCorrelationMessageResp"
         )
+    }
+
+    @Test
+    fun testPrioritizationOrdering() {
+        val differentPriorityMessages = MessagePrioritizationSample
+            .sampleMessageWithSameCorrelation("sample-group", MessageState.NEW.name, 5)
+        val orderedPriorityMessages = differentPriorityMessages.orderByHighestPriority()
+        assertNotNull(orderedPriorityMessages, "failed to order the priority messages")
     }
 }

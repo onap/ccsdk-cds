@@ -25,5 +25,12 @@ interface MessagePrioritizationService {
 
     suspend fun prioritize(messagePrioritization: MessagePrioritization)
 
-    suspend fun output(id: String)
+    /** Used to produce the prioritized or sequenced or aggregated message in Kafka topic or in database */
+    suspend fun output(messages: List<MessagePrioritization>)
+
+    /** Scheduler service will use this method for updating the expired messages based on the [expiryConfiguration] */
+    suspend fun updateExpiredMessages(expiryConfiguration: ExpiryConfiguration)
+
+    /** Scheduler service will use this method for clean the expired messages based on the [cleanConfiguration] */
+    suspend fun cleanExpiredMessage(cleanConfiguration: CleanConfiguration)
 }
