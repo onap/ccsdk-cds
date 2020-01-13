@@ -22,6 +22,30 @@
       "revId": "d57c3727ee2d02e2b2f4c899647d4d9de7e72b43",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5e65c354_c59d643d",
+        "filename": "pom.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-01-13T16:09:26Z",
+      "side": 1,
+      "message": "Please join http://onap-integration.eastus.cloudapp.azure.com:3000/channel/onap_cds for updated on same !",
+      "parentUuid": "a5c0fd3f_7c8eb267",
+      "range": {
+        "startLine": 43,
+        "startChar": 7,
+        "endLine": 43,
+        "endChar": 38
+      },
+      "revId": "d57c3727ee2d02e2b2f4c899647d4d9de7e72b43",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
