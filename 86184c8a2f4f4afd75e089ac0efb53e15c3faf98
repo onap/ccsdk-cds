@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79494e29_4251acff",
+        "filename": "ms/blueprintsprocessor/modules/services/execution-service/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/services/execution/AbstractComponentFunction.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2020-01-13T16:26:45Z",
+      "side": 1,
+      "message": "BlueprintRuntime Service holds all the error message , irrespective to the component, So this should be checked at workflow response level. For Component error component should throe the error and below catch will set the status.",
+      "range": {
+        "startLine": 127,
+        "startChar": 0,
+        "endLine": 129,
+        "endChar": 13
+      },
+      "revId": "86184c8a2f4f4afd75e089ac0efb53e15c3faf98",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
