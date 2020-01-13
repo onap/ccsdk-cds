@@ -5,11 +5,11 @@ RUN tar -xzf /source.tar.gz -C /tmp \
  && rm -rf /source.tar.gz \
  && rm -rf /tmp/@project.build.finalName@
 
-FROM omahoco1/alpine-java-python
+FROM openjdk:11.0.5-jre-slim-buster
 
 # add entrypoint
 COPY startService.sh /startService.sh
-RUN chmod 777 /startService.sh && dos2unix /startService.sh
+RUN chmod 755 /startService.sh
 
 # add application
 COPY --from=extractor /opt /opt
