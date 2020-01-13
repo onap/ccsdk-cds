@@ -40,7 +40,7 @@ limitations under the License.
 
     <modules>
         <module>ms</module>
-        <!--<module>cds-ui</module>-->
+        <module>cds-ui</module>
         <module>components</module>
     </modules>
 
