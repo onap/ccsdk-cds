@@ -50,3 +50,18 @@ fun MessagePrioritization.toFormatedCorrelation(): String {
 fun MessagePrioritization.toTypeNCorrelation(): TypeCorrelationKey {
     return TypeCorrelationKey(this.type, this.toFormatedCorrelation())
 }
+
+/** get list of message ids **/
+fun List<MessagePrioritization>.ids(): List<String> {
+    return this.map { it.id }
+}
+
+/** Ordered by highest priority and updated date **/
+fun List<MessagePrioritization>.orderByHighestPriority(): List<MessagePrioritization> {
+    return this.sortedWith(compareBy(MessagePrioritization::priority, MessagePrioritization::updatedDate))
+}
+
+/** Ordered by Updated date **/
+fun List<MessagePrioritization>.orderByUpdatedDate(): List<MessagePrioritization> {
+    return this.sortedWith(compareBy(MessagePrioritization::updatedDate))
+}

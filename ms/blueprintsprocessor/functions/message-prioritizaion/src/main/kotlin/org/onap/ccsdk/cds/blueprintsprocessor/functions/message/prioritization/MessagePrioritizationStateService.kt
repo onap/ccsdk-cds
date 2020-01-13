@@ -35,6 +35,8 @@ interface MessagePrioritizationStateService {
     suspend fun getMessageForStatesExpired(group: String, states: List<String>, count: Int):
         List<MessagePrioritization>?
 
+    suspend fun getExpiredMessages(expiryDate: Date, count: Int): List<MessagePrioritization>?
+
     suspend fun getExpiredMessages(group: String, expiryDate: Date, count: Int): List<MessagePrioritization>?
 
     suspend fun getCorrelatedMessages(
@@ -60,9 +62,11 @@ interface MessagePrioritizationStateService {
 
     suspend fun deleteMessage(id: String)
 
+    suspend fun deleteMessages(id: List<String>)
+
+    suspend fun deleteExpiredMessage(retentionDays: Int)
+
     suspend fun deleteMessageByGroup(group: String)
 
     suspend fun deleteMessageStates(group: String, states: List<String>)
-
-    suspend fun deleteExpiredMessage(group: String, retentionDays: Int)
 }

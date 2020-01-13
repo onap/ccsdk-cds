@@ -23,6 +23,8 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.d
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.toFormatedCorrelation
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.addDate
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.controllerDate
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -77,9 +79,15 @@ open class MessagePrioritizationStateServiceImpl(
         )
     }
 
+    override suspend fun getExpiredMessages(expiryDate: Date, count: Int): List<MessagePrioritization>? {
+        return prioritizationMessageRepository.findByExpiredDate(
+            expiryDate, PageRequest.of(0, count)
+        )
+    }
+
     override suspend fun getExpiredMessages(group: String, expiryDate: Date, count: Int):
         List<MessagePrioritization>? {
-        return prioritizationMessageRepository.findByByGroupAndExpiredDate(
+        return prioritizationMessageRepository.findByGroupAndExpiredDate(
             group,
             expiryDate, PageRequest.of(0, count)
         )
@@ -142,21 +150,27 @@ open class MessagePrioritizationStateServiceImpl(
     }
 
     override suspend fun deleteMessage(id: String) {
-        return prioritizationMessageRepository.deleteById(id)
+        prioritizationMessageRepository.deleteById(id)
+        log.info("Prioritization Messages $id deleted successfully.")
+    }
+
+    override suspend fun deleteMessages(ids: List<String>) {
+        prioritizationMessageRepository.deleteByIds(ids)
+        log.info("Prioritization Messages $ids deleted successfully.")
+    }
+
+    override suspend fun deleteExpiredMessage(retentionDays: Int) {
+        val expiryCheckDate = controllerDate().addDate(retentionDays)
+        prioritizationMessageRepository.deleteByExpiryDate(expiryCheckDate)
     }
 
     override suspend fun deleteMessageByGroup(group: String) {
-        return prioritizationMessageRepository.deleteGroup(group)
+        prioritizationMessageRepository.deleteGroup(group)
+        log.info("Prioritization Messages group($group) deleted successfully.")
     }
 
     override suspend fun deleteMessageStates(group: String, states: List<String>) {
-        return prioritizationMessageRepository.deleteGroupAndStateIn(group, states)
-    }
-
-    override suspend fun deleteExpiredMessage(group: String, retentionDays: Int) {
-        return prioritizationMessageRepository.deleteGroupAndStateIn(
-            group,
-            arrayListOf(MessageState.EXPIRED.name)
-        )
+        prioritizationMessageRepository.deleteGroupAndStateIn(group, states)
+        log.info("Prioritization Messages group($group) with states($states) deleted successfully.")
     }
 }
