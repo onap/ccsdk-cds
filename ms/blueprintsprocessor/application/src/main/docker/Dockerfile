@@ -1,8 +1,8 @@
-FROM omahoco1/alpine-java-python
+FROM openjdk:11.0.5-jre-slim-buster
 
 # add entrypoint
 COPY startService.sh /startService.sh
-RUN chmod 777 /startService.sh && dos2unix /startService.sh
+RUN chmod 755 /startService.sh
 
 # add application
 COPY @project.build.finalName@-@assembly.id@.tar.gz /source.tar.gz
