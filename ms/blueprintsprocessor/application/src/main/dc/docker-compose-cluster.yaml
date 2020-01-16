@@ -22,13 +22,17 @@ services:
     image: nats-streaming:latest
     container_name: nats
     hostname: nats
-    command: "-cid cds-cluster --auth tokenAuth -store file -dir store-nats-0 --cluster_node_id nats-0"
+    command: "-cid cds-cluster --auth tokenAuth -store file -dir /opt/app/onap/nats/store --cluster_node_id nats-0"
     networks:
       - cds-network
     ports:
       - "8222:8222"
       - "4222:4222"
     restart: always
+    volumes:
+      - target: /opt/app/onap/nats/store
+        type: volume
+        source: nats-store
   cds-controller-0:
     depends_on:
       - db
@@ -57,6 +61,7 @@ services:
       CLUSTER_MEMBERS: cds-controller-0,resource-resolution-0
       CLUSTER_STORAGE_PATH: /opt/app/onap/config/cluster
       #CLUSTER_CONFIG_FILE: /opt/app/onap/config/atomix/atomix-multicast.conf
+      NATS_CLUSTER_ID: cds-cluster
       NATS_HOSTS: nats://nats:4222
       APPLICATIONNAME: cds-controller
       BUNDLEVERSION: 1.0.0
@@ -90,6 +95,7 @@ services:
       CLUSTER_MEMBERS: cds-controller-0,resource-resolution-0
       CLUSTER_STORAGE_PATH: /opt/app/onap/config/cluster
       #CLUSTER_CONFIG_FILE: /opt/app/onap/config/atomix/atomix-multicast.conf
+      NATS_CLUSTER_ID: cds-cluster
       NATS_HOSTS: nats://nats:4222
       APPLICATIONNAME: resource-resolution
       BUNDLEVERSION: 1.0.0
@@ -116,6 +122,7 @@ services:
       CLUSTER_ID: cds-cluster
       CLUSTER_NODE_ID: py-executor-0
       CLUSTER_MEMBERS: cds-controller-0,resource-resolution-0,py-executor-0
+      NATS_CLUSTER_ID: cds-cluster
       NATS_HOSTS: nats://nats:4222
       APPLICATIONNAME: py-executor
       BUNDLEVERSION: 1.0.0
@@ -132,6 +139,12 @@ volumes:
       type: none
       device: /opt/app/cds/mysql/data
       o: bind
+  nats-store:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/app/cds/nats/nats-0/store
+      o: bind
   blueprints-deploy:
     driver: local
     driver_opts:
@@ -142,13 +155,13 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /opt/app/cds/cds-controller/config
+      device: /opt/app/cds/cds-controller/cds-controller-0/config
       o: bind
   resource-resolution-config:
     driver: local
     driver_opts:
       type: none
-      device: /opt/app/cds/resource-resolution/config
+      device: /opt/app/cds/resource-resolution/resource-resolution-0/config
       o: bind
 
 networks:

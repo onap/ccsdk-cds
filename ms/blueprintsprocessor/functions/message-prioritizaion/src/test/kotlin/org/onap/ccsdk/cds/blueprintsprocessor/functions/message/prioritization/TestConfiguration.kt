@@ -17,10 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization
 
 import org.onap.ccsdk.cds.blueprintsprocessor.db.PrimaryDBLibGenericService
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.kafka.DefaultMessagePrioritizeProcessor
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.kafka.MessagePrioritizationConsumer
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.service.SampleMessagePrioritizationService
-import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BluePrintMessageLibPropertyService
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
@@ -66,15 +63,3 @@ open class SamplePrioritizationListeners(private val defaultMessagePrioritizatio
 @Service
 open class TestMessagePrioritizationService(messagePrioritizationStateService: MessagePrioritizationStateService) :
     SampleMessagePrioritizationService(messagePrioritizationStateService)
-
-/** For Kafka Consumer  **/
-@Service
-open class TestMessagePrioritizationConsumer(
-    bluePrintMessageLibPropertyService: BluePrintMessageLibPropertyService
-) : MessagePrioritizationConsumer(bluePrintMessageLibPropertyService)
-
-@Service(MessagePrioritizationConstants.PROCESSOR_PRIORITIZE)
-open class TestMessagePrioritizeProcessor(
-    messagePrioritizationStateService: MessagePrioritizationStateService,
-    messagePrioritizationService: MessagePrioritizationService
-) : DefaultMessagePrioritizeProcessor(messagePrioritizationStateService, messagePrioritizationService)

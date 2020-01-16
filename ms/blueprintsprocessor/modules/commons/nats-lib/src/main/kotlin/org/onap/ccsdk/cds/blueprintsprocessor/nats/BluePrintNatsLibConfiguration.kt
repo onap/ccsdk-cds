@@ -41,6 +41,7 @@ class NatsLibConstants {
         const val SERVICE_BLUEPRINT_NATS_LIB_PROPERTY = "blueprint-nats-lib-property-service"
         const val DEFULT_NATS_SELECTOR = "cds-controller"
         const val PROPERTY_NATS_PREFIX = "blueprintsprocessor.nats."
+        const val PROPERTY_NATS_CLUSTER_ID = "NATS_CLUSTER_ID"
         const val TYPE_TOKEN_AUTH = "token-auth"
         const val TYPE_TLS_AUTH = "tls-auth"
     }

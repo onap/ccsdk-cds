@@ -50,15 +50,13 @@ open class BluePrintNatsLibPropertyService(private var bluePrintPropertiesServic
                 JacksonUtils.readValue(jsonNode, TLSAuthNatsConnectionProperties::class.java)!!
             }
             else -> {
-                throw BluePrintProcessorException("Nats type($type) not supported")
+                throw BluePrintProcessorException("NATS type($type) not supported")
             }
         }
     }
 
     fun natsConnectionProperties(prefix: String): NatsConnectionProperties {
-        val type = bluePrintPropertiesService.propertyBeanType(
-            "$prefix.type", String::class.java
-        )
+        val type = bluePrintPropertiesService.propertyBeanType("$prefix.type", String::class.java)
         return when (type) {
             NatsLibConstants.TYPE_TOKEN_AUTH -> {
                 tokenAuthNatsConnectionProperties(prefix)
@@ -67,7 +65,7 @@ open class BluePrintNatsLibPropertyService(private var bluePrintPropertiesServic
                 tlsAuthNatsConnectionProperties(prefix)
             }
             else -> {
-                throw BluePrintProcessorException("Grpc type($type) not supported")
+                throw BluePrintProcessorException("NATS type($type) not supported")
             }
         }
     }
@@ -90,7 +88,7 @@ open class BluePrintNatsLibPropertyService(private var bluePrintPropertiesServic
                 TLSAuthNatsService(natsConnectionProperties)
             }
             else -> {
-                throw BluePrintProcessorException("couldn't get nats service for properties $natsConnectionProperties")
+                throw BluePrintProcessorException("couldn't get NATS service for properties $natsConnectionProperties")
             }
         }
     }

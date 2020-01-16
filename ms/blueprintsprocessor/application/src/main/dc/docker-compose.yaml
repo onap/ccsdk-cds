@@ -18,6 +18,21 @@ services:
       MYSQL_DATABASE: sdnctl
       MYSQL_USER: sdnctl
       MYSQL_PASSWORD: sdnctl
+  nats:
+    image: nats-streaming:latest
+    container_name: nats
+    hostname: nats
+    command: "-cid cds-cluster --auth tokenAuth -store file -dir /opt/app/onap/nats/store --cluster_node_id nats"
+    networks:
+      - cds-network
+    ports:
+      - "8222:8222"
+      - "4222:4222"
+    restart: always
+    volumes:
+      - target: /opt/app/onap/nats/store
+        type: volume
+        source: nats-store
   cds-controller-default:
     depends_on:
       - db
@@ -88,6 +103,12 @@ volumes:
     driver_opts:
       type: none
       device: /opt/app/cds/mysql/data
+      o: bind
+  nats-store:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/app/cds/nats/store
       o: bind
   blueprints-deploy:
     driver: local

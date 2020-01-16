@@ -18,6 +18,7 @@ package org.onap.ccsdk.cds.controllerblueprints.core.service
 
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.springframework.context.ApplicationContext
+import org.springframework.context.ConfigurableApplicationContext
 import kotlin.reflect.KClass
 
 /**
@@ -34,6 +35,14 @@ object BluePrintDependencyService {
 
     fun inject(applicationContext: ApplicationContext) {
         BluePrintDependencyService.applicationContext = applicationContext
+    }
+
+    /** Used to inject [instance] into spring application context for the [key],
+     * Use this method only for testing
+     * */
+    fun registerSingleton(key: String, instance: Any) {
+        val configurableApplicationContext = applicationContext as ConfigurableApplicationContext
+        configurableApplicationContext.beanFactory.registerSingleton(key, instance)
     }
 
     inline fun <reified T> instance(name: String): T {

@@ -19,6 +19,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.Topology
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.MessagePrioritizationConstants
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.MessagePrioritizationService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.PrioritizationConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.utils.MessageProcessorUtils.bluePrintProcessorSupplier
 import org.onap.ccsdk.cds.blueprintsprocessor.message.KafkaStreamsBasicAuthConsumerProperties
@@ -30,13 +31,14 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.splitCommaAsList
 
-open class MessagePrioritizationConsumer(
-    private val bluePrintMessageLibPropertyService: BluePrintMessageLibPropertyService
+open class KafkaMessagePrioritizationConsumer(
+    private val bluePrintMessageLibPropertyService: BluePrintMessageLibPropertyService,
+    private val kafkaMessagePrioritizationService: MessagePrioritizationService
 ) {
 
-    private val log = logger(MessagePrioritizationConsumer::class)
+    private val log = logger(KafkaMessagePrioritizationConsumer::class)
 
-    lateinit var streamingConsumerService: BlueprintMessageConsumerService
+    private lateinit var streamingConsumerService: BlueprintMessageConsumerService
 
     open fun consumerService(selector: String): BlueprintMessageConsumerService {
         return bluePrintMessageLibPropertyService
@@ -67,8 +69,7 @@ open class MessagePrioritizationConsumer(
                 topology.addProcessor(
                     MessagePrioritizationConstants.PROCESSOR_PRIORITIZE,
                     bluePrintProcessorSupplier<ByteArray, ByteArray>(
-                        MessagePrioritizationConstants.PROCESSOR_PRIORITIZE,
-                        prioritizationConfiguration
+                        MessagePrioritizationConstants.PROCESSOR_PRIORITIZE
                     ),
                     MessagePrioritizationConstants.SOURCE_INPUT
                 )
@@ -100,7 +101,7 @@ open class MessagePrioritizationConsumer(
     }
 
     suspend fun shutDown() {
-        if (streamingConsumerService != null) {
+        if (::streamingConsumerService.isInitialized) {
             streamingConsumerService.shutDown()
         }
     }

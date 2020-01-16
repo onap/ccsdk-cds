@@ -21,15 +21,23 @@ import io.nats.client.Options
 import io.nats.streaming.NatsStreaming
 import io.nats.streaming.StreamingConnection
 import org.onap.ccsdk.cds.blueprintsprocessor.nats.TokenAuthNatsConnectionProperties
+import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.splitCommaAsList
 
 open class TokenAuthNatsService(private val natsConnectionProperties: TokenAuthNatsConnectionProperties) :
     BluePrintNatsService {
 
+    private val log = logger(TokenAuthNatsService::class)
+
     lateinit var streamingConnection: StreamingConnection
 
     override suspend fun connection(): StreamingConnection {
         if (!::streamingConnection.isInitialized) {
+            log.info(
+                "NATS connection requesting for cluster(${natsConnectionProperties.clusterId}) with" +
+                    "clientId($natsConnectionProperties.clientId)"
+            )
+
             val serverList = natsConnectionProperties.host.splitCommaAsList()
 
             val options = Options.Builder()

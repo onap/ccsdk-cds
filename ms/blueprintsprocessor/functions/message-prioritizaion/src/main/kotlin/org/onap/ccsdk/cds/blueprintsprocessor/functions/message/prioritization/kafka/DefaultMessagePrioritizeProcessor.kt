@@ -29,7 +29,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 
 open class DefaultMessagePrioritizeProcessor(
     private val messagePrioritizationStateService: MessagePrioritizationStateService,
-    private val messagePrioritizationService: MessagePrioritizationService
+    private val kafkaMessagePrioritizationService: MessagePrioritizationService
 ) : AbstractMessagePrioritizeProcessor<ByteArray, ByteArray>() {
 
     private val log = logger(DefaultMessagePrioritizeProcessor::class)
@@ -39,7 +39,7 @@ open class DefaultMessagePrioritizeProcessor(
         val messagePrioritize = JacksonUtils.readValue(String(value), MessagePrioritization::class.java)
             ?: throw BluePrintProcessorException("failed to convert")
         try {
-            messagePrioritizationService.prioritize(messagePrioritize)
+            kafkaMessagePrioritizationService.prioritize(messagePrioritize)
         } catch (e: Exception) {
             messagePrioritize.error = "failed in Prioritize message(${messagePrioritize.id}) : ${e.message}"
             log.error(messagePrioritize.error)
@@ -59,7 +59,14 @@ open class DefaultMessagePrioritizeProcessor(
     override fun init(context: ProcessorContext) {
         super.init(context)
         /** Set Configuration and Processor Context to messagePrioritizationService */
-        messagePrioritizationService.setKafkaProcessorContext(processorContext)
+        if (kafkaMessagePrioritizationService is AbstractKafkaMessagePrioritizationService) {
+            kafkaMessagePrioritizationService.setKafkaProcessorContext(processorContext)
+        } else {
+            throw BluePrintProcessorException(
+                "messagePrioritizationService is not instance of " +
+                    "AbstractKafkaMessagePrioritizationService, it is ${kafkaMessagePrioritizationService.javaClass}"
+            )
+        }
     }
 
     override fun close() {
