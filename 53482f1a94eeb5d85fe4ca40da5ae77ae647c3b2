@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "209a5642_858e72bc",
+        "filename": "ms/blueprintsprocessor/functions/nrm-restful/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/nrm/restful/RestfulNRMServiceClientTest.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2020-01-16T16:12:18Z",
+      "side": 1,
+      "message": "Is there something in the struct that\u0027s returned that would indicate that it\u0027s valid rather than just not null?\ncomment applies for other tests.",
+      "range": {
+        "startLine": 71,
+        "startChar": 8,
+        "endLine": 71,
+        "endChar": 21
+      },
+      "revId": "53482f1a94eeb5d85fe4ca40da5ae77ae647c3b2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
