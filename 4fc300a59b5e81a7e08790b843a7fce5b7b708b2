@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a228ae3e_fe546391",
+        "filename": "ms/blueprintsprocessor/application/src/main/dc/docker-compose-cluster.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2020-01-16T18:56:45Z",
+      "side": 1,
+      "message": "This is inside the container, so no need to change this.",
+      "parentUuid": "7ddc5698_36842b9f",
+      "revId": "4fc300a59b5e81a7e08790b843a7fce5b7b708b2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e04bc824_bfbd5102",
         "filename": "ms/blueprintsprocessor/application/src/main/dc/docker-compose-cluster.yaml",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2020-01-16T18:14:08Z",
       "side": 1,
       "message": "Will NATS_CLUSTER_ID be aways same as parent CLUSTER_ID as line #59 ?\nIf so, do we need two different paramters to hold same value ?",
+      "revId": "4fc300a59b5e81a7e08790b843a7fce5b7b708b2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0789c142_56e29b3b",
+        "filename": "ms/blueprintsprocessor/application/src/main/dc/docker-compose-cluster.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2020-01-16T18:56:45Z",
+      "side": 1,
+      "message": "There may be situation where NATS can be managed by Enterprise, It may have different cluster. In those situtation, we can make use of that. If not it can be default to Application cluster name, It means NATS is with respect to small application groups.",
+      "parentUuid": "e04bc824_bfbd5102",
       "revId": "4fc300a59b5e81a7e08790b843a7fce5b7b708b2",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "b292f484_2303f8e2",
+        "filename": "ms/blueprintsprocessor/application/src/main/dc/docker-compose.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2020-01-16T18:56:45Z",
+      "side": 1,
+      "message": "NATS is optional and this docker-comppose is sample, So I leave to the organization, how to use that.",
+      "parentUuid": "6254d67d_e0b082dd",
+      "revId": "4fc300a59b5e81a7e08790b843a7fce5b7b708b2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2674c7cc_7ddeb676",
         "filename": "ms/blueprintsprocessor/modules/commons/nats-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/nats/service/BluePrintNatsLibPropertyService.kt",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2020-01-16T18:10:56Z",
       "side": 1,
       "message": "Should be NATS",
+      "revId": "4fc300a59b5e81a7e08790b843a7fce5b7b708b2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de58b6b6_fe4b2978",
+        "filename": "ms/blueprintsprocessor/modules/commons/nats-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/nats/service/BluePrintNatsLibPropertyService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2020-01-16T18:56:45Z",
+      "side": 1,
+      "message": "Yes, you are right. Thanks for the catch I am goin to fix this.",
+      "parentUuid": "2674c7cc_7ddeb676",
       "revId": "4fc300a59b5e81a7e08790b843a7fce5b7b708b2",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
