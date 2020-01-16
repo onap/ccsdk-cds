@@ -27,6 +27,10 @@ object ClusterUtils {
         return ip.hostName
     }
 
+    fun applicationName(): String {
+        return BluePrintConstants.APP_NAME
+    }
+
     fun clusterId(): String {
         return System.getenv(BluePrintConstants.PROPERTY_CLUSTER_ID) ?: "cds-cluster"
     }

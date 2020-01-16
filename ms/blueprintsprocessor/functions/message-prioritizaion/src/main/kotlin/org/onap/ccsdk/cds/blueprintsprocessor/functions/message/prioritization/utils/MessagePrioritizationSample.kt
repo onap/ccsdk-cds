@@ -19,10 +19,12 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.CleanConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.ExpiryConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.KafkaConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.NatsConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.PrioritizationConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.ShutDownConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.MessagePrioritization
-import java.util.Calendar
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.addDate
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.controllerDate
 import java.util.Date
 import java.util.UUID
 
@@ -34,6 +36,12 @@ object MessagePrioritizationSample {
                 inputTopicSelector = "prioritize-input"
                 outputTopic = "prioritize-output-topic"
                 expiredTopic = "prioritize-expired-topic"
+            }
+            natsConfiguration = NatsConfiguration().apply {
+                connectionSelector = "cds-controller"
+                inputSubject = "prioritize-input"
+                outputSubject = "prioritize-output"
+                expiredSubject = "prioritize-expired"
             }
             expiryConfiguration = ExpiryConfiguration().apply {
                 frequencyMilli = 10000L
@@ -66,9 +74,7 @@ object MessagePrioritizationSample {
     }
 
     private fun currentDatePlusDays(days: Int): Date {
-        val calender = Calendar.getInstance()
-        calender.add(Calendar.DATE, days)
-        return calender.time
+        return controllerDate().addDate(days)
     }
 
     fun sampleMessages(messageState: String, count: Int): List<MessagePrioritization> {

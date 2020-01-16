@@ -43,7 +43,9 @@ open class MessagePrioritizationSchedulerService(
     }
     */
 
-    open suspend fun startScheduling(prioritizationConfiguration: PrioritizationConfiguration) {
+    open suspend fun startScheduling() {
+        val prioritizationConfiguration = messagePrioritizationService.getConfiguration()
+
         log.info("Starting Prioritization Scheduler Service...")
         GlobalScope.launch {
             expiryScheduler(prioritizationConfiguration)
@@ -66,7 +68,7 @@ open class MessagePrioritizationSchedulerService(
         withContext(Dispatchers.Default) {
             while (keepGoing) {
                 try {
-                    messagePrioritizationService.updateExpiredMessages(expiryConfiguration)
+                    messagePrioritizationService.updateExpiredMessages()
                     delay(expiryConfiguration.frequencyMilli)
                 } catch (e: Exception) {
                     log.error("failed in prioritization expiry scheduler", e)
@@ -83,7 +85,7 @@ open class MessagePrioritizationSchedulerService(
         withContext(Dispatchers.Default) {
             while (keepGoing) {
                 try {
-                    messagePrioritizationService.cleanExpiredMessage(cleanConfiguration)
+                    messagePrioritizationService.cleanExpiredMessage()
                     delay(cleanConfiguration.frequencyMilli)
                 } catch (e: Exception) {
                     log.error("failed in prioritization clean scheduler", e)

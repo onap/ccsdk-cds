@@ -16,21 +16,22 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization
 
-import org.apache.kafka.streams.processor.ProcessorContext
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.MessagePrioritization
 
 interface MessagePrioritizationService {
 
-    fun setKafkaProcessorContext(processorContext: ProcessorContext?)
+    fun setConfiguration(prioritizationConfiguration: PrioritizationConfiguration)
+
+    fun getConfiguration(): PrioritizationConfiguration
 
     suspend fun prioritize(messagePrioritization: MessagePrioritization)
 
     /** Used to produce the prioritized or sequenced or aggregated message in Kafka topic or in database */
     suspend fun output(messages: List<MessagePrioritization>)
 
-    /** Scheduler service will use this method for updating the expired messages based on the [expiryConfiguration] */
-    suspend fun updateExpiredMessages(expiryConfiguration: ExpiryConfiguration)
+    /** Scheduler service will use this method for updating the expired messages based on the expiryConfiguration */
+    suspend fun updateExpiredMessages()
 
-    /** Scheduler service will use this method for clean the expired messages based on the [cleanConfiguration] */
-    suspend fun cleanExpiredMessage(cleanConfiguration: CleanConfiguration)
+    /** Scheduler service will use this method for clean the expired messages based on the cleanConfiguration */
+    suspend fun cleanExpiredMessage()
 }

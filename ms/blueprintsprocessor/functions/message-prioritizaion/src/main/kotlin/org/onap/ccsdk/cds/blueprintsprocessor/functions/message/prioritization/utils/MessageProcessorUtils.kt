@@ -19,7 +19,6 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.
 import org.apache.kafka.streams.processor.ProcessorSupplier
 import org.onap.ccsdk.cds.blueprintsprocessor.atomix.optionalClusterService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterLock
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.PrioritizationConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.MessagePrioritization
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.kafka.AbstractMessagePrioritizeProcessor
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.toFormatedCorrelation
@@ -77,14 +76,11 @@ object MessageProcessorUtils {
         }
     }
 
-    /** Get the Kafka Supplier for processor lookup [name] and [prioritizationConfiguration] **/
-    fun <K, V> bluePrintProcessorSupplier(name: String, prioritizationConfiguration: PrioritizationConfiguration):
-        ProcessorSupplier<K, V> {
+    /** Get the Kafka Supplier for processor lookup [name] **/
+    fun <K, V> bluePrintProcessorSupplier(name: String): ProcessorSupplier<K, V> {
         return ProcessorSupplier<K, V> {
             // Dynamically resolve the Prioritization Processor
-            val processorInstance = BluePrintDependencyService.instance<AbstractMessagePrioritizeProcessor<K, V>>(name)
-            processorInstance.prioritizationConfiguration = prioritizationConfiguration
-            processorInstance
+            BluePrintDependencyService.instance<AbstractMessagePrioritizeProcessor<K, V>>(name)
         }
     }
 }

@@ -16,11 +16,12 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.nats
 
+import org.onap.ccsdk.cds.blueprintsprocessor.nats.utils.NatsClusterUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.ClusterUtils
 
 open class NatsConnectionProperties {
     lateinit var type: String
-    var clusterId: String = ClusterUtils.clusterId()
+    var clusterId: String = NatsClusterUtils.clusterId()
     var clientId: String = ClusterUtils.clusterNodeId()
     lateinit var host: String
     /** Rest endpoint selector to access Monitoring API */

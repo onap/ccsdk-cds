@@ -84,7 +84,7 @@ class BluePrintNatsServiceTest {
      * Start the Server with : nats-streaming-server -cid cds-cluster --auth tokenAuth -m 8222 -V
      */
     // @Test
-    fun localTntegrationTest() {
+    fun localIntegrationTest() {
         runBlocking {
 
             val connectionProperties = TokenAuthNatsConnectionProperties().apply {
