@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "e04bc824_bfbd5102",
+        "filename": "ms/blueprintsprocessor/application/src/main/dc/docker-compose-cluster.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-01-16T18:14:08Z",
+      "side": 1,
+      "message": "Will NATS_CLUSTER_ID be aways same as parent CLUSTER_ID as line #59 ?\nIf so, do we need two different paramters to hold same value ?",
+      "revId": "4fc300a59b5e81a7e08790b843a7fce5b7b708b2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6254d67d_e0b082dd",
         "filename": "ms/blueprintsprocessor/application/src/main/dc/docker-compose.yaml",
         "patchSetId": 1
