@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "31743636_a7e45a00",
+        "filename": "ms/blueprintsprocessor/application/src/main/dc/docker-compose-cluster.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-01-16T19:02:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a228ae3e_fe546391",
+      "revId": "4fc300a59b5e81a7e08790b843a7fce5b7b708b2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e04bc824_bfbd5102",
         "filename": "ms/blueprintsprocessor/application/src/main/dc/docker-compose-cluster.yaml",
         "patchSetId": 1
@@ -69,6 +87,24 @@
       "revId": "4fc300a59b5e81a7e08790b843a7fce5b7b708b2",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "799c4837_0387f27c",
+        "filename": "ms/blueprintsprocessor/application/src/main/dc/docker-compose-cluster.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-01-16T19:02:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0789c142_56e29b3b",
+      "revId": "4fc300a59b5e81a7e08790b843a7fce5b7b708b2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -107,6 +143,24 @@
     },
     {
       "key": {
+        "uuid": "cab07ab0_3cc8e127",
+        "filename": "ms/blueprintsprocessor/application/src/main/dc/docker-compose.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-01-16T19:02:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b292f484_2303f8e2",
+      "revId": "4fc300a59b5e81a7e08790b843a7fce5b7b708b2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2674c7cc_7ddeb676",
         "filename": "ms/blueprintsprocessor/modules/commons/nats-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/nats/service/BluePrintNatsLibPropertyService.kt",
         "patchSetId": 1
@@ -139,6 +193,24 @@
       "revId": "4fc300a59b5e81a7e08790b843a7fce5b7b708b2",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c51ec6c_a3a7c888",
+        "filename": "ms/blueprintsprocessor/modules/commons/nats-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/nats/service/BluePrintNatsLibPropertyService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-01-16T19:02:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "de58b6b6_fe4b2978",
+      "revId": "4fc300a59b5e81a7e08790b843a7fce5b7b708b2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
