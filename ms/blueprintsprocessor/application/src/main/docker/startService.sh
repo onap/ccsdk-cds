@@ -8,7 +8,7 @@ export APP_HOME=/opt/app/onap
 keytool -import -noprompt -trustcacerts -keystore $JAVA_HOME/jre/lib/security/cacerts -storepass changeit -alias ONAP -import -file $APP_CONFIG_HOME/ONAP_RootCA.cer
 
 exec java -classpath "/etc:${APP_HOME}/lib/*:/lib/*:/src:/schema:/generated-sources:${APP_CONFIG_HOME}:${APP_HOME}" \
--DappName=${APPLICATIONNAME} -DappVersion=${BUNDLEVERSION} \
+-DappName=${APP_NAME} -DappVersion=${BUNDLEVERSION} \
 -DrouteOffer=${ROUTEOFFER} \
 -DVERSION_ROUTEOFFER_ENVCONTEXT=${BUNDLEVERSION}/${STICKYSELECTORKEY}/${ENVCONTEXT} \
 -DSecurityFilePath=/etc \
@@ -16,6 +16,6 @@ exec java -classpath "/etc:${APP_HOME}/lib/*:/lib/*:/src:/schema:/generated-sour
 -Dms_name=org.onap.ccsdk.cds.blueprintsprocessor \
 -Dlogging.config=${APP_CONFIG_HOME}/logback.xml \
 -Djava.security.egd=file:/dev/./urandom \
--DAPPNAME=${APPLICATIONNAME} -DAPPENV=${APP_ENV} -DAPPVERSION=${APP_VERSION} -DNAMESPACE=${NAMESPACE} \
+-DAPPNAME=${APP_NAME} -DAPPENV=${APP_ENV} -DAPPVERSION=${APP_VERSION} -DNAMESPACE=${NAMESPACE} \
 -Dspring.config.location=${APP_CONFIG_HOME}/ \
 org.onap.ccsdk.cds.blueprintsprocessor.BlueprintProcessorApplicationKt

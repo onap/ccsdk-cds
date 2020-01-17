@@ -62,8 +62,7 @@ services:
       CLUSTER_STORAGE_PATH: /opt/app/onap/config/cluster
       #CLUSTER_CONFIG_FILE: /opt/app/onap/config/atomix/atomix-multicast.conf
       NATS_CLUSTER_ID: cds-cluster
-      NATS_HOSTS: nats://nats:4222
-      APPLICATIONNAME: cds-controller
+      APP_NAME: cds-controller
       BUNDLEVERSION: 1.0.0
       APP_CONFIG_HOME: /opt/app/onap/config
       STICKYSELECTORKEY:
@@ -96,8 +95,7 @@ services:
       CLUSTER_STORAGE_PATH: /opt/app/onap/config/cluster
       #CLUSTER_CONFIG_FILE: /opt/app/onap/config/atomix/atomix-multicast.conf
       NATS_CLUSTER_ID: cds-cluster
-      NATS_HOSTS: nats://nats:4222
-      APPLICATIONNAME: resource-resolution
+      APP_NAME: resource-resolution
       BUNDLEVERSION: 1.0.0
       APP_CONFIG_HOME: /opt/app/onap/config
       STICKYSELECTORKEY:
@@ -123,8 +121,7 @@ services:
       CLUSTER_NODE_ID: py-executor-0
       CLUSTER_MEMBERS: cds-controller-0,resource-resolution-0,py-executor-0
       NATS_CLUSTER_ID: cds-cluster
-      NATS_HOSTS: nats://nats:4222
-      APPLICATIONNAME: py-executor
+      APP_NAME: py-executor
       BUNDLEVERSION: 1.0.0
       APP_CONFIG_HOME: /opt/app/onap/config
       STICKYSELECTORKEY:

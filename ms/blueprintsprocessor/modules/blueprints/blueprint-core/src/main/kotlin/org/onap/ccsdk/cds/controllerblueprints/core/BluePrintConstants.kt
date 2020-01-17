@@ -24,9 +24,7 @@ package org.onap.ccsdk.cds.controllerblueprints.core
  */
 object BluePrintConstants {
 
-    val APP_NAME = System.getProperty("APPLICATION_NAME")
-        ?: System.getProperty("APP_NAME")
-        ?: System.getProperty("APPNAME")
+    val APP_NAME = System.getenv("APP_NAME")
         ?: "cds-controller"
 
     const val DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"

@@ -36,6 +36,7 @@ services:
   cds-controller-default:
     depends_on:
       - db
+      - nats
     image: onap/ccsdk-blueprintsprocessor:latest
     container_name: cds-controller-default
     hostname: cds-controller-default
@@ -53,7 +54,7 @@ services:
         type: volume
         source: controller-config
     environment:
-      APPLICATIONNAME: cds-controller
+      APP_NAME: cds-controller
       BUNDLEVERSION: 1.0.0
       APP_CONFIG_HOME: /opt/app/onap/config
       STICKYSELECTORKEY:
@@ -75,6 +76,7 @@ services:
   py-executor-default:
     depends_on:
       - db
+      - nats
     image: onap/ccsdk-py-executor
     container_name: py-executor-default
     hostname: py-executor-default
@@ -88,7 +90,7 @@ services:
         type: volume
         source: blueprints-deploy
     environment:
-      APPLICATIONNAME: py-executor
+      APP_NAME: py-executor
       BUNDLEVERSION: 1.0.0
       APP_CONFIG_HOME: /opt/app/onap/config
       STICKYSELECTORKEY:

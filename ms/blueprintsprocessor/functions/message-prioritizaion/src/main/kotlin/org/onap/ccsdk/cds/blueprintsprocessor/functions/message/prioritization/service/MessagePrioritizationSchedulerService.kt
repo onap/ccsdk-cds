@@ -38,10 +38,10 @@ open class MessagePrioritizationSchedulerService(
     /** This is sample scheduler implementation used during starting application with configuration.
     @EventListener(ApplicationReadyEvent::class)
     open fun init() = runBlocking {
-        log.info("Starting PrioritizationListeners...")
-        startScheduling(MessagePrioritizationSample.samplePrioritizationConfiguration())
+    log.info("Starting PrioritizationListeners...")
+    startScheduling(MessagePrioritizationSample.samplePrioritizationConfiguration())
     }
-    */
+     */
 
     open suspend fun startScheduling() {
         val prioritizationConfiguration = messagePrioritizationService.getConfiguration()
@@ -55,8 +55,9 @@ open class MessagePrioritizationSchedulerService(
         }
     }
 
-    open suspend fun shutdownScheduling(prioritizationConfiguration: PrioritizationConfiguration) {
+    open suspend fun shutdownScheduling() {
         keepGoing = false
+        val prioritizationConfiguration = messagePrioritizationService.getConfiguration()
         delay(prioritizationConfiguration.shutDownConfiguration.waitMill)
     }
 

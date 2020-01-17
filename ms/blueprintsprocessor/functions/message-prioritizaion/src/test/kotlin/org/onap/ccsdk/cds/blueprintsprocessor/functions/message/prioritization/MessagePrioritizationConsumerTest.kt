@@ -207,7 +207,7 @@ open class MessagePrioritizationConsumerTest {
             launch {
                 /** To debug increase the delay time */
                 delay(20)
-                messagePrioritizationSchedulerService.shutdownScheduling(configuration)
+                messagePrioritizationSchedulerService.shutdownScheduling()
             }
         }
     }

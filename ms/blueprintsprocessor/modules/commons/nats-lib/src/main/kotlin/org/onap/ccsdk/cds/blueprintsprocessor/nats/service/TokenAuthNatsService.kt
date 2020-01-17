@@ -35,7 +35,7 @@ open class TokenAuthNatsService(private val natsConnectionProperties: TokenAuthN
         if (!::streamingConnection.isInitialized) {
             log.info(
                 "NATS connection requesting for cluster(${natsConnectionProperties.clusterId}) with" +
-                    "clientId($natsConnectionProperties.clientId)"
+                    "clientId(${natsConnectionProperties.clientId})"
             )
 
             val serverList = natsConnectionProperties.host.splitCommaAsList()
