@@ -1,4 +1,4 @@
-class ModelType {
+export class ModelType {
     modelName: string;
     derivedFrom: string;
     definitionType: string;

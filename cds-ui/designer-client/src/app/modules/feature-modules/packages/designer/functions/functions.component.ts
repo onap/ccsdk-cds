@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {DesignerStore} from '../designer.store';
+import {ModelType} from '../../model/ModelType.model';
+
 
 @Component({
     selector: 'app-functions',

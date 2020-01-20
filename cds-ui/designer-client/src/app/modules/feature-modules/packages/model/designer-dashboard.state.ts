@@ -19,6 +19,8 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
+import {ModelType} from './ModelType.model';
+
 export class DesignerDashboardState {
 
     functions: ModelType[];
