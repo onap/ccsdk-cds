@@ -75,7 +75,8 @@ export class PackagesStore extends Store<PackagesDashboardState> {
 
     }
 
-    private getPagedPackages(pageNumber: number, pageSize: number, sortBy: string = this.state.sortBy) {
+
+    protected getPagedPackages(pageNumber: number, pageSize: number, sortBy: string = this.state.sortBy) {
 
         this.packagesServiceList.getPagedPackages(pageNumber, pageSize, sortBy)
             .subscribe((pages: BluePrintPage[]) => {

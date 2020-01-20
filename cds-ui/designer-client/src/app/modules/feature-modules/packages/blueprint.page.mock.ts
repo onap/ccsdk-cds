@@ -1,4 +1,6 @@
-import { BluePrintPage } from './model/BluePrint.model';
+import {BluePrintPage} from './model/BluePrint.model';
+import {PackagesDashboardState} from './model/packages-dashboard.state';
+
 export function getBluePrintPageMock(): BluePrintPage {
     return {
         content: [
@@ -47,4 +49,6 @@ export function getBluePrintPageMock(): BluePrintPage {
         first: true,
         empty: false
     };
+
 }
+

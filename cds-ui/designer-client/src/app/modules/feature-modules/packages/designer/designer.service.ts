@@ -23,6 +23,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {ApiService} from '../../../../common/core/services/api.typed.service';
 import {ResourceDictionaryURLs} from '../../../../common/constants/app-constants';
+import {ModelType} from '../model/ModelType.model';
 
 
 @Injectable({

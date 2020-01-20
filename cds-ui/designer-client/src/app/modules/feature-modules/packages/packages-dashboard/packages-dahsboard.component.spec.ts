@@ -37,7 +37,7 @@ describe('PackagesDashboardComponent', () => {
     component = fixture.componentInstance;
   }));
 
-  fit('should create', () => {
+  it('should create', () => {
     fixture.detectChanges();
     expect(component).toBeTruthy();
   });
