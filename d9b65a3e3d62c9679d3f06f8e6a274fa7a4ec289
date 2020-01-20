@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b751d502_75d21d89",
+        "filename": "ms/blueprintsprocessor/functions/nrm-restful/pom.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-01-20T01:32:26Z",
+      "side": 1,
+      "message": "Webflux is already part of processor-core dependencies.",
+      "revId": "d9b65a3e3d62c9679d3f06f8e6a274fa7a4ec289",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03fd6092_31bc1b26",
+        "filename": "ms/blueprintsprocessor/parent/pom.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-01-20T01:32:26Z",
+      "side": 1,
+      "message": "change to \u0027ccsdk.cds.version\u0027",
+      "revId": "d9b65a3e3d62c9679d3f06f8e6a274fa7a4ec289",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
