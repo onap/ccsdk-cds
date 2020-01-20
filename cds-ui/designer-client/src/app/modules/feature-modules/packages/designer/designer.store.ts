@@ -22,6 +22,7 @@ limitations under the License.
 import {Injectable} from '@angular/core';
 import {Store} from '../../../../common/core/stores/Store';
 import {DesignerService} from './designer.service';
+import {ModelType} from '../model/ModelType.model';
 import {DesignerDashboardState} from '../model/designer-dashboard.state';
 
 
