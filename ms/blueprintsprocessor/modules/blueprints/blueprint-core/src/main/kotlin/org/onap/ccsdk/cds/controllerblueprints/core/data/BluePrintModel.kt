@@ -19,6 +19,7 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.data
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import com.fasterxml.jackson.databind.JsonNode
@@ -154,6 +155,7 @@ entity defined in this specification (e.g., Node Types, Relationship Types, Capa
 Properties are used by template authors to provide input values to TOSCA entities which indicate their “desired state” when they are
 instantiated. The value of a property can be retrieved using the get_property function within TOSCA Service Templates.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 class PropertyDefinition {
 
     @get:JsonIgnore

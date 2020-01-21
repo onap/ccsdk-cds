@@ -22,6 +22,8 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.annotation.JsonTypeName
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictionary
+import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import java.io.Serializable
 import java.util.Date
@@ -30,6 +32,35 @@ class BootstrapRequest {
     var loadModelType: Boolean = false
     var loadResourceDictionary: Boolean = false
     var loadCBA: Boolean = false
+}
+
+class WorkflowsResponse {
+    var blueprintName: String = ""
+    var version: String = "1.0.0"
+    var workflows: MutableSet<String> = mutableSetOf()
+}
+
+class WorkflowModelRequest {
+    var blueprintName: String = ""
+    var version: String = "1.0.0"
+    var returnContent: String = "json"
+    var workflowName: String = ""
+    var specType: String = "TOSCA"
+}
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+class WorkflowModelResponse {
+    var blueprintName: String = ""
+    var version: String = "1.0.0"
+    var workFlowData: WorkFlowData? = null
+    var dataTypes: MutableMap<String, DataType>? = mutableMapOf()
+}
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+class WorkFlowData {
+    var workFlowName: String = ""
+    var inputs: MutableMap<String, PropertyDefinition>? = null
+    var outputs: MutableMap<String, PropertyDefinition>? = null
 }
 
 /**

@@ -207,4 +207,34 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     ) = monoMdc {
         bluePrintModelHandler.deleteBlueprintModel(name, version)
     }
+
+    @PostMapping(
+            path = arrayOf("/workflow-model"), produces = arrayOf(MediaType
+            .APPLICATION_JSON_VALUE),
+            consumes = arrayOf(MediaType.APPLICATION_JSON_VALUE)
+    )
+    @ResponseBody
+    @Throws(BluePrintException::class)
+    @PreAuthorize("hasRole('USER')")
+    fun workflowModel(@RequestBody workflowModelRequest: WorkflowModelRequest):
+            Mono<ResponseEntity<WorkflowModelResponse>> = monoMdc {
+        bluePrintModelHandler.prepareWorkFlowModel(workflowModelRequest)
+    }
+
+    @GetMapping(
+            path = arrayOf("/workflows/blueprint-name/{name}/version/{version" +
+                    "}"),
+            produces = arrayOf(MediaType.APPLICATION_JSON_VALUE)
+    )
+    @ResponseBody
+    @Throws(BluePrintException::class)
+    @PreAuthorize("hasRole('USER')")
+    fun getWorkflows(
+        @ApiParam(value = "Name of the CBA.", required = true)
+        @PathVariable(value = "name") name: String,
+        @ApiParam(value = "Version of the CBA.", required = true)
+        @PathVariable(value = "version") version: String
+    ): Mono<ResponseEntity<WorkflowsResponse>> = monoMdc {
+        bluePrintModelHandler.getWorkflows(name, version)
+    }
 }
