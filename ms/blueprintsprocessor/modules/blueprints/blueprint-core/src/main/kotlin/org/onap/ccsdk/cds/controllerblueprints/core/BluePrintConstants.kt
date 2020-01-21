@@ -218,9 +218,6 @@ object BluePrintConstants {
     const val DEFAULT_STEP_OPERATION = "process"
     const val DEFAULT_STEP_INTERFACE = "ComponentInterface"
 
-    const val ARTIFACT_VELOCITY_TYPE_NAME = "artifact-template-velocity"
-    const val ARTIFACT_JINJA_TYPE_NAME = "artifact-template-jinja"
-
     const val MODEL_TYPE_ARTIFACT_TEMPLATE_VELOCITY = "artifact-template-velocity"
     const val MODEL_TYPE_ARTIFACT_TEMPLATE_JINJA = "artifact-template-jinja"
     const val MODEL_TYPE_ARTIFACT_MAPPING_RESOURCE = "artifact-mapping-resource"

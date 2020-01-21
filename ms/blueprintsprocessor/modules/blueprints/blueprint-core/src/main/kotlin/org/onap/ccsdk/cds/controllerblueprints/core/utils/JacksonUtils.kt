@@ -133,9 +133,13 @@ class JacksonUtils {
             return getJson(wrapperMap, pretty)
         }
 
-        fun getJson(any: kotlin.Any, pretty: Boolean = false): String {
+        fun getJson(any: kotlin.Any, pretty: Boolean = false, includeNull: Boolean = false): String {
             val objectMapper = jacksonObjectMapper()
-            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL)
+            if (includeNull) {
+                objectMapper.setSerializationInclusion(JsonInclude.Include.ALWAYS)
+            } else {
+                objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL)
+            }
             if (pretty) {
                 objectMapper.enable(SerializationFeature.INDENT_OUTPUT)
             }

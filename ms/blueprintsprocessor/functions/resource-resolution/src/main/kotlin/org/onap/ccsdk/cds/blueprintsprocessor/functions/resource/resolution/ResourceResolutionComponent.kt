@@ -43,6 +43,7 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
         const val INPUT_RESOURCE_TYPE = "resource-type"
         const val INPUT_ARTIFACT_PREFIX_NAMES = "artifact-prefix-names"
         const val INPUT_RESOLUTION_KEY = "resolution-key"
+        const val INPUT_RESOLUTION_SUMMARY = "resolution-summary"
         const val INPUT_STORE_RESULT = "store-result"
         const val INPUT_OCCURRENCE = "occurrence"
 
@@ -64,6 +65,8 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
 
         val resourceType =
             getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE)?.returnNullIfMissing()?.textValue() ?: ""
+        val resolutionSummary =
+                getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_SUMMARY)?.asBoolean() ?: false
 
         val properties: MutableMap<String, Any> = mutableMapOf()
         properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] = storeResult
@@ -71,6 +74,7 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
         properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] = resourceId
         properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] = resourceType
         properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] = occurrence
+        properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_SUMMARY] = resolutionSummary
 
         val jsonResponse = JsonNodeFactory.instance.objectNode()
         // Initialize Output Attribute to empty JSON

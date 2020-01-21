@@ -42,6 +42,8 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeServ
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonReactorUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.PropertyDefinitionUtils.Companion.hasLogProtect
+import org.onap.ccsdk.cds.controllerblueprints.resource.dict.KeyIdentifier
+import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResolutionSummary
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.slf4j.LoggerFactory
@@ -196,6 +198,22 @@ class ResourceAssignmentUtils {
             return data
         }
 
+        fun generateResolutionSummaryData(
+            resourceAssignments: List<ResourceAssignment>,
+            resourceDefinitions: Map<String, ResourceDefinition>
+        ): String {
+            val resolutionSummaryList = resourceAssignments.map {
+                val payload = resourceDefinitions[it.name]
+                        ?.sources?.get(it.dictionarySource)?.properties?.get("payload")
+                ResolutionSummary(
+                        it.name, it.property?.value, it.property?.required,
+                        it.property?.type, it.keyIdentifiers, it.dictionaryName,
+                        payload, it.dictionarySource, it.status, it.message
+                )
+            }
+            return JacksonUtils.getJson(resolutionSummaryList, includeNull = true)
+        }
+
         private fun useDefaultValueIfNull(
             resourceAssignment: ResourceAssignment,
             resourceAssignmentName: String
@@ -263,7 +281,7 @@ class ResourceAssignmentUtils {
                 return when (type) {
                     in BluePrintTypes.validPrimitiveTypes() -> {
                         // Primitive Types
-                        parseResponseNodeForPrimitiveTypes(responseNode, outputKeyMapping)
+                        parseResponseNodeForPrimitiveTypes(responseNode, resourceAssignment, outputKeyMapping)
                     }
                     in BluePrintTypes.validCollectionTypes() -> {
                         // Array Types
@@ -282,6 +300,7 @@ class ResourceAssignmentUtils {
 
         private fun parseResponseNodeForPrimitiveTypes(
             responseNode: JsonNode,
+            resourceAssignment: ResourceAssignment,
             outputKeyMapping: MutableMap<String, String>
         ): JsonNode {
             // Return responseNode if is not a Complex Type
@@ -306,11 +325,16 @@ class ResourceAssignmentUtils {
             if (returnNode.isNullOrMissing() || returnNode!!.isComplexType() && !returnNode.has(outputKeyMapping[outputKey])) {
                 throw BluePrintProcessorException("Fail to find output key mapping ($outputKey) in the responseNode.")
             }
-            return if (returnNode.isComplexType()) {
+
+            val returnValue = if (returnNode.isComplexType()) {
                 returnNode[outputKeyMapping[outputKey]]
             } else {
                 returnNode
             }
+
+            outputKey?.let { KeyIdentifier(it, returnValue) }
+                ?.let { resourceAssignment.keyIdentifiers.add(it) }
+            return returnValue
         }
 
         private fun parseResponseNodeForCollection(
@@ -337,7 +361,7 @@ class ResourceAssignmentUtils {
                         val responseArrayNode = responseNode.toList()
                         for (responseSingleJsonNode in responseArrayNode) {
                             val arrayChildNode = parseSingleElementOfArrayResponseNode(
-                                entrySchemaType,
+                                entrySchemaType, resourceAssignment,
                                 outputKeyMapping, raRuntimeService, responseSingleJsonNode, metadata
                             )
                             arrayNode.add(arrayChildNode)
@@ -347,7 +371,10 @@ class ResourceAssignmentUtils {
                     is ObjectNode -> {
                         val responseArrayNode = responseNode.rootFieldsToMap()
                         resultNode =
-                            parseObjectResponseNode(entrySchemaType, outputKeyMapping, responseArrayNode, metadata)
+                            parseObjectResponseNode(
+                                resourceAssignment, entrySchemaType, outputKeyMapping,
+                                responseArrayNode, metadata
+                            )
                     }
                     else -> {
                         throw BluePrintProcessorException("Key-value response expected to match the responseNode.")
@@ -387,6 +414,7 @@ class ResourceAssignmentUtils {
 
         private fun parseSingleElementOfArrayResponseNode(
             entrySchemaType: String,
+            resourceAssignment: ResourceAssignment,
             outputKeyMapping: MutableMap<String, String>,
             raRuntimeService: ResourceAssignmentRuntimeService,
             responseNode: JsonNode,
@@ -397,7 +425,13 @@ class ResourceAssignmentUtils {
                 in BluePrintTypes.validPrimitiveTypes() -> {
                     if (outputKeyMappingHasOnlyOneElement) {
                         val outputKeyMap = outputKeyMapping.entries.first()
+                        if (resourceAssignment.keyIdentifiers.none { it.name == outputKeyMap.key }) {
+                            resourceAssignment.keyIdentifiers.add(
+                                    KeyIdentifier(outputKeyMap.key, JacksonUtils.objectMapper.createArrayNode())
+                            )
+                        }
                         return parseSingleElementNodeWithOneOutputKeyMapping(
+                            resourceAssignment,
                             responseNode,
                             outputKeyMap.key,
                             outputKeyMap.value,
@@ -416,6 +450,7 @@ class ResourceAssignmentUtils {
                             raRuntimeService
                         ) -> {
                             parseSingleElementNodeWithAllOutputKeyMapping(
+                                resourceAssignment,
                                 responseNode,
                                 outputKeyMapping,
                                 entrySchemaType,
@@ -425,6 +460,7 @@ class ResourceAssignmentUtils {
                         outputKeyMappingHasOnlyOneElement -> {
                             val outputKeyMap = outputKeyMapping.entries.first()
                             parseSingleElementNodeWithOneOutputKeyMapping(
+                                resourceAssignment,
                                 responseNode,
                                 outputKeyMap.key,
                                 outputKeyMap.value,
@@ -441,6 +477,7 @@ class ResourceAssignmentUtils {
         }
 
         private fun parseObjectResponseNode(
+            resourceAssignment: ResourceAssignment,
             entrySchemaType: String,
             outputKeyMapping: MutableMap<String, String>,
             responseArrayNode: MutableMap<String, JsonNode>,
@@ -449,19 +486,21 @@ class ResourceAssignmentUtils {
             val outputKeyMappingHasOnlyOneElement = checkIfOutputKeyMappingProvideOneElement(outputKeyMapping)
             if (outputKeyMappingHasOnlyOneElement) {
                 val outputKeyMap = outputKeyMapping.entries.first()
-                return parseObjectResponseNodeWithOneOutputKeyMapping(
+                val returnValue = parseObjectResponseNodeWithOneOutputKeyMapping(
                     responseArrayNode, outputKeyMap.key, outputKeyMap.value,
                     entrySchemaType, metadata
                 )
+                resourceAssignment.keyIdentifiers.add(KeyIdentifier(outputKeyMap.key, returnValue))
+                return returnValue
             } else {
                 throw BluePrintProcessorException("Output-key-mapping do not map the Data Type $entrySchemaType")
             }
         }
 
         private fun parseSingleElementNodeWithOneOutputKeyMapping(
+            resourceAssignment: ResourceAssignment,
             responseSingleJsonNode: JsonNode,
-            outputKeyMappingKey:
-            String,
+            outputKeyMappingKey: String,
             outputKeyMappingValue: String,
             type: String,
             metadata: MutableMap<String, String>?
@@ -476,11 +515,19 @@ class ResourceAssignmentUtils {
 
             logKeyValueResolvedResource(metadata, outputKeyMappingKey, responseKeyValue, type)
             JacksonUtils.populateJsonNodeValues(outputKeyMappingKey, responseKeyValue, type, arrayChildNode)
-
+            resourceAssignment.keyIdentifiers.find { it.name == outputKeyMappingKey && it.value.isArray }
+                    .let {
+                        if (it != null)
+                            (it.value as ArrayNode).add(responseKeyValue)
+                        else
+                            resourceAssignment.keyIdentifiers.add(
+                                    KeyIdentifier(outputKeyMappingKey, responseKeyValue))
+                    }
             return arrayChildNode
         }
 
         private fun parseSingleElementNodeWithAllOutputKeyMapping(
+            resourceAssignment: ResourceAssignment,
             responseSingleJsonNode: JsonNode,
             outputKeyMapping: MutableMap<String, String>,
             type: String,
@@ -496,6 +543,7 @@ class ResourceAssignmentUtils {
 
                 logKeyValueResolvedResource(metadata, it.key, responseKeyValue, type)
                 JacksonUtils.populateJsonNodeValues(it.key, responseKeyValue, type, arrayChildNode)
+                resourceAssignment.keyIdentifiers.add(KeyIdentifier(it.key, responseKeyValue))
             }
             return arrayChildNode
         }
@@ -541,6 +589,7 @@ class ResourceAssignmentUtils {
                         raRuntimeService
                     ) -> {
                         parseSingleElementNodeWithAllOutputKeyMapping(
+                            resourceAssignment,
                             responseNode,
                             outputKeyMapping,
                             entrySchemaType,
@@ -550,8 +599,8 @@ class ResourceAssignmentUtils {
                     outputKeyMappingHasOnlyOneElement -> {
                         val outputKeyMap = outputKeyMapping.entries.first()
                         parseSingleElementNodeWithOneOutputKeyMapping(
-                            responseNode, outputKeyMap.key, outputKeyMap.value,
-                            entrySchemaType, metadata
+                            resourceAssignment, responseNode, outputKeyMap.key,
+                            outputKeyMap.value, entrySchemaType, metadata
                         )
                     }
                     else -> {

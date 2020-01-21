@@ -41,6 +41,7 @@ class ResourceResolutionComponentDSLTest {
                     occurrence(2)
                     resourceType("vnf")
                     storeResult(false)
+                    resolutionSummary(true)
                     artifactPrefixNames(arrayListOf("template1", "template2"))
                     dynamicProperties(
                         """{

@@ -147,7 +147,7 @@ open class ResourceResolutionServiceImpl(
         properties: Map<String, Any>
     ): String {
 
-        // Velocity Artifact Definition Name
+        // Template Artifact Definition Name
         val artifactTemplate = "$artifactPrefix-template"
         // Resource Assignment Artifact Definition Name
         val artifactMapping = "$artifactPrefix-mapping"
@@ -185,22 +185,28 @@ open class ResourceResolutionServiceImpl(
             properties
         )
 
+        val resolutionSummary = properties.getOrDefault(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_SUMMARY, false) as Boolean
         val resolvedParamJsonContent =
             ResourceAssignmentUtils.generateResourceDataForAssignments(resourceAssignments.toList())
-
         val artifactTemplateDefinition = bluePrintRuntimeService.bluePrintContext().checkNodeTemplateArtifact(nodeTemplateName, artifactTemplate)
 
-        val resolvedContent = if (artifactTemplateDefinition != null) {
-            blueprintTemplateService.generateContent(
-                bluePrintRuntimeService, nodeTemplateName,
-                artifactTemplate, resolvedParamJsonContent, false,
-                mutableMapOf(
-                    ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE to
-                            properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE].asJsonPrimitive()
+        val resolvedContent = when {
+            artifactTemplateDefinition != null -> {
+                blueprintTemplateService.generateContent(
+                        bluePrintRuntimeService, nodeTemplateName,
+                        artifactTemplate, resolvedParamJsonContent, false,
+                        mutableMapOf(
+                                ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE to
+                                        properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE].asJsonPrimitive()
+                        )
                 )
-            )
-        } else {
-            resolvedParamJsonContent
+            }
+            resolutionSummary -> {
+                ResourceAssignmentUtils.generateResolutionSummaryData(resourceAssignments, resourceDefinitions)
+            }
+            else -> {
+                resolvedParamJsonContent
+            }
         }
 
         if (isToStore(properties)) {

@@ -82,6 +82,11 @@ fun BluePrintTypes.nodeTypeComponentResourceResolution(): NodeType {
                 )
 
                 property(
+                    ResourceResolutionComponent.INPUT_RESOLUTION_SUMMARY, BluePrintConstants.DATA_TYPE_BOOLEAN,
+                        false, "Enables ResolutionSummary output"
+                )
+
+                property(
                     ResourceResolutionComponent.INPUT_OCCURRENCE, BluePrintConstants.DATA_TYPE_INTEGER,
                     false, "Number of time to perform the resolution."
                 ) {
@@ -174,6 +179,12 @@ class ComponentResourceResolutionNodeTemplateBuilder(id: String, description: St
 
         fun resolutionKey(resolutionKey: JsonNode) {
             property(ResourceResolutionComponent.INPUT_RESOLUTION_KEY, resolutionKey)
+        }
+
+        fun resolutionSummary(resolutionSummary: Boolean) = resolutionSummary(resolutionSummary.asJsonPrimitive())
+
+        fun resolutionSummary(resolutionSummary: JsonNode) {
+            property(ResourceResolutionComponent.INPUT_RESOLUTION_SUMMARY, resolutionSummary)
         }
 
         fun dynamicProperties(dynamicProperties: String) = dynamicProperties(dynamicProperties.asJsonType())
