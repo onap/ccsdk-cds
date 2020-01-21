@@ -38,6 +38,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintTemplateSer
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.PropertyDefinitionUtils.Companion.hasLogProtect
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
+import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResolutionSummary
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.utils.BulkResourceSequencingUtils
 import org.slf4j.LoggerFactory
@@ -147,7 +148,7 @@ open class ResourceResolutionServiceImpl(
         properties: Map<String, Any>
     ): String {
 
-        // Velocity Artifact Definition Name
+        // Template Artifact Definition Name
         val artifactTemplate = "$artifactPrefix-template"
         // Resource Assignment Artifact Definition Name
         val artifactMapping = "$artifactPrefix-mapping"
@@ -185,22 +186,37 @@ open class ResourceResolutionServiceImpl(
             properties
         )
 
+        val resolutionSummary = properties.getOrDefault(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_SUMMARY, false) as Boolean
         val resolvedParamJsonContent =
             ResourceAssignmentUtils.generateResourceDataForAssignments(resourceAssignments.toList())
-
         val artifactTemplateDefinition = bluePrintRuntimeService.bluePrintContext().checkNodeTemplateArtifact(nodeTemplateName, artifactTemplate)
 
-        val resolvedContent = if (artifactTemplateDefinition != null) {
-            blueprintTemplateService.generateContent(
-                bluePrintRuntimeService, nodeTemplateName,
-                artifactTemplate, resolvedParamJsonContent, false,
-                mutableMapOf(
-                    ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE to
-                            properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE].asJsonPrimitive()
+        val resolvedContent = when {
+            artifactTemplateDefinition != null -> {
+                blueprintTemplateService.generateContent(
+                        bluePrintRuntimeService, nodeTemplateName,
+                        artifactTemplate, resolvedParamJsonContent, false,
+                        mutableMapOf(
+                                ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE to
+                                        properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE].asJsonPrimitive()
+                        )
                 )
-            )
-        } else {
-            resolvedParamJsonContent
+            }
+            resolutionSummary -> {
+                val resolutionSummaryList = resourceAssignments.map {
+                    val payload = resourceDefinitions[it.name]
+                            ?.sources?.get(it.dictionarySource)?.properties?.get("payload")
+                    ResolutionSummary(
+                            it.name, it.property?.value, it.property?.required,
+                            it.property?.type, it.keyIdentifiers, it.dictionaryName,
+                            payload, it.dictionarySource, it.status, it.message
+                    )
+                }
+                JacksonUtils.getJson(resolutionSummaryList, includeNull = true)
+            }
+            else -> {
+                resolvedParamJsonContent
+            }
         }
 
         if (isToStore(properties)) {

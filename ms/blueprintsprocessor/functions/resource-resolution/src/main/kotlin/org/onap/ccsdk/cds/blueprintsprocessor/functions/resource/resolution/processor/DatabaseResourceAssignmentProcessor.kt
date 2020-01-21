@@ -28,6 +28,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.isNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.nullToEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.onap.ccsdk.cds.controllerblueprints.resource.dict.KeyIdentifier
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDictionaryConstants
 import org.slf4j.LoggerFactory
@@ -90,6 +91,11 @@ open class DatabaseResourceAssignmentProcessor(
         val inputKeyMapping = checkNotNull(sourceProperties.inputKeyMapping) {
             "failed to get input-key-mappings for $dName under $dSource properties"
         }
+
+        sourceProperties.inputKeyMapping
+                ?.mapValues { raRuntimeService.getDictionaryStore(it.value) }
+                ?.map { KeyIdentifier(it.key, it.value) }
+                ?.let { resourceAssignment.keyIdentifiers.addAll(it) }
 
         logger.info(
             "DatabaseResource ($dSource) dictionary information: " +
