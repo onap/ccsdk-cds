@@ -19,6 +19,7 @@ package org.onap.ccsdk.cds.controllerblueprints.resource.dict
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import java.io.Serializable
@@ -87,6 +88,11 @@ open class ResourceAssignment {
     @JsonProperty("updated-by")
     var updatedBy: String? = null
 
+    /** input & output key-mapping with their resolved values **/
+    var keyIdentifiers: MutableList<KeyIdentifier> = mutableListOf()
+
+    var requestPayload: String? = null
+
     override fun toString(): String {
         return """
             [
@@ -100,6 +106,30 @@ open class ResourceAssignment {
             """.trimIndent()
     }
 }
+
+data class KeyIdentifier(val name: String, val value: JsonNode)
+
+/**
+ * Data class for exposing resource assignment
+ */
+data class ResourceAssignmentData(
+    val name: String,
+    val value: JsonNode?,
+    val required: Boolean?,
+    val type: String?,
+    @JsonProperty("key-identifiers")
+    val keyIdentifiers: MutableList<KeyIdentifier>,
+    @JsonProperty("dictionary-name")
+    val dictionaryName: String?,
+    @JsonProperty("request-payload")
+    val requestPayload: String?,
+    @JsonProperty("dictionary-source")
+    val dictionarySource: String?,
+    @JsonProperty("status")
+    val status: String?,
+    @JsonProperty("message")
+    val message: String?
+)
 
 /**
  * Interface for Source Definitions (ex Input Source,
