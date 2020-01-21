@@ -19,6 +19,7 @@ package org.onap.ccsdk.cds.controllerblueprints.resource.dict
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import java.io.Serializable
@@ -87,6 +88,11 @@ open class ResourceAssignment {
     @JsonProperty("updated-by")
     var updatedBy: String? = null
 
+    /** input & output key-mapping with their resolved values **/
+    var keyIdentifiers: MutableList<KeyIdentifier> = mutableListOf()
+
+    var requestPayload: String? = null
+
     override fun toString(): String {
         return """
             [
@@ -101,6 +107,42 @@ open class ResourceAssignment {
     }
 }
 
+data class KeyIdentifier(val name: String, val value: JsonNode)
+
+/**
+ * Data class for exposing summary of resource resolution
+ */
+data class ResolutionSummary(
+    val name: String,
+    val value: JsonNode?,
+    val required: Boolean?,
+    val type: String?,
+    @JsonProperty("key-identifiers")
+    val keyIdentifiers: MutableList<KeyIdentifier>,
+    @JsonProperty("dictionary-name")
+    val dictionaryName: String?,
+    @JsonProperty("request-payload")
+    val requestPayload: String?,
+    @JsonProperty("dictionary-source")
+    val dictionarySource: String?,
+    @JsonProperty("status")
+    val status: String?,
+    @JsonProperty("message")
+    val message: String?
+) {
+    constructor(resourceAssignment: ResourceAssignment) : this (
+            resourceAssignment.name,
+            resourceAssignment.property?.value,
+            resourceAssignment.property?.required,
+            resourceAssignment.property?.type,
+            resourceAssignment.keyIdentifiers,
+            resourceAssignment.dictionaryName,
+            resourceAssignment.requestPayload,
+            resourceAssignment.dictionarySource,
+            resourceAssignment.status,
+            resourceAssignment.message
+    )
+}
 /**
  * Interface for Source Definitions (ex Input Source,
  * Default Source, Database Source, Rest Sources, etc)

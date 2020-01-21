@@ -40,7 +40,7 @@ class BluePrintTemplateService(private val bluePrintLoadConfiguration: BluePrint
         val template = bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactName)
 
         return when (templateType) {
-            BluePrintConstants.ARTIFACT_JINJA_TYPE_NAME -> {
+            BluePrintConstants.MODEL_TYPE_ARTIFACT_TEMPLATE_JINJA -> {
                 BluePrintJinjaTemplateService.generateContent(
                     template,
                     jsonData,
@@ -51,13 +51,13 @@ class BluePrintTemplateService(private val bluePrintLoadConfiguration: BluePrint
                     bluePrintRuntimeService.bluePrintContext().version()
                 )
             }
-            BluePrintConstants.ARTIFACT_VELOCITY_TYPE_NAME -> {
+            BluePrintConstants.MODEL_TYPE_ARTIFACT_TEMPLATE_VELOCITY -> {
                 BluePrintVelocityTemplateService.generateContent(template, jsonData, ignoreJsonNull, additionalContext)
             }
             else -> {
                 throw BluePrintProcessorException(
-                    "Unknown Artifact type, expecting ${BluePrintConstants.ARTIFACT_JINJA_TYPE_NAME}" +
-                            "or ${BluePrintConstants.ARTIFACT_VELOCITY_TYPE_NAME}"
+                    "Unknown Artifact type, expecting ${BluePrintConstants.MODEL_TYPE_ARTIFACT_TEMPLATE_JINJA}" +
+                            "or ${BluePrintConstants.MODEL_TYPE_ARTIFACT_TEMPLATE_VELOCITY}"
                 )
             }
         }

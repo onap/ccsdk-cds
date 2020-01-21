@@ -179,6 +179,10 @@
           "another-mapping": {
             "type": "artifact-mapping-resource",
             "file": "Definitions/another-mapping.json"
+          },
+          "notemplate-mapping": {
+            "type": "artifact-mapping-resource",
+            "file": "Definitions/notemplate-mapping.json"
           }
         }
       },
