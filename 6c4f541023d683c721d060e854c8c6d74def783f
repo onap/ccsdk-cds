@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a592c6a9_560c9817",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/data/BluePrintModel.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2020-01-21T16:57:42Z",
+      "side": 1,
+      "message": "This has huge impact in existing BP, Please remove this annotation.",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 158,
+        "endChar": 42
+      },
+      "revId": "6c4f541023d683c721d060e854c8c6d74def783f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05c5a055_9082f60f",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/designer-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/designer/api/DesignerApiData.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2020-01-21T16:57:42Z",
+      "side": 1,
+      "message": "It increase data size and model changes is tough to manage, so, please remove this annotation.",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 42
+      },
+      "revId": "6c4f541023d683c721d060e854c8c6d74def783f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec3c0821_2d613f6d",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/designer-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/designer/api/DesignerApiData.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2020-01-21T16:57:42Z",
+      "side": 1,
+      "message": "It increase data size and model changes is tough to manage, so, please remove this annotation.",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 42
+      },
+      "revId": "6c4f541023d683c721d060e854c8c6d74def783f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89eb31ea_1dc0ac6e",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/designer-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/designer/api/handler/BluePrintModelHandler.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2020-01-21T16:57:42Z",
+      "side": 1,
+      "message": "Move response entity to Controller, If possible.",
+      "range": {
+        "startLine": 100,
+        "startChar": 12,
+        "endLine": 100,
+        "endChar": 26
+      },
+      "revId": "6c4f541023d683c721d060e854c8c6d74def783f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2c5c036_7b0d4071",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/designer-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/designer/api/handler/BluePrintModelHandler.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2020-01-21T16:57:42Z",
+      "side": 1,
+      "message": "Move response entity to Controller, If possible.",
+      "range": {
+        "startLine": 136,
+        "startChar": 11,
+        "endLine": 136,
+        "endChar": 26
+      },
+      "revId": "6c4f541023d683c721d060e854c8c6d74def783f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
