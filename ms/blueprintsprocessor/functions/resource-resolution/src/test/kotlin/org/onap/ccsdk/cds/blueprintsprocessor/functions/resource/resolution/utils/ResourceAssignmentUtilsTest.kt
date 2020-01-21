@@ -46,6 +46,7 @@ data class ExpectedResponseIpAddress(val ipAddress: IpAddress)
 
 class ResourceAssignmentUtilsTest {
     private lateinit var resourceAssignmentRuntimeService: ResourceAssignmentRuntimeService
+    private lateinit var resourceAssignment: ResourceAssignment
 
     private lateinit var inputMapToTestPrimitiveTypeWithValue: JsonNode
     private lateinit var inputMapToTestPrimitiveTypeWithKeyValue: JsonNode
@@ -181,6 +182,7 @@ class ResourceAssignmentUtilsTest {
             outcome,
             "Unexpected outcome returned for primitive type of simple String"
         )
+        assertEquals(0, resourceAssignment.keyIdentifiers.size)
 
         outcome = prepareResponseNodeForTest(
             "sample-key-value", "string", "",
@@ -190,6 +192,10 @@ class ResourceAssignmentUtilsTest {
             expectedValueToTestPrimitiveType,
             outcome,
             "Unexpected outcome returned for primitive type of key-value String"
+        )
+        assertEquals(
+                expectedValueToTestPrimitiveType,
+                resourceAssignment.keyIdentifiers["sample-ip"]
         )
     }
 
@@ -204,6 +210,13 @@ class ResourceAssignmentUtilsTest {
             outcome,
             "unexpected outcome returned for list of String"
         )
+
+        val expectedKeyIdentifierValue = JacksonUtils.getJsonNode(outcome.map { it["ip"] })
+        assertEquals(
+                expectedKeyIdentifierValue,
+                resourceAssignment.keyIdentifiers["ip"]
+        )
+
         // FIXME("Map is not collection type, It is known complex type")
         // outcome = prepareResponseNodeForTest(
         //     "mapOfString", "map", "string",
@@ -250,6 +263,9 @@ class ResourceAssignmentUtilsTest {
             outcome,
             "Unexpected outcome returned for complex type"
         )
+        assertEquals(
+                expectedValueToTestComplexTypeWithOneOutputKeyMapping["host"],
+                resourceAssignment.keyIdentifiers["host"])
     }
 
     @Test
@@ -262,6 +278,16 @@ class ResourceAssignmentUtilsTest {
             expectedValueToTestComplexTypeWithAllOutputKeyMapping,
             outcome,
             "Unexpected outcome returned for complex type"
+        )
+        assertEquals(2, resourceAssignment.keyIdentifiers.size)
+        assertEquals(
+                expectedValueToTestComplexTypeWithAllOutputKeyMapping["name"],
+                resourceAssignment.keyIdentifiers["name"]
+        )
+
+        assertEquals(
+                expectedValueToTestComplexTypeWithAllOutputKeyMapping["ipAddress"],
+                resourceAssignment.keyIdentifiers["ipAddress"]
         )
     }
 
@@ -359,7 +385,7 @@ class ResourceAssignmentUtilsTest {
         response: Any
     ): JsonNode {
 
-        val resourceAssignment = when (sourceType) {
+        resourceAssignment = when (sourceType) {
             "list" -> {
                 prepareRADataDictionaryCollection(dictionary_source, sourceType, entrySchema)
             }
