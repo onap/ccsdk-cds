@@ -1,0 +1,26 @@
+{
+  "tags" : "datetime",
+  "name" : "datetime",
+  "property" : {
+    "description" : "Request to get a time",
+    "type" : "string"
+  },
+  "updated-by" : "anil",
+  "sources" : {
+    "rest" : {
+      "type" : "source-rest",
+      "properties" : {
+        "type" : "string",
+        "verb" : "GET",
+        "url-path" : "/api/json/est/now",
+        "endpoint-selector": "rest-endpoint",
+        "path": "",
+        "input-key-mapping" : {},
+        "output-key-mapping" : {
+          "datetime" : "currentDateTime",
+          "dayofweek": "dayOfTheWeek"
+        }
+      }
+    }
+  }
+}

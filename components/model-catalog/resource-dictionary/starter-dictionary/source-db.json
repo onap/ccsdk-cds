@@ -1,0 +1,22 @@
+{
+  "name" : "telcos",
+  "tags" : "telcos",
+  "updated-by" : "Gaddam, Anil <anil.gaddam@bell.ca>",
+  "property" : {
+    "description" : "Telecom companies in Canada",
+    "type" : "string"
+  },
+  "sources" : {
+    "processor-db" : {
+      "type" : "source-db",
+      "properties" : {
+        "type" : "SQL",
+        "query" : "select sdnctl.telcos.carriers from sdnctl.telcos",
+        "input-key-mapping": {},
+        "output-key-mapping" : {
+          "carriers" : "carriers"
+        }
+      }
+    }
+  }
+}

@@ -38,6 +38,11 @@
               "required": false,
               "type": "string"
             },
+            "resolution-summary": {
+              "description": "Enable resolution-summary output",
+              "required": false,
+              "type": "boolean"
+            },
             "artifact-prefix-names": {
               "required": true,
               "description": "Template , Resource Assignment Artifact Prefix names",
