@@ -27,6 +27,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.isNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.nullToEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.onap.ccsdk.cds.controllerblueprints.resource.dict.KeyIdentifier
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
@@ -75,8 +76,14 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                     checkNotNull(sourceProperties.inputKeyMapping) { "failed to get input-key-mappings for $dName under $dSource properties" }
                 val resolvedInputKeyMapping = resolveInputKeyMappingVariables(inputKeyMapping).toMutableMap()
 
+                sourceProperties.inputKeyMapping
+                        ?.mapValues { raRuntimeService.getDictionaryStore(it.value) }
+                        ?.map { KeyIdentifier(it.key, it.value) }
+                        ?.let { resourceAssignment.keyIdentifiers.addAll(it) }
+
                 // Resolving content Variables
                 val payload = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.payload), resolvedInputKeyMapping)
+                resourceAssignment.requestPayload = payload
                 val urlPath =
                     resolveFromInputKeyMapping(checkNotNull(sourceProperties.urlPath), resolvedInputKeyMapping)
                 val verb = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.verb), resolvedInputKeyMapping)
