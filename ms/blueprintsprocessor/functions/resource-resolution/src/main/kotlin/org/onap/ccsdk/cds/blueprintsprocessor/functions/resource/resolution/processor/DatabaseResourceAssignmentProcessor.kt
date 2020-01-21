@@ -91,6 +91,10 @@ open class DatabaseResourceAssignmentProcessor(
             "failed to get input-key-mappings for $dName under $dSource properties"
         }
 
+        sourceProperties.inputKeyMapping
+                ?.mapValues { raRuntimeService.getDictionaryStore(it.value) }
+                ?.let { resourceAssignment.keyIdentifiers.putAll(it) }
+
         logger.info(
             "DatabaseResource ($dSource) dictionary information: " +
                     "Query:($sql), input-key-mapping:($inputKeyMapping), output-key-mapping:(${sourceProperties.outputKeyMapping})"
