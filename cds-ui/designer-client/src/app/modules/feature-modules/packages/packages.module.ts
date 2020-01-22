@@ -20,6 +20,7 @@ import {PackageCreationComponent} from './package-creation/package-creation.comp
 import {FormsModule} from '@angular/forms';
 import { ImportsTabComponent } from './package-creation/imports-tab/imports-tab.component';
 import { NgxFileDropModule } from 'ngx-file-drop';
+import { TemplateMappingComponent } from './package-creation/template-mapping/template-mapping.component';
 
 @NgModule({
     declarations: [PackagesDashboardComponent,
@@ -35,6 +36,7 @@ import { NgxFileDropModule } from 'ngx-file-drop';
         ActionsComponent,
         PackageCreationComponent,
         ImportsTabComponent,
+        TemplateMappingComponent,
     ],
     imports: [
         CommonModule,
