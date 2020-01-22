@@ -114,7 +114,29 @@ class BluePrintEnhancerUtils {
             return prepareResourceEntity(compressedFile.name, compressedFile.readBytes())
         }
 
+<<<<<<< HEAD   (9f92c1 cmd-exec separate env-prepare and exec timeouts.)
         suspend fun prepareResourceEntity(fileName: String, file: ByteArray): ResponseEntity<Resource> {
+=======
+        /** compress [enhanceDir] to [archiveDir] and return ResponseEntity */
+        suspend fun compressEnhanceDirAndReturnFilePart(
+            enhanceDir: String,
+            archiveDir: String,
+            outputFileName: String = "enhanced-cba.zip"
+        ):
+            ResponseEntity<Resource> {
+            val compressedFile = normalizedFile(archiveDir, outputFileName)
+            BluePrintArchiveUtils.compress(Paths.get(enhanceDir).toFile(), compressedFile)
+            return prepareResourceEntity(compressedFile)
+        }
+
+        /** convert [file] to ResourceEntity */
+        suspend fun prepareResourceEntity(file: File): ResponseEntity<Resource> {
+            return prepareResourceEntity(file.name, file.readBytes())
+        }
+
+        /** convert [byteArray] to ResourceEntity with [fileName]*/
+        fun prepareResourceEntity(fileName: String, byteArray: ByteArray): ResponseEntity<Resource> {
+>>>>>>> CHANGE (709302 Enhancement better error messages.)
             return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType("text/plain"))
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"$fileName\"")
