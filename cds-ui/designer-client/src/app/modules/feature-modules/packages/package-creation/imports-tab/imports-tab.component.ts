@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {NgxFileDropEntry, FileSystemFileEntry, FileSystemDirectoryEntry} from 'ngx-file-drop';
 import {PackageCreationStore} from '../package-creation.store';
-import {Observable} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
+import {PackageCreationUtils} from '../package-creation.utils';
 
 
 @Component({
@@ -12,12 +11,18 @@ import {HttpClient} from '@angular/common/http';
 })
 export class ImportsTabComponent {
 
-    fileContent: string | ArrayBuffer = '';
-
-    constructor(private packageCreationStore: PackageCreationStore, private http: HttpClient) {
-    }
+    public definitionFiles: Map<string, string> = new Map<string, string>();
+    public uploadedFiles: FileSystemFileEntry[] = [];
 
     public files: NgxFileDropEntry[] = [];
+
+    constructor(private packageCreationStore: PackageCreationStore, private packageCreationUtils: PackageCreationUtils) {
+        this.packageCreationStore.state$.subscribe(cbaPackage => {
+            if (cbaPackage.definitions && cbaPackage.definitions.files && cbaPackage.definitions.files.size > 0) {
+                this.definitionFiles = cbaPackage.definitions.files;
+            }
+        });
+    }
 
     public dropped(files: NgxFileDropEntry[]) {
         this.files = files;
@@ -26,30 +31,29 @@ export class ImportsTabComponent {
             // Is it a file?
             if (droppedFile.fileEntry.isFile) {
                 const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
-
-                fileEntry.file((file: File) => {
-                    console.log(droppedFile.relativePath, file);
-
-                    const formData = new FormData();
-                    formData.append('logo', file, droppedFile.relativePath);
-                    console.log(formData);
-
-                    this.packageCreationStore.addDefinition(droppedFile.relativePath, this.getContent(droppedFile.relativePath));
-
-                });
-            } else {
-                // It was a directory (empty directories are added, otherwise only files)
-                const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
-                console.log(droppedFile.relativePath, fileEntry);
+                this.uploadedFiles.push(fileEntry);
 
 
-               /* const formData = new FormData();
-                formData.append('logo', droppedFile, droppedFile.relativePath);
+            } /*else {
+                const directorEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
+                this.filesUnderDirectory = directorEntry.getFile('');
+               // const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
+               /* this.uploadedFile.push(droppedFile);
+                const formData = new FormData()
+                formData.append('logo', fileEntry, droppedFile.relativePath);
                 console.log(formData);*/
+            /* // It was a directory (empty directories are added, otherwise only files)
+             const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
+             console.log(droppedFile.relativePath, fileEntry);
 
-                this.packageCreationStore.addDefinition(droppedFile.relativePath, this.getContent(droppedFile.relativePath));
 
-            }
+              const formData = new FormData();
+              formData.append('logo', droppedFile, droppedFile.relativePath);
+              console.log(formData);
+
+             //this.packageCreationStore.addDefinition(droppedFile.relativePath, this.getContent(droppedFile.relativePath));
+*/
+            /* }*/
         }
     }
 
@@ -62,15 +66,31 @@ export class ImportsTabComponent {
     }
 
 
-    getContent(filePath: string) {
-        let content = '';
-        this.getJSON(filePath).subscribe(data => {
-            content = data;
-        });
-        return content;
+    /* readFileContent(file: File): string | ArrayBuffer {
+         const fileReader = new FileReader();
+        // let content: string | ArrayBuffer = '';
+         fileReader.onload = (e) => {
+             content = fileReader.result;
+         };
+         fileReader.readAsText(file);
+         return content;
+     }
+ */
+    setFilesToStore() {
+        for (const droppedFile of this.uploadedFiles) {
+            droppedFile.file((file: File) => {
+                const fileReader = new FileReader();
+                fileReader.onload = (e) => {
+                    this.packageCreationStore.addDefinition(droppedFile.name,
+                        this.packageCreationUtils.transformToJson(fileReader.result));
+                };
+                fileReader.readAsText(file);
+            });
+
+        }
     }
 
-    public getJSON(filePath: string): Observable<any> {
-        return this.http.get(filePath);
+    resetTheUploadedFiles() {
+        this.uploadedFiles = [];
     }
 }
