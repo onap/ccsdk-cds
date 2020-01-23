@@ -53,12 +53,12 @@ class CommandExecutorServer(CommandExecutor_pb2_grpc.CommandExecutorServiceServi
         payload_result = {}
         handler = CommandExecutorHandler(request)
         payload_result = handler.execute_command(request, log_results)
-        if not payload_result["cds_return_code"]:
+        if payload_result["cds_return_code"] != 0:
             self.logger.info("{} - Failed to executeCommand. {}".format(blueprint_id, log_results))
         else:
             self.logger.info("{} - Execution finished successfully.".format(blueprint_id))
 
-        ret = utils.build_response(request, log_results, payload_result, payload_result["cds_return_code"])
+        ret = utils.build_response(request, log_results, payload_result, payload_result["cds_return_code"] == 0)
         self.logger.info("Payload returned %s" % payload_result)
 
         return ret
