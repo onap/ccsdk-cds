@@ -1,0 +1,80 @@
+# Resource resolution client
+
+##  How to use examples
+
+### Insecure channel
+
+```
+from blueprints_grpc.proto.BluePrintCommon_pb2_grpc import ActionIdentifiers, CommonHeader
+from blueprints_grpc.proto.BluePrintProcessing_pb2_grpc import ExecutionServiceInput
+from resource_resolution.client import Client as ResourceResolutionClient
+
+
+def generate_messages():
+    commonHeader = CommonHeader()
+    commonHeader.requestId = "1234"
+    commonHeader.subRequestId = "1234-1"
+    commonHeader.originatorId = "CDS"
+
+    actionIdentifiers = ActionIdentifiers()
+    actionIdentifiers.blueprintName = "sample-cba"
+    actionIdentifiers.blueprintVersion = "1.0.0"
+    actionIdentifiers.actionName = "SampleScript"
+
+    input = ExecutionServiceInput(commonHeader=commonHeader, actionIdentifiers=actionIdentifiers)
+
+    commonHeader2 = CommonHeader()
+    commonHeader2.requestId = "1235"
+    commonHeader2.subRequestId = "1234-2"
+    commonHeader2.originatorId = "CDS"
+
+    input2 = ExecutionServiceInput(commonHeader=commonHeader2, actionIdentifiers=actionIdentifiers)
+
+    yield from [input, input2]
+
+
+if __name__ == "__main__":
+    with ResourceResolutionClient("localhost:50052") as client:
+        for response in client.process(generate_messages()):
+            print(response)
+
+```
+
+### Secure channel
+
+```
+from blueprints_grpc.proto.BluePrintCommon_pb2_grpc import ActionIdentifiers, CommonHeader
+from blueprints_grpc.proto.BluePrintProcessing_pb2_grpc import ExecutionServiceInput
+from resource_resolution.client import Client as ResourceResolutionClient
+
+
+def generate_messages():
+    commonHeader = CommonHeader()
+    commonHeader.requestId = "1234"
+    commonHeader.subRequestId = "1234-1"
+    commonHeader.originatorId = "CDS"
+
+    actionIdentifiers = ActionIdentifiers()
+    actionIdentifiers.blueprintName = "sample-cba"
+    actionIdentifiers.blueprintVersion = "1.0.0"
+    actionIdentifiers.actionName = "SampleScript"
+
+    input = ExecutionServiceInput(commonHeader=commonHeader, actionIdentifiers=actionIdentifiers)
+
+    commonHeader2 = CommonHeader()
+    commonHeader2.requestId = "1235"
+    commonHeader2.subRequestId = "1234-2"
+    commonHeader2.originatorId = "CDS"
+
+    input2 = ExecutionServiceInput(commonHeader=commonHeader2, actionIdentifiers=actionIdentifiers)
+
+    yield from [input, input2]
+
+
+if __name__ == "__main__":
+    with open("certs/py-executor/py-executor-chain.pem", "rb") as f:
+        with ResourceResolutionClient("localhost:50052", use_ssl=True, root_certificates=f.read()) as client:
+            for response in client.process(generate_messages()):
+                print(response)
+
+```
