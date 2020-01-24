@@ -91,7 +91,11 @@ class ComponentRemotePythonExecutorTest {
             val componentRemotePythonExecutor = ComponentRemotePythonExecutor(remoteScriptExecutionService)
             val bluePrintRuntime = mockk<DefaultBluePrintRuntimeService>("123456-1000")
 
+<<<<<<< HEAD   (0aabd6 Merge "execution timeout not respected...")
             every { bluePrintRuntime.getBluePrintError() } answers { BluePrintError() } // successful case.
+=======
+            every { bluePrintRuntime.getBluePrintError() } answers { BluePrintError() } //successful case.
+>>>>>>> CHANGE (9f92c1 cmd-exec separate env-prepare and exec timeouts.)
             every { bluePrintRuntime.setNodeTemplateAttributeValue(any(), any(), any()) } answers {}
 
             val input = getMockedOutput(bluePrintRuntime)

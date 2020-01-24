@@ -55,14 +55,19 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
         const val INPUT_ENDPOINT_SELECTOR = "endpoint-selector"
         const val INPUT_DYNAMIC_PROPERTIES = "dynamic-properties"
         const val INPUT_ARGUMENT_PROPERTIES = "argument-properties"
+
         const val INPUT_COMMAND = "command"
         const val INPUT_PACKAGES = "packages"
         const val DEFAULT_SELECTOR = "remote-python"
+        const val INPUT_ENV_PREPARE_TIMEOUT = "env-prepare-timeout"
+        const val INPUT_EXECUTE_TIMEOUT = "execution-timeout"
 
         const val ATTRIBUTE_EXEC_CMD_STATUS = "status"
         const val ATTRIBUTE_PREPARE_ENV_LOG = "prepare-environment-logs"
         const val ATTRIBUTE_EXEC_CMD_LOG = "execute-command-logs"
         const val ATTRIBUTE_RESPONSE_DATA = "response-data"
+        const val DEFAULT_ENV_PREPARE_TIMEOUT_IN_SEC = 120
+        const val DEFAULT_EXECUTE_TIMEOUT_IN_SEC = 180
     }
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
@@ -99,6 +104,16 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
             ?.rootFieldsToMap()?.toSortedMap()?.values?.joinToString(" ") { formatNestedJsonNode(it) }
 
         val command = getOperationInput(INPUT_COMMAND).asText()
+
+        /**
+         * Timeouts that are specific to the command executor.
+         * Note: the interface->input->timeout is the component level timeout.
+         */
+        val envPrepTimeout = getOptionalOperationInput(INPUT_ENV_PREPARE_TIMEOUT)?.asInt()
+            ?: DEFAULT_ENV_PREPARE_TIMEOUT_IN_SEC
+        val executionTimeout = getOptionalOperationInput(INPUT_EXECUTE_TIMEOUT)?.asInt()
+            ?: DEFAULT_EXECUTE_TIMEOUT_IN_SEC
+
         var scriptCommand = command.replace(pythonScript.name, pythonScript.absolutePath)
         if (args != null && args.isNotEmpty()) {
             scriptCommand = scriptCommand.plus(" ").plus(args)
@@ -116,6 +131,7 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
 
             // If packages are defined, then install in remote server
             if (packages != null) {
+<<<<<<< HEAD   (0aabd6 Merge "execution timeout not respected...")
                 val prepareEnvInput = PrepareRemoteEnvInput(
                     requestId = processId,
                     remoteIdentifier = RemoteIdentifier(
@@ -123,6 +139,14 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
                         blueprintVersion = blueprintVersion
                     ),
                     packages = packages
+=======
+                val prepareEnvInput = PrepareRemoteEnvInput(requestId = processId,
+                    remoteIdentifier = RemoteIdentifier(blueprintName = blueprintName,
+                        blueprintVersion = blueprintVersion),
+                    packages = packages,
+                    timeOut = envPrepTimeout.toLong()
+
+>>>>>>> CHANGE (9f92c1 cmd-exec separate env-prepare and exec timeouts.)
                 )
                 val prepareEnvOutput = remoteScriptExecutionService.prepareEnv(prepareEnvInput)
                 log.info("$ATTRIBUTE_PREPARE_ENV_LOG - ${prepareEnvOutput.response}")
@@ -137,9 +161,22 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
                     setNodeOutputProperties(prepareEnvOutput.status.name.asJsonPrimitive(), logsEnv, "".asJsonPrimitive())
                 }
             }
-
-            // if Env preparation was successful, then proceed with command execution in this Env
-            if (bluePrintRuntimeService.getBluePrintError().errors.isEmpty()) {
+        } catch (grpcEx: io.grpc.StatusRuntimeException) {
+            val timeoutErrMsg = "Command executor timed out in GRPC call during env. preparation.. timeout($envPrepTimeout) requestId ($processId)."
+            setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, timeoutErrMsg.asJsonPrimitive())
+            setNodeOutputErrors(status = timeoutErrMsg, message = "${grpcEx.status}".asJsonPrimitive())
+            log.error(timeoutErrMsg, grpcEx)
+            addError(timeoutErrMsg)
+        } catch (e: Exception) {
+            val timeoutErrMsg = "Command executor failed during env. preparation.. timeout($envPrepTimeout) requestId ($processId)."
+            setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, e.message.asJsonPrimitive())
+            setNodeOutputErrors(status = timeoutErrMsg, message = "${e.message}".asJsonPrimitive())
+            log.error("Failed to process on remote executor requestId ($processId)", e)
+            addError(timeoutErrMsg)
+        }
+        // if Env preparation was successful, then proceed with command execution in this Env
+        if (bluePrintRuntimeService.getBluePrintError().errors.isEmpty()) {
+            try {
                 // Populate command execution properties and pass it to the remote server
                 val properties = dynamicProperties?.returnNullIfMissing()?.rootFieldsToMap() ?: hashMapOf()
 
@@ -148,13 +185,22 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
                     remoteIdentifier = RemoteIdentifier(blueprintName = blueprintName, blueprintVersion = blueprintVersion),
                     command = scriptCommand,
                     properties = properties,
+<<<<<<< HEAD   (0aabd6 Merge "execution timeout not respected...")
                     timeOut = implementation.timeout.toLong())
+=======
+                    timeOut = executionTimeout.toLong())
+
+>>>>>>> CHANGE (9f92c1 cmd-exec separate env-prepare and exec timeouts.)
 
                 val remoteExecutionOutputDeferred = GlobalScope.async {
                     remoteScriptExecutionService.executeCommand(remoteExecutionInput)
                 }
 
+<<<<<<< HEAD   (0aabd6 Merge "execution timeout not respected...")
                 val remoteExecutionOutput = withTimeout(implementation.timeout * 1000L) {
+=======
+                val remoteExecutionOutput = withTimeout(executionTimeout * 1000L) {
+>>>>>>> CHANGE (9f92c1 cmd-exec separate env-prepare and exec timeouts.)
                     remoteExecutionOutputDeferred.await()
                 }
 
@@ -168,7 +214,18 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
                     setNodeOutputProperties(remoteExecutionOutput.status.name.asJsonPrimitive(), logs,
                         remoteExecutionOutput.payload)
                 }
+            } catch (timeoutEx: TimeoutCancellationException) {
+                val timeoutErrMsg = "Command executor timed out executing after $executionTimeout seconds requestId ($processId)"
+                setNodeOutputErrors(status = timeoutErrMsg, message = "".asJsonPrimitive())
+                log.error(timeoutErrMsg, timeoutEx)
+            } catch (grpcEx: io.grpc.StatusRuntimeException) {
+                val timeoutErrMsg = "Command executor timed out executing after $executionTimeout seconds requestId ($processId)"
+                setNodeOutputErrors(status = timeoutErrMsg, message = "".asJsonPrimitive())
+                log.error("Command executor time out during GRPC call", grpcEx)
+            } catch (e: Exception) {
+                log.error("Failed to process on remote executor requestId ($processId)", e)
             }
+<<<<<<< HEAD   (0aabd6 Merge "execution timeout not respected...")
         } catch (timeoutEx: TimeoutCancellationException) {
             setNodeOutputErrors(status = "Command executor timed out after ${implementation.timeout} seconds", message = "".asJsonPrimitive())
             log.error("Command executor timed out after ${implementation.timeout} seconds", timeoutEx)
@@ -177,8 +234,13 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
             log.error("Command executor time out during GRPC call", grpcEx)
         } finally {
             remoteScriptExecutionService.close()
+=======
+>>>>>>> CHANGE (9f92c1 cmd-exec separate env-prepare and exec timeouts.)
         }
+        log.debug("Trying to close GRPC channel. request ($processId)")
+        remoteScriptExecutionService.close()
     }
+
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         bluePrintRuntimeService.getBluePrintError()
@@ -217,7 +279,6 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
         log.info("Executor message  : $message")
         setAttribute(ATTRIBUTE_RESPONSE_DATA, artifacts)
         log.info("Executor artifacts: $artifacts")
-
         addError(status, ATTRIBUTE_EXEC_CMD_LOG, message.toString())
     }
 }
