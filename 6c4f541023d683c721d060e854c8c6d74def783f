@@ -25,6 +25,75 @@
     },
     {
       "key": {
+        "uuid": "5ec56f7c_f873c118",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/designer-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/designer/api/DesignerApiData.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-01-24T14:48:55Z",
+      "side": 1,
+      "message": "Please move this as constant in org.onap.ccsdk.cds.controllerblueprints.core.BlueprintContants",
+      "range": {
+        "startLine": 39,
+        "startChar": 26,
+        "endLine": 39,
+        "endChar": 33
+      },
+      "revId": "6c4f541023d683c721d060e854c8c6d74def783f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f380d45_0dfa3235",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/designer-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/designer/api/DesignerApiData.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-01-24T14:48:55Z",
+      "side": 1,
+      "message": "Please move this as constant in org.onap.ccsdk.cds.controllerblueprints.core.BlueprintContants",
+      "range": {
+        "startLine": 46,
+        "startChar": 32,
+        "endLine": 46,
+        "endChar": 38
+      },
+      "revId": "6c4f541023d683c721d060e854c8c6d74def783f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a499b37f_13080458",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/designer-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/designer/api/DesignerApiData.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-01-24T14:48:55Z",
+      "side": 1,
+      "message": "Please move this as constant in org.onap.ccsdk.cds.controllerblueprints.core.BlueprintContants",
+      "range": {
+        "startLine": 48,
+        "startChar": 27,
+        "endLine": 48,
+        "endChar": 34
+      },
+      "revId": "6c4f541023d683c721d060e854c8c6d74def783f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "05c5a055_9082f60f",
         "filename": "ms/blueprintsprocessor/modules/inbounds/designer-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/designer/api/DesignerApiData.kt",
         "patchSetId": 1
@@ -41,6 +110,29 @@
         "startChar": 0,
         "endLine": 51,
         "endChar": 42
+      },
+      "revId": "6c4f541023d683c721d060e854c8c6d74def783f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de00329d_22c7f9b0",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/designer-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/designer/api/DesignerApiData.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-01-24T14:48:55Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 54,
+        "startChar": 26,
+        "endLine": 54,
+        "endChar": 33
       },
       "revId": "6c4f541023d683c721d060e854c8c6d74def783f",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
