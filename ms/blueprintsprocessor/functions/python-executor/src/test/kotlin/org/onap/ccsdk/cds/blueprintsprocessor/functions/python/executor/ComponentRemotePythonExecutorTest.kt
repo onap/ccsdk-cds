@@ -25,6 +25,7 @@ import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.*
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.RemoteScriptExecutionService
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.putJsonElement
@@ -81,6 +82,7 @@ class ComponentRemotePythonExecutorTest {
             val componentRemotePythonExecutor = ComponentRemotePythonExecutor(remoteScriptExecutionService)
             val bluePrintRuntime = mockk<DefaultBluePrintRuntimeService>("123456-1000")
 
+            every { bluePrintRuntime.getBluePrintError() } answers { BluePrintError() } //successful case.
             every { bluePrintRuntime.setNodeTemplateAttributeValue(any(), any(), any()) } answers {}
 
             val input = getMockedOutput(bluePrintRuntime)
