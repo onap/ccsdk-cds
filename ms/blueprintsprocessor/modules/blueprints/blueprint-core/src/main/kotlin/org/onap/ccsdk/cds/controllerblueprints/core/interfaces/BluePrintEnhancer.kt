@@ -164,8 +164,17 @@ interface BluePrintTypeEnhancerService {
         bluePrintRuntimeService: BluePrintRuntimeService<*>,
         properties: MutableMap<String, PropertyDefinition>
     ) {
+        val errorMap = linkedMapOf<String, BluePrintException>()
         properties.forEach { propertyName, propertyDefinition ->
-            enhancePropertyDefinition(bluePrintRuntimeService, propertyName, propertyDefinition)
+            try {
+                enhancePropertyDefinition(bluePrintRuntimeService, propertyName, propertyDefinition)
+            } catch (e: BluePrintException) {
+                errorMap[propertyName] = e
+            }
+        }
+        if (errorMap.isNotEmpty()) {
+            val nestedErrors = errorMap.keys.map { "[ property: ${errorMap[it]?.message} ]" }.joinToString(";")
+            throw BluePrintException("Failed to enhance properties $nestedErrors")
         }
     }
 
@@ -182,8 +191,17 @@ interface BluePrintTypeEnhancerService {
         bluePrintRuntimeService: BluePrintRuntimeService<*>,
         attributes: MutableMap<String, AttributeDefinition>
     ) {
+        val errorMap = linkedMapOf<String, BluePrintException>()
         attributes.forEach { attributeName, attributeDefinition ->
-            enhanceAttributeDefinition(bluePrintRuntimeService, attributeName, attributeDefinition)
+            try {
+                enhanceAttributeDefinition(bluePrintRuntimeService, attributeName, attributeDefinition)
+            } catch (e: BluePrintException) {
+                errorMap[attributeName] = e
+            }
+        }
+        if (errorMap.isNotEmpty()) {
+            val nestedErrors = errorMap.keys.map { "[ attribute: ${errorMap[it]?.message} ]" }.joinToString(";")
+            throw BluePrintException("Failed to enhance attributes $nestedErrors")
         }
     }
 
@@ -204,8 +222,19 @@ interface BluePrintTypeEnhancerService {
         enhancers: List<BluePrintEnhancer<T>>
     ) {
         if (enhancers.isNotEmpty()) {
+            val errorMap = linkedMapOf<String, BluePrintException>()
             enhancers.forEach {
-                it.enhance(bluePrintRuntimeService, name, definition as T)
+                try {
+                    it.enhance(bluePrintRuntimeService, name, definition as T)
+                } catch (e: BluePrintException) {
+                    errorMap[name] = e
+                }
+            }
+            if (errorMap.isNotEmpty()) {
+                val nestedErrors = errorMap.keys.map {
+                    "${errorMap[it]?.message ?: errorMap[it].toString()}"
+                }.joinToString(";")
+                throw BluePrintException("$name-->$nestedErrors")
             }
         }
     }
