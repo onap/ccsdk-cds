@@ -60,6 +60,18 @@
               "entry_schema" : {
                 "type" : "dt-system-packages"
               }
+            },
+            "env-prepare-timeout": {
+              "description": "Time-out for environment preparation.",
+              "required": false,
+              "type": "integer",
+              "default": 120
+            },
+            "execution-timeout": {
+              "description": "Time-out for the execution step.",
+              "required": false,
+              "type": "integer",
+              "default": 180
             }
           }
         }
