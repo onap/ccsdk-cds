@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "09fe34e5_66036811",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/designer-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/designer/api/DesignerApiData.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2020-01-24T15:31:08Z",
+      "side": 1,
+      "message": "shall be lateinit property",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 34
+      },
+      "revId": "d6900a1692d114ded75a67690979820e80b80b6b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a057d6a5_f64f3056",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/designer-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/designer/api/DesignerApiData.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2020-01-24T15:31:08Z",
+      "side": 1,
+      "message": "shall be lateinit property",
+      "range": {
+        "startLine": 52,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 33
+      },
+      "revId": "d6900a1692d114ded75a67690979820e80b80b6b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53865886_31bc404d",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/designer-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/designer/api/handler/BluePrintModelHandler.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2020-01-24T15:31:08Z",
+      "side": 1,
+      "message": "It has the logic only for parent level not the nested level of data type.",
+      "range": {
+        "startLine": 116,
+        "startChar": 7,
+        "endLine": 122,
+        "endChar": 0
+      },
+      "revId": "d6900a1692d114ded75a67690979820e80b80b6b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94716441_b3696e61",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/designer-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/designer/api/handler/BluePrintModelHandler.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2020-01-24T15:31:08Z",
+      "side": 1,
+      "message": "It has the logic only for parent level not the nested level of data type.",
+      "range": {
+        "startLine": 124,
+        "startChar": 12,
+        "endLine": 127,
+        "endChar": 13
+      },
+      "revId": "d6900a1692d114ded75a67690979820e80b80b6b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
