@@ -15,7 +15,7 @@
 		"any-db": {
 			"type": "source-db",
 			"properties": {
-				"query": "SELECT artifact_name FROM BLUEPRINT_RUNTIME where artifact_version=\"1.0.0\"",
+				"query": "SELECT artifact_name FROM BLUEPRINT_MODEL where artifact_version=\"1.0.0\"",
 				"input-key-mapping": {},
 				"output-key-mapping": {
 					"service-instance-id": "artifact_name"
@@ -25,7 +25,7 @@
 		"processor-db": {
 			"type": "source-db",
 			"properties": {
-				"query": "SELECT artifact_name FROM BLUEPRINT_RUNTIME where artifact_version=\"1.0.0\"",
+				"query": "SELECT artifact_name FROM BLUEPRINT_MODEL where artifact_version=\"1.0.0\"",
 				"input-key-mapping": {},
 				"output-key-mapping": {
 					"service-instance-id": "artifact_name"
@@ -38,22 +38,6 @@
 				"script-type": "jython",
 				"script-class-reference": "SampleRAProcessor",
 				"instance-dependencies": []
-			}
-		},
-		"sdnc": {
-			"type": "source-rest",
-			"properties": {
-				"verb": "GET",
-				"type": "JSON",
-				"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id",
-				"path": "/service/0/service-instance-id",
-				"input-key-mapping": {
-					"service-instance-id": "service-instance.service-instance-id"
-				},
-				"output-key-mapping": {
-					"service-instance-id": "service-instance-id"
-				},
-				"key-dependencies": ["service-instance.service-instance-id"]
 			}
 		}
 	}
