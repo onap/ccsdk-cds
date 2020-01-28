@@ -28,8 +28,7 @@
 				},
 				"key-dependencies": [
 					"vf-module-model-customization-uuid"
-				],
-				"endpoint-selector": "dynamic-db-source"
+				]
 			}
 		}
 	}
