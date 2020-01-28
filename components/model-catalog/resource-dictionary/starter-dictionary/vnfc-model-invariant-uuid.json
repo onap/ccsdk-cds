@@ -23,7 +23,6 @@
 				"output-key-mapping": {
 					"vnfc-model-invariant-uuid": "vfc_invariant_uuid"
 				},
-				
 				"input-key-mapping": {
 					"vfccustomizationuuid": "vfccustomizationuuid"
 				},

@@ -3,7 +3,7 @@
 	"name": "vf-module-name",
 	"group":"default",
 	"property": {
-		"description": "vf_module_name",
+		"description": "vf-module-name",
 		"type": "string"
 	},
 	"updated-by": "Singal, Kapil <ks220y@att.com>",

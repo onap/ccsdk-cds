@@ -19,7 +19,7 @@
       "type": "source-rest",
       "properties": {
         "verb": "GET",   "type": "JSON",
-        "url-path": "config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vnf_name",
+        "url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vnf_name",
         "path": "/param/0/value",
         "input-key-mapping": {
           "service-instance-id": "service-instance-id",
