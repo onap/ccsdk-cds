@@ -3,7 +3,7 @@
 	"name": "vpg_name_0",
 	"group":"default",
 	"property": {
-		"description": "vlb_name_0",
+		"description": "vpg_name_0",
 		"type": "string"
 	},
 	"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",

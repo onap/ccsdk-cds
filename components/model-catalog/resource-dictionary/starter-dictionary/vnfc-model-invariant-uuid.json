@@ -18,12 +18,12 @@
 		"processor-db": {
 			"type": "source-db",
 			"properties": {
+				"endpoint-selector" : "dynamic-db-source",
 				"type": "SQL",
 				"query": "select VFC_MODEL.invariant_uuid as vfc_invariant_uuid from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
 				"output-key-mapping": {
 					"vnfc-model-invariant-uuid": "vfc_invariant_uuid"
 				},
-				
 				"input-key-mapping": {
 					"vfccustomizationuuid": "vfccustomizationuuid"
 				},

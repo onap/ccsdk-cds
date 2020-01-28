@@ -18,12 +18,12 @@
 		"processor-db": {
 			"type": "source-db",
 			"properties": {
+				"endpoint-selector" : "dynamic-db-source",
 				"type": "SQL",
 				"query": "select sdnctl.IPAM_IP_POOL.prefix as prefix from sdnctl.IPAM_IP_POOL where description = \"private2\"",
 				"output-key-mapping": {
 					"int_private2_net_cidr": "prefix"
 				},
-				
 				"input-key-mapping": {}
 			}
 		},

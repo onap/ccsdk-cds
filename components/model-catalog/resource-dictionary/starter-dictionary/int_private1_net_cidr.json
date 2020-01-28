@@ -15,6 +15,18 @@
 			"type": "source-default",
 			"properties": {}
 		},
+		"processor-db": {
+			"type": "source-db",
+			"properties": {
+				"endpoint-selector" : "dynamic-db-source",
+				"type": "SQL",
+				"query": "select sdnctl.IPAM_IP_POOL.prefix as prefix from sdnctl.IPAM_IP_POOL where description = \"private1\"",
+				"input-key-mapping": {},
+				"output-key-mapping": {
+					"int_private1_net_cidr": "prefix"
+				}
+			}
+		},
 		"sdnc": {
 			"type": "source-rest",
 			"properties": {
@@ -33,18 +45,6 @@
 					"service-instance-id",
 					"vnf-id"
 				]
-			}
-		},
-		"processor-db": {
-			"type": "source-db",
-			"properties": {
-				
-				"type": "SQL",
-				"query": "select sdnctl.IPAM_IP_POOL.prefix as prefix from sdnctl.IPAM_IP_POOL where description = \"private1\"",
-				"input-key-mapping": {},
-				"output-key-mapping": {
-					"int_private1_net_cidr": "prefix"
-				}
 			}
 		}
 	}
