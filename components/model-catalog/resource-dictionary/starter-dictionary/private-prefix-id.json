@@ -18,7 +18,6 @@
     "processor-db": {
       "type": "source-db",
       "properties": {
-        "endpoint-selector": "dynamic-db-source",
         "type": "SQL",
         "query": "select sdnctl.IPAM_IP_POOL.prefix_id as prefix_id from sdnctl.IPAM_IP_POOL where description = \"private\"",
         "input-key-mapping": {},
