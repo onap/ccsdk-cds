@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1b69f952_74ea88b2",
+        "filename": "ms/blueprintsprocessor/parent/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-01-28T15:18:08Z",
+      "side": 1,
+      "message": "This property cause problem when other project refers this pom as parent pom.",
+      "revId": "34dd821ac8648aeebee99abf066ca2ab24f170ee",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
