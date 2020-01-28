@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {NgxFileDropEntry, FileSystemFileEntry, FileSystemDirectoryEntry} from 'ngx-file-drop';
-import {PackageCreationStore} from '../package-creation.store';
-import {PackageCreationUtils} from '../package-creation.utils';
+import { Component, OnInit } from '@angular/core';
+import { NgxFileDropEntry, FileSystemFileEntry, FileSystemDirectoryEntry } from 'ngx-file-drop';
+import { PackageCreationStore } from '../package-creation.store';
+import { PackageCreationUtils } from '../package-creation.utils';
 
 
 @Component({
@@ -9,10 +9,11 @@ import {PackageCreationUtils} from '../package-creation.utils';
     templateUrl: './imports-tab.component.html',
     styleUrls: ['./imports-tab.component.css']
 })
-export class ImportsTabComponent {
+export class ImportsTabComponent implements OnInit {
 
     public definitionFiles: Map<string, string> = new Map<string, string>();
     public uploadedFiles: FileSystemFileEntry[] = [];
+    private fileNames: Set<string> = new Set();
 
     public files: NgxFileDropEntry[] = [];
 
@@ -24,15 +25,19 @@ export class ImportsTabComponent {
         });
     }
 
+    ngOnInit(): void {
+        // TODO
+    }
+
     public dropped(files: NgxFileDropEntry[]) {
         this.files = files;
         for (const droppedFile of files) {
-
-            // Is it a file?
-            if (droppedFile.fileEntry.isFile) {
+            // Is it a file? & Not added before
+            if (droppedFile.fileEntry.isFile && !this.fileNames.has(droppedFile.fileEntry.name)) {
                 const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
                 this.uploadedFiles.push(fileEntry);
-
+                console.log(fileEntry.name);
+                this.fileNames.add(fileEntry.name);
 
             } /*else {
                 const directorEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
@@ -57,6 +62,13 @@ export class ImportsTabComponent {
         }
     }
 
+    removeFile(fileIndex: number) {
+        console.log(this.uploadedFiles[fileIndex]);
+        console.log(this.uploadedFiles);
+        this.packageCreationStore.removeFromState(this.uploadedFiles[fileIndex].name, 'definitions');
+        this.uploadedFiles.splice(fileIndex, 1);
+    }
+
     public fileOver(event) {
         console.log(event);
     }
@@ -64,8 +76,6 @@ export class ImportsTabComponent {
     public fileLeave(event) {
         console.log(event);
     }
-
-
     /* readFileContent(file: File): string | ArrayBuffer {
          const fileReader = new FileReader();
         // let content: string | ArrayBuffer = '';

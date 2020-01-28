@@ -1,0 +1,92 @@
+<div class="import-container-all">
+    <div class="import-container">
+        <div class="import-container-input">
+            <input class="ng-pristine ng-valid ng-touched" placeholder="Enter file URL" type="input">
+            <a class="enter-link" href="#"><i class="icon-enter"></i></a>
+        </div>
+        <span class="import-container-span">Or you can also <a data-target="#scriptsModal" data-toggle="modal"
+                                                               href="#">Import File</a></span>
+
+    </div>
+
+    <div class="accordion">
+        <div class="card creat-card">
+            <div class="single-line">
+                <label class="label-name">File</label>
+            </div>
+        </div>
+        <div *ngFor="let file of scriptsFiles | keyvalue; let mapIndex = index" id="accordion">
+
+            <div class="card">
+                <div [id]="'head-'+mapIndex" class="card-header">
+                    <h5 class="mb-0 d-flex justify-content-between">
+                        <button [attr.aria-controls]="'id-'+mapIndex" [attr.data-target]="'#id-'+mapIndex"
+                                aria-expanded="false" class="btn btn-link collapsed"
+                                data-toggle="collapse">
+                            <i class="icon-file-code"></i> Definitions/{{file.key}}
+                        </button>
+                        <a (click)="removeFile(mapIndex)" class="accordion-delete"><i class="icon-delete"></i></a>
+                    </h5>
+                </div>
+                <div [attr.aria-labelledby]="'head-'+mapIndex" [id]="'id-'+mapIndex" class="collapse"
+                     data-parent="#accordion">
+                    <div class="card-body">
+                        {{file.value}}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<div aria-hidden="true" aria-labelledby="scriptsModalLabel" class="modal fade" id="scriptsModal" role="dialog"
+     tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="scriptsModalLabel">Import File</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ngx-file-drop (onFileDrop)="dropped($event)" (onFileLeave)="fileLeave($event)"
+                               (onFileOver)="fileOver($event)" dropZoneLabel="Drop files here">
+                    <ng-template let-openFileSelector="openFileSelector" ngx-file-drop-content-tmp>
+                        <div class="folder-upload">
+                            <img src="assets/img/folder-upload.svg"/>
+                        </div>
+                        <div class="folder-upload-text">
+                            Drag & Drop file
+                        </div>
+                        <div class="folder-upload-text">or
+                            <button (click)="openFileSelector()" class="btn btn-sm btn-primary" type="button">Browse
+                                Files
+                            </button>
+                        </div>
+                        <div class="folder-upload-type">Allowed file type: Kotlin(Kt)</div>
+                    </ng-template>
+                </ngx-file-drop>
+                <div *ngFor="let item of uploadedFiles; let i=index" class="upload-table">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Name : {{ item.name }}</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button (click)="resetTheUploadedFiles()" class="btn btn-sm btn-secondary" data-dismiss="modal"
+                        type="button">Cancel
+                </button>
+                <button (click)="setFilesToStore()" class="btn btn-sm btn-primary" data-dismiss="modal" type="button">
+                    Import
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
