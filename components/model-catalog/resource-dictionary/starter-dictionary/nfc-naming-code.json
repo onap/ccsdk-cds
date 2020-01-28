@@ -28,8 +28,7 @@
 				},
 				"key-dependencies": [
 					"vfccustomizationuuid"
-				],
-				"endpoint-selector": "dynamic-db-source"
+				]
 			}
 		}
 	}

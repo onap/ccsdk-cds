@@ -23,7 +23,6 @@
 				"output-key-mapping": {
 					"vf-module-type": "vf_module_type"
 				},
-				
 				"input-key-mapping": {
 					"customizationid": "vf-module-model-customization-uuid"
 				},

@@ -18,7 +18,6 @@
 		"processor-db": {
 			"type": "source-db",
 			"properties": {
-				
 				"type": "SQL",
 				"query": "select VFC_MODEL.version as vnfc_model_version from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
 				"input-key-mapping": {

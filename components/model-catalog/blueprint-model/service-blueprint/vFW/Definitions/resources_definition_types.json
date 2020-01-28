@@ -296,7 +296,6 @@
       "processor-db" : {
         "type" : "source-db",
         "properties" : {
-          "endpoint-selector" : "dynamic-db-source",
           "type" : "SQL",
           "query" : "select sdnctl.IPAM_IP_POOL.prefix as prefix from sdnctl.IPAM_IP_POOL where description = \"private1\"",
           "input-key-mapping" : { },
@@ -360,7 +359,6 @@
       "processor-db" : {
         "type" : "source-db",
         "properties" : {
-          "endpoint-selector" : "dynamic-db-source",
           "type" : "SQL",
           "query" : "select sdnctl.IPAM_IP_POOL.prefix as prefix from sdnctl.IPAM_IP_POOL where description = \"private2\"",
           "input-key-mapping" : { },
@@ -442,7 +440,6 @@
       "processor-db" : {
         "type" : "source-db",
         "properties" : {
-          "endpoint-selector" : "dynamic-db-source",
           "type" : "SQL",
           "query" : "select sdnctl.IPAM_IP_POOL.prefix_id as prefix_id from sdnctl.IPAM_IP_POOL where description = \"management\"",
           "input-key-mapping" : { },
@@ -515,8 +512,7 @@
           "output-key-mapping" : {
             "nfc-naming-code" : "nfc_naming_code"
           },
-          "key-dependencies" : [ "vfccustomizationuuid" ],
-          "endpoint-selector" : "dynamic-db-source"
+          "key-dependencies" : [ "vfccustomizationuuid" ]
         }
       }
     }
@@ -540,7 +536,6 @@
       "processor-db" : {
         "type" : "source-db",
         "properties" : {
-          "endpoint-selector" : "dynamic-db-source",
           "type" : "SQL",
           "query" : "select sdnctl.IPAM_IP_POOL.prefix as prefix from sdnctl.IPAM_IP_POOL where description = \"management\"",
           "input-key-mapping" : { },
@@ -674,7 +669,6 @@
       "processor-db" : {
         "type" : "source-db",
         "properties" : {
-          "endpoint-selector" : "dynamic-db-source",
           "type" : "SQL",
           "query" : "select sdnctl.IPAM_IP_POOL.prefix_id as prefix_id from sdnctl.IPAM_IP_POOL where description = \"private1\"",
           "input-key-mapping" : { },
@@ -721,7 +715,6 @@
       "processor-db" : {
         "type" : "source-db",
         "properties" : {
-          "endpoint-selector" : "dynamic-db-source",
           "type" : "SQL",
           "query" : "select sdnctl.IPAM_IP_POOL.prefix_id as prefix_id from sdnctl.IPAM_IP_POOL where description = \"private2\"",
           "input-key-mapping" : { },
@@ -957,8 +950,7 @@
           "output-key-mapping" : {
             "vf-module-label" : "vf_module_label"
           },
-          "key-dependencies" : [ "vf-module-model-customization-uuid" ],
-          "endpoint-selector" : "dynamic-db-source"
+          "key-dependencies" : [ "vf-module-model-customization-uuid" ]
         }
       }
     }
@@ -1023,7 +1015,6 @@
           "output-key-mapping" : {
             "vf-module-type" : "vf_module_type"
           },
-          "endpoint-selector" : "dynamic-db-source",
           "input-key-mapping" : {
             "customizationid" : "vf-module-model-customization-uuid"
           },
@@ -1065,7 +1056,6 @@
       "processor-db" : {
         "type" : "source-db",
         "properties" : {
-          "endpoint-selector" : "dynamic-db-source",
           "type" : "SQL",
           "query" : "select sdnctl.VF_MODEL.naming_policy as vf_naming_policy from sdnctl.VF_MODEL where sdnctl.VF_MODEL.customization_uuid=:vnf_model_customization_uuid",
           "input-key-mapping" : {
@@ -1098,7 +1088,6 @@
       "processor-db" : {
         "type" : "source-db",
         "properties" : {
-          "endpoint-selector" : "dynamic-db-source",
           "type" : "SQL",
           "query" : "select sdnctl.VF_MODULE_TO_VFC_MAPPING.vfc_customization_uuid as vnf_customid from sdnctl.VF_MODULE_TO_VFC_MAPPING where vm_count = 1 and sdnctl.VF_MODULE_TO_VFC_MAPPING.vf_module_customization_uuid=:vfmodulecustomizationuuid",
           "input-key-mapping" : {
@@ -1395,7 +1384,6 @@
           "output-key-mapping" : {
             "vnfc-model-invariant-uuid" : "vfc_invariant_uuid"
           },
-          "endpoint-selector" : "dynamic-db-source",
           "input-key-mapping" : {
             "vfccustomizationuuid" : "vfccustomizationuuid"
           },
@@ -1428,7 +1416,6 @@
           "output-key-mapping" : {
             "vnfc-model-version" : "vnfc_model_version"
           },
-          "endpoint-selector" : "dynamic-db-source",
           "input-key-mapping" : {
             "vfccustomizationuuid" : "vfccustomizationuuid"
           },
