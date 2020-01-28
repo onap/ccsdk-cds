@@ -34,7 +34,7 @@
                 </div>
                 <nav class="row">
                     <div class="col pr-0">
-                        <button class="float btn btn-sm btn-primary" (click)="saveMetaData()">Save</button>
+                        <button class="float btn btn-sm btn-primary" (click)="saveBluePrint()">Save</button>
                         <button class="float btn btn-sm btn-outline-secondary" disabled>Cancel</button>
                     </div>
                 </nav>
@@ -68,95 +68,7 @@
                         <div class="tab-content" id="nav-tabContent">
                             <div class="tab-pane fade show active" id="nav-metadata" role="tabpanel"
                                  aria-labelledby="nav-metadata-tab">
-                                <div class="card creat-card">
-                                    <div class="single-line">
-                                        <label class="label-name">Mode</label>
-                                        <label name="trst" *ngFor="let mode of modes; let i = index">
-                                            <input class="form-check-input" [(ngModel)]="metaDataTab.mode" type="radio"
-                                                   name="exampleRadios" id="exampleRadios1" value={{mode.name}}>
-
-                                            <span>
-                                            <i [className]="mode.style" aria-hidden="true" [id]="mode.name"></i>
-                                                {{mode.name}}
-                                            </span>
-                                        </label>
-                                    </div>
-
-                                </div>
-                                <div class="card creat-card">
-                                    <div class="single-line">
-                                        <label class="label-name">Name</label>
-                                        <div class="label-input">
-                                            <input type="input"
-                                                   [(ngModel)]="metaDataTab.name" placeholder="Topology name.vLB.CDS">
-                                        </div>
-                                    </div>
-                                    <hr/>
-                                    <div class="single-line">
-                                        <label class="label-name">Description</label>
-                                        <div class="label-input">
-                                            <input type="input" [(ngModel)]="metaDataTab.description"
-                                                   placeholder="Descripe the package">
-                                        </div>
-                                    </div>
-                                    <hr/>
-                                    <div class="single-line">
-                                        <label class="label-name">Version</label>
-                                        <div class="label-input">
-                                            <input type="input" [(ngModel)]="metaDataTab.version"
-                                                   (input)="validatePackageNameAndVersion()"
-                                                   placeholder="Example: 1.0.0">
-                                        </div>
-                                        <div><label style="color: red">{{errorMessage}}</label></div>
-                                    </div>
-                                    <hr/>
-                                    <div class="single-line">
-                                        <label class="label-name">tags</label>
-                                        <div class="label-input">
-                                            <input type="input" [(ngModel)]="metaDataTab.tags"
-                                                   placeholder="Ex., vDNS-CDS">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="container">
-                                    <div id="target">
-                                        <div class="card creat-card">
-                                            <div class="single-line">
-                                                <h5 class="label-name">
-                                                    Custom key <a class="delete-key" (click)="deleteCustomKey($event)">Delete</a>
-                                                </h5>
-
-                                            </div>
-                                            <div class="single-line">
-                                                <label class="label-name">Name</label>
-                                                <div class="label-input">
-                                                    <input name="key" type="input" placeholder="Enter Name">
-                                                </div>
-                                            </div>
-                                            <hr/>
-                                            <div class="single-line">
-                                                <label class="label-name">Value</label>
-                                                <div class="label-input">
-                                                    <input name="value" type="input"
-                                                           placeholder="Enter Value">
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card creat-card">
-                                    <div class="single-line">
-                                        <div name="custom key">
-                                            <button class="custom-key" (click)="createAnotherCustomKeyDiv()"><i
-                                                    class="fa fa-plus" aria-hidden="true"></i> Add a custom key
-                                            </button>
-
-
-                                        </div>
-                                    </div>
-                                </div>
-
+                                <app-metadata-tab></app-metadata-tab>
                             </div>
                             <div class="tab-pane fade" id="nav-imports" role="tabpanel"
                                  aria-labelledby="nav-imports-tab">
@@ -164,13 +76,16 @@
 
                             </div>
                             <div class="tab-pane fade" id="nav-authentication" role="tabpanel"
-                                 aria-labelledby="nav-authentication-tab">...
+                                 aria-labelledby="nav-authentication-tab">
+                                <app-source-editor [Data]="'test'" lang="javascript"></app-source-editor>
                             </div>
                             <div class="tab-pane fade" id="nav-template" role="tabpanel"
-                                 aria-labelledby="nav-template-tab"><app-template-mapping></app-template-mapping>
+                                 aria-labelledby="nav-template-tab">
+                                <app-template-mapping></app-template-mapping>
                             </div>
                             <div class="tab-pane fade" id="nav-scripts" role="tabpanel"
-                                 aria-labelledby="nav-scripts-tab">...
+                                 aria-labelledby="nav-scripts-tab">
+                                <app-scripts-tab></app-scripts-tab>
                             </div>
                         </div>
                     </div>

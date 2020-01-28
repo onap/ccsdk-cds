@@ -18,9 +18,14 @@ import {FunctionsComponent} from './designer/functions/functions.component';
 import {ActionsComponent} from './designer/actions/actions.component';
 import {PackageCreationComponent} from './package-creation/package-creation.component';
 import {FormsModule} from '@angular/forms';
-import { ImportsTabComponent } from './package-creation/imports-tab/imports-tab.component';
-import { NgxFileDropModule } from 'ngx-file-drop';
-import { TemplateMappingComponent } from './package-creation/template-mapping/template-mapping.component';
+import {ImportsTabComponent} from './package-creation/imports-tab/imports-tab.component';
+import {NgxFileDropModule} from 'ngx-file-drop';
+import {TemplateMappingComponent} from './package-creation/template-mapping/template-mapping.component';
+import {SourceEditorComponent} from './source-editor/source-editor.component';
+import {ScriptsTabComponent} from './package-creation/scripts-tab/scripts-tab.component';
+import {AceEditorModule} from 'ng2-ace-editor';
+import {MetadataTabComponent} from './package-creation/metadata-tab/metadata-tab.component';
+import {DslDefinitionsTabComponent} from './package-creation/dsl-definitions-tab/dsl-definitions-tab.component';
 
 @NgModule({
     declarations: [PackagesDashboardComponent,
@@ -37,6 +42,10 @@ import { TemplateMappingComponent } from './package-creation/template-mapping/te
         PackageCreationComponent,
         ImportsTabComponent,
         TemplateMappingComponent,
+        SourceEditorComponent,
+        ScriptsTabComponent,
+        MetadataTabComponent,
+        DslDefinitionsTabComponent,
     ],
     imports: [
         CommonModule,
@@ -46,6 +55,7 @@ import { TemplateMappingComponent } from './package-creation/template-mapping/te
         SidebarModule.forRoot(),
         FormsModule,
         NgxFileDropModule,
+        AceEditorModule
     ],
     providers: [ApiService, JsonPipe],
     bootstrap: []

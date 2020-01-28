@@ -23,9 +23,10 @@ import {Injectable} from '@angular/core';
 
 import {Store} from '../../../../common/core/stores/Store';
 
-import {CBAPackage, Definition} from './mapping-models/CBAPacakge.model';
-import {Metadata} from './mapping-models/definitions/VlbDefinition';
+import {CBAPackage, Definition, Scripts} from './mapping-models/CBAPacakge.model';
 import {PackageCreationService} from './package-creation.service';
+import {FolderNodeElement, MetaDataTabModel} from './mapping-models/metadata/MetaDataTab.model';
+import * as JSZip from 'jszip';
 
 
 @Injectable({
@@ -33,11 +34,14 @@ import {PackageCreationService} from './package-creation.service';
 })
 export class PackageCreationStore extends Store<CBAPackage> {
 
+    private folder: FolderNodeElement = new FolderNodeElement();
+    private zipFile: JSZip = new JSZip();
+
     constructor(private packageCreationService: PackageCreationService) {
         super(new CBAPackage());
     }
 
-    changeMetaData(metaDataObject: Metadata) {
+    changeMetaData(metaDataObject: MetaDataTabModel) {
 
         this.setState({
             ...this.state,
@@ -51,5 +55,24 @@ export class PackageCreationStore extends Store<CBAPackage> {
             ...this.state,
             definitions: new Definition(this.state.definitions.files.set(name, content))
         });
+    }
+
+    addScripts(name: string, content: string) {
+
+        this.setState({
+            ...this.state,
+            scripts: new Scripts(this.state.scripts.files.set(name, content))
+        });
+
+    }
+
+    // type => refer to scripts || definitions
+    // from Files from scripts or imports
+    removeFromState(name: string, type: string) {
+        this.state[type].files.delete(name);
+    }
+
+    saveBluePrint(blob) {
+        this.packageCreationService.savePackage(blob);
     }
 }

@@ -20,10 +20,9 @@ limitations under the License.
 */
 
 
-export class MetaDataTab {
+export class MetaDataTabModel {
 
     mode: string;
-    dictionaryLibraryInstance?: null;
     name: string;
     description: string;
     version: string;
@@ -46,7 +45,7 @@ Content-Type: application/vnd.oasis.bpmn*/
 
 export class MetaDataFile {
 
-    static getObjectInstance(metaDataTab: MetaDataTab): string {
+    static getObjectInstance(metaDataTab: MetaDataTabModel): string {
         return 'TOSCA-Meta-File-Version: 1.0.0\n' +
             'CSAR-Version: 1.0\n' +
             'Created-By: Shaaban Ebrahim <shaaban.eltanany.ext@orange.con>\n' +

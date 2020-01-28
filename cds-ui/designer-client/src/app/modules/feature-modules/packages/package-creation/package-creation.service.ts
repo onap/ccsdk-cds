@@ -36,7 +36,7 @@ export class PackageCreationService {
     constructor(private api: ApiService, private packagesListService: PackagesApiService, private packagesStore: PackagesStore) {
     }
 
-    saveBlueprint(body: any | null, options?: any): Observable<any> {
+    private saveBlueprint(body: any | null, options?: any): Observable<any> {
         return this.api.post(BlueprintURLs.save, body, {responseType: 'text'});
     }
 
@@ -48,4 +48,18 @@ export class PackageCreationService {
     refreshPackages() {
         this.packagesStore.getAll();
     }
+
+    savePackage(blob) {
+
+        const formData = new FormData();
+        formData.append('file', blob);
+        this.saveBlueprint(formData)
+            .subscribe(
+                data => {
+                    console.log('Success:' + JSON.stringify(data));
+                }, error => {
+                    console.log('Error -' + error.message);
+                });
+    }
+
 }

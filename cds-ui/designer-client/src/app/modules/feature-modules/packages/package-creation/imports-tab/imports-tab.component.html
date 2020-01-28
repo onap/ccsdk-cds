@@ -4,7 +4,8 @@
             <input placeholder="Enter file URL" type="input" class="ng-pristine ng-valid ng-touched">
             <a class="enter-link" href="#"><i class="icon-enter"></i></a>
         </div>
-        <span class="import-container-span">Or you can also <a href="#" data-toggle="modal" data-target="#exampleModal">Import File</a></span>
+        <span class="import-container-span">Or you can also <a href="#" data-toggle="modal"
+                data-target="#exampleModal">Import File</a></span>
 
     </div>
 
@@ -14,12 +15,12 @@
                 <label class="label-name">File</label>
             </div>
         </div>
-        <div id="accordion" *ngFor="let file of definitionFiles | keyvalue">
-            <div class="card">
+        <div id="accordion" *ngFor="let file of definitionFiles | keyvalue; let mapIndex = index">
+            <!-- <div class="card">
                 <div class="card-header" [id]="file.key">
                     <h5 class="mb-0 d-flex justify-content-between">
                         <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne"
-                                aria-expanded="true" aria-controls="collapseOne">
+                            aria-expanded="true" aria-controls="collapseOne">
                             <i class="icon-file-code"></i> Definitions/{{file.key}}
                         </button>
                         <a class="accordion-delete" href="#"><i class="icon-delete"></i></a>
@@ -31,28 +32,26 @@
                         {{file.value | json}}
                     </div>
                 </div>
+            </div> -->
+            <div class="card">
+                <div class="card-header" [id]="'head-'+mapIndex">
+                    <h5 class="mb-0 d-flex justify-content-between">
+                        <button class="btn btn-link collapsed" data-toggle="collapse"
+                            [attr.data-target]="'#id-'+mapIndex" aria-expanded="false"
+                            [attr.aria-controls]="'id-'+mapIndex">
+                            <i class="icon-file-code"></i> Definitions/{{file.key}}
+                        </button>
+                        <a class="accordion-delete" (click)="removeFile(mapIndex)"><i class="icon-delete"></i></a>
+                    </h5>
+                </div>
+                <div [id]="'id-'+mapIndex" class="collapse" [attr.aria-labelledby]="'head-'+mapIndex"
+                    data-parent="#accordion">
+                    <div class="card-body">
+                        {{file.value}}
+                    </div>
+                </div>
             </div>
-            <!--   <div class="card">
-                   <div class="card-header" id="headingTwo">
-                       <h5 class="mb-0">
-                           <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo"
-                                   aria-expanded="false" aria-controls="collapseTwo">
-                               <i class="icon-file-code"></i> Definitions/relationship_types.json
-                           </button>
-                       </h5>
-                   </div>
-                   <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                       <div class="card-body">
-                           Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
-                           3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt
-                           laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin
-                           coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes
-                           anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
-                           occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard
-                           of them accusamus labore sustainable VHS.
-                       </div>
-                   </div>
-               </div>
+            <!--
                <div class="card">
                    <div class="card-header" id="headingThree">
                        <h5 class="mb-0">
@@ -74,13 +73,14 @@
                        </div>
                    </div>
                </div>
-           --></div>
+           -->
+        </div>
     </div>
 
 </div>
 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -91,10 +91,10 @@
             </div>
             <div class="modal-body">
                 <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)"
-                               (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)">
+                    (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)">
                     <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
                         <div class="folder-upload">
-                            <img src="assets/img/folder-upload.svg"/>
+                            <img src="assets/img/folder-upload.svg" />
                         </div>
                         <div class="folder-upload-text">
                             Drag & Drop file
@@ -110,16 +110,16 @@
                 <div class="upload-table" *ngFor="let item of uploadedFiles; let i=index">
                     <table class="table">
                         <thead>
-                        <tr>
-                            <th>Name : {{ item.name }}</th>
-                        </tr>
+                            <tr>
+                                <th>Name : {{ item.name }}</th>
+                            </tr>
                         </thead>
                     </table>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal"
-                        (click)="resetTheUploadedFiles()">Cancel
+                    (click)="resetTheUploadedFiles()">Cancel
                 </button>
                 <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" (click)="setFilesToStore()">
                     Import
@@ -128,5 +128,3 @@
         </div>
     </div>
 </div>
-
-
