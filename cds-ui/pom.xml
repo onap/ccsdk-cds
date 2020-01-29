@@ -38,6 +38,7 @@ limitations under the License.
 
     <modules>
         <module>client</module>
+        <module>designer-client</module>
         <module>server</module>
         <module>application</module>
     </modules>
