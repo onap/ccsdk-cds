@@ -18,23 +18,32 @@ from google.protobuf.timestamp_pb2 import Timestamp
 import proto.CommandExecutor_pb2 as CommandExecutor_pb2
 import json
 
+
 def get_blueprint_id(request):
-    blueprint_name = request.identifiers.blueprintName
-    blueprint_version = request.identifiers.blueprintVersion
-    return blueprint_name + '/' + blueprint_version
+  blueprint_name = request.identifiers.blueprintName
+  blueprint_version = request.identifiers.blueprintVersion
+  return blueprint_name + '/' + blueprint_version
 
-
+# Create a response for grpc. Fils in the timestamp as well as removes cds_is_successful element
 def build_response(request, log_results, payload_return, is_success=False):
-    if is_success:
-        status = CommandExecutor_pb2.SUCCESS
-    else:
-        status = CommandExecutor_pb2.FAILURE
+  if is_success:
+    status = CommandExecutor_pb2.SUCCESS
+  else:
+    status = CommandExecutor_pb2.FAILURE
 
-    timestamp = Timestamp()
-    timestamp.GetCurrentTime()
+  timestamp = Timestamp()
+  timestamp.GetCurrentTime()
 
-    if 'cds_return_code' in payload_return:
-        payload_return.pop('cds_return_code')
-    payload_str = json.dumps(payload_return)
-    return CommandExecutor_pb2.ExecutionOutput(requestId=request.requestId, response=log_results, status=status,
-                                               payload=payload_str, timestamp=timestamp)
+  if 'cds_is_successful' in payload_return:
+    payload_return.pop('cds_is_successful')
+  payload_str = json.dumps(payload_return)
+  return CommandExecutor_pb2.ExecutionOutput(requestId=request.requestId,
+                                             response=log_results,
+                                             status=status,
+                                             payload=payload_str,
+                                             timestamp=timestamp)
+
+# build a return data structure which contains an error msg
+def build_ret_data(cds_is_successful, err_msg):
+  ret_data = {"cds_is_successful": cds_is_successful, "err_msg": err_msg}
+  return ret_data

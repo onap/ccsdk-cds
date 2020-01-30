@@ -142,6 +142,10 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
                     setNodeOutputProperties(prepareEnvOutput.status.name.asJsonPrimitive(), logsEnv, "".asJsonPrimitive())
                 }
             }
+            else {
+                //set env preparation log to empty...
+                setAttribute(ATTRIBUTE_PREPARE_ENV_LOG,"".asJsonPrimitive());
+            }
         } catch (grpcEx: io.grpc.StatusRuntimeException) {
             val timeoutErrMsg = "Command executor timed out in GRPC call during env. preparation.. timeout($envPrepTimeout) requestId ($processId)."
             setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, timeoutErrMsg.asJsonPrimitive())
