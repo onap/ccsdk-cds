@@ -24,6 +24,7 @@ import {FilesContent, FolderNodeElement, MetaDataFile, MetaDataTabModel} from '.
 // import {saveAs} from 'file-saver/dist/FileSaver';
 import * as JSZip from 'jszip';
 import {PackageCreationStore} from './package-creation.store';
+import {Definition} from './mapping-models/CBAPacakge.model';
 
 @Component({
     selector: 'app-package-creation',
@@ -39,6 +40,7 @@ export class PackageCreationComponent implements OnInit {
     private folder: FolderNodeElement = new FolderNodeElement();
     private zipFile: JSZip = new JSZip();
     private filesData: any = [];
+    private definition: Definition = new Definition();
 
     constructor(private packageCreationStore: PackageCreationStore) {
     }
@@ -50,28 +52,31 @@ export class PackageCreationComponent implements OnInit {
     saveBluePrint() {
         this.packageCreationStore.state$.subscribe(
             cbaPackage => {
+                console.log(cbaPackage);
                 this.metaDataTab = cbaPackage.metaData;
                 this.setModeType(this.metaDataTab);
                 this.setEntryPoint(this.metaDataTab);
-
                 this.addToscaMetaDataFile(this.metaDataTab);
 
+                this.definition = cbaPackage.definitions;
+                this.definition.metaDataTab = cbaPackage.metaData;
+                this.createDefinitionsFolder(this.definition);
                 // const vlbDefinition: VlbDefinition = new VlbDefinition();
                 // this.fillVLBDefinition(vlbDefinition, this.metaDataTab);
 
                 this.filesData.push(this.folder.TREE_DATA);
-                console.log(FilesContent.getMapOfFilesNamesAndContent());
                 this.saveBluePrintToDataBase();
             });
 
 
     }
 
-    addToscaMetaDataFile(metaDataTab: MetaDataTabModel) {
-        const filename = 'TOSCA.meta';
-        FilesContent.putData(filename, MetaDataFile.getObjectInstance(this.metaDataTab));
+    private addToscaMetaDataFile(metaDataTab: MetaDataTabModel) {
+        const filename = 'TOSCA-Metadata/TOSCA.meta';
+        FilesContent.putData(filename, MetaDataFile.getValueOfMetaData(metaDataTab));
     }
 
+// TODO use enumerator
     private setModeType(metaDataTab: MetaDataTabModel) {
         if (metaDataTab.mode.startsWith('Scripting')) {
             metaDataTab.mode = 'KOTLIN_SCRIPT';
@@ -79,6 +84,14 @@ export class PackageCreationComponent implements OnInit {
             metaDataTab.mode = 'DEFAULT';
         } else {
             metaDataTab.mode = 'GENERIC_SCRIPT';
+        }
+    }
+
+    private setEntryPoint(metaDataTab: MetaDataTabModel) {
+        if (metaDataTab.mode.startsWith('DEFAULT')) {
+            metaDataTab.entryFileName = 'Definitions/vLB_CDS.json';
+        } else {
+            metaDataTab.entryFileName = '';
         }
     }
 
@@ -93,7 +106,6 @@ export class PackageCreationComponent implements OnInit {
 
     create() {
         this.folder.TREE_DATA.forEach((path) => {
-
             const name = path.name;
             if (path.children) {
                 this.zipFile.folder(name);
@@ -110,15 +122,29 @@ export class PackageCreationComponent implements OnInit {
         });
     }
 
-    private setEntryPoint(metaDataTab: MetaDataTabModel) {
-        if (metaDataTab.mode.startsWith('DEFAULT')) {
-            metaDataTab.entryFileName = 'Definitions/vLB_CDS.json';
-        } else {
-            metaDataTab.entryFileName = '';
-        }
+    private createDefinitionsFolder(definition: Definition) {
+        this.definition.imports.forEach((key, value) => {
+            FilesContent.putData(key, value);
+        });
 
+        /*const filenameEntry = 'vLB_CDS.json';
+        const vlbDefinition: VlbDefinition = new VlbDefinition();
+        const metadata: MetaDataTabModel = new MetaDataTabModel();
 
+        metadata.templateAuthor = ' lldkslds';
+        metadata.templateName = ' lldkslds';
+        metadata.templateTags = ' lldkslds';
+        metadata.templateVersion = ' lldkslds';
+        metadata['author-email'] = ' lldkslds';
+        metadata['user-groups'] = ' lldkslds';
+        vlbDefinition.metadata = metadata;
+
+        vlbDefinition.imports = [{
+            file: 'Definitions/data_types.json'
+        }];
+
+        const value = this.packageCreationUtils.transformToJson(vlbDefinition);
+        FilesContent.putData(filenameEntry, value);*/
     }
-
 
 }

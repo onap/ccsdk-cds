@@ -23,7 +23,7 @@ import {Injectable} from '@angular/core';
 
 import {Store} from '../../../../common/core/stores/Store';
 
-import {CBAPackage, Definition, Scripts} from './mapping-models/CBAPacakge.model';
+import {CBAPackage} from './mapping-models/CBAPacakge.model';
 import {PackageCreationService} from './package-creation.service';
 import {FolderNodeElement, MetaDataTabModel} from './mapping-models/metadata/MetaDataTab.model';
 import * as JSZip from 'jszip';
@@ -53,7 +53,7 @@ export class PackageCreationStore extends Store<CBAPackage> {
 
         this.setState({
             ...this.state,
-            definitions: new Definition(this.state.definitions.files.set(name, content))
+            definitions: this.state.definitions.setImports(name, content)
         });
     }
 
@@ -61,15 +61,17 @@ export class PackageCreationStore extends Store<CBAPackage> {
 
         this.setState({
             ...this.state,
-            scripts: new Scripts(this.state.scripts.files.set(name, content))
+            scripts: this.state.scripts.setScripts(name, content)
         });
 
     }
 
-    // type => refer to scripts || definitions
-    // from Files from scripts or imports
-    removeFromState(name: string, type: string) {
-        this.state[type].files.delete(name);
+    removeFileFromState(name: string) {
+        this.state.scripts.files.delete(name);
+    }
+
+    removeFileFromDefinition(filename) {
+        this.state.definitions.imports.delete(filename);
     }
 
     saveBluePrint(blob) {
