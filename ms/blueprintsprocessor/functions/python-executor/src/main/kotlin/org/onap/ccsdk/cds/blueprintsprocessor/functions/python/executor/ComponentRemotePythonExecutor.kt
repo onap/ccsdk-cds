@@ -133,9 +133,32 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
                     setNodeOutputProperties(prepareEnvOutput.status.name.asJsonPrimitive(), logsEnv, "".asJsonPrimitive())
                 }
             }
+<<<<<<< HEAD   (fa12b4 Merge "Fix GroupId and package name in Error Catalog")
 
             // if Env preparation was successful, then proceed with command execution in this Env
             if (bluePrintRuntimeService.getBluePrintError().errors.isEmpty()) {
+=======
+            else {
+                //set env preparation log to empty...
+                setAttribute(ATTRIBUTE_PREPARE_ENV_LOG,"".asJsonPrimitive());
+            }
+        } catch (grpcEx: io.grpc.StatusRuntimeException) {
+            val grpcErrMsg = "Command failed during env. preparation... timeout($envPrepTimeout) requestId ($processId)."
+            setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, grpcErrMsg.asJsonPrimitive())
+            setNodeOutputErrors(status = grpcErrMsg, message = "${grpcEx.status}".asJsonPrimitive())
+            log.error(grpcErrMsg, grpcEx)
+            addError(grpcErrMsg)
+        } catch (e: Exception) {
+            val timeoutErrMsg = "Command executor failed during env. preparation.. timeout($envPrepTimeout) requestId ($processId)."
+            setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, e.message.asJsonPrimitive())
+            setNodeOutputErrors(status = timeoutErrMsg, message = "${e.message}".asJsonPrimitive())
+            log.error("Failed to process on remote executor requestId ($processId)", e)
+            addError(timeoutErrMsg)
+        }
+        // if Env preparation was successful, then proceed with command execution in this Env
+        if (bluePrintRuntimeService.getBluePrintError().errors.isEmpty()) {
+            try {
+>>>>>>> CHANGE (6449c2 Improving CMD-exec err msgs/handling.)
                 // Populate command execution properties and pass it to the remote server
                 val properties = dynamicProperties?.returnNullIfMissing()?.rootFieldsToMap() ?: hashMapOf()
 
