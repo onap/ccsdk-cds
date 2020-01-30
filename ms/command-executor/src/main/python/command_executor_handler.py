@@ -45,43 +45,69 @@ class CommandExecutorHandler():
 
     def prepare_env(self, request, results):
         if not self.is_installed():
-            self.create_venv()
-            if not self.activate_venv():
-                return False
+            create_venv_status = self.create_venv()
+            if not create_venv_status["cds_is_successful"]:
+                err_msg = "ERROR: failed to prepare environment for request {} due to error in creating virtual Python env. Original error {}".format(self.blueprint_id, create_venv_status["err_msg"])
+                self.logger.error(err_msg)
+                return utils.build_ret_data(False, err_msg)
 
-            f = open(self.installed, "w+")
-            if not self.install_packages(request, CommandExecutor_pb2.pip, f, results):
-                return False
-            f.write("\r\n")
-            results.append("\n")
-            if not self.install_packages(request, CommandExecutor_pb2.ansible_galaxy, f, results):
-                return False
-            f.close()
+            activate_venv_status = self.activate_venv()
+            if not activate_venv_status["cds_is_successful"]:
+                err_msg = "ERROR: failed to prepare environment for request {} due Python venv_activation. Original error {}".format(self.blueprint_id, activate_venv_status["err_msg"])
+                self.logger.error(err_msg)
+                return utils.build_ret_data(False, err_msg)
+            try:
+                with open(self.installed, "w+") as f:
+                   if not self.install_packages(request, CommandExecutor_pb2.pip, f, results):
+                       return utils.build_ret_data(False, "ERROR: failed to prepare environment for request {} during pip package install.".format(self.blueprint_id))
+                   f.write("\r\n") # TODO: is \r needed?
+                   results.append("\n")
+                   if not self.install_packages(request, CommandExecutor_pb2.ansible_galaxy, f, results):
+                       return utils.build_ret_data(False, "ERROR: failed to prepare environment for request {} during Ansible install.".format(self.blueprint_id))
+            except Exception as ex:
+                err_msg = "ERROR: failed to prepare environment for request {} during installing packages. Exception: {}".format(self.blueprint_id, ex)
+                self.logger.error(err_msg)
+                return utils.build_ret_data(False, err_msg)
         else:
-            f = open(self.installed, "r")
-            results.append(f.read())
-            f.close()
+            try:
+                with open(self.installed, "r") as f:
+                  results.append(f.read())
+            except Exception as ex:
+                return utils.build_ret_data(False, "ERROR: failed to prepare environment during reading 'installed' file {}. Exception: {}".format(self.installed, ex))
 
         # deactivate_venv(blueprint_id)
-        return True
+        return utils.build_ret_data(True, "")
 
     def execute_command(self, request, results):
-
-        if not self.activate_venv():
-            return False
-
-        cmd = "cd " + self.venv_home
-
-        if "ansible-playbook" in request.command:
-            cmd = cmd + "; " + request.command + " -e 'ansible_python_interpreter=" + self.venv_home + "/bin/python'"
-        else:
-            cmd = cmd + "; " + request.command + " " + re.escape(MessageToJson(request.properties))
-
         payload_result = {}
-        payload_section = []
-        is_payload_section = False
-
+        # workaround for when packages are not specified, we may not want to go through the install step
+        # can just call create_venv from here.
+        if not self.is_installed():
+            self.create_venv()
         try:
+            if not self.is_installed():
+                create_venv_status = self.create_venv
+                if not create_venv_status["cds_is_successful"]:
+                    err_msg = "{} - Failed to execute command during venv creation. Original error: {}".format(self.blueprint_id, create_venv_status["err_msg"])
+                    results.append(err_msg)
+                    return utils.build_ret_data(False, err_msg)
+            activate_response = self.activate_venv()
+            if not activate_response["cds_is_successful"]:
+                orig_error = activate_response["err_msg"]
+                err_msg = "{} - Failed to execute command during environment activation. Original error: {}".format(self.blueprint_id, orig_error)
+                results.append(err_msg) #TODO: get rid of results and just rely on the return data struct.
+                return utils.build_ret_data(False, err_msg)
+
+            cmd = "cd " + self.venv_home
+
+            ### TODO: replace with os.environ['VIRTUAL_ENV']?
+            if "ansible-playbook" in request.command:
+                cmd = cmd + "; " + request.command + " -e 'ansible_python_interpreter=" + self.venv_home + "/bin/python'"
+            else:
+                cmd = cmd + "; " + request.command + " " + re.escape(MessageToJson(request.properties))
+            payload_section = []
+            is_payload_section = False
+
             with subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                                   shell=True, bufsize=1, universal_newlines=True) as newProcess:
                 while True:
@@ -105,14 +131,17 @@ class CommandExecutorHandler():
                         payload_section.append(output.strip())
                 rc = newProcess.poll()
         except Exception as e:
-            self.logger.info("{} - Failed to execute command. Error: {}".format(self.blueprint_id, e))
+            err_msg = "{} - Failed to execute command. Error: {}".format(self.blueprint_id, e)
+            self.logger.info(err_msg)
             results.append(e)
-            payload_result["cds_return_code"] = False
+            payload_result.update(utils.build_ret_data(False, err_msg))
             return payload_result
 
         # deactivate_venv(blueprint_id)
-
-        payload_result["cds_return_code"] = rc
+        #Since return code is only used to check if it's zero (success), we can just return success flag instead.
+        self.logger.debug("python return_code : {}".format(rc))
+        is_execution_successful = rc == 0
+        payload_result.update(utils.build_ret_data(is_execution_successful, ""))
         return payload_result
 
     def install_packages(self, request, type, f, results):
@@ -147,6 +176,7 @@ class CommandExecutorHandler():
         env = dict(os.environ)
         if "https_proxy" in os.environ:
             env['https_proxy'] = os.environ['https_proxy']
+            self.logger.info("Using https_proxy: ", env['https_proxy'])
 
         try:
             results.append(subprocess.run(command, check=True, stdout=PIPE, stderr=PIPE, env=env).stdout.decode())
@@ -174,6 +204,10 @@ class CommandExecutorHandler():
             results.append(e.stderr.decode())
             return False
 
+    # Returns a map with 'status' and 'err_msg'.
+    # 'status' True indicates success.
+    # 'err_msg' indicates an error occurred. The presence of err_msg may not be fatal,
+    # status should be set to False for fatal errors.
     def create_venv(self):
         self.logger.info("{} - Create Python Virtual Environment".format(self.blueprint_id))
         try:
@@ -181,10 +215,14 @@ class CommandExecutorHandler():
             # venv doesn't populate the activate_this.py script, hence we use from virtualenv
             venv.create(self.venv_home, with_pip=True, system_site_packages=True)
             virtualenv.writefile(os.path.join(bin_dir, "activate_this.py"), virtualenv.ACTIVATE_THIS)
+            return utils.build_ret_data(True, "")
         except Exception as err:
-            self.logger.info(
-                "{} - Failed to provision Python Virtual Environment. Error: {}".format(self.blueprint_id, err))
+            err_msg = "{} - Failed to provision Python Virtual Environment. Error: {}".format(self.blueprint_id, err)
+            self.logger.info(err_msg)
+            return utils.build_ret_data(False, err_msg)
 
+    # return map cds_is_successful and err_msg. Status is True on success. err_msg may existence doesn't necessarily indicate fatal condition.
+    # the 'status' should be set to False to indicate error.
     def activate_venv(self):
         self.logger.info("{} - Activate Python Virtual Environment".format(self.blueprint_id))
 
@@ -195,14 +233,15 @@ class CommandExecutorHandler():
 
         path = "%s/bin/activate_this.py" % self.venv_home
         try:
-            exec (open(path).read(), {'__file__': path})
+            with open(path) as activate_this_script:
+              exec (activate_this_script.read(), {'__file__': path})
             exec (fixpathenvvar)
             self.logger.info("Running with PATH : {}".format(os.environ['PATH']))
-            return True
+            return utils.build_ret_data(True, "")
         except Exception as err:
-            self.logger.info(
-                "{} - Failed to activate Python Virtual Environment. Error: {}".format(self.blueprint_id, err))
-            return False
+            err_msg ="{} - Failed to activate Python Virtual Environment. Error: {}".format(self.blueprint_id, err)
+            self.logger.info( err_msg)
+            return utils.build_ret_data(False, err_msg)
 
     def deactivate_venv(self):
         self.logger.info("{} - Deactivate Python Virtual Environment".format(self.blueprint_id))
