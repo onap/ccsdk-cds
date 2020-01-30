@@ -37,11 +37,12 @@ class CommandExecutorServer(CommandExecutor_pb2_grpc.CommandExecutorServiceServi
 
         results = []
         handler = CommandExecutorHandler(request)
-        if not handler.prepare_env(request, results):
+        prepare_env_response = handler.prepare_env(request, results)
+        if not prepare_env_response["cds_is_successful"]:
             self.logger.info("{} - Failed to prepare python environment. {}".format(blueprint_id, results))
-            return utils.build_response(request, results, {}, False)
+            return utils.build_grpc_response(request, results, {}, False)
         self.logger.info("{} - Package installation logs {}".format(blueprint_id, results))
-        return utils.build_response(request, results, {}, True)
+        return utils.build_grpc_response(request, results, {}, True)
 
     def executeCommand(self, request, context):
         blueprint_id = utils.get_blueprint_id(request)
@@ -53,12 +54,12 @@ class CommandExecutorServer(CommandExecutor_pb2_grpc.CommandExecutorServiceServi
         payload_result = {}
         handler = CommandExecutorHandler(request)
         payload_result = handler.execute_command(request, log_results)
-        if payload_result["cds_return_code"] != 0:
+        if not payload_result["cds_is_successful"]:
             self.logger.info("{} - Failed to executeCommand. {}".format(blueprint_id, log_results))
         else:
             self.logger.info("{} - Execution finished successfully.".format(blueprint_id))
 
-        ret = utils.build_response(request, log_results, payload_result, payload_result["cds_return_code"] == 0)
+        ret = utils.build_grpc_response(request, log_results, payload_result, payload_result["cds_is_successful"])
         self.logger.info("Payload returned %s" % payload_result)
 
         return ret
