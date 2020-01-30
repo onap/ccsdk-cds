@@ -8,7 +8,7 @@ RUN tar -xzf /source.tar.gz -C /tmp \
  && rm -rf /source.tar.gz \
  && rm -rf /tmp/@project.build.finalName@
 
-RUN pip install --no-cache-dir -r /opt/app/onap/python/requirements.txt
+RUN pip install --no-cache-dir -r /opt/app/onap/python/requirements/docker.txt
 
 VOLUME /opt/app/onap/blueprints/deploy/
 

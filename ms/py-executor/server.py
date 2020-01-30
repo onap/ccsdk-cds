@@ -15,16 +15,20 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+import logging
+import os
+import time
 from builtins import KeyboardInterrupt
 from concurrent import futures
-import logging
-import time
-import grpc
 from pathlib import Path, PurePath
-from blueprints_grpc import BluePrintProcessing_pb2_grpc
-from blueprints_grpc.request_header_validator_interceptor import RequestHeaderValidatorInterceptor
+
+import grpc
+from manager.servicer import ArtifactManagerServicer
+from proto.BluePrintManagement_pb2_grpc import add_BluePrintManagementServiceServicer_to_server
+
+from blueprints_grpc import BluePrintProcessing_pb2_grpc, ScriptExecutorConfiguration
 from blueprints_grpc.blueprint_processing_server import BluePrintProcessingServer
-from blueprints_grpc import ScriptExecutorConfiguration
+from blueprints_grpc.request_header_validator_interceptor import RequestHeaderValidatorInterceptor
 
 logger = logging.getLogger("Server")
 
@@ -53,7 +57,9 @@ def serve(configuration: ScriptExecutorConfiguration):
         # create server
         server = grpc.server(futures.ThreadPoolExecutor(max_workers=int(maxWorkers)))
         BluePrintProcessing_pb2_grpc.add_BluePrintProcessingServiceServicer_to_server(
-            BluePrintProcessingServer(configuration), server)
+            BluePrintProcessingServer(configuration), server
+        )
+        add_BluePrintManagementServiceServicer_to_server(ArtifactManagerServicer(), server)
 
         # add secure port using credentials
         server.add_secure_port('[::]:' + port, server_credentials)
@@ -68,7 +74,9 @@ def serve(configuration: ScriptExecutorConfiguration):
         server = grpc.server(futures.ThreadPoolExecutor(max_workers=int(maxWorkers)),
                              interceptors=(header_validator,))
         BluePrintProcessing_pb2_grpc.add_BluePrintProcessingServiceServicer_to_server(
-            BluePrintProcessingServer(configuration), server)
+            BluePrintProcessingServer(configuration), server
+        )
+        add_BluePrintManagementServiceServicer_to_server(ArtifactManagerServicer(), server)
 
         server.add_insecure_port('[::]:' + port)
         server.start()
@@ -83,7 +91,10 @@ def serve(configuration: ScriptExecutorConfiguration):
 
 
 if __name__ == '__main__':
-    config_file = str(PurePath(Path().absolute())) + '/configuration.ini'
+    default_configuration_file = str(PurePath(Path().absolute(), "../../configuration.ini"))
+    supplied_configuration_file = os.environ.get("CONFIGURATION")
+    config_file = str(os.path.expanduser(Path(supplied_configuration_file or default_configuration_file)))
+
     configuration = ScriptExecutorConfiguration(config_file)
     logging_formater = '%(asctime)s - %(name)s - %(threadName)s - %(levelname)s - %(message)s'
     logging.basicConfig(filename=configuration.script_executor_property('logFile'),

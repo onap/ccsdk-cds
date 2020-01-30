@@ -25,9 +25,9 @@
 #  limitations under the License.
 
 import grpc
-from blueprints_grpc.proto.BluePrintProcessing_pb2_grpc import BluePrintProcessingServiceStub
-from blueprints_grpc.proto.BluePrintProcessing_pb2 import ExecutionServiceInput
-from blueprints_grpc.proto.BluePrintCommon_pb2 import CommonHeader, ActionIdentifiers
+from proto.BluePrintCommon_pb2 import ActionIdentifiers, CommonHeader
+from proto.BluePrintProcessing_pb2 import ExecutionServiceInput
+from proto.BluePrintProcessing_pb2_grpc import BluePrintProcessingServiceStub
 
 
 def generate_messages():

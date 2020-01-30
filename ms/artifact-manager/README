@@ -1,0 +1,199 @@
+# CDS Artifact Manager
+
+Artifact Manager is a very simple gRPC service that lets you upload, download and delete CBA archives. It can be ran as a standalone micro service (using `server.py`) or you can include it's methods in a service like `py-executor`.
+
+## Configuration
+Configuration is stored in `.ini` file, you can specify a path and name of a file using `CONFIGURATION` env variable.
+For possible variables please see example below (with inline comments):
+```
+[artifactManagerServer]
+port=50052                    # A port on which the server will be listening
+logFile=server.log            # Path to a log file
+maxWorkers=20                 # Max number of concurent workers
+debug=true                    # Debug flag
+logConfig=logging.yaml        # A special MDC logger config
+fileRepositoryBasePath=/tmp/  # A FS path where we should store CBA files
+```
+
+## Methods
+Below is a list of gRPC methods handled by the service. The `proto` files are available in `artifact-manager/manager/proto` directory.
+
+All methods expect `CommonHeader` with:
+* `timestamp` - datetime in UTC with this: `%Y-%m-%dT%H:%M:%S.%fZ` format
+* `originatorId` - name of the component (eg. `CDS`)
+* `requestId` - ID of the request
+* `subRequestId` - Sub ID of the request
+* `flag` - TBD
+
+and an `ActionIdentifiers` with following fields:
+* `blueprintName` - name of the blueprint
+* `blueprintVersion` - version number of blueprint (as string)
+* `actionName` - TBD
+* `mode` - TBD
+
+### Upload
+
+Upload `CBA.zip` file for storage in artifact manager. File needs to be sent as a binary data in `fileChunk` field.
+
+#### Example
+
+```
+stub: BluePrintManagementServiceStub = BluePrintManagementServiceStub(channel)
+with  open(file_path, "rb") as cba_file:
+    msg: BluePrintUploadInput = BluePrintUploadInput()
+    msg.actionIdentifiers.blueprintName =  "Test"
+    msg.actionIdentifiers.blueprintVersion =  "0.0.1"
+    msg.fileChunk.chunk = cba_file.read()
+return  stub.uploadBlueprint(msg)
+```
+
+### Download
+
+Download existing `CBA.zip` file.
+
+#### Example
+
+```
+stub: BluePrintManagementServiceStub = BluePrintManagementServiceStub(channel)
+msg: BluePrintDownloadInput = BluePrintDownloadInput()
+msg.actionIdentifiers.blueprintName =  "Test"
+msg.actionIdentifiers.blueprintVersion =  "0.0.1"
+return  stub.downloadBlueprint(msg)
+```
+### Remove
+
+Delete existing `CBA.zip` file.
+
+#### Example
+
+```
+stub: BluePrintManagementServiceStub = BluePrintManagementServiceStub(channel)
+msg: BluePrintRemoveInput = BluePrintRemoveInput()
+msg.actionIdentifiers.blueprintName =  "Test"
+msg.actionIdentifiers.blueprintVersion =  "0.0.1"
+return  stub.removeBlueprint(msg)
+```
+
+## Full gRPC Client Example
+
+```
+import logging
+import sys
+from argparse import ArgumentParser, FileType, Namespace
+from configparser import ConfigParser
+from datetime import datetime
+from pathlib import Path
+
+import zipfile
+
+from grpc import Channel, ChannelCredentials, insecure_channel, secure_channel, ssl_channel_credentials
+
+from proto.BluePrintManagement_pb2 import (
+    BluePrintDownloadInput,
+    BluePrintRemoveInput,
+    BluePrintUploadInput,
+    BluePrintManagementOutput,
+)
+from proto.BluePrintManagement_pb2_grpc import BluePrintManagementServiceStub
+
+
+logging.basicConfig(level=logging.DEBUG)
+
+
+class ClientArgumentParser(ArgumentParser):
+    """Client argument parser.
+
+    It has two arguments:
+     - config_file - provide a path to configuration file. Default is ./configuration-local.ini
+     - actions - list of actions to do by client. It have to be a list of given values: upload, download, remove.
+    """
+
+    DEFAULT_CONFIG_PATH: str = str(Path(__file__).resolve().with_name("configuration-local.ini"))
+
+    def __init__(self, *args, **kwargs):
+        """Initialize argument parser."""
+        super().__init__(*args, **kwargs)
+        self.description: str = "Artifact Manager client example"
+
+        self.add_argument(
+            "--config_file",
+            type=FileType("r"),
+            default=self.DEFAULT_CONFIG_PATH,
+            help="Path to the client configuration file. By default it's `configuration-local.ini` file from Artifact Manager directory",
+        )
+        self.add_argument(
+            "--actions", nargs="+", default=["upload", "download", "remove"], choices=["upload", "download", "remove"]
+        )
+
+
+class Client:
+    """Client class.
+
+    Implements methods which can be called to server.
+    """
+
+    def __init__(self, channel: Channel, config: ConfigParser) -> None:
+        """Initialize client class.
+
+        :param channel: gprc channel object
+        :param config: ConfigParser object with "client" section
+        """
+        self.channel: Channel = channel
+        self.stub: BluePrintManagementServiceStub = BluePrintManagementServiceStub(self.channel)
+        self.config = config
+
+    def upload(self) -> BluePrintManagementOutput:
+        """Prepare upload message and send it to server."""
+        logging.info("Call upload client method")
+        with open(self.config.get("client", "cba_file"), "rb") as cba_file:
+            msg: BluePrintUploadInput = BluePrintUploadInput()
+            msg.actionIdentifiers.blueprintName = "Test"
+            msg.actionIdentifiers.blueprintVersion = "0.0.1"
+            msg.fileChunk.chunk = cba_file.read()
+        return self.stub.uploadBlueprint(msg)
+
+    def download(self) -> BluePrintManagementOutput:
+        """Prepare download message and send it to server."""
+        logging.info("Call download client method")
+        msg: BluePrintDownloadInput = BluePrintDownloadInput()
+        msg.actionIdentifiers.blueprintName = "Test"
+        msg.actionIdentifiers.blueprintVersion = "0.0.1"
+        return self.stub.downloadBlueprint(msg)
+
+    def remove(self) -> BluePrintManagementOutput:
+        """Prepare remove message and send it to server."""
+        logging.info("Call remove client method")
+        msg: BluePrintRemoveInput = BluePrintRemoveInput()
+        msg.actionIdentifiers.blueprintName = "Test"
+        msg.actionIdentifiers.blueprintVersion = "0.0.1"
+        return self.stub.removeBlueprint(msg)
+
+
+if __name__ == "__main__":
+    arg_parser: ClientArgumentParser = ClientArgumentParser()
+    args: Namespace = arg_parser.parse_args()
+
+    config_parser: ConfigParser = ConfigParser()
+    config_parser.read_file(args.config_file)
+
+    server_address: str = f"{config_parser.get('client', 'address')}:{config_parser.get('client', 'port')}"
+    if config_parser.getboolean("client", "use_ssl", fallback=False):
+        logging.info(f"Create secure connection on {server_address}")
+        with open(config_parser.get("client", "private_key_file"), "rb") as private_key_file, open(
+            config_parser.get("client", "certificate_chain_file"), "rb"
+        ) as certificate_chain_file:
+            ssl_credentials: ChannelCredentials = ssl_channel_credentials(
+                private_key=private_key_file.read(), certificate_chain=certificate_chain_file.read()
+            )
+        channel: Channel = secure_channel(server_address, ssl_credentials)
+    else:
+        logging.info(f"Create insecure connection on {server_address}")
+        channel: Channel = insecure_channel(server_address)
+
+    with channel:
+        client: Client = Client(channel, config_parser)
+        for action in args.actions:
+            logging.info("Get response")
+            logging.info(getattr(client, action)())
+
+```

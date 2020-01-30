@@ -1,0 +1,4 @@
+-r shared.txt
+/opt/app/onap/dependencies/common
+-r /opt/app/onap/dependencies/artifact-manager/requirements/docker.txt
+/opt/app/onap/dependencies/artifact-manager

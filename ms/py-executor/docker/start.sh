@@ -22,10 +22,22 @@ then
   export APP_PORT=50052
 fi
 
+if [ -z "${ARTIFACT_MANAGER_PORT}" ]
+then
+  echo "ARTIFACT_MANAGER_PORT environment variable is not set, using default."
+  export ARTIFACT_MANAGER_PORT=50053
+fi
+
 if [ -z "${LOG_FILE}" ]
 then
   echo "LOG_FILE environment variable is not set, using default."
   export LOG_FILE="application.log"
+fi
+
+if [ -z "${ARTIFACT_MANAGER_SERVER_LOG_FILE}" ]
+then
+  echo "ARTIFACT_MANAGER_SERVER_LOG_FILE environment variable is not set, using default."
+  export ARTIFACT_MANAGER_SERVER_LOG_FILE="artifacts.log"
 fi
 
 if [ "${http_proxy}" ]
@@ -37,6 +49,13 @@ if [ "${https_proxy}" ]
 then
   echo "Setting https_proxy: ${https_proxy}"
 fi
+
+if [ -z "${CONFIGURATION}" ]
+then
+  echo "CONFIGURATION environment variable is not set, using default."
+  export CONFIGURATION="/opt/app/onap/configuration.ini"
+fi
+
 
 cd /opt/app/onap/python/
 python server.py

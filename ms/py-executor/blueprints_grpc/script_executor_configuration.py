@@ -42,7 +42,9 @@ class ScriptExecutorConfiguration:
 
 
 if __name__ == '__main__':
-    config_file = str(PurePath(Path().absolute())) + '/../configuration.ini'
+    default_configuration_file = str(PurePath(Path().absolute(), "../../configuration.ini"))
+    supplied_configuration_file = os.environ.get('CONFIGURATION')
+    config_file = str(os.path.expanduser(Path(supplied_configuration_file or default_configuration_file)))
     scriptExecutorConfiguration = ScriptExecutorConfiguration(config_file)
     blueprintDeployPath = scriptExecutorConfiguration.get_property('blueprintsprocessor', 'blueprintDeployPath')
     print(blueprintDeployPath)
