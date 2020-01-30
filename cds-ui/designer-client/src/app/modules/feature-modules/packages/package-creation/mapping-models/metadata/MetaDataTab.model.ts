@@ -45,7 +45,7 @@ Content-Type: application/vnd.oasis.bpmn*/
 
 export class MetaDataFile {
 
-    static getObjectInstance(metaDataTab: MetaDataTabModel): string {
+    static getValueOfMetaData(metaDataTab: MetaDataTabModel): string {
         return 'TOSCA-Meta-File-Version: 1.0.0\n' +
             'CSAR-Version: 1.0\n' +
             'Created-By: Shaaban Ebrahim <shaaban.eltanany.ext@orange.con>\n' +
@@ -109,7 +109,7 @@ export class FolderNodeElement {
 
 export class FilesContent {
 
-    public static mapOfFilesNamesAndContent: Map<string, string> = new Map<string, string>();
+    private static mapOfFilesNamesAndContent: Map<string, string> = new Map<string, string>();
 
     public static getMapOfFilesNamesAndContent(): Map<string, string> {
         return FilesContent.mapOfFilesNamesAndContent;

@@ -43,7 +43,7 @@ export class ScriptsTabComponent implements OnInit {
 
     removeFile(fileIndex: number) {
         console.log(this.uploadedFiles[fileIndex]);
-        this.packageCreationStore.removeFromState(this.uploadedFiles[fileIndex].name, 'scripts');
+        this.packageCreationStore.removeFileFromState(this.uploadedFiles[fileIndex].name);
         this.uploadedFiles.splice(fileIndex, 1);
     }
 
