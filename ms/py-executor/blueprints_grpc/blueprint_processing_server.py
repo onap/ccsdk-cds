@@ -16,7 +16,7 @@
 
 import logging
 from google.protobuf.json_format import MessageToJson
-from .proto import BluePrintProcessing_pb2_grpc as BluePrintProcessing_pb2_grpc
+from proto import BluePrintProcessing_pb2_grpc as BluePrintProcessing_pb2_grpc
 from .script_executor_configuration import ScriptExecutorConfiguration
 from .executor_utils import instance_for_input
 

@@ -14,14 +14,28 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from google.protobuf.timestamp_pb2 import Timestamp
-from google.protobuf import struct_pb2
-from google.protobuf import json_format
-import sys, importlib, importlib.util, json, time, datetime
+import datetime
+import importlib
+import importlib.util
+import json
 import logging
-from .proto.BluePrintProcessing_pb2 import ExecutionServiceInput, ExecutionServiceOutput
-from .proto.BluePrintCommon_pb2 import Status, EVENT_COMPONENT_TRACE, EVENT_COMPONENT_PROCESSING, \
-    EVENT_COMPONENT_EXECUTED, EVENT_COMPONENT_NOTIFICATION
+import sys
+import time
+
+from google.protobuf import json_format, struct_pb2
+from google.protobuf.timestamp_pb2 import Timestamp
+from proto.BluePrintCommon_pb2 import (
+    EVENT_COMPONENT_EXECUTED,
+    EVENT_COMPONENT_NOTIFICATION,
+    EVENT_COMPONENT_PROCESSING,
+    EVENT_COMPONENT_TRACE,
+    Status
+)
+from proto.BluePrintProcessing_pb2 import (
+    ExecutionServiceInput,
+    ExecutionServiceOutput,
+)
+
 from .script_executor_configuration import ScriptExecutorConfiguration
 
 logger = logging.getLogger("Utils")

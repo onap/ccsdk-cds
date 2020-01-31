@@ -1,0 +1,4 @@
+-r shared.txt
+../../py-modules/common
+-r ../../artifact-manager/requirements/local.txt
+../artifact-manager

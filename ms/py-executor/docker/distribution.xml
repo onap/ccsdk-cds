@@ -27,17 +27,42 @@
             <directory>${project.basedir}</directory>
             <outputDirectory>opt/app/onap/python</outputDirectory>
             <includes>
-                <include>blueprints_grpc/**/*.py</include>
+                <include>blueprints_grpc/*.py</include>
                 <include>*.py</include>
             </includes>
             <useDefaultExcludes>true</useDefaultExcludes>
         </fileSet>
         <fileSet>
+            <directory>${project.basedir}/../../py-modules</directory>
+            <outputDirectory>opt/app/onap/dependencies/</outputDirectory>
+            <includes>
+                <include>common/**/*.py</include>
+            </includes>
+            <useDefaultExcludes>true</useDefaultExcludes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/..</directory>
+            <outputDirectory>opt/app/onap/dependencies</outputDirectory>
+            <includes>
+                <include>artifact-manager/**/*.*</include>
+            </includes>
+            <useDefaultExcludes>true</useDefaultExcludes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/..</directory>
+            <outputDirectory>opt/app/onap</outputDirectory>
+            <includes>
+                <include>logging.yaml</include>
+                <include>configuration.ini</include>
+            </includes>
+            <useDefaultExcludes>true</useDefaultExcludes>
+            <fileMode>0666</fileMode>
+        </fileSet>
+        <fileSet>
             <directory>${project.basedir}</directory>
             <outputDirectory>opt/app/onap/python</outputDirectory>
             <includes>
-                <include>requirements.txt</include>
-                <include>configuration.ini</include>
+                <include>requirements/*.txt</include>
             </includes>
             <useDefaultExcludes>true</useDefaultExcludes>
             <fileMode>0666</fileMode>

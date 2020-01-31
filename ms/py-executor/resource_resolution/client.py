@@ -12,14 +12,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
-from logging import getLogger, Logger
+from logging import Logger, getLogger
 from types import TracebackType
 from typing import Iterable, List, Optional, Type
 
 from grpc import Channel, insecure_channel, secure_channel, ssl_channel_credentials
-
-from blueprints_grpc.proto.BluePrintProcessing_pb2 import ExecutionServiceInput, ExecutionServiceOutput
-from blueprints_grpc.proto.BluePrintProcessing_pb2_grpc import BluePrintProcessingServiceStub
+from proto.BluePrintProcessing_pb2 import ExecutionServiceInput, ExecutionServiceOutput
+from proto.BluePrintProcessing_pb2_grpc import BluePrintProcessingServiceStub
 
 
 class Client:
