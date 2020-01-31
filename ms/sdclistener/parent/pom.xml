@@ -33,8 +33,6 @@
     <description>SDC Listener Parent</description>
 
     <properties>
-        <spring.boot.version>2.1.3.RELEASE</spring.boot.version>
-        <spring.version>5.1.5.RELEASE</spring.version>
         <eelf.version>1.0.0</eelf.version>
         <guava.version>27.0.1-jre</guava.version>
         <onap.logger.slf4j>1.2.2</onap.logger.slf4j>
@@ -142,85 +140,6 @@
                 <groupId>io.projectreactor</groupId>
                 <artifactId>reactor-core</artifactId>
                 <version>${reactorcore.version}</version>
-            </dependency>
-
-            <!-- Blueprint Processor Application Module Dependencies -->
-            <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-                <artifactId>processor-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-                <artifactId>db-lib</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-                <artifactId>rest-lib</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-                <artifactId>dmaap-lib</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-                <artifactId>grpc-lib</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-                <artifactId>execution-service</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-                <artifactId>workflow-service</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-                <artifactId>resource-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-                <artifactId>selfservice-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-                <artifactId>application</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <!-- Controller Blueprints Application Dependency -->
-            <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-                <artifactId>resource-dict</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-                <artifactId>blueprint-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-                <artifactId>blueprint-scripts</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-                <artifactId>db-resources</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-                <artifactId>blueprint-validation</artifactId>
-                <version>${project.version}</version>
             </dependency>
 
             <!-- Test Dependency -->

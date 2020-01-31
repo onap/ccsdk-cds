@@ -32,7 +32,7 @@ object PayloadUtils {
 
     fun prepareRequestPayload(workflowName: String, jsonNode: JsonNode): JsonNode {
         val objectNode = JacksonUtils.objectMapper.createObjectNode()
-        objectNode["$workflowName-request"] = jsonNode
+        objectNode.set<JsonNode>("$workflowName-request", jsonNode)
         return objectNode
     }
 

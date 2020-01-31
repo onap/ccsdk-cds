@@ -28,7 +28,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogS
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.security.SecurityProperties
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.context.ContextConfiguration
@@ -46,7 +45,7 @@ import kotlin.test.assertTrue
 @WebFluxTest
 @ContextConfiguration(
     classes = [ExecutionServiceHandler::class, BluePrintCoreConfiguration::class,
-        BluePrintCatalogService::class, SecurityProperties::class]
+        BluePrintCatalogService::class]
 )
 @ComponentScan(
     basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor",

@@ -29,7 +29,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.security.SecurityProperties
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.context.ContextConfiguration
@@ -41,7 +40,7 @@ import org.springframework.test.web.reactive.server.WebTestClient
 @WebFluxTest
 @ContextConfiguration(
     classes = [TestDatabaseConfiguration::class,
-        ResourceController::class, ResourceResolutionDBService::class, SecurityProperties::class]
+        ResourceController::class, ResourceResolutionDBService::class]
 )
 @ComponentScan(
     basePackages = ["org.onap.ccsdk.cds.controllerblueprints.core.service",

@@ -42,8 +42,6 @@
         <!-- Should be using released artifact as soon as available: -->
         <!-- https://github.com/springfox/springfox/milestone/44 -->
         <springfox.swagger2.version>2.9.2</springfox.swagger2.version>
-        <spring.kafka.version>2.2.6.RELEASE</spring.kafka.version>
-        <kafka.version>2.2.0</kafka.version>
         <eelf.version>1.0.0</eelf.version>
         <onap.logger.slf4j>1.2.2</onap.logger.slf4j>
 
@@ -90,7 +88,7 @@
             <dependency>
                 <groupId>org.springframework.kafka</groupId>
                 <artifactId>spring-kafka</artifactId>
-                <version>${spring.kafka.version}</version>
+                <version>${spring-kafka.version}</version>
             </dependency>
 
             <!--Swagger Dependencies -->
@@ -649,7 +647,7 @@
             <dependency>
                 <groupId>org.springframework.kafka</groupId>
                 <artifactId>spring-kafka-test</artifactId>
-                <version>${spring.kafka.version}</version>
+                <version>${spring-kafka.version}</version>
                 <scope>test</scope>
             </dependency>
 

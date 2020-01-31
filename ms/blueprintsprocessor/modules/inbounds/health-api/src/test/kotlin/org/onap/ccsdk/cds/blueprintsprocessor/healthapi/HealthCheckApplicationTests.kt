@@ -23,7 +23,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentScript
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.security.SecurityProperties
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.context.ContextConfiguration
@@ -41,7 +40,7 @@ import org.springframework.test.web.reactive.server.WebTestClient
 @WebFluxTest
 @ContextConfiguration(
     classes = [BluePrintRuntimeService::class, BluePrintCoreConfiguration::class,
-        BluePrintCatalogService::class, SecurityProperties::class, ComponentScriptExecutor::class]
+        BluePrintCatalogService::class, ComponentScriptExecutor::class]
 )
 @ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
 @TestPropertySource(locations = ["classpath:application-test.properties"])

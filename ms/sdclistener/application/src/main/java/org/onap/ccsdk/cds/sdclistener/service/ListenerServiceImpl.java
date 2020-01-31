@@ -19,7 +19,7 @@ package org.onap.ccsdk.cds.sdclistener.service;
 import com.google.protobuf.ByteString;
 import io.grpc.ManagedChannel;
 import org.apache.commons.io.FileUtils;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.apache.commons.io.IOUtils;
 import org.onap.ccsdk.cds.controllerblueprints.common.api.ActionIdentifiers;
 import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader;
 import org.onap.ccsdk.cds.controllerblueprints.common.api.Status;

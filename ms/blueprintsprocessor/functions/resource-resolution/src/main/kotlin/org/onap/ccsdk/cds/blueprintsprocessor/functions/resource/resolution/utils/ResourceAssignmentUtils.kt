@@ -163,7 +163,7 @@ class ResourceAssignmentUtils {
                         val valueToPrint = getValueToLog(metadata, value)
                         containsLogProtected = hasLogProtect(metadata)
                         logger.trace("Generating Resource name ($rName), type ($type), value ($valueToPrint)")
-                        root.set(rName, value)
+                        root.set<JsonNode>(rName, value)
                     }
                 }
                 result = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(root)
