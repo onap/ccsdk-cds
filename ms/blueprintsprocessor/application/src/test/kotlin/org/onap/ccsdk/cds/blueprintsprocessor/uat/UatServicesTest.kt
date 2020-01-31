@@ -41,7 +41,6 @@ import org.apache.http.message.BasicHeader
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalToIgnoringCase
-import org.jetbrains.kotlin.konan.util.prefixIfNot
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.logging.LogColor.COLOR_WIREMOCK
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.logging.LogColor.markerOf
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.utils.MarkedSlf4jNotifier
@@ -66,6 +65,9 @@ import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertNotNull
+
+fun String.prefixIfNot(prefix: String) =
+    if (this.startsWith(prefix)) this else "$prefix$this"
 
 @ActiveProfiles("uat")
 @Suppress("MemberVisibilityCanBePrivate")

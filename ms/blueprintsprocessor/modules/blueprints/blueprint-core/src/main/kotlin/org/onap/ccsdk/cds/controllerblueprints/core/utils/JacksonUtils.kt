@@ -282,7 +282,7 @@ class JacksonUtils {
         fun populatePrimitiveDefaultValues(key: String, primitiveType: String, objectNode: ObjectNode) {
             val defaultValue = getDefaultValueOfPrimitiveAsJsonNode(primitiveType)
                 ?: throw BluePrintException("populatePrimitiveDefaultValues expected only primitive values! Received type ($primitiveType)")
-            objectNode.set(key, defaultValue)
+            objectNode.set<JsonNode>(key, defaultValue)
         }
 
         fun populatePrimitiveDefaultValuesForArrayNode(primitiveType: String, arrayNode: ArrayNode) {
@@ -304,11 +304,11 @@ class JacksonUtils {
 
         fun populateJsonNodeValues(key: String, nodeValue: JsonNode?, type: String, objectNode: ObjectNode) {
             if (nodeValue == null || nodeValue is NullNode) {
-                objectNode.set(key, nodeValue)
+                objectNode.set<JsonNode>(key, nodeValue)
             } else if (BluePrintTypes.validPrimitiveTypes().contains(type)) {
                 populatePrimitiveValues(key, nodeValue, type, objectNode)
             } else {
-                objectNode.set(key, nodeValue)
+                objectNode.set<JsonNode>(key, nodeValue)
             }
         }
 

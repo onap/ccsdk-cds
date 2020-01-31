@@ -16,6 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.services.workflow
 
+import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
@@ -94,7 +95,7 @@ open class BluePrintWorkflowExecutionServiceImpl(
 
         // Set the Response Payload
         executionServiceOutput.payload = JacksonUtils.objectMapper.createObjectNode()
-        executionServiceOutput.payload.set("$workflowName-response", workflowOutputs.asObjectNode())
+        executionServiceOutput.payload.set<JsonNode>("$workflowName-response", workflowOutputs.asObjectNode())
         return executionServiceOutput
     }
 }

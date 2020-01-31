@@ -17,6 +17,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
@@ -107,7 +108,7 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
 
             // provide indexed result in output if we have multiple resolution
             if (occurrence != 1) {
-                jsonResponse.set(Integer.toString(j), response.asJsonNode())
+                jsonResponse.set<JsonNode>(Integer.toString(j), response.asJsonNode())
             } else {
                 jsonResponse.setAll(response.asObjectNode())
             }

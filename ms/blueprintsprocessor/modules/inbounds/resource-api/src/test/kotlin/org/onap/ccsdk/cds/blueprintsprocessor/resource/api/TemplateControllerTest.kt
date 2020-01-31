@@ -24,7 +24,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.security.SecurityProperties
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.http.MediaType
@@ -39,7 +38,7 @@ import kotlin.test.AfterTest
 @WebFluxTest
 @ContextConfiguration(
     classes = [TestDatabaseConfiguration::class, BluePrintCoreConfiguration::class,
-        BluePrintCatalogService::class, SecurityProperties::class]
+        BluePrintCatalogService::class]
 )
 @ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
 @TestPropertySource(locations = ["classpath:application-test.properties"])
