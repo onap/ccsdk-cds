@@ -20,7 +20,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.M
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.MessagePrioritizationStateService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.UpdateStateRequest
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.MessagePrioritization
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.monoMdc
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.mdcWebCoroutineScope
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -39,11 +39,11 @@ open class MessagePrioritizationApi(
 
     @GetMapping(path = ["/ping"], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
-    fun ping(): String = "Success"
+    suspend fun ping(): String = mdcWebCoroutineScope { "Success" }
 
     @GetMapping(path = ["/{id}"], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
-    fun messagePrioritization(@PathVariable(value = "id") id: String) = monoMdc {
+    suspend fun messagePrioritization(@PathVariable(value = "id") id: String) = mdcWebCoroutineScope {
         messagePrioritizationStateService.getMessage(id)
     }
 
@@ -52,16 +52,17 @@ open class MessagePrioritizationApi(
         consumes = [MediaType.APPLICATION_JSON_VALUE]
     )
     @ResponseBody
-    fun saveMessagePrioritization(@RequestBody messagePrioritization: MessagePrioritization) = monoMdc {
-        messagePrioritizationStateService.saveMessage(messagePrioritization)
-    }
+    suspend fun saveMessagePrioritization(@RequestBody messagePrioritization: MessagePrioritization) =
+        mdcWebCoroutineScope {
+            messagePrioritizationStateService.saveMessage(messagePrioritization)
+        }
 
     @PostMapping(
         path = ["/prioritize"], produces = [MediaType.APPLICATION_JSON_VALUE],
         consumes = [MediaType.APPLICATION_JSON_VALUE]
     )
     @ResponseBody
-    fun prioritize(@RequestBody messagePrioritization: MessagePrioritization) = monoMdc {
+    suspend fun prioritize(@RequestBody messagePrioritization: MessagePrioritization) = mdcWebCoroutineScope {
         messagePrioritizationService.prioritize(messagePrioritization)
     }
 
@@ -69,8 +70,8 @@ open class MessagePrioritizationApi(
         path = ["/update-state"], produces = [MediaType.APPLICATION_JSON_VALUE],
         consumes = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun updateMessagePrioritizationState(@RequestBody updateMessageState: UpdateStateRequest) =
-        monoMdc {
+    suspend fun updateMessagePrioritizationState(@RequestBody updateMessageState: UpdateStateRequest) =
+        mdcWebCoroutineScope {
             messagePrioritizationStateService.setMessageState(
                 updateMessageState.id,
                 updateMessageState.state!!

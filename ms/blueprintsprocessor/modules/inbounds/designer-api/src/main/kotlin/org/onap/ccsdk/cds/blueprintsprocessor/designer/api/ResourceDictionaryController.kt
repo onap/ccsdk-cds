@@ -16,9 +16,9 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 
-import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictionary
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.ResourceDictionaryHandler
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.mdcWebCoroutineScope
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceSourceMapping
@@ -39,50 +39,67 @@ open class ResourceDictionaryController(private val resourceDictionaryHandler: R
     @GetMapping(path = ["/{name}"], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     @Throws(BluePrintException::class)
-    fun getResourceDictionaryByName(@PathVariable(value = "name") name: String): ResourceDictionary = runBlocking {
-        resourceDictionaryHandler.getResourceDictionaryByName(name)
-    }
+    suspend fun getResourceDictionaryByName(@PathVariable(value = "name") name: String): ResourceDictionary =
+        mdcWebCoroutineScope {
+            resourceDictionaryHandler.getResourceDictionaryByName(name)
+        }
 
-    @PostMapping(path = [""], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping(
+        path = [""],
+        produces = [MediaType.APPLICATION_JSON_VALUE],
+        consumes = [MediaType.APPLICATION_JSON_VALUE]
+    )
     @ResponseBody
     @Throws(BluePrintException::class)
-    fun saveResourceDictionary(@RequestBody dataDictionary: ResourceDictionary): ResourceDictionary = runBlocking {
-        resourceDictionaryHandler.saveResourceDictionary(dataDictionary)
-    }
+    suspend fun saveResourceDictionary(@RequestBody dataDictionary: ResourceDictionary): ResourceDictionary =
+        mdcWebCoroutineScope {
+            resourceDictionaryHandler.saveResourceDictionary(dataDictionary)
+        }
 
-    @PostMapping(path = ["/definition"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping(
+        path = ["/definition"],
+        produces = [MediaType.APPLICATION_JSON_VALUE],
+        consumes = [MediaType.APPLICATION_JSON_VALUE]
+    )
     @ResponseBody
     @Throws(BluePrintException::class)
-    fun saveResourceDictionary(@RequestBody resourceDefinition: ResourceDefinition): ResourceDefinition = runBlocking {
-        resourceDictionaryHandler.saveResourceDefinition(resourceDefinition)
-    }
+    suspend fun saveResourceDictionary(@RequestBody resourceDefinition: ResourceDefinition): ResourceDefinition =
+        mdcWebCoroutineScope {
+            resourceDictionaryHandler.saveResourceDefinition(resourceDefinition)
+        }
 
     @DeleteMapping(path = ["/{name}"])
-    fun deleteResourceDictionaryByName(@PathVariable(value = "name") name: String) = runBlocking {
+    suspend fun deleteResourceDictionaryByName(@PathVariable(value = "name") name: String) = mdcWebCoroutineScope {
         resourceDictionaryHandler.deleteResourceDictionary(name)
     }
 
-    @PostMapping(path = ["/by-names"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping(
+        path = ["/by-names"],
+        produces = [MediaType.APPLICATION_JSON_VALUE],
+        consumes = [MediaType.APPLICATION_JSON_VALUE]
+    )
     @ResponseBody
-    fun searchResourceDictionaryByNames(@RequestBody names: List<String>): List<ResourceDictionary> = runBlocking {
-        resourceDictionaryHandler.searchResourceDictionaryByNames(names)
-    }
+    suspend fun searchResourceDictionaryByNames(@RequestBody names: List<String>): List<ResourceDictionary> =
+        mdcWebCoroutineScope {
+            resourceDictionaryHandler.searchResourceDictionaryByNames(names)
+        }
 
     @GetMapping(path = ["/search/{tags}"], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
-    fun searchResourceDictionaryByTags(@PathVariable(value = "tags") tags: String): List<ResourceDictionary> = runBlocking {
-        resourceDictionaryHandler.searchResourceDictionaryByTags(tags)
-    }
+    suspend fun searchResourceDictionaryByTags(@PathVariable(value = "tags") tags: String): List<ResourceDictionary> =
+        mdcWebCoroutineScope {
+            resourceDictionaryHandler.searchResourceDictionaryByTags(tags)
+        }
 
     @GetMapping(path = ["/source-mapping"], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
-    fun getResourceSourceMapping(): ResourceSourceMapping = runBlocking {
+    suspend fun getResourceSourceMapping(): ResourceSourceMapping = mdcWebCoroutineScope {
         resourceDictionaryHandler.getResourceSourceMapping()
     }
 
     @GetMapping(path = ["/resource_dictionary_group"], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
-    fun getResourceDictionaryDistinct(): List<String> = runBlocking {
+    suspend fun getResourceDictionaryDistinct(): List<String> = mdcWebCoroutineScope {
         resourceDictionaryHandler.getResourceDictionaryDistinct()
     }
 }

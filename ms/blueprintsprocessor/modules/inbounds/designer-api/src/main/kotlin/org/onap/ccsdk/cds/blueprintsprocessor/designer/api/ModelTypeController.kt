@@ -17,9 +17,9 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 
-import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ModelType
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.ModelTypeHandler
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.mdcWebCoroutineScope
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -32,34 +32,39 @@ import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping(value = arrayOf("/api/v1/model-type"))
+@RequestMapping(value = ["/api/v1/model-type"])
 open class ModelTypeController(private val modelTypeHandler: ModelTypeHandler) {
 
-    @GetMapping(path = arrayOf("/{name}"), produces = arrayOf(MediaType.APPLICATION_JSON_VALUE))
-    fun getModelTypeByName(@PathVariable(value = "name") name: String): ModelType? = runBlocking {
+    @GetMapping(path = ["/{name}"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    suspend fun getModelTypeByName(@PathVariable(value = "name") name: String): ModelType? = mdcWebCoroutineScope {
         modelTypeHandler.getModelTypeByName(name)
     }
 
-    @GetMapping(path = arrayOf("/search/{tags}"), produces = arrayOf(MediaType.APPLICATION_JSON_VALUE))
-    fun searchModelTypes(@PathVariable(value = "tags") tags: String): List<ModelType> = runBlocking {
+    @GetMapping(path = ["/search/{tags}"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    suspend fun searchModelTypes(@PathVariable(value = "tags") tags: String): List<ModelType> = mdcWebCoroutineScope {
         modelTypeHandler.searchModelTypes(tags)
     }
 
-    @GetMapping(path = arrayOf("/by-definition/{definitionType}"), produces = arrayOf(MediaType.APPLICATION_JSON_VALUE))
+    @GetMapping(path = ["/by-definition/{definitionType}"], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
-    fun getModelTypeByDefinitionType(@PathVariable(value = "definitionType") definitionType: String): List<ModelType> = runBlocking {
-        modelTypeHandler.getModelTypeByDefinitionType(definitionType)
-    }
+    suspend fun getModelTypeByDefinitionType(@PathVariable(value = "definitionType") definitionType: String): List<ModelType> =
+        mdcWebCoroutineScope {
+            modelTypeHandler.getModelTypeByDefinitionType(definitionType)
+        }
 
-    @PostMapping(path = arrayOf(""), produces = arrayOf(MediaType.APPLICATION_JSON_VALUE), consumes = arrayOf(MediaType.APPLICATION_JSON_VALUE))
+    @PostMapping(
+        path = [""],
+        produces = [MediaType.APPLICATION_JSON_VALUE],
+        consumes = [MediaType.APPLICATION_JSON_VALUE]
+    )
     @ResponseBody
     @Throws(BluePrintException::class)
-    fun saveModelType(@RequestBody modelType: ModelType): ModelType = runBlocking {
+    suspend fun saveModelType(@RequestBody modelType: ModelType): ModelType = mdcWebCoroutineScope {
         modelTypeHandler.saveModel(modelType)
     }
 
-    @DeleteMapping(path = arrayOf("/{name}"))
-    fun deleteModelTypeByName(@PathVariable(value = "name") name: String) = runBlocking {
+    @DeleteMapping(path = ["/{name}"])
+    suspend fun deleteModelTypeByName(@PathVariable(value = "name") name: String) = mdcWebCoroutineScope {
         modelTypeHandler.deleteByModelName(name)
     }
 }

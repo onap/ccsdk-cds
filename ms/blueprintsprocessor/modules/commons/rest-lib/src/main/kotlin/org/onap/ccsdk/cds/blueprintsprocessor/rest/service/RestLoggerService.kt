@@ -21,10 +21,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.handleCoroutineException
 import kotlinx.coroutines.newCoroutineContext
 import kotlinx.coroutines.reactor.ReactorContext
 import kotlinx.coroutines.reactor.asCoroutineContext
+import kotlinx.coroutines.withContext
 import org.apache.http.message.BasicHeader
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_INVOCATION_ID
@@ -94,6 +96,32 @@ class RestLoggerService {
     }
 }
 
+/** Used in Rest controller API methods to populate MDC context to nested coroutines from reactor web filter context. */
+suspend fun <T> mdcWebCoroutineScope(
+    block: suspend CoroutineScope.() -> T
+) = coroutineScope {
+    val reactorContext = this.coroutineContext[ReactorContext]
+    /** Populate MDC context only if present in Reactor Context */
+    val newContext = if (reactorContext != null &&
+        !reactorContext.context.isEmpty &&
+        reactorContext.context.hasKey(MDCContext)
+    ) {
+        val mdcContext = reactorContext.context.get<MDCContext>(MDCContext)
+        if (mdcContext != null)
+            newCoroutineContext(this.coroutineContext + reactorContext + mdcContext)
+        else
+            newCoroutineContext(this.coroutineContext + reactorContext)
+    } else this.coroutineContext
+    // Execute the block with new and old context
+    withContext(newContext) {
+        block()
+    }
+}
+
+@Deprecated(
+    message = "Now CDS supports Coruoutin rest controller",
+    replaceWith = ReplaceWith("mdcWebCoroutineScope")
+)
 /** Used in Rest controller API methods to populate MDC context to nested coroutines from reactor web filter context. */
 @UseExperimental(InternalCoroutinesApi::class)
 fun <T> monoMdc(
