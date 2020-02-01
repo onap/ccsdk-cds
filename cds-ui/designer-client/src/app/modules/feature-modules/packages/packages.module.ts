@@ -26,6 +26,8 @@ import {ScriptsTabComponent} from './package-creation/scripts-tab/scripts-tab.co
 import {AceEditorModule} from 'ng2-ace-editor';
 import {MetadataTabComponent} from './package-creation/metadata-tab/metadata-tab.component';
 import {DslDefinitionsTabComponent} from './package-creation/dsl-definitions-tab/dsl-definitions-tab.component';
+import { TemplMappCreationComponent } from './package-creation/template-mapping/templ-mapp-creation/templ-mapp-creation.component';
+import { TemplMappListingComponent } from './package-creation/template-mapping/templ-mapp-listing/templ-mapp-listing.component';
 
 @NgModule({
     declarations: [PackagesDashboardComponent,
@@ -42,6 +44,8 @@ import {DslDefinitionsTabComponent} from './package-creation/dsl-definitions-tab
         PackageCreationComponent,
         ImportsTabComponent,
         TemplateMappingComponent,
+        TemplMappCreationComponent,
+        TemplMappListingComponent,
         SourceEditorComponent,
         ScriptsTabComponent,
         MetadataTabComponent,

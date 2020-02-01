@@ -6,10 +6,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./template-mapping.component.css']
 })
 export class TemplateMappingComponent implements OnInit {
+  creationView = false;
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  openCreationView() {
+    this.creationView = true;
   }
 
 }
