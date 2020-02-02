@@ -4,12 +4,14 @@ export class Definition {
 
     public metaDataTab: MetaDataTabModel;
     public imports: Map<string, string>;
+    public dslDefinition: DslDefinition;
 
     // public dslDefinition:
 
     constructor() {
         this.imports = new Map<string, string>();
         this.metaDataTab = new MetaDataTabModel();
+        this.dslDefinition = new DslDefinition();
     }
 
     public setImports(key: string, value: string) {
@@ -22,6 +24,14 @@ export class Definition {
         return this;
     }
 
+    public setDslDefinition(dslDefinition: DslDefinition): Definition {
+        this.dslDefinition = dslDefinition;
+        return this;
+    }
+}
+
+export class DslDefinition {
+    content: string;
 }
 
 export class Scripts {

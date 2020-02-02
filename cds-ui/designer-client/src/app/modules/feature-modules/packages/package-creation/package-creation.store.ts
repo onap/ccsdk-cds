@@ -23,7 +23,7 @@ import {Injectable} from '@angular/core';
 
 import {Store} from '../../../../common/core/stores/Store';
 
-import {CBAPackage} from './mapping-models/CBAPacakge.model';
+import {CBAPackage, DslDefinition} from './mapping-models/CBAPacakge.model';
 import {PackageCreationService} from './package-creation.service';
 import {FolderNodeElement, MetaDataTabModel} from './mapping-models/metadata/MetaDataTab.model';
 import * as JSZip from 'jszip';
@@ -48,6 +48,15 @@ export class PackageCreationStore extends Store<CBAPackage> {
             metaData: metaDataObject
         });
     }
+
+    changeDslDefinition(dslDefinition: DslDefinition) {
+
+        this.setState({
+            ...this.state,
+            definitions: this.state.definitions.setDslDefinition(dslDefinition)
+        });
+    }
+
 
     addDefinition(name: string, content: string) {
 
