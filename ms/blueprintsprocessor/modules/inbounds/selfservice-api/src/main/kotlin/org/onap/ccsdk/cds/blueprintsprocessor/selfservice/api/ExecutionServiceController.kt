@@ -17,14 +17,14 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 
+import com.fasterxml.jackson.databind.JsonNode
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
-import kotlinx.coroutines.Dispatchers
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ACTION_MODE_ASYNC
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.monoMdc
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.mdcWebCoroutineScope
 import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.utils.determineHttpStatusCode
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
@@ -37,7 +37,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
-import reactor.core.publisher.Mono
 import java.util.concurrent.Phaser
 import javax.annotation.PreDestroy
 
@@ -63,7 +62,7 @@ open class ExecutionServiceController {
     )
     @ResponseBody
     @ApiOperation(value = "Health Check", hidden = true)
-    fun executionServiceControllerHealthCheck() = monoMdc(Dispatchers.IO) {
+    suspend fun executionServiceControllerHealthCheck(): JsonNode = mdcWebCoroutineScope {
         "Success".asJsonPrimitive()
     }
 
@@ -76,16 +75,14 @@ open class ExecutionServiceController {
     )
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
-    fun process(
+    suspend fun process(
         @ApiParam(value = "ExecutionServiceInput payload.", required = true)
         @RequestBody executionServiceInput: ExecutionServiceInput
-    ):
-            Mono<ResponseEntity<ExecutionServiceOutput>> = monoMdc(Dispatchers.IO) {
+    ): ResponseEntity<ExecutionServiceOutput> = mdcWebCoroutineScope {
 
         if (executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC) {
             throw IllegalStateException("Can't process async request through the REST endpoint. Use gRPC for async processing.")
         }
-
         ph.register()
         val processResult = executionServiceHandler.doProcess(executionServiceInput)
         ph.arriveAndDeregister()

@@ -16,6 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.FixMethodOrder
 import org.junit.Test
@@ -23,8 +24,8 @@ import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ModelType
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.annotation.Commit
 import org.springframework.test.context.ContextConfiguration
@@ -39,10 +40,10 @@ import org.springframework.test.context.junit4.SpringRunner
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class ModelTypeControllerTest {
 
-    private val log = LoggerFactory.getLogger(ModelTypeControllerTest::class.java)!!
+    private val log = logger(ModelTypeControllerTest::class.java)!!
 
     @Autowired
-    internal var modelTypeController: ModelTypeController? = null
+    lateinit var modelTypeController: ModelTypeController
 
     private var modelName = "test-datatype"
 
@@ -50,73 +51,80 @@ class ModelTypeControllerTest {
     @Commit
     @Throws(Exception::class)
     fun test01SaveModelType() {
-        log.info("**************** test01SaveModelType  ********************")
+        runBlocking {
+            log.info("**************** test01SaveModelType  ********************")
 
-        val content = JacksonUtils.getClassPathFileContent("model_type/data_type/datatype-property.json")
-        var modelType = ModelType()
-        modelType.definitionType = BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE
-        modelType.derivedFrom = BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT
-        modelType.description = "Definition for Sample Datatype "
-        modelType.definition = JacksonUtils.jsonNode(content)
-        modelType.modelName = modelName
-        modelType.version = "1.0.0"
-        modelType.tags = ("test-datatype ," + BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT + "," +
+            val content = JacksonUtils.getClassPathFileContent("model_type/data_type/datatype-property.json")
+            var modelType = ModelType()
+            modelType.definitionType = BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE
+            modelType.derivedFrom = BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT
+            modelType.description = "Definition for Sample Datatype "
+            modelType.definition = JacksonUtils.jsonNode(content)
+            modelType.modelName = modelName
+            modelType.version = "1.0.0"
+            modelType.tags = ("test-datatype ," + BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT + "," +
                 BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)
-        modelType.updatedBy = "xxxxxx@xxx.com"
-        modelType = modelTypeController!!.saveModelType(modelType)
-        log.info("Saved Mode {}", modelType.toString())
-        Assert.assertNotNull("Failed to get Saved ModelType", modelType)
-        Assert.assertNotNull("Failed to get Saved ModelType, Id", modelType.modelName)
+            modelType.updatedBy = "xxxxxx@xxx.com"
+            modelType = modelTypeController.saveModelType(modelType)
+            log.info("Saved Mode {}", modelType.toString())
+            Assert.assertNotNull("Failed to get Saved ModelType", modelType)
+            Assert.assertNotNull("Failed to get Saved ModelType, Id", modelType.modelName)
 
-        val dbModelType = modelTypeController!!.getModelTypeByName(modelType.modelName)
-        Assert.assertNotNull(
-            "Failed to query ResourceMapping for ID (" + dbModelType!!.modelName + ")",
-            dbModelType
-        )
+            val dbModelType = modelTypeController.getModelTypeByName(modelType.modelName)
+            Assert.assertNotNull(
+                "Failed to query ResourceMapping for ID (" + dbModelType!!.modelName + ")",
+                dbModelType
+            )
 
-        // Model Update
-        modelType.updatedBy = "bs2796@xxx.com"
-        modelType = modelTypeController!!.saveModelType(modelType)
-        Assert.assertNotNull("Failed to get Saved ModelType", modelType)
-        Assert.assertEquals("Failed to get Saved getUpdatedBy ", "bs2796@xxx.com", modelType.updatedBy)
+            // Model Update
+            modelType.updatedBy = "bs2796@xxx.com"
+            modelType = modelTypeController.saveModelType(modelType)
+            Assert.assertNotNull("Failed to get Saved ModelType", modelType)
+            Assert.assertEquals("Failed to get Saved getUpdatedBy ", "bs2796@xxx.com", modelType.updatedBy)
+        }
     }
 
     @Test
     @Throws(Exception::class)
     fun test02SearchModelTypes() {
-        log.info("*********************** test02SearchModelTypes  ***************************")
-
-        val tags = "test-datatype"
-
-        val dbModelTypes = modelTypeController!!.searchModelTypes(tags)
-        Assert.assertNotNull("Failed to search ResourceMapping by tags", dbModelTypes)
-        Assert.assertTrue("Failed to search ResourceMapping by tags count", dbModelTypes.isNotEmpty())
+        runBlocking {
+            log.info("*********************** test02SearchModelTypes  ***************************")
+            val tags = "test-datatype"
+            val dbModelTypes = modelTypeController.searchModelTypes(tags)
+            Assert.assertNotNull("Failed to search ResourceMapping by tags", dbModelTypes)
+            Assert.assertTrue("Failed to search ResourceMapping by tags count", dbModelTypes.isNotEmpty())
+        }
     }
 
     @Test
     @Throws(Exception::class)
     fun test03GetModelType() {
-        log.info("************************* test03GetModelType  *********************************")
-        val dbModelType = modelTypeController!!.getModelTypeByName(modelName)
-        Assert.assertNotNull("Failed to get response for api call getModelByName $modelName", dbModelType)
-        Assert.assertNotNull("Failed to get Id for api call  getModelByName ", dbModelType!!.modelName)
+        runBlocking {
+            log.info("************************* test03GetModelType  *********************************")
+            val dbModelType = modelTypeController.getModelTypeByName(modelName)
+            Assert.assertNotNull("Failed to get response for api call getModelByName $modelName", dbModelType)
+            Assert.assertNotNull("Failed to get Id for api call  getModelByName ", dbModelType!!.modelName)
 
-        val dbDatatypeModelTypes = modelTypeController!!.getModelTypeByDefinitionType(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)
-        Assert.assertNotNull("Failed to find getModelTypeByDefinitionType by tags", dbDatatypeModelTypes)
-        Assert.assertTrue("Failed to find getModelTypeByDefinitionType by count", dbDatatypeModelTypes.isNotEmpty())
+            val dbDatatypeModelTypes =
+                modelTypeController.getModelTypeByDefinitionType(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)
+            Assert.assertNotNull("Failed to find getModelTypeByDefinitionType by tags", dbDatatypeModelTypes)
+            Assert.assertTrue("Failed to find getModelTypeByDefinitionType by count", dbDatatypeModelTypes.isNotEmpty())
+        }
     }
 
     @Test
     @Commit
     @Throws(Exception::class)
     fun test04DeleteModelType() {
-        log.info(
-            "************************ test03DeleteModelType  ***********************"
-        )
-        val dbResourceMapping = modelTypeController!!.getModelTypeByName(modelName)
-        Assert.assertNotNull("Failed to get response for api call getModelByName ", dbResourceMapping)
-        Assert.assertNotNull("Failed to get Id for api call  getModelByName ", dbResourceMapping!!.modelName)
-
-        modelTypeController!!.deleteModelTypeByName(dbResourceMapping.modelName)
+        runBlocking {
+            log.info("************************ test03DeleteModelType  ***********************")
+            val dbResourceMapping = modelTypeController.getModelTypeByName(modelName)
+            Assert.assertNotNull("Failed to get response for api call getModelByName ", dbResourceMapping)
+            Assert.assertNotNull(
+                "Failed to get Id for api call  getModelByName ",
+                dbResourceMapping!!.modelName
+            )
+            modelTypeController.deleteModelTypeByName(dbResourceMapping.modelName)
+        }
     }
 }

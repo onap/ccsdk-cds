@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelSearch
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.BluePrintModelHandler
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.utils.BlueprintSortByOption
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.monoMdc
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.mdcWebCoroutineScope
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.springframework.core.io.Resource
 import org.springframework.data.domain.Page
@@ -45,7 +45,6 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
-import reactor.core.publisher.Mono
 
 /**
  * BlueprintModelController Purpose: Handle controllerBlueprint API request
@@ -64,7 +63,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @ResponseBody
     @Throws(BluePrintException::class)
     @PreAuthorize("hasRole('USER')")
-    fun bootstrap(@RequestBody bootstrapRequest: BootstrapRequest): Mono<Unit> = monoMdc {
+    suspend fun bootstrap(@RequestBody bootstrapRequest: BootstrapRequest): Unit = mdcWebCoroutineScope {
         bluePrintModelHandler.bootstrapBlueprint(bootstrapRequest)
     }
 
@@ -72,7 +71,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @ResponseBody
     @Throws(BluePrintException::class)
     @PreAuthorize("hasRole('USER')")
-    fun saveBlueprint(@RequestPart("file") filePart: FilePart): Mono<BlueprintModelSearch> = monoMdc {
+    suspend fun saveBlueprint(@RequestPart("file") filePart: FilePart): BlueprintModelSearch = mdcWebCoroutineScope {
         bluePrintModelHandler.saveBlueprintModel(filePart)
     }
 
@@ -98,9 +97,10 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @GetMapping("meta-data/{keyword}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
-    fun allBlueprintModelMetaData(@NotNull @PathVariable(value = "keyword") keyWord: String): List<BlueprintModelSearch> {
-        return this.bluePrintModelHandler.searchBluePrintModelsByKeyWord(keyWord)
-    }
+    suspend fun allBlueprintModelMetaData(@NotNull @PathVariable(value = "keyword") keyWord: String): List<BlueprintModelSearch> =
+        mdcWebCoroutineScope {
+            bluePrintModelHandler.searchBluePrintModelsByKeyWord(keyWord)
+        }
 
     @GetMapping("/paged/meta-data/{keyword}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
@@ -118,20 +118,20 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @DeleteMapping("/{id}")
     @Throws(BluePrintException::class)
     @PreAuthorize("hasRole('USER')")
-    fun deleteBlueprint(@PathVariable(value = "id") id: String) {
-        this.bluePrintModelHandler.deleteBlueprintModel(id)
+    suspend fun deleteBlueprint(@PathVariable(value = "id") id: String) = mdcWebCoroutineScope {
+        bluePrintModelHandler.deleteBlueprintModel(id)
     }
 
     @GetMapping("/by-name/{name}/version/{version}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     @Throws(BluePrintException::class)
     @PreAuthorize("hasRole('USER')")
-    fun getBlueprintByNameAndVersion(
+    suspend fun getBlueprintByNameAndVersion(
         @PathVariable(value = "name") name: String,
         @PathVariable(value = "version") version: String
-    ):
-            Mono<ResponseEntity<BlueprintModelSearch>> = monoMdc {
-        var bluePrintModel: BlueprintModelSearch? = bluePrintModelHandler.getBlueprintModelSearchByNameAndVersion(name, version)
+    ): ResponseEntity<BlueprintModelSearch> = mdcWebCoroutineScope {
+        val bluePrintModel: BlueprintModelSearch? =
+            bluePrintModelHandler.getBlueprintModelSearchByNameAndVersion(name, version)
         if (bluePrintModel != null)
             ResponseEntity(bluePrintModel, HttpStatus.OK)
         else
@@ -142,11 +142,10 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @ResponseBody
     @Throws(BluePrintException::class)
     @PreAuthorize("hasRole('USER')")
-    fun downloadBlueprintByNameAndVersion(
+    suspend fun downloadBlueprintByNameAndVersion(
         @PathVariable(value = "name") name: String,
         @PathVariable(value = "version") version: String
-    ):
-            Mono<ResponseEntity<Resource>> = monoMdc {
+    ): ResponseEntity<Resource> = mdcWebCoroutineScope {
         bluePrintModelHandler.downloadBlueprintModelFileByNameAndVersion(name, version)
     }
 
@@ -154,17 +153,18 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @ResponseBody
     @Throws(BluePrintException::class)
     @PreAuthorize("hasRole('USER')")
-    fun getBlueprintModel(@PathVariable(value = "id") id: String): BlueprintModelSearch {
-        return this.bluePrintModelHandler.getBlueprintModelSearch(id)
+    suspend fun getBlueprintModel(@PathVariable(value = "id") id: String): BlueprintModelSearch = mdcWebCoroutineScope {
+        bluePrintModelHandler.getBlueprintModelSearch(id)
     }
 
     @GetMapping("/download/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     @Throws(BluePrintException::class)
     @PreAuthorize("hasRole('USER')")
-    fun downloadBluePrint(@PathVariable(value = "id") id: String): Mono<ResponseEntity<Resource>> = monoMdc {
-        bluePrintModelHandler.downloadBlueprintModelFile(id)
-    }
+    suspend fun downloadBluePrint(@PathVariable(value = "id") id: String): ResponseEntity<Resource> =
+        mdcWebCoroutineScope {
+            bluePrintModelHandler.downloadBlueprintModelFile(id)
+        }
 
     @PostMapping(
         "/enrich", produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
@@ -173,7 +173,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @ResponseBody
     @Throws(BluePrintException::class)
     @PreAuthorize("hasRole('USER')")
-    fun enrichBlueprint(@RequestPart("file") file: FilePart): Mono<ResponseEntity<Resource>> = monoMdc {
+    suspend fun enrichBlueprint(@RequestPart("file") file: FilePart): ResponseEntity<Resource> = mdcWebCoroutineScope {
         bluePrintModelHandler.enrichBlueprint(file)
     }
 
@@ -181,16 +181,17 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @ResponseBody
     @Throws(BluePrintException::class)
     @PreAuthorize("hasRole('USER')")
-    fun publishBlueprint(@RequestPart("file") file: FilePart): Mono<BlueprintModelSearch> = monoMdc {
+    suspend fun publishBlueprint(@RequestPart("file") file: FilePart): BlueprintModelSearch = mdcWebCoroutineScope {
         bluePrintModelHandler.publishBlueprint(file)
     }
 
     @GetMapping("/search/{tags}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
-    fun searchBlueprintModels(@PathVariable(value = "tags") tags: String): List<BlueprintModelSearch> {
-        return this.bluePrintModelHandler.searchBlueprintModels(tags)
-    }
+    suspend fun searchBlueprintModels(@PathVariable(value = "tags") tags: String): List<BlueprintModelSearch> =
+        mdcWebCoroutineScope {
+            bluePrintModelHandler.searchBlueprintModels(tags)
+        }
 
     @DeleteMapping("/name/{name}/version/{version}")
     @ApiOperation(
@@ -199,12 +200,12 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     @PreAuthorize("hasRole('USER')")
-    fun deleteBlueprint(
+    suspend fun deleteBlueprint(
         @ApiParam(value = "Name of the CBA.", required = true)
         @PathVariable(value = "name") name: String,
         @ApiParam(value = "Version of the CBA.", required = true)
         @PathVariable(value = "version") version: String
-    ) = monoMdc {
+    ) = mdcWebCoroutineScope {
         bluePrintModelHandler.deleteBlueprintModel(name, version)
     }
 }
