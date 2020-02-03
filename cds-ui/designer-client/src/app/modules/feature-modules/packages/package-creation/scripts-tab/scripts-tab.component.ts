@@ -61,8 +61,8 @@ export class ScriptsTabComponent implements OnInit {
             droppedFile.file((file: File) => {
                 const fileReader = new FileReader();
                 fileReader.onload = (e) => {
-                    this.packageCreationStore.addScripts(droppedFile.name,
-                        this.packageCreationUtils.transformToJson(fileReader.result));
+                    this.packageCreationStore.addScripts('Scripts/' + droppedFile.name,
+                        fileReader.result.toString());
                 };
                 fileReader.readAsText(file);
             });
