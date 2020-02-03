@@ -1,7 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {FileSystemFileEntry, NgxFileDropEntry} from 'ngx-file-drop';
-import {PackageCreationStore} from '../package-creation.store';
-import {PackageCreationUtils} from '../package-creation.utils';
+import { Component, OnInit } from '@angular/core';
+import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
+import { PackageCreationStore } from '../package-creation.store';
+import { PackageCreationUtils } from '../package-creation.utils';
+import 'ace-builds/src-noconflict/ace';
+import 'ace-builds/webpack-resolver';
 
 
 @Component({
@@ -63,9 +65,8 @@ export class ImportsTabComponent implements OnInit {
     }
 
     removeFile(fileIndex: number) {
-        console.log(this.uploadedFiles[fileIndex]);
-        console.log(this.uploadedFiles);
-        this.packageCreationStore.removeFileFromDefinition(this.uploadedFiles[fileIndex].name);
+        const filename = 'Definitions/' + this.uploadedFiles[fileIndex].name;
+        this.packageCreationStore.removeFileFromDefinition(filename);
         this.uploadedFiles.splice(fileIndex, 1);
     }
 
@@ -92,8 +93,8 @@ export class ImportsTabComponent implements OnInit {
             droppedFile.file((file: File) => {
                 const fileReader = new FileReader();
                 fileReader.onload = (e) => {
-                    this.packageCreationStore.addDefinition(droppedFile.name,
-                        this.packageCreationUtils.transformToJson(fileReader.result));
+                    this.packageCreationStore.addDefinition('Definitions/' + droppedFile.name,
+                        fileReader.result.toString());
                 };
                 fileReader.readAsText(file);
             });

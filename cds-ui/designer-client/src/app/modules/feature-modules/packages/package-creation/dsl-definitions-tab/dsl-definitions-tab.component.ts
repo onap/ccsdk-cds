@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {DslDefinition} from '../mapping-models/CBAPacakge.model';
-import {PackageCreationStore} from '../package-creation.store';
+import { Component, OnInit } from '@angular/core';
+import { DslDefinition } from '../mapping-models/CBAPacakge.model';
+import { PackageCreationStore } from '../package-creation.store';
 
 @Component({
     selector: 'app-dsl-definitions-tab',
@@ -18,5 +18,9 @@ export class DslDefinitionsTabComponent implements OnInit {
     ngOnInit() {
         this.packageCreationStore.changeDslDefinition(this.dslDefinition);
 
+    }
+
+    textChanged(event) {
+        console.log('event changed');
     }
 }

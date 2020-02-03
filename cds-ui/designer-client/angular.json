@@ -36,6 +36,7 @@
             "scripts": [
               "./node_modules/ace-builds/src-min/ace.js",
               "./node_modules/ace-builds/src-min/theme-eclipse.js",
+              "./node_modules/ace-builds/src-min/theme-tomorrow_night_bright.js",
               "./node_modules/ace-builds/src-min/mode-json.js",
               "./node_modules/ace-builds/src-min/mode-javascript.js",
               "./node_modules/ace-builds/src-min/mode-python.js",
@@ -49,6 +50,7 @@
               "./node_modules/ace-builds/src-min/ext-beautify.js",
               "./node_modules/ace-builds/src-min/ext-searchbox.js",
               "./node_modules/ace-builds/src-min/ext-language_tools.js",
+              "./node_modules/ace-builds/src-min/worker-json.js",
               "./node_modules/jquery/dist/jquery.js",
               "./node_modules/lodash/index.js",
               "./node_modules/backbone/backbone.js",

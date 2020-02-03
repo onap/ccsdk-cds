@@ -45,17 +45,6 @@ Content-Type: application/vnd.oasis.bpmn*/
 
 export class MetaDataFile {
 
-    static getValueOfMetaData(metaDataTab: MetaDataTabModel): string {
-        return 'TOSCA-Meta-File-Version: 1.0.0\n' +
-            'CSAR-Version: 1.0\n' +
-            'Created-By: Shaaban Ebrahim <shaaban.eltanany.ext@orange.con>\n' +
-            'Entry-Definitions:' + metaDataTab.entryFileName + '\n' +
-            'Template-Name:' + metaDataTab.name + '\n' +
-            'Template-Version:' + metaDataTab.version + '\n' +
-            'Template-Type: ' + metaDataTab.mode + '\n' +
-            'Template-Tags:' + metaDataTab.tags;
-
-    }
 
 }
 
@@ -117,5 +106,9 @@ export class FilesContent {
 
     public static putData(fileName: string, content: string) {
         FilesContent.mapOfFilesNamesAndContent.set(fileName, content);
+    }
+
+    public static clear() {
+        this.mapOfFilesNamesAndContent = new Map<string, string>();
     }
 }

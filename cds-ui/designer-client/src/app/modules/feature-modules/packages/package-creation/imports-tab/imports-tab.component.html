@@ -39,7 +39,7 @@
                         <button class="btn btn-link collapsed" data-toggle="collapse"
                             [attr.data-target]="'#id-'+mapIndex" aria-expanded="false"
                             [attr.aria-controls]="'id-'+mapIndex">
-                            <i class="icon-file-code"></i> Definitions/{{file.key}}
+                            <i class="icon-file-code"></i> {{file.key}}
                         </button>
                         <a class="accordion-delete" (click)="removeFile(mapIndex)"><i class="icon-delete"></i></a>
                     </h5>
@@ -47,7 +47,9 @@
                 <div [id]="'id-'+mapIndex" class="collapse" [attr.aria-labelledby]="'head-'+mapIndex"
                     data-parent="#accordion">
                     <div class="card-body">
-                        {{file.value}}
+                        <ace-editor [(text)]="file.value" [mode]="'json'" [autoUpdateContent]="true"
+                            [durationBeforeCallback]="1000" [theme]="'tomorrow_night_bright'" #editor style="height:300px;">
+                        </ace-editor>
                     </div>
                 </div>
             </div>
@@ -90,7 +92,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)"
+                <ngx-file-drop accept=".json" dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)"
                     (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)">
                     <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
                         <div class="folder-upload">
