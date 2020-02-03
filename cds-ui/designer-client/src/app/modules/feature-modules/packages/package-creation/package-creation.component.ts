@@ -20,11 +20,14 @@ limitations under the License.
 */
 
 import {Component, OnInit} from '@angular/core';
-import {FilesContent, FolderNodeElement, MetaDataFile, MetaDataTabModel} from './mapping-models/metadata/MetaDataTab.model';
-// import {saveAs} from 'file-saver/dist/FileSaver';
+import {FilesContent, FolderNodeElement, MetaDataTabModel} from './mapping-models/metadata/MetaDataTab.model';
+
 import * as JSZip from 'jszip';
 import {PackageCreationStore} from './package-creation.store';
 import {Definition} from './mapping-models/CBAPacakge.model';
+import {PackageCreationModes} from './creationModes/PackageCreationModes';
+import {PackageCreationBuilder} from './creationModes/PackageCreationBuilder';
+
 
 @Component({
     selector: 'app-package-creation',
@@ -42,6 +45,9 @@ export class PackageCreationComponent implements OnInit {
     private filesData: any = [];
     private definition: Definition = new Definition();
 
+    // adding initial referencing to designer mode
+
+
     constructor(private packageCreationStore: PackageCreationStore) {
     }
 
@@ -53,14 +59,18 @@ export class PackageCreationComponent implements OnInit {
         this.packageCreationStore.state$.subscribe(
             cbaPackage => {
                 console.log(cbaPackage);
-                this.metaDataTab = cbaPackage.metaData;
-                this.setModeType(this.metaDataTab);
-                this.setEntryPoint(this.metaDataTab);
-                this.addToscaMetaDataFile(this.metaDataTab);
+                FilesContent.clear();
+                let packageCreationModes: PackageCreationModes;
+                cbaPackage = PackageCreationModes.mapModeType(cbaPackage);
+                cbaPackage.metaData = PackageCreationModes.setEntryPoint(cbaPackage.metaData);
+                packageCreationModes = PackageCreationBuilder.getCreationMode(cbaPackage);
+                packageCreationModes.execute(cbaPackage);
+                /*
+                 this.addToscaMetaDataFile(this.metaDataTab);
 
-                this.definition = cbaPackage.definitions;
-                this.definition.metaDataTab = cbaPackage.metaData;
-                this.createDefinitionsFolder(this.definition);
+                 this.definition = cbaPackage.definitions;
+                 this.definition.metaDataTab = cbaPackage.metaData;
+                 this.createDefinitionsFolder(this.definition);*/
                 // const vlbDefinition: VlbDefinition = new VlbDefinition();
                 // this.fillVLBDefinition(vlbDefinition, this.metaDataTab);
 
@@ -71,29 +81,6 @@ export class PackageCreationComponent implements OnInit {
 
     }
 
-    private addToscaMetaDataFile(metaDataTab: MetaDataTabModel) {
-        const filename = 'TOSCA-Metadata/TOSCA.meta';
-        FilesContent.putData(filename, MetaDataFile.getValueOfMetaData(metaDataTab));
-    }
-
-// TODO use enumerator
-    private setModeType(metaDataTab: MetaDataTabModel) {
-        if (metaDataTab.mode.startsWith('Scripting')) {
-            metaDataTab.mode = 'KOTLIN_SCRIPT';
-        } else if (metaDataTab.mode.startsWith('Designer')) {
-            metaDataTab.mode = 'DEFAULT';
-        } else {
-            metaDataTab.mode = 'GENERIC_SCRIPT';
-        }
-    }
-
-    private setEntryPoint(metaDataTab: MetaDataTabModel) {
-        if (metaDataTab.mode.startsWith('DEFAULT')) {
-            metaDataTab.entryFileName = 'Definitions/vLB_CDS.json';
-        } else {
-            metaDataTab.entryFileName = '';
-        }
-    }
 
     saveBluePrintToDataBase() {
         this.create();
@@ -105,7 +92,11 @@ export class PackageCreationComponent implements OnInit {
 
 
     create() {
-        this.folder.TREE_DATA.forEach((path) => {
+        FilesContent.getMapOfFilesNamesAndContent().forEach((key, value) => {
+            this.zipFile.folder(key.split('/')[0]);
+            this.zipFile.file(key, value);
+        });
+        /*this.folder.TREE_DATA.forEach((path) => {
             const name = path.name;
             if (path.children) {
                 this.zipFile.folder(name);
@@ -114,12 +105,13 @@ export class PackageCreationComponent implements OnInit {
                     if (FilesContent.getMapOfFilesNamesAndContent().has(name2)) {
                         this.zipFile.file(name + '/' + name2, FilesContent.getMapOfFilesNamesAndContent().get(name2));
                     } else {
+                        // this.zipFile.file(name2, FilesContent.getMapOfFilesNamesAndContent().get(name2));
                     }
 
                 });
 
             }
-        });
+        });*/
     }
 
     private createDefinitionsFolder(definition: Definition) {

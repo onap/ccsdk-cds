@@ -23,7 +23,7 @@
                         <button [attr.aria-controls]="'id-'+mapIndex" [attr.data-target]="'#id-'+mapIndex"
                                 aria-expanded="false" class="btn btn-link collapsed"
                                 data-toggle="collapse">
-                            <i class="icon-file-code"></i> Definitions/{{file.key}}
+                            <i class="icon-file-code"></i> {{file.key}}
                         </button>
                         <a (click)="removeFile(mapIndex)" class="accordion-delete"><i class="icon-delete"></i></a>
                     </h5>
