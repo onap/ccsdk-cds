@@ -46,6 +46,12 @@
                                href="#nav-metadata"
                                role="tab" aria-controls="nav-metadata"
                                aria-selected="true">METADATA</a>
+                            <a class="nav-item nav-link" id="nav-template-tab" data-toggle="tab" href="#nav-template"
+                               role="tab" aria-controls="nav-template"
+                               aria-selected="false">TEMPLATE & MAPPING</a>
+                            <a class="nav-item nav-link" id="nav-scripts-tab" data-toggle="tab" href="#nav-scripts"
+                               role="tab" aria-controls="nav-scripts"
+                               aria-selected="false">SCRIPTS</a>
                             <a class="nav-item nav-link" id="nav-imports-tab" data-toggle="tab" href="#nav-imports"
                                role="tab" aria-controls="nav-imports"
                                aria-selected="false">IMPORTS</a>
@@ -53,12 +59,6 @@
                                href="#nav-authentication"
                                role="tab" aria-controls="nav-authentication"
                                aria-selected="false">EXTERNAL SYSTEM AUTHENTICATION PROPERTIES</a>
-                            <a class="nav-item nav-link" id="nav-template-tab" data-toggle="tab" href="#nav-template"
-                               role="tab" aria-controls="nav-template"
-                               aria-selected="false">TEMPLATE & MAPPING</a>
-                            <a class="nav-item nav-link" id="nav-scripts-tab" data-toggle="tab" href="#nav-scripts"
-                               role="tab" aria-controls="nav-scripts"
-                               aria-selected="false">SCRIPTS</a>
                         </div>
                     </div>
 
@@ -70,6 +70,14 @@
                                  aria-labelledby="nav-metadata-tab">
                                 <app-metadata-tab></app-metadata-tab>
                             </div>
+                            <div class="tab-pane fade" id="nav-template" role="tabpanel"
+                                 aria-labelledby="nav-template-tab">
+                                <app-template-mapping></app-template-mapping>
+                            </div>
+                            <div class="tab-pane fade" id="nav-scripts" role="tabpanel"
+                                 aria-labelledby="nav-scripts-tab">
+                                <app-scripts-tab></app-scripts-tab>
+                            </div>
                             <div class="tab-pane fade" id="nav-imports" role="tabpanel"
                                  aria-labelledby="nav-imports-tab">
                                 <app-imports-tab></app-imports-tab>
@@ -78,14 +86,6 @@
                             <div class="tab-pane fade" id="nav-authentication" role="tabpanel"
                                  aria-labelledby="nav-authentication-tab">
                                 <app-dsl-definitions-tab></app-dsl-definitions-tab>
-                            </div>
-                            <div class="tab-pane fade" id="nav-template" role="tabpanel"
-                                 aria-labelledby="nav-template-tab">
-                                <app-template-mapping></app-template-mapping>
-                            </div>
-                            <div class="tab-pane fade" id="nav-scripts" role="tabpanel"
-                                 aria-labelledby="nav-scripts-tab">
-                                <app-scripts-tab></app-scripts-tab>
                             </div>
                         </div>
                     </div>
