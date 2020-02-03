@@ -92,8 +92,8 @@ export class ImportsTabComponent implements OnInit {
             droppedFile.file((file: File) => {
                 const fileReader = new FileReader();
                 fileReader.onload = (e) => {
-                    this.packageCreationStore.addDefinition(droppedFile.name,
-                        this.packageCreationUtils.transformToJson(fileReader.result));
+                    this.packageCreationStore.addDefinition('Definitions/' + droppedFile.name,
+                            fileReader.result.toString());
                 };
                 fileReader.readAsText(file);
             });
