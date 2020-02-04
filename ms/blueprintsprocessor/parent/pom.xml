@@ -64,6 +64,7 @@
         <commons-io-version>2.6</commons-io-version>
         <commons-lang3-version>3.2.1</commons-lang3-version>
         <commons-collections-version>3.2.2</commons-collections-version>
+        <error-catalog.version>0.0.1-SNAPSHOT</error-catalog.version>
     </properties>
 
     <dependencyManagement>
@@ -406,6 +407,11 @@
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>db-lib</artifactId>
                 <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.error.catalog</groupId>
+                <artifactId>error-catalog</artifactId>
+                <version>${error-catalog.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
@@ -758,31 +764,6 @@
             <artifactId>netty-tcnative-boringssl-static</artifactId>
         </dependency>
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>spring-libs-milestone</id>
-            <name>Spring Milestone Maven Repository</name>
-            <url>http://oss.jfrog.org/artifactory/oss-release-local/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>spring-libs-milestone-snapshot</id>
-            <name>Spring Milestone Maven Repository - snapshots</name>
-            <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 
     <build>
         <plugins>
