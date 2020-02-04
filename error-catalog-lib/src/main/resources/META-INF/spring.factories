@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=org.onap.ccsdk.error.catalog.config.ErrorCatalogConfiguration,\
+org.onap.ccsdk.error.catalog.config.ErrorCatalogDatabaseConfiguration
