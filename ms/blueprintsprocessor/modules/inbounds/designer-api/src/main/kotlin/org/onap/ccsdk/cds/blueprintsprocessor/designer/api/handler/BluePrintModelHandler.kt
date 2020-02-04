@@ -31,6 +31,8 @@ import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.WorkFlowSpecResponse
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.WorkFlowsResponse
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.load.BluePrintDatabaseLoadService
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.utils.BluePrintEnhancerUtils
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.error.BlueprintProcessorErrorCodes
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.error.ErrorCatalogManagerImpl
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
@@ -45,6 +47,8 @@ import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintCompileCach
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.error.catalog.data.ErrorMessageLibConstants.Companion.ERROR_CATALOG_PROTOCOL_HTTP
+import org.onap.ccsdk.error.catalog.service.ErrorCatalogService
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.core.io.Resource
 import org.springframework.data.domain.Page
@@ -74,10 +78,12 @@ open class BluePrintModelHandler(
     private val blueprintModelSearchRepository: BlueprintModelSearchRepository,
     private val blueprintModelRepository: BlueprintModelRepository,
     private val blueprintModelContentRepository: BlueprintModelContentRepository,
-    private val bluePrintEnhancerService: BluePrintEnhancerService
+    private val bluePrintEnhancerService: BluePrintEnhancerService,
+    private val errorCatalogService: ErrorCatalogService
 ) {
 
     private val log = logger(BluePrintModelHandler::class)
+    private val errorManager = ErrorCatalogManagerImpl(errorCatalogService)
 
     open suspend fun bootstrapBlueprint(bootstrapRequest: BootstrapRequest) {
         log.info(
@@ -451,12 +457,9 @@ open class BluePrintModelHandler(
             }
             // Save the Copied file to Database
             val blueprintId = blueprintsProcessorCatalogService.saveToDatabase(saveId, compressedFile, validate)
-
             return blueprintModelSearchRepository.findById(blueprintId)
-                ?: throw BluePrintException(
-                    ErrorCode.RESOURCE_NOT_FOUND.value,
-                    String.format(BLUEPRINT_MODEL_ID_FAILURE_MSG, blueprintId)
-                )
+                ?: throw errorManager.generateException(BlueprintProcessorErrorCodes.RESOURCE_NOT_FOUND,
+                        ERROR_CATALOG_PROTOCOL_HTTP, String.format(BLUEPRINT_MODEL_ID_FAILURE_MSG, blueprintId))
         } catch (e: IOException) {
             throw BluePrintException(
                 ErrorCode.IO_FILE_INTERRUPT.value,

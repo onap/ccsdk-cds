@@ -26,8 +26,12 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInpu
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.mdcWebCoroutineScope
 import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.utils.determineHttpStatusCode
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.error.BlueprintProcessorErrorCodes
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.error.ErrorCatalogManagerImpl
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
+import org.onap.ccsdk.error.catalog.data.ErrorMessageLibConstants.Companion.ERROR_CATALOG_PROTOCOL_HTTP
+import org.onap.ccsdk.error.catalog.service.ErrorCatalogService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -46,7 +50,7 @@ import javax.annotation.PreDestroy
     value = "/api/v1/execution-service",
     description = "Interaction with CBA."
 )
-open class ExecutionServiceController {
+open class ExecutionServiceController(private val errorCatalogService: ErrorCatalogService) {
 
     val log = logger(ExecutionServiceController::class)
 
@@ -54,6 +58,8 @@ open class ExecutionServiceController {
 
     @Autowired
     lateinit var executionServiceHandler: ExecutionServiceHandler
+
+    private val errorManager = ErrorCatalogManagerImpl(errorCatalogService)
 
     @RequestMapping(
         path = ["/health-check"],
@@ -81,7 +87,8 @@ open class ExecutionServiceController {
     ): ResponseEntity<ExecutionServiceOutput> = mdcWebCoroutineScope {
 
         if (executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC) {
-            throw IllegalStateException("Can't process async request through the REST endpoint. Use gRPC for async processing.")
+            throw errorManager.generateException(BlueprintProcessorErrorCodes.GENERIC_PROCESS_FAILURE,
+                    ERROR_CATALOG_PROTOCOL_HTTP, "Can't process async request through the REST endpoint. Use gRPC for async processing.")
         }
         ph.register()
         val processResult = executionServiceHandler.doProcess(executionServiceInput)
