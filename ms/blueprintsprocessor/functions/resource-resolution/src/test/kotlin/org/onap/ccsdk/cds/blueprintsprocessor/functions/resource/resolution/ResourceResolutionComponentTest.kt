@@ -1,5 +1,6 @@
 /*
  * Copyright © 2018 Bell Canada
+ * Modifications Copyright © 2020 IBM, Bell Canada.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +27,8 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.blueprintsprocessor.error.catalog.interfaces.ErrorCatalogException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintError
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -79,7 +80,7 @@ class ResourceResolutionComponentTest {
         runBlocking {
             try {
                 resourceResolutionComponent.processNB(executionRequest)
-            } catch (e: BluePrintProcessorException) {
+            } catch (e: ErrorCatalogException) {
                 assertEquals(
                     "Can't proceed with the resolution: either provide resolution-key OR combination of resource-id and resource-type.",
                     e.message
@@ -98,7 +99,7 @@ class ResourceResolutionComponentTest {
         runBlocking {
             try {
                 resourceResolutionComponent.processNB(executionRequest)
-            } catch (e: BluePrintProcessorException) {
+            } catch (e: ErrorCatalogException) {
                 assertEquals(
                     "Can't proceed with the resolution: both resource-id and resource-type should be provided, one of them is missing.",
                     e.message
@@ -118,7 +119,7 @@ class ResourceResolutionComponentTest {
         runBlocking {
             try {
                 resourceResolutionComponent.processNB(executionRequest)
-            } catch (e: BluePrintProcessorException) {
+            } catch (e: ErrorCatalogException) {
                 assertEquals(
                     "Can't proceed with the resolution: can't persist resolution without a correlation key. " +
                         "Either provide a resolution-key OR combination of resource-id and resource-type OR set `storeResult` to false.",
