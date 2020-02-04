@@ -1,0 +1,82 @@
+{
+  "data_types": {
+    "sample-property": {
+      "description": "This is sample data type",
+      "version": "1.0.0",
+      "properties": {
+        "content": {
+          "required": false,
+          "type": "string"
+        },
+        "process-name": {
+          "required": false,
+          "type": "string"
+        },
+        "version": {
+          "required": false,
+          "type": "string",
+          "default": "LATEST"
+        }
+      },
+      "derived_from": "tosca.datatypes.Root"
+    },
+    "dt-resource-assignment-properties": {
+      "description": "This is Dynamically generated data type for workflow activate",
+      "version": "1.0.0",
+      "properties": {
+        "request-id": {
+          "required": true,
+          "type": "string"
+        },
+        "service-instance-id": {
+          "required": true,
+          "type": "string"
+        },
+        "vnf-id": {
+          "required": true,
+          "type": "string"
+        },
+        "action-name": {
+          "required": true,
+          "type": "string"
+        },
+        "scope-type": {
+          "required": true,
+          "type": "string"
+        },
+        "hostname": {
+          "required": true,
+          "type": "string"
+        },
+        "vnf_name": {
+          "required": true,
+          "type": "string"
+        }
+      },
+      "derived_from": "tosca.datatypes.Dynamic"
+    },
+    "dt-assign-activate-properties": {
+      "description": "This is Dynamically generated data type for workflow assign-activate",
+      "version": "1.0.0",
+      "properties": {
+        "request-id": {
+          "required": true,
+          "type": "string"
+        },
+        "action-name": {
+          "required": true,
+          "type": "string"
+        },
+        "scope-type": {
+          "required": true,
+          "type": "string"
+        },
+        "hostname": {
+          "required": true,
+          "type": "string"
+        }
+      },
+      "derived_from": "tosca.datatypes.Dynamic"
+    }
+  }
+}

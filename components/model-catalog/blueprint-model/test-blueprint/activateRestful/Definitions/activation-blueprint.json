@@ -1,0 +1,123 @@
+{
+  "metadata": {
+    "template_author": "Brinda Santh Muthuramalingam",
+    "author-email": "brindasanth@in.ibm.com",
+    "user-groups": "ADMIN, OPERATION",
+    "template_name": "baseconfiguration",
+    "template_version": "1.0.0",
+    "template_tags": "brinda, tosca"
+  },
+  "imports": [
+    {
+      "file": "Definitions/data_types.json"
+    },
+    {
+      "file": "Definitions/relationship_types.json"
+    },
+    {
+      "file": "Definitions/artifact_types.json"
+    },
+    {
+      "file": "Definitions/node_types.json"
+    },
+    {
+      "file": "Definitions/policy_types.json"
+    }
+  ],
+  "topology_template": {
+    "inputs": {
+      "request-id": {
+        "required": true,
+        "type": "string"
+      },
+      "action-name": {
+        "required": true,
+        "type": "string"
+      },
+      "scope-type": {
+        "required": true,
+        "type": "string"
+      },
+      "hostname": {
+        "required": true,
+        "type": "string"
+      }
+    },
+    "node_templates": {
+      "activate-restful": {
+        "type": "component-restful-executor",
+        "interfaces": {
+          "ComponentRestfulExecutor": {
+            "operations": {
+              "process": {
+                "implementation": {
+                  "primary": "component-script"
+                },
+                "inputs": {
+                  "instance-dependencies": [
+                    "json-parser-service"
+                  ]
+                },
+                "outputs": {
+                  "response-data": "",
+                  "status": ""
+                }
+              }
+            }
+          }
+        },
+        "artifacts": {
+          "component-script": {
+            "type": "artifact-script-jython",
+            "file": "Scripts/python/SampleRestfulComponentNode.py"
+          }
+        }
+      }
+    },
+    "relationship_templates": {
+      "cli-device-properties": {
+        "type": "tosca.relationships.ConnectsTo.SshClient",
+        "description": "SSH Connection",
+        "properties": {
+          "connection-config": {
+            "password": "sample-password",
+            "host": {
+              "get_input": "hostname"
+            },
+            "type": "basic-auth",
+            "connectionTimeOut": 30,
+            "username": "sample-user"
+          }
+        }
+      }
+    },
+    "workflows": {
+      "activate": {
+        "inputs": {
+          "request-id": {
+            "required": true,
+            "type": "string"
+          },
+          "action-name": {
+            "required": true,
+            "type": "string"
+          },
+          "scope-type": {
+            "required": true,
+            "type": "string"
+          },
+          "hostname": {
+            "required": true,
+            "type": "string"
+          }
+        },
+        "steps": {
+          "activate-process": {
+            "description": "Restful Activation Workflow",
+            "target": "activate-process"
+          }
+        }
+      }
+    }
+  }
+}
