@@ -425,7 +425,7 @@
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
-                <artifactId>nrm-restful</artifactId>
+                <artifactId>restful-executor</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>

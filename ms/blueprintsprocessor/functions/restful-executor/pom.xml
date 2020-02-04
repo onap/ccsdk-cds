@@ -24,11 +24,10 @@
     </parent>
 
     <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
-    <artifactId>nrm-restful</artifactId>
-    <packaging>jar</packaging>
+    <artifactId>restful-executor</artifactId>
 
-    <name>Blueprints Processor Function - NRM Restful</name>
-    <description>Blueprints Processor Function - NRM Restful</description>
+    <name>Blueprints Processor Function - NRM Restful executor</name>
+    <description>Blueprints Processor Function - NRM Restful executor</description>
 
     <dependencies>
         <dependency>
@@ -47,6 +46,11 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
