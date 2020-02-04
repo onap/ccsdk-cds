@@ -1,5 +1,6 @@
 /*
  * Copyright © 2018-2019 AT&T Intellectual Property.
+ * Modifications Copyright © 2020 IBM, Bell Canada.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +23,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.PrimaryDatabaseConfigur
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
+import org.springframework.context.annotation.Primary
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean
@@ -40,6 +42,7 @@ open class BlueprintDatabaseConfiguration(primaryDataSourceProperties: PrimaryDa
     PrimaryDatabaseConfiguration(primaryDataSourceProperties) {
 
     @Bean("primaryEntityManager")
+    @Primary
     open fun primaryEntityManager(): LocalContainerEntityManagerFactoryBean {
         return primaryEntityManager(
             "org.onap.ccsdk.cds.controllerblueprints",
@@ -48,6 +51,7 @@ open class BlueprintDatabaseConfiguration(primaryDataSourceProperties: PrimaryDa
     }
 
     @Bean("primaryDataSource")
+    @Primary
     override fun primaryDataSource(): DataSource {
         return super.primaryDataSource()
     }
