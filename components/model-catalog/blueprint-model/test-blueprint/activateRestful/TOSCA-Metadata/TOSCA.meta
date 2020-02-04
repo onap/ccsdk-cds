@@ -1,0 +1,9 @@
+TOSCA-Meta-File-Version: 1.0.0
+CSAR-Version: 1.0
+Created-By: Huang Cheng <duke.huangcheng@huawei.com>
+Entry-Definitions: Definitions/activation-blueprint.json
+Template-Name: activateRestful
+Template-Version: 1.0.0
+Template-Type: DEFAULT
+Template-Tags: Huang cheng, activation-blueprint
+

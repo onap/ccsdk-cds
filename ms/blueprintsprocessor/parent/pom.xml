@@ -514,6 +514,11 @@
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
+                <artifactId>restful-executor</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
                 <artifactId>ansible-awx-executor</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
