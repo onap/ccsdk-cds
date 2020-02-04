@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.functions.nrm.restful
+package org.onap.ccsdk.cds.blueprintsprocessor.functions.restful.executor.nrmfunction
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
