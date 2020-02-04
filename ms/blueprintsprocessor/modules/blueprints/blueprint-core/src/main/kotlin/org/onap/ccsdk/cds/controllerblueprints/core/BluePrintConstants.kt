@@ -242,3 +242,21 @@ object BluePrintConstants {
     const val PROPERTY_CLUSTER_STORAGE_PATH = "CLUSTER_STORAGE_PATH"
     const val PROPERTY_CLUSTER_CONFIG_FILE = "CLUSTER_CONFIG_FILE"
 }
+
+object BlueprintComponentConstants {
+    const val BLUEPRINT_RUNTIME_PROCESSOR = 1
+    const val COMMAND_EXECUTOR = 2
+    const val PY_EXECUTOR = 3
+    const val SDC_LISTENER = 4
+}
+
+object ErrorCodeDomainsConstants {
+    const val BLUEPRINT_PROCESSOR = "org.onap.ccsdk.cds.blueprintsprocessor"
+    const val SDC_LISTENER = "org.onap.ccsdk.cds.sdclistener"
+    const val NETCONF_EXECUTOR = "org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor"
+    const val RESOURCE_RESOLUTION = "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution"
+    const val RESTCONF_EXECUTOR = "org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor"
+    const val CLI_EXECUTOR = "org.onap.ccsdk.cds.blueprintsprocessor.functions.cli.executor"
+    const val PYTHON_EXECUTOR = "org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor"
+    const val SELFSERVICE_API = "org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api"
+}
