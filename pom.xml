@@ -42,6 +42,7 @@ limitations under the License.
         <module>ms</module>
         <module>cds-ui</module>
         <module>components</module>
+        <module>error-catalog-lib</module>
     </modules>
 
     <properties>
