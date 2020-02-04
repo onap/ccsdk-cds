@@ -90,7 +90,7 @@ open class BluePrintModelHandler(
     }
 
     /**
-     * This is a getAllBlueprintModel method to retrieve all the BlueprintModel in Database
+     * This is a getAllBlueprintModel method to retrieve all the Domain in Database
      *
      * @return List<BlueprintModelSearch> list of the controller blueprint archives
     </BlueprintModelSearch> */
@@ -99,7 +99,7 @@ open class BluePrintModelHandler(
     }
 
     /**
-     * This is a getAllBlueprintModel method to retrieve all the BlueprintModel in Database
+     * This is a getAllBlueprintModel method to retrieve all the Domain in Database
      *
      * @return List<BlueprintModelSearch> list of the controller blueprint archives
     </BlueprintModelSearch> */
@@ -216,7 +216,7 @@ open class BluePrintModelHandler(
      * This is a getBlueprintModel method
      *
      * @param id id
-     * @return BlueprintModel
+     * @return Domain
      * @throws BluePrintException BluePrintException
      */
     @Throws(BluePrintException::class)
@@ -237,7 +237,7 @@ open class BluePrintModelHandler(
      *
      * @param name name
      * @param version version
-     * @return BlueprintModel
+     * @return Domain
      * @throws BluePrintException BluePrintException
      */
     @Throws(BluePrintException::class)
@@ -269,7 +269,7 @@ open class BluePrintModelHandler(
     }
 
     /**
-     * This is a searchBluePrintModelsByKeyWord method to retrieve specific  BlueprintModel in Database
+     * This is a searchBluePrintModelsByKeyWord method to retrieve specific  Domain in Database
      * where keyword equals updatedBy or tags or artifcat name or artifcat version or artifact type
      * @author Shaaban Ebrahim
      * @param keyWord
@@ -283,7 +283,7 @@ open class BluePrintModelHandler(
     }
 
     /**
-     * This is a searchBluePrintModelsByKeyWordPagebale method to retrieve specific  BlueprintModel in Database
+     * This is a searchBluePrintModelsByKeyWordPagebale method to retrieve specific  Domain in Database
      * where keyword equals updatedBy or tags or artifcat name or artifcat version or artifact type and pageable
      * @author Shaaban Ebrahim
      * @param keyWord
