@@ -454,8 +454,8 @@ open class BluePrintModelHandler(
 
             return blueprintModelSearchRepository.findById(blueprintId)
                 ?: throw BluePrintException(
-                    ErrorCode.RESOURCE_NOT_FOUND.value,
-                    String.format(BLUEPRINT_MODEL_ID_FAILURE_MSG, blueprintId)
+                        ErrorCode.RESOURCE_NOT_FOUND.value,
+                        String.format(BLUEPRINT_MODEL_ID_FAILURE_MSG, blueprintId)
                 )
         } catch (e: IOException) {
             throw BluePrintException(
