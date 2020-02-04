@@ -64,11 +64,11 @@ open class BluePrintPropertyConfiguration {
 open class BluePrintPropertiesService(private var bluePrintPropertyBinder: Binder) {
     private val log = logger(BluePrintPropertiesService::class)
 
-    fun <T> propertyBeanType(prefix: String, type: Class<T>): T {
+    fun <T> propertyBeanType(prefix: String, type: Class<T>, propertyFileName: String = "application.properties"): T {
         return try {
             bluePrintPropertyBinder.bind(prefix, Bindable.of(type)).get()
         } catch (e: NoSuchElementException) {
-            val errMsg = "Error: missing property \"$prefix\"... Check the application.properties file."
+            val errMsg = "Error: missing property \"$prefix\"... Check the $propertyFileName file."
             log.error(errMsg)
             throw BluePrintProcessorException(e, errMsg)
         }
