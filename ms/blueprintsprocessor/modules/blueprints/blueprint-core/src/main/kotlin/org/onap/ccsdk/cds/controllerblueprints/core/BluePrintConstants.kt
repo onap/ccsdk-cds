@@ -241,3 +241,14 @@ object BluePrintConstants {
     const val PROPERTY_CLUSTER_JOIN_AS_CLIENT = "CLUSTER_JOIN_AS_CLIENT"
     const val PROPERTY_CLUSTER_CONFIG_FILE = "CLUSTER_CONFIG_FILE"
 }
+
+object ErrorCatalogDomainsConstants {
+    const val BLUEPRINT_PROCESSOR = "org.onap.ccsdk.cds.blueprintsprocessor"
+    const val NETCONF_EXECUTOR = "org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor"
+    const val RESOURCE_RESOLUTION = "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution"
+    const val RESTCONF_EXECUTOR = "org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor"
+    const val CLI_EXECUTOR = "org.onap.ccsdk.cds.blueprintsprocessor.functions.cli.executor"
+    const val PYTHON_EXECUTOR = "org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor"
+    const val SELF_SERVICE_API = "org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api"
+    const val SDC_LISTENER = "org.onap.ccsdk.cds.sdclistener"
+}

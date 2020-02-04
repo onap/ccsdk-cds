@@ -26,6 +26,9 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInpu
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.mdcWebCoroutineScope
 import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.utils.determineHttpStatusCode
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.error.BlueprintProcessorErrorCodes
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.error.data.CDSErrorException
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.error.data.CDSErrorImpl
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.springframework.beans.factory.annotation.Autowired
@@ -81,7 +84,12 @@ open class ExecutionServiceController {
     ): ResponseEntity<ExecutionServiceOutput> = mdcWebCoroutineScope {
 
         if (executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC) {
-            throw IllegalStateException("Can't process async request through the REST endpoint. Use gRPC for async processing.")
+            val errorType = BlueprintProcessorErrorCodes.GENERIC_PROCESS_FAILURE
+            val cdsErrorImpl = CDSErrorImpl(errorType.httpCode, errorType.name)
+            val cdsErrorException = CDSErrorException(cdsErrorImpl, message = "Can't process async request through the " +
+                    "REST endpoint. Use gRPC for async processing.")
+            cdsErrorException.updateErrorCatalogException(errorType.getErrorModel())
+            throw cdsErrorException
         }
         ph.register()
         val processResult = executionServiceHandler.doProcess(executionServiceInput)
