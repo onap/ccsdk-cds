@@ -1,0 +1,24 @@
+{
+  "relationship_types": {
+    "tosca.relationships.ConnectsTo": {
+      "description": "Relationship tosca.relationships.ConnectsTo",
+      "version": "1.0.0",
+      "derived_from": "tosca.relationships.Root"
+    },
+    "tosca.relationships.ConnectsTo.SshClient": {
+      "description": "Relationship connects to through SSH Client.",
+      "version": "1.0.0",
+      "properties": {
+        "connection-config": {
+          "description": "Connection Config details.",
+          "required": true,
+          "type": "map"
+        }
+      },
+      "derived_from": "tosca.relationships.ConnectsTo",
+      "valid_target_types": [
+        "tosca.capabilities.Endpoint"
+      ]
+    }
+  }
+}

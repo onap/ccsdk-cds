@@ -36,6 +36,7 @@
         <module>nrm-restful</module>
         <module>ansible-awx-executor</module>
         <module>python-executor</module>
+        <module>restful-executor</module>
         <module>netconf-executor</module>
         <module>restconf-executor</module>
         <module>cli-executor</module>
