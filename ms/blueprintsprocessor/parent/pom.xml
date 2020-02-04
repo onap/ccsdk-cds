@@ -441,6 +441,11 @@
                 <artifactId>ssh-lib</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>error-catalog</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
 
             <!-- message-lib dependency -->
             <dependency>
