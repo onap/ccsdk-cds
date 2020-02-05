@@ -202,20 +202,20 @@ class ResourceResolutionServiceTest {
                 "resource-assignment"
             )
 
-            resourceResolutionService.resolveResources(
-                resourceAssignmentRuntimeService,
-                "resource-assignment",
-                artifactPrefix,
-                props
+            assertNotNull(
+                resourceResolutionService.resolveResources(
+                    resourceAssignmentRuntimeService,
+                    "resource-assignment",
+                    artifactPrefix,
+                    props
+                ), "Couldn't Resolve Resources for artifact $artifactPrefix"
             )
         }
     }
 
     @Test
     fun testResolveResourcesWithResourceIdAndResourceType() {
-
         props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] = ""
-
         runBlocking {
             Assert.assertNotNull("failed to create ResourceResolutionService", resourceResolutionService)
 
@@ -245,11 +245,13 @@ class ResourceResolutionServiceTest {
                 "resource-assignment"
             )
 
-            resourceResolutionService.resolveResources(
-                resourceAssignmentRuntimeService,
-                "resource-assignment",
-                artifactPrefix,
-                props
+            assertNotNull(
+                resourceResolutionService.resolveResources(
+                    resourceAssignmentRuntimeService,
+                    "resource-assignment",
+                    artifactPrefix,
+                    props
+                ), "Couldn't Resolve Resources for artifact $artifactPrefix"
             )
         }
     }
