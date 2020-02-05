@@ -33,10 +33,6 @@
     <dependencies>
         <dependency>
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-            <artifactId>atomix-lib</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
             <artifactId>message-lib</artifactId>
         </dependency>
         <dependency>

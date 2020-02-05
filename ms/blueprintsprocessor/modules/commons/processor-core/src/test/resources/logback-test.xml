@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright © 2017-2018 AT&T Intellectual Property.
+  ~ Copyright © 2018-2019 AT&T Intellectual Property.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@
     <logger name="org.springframework.test" level="warn"/>
     <logger name="org.springframework" level="warn"/>
     <logger name="org.hibernate" level="info"/>
-    <logger name="io.atomix" level="warn"/>
+    <logger name="com.hazelcast" level="warn"/>
     <logger name="org.onap.ccsdk.cds.blueprintsprocessor" level="info"/>
 
     <root level="warn">
