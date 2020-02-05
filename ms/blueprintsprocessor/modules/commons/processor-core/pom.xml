@@ -32,6 +32,10 @@
     <description>Blueprints Processor Core</description>
 
     <dependencies>
+         <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-all</artifactId>
+         </dependency>
         <dependency>
            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
            <artifactId>blueprint-proto</artifactId>

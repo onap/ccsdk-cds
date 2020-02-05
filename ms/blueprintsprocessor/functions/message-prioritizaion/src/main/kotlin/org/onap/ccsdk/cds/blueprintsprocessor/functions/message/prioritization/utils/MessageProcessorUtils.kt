@@ -17,7 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.utils
 
 import org.apache.kafka.streams.processor.ProcessorSupplier
-import org.onap.ccsdk.cds.blueprintsprocessor.atomix.optionalClusterService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.cluster.optionalClusterService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterLock
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.MessagePrioritization
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.kafka.AbstractMessagePrioritizeProcessor

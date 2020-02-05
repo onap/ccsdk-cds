@@ -92,12 +92,6 @@
             <artifactId>health-api-common</artifactId>
         </dependency>
 
-        <!-- Libs -->
-        <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-            <artifactId>atomix-lib</artifactId>
-        </dependency>
-
         <!-- Functions -->
         <dependency>
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>

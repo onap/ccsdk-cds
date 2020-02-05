@@ -44,7 +44,7 @@ services:
       - cds-network
     ports:
       - "8000:8080"
-      - "9111:9111"
+      - "9110:9111"
     restart: always
     volumes:
       - target: /opt/app/onap/blueprints/deploy
@@ -58,26 +58,60 @@ services:
       CLUSTER_ENABLED: "true"
       CLUSTER_ID: cds-cluster
       CLUSTER_NODE_ID: cds-controller-0
-      CLUSTER_MEMBERS: cds-controller-0,resource-resolution-0
-      CLUSTER_STORAGE_PATH: /opt/app/onap/config/cluster
-      #CLUSTER_CONFIG_FILE: /opt/app/onap/config/atomix/atomix-multicast.conf
+      CLUSTER_DISCOVERY: "DOCKER_COMPOSE"
+      #CLUSTER_JOIN_AS_CLIENT: "true" or "false"
+      #CLUSTER_CONFIG_FILE:
       NATS_CLUSTER_ID: cds-cluster
       APP_NAME: cds-controller
       BUNDLEVERSION: 1.0.0
       APP_CONFIG_HOME: /opt/app/onap/config
       STICKYSELECTORKEY:
       ENVCONTEXT: dev
-  resource-resolution-0:
+  cds-controller-1:
     depends_on:
       - db
       - nats
     image: onap/ccsdk-blueprintsprocessor:latest
-    container_name: resource-resolution-0
-    hostname: resource-resolution-0
+    container_name: cds-controller-1
+    hostname: cds-controller-1
     networks:
       - cds-network
     ports:
       - "8001:8080"
+      - "9111:9111"
+    restart: always
+    volumes:
+      - target: /opt/app/onap/blueprints/deploy
+        type: volume
+        source: blueprints-deploy
+      - target: /opt/app/onap/config
+        type: volume
+        source: controller-config
+    environment:
+      # Same as hostname and container name
+      CLUSTER_ENABLED: "true"
+      CLUSTER_ID: cds-cluster
+      CLUSTER_NODE_ID: cds-controller-1
+      CLUSTER_DISCOVERY: "DOCKER_COMPOSE"
+      #CLUSTER_JOIN_AS_CLIENT: "true" or "false"
+      #CLUSTER_CONFIG_FILE:
+      NATS_CLUSTER_ID: cds-cluster
+      APP_NAME: cds-controller
+      BUNDLEVERSION: 1.0.0
+      APP_CONFIG_HOME: /opt/app/onap/config
+      STICKYSELECTORKEY:
+      ENVCONTEXT: dev
+  cds-controller-2:
+    depends_on:
+      - db
+      - nats
+    image: onap/ccsdk-blueprintsprocessor:latest
+    container_name: cds-controller-2
+    hostname: cds-controller-2
+    networks:
+      - cds-network
+    ports:
+      - "8002:8080"
       - "9112:9111"
     restart: always
     volumes:
@@ -86,16 +120,17 @@ services:
         source: blueprints-deploy
       - target: /opt/app/onap/config
         type: volume
-        source: resource-resolution-config
+        source: controller-config
     environment:
+      # Same as hostname and container name
       CLUSTER_ENABLED: "true"
       CLUSTER_ID: cds-cluster
-      CLUSTER_NODE_ID: resource-resolution-0
-      CLUSTER_MEMBERS: cds-controller-0,resource-resolution-0
-      CLUSTER_STORAGE_PATH: /opt/app/onap/config/cluster
-      #CLUSTER_CONFIG_FILE: /opt/app/onap/config/atomix/atomix-multicast.conf
+      CLUSTER_NODE_ID: cds-controller-2
+      CLUSTER_DISCOVERY: "DOCKER_COMPOSE"
+      #CLUSTER_JOIN_AS_CLIENT: "true" or "false"
+      #CLUSTER_CONFIG_FILE:
       NATS_CLUSTER_ID: cds-cluster
-      APP_NAME: resource-resolution
+      APP_NAME: cds-controller
       BUNDLEVERSION: 1.0.0
       APP_CONFIG_HOME: /opt/app/onap/config
       STICKYSELECTORKEY:
@@ -119,7 +154,9 @@ services:
     environment:
       CLUSTER_ID: cds-cluster
       CLUSTER_NODE_ID: py-executor-0
-      CLUSTER_MEMBERS: cds-controller-0,resource-resolution-0,py-executor-0
+      CLUSTER_DISCOVERY: "DOCKER_COMPOSE"
+      #CLUSTER_JOIN_AS_CLIENT: "true" or "false"
+      #CLUSTER_CONFIG_FILE:
       NATS_CLUSTER_ID: cds-cluster
       APP_NAME: py-executor
       BUNDLEVERSION: 1.0.0
@@ -140,7 +177,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /opt/app/cds/nats/nats-0/store
+      device: /opt/app/cds/nats/store
       o: bind
   blueprints-deploy:
     driver: local
@@ -152,13 +189,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /opt/app/cds/cds-controller/cds-controller-0/config
-      o: bind
-  resource-resolution-config:
-    driver: local
-    driver_opts:
-      type: none
-      device: /opt/app/cds/resource-resolution/resource-resolution-0/config
+      device: /opt/app/cds/cds-controller/config
       o: bind
 
 networks:
