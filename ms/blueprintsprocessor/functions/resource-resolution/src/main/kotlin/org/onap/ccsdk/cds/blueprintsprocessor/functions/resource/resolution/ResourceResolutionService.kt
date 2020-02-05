@@ -152,8 +152,7 @@ open class ResourceResolutionServiceImpl(
         // Resource Assignment Artifact Definition Name
         val artifactMapping = "$artifactPrefix-mapping"
 
-        val resolvedContent: String
-        log.info("Resolving resource for template artifact($artifactTemplate) with resource assignment artifact($artifactMapping)")
+        log.info("Resolving resource with resource assignment artifact($artifactMapping)")
 
         val resourceAssignmentContent =
             bluePrintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, artifactMapping)
@@ -189,14 +188,20 @@ open class ResourceResolutionServiceImpl(
         val resolvedParamJsonContent =
             ResourceAssignmentUtils.generateResourceDataForAssignments(resourceAssignments.toList())
 
-        resolvedContent = blueprintTemplateService.generateContent(
-            bluePrintRuntimeService, nodeTemplateName,
-            artifactTemplate, resolvedParamJsonContent, false,
-            mutableMapOf(
-                ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE to
-                        properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE].asJsonPrimitive()
+        val artifactTemplateDefinition = bluePrintRuntimeService.bluePrintContext().checkNodeTemplateArtifact(nodeTemplateName, artifactTemplate)
+
+        val resolvedContent = if (artifactTemplateDefinition != null) {
+            blueprintTemplateService.generateContent(
+                bluePrintRuntimeService, nodeTemplateName,
+                artifactTemplate, resolvedParamJsonContent, false,
+                mutableMapOf(
+                    ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE to
+                            properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE].asJsonPrimitive()
+                )
             )
-        )
+        } else {
+            resolvedParamJsonContent
+        }
 
         if (isToStore(properties)) {
             templateResolutionDBService.write(properties, resolvedContent, bluePrintRuntimeService, artifactPrefix)
@@ -211,8 +216,7 @@ open class ResourceResolutionServiceImpl(
         resourceDefinitions: MutableMap<String, ResourceDefinition>,
         resolveDefinition: String,
         sources: List<String>
-    ):
-            MutableMap<String, JsonNode> {
+    ): MutableMap<String, JsonNode> {
 
         // Populate Dummy Resource Assignments
         val resourceAssignments = createResourceAssignments(resourceDefinitions, resolveDefinition, sources)
@@ -397,8 +401,10 @@ open class ResourceResolutionServiceImpl(
             if (resourceResolution.status == BluePrintConstants.STATUS_SUCCESS) {
                 resourceAssignmentList.forEach {
                     if (compareOne(resourceResolution, it)) {
-                        log.info("Resource ({}) already resolved: value=({})", it.name,
-                            if (hasLogProtect(it.property)) LOG_REDACTED else resourceResolution.value)
+                        log.info(
+                            "Resource ({}) already resolved: value=({})", it.name,
+                            if (hasLogProtect(it.property)) LOG_REDACTED else resourceResolution.value
+                        )
 
                         // Make sure to recreate value as per the defined type.
                         val value = resourceResolution.value!!.asJsonType(it.property!!.type)

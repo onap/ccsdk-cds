@@ -231,15 +231,17 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
         return nodeTemplateByName(nodeTemplateName).artifacts
     }
 
-    fun nodeTemplateArtifact(nodeTemplateName: String, artifactName: String): ArtifactDefinition {
+    fun checkNodeTemplateArtifact(nodeTemplateName: String, artifactName: String): ArtifactDefinition? {
         return nodeTemplateArtifacts(nodeTemplateName)?.get(artifactName)
+    }
+
+    fun nodeTemplateArtifact(nodeTemplateName: String, artifactName: String): ArtifactDefinition {
+        return checkNodeTemplateArtifact(nodeTemplateName, artifactName)
             ?: throw BluePrintException("could't get NodeTemplate($nodeTemplateName)'s ArtifactDefinition($artifactName)")
     }
 
     fun nodeTemplateArtifactForArtifactType(nodeTemplateName: String, artifactType: String): ArtifactDefinition {
-        return nodeTemplateArtifacts(nodeTemplateName)?.filter { it.value.type == artifactType }?.map { it.value }?.get(
-            0
-        )
+        return nodeTemplateArtifacts(nodeTemplateName)?.filter { it.value.type == artifactType }?.map { it.value }?.get(0)
             ?: throw BluePrintException("could't get NodeTemplate($nodeTemplateName)'s Artifact Type($artifactType)")
     }
 
