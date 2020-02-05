@@ -14,79 +14,78 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.atomix
+package org.onap.ccsdk.cds.blueprintsprocessor.core.cluster
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.hazelcast.core.IMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import org.junit.Before
 import org.junit.Test
-import org.onap.ccsdk.cds.blueprintsprocessor.atomix.service.AtomixBluePrintClusterService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterInfo
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.DiscoveryPlatform
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
-import org.onap.ccsdk.cds.controllerblueprints.core.deleteNBDir
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
+import java.time.Duration
+import java.util.Properties
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-class AtomixBluePrintClusterServiceTest {
-    private val log = logger(AtomixBluePrintClusterServiceTest::class)
+class HazlecastClusterServiceTest {
+    private val log = logger(HazlecastClusterServiceTest::class)
 
-    @Before
-    fun init() {
-        runBlocking {
-            deleteNBDir("target/cluster")
-        }
-    }
-
-    /** Testing two cluster with distributed map store creation, This is time consuming test case, taks around 10s **/
     @Test
     fun testClusterJoin() {
         runBlocking {
             val bluePrintClusterServiceOne =
-                createCluster(arrayListOf(5679, 5680)).toMutableList()
-            // val bluePrintClusterServiceTwo = createCluster(arrayListOf(5681, 5682), arrayListOf(5679, 5680))
+                createCluster(arrayListOf(5679, 5680, 5681)).toMutableList()
+            // delay(1000)
+            // Join as Hazlecast Management Node
+            // val bluePrintClusterServiceTwo = createCluster(arrayListOf(5682, 5683), false, arrayListOf(5679))
             // bluePrintClusterServiceOne.addAll(bluePrintClusterServiceTwo)
-            val bluePrintClusterService = bluePrintClusterServiceOne[0]
-            log.info("Members : ${bluePrintClusterService.allMembers()}")
-            log.info("Master(System) Members : ${bluePrintClusterService.masterMember("system")}")
-            log.info("Master(Data) Members : ${bluePrintClusterService.masterMember("data")}")
+            printReachableMembers(bluePrintClusterServiceOne)
             testDistributedStore(bluePrintClusterServiceOne)
             testDistributedLock(bluePrintClusterServiceOne)
+            // Shutdown
+            shutdown(bluePrintClusterServiceOne)
         }
     }
 
     private suspend fun createCluster(
         ports: List<Int>,
-        otherClusterPorts: List<Int>? = null
+        joinAsClient: Boolean? = false
     ): List<BluePrintClusterService> {
 
         return withContext(Dispatchers.Default) {
-            val clusterMembers = ports.map { "node-$it" }.toMutableList()
-            /** Add the other cluster as members */
-            if (!otherClusterPorts.isNullOrEmpty()) {
-                val otherClusterMembers = otherClusterPorts.map { "node-$it" }.toMutableList()
-                clusterMembers.addAll(otherClusterMembers)
-            }
             val deferred = ports.map { port ->
                 async(Dispatchers.IO) {
                     val nodeId = "node-$port"
                     log.info("********** Starting node($nodeId) on port($port)")
-                    val clusterInfo = ClusterInfo(
-                        id = "test-cluster", nodeId = nodeId,
-                        clusterMembers = clusterMembers, nodeAddress = "localhost:$port", storagePath = "target/cluster"
-                    )
-                    val atomixClusterService = AtomixBluePrintClusterService()
-                    atomixClusterService.startCluster(clusterInfo)
-                    atomixClusterService
+                    val properties = Properties()
+                    properties["hazelcast.logging.type"] = "slf4j"
+                    val clusterInfo =
+                        ClusterInfo(
+                            id = "test-cluster", discoverPlatform = DiscoveryPlatform.DOCKER_COMPOSE,
+                            nodeId = nodeId, joinAsClient = joinAsClient!!,
+                            managementGroupCount = 3, managementMemberCount = 3,
+                            properties = properties
+                        )
+                    val hazlecastClusterService = HazlecastClusterService()
+                    hazlecastClusterService.startCluster(clusterInfo)
+                    hazlecastClusterService
                 }
             }
             deferred.awaitAll()
+        }
+    }
+
+    private suspend fun shutdown(bluePrintClusterServices: List<BluePrintClusterService>) {
+        bluePrintClusterServices.forEach { bluePrintClusterService ->
+            bluePrintClusterService.shutDown(Duration.ofMillis(10))
         }
     }
 
@@ -95,20 +94,21 @@ class AtomixBluePrintClusterServiceTest {
         repeat(2) { storeId ->
             val store = bluePrintClusterServices[0].clusterMapStore<JsonNode>(
                 "blueprint-runtime-$storeId"
-            ).toDistributedMap()
+            ) as IMap
             assertNotNull(store, "failed to get store")
-            val store1 = bluePrintClusterServices[1].clusterMapStore<JsonNode>(
-                "blueprint-runtime-$storeId"
-            ).toDistributedMap()
-
-            store1.addListener {
-                log.info("Received map event : $it")
-            }
             repeat(5) {
                 store["key-$storeId-$it"] = "value-$it".asJsonPrimitive()
             }
-            delay(10)
-            store.close()
+
+            val store1 = bluePrintClusterServices[1].clusterMapStore<JsonNode>(
+                "blueprint-runtime-$storeId"
+            ) as IMap
+
+            store1.values.map {
+                log.info("Received map event : $it")
+            }
+            delay(5)
+            store.clear()
         }
     }
 
@@ -142,11 +142,22 @@ class AtomixBluePrintClusterServiceTest {
         assertTrue(distributedLock.isLocked(), "failed to lock $lockId")
         try {
             log.info("locked $lockId process for 5mSec")
-            delay(5)
+            delay(100)
         } finally {
             distributedLock.unLock()
             log.info("$lockId lock released")
         }
         distributedLock.close()
+    }
+
+    private suspend fun printReachableMembers(bluePrintClusterServices: List<BluePrintClusterService>) {
+        bluePrintClusterServices.forEach { bluePrintClusterService ->
+            val hazlecastClusterService = bluePrintClusterService as HazlecastClusterService
+            val hazelcast = hazlecastClusterService.hazelcast
+            val self = hazelcast.cluster.localMember
+            val master = hazlecastClusterService.masterMember("system")
+            val members = hazlecastClusterService.allMembers().map { it.memberAddress }
+            log.info("Cluster Members for($self): master($master) Members($members)")
+        }
     }
 }

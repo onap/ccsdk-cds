@@ -28,7 +28,6 @@
     <logger name="org.springframework" level="info"/>
     <logger name="org.springframework.web" level="info"/>
     <logger name="org.hibernate" level="error"/>
-    <logger name="io.atomix" level="warn"/>
     <logger name="org.onap.ccsdk.cds" level="info"/>
 
     <root level="info">

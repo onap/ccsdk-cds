@@ -58,9 +58,9 @@ services:
       CLUSTER_ENABLED: "true"
       CLUSTER_ID: cds-cluster
       CLUSTER_NODE_ID: cds-controller-0
-      CLUSTER_MEMBERS: cds-controller-0,resource-resolution-0
-      CLUSTER_STORAGE_PATH: /opt/app/onap/config/cluster
-      #CLUSTER_CONFIG_FILE: /opt/app/onap/config/atomix/atomix-multicast.conf
+      CLUSTER_DISCOVERY: "DOCKER_COMPOSE"
+      #CLUSTER_JOIN_AS_CLIENT: "true" or "false"
+      #CLUSTER_CONFIG_FILE:
       NATS_CLUSTER_ID: cds-cluster
       APP_NAME: cds-controller
       BUNDLEVERSION: 1.0.0
@@ -91,9 +91,9 @@ services:
       CLUSTER_ENABLED: "true"
       CLUSTER_ID: cds-cluster
       CLUSTER_NODE_ID: resource-resolution-0
-      CLUSTER_MEMBERS: cds-controller-0,resource-resolution-0
-      CLUSTER_STORAGE_PATH: /opt/app/onap/config/cluster
-      #CLUSTER_CONFIG_FILE: /opt/app/onap/config/atomix/atomix-multicast.conf
+      CLUSTER_DISCOVERY: "DOCKER_COMPOSE"
+      #CLUSTER_JOIN_AS_CLIENT: "true" or "false"
+      #CLUSTER_CONFIG_FILE:
       NATS_CLUSTER_ID: cds-cluster
       APP_NAME: resource-resolution
       BUNDLEVERSION: 1.0.0
@@ -119,7 +119,9 @@ services:
     environment:
       CLUSTER_ID: cds-cluster
       CLUSTER_NODE_ID: py-executor-0
-      CLUSTER_MEMBERS: cds-controller-0,resource-resolution-0,py-executor-0
+      CLUSTER_DISCOVERY: "DOCKER_COMPOSE"
+      #CLUSTER_JOIN_AS_CLIENT: "true" or "false"
+      #CLUSTER_CONFIG_FILE:
       NATS_CLUSTER_ID: cds-cluster
       APP_NAME: py-executor
       BUNDLEVERSION: 1.0.0

@@ -17,6 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.core.service
 
 import java.time.Duration
+import java.util.Properties
 
 interface BluePrintClusterService {
 
@@ -32,8 +33,8 @@ interface BluePrintClusterService {
     /** Returns all the data cluster members */
     suspend fun allMembers(): Set<ClusterMember>
 
-    /** Returns data cluster members starting with prefix */
-    suspend fun clusterMembersForPrefix(memberPrefix: String): Set<ClusterMember>
+    /** Returns application cluster members for [appName] */
+    suspend fun applicationMembers(appName: String): Set<ClusterMember>
 
     /** Create and get or get the distributed data map store with [name] */
     suspend fun <T> clusterMapStore(name: String): MutableMap<String, T>
@@ -47,19 +48,29 @@ interface BluePrintClusterService {
 
 data class ClusterInfo(
     val id: String,
-    var configFile: String? = null,
     val nodeId: String,
-    val nodeAddress: String,
-    var clusterMembers: List<String>,
-    var storagePath: String
+    var discoverPlatform: DiscoveryPlatform = DiscoveryPlatform.DOCKER_COMPOSE, // DOCKER_COMPOSE, KUBERNETES, AZURE, GCP, OPEN_STACK
+    var joinAsClient: Boolean = false,
+    var managementMemberCount: Int = 3,
+    var managementGroupCount: Int = -1,
+    var properties: Properties?,
+    var configFile: String? = null
 )
 
-data class ClusterMember(val id: String, val memberAddress: String?, val state: String? = null)
+data class ClusterMember(
+    val id: String,
+    val memberAddress: String?,
+    val state: String? = null
+)
+
+enum class DiscoveryPlatform { DOCKER_COMPOSE, AWS, AZURE, GCP, EUREKA, KUBERNETES }
 
 interface ClusterLock {
     fun name(): String
     suspend fun lock()
+    suspend fun fenceLock(): String
     suspend fun tryLock(timeout: Long): Boolean
+    suspend fun tryFenceLock(timeout: Long): String
     suspend fun unLock()
     fun isLocked(): Boolean
     fun close()
