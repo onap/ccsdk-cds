@@ -14,26 +14,31 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.atomix
+package org.onap.ccsdk.cds.blueprintsprocessor.core.cluster
 
-import org.onap.ccsdk.cds.blueprintsprocessor.atomix.service.AtomixBluePrintClusterService
+import com.hazelcast.cluster.Member
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterMember
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
-import org.springframework.context.annotation.Configuration
-
-@Configuration
-open class BluePrintAtomixLibConfiguration
 
 /**
- * Exposed Dependency Service by this Atomix Lib Module
+ * Exposed Dependency Service by this Hazlecast Lib Module
  */
 fun BluePrintDependencyService.clusterService(): BluePrintClusterService =
-    instance(AtomixBluePrintClusterService::class)
+    instance(HazlecastClusterService::class)
 
 /** Optional Cluster Service, returns only if Cluster is enabled */
 fun BluePrintDependencyService.optionalClusterService(): BluePrintClusterService? {
     return if (BluePrintConstants.CLUSTER_ENABLED) {
         BluePrintDependencyService.clusterService()
     } else null
+}
+
+/** Extension to convert Hazelcast Member to Blueprints Cluster Member */
+fun Member.toClusterMember(): ClusterMember {
+    return ClusterMember(
+        id = this.uuid.toString(),
+        memberAddress = this.address.toString()
+    )
 }
