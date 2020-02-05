@@ -34,7 +34,6 @@
 
     <modules>
         <module>processor-core</module>
-        <module>atomix-lib</module>
         <module>db-lib</module>
         <module>rest-lib</module>
         <module>dmaap-lib</module>
