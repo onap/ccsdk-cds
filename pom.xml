@@ -40,7 +40,7 @@ limitations under the License.
 
     <modules>
         <module>ms</module>
-        <module>cds-ui</module>
+        <!--        <module>cds-ui</module>-->
         <module>components</module>
     </modules>
 
@@ -54,7 +54,8 @@ limitations under the License.
         <!--Only include java and kt files to the scan-->
         <sonar.inclusions>**/*.java,**/*.kt</sonar.inclusions>
         <!--Specify path to load jacoco XLM report, as Sonar can't load Kotlin coverage from binary report-->
-        <sonar.coverage.jacoco.xmlReportPaths>${project.reporting.outputDirectory}/jacoco-ut/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.reporting.outputDirectory}/jacoco-ut/jacoco.xml
+        </sonar.coverage.jacoco.xmlReportPaths>
         <jacoco.version>0.8.3</jacoco.version>
 
         <!-- Properties for POM Format -->

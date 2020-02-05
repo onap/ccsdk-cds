@@ -45,6 +45,11 @@
             <useDefaultExcludes>true</useDefaultExcludes>
         </fileSet>
         <fileSet>
+            <directory>${project.basedir}/src/main/resources/hazelcast</directory>
+            <outputDirectory>opt/app/onap/config/hazelcast</outputDirectory>
+            <useDefaultExcludes>true</useDefaultExcludes>
+        </fileSet>
+        <fileSet>
             <directory>${project.basedir}/src/main/resources/certs</directory>
             <outputDirectory>opt/app/onap/config/certs</outputDirectory>
             <useDefaultExcludes>true</useDefaultExcludes>
