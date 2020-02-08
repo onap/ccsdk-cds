@@ -80,12 +80,14 @@ external-services:
                 netconf-node-topology:max-connection-attempts: 5
         response:
           status: 201
+        times: 1
       - request:
           method: GET
           path: [ restconf/operational, *nodeIdentifier]
-        response:
-          body:
-            node: [ { netconf-node-topology:connection-status: connected }]
+        responses:
+          - body:
+              node: [ { netconf-node-topology:connection-status: connected }]
+        times: 1
       - request:
           method: GET
           path: [*configUri, &configletResourcePath yang-ext:mount/mynetconf:netconflist]
@@ -112,6 +114,8 @@ external-services:
                   operation: merge
                   target: /
                   value: { netconflist: { netconf: [ { netconf-id: "30", netconf-param: "3000" }]}}
+        times: 1
       - request:
           method: DELETE
           path: *configUri
+        times: 1
