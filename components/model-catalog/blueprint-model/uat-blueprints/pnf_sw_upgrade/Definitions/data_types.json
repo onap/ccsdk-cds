@@ -1,0 +1,56 @@
+{
+  "data_types": {
+    "dt-precheck-properties": {
+      "description": "Dynamic DataType definition for the precheck workflow(upgrade-software).",
+      "version": "1.0.0",
+      "properties": {
+        "pnf-id": {
+          "type": "string"
+        },
+        "target-software-version": {
+          "type": "string"
+        }
+      },
+      "derived_from": "tosca.datatypes.Dynamic"
+    },
+    "dt-downloadNeSw-properties": {
+      "description": "Dynamic DataType definition for the downloadNeSw workflow(upgrade-software).",
+      "version": "1.0.0",
+      "properties": {
+        "pnf-id": {
+          "type": "string"
+        },
+        "target-software-version": {
+          "type": "string"
+        }
+      },
+      "derived_from": "tosca.datatypes.Dynamic"
+    },
+    "dt-activateNeSw-properties": {
+      "description": "Dynamic DataType definition for the activateNeSw workflow(upgrade-software).",
+      "version": "1.0.0",
+      "properties": {
+        "pnf-id": {
+          "type": "string"
+        },
+        "target-software-version": {
+          "type": "string"
+        }
+      },
+      "derived_from": "tosca.datatypes.Dynamic"
+    },
+    "dt-postcheck-properties": {
+      "description": "Dynamic DataType definition for the postcheck workflow(upgrade-software).",
+      "version": "1.0.0",
+      "properties": {
+        "pnf-id": {
+          "type": "string"
+        },
+        "target-software-version": {
+          "type": "string"
+        }
+      },
+      "derived_from": "tosca.datatypes.Dynamic"
+    }
+  }
+}
