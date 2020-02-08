@@ -24,9 +24,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argThat
 import com.nhaarman.mockitokotlin2.atLeast
-import com.nhaarman.mockitokotlin2.atLeastOnce
+import com.nhaarman.mockitokotlin2.atMost
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.nhaarman.mockitokotlin2.whenever
@@ -44,6 +45,7 @@ import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.mockito.Answers
+import org.mockito.verification.VerificationMode
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService.WebClientResponse
@@ -77,7 +79,8 @@ class UatExecutor(
 
     companion object {
         private const val NOOP_PASSWORD_PREFIX = "{noop}"
-
+        private const val PROPERTY_IN_UAT = "IN_UAT"
+        private val TIMES_SPEC_REGEX = "([<>]=?)?\\s*(\\d+)".toRegex()
         private val log: Logger = LoggerFactory.getLogger(UatExecutor::class.java)
         private val mockLoggingListener = MockInvocationLogger(markerOf(COLOR_MOCKITO))
     }
@@ -111,15 +114,16 @@ class UatExecutor(
         val spyInterceptor = SpyPostInterceptor(mapper)
         restClientFactory.setInterceptors(mockInterceptor, spyInterceptor)
         try {
-            // Configure mocked external services and save their expected requests for further validation
-            val requestsPerClient = uat.externalServices.associateBy(
+            markUatBegin()
+            // Configure mocked external services and save their expectations for further validation
+            val expectationsPerClient = uat.externalServices.associateBy(
                 { service ->
                     createRestClientMock(service.expectations).also { restClient ->
                         // side-effect: register restClient to override real instance
                         mockInterceptor.registerMock(service.selector, restClient)
                     }
                 },
-                { service -> service.expectations.map { it.request } }
+                { service -> service.expectations }
             )
 
             val newProcesses = httpClient.use { client ->
@@ -143,9 +147,10 @@ class UatExecutor(
             }
 
             // Validate requests to external services
-            for ((mockClient, requests) in requestsPerClient) {
-                requests.forEach { request ->
-                    verify(mockClient, atLeastOnce()).exchangeResource(
+            for ((mockClient, expectations) in expectationsPerClient) {
+                expectations.forEach { expectation ->
+                    val request = expectation.request
+                    verify(mockClient, evalVerificationMode(expectation.times)).exchangeResource(
                         eq(request.method),
                         eq(request.path),
                         argThat { assertJsonEquals(request.body, this) },
@@ -163,7 +168,16 @@ class UatExecutor(
             return UatDefinition(newProcesses, newExternalServices)
         } finally {
             restClientFactory.clearInterceptors()
+            markUatEnd()
         }
+    }
+
+    private fun markUatBegin() {
+        System.setProperty(PROPERTY_IN_UAT, "1")
+    }
+
+    private fun markUatEnd() {
+        System.clearProperty(PROPERTY_IN_UAT)
     }
 
     private fun createRestClientMock(restExpectations: List<ExpectationDefinition>):
@@ -183,15 +197,17 @@ class UatExecutor(
                 restClient.exchangeResource(method, path, request, emptyMap())
             }
         for (expectation in restExpectations) {
-            whenever(
-                restClient.exchangeResource(
-                    eq(expectation.request.method),
-                    eq(expectation.request.path),
-                    any(),
-                    any()
-                )
+            var stubbing = whenever(
+                    restClient.exchangeResource(
+                            eq(expectation.request.method),
+                            eq(expectation.request.path),
+                            any(),
+                            any()
+                    )
             )
-                .thenReturn(WebClientResponse(expectation.response.status, expectation.response.body.toString()))
+            for (response in expectation.responses) {
+                stubbing = stubbing.thenReturn(WebClientResponse(response.status, response.body.toString()))
+            }
         }
         return restClient
     }
@@ -234,6 +250,19 @@ class UatExecutor(
             assertJsonEquals(expectedResponse, actualResponse)
         }
         return mapper.readTree(actualResponse)!!
+    }
+
+    private fun evalVerificationMode(times: String): VerificationMode {
+        val matchResult = TIMES_SPEC_REGEX.matchEntire(times) ?: throw InvalidUatDefinition(
+                "Time specification '$times' does not follow expected format $TIMES_SPEC_REGEX")
+        val counter = matchResult.groups[2]!!.value.toInt()
+        return when (matchResult.groups[1]?.value) {
+            ">=" -> atLeast(counter)
+            ">" -> atLeast(counter + 1)
+            "<=" -> atMost(counter)
+            "<" -> atMost(counter - 1)
+            else -> times(counter)
+        }
     }
 
     @Throws(AssertionError::class)
