@@ -1,0 +1,302 @@
+{
+  "tosca_definitions_version" : "controller_blueprint_1_0_0",
+  "metadata" : {
+    "template_author" : "Raj Gumma",
+    "author-email" : "raj.gumma@est.tech",
+    "user-groups" : "ADMIN, OPERATION",
+    "template_name" : "pnf_sw_upgrade",
+    "template_version" : "1.0.0",
+    "template_tags" : "pnf, software upgrade, upgrade"
+  },
+  "imports" : [ {
+    "file" : "Definitions/data_types.json"
+  }, {
+    "file" : "Definitions/relationship_types.json"
+  }, {
+    "file" : "Definitions/artifact_types.json"
+  }, {
+    "file" : "Definitions/node_types.json"
+  }, {
+    "file" : "Definitions/policy_types.json"
+  } ],
+  "dsl_definitions" : {
+    "precheck-properties" : {
+      "resolution-key" : {
+        "get_input" : "resolution-key"
+      }
+    },
+    "downloadNeSw-properties" : {
+      "resolution-key" : {
+        "get_input" : "resolution-key"
+      }
+    },
+    "activateNeSw-properties" : {
+      "resolution-key" : {
+        "get_input" : "resolution-key"
+      }
+    },
+    "postcheck-properties" : {
+      "resolution-key" : {
+        "get_input" : "resolution-key"
+      }
+    }
+  },
+  "topology_template" : {
+    "workflows" : {
+      "precheck" : {
+        "steps" : {
+          "activate-process" : {
+            "description" : "Check if pnf ready for sw upgrade",
+            "target" : "precheck",
+            "activities" : [ {
+              "call_operation" : ""
+            } ]
+          }
+        },
+        "inputs" : {
+          "resolution-key" : {
+            "required" : true,
+            "type" : "string"
+          },
+          "precheck-properties" : {
+            "description" : "Dynamic PropertyDefinition for precheck workflow(software-upgrade).",
+            "required" : true,
+            "type" : "dt-precheck-properties"
+          }
+        }
+      },
+      "downloadNeSw" : {
+        "steps" : {
+          "activate-process" : {
+            "description" : "Trigger download new software for sw upgrade",
+            "target" : "downloadNeSw",
+            "activities" : [ {
+              "call_operation" : ""
+            } ]
+          }
+        },
+        "inputs" : {
+          "resolution-key" : {
+            "required" : true,
+            "type" : "string"
+          },
+          "downloadNeSw-properties" : {
+            "description" : "Dynamic PropertyDefinition for downloadNeSw workflow(software-upgrade).",
+            "required" : true,
+            "type" : "dt-downloadNeSw-properties"
+          }
+        }
+      },
+      "activateNeSw" : {
+        "steps" : {
+          "activate-process" : {
+            "description" : "Trigger activation of target software version for pnf upgrade",
+            "target" : "activateNeSw",
+            "activities" : [ {
+              "call_operation" : ""
+            } ]
+          }
+        },
+        "inputs" : {
+          "resolution-key" : {
+            "required" : true,
+            "type" : "string"
+          },
+          "activateNeSw-properties" : {
+            "description" : "Dynamic PropertyDefinition for activateNeSw workflow(software-upgrade).",
+            "required" : true,
+            "type" : "dt-activateNeSw-properties"
+          }
+        }
+      },
+      "postcheck" : {
+        "steps" : {
+          "activate-process" : {
+            "description" : "Check if pnf upgrade is completed",
+            "target" : "postcheck",
+            "activities" : [ {
+              "call_operation" : ""
+            } ]
+          }
+        },
+        "inputs" : {
+          "resolution-key" : {
+            "required" : true,
+            "type" : "string"
+          },
+          "postcheck-properties" : {
+            "description" : "Dynamic PropertyDefinition for postcheck workflow(software-upgrade).",
+            "required" : true,
+            "type" : "dt-postcheck-properties"
+          }
+        }
+      }
+    },
+    "node_templates" : {
+      "precheck" : {
+        "type" : "component-script-executor",
+        "interfaces" : {
+          "ComponentScriptExecutor" : {
+            "operations" : {
+              "process" : {
+                "implementation" : {
+                  "primary" : "component-script",
+                  "timeout" : 180,
+                  "operation_host" : "SELF"
+                },
+                "inputs" : {
+                  "script-type" : "kotlin",
+                  "script-class-reference" : "cba.pnf.swug.RestconfConfigure",
+                  "dynamic-properties" : "*precheck-properties"
+                },
+                "outputs" : {
+                  "response-data" : "",
+                  "status" : "success"
+                }
+              }
+            }
+          }
+        },
+        "artifacts" : {
+          "mount-node-template" : {
+            "type" : "artifact-template-velocity",
+            "file" : "Templates/restconf-mount-template.vtl"
+          },
+          "mount-node-mapping" : {
+            "type" : "artifact-mapping-resource",
+            "file" : "Definitions/pnf-software-upgrade-mapping.json"
+          }
+        }
+      },
+      "downloadNeSw" : {
+        "type" : "component-script-executor",
+        "interfaces" : {
+          "ComponentScriptExecutor" : {
+            "operations" : {
+              "process" : {
+                "implementation" : {
+                  "primary" : "component-script",
+                  "timeout" : 180,
+                  "operation_host" : "SELF"
+                },
+                "inputs" : {
+                  "script-type" : "kotlin",
+                  "script-class-reference" : "cba.pnf.swug.RestconfConfigure",
+                  "dynamic-properties" : "*downloadNeSw-properties"
+                },
+                "outputs" : {
+                  "response-data" : "",
+                  "status" : "success"
+                }
+              }
+            }
+          }
+        },
+        "artifacts" : {
+          "mount-node-template" : {
+            "type" : "artifact-template-velocity",
+            "file" : "Templates/restconf-mount-template.vtl"
+          },
+          "mount-node-mapping" : {
+            "type" : "artifact-mapping-resource",
+            "file" : "Definitions/pnf-software-upgrade-mapping.json"
+          },
+          "configure-template" : {
+            "type" : "artifact-template-velocity",
+            "file" : "Templates/pnf-swug-config-template.vtl"
+          },
+          "configure-mapping" : {
+            "type" : "artifact-mapping-resource",
+            "file" : "Definitions/pnf-software-upgrade-mapping.json"
+          },
+          "download-ne-sw-template" : {
+            "type" : "artifact-template-velocity",
+            "file" : "Templates/pnf-swug-download-ne-sw-template.vtl"
+          },
+          "download-ne-sw-mapping" : {
+            "type" : "artifact-mapping-resource",
+            "file" : "Definitions/pnf-software-upgrade-mapping.json"
+          }
+        }
+      },
+      "activateNeSw" : {
+        "type" : "component-script-executor",
+        "interfaces" : {
+          "ComponentScriptExecutor" : {
+            "operations" : {
+              "process" : {
+                "implementation" : {
+                  "primary" : "component-script",
+                  "timeout" : 180,
+                  "operation_host" : "SELF"
+                },
+                "inputs" : {
+                  "script-type" : "kotlin",
+                  "script-class-reference" : "cba.pnf.swug.RestconfConfigure",
+                  "dynamic-properties" : "*activateNeSw-properties"
+                },
+                "outputs" : {
+                  "response-data" : "",
+                  "status" : "success"
+                }
+              }
+            }
+          }
+        },
+        "artifacts" : {
+          "mount-node-template" : {
+            "type" : "artifact-template-velocity",
+            "file" : "Templates/restconf-mount-template.vtl"
+          },
+          "mount-node-mapping" : {
+            "type" : "artifact-mapping-resource",
+            "file" : "Definitions/pnf-software-upgrade-mapping.json"
+          },
+          "configure-template" : {
+            "type" : "artifact-template-velocity",
+            "file" : "Templates/pnf-swug-config-template.vtl"
+          },
+          "configure-mapping" : {
+            "type" : "artifact-mapping-resource",
+            "file" : "Definitions/pnf-software-upgrade-mapping.json"
+          }
+        }
+      },
+      "postcheck" : {
+        "type" : "component-script-executor",
+        "interfaces" : {
+          "ComponentScriptExecutor" : {
+            "operations" : {
+              "process" : {
+                "implementation" : {
+                  "primary" : "component-script",
+                  "timeout" : 180,
+                  "operation_host" : "SELF"
+                },
+                "inputs" : {
+                  "script-type" : "kotlin",
+                  "script-class-reference" : "cba.pnf.swug.RestconfConfigure",
+                  "dynamic-properties" : "*postcheck-properties"
+                },
+                "outputs" : {
+                  "response-data" : "",
+                  "status" : "success"
+                }
+              }
+            }
+          }
+        },
+        "artifacts" : {
+          "mount-node-template" : {
+            "type" : "artifact-template-velocity",
+            "file" : "Templates/restconf-mount-template.vtl"
+          },
+          "mount-node-mapping" : {
+            "type" : "artifact-mapping-resource",
+            "file" : "Definitions/pnf-software-upgrade-mapping.json"
+          }
+        }
+      }
+    }
+  }
+}
