@@ -50,15 +50,27 @@ data class RequestDefinition(
 data class ResponseDefinition(val status: Int = 200, val body: JsonNode? = null) {
 
     companion object {
-        val DEFAULT_RESPONSE = ResponseDefinition()
+        val DEFAULT_RESPONSES = listOf(ResponseDefinition())
     }
 }
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-data class ExpectationDefinition(
-    val request: RequestDefinition,
-    val response: ResponseDefinition = ResponseDefinition.DEFAULT_RESPONSE
-)
+class ExpectationDefinition(
+        val request: RequestDefinition,
+        response: ResponseDefinition?,
+        responses: List<ResponseDefinition>? = null,
+        val times: String = ">= 1"
+) {
+    val responses: List<ResponseDefinition> = resolveOneOrMany(response, responses, ResponseDefinition.DEFAULT_RESPONSES)
+
+    companion object {
+        fun <T> resolveOneOrMany(one: T?, many: List<T>?, defaultMany: List<T>): List<T> = when {
+            many != null -> many
+            one != null -> listOf(one)
+            else -> defaultMany
+        }
+    }
+}
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 data class ServiceDefinition(val selector: String, val expectations: List<ExpectationDefinition>)
