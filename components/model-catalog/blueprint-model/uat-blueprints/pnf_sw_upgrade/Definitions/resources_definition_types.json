@@ -1,0 +1,62 @@
+{
+  "pnf-id" : {
+    "tags" : "pnf-id",
+    "name" : "pnf-id",
+    "property" : {
+      "description" : "pnf-id",
+      "type" : "string"
+    },
+    "updated-by" : "Raj Gumma <raj.gumma@est.tech>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      }
+    }
+  },
+  "target-software-version" : {
+    "tags" : "target-software-version",
+    "name" : "target-software-version",
+    "property" : {
+      "description" : "PNF Desired Software Version",
+      "type" : "string"
+    },
+    "updated-by" : "Raj Gumma <raj.gumma@est.tech>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      }
+    }
+  },
+  "pnf-ipaddress-aai" : {
+    "tags" : "aai-get",
+    "name" : "pnf-ipaddress-aai",
+    "property" : {
+      "description" : "primary aai data to get resource",
+      "type" : "string"
+    },
+    "updated-by" : "Raj Gumma <raj.gumma@est.tech>",
+    "sources" : {
+      "aai-data" : {
+        "type" : "source-rest",
+        "properties" : {
+          "type" : "JSON",
+          "verb" : "GET",
+          "url-path" : "/aai/v14/network/pnfs/pnf/$pnf-id",
+          "path" : "/ipaddress-v4-oam",
+          "input-key-mapping" : {
+            "pnf-id" : "pnf-id"
+          },
+          "headers" : {
+            "Accept" : "application/json"
+          },
+          "output-key-mapping" : {
+            "ipaddress-v4-oam" : "value"
+          },
+          "key-dependencies" : [ "pnf-id" ]
+        }
+      }
+    }
+  }
+}

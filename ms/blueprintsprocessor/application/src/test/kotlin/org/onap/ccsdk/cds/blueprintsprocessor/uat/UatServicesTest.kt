@@ -211,7 +211,6 @@ class UatServicesTest : BaseUatTest() {
         service.expectations.forEach { expectation ->
 
             val request = expectation.request
-            val response = expectation.response
             // WebTestClient always use absolute path, prefixing with "/" if necessary
             val urlPattern = urlEqualTo(request.path.prefixIfNot("/"))
             val mappingBuilder: MappingBuilder = request(request.method, urlPattern)
@@ -222,14 +221,15 @@ class UatServicesTest : BaseUatTest() {
                 mappingBuilder.withRequestBody(equalToJson(mapper.writeValueAsString(request.body), true, true))
             }
 
-            val responseDefinitionBuilder: ResponseDefinitionBuilder = aResponse()
-                .withStatus(response.status)
-            if (response.body != null) {
-                responseDefinitionBuilder.withBody(mapper.writeValueAsBytes(response.body))
-                    .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            for (response in expectation.responses) {
+                val responseDefinitionBuilder: ResponseDefinitionBuilder = aResponse()
+                        .withStatus(response.status)
+                if (response.body != null) {
+                    responseDefinitionBuilder.withBody(mapper.writeValueAsBytes(response.body))
+                            .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                }
+                mappingBuilder.willReturn(responseDefinitionBuilder)
             }
-
-            mappingBuilder.willReturn(responseDefinitionBuilder)
 
             mockServer.stubFor(mappingBuilder)
         }

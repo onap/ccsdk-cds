@@ -83,9 +83,9 @@ external-services:
       - request:
           method: GET
           path: [ restconf/operational, *nodeIdentifier]
-        response:
-          body:
-            node: [ { netconf-node-topology:connection-status: connected }]
+        responses:
+          - body:
+              node: [ { netconf-node-topology:connection-status: connected }]
       - request:
           method: GET
           path: [*configUri, &configletResourcePath yang-ext:mount/mynetconf:netconflist]
