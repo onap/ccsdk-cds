@@ -1,0 +1,7 @@
+TOSCA-Meta-File-Version: 1.0.0
+CSAR-Version: 1.0
+Created-By: Raj Gumma
+Entry-Definitions: Definitions/pnf-sw-upgrade.json
+Template-Name: pnf_sw_upgrade
+Template-Version: 1.0.0
+Template-Tags: pnf-sw-upgrade-blueprint
