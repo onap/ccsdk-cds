@@ -32,8 +32,8 @@ class DeviceInfo {
     var connectTimeout: Long = 30
     @get:JsonIgnore
     var source: String? = null
-    @get:JsonIgnore
-    var replyTimeout: Int = 20
+    @get:JsonProperty("reply-time-out")
+    var replyTimeout: Int = 120
     @get:JsonIgnore
     var idleTimeout: Int = 99999
 
