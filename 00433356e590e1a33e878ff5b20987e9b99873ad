@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "25dd69f0_d020db26",
+        "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/scripts/BluePrintCompileService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-02-12T14:17:41Z",
+      "side": 1,
+      "message": "Do not forget to sign this code. Bell Canada is missing as modifier.",
+      "revId": "00433356e590e1a33e878ff5b20987e9b99873ad",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59681a86_362d962e",
+        "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/scripts/BluePrintScriptsServiceImpl.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-02-12T14:17:41Z",
+      "side": 1,
+      "message": "Add Bell Canada here as modifier.",
+      "revId": "00433356e590e1a33e878ff5b20987e9b99873ad",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
