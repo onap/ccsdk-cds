@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "6c8d3a7d_a32e69f2",
+        "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/scripts/BluePrintCompileService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 5732
+      },
+      "writtenOn": "2020-02-12T14:40:15Z",
+      "side": 1,
+      "message": "I\u0027m cherry-picking a patch from brinda. I did not make the change Brinda did.",
+      "parentUuid": "25dd69f0_d020db26",
+      "revId": "00433356e590e1a33e878ff5b20987e9b99873ad",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "59681a86_362d962e",
         "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/scripts/BluePrintScriptsServiceImpl.kt",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2020-02-12T14:17:41Z",
       "side": 1,
       "message": "Add Bell Canada here as modifier.",
+      "revId": "00433356e590e1a33e878ff5b20987e9b99873ad",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9fd8621_7131d880",
+        "filename": "ms/controllerblueprints/modules/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/scripts/BluePrintScriptsServiceImpl.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 5732
+      },
+      "writtenOn": "2020-02-12T14:40:15Z",
+      "side": 1,
+      "message": "Same",
+      "parentUuid": "59681a86_362d962e",
       "revId": "00433356e590e1a33e878ff5b20987e9b99873ad",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
