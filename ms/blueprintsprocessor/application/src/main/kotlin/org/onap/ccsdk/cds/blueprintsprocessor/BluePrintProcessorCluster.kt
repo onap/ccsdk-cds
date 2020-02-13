@@ -88,6 +88,6 @@ open class BluePrintProcessorCluster(private val bluePrintClusterService: BluePr
 
     @PreDestroy
     fun shutDown() = runBlocking {
-        bluePrintClusterService.shutDown(Duration.ofSeconds(1))
+        bluePrintClusterService.shutDown(Duration.ofMillis(1))
     }
 }
