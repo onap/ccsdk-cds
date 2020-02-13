@@ -1,4 +1,5 @@
-import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AceEditorComponent } from 'ng2-ace-editor';
 // import 'brace/ext/searchbox';
 // import 'ace-builds/webpack-resolver';
 // import 'brace';
@@ -13,12 +14,10 @@ import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild
 export class SourceEditorComponent implements OnInit, AfterViewInit {
 
 
-    @Input() Data: string;
-    @Output() DataChange = new EventEmitter();
+    @Input() text: string;
+    @Output() textChange = new EventEmitter();
     @Input() lang: string;
-    mode = 'json';
-    @ViewChild('editor', {static: false}) editor;
-    text = '';
+    @ViewChild('editor', { static: false }) editor: AceEditorComponent;
 
     ngOnInit(): void {
         //  throw new Error("Method not implemented.");
@@ -26,10 +25,18 @@ export class SourceEditorComponent implements OnInit, AfterViewInit {
 
 
     ngAfterViewInit() {
-        this.editor.setTheme('eclipse');
 
+        console.log(this.lang);
+        this.editor.setTheme('eclipse');
         this.editor.getEditor().setOptions({
-            enableBasicAutocompletion: true
+            enableBasicAutocompletion: true,
+            // fontSize: '14pt',
+            // maxLines: 4096,
+            // behavioursEnabled: true,
+            // wrapBehavioursEnabled: true,
+            // showPrintMargin: true,
+            // indentedSoftWrap: true,
+            // wrap: true,
         });
 
         this.editor.getEditor().commands.addCommand({
@@ -41,9 +48,7 @@ export class SourceEditorComponent implements OnInit, AfterViewInit {
         });
     }
 
-    onChange($event: {}) {
-        console.log('editor action');
-        console.log(this.Data);
-        console.log($event);
+    onChange(editor) {
+        this.textChange.emit(this.text);
     }
 }
