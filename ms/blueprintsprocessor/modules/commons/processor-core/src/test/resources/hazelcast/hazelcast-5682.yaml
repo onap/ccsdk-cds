@@ -6,6 +6,9 @@ hazelcast:
   cp-subsystem:
     cp-member-count: 3
     group-size: 3
+    session-time-to-live-seconds: 60
+    session-heartbeat-interval-seconds: 5
+    missing-cp-member-auto-removal-seconds: 120
 #  network:
 #    join:
 #      multicast:
