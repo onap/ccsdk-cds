@@ -27,6 +27,7 @@ import com.hazelcast.config.FileSystemYamlConfig
 import com.hazelcast.config.MemberAttributeConfig
 import com.hazelcast.core.Hazelcast
 import com.hazelcast.core.HazelcastInstance
+import com.hazelcast.cp.CPSubsystemManagementService
 import com.hazelcast.cp.lock.FencedLock
 import com.hazelcast.scheduledexecutor.IScheduledExecutorService
 import kotlinx.coroutines.delay
@@ -48,6 +49,7 @@ open class HazlecastClusterService : BluePrintClusterService {
 
     private val log = logger(HazlecastClusterService::class)
     lateinit var hazelcast: HazelcastInstance
+    lateinit var cpSubsystemManagementService: CPSubsystemManagementService
     var joinedClient = false
     var joinedLite = false
 
@@ -57,7 +59,10 @@ open class HazlecastClusterService : BluePrintClusterService {
             when (configuration) {
                 is Config -> {
                     joinedLite = configuration.isLiteMember
-                    Hazelcast.newHazelcastInstance(configuration)
+                    val hazelcastInstance = Hazelcast.newHazelcastInstance(configuration)
+                    /** Promote as CP Member */
+                    promoteAsCPMember(hazelcastInstance)
+                    hazelcastInstance
                 }
                 is ClientConfig -> {
                     joinedClient = true
@@ -99,7 +104,10 @@ open class HazlecastClusterService : BluePrintClusterService {
                         hazelcastServerConfiguration.properties = configuration.properties
                         hazelcastServerConfiguration.memberAttributeConfig = memberAttributeConfig
                         joinedLite = hazelcastServerConfiguration.isLiteMember
-                        Hazelcast.newHazelcastInstance(hazelcastServerConfiguration)
+                        val hazelcastInstance = Hazelcast.newHazelcastInstance(hazelcastServerConfiguration)
+                        /** Promote as CP Member */
+                        promoteAsCPMember(hazelcastInstance)
+                        hazelcastInstance
                     }
                 }
                 else -> {
@@ -169,11 +177,17 @@ open class HazlecastClusterService : BluePrintClusterService {
     override suspend fun shutDown(duration: Duration) {
         if (::hazelcast.isInitialized && clusterJoined()) {
             delay(duration.toMillis())
-            hazelcast.lifecycleService.terminate()
+            HazlecastClusterUtils.terminate(hazelcast)
         }
     }
 
     /** Utils */
+    suspend fun promoteAsCPMember(hazelcastInstance: HazelcastInstance) {
+        if (!joinedClient && !joinedLite) {
+            HazlecastClusterUtils.promoteAsCPMember(hazelcastInstance)
+        }
+    }
+
     suspend fun myHazelcastApplicationMembers(): Map<String, Member> {
         check(::hazelcast.isInitialized) { "failed to start and join cluster" }
         check(!isClient()) { "not supported for cluster client members." }
@@ -198,11 +212,11 @@ open class BlueprintsClusterMembershipListener(val hazlecastClusterService: Hazl
     private val log = logger(BlueprintsClusterMembershipListener::class)
 
     override fun memberRemoved(membershipEvent: MembershipEvent) {
-        log.info("${hazlecastClusterService.hazelcast.cluster.localMember} : Member Removed: $membershipEvent")
+        log.info("MembershipEvent: ${hazlecastClusterService.hazelcast.cluster.localMember} member removed")
     }
 
     override fun memberAdded(membershipEvent: MembershipEvent) {
-        log.info("${hazlecastClusterService.hazelcast.cluster.localMember} : Member Added : $membershipEvent")
+        log.info("MembershipEvent: ${hazlecastClusterService.hazelcast.cluster.localMember} member added")
     }
 }
 
