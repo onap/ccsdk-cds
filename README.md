@@ -1,6 +1,6 @@
-## Format code with ktlint checkstyle tool use the following command
+##### Format code with ktlint checkstyle tool use the following command
 
-mvn process-source -P format
+`mvn process-sources -P format`
 
 
 ## Reference

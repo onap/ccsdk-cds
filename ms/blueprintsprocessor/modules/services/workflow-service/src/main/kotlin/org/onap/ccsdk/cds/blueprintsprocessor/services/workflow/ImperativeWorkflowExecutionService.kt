@@ -144,7 +144,7 @@ open class ImperativeBluePrintWorkflowService(private val nodeTemplateExecutionS
         nodeInput: ExecutionServiceInput,
         nodeOutput: ExecutionServiceOutput
     ): EdgeLabel {
-        log.info("Executing workflow($workflowName[${this.workflowId}])'s step($${node.id})")
+        log.info("Executing workflow($workflowName[${this.workflowId}])'s step(${node.id})")
         val step = bluePrintRuntimeService.bluePrintContext().workflowStepByName(this.workflowName, node.id)
         checkNotEmpty(step.target) { "couldn't get step target for workflow(${this.workflowName})'s step(${node.id})" }
         val nodeTemplateName = step.target!!
