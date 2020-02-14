@@ -123,6 +123,13 @@ external-services:
                   operation: merge
                   target: /
                   value: { netconflist: { netconf: [ { netconf-id: "30", netconf-param: "3000" }]}}
+        response:
+          body:
+            ietf-yang-patch:yang-patch-status:
+              patch-id: patch-1
+              ok: [
+                null
+              ]
       - request:
           method: DELETE
           path: *configUri
