@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b9ba29ae_63904c1e",
+        "filename": "ms/blueprintsprocessor/functions/restconf-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/restconf/executor/RestconfExecutorExtensions.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 4023
+      },
+      "writtenOn": "2020-02-14T15:37:52Z",
+      "side": 1,
+      "message": "Need a returns in here?",
+      "range": {
+        "startLine": 71,
+        "startChar": 3,
+        "endLine": 71,
+        "endChar": 29
+      },
+      "revId": "74ca9eb6c9507bad88cfc518d9070562eace8e43",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
