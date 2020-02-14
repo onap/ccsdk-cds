@@ -132,7 +132,7 @@ open class DatabaseResourceAssignmentProcessor(
     private fun populateNamedParameter(inputKeyMapping: Map<String, String>): Map<String, Any> {
         val namedParameters = HashMap<String, Any>()
         inputKeyMapping.forEach {
-            val expressionValue = raRuntimeService.getDictionaryStore(it.value).textValue()
+            val expressionValue = raRuntimeService.getResolutionStore(it.value).textValue()
             logger.trace("Reference dictionary key (${it.key}) resulted in value ($expressionValue)")
             namedParameters[it.key] = expressionValue
         }
