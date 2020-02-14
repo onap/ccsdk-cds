@@ -1,0 +1,103 @@
+%YAML 1.1
+---
+processes:
+  - name: update-config
+    request:
+      commonHeader: &commonHeader
+        originatorId: sdnc
+        requestId: 123456-1000
+        subRequestId: sub-123456-1000
+      actionIdentifiers: &actionIdentifiers
+        blueprintName: pnf_config_with_response
+        blueprintVersion: 1.0.0
+        actionName: update-config
+        mode: sync
+      payload:
+        update-config-request:
+          update-config-properties:
+            nfName: &nfName "testname"
+    expectedResponse:
+      commonHeader: *commonHeader
+      actionIdentifiers: *actionIdentifiers
+      status:
+        code: 200
+        eventType: EVENT_COMPONENT_EXECUTED
+        errorMessage: null
+        message: success
+      payload:
+        update-config-response: {}
+
+external-services:
+  - selector: aai-data
+    expectations:
+      - request:
+          method: GET
+          path: [ /aai/v14/network/pnfs/pnf, *nfName]
+          headers:
+            Accept: application/json
+        response:
+          headers:
+            Content-Type: application/json
+          body:
+            ipaddress-v4-oam: &nfAddress 13.13.13.13
+            ipaddress-v6-oam: 1::13
+
+  - selector: sdnc
+    expectations:
+      - request:
+          method: PUT
+          path: &configUri [ restconf/config, &nodeIdentifier [network-topology:network-topology/topology/topology-netconf/node, *nfName]]
+          headers:
+            Content-Type: application/json
+          body:
+            node:
+              - node-id: *nfName
+                netconf-node-topology:protocol: { name: TLS }
+                netconf-node-topology:host: *nfAddress
+                netconf-node-topology:key-based:
+                  username: netconf
+                  key-id: ODL_private_key_0
+                netconf-node-topology:port: 6513
+                netconf-node-topology:tcp-only: false
+                netconf-node-topology:max-connection-attempts: 5
+        response:
+          status: 201
+      - request:
+          method: GET
+          path: [ restconf/operational, *nodeIdentifier]
+        response:
+          body:
+            node: [ { netconf-node-topology:connection-status: connected }]
+      - request:
+          method: PATCH
+          path: [*configUri, yang-ext:mount/mynetconf:netconflist]
+          headers:
+            Content-Type: application/yang.patch+json
+          body:
+            ietf-restconf:yang-patch:
+              patch-id: patch-1
+              edit:
+                - edit-id: edit1
+                  operation: merge
+                  target: /
+                  value: { netconflist: { netconf: [ { netconf-id: "10", netconf-param: "1000" }]}}
+        response:
+          body:
+            ietf-yang-patch:yang-patch-status:
+              patch-id: patch-1
+              errors:
+                - error: [
+                  {
+                    error-type: "application",
+                    error-tag: "operation-failed",
+                    error-message: "Commit of transaction org.opendaylight.netconf.sal.connect.netconf.sal.tx.WriteCandidateRunningTx@22b0d314 failed"
+                  }
+                ]
+              edit-status:
+                - edit: [
+                    edit-id: edit1,
+                    ok: [null]
+                ]
+      - request:
+          method: DELETE
+          path: *configUri

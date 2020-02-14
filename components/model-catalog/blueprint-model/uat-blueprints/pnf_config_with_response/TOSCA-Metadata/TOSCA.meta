@@ -1,0 +1,7 @@
+TOSCA-Meta-File-Version: 1.0.0
+CSAR-Version: 1.0
+Created-By: David Farrelly
+Entry-Definitions: Definitions/pnf_config_with_response.json
+Template-Name: pnf_config_with_response
+Template-Version: 1.0.0
+Template-Tags: pnf_config_with_response

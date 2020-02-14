@@ -1,0 +1,14 @@
+{
+  "data_types" : {
+    "dt-update-config-properties" : {
+      "description" : "Dynamic DataType definition for workflow(create-subscription).",
+      "version" : "1.0.0",
+      "properties" : {
+        "nfName": {
+          "type": "string"
+        }
+      },
+      "derived_from" : "tosca.datatypes.Dynamic"
+    }
+  }
+}
