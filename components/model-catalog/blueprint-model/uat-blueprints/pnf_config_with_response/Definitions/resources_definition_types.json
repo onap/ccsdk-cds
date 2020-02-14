@@ -1,0 +1,49 @@
+{
+  "nfName" : {
+    "tags" : "nfName",
+    "name" : "nfName",
+    "property" : {
+      "description" : "nfName",
+      "type" : "string"
+    },
+    "updated-by" : "David Farrelly <david.farrelly@est.tech>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      }
+    }
+  },
+  "pnf-ipv4-address" : {
+    "tags" : "aai-get",
+    "name" : "pnf-ipv4-address",
+    "property" : {
+      "description" : "primary aai data to get resource",
+      "type" : "string"
+    },
+    "updated-by" : "David Farrelly <david.farrelly@est.tech>",
+    "sources" : {
+      "aai-data" : {
+        "type" : "source-rest",
+        "properties" : {
+          "type" : "JSON",
+          "verb" : "GET",
+          "url-path" : "/aai/v14/network/pnfs/pnf/$nfName",
+          "path" : "/ipaddress-v4-oam",
+          "input-key-mapping" : {
+            "nfName" : "nfName"
+          },
+          "headers" : {
+            "Accept": "application/json",
+            "x-transactionId": "9998",
+            "X-FromAppId": "dcae-curl"
+          },
+          "output-key-mapping" : {
+            "ipaddress-v4-oam" : "value"
+          },
+          "key-dependencies" : [ "nfName" ]
+        }
+      }
+    }
+  }
+}

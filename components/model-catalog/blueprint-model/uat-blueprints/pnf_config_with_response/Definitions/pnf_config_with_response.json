@@ -1,0 +1,88 @@
+{
+  "tosca_definitions_version" : "controller_blueprint_1_0_0",
+  "metadata" : {
+    "template_author" : "David Farrelly",
+    "author-email" : "david.farrelly@est.tech",
+    "user-groups" : "ADMIN, OPERATION",
+    "template_name" : "pnf_config_with_response",
+    "template_version" : "1.0.0",
+    "template_tags" : "pnf, restconf, config, configuration"
+  },
+  "imports" : [ {
+    "file" : "Definitions/data_types.json"
+  }, {
+    "file" : "Definitions/relationship_types.json"
+  }, {
+    "file" : "Definitions/artifact_types.json"
+  }, {
+    "file" : "Definitions/node_types.json"
+  }, {
+    "file" : "Definitions/policy_types.json"
+  } ],
+  "dsl_definitions" : {
+    "update-config-properties" : {}
+  },
+  "topology_template" : {
+    "workflows" : {
+      "update-config" : {
+        "steps" : {
+          "create-process" : {
+            "description" : "Update configuration on PNF",
+            "target" : "update-config",
+            "activities" : [ {
+              "call_operation" : ""
+            } ]
+          }
+        },
+        "inputs" : {
+          "update-config-properties" : {
+            "description" : "Dynamic PropertyDefinition for workflow(update-config).",
+            "required" : true,
+            "type" : "dt-update-config-properties"
+          }
+        }
+      }
+    },
+    "node_templates" : {
+      "update-config" : {
+        "type" : "component-script-executor",
+        "interfaces" : {
+          "ComponentScriptExecutor" : {
+            "operations" : {
+              "process" : {
+                "implementation" : {
+                  "primary" : "component-script",
+                  "timeout" : 180,
+                  "operation_host" : "SELF"
+                },
+                "inputs" : {
+                  "script-type" : "kotlin",
+                  "script-class-reference" : "cba.pnf.config.with.response.UpdateConfig",
+                  "dynamic-properties" : "*update-config-properties"
+                }
+              }
+            }
+          }
+        },
+        "artifacts" : {
+          "update-config-template" : {
+            "type" : "artifact-template-velocity",
+            "file" : "Templates/update-config-restconf-configlet-template.vtl"
+          },
+          "update-config-mapping" : {
+            "type" : "artifact-mapping-resource",
+            "file" : "Definitions/update-config-mapping.json"
+          },
+          "restconf-mount-template": {
+            "type": "artifact-template-velocity",
+            "file": "Templates/restconf-mount-template.vtl"
+          },
+          "restconf-mount-mapping": {
+            "type" : "artifact-mapping-resource",
+            "file" : "Definitions/restconf-mount-mapping.json"
+          }
+        }
+      }
+    }
+  }
+}
