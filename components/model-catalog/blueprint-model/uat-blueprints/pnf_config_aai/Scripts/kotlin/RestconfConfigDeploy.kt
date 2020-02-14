@@ -31,11 +31,14 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor.restco
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService.WebClientResponse
 
 class RestconfConfigDeploy : AbstractScriptComponentFunction() {
     private val CONFIGLET_TEMPLATE_NAME = "config-assign"
     private val CONFIGLET_RESOURCE_PATH = "yang-ext:mount/mynetconf:netconflist"
     private val RESTCONF_SERVER_IDENTIFIER = "sdnc"
+    private val mapper = ObjectMapper()
     private val log = logger(AbstractScriptComponentFunction::class.java)
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
@@ -58,9 +61,17 @@ class RestconfConfigDeploy : AbstractScriptComponentFunction() {
                 val currentConfig: Any = restconfDeviceConfig(webclientService, deviceID, CONFIGLET_RESOURCE_PATH)
                 log.info("Current configuration subtree : $currentConfig")
                 //Apply configlet
-                restconfApplyDeviceConfig(webclientService, deviceID, CONFIGLET_RESOURCE_PATH,
+                val result = restconfApplyDeviceConfig(webclientService, deviceID, CONFIGLET_RESOURCE_PATH,
                         storedContentFromResolvedArtifactNB(resolutionKey, CONFIGLET_TEMPLATE_NAME),
-                        mutableMapOf("Content-Type" to "application/yang.patch+json"))
+                        mutableMapOf("Content-Type" to "application/yang.patch+json")) as WebClientResponse<*>
+
+                val jsonResult = mapper.readTree((result.body).toString())
+
+                if(jsonResult.get("ietf-yang-patch:yang-patch-status").get("errors") != null) {
+                    log.error("There was an error configuring device")
+                }  else {
+                    log.info("Device has been configured succesfully")
+                }
 
             } catch (err: Exception) {
                 log.error("an error occurred while configuring device {}", err)
