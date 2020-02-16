@@ -1,64 +1,12 @@
 <h6 class="create-title">CREATE</h6>
 <div class="card creat-card">
-    <div class="single-line">
-        <label class="label-name">Name</label>
+    <div class="single-line-model">
+        <label class="label-name">Name
+            <span _ngcontent-uew-c3="">*</span>
+        </label>
+        
         <div class="label-input">
             <input type="input" placeholder="Topology name.vLB.CDS">
-        </div>
-    </div>
-    <hr />
-    <div class="single-line">
-        <label class="label-name">Management Type</label>
-        <div class="label-input">
-            <div class="row">
-                <div class="col-md-4 d-flex">
-                    <a class="select-type active" href="#">
-                        <div class="select-type-icon"><span class="icon-template-mapping"></span></div>
-                        <div>Template And Support Mapping</div>
-                    </a>
-                </div>
-                <div class="col-md-4 d-flex">
-                    <a class="select-type" href="#">
-                        <div class="select-type-icon"><span class="icon-template"></span></div>
-                        <div>Template Only</div>
-                    </a>
-                </div>
-                <div class="col-md-4 d-flex">
-                    <a class="select-type" href="#">
-                        <div class="select-type-icon"><span class="icon-mapping"></span></div>
-                        <div>Mapping Only</div>
-                    </a>
-
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <hr />
-    <div class="single-line">
-        <label class="label-name">Type</label>
-        <div class="label-input">
-            <label name="trst">
-                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value=Velcoity>
-
-                <span>
-                    Velcoity
-                </span>
-            </label>
-            <label name="trst">
-                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value=Velcoity>
-
-                <span>
-                    Jinja
-                </span>
-            </label>
-            <label name="trst">
-                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value=Velcoity>
-
-                <span>
-                    Kotlin
-                </span>
-            </label>
         </div>
     </div>
 </div>
@@ -78,13 +26,36 @@
 
             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                 <div class="card-body">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3
-                    wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum
-                    eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla
-                    assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt
-                    sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer
-                    farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
-                    labore sustainable VHS.
+                    <div class="single-line">
+                        <label class="label-name">Template Type</label>
+                        <div class="label-input">
+                            <label name="trst">
+                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value=Velcoity>
+                
+                                <span>
+                                    Velcoity
+                                </span>
+                            </label>
+                            <label name="trst">
+                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value=Velcoity>
+                
+                                <span>
+                                    Jinja
+                                </span>
+                            </label>
+                            <label name="trst">
+                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value=Velcoity>
+                
+                                <span>
+                                    Kotlin
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="create-template-import">Use the editor to add parameters or you can also <a href="#" data-toggle="modal" data-target="#exampleModal">Import File</a></div>
+                    <div class="editor-container">
+                        <app-dsl-definitions-tab></app-dsl-definitions-tab>
+                    </div>
                 </div>
             </div>
         </div>
@@ -99,14 +70,91 @@
             </div>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                 <div class="card-body">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3
-                    wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum
-                    eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla
-                    assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt
-                    sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer
-                    farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
-                    labore sustainable VHS.
+                    <h6 class="text-center">Select a source to load config parameters</h6>
+                    <div class="text-center">
+                        <a href="#" class="mapping-source-load">
+                            <i class="icon-current-template"></i>
+                        <br/>
+                            <span>Use Current Template Instance</span>
+                        </a>
+                        <a href="#" data-toggle="modal" data-target="#exampleModal" class="mapping-source-load">
+                            <i class="icon-Upload-attribute"></i>
+                        <br/>
+                            <div>Upload attribute list</div>
+                            <div class="source-load-note">(Should be comma delimited file)</div>
+                        </a>
+                        <!-- <a href="#" class="mapping-source-load">
+                            <i class="icon-import-cds"></i>
+                        <br/>
+                            <span>Import from SDC Model</span>
+                        </a> -->
+                    </div>
+
+                    <div class="table-container">
+                        
+
+                    </div>
                 </div>
+
+                
+            </div>
+
+            
+        </div>
+
+        <div class="template-mapping-action">
+            <button class="btn btn-sm btn-outline-secondary">Cancel</button>
+            <button class="btn btn-sm btn-primary">Finish</button>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Import File</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)"
+                    (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)">
+                    <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+                        <div class="folder-upload">
+                            <img src="assets/img/folder-upload.svg" />
+                        </div>
+                        <div class="folder-upload-text">
+                            Drag & Drop file
+                        </div>
+                        <div class="folder-upload-text">or
+                            <button type="button" class="btn btn-sm btn-primary" (click)="openFileSelector()">Browse
+                                Files
+                            </button>
+                        </div>
+                        <div class="folder-upload-type">Allowed file type: json</div>
+                    </ng-template>
+                </ngx-file-drop>
+                <div class="upload-table" *ngFor="let item of uploadedFiles; let i=index">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name : {{ item.name }}</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal"
+                    (click)="resetTheUploadedFiles()">Cancel
+                </button>
+                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" (click)="setFilesToStore()">
+                    Import
+                </button>
             </div>
         </div>
     </div>

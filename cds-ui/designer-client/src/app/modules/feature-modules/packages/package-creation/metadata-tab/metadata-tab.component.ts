@@ -14,7 +14,8 @@ export class MetadataTabComponent implements OnInit {
     counter = 0;
     modes: object[] = [
         {name: 'Designer Mode', style: 'mode-icon icon-designer-mode'},
-        {name: 'Scripting Mode', style: 'mode-icon icon-scripting-mode'}];
+        {name: 'Scripting Mode', style: 'mode-icon icon-scripting-mode'},
+        {name: 'Generic Script Mode', style: 'mode-icon icon-generic-script-mode'}];
     private metaDataTab: MetaDataTabModel = new MetaDataTabModel();
     private errorMessage: string;
 

@@ -11,40 +11,62 @@
                                             </span>
         </label>
     </div>
+    <div class="single-line">
+        <label class="label-name">Dictionary Library Instance</label>
+        <div class="label-input">
+            <select class="form-control" id="exampleFormControlSelect1">
+                <option>Library Instance 1</option>
+                <option>Library Instance 2</option>
+                <option>Library Instance 3</option>
+                <option>Library Instance 4</option>
+                <option>Library Instance 5</option>
+              </select>
+        </div>
+    </div>
 
 </div>
 <div class="card creat-card">
-    <div class="single-line">
-        <label class="label-name">Name</label>
+    <div class="single-line-model error">
+        <label class="label-name">Name <span>*</span></label>
         <div class="label-input">
             <input type="input"
                    [(ngModel)]="metaDataTab.name" placeholder="Topology name.vLB.CDS">
         </div>
+        <div class="model-note-container error-message">
+            Package name already exists with this version. Please enter a different name or enter different version number.
+            </div>
     </div>
-    <hr/>
-    <div class="single-line">
+   
+    <div class="single-line-model">
+        <label class="label-name">Version <span>*</span></label>
+        <div class="label-input">
+            <input type="input" [(ngModel)]="metaDataTab.version"
+                   (input)="validatePackageNameAndVersion()"
+                   placeholder="Example: 1.0.0">
+        </div>
+        <div class="model-note-container error-message">{{errorMessage}}</div>
+    </div>
+    <div class="single-line-model">
         <label class="label-name">Description</label>
         <div class="label-input">
             <input type="input" [(ngModel)]="metaDataTab.description"
                    placeholder="Descripe the package">
         </div>
     </div>
-    <hr/>
-    <div class="single-line">
-        <label class="label-name">Version</label>
-        <div class="label-input">
-            <input type="input" [(ngModel)]="metaDataTab.version"
-                   (input)="validatePackageNameAndVersion()"
-                   placeholder="Example: 1.0.0">
-        </div>
-        <div><label style="color: red">{{errorMessage}}</label></div>
-    </div>
-    <hr/>
-    <div class="single-line">
+    
+    <div class="single-line-model">
         <label class="label-name">tags</label>
         <div class="label-input">
             <input type="input" [(ngModel)]="metaDataTab.tags"
                    placeholder="Ex., vDNS-CDS">
+                   
+        </div>
+        <div class="model-note-container tag-notes">Seprate tags with comma or space</div>
+        <div class="model-note-container tages-container">
+            <span class="single-tage">vDNS-CDS <a href="#"> <i class="fa fa-times-circle"></i></a></span>
+            <span class="single-tage">vDNS-CDS <a href="#"> <i class="fa fa-times-circle"></i></a></span>
+            <span class="single-tage">vDNS-CDS <a href="#"> <i class="fa fa-times-circle"></i></a></span>
+            <span class="single-tage">vDNS-CDS <a href="#"> <i class="fa fa-times-circle"></i></a></span>
         </div>
     </div>
 </div>
@@ -53,35 +75,58 @@
         <div class="card creat-card">
             <div class="single-line">
                 <h5 class="label-name">
-                    Custom key <a class="delete-key" (click)="deleteCustomKey($event)">Delete</a>
+                    Custom key 
                 </h5>
 
             </div>
-            <div class="single-line">
-                <label class="label-name">Name</label>
+            <div class="single-custom-key">
+            <div class="single-line-custom-key">
+                <label class="label-name"><span>1-</span> Name</label>
                 <div class="label-input">
-                    <input name="key" type="input" placeholder="Enter Name">
+                    <input name="key" type="input" placeholder="Enter name">
                 </div>
             </div>
-            <hr/>
-            <div class="single-line">
+            <div class="single-line-custom-key">
                 <label class="label-name">Value</label>
                 <div class="label-input">
                     <input name="value" type="input"
-                           placeholder="Enter Value">
+                           placeholder="Enter value">
                 </div>
             </div>
+            <div class="single-line-custom-key-delete"><button class="custom-key-delete"><i aria-hidden="true" class="icon-delete"></i></button></div>
+           </div>
+           <div class="single-custom-key">
+            <div class="single-line-custom-key">
+                <label class="label-name"><span>2-</span> Name</label>
+                <div class="label-input">
+                    <input name="key" type="input" placeholder="Enter name">
+                </div>
+            </div>
+            <div class="single-line-custom-key">
+                <label class="label-name">Value</label>
+                <div class="label-input">
+                    <input name="value" type="input"
+                           placeholder="Enter value">
+                </div>
+            </div>
+            <div class="single-line-custom-key-delete"><button class="custom-key-delete"><i aria-hidden="true" class="icon-delete"></i></button></div>
+           </div>
 
-        </div>
-    </div>
-</div>
-<div class="card creat-card">
-    <div class="single-line">
-        <div name="custom key">
-            <button class="custom-key" (click)="createAnotherCustomKeyDiv()"><i
-                    class="fa fa-plus" aria-hidden="true"></i> Add a custom key
-            </button>
-
+           <div class="single-custom-key">
+            <div class="single-line-custom-key">
+                <label class="label-name"><span>3-</span> Name</label>
+                <div class="label-input">
+                    <input name="key" type="input" placeholder="Enter name">
+                </div>
+            </div>
+            <div class="single-line-custom-key">
+                <label class="label-name">Value</label>
+                <div class="label-input">
+                    <input name="value" type="input"
+                           placeholder="Enter value">
+                </div>
+            </div>
+           </div>
 
         </div>
     </div>
