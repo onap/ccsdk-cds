@@ -86,4 +86,11 @@ export class PackageCreationStore extends Store<CBAPackage> {
     saveBluePrint(blob) {
         this.packageCreationService.savePackage(blob);
     }
+
+    addTemplate(filePath: string, fileContent: string) {
+        this.setState({
+            ...this.state,
+            templates: this.state.templates.setTemplates(filePath, fileContent)
+        });
+    }
 }

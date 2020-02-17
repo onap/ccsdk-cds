@@ -47,17 +47,33 @@ export class Scripts {
     }
 }
 
+
+export class Template {
+    public files: Map<string, string>;
+
+    constructor() {
+        this.files = new Map<string, string>();
+    }
+
+    public setTemplates(key: string, value: string) {
+        this.files.set(key, value);
+        return this;
+    }
+}
+
 export class CBAPackage {
 
     public metaData: MetaDataTabModel;
     public definitions: Definition;
     public scripts: Scripts;
+    public templates: Template;
 
 
     constructor() {
         this.definitions = new Definition();
         this.scripts = new Scripts();
         this.metaData = new MetaDataTabModel();
+        this.templates = new Template();
     }
 
 

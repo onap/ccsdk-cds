@@ -39,26 +39,7 @@ export class ImportsTabComponent implements OnInit {
                 console.log(fileEntry.name);
                 this.fileNames.add(fileEntry.name);
 
-            } /*else {
-                const directorEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
-                this.filesUnderDirectory = directorEntry.getFile('');
-               // const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
-               /* this.uploadedFile.push(droppedFile);
-                const formData = new FormData()
-                formData.append('logo', fileEntry, droppedFile.relativePath);
-                console.log(formData);*/
-            /* // It was a directory (empty directories are added, otherwise only files)
-             const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
-             console.log(droppedFile.relativePath, fileEntry);
-
-
-              const formData = new FormData();
-              formData.append('logo', droppedFile, droppedFile.relativePath);
-              console.log(formData);
-
-             //this.packageCreationStore.addDefinition(droppedFile.relativePath, this.getContent(droppedFile.relativePath));
-*/
-            /* }*/
+            }
         }
     }
 
@@ -76,16 +57,6 @@ export class ImportsTabComponent implements OnInit {
         console.log(event);
     }
 
-    /* readFileContent(file: File): string | ArrayBuffer {
-         const fileReader = new FileReader();
-        // let content: string | ArrayBuffer = '';
-         fileReader.onload = (e) => {
-             content = fileReader.result;
-         };
-         fileReader.readAsText(file);
-         return content;
-     }
- */
     setFilesToStore() {
         for (const droppedFile of this.uploadedFiles) {
             droppedFile.file((file: File) => {
