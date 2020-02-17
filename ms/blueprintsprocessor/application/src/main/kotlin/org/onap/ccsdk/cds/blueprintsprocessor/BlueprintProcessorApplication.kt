@@ -19,6 +19,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.autoconfigure.hazelcast.HazelcastAutoConfiguration
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 import org.springframework.context.annotation.ComponentScan
 
@@ -28,7 +29,7 @@ import org.springframework.context.annotation.ComponentScan
  * @author Brinda Santh
  */
 @SpringBootApplication
-@EnableAutoConfiguration(exclude = [DataSourceAutoConfiguration::class])
+@EnableAutoConfiguration(exclude = [DataSourceAutoConfiguration::class, HazelcastAutoConfiguration::class])
 @ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
 open class BlueprintProcessorApplication
 

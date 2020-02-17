@@ -54,7 +54,7 @@ open class HazlecastClusterService : BluePrintClusterService {
     var joinedLite = false
 
     override suspend fun <T> startCluster(configuration: T) {
-        /** Get the Hazelcast Cliet or Server instance */
+        /** Get the Hazelcast Client or Server instance */
         hazelcast =
             when (configuration) {
                 is Config -> {
@@ -101,6 +101,8 @@ open class HazlecastClusterService : BluePrintClusterService {
                     } else {
                         /** Hazelcast Server from config file */
                         val hazelcastServerConfiguration = FileSystemYamlConfig(normalizedFile(configFile))
+                        hazelcastServerConfiguration.clusterName = configuration.id
+                        hazelcastServerConfiguration.instanceName = configuration.nodeId
                         hazelcastServerConfiguration.properties = configuration.properties
                         hazelcastServerConfiguration.memberAttributeConfig = memberAttributeConfig
                         joinedLite = hazelcastServerConfiguration.isLiteMember
@@ -116,7 +118,7 @@ open class HazlecastClusterService : BluePrintClusterService {
             }
 
         /** Add the Membership Listeners */
-        hazelcast.cluster.addMembershipListener(BlueprintsClusterMembershipListener(this))
+        hazelcast.cluster.addMembershipListener(BlueprintsClusterMembershipListener())
         log.info(
             "Cluster(${hazelcast.config.clusterName}) node(${hazelcast.name}) created successfully...."
         )
@@ -207,7 +209,7 @@ open class HazlecastClusterService : BluePrintClusterService {
     }
 }
 
-open class BlueprintsClusterMembershipListener(val hazlecastClusterService: HazlecastClusterService) :
+open class BlueprintsClusterMembershipListener() :
     MembershipListener {
     private val log = logger(BlueprintsClusterMembershipListener::class)
 
