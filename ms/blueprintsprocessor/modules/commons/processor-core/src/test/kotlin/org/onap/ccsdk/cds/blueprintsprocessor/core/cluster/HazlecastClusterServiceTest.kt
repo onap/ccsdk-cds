@@ -113,7 +113,7 @@ class HazlecastClusterServiceTest {
                         } else {
                             ClusterInfo(
                                 id = "test-cluster", nodeId = nodeId, joinAsClient = false,
-                                configFile = "./src/test/resources/hazelcast/hazelcast-$port.yaml",
+                                configFile = "./src/test/resources/hazelcast/hazelcast-cluster.yaml",
                                 properties = properties
                             )
                         }
@@ -162,7 +162,7 @@ class HazlecastClusterServiceTest {
                 executeLock(bluePrintClusterServices[0], "first", lockName)
             }
             val deferred2 = async {
-                executeLock(bluePrintClusterServices[0], "second", lockName)
+                executeLock(bluePrintClusterServices[1], "second", lockName)
             }
             val deferred3 = async {
                 executeLock(bluePrintClusterServices[2], "third", lockName)

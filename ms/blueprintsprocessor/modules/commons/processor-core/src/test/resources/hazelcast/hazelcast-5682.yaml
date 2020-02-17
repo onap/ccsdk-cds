@@ -9,10 +9,11 @@ hazelcast:
     session-time-to-live-seconds: 60
     session-heartbeat-interval-seconds: 5
     missing-cp-member-auto-removal-seconds: 120
-#  network:
-#    join:
-#      multicast:
-#        enabled: false
+  network:
+    join:
+      multicast:
+        enabled: true
+        multicast-group: 224.0.0.1
 #      kubernetes:
 #        enabled: true
 #        namespace: MY-KUBERNETES-NAMESPACE
