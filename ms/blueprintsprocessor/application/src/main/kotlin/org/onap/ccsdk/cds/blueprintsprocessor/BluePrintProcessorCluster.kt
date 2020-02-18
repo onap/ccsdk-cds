@@ -25,9 +25,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.ClusterUtils
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
-import java.time.Duration
 import java.util.Properties
-import javax.annotation.PreDestroy
 
 /**
  * To Start the cluster, minimum 2 Instances/ Replicas od CDS needed.
@@ -84,10 +82,5 @@ open class BluePrintProcessorCluster(private val bluePrintClusterService: BluePr
         } else {
             log.info("Cluster is disabled, to enable cluster set the environment CLUSTER_* properties.")
         }
-    }
-
-    @PreDestroy
-    fun shutDown() = runBlocking {
-        bluePrintClusterService.shutDown(Duration.ofMillis(1))
     }
 }

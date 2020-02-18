@@ -18,4 +18,6 @@ exec java -classpath "/etc:${APP_HOME}/lib/*:/lib/*:/src:/schema:/generated-sour
 -Djava.security.egd=file:/dev/./urandom \
 -DAPPNAME=${APP_NAME} -DAPPENV=${APP_ENV} -DAPPVERSION=${APP_VERSION} -DNAMESPACE=${NAMESPACE} \
 -Dspring.config.location=${APP_CONFIG_HOME}/ \
+-Dhazelcast.shutdownhook.policy=GRACEFUL \
+-Dhazelcast.graceful.shutdown.max.wait=600 \
 org.onap.ccsdk.cds.blueprintsprocessor.BlueprintProcessorApplicationKt
