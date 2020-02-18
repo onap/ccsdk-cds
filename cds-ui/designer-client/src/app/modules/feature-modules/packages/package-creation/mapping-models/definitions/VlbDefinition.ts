@@ -1,4 +1,4 @@
-import {Any, JsonObject, JsonProperty} from 'json2typescript';
+import { Any, JsonObject, JsonProperty } from 'json2typescript';
 
 
 @JsonObject
@@ -8,29 +8,35 @@ export class VlbDefinition {
     tosca_definitions_version: string;
     metadata: Metadata;
     imports: Import[];
-    // dsl_definitions:           DSLDefinitions;
+    // tslint:disable-next-line: variable-name
+    dsl_definitions: DslContent;
     // topology_template: TopologyTemplate;
+}
+
+@JsonObject('dsl_definitions')
+export class DslContent {
+
 }
 
 @JsonObject('metadata')
 export class Metadata {
     @JsonProperty('template_author')
-     // tslint:disable-next-line:variable-name
+    // tslint:disable-next-line:variable-name
     template_author: string;
     'author-email': string;
     'user-groups': string;
     @JsonProperty('template_name')
-        // tslint:disable-next-line:variable-name
+    // tslint:disable-next-line:variable-name
     template_name: string;
     @JsonProperty('template_version')
-        // tslint:disable-next-line:variable-name
+    // tslint:disable-next-line:variable-name
     template_version: string;
     @JsonProperty('template_tag')
-        // tslint:disable-next-line:variable-name
+    // tslint:disable-next-line:variable-name
     template_tags: string;
 
     @JsonProperty('dictionary_group')
-        // tslint:disable-next-line:variable-name
+    // tslint:disable-next-line:variable-name
     dictionary_group: string;
 
 
