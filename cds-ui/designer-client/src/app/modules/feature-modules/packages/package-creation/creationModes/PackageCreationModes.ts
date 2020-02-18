@@ -1,7 +1,7 @@
-import {CBAPackage} from '../mapping-models/CBAPacakge.model';
-import {ModeType} from '../mapping-models/ModeType';
-import {FilesContent, MetaDataTabModel} from '../mapping-models/metadata/MetaDataTab.model';
-import {PackageCreationUtils} from '../package-creation.utils';
+import { CBAPackage } from '../mapping-models/CBAPacakge.model';
+import { ModeType } from '../mapping-models/ModeType';
+import { FilesContent, MetaDataTabModel } from '../mapping-models/metadata/MetaDataTab.model';
+import { PackageCreationUtils } from '../package-creation.utils';
 
 
 export abstract class PackageCreationModes {
@@ -44,11 +44,11 @@ export abstract class PackageCreationModes {
 
     protected addToscaMetaDataFile(metaDataTab: MetaDataTabModel) {
         const filename = 'TOSCA-Metadata/TOSCA.meta';
-        FilesContent.putData(this.getValueOfMetaData(metaDataTab), filename);
+        FilesContent.putData(filename, this.getValueOfMetaData(metaDataTab));
     }
 
 
-    abstract execute(cbaPackage: CBAPackage, packageCreationUtils: PackageCreationUtils) ;
+    abstract execute(cbaPackage: CBAPackage, packageCreationUtils: PackageCreationUtils);
 
 
 }

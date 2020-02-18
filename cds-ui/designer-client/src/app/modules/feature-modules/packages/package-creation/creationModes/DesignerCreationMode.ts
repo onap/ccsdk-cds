@@ -1,8 +1,8 @@
-import {PackageCreationModes} from './PackageCreationModes';
-import {CBAPackage, Scripts} from '../mapping-models/CBAPacakge.model';
-import {FilesContent} from '../mapping-models/metadata/MetaDataTab.model';
-import {Import, Metadata, VlbDefinition} from '../mapping-models/definitions/VlbDefinition';
-import {PackageCreationUtils} from '../package-creation.utils';
+import { PackageCreationModes } from './PackageCreationModes';
+import { CBAPackage, Scripts } from '../mapping-models/CBAPacakge.model';
+import { FilesContent } from '../mapping-models/metadata/MetaDataTab.model';
+import { Import, Metadata, VlbDefinition } from '../mapping-models/definitions/VlbDefinition';
+import { PackageCreationUtils } from '../package-creation.utils';
 
 
 export class DesignerCreationMode extends PackageCreationModes {
@@ -18,13 +18,13 @@ export class DesignerCreationMode extends PackageCreationModes {
     }
 
     private addScriptsFolder(scripts: Scripts) {
-        scripts.files.forEach((key, value) => {
+        scripts.files.forEach((value, key) => {
             FilesContent.putData(key, value);
         });
     }
 
     private createDefinitionsFolder(cbaPackage: CBAPackage, packageCreationUtils: PackageCreationUtils) {
-        cbaPackage.definitions.imports.forEach((key, valueOfFile) => {
+        cbaPackage.definitions.imports.forEach((valueOfFile, key) => {
             FilesContent.putData(key, valueOfFile);
         });
 
@@ -38,16 +38,21 @@ export class DesignerCreationMode extends PackageCreationModes {
         metadata.template_version = cbaPackage.metaData.version;
         metadata['author-email'] = 'shaaban.eltanany.ext@orange.com';
         metadata['user-groups'] = 'test';
-        cbaPackage.definitions.metaDataTab.mapOfCustomKey.forEach((key, customKeyValue) => {
+        cbaPackage.definitions.metaDataTab.mapOfCustomKey.forEach((customKeyValue, key) => {
             metadata[key] = customKeyValue;
         });
         vlbDefinition.metadata = metadata;
         const files: Import[] = [];
-        cbaPackage.definitions.imports.forEach((key, valueOfFile) => {
-            files.push({file: valueOfFile});
+        cbaPackage.definitions.imports.forEach((valueOfFile, key) => {
+            files.push({ file: valueOfFile });
         });
         console.log(vlbDefinition);
         vlbDefinition.imports = files;
+        console.log(cbaPackage.definitions.dslDefinition.content);
+        if (cbaPackage.definitions.dslDefinition.content) {
+            vlbDefinition.dsl_definitions = JSON.parse(cbaPackage.definitions.dslDefinition.content);
+        }
+        console.log(vlbDefinition);
         const value = packageCreationUtils.transformToJson(vlbDefinition);
         FilesContent.putData(filenameEntry, value);
         console.log('hello there');
