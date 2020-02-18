@@ -47,18 +47,30 @@ data class RequestDefinition(
 )
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-data class ResponseDefinition(val status: Int = 200, val body: JsonNode? = null) {
+data class ResponseDefinition(val status: Int = 200, val body: JsonNode? = null, val headers: Map<String, String> = mapOf("Content-Type" to "application/json")) {
 
     companion object {
-        val DEFAULT_RESPONSE = ResponseDefinition()
+        val DEFAULT_RESPONSES = listOf(ResponseDefinition())
     }
 }
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-data class ExpectationDefinition(
+class ExpectationDefinition(
     val request: RequestDefinition,
-    val response: ResponseDefinition = ResponseDefinition.DEFAULT_RESPONSE
-)
+    response: ResponseDefinition?,
+    responses: List<ResponseDefinition>? = null,
+    val times: String = ">= 1"
+) {
+    val responses: List<ResponseDefinition> = resolveOneOrMany(response, responses, ResponseDefinition.DEFAULT_RESPONSES)
+
+    companion object {
+        fun <T> resolveOneOrMany(one: T?, many: List<T>?, defaultMany: List<T>): List<T> = when {
+            many != null -> many
+            one != null -> listOf(one)
+            else -> defaultMany
+        }
+    }
+}
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 data class ServiceDefinition(val selector: String, val expectations: List<ExpectationDefinition>)
@@ -97,6 +109,6 @@ data class UatDefinition(
 
     companion object {
         fun load(mapper: ObjectMapper, spec: String): UatDefinition =
-            mapper.convertValue(Yaml().load(spec), UatDefinition::class.java)
+                mapper.convertValue(Yaml().load(spec), UatDefinition::class.java)
     }
 }

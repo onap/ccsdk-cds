@@ -1,0 +1,36 @@
+[
+  {
+    "name": "pnf-id",
+    "input-param": true,
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "pnf-id",
+    "dictionary-source": "input",
+    "dependencies": [
+    ]
+  },
+  {
+    "name": "target-software-version",
+    "input-param": true,
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "target-software-version",
+    "dictionary-source": "input",
+    "dependencies": [
+    ]
+  },
+  {
+    "name": "pnf-ipv4-address",
+    "input-param": false,
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "pnf-ipaddress-aai",
+    "dictionary-source": "aai-data",
+    "dependencies": [
+      "pnf-id"
+    ]
+  }
+]

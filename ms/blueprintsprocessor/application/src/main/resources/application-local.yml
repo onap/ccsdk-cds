@@ -38,10 +38,10 @@ blueprintsprocessor:
     remoteScriptCommand:
         enabled: true
     restclient:
-        sdncodl:
+        sdnc:
             password: Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U
             type: basic-auth
-            url: http://localhost:8282/
+            url: http://localhost:8282
             username: admin
     restconfEnabled: true
 controllerblueprints:

@@ -1,6 +1,6 @@
 /*
 * ============LICENSE_START=======================================================
-*  Copyright (C) 2019 Nordix Foundation.
+*  Copyright (C) 2020 Nordix Foundation.
 * ================================================================================
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -67,9 +67,9 @@ class RestconfConfigDeploy : AbstractScriptComponentFunction() {
 
                 val jsonResult = mapper.readTree((result.body).toString())
 
-                if(jsonResult.get("ietf-yang-patch:yang-patch-status").get("errors") != null) {
+                if (jsonResult.get("ietf-yang-patch:yang-patch-status").get("errors") != null) {
                     log.error("There was an error configuring device")
-                }  else {
+                } else {
                     log.info("Device has been configured succesfully")
                 }
 
