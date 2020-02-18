@@ -61,7 +61,8 @@ message Uat {
 
     message Expectation {
         required Request request = 1;
-        required Response response = 2;
+        optional Response response = 2;
+        repeated Response responses = 3;
     }
 
     message ExternalService {
