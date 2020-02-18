@@ -1,0 +1,7 @@
+TOSCA-Meta-File-Version: 1.0.0
+CSAR-Version: 1.0
+Created-By: Raj Gumma <raj.gumma@est.tech>
+Entry-Definitions: Definitions/PNF_CDS_RESTCONF.json
+Template-Name: PNF_CDS_RESTCONF
+Template-Version: 1.0.0
+Template-Tags: PNF_CDS_RESTCONF
