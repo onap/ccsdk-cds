@@ -78,6 +78,7 @@ suspend fun AbstractScriptComponentFunction.restconfApplyDeviceConfig(
     configletToApply: Any,
     additionalHeaders: Map<String, String> = mutableMapOf("Content-Type" to "application/yang.patch+xml")
 ): BlueprintWebClientService.WebClientResponse<String> {
+
     log.debug("headers: $additionalHeaders")
     log.info("configuring device: $deviceId, Configlet: $configletToApply")
     val applyConfigUrl = "restconf/config/network-topology:network-topology/topology/topology-netconf/node/" +
