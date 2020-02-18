@@ -64,7 +64,7 @@ external-services:
     expectations:
       - request:
           method: PUT
-          path: &configUri [ restconf/config, &nodeIdentifier [network-topology:network-topology/topology/topology-netconf/node, *pnfId]]
+          path: &configUri [ /restconf/config, &nodeIdentifier [network-topology:network-topology/topology/topology-netconf/node, *pnfId]]
           headers:
             Content-Type: application/json
           body:
@@ -82,7 +82,7 @@ external-services:
           status: 201
       - request:
           method: GET
-          path: [ restconf/operational, *nodeIdentifier]
+          path: [ /restconf/operational, *nodeIdentifier]
         response:
           body:
             node: [ { netconf-node-topology:connection-status: connected }]

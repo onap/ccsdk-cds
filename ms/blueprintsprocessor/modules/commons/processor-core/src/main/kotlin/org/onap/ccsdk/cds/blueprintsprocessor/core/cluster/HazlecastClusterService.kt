@@ -243,8 +243,11 @@ open class ClusterLockImpl(private val hazelcast: HazelcastInstance, private val
     }
 
     override suspend fun unLock() {
-        distributedLock.unlock()
-        log.trace("Cluster unlock(${name()}) successfully..")
+        // Added condition to avoid failures like - "Current thread is not owner of the lock!"
+        if (distributedLock.isLockedByCurrentThread) {
+            distributedLock.unlock()
+            log.trace("Cluster unlock(${name()}) successfully..")
+        }
     }
 
     override fun isLocked(): Boolean {
