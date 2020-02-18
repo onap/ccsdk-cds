@@ -1,0 +1,343 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fee5dd59_e988ddcb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 5006
+      },
+      "writtenOn": "2020-02-18T14:31:34Z",
+      "side": 1,
+      "message": "In logs i see that you are mounting/unmounting for every action, did you try with one time un/mount. just to test",
+      "revId": "ee32a0021560f533891247ad3fa57caf09389d03",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b90dd8c_0518f69e",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_sw_upgrade/Scripts/kotlin/RestconfConfigure.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 5006
+      },
+      "writtenOn": "2020-02-18T14:31:34Z",
+      "side": 1,
+      "message": "2020, applies on every new file",
+      "range": {
+        "startLine": 3,
+        "startChar": 17,
+        "endLine": 3,
+        "endChar": 21
+      },
+      "revId": "ee32a0021560f533891247ad3fa57caf09389d03",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4ab5352_ca3ece35",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_sw_upgrade/Scripts/kotlin/RestconfConfigure.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 5006
+      },
+      "writtenOn": "2020-02-18T14:31:34Z",
+      "side": 1,
+      "message": "mapOf, this map doesn\u0027t need to be mutable.",
+      "range": {
+        "startLine": 59,
+        "startChar": 64,
+        "endLine": 59,
+        "endChar": 76
+      },
+      "revId": "ee32a0021560f533891247ad3fa57caf09389d03",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b321936a_ce143faa",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_sw_upgrade/Scripts/kotlin/RestconfConfigure.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 5006
+      },
+      "writtenOn": "2020-02-18T14:31:34Z",
+      "side": 1,
+      "message": "if you are making a dedicated method for this action, why to send a param(redundant param)",
+      "range": {
+        "startLine": 63,
+        "startChar": 101,
+        "endLine": 63,
+        "endChar": 124
+      },
+      "revId": "ee32a0021560f533891247ad3fa57caf09389d03",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c62b43f1_fa33040b",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_sw_upgrade/Scripts/kotlin/RestconfConfigure.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 5006
+      },
+      "writtenOn": "2020-02-18T14:31:34Z",
+      "side": 1,
+      "message": "same as above",
+      "range": {
+        "startLine": 64,
+        "startChar": 102,
+        "endLine": 64,
+        "endChar": 124
+      },
+      "revId": "ee32a0021560f533891247ad3fa57caf09389d03",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18c44c3a_05bec299",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_sw_upgrade/Scripts/kotlin/RestconfConfigure.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 5006
+      },
+      "writtenOn": "2020-02-18T14:31:34Z",
+      "side": 1,
+      "message": "its a generic action name ,add SW-upgrade with this for better debug outcomes.",
+      "range": {
+        "startLine": 78,
+        "startChar": 22,
+        "endLine": 78,
+        "endChar": 37
+      },
+      "revId": "ee32a0021560f533891247ad3fa57caf09389d03",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6368a616_eef66580",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_sw_upgrade/Scripts/kotlin/RestconfConfigure.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 5006
+      },
+      "writtenOn": "2020-02-18T14:31:34Z",
+      "side": 1,
+      "message": "mapOf",
+      "range": {
+        "startLine": 100,
+        "startChar": 16,
+        "endLine": 100,
+        "endChar": 28
+      },
+      "revId": "ee32a0021560f533891247ad3fa57caf09389d03",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e5d9102_87f516c6",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_sw_upgrade/Scripts/kotlin/RestconfConfigure.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 5006
+      },
+      "writtenOn": "2020-02-18T14:31:34Z",
+      "side": 1,
+      "message": "its a generic action name ,add SW-upgrade with this for better debug outcomes.",
+      "range": {
+        "startLine": 117,
+        "startChar": 22,
+        "endLine": 117,
+        "endChar": 41
+      },
+      "revId": "ee32a0021560f533891247ad3fa57caf09389d03",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e76d6ec_1c4d083d",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_sw_upgrade/Scripts/kotlin/RestconfConfigure.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 5006
+      },
+      "writtenOn": "2020-02-18T14:31:34Z",
+      "side": 1,
+      "message": "mapOf",
+      "range": {
+        "startLine": 125,
+        "startChar": 20,
+        "endLine": 125,
+        "endChar": 32
+      },
+      "revId": "ee32a0021560f533891247ad3fa57caf09389d03",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e28ff606_17bc03b5",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_sw_upgrade/Scripts/kotlin/RestconfConfigure.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 5006
+      },
+      "writtenOn": "2020-02-18T14:31:34Z",
+      "side": 1,
+      "message": "can this code and code at 103 pulled to a method, deduplication",
+      "range": {
+        "startLine": 128,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 12
+      },
+      "revId": "ee32a0021560f533891247ad3fa57caf09389d03",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe2408be_aee9a440",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_sw_upgrade/Scripts/kotlin/RestconfConfigure.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 5006
+      },
+      "writtenOn": "2020-02-18T14:31:34Z",
+      "side": 1,
+      "message": "add SWU",
+      "range": {
+        "startLine": 145,
+        "startChar": 21,
+        "endLine": 145,
+        "endChar": 37
+      },
+      "revId": "ee32a0021560f533891247ad3fa57caf09389d03",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95017765_6c025183",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_sw_upgrade/Scripts/kotlin/RestconfConfigure.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 5006
+      },
+      "writtenOn": "2020-02-18T14:31:34Z",
+      "side": 1,
+      "message": "good if you return bool",
+      "range": {
+        "startLine": 158,
+        "startChar": 96,
+        "endLine": 158,
+        "endChar": 104
+      },
+      "revId": "ee32a0021560f533891247ad3fa57caf09389d03",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eebb69e5_d8f7792d",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_sw_upgrade/Scripts/kotlin/RestconfConfigure.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 5006
+      },
+      "writtenOn": "2020-02-18T14:31:34Z",
+      "side": 1,
+      "message": "this string is used at many places can be defined at class level where in future only one change reflect everywhr",
+      "range": {
+        "startLine": 171,
+        "startChar": 17,
+        "endLine": 171,
+        "endChar": 74
+      },
+      "revId": "ee32a0021560f533891247ad3fa57caf09389d03",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0088f73e_9482a8ad",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_sw_upgrade/Scripts/kotlin/RestconfConfigure.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 5006
+      },
+      "writtenOn": "2020-02-18T14:31:34Z",
+      "side": 1,
+      "message": "these can be defined as constants in class, handy to change them in future if reqd. apply for ACTIVATION_COMPLETED, INITIALIZED.",
+      "range": {
+        "startLine": 173,
+        "startChar": 98,
+        "endLine": 173,
+        "endChar": 116
+      },
+      "revId": "ee32a0021560f533891247ad3fa57caf09389d03",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72afbe08_607b5cdf",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_sw_upgrade/Tests/uat.yaml",
+        "patchSetId": 7
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 5006
+      },
+      "writtenOn": "2020-02-18T14:31:34Z",
+      "side": 1,
+      "message": "if I compare it with config-deploy there mode is async,",
+      "range": {
+        "startLine": 14,
+        "startChar": 14,
+        "endLine": 14,
+        "endChar": 18
+      },
+      "revId": "ee32a0021560f533891247ad3fa57caf09389d03",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
