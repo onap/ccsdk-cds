@@ -20,6 +20,7 @@ import org.apache.http.message.BasicHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
+import java.net.URI
 import java.nio.charset.Charset
 import java.util.Base64
 
@@ -43,7 +44,8 @@ class BasicAuthRestClientService(
     }
 
     override fun host(uri: String): String {
-        return restClientProperties.url + uri
+        val uri: URI = URI.create(restClientProperties.url + uri)
+        return uri.resolve(uri).toString()
     }
 
     override fun convertToBasicHeaders(headers: Map<String, String>):

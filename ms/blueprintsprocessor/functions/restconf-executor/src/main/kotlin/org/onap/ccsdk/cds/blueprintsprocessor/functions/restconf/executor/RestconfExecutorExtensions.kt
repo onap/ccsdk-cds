@@ -45,12 +45,12 @@ suspend fun AbstractScriptComponentFunction.restconfMountDevice(
     headers: Map<String, String> = mutableMapOf("Content-Type" to "application/xml")
 ) {
 
-    val mountUrl = "restconf/config/network-topology:network-topology/topology/topology-netconf/node/$deviceId"
+    val mountUrl = "/restconf/config/network-topology:network-topology/topology/topology-netconf/node/$deviceId"
     log.info("sending mount request, url: $mountUrl")
     webClientService.exchangeResource("PUT", mountUrl, payload as String, headers)
 
     /** Check device has mounted */
-    val mountCheckUrl = "restconf/operational/network-topology:network-topology/topology/topology-netconf/node/$deviceId"
+    val mountCheckUrl = "/restconf/operational/network-topology:network-topology/topology/topology-netconf/node/$deviceId"
 
     val expectedResult = """"netconf-node-topology:connection-status":"connected""""
     val mountCheckExecutionBlock: suspend (Int) -> String = { tryCount: Int ->
@@ -80,7 +80,7 @@ suspend fun AbstractScriptComponentFunction.restconfApplyDeviceConfig(
 ): BlueprintWebClientService.WebClientResponse<String> {
     log.debug("headers: $additionalHeaders")
     log.info("configuring device: $deviceId, Configlet: $configletToApply")
-    val applyConfigUrl = "restconf/config/network-topology:network-topology/topology/topology-netconf/node/" +
+    val applyConfigUrl = "/restconf/config/network-topology:network-topology/topology/topology-netconf/node/" +
             "$deviceId/$configletResourcePath"
     return webClientService.exchangeResource("PATCH", applyConfigUrl, configletToApply as String, additionalHeaders)
 }
@@ -92,7 +92,7 @@ suspend fun AbstractScriptComponentFunction.restconfDeviceConfig(
 ):
         BlueprintWebClientService.WebClientResponse<String> {
 
-    val configPathUrl = "restconf/config/network-topology:network-topology/topology/topology-netconf/node/" +
+    val configPathUrl = "/restconf/config/network-topology:network-topology/topology/topology-netconf/node/" +
             "$deviceId/$configletResourcePath"
     log.debug("sending GET request,  url: $configPathUrl")
     return webClientService.exchangeResource("GET", configPathUrl, "")
@@ -106,7 +106,7 @@ suspend fun AbstractScriptComponentFunction.restconfUnMountDevice(
     deviceId: String,
     payload: String
 ) {
-    val unMountUrl = "restconf/config/network-topology:network-topology/topology/topology-netconf/node/$deviceId"
+    val unMountUrl = "/restconf/config/network-topology:network-topology/topology/topology-netconf/node/$deviceId"
     log.info("sending unMount request, url: $unMountUrl")
     webClientService.exchangeResource("DELETE", unMountUrl, "")
 }
