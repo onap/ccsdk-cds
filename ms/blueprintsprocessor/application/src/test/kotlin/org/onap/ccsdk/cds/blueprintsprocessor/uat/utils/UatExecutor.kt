@@ -24,9 +24,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argThat
 import com.nhaarman.mockitokotlin2.atLeast
-import com.nhaarman.mockitokotlin2.atLeastOnce
+import com.nhaarman.mockitokotlin2.atMost
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.nhaarman.mockitokotlin2.whenever
@@ -44,6 +45,7 @@ import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.mockito.Answers
+import org.mockito.verification.VerificationMode
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService.WebClientResponse
@@ -77,7 +79,8 @@ class UatExecutor(
 
     companion object {
         private const val NOOP_PASSWORD_PREFIX = "{noop}"
-
+        private const val PROPERTY_IN_UAT = "IN_UAT"
+        private val TIMES_SPEC_REGEX = "([<>]=?)?\\s*(\\d+)".toRegex()
         private val log: Logger = LoggerFactory.getLogger(UatExecutor::class.java)
         private val mockLoggingListener = MockInvocationLogger(markerOf(COLOR_MOCKITO))
     }
@@ -103,23 +106,24 @@ class UatExecutor(
     fun execute(uat: UatDefinition, cbaBytes: ByteArray): UatDefinition {
         val defaultHeaders = listOf(BasicHeader(HttpHeaders.AUTHORIZATION, clientAuthToken()))
         val httpClient = HttpClientBuilder.create()
-            .setDefaultHeaders(defaultHeaders)
-            .build()
+                .setDefaultHeaders(defaultHeaders)
+                .build()
         // Only if externalServices are defined
         val mockInterceptor = MockPreInterceptor()
         // Always defined and used, whatever the case
         val spyInterceptor = SpyPostInterceptor(mapper)
         restClientFactory.setInterceptors(mockInterceptor, spyInterceptor)
         try {
-            // Configure mocked external services and save their expected requests for further validation
-            val requestsPerClient = uat.externalServices.associateBy(
-                { service ->
-                    createRestClientMock(service.expectations).also { restClient ->
-                        // side-effect: register restClient to override real instance
-                        mockInterceptor.registerMock(service.selector, restClient)
-                    }
-                },
-                { service -> service.expectations.map { it.request } }
+            markUatBegin()
+            // Configure mocked external services and save their expectations for further validation
+            val expectationsPerClient = uat.externalServices.associateBy(
+                    { service ->
+                        createRestClientMock(service.expectations).also { restClient ->
+                            // side-effect: register restClient to override real instance
+                            mockInterceptor.registerMock(service.selector, restClient)
+                        }
+                    },
+                    { service -> service.expectations }
             )
 
             val newProcesses = httpClient.use { client ->
@@ -130,26 +134,27 @@ class UatExecutor(
                     log.info("Executing process '${process.name}'")
                     val responseNormalizer = JsonNormalizer.getNormalizer(mapper, process.responseNormalizerSpec)
                     val actualResponse = processBlueprint(
-                        client, process.request,
-                        process.expectedResponse, responseNormalizer
+                            client, process.request,
+                            process.expectedResponse, responseNormalizer
                     )
                     ProcessDefinition(
-                        process.name,
-                        process.request,
-                        actualResponse,
-                        process.responseNormalizerSpec
+                            process.name,
+                            process.request,
+                            actualResponse,
+                            process.responseNormalizerSpec
                     )
                 }
             }
 
             // Validate requests to external services
-            for ((mockClient, requests) in requestsPerClient) {
-                requests.forEach { request ->
-                    verify(mockClient, atLeastOnce()).exchangeResource(
-                        eq(request.method),
-                        eq(request.path),
-                        argThat { assertJsonEquals(request.body, this) },
-                        argThat(RequiredMapEntriesMatcher(request.headers))
+            for ((mockClient, expectations) in expectationsPerClient) {
+                expectations.forEach { expectation ->
+                    val request = expectation.request
+                    verify(mockClient, evalVerificationMode(expectation.times)).exchangeResource(
+                            eq(request.method),
+                            eq(request.path),
+                            argThat { assertJsonEquals(request.body, this) },
+                            argThat(RequiredMapEntriesMatcher(request.headers))
                     )
                 }
                 // Don't mind the invocations to the overloaded exchangeResource(String, String, String)
@@ -158,40 +163,51 @@ class UatExecutor(
             }
 
             val newExternalServices = spyInterceptor.getSpies()
-                .map(SpyService::asServiceDefinition)
+                    .map(SpyService::asServiceDefinition)
 
             return UatDefinition(newProcesses, newExternalServices)
         } finally {
             restClientFactory.clearInterceptors()
+            markUatEnd()
         }
+    }
+
+    private fun markUatBegin() {
+        System.setProperty(PROPERTY_IN_UAT, "1")
+    }
+
+    private fun markUatEnd() {
+        System.clearProperty(PROPERTY_IN_UAT)
     }
 
     private fun createRestClientMock(restExpectations: List<ExpectationDefinition>):
             BlueprintWebClientService {
         val restClient = mock<BlueprintWebClientService>(
-            defaultAnswer = Answers.RETURNS_SMART_NULLS,
-            // our custom verboseLogging handler
-            invocationListeners = arrayOf(mockLoggingListener)
+                defaultAnswer = Answers.RETURNS_SMART_NULLS,
+                // our custom verboseLogging handler
+                invocationListeners = arrayOf(mockLoggingListener)
         )
 
         // Delegates to overloaded exchangeResource(String, String, String, Map<String, String>)
         whenever(restClient.exchangeResource(any(), any(), any()))
-            .thenAnswer { invocation ->
-                val method = invocation.arguments[0] as String
-                val path = invocation.arguments[1] as String
-                val request = invocation.arguments[2] as String
-                restClient.exchangeResource(method, path, request, emptyMap())
-            }
+                .thenAnswer { invocation ->
+                    val method = invocation.arguments[0] as String
+                    val path = invocation.arguments[1] as String
+                    val request = invocation.arguments[2] as String
+                    restClient.exchangeResource(method, path, request, emptyMap())
+                }
         for (expectation in restExpectations) {
-            whenever(
-                restClient.exchangeResource(
-                    eq(expectation.request.method),
-                    eq(expectation.request.path),
-                    any(),
-                    any()
-                )
+            var stubbing = whenever(
+                    restClient.exchangeResource(
+                            eq(expectation.request.method),
+                            eq(expectation.request.path),
+                            any(),
+                            any()
+                    )
             )
-                .thenReturn(WebClientResponse(expectation.response.status, expectation.response.body.toString()))
+            for (response in expectation.responses) {
+                stubbing = stubbing.thenReturn(WebClientResponse(response.status, response.body.toString()))
+            }
         }
         return restClient
     }
@@ -199,9 +215,9 @@ class UatExecutor(
     @Throws(AssertionError::class)
     private fun uploadBlueprint(client: HttpClient, cbaBytes: ByteArray) {
         val multipartEntity = MultipartEntityBuilder.create()
-            .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
-            .addBinaryBody("file", cbaBytes, ContentType.DEFAULT_BINARY, "cba.zip")
-            .build()
+                .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
+                .addBinaryBody("file", cbaBytes, ContentType.DEFAULT_BINARY, "cba.zip")
+                .build()
         val request = HttpPost("$baseUrl/api/v1/blueprint-model/publish").apply {
             entity = multipartEntity
         }
@@ -236,6 +252,19 @@ class UatExecutor(
         return mapper.readTree(actualResponse)!!
     }
 
+    private fun evalVerificationMode(times: String): VerificationMode {
+        val matchResult = TIMES_SPEC_REGEX.matchEntire(times) ?: throw InvalidUatDefinition(
+                "Time specification '$times' does not follow expected format $TIMES_SPEC_REGEX")
+        val counter = matchResult.groups[2]!!.value.toInt()
+        return when (matchResult.groups[1]?.value) {
+            ">=" -> atLeast(counter)
+            ">" -> atLeast(counter + 1)
+            "<=" -> atMost(counter)
+            "<" -> atMost(counter - 1)
+            else -> times(counter)
+        }
+    }
+
     @Throws(AssertionError::class)
     private fun assertJsonEquals(expected: JsonNode?, actual: String): Boolean {
         // special case
@@ -249,15 +278,15 @@ class UatExecutor(
     }
 
     private fun localServerPort(): Int =
-        (environment.getProperty("local.server.port")
-            ?: environment.getRequiredProperty("blueprint.httpPort")).toInt()
+            (environment.getProperty("local.server.port")
+                    ?: environment.getRequiredProperty("blueprint.httpPort")).toInt()
 
     private fun clientAuthToken(): String {
         val username = environment.getRequiredProperty("security.user.name")
         val password = environment.getRequiredProperty("security.user.password")
         val plainPassword = when {
             password.startsWith(NOOP_PASSWORD_PREFIX) -> password.substring(
-                NOOP_PASSWORD_PREFIX.length)
+                    NOOP_PASSWORD_PREFIX.length)
             else -> username
         }
         return "Basic " + Base64Utils.encodeToString("$username:$plainPassword".toByteArray())
@@ -271,7 +300,7 @@ class UatExecutor(
         }
 
         override fun getInstance(selector: String): BlueprintWebClientService? =
-            mocks[selector]
+                mocks[selector]
 
         fun registerMock(selector: String, client: BlueprintWebClientService) {
             mocks[selector] = client
@@ -293,7 +322,7 @@ class UatExecutor(
         }
 
         fun getSpies(): List<SpyService> =
-            spies.values.toList()
+                spies.values.toList()
     }
 
     private class SpyService(
@@ -301,14 +330,14 @@ class UatExecutor(
         val selector: String,
         private val realService: BlueprintWebClientService
     ) :
-        BlueprintWebClientService by realService {
+            BlueprintWebClientService by realService {
 
         private val expectations: MutableList<ExpectationDefinition> = mutableListOf()
 
         override fun exchangeResource(methodType: String, path: String, request: String): WebClientResponse<String> =
-            exchangeResource(methodType, path, request,
-                DEFAULT_HEADERS
-            )
+                exchangeResource(methodType, path, request,
+                        DEFAULT_HEADERS
+                )
 
         override fun exchangeResource(
             methodType: String,
@@ -317,7 +346,7 @@ class UatExecutor(
             headers: Map<String, String>
         ): WebClientResponse<String> {
             val requestDefinition =
-                RequestDefinition(methodType, path, headers, toJson(request))
+                    RequestDefinition(methodType, path, headers, toJson(request))
             val realAnswer = realService.exchangeResource(methodType, path, request, headers)
             val responseBody = when {
                 // TODO: confirm if we need to normalize the response here
@@ -325,12 +354,12 @@ class UatExecutor(
                 else -> null
             }
             val responseDefinition =
-                ResponseDefinition(realAnswer.status, responseBody)
+                    ResponseDefinition(realAnswer.status, responseBody)
             expectations.add(
-                ExpectationDefinition(
-                    requestDefinition,
-                    responseDefinition
-                )
+                    ExpectationDefinition(
+                            requestDefinition,
+                            responseDefinition
+                    )
             )
             return realAnswer
         }
@@ -340,7 +369,7 @@ class UatExecutor(
         }
 
         fun asServiceDefinition() =
-            ServiceDefinition(selector, expectations)
+                ServiceDefinition(selector, expectations)
 
         private fun toJson(str: String): JsonNode? {
             return when {
@@ -351,8 +380,8 @@ class UatExecutor(
 
         companion object {
             private val DEFAULT_HEADERS = mapOf(
-                HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE,
-                HttpHeaders.ACCEPT to MediaType.APPLICATION_JSON_VALUE
+                    HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE,
+                    HttpHeaders.ACCEPT to MediaType.APPLICATION_JSON_VALUE
             )
         }
     }
