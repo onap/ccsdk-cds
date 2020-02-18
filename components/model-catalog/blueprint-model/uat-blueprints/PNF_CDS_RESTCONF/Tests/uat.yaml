@@ -1,0 +1,377 @@
+%YAML 1.1
+---
+processes:
+  - name: config-assign
+    request:
+      commonHeader: &commonHeader
+        originatorId: sdnc
+        requestId: "123456-1000"
+        subRequestId: sub-123456-1000
+      actionIdentifiers: &assign-ai
+        blueprintName: PNF_CDS_RESTCONF
+        blueprintVersion: "1.0.0"
+        actionName: config-assign
+        mode: sync
+      payload:
+        config-assign-request:
+          resolution-key: &resKey "RES-KEY 61"
+          config-assign-properties:
+            service-instance-id: siid_1234
+            pnf-id: &pnfId pnf-id-2019-07-12
+            service-model-uuid: service-model-uuid
+            pnf-customization-uuid: pnf-customization-uuid
+    expectedResponse:
+      commonHeader: *commonHeader
+      actionIdentifiers: *assign-ai
+      status:
+        code: 200
+        eventType: EVENT_COMPONENT_EXECUTED
+        errorMessage: null
+        message: success
+      payload:
+        config-assign-response: {}
+  - name: config-deploy
+    request:
+      commonHeader: *commonHeader
+      actionIdentifiers: &deploy-ai
+        actionName: config-deploy
+        blueprintName: PNF_CDS_RESTCONF
+        blueprintVersion: "1.0.0"
+        mode: sync
+      payload:
+        config-deploy-request:
+          resolution-key: *resKey
+          config-deploy-properties:
+            service-instance-id: siid_1234
+            pnf-id: *pnfId
+            service-model-uuid: service-model-uuid
+            pnf-customization-uuid: pnf-customization-uuid
+    expectedResponse:
+      commonHeader: *commonHeader
+      actionIdentifiers: *deploy-ai
+      payload:
+        config-deploy-response: {}
+      status:
+        code: 200
+        errorMessage: null
+        eventType: EVENT_COMPONENT_EXECUTED
+        message: success
+  - name: precheck
+    request:
+      commonHeader: &commonHeader
+        originatorId: sdnc
+        requestId: "123456-1000"
+        subRequestId: sub-123456-1000
+      actionIdentifiers: &precheck-ai
+        blueprintName: PNF_CDS_RESTCONF
+        blueprintVersion: "1.0.0"
+        actionName: precheck
+        mode: sync
+      payload:
+        precheck-request:
+          resolution-key: &resKey "RES-KEY 61"
+          precheck-properties: &actionProps
+            service-instance-id: siid_1234
+            pnf-id: &pnfId pnf-id-2019-07-12
+            target-software-version: "2.0.2"
+            service-model-uuid: service-model-uuid
+            pnf-customization-uuid: pnf-customization-uuid
+    expectedResponse:
+      commonHeader: *commonHeader
+      actionIdentifiers: *precheck-ai
+      status:
+        code: 200
+        eventType: EVENT_COMPONENT_EXECUTED
+        errorMessage: null
+        message: success
+      payload:
+        precheck-response: {}
+  - name: downloadNeSw
+    request:
+      commonHeader: *commonHeader
+      actionIdentifiers: &download-ai
+        blueprintName: PNF_CDS_RESTCONF
+        blueprintVersion: "1.0.0"
+        actionName: downloadNeSw
+        mode: sync
+      payload:
+        downloadNeSw-request:
+          resolution-key: *resKey
+          downloadNeSw-properties: *actionProps
+    expectedResponse:
+      commonHeader: *commonHeader
+      actionIdentifiers: *download-ai
+      status:
+        code: 200
+        eventType: EVENT_COMPONENT_EXECUTED
+        errorMessage: null
+        message: success
+      payload:
+        downloadNeSw-response: {}
+  - name: activateNeSw
+    request:
+      commonHeader: &commonHeader
+        originatorId: sdnc
+        requestId: "123456-1000"
+        subRequestId: sub-123456-1000
+      actionIdentifiers: &activate-ai
+        blueprintName: PNF_CDS_RESTCONF
+        blueprintVersion: "1.0.0"
+        actionName: activateNeSw
+        mode: sync
+      payload:
+        activateNeSw-request:
+          resolution-key: *resKey
+          activateNeSw-properties: *actionProps
+    expectedResponse:
+      commonHeader: *commonHeader
+      actionIdentifiers: *activate-ai
+      status:
+        code: 200
+        eventType: EVENT_COMPONENT_EXECUTED
+        errorMessage: null
+        message: success
+      payload:
+        activateNeSw-response: {}
+  - name: postcheck
+    request:
+      commonHeader: *commonHeader
+      actionIdentifiers: &postcheck-ai
+        blueprintName: PNF_CDS_RESTCONF
+        blueprintVersion: "1.0.0"
+        actionName: postcheck
+        mode: sync
+      payload:
+        postcheck-request:
+          resolution-key: *resKey
+          postcheck-properties: *actionProps
+    expectedResponse:
+      commonHeader: *commonHeader
+      actionIdentifiers: *postcheck-ai
+      status:
+        code: 200
+        eventType: EVENT_COMPONENT_EXECUTED
+        errorMessage: null
+        message: success
+      payload:
+        postcheck-response: {}
+external-services:
+  - selector: aai-data
+    expectations:
+      - request:
+          method: GET
+          path: [ /aai/v14/network/pnfs/pnf, *pnfId]
+          headers:
+            Accept: application/json
+        response:
+          headers:
+            Content-Type: application/json
+          body:
+            ipaddress-v4-oam: &pnfAddress 13.13.13.13
+            ipaddress-v6-oam: 1::13
+  - selector: sdnc
+    expectations:
+      - request:
+          method: PUT
+          path: &configUri [ restconf/config, &nodeIdentifier [network-topology:network-topology/topology/topology-netconf/node, *pnfId]]
+          headers:
+            Content-Type: application/json
+          body:
+            node:
+              - node-id: *pnfId
+                netconf-node-topology:protocol: { name: TLS }
+                netconf-node-topology:host: *pnfAddress
+                netconf-node-topology:key-based:
+                  username: netconf
+                  key-id: ODL_private_key_0
+                netconf-node-topology:port: 6513
+                netconf-node-topology:tcp-only: false
+                netconf-node-topology:max-connection-attempts: 5
+        response:
+          status: 201
+      - request:
+          method: GET
+          path: [ restconf/operational, *nodeIdentifier]
+        response:
+          body:
+            node: [ { netconf-node-topology:connection-status: connected }]
+      - request:
+          method: GET
+          path: [*configUri, &configletResourcePath yang-ext:mount/mynetconf:netconflist]
+        response:
+          body: {}
+      - request:
+          method: PATCH
+          path: [*configUri, *configletResourcePath]
+          headers:
+            Content-Type: application/yang.patch+json
+          body:
+            ietf-restconf:yang-patch:
+              patch-id: patch-1
+              edit:
+                - edit-id: edit1
+                  operation: merge
+                  target: /
+                  value: { netconflist: { netconf: [ { netconf-id: "10", netconf-param: "1000" }]}}
+                - edit-id: edit2
+                  operation: merge
+                  target: /
+                  value: { netconflist: { netconf: [ { netconf-id: "20", netconf-param: "2000" }]}}
+                - edit-id: edit3
+                  operation: merge
+                  target: /
+                  value: { netconflist: { netconf: [ { netconf-id: "30", netconf-param: "3000" }]}}
+        response:
+          body:
+            ietf-yang-patch:yang-patch-status:
+              patch-id: patch-1
+              ok: [
+                null
+              ]
+      ### External expectations for Software Upgrade
+      - request:
+          method: GET
+          path: &ConfigSwUgUri [*configUri, &configletResourcePath yang-ext:mount/pnf-sw-upgrade:software-upgrade]
+          headers:
+            Accept: application/json
+        responses:
+          - headers:
+              Content-Type: application/json
+            body:
+              software-upgrade:
+                upgrade-package:
+                  - id: 2.0.1
+                    current-status: INITIALIZED
+                    user-label: trial software update
+                    uri: sftp:127.0.0.1/test_software_1.img
+                    software-version: 2.0.1
+                    user: test_user
+                    password: test_password
+          - headers:
+              Content-Type: application/json
+            body:
+              software-upgrade:
+                upgrade-package:
+                  - id: 2.0.1
+                    current-status: INITIALIZED
+                    user-label: trial software update
+                    uri: sftp:127.0.0.1/test_software_1.img
+                    software-version: 2.0.1
+                    user: test_user
+                    password: test_password
+          - headers:
+              Content-Type: application/json
+            body:
+              software-upgrade:
+                upgrade-package:
+                  - id: 2.0.1
+                    current-status: INITIALIZED
+                    user-label: trial software update
+                    uri: sftp:127.0.0.1/test_software_1.img
+                    software-version: 2.0.1
+                    user: test_user
+                    password: test_password
+                  - id: 2.0.2
+                    current-status: DOWNLOAD_COMPLETED
+                    state-change-time: '2020-02-20T13:03:21Z'
+                    software-version: 2.0.2
+                    user-label: trial software update
+                    uri: sftp:127.0.0.1/test_software_1.img
+                    user: test_user
+                    password: test_password
+          - headers:
+              Content-Type: application/json
+            body:
+              software-upgrade:
+                upgrade-package:
+                  - id: 2.0.1
+                    current-status: INITIALIZED
+                    user-label: trial software update
+                    uri: sftp:127.0.0.1/test_software_1.img
+                    software-version: 2.0.1
+                    user: test_user
+                    password: test_password
+                  - id: 2.0.2
+                    current-status: ACTIVATION_COMPLETED
+                    state-change-time: '2020-02-20T13:03:21Z'
+                    software-version: 2.0.2
+                    user-label: trial software update
+                    uri: sftp:127.0.0.1/test_software_1.img
+                    user: test_user
+                    password: test_password
+      - request:
+          method: PATCH
+          path: *ConfigSwUgUri
+          headers:
+            Content-Type: application/yang.patch+json
+          body:
+            ietf-restconf:yang-patch:
+              patch-id: patch-1
+              edit:
+                - edit-id: edit1
+                  operation: merge
+                  target: "/"
+        response:
+          headers:
+            Content-Type: application/yang.patch-status+json
+          body:
+            { ietf-yang-patch:yang-patch-status: {patch-id: patch-1, ok: [ ] } }
+        times: 2
+      - request:
+          method: GET
+          path: [*ConfigSwUgUri, upgrade-package/2.0.2]
+          headers:
+            Accept: application/json
+        responses:
+          - headers:
+              Content-Type: application/json
+            body:
+              upgrade-package:
+                - id: 2.0.2
+                  current-status: DOWNLOAD_IN_PROGRESS
+                  state-change-time: '2020-02-20T12:17:34.984Z'
+                  software-version: 2.0.2
+          - headers:
+              Content-Type: application/json
+            body:
+              upgrade-package:
+                - id: 2.0.2
+                  current-status: DOWNLOAD_IN_PROGRESS
+                  state-change-time: '2020-02-20T12:52:30Z'
+                  software-version: 2.0.2
+          - headers:
+              Content-Type: application/json
+            body:
+              upgrade-package:
+                - id: 2.0.2
+                  current-status: DOWNLOAD_COMPLETED
+                  state-change-time: '2020-02-20T13:03:21Z'
+                  software-version: 2.0.2
+          - headers:
+              Content-Type: application/json
+            body:
+              upgrade-package:
+                - id: 2.0.2
+                  current-status: ACTIVATION_IN_PROGRESS
+                  state-change-time: '2020-02-20T13:05:08Z'
+                  software-version: 2.0.2
+          - headers:
+              Content-Type: application/json
+            body:
+              upgrade-package:
+                - id: 2.0.2
+                  current-status: ACTIVATION_IN_PROGRESS
+                  state-change-time: '2020-02-20T12:52:30Z'
+                  software-version: 2.0.2
+          - headers:
+              Content-Type: application/json
+            body:
+              upgrade-package:
+                - id: 2.0.2
+                  current-status: ACTIVATION_COMPLETED
+                  state-change-time: '2020-02-20T13:07:12Z'
+                  software-version: 2.0.2
+      - request:
+          method: DELETE
+          path: *configUri
+        times: 5
