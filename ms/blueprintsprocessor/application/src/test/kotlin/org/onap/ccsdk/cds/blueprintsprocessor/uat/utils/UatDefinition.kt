@@ -31,43 +31,55 @@ import org.yaml.snakeyaml.nodes.Tag
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 data class ProcessDefinition(
-    val name: String,
-    val request: JsonNode,
-    val expectedResponse: JsonNode? = null,
-    val responseNormalizerSpec: JsonNode? = null
+        val name: String,
+        val request: JsonNode,
+        val expectedResponse: JsonNode? = null,
+        val responseNormalizerSpec: JsonNode? = null
 )
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 data class RequestDefinition(
-    val method: String,
-    @JsonDeserialize(using = PathDeserializer::class)
-    val path: String,
-    val headers: Map<String, String> = emptyMap(),
-    val body: JsonNode? = null
+        val method: String,
+        @JsonDeserialize(using = PathDeserializer::class)
+        val path: String,
+        val headers: Map<String, String> = emptyMap(),
+        val body: JsonNode? = null
 )
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 data class ResponseDefinition(val status: Int = 200, val body: JsonNode? = null) {
 
     companion object {
-        val DEFAULT_RESPONSE = ResponseDefinition()
+        val DEFAULT_RESPONSES = listOf(ResponseDefinition())
     }
 }
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-data class ExpectationDefinition(
-    val request: RequestDefinition,
-    val response: ResponseDefinition = ResponseDefinition.DEFAULT_RESPONSE
-)
+class ExpectationDefinition(
+        val request: RequestDefinition,
+        response: ResponseDefinition?,
+        responses: List<ResponseDefinition>? = null,
+        val times: String = ">= 1"
+) {
+    val responses: List<ResponseDefinition> = resolveOneOrMany(response, responses, ResponseDefinition.DEFAULT_RESPONSES)
+
+    companion object {
+        fun <T> resolveOneOrMany(one: T?, many: List<T>?, defaultMany: List<T>): List<T> = when {
+            many != null -> many
+            one != null -> listOf(one)
+            else -> defaultMany
+        }
+    }
+}
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 data class ServiceDefinition(val selector: String, val expectations: List<ExpectationDefinition>)
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 data class UatDefinition(
-    val processes: List<ProcessDefinition>,
-    @JsonAlias("external-services")
-    val externalServices: List<ServiceDefinition> = emptyList()
+        val processes: List<ProcessDefinition>,
+        @JsonAlias("external-services")
+        val externalServices: List<ServiceDefinition> = emptyList()
 ) {
 
     fun dump(mapper: ObjectMapper, excludedProperties: List<String> = emptyList()): String {
@@ -97,6 +109,6 @@ data class UatDefinition(
 
     companion object {
         fun load(mapper: ObjectMapper, spec: String): UatDefinition =
-            mapper.convertValue(Yaml().load(spec), UatDefinition::class.java)
+                mapper.convertValue(Yaml().load(spec), UatDefinition::class.java)
     }
 }
