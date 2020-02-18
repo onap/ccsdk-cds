@@ -25,12 +25,26 @@ const fs = require('fs')
 module.exports = application;
 
 if (require.main === module) {
+
+  try {
+    var p12File = process.env.KEYSTORE || "aaf.p12"
+    var passwdFile = process.env.PASSPHRASE || ".enc"
+
+    var data = fs.readFileSync(passwdFile, 'utf8')
+    var elements = data.match(/cadi_keystore_password_p12=(.*)\n/)
+    var passphrase = elements[1]
+    var p12 = fs.readFileSync(p12File)
+  } catch(e){
+    console.error('Reading keystore error :', e)
+    process.exit(11)
+  }
+
   // Run the application
   const config = {
     rest: {
       protocol: 'https',
-      key: fs.readFileSync('server.key'),
-      cert: fs.readFileSync('server.cert'),
+      pfx: p12,
+      passphrase: passphrase,
       port: +process.env.PORT || 3000,
       host: process.env.HOST || 'localhost',
       openApiSpec: {
