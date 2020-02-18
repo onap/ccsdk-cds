@@ -69,6 +69,7 @@ suspend fun AbstractScriptComponentFunction.restconfMountDevice(
 
 /**
  * Generic Configure function
+ * @return The WebClientResponse from the request
  */
 suspend fun AbstractScriptComponentFunction.restconfApplyDeviceConfig(
     webClientService: BlueprintWebClientService,
@@ -76,14 +77,13 @@ suspend fun AbstractScriptComponentFunction.restconfApplyDeviceConfig(
     configletResourcePath: String,
     configletToApply: Any,
     additionalHeaders: Map<String, String> = mutableMapOf("Content-Type" to "application/yang.patch+xml")
-) {
+): BlueprintWebClientService.WebClientResponse<String> {
 
     log.debug("headers: $additionalHeaders")
     log.info("configuring device: $deviceId, Configlet: $configletToApply")
     val applyConfigUrl = "restconf/config/network-topology:network-topology/topology/topology-netconf/node/" +
             "$deviceId/$configletResourcePath"
-    val result: Any = webClientService.exchangeResource("PATCH", applyConfigUrl, configletToApply as String, additionalHeaders)
-    log.info("Configuration application result: $result")
+    return webClientService.exchangeResource("PATCH", applyConfigUrl, configletToApply as String, additionalHeaders)
 }
 
 suspend fun AbstractScriptComponentFunction.restconfDeviceConfig(

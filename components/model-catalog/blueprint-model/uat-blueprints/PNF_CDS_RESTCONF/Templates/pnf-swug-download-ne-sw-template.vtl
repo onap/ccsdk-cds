@@ -1,0 +1,28 @@
+{
+  "ietf-restconf:yang-patch": {
+    "patch-id": "patch-1",
+    "edit": [
+      {
+        "edit-id": "edit1",
+        "operation": "merge",
+        "target": "/",
+        "value": {
+          "software-upgrade": {
+            "upgrade-package": [
+              {
+                  "id": "${target-software-version}",
+                  "current-status": "INITIALIZED",
+                  "action": "%actionName%",
+                  "user-label": "trial software update",
+                  "uri": "sftp://127.0.0.1/test_software_2.img",
+                  "software-version": "${target-software-version}",
+                  "user": "test_user",
+                  "password": "test_password"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}
