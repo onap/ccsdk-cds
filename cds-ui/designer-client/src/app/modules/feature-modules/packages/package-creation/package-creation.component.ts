@@ -19,15 +19,15 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import {Component, OnInit} from '@angular/core';
-import {FilesContent, FolderNodeElement, MetaDataTabModel} from './mapping-models/metadata/MetaDataTab.model';
+import { Component, OnInit } from '@angular/core';
+import { FilesContent, FolderNodeElement, MetaDataTabModel } from './mapping-models/metadata/MetaDataTab.model';
 
 import * as JSZip from 'jszip';
-import {PackageCreationStore} from './package-creation.store';
-import {Definition} from './mapping-models/CBAPacakge.model';
-import {PackageCreationModes} from './creationModes/PackageCreationModes';
-import {PackageCreationBuilder} from './creationModes/PackageCreationBuilder';
-import {PackageCreationUtils} from './package-creation.utils';
+import { PackageCreationStore } from './package-creation.store';
+import { Definition } from './mapping-models/CBAPacakge.model';
+import { PackageCreationModes } from './creationModes/PackageCreationModes';
+import { PackageCreationBuilder } from './creationModes/PackageCreationBuilder';
+import { PackageCreationUtils } from './package-creation.utils';
 
 
 @Component({
@@ -38,8 +38,8 @@ import {PackageCreationUtils} from './package-creation.utils';
 export class PackageCreationComponent implements OnInit {
     counter = 0;
     modes: object[] = [
-        {name: 'Designer Mode', style: 'mode-icon icon-designer-mode'},
-        {name: 'Scripting Mode', style: 'mode-icon icon-scripting-mode'}];
+        { name: 'Designer Mode', style: 'mode-icon icon-designer-mode' },
+        { name: 'Scripting Mode', style: 'mode-icon icon-scripting-mode' }];
     private metaDataTab: MetaDataTabModel = new MetaDataTabModel();
     private folder: FolderNodeElement = new FolderNodeElement();
     private zipFile: JSZip = new JSZip();
@@ -76,7 +76,7 @@ export class PackageCreationComponent implements OnInit {
 
     saveBluePrintToDataBase() {
         this.create();
-        this.zipFile.generateAsync({type: 'blob'})
+        this.zipFile.generateAsync({ type: 'blob' })
             .then(blob => {
                 this.packageCreationStore.saveBluePrint(blob);
             });
@@ -84,7 +84,7 @@ export class PackageCreationComponent implements OnInit {
 
 
     create() {
-        FilesContent.getMapOfFilesNamesAndContent().forEach((key, value) => {
+        FilesContent.getMapOfFilesNamesAndContent().forEach((value, key) => {
             this.zipFile.folder(key.split('/')[0]);
             this.zipFile.file(key, value);
         });
