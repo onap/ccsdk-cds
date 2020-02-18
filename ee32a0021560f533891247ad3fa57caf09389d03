@@ -318,6 +318,23 @@
     },
     {
       "key": {
+        "uuid": "a3675fe2_31b7dd64",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_sw_upgrade/TOSCA-Metadata/TOSCA.meta",
+        "patchSetId": 7
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 5006
+      },
+      "writtenOn": "2020-02-18T14:47:26Z",
+      "side": 1,
+      "message": "general practise is name and email, need to fix in pnf_config_aai ;)",
+      "revId": "ee32a0021560f533891247ad3fa57caf09389d03",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "72afbe08_607b5cdf",
         "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_sw_upgrade/Tests/uat.yaml",
         "patchSetId": 7
@@ -334,6 +351,29 @@
         "startChar": 14,
         "endLine": 14,
         "endChar": 18
+      },
+      "revId": "ee32a0021560f533891247ad3fa57caf09389d03",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "faa98816_dfb52a3a",
+        "filename": "ms/blueprintsprocessor/application/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/uat/utils/UatDefinition.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 5006
+      },
+      "writtenOn": "2020-02-18T14:47:26Z",
+      "side": 1,
+      "message": "not needed.",
+      "range": {
+        "startLine": 61,
+        "startChar": 40,
+        "endLine": 61,
+        "endChar": 47
       },
       "revId": "ee32a0021560f533891247ad3fa57caf09389d03",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
