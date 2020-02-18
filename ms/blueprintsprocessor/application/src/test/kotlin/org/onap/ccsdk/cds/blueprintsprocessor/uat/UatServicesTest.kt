@@ -30,6 +30,8 @@ import com.github.tomakehurst.wiremock.client.WireMock.equalToJson
 import com.github.tomakehurst.wiremock.client.WireMock.request
 import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
+import com.github.tomakehurst.wiremock.http.HttpHeader
+import com.github.tomakehurst.wiremock.http.HttpHeaders
 import org.apache.http.HttpStatus
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.ContentType
@@ -55,8 +57,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.core.env.ConfigurableEnvironment
 import org.springframework.core.env.MapPropertySource
-import org.springframework.http.HttpHeaders
-import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.support.TestPropertySourceUtils.INLINED_PROPERTIES_PROPERTY_SOURCE_NAME
 import org.yaml.snakeyaml.Yaml
@@ -211,7 +211,6 @@ class UatServicesTest : BaseUatTest() {
         service.expectations.forEach { expectation ->
 
             val request = expectation.request
-            val response = expectation.response
             // WebTestClient always use absolute path, prefixing with "/" if necessary
             val urlPattern = urlEqualTo(request.path.prefixIfNot("/"))
             val mappingBuilder: MappingBuilder = request(request.method, urlPattern)
@@ -222,14 +221,18 @@ class UatServicesTest : BaseUatTest() {
                 mappingBuilder.withRequestBody(equalToJson(mapper.writeValueAsString(request.body), true, true))
             }
 
-            val responseDefinitionBuilder: ResponseDefinitionBuilder = aResponse()
-                .withStatus(response.status)
-            if (response.body != null) {
-                responseDefinitionBuilder.withBody(mapper.writeValueAsBytes(response.body))
-                    .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            }
+            for (response in expectation.responses) {
+                val responseDefinitionBuilder: ResponseDefinitionBuilder = aResponse()
+                        .withStatus(response.status)
+                if (response.body != null) {
+                    responseDefinitionBuilder.withBody(mapper.writeValueAsBytes(response.body))
+                        .withHeaders(HttpHeaders(
+                            response.headers.entries.map { e -> HttpHeader(e.key, e.value) }))
+                }
 
-            mappingBuilder.willReturn(responseDefinitionBuilder)
+                // TODO: MockServer verification for multiple responses should be done using Wiremock scenarios
+                mappingBuilder.willReturn(responseDefinitionBuilder)
+            }
 
             mockServer.stubFor(mappingBuilder)
         }

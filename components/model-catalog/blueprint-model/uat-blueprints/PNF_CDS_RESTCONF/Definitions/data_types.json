@@ -1,0 +1,75 @@
+{
+  "data_types" : {
+    "dt-config-assign-properties" : {
+      "description" : "Dynamic DataType definition for workflow(config-assign).",
+      "version" : "1.0.0",
+      "properties" : { },
+      "derived_from" : "tosca.datatypes.Dynamic"
+    },
+    "dt-config-deploy-properties" : {
+      "description" : "Dynamic DataType definition for workflow(config-deploy).",
+      "version" : "1.0.0",
+      "properties" : {
+        "pnf-ipv4-address" : {
+          "type" : "string"
+        },
+        "pnf-id" : {
+          "type" : "string"
+        }
+      },
+      "derived_from" : "tosca.datatypes.Dynamic"
+    },
+    "dt-precheck-properties": {
+      "description": "Dynamic DataType definition for the precheck workflow(upgrade-software).",
+      "version": "1.0.0",
+      "properties": {
+        "pnf-id": {
+          "type": "string"
+        },
+        "target-software-version": {
+          "type": "string"
+        }
+      },
+      "derived_from": "tosca.datatypes.Dynamic"
+    },
+    "dt-downloadNeSw-properties": {
+      "description": "Dynamic DataType definition for the downloadNeSw workflow(upgrade-software).",
+      "version": "1.0.0",
+      "properties": {
+        "pnf-id": {
+          "type": "string"
+        },
+        "target-software-version": {
+          "type": "string"
+        }
+      },
+      "derived_from": "tosca.datatypes.Dynamic"
+    },
+    "dt-activateNeSw-properties": {
+      "description": "Dynamic DataType definition for the activateNeSw workflow(upgrade-software).",
+      "version": "1.0.0",
+      "properties": {
+        "pnf-id": {
+          "type": "string"
+        },
+        "target-software-version": {
+          "type": "string"
+        }
+      },
+      "derived_from": "tosca.datatypes.Dynamic"
+    },
+    "dt-postcheck-properties": {
+      "description": "Dynamic DataType definition for the postcheck workflow(upgrade-software).",
+      "version": "1.0.0",
+      "properties": {
+        "pnf-id": {
+          "type": "string"
+        },
+        "target-software-version": {
+          "type": "string"
+        }
+      },
+      "derived_from": "tosca.datatypes.Dynamic"
+    }
+  }
+}

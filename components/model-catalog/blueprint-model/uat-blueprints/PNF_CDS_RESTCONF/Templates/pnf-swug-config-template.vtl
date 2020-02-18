@@ -1,0 +1,22 @@
+{
+  "ietf-restconf:yang-patch": {
+    "patch-id": "patch-1",
+    "edit": [
+      {
+        "edit-id": "edit1",
+        "operation": "merge",
+        "target": "/",
+        "value": {
+          "software-upgrade": {
+            "upgrade-package": [
+              {
+                "id": "%id%",
+                "action": "%actionName%"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}
