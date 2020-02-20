@@ -55,14 +55,11 @@
         <jslt.version>0.1.8</jslt.version>
         <jython.version>2.7.1</jython.version>
         <jinja.version>2.5.1</jinja.version>
-        <velocity.version>1.7</velocity.version>
         <guava.version>27.0.1-jre</guava.version>
-        <jsoup.version>1.10.3</jsoup.version>
         <json-patch.version>1.9</json-patch.version>
         <json-smart.version>2.3</json-smart.version>
 
         <commons-io-version>2.6</commons-io-version>
-        <commons-lang3-version>3.2.1</commons-lang3-version>
         <commons-collections-version>3.2.2</commons-collections-version>
     </properties>
 
@@ -75,12 +72,6 @@
                 <version>${spring.boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.jsoup</groupId>
-                <artifactId>jsoup</artifactId>
-                <version>${jsoup.version}</version>
             </dependency>
 
             <dependency>
@@ -129,11 +120,6 @@
 
             <!-- Common Utils Dependencies -->
             <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commons-lang3-version}</version>
-            </dependency>
-            <dependency>
                 <groupId>commons-collections</groupId>
                 <artifactId>commons-collections</artifactId>
                 <version>${commons-collections-version}</version>
@@ -142,17 +128,6 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.velocity</groupId>
-                <artifactId>velocity</artifactId>
-                <version>${velocity.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-api</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>com.hubspot.jinjava</groupId>
@@ -251,47 +226,6 @@
                 <version>${kotlin.version}</version>
             </dependency>
 
-            <!-- GRPC Dependencies -->
-            <dependency>
-                <groupId>io.grpc</groupId>
-                <artifactId>grpc-core</artifactId>
-                <version>${grpc.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.grpc</groupId>
-                <artifactId>grpc-netty</artifactId>
-                <version>${grpc.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.grpc</groupId>
-                <artifactId>grpc-protobuf</artifactId>
-                <version>${grpc.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.grpc</groupId>
-                <artifactId>grpc-stub</artifactId>
-                <version>${grpc.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.grpc</groupId>
-                <artifactId>grpc-netty-shaded</artifactId>
-                <version>${grpc.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.grpc</groupId>
-                <artifactId>grpc-grpclb</artifactId>
-                <version>${grpc.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.protobuf</groupId>
-                <artifactId>protobuf-java</artifactId>
-                <version>${protobuff.java.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.protobuf</groupId>
-                <artifactId>protobuf-java-util</artifactId>
-                <version>${protobuff.java.utils.version}</version>
-            </dependency>
             <dependency>
                 <groupId>com.github.marcoferrer.krotoplus</groupId>
                 <artifactId>kroto-plus-coroutines</artifactId>
@@ -614,13 +548,6 @@
                 <scope>test</scope>
             </dependency>
 
-            <dependency>
-                <groupId>io.grpc</groupId>
-                <artifactId>grpc-testing</artifactId>
-                <version>${grpc.version}</version>
-                <scope>test</scope>
-            </dependency>
-
             <!-- Spring Kafka -->
             <dependency>
                 <groupId>org.springframework.kafka</groupId>
@@ -628,7 +555,6 @@
                 <version>${spring-kafka.version}</version>
                 <scope>test</scope>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
     <dependencies>
