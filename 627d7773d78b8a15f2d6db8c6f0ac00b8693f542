@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f42840d8_e3e4963b",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/PNF_CDS_RESTCONF/Scripts/kotlin/RestconfSoftwareUpgrade.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 5053
+      },
+      "writtenOn": "2020-02-21T13:54:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39f75d9c_0488d573",
+      "range": {
+        "startLine": 47,
+        "startChar": 34,
+        "endLine": 47,
+        "endChar": 45
+      },
+      "revId": "627d7773d78b8a15f2d6db8c6f0ac00b8693f542",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9ab8db56_0085d0a9",
         "filename": "components/model-catalog/blueprint-model/uat-blueprints/PNF_CDS_RESTCONF/Scripts/kotlin/RestconfSoftwareUpgrade.kt",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2020-02-21T11:55:20Z",
       "side": 1,
       "message": "mention how many times you will poll before abort, that will helpful",
+      "range": {
+        "startLine": 120,
+        "startChar": 46,
+        "endLine": 120,
+        "endChar": 49
+      },
+      "revId": "627d7773d78b8a15f2d6db8c6f0ac00b8693f542",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9782dd0_ba6465dc",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/PNF_CDS_RESTCONF/Scripts/kotlin/RestconfSoftwareUpgrade.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 5053
+      },
+      "writtenOn": "2020-02-21T13:54:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab8db56_0085d0a9",
       "range": {
         "startLine": 120,
         "startChar": 46,
@@ -82,6 +130,30 @@
       "writtenOn": "2020-02-21T12:59:14Z",
       "side": 1,
       "message": "*can use",
+      "parentUuid": "b0bc7698_eda5fd9a",
+      "range": {
+        "startLine": 61,
+        "startChar": 20,
+        "endLine": 64,
+        "endChar": 37
+      },
+      "revId": "627d7773d78b8a15f2d6db8c6f0ac00b8693f542",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0aea063a_ad34d553",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/PNF_CDS_RESTCONF/Tests/uat.yaml",
+        "patchSetId": 5
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 5053
+      },
+      "writtenOn": "2020-02-21T13:54:11Z",
+      "side": 1,
+      "message": "Re-initializing the references for Software upgrade so we can separate the UAT yamls in the future to accomodate Wire mock scenario testing",
       "parentUuid": "b0bc7698_eda5fd9a",
       "range": {
         "startLine": 61,
@@ -175,6 +247,24 @@
       "writtenOn": "2020-02-21T11:55:20Z",
       "side": 1,
       "message": "restore this file",
+      "revId": "627d7773d78b8a15f2d6db8c6f0ac00b8693f542",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b0b0677_9295fb03",
+        "filename": "ms/blueprintsprocessor/functions/restconf-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/restconf/executor/RestconfExecutorExtensions.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 5053
+      },
+      "writtenOn": "2020-02-21T13:54:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa01ea79_2de29fd5",
       "revId": "627d7773d78b8a15f2d6db8c6f0ac00b8693f542",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
