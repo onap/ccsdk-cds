@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "6ce34ad3_e34ec51f",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/PNF_CDS_RESTCONF/Tests/uat.yaml",
+        "patchSetId": 5
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 5006
+      },
+      "writtenOn": "2020-02-21T12:59:14Z",
+      "side": 1,
+      "message": "*can use",
+      "parentUuid": "b0bc7698_eda5fd9a",
+      "range": {
+        "startLine": 61,
+        "startChar": 20,
+        "endLine": 64,
+        "endChar": 37
+      },
+      "revId": "627d7773d78b8a15f2d6db8c6f0ac00b8693f542",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "36ae35fe_d4d11b41",
         "filename": "components/model-catalog/blueprint-model/uat-blueprints/PNF_CDS_RESTCONF/Tests/uat.yaml",
         "patchSetId": 5
