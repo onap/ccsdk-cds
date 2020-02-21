@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3228916f_c958a2ed",
+        "filename": "ms/blueprintsprocessor/modules/commons/error-catalog/pom.xml",
+        "patchSetId": 11
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-02-21T15:13:31Z",
+      "side": 1,
+      "message": "In our design discussion we planned to have Error-catalog as a CCSDK library.\n\nIt is temporally kept in CDS repo to have a first try with CDS.",
+      "parentUuid": "6678f743_e2137e46",
+      "revId": "9b315c075c1df8db25e31df91844bd9f4df55dd9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b41fd506_9b1ed9db",
         "filename": "ms/blueprintsprocessor/modules/commons/error-catalog/src/main/kotlin/org/onap/ccsdk/error/catalog/config/ErrorCatalogConfiguration.kt",
         "patchSetId": 11
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "3242a216_178fa732",
+        "filename": "ms/blueprintsprocessor/modules/commons/error-catalog/src/main/kotlin/org/onap/ccsdk/error/catalog/config/ErrorCatalogConfiguration.kt",
+        "patchSetId": 11
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-02-21T15:13:31Z",
+      "side": 1,
+      "message": "Yes, this is where you find confusion. It is not a CDS component. Other Components will use \nerror-catalog. It is a starter library.",
+      "parentUuid": "b41fd506_9b1ed9db",
+      "revId": "9b315c075c1df8db25e31df91844bd9f4df55dd9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "64ec2575_d7f705d2",
         "filename": "ms/blueprintsprocessor/modules/commons/processor-core/src/main/resources/application.properties",
         "patchSetId": 11
@@ -47,6 +83,24 @@
       "writtenOn": "2020-02-21T15:05:43Z",
       "side": 1,
       "message": "Fix this change",
+      "revId": "9b315c075c1df8db25e31df91844bd9f4df55dd9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec5d4901_f0021767",
+        "filename": "ms/blueprintsprocessor/modules/commons/processor-core/src/main/resources/application.properties",
+        "patchSetId": 11
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-02-21T15:13:31Z",
+      "side": 1,
+      "message": "Sure thanks!",
+      "parentUuid": "64ec2575_d7f705d2",
       "revId": "9b315c075c1df8db25e31df91844bd9f4df55dd9",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
