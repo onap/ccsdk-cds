@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6678f743_e2137e46",
+        "filename": "ms/blueprintsprocessor/modules/commons/error-catalog/pom.xml",
+        "patchSetId": 11
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-02-21T15:05:43Z",
+      "side": 1,
+      "message": "Better to keep same group-id, artifact-id, version as Parent CDS Module.. or refer blueprint-processor:parent as parent pom.",
+      "revId": "9b315c075c1df8db25e31df91844bd9f4df55dd9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b41fd506_9b1ed9db",
+        "filename": "ms/blueprintsprocessor/modules/commons/error-catalog/src/main/kotlin/org/onap/ccsdk/error/catalog/config/ErrorCatalogConfiguration.kt",
+        "patchSetId": 11
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-02-21T15:05:43Z",
+      "side": 1,
+      "message": "As this is a CDS Component, keep cds in package name \ne.g. org.onap.ccsdk.cds.error.catalog",
+      "revId": "9b315c075c1df8db25e31df91844bd9f4df55dd9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64ec2575_d7f705d2",
+        "filename": "ms/blueprintsprocessor/modules/commons/processor-core/src/main/resources/application.properties",
+        "patchSetId": 11
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-02-21T15:05:43Z",
+      "side": 1,
+      "message": "Fix this change",
+      "revId": "9b315c075c1df8db25e31df91844bd9f4df55dd9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
