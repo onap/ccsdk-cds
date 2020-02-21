@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "990944a2_035ed816",
+        "filename": "ms/blueprintsprocessor/modules/commons/error-catalog/pom.xml",
+        "patchSetId": 11
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-02-21T15:25:48Z",
+      "side": 1,
+      "message": "ok, good idea. I placed it in common because all libraries are kept there. I will move into cds/",
+      "parentUuid": "1fc02323_55ca2d3c",
+      "revId": "9b315c075c1df8db25e31df91844bd9f4df55dd9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b41fd506_9b1ed9db",
         "filename": "ms/blueprintsprocessor/modules/commons/error-catalog/src/main/kotlin/org/onap/ccsdk/error/catalog/config/ErrorCatalogConfiguration.kt",
         "patchSetId": 11
