@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1fc02323_55ca2d3c",
+        "filename": "ms/blueprintsprocessor/modules/commons/error-catalog/pom.xml",
+        "patchSetId": 11
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-02-21T15:17:56Z",
+      "side": 1,
+      "message": "If that\u0027s the case, keep it outside in parallel to ms repo, instead inside commons.",
+      "parentUuid": "3228916f_c958a2ed",
+      "revId": "9b315c075c1df8db25e31df91844bd9f4df55dd9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b41fd506_9b1ed9db",
         "filename": "ms/blueprintsprocessor/modules/commons/error-catalog/src/main/kotlin/org/onap/ccsdk/error/catalog/config/ErrorCatalogConfiguration.kt",
         "patchSetId": 11
@@ -69,6 +87,24 @@
       "revId": "9b315c075c1df8db25e31df91844bd9f4df55dd9",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d499f92_f64fb336",
+        "filename": "ms/blueprintsprocessor/modules/commons/error-catalog/src/main/kotlin/org/onap/ccsdk/error/catalog/config/ErrorCatalogConfiguration.kt",
+        "patchSetId": 11
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-02-21T15:17:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3242a216_178fa732",
+      "revId": "9b315c075c1df8db25e31df91844bd9f4df55dd9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
