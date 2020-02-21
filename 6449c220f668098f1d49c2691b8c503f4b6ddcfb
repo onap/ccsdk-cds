@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a626f9e_c460a65d",
+        "filename": "ms/command-executor/src/main/python/command_executor_server.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 3293
+      },
+      "writtenOn": "2020-02-21T21:01:58Z",
+      "side": 1,
+      "message": "Optional : You can put it into a constant.",
+      "range": {
+        "startLine": 41,
+        "startChar": 37,
+        "endLine": 41,
+        "endChar": 54
+      },
+      "revId": "6449c220f668098f1d49c2691b8c503f4b6ddcfb",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
