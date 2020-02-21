@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "39f75d9c_0488d573",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/PNF_CDS_RESTCONF/Scripts/kotlin/RestconfSoftwareUpgrade.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 5006
+      },
+      "writtenOn": "2020-02-21T11:55:20Z",
+      "side": 1,
+      "message": ", Device ID and target software version",
+      "range": {
+        "startLine": 47,
+        "startChar": 34,
+        "endLine": 47,
+        "endChar": 45
+      },
+      "revId": "627d7773d78b8a15f2d6db8c6f0ac00b8693f542",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ab8db56_0085d0a9",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/PNF_CDS_RESTCONF/Scripts/kotlin/RestconfSoftwareUpgrade.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 5006
+      },
+      "writtenOn": "2020-02-21T11:55:20Z",
+      "side": 1,
+      "message": "mention how many times you will poll before abort, that will helpful",
+      "range": {
+        "startLine": 120,
+        "startChar": 46,
+        "endLine": 120,
+        "endChar": 49
+      },
+      "revId": "627d7773d78b8a15f2d6db8c6f0ac00b8693f542",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0bc7698_eda5fd9a",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/PNF_CDS_RESTCONF/Tests/uat.yaml",
+        "patchSetId": 5
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 5006
+      },
+      "writtenOn": "2020-02-21T11:55:20Z",
+      "side": 1,
+      "message": "why reloading same var again , can you already existed",
+      "range": {
+        "startLine": 61,
+        "startChar": 20,
+        "endLine": 64,
+        "endChar": 37
+      },
+      "revId": "627d7773d78b8a15f2d6db8c6f0ac00b8693f542",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36ae35fe_d4d11b41",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/PNF_CDS_RESTCONF/Tests/uat.yaml",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 5006
+      },
+      "writtenOn": "2020-02-21T11:55:20Z",
+      "side": 1,
+      "message": "same as above",
+      "range": {
+        "startLine": 72,
+        "startChar": 26,
+        "endLine": 72,
+        "endChar": 33
+      },
+      "revId": "627d7773d78b8a15f2d6db8c6f0ac00b8693f542",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a5f0c70_a5051679",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/PNF_CDS_RESTCONF/Tests/uat.yaml",
+        "patchSetId": 5
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 5006
+      },
+      "writtenOn": "2020-02-21T11:55:20Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 75,
+        "startChar": 20,
+        "endLine": 75,
+        "endChar": 26
+      },
+      "revId": "627d7773d78b8a15f2d6db8c6f0ac00b8693f542",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06990c75_ba9cd476",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/PNF_CDS_RESTCONF/Tests/uat.yaml",
+        "patchSetId": 5
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 5006
+      },
+      "writtenOn": "2020-02-21T11:55:20Z",
+      "side": 1,
+      "message": "just a suggestion -\u003e downloadAi\n- is not identified by the gerrit yaml plugin\nif you change here apply it everywhr",
+      "range": {
+        "startLine": 92,
+        "startChar": 26,
+        "endLine": 92,
+        "endChar": 37
+      },
+      "revId": "627d7773d78b8a15f2d6db8c6f0ac00b8693f542",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa01ea79_2de29fd5",
+        "filename": "ms/blueprintsprocessor/functions/restconf-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/restconf/executor/RestconfExecutorExtensions.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 5006
+      },
+      "writtenOn": "2020-02-21T11:55:20Z",
+      "side": 1,
+      "message": "restore this file",
+      "revId": "627d7773d78b8a15f2d6db8c6f0ac00b8693f542",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
