@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2433f995_07148fe6",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_config_aai/TOSCA-Metadata/TOSCA.meta",
+        "patchSetId": 6
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-02-21T18:24:36Z",
+      "side": 0,
+      "message": "This is not the right entry-definition file.",
+      "revId": "9e3c594bc3cf74ab5748c14bcde81dec7f062fa0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99a8fa6f_8a14e941",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_config_aai/TOSCA-Metadata/TOSCA.meta",
+        "patchSetId": 6
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-02-21T18:24:36Z",
+      "side": 0,
+      "message": "Minor note:\nplease put the same name you have in Definition.",
+      "revId": "9e3c594bc3cf74ab5748c14bcde81dec7f062fa0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
