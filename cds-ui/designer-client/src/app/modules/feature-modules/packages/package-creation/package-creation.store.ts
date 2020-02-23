@@ -93,4 +93,10 @@ export class PackageCreationStore extends Store<CBAPackage> {
             templates: this.state.templates.setTemplates(filePath, fileContent)
         });
     }
+
+    getTemplateAndMapping(variables: string[]) {
+        this.packageCreationService.getTemplateAndMapping(variables).subscribe(element => {
+            console.log('the element is ' + element);
+        });
+    }
 }
