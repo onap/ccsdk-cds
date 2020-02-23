@@ -2,7 +2,7 @@ import {MetaDataTabModel} from './metadata/MetaDataTab.model';
 
 export class Definition {
 
-    public metaDataTab: MetaDataTabModel;
+    // public metaDataTab: MetaDataTabModel;
     public imports: Map<string, string>;
     public dslDefinition: DslDefinition;
 
@@ -10,7 +10,7 @@ export class Definition {
 
     constructor() {
         this.imports = new Map<string, string>();
-        this.metaDataTab = new MetaDataTabModel();
+        // this.metaDataTab = new MetaDataTabModel();
         this.dslDefinition = new DslDefinition();
     }
 
@@ -19,10 +19,10 @@ export class Definition {
         return this;
     }
 
-    public setMetaData(metaDataTab: MetaDataTabModel) {
-        this.metaDataTab = metaDataTab;
-        return this;
-    }
+    // public setMetaData(metaDataTab: MetaDataTabModel) {
+    //     this.metaDataTab = metaDataTab;
+    //     return this;
+    // }
 
     public setDslDefinition(dslDefinition: DslDefinition): Definition {
         this.dslDefinition = dslDefinition;
