@@ -59,6 +59,10 @@ export class Template {
         this.files.set(key, value);
         return this;
     }
+
+    public getValue(key: string): string {
+        return this.files.get(key);
+    }
 }
 
 export class CBAPackage {
