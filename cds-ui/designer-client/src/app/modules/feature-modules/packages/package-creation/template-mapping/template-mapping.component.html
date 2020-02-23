@@ -1,9 +1,9 @@
-<div *ngIf="!creationView">
-  <app-templ-mapp-listing  
-    (showCreationViewParentNotification)="openCreationView($event)">
-  </app-templ-mapp-listing>
+<div *ngIf="!listView">
+    <app-templ-mapp-listing
+            (showCreationViewParentNotification)="openCreationView($event)">
+    </app-templ-mapp-listing>
 </div>
 
-<div *ngIf="creationView">
-  <app-templ-mapp-creation></app-templ-mapp-creation>
+<div *ngIf="!creationView">
+    <app-templ-mapp-creation (showListViewParent)="openListView($event)"></app-templ-mapp-creation>
 </div>
