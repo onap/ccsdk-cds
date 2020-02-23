@@ -63,6 +63,7 @@
 
         <commons-io-version>2.6</commons-io-version>
         <commons-lang3-version>3.2.1</commons-lang3-version>
+        <commons-compress-version>1.20</commons-compress-version>
         <commons-collections-version>3.2.2</commons-collections-version>
     </properties>
 
@@ -142,6 +143,11 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-compress</artifactId>
+                <version>${commons-compress-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.velocity</groupId>
