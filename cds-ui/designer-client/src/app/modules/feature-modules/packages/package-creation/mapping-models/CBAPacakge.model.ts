@@ -1,4 +1,4 @@
-import {MetaDataTabModel} from './metadata/MetaDataTab.model';
+import { MetaDataTabModel } from './metadata/MetaDataTab.model';
 
 export class Definition {
 
@@ -34,6 +34,22 @@ export class DslDefinition {
     content: string;
 }
 
+export class Base {
+    public files: Map<string, string>;
+
+    constructor() {
+        this.files = new Map<string, string>();
+    }
+
+    public setContent(key: string, value: string) {
+        this.files.set(key, value);
+        return this;
+    }
+
+    public getValue(key: string): string {
+        return this.files.get(key);
+    }
+}
 export class Scripts {
     public files: Map<string, string>;
 
@@ -65,12 +81,15 @@ export class Template {
     }
 }
 
+export class Mapping extends Base {
+}
 export class CBAPackage {
 
     public metaData: MetaDataTabModel;
     public definitions: Definition;
     public scripts: Scripts;
     public templates: Template;
+    public mapping: Mapping;
 
 
     constructor() {
@@ -78,6 +97,7 @@ export class CBAPackage {
         this.scripts = new Scripts();
         this.metaData = new MetaDataTabModel();
         this.templates = new Template();
+        this.mapping = new Mapping();
     }
 
 

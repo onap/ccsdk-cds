@@ -7,6 +7,7 @@ import { PackageCreationUtils } from '../package-creation.utils';
 
 export class DesignerCreationMode extends PackageCreationModes {
 
+    // Refactor methods params to be in constructor level
     constructor() {
         super();
     }
@@ -15,10 +16,22 @@ export class DesignerCreationMode extends PackageCreationModes {
         this.addToscaMetaDataFile(cbaPackage.metaData);
         this.createDefinitionsFolder(cbaPackage, packageCreationUtils);
         this.addScriptsFolder(cbaPackage.scripts);
+        this.addTemplateFolder(cbaPackage);
     }
 
     private addScriptsFolder(scripts: Scripts) {
         scripts.files.forEach((value, key) => {
+            FilesContent.putData(key, value);
+        });
+    }
+
+    private addTemplateFolder(cbaPackage: CBAPackage) {
+        // Create Template Files Folder
+        cbaPackage.templates.files.forEach((value, key) => {
+            FilesContent.putData(key, value);
+        });
+        // Create Mapping Files Folder
+        cbaPackage.mapping.files.forEach((value, key) => {
             FilesContent.putData(key, value);
         });
     }
