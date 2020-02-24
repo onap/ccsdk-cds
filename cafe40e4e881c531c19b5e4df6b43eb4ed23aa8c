@@ -22,6 +22,30 @@
       "revId": "cafe40e4e881c531c19b5e4df6b43eb4ed23aa8c",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e247c730_c8a68d03",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/PNF_CDS_RESTCONF/Scripts/kotlin/RestconfConfigDeploy.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 5053
+      },
+      "writtenOn": "2020-02-24T11:47:12Z",
+      "side": 1,
+      "message": "Interesting observation.\nLooks like when the blueprintsprocessor.restclient.sdncodl/sdnc properties were consolidated for sdnc, the trailing \"/\" on the connection url was removed but this was not done everywhere.\n\nThere are are still instances where there is trailing spaces in the URL across properties file and probably in OOM as well. \nFixed the RestconfExecutor in patch 7 to always have a leading \"/\" which is similar to what seems to be the practice for external service mapping (See AAI).\n\nIt would be good to bring this up in the next community meeting.",
+      "parentUuid": "69e7d390_30bb58aa",
+      "range": {
+        "startLine": 40,
+        "startChar": 46,
+        "endLine": 40,
+        "endChar": 50
+      },
+      "revId": "cafe40e4e881c531c19b5e4df6b43eb4ed23aa8c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }

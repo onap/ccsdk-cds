@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "dd2567a3_d392d103",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_config_aai/TOSCA-Metadata/TOSCA.meta",
+        "patchSetId": 6
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 5053
+      },
+      "writtenOn": "2020-02-24T11:47:12Z",
+      "side": 0,
+      "message": "This file is being replaced by [ccsdk/cds.git] / components / model-catalog / blueprint-model / uat-blueprints / PNF_CDS_RESTCONF / TOSCA-Metadata / TOSCA.meta\n\nYou might be looking at a deleted file",
+      "parentUuid": "2433f995_07148fe6",
+      "revId": "9e3c594bc3cf74ab5748c14bcde81dec7f062fa0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "99a8fa6f_8a14e941",
         "filename": "components/model-catalog/blueprint-model/uat-blueprints/pnf_config_aai/TOSCA-Metadata/TOSCA.meta",
         "patchSetId": 6
