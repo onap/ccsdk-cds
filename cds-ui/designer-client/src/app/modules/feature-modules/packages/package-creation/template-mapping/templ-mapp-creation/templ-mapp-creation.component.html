@@ -17,7 +17,7 @@
             <div class="card-header" id="headingOne">
                 <h5 class="mb-0 d-flex justify-content-between">
                     <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
-                            aria-controls="collapseOne">
+                        aria-controls="collapseOne">
                         1. Create Template
                     </button>
 
@@ -30,24 +30,23 @@
                         <label class="label-name">Template Type</label>
                         <div class="label-input">
                             <label name="trst">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1"
-                                       value=Velcoity>
-
+                                <input class="form-check-input" [(ngModel)]="templateExt" type="radio"
+                                    name="exampleRadios" id="exampleRadios1" value=Velcoity>
                                 <span>
                                     Velcoity
                                 </span>
                             </label>
                             <label name="trst">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1"
-                                       value=Velcoity>
+                                <input class="form-check-input" [(ngModel)]="templateExt" type="radio"
+                                    name="exampleRadios" id="exampleRadios1" value=Jinja>
 
                                 <span>
                                     Jinja
                                 </span>
                             </label>
                             <label name="trst">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1"
-                                       value=Velcoity>
+                                <input class="form-check-input" [(ngModel)]="templateExt" type="radio"
+                                    name="exampleRadios" id="exampleRadios1" value=Kotlin>
 
                                 <span>
                                     Kotlin
@@ -56,12 +55,12 @@
                         </div>
                     </div>
                     <div class="create-template-import">Use the editor to add parameters or you can also <a href="#"
-                                                                                                            data-toggle="modal"
-                                                                                                            data-target="#exampleModal">Import
-                        File</a></div>
+                            data-toggle="modal" (click)="allowedExt=['.vtl','.kt','.j2','.jinja2']"
+                            data-target="#exampleModal">Import
+                            File</a></div>
                     <div class="editor-container">
-                        <app-source-editor
-                                (textChange)="textChanges($event,templateInfo.fileName)"   [(text)]="templateInfo.fileContent"></app-source-editor>
+                        <app-source-editor (textChange)="textChanges($event,templateInfo.fileName)"
+                            [(text)]="templateFileContent"></app-source-editor>
                     </div>
                 </div>
             </div>
@@ -70,7 +69,7 @@
             <div class="card-header" id="headingTwo">
                 <h5 class="mb-0">
                     <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo"
-                            aria-expanded="false" aria-controls="collapseTwo">
+                        aria-expanded="false" aria-controls="collapseTwo">
                         2. Manage Mapping
                     </button>
                 </h5>
@@ -79,14 +78,16 @@
                 <div class="card-body">
                     <h6 class="text-center">Select a source to load config parameters</h6>
                     <div class="text-center">
-                        <a (click)="initTemplateMappingTableFromCurrentTemplate()" class="mapping-source-load">
+                        <a href="#" (click)="initTemplateMappingTableFromCurrentTemplate($event)"
+                            class="mapping-source-load">
                             <i class="icon-current-template"></i>
-                            <br/>
+                            <br />
                             <span>Use Current Template Instance</span>
                         </a>
-                        <a href="#" data-toggle="modal" data-target="#exampleModal" class="mapping-source-load">
+                        <a href="#" (click)="allowedExt=['.csv']" data-toggle="modal" data-target="#exampleModal"
+                            class="mapping-source-load">
                             <i class="icon-Upload-attribute"></i>
-                            <br/>
+                            <br />
                             <div>Upload attribute list</div>
                             <div class="source-load-note">(Should be comma delimited file)</div>
                         </a>
@@ -102,23 +103,63 @@
 
                     </div>
                 </div>
+                <div id="mapping-table" [hidden]="resourceDictionaryRes?.length == 0" class="mx-4 my-2">
+                    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                        <thead>
+                            <tr>
+                                <th>Parameter Name</th>
+                                <th>Dictionary Name</th>
+                                <th>Dictionary Source</th>
+                                <th>Dependancies</th>
+                                <th>Default</th>
+                                <th>Data Type</th>
+                                <th>Entry Schema</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let dict of resourceDictionaryRes">
+                                <td>{{ dict.name }}</td>
+                                <td>{{ dict.name }}</td>
+                                <td>
+                                    <select class="custom-select">
+                                        <option *ngFor="let val of dict.definition.sources | keyvalue">{{val.key}}
+                                        </option>
+
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="custom-select">
+                                        <option
+                                            *ngFor="let val of dict?.definition?.sources?.sdnc?.properties['key-dependencies'] ">
+                                            {{val}}</option>
+
+                                    </select>
+                                    <!-- {{ dict.definition.sources }} -->
+                                </td>
+                                <!-- <td>{{ dict?.definition?.sources?.sdnc?.properties['key-dependencies'] }}</td> -->
+                                <td>{{ dict.definition?.property?.default }}</td>
+                                <td>{{ dict.dataType }}</td>
+                                <td>{{ dict.entrySchema }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
 
             </div>
 
 
         </div>
-
         <div class="template-mapping-action">
             <button class="btn btn-sm btn-outline-secondary">Cancel</button>
-            <button class="btn btn-sm btn-primary">Finish</button>
+            <button (click)="saveToStore()" class="btn btn-sm btn-primary">Finish</button>
         </div>
     </div>
 </div>
 
 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -128,11 +169,11 @@
                 </button>
             </div>
             <div class="modal-body">
-                <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)"
-                               (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)">
+                <ngx-file-drop [accept]="allowedExt" dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)"
+                    (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)">
                     <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
                         <div class="folder-upload">
-                            <img src="assets/img/folder-upload.svg"/>
+                            <img src="assets/img/folder-upload.svg" />
                         </div>
                         <div class="folder-upload-text">
                             Drag & Drop file
@@ -148,9 +189,9 @@
                 <div class="upload-table" *ngFor="let item of uploadedFiles; let i=index">
                     <table class="table">
                         <thead>
-                        <tr>
-                            <th>Name : {{ item.name }}</th>
-                        </tr>
+                            <tr>
+                                <th>Name : {{ item.name }}</th>
+                            </tr>
                         </thead>
                     </table>
                 </div>
@@ -158,10 +199,10 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal"
-                        (click)="resetTheUploadedFiles()">Cancel
+                    (click)="resetTheUploadedFiles()">Cancel
                 </button>
                 <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal"
-                        (click)="setFilesToStore()" (click)="openListView()">
+                    (click)="uploadFile();openListView()">
                     Import
                 </button>
             </div>
