@@ -1,14 +1,17 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {FileSystemFileEntry, NgxFileDropEntry} from 'ngx-file-drop';
-import {PackageCreationStore} from '../../package-creation.store';
-import {TemplateInfo, TemplateStore} from '../../template.store';
+import { Component, EventEmitter, OnInit, Output, OnDestroy } from '@angular/core';
+import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
+import { PackageCreationStore } from '../../package-creation.store';
+import { TemplateInfo, TemplateStore } from '../../template.store';
+import { PackageCreationService } from '../../package-creation.service';
+import { Subject } from 'rxjs';
+import { ResourceDictionary } from '../../mapping-models/ResourceDictionary.model';
 
 @Component({
     selector: 'app-templ-mapp-creation',
     templateUrl: './templ-mapp-creation.component.html',
     styleUrls: ['./templ-mapp-creation.component.css']
 })
-export class TemplMappCreationComponent implements OnInit {
+export class TemplMappCreationComponent implements OnInit, OnDestroy {
     @Output() showListViewParent = new EventEmitter<any>();
 
     public uploadedFiles: FileSystemFileEntry[] = [];
@@ -18,17 +21,36 @@ export class TemplMappCreationComponent implements OnInit {
     fileName: any;
     templateInfo = new TemplateInfo();
     private variables: string[] = [];
+    private mappingFileValues = [];
+    dtOptions: DataTables.Settings = {};
+    // We use this trigger because fetching the list of persons can be quite long,
+    // thus we ensure the data is fetched before rendering
+    dtTrigger = new Subject();
+    resourceDictionaryRes: ResourceDictionary[] = [];
+    allowedExt = [];
 
 
-    constructor(private packageCreationStore: PackageCreationStore, private templateStore: TemplateStore) {
+    constructor(
+        private packageCreationStore: PackageCreationStore,
+        private templateStore: TemplateStore,
+        private packageCreationService: PackageCreationService
+    ) {
     }
 
     ngOnInit() {
         this.templateStore.state$.subscribe(templateInfo => {
+            console.log(templateInfo);
             this.templateInfo = templateInfo;
             this.fileName = templateInfo.fileName.split('/')[1];
             this.variables = this.getTemplateVariable(templateInfo.fileContent);
         });
+
+        this.dtOptions = {
+            pagingType: 'full_numbers',
+            pageLength: 10,
+            destroy: true,
+            retrieve: true
+        };
     }
 
     public getTemplateVariable(fileContent: string) {
@@ -59,6 +81,7 @@ export class TemplMappCreationComponent implements OnInit {
                 }
             }
         }
+        // this.dtTrigger.next();
         return variables;
     }
 
@@ -81,6 +104,33 @@ export class TemplMappCreationComponent implements OnInit {
         this.uploadedFiles.splice(fileIndex, 1);*/
     }
 
+    uploadFile() {
+        if (this.allowedExt.includes('.csv')) {
+            this.fetchCSVkeys();
+        } else {
+            this.setFilesToStore();
+        }
+    }
+
+    fetchCSVkeys() {
+        for (const droppedFile of this.uploadedFiles) {
+            droppedFile.file((file: File) => {
+                const fileReader = new FileReader();
+                fileReader.onload = (e) => {
+                    this.mappingFileValues = fileReader.result.toString().split(',');
+                    console.log(this.mappingFileValues);
+                    this.packageCreationService.getTemplateAndMapping(this.mappingFileValues).subscribe(res => {
+                        this.resourceDictionaryRes = res;
+                        console.log(res);
+                        this.dtTrigger.next();
+                    });
+                };
+                fileReader.readAsText(file);
+            });
+        }
+        this.uploadedFiles = [];
+    }
+
     setFilesToStore() {
         for (const droppedFile of this.uploadedFiles) {
             droppedFile.file((file: File) => {
@@ -88,12 +138,16 @@ export class TemplMappCreationComponent implements OnInit {
                 fileReader.onload = (e) => {
                     this.packageCreationStore.addTemplate('Templates/' + this.fileName,
                         fileReader.result.toString());
+
                 };
                 fileReader.readAsText(file);
             });
-
         }
         this.uploadedFiles = [];
+    }
+
+    textChanges(code: any, fileName: string) {
+        this.packageCreationStore.addTemplate(fileName, code);
     }
 
     public fileOver(event) {
@@ -113,13 +167,13 @@ export class TemplMappCreationComponent implements OnInit {
     }
 
     initTemplateMappingTableFromCurrentTemplate() {
-        console.log('happend');
         if (this.variables && this.variables.length > 0) {
             this.packageCreationStore.getTemplateAndMapping(this.variables);
         }
     }
 
-    textChanges(code: any, fileName: string) {
-        this.packageCreationStore.addTemplate(fileName, code);
+    ngOnDestroy(): void {
+        // Do not forget to unsubscribe the event
+        this.dtTrigger.unsubscribe();
     }
 }
