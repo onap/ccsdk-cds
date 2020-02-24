@@ -19,13 +19,13 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import {Store} from '../../../../common/core/stores/Store';
+import { Store } from '../../../../common/core/stores/Store';
 
-import {CBAPackage, DslDefinition} from './mapping-models/CBAPacakge.model';
-import {PackageCreationService} from './package-creation.service';
-import {FolderNodeElement, MetaDataTabModel} from './mapping-models/metadata/MetaDataTab.model';
+import { CBAPackage, DslDefinition } from './mapping-models/CBAPacakge.model';
+import { PackageCreationService } from './package-creation.service';
+import { FolderNodeElement, MetaDataTabModel } from './mapping-models/metadata/MetaDataTab.model';
 import * as JSZip from 'jszip';
 
 
@@ -95,8 +95,6 @@ export class PackageCreationStore extends Store<CBAPackage> {
     }
 
     getTemplateAndMapping(variables: string[]) {
-        this.packageCreationService.getTemplateAndMapping(variables).subscribe(element => {
-            console.log('the element is ' + element);
-        });
+        this.packageCreationService.getTemplateAndMapping(variables);
     }
 }
