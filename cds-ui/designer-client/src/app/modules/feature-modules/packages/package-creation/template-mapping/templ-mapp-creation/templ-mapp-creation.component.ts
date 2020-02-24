@@ -117,4 +117,8 @@ export class TemplMappCreationComponent implements OnInit {
             this.packageCreationStore.getTemplateAndMapping(this.variables);
         }
     }
+
+    textChanges(code: any, fileName: string) {
+        this.packageCreationStore.addTemplate(fileName, code);
+    }
 }

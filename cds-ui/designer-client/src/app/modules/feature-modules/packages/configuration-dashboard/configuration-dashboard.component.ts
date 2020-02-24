@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {PackageStore} from './package.store';
 import {BluePrintDetailModel} from '../model/BluePrint.detail.model';
+import {CBAPackage} from '../package-creation/mapping-models/CBAPacakge.model';
 
 
 @Component({
@@ -18,6 +19,8 @@ export class ConfigurationDashboardComponent implements OnInit {
         this.configurationStore.getPagedPackages(id);
         this.configurationStore.state$.subscribe(
             el => {
+                const cbaPackage = new CBAPackage();
+
                 if (el && el.configuration) {
                     this.viewedPackage = el.configuration;
                 }

@@ -61,7 +61,7 @@
                         File</a></div>
                     <div class="editor-container">
                         <app-source-editor
-                                           [(text)]="templateInfo.fileContent"></app-source-editor>
+                                (textChange)="textChanges($event,templateInfo.fileName)"   [(text)]="templateInfo.fileContent"></app-source-editor>
                     </div>
                 </div>
             </div>
