@@ -26,6 +26,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.BluePrintMode
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.utils.BlueprintSortByOption
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.mdcWebCoroutineScope
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
 import org.springframework.core.io.Resource
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -207,5 +208,39 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
         @PathVariable(value = "version") version: String
     ) = mdcWebCoroutineScope {
         bluePrintModelHandler.deleteBlueprintModel(name, version)
+    }
+
+    @PostMapping(
+            path = arrayOf("/workflow-spec"), produces = arrayOf(MediaType
+            .APPLICATION_JSON_VALUE),
+            consumes = arrayOf(MediaType.APPLICATION_JSON_VALUE)
+    )
+    @ResponseBody
+    @Throws(BluePrintException::class)
+    @PreAuthorize("hasRole('USER')")
+    suspend fun workflowSpec(@RequestBody workFlowSpecReq: WorkFlowSpecRequest):
+            ResponseEntity<String> = mdcWebCoroutineScope {
+        var json = bluePrintModelHandler.prepareWorkFlowSpec(workFlowSpecReq)
+                .asJsonString()
+        ResponseEntity(json, HttpStatus.OK)
+    }
+
+    @GetMapping(
+            path = arrayOf("/workflows/blueprint-name/{name}/version/{version" +
+                    "}"),
+            produces = arrayOf(MediaType.APPLICATION_JSON_VALUE)
+    )
+    @ResponseBody
+    @Throws(BluePrintException::class)
+    @PreAuthorize("hasRole('USER')")
+    suspend fun getWorkflowList(
+        @ApiParam(value = "Name of the CBA.", required = true)
+        @PathVariable(value = "name") name: String,
+        @ApiParam(value = "Version of the CBA.", required = true)
+        @PathVariable(value = "version") version: String
+    ): ResponseEntity<String> = mdcWebCoroutineScope {
+        var json = bluePrintModelHandler.getWorkflowNames(name, version)
+                .asJsonString()
+        ResponseEntity(json, HttpStatus.OK)
     }
 }

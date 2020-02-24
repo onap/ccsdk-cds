@@ -226,6 +226,8 @@ object BluePrintConstants {
     const val MODEL_TYPE_ARTIFACT_DIRECTED_GRAPH = "artifact-directed-graph"
     const val MODEL_TYPE_ARTIFACT_COMPONENT_JAR = "artifact-component-jar"
 
+    const val TOSCA_SPEC = "TOSCA"
+
     val USE_SCRIPT_COMPILE_CACHE: Boolean = (System.getenv("USE_SCRIPT_COMPILE_CACHE") ?: "true").toBoolean()
 
     const val LOG_PROTECT: String = "log-protect"

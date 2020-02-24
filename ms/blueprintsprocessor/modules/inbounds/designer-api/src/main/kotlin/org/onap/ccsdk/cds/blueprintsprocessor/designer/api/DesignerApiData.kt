@@ -22,6 +22,11 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.annotation.JsonTypeName
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictionary
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.DATA_TYPE_JSON
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.DEFAULT_VERSION_NUMBER
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.TOSCA_SPEC
+import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import java.io.Serializable
 import java.util.Date
@@ -30,6 +35,33 @@ class BootstrapRequest {
     var loadModelType: Boolean = false
     var loadResourceDictionary: Boolean = false
     var loadCBA: Boolean = false
+}
+
+class WorkFlowsResponse {
+    lateinit var blueprintName: String
+    var version: String = DEFAULT_VERSION_NUMBER
+    var workflows: MutableSet<String> = mutableSetOf()
+}
+
+class WorkFlowSpecRequest {
+    lateinit var blueprintName: String
+    var version: String = DEFAULT_VERSION_NUMBER
+    var returnContent: String = DATA_TYPE_JSON
+    lateinit var workflowName: String
+    var specType: String = TOSCA_SPEC
+}
+
+class WorkFlowSpecResponse {
+    lateinit var blueprintName: String
+    var version: String = DEFAULT_VERSION_NUMBER
+    lateinit var workFlowData: WorkFlowData
+    var dataTypes: MutableMap<String, DataType>? = mutableMapOf()
+}
+
+class WorkFlowData {
+    lateinit var workFlowName: String
+    var inputs: MutableMap<String, PropertyDefinition>? = null
+    var outputs: MutableMap<String, PropertyDefinition>? = null
 }
 
 /**
