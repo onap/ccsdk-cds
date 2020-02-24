@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
-import { PackageCreationStore } from '../package-creation.store';
-import { PackageCreationUtils } from '../package-creation.utils';
+import {Component, OnInit} from '@angular/core';
+import {FileSystemFileEntry, NgxFileDropEntry} from 'ngx-file-drop';
+import {PackageCreationStore} from '../package-creation.store';
+import {PackageCreationUtils} from '../package-creation.utils';
 
 
 @Component({
@@ -73,5 +73,9 @@ export class ImportsTabComponent implements OnInit {
 
     resetTheUploadedFiles() {
         this.uploadedFiles = [];
+    }
+
+    textChanges(code: any, key: string) {
+        this.packageCreationStore.addDefinition(key, code);
     }
 }

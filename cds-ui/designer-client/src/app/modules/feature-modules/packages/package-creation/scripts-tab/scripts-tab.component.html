@@ -30,7 +30,7 @@
                 <div [attr.aria-labelledby]="'head-script-'+mapIndex" [id]="'id-script-'+mapIndex" class="collapse"
                     data-parent="#accordion-script">
                     <div class="card-body">
-                        <ace-editor [(text)]="file.value" [mode]="'kotlin'" [autoUpdateContent]="true"
+                        <ace-editor [(text)]="file.value"  (textChange)="textChanges($event,file.key)"  [mode]="'kotlin'" [autoUpdateContent]="true"
                             [durationBeforeCallback]="1000" [theme]="'tomorrow_night_bright'" #editor
                             style="height:300px;">
                         </ace-editor>
