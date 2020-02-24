@@ -3,6 +3,8 @@ import * as joint from 'jointjs';
 import './jointjs/elements/palette.function.element';
 import './jointjs/elements/action.element';
 import './jointjs/elements/board.function.element';
+import { DesignerStore } from './designer.store';
+import { ActionElementTypeName } from 'src/app/common/constants/app-constants';
 
 
 
@@ -26,7 +28,7 @@ export class DesignerComponent implements OnInit {
   paletteGraph: joint.dia.Graph;
   palettePaper: joint.dia.Paper;
 
-  constructor() {
+  constructor(private designerStore: DesignerStore) {
     this.controllerSideBar = true;
     this.attributesSideBar = false;
   }
@@ -54,22 +56,37 @@ export class DesignerComponent implements OnInit {
     this.initializeBoard();
     this.initializePalette();
     // this.createEditBarOverThePaper();
+
+    //functions list is contants for now
     const list = [
       { modelName: 'component-netconf-executor'},
       { modelName: 'component-remote-ansible-executor' },
       { modelName: 'dg-generic' },
       { modelName: 'component-resource-resolution' }];
+      const cells = this.buildPaletteGraphFromList(list);
+      this.paletteGraph.resetCells(cells);
 
-    const cells = this.buildPaletteGraphFromList(list);
-    this.paletteGraph.resetCells(cells);
+      let idx = 0;
+      cells.forEach(cell => {
+        console.log(cell);
+        cell.translate(5, (cell.attributes.size.height + 5) * idx++);
 
-    let idx = 0;
-    cells.forEach(cell => {
-      console.log(cell);
-      cell.translate(5, (cell.attributes.size.height + 5) * idx++);
-
-    });
-    this.stencilPaperEventListeners();
+      });
+      this.stencilPaperEventListeners();
+      /**
+       * the code to retrieve from server is commented
+       */
+        // this.designerStore.state$.subscribe(state => {
+        //   console.log(state);
+        //   if (state.functions) {
+        //     console.log('functions-->' , state.functions);
+        //     // this.viewedFunctions = state.functions;
+        //     const list = state.functions;
+        //   }
+        // });
+        //action triggering
+        // this.designerStore.getFuntions();
+    
   }
 
   initializePalette() {
@@ -127,9 +144,6 @@ export class DesignerComponent implements OnInit {
         
         var parentBbox = parent.getBBox();
         var cellBbox = cell.getBBox();
-
-        console.log("parent ", parentBbox);
-        console.log("cell ", cellBbox);
         if (parentBbox.containsPoint(cellBbox.origin()) &&
           parentBbox.containsPoint(cellBbox.topRight()) &&
           parentBbox.containsPoint(cellBbox.corner()) &&
@@ -149,8 +163,12 @@ export class DesignerComponent implements OnInit {
 
   insertCustomActionIntoBoard() {
     this.actionIdCounter++;
-    const element = this.createCustomAction("action_"+ this.actionIdCounter, 'Action' + this.actionIdCounter);
+    const actionId = "action_" + this.actionIdCounter;
+    const actionName = 'Action' + this.actionIdCounter;
+    const element = this.createCustomAction(actionId , actionName);
     this.boardGraph.addCell(element);
+    console.log('saving action to store action workflow....');
+    this.designerStore.addDeclarativeWorkFlow(actionName);
   }
 
   createCustomAction(id: string, label: string) {
@@ -192,7 +210,6 @@ export class DesignerComponent implements OnInit {
 
   stencilPaperEventListeners() {
     this.palettePaper.on('cell:pointerdown', (draggedCell, pointerDownEvent, x, y) => {
-      console.log('pointerdown 2');
 
       $('body').append(`
         <div id="flyPaper"
@@ -232,38 +249,30 @@ export class DesignerComponent implements OnInit {
         if (mouseupX > target.left &&
           mouseupX < target.left + this.boardPaper.$el.width() &&
           mouseupY > target.top && y < target.top + this.boardPaper.$el.height()) {
-          // const clonedShape = flyShape.clone();
-          const type = flyShape.attributes.attrs.type;
-          console.log(type);
+          const functionType = flyShape.attributes.attrs.type;
+          console.log(functionType);
+          const functionElementForBoard = this.dropFunctionOverAction(functionType, mouseupX, target, offset, mouseupY);
 
-          //create board function element of the same type of palette function
-          //board function element is different in design from the palette function element
-          this.fuctionIdCounter++;
-          console.log(this.fuctionIdCounter);
-          const functionElementForBoard = 
-            this.createFuctionElementForBoard("fucntion_" + this.fuctionIdCounter, 'execute', type);
+          let parentCell = this.getParent(functionElementForBoard);
 
-          functionElementForBoard.position(mouseupX - target.left - offset.x, mouseupY - target.top - offset.y);
-          this.boardGraph.addCell(functionElementForBoard);
-          const cellViewsBelow =
-            this.boardPaper.findViewsFromPoint(functionElementForBoard.getBBox().center());
-          console.log(cellViewsBelow);
-          if (cellViewsBelow.length) {
-            let cellViewBelow;
-            cellViewsBelow.forEach( cellItem => {
-              if (cellItem.model.id !== functionElementForBoard.id) {
-                cellViewBelow = cellItem;
-              }
-            });
+          console.log("parentCell -->", parentCell);
+
+          if (parentCell && 
+              parentCell.model.attributes.type === ActionElementTypeName){
+                
+            const actionName = parentCell.model.attributes.attrs['#label'].text;
+            this.designerStore.addStepToDeclarativeWorkFlow(actionName, functionType);
+            this.designerStore.addNodeTemplate(functionType);
 
             // Prevent recursive embedding.
-            if (cellViewBelow && cellViewBelow.model.get('parent') !== functionElementForBoard.id) {
-              console.log(cellViewBelow);
-              cellViewBelow.model.embed(functionElementForBoard);
+            if (parentCell &&
+              parentCell.model.get('parent') !== functionElementForBoard.id) {
+              parentCell.model.embed(functionElementForBoard);
             }
-            console.log(this.boardGraph);
+          }else{
+            console.log('function dropped outside action, rolling back...');
+            functionElementForBoard.remove();
           }
-
         }
         $('body').off('mousemove.fly').off('mouseup.fly');
         // flyShape.remove();
@@ -272,6 +281,32 @@ export class DesignerComponent implements OnInit {
     });
   }
 
+  private getParent(functionElementForBoard: joint.shapes.board.FunctionElement) {
+    const cellViewsBelow = this.boardPaper.findViewsFromPoint(functionElementForBoard.getBBox().center());
+    let cellViewBelow;
+    if (cellViewsBelow.length) {
+      cellViewsBelow.forEach(cellItem => {
+        if (cellItem.model.id !== functionElementForBoard.id) {
+          cellViewBelow = cellItem;
+        }
+      });
+    }
+    return cellViewBelow;
+  }
+
+  /**
+   * trigger actions related to Function dropped over the board:
+   * - create board function element of the same type of palette function 
+   * as board function element is different from the palette function element
+   * - save function to parent action in store
+  */
+  private dropFunctionOverAction(functionType: any, mouseupX: number, target: JQuery.Coordinates, offset: { x: number; y: number; }, mouseupY: number) {
+    this.fuctionIdCounter++;
+    const functionElementForBoard = this.createFuctionElementForBoard("fucntion_" + this.fuctionIdCounter, 'execute', functionType);
+    functionElementForBoard.position(mouseupX - target.left - offset.x, mouseupY - target.top - offset.y);
+    this.boardGraph.addCell(functionElementForBoard);
+    return functionElementForBoard;
+  }
   /**
    * this is a way to add the button like zoom in , zoom out , and source over jointjs paper
    * may be used if no other way is found

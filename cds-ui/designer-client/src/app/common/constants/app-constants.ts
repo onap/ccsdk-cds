@@ -117,3 +117,6 @@ export const ControllerCatalogURLs = {
     getDefinition: '/controllercatalog/model-type/by-definition',
     getDerivedFrom: '/controllercatalog/model-type/by-derivedfrom'
 };
+
+
+export const ActionElementTypeName = 'app.ActionElement';
