@@ -47,7 +47,7 @@
                 <div [id]="'id-'+mapIndex" class="collapse" [attr.aria-labelledby]="'head-'+mapIndex"
                     data-parent="#accordion">
                     <div class="card-body">
-                        <ace-editor [(text)]="file.value" [mode]="'json'" [autoUpdateContent]="true"
+                        <ace-editor [(text)]="file.value" (textChange)="textChanges($event,file.key)" [mode]="'json'" [autoUpdateContent]="true"
                             [durationBeforeCallback]="1000" [theme]="'tomorrow_night_bright'" #editor
                             style="height:300px;">
                         </ace-editor>

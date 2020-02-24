@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
-import { PackageCreationStore } from '../package-creation.store';
-import { PackageCreationUtils } from '../package-creation.utils';
+import {Component, OnInit} from '@angular/core';
+import {FileSystemFileEntry, NgxFileDropEntry} from 'ngx-file-drop';
+import {PackageCreationStore} from '../package-creation.store';
+import {PackageCreationUtils} from '../package-creation.utils';
 import 'ace-builds/src-noconflict/ace';
 import 'ace-builds/webpack-resolver';
 
@@ -75,5 +75,9 @@ export class ScriptsTabComponent implements OnInit {
 
     resetTheUploadedFiles() {
         this.uploadedFiles = [];
+    }
+
+    textChanges(code: any, key: string) {
+        this.packageCreationStore.addScripts(key, code);
     }
 }

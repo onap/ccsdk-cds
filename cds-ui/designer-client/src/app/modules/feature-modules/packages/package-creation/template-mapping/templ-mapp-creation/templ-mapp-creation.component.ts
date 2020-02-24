@@ -113,8 +113,13 @@ export class TemplMappCreationComponent implements OnInit {
     }
 
     initTemplateMappingTableFromCurrentTemplate() {
+        console.log('happend');
         if (this.variables && this.variables.length > 0) {
             this.packageCreationStore.getTemplateAndMapping(this.variables);
         }
+    }
+
+    textChanges(code: any, fileName: string) {
+        this.packageCreationStore.addTemplate(fileName, code);
     }
 }

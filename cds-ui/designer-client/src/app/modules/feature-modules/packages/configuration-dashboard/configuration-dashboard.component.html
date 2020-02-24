@@ -1,7 +1,133 @@
-<app-header>
-</app-header>
-<p>package-viewing works!
+
+<app-header></app-header>
+
+<div class="new-wrapper">
+    <div class="container-fluid main-container">
+        <header class="page-title">
+            <div class="row">
+                <h2 class="col m-0">
+                    <ul class="breadcrumb-header">
+                        <li>CBA Packages</li>
+                        <li>Package Name</li>
+                    </ul>
+                </h2>
+               <!-- <div class="col d-flex justify-content-end header-button-save">
+                    <button class="float btn btn-sm btn-outline-secondary" disabled>Discard Changes</button>
+                    <button class="float btn btn-sm btn-primary" (click)="saveBluePrint()">Save</button>
+                </div>-->
+            </div>
+        </header>
 
 
-    {{viewedPackage!.artifactName}}}
-</p>
+
+        <div class="container-fluid body-container">
+
+            <div class="container">
+               <!-- <div class="creat-action-container">
+                    <a href="#" class="action-button">
+                        <i class="icon-clone" aria-hidden="true"></i>
+                        <span>Clone</span>
+                    </a>
+
+                    <a href="#" class="action-button">
+                        <i class="icon-archive" aria-hidden="true"></i>
+                        <span>Archive</span>
+                    </a>
+
+                    <a href="#" class="action-button delete">
+                        <i class="icon-delete" aria-hidden="true"></i>
+                        <span>Delete</span>
+                    </a>
+                </div>-->
+
+                <div class="card creat-card view-package-container">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="row">
+                                <div class="col d-flex">
+                                    <i class="package-type-icon icon-designer-mode"></i>
+                                    <div class="package-name-container">
+                                        <div class="row">
+                                            <div class="col-12 package-name deployed">
+                                                Package Name
+                                                <span>.vLB.CDS</span>
+                                                <i class="icon-deploy"></i>
+                                            </div>
+                                            <div class="col-12 package-description">
+                                                Last modified Oct 4, 2019 03:48 PM By Ahmed Abbas
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 package-view-button">
+                            <button class="btn btn-sm btn-outline-secondary"><i class="fa fa-play-circle"></i> Deploy</button>
+                            <button class="btn btn-sm btn-primary">Designer Mode</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <nav class="row">
+                    <!--Nav Tabs-->
+                    <div class="col">
+                        <div class="nav nav-tabs " id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active" id="nav-metadata-tab" data-toggle="tab"
+                               href="#nav-metadata"
+                               role="tab" aria-controls="nav-metadata"
+                               aria-selected="true">METADATA</a>
+                            <a class="nav-item nav-link" id="nav-template-tab" data-toggle="tab" href="#nav-template"
+                               role="tab" aria-controls="nav-template"
+                               aria-selected="false">TEMPLATE & MAPPING</a>
+                            <a class="nav-item nav-link" id="nav-scripts-tab" data-toggle="tab" href="#nav-scripts"
+                               role="tab" aria-controls="nav-scripts"
+                               aria-selected="false">SCRIPTS</a>
+                            <a class="nav-item nav-link" id="nav-imports-tab" data-toggle="tab" href="#nav-imports"
+                               role="tab" aria-controls="nav-imports"
+                               aria-selected="false">IMPORTS</a>
+                            <a class="nav-item nav-link" id="nav-authentication-tab" data-toggle="tab"
+                               href="#nav-authentication"
+                               role="tab" aria-controls="nav-authentication"
+                               aria-selected="false">EXTERNAL SYSTEM AUTHENTICATION PROPERTIES</a>
+                        </div>
+                    </div>
+
+                </nav>
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-metadata" role="tabpanel"
+                                 aria-labelledby="nav-metadata-tab">
+                                <app-metadata-tab></app-metadata-tab>
+                            </div>
+                            <div class="tab-pane fade" id="nav-template" role="tabpanel"
+                                 aria-labelledby="nav-template-tab">
+                                <app-template-mapping></app-template-mapping>
+                            </div>
+                            <div class="tab-pane fade" id="nav-scripts" role="tabpanel"
+                                 aria-labelledby="nav-scripts-tab">
+                                <app-scripts-tab></app-scripts-tab>
+                            </div>
+                            <div class="tab-pane fade" id="nav-imports" role="tabpanel"
+                                 aria-labelledby="nav-imports-tab">
+                                <app-imports-tab></app-imports-tab>
+
+                            </div>
+                            <div class="tab-pane fade" id="nav-authentication" role="tabpanel"
+                                 aria-labelledby="nav-authentication-tab">
+                                <div class="card creat-card">
+                                    <div class="editor-container">
+                                        <app-dsl-definitions-tab></app-dsl-definitions-tab>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

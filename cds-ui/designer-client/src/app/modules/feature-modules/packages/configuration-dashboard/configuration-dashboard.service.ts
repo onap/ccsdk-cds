@@ -17,6 +17,5 @@ export class ConfigurationDashboardService {
 
     getBluePrintModel(id: string): Observable<BluePrintDetailModel> {
         return this.api.getOne(BlueprintURLs.getOneBlueprint + '/' + id);
-
     }
 }
