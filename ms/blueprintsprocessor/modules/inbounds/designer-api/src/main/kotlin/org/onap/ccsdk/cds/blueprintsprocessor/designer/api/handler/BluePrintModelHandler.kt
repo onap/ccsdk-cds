@@ -25,10 +25,15 @@ import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.BlueprintMod
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.BlueprintModelRepository
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.BlueprintModelSearchRepository
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.BootstrapRequest
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.WorkFlowData
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.WorkFlowSpecRequest
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.WorkFlowSpecResponse
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.WorkFlowsResponse
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.load.BluePrintDatabaseLoadService
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.utils.BluePrintEnhancerUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
+import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ErrorCode
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteNBDir
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
@@ -37,7 +42,9 @@ import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintCompileCache
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.core.io.Resource
 import org.springframework.data.domain.Page
@@ -87,6 +94,68 @@ open class BluePrintModelHandler(
         if (bootstrapRequest.loadCBA) {
             bluePrintDatabaseLoadService.initBluePrintCatalog()
         }
+    }
+
+    @Throws(BluePrintException::class)
+    open suspend fun prepareWorkFlowSpec(req: WorkFlowSpecRequest):
+            WorkFlowSpecResponse {
+        val basePath = blueprintsProcessorCatalogService.getFromDatabase(req
+                .blueprintName, req.version)
+        log.info("blueprint base path $basePath")
+
+        val blueprintContext = BluePrintMetadataUtils.getBluePrintContext(basePath.toString())
+        val workFlow = blueprintContext.workflowByName(req.workflowName)
+
+        val wfRes = WorkFlowSpecResponse()
+        wfRes.blueprintName = req.blueprintName
+        wfRes.version = req.version
+
+        val workFlowData = WorkFlowData()
+        workFlowData.workFlowName = req.workflowName
+        workFlowData.inputs = workFlow.inputs
+        workFlowData.outputs = workFlow.outputs
+
+        for ((k, v) in workFlow.inputs!!) {
+            addDataType(v.type, blueprintContext, wfRes)
+        }
+
+        for ((k, v) in workFlow.outputs!!) {
+            addDataType(v.type, blueprintContext, wfRes)
+        }
+        wfRes.workFlowData = workFlowData
+        return wfRes
+    }
+
+    private fun addDataType(name: String, ctx: BluePrintContext, res: WorkFlowSpecResponse) {
+        var data = ctx.dataTypeByName(name)
+        if (data != null) {
+            res.dataTypes?.put(name, data)
+            addParentDataType(data, ctx, res)
+        }
+    }
+
+    private fun addParentDataType(data: DataType, ctx: BluePrintContext, res: WorkFlowSpecResponse) {
+        for ((k, v) in data.properties!!) {
+            addDataType(v.type, ctx, res)
+        }
+    }
+
+    @Throws(BluePrintException::class)
+    open suspend fun getWorkflowNames(name: String, version: String): WorkFlowsResponse {
+        val basePath = blueprintsProcessorCatalogService.getFromDatabase(
+                name, version)
+        log.info("blueprint base path $basePath")
+
+        var res = WorkFlowsResponse()
+        res.blueprintName = name
+        res.version = version
+
+        val blueprintContext = BluePrintMetadataUtils.getBluePrintContext(
+                basePath.toString())
+        if (blueprintContext.workflows() != null) {
+            res.workflows = blueprintContext.workflows()!!.keys
+        }
+        return res
     }
 
     /**
