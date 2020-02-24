@@ -31,6 +31,10 @@
     <name>CBA - Test Blueprints</name>
     <description>CBA - Test Blueprints</description>
 
+    <properties>
+        <sonar.skip>true</sonar.skip>
+    </properties>
+
     <modules>
         <module>capability_cli</module>
         <module>resource-audit</module>
