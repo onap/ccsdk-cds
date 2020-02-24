@@ -19,14 +19,16 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import {Store} from '../../../../common/core/stores/Store';
+import { Store } from '../../../../common/core/stores/Store';
 
-import {CBAPackage, DslDefinition} from './mapping-models/CBAPacakge.model';
-import {PackageCreationService} from './package-creation.service';
-import {FolderNodeElement, MetaDataTabModel} from './mapping-models/metadata/MetaDataTab.model';
+import { CBAPackage, DslDefinition } from './mapping-models/CBAPacakge.model';
+import { PackageCreationService } from './package-creation.service';
+import { FolderNodeElement, MetaDataTabModel } from './mapping-models/metadata/MetaDataTab.model';
 import * as JSZip from 'jszip';
+import { Observable } from 'rxjs';
+import { ResourceDictionary } from './mapping-models/ResourceDictionary.model';
 
 
 @Injectable({
@@ -94,9 +96,14 @@ export class PackageCreationStore extends Store<CBAPackage> {
         });
     }
 
-    getTemplateAndMapping(variables: string[]) {
-        this.packageCreationService.getTemplateAndMapping(variables).subscribe(element => {
-            console.log('the element is ' + element);
+    addMapping(filePath: string, fileContent: string) {
+        this.setState({
+            ...this.state,
+            mapping: this.state.mapping.setContent(filePath, fileContent)
         });
+    }
+
+    getTemplateAndMapping(variables: string[]): Observable<ResourceDictionary[]> {
+        return this.packageCreationService.getTemplateAndMapping(variables);
     }
 }
