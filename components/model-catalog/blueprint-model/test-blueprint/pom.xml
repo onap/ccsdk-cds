@@ -35,4 +35,8 @@
         <module>capability_cli</module>
         <module>resource-audit</module>
     </modules>
+
+    <properties>
+        <sonar.skip>true</sonar.skip>
+    </properties>
 </project>
