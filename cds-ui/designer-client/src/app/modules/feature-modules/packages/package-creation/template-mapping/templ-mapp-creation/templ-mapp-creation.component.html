@@ -60,7 +60,8 @@
                                                                                                             data-target="#exampleModal">Import
                         File</a></div>
                     <div class="editor-container">
-                        <app-dsl-definitions-tab></app-dsl-definitions-tab>
+                        <app-source-editor
+                                           [(text)]="templateInfo.fileContent"></app-source-editor>
                     </div>
                 </div>
             </div>
@@ -78,7 +79,7 @@
                 <div class="card-body">
                     <h6 class="text-center">Select a source to load config parameters</h6>
                     <div class="text-center">
-                        <a href="#" class="mapping-source-load">
+                        <a (click)="initTemplateMappingTableFromCurrentTemplate()" class="mapping-source-load">
                             <i class="icon-current-template"></i>
                             <br/>
                             <span>Use Current Template Instance</span>
@@ -160,7 +161,7 @@
                         (click)="resetTheUploadedFiles()">Cancel
                 </button>
                 <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal"
-                        (click)="setFilesToStore()">
+                        (click)="setFilesToStore()" (click)="openListView()">
                     Import
                 </button>
             </div>

@@ -1,20 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
-  selector: 'app-template-mapping',
-  templateUrl: './template-mapping.component.html',
-  styleUrls: ['./template-mapping.component.css']
+    selector: 'app-template-mapping',
+    templateUrl: './template-mapping.component.html',
+    styleUrls: ['./template-mapping.component.css']
 })
 export class TemplateMappingComponent implements OnInit {
-  creationView = false;
+    creationView = true;
+    listView = false;
 
-  constructor() { }
+    constructor() {
+    }
 
-  ngOnInit() {
-  }
+    ngOnInit() {
+    }
 
-  openCreationView() {
-    this.creationView = true;
-  }
+    openCreationView() {
+        this.creationView = false;
+        this.listView = true;
+    }
+
+    openListView() {
+        this.listView = false;
+        this.creationView = false;
+    }
 
 }

@@ -23,7 +23,7 @@ import {Injectable} from '@angular/core';
 
 import {Observable} from 'rxjs';
 import {ApiService} from '../../../../common/core/services/api.service';
-import {BlueprintURLs} from '../../../../common/constants/app-constants';
+import {BlueprintURLs, ResourceDictionaryURLs} from '../../../../common/constants/app-constants';
 import {PackagesApiService} from '../packages-api.service';
 import {PackagesStore} from '../packages.store';
 
@@ -62,4 +62,7 @@ export class PackageCreationService {
                 });
     }
 
+    getTemplateAndMapping(variables: string[]): Observable<any> {
+        return this.api.post(ResourceDictionaryURLs.searchResourceDictionaryByNames, variables);
+    }
 }
