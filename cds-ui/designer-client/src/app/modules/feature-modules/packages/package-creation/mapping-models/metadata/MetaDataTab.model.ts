@@ -30,6 +30,7 @@ export class MetaDataTabModel {
     mapOfCustomKey: Map<string, string> = new Map<string, string>();
     entryFileName: string;
     templateName: string;
+    templateTags: Set<string> = new Set<string>();
 
 }
 
@@ -59,10 +60,10 @@ export class FolderNodeElement {
         {
             name: 'Definitions',
             children: [
-                {name: 'activation-blueprint.json'},
-                {name: 'artifacts_types.json'},
-                {name: 'data_types.json'},
-                {name: 'vLB_CDS.json'},
+                { name: 'activation-blueprint.json' },
+                { name: 'artifacts_types.json' },
+                { name: 'data_types.json' },
+                { name: 'vLB_CDS.json' },
             ]
         },
         {
@@ -71,8 +72,8 @@ export class FolderNodeElement {
                 {
                     name: 'kotlin',
                     children: [
-                        {name: 'ScriptComponent.cba.kts'},
-                        {name: 'ResourceAssignmentProcessor.cba.kts'},
+                        { name: 'ScriptComponent.cba.kts' },
+                        { name: 'ResourceAssignmentProcessor.cba.kts' },
                     ]
                 }
             ]

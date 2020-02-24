@@ -2,13 +2,13 @@
     <div class="single-line">
         <label class="label-name">Mode</label>
         <label name="trst" *ngFor="let mode of modes; let i = index">
-            <input class="form-check-input" [(ngModel)]="metaDataTab.mode" type="radio"
-                   name="exampleRadios" id="exampleRadios1" value={{mode.name}}>
+            <input class="form-check-input" [(ngModel)]="metaDataTab.mode" type="radio" name="exampleRadios"
+                id="exampleRadios1" value={{mode.name}}>
 
             <span>
-                                            <i [className]="mode.style" aria-hidden="true" [id]="mode.name"></i>
+                <i [className]="mode.style" aria-hidden="true" [id]="mode.name"></i>
                 {{mode.name}}
-                                            </span>
+            </span>
         </label>
     </div>
     <div class="single-line">
@@ -20,7 +20,7 @@
                 <option>Library Instance 3</option>
                 <option>Library Instance 4</option>
                 <option>Library Instance 5</option>
-              </select>
+            </select>
         </div>
     </div>
 
@@ -29,44 +29,40 @@
     <div class="single-line-model error">
         <label class="label-name">Name <span>*</span></label>
         <div class="label-input">
-            <input type="input"
-                   [(ngModel)]="metaDataTab.name" placeholder="Topology name.vLB.CDS">
+            <input type="input" [(ngModel)]="metaDataTab.name" placeholder="Topology name.vLB.CDS">
         </div>
         <div class="model-note-container error-message">
-            Package name already exists with this version. Please enter a different name or enter different version number.
-            </div>
+            Package name already exists with this version. Please enter a different name or enter different version
+            number.
+        </div>
     </div>
-   
+
     <div class="single-line-model">
         <label class="label-name">Version <span>*</span></label>
         <div class="label-input">
-            <input type="input" [(ngModel)]="metaDataTab.version"
-                   (input)="validatePackageNameAndVersion()"
-                   placeholder="Example: 1.0.0">
+            <input type="input" [(ngModel)]="metaDataTab.version" (input)="validatePackageNameAndVersion()"
+                placeholder="Example: 1.0.0">
         </div>
         <div class="model-note-container error-message">{{errorMessage}}</div>
     </div>
     <div class="single-line-model">
         <label class="label-name">Description</label>
         <div class="label-input">
-            <input type="input" [(ngModel)]="metaDataTab.description"
-                   placeholder="Descripe the package">
+            <input type="input" [(ngModel)]="metaDataTab.description" placeholder="Descripe the package">
         </div>
     </div>
-    
+
     <div class="single-line-model">
         <label class="label-name">tags</label>
         <div class="label-input">
-            <input type="input" [(ngModel)]="metaDataTab.tags"
-                   placeholder="Ex., vDNS-CDS">
-                   
+            <input type="input" (keyup.enter)="addTag($event)" [(ngModel)]="metaDataTab.tags"
+                placeholder="Ex., vDNS-CDS">
+
         </div>
         <div class="model-note-container tag-notes">Seprate tags with comma or space</div>
         <div class="model-note-container tages-container">
-            <span class="single-tage">vDNS-CDS <a href="#"> <i class="fa fa-times-circle"></i></a></span>
-            <span class="single-tage">vDNS-CDS <a href="#"> <i class="fa fa-times-circle"></i></a></span>
-            <span class="single-tage">vDNS-CDS <a href="#"> <i class="fa fa-times-circle"></i></a></span>
-            <span class="single-tage">vDNS-CDS <a href="#"> <i class="fa fa-times-circle"></i></a></span>
+            <span *ngFor="let tag of tags" class="single-tage">{{tag}} <i (click)="removeTag(tag)"
+                    class="fa fa-times-circle"></i></span>
         </div>
     </div>
 </div>
@@ -75,58 +71,45 @@
         <div class="card creat-card">
             <div class="single-line">
                 <h5 class="label-name">
-                    Custom key 
+                    Custom key
                 </h5>
 
             </div>
-            <div class="single-custom-key">
-            <div class="single-line-custom-key">
-                <label class="label-name"><span>1-</span> Name</label>
-                <div class="label-input">
-                    <input name="key" type="input" placeholder="Enter name">
+            <div *ngFor="let map of customKeysMap | keyvalue; let i=index" class="single-custom-key">
+                <div class="single-line-custom-key">
+                    <label class="label-name"><span>{{i+1}}-</span> Name</label>
+                    <div class="label-input">
+                        <input value="{{map.key}}" name="key" type="input" placeholder="Enter name">
+                    </div>
                 </div>
-            </div>
-            <div class="single-line-custom-key">
-                <label class="label-name">Value</label>
-                <div class="label-input">
-                    <input name="value" type="input"
-                           placeholder="Enter value">
+                <div class="single-line-custom-key">
+                    <label class="label-name">Value</label>
+                    <div class="label-input">
+                        <input value="{{map.value}}" name="value" type="input" placeholder="Enter value">
+                    </div>
                 </div>
+                <div class="single-line-custom-key-delete"><button (click)="removeKey($event,map.key)"
+                        class="custom-key-delete"><i aria-hidden="true" class="icon-delete"></i></button></div>
             </div>
-            <div class="single-line-custom-key-delete"><button class="custom-key-delete"><i aria-hidden="true" class="icon-delete"></i></button></div>
-           </div>
-           <div class="single-custom-key">
-            <div class="single-line-custom-key">
-                <label class="label-name"><span>2-</span> Name</label>
-                <div class="label-input">
-                    <input name="key" type="input" placeholder="Enter name">
-                </div>
-            </div>
-            <div class="single-line-custom-key">
-                <label class="label-name">Value</label>
-                <div class="label-input">
-                    <input name="value" type="input"
-                           placeholder="Enter value">
-                </div>
-            </div>
-            <div class="single-line-custom-key-delete"><button class="custom-key-delete"><i aria-hidden="true" class="icon-delete"></i></button></div>
-           </div>
 
-           <div class="single-custom-key">
-            <div class="single-line-custom-key">
-                <label class="label-name"><span>3-</span> Name</label>
-                <div class="label-input">
-                    <input name="key" type="input" placeholder="Enter name">
+            <div class="single-custom-key">
+                <div class="single-line-custom-key">
+                    <label class="label-name"><span>{{customKeysMap.size+1}}.</span> Name</label>
+                    <div class="label-input">
+                        <input (keyup.enter)="addCustomKey()" name="key" type="input" class="mapKey"
+                            placeholder="Enter name">
+                    </div>
                 </div>
-            </div>
-            <div class="single-line-custom-key">
-                <label class="label-name">Value</label>
-                <div class="label-input">
-                    <input name="value" type="input"
-                           placeholder="Enter value">
+                <div class="single-line-custom-key">
+                    <label class="label-name">Value</label>
+                    <div class="label-input">
+                        <input (keyup.enter)="addCustomKey()" class="mapValue" name="value" type="input"
+                            placeholder="Enter value">
+                    </div>
                 </div>
+                <!-- <div class="single-line-custom-key-delete"><button (click)="removeKey($event)"
+                        class="custom-key-delete"><i aria-hidden="true" class="icon-delete"></i></button></div> -->
             </div>
-           </div>
 
         </div>
     </div>

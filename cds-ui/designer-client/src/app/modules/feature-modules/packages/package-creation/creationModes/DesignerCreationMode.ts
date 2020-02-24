@@ -38,13 +38,25 @@ export class DesignerCreationMode extends PackageCreationModes {
         metadata.template_version = cbaPackage.metaData.version;
         metadata['author-email'] = 'shaaban.eltanany.ext@orange.com';
         metadata['user-groups'] = 'test';
-        cbaPackage.definitions.metaDataTab.mapOfCustomKey.forEach((customKeyValue, key) => {
+        cbaPackage.metaData.mapOfCustomKey.forEach((customKeyValue, key) => {
             metadata[key] = customKeyValue;
         });
+        // create Tags
+        let fullTags = '';
+        let setCount = 0;
+        cbaPackage.metaData.templateTags.forEach(val => {
+            if (setCount === cbaPackage.metaData.templateTags.size) {
+                fullTags += val;
+            } else {
+                fullTags += val + ', ';
+            }
+            setCount++;
+        });
+        metadata.template_tags = fullTags;
         vlbDefinition.metadata = metadata;
         const files: Import[] = [];
         cbaPackage.definitions.imports.forEach((valueOfFile, key) => {
-            files.push({ file: valueOfFile });
+            files.push({ file: key });
         });
         console.log(vlbDefinition);
         vlbDefinition.imports = files;
