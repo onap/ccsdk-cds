@@ -1,4 +1,5 @@
 import * as joint from 'jointjs';
+import { ActionElementTypeName } from 'src/app/common/constants/app-constants';
 /**
  * please refer to documentation in file palette.function.element.ts to get more details
  * about how to create new element type and define it in typescript
@@ -18,7 +19,7 @@ const rectWidth = 616;
 const rectHeight = 381;
 // custom element implementation
 // https://resources.jointjs.com/tutorials/joint/tutorials/custom-elements.html#markup
-const ActionElement = joint.shapes.standard.Rectangle.define('app.ActionElement', {
+const ActionElement = joint.shapes.standard.Rectangle.define(ActionElementTypeName, {
     size: {width: rectWidth, height: rectHeight}
 },
     {
