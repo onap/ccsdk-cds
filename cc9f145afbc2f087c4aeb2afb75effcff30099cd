@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb2604db_4cc0f738",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/utils/BluePrintArchiveUtils.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2020-02-25T16:06:04Z",
+      "side": 1,
+      "message": "it\u0027s probably safe to use larger buffer size 8K",
+      "range": {
+        "startLine": 194,
+        "startChar": 44,
+        "endLine": 194,
+        "endChar": 66
+      },
+      "revId": "cc9f145afbc2f087c4aeb2afb75effcff30099cd",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
