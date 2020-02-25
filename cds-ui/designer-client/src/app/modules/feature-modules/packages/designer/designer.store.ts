@@ -22,8 +22,10 @@ limitations under the License.
 import {Injectable} from '@angular/core';
 import {Store} from '../../../../common/core/stores/Store';
 import {DesignerService} from './designer.service';
-import {ModelType} from '../model/ModelType.model';
-import {DesignerDashboardState} from '../model/designer-dashboard.state';
+import {ModelType} from './model/ModelType.model';
+import {DesignerDashboardState} from './model/designer.dashboard.state';
+import { DeclarativeWorkflow } from './model/designer.workflow';
+import { NodeTemplate } from './model/desinger.nodeTemplate.model';
 
 
 @Injectable({
@@ -35,15 +37,60 @@ export class DesignerStore extends Store<DesignerDashboardState> {
         super(new DesignerDashboardState());
     }
 
-    public getFuntions() {
+    public retrieveFuntions() {
         const modelDefinitionType = 'node_type';
         this.designerService.getFunctions(modelDefinitionType).subscribe(
-            (modelType: ModelType[]) => {
-                console.log(modelType);
+            (modelTypeList: ModelType[]) => {
+                console.log(modelTypeList);
                 this.setState({
                     ...this.state,
-                    functions: modelType,
+                    serverFunctions: modelTypeList,
                 });
             });
+    }
+
+    /**
+     * adds empty workflow with name only.
+     * called when blank action is added to the board
+     * declarative workflow just contain the steps but its order is determind by dg-graph
+     */
+    addDeclarativeWorkFlow(workflowName: string) {
+        this.setState({
+            ...this.state,
+            template: {
+                ...this.state.template,
+                workflows:
+                    this.state.template.workflows.set(workflowName, new DeclarativeWorkflow())
+            }
+        });
+    }
+
+    addStepToDeclarativeWorkFlow(workflowName: string, stepType: string) {
+        const currentWorkflow: DeclarativeWorkflow = this.state.template.workflows.get(workflowName);
+        currentWorkflow.steps = {
+                target: stepType,
+                description: ''
+            };
+        const allNewWorkflowsMap =
+            this.state.template.workflows.set(workflowName, currentWorkflow);
+        this.setState({
+            ...this.state,
+            template: {
+                ...this.state.template,
+                workflows: allNewWorkflowsMap
+            }
+        });
+    }
+
+
+    addNodeTemplate(nodeTemplateName: string) {
+        this.setState({
+            ...this.state,
+            template: {
+                ...this.state.template,
+                node_templates:
+                    this.state.template.node_templates.set(nodeTemplateName, new NodeTemplate())
+            }
+        });
     }
 }

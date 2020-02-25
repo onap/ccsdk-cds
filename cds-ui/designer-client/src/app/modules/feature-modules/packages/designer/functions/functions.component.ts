@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {DesignerStore} from '../designer.store';
-import {ModelType} from '../../model/ModelType.model';
+import {ModelType} from '../model/ModelType.model';
 
 
 @Component({
@@ -15,14 +15,14 @@ export class FunctionsComponent implements OnInit {
 
         this.designerStore.state$.subscribe(state => {
             console.log(state);
-            if (state.functions) {
-                this.viewedFunctions = state.functions;
+            if (state.serverFunctions) {
+                this.viewedFunctions = state.serverFunctions;
             }
         });
     }
 
     ngOnInit() {
-        this.designerStore.getFuntions();
+        this.designerStore.retrieveFuntions();
     }
 
 }
