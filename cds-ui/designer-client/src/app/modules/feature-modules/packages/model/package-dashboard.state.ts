@@ -21,8 +21,13 @@ limitations under the License.
 
 
 import {BluePrintDetailModel} from './BluePrint.detail.model';
+import {Mapping, Scripts, Template} from '../package-creation/mapping-models/CBAPacakge.model';
 
-export class PackageDashboardState  {
+export class PackageDashboardState {
     configuration: BluePrintDetailModel;
+    public scripts: Scripts;
+    public templates: Template;
+    public mapping: Mapping;
+    public imports: Map<string, string>;
 
 }
