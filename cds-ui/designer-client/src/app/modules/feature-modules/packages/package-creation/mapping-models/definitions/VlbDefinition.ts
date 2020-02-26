@@ -17,7 +17,7 @@ export class VlbDefinition {
 export class DslContent {
 
 }
-
+// Refactor varaibles name and use JsonConverteri
 @JsonObject('metadata')
 export class Metadata {
     @JsonProperty('template_author')
