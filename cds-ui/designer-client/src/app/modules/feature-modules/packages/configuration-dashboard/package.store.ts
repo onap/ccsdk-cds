@@ -21,9 +21,9 @@ limitations under the License.
 
 import {Injectable} from '@angular/core';
 import {Store} from '../../../../common/core/stores/Store';
-import {BluePrintDetailModel} from '../model/BluePrint.detail.model';
 import {ConfigurationDashboardService} from './configuration-dashboard.service';
 import {PackageDashboardState} from '../model/package-dashboard.state';
+import {BlueprintURLs} from '../../../../common/constants/app-constants';
 
 
 @Injectable({
@@ -44,15 +44,9 @@ export class PackageStore extends Store<PackageDashboardState> {
                     configuration: bluePrintDetailModels[0]
                 });
             });
-        /* bluePrintDetailModels.forEach(
-            bluePrintDetailModel => {
-                 this.setState({
-                     ...this.state,
-                     configuration: bluePrintDetailModel
-                 });
-             });*/
-
-
     }
 
+    public downloadTest(filename: string) {
+        this.configurationDashboardService.downloadResource(BlueprintURLs.download + filename);
+    }
 }

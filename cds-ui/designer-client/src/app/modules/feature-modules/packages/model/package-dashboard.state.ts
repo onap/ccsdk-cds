@@ -22,7 +22,8 @@ limitations under the License.
 
 import {BluePrintDetailModel} from './BluePrint.detail.model';
 
-export class PackageDashboardState  {
+export class PackageDashboardState {
     configuration: BluePrintDetailModel;
+    downloadedPackage: Blob;
 
 }
