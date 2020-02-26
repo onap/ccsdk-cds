@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {PackageCreationService} from '../package-creation.service';
-import {MetaDataTabModel} from '../mapping-models/metadata/MetaDataTab.model';
-import {PackageCreationStore} from '../package-creation.store';
-import {PackageStore} from '../../configuration-dashboard/package.store';
+import { Component, OnInit } from '@angular/core';
+import { PackageCreationService } from '../package-creation.service';
+import { MetaDataTabModel } from '../mapping-models/metadata/MetaDataTab.model';
+import { PackageCreationStore } from '../package-creation.store';
+import { PackageStore } from '../../configuration-dashboard/package.store';
 
 
 @Component({
@@ -16,14 +16,16 @@ export class MetadataTabComponent implements OnInit {
     tags = new Set<string>();
     customKeysMap = new Map();
     modes: object[] = [
-        {name: 'Designer Mode', style: 'mode-icon icon-designer-mode'},
-        {name: 'Scripting Mode', style: 'mode-icon icon-scripting-mode'},
-        {name: 'Generic Script Mode', style: 'mode-icon icon-generic-script-mode'}];
+        { name: 'Designer Mode', style: 'mode-icon icon-designer-mode' },
+        { name: 'Scripting Mode', style: 'mode-icon icon-scripting-mode' },
+        { name: 'Generic Script Mode', style: 'mode-icon icon-generic-script-mode' }];
     private metaDataTab: MetaDataTabModel = new MetaDataTabModel();
     private errorMessage: string;
 
-    constructor(private packageCreationService: PackageCreationService, private packageCreationStore: PackageCreationStore,
-                private packageStore: PackageStore) {
+    constructor(
+        private packageCreationService: PackageCreationService,
+        private packageCreationStore: PackageCreationStore,
+        private packageStore: PackageStore) {
 
     }
 
@@ -34,10 +36,12 @@ export class MetadataTabComponent implements OnInit {
 
         this.packageStore.state$.subscribe(element => {
             if (element && element.configuration) {
+                console.log('from element2');
+                console.log(element);
                 this.metaDataTab.name = element.configuration.artifactName;
                 this.metaDataTab.version = element.configuration.artifactVersion;
-                this.metaDataTab.tags = element.configuration.tags;
                 this.metaDataTab.description = element.configuration.artifactDescription;
+                this.tags = new Set(element.configuration.tags.split(','));
 
             }
         });

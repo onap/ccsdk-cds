@@ -26,7 +26,6 @@ export class MetaDataTabModel {
     name: string;
     description: string;
     version: string;
-    tags: string;
     mapOfCustomKey: Map<string, string> = new Map<string, string>();
     entryFileName: string;
     templateName: string;

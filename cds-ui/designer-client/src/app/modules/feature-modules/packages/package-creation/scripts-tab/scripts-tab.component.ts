@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {FileSystemFileEntry, NgxFileDropEntry} from 'ngx-file-drop';
-import {PackageCreationStore} from '../package-creation.store';
-import {PackageCreationUtils} from '../package-creation.utils';
+import { Component, OnInit } from '@angular/core';
+import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
+import { PackageCreationStore } from '../package-creation.store';
+import { PackageCreationUtils } from '../package-creation.utils';
 import 'ace-builds/src-noconflict/ace';
 import 'ace-builds/webpack-resolver';
+import { PackageStore } from '../../configuration-dashboard/package.store';
 
 @Component({
     selector: 'app-scripts-tab',
@@ -17,16 +18,28 @@ export class ScriptsTabComponent implements OnInit {
     public files: NgxFileDropEntry[] = [];
     private fileNames: Set<string> = new Set();
 
-    constructor(private packageCreationStore: PackageCreationStore, private packageCreationUtils: PackageCreationUtils) {
+    constructor(
+        private packageCreationStore: PackageCreationStore,
+        private packageCreationUtils: PackageCreationUtils,
+        private packageStore: PackageStore
+    ) {
+
+    }
+
+
+    ngOnInit() {
         this.packageCreationStore.state$.subscribe(cbaPackage => {
             if (cbaPackage.scripts && cbaPackage.scripts.files && cbaPackage.scripts.files.size > 0) {
                 this.scriptsFiles = cbaPackage.scripts.files;
             }
         });
-    }
 
-
-    ngOnInit() {
+        this.packageStore.state$.subscribe(res => {
+            //  this.scriptsFiles =
+            console.log('from scripts');
+            console.log(res.scripts);
+            this.scriptsFiles = res.scripts.files;
+        });
     }
 
     public dropped(files: NgxFileDropEntry[]) {

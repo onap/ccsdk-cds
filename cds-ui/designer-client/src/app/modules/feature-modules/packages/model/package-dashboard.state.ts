@@ -20,8 +20,8 @@ limitations under the License.
 */
 
 
-import {BluePrintDetailModel} from './BluePrint.detail.model';
-import {Mapping, Scripts, Template} from '../package-creation/mapping-models/CBAPacakge.model';
+import { BluePrintDetailModel } from './BluePrint.detail.model';
+import { Mapping, Scripts, Template } from '../package-creation/mapping-models/CBAPacakge.model';
 
 export class PackageDashboardState {
     configuration: BluePrintDetailModel;
@@ -29,5 +29,12 @@ export class PackageDashboardState {
     public templates: Template;
     public mapping: Mapping;
     public imports: Map<string, string>;
+
+    constructor() {
+        this.scripts = new Scripts();
+        this.templates = new Template();
+        this.mapping = new Mapping();
+        this.imports = new Map<string, string>();
+    }
 
 }
