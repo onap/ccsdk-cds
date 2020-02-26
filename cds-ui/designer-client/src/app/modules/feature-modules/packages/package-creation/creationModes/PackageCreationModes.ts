@@ -31,6 +31,16 @@ export abstract class PackageCreationModes {
     }
 
     getValueOfMetaData(metaDataTab: MetaDataTabModel): string {
+        let tags = '';
+        let count = 0;
+        for (const tag of metaDataTab.templateTags) {
+            count++;
+            if (count === metaDataTab.templateTags.size) {
+                tags += tag;
+            } else {
+                tags += tag + ', ';
+            }
+        }
         return 'TOSCA-Meta-File-Version: 1.0.0\n' +
             'CSAR-Version: 1.0\n' +
             'Created-By: Shaaban Ebrahim <shaaban.eltanany.ext@orange.con>\n' +
@@ -38,7 +48,7 @@ export abstract class PackageCreationModes {
             'Template-Name:' + metaDataTab.name + '\n' +
             'Template-Version:' + metaDataTab.version + '\n' +
             'Template-Type: ' + metaDataTab.mode + '\n' +
-            'Template-Tags:' + metaDataTab.tags;
+            'Template-Tags:' + tags;
 
     }
 

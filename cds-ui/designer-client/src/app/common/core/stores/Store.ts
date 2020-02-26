@@ -1,4 +1,4 @@
-import {Observable, BehaviorSubject} from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
 
 export class Store<T> {
@@ -17,6 +17,10 @@ export class Store<T> {
     protected setState(nextState: T): void {
         console.log('setting state', this.subject);
         this.subject.next(nextState);
+    }
+
+    public unsubscribe() {
+        this.subject.unsubscribe();
     }
 
 }

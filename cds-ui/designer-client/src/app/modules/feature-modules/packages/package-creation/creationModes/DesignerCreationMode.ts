@@ -47,7 +47,6 @@ export class DesignerCreationMode extends PackageCreationModes {
 
         metadata.template_author = 'Shaaban Ebrahim';
         metadata.template_name = cbaPackage.metaData.name;
-        metadata.template_tags = cbaPackage.metaData.tags;
         metadata.template_version = cbaPackage.metaData.version;
         metadata['author-email'] = 'shaaban.eltanany.ext@orange.com';
         metadata['user-groups'] = 'test';
@@ -58,12 +57,12 @@ export class DesignerCreationMode extends PackageCreationModes {
         let fullTags = '';
         let setCount = 0;
         cbaPackage.metaData.templateTags.forEach(val => {
+            setCount++;
             if (setCount === cbaPackage.metaData.templateTags.size) {
                 fullTags += val;
             } else {
                 fullTags += val + ', ';
             }
-            setCount++;
         });
         metadata.template_tags = fullTags;
         vlbDefinition.metadata = metadata;

@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {PackageStore} from './package.store';
-import {BluePrintDetailModel} from '../model/BluePrint.detail.model';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { PackageStore } from './package.store';
+import { BluePrintDetailModel } from '../model/BluePrint.detail.model';
 
 
 @Component({
@@ -13,23 +13,22 @@ export class ConfigurationDashboardComponent implements OnInit {
     viewedPackage: BluePrintDetailModel = new BluePrintDetailModel();
 
     constructor(private route: ActivatedRoute, private configurationStore: PackageStore) {
-
-        const id = this.route.snapshot.paramMap.get('id');
-        this.configurationStore.getPagedPackages(id);
-
-
     }
-
+    // test
     ngOnInit() {
-        this.configurationStore.state$.subscribe(
-            el => {
-                if (el && el.configuration) {
-                    this.viewedPackage = el.configuration;
+        const id = this.route.snapshot.paramMap.get('id');
+        this.configurationStore.getPagedPackages(id).subscribe(
+            (bluePrintDetailModels) => {
+                console.log('-------------xxxxxxxxxxx----------------');
+                console.log(bluePrintDetailModels);
+                this.configurationStore.setConfiguration(bluePrintDetailModels);
+
+                console.log('----------------- id ' + id);
+                if (bluePrintDetailModels) {
                     this.configurationStore.downloadResource(
-                        this.viewedPackage.artifactName + '/' + this.viewedPackage.artifactVersion);
+                        bluePrintDetailModels[0].artifactName + '/' + bluePrintDetailModels[0].artifactVersion);
                 }
-            }
-        );
+            });
     }
 
 }

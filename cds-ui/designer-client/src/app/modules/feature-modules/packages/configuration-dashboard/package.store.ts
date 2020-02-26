@@ -19,11 +19,11 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import {Injectable} from '@angular/core';
-import {Store} from '../../../../common/core/stores/Store';
-import {ConfigurationDashboardService} from './configuration-dashboard.service';
-import {PackageDashboardState} from '../model/package-dashboard.state';
-import {BlueprintURLs} from '../../../../common/constants/app-constants';
+import { Injectable } from '@angular/core';
+import { Store } from '../../../../common/core/stores/Store';
+import { ConfigurationDashboardService } from './configuration-dashboard.service';
+import { PackageDashboardState } from '../model/package-dashboard.state';
+import { BlueprintURLs } from '../../../../common/constants/app-constants';
 import * as JSZip from 'jszip';
 
 @Injectable({
@@ -38,23 +38,20 @@ export class PackageStore extends Store<PackageDashboardState> {
     }
 
     getPagedPackages(id: string) {
-        this.configurationDashboardService.getBluePrintModel(id).subscribe(
-            (bluePrintDetailModels) => {
-                this.setState({
-                    ...this.state,
-                    configuration: bluePrintDetailModels[0]
-                });
-            });
+        return this.configurationDashboardService.getBluePrintModel(id);
     }
 
     public downloadResource(path: string) {
+        console.log('download resource xx');
         this.configurationDashboardService.downloadResource(BlueprintURLs.download + path).subscribe(response => {
-            const blob = new Blob([response], {type: 'application/octet-stream'});
+            console.log('try to download ');
+            const blob = new Blob([response], { type: 'application/octet-stream' });
             this.zipFile.loadAsync(blob).then((zip) => {
                 Object.keys(zip.files).forEach((filename) => {
+                    console.log(filename);
                     zip.files[filename].async('string').then((fileData) => {
                         if (fileData) {
-                            if (filename.includes('scripts/')) {
+                            if (filename.includes('Scripts/')) {
                                 this.setScripts(filename, fileData);
                             } else if (filename.includes('templates/')) {
                                 this.setTemplates(filename, fileData);
@@ -68,10 +65,17 @@ export class PackageStore extends Store<PackageDashboardState> {
         });
     }
 
+    setConfiguration(bluePrintDetailModels) {
+        this.setState({
+            ...this.state,
+            configuration: bluePrintDetailModels[0]
+        });
+    }
+
     private setScripts(filename: string, fileData: any) {
         this.setState({
             ...this.state,
-            scripts: this.state.scripts.setScripts(name, fileData)
+            scripts: this.state.scripts.setScripts(filename, fileData)
         });
     }
 
