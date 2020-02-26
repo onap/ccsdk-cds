@@ -22,9 +22,9 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse, HttpHeaderResponse, HttpParams } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {Observable} from 'rxjs';
 
 @Injectable()
 export class ApiService<T> {
@@ -59,5 +59,9 @@ export class ApiService<T> {
         }
         const options = {params: httpParams};
         return this.httpClient.get<T>(url, options);
+    }
+
+    getCustomized(url: string, params?: any): Observable<any> {
+        return this.httpClient.get(url, params);
     }
 }

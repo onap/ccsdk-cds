@@ -21,16 +21,17 @@ limitations under the License.
 
 import {Injectable} from '@angular/core';
 import {Store} from '../../../../common/core/stores/Store';
-import {BluePrintDetailModel} from '../model/BluePrint.detail.model';
 import {ConfigurationDashboardService} from './configuration-dashboard.service';
 import {PackageDashboardState} from '../model/package-dashboard.state';
-
+import {BlueprintURLs} from '../../../../common/constants/app-constants';
+import * as JSZip from 'jszip';
 
 @Injectable({
     providedIn: 'root'
 })
 export class PackageStore extends Store<PackageDashboardState> {
 
+    private zipFile: JSZip = new JSZip();
 
     constructor(private configurationDashboardService: ConfigurationDashboardService) {
         super(new PackageDashboardState());
@@ -44,15 +45,41 @@ export class PackageStore extends Store<PackageDashboardState> {
                     configuration: bluePrintDetailModels[0]
                 });
             });
-        /* bluePrintDetailModels.forEach(
-            bluePrintDetailModel => {
-                 this.setState({
-                     ...this.state,
-                     configuration: bluePrintDetailModel
-                 });
-             });*/
+    }
 
+    public downloadResource(path: string) {
+        this.configurationDashboardService.downloadResource(BlueprintURLs.download + path).subscribe(response => {
+            const blob = new Blob([response], {type: 'application/octet-stream'});
+            this.zipFile.loadAsync(blob).then((zip) => {
+                Object.keys(zip.files).forEach((filename) => {
+                    zip.files[filename].async('string').then((fileData) => {
+                        if (fileData) {
+                            if (filename.includes('scripts/')) {
+                                this.setScripts(filename, fileData);
+                            } else if (filename.includes('templates/')) {
+                                this.setTemplates(filename, fileData);
+                            } else if (filename.includes('definitions/')) {
+                                this.setImports(filename, fileData);
+                            }
+                        }
+                    });
+                });
+            });
+        });
+    }
+
+    private setScripts(filename: string, fileData: any) {
+        this.setState({
+            ...this.state,
+            scripts: this.state.scripts.setScripts(name, fileData)
+        });
+    }
+
+    private setImports(filename: string, fileData: any) {
 
     }
 
+    private setTemplates(filename: string, fileData: any) {
+
+    }
 }

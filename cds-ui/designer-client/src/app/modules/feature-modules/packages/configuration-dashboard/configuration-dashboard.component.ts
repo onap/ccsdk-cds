@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {PackageStore} from './package.store';
 import {BluePrintDetailModel} from '../model/BluePrint.detail.model';
-import {CBAPackage} from '../package-creation/mapping-models/CBAPacakge.model';
 
 
 @Component({
@@ -17,21 +16,20 @@ export class ConfigurationDashboardComponent implements OnInit {
 
         const id = this.route.snapshot.paramMap.get('id');
         this.configurationStore.getPagedPackages(id);
-        this.configurationStore.state$.subscribe(
-            el => {
-                const cbaPackage = new CBAPackage();
-
-                if (el && el.configuration) {
-                    this.viewedPackage = el.configuration;
-                }
-            }
-        );
 
 
     }
 
     ngOnInit() {
-
+        this.configurationStore.state$.subscribe(
+            el => {
+                if (el && el.configuration) {
+                    this.viewedPackage = el.configuration;
+                    this.configurationStore.downloadResource(
+                        this.viewedPackage.artifactName + '/' + this.viewedPackage.artifactVersion);
+                }
+            }
+        );
     }
 
 }

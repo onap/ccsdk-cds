@@ -9,8 +9,6 @@ import {BluePrintDetailModel} from '../model/BluePrint.detail.model';
     providedIn: 'root'
 })
 export class ConfigurationDashboardService {
-
-
     constructor(private api: ApiService<BluePrintDetailModel>) {
 
     }
@@ -18,4 +16,10 @@ export class ConfigurationDashboardService {
     getBluePrintModel(id: string): Observable<BluePrintDetailModel> {
         return this.api.getOne(BlueprintURLs.getOneBlueprint + '/' + id);
     }
+
+
+    public downloadResource(id: string) {
+        return this.api.getCustomized(id, {responseType: 'blob'});
+    }
+
 }
