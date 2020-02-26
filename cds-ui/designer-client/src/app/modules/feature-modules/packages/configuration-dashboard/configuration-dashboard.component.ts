@@ -17,21 +17,20 @@ export class ConfigurationDashboardComponent implements OnInit {
 
         const id = this.route.snapshot.paramMap.get('id');
         this.configurationStore.getPagedPackages(id);
-        this.configurationStore.state$.subscribe(
-            el => {
-                const cbaPackage = new CBAPackage();
-
-                if (el && el.configuration) {
-                    this.viewedPackage = el.configuration;
-                }
-            }
-        );
 
 
     }
 
     ngOnInit() {
-
+        this.configurationStore.state$.subscribe(
+            el => {
+                if (el && el.configuration) {
+                    this.viewedPackage = el.configuration;
+                    console.log(this.configurationStore.downloadTest(
+                        this.viewedPackage.artifactName + '/' + this.viewedPackage.artifactVersion));
+                }
+            }
+        );
     }
 
 }

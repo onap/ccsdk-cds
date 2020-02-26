@@ -18,136 +18,17 @@
             </div>
 
             <div id="collapseThree" class="collapse show" aria-labelledby="headingThree" data-parent="#accordion">
-                <div class="card-body max-height-list"
-                     *ngFor="let file of templates.files | keyvalue; let mapIndex = index">
+                <div class="card-body max-height-list">
                     <div class="row">
-                        <div class="col" style="color:white">
-                            <a (click)="setSourceCodeEditor(file.key)" class="template-mapping-list active">{{file.key}}
-                                <span>Mapping</span>
-                                <span>Template</span>
+                        <!-- <div class="col-4" style="color:white" *ngFor="let file of templates.files | keyvalue; let mapIndex = index">-->
+                        <div class="col-4" style="color:white" *ngFor="let file of  getKeys(templateAndMappingMap)">
+                            <a (click)="setSourceCodeEditor(file)"
+                               class="template-mapping-list active">{{file}}
+                                <span *ngIf="getValue(file).isMapping">Mapping</span>
+                                <span *ngIf="getValue(file).isTemplate">Template</span>
                             </a>
                         </div>
-                        <!-- <div class="col">
-                             <a href="#" class="template-mapping-list">vf-module-1
-                                 <span>Mapping</span>
-                             </a>
-                         </div>
-                         <div class="col">
-                             <a href="#" class="template-mapping-list">vf-module-2
-                                 <span>Mapping</span>
-                             </a>
-                         </div>-->
                     </div>
-                    <!--   <div class="row">
-                           <div class="col">
-                               <a href="#" class="template-mapping-list">hostname
-                                   <span>Mapping</span>
-                                   <span>Template</span>
-                               </a>
-                           </div>
-                           <div class="col">
-                               <a href="#" class="template-mapping-list">vf-module-1
-                                   <span>Mapping</span>
-                               </a>
-                           </div>
-                           <div class="col">
-                               <a href="#" class="template-mapping-list">vf-module-2
-                                   <span>Mapping</span>
-                               </a>
-                           </div>
-                       </div>
-                       <div class="row">
-                           <div class="col">
-                               <a href="#" class="template-mapping-list">hostname
-
-                                   <span>Template</span>
-                               </a>
-                           </div>
-                           <div class="col">
-                               <a href="#" class="template-mapping-list">vf-module-1
-                                   <span>Template</span>
-                               </a>
-                           </div>
-                           <div class="col">
-                               <a href="#" class="template-mapping-list">vf-module-2
-                                   <span>Mapping</span>
-                                   <span>Template</span>
-                               </a>
-                           </div>
-                       </div>
-                       <div class="row">
-                           <div class="col">
-                               <a href="#" class="template-mapping-list">hostname
-
-                                   <span>Template</span>
-                               </a>
-                           </div>
-                           <div class="col">
-                               <a href="#" class="template-mapping-list">vf-module-1
-                                   <span>Mapping</span>
-                               </a>
-                           </div>
-                           <div class="col">
-                               <a href="#" class="template-mapping-list">vf-module-2
-                                   <span>Mapping</span>
-                               </a>
-                           </div>
-                       </div>
-                       <div class="row">
-                           <div class="col">
-                               <a href="#" class="template-mapping-list">hostname
-                                   <span>Mapping</span>
-                                   <span>Template</span>
-                               </a>
-                           </div>
-                           <div class="col">
-                               <a href="#" class="template-mapping-list">vf-module-1
-                                   <span>Mapping</span>
-                               </a>
-                           </div>
-                           <div class="col">
-                               <a href="#" class="template-mapping-list">vf-module-2
-                                   <span>Mapping</span>
-                               </a>
-                           </div>
-                       </div>
-                       <div class="row">
-                           <div class="col">
-                               <a href="#" class="template-mapping-list">hostname
-                                   <span>Mapping</span>
-                                   <span>Template</span>
-                               </a>
-                           </div>
-                           <div class="col">
-                               <a href="#" class="template-mapping-list">vf-module-1
-                                   <span>Mapping</span>
-                               </a>
-                           </div>
-                           <div class="col">
-                               <a href="#" class="template-mapping-list">vf-module-2
-                                   <span>Mapping</span>
-                               </a>
-                           </div>
-                       </div>
-                       <div class="row">
-                           <div class="col">
-                               <a href="#" class="template-mapping-list">hostname
-
-                                   <span>Template</span>
-                               </a>
-                           </div>
-                           <div class="col">
-                               <a href="#" class="template-mapping-list">vf-module-1
-                                   <span>Template</span>
-                               </a>
-                           </div>
-                           <div class="col">
-                               <a href="#" class="template-mapping-list">vf-module-2
-                                   <span>Mapping</span>
-                                   <span>Template</span>
-                               </a>
-                           </div>
-                       </div>-->
                 </div>
             </div>
         </div>

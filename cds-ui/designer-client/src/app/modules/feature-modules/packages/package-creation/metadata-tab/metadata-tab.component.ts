@@ -38,6 +38,10 @@ export class MetadataTabComponent implements OnInit {
                 this.metaDataTab.version = element.configuration.artifactVersion;
                 this.metaDataTab.tags = element.configuration.tags;
                 this.metaDataTab.description = element.configuration.artifactDescription;
+
+                // getting cba.zip
+                console.log(element.downloadedPackage);
+
             }
         });
     }

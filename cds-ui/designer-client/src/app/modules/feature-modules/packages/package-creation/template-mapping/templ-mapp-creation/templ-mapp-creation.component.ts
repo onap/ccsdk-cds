@@ -1,13 +1,13 @@
-import { Component, EventEmitter, OnInit, Output, OnDestroy, ViewChild } from '@angular/core';
-import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
-import { PackageCreationStore } from '../../package-creation.store';
-import { TemplateInfo, TemplateStore } from '../../template.store';
-import { Subject } from 'rxjs';
-import { ResourceDictionary } from '../../mapping-models/ResourceDictionary.model';
-import { DataTableDirective } from 'angular-datatables';
-import { MappingAdapter, Mapping } from '../../mapping-models/mappingAdapter.model';
-import { PackageCreationUtils } from '../../package-creation.utils';
-import { JsonConvert } from 'json2typescript';
+import {Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {FileSystemFileEntry, NgxFileDropEntry} from 'ngx-file-drop';
+import {PackageCreationStore} from '../../package-creation.store';
+import {TemplateInfo, TemplateStore} from '../../template.store';
+import {Subject} from 'rxjs';
+import {ResourceDictionary} from '../../mapping-models/ResourceDictionary.model';
+import {DataTableDirective} from 'angular-datatables';
+import {Mapping, MappingAdapter} from '../../mapping-models/mappingAdapter.model';
+import {PackageCreationUtils} from '../../package-creation.utils';
+import {JsonConvert} from 'json2typescript';
 
 @Component({
     selector: 'app-templ-mapp-creation',
@@ -31,7 +31,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     dtTrigger = new Subject();
     resourceDictionaryRes: ResourceDictionary[] = [];
     allowedExt = ['.vtl'];
-    @ViewChild(DataTableDirective, { static: false })
+    @ViewChild(DataTableDirective, {static: false})
     dtElement: DataTableDirective;
     MappingAdapter: MappingAdapter;
     mapping = new Map();
@@ -63,12 +63,17 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
 
     getFileExtension() {
         switch (this.templateExt) {
-            case 'Velcoity': return '.vtl';
-            case 'Koltin': return '.ktl';
-            case 'Jinja': return '.j2';
-            default: return '.vtl';
+            case 'Velcoity':
+                return '.vtl';
+            case 'Koltin':
+                return '.ktl';
+            case 'Jinja':
+                return '.j2';
+            default:
+                return '.vtl';
         }
     }
+
     public getTemplateVariable(fileContent: string) {
         const variables: string[] = [];
         const stringsSlittedByBraces = fileContent.split('${');
@@ -111,12 +116,6 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
 
             }
         }
-    }
-
-    removeFile(fileIndex: number) {
-        /*const filename = 'Definitions/' + this.uploadedFiles[fileIndex].name;
-        this.packageCreationStore.removeFileFromDefinition(filename);
-        this.uploadedFiles.splice(fileIndex, 1);*/
     }
 
     uploadFile() {
@@ -189,7 +188,9 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     }
 
     getMappingTableFromTemplate(e) {
-        if (e) { e.preventDefault(); }
+        if (e) {
+            e.preventDefault();
+        }
         if (this.variables && this.variables.length > 0) {
             console.log('base');
             this.packageCreationStore.getTemplateAndMapping(this.variables).subscribe(res => {
@@ -203,15 +204,17 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     saveToStore() {
         if (this.fileName) {
             // Save Mapping to Store
-            if (this.resourceDictionaryRes) {
+            if (this.resourceDictionaryRes && this.resourceDictionaryRes.length > 0) {
                 const mapArray = this.convertDictionaryToMap(this.resourceDictionaryRes);
                 this.packageCreationStore.addMapping('Templates/' + this.fileName + '-mapping.json',
                     this.packageCreationUtils.transformToJson(this.jsonConvert.serialize(mapArray)));
+                this.resourceDictionaryRes = [];
             }
             // Save Template to store
             if (this.templateFileContent) {
                 this.packageCreationStore.addTemplate('Templates/' + this.fileName + '-template' + this.getFileExtension(),
                     this.templateFileContent);
+                this.templateFileContent = '';
             }
         } else {
 
