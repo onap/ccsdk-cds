@@ -33,4 +33,7 @@ export class SearchCatalogService {
   searchByTags(tag) {
     return this.api.get(ControllerCatalogURLs.searchControllerCatalogByTags + '/' + tag);
   }
+  deleteCatalog(modelName) {
+    return this.api.delete(ControllerCatalogURLs.deleteCatalog + '/' + modelName);
+}
 }

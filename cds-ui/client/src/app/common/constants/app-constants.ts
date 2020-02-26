@@ -115,9 +115,9 @@ export const ResourceDictionaryURLs = {
 }
 
 export const ControllerCatalogURLs = {
-	searchControllerCatalogByTags: '/controllercatalog/search',
-	saveControllerCatalog: '/controllercatalog/save',
-	getDefinition: '/controllercatalog/model-type/by-definition',
-	getDerivedFrom: '/controllercatalog/model-type/by-derivedfrom',
-	deleteCatalog: '/controllercatalog/model-type'
+    searchControllerCatalogByTags: '/controllercatalog/search',
+    saveControllerCatalog: '/controllercatalog/save',
+    getDefinition: '/controllercatalog/model-type/by-definition',
+    getDerivedFrom: '/controllercatalog/model-type/by-derivedfrom',
+    deleteCatalog: '/controllercatalog'
 }
