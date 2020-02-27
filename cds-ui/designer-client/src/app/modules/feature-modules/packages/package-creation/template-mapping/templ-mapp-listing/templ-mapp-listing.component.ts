@@ -1,8 +1,8 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {PackageCreationStore} from '../../package-creation.store';
-import {Mapping, Template} from '../../mapping-models/CBAPacakge.model';
-import {TemplateInfo, TemplateStore} from '../../template.store';
-import {TemplateAndMapping} from '../TemplateAndMapping';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { PackageCreationStore } from '../../package-creation.store';
+import { Mapping, Template } from '../../mapping-models/CBAPacakge.model';
+import { TemplateInfo, TemplateStore } from '../../template.store';
+import { TemplateAndMapping } from '../TemplateAndMapping';
 
 @Component({
     selector: 'app-templ-mapp-listing',
@@ -45,13 +45,14 @@ export class TemplMappListingComponent implements OnInit {
 
     private setIsMappingOrTemplate(key: string, templateAndMapping: TemplateAndMapping, isFromTemplate: boolean) {
         const nameOfFile = key.split('/')[1].split('.')[0].split('-')[0];
-        if (this.templateAndMappingMap.has(nameOfFile)) {
-            const templateAndMappingExisted = this.templateAndMappingMap.get(nameOfFile);
+        const fullName = nameOfFile + ',' + key;
+        if (this.templateAndMappingMap.has(fullName)) {
+            const templateAndMappingExisted = this.templateAndMappingMap.get(fullName);
             !isFromTemplate ? templateAndMappingExisted.isMapping = true : templateAndMappingExisted.isTemplate = true;
-            this.templateAndMappingMap.set(nameOfFile, templateAndMappingExisted);
+            this.templateAndMappingMap.set(fullName, templateAndMappingExisted);
         } else {
 
-            this.templateAndMappingMap.set(nameOfFile, templateAndMapping);
+            this.templateAndMappingMap.set(fullName, templateAndMapping);
         }
 
     }
@@ -63,7 +64,10 @@ export class TemplMappListingComponent implements OnInit {
     setSourceCodeEditor(key: string) {
         this.packageCreationStore.state$.subscribe(cba => {
             if (cba.templates) {
-                const fileContent = cba.templates.getValue(key);
+                console.log(cba.templates);
+                console.log(key);
+                const fileContent = cba.templates.getValue(key.trim());
+                console.log(fileContent);
                 const templateInfo = new TemplateInfo();
                 templateInfo.fileContent = fileContent;
                 templateInfo.fileName = key;

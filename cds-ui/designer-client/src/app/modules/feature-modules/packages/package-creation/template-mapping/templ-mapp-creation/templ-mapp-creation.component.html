@@ -53,9 +53,10 @@
                                 </span>
                             </label>
                         </div>
-                    </div>
-                    <div class="create-template-import">Use the editor to add parameters or you can also <a href="#"
-                            data-toggle="modal" data-target="#exampleModal">Import
+                    </div> 
+                    <div class="create-template-import">Use the editor to add parameters or you can also
+                        <a href="#" data-toggle="modal" (click)="allowedExt=[getFileExtension()]"
+                            data-target="#exampleModal">Import
                             File</a></div>
                     <div class="editor-container">
                         <app-source-editor (textChange)="textChanges($event,templateInfo.fileName)"
@@ -117,28 +118,32 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let dict of resourceDictionaryRes">
-                                <td>{{ dict.definition?.property?.required }}</td>
+                                <td>
+                                    <i *ngIf="dict.definition?.property?.required" class="fa fa-check-square mx-2"></i>
+                                    <i *ngIf="!dict.definition?.property?.required" class="fa fa-square mx-2"></i>
+                                </td>
                                 <td>{{ dict.name }}</td>
                                 <td>{{ dict.name }}</td>
                                 <td>
-                                    <select class="custom-select">
-                                        <option *ngFor="let val of dict.definition.sources | keyvalue">{{val.key}}
+                                    <select class="custom-select" (click)="testOption(dict,$event)">
+                                        <option *ngFor="let val of dict.definition.sources | keyvalue">
+                                            {{initMap(dict.name,val)}}
                                         </option>
 
                                     </select>
                                 </td>
                                 <td>
-                                    <select class="custom-select">
-                                        <option
-                                            *ngFor="let val of dict?.definition?.sources?.sdnc?.properties['key-dependencies'] ">
-                                            {{val}}</option>
+                                    <!-- <select class="custom-select">
+                                        <option *ngFor="let val of getKeys(dependancies)">
+                                            {{ getValue(dict.name)}}</option>
 
-                                    </select>
+                                    </select> -->
+                                    <input type="text" class="form-control" [ngModel]="getValue(dict.name)">
                                     <!-- {{ dict.definition.sources }} -->
                                 </td>
                                 <td>{{ dict.definition?.property?.default }}</td>
-                                <td>{{ dict.dataType }}</td>
-                                <td>{{ dict.entrySchema }}</td>
+                                <td>{{ dict.definition?.property?.type }}</td>
+                                <td>{{ dict.definition?.property['entry_schema'] }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -182,7 +187,9 @@
                                 Files
                             </button>
                         </div>
-                        <div class="folder-upload-type">Allowed file type: json</div>
+                        <div class="folder-upload-type">Allowed file type:
+                            {{allowedExt}}
+                        </div>
                     </ng-template>
                 </ngx-file-drop>
                 <div class="upload-table" *ngFor="let item of uploadedFiles; let i=index">
