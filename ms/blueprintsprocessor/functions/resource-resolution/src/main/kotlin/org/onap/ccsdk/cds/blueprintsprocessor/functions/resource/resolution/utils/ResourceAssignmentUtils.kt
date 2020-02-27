@@ -204,7 +204,7 @@ class ResourceAssignmentUtils {
         ): String {
             val resolutionSummaryList = resourceAssignments.map {
                 val payload = resourceDefinitions[it.name]
-                        ?.sources?.get(it.dictionarySource)?.properties?.get("payload")
+                        ?.sources?.get(it.dictionarySource)?.properties?.get("resolved-payload")
                 ResolutionSummary(
                         it.name, it.property?.value, it.property?.required,
                         it.property?.type, it.keyIdentifiers, it.dictionaryName,

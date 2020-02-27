@@ -83,6 +83,7 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
 
                 // Resolving content Variables
                 val payload = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.payload), resolvedInputKeyMapping)
+                resourceSourceProperties["resolved-payload"] = JacksonUtils.jsonNode(payload)
                 val urlPath =
                     resolveFromInputKeyMapping(checkNotNull(sourceProperties.urlPath), resolvedInputKeyMapping)
                 val verb = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.verb), resolvedInputKeyMapping)
