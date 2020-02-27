@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "94e6ddb7_3c9de32f",
+        "filename": "error-catalog-lib/src/main/kotlin/org/onap/ccsdk/error/catalog/data/ErrorCodeModel.kt",
+        "patchSetId": 8
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2020-02-27T20:57:40Z",
+      "side": 1,
+      "message": "Why not just use log4j levels?\nhttp://www.slf4j.org/api/org/apache/log4j/Level.html",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 1
+      },
+      "revId": "85a823cbb1def9c6c301feb74dc1fbdeea492c6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5a0cc49_a5caa9fd",
+        "filename": "error-catalog-lib/src/main/kotlin/org/onap/ccsdk/error/catalog/service/ErrorMessagesLibDBService.kt",
+        "patchSetId": 8
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2020-02-27T20:57:40Z",
+      "side": 1,
+      "message": "\u003d logger(...)",
+      "range": {
+        "startLine": 34,
+        "startChar": 8,
+        "endLine": 37,
+        "endChar": 5
+      },
+      "revId": "85a823cbb1def9c6c301feb74dc1fbdeea492c6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "872b8547_3bcc2c9b",
+        "filename": "error-catalog-lib/src/main/kotlin/org/onap/ccsdk/error/catalog/service/ErrorMessagesLibPropertyService.kt",
+        "patchSetId": 8
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2020-02-27T20:57:40Z",
+      "side": 1,
+      "message": "\"$domain.${key.toLowerCase()}\" can use templating in Kotlin",
+      "range": {
+        "startLine": 68,
+        "startChar": 32,
+        "endLine": 68,
+        "endChar": 67
+      },
+      "revId": "85a823cbb1def9c6c301feb74dc1fbdeea492c6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06d61ae5_fdbb7d06",
+        "filename": "error-catalog-lib/src/main/kotlin/org/onap/ccsdk/error/catalog/service/ErrorMessagesLibPropertyService.kt",
+        "patchSetId": 8
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2020-02-27T20:57:40Z",
+      "side": 1,
+      "message": "why is this needed?\nCould getErrorMessage not  properties.getProperty(attribute) directly?",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 5
+      },
+      "revId": "85a823cbb1def9c6c301feb74dc1fbdeea492c6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7024fa4f_c143d718",
+        "filename": "error-catalog-lib/src/main/kotlin/org/onap/ccsdk/error/catalog/utils/ErrorCatalogUtils.kt",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2020-02-27T20:57:40Z",
+      "side": 1,
+      "message": "Could this be an object",
+      "range": {
+        "startLine": 23,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 5
+      },
+      "revId": "85a823cbb1def9c6c301feb74dc1fbdeea492c6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94fefd85_92a7a18b",
+        "filename": "ms/blueprintsprocessor/application/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/BlueprintDatabaseConfiguration.kt",
+        "patchSetId": 8
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2020-02-27T20:57:40Z",
+      "side": 1,
+      "message": "may not want this",
+      "range": {
+        "startLine": 45,
+        "startChar": 5,
+        "endLine": 45,
+        "endChar": 12
+      },
+      "revId": "85a823cbb1def9c6c301feb74dc1fbdeea492c6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c14d951c_348f6932",
+        "filename": "ms/blueprintsprocessor/application/src/main/resources/application-dev.properties",
+        "patchSetId": 8
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2020-02-27T20:57:40Z",
+      "side": 1,
+      "message": "db",
+      "range": {
+        "startLine": 149,
+        "startChar": 34,
+        "endLine": 149,
+        "endChar": 43
+      },
+      "revId": "85a823cbb1def9c6c301feb74dc1fbdeea492c6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f75bdf0b_adcc9daf",
+        "filename": "ms/blueprintsprocessor/application/src/test/resources/application-test.properties",
+        "patchSetId": 8
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2020-02-27T20:57:40Z",
+      "side": 1,
+      "message": "db",
+      "range": {
+        "startLine": 73,
+        "startChar": 34,
+        "endLine": 73,
+        "endChar": 43
+      },
+      "revId": "85a823cbb1def9c6c301feb74dc1fbdeea492c6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd127c58_4242dfff",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/designer-api/src/test/resources/application-test.properties",
+        "patchSetId": 8
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2020-02-27T20:57:40Z",
+      "side": 1,
+      "message": "db",
+      "range": {
+        "startLine": 50,
+        "startChar": 34,
+        "endLine": 50,
+        "endChar": 43
+      },
+      "revId": "85a823cbb1def9c6c301feb74dc1fbdeea492c6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "751a6e1f_851c54b0",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/selfservice-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/selfservice/api/ExecutionServiceController.kt",
+        "patchSetId": 8
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2020-02-27T20:57:40Z",
+      "side": 1,
+      "message": "throw .......",
+      "range": {
+        "startLine": 89,
+        "startChar": 12,
+        "endLine": 89,
+        "endChar": 33
+      },
+      "revId": "85a823cbb1def9c6c301feb74dc1fbdeea492c6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52fc94d8_bf6a2c9d",
+        "filename": "ms/blueprintsprocessor/modules/services/execution-service/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/services/execution/error/BlueprintProcessorErrorCodes.kt",
+        "patchSetId": 8
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2020-02-27T20:57:40Z",
+      "side": 1,
+      "message": "getOrDefault",
+      "range": {
+        "startLine": 64,
+        "startChar": 23,
+        "endLine": 65,
+        "endChar": 9
+      },
+      "revId": "85a823cbb1def9c6c301feb74dc1fbdeea492c6c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
