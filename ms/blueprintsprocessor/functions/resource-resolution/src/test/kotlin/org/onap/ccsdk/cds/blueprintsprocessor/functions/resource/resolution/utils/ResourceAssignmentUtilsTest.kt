@@ -164,7 +164,7 @@ class ResourceAssignmentUtilsTest {
         val resourceAssignment = createResourceAssignmentForTest(null)
         val resourceDefinition = ResourceDefinition()
         val nodeTemplate = NodeTemplate().apply {
-            properties = mutableMapOf("payload" to JacksonUtils.jsonNode("{\"mock\": true}"))
+            properties = mutableMapOf("resolved-payload" to JacksonUtils.jsonNode("{\"mock\": true}"))
         }
         resourceDefinition.sources = mutableMapOf("input" to nodeTemplate)
 
