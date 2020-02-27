@@ -19,15 +19,17 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Component, OnInit } from '@angular/core';
-import { FilesContent, FolderNodeElement, MetaDataTabModel } from './mapping-models/metadata/MetaDataTab.model';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {FilesContent, FolderNodeElement, MetaDataTabModel} from './mapping-models/metadata/MetaDataTab.model';
 
 import * as JSZip from 'jszip';
-import { PackageCreationStore } from './package-creation.store';
-import { Definition } from './mapping-models/CBAPacakge.model';
-import { PackageCreationModes } from './creationModes/PackageCreationModes';
-import { PackageCreationBuilder } from './creationModes/PackageCreationBuilder';
-import { PackageCreationUtils } from './package-creation.utils';
+import {PackageCreationStore} from './package-creation.store';
+import {Definition} from './mapping-models/CBAPacakge.model';
+import {PackageCreationModes} from './creationModes/PackageCreationModes';
+import {PackageCreationBuilder} from './creationModes/PackageCreationBuilder';
+import {PackageCreationUtils} from './package-creation.utils';
+import {MetadataTabComponent} from './metadata-tab/metadata-tab.component';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -36,24 +38,33 @@ import { PackageCreationUtils } from './package-creation.utils';
     styleUrls: ['./package-creation.component.css']
 })
 export class PackageCreationComponent implements OnInit {
+
+    // adding initial referencing to designer mode
+
+
+    constructor(private packageCreationStore: PackageCreationStore,
+                private packageCreationUtils: PackageCreationUtils,
+                private router: Router) {
+    }
+
     counter = 0;
     modes: object[] = [
-        { name: 'Designer Mode', style: 'mode-icon icon-designer-mode' },
-        { name: 'Scripting Mode', style: 'mode-icon icon-scripting-mode' }];
+        {name: 'Designer Mode', style: 'mode-icon icon-designer-mode'},
+        {name: 'Scripting Mode', style: 'mode-icon icon-scripting-mode'}];
     private metaDataTab: MetaDataTabModel = new MetaDataTabModel();
     private folder: FolderNodeElement = new FolderNodeElement();
     private zipFile: JSZip = new JSZip();
     private filesData: any = [];
     private definition: Definition = new Definition();
 
-    // adding initial referencing to designer mode
+    @ViewChild(MetadataTabComponent, {static: false})
+    private metadataTabComponent: MetadataTabComponent;
 
-
-    constructor(private packageCreationStore: PackageCreationStore, private packageCreationUtils: PackageCreationUtils) {
-    }
+    @ViewChild('nameit', {static: true})
+    private elementRef: ElementRef;
 
     ngOnInit() {
-
+        this.elementRef.nativeElement.focus();
     }
 
     saveBluePrint() {
@@ -76,9 +87,10 @@ export class PackageCreationComponent implements OnInit {
 
     saveBluePrintToDataBase() {
         this.create();
-        this.zipFile.generateAsync({ type: 'blob' })
+        this.zipFile.generateAsync({type: 'blob'})
             .then(blob => {
                 this.packageCreationStore.saveBluePrint(blob);
+                this.router.navigate(['/packages']);
             });
     }
 
@@ -88,23 +100,14 @@ export class PackageCreationComponent implements OnInit {
             this.zipFile.folder(key.split('/')[0]);
             this.zipFile.file(key, value);
         });
-        /*this.folder.TREE_DATA.forEach((path) => {
-            const name = path.name;
-            if (path.children) {
-                this.zipFile.folder(name);
-                path.children.forEach(children => {
-                    const name2 = children.name;
-                    if (FilesContent.getMapOfFilesNamesAndContent().has(name2)) {
-                        this.zipFile.file(name + '/' + name2, FilesContent.getMapOfFilesNamesAndContent().get(name2));
-                    } else {
-                        // this.zipFile.file(name2, FilesContent.getMapOfFilesNamesAndContent().get(name2));
-                    }
 
-                });
-
-            }
-        });*/
     }
 
+    test() {
+        this.metadataTabComponent.saveMetaDataToStore();
+    }
 
+    goBackToDashBorad() {
+        this.router.navigate(['/packages']);
+    }
 }

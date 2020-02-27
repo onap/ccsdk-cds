@@ -11,16 +11,16 @@
                         <li>Package Name</li>
                     </ul>
                 </h2>
-               <!-- <div class="col d-flex justify-content-end header-button-save">
-                    <button class="float btn btn-sm btn-outline-secondary" disabled>Discard Changes</button>
-                    <button class="float btn btn-sm btn-primary" (click)="saveBluePrint()">Save</button>
-                </div>-->
+                <div class="col d-flex justify-content-end header-button-save">
+                    <button class="float btn btn-sm btn-outline-secondary" (click)="goBacktoDashboard()" >Discard Changes</button>
+                    <button class="float btn btn-sm btn-primary" (click)="editBluePrint()">Apply Changes</button>
+                </div>
             </div>
         </header>
 
 
 
-        <div class="container-fluid body-container">
+        <div class="container-fluid body-container">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
 
             <div class="container">
                <!-- <div class="creat-action-container">
@@ -77,7 +77,7 @@
                             <a class="nav-item nav-link active" id="nav-metadata-tab" data-toggle="tab"
                                href="#nav-metadata"
                                role="tab" aria-controls="nav-metadata"
-                               aria-selected="true">METADATA</a>
+                               aria-selected="true"  autofocus  #nameit (focusout)="saveMetaData()">METADATA</a>
                             <a class="nav-item nav-link" id="nav-template-tab" data-toggle="tab" href="#nav-template"
                                role="tab" aria-controls="nav-template"
                                aria-selected="false">TEMPLATE & MAPPING</a>
