@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8fabc232_73397081",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/processor/RestResourceResolutionProcessor.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-02-27T19:50:30Z",
+      "side": 1,
+      "message": "is it required only for Rest Type resource ?",
+      "revId": "61a8858264a2170a303e12098972be89ad08b071",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
