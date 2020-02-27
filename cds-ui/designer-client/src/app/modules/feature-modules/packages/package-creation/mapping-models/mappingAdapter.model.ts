@@ -1,10 +1,13 @@
 import { ResourceDictionary } from './ResourceDictionary.model';
 import { JsonObject, JsonProperty, JsonConvert } from 'json2typescript';
 
-// Convert ResourceDictionary object to store Mapping
+// Convert ResourceDictionary object to store Mapping.
 export class MappingAdapter {
 
-    constructor(private resourceDictionary: ResourceDictionary) { }
+    constructor(
+        private resourceDictionary: ResourceDictionary,
+        private dependancies: Map<string, Array<string>>,
+        private dependanciesSource: Map<string, string>) { }
 
     ToMapping(): Mapping {
         const mapping = new Mapping();
@@ -12,8 +15,12 @@ export class MappingAdapter {
         mapping.dictionaryName = this.resourceDictionary.name;
         mapping.property = this.resourceDictionary.definition.property;
         mapping.inputParam = false;
-        mapping.dictionarySource = 'sdnc';
-        mapping.dependencies = [];
+        mapping.dictionarySource = this.dependanciesSource.get(mapping.name);
+        if (this.dependancies.get(mapping.name)) {
+            mapping.dependencies = this.dependancies.get(mapping.name);
+        } else {
+            mapping.dependencies = [];
+        }
         mapping.version = 0;
         return mapping;
     }
@@ -32,7 +39,7 @@ export class Mapping {
     @JsonProperty('dictionary-source')
     dictionarySource: string;
     @JsonProperty()
-    dependencies: [];
+    dependencies: string[];
     @JsonProperty()
     version: number;
 }

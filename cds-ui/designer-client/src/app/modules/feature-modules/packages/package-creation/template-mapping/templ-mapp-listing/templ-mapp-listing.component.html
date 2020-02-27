@@ -9,8 +9,7 @@
             <div class="card-header" id="headingThree">
                 <h5 class="mb-0 d-flex justify-content-between">
                     <button class="btn btn-link" data-toggle="collapse" data-target="#collapseThree"
-                            aria-expanded="true"
-                            aria-controls="collapseThree">
+                        aria-expanded="true" aria-controls="collapseThree">
                         Template and Mapping List
                     </button>
 
@@ -22,8 +21,8 @@
                     <div class="row">
                         <!-- <div class="col-4" style="color:white" *ngFor="let file of templates.files | keyvalue; let mapIndex = index">-->
                         <div class="col-4" style="color:white" *ngFor="let file of  getKeys(templateAndMappingMap)">
-                            <a (click)="setSourceCodeEditor(file)"
-                               class="template-mapping-list active">{{file}}
+                            <a (click)="setSourceCodeEditor(file.split(',')[1])"
+                                class="template-mapping-list active">{{file.split(',')[0]}}
                                 <span *ngIf="getValue(file).isMapping">Mapping</span>
                                 <span *ngIf="getValue(file).isTemplate">Template</span>
                             </a>

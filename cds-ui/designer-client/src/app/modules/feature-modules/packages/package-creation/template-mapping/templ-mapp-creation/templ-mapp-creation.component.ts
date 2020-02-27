@@ -1,13 +1,13 @@
-import {Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
-import {FileSystemFileEntry, NgxFileDropEntry} from 'ngx-file-drop';
-import {PackageCreationStore} from '../../package-creation.store';
-import {TemplateInfo, TemplateStore} from '../../template.store';
-import {Subject} from 'rxjs';
-import {ResourceDictionary} from '../../mapping-models/ResourceDictionary.model';
-import {DataTableDirective} from 'angular-datatables';
-import {Mapping, MappingAdapter} from '../../mapping-models/mappingAdapter.model';
-import {PackageCreationUtils} from '../../package-creation.utils';
-import {JsonConvert} from 'json2typescript';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
+import { PackageCreationStore } from '../../package-creation.store';
+import { TemplateInfo, TemplateStore } from '../../template.store';
+import { Subject } from 'rxjs';
+import { ResourceDictionary } from '../../mapping-models/ResourceDictionary.model';
+import { DataTableDirective } from 'angular-datatables';
+import { Mapping, MappingAdapter } from '../../mapping-models/mappingAdapter.model';
+import { PackageCreationUtils } from '../../package-creation.utils';
+import { JsonConvert } from 'json2typescript';
 
 @Component({
     selector: 'app-templ-mapp-creation',
@@ -24,19 +24,21 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     fileName: any;
     templateInfo = new TemplateInfo();
     private variables: string[] = [];
-    private mappingFileValues = [];
     dtOptions: DataTables.Settings = {};
     // We use this trigger because fetching the list of persons can be quite long,
     // thus we ensure the data is fetched before rendering
     dtTrigger = new Subject();
     resourceDictionaryRes: ResourceDictionary[] = [];
     allowedExt = ['.vtl'];
-    @ViewChild(DataTableDirective, {static: false})
+    @ViewChild(DataTableDirective, { static: false })
     dtElement: DataTableDirective;
     MappingAdapter: MappingAdapter;
     mapping = new Map();
     templateFileContent: string;
     templateExt = 'Velcoity';
+    dependancies = new Map<string, Array<string>>();
+    dependanciesSource = new Map<string, string>();
+
 
 
     constructor(
@@ -51,6 +53,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
             console.log(templateInfo);
             this.templateInfo = templateInfo;
             this.fileName = templateInfo.fileName.split('/')[1];
+            this.templateFileContent = templateInfo.fileContent;
         });
 
         this.dtOptions = {
@@ -144,7 +147,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     private convertDictionaryToMap(resourceDictionaries: ResourceDictionary[]): Mapping[] {
         const mapArray: Mapping[] = [];
         for (const resourceDictionary of resourceDictionaries) {
-            this.MappingAdapter = new MappingAdapter(resourceDictionary);
+            this.MappingAdapter = new MappingAdapter(resourceDictionary, this.dependancies, this.dependanciesSource);
             mapArray.push(this.MappingAdapter.ToMapping());
         }
         console.log(mapArray);
@@ -201,7 +204,15 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         }
     }
 
+    initMap(key, map) {
+        if (!this.dependanciesSource.has(key)) {
+            this.dependanciesSource.set(key, map.key);
+        }
+        return map.key;
+    }
     saveToStore() {
+        console.log(this.dependancies);
+        console.log(this.dependanciesSource);
         if (this.fileName) {
             // Save Mapping to Store
             if (this.resourceDictionaryRes && this.resourceDictionaryRes.length > 0) {
@@ -221,6 +232,32 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         }
     }
 
+    testOption(dict, e) {
+        const source = e.target.value;
+        let keyDepend = null;
+        try {
+            keyDepend = dict.definition.sources[source].properties['key-dependencies'] || null;
+        } catch (e) { }
+        console.log(dict);
+        console.log(source);
+        if (keyDepend) {
+            this.dependancies.set(dict.name, keyDepend);
+            this.dependanciesSource.set(dict.name, source);
+        } else {
+            // this.dependancies.delete(dict.name);
+            // this.dependanciesSource.delete(dict.name);
+        }
+        console.log(this.dependancies);
+    }
+
+    getKeys(map: Map<string, any>) {
+        return Array.from(map.keys());
+    }
+
+    getValue(key) {
+        return this.dependancies.get(key);
+    }
+
     rerender(): void {
         if (this.dtElement.dtInstance) {
             console.log('rerender');
@@ -238,5 +275,17 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         // Do not forget to unsubscribe the event
         this.dtTrigger.unsubscribe();
+    }
+}
+
+class DependancyVal {
+    source: string;
+    keyDepend: any;
+    constructor(
+        source: string,
+        keyDepend: any
+    ) {
+        this.source = source;
+        this.keyDepend = keyDepend;
     }
 }
