@@ -2,21 +2,20 @@
 
 <div class="new-wrapper">
     <div class="container-fluid main-container">
-    <header class="page-title">
-        <div class="row">
-            <h2 class="col m-0">
-                <ul class="breadcrumb-header">
-                    <li>CBA Packages</li>
-                    <li>Package Name</li>
-                </ul>
-            </h2>
-            <div class="col d-flex justify-content-end header-button-save">
-                <button class="float btn btn-sm btn-outline-secondary" disabled>Discard Changes</button>
-                <button class="float btn btn-sm btn-primary" (click)="saveBluePrint()">Save</button>
+        <header class="page-title">
+            <div class="row">
+                <h2 class="col m-0">
+                    <ul class="breadcrumb-header">
+                        <li>CBA Packages</li>
+                        <li>Package Name</li>
+                    </ul>
+                </h2>
+                <div class="col d-flex justify-content-end header-button-save">
+                    <button class="float btn btn-sm btn-outline-secondary" disabled>Discard Changes</button>
+                    <button class="float btn btn-sm btn-primary" (click)="saveBluePrint()">Save</button>
+                </div>
             </div>
-        </div>
-    </header>
-
+        </header>
 
 
         <div class="container-fluid body-container">
@@ -39,71 +38,6 @@
                     </a>
                 </div>
 
-                <div class="card creat-card view-package-container">
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="row">
-                                <div class="col d-flex">
-                                    <i class="package-type-icon icon-designer-mode"></i>
-                                    <div class="package-name-container">
-                                        <div class="row">
-                                            <div class="col-12 package-name deployed">
-                                                Package Name
-                                                <span>.vLB.CDS</span>
-                                                <i class="icon-deploy"></i>
-                                            </div>
-                                            <div class="col-12 package-description">
-                                                Last modified Oct 4, 2019 03:48 PM By Ahmed Abbas
-                                            </div>
-                                        </div>
-                                        <!-- <div class="row">
-                                            <div class="col-4">
-                                                <div class="package-view-title">Author Name</div>
-                                                <p>Abdelmuhaimen Seaudi</p>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="package-view-title">Author Email</div>
-                                                <p>abdelmuhaimen.seaudi@orange.com</p>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="package-view-title">Contributions</div>
-                                                <ul class="package-contributers">
-                                                    <li>
-                                                        <button type="button" class="border-fade" data-toggle="tooltip"
-                                                                data-placement="bottom"
-                                                                title="User name">
-                                                            <img src="/assets/img/img-user1.jpeg">
-                                                        </button>
-                                                    </li>
-                                                    <li>
-                                                        <button type="button" data-toggle="tooltip" data-placement="bottom"
-                                                                title="User name">
-                                                            <img src="/assets/img/img-user2.jpg">
-                                                        </button>
-                                                    </li>
-                                                    <li>
-                                                        <button type="button" data-toggle="tooltip" data-placement="bottom"
-                                                                title="User name">
-                                                            <img src="/assets/img/img-user3.jpg">
-                                                        </button>
-                                                    </li>
-                                                    <li>
-                                                        <a href="">5 contributors</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div> -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-4 package-view-button">
-                            <button class="btn btn-sm btn-outline-secondary"><i class="fa fa-play-circle"></i> Deploy</button>
-                            <button class="btn btn-sm btn-primary">Designer Mode</button>
-                        </div>
-                    </div>
-                 
-                </div>
 
                 <nav class="row">
                     <!--Nav Tabs-->
@@ -112,7 +46,7 @@
                             <a class="nav-item nav-link active" id="nav-metadata-tab" data-toggle="tab"
                                href="#nav-metadata"
                                role="tab" aria-controls="nav-metadata"
-                               aria-selected="true">METADATA</a>
+                               aria-selected="false"  autofocus  #nameit (focusout)="test()">METADATA</a>
                             <a class="nav-item nav-link" id="nav-template-tab" data-toggle="tab" href="#nav-template"
                                role="tab" aria-controls="nav-template"
                                aria-selected="false">TEMPLATE & MAPPING</a>
@@ -163,5 +97,5 @@
                 </div>
             </div>
         </div>
-</div>
+    </div>
 </div>

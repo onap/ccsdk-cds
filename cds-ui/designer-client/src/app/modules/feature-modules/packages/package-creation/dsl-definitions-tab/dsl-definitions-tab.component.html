@@ -1,5 +1,5 @@
 <ace-editor [(text)]="dslDefinition.content" [mode]="'javascript'" [autoUpdateContent]="true"
-    [durationBeforeCallback]="1000" [theme]="'tomorrow_night_bright'" #editor style="height:300px;">
+    [durationBeforeCallback]="1000" (textChanged)="textChanged($event)" [theme]="'tomorrow_night_bright'" #editor style="height:300px;">
 </ace-editor>
 
 <!-- <app-source-editor [lang]="'javascript'" (textChanged)="textChanged($event)" [(text)]="dslDefinition.content"></app-source-editor> -->
