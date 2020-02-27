@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { DslDefinition } from '../mapping-models/CBAPacakge.model';
-import { PackageCreationStore } from '../package-creation.store';
+import {Component, OnInit} from '@angular/core';
+import {DslDefinition} from '../mapping-models/CBAPacakge.model';
+import {PackageCreationStore} from '../package-creation.store';
 
 @Component({
     selector: 'app-dsl-definitions-tab',
@@ -16,11 +16,15 @@ export class DslDefinitionsTabComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.packageCreationStore.changeDslDefinition(this.dslDefinition);
+        this.packageCreationStore.state$.subscribe(cbaPackage => {
+            if (cbaPackage && cbaPackage.definitions && cbaPackage.definitions.dslDefinition) {
+                this.dslDefinition.content = cbaPackage.definitions.dslDefinition.content;
+            }
+        });
 
     }
 
     textChanged(event) {
-        console.log('event changed');
+        this.packageCreationStore.changeDslDefinition(this.dslDefinition);
     }
 }

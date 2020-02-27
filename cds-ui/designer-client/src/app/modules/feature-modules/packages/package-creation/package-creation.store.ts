@@ -19,16 +19,15 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
-import { Store } from '../../../../common/core/stores/Store';
+import {Store} from '../../../../common/core/stores/Store';
 
-import { CBAPackage, DslDefinition } from './mapping-models/CBAPacakge.model';
-import { PackageCreationService } from './package-creation.service';
-import { FolderNodeElement, MetaDataTabModel } from './mapping-models/metadata/MetaDataTab.model';
-import * as JSZip from 'jszip';
-import { Observable } from 'rxjs';
-import { ResourceDictionary } from './mapping-models/ResourceDictionary.model';
+import {CBAPackage, DslDefinition} from './mapping-models/CBAPacakge.model';
+import {PackageCreationService} from './package-creation.service';
+import {MetaDataTabModel} from './mapping-models/metadata/MetaDataTab.model';
+import {Observable} from 'rxjs';
+import {ResourceDictionary} from './mapping-models/ResourceDictionary.model';
 
 
 @Injectable({
@@ -36,8 +35,6 @@ import { ResourceDictionary } from './mapping-models/ResourceDictionary.model';
 })
 export class PackageCreationStore extends Store<CBAPackage> {
 
-    private folder: FolderNodeElement = new FolderNodeElement();
-    private zipFile: JSZip = new JSZip();
 
     constructor(private packageCreationService: PackageCreationService) {
         super(new CBAPackage());
@@ -48,6 +45,13 @@ export class PackageCreationStore extends Store<CBAPackage> {
         this.setState({
             ...this.state,
             metaData: metaDataObject
+        });
+    }
+
+    setCustomKeys(mapOfCustomKey: Map<string, string>) {
+        this.setState({
+            ...this.state,
+            metaData: this.state.metaData.setCustomKey(mapOfCustomKey)
         });
     }
 

@@ -13,13 +13,15 @@ export class ConfigurationDashboardService {
 
     }
 
-    getBluePrintModel(id: string): Observable<BluePrintDetailModel> {
+    private getBluePrintModel(id: string): Observable<BluePrintDetailModel> {
         return this.api.getOne(BlueprintURLs.getOneBlueprint + '/' + id);
     }
+    getPagedPackages(id: string) {
+        return this.getBluePrintModel(id);
+    }
 
-
-    public downloadResource(id: string) {
-        return this.api.getCustomized(id, {responseType: 'blob'});
+    public downloadResource(path: string) {
+        return this.api.getCustomized(BlueprintURLs.download + path, {responseType: 'blob'});
     }
 
 }

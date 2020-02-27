@@ -31,6 +31,11 @@ export class MetaDataTabModel {
     templateName: string;
     templateTags: Set<string> = new Set<string>();
 
+    setCustomKey(mapOfCustomKey: Map<string, string>) {
+        this.mapOfCustomKey = mapOfCustomKey;
+        return this;
+    }
+
 }
 
 /*TOSCA-Meta-File-Version: 1.0.0
@@ -59,10 +64,10 @@ export class FolderNodeElement {
         {
             name: 'Definitions',
             children: [
-                { name: 'activation-blueprint.json' },
-                { name: 'artifacts_types.json' },
-                { name: 'data_types.json' },
-                { name: 'vLB_CDS.json' },
+                {name: 'activation-blueprint.json'},
+                {name: 'artifacts_types.json'},
+                {name: 'data_types.json'},
+                {name: 'vLB_CDS.json'},
             ]
         },
         {
@@ -71,8 +76,8 @@ export class FolderNodeElement {
                 {
                     name: 'kotlin',
                     children: [
-                        { name: 'ScriptComponent.cba.kts' },
-                        { name: 'ResourceAssignmentProcessor.cba.kts' },
+                        {name: 'ScriptComponent.cba.kts'},
+                        {name: 'ResourceAssignmentProcessor.cba.kts'},
                     ]
                 }
             ]

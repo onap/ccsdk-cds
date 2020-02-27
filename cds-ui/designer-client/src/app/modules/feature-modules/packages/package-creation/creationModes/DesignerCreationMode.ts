@@ -41,7 +41,7 @@ export class DesignerCreationMode extends PackageCreationModes {
             FilesContent.putData(key, valueOfFile);
         });
 
-        const filenameEntry = 'Definitions/vLB_CDS.json';
+        const filenameEntry = 'Definitions/blueprint.json';
         const vlbDefinition: VlbDefinition = new VlbDefinition();
         const metadata: Metadata = new Metadata();
 

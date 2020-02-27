@@ -2,21 +2,20 @@
 
 <div class="new-wrapper">
     <div class="container-fluid main-container">
-    <header class="page-title">
-        <div class="row">
-            <h2 class="col m-0">
-                <ul class="breadcrumb-header">
-                    <li>CBA Packages</li>
-                    <li>Package Name</li>
-                </ul>
-            </h2>
-            <div class="col d-flex justify-content-end header-button-save">
-                <button class="float btn btn-sm btn-outline-secondary" disabled>Discard Changes</button>
-                <button class="float btn btn-sm btn-primary" (click)="saveBluePrint()">Save</button>
+        <header class="page-title">
+            <div class="row">
+                <h2 class="col m-0">
+                    <ul class="breadcrumb-header">
+                        <li>CBA Packages</li>
+                        <li>Package Name</li>
+                    </ul>
+                </h2>
+                <div class="col d-flex justify-content-end header-button-save">
+                    <button class="float btn btn-sm btn-outline-secondary" disabled>Discard Changes</button>
+                    <button class="float btn btn-sm btn-primary" (click)="saveBluePrint()">Save</button>
+                </div>
             </div>
-        </div>
-    </header>
-
+        </header>
 
 
         <div class="container-fluid body-container">
@@ -98,11 +97,12 @@
                             </div>
                         </div>
                         <div class="col-4 package-view-button">
-                            <button class="btn btn-sm btn-outline-secondary"><i class="fa fa-play-circle"></i> Deploy</button>
+                            <button class="btn btn-sm btn-outline-secondary"><i class="fa fa-play-circle"></i> Deploy
+                            </button>
                             <button class="btn btn-sm btn-primary">Designer Mode</button>
                         </div>
                     </div>
-                 
+
                 </div>
 
                 <nav class="row">
@@ -112,7 +112,7 @@
                             <a class="nav-item nav-link active" id="nav-metadata-tab" data-toggle="tab"
                                href="#nav-metadata"
                                role="tab" aria-controls="nav-metadata"
-                               aria-selected="true">METADATA</a>
+                               aria-selected="false"  autofocus  #nameit (focusout)="test()">METADATA</a>
                             <a class="nav-item nav-link" id="nav-template-tab" data-toggle="tab" href="#nav-template"
                                role="tab" aria-controls="nav-template"
                                aria-selected="false">TEMPLATE & MAPPING</a>
@@ -163,5 +163,5 @@
                 </div>
             </div>
         </div>
-</div>
+    </div>
 </div>

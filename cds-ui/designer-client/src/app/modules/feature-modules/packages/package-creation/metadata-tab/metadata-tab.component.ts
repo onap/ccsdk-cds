@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { PackageCreationService } from '../package-creation.service';
-import { MetaDataTabModel } from '../mapping-models/metadata/MetaDataTab.model';
-import { PackageCreationStore } from '../package-creation.store';
-import { PackageStore } from '../../configuration-dashboard/package.store';
+import {Component, OnInit} from '@angular/core';
+import {PackageCreationService} from '../package-creation.service';
+import {MetaDataTabModel} from '../mapping-models/metadata/MetaDataTab.model';
+import {PackageCreationStore} from '../package-creation.store';
+import {PackageStore} from '../../configuration-dashboard/package.store';
+import {ActivatedRoute} from '@angular/router';
 
 
 @Component({
@@ -11,37 +12,47 @@ import { PackageStore } from '../../configuration-dashboard/package.store';
     styleUrls: ['./metadata-tab.component.css']
 })
 export class MetadataTabComponent implements OnInit {
-
+    packageNameAndVersionEnables = true;
     counter = 0;
     tags = new Set<string>();
     customKeysMap = new Map();
     modes: object[] = [
-        { name: 'Designer Mode', style: 'mode-icon icon-designer-mode' },
-        { name: 'Scripting Mode', style: 'mode-icon icon-scripting-mode' },
-        { name: 'Generic Script Mode', style: 'mode-icon icon-generic-script-mode' }];
+        {name: 'Designer Mode', style: 'mode-icon icon-designer-mode'},
+        {name: 'Scripting Mode', style: 'mode-icon icon-scripting-mode'},
+        {name: 'Generic Script Mode', style: 'mode-icon icon-generic-script-mode'}];
     private metaDataTab: MetaDataTabModel = new MetaDataTabModel();
     private errorMessage: string;
 
-    constructor(
-        private packageCreationService: PackageCreationService,
-        private packageCreationStore: PackageCreationStore,
-        private packageStore: PackageStore) {
+    constructor(private route: ActivatedRoute,
+                private packageCreationService: PackageCreationService,
+                private packageCreationStore: PackageCreationStore,
+                private packageStore: PackageStore) {
 
     }
 
     ngOnInit() {
         this.metaDataTab.templateTags = this.tags;
         this.metaDataTab.mapOfCustomKey = this.customKeysMap;
-        this.packageCreationStore.changeMetaData(this.metaDataTab);
 
-        this.packageStore.state$.subscribe(element => {
-            if (element && element.configuration) {
-                console.log('from element2');
+        const id = this.route.snapshot.paramMap.get('id');
+        id ? this.packageNameAndVersionEnables = false :
+            this.packageNameAndVersionEnables = true;
+        this.packageCreationStore.state$.subscribe(element => {
+
+            if (element && element.metaData) {
+
+                this.metaDataTab.name = element.metaData.name;
+                this.metaDataTab.version = element.metaData.version;
+                this.metaDataTab.description = element.metaData.description;
+                this.tags = element.metaData.templateTags;
+                this.metaDataTab.templateTags = this.tags;
                 console.log(element);
-                this.metaDataTab.name = element.configuration.artifactName;
-                this.metaDataTab.version = element.configuration.artifactVersion;
-                this.metaDataTab.description = element.configuration.artifactDescription;
-                this.tags = new Set(element.configuration.tags.split(','));
+                if (element.metaData.mode && element.metaData.mode.includes(' DEFAULT')) {
+                    this.metaDataTab.mode = 'Designer Mode';
+                }
+
+                this.customKeysMap = element.metaData.mapOfCustomKey;
+                // this.tags = element.metaData.templateTags;
 
             }
         });
@@ -94,5 +105,9 @@ export class MetadataTabComponent implements OnInit {
             });
         }
 
+    }
+
+    saveMetaDataToStore() {
+        this.packageCreationStore.changeMetaData(this.metaDataTab);
     }
 }

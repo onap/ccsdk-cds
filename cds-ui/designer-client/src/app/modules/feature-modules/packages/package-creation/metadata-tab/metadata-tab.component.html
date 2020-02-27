@@ -3,10 +3,11 @@
         <label class="label-name">Mode</label>
         <label name="trst" *ngFor="let mode of modes; let i = index">
             <input class="form-check-input" [(ngModel)]="metaDataTab.mode" type="radio" name="exampleRadios"
-                id="exampleRadios1" value={{mode.name}}>
+                  id="exampleRadios1" value={{mode.name}}>
 
             <span>
-                <i [className]="mode.style" aria-hidden="true" [id]="mode.name"></i>
+                <i [className]="mode.style" aria-hidden="true"
+                   [id]="mode.name"></i>
                 {{mode.name}}
             </span>
         </label>
@@ -29,19 +30,20 @@
     <div class="single-line-model error">
         <label class="label-name">Name <span>*</span></label>
         <div class="label-input">
-            <input type="input" [(ngModel)]="metaDataTab.name" placeholder="Topology name.vLB.CDS">
+            <input type="input" [readOnly]="!packageNameAndVersionEnables" [(ngModel)]="metaDataTab.name"
+                   placeholder="Topology name.vLB.CDS">
         </div>
-        <div class="model-note-container error-message">
+        <!--<div class="model-note-container error-message">
             Package name already exists with this version. Please enter a different name or enter different version
             number.
-        </div>
+        </div>-->
     </div>
 
     <div class="single-line-model">
         <label class="label-name">Version <span>*</span></label>
         <div class="label-input">
-            <input type="input" [(ngModel)]="metaDataTab.version" (input)="validatePackageNameAndVersion()"
-                placeholder="Example: 1.0.0">
+            <input type="input" [readOnly]="!packageNameAndVersionEnables" [(ngModel)]="metaDataTab.version" (input)="validatePackageNameAndVersion()"
+                   placeholder="Example: 1.0.0">
         </div>
         <div class="model-note-container error-message">{{errorMessage}}</div>
     </div>
@@ -56,13 +58,13 @@
         <label class="label-name">tags</label>
         <div class="label-input">
             <input type="input" (keyup.enter)="addTag($event)" [(ngModel)]="metaDataTab.tags"
-                placeholder="Ex., vDNS-CDS">
+                   placeholder="Ex., vDNS-CDS">
 
         </div>
         <div class="model-note-container tag-notes">Seprate tags with comma or space</div>
         <div class="model-note-container tages-container">
             <span *ngFor="let tag of tags" class="single-tage">{{tag}} <i (click)="removeTag(tag)"
-                    class="fa fa-times-circle"></i></span>
+                                                                          class="fa fa-times-circle"></i></span>
         </div>
     </div>
 </div>
@@ -77,7 +79,7 @@
             </div>
             <div *ngFor="let map of customKeysMap | keyvalue; let i=index" class="single-custom-key">
                 <div class="single-line-custom-key">
-                    <label class="label-name"><span>{{i+1}}-</span> Name</label>
+                    <label class="label-name"><span>{{i + 1}}-</span> Name</label>
                     <div class="label-input">
                         <input value="{{map.key}}" name="key" type="input" placeholder="Enter name">
                     </div>
@@ -88,23 +90,25 @@
                         <input value="{{map.value}}" name="value" type="input" placeholder="Enter value">
                     </div>
                 </div>
-                <div class="single-line-custom-key-delete"><button (click)="removeKey($event,map.key)"
-                        class="custom-key-delete"><i aria-hidden="true" class="icon-delete"></i></button></div>
+                <div class="single-line-custom-key-delete">
+                    <button (click)="removeKey($event,map.key)"
+                            class="custom-key-delete"><i aria-hidden="true" class="icon-delete"></i></button>
+                </div>
             </div>
 
             <div class="single-custom-key">
                 <div class="single-line-custom-key">
-                    <label class="label-name"><span>{{customKeysMap.size+1}}.</span> Name</label>
+                    <label class="label-name"><span>{{customKeysMap.size + 1}}.</span> Name</label>
                     <div class="label-input">
                         <input (keyup.enter)="addCustomKey()" name="key" type="input" class="mapKey"
-                            placeholder="Enter name">
+                               placeholder="Enter name">
                     </div>
                 </div>
                 <div class="single-line-custom-key">
                     <label class="label-name">Value</label>
                     <div class="label-input">
                         <input (keyup.enter)="addCustomKey()" class="mapValue" name="value" type="input"
-                            placeholder="Enter value">
+                               placeholder="Enter value">
                     </div>
                 </div>
                 <!-- <div class="single-line-custom-key-delete"><button (click)="removeKey($event)"
