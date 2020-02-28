@@ -22,7 +22,6 @@ limitations under the License.
 import {Injectable} from '@angular/core';
 import {Store} from '../../../../common/core/stores/Store';
 import {DesignerService} from './designer.service';
-import {ModelType} from './model/ModelType.model';
 import {DesignerDashboardState} from './model/designer.dashboard.state';
 import { DeclarativeWorkflow } from './model/designer.workflow';
 import { NodeTemplate } from './model/desinger.nodeTemplate.model';
@@ -37,18 +36,6 @@ export class DesignerStore extends Store<DesignerDashboardState> {
         super(new DesignerDashboardState());
     }
 
-    public retrieveFuntions() {
-        const modelDefinitionType = 'node_type';
-        this.designerService.getFunctions(modelDefinitionType).subscribe(
-            (modelTypeList: ModelType[]) => {
-                console.log(modelTypeList);
-                this.setState({
-                    ...this.state,
-                    serverFunctions: modelTypeList,
-                });
-            });
-    }
-
     /**
      * adds empty workflow with name only.
      * called when blank action is added to the board
@@ -59,37 +46,98 @@ export class DesignerStore extends Store<DesignerDashboardState> {
             ...this.state,
             template: {
                 ...this.state.template,
-                workflows:
-                    this.state.template.workflows.set(workflowName, new DeclarativeWorkflow())
+                workflows: {
+                    ...this.state.template.workflows,
+                    [workflowName]: new DeclarativeWorkflow()
+                }
             }
         });
     }
 
-    addStepToDeclarativeWorkFlow(workflowName: string, stepType: string) {
-        const currentWorkflow: DeclarativeWorkflow = this.state.template.workflows.get(workflowName);
-        currentWorkflow.steps = {
-                target: stepType,
-                description: ''
-            };
-        const allNewWorkflowsMap =
-            this.state.template.workflows.set(workflowName, currentWorkflow);
+    addStepToDeclarativeWorkFlow(workflowName: string, stepName: string,  stepType: string) {
         this.setState({
             ...this.state,
             template: {
                 ...this.state.template,
-                workflows: allNewWorkflowsMap
+                workflows: {
+                    ...this.state.template.workflows,
+                    [workflowName]: {
+                        ...this.state.template.workflows[workflowName],
+                        steps: {
+                            [stepName]: {
+                                target: stepType,
+                                description: ''
+                            }
+                        }
+                    }
+                }
             }
         });
     }
 
+    saveSourceContent(code: string) {
+        const topologtTemplate = JSON.parse(code);
+        this.setState({
+            ...this.state,
+            sourceContent: code,
+            template: topologtTemplate
+        });
+    }
 
-    addNodeTemplate(nodeTemplateName: string) {
+
+    /**
+     * adding node tempates is a separate action of adding the steps to the workflow
+     * you can add node template and don't add workflow step when you add dependencies for the
+     * dg-generic function for example
+     */
+    addNodeTemplate(nodeTemplateName: string, type: string) {
         this.setState({
             ...this.state,
             template: {
                 ...this.state.template,
-                node_templates:
-                    this.state.template.node_templates.set(nodeTemplateName, new NodeTemplate())
+                node_templates: {
+                    ...this.state.template.node_templates,
+                    [nodeTemplateName]: new NodeTemplate(type)
+                }
+            }
+        });
+    }
+
+    addDgGenericNodeTemplate(nodeTemplateName: string) {
+        const node = new NodeTemplate('dg-generic');
+        node.properties = {
+            'dependency-node-template': []
+        };
+        this.setState({
+            ...this.state,
+            template: {
+                ...this.state.template,
+                node_templates: {
+                    ...this.state.template.node_templates,
+                    [nodeTemplateName]: node
+                }
+            }
+        });
+    }
+
+    addDgGenericDependency(dgGenericNodeName: string, dependency: string) {
+        const props = this.state.template.node_templates[dgGenericNodeName].properties;
+        this.setState({
+            ...this.state,
+            template: {
+                ...this.state.template,
+                node_templates: {
+                    ...this.state.template.node_templates,
+                    [dgGenericNodeName]: {
+                        ...this.state.template.node_templates[dgGenericNodeName],
+                        properties: {
+                            'dependency-node-template': [
+                                ...props['dependency-node-template'],
+                                dependency
+                            ]
+                        }
+                    }
+                }
             }
         });
     }

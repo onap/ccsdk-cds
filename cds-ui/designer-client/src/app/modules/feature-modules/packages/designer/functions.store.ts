@@ -19,15 +19,30 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import {ModelType} from './ModelType.model';
-import { TopologyTemplate } from './designer.topologyTemplate.model';
+import {Injectable} from '@angular/core';
+import {Store} from '../../../../common/core/stores/Store';
+import {DesignerService} from './designer.service';
+import {ModelType} from './model/ModelType.model';
+import { FunctionsState } from './model/functions.state';
 
-export class DesignerDashboardState {
 
-    template: TopologyTemplate;
-    sourceContent: string;
+@Injectable({
+    providedIn: 'root'
+})
+export class FunctionsStore extends Store<FunctionsState> {
 
-    constructor() {
-        this.template = new TopologyTemplate();
+    constructor(private designerService: DesignerService) {
+        super(new FunctionsState());
+    }
+
+    public retrieveFuntions() {
+        const modelDefinitionType = 'node_type';
+        this.designerService.getFunctions(modelDefinitionType).subscribe(
+            (modelTypeList: ModelType[]) => {
+                this.setState({
+                    ...this.state,
+                    serverFunctions: modelTypeList,
+                });
+            });
     }
 }

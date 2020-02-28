@@ -1,3 +1,6 @@
+.dsl-editor {
+    height: 500px;  
+}
 
 body{
   background-image: linear-gradient(-45deg, #000 9%, #fff 0) !important;
@@ -279,8 +282,6 @@ p.compType-4{
 }
 .componentsList{
   padding-bottom: 0;
-  height: calc( 100vh - 218px)!important;
-  overflow: scroll;
 }
 .custom-control.custom-checkbox:hover,
 .custom-control-label:hover{

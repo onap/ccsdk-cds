@@ -87,10 +87,5 @@
   },
   "rulesDirectory": [
     "codelyzer"
-  ],
-  "linterOptions": {
-    "exclude": [
-      "src/app/modules/feature-modules/packages/designer/designer.component.ts"
-    ]
-  }
+  ]
 }
