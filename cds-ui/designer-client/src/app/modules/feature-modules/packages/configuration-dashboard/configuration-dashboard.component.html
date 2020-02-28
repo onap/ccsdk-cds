@@ -20,7 +20,7 @@
 
 
 
-        <div class="container-fluid body-container">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+        <div class="container-fluid body-container">
 
             <div class="container">
                <!-- <div class="creat-action-container">
@@ -49,12 +49,12 @@
                                     <div class="package-name-container">
                                         <div class="row">
                                             <div class="col-12 package-name deployed">
-                                                Package Name
+                                                {{viewedPackage.artifactName}}
                                                 <span>.vLB.CDS</span>
                                                 <i class="icon-deploy"></i>
                                             </div>
                                             <div class="col-12 package-description">
-                                                Last modified Oct 4, 2019 03:48 PM By Ahmed Abbas
+                                                Last modified {{ viewedPackage.createdDate | date:'short' }} By {{viewedPackage.updatedBy}}
                                             </div>
                                         </div>
 
@@ -63,7 +63,9 @@
                             </div>
                         </div>
                         <div class="col-4 package-view-button">
-                            <button class="btn btn-sm btn-outline-secondary"><i class="fa fa-play-circle"></i> Deploy</button>
+                            <button class="btn btn-sm btn-outline-secondary" (click)="deployCurrentPackage()"><i class="fa fa-play-circle"></i> Deploy</button>
+                            <button class="btn btn-sm btn-outline-secondary" (click)="downloadPackage(viewedPackage.artifactName,viewedPackage.artifactVersion)"><i class="fa"></i> Download</button>
+
                             <button class="btn btn-sm btn-primary">Designer Mode</button>
                         </div>
                     </div>

@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {PackageCreationService} from '../package-creation.service';
 import {MetaDataTabModel} from '../mapping-models/metadata/MetaDataTab.model';
 import {PackageCreationStore} from '../package-creation.store';
-import {PackageStore} from '../../configuration-dashboard/package.store';
 import {ActivatedRoute} from '@angular/router';
 
 
@@ -25,8 +24,8 @@ export class MetadataTabComponent implements OnInit {
 
     constructor(private route: ActivatedRoute,
                 private packageCreationService: PackageCreationService,
-                private packageCreationStore: PackageCreationStore,
-                private packageStore: PackageStore) {
+                private packageCreationStore: PackageCreationStore
+    ) {
 
     }
 

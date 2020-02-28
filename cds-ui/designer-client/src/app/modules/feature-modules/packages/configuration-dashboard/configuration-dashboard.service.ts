@@ -16,6 +16,7 @@ export class ConfigurationDashboardService {
     private getBluePrintModel(id: string): Observable<BluePrintDetailModel> {
         return this.api.getOne(BlueprintURLs.getOneBlueprint + '/' + id);
     }
+
     getPagedPackages(id: string) {
         return this.getBluePrintModel(id);
     }
@@ -24,4 +25,7 @@ export class ConfigurationDashboardService {
         return this.api.getCustomized(BlueprintURLs.download + path, {responseType: 'blob'});
     }
 
+    deployPost(body: any | null): Observable<any> {
+        return this.api.post(BlueprintURLs.deploy, body, {responseType: 'text'});
+    }
 }
