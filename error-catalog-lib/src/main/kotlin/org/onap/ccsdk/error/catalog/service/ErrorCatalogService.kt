@@ -36,7 +36,7 @@ class ErrorCatalogService(private var errorMessagesLibService: ErrorMessagesLibS
         val errorMessage = getMessage(enumErrorCatalog.getErrorDomain(), enumErrorCatalog.getErrorName()) ?: message
         val errorCode = errorCode ?: getProtocolErrorCode(enumErrorCatalog, protocol)
         val action = ErrorCatalogUtils.readErrorActionFromMessage(errorMessage)
-        val errorCause = cause!!.message ?: ErrorCatalogUtils.readErrorCauseFromMessage(errorMessage)
+        val errorCause = cause?.message ?: ErrorCatalogUtils.readErrorCauseFromMessage(errorMessage)
 
         return ErrorCatalog(enumErrorCatalog.getErrorName(), enumErrorCatalog.getErrorDomain(), errorCode, action, errorCause)
     }

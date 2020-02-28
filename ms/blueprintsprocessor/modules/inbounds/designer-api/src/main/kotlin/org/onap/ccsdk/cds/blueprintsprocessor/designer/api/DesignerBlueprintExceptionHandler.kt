@@ -1,5 +1,6 @@
 /*
  * Copyright © 2018-2019 Bell Canada Intellectual Property.
+ *  Modifications Copyright © 2017-2020 AT&T, IBM, Bell Canada
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +17,16 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.cds.controllerblueprints.core.data.ErrorCode
-import org.slf4j.LoggerFactory
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.error.BlueprintProcessorErrorCodes
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.error.ErrorCatalogManagerImpl
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.error.catalog.ErrorPayload
+import org.onap.ccsdk.error.catalog.data.ErrorMessageLibConstants
+import org.onap.ccsdk.error.catalog.interfaces.ErrorCatalogExceptionHandler
+import org.onap.ccsdk.error.catalog.utils.ErrorCatalogUtils
+import org.onap.ccsdk.error.catalog.utils.errorCauseOrDefault
+import org.onap.ccsdk.error.catalog.utils.errorMessageOrDefault
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -28,29 +36,27 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
  * ControllerBlueprintExceptionHandler Purpose: Handle exceptions in controllerBlueprint API and provide the right
  * HTTP code status
  *
- * @author Vinal Patel
+ * @author Steve Siani
  * @version 1.0
  */
 @RestControllerAdvice("org.onap.ccsdk.cds.controllerblueprints")
-open class DesignerBlueprintExceptionHandler {
+open class DesignerBlueprintExceptionHandler : ErrorCatalogExceptionHandler {
+    @Autowired
+    lateinit var errorManager: ErrorCatalogManagerImpl
 
-    companion object ControllerBlueprintExceptionHandler {
-        val LOG = LoggerFactory.getLogger(DesignerBlueprintExceptionHandler::class.java)
+    @ExceptionHandler(BluePrintProcessorException::class)
+    fun errorCatalogException(e: BluePrintProcessorException): ResponseEntity<ErrorPayload> {
+        return ErrorCatalogUtils.returnResponseEntity(errorManager.generateException(
+                BlueprintProcessorErrorCodes.GENERIC_FAILURE,
+                ErrorMessageLibConstants.ERROR_CATALOG_PROTOCOL_HTTP,
+                e.errorMessageOrDefault(), e.errorCauseOrDefault()))
     }
 
-    @ExceptionHandler
-    fun ControllerBlueprintExceptionHandler(e: BluePrintException): ResponseEntity<ErrorMessage> {
-        val errorCode = ErrorCode.valueOf(e.code)
-        val errorMessage = ErrorMessage(errorCode?.message(e.message!!), errorCode?.value, "ControllerBluePrint_Error_Message")
-        LOG.error("Error: $errorCode ${e.message}")
-        return ResponseEntity(errorMessage, HttpStatus.resolve(errorCode!!.httpCode))
-    }
-
-    @ExceptionHandler
-    fun ControllerBlueprintExceptionHandler(e: Exception): ResponseEntity<ErrorMessage> {
-        val errorCode = ErrorCode.GENERIC_FAILURE
-        val errorMessage = ErrorMessage(errorCode?.message(e.message!!), errorCode?.value, "ControllerBluePrint_Error_Message")
-        LOG.error("Error: $errorCode ${e.message}")
-        return ResponseEntity(errorMessage, HttpStatus.resolve(errorCode!!.httpCode))
+    @ExceptionHandler(Exception::class)
+    fun errorCatalogException(e: Exception): ResponseEntity<ErrorPayload> {
+        return ErrorCatalogUtils.returnResponseEntity(errorManager.generateException(
+                BlueprintProcessorErrorCodes.GENERIC_FAILURE,
+                ErrorMessageLibConstants.ERROR_CATALOG_PROTOCOL_HTTP,
+                e.errorMessageOrDefault(), e.errorCauseOrDefault()))
     }
 }

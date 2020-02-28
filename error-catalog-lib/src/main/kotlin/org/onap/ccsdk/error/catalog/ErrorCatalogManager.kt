@@ -21,11 +21,8 @@ import org.onap.ccsdk.error.catalog.data.LogLevel
 import org.onap.ccsdk.error.catalog.interfaces.EnumErrorCatalogInterface
 import org.onap.ccsdk.error.catalog.interfaces.ErrorCatalogException
 import org.onap.ccsdk.error.catalog.service.ErrorCatalogService
-import org.springframework.beans.factory.annotation.Autowired
 
-abstract class ErrorCatalogManager {
-    @Autowired
-    lateinit var errorCatalogService: ErrorCatalogService
+abstract class ErrorCatalogManager(private val errorCatalogService: ErrorCatalogService) {
 
     private fun getErrorCatalog(
         enumErrorCatalog: EnumErrorCatalogInterface, protocol: String, message: String

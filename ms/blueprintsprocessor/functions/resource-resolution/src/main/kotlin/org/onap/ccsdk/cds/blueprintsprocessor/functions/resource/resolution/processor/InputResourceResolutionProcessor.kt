@@ -1,6 +1,6 @@
 /*
  *  Copyright © 2017-2018 AT&T Intellectual Property.
- *  Modifications Copyright © 2018 IBM.
+ *  Modifications Copyright © 2018 - 2020 IBM, Bell Canada.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,10 +20,15 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.pro
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.DatabaseResourceSource
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.error.BlueprintProcessorErrorCodes
 import org.onap.ccsdk.cds.controllerblueprints.core.isNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
+import org.onap.ccsdk.error.catalog.data.ErrorMessage
+import org.onap.ccsdk.error.catalog.data.ErrorMessageLibConstants
+import org.onap.ccsdk.error.catalog.interfaces.ErrorCatalogException
+import org.onap.ccsdk.error.catalog.utils.errorCauseOrDefault
+import org.onap.ccsdk.error.catalog.utils.errorMessageOrDefault
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
@@ -48,9 +53,15 @@ open class InputResourceResolutionProcessor : ResourceAssignmentProcessor() {
             }
             // Check the value has populated for mandatory case
             ResourceAssignmentUtils.assertTemplateKeyValueNotNull(resourceAssignment)
+        } catch (e: ErrorCatalogException) {
+            e.addErrorModel(ErrorMessage(BlueprintProcessorErrorCodes.RESOLUTION_FAILURE.domain,
+                    "Error while processing Input Resource Resolution", null))
+            throw e
         } catch (e: Exception) {
             ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, e.message)
-            throw BluePrintProcessorException("Failed in template key ($resourceAssignment) assignments with : (${e.message})", e)
+            throw errorManager.generateException(BlueprintProcessorErrorCodes.RESOLUTION_FAILURE,
+                    ErrorMessageLibConstants.ERROR_CATALOG_PROTOCOL_GRPC, "Failed in template key ($resourceAssignment) " +
+                    "assignments with : (${e.errorMessageOrDefault()})", e.errorCauseOrDefault())
         }
     }
 
@@ -63,7 +74,9 @@ open class InputResourceResolutionProcessor : ResourceAssignmentProcessor() {
         /** Check Resource Assignment has the source definitions, If not get from Resource Definition **/
         val resourceSource = resourceAssignment.dictionarySourceDefinition
             ?: resourceDefinition?.sources?.get(dSource)
-            ?: throw BluePrintProcessorException("couldn't get resource definition $dName source($dSource)")
+            ?: throw errorManager.generateException(BlueprintProcessorErrorCodes.RESOLUTION_FAILURE,
+                    ErrorMessageLibConstants.ERROR_CATALOG_PROTOCOL_GRPC, "couldn't get resource definition $dName " +
+                    "source($dSource)")
         val resourceSourceProperties = checkNotNull(resourceSource.properties) {
             "failed to get source properties for $dName "
         }

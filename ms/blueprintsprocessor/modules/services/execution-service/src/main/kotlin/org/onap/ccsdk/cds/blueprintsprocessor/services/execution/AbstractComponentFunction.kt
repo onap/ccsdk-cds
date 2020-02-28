@@ -1,6 +1,6 @@
 /*
  *  Copyright © 2017-2018 AT&T Intellectual Property.
- *  Modifications Copyright © 2019 IBM.
+ *  Modifications Copyright © 2019 - 2020 IBM, Bell Canada.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInpu
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.Status
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.error.ErrorCatalogManagerImpl
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
@@ -36,6 +37,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.readNBLines
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintVelocityTemplateService
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 
 /**
  * AbstractComponentFunction
@@ -57,6 +59,8 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     lateinit var operationName: String
     lateinit var nodeTemplateName: String
     var operationInputs: MutableMap<String, JsonNode> = hashMapOf()
+    @Autowired
+    lateinit var errorManager: ErrorCatalogManagerImpl
 
     override fun getName(): String {
         return stepName

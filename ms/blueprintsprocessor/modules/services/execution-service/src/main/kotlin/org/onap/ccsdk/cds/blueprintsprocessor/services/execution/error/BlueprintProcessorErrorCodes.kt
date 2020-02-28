@@ -43,6 +43,12 @@ enum class BlueprintProcessorErrorCodes(
         override fun getErrorHttpCode(): Int { return httpCode }
         override fun getErrorGrpcCode(): Int { return grpcCode }
     },
+    RESOLUTION_FAILURE(ErrorCatalogDomainsConstants.RESOURCE_RESOLUTION, 500, 2) {
+        override fun getErrorName(): String { return name }
+        override fun getErrorDomain(): String { return domain }
+        override fun getErrorHttpCode(): Int { return httpCode }
+        override fun getErrorGrpcCode(): Int { return grpcCode }
+    },
     INVALID_FILE_EXTENSION(ErrorCatalogDomainsConstants.SELF_SERVICE_API, 415, 3) {
         override fun getErrorName(): String { return name }
         override fun getErrorDomain(): String { return domain }
@@ -50,6 +56,60 @@ enum class BlueprintProcessorErrorCodes(
         override fun getErrorGrpcCode(): Int { return grpcCode }
     },
     RESOURCE_NOT_FOUND(httpCode = 404, grpcCode = 5) {
+        override fun getErrorName(): String { return name }
+        override fun getErrorDomain(): String { return domain }
+        override fun getErrorHttpCode(): Int { return httpCode }
+        override fun getErrorGrpcCode(): Int { return grpcCode }
+    },
+    UNSUPPORTED_MEDIA_TYPE(httpCode = 415, grpcCode = 3) {
+        override fun getErrorName(): String { return name }
+        override fun getErrorDomain(): String { return domain }
+        override fun getErrorHttpCode(): Int { return httpCode }
+        override fun getErrorGrpcCode(): Int { return grpcCode }
+    },
+    RESOURCE_PATH_MISSING(httpCode = 503, grpcCode = 3) {
+        override fun getErrorName(): String { return name }
+        override fun getErrorDomain(): String { return domain }
+        override fun getErrorHttpCode(): Int { return httpCode }
+        override fun getErrorGrpcCode(): Int { return grpcCode }
+    },
+    RESOURCE_WRITING_FAIL(httpCode = 503, grpcCode = 9) {
+        override fun getErrorName(): String { return name }
+        override fun getErrorDomain(): String { return domain }
+        override fun getErrorHttpCode(): Int { return httpCode }
+        override fun getErrorGrpcCode(): Int { return grpcCode }
+    },
+    IO_FILE_INTERRUPT(httpCode = 503, grpcCode = 3) {
+        override fun getErrorName(): String { return name }
+        override fun getErrorDomain(): String { return domain }
+        override fun getErrorHttpCode(): Int { return httpCode }
+        override fun getErrorGrpcCode(): Int { return grpcCode }
+    },
+    INVALID_REQUEST_FORMAT(httpCode = 400, grpcCode = 3) {
+        override fun getErrorName(): String { return name }
+        override fun getErrorDomain(): String { return domain }
+        override fun getErrorHttpCode(): Int { return httpCode }
+        override fun getErrorGrpcCode(): Int { return grpcCode }
+    },
+    UNAUTHORIZED_REQUEST(httpCode = 401, grpcCode = 16) {
+        override fun getErrorName(): String { return name }
+        override fun getErrorDomain(): String { return domain }
+        override fun getErrorHttpCode(): Int { return httpCode }
+        override fun getErrorGrpcCode(): Int { return grpcCode }
+    },
+    REQUEST_NOT_FOUND(httpCode = 404, grpcCode = 8) {
+        override fun getErrorName(): String { return name }
+        override fun getErrorDomain(): String { return domain }
+        override fun getErrorHttpCode(): Int { return httpCode }
+        override fun getErrorGrpcCode(): Int { return grpcCode }
+    },
+    CONFLICT_ADDING_RESOURCE(httpCode = 409, grpcCode = 10) {
+        override fun getErrorName(): String { return name }
+        override fun getErrorDomain(): String { return domain }
+        override fun getErrorHttpCode(): Int { return httpCode }
+        override fun getErrorGrpcCode(): Int { return grpcCode }
+    },
+    DUPLICATE_DATA(httpCode = 409, grpcCode = 11) {
         override fun getErrorName(): String { return name }
         override fun getErrorDomain(): String { return domain }
         override fun getErrorHttpCode(): Int { return httpCode }
