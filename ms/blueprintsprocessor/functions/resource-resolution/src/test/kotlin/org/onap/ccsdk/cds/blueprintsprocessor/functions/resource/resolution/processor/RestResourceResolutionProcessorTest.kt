@@ -22,6 +22,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock.MockBluePrintRestLibPropertyService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock.MockErrorCatalogConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock.MockRestResourceResolutionProcessor
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestClientProperties
@@ -38,7 +39,8 @@ import kotlin.test.assertNotNull
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
     classes = [MockRestResourceResolutionProcessor::class, MockBluePrintRestLibPropertyService::class,
-        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, RestClientProperties::class]
+        MockErrorCatalogConfiguration::class, BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class,
+        RestClientProperties::class]
 )
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class RestResourceResolutionProcessorTest {

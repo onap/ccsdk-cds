@@ -19,11 +19,14 @@ package org.onap.ccsdk.error.catalog.interfaces
 import org.onap.ccsdk.error.catalog.ErrorPayload
 import org.onap.ccsdk.error.catalog.data.ErrorCatalog
 import org.onap.ccsdk.error.catalog.data.ErrorMessage
+import org.onap.ccsdk.error.catalog.data.ErrorMessageLibConstants
 import org.onap.ccsdk.error.catalog.data.LogLevel
 
 abstract class ErrorCatalogException : RuntimeException {
     var errorPayload: ErrorPayload
     private val messageSeparator = "${System.lineSeparator()} -> "
+    var httpCode: Int = 500
+    var grpcCode: Int = 13
 
     fun addErrorModel(errorMessage: ErrorMessage) {
         errorPayload.subErrors.add(errorMessage)
@@ -73,5 +76,18 @@ abstract class ErrorCatalogException : RuntimeException {
         this.errorPayload = errorPayload
         this.errorPayload.debugMessage = cause.message ?: ""
         addErrorModel(ErrorMessage(domainId, String.format(message, *args), cause))
+    }
+
+    fun updateErrorPayloadCode(protocol: String) {
+        if (protocol == ErrorMessageLibConstants.ERROR_CATALOG_PROTOCOL_GRPC) {
+            this.errorPayload.code = this.grpcCode
+        } else {
+            this.errorPayload.code = this.httpCode
+        }
+    }
+
+    fun setProtocolsCode(enumErrorCatalog: EnumErrorCatalogInterface) {
+        this.httpCode = enumErrorCatalog.getErrorHttpCode()
+        this.grpcCode = enumErrorCatalog.getErrorGrpcCode()
     }
 }

@@ -22,6 +22,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.Rest
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.error.BlueprintProcessorErrorCodes
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.isNotEmpty
@@ -29,6 +30,10 @@ import org.onap.ccsdk.cds.controllerblueprints.core.nullToEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.KeyIdentifier
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
+import org.onap.ccsdk.error.catalog.data.ErrorMessage
+import org.onap.ccsdk.error.catalog.interfaces.ErrorCatalogException
+import org.onap.ccsdk.error.catalog.utils.errorCauseOrDefault
+import org.onap.ccsdk.error.catalog.utils.errorMessageOrDefault
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
@@ -63,7 +68,8 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                 /** Check Resource Assignment has the source definitions, If not get from Resource Definitions **/
                 val resourceSource = resourceAssignment.dictionarySourceDefinition
                     ?: resourceDefinition?.sources?.get(dSource)
-                    ?: throw BluePrintProcessorException("couldn't get resource definition $dName source($dSource)")
+                    ?: throw errorManager.generateException(BlueprintProcessorErrorCodes.RESOLUTION_FAILURE,
+                            errorMessage = "couldn't get resource definition $dName source($dSource)")
 
                 val resourceSourceProperties =
                     checkNotNull(resourceSource.properties) { "failed to get source properties for $dName " }
@@ -107,16 +113,24 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                     populateResource(resourceAssignment, sourceProperties, responseBody, path)
                 } else {
                     val errMsg =
-                        "Failed to get $dSource result for dictionary name ($dName) using urlPath ($urlPath) response_code: ($responseStatusCode)"
+                        "Failed to get $dSource result for dictionary name ($dName) using urlPath ($urlPath) " +
+                                "response_code: ($responseStatusCode)"
                     logger.warn(errMsg)
-                    throw BluePrintProcessorException(errMsg)
+                    throw errorManager.generateException(BlueprintProcessorErrorCodes.RESOLUTION_FAILURE,
+                            errorMessage = errMsg)
                 }
             }
             // Check the value has populated for mandatory case
             ResourceAssignmentUtils.assertTemplateKeyValueNotNull(resourceAssignment)
+        } catch (e: ErrorCatalogException) {
+            e.addErrorModel(ErrorMessage(BlueprintProcessorErrorCodes.RESOLUTION_FAILURE.domain,
+                    "Error while processing REST Resource Resolution", null))
+            throw e
         } catch (e: Exception) {
             ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, e.message)
-            throw BluePrintProcessorException("Failed in template key ($resourceAssignment) assignments with: ${e.message}", e)
+            throw errorManager.generateException(BlueprintProcessorErrorCodes.RESOLUTION_FAILURE,
+                    errorMessage = "Failed in template key ($resourceAssignment) " +
+                    "assignments with: ${e.errorMessageOrDefault()}", errorCause = e.errorCauseOrDefault())
         }
     }
 
@@ -176,7 +190,7 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
         }
     }
 
-    override suspend fun recoverNB(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
+    override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ResourceAssignment) {
         raRuntimeService.getBluePrintError().addError(runtimeException.message!!)
     }
 }

@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock
+package org.onap.ccsdk.cds.blueprintsprocessor.resource.api.mockk
 
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.error.ErrorCatalogManagerImpl
 import org.onap.ccsdk.error.catalog.data.ErrorCatalogProperties

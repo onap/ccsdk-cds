@@ -33,12 +33,19 @@ class ErrorCatalogService(private var errorMessagesLibService: ErrorMessagesLibS
         enumErrorCatalog: EnumErrorCatalogInterface, protocol: String, errorCode: Int?, message: String,
         cause: Throwable?
     ): ErrorCatalog {
-        val errorMessage = getMessage(enumErrorCatalog.getErrorDomain(), enumErrorCatalog.getErrorName()) ?: message
-        val errorCode = errorCode ?: getProtocolErrorCode(enumErrorCatalog, protocol)
-        val action = ErrorCatalogUtils.readErrorActionFromMessage(errorMessage)
-        val errorCause = cause!!.message ?: ErrorCatalogUtils.readErrorCauseFromMessage(errorMessage)
+        val errorMessage = getMessage(enumErrorCatalog.getErrorDomain(), enumErrorCatalog.getErrorName())
+        val code = errorCode ?: getProtocolErrorCode(enumErrorCatalog, protocol)
+        val action : String
+        val errorCause: String
+        if (errorMessage.isNullOrEmpty()) {
+            action = message
+            errorCause = cause?.message ?: ""
+        } else {
+            action = ErrorCatalogUtils.readErrorActionFromMessage(errorMessage)
+            errorCause = cause?.message ?: ErrorCatalogUtils.readErrorCauseFromMessage(errorMessage)
+        }
 
-        return ErrorCatalog(enumErrorCatalog.getErrorName(), enumErrorCatalog.getErrorDomain(), errorCode, action, errorCause)
+        return ErrorCatalog(enumErrorCatalog.getErrorName(), enumErrorCatalog.getErrorDomain(), code, action, errorCause)
     }
 
     private fun getProtocolErrorCode(enumErrorCatalog: EnumErrorCatalogInterface, protocol: String): Int {
