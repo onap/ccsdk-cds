@@ -1,10 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
-import { PackageCreationStore } from '../package-creation.store';
-import { PackageCreationUtils } from '../package-creation.utils';
+import {Component, OnInit} from '@angular/core';
+import {FileSystemFileEntry, NgxFileDropEntry} from 'ngx-file-drop';
+import {PackageCreationStore} from '../package-creation.store';
 import 'ace-builds/src-noconflict/ace';
 import 'ace-builds/webpack-resolver';
-import { PackageStore } from '../../configuration-dashboard/package.store';
 
 @Component({
     selector: 'app-scripts-tab',
@@ -20,8 +18,6 @@ export class ScriptsTabComponent implements OnInit {
 
     constructor(
         private packageCreationStore: PackageCreationStore,
-        private packageCreationUtils: PackageCreationUtils,
-        private packageStore: PackageStore
     ) {
 
     }
@@ -34,12 +30,12 @@ export class ScriptsTabComponent implements OnInit {
             }
         });
 
-        this.packageStore.state$.subscribe(res => {
-            //  this.scriptsFiles =
-            console.log('from scripts');
-            console.log(res.scripts);
-            this.scriptsFiles = res.scripts.files;
-        });
+        /* this.packageStore.state$.subscribe(res => {
+             //  this.scriptsFiles =
+             console.log('from scripts');
+             console.log(res.scripts);
+             this.scriptsFiles = res.scripts.files;
+         });*/
     }
 
     public dropped(files: NgxFileDropEntry[]) {

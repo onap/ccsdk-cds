@@ -11,7 +11,7 @@ import {DslDefinition} from '../package-creation/mapping-models/CBAPacakge.model
 import {PackageCreationUtils} from '../package-creation/package-creation.utils';
 import {PackageCreationModes} from '../package-creation/creationModes/PackageCreationModes';
 import {PackageCreationBuilder} from '../package-creation/creationModes/PackageCreationBuilder';
-
+import {saveAs} from 'file-saver';
 
 @Component({
     selector: 'app-configuration-dashboard',
@@ -32,6 +32,8 @@ export class ConfigurationDashboardComponent implements OnInit {
     private filesData: any = [];
     private folder: FolderNodeElement = new FolderNodeElement();
 
+    private currentBlob = new Blob();
+
     constructor(private route: ActivatedRoute, private configurationDashboardService: ConfigurationDashboardService,
                 private packageCreationStore: PackageCreationStore,
                 private packageCreationUtils: PackageCreationUtils,
@@ -44,6 +46,7 @@ export class ConfigurationDashboardComponent implements OnInit {
         this.configurationDashboardService.getPagedPackages(id).subscribe(
             (bluePrintDetailModels) => {
                 if (bluePrintDetailModels) {
+                    this.viewedPackage = bluePrintDetailModels[0];
                     this.downloadCBAPackage(bluePrintDetailModels);
                 }
             });
@@ -54,6 +57,7 @@ export class ConfigurationDashboardComponent implements OnInit {
         this.configurationDashboardService.downloadResource(
             bluePrintDetailModels[0].artifactName + '/' + bluePrintDetailModels[0].artifactVersion).subscribe(response => {
             const blob = new Blob([response], {type: 'application/octet-stream'});
+            this.currentBlob = blob;
             this.zipFile.loadAsync(blob).then((zip) => {
                 Object.keys(zip.files).forEach((filename) => {
                     console.log(filename);
@@ -172,4 +176,28 @@ export class ConfigurationDashboardComponent implements OnInit {
     goBacktoDashboard() {
         this.router.navigate(['/packages']);
     }
+
+    downloadPackage(artifactName: string, artifactVersion: string) {
+        this.configurationDashboardService.downloadResource(artifactName + '/' + artifactVersion).subscribe(response => {
+            const blob = new Blob([response], {type: 'application/octet-stream'});
+            saveAs(blob, artifactName + '-' + artifactVersion + '-CBA.zip');
+        });
+    }
+
+    deployCurrentPackage() {
+        console.log('happened');
+        /*   this.zipFile.generateAsync({type: 'blob'})
+               .then(blob => {
+                   const formData = new FormData();
+                   formData.append('file', this.currentBlob);
+                   this.configurationDashboardService.deployPost(formData)
+                       .subscribe(data => {
+                       }, error => {
+                       });
+                   this.router.navigate(['/packages']);
+               });
+   */
+        this.router.navigate(['/packages']);
+    }
+
 }
