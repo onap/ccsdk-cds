@@ -1,0 +1,80 @@
+<header>
+    <div class="row m-0">
+        <div class="col pl-0">
+            <p class="logo mb-0"></p>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item">
+                        <a href="#">CBA Packages</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="#">Package Name</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <p class="mb-0">Topology View</p>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+        <div class="col pr-0 text-right">
+            <ul class="topology-actions">
+                <li>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <a href="#" role="button" aria-pressed="true" class="btn-topology-action float tooltip-bottom"
+                            data-tooltip="Preview">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                        <a href="#" role="button" aria-pressed="true" class="btn-topology-action float tooltip-bottom"
+                            data-tooltip="Download">
+                            <i class="fa fa-download"></i>
+                        </a>
+                        <a href="#" role="button" aria-pressed="true" class="btn-topology-action float tooltip-bottom"
+                            data-tooltip="Share">
+                            <i class="fa fa-share-square"></i>
+                        </a>
+                    </div>
+                </li>
+                <li>
+                    <div class="dropdown">
+                        <input class="dropdown-toggle" type="text">
+                        <div class="dropdown-text">Save</div>
+                        <ul class="dropdown-content">
+                            <li>
+                                <a href="">Save</a>
+                            </li>
+                            <li>
+                                <a href="">Save &amp; Deploy</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+
+
+        </div>
+    </div>
+</header>
+<div class="source-button editBar">
+    <div class="btn-group viewBtns" role="group">
+        <button (click)="convertAndOpenInDesingerView()" type="button" class="btn btn-secondary topologySource">Designer</button>
+        <button type="button"
+            class="btn btn-secondary topologyView active">Scripting</button>
+    </div>
+</div>
+<ng-sidebar-container class="sidebar-container">
+    <!-- Controller SideBar -->
+    <ng-sidebar [(opened)]="controllerSideBar" [sidebarClass]="'demo-sidebar controllerSidebar container-fluid'"
+        [mode]="'push'" #sidebarLeft>
+        <div class="row">
+
+            <h1 class="col-12">Actions</h1>
+           
+            
+        </div>
+    </ng-sidebar>
+<div ng-sidebar-content id="board-paper">
+    <ace-editor [(text)]="content" [mode]="'json'" [autoUpdateContent]="true" [durationBeforeCallback]="1000"
+        [theme]="'tomorrow_night_bright'" #editor style="height:500px">
+    </ace-editor>
+
+   </div>

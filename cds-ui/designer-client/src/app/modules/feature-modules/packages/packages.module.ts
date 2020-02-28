@@ -14,7 +14,6 @@ import { PackagesHeaderComponent } from './packages-dashboard/packages-header/pa
 import { PackagesSearchComponent } from './packages-dashboard/search-by-packages/search-by-packages.component';
 import { TagsFilteringComponent } from './packages-dashboard/filter-by-tags/filter-by-tags.component';
 import { ConfigurationDashboardComponent } from './configuration-dashboard/configuration-dashboard.component';
-import { FunctionsComponent } from './designer/functions/functions.component';
 import { ActionsComponent } from './designer/actions/actions.component';
 import { PackageCreationComponent } from './package-creation/package-creation.component';
 import { FormsModule } from '@angular/forms';
@@ -29,6 +28,7 @@ import { DslDefinitionsTabComponent } from './package-creation/dsl-definitions-t
 import { TemplMappCreationComponent } from './package-creation/template-mapping/templ-mapp-creation/templ-mapp-creation.component';
 import { TemplMappListingComponent } from './package-creation/template-mapping/templ-mapp-listing/templ-mapp-listing.component';
 import { DataTablesModule } from 'angular-datatables';
+import { DesignerSourceViewComponent } from './designer/source-view/source-view.component';
 
 @NgModule({
     declarations: [PackagesDashboardComponent,
@@ -40,7 +40,6 @@ import { DataTablesModule } from 'angular-datatables';
         SortPackagesComponent,
         ConfigurationDashboardComponent,
         PackagesHeaderComponent,
-        FunctionsComponent,
         ActionsComponent,
         PackageCreationComponent,
         ImportsTabComponent,
@@ -51,6 +50,7 @@ import { DataTablesModule } from 'angular-datatables';
         ScriptsTabComponent,
         MetadataTabComponent,
         DslDefinitionsTabComponent,
+        DesignerSourceViewComponent,
     ],
     imports: [
         CommonModule,

@@ -55,18 +55,19 @@
         </div>
     </div>
 </header>
+<div class="source-button editBar">
+    <div class="btn-group viewBtns" role="group">
+        <button type="button" class="btn btn-secondary topologySource active">Designer</button>
+        <button [routerLink]="['/designer/source']" type="button" class="btn btn-secondary topologyView">Scripting</button>
+    </div>
+</div>
 <ng-sidebar-container class="sidebar-container">
     <!-- Controller SideBar -->
     <ng-sidebar [(opened)]="controllerSideBar" [sidebarClass]="'demo-sidebar controllerSidebar container-fluid'"
                 [mode]="'push'"
                 #sidebarLeft>
         <div class="row">
-            <!-- <div class="col-12 p-0">
-                <form>
-                    <input type="text" class="form-control input-search-controller"
-                           placeholder="Search actions and functions">
-                </form>
-            </div> -->
+            
             <h1 class="col-12">Actions</h1>
             <div class="col-12 text-center p-0">
                 <div class="btn-group actionBtns" role="group">
@@ -109,29 +110,13 @@
       </div> -->
 
         <h1 class="col-12">Functions</h1>
+        <b>Drag and drop function to Action’s box</b>
         <div id="palette-paper" class="col-12 componentsList">
-            <b>Drag and drop function to Action’s box</b>
-            <ul class="list-group actions-scroll">
-                <!-- <li class="list-group-item" *ngFor="let function of viewedFunctions">
-                    <p class="compType-1">{{function.modelName}}</p>
-                </li> -->
-                <li class="list-group-item">
-                    <p class="compType-2">component-netconf-executor</p>
-                </li>
-                <li class="list-group-item">
-                    <p class="compType-3">component-remote-ansible-executor</p>
-                </li>
-                <li class="list-group-item">
-                    <p class="compType-4">dg-generic</p>
-                </li>
-                <li class="list-group-item">
-                    <p class="compType-1">component-resource-resolution</p>
-                </li>
-            </ul>
         </div>
         </div>
     </ng-sidebar>
     <!-- Page content -->
+    
     <div ng-sidebar-content id="board-paper">
         <button class="rotate" (click)="_toggleSidebar1()">
       <span>
@@ -139,6 +124,7 @@
         <i class="fa fa-angle-double-left"></i>
       </span>
         </button>
+        
         <!-- Canvas -->
         <div class="editBar text-center">
             <div class="btn-group mr-2" role="group" aria-label="First group">

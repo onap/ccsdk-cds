@@ -20,14 +20,12 @@ limitations under the License.
 */
 
 import {ModelType} from './ModelType.model';
-import { TopologyTemplate } from './designer.topologyTemplate.model';
 
-export class DesignerDashboardState {
+export class FunctionsState {
 
-    template: TopologyTemplate;
-    sourceContent: string;
+    serverFunctions: ModelType[];
 
     constructor() {
-        this.template = new TopologyTemplate();
+        this.serverFunctions = [];
     }
 }

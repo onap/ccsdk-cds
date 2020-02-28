@@ -4,6 +4,7 @@ import {PackagesDashboardComponent} from './packages-dashboard/packages-dashboar
 import {DesignerComponent} from './designer/designer.component';
 import {PackageCreationComponent} from './package-creation/package-creation.component';
 import {ConfigurationDashboardComponent} from './configuration-dashboard/configuration-dashboard.component';
+import { DesignerSourceViewComponent } from './designer/source-view/source-view.component';
 
 
 const routes: Routes = [
@@ -12,6 +13,7 @@ const routes: Routes = [
         component: PackagesDashboardComponent
     },
     {path: 'designer', component: DesignerComponent},
+    { path: 'designer/source', component: DesignerSourceViewComponent },
     {path: 'package/:id', component: ConfigurationDashboardComponent},
     {path: 'createPackage', component: PackageCreationComponent},
 ];
