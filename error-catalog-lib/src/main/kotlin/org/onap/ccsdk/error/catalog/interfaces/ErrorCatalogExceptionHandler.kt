@@ -17,14 +17,13 @@
 package org.onap.ccsdk.error.catalog.interfaces
 
 import org.onap.ccsdk.error.catalog.ErrorPayload
-import org.springframework.http.HttpStatus
+import org.onap.ccsdk.error.catalog.utils.ErrorCatalogUtils.returnResponseEntity
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 
 interface ErrorCatalogExceptionHandler {
     @ExceptionHandler(ErrorCatalogException::class)
     fun errorCatalogException(e: ErrorCatalogException): ResponseEntity<ErrorPayload> {
-        val errorMessage = e.errorPayload
-        return ResponseEntity(errorMessage, HttpStatus.resolve(errorMessage.code)!!)
+        return returnResponseEntity(e)
     }
 }

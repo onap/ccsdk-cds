@@ -1,7 +1,7 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
  *
- * Modifications Copyright © 2019 IBM, Bell Canada.
+ * Modifications Copyright © 2019 - 2020 IBM, Bell Canada.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.Capa
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.error.BlueprintProcessorErrorCodes
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory
@@ -53,7 +53,8 @@ open class CapabilityResourceResolutionProcessor(private var componentFunctionSc
             /** Check Resource Assignment has the source definitions, If not get from Resource Definition **/
             val resourceSource = resourceAssignment.dictionarySourceDefinition
                 ?: resourceDefinition?.sources?.get(dSource)
-                ?: throw BluePrintProcessorException("couldn't get resource definition $dName source($dSource)")
+                ?: throw errorManager.generateException(BlueprintProcessorErrorCodes.RESOLUTION_FAILURE,
+                        errorMessage = "couldn't get resource definition $dName source($dSource)")
 
             val resourceSourceProps =
                 checkNotNull(resourceSource.properties) { "failed to get $resourceSource properties" }
@@ -84,10 +85,10 @@ open class CapabilityResourceResolutionProcessor(private var componentFunctionSc
         }
     }
 
-    override suspend fun recoverNB(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
+    override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ResourceAssignment) {
         raRuntimeService.getBluePrintError()
             .addError("Failed in CapabilityResourceResolutionProcessor : ${runtimeException.message}")
-        ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, runtimeException.message)
+        ResourceAssignmentUtils.setFailedResourceDataValue(executionRequest, runtimeException.message)
     }
 
     suspend fun scriptInstance(scriptType: String, scriptClassReference: String, instanceDependencies: List<String>):

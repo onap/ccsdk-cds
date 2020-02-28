@@ -17,25 +17,23 @@
 package org.onap.ccsdk.error.catalog
 
 import org.onap.ccsdk.error.catalog.data.ErrorCatalog
+import org.onap.ccsdk.error.catalog.data.ErrorMessageLibConstants
 import org.onap.ccsdk.error.catalog.data.LogLevel
 import org.onap.ccsdk.error.catalog.interfaces.EnumErrorCatalogInterface
 import org.onap.ccsdk.error.catalog.interfaces.ErrorCatalogException
 import org.onap.ccsdk.error.catalog.service.ErrorCatalogService
-import org.springframework.beans.factory.annotation.Autowired
 
-abstract class ErrorCatalogManager {
-    @Autowired
-    lateinit var errorCatalogService: ErrorCatalogService
+abstract class ErrorCatalogManager(private val errorCatalogService: ErrorCatalogService) {
 
     private fun getErrorCatalog(
-        enumErrorCatalog: EnumErrorCatalogInterface, protocol: String, message: String
+            enumErrorCatalog: EnumErrorCatalogInterface, protocol: String, message: String
     ): ErrorCatalog {
         return getErrorCatalog(enumErrorCatalog, protocol, message, null)
     }
 
     private fun getErrorCatalog(
-        enumErrorCatalog: EnumErrorCatalogInterface, protocol: String, message: String,
-        cause: Throwable?
+            enumErrorCatalog: EnumErrorCatalogInterface, protocol: String, message: String,
+            cause: Throwable?
     ): ErrorCatalog {
         return getErrorCatalog(enumErrorCatalog, protocol, null, message, cause)
     }
@@ -54,82 +52,108 @@ abstract class ErrorCatalogManager {
     }
 
     abstract fun generateException(
-            errorCatalog: ErrorCatalog, message: String, logLevel: String = LogLevel.ERROR.name
+            errorCatalog: ErrorCatalog, errorMessage: String, logLevel: String = LogLevel.ERROR.name
     ): ErrorCatalogException
 
     abstract fun generateException(
-            errorCatalog: ErrorCatalog, message: String, logLevel: String = LogLevel.ERROR.name, vararg args: Any?
+            errorCatalog: ErrorCatalog, errorMessage: String, logLevel: String = LogLevel.ERROR.name, vararg args: Any?
     ): ErrorCatalogException
 
     abstract fun generateException(
-            errorCatalog: ErrorCatalog, message: String, cause: Throwable, logLevel: String = LogLevel.ERROR.name
+            errorCatalog: ErrorCatalog, errorMessage: String, errorCause: Throwable,
+            logLevel: String = LogLevel.ERROR.name
     ): ErrorCatalogException
 
     abstract fun generateException(
-            errorCatalog: ErrorCatalog, message: String, cause: Throwable, logLevel: String = LogLevel.ERROR.name, vararg args: Any?
+            errorCatalog: ErrorCatalog, errorMessage: String, errorCause: Throwable,
+            logLevel: String = LogLevel.ERROR.name, vararg args: Any?
     ): ErrorCatalogException
 
     fun generateException(
-            enumErrorCatalog: EnumErrorCatalogInterface, protocol: String, message: String,
+            enumErrorCatalog: EnumErrorCatalogInterface,
+            protocol: String = ErrorMessageLibConstants.ERROR_CATALOG_PROTOCOL_GRPC, errorMessage: String,
             logLevel: String = LogLevel.ERROR.name
     ): ErrorCatalogException {
-        val errorCatalog = getErrorCatalog(enumErrorCatalog, protocol, message)
-        return generateException(errorCatalog, message, logLevel)
+        val errorCatalog = getErrorCatalog(enumErrorCatalog, protocol, errorMessage)
+        val errorCatalogException = generateException(errorCatalog, errorMessage, logLevel)
+        errorCatalogException.setProtocolsCode(enumErrorCatalog)
+        return errorCatalogException
     }
 
     fun generateException(
-            enumErrorCatalog: EnumErrorCatalogInterface, protocol: String, code: Int?, message: String,
+            enumErrorCatalog: EnumErrorCatalogInterface,
+            protocol: String = ErrorMessageLibConstants.ERROR_CATALOG_PROTOCOL_GRPC, code: Int?, errorMessage: String,
             logLevel: String = LogLevel.ERROR.name
     ): ErrorCatalogException {
-        val errorCatalog = getErrorCatalog(enumErrorCatalog, protocol, code, message)
-        return generateException(errorCatalog, message, logLevel)
+        val errorCatalog = getErrorCatalog(enumErrorCatalog, protocol, code, errorMessage)
+        val errorCatalogException = generateException(errorCatalog, errorMessage, logLevel)
+        errorCatalogException.setProtocolsCode(enumErrorCatalog)
+        return errorCatalogException
     }
 
     fun generateException(
-            enumErrorCatalog: EnumErrorCatalogInterface, protocol: String, message: String,
+            enumErrorCatalog: EnumErrorCatalogInterface,
+            protocol: String = ErrorMessageLibConstants.ERROR_CATALOG_PROTOCOL_GRPC, errorMessage: String,
             logLevel: String = LogLevel.ERROR.name, vararg args: Any?
     ): ErrorCatalogException {
-        val errorCatalog = getErrorCatalog(enumErrorCatalog, protocol, message)
-        return generateException(errorCatalog, message, logLevel, args)
+        val errorCatalog = getErrorCatalog(enumErrorCatalog, protocol, errorMessage)
+        val errorCatalogException = generateException(errorCatalog, errorMessage, logLevel, args)
+        errorCatalogException.setProtocolsCode(enumErrorCatalog)
+        return errorCatalogException
     }
 
     fun generateException(
-            enumErrorCatalog: EnumErrorCatalogInterface, protocol: String, code: Int?, message: String,
+            enumErrorCatalog: EnumErrorCatalogInterface,
+            protocol: String = ErrorMessageLibConstants.ERROR_CATALOG_PROTOCOL_GRPC, code: Int?, errorMessage: String,
             logLevel: String = LogLevel.ERROR.name, vararg args: Any?
     ): ErrorCatalogException {
-        val errorCatalog = getErrorCatalog(enumErrorCatalog, protocol, code, message)
-        return generateException(errorCatalog, message, logLevel, args)
+        val errorCatalog = getErrorCatalog(enumErrorCatalog, protocol, code, errorMessage)
+        val errorCatalogException = generateException(errorCatalog, errorMessage, logLevel, args)
+        errorCatalogException.setProtocolsCode(enumErrorCatalog)
+        return errorCatalogException
     }
 
     fun generateException(
-            enumErrorCatalog: EnumErrorCatalogInterface, protocol: String, message: String, cause: Throwable,
-            logLevel: String = LogLevel.ERROR.name
+            enumErrorCatalog: EnumErrorCatalogInterface,
+            protocol: String = ErrorMessageLibConstants.ERROR_CATALOG_PROTOCOL_GRPC, errorMessage: String,
+            errorCause: Throwable, logLevel: String = LogLevel.ERROR.name
     ): ErrorCatalogException {
-        val errorCatalog = getErrorCatalog(enumErrorCatalog, protocol, message, cause)
-        return generateException(errorCatalog, message, cause, logLevel)
+        val errorCatalog = getErrorCatalog(enumErrorCatalog, protocol, errorMessage, errorCause)
+        val errorCatalogException = generateException(errorCatalog, errorMessage, errorCause, logLevel)
+        errorCatalogException.setProtocolsCode(enumErrorCatalog)
+        return errorCatalogException
     }
 
     fun generateException(
-            enumErrorCatalog: EnumErrorCatalogInterface, protocol: String, code: Int?, message: String, cause: Throwable,
-            logLevel: String = LogLevel.ERROR.name
+            enumErrorCatalog: EnumErrorCatalogInterface,
+            protocol: String = ErrorMessageLibConstants.ERROR_CATALOG_PROTOCOL_GRPC, code: Int?, errorMessage: String,
+            errorCause: Throwable, logLevel: String = LogLevel.ERROR.name
     ): ErrorCatalogException {
-        val errorCatalog = getErrorCatalog(enumErrorCatalog, protocol, code, message, cause)
-        return generateException(errorCatalog, message, cause, logLevel)
+        val errorCatalog = getErrorCatalog(enumErrorCatalog, protocol, code, errorMessage, errorCause)
+        val errorCatalogException = generateException(errorCatalog, errorMessage, errorCause, logLevel)
+        errorCatalogException.setProtocolsCode(enumErrorCatalog)
+        return errorCatalogException
     }
 
     fun generateException(
-            enumErrorCatalog: EnumErrorCatalogInterface, protocol: String, message: String, cause: Throwable,
+            enumErrorCatalog: EnumErrorCatalogInterface,
+            protocol: String = ErrorMessageLibConstants.ERROR_CATALOG_PROTOCOL_GRPC, errorMessage: String, errorCause: Throwable,
             logLevel: String = LogLevel.ERROR.name, vararg args: Any?
     ): ErrorCatalogException {
-        val errorCatalog = getErrorCatalog(enumErrorCatalog, protocol, message, cause)
-        return generateException(errorCatalog, message, cause, logLevel, args)
+        val errorCatalog = getErrorCatalog(enumErrorCatalog, protocol, errorMessage, errorCause)
+        val errorCatalogException = generateException(errorCatalog, errorMessage, errorCause, logLevel, args)
+        errorCatalogException.setProtocolsCode(enumErrorCatalog)
+        return errorCatalogException
     }
 
     fun generateException(
-            enumErrorCatalog: EnumErrorCatalogInterface, protocol: String, code: Int?, message: String, cause: Throwable,
-            logLevel: String = LogLevel.ERROR.name, vararg args: Any?
+            enumErrorCatalog: EnumErrorCatalogInterface,
+            protocol: String = ErrorMessageLibConstants.ERROR_CATALOG_PROTOCOL_GRPC, code: Int?, errorMessage: String,
+            errorCause: Throwable, logLevel: String = LogLevel.ERROR.name, vararg args: Any?
     ): ErrorCatalogException {
-        val errorCatalog = getErrorCatalog(enumErrorCatalog, protocol, code, message, cause)
-        return generateException(errorCatalog, message, cause, logLevel, args)
+        val errorCatalog = getErrorCatalog(enumErrorCatalog, protocol, code, errorMessage, errorCause)
+        val errorCatalogException = generateException(errorCatalog, errorMessage, errorCause, logLevel, args)
+        errorCatalogException.setProtocolsCode(enumErrorCatalog)
+        return errorCatalogException
     }
 }

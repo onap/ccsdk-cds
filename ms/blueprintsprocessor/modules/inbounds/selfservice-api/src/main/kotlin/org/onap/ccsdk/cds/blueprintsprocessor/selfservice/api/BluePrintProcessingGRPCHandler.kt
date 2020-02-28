@@ -17,6 +17,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 
+import io.grpc.Status
 import io.grpc.stub.StreamObserver
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
@@ -24,6 +25,9 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.utils.toJava
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.BluePrintProcessingServiceGrpc
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceInput
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceOutput
+import org.onap.ccsdk.error.catalog.interfaces.ErrorCatalogException
+import org.onap.ccsdk.error.catalog.utils.errorCauseOrDefault
+import org.onap.ccsdk.error.catalog.utils.errorMessageOrDefault
 import org.slf4j.LoggerFactory
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Service
@@ -62,9 +66,24 @@ open class BluePrintProcessingGRPCHandler(
 
             override fun onError(error: Throwable) {
                 log.debug("Fail to process message", error)
+                if (error is ErrorCatalogException) onErrorCatalog(error) else onError(error)
+            }
+
+            fun onError(error: Exception) {
                 responseObserver.onError(
-                    io.grpc.Status.INTERNAL
-                        .withDescription(error.message)
+                        Status.INTERNAL
+                                .withDescription(error.errorMessageOrDefault())
+                                .withCause(error.errorCauseOrDefault())
+                                .asException()
+                )
+            }
+
+            fun onErrorCatalog(error: ErrorCatalogException) {
+                val grpcCode = Status.fromCodeValue(error.errorPayload.code)
+                responseObserver.onError(
+                        grpcCode
+                        .withDescription(error.errorMessageOrDefault())
+                        .withCause(error.errorCauseOrDefault())
                         .asException()
                 )
             }

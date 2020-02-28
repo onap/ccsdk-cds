@@ -17,10 +17,13 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.services.execution.error
 
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.error.data.CDSErrorException
+import org.onap.ccsdk.error.catalog.service.ErrorCatalogService
 import org.onap.ccsdk.error.catalog.ErrorCatalogManager
 import org.onap.ccsdk.error.catalog.data.ErrorCatalog
+import org.springframework.stereotype.Service
 
-class ErrorCatalogManagerImpl : ErrorCatalogManager() {
+@Service
+class ErrorCatalogManagerImpl(private val errorCatalogService: ErrorCatalogService) : ErrorCatalogManager(errorCatalogService) {
     override fun generateException(errorCatalog: ErrorCatalog, errorMessage: String, logLevel: String): CDSErrorException {
         return CDSErrorException(errorCatalog, errorMessage, logLevel)
     }

@@ -24,6 +24,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.Reso
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.TestDatabaseConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock.MockBlueprintProcessorCatalogServiceImpl
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock.MockDBLibGenericService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock.MockErrorCatalogConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
@@ -39,7 +40,7 @@ import kotlin.test.assertNotNull
     classes = [TestDatabaseConfiguration::class,
         PrimaryDBLibGenericService::class, BluePrintDBLibPropertyService::class,
         DatabaseResourceAssignmentProcessor::class, MockDBLibGenericService::class,
-        MockBlueprintProcessorCatalogServiceImpl::class]
+        MockBlueprintProcessorCatalogServiceImpl::class, MockErrorCatalogConfiguration::class]
 )
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class DatabaseResourceResolutionProcessorTest {

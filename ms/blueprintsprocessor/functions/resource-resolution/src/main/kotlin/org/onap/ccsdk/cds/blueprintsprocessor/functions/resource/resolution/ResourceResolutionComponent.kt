@@ -1,6 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
- * Modifications Copyright © 2019 IBM.
+ * Modifications Copyright © 2019 - 2020 IBM, Bell Canada.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.error.BlueprintProcessorErrorCodes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.asObjectNode
 import org.onap.ccsdk.cds.controllerblueprints.core.returnNullIfMissing
@@ -86,14 +86,18 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
         // validate inputs if we need to store the resource and template resolution.
         if (storeResult) {
             if (resolutionKey.isNotEmpty() && (resourceId.isNotEmpty() || resourceType.isNotEmpty())) {
-                throw BluePrintProcessorException("Can't proceed with the resolution: either provide resolution-key OR combination of resource-id and resource-type.")
+                throw errorManager.generateException(BlueprintProcessorErrorCodes.RESOLUTION_FAILURE,
+                        errorMessage = "Can't proceed with the resolution: " +
+                        "either provide resolution-key OR combination of resource-id and resource-type.")
             } else if ((resourceType.isNotEmpty() && resourceId.isEmpty()) || (resourceType.isEmpty() && resourceId.isNotEmpty())) {
-                throw BluePrintProcessorException("Can't proceed with the resolution: both resource-id and resource-type should be provided, one of them is missing.")
+                throw errorManager.generateException(BlueprintProcessorErrorCodes.RESOLUTION_FAILURE,
+                        errorMessage = "Can't proceed with the resolution: " +
+                        "both resource-id and resource-type should be provided, one of them is missing.")
             } else if (resourceType.isEmpty() && resourceId.isEmpty() && resolutionKey.isEmpty()) {
-                throw BluePrintProcessorException(
-                    "Can't proceed with the resolution: can't persist resolution without a correlation key. " +
-                            "Either provide a resolution-key OR combination of resource-id and resource-type OR set `storeResult` to false."
-                )
+                throw errorManager.generateException(BlueprintProcessorErrorCodes.RESOLUTION_FAILURE,
+                        errorMessage = "Can't proceed with the resolution: can't " +
+                        "persist resolution without a correlation key. Either provide a resolution-key OR combination of" +
+                        " resource-id and resource-type OR set `storeResult` to false.")
             }
         }
 

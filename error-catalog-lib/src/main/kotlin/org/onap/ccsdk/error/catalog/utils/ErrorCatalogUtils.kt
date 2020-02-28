@@ -16,6 +16,12 @@
 
 package org.onap.ccsdk.error.catalog.utils
 
+import org.onap.ccsdk.error.catalog.ErrorPayload
+import org.onap.ccsdk.error.catalog.interfaces.ErrorCatalogException
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import java.lang.Exception
+
 object ErrorCatalogUtils {
     private const val REGEX_PATTERN = "^cause=(.*),action=(.*)"
     private val regex = REGEX_PATTERN.toRegex()
@@ -28,4 +34,16 @@ object ErrorCatalogUtils {
         val matchResults = regex.matchEntire(message)
         return matchResults!!.groupValues[2]
     }
+
+    fun returnResponseEntity(errorException: ErrorCatalogException): ResponseEntity<ErrorPayload> {
+        return ResponseEntity(errorException.errorPayload, HttpStatus.resolve(errorException.errorPayload.code)!!)
+    }
+}
+
+fun Exception.errorCauseOrDefault(): Throwable {
+    return this.cause ?: Throwable()
+}
+
+fun Exception.errorMessageOrDefault(): String {
+    return this.message ?: ""
 }
