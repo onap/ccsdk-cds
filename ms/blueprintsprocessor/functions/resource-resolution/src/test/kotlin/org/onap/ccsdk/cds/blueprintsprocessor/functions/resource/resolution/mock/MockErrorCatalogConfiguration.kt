@@ -16,9 +16,11 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock
 
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.error.ErrorCatalogManagerImpl
 import org.onap.ccsdk.error.catalog.data.ErrorCatalogProperties
 import org.onap.ccsdk.error.catalog.service.ErrorCatalogService
 import org.onap.ccsdk.error.catalog.service.ErrorMessagesLibPropertyService
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -31,5 +33,10 @@ open class MockErrorCatalogConfiguration {
         errorCatalogProperties.type = "properties"
         errorCatalogProperties.applicationId = "CDS"
         return ErrorCatalogService(ErrorMessagesLibPropertyService(errorCatalogProperties))
+    }
+
+    @Bean
+    open fun errorCatalogManagerImpl(): ErrorCatalogManagerImpl {
+        return ErrorCatalogManagerImpl(errorCatalogService())
     }
 }

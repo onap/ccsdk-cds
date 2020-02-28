@@ -22,6 +22,8 @@ import com.fasterxml.jackson.databind.JsonNode
 import org.apache.commons.collections.MapUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.error.BlueprintProcessorErrorCodes
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.error.ErrorCatalogManagerImpl
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
@@ -31,7 +33,9 @@ import org.onap.ccsdk.cds.controllerblueprints.core.isNullOrMissing
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintVelocityTemplateService
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
+import org.onap.ccsdk.error.catalog.data.ErrorMessageLibConstants
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import java.util.HashMap
 
 abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssignment, Boolean> {
@@ -43,13 +47,17 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
 
     var scriptPropertyInstances: MutableMap<String, Any> = hashMapOf()
     lateinit var scriptType: String
+    @Autowired
+    lateinit var errorManager: ErrorCatalogManagerImpl
+
 
     /**
      * This will be called from the scripts to serve instance from runtime to scripts.
      */
     open fun <T> scriptPropertyInstanceType(name: String): T {
         return scriptPropertyInstances as? T
-            ?: throw BluePrintProcessorException("couldn't get script property instance ($name)")
+            ?: throw errorManager.generateException(BlueprintProcessorErrorCodes.RESOLUTION_FAILURE,
+                    errorMessage = "couldn't get script property instance ($name)")
     }
 
     open fun setFromInput(resourceAssignment: ResourceAssignment): Boolean {
@@ -186,7 +194,8 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
     }
 
     override fun recover(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
-        throw BluePrintException("Not Implemented, child class will implement this")
+        throw errorManager.generateException(BlueprintProcessorErrorCodes.RESOLUTION_FAILURE,
+                errorMessage = "Not Implemented, child class will implement this")
     }
 
     fun addError(type: String, name: String, error: String) {

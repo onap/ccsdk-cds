@@ -1,6 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
- * Modifications Copyright © 2019 IBM, Bell Canada.
+ * Modifications Copyright © 2019 - 2020 IBM, Bell Canada.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,7 +58,8 @@ open class ExecutionServiceController {
     @Autowired
     lateinit var executionServiceHandler: ExecutionServiceHandler
 
-    private val errorManager = ErrorCatalogManagerImpl()
+    @Autowired
+    lateinit var errorManager: ErrorCatalogManagerImpl
 
     @RequestMapping(
         path = ["/health-check"],
@@ -87,7 +88,7 @@ open class ExecutionServiceController {
 
         if (executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC) {
             throw errorManager.generateException(BlueprintProcessorErrorCodes.GENERIC_PROCESS_FAILURE,
-                    protocol = ERROR_CATALOG_PROTOCOL_HTTP, message = "Can't process async request through the REST endpoint. Use gRPC for async processing.")
+                    ERROR_CATALOG_PROTOCOL_HTTP, "Can't process async request through the REST endpoint. Use gRPC for async processing.")
         }
         ph.register()
         val processResult = executionServiceHandler.doProcess(executionServiceInput)

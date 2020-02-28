@@ -19,6 +19,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock.MockErrorCatalogConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
@@ -29,7 +30,7 @@ import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [DefaultResourceResolutionProcessor::class])
+@ContextConfiguration(classes = [DefaultResourceResolutionProcessor::class, MockErrorCatalogConfiguration::class])
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class DefaultResourceResolutionProcessorTest {
 
