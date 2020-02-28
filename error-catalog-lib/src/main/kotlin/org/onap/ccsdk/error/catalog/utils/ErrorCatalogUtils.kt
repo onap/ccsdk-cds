@@ -16,6 +16,8 @@
 
 package org.onap.ccsdk.error.catalog.utils
 
+import java.lang.Exception
+
 object ErrorCatalogUtils {
     private const val REGEX_PATTERN = "^cause=(.*),action=(.*)"
     private val regex = REGEX_PATTERN.toRegex()
@@ -28,4 +30,13 @@ object ErrorCatalogUtils {
         val matchResults = regex.matchEntire(message)
         return matchResults!!.groupValues[2]
     }
+
+}
+
+fun Exception.errorCauseOrDefault(): Throwable{
+    return this.cause ?: Throwable()
+}
+
+fun Exception.errorMessageOrDefault(): String{
+    return this.message ?: ""
 }

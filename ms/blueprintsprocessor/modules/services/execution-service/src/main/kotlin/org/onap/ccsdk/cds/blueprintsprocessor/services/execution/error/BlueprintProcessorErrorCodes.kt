@@ -54,6 +54,13 @@ enum class BlueprintProcessorErrorCodes(
         override fun getErrorDomain(): String { return domain }
         override fun getErrorHttpCode(): Int { return httpCode }
         override fun getErrorGrpcCode(): Int { return grpcCode }
+    },
+
+    UNSUPPORTED_MEDIA_TYPE(httpCode = 415, grpcCode = 3) {
+        override fun getErrorName(): String { return name }
+        override fun getErrorDomain(): String { return domain }
+        override fun getErrorHttpCode(): Int { return httpCode }
+        override fun getErrorGrpcCode(): Int { return grpcCode }
     };
 
     companion object {
