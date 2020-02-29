@@ -53,6 +53,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
   paletteGraph: joint.dia.Graph;
   palettePaper: joint.dia.Paper;
   private ngUnsubscribe = new Subject();
+  private opt = { tx: 100, ty: 100 };
 
   constructor(private designerStore: DesignerStore,
               private functionStore: FunctionsStore,
@@ -91,7 +92,6 @@ export class DesignerComponent implements OnInit, OnDestroy {
      * the code to retrieve from server is commented
      */
     this.functionStore.state$
-      .pipe(x => { console.log('value on way to distinct', x); return x; })
       .pipe(
         distinctUntilChanged((a: any, b: any) => JSON.stringify(a) === JSON.stringify(b)),
         takeUntil(this.ngUnsubscribe))
@@ -114,7 +114,9 @@ export class DesignerComponent implements OnInit, OnDestroy {
       });
 
     this.designerStore.state$
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(
+        distinctUntilChanged((a: any, b: any) => JSON.stringify(a) === JSON.stringify(b)),
+        takeUntil(this.ngUnsubscribe))
       .subscribe(state => {
         if (state.sourceContent) {
           console.log('inside desinger.component---> ', state);
@@ -123,6 +125,8 @@ export class DesignerComponent implements OnInit, OnDestroy {
           console.log(topologtTemplate);
           delete state.sourceContent;
           this.graphGenerator.populate(topologtTemplate, this.boardGraph);
+
+          console.log('all cells', this.boardGraph.getCells());
           /**
            * auto arrange elements in graph
            * https://resources.jointjs.com/docs/jointjs/v3.1/joint.html#layout.DirectedGraph
@@ -130,12 +134,10 @@ export class DesignerComponent implements OnInit, OnDestroy {
           joint.layout.DirectedGraph.layout( this.boardGraph.getCells(), {
             dagre,
             graphlib,
-            // nodeSep: 50,
-            // setLinkVertices: false,
-            // rankDir: 'LR',
-            marginX: 100,
-            marginY: 100,
-            clusterPadding: { top: 100, left: 10, right: 10, bottom: 100 },
+            setLinkVertices: false,
+            marginX: 10,
+            marginY: 10,
+            clusterPadding: { top: 100, left: 30, right: 10, bottom: 100 },
             rankDir: 'TB'
           });
         }
@@ -174,9 +176,9 @@ export class DesignerComponent implements OnInit, OnDestroy {
           width: 1100,
           gridSize: 10,
           drawGrid: true,
-          background: {
-            color: 'rgba(0, 255, 0, 0.3)'
-          },
+          // background: {
+          //   color: 'rgba(0, 255, 0, 0.3)'
+          // },
           cellViewNamespace: joint.shapes
         });
 
@@ -200,6 +202,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
 
         const parentId = cell.get('parent');
         if (!parentId) {
+          // this is action
           return;
         }
 

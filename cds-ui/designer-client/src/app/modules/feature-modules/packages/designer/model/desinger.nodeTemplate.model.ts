@@ -1,7 +1,7 @@
 export class NodeTemplate {
     type: string;
     properties?: {
-        'dependency-node-template'?: string[]
+        'dependency-node-templates'?: string[]
     };
     interfaces?: {};
     artifacts?: {};

@@ -211,4 +211,18 @@ export class GraphUtil {
         return !parentCell.get('embeds') || parentCell.get('embeds').length < 1;
     }
 
+    getActionSiblings(actionCell: joint.shapes.app.ActionElement,
+                      boardGraph: joint.dia.Graph
+        ): joint.shapes.app.ActionElement[] {
+        const cellId = actionCell.id;
+        const siblings = boardGraph.getCells().filter(elem => {
+            const type = elem.attributes.type;
+            const elemId = elem.id;
+            return (type !== undefined && type === 'app.ActionElement'
+                && elemId !== cellId);
+        }) as joint.shapes.app.ActionElement[];
+        console.log('siblings', siblings);
+        return siblings;
+    }
+
 }

@@ -1,7 +1,3 @@
-import { TopologyTemplate } from './model/designer.topologyTemplate.model';
-import { Injectable } from '@angular/core';
-import { GraphUtil } from './graph.util';
-
 /*
 ============LICENSE_START==========================================
 ===================================================================
@@ -22,6 +18,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
 */
+import { TopologyTemplate } from './model/designer.topologyTemplate.model';
+import { Injectable } from '@angular/core';
+import { GraphUtil } from './graph.util';
+import { NodeTemplate } from './model/desinger.nodeTemplate.model';
 
 @Injectable({
     providedIn: 'root'
@@ -36,7 +36,41 @@ export class GraphGenerator {
      * create action element
      * from steps --> create function element
      * add function element to action element
+     * example toplogyTemplate
+     *
+     * {
+     * "workflows": {
+     *   "Action1": {
+     *       "steps": {
+     *           "STEP_NAME": {
+     *               "target": "NODE_TEMPLATE_NAME",
+     *                   "description": ""
+     *           }
+     *       }
+     *   }
+     * },
+     * "node_templates": {
+     *    "NODE_TEMPLATE_NAME": {
+     *        "type": "dg-generic",
+     *            "properties": {
+     *            "dependency-node-templates": [
+     *                "component-config-snapshots-executor",
+     *                "component-jython-executor"
+     *            ]
+     *        }
+     *    },
+     *    "component-config-snapshots-executor": {
+     *        "type": "component-config-snapshots-executor",
+     *            "properties": { }
+     *    },
+     *    "component-jython-executor": {
+     *        "type": "component-jython-executor",
+     *            "properties": { }
+     *    }
+     * }
+     * }
      */
+
     public populate(topologyTempalte: TopologyTemplate,
                     boardGraph: joint.dia.Graph) {
 
@@ -51,18 +85,19 @@ export class GraphGenerator {
             const workflow = topologyTempalte.workflows[workFlowName].steps;
             const stepName = Object.keys(workflow)[0];
             if (stepName) {
-                const functionType = workflow[stepName].target;
+                const nodeTemplateName = workflow[stepName].target;
+                const functionType = topologyTempalte.node_templates[nodeTemplateName].type;
                 console.log('draw function with ', stepName, functionType);
 
-                const functionElementForBoard = this.graphUtil.dropFunctionOverActionRelativeToParent(
+                this.graphUtil.dropFunctionOverActionRelativeToParent(
                     actionElement,
                     stepName , functionType, boardGraph);
 
                 // TODO handle dg-generic case (multi-step in the same action)
                 if (functionType === 'dg-generic') {
-                    const props = topologyTempalte.node_templates[stepName].properties;
+                    const props = topologyTempalte.node_templates[nodeTemplateName].properties;
                     console.log('dg props', props);
-                    props['dependency-node-template'].forEach(dependencyStepName => {
+                    props['dependency-node-templates'].forEach(dependencyStepName => {
                         const dependencyType = topologyTempalte.node_templates[dependencyStepName].type;
                         console.log('dependencyType', dependencyType);
                         this.graphUtil.dropFunctionOverActionRelativeToParent(
@@ -75,5 +110,4 @@ export class GraphGenerator {
         });
 
     }
-
 }

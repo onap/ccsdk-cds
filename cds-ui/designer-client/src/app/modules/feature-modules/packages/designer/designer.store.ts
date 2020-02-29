@@ -106,7 +106,7 @@ export class DesignerStore extends Store<DesignerDashboardState> {
     addDgGenericNodeTemplate(nodeTemplateName: string) {
         const node = new NodeTemplate('dg-generic');
         node.properties = {
-            'dependency-node-template': []
+            'dependency-node-templates': []
         };
         this.setState({
             ...this.state,
@@ -131,7 +131,7 @@ export class DesignerStore extends Store<DesignerDashboardState> {
                     [dgGenericNodeName]: {
                         ...this.state.template.node_templates[dgGenericNodeName],
                         properties: {
-                            'dependency-node-template': [
+                            'dependency-node-templates': [
                                 ...props['dependency-node-template'],
                                 dependency
                             ]
