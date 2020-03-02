@@ -194,7 +194,6 @@ open class ComponentConfigSnapshotsExecutor(private val cfgSnapshotService: Reso
     private fun setNodeOutputProperties(status: String, snapshot: String) {
         setAttribute(OUTPUT_STATUS, status.asJsonPrimitive())
         setAttribute(OUTPUT_SNAPSHOT, snapshot.asJsonPrimitive())
-        log.info("Setting output $OUTPUT_STATUS=$status, $OUTPUT_SNAPSHOT=$snapshot ")
     }
 
     /**
