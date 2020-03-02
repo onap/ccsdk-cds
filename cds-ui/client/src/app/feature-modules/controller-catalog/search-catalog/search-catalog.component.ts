@@ -82,37 +82,20 @@ export class SearchCatalogComponent implements OnInit {
     }, error=>{
       window.alert('Catalog not matching the search tag' + error);
     })
-
-//     this.options=[  {
-//       "modelName": "tosca.nodes.Artifact",
-//       "derivedFrom": "tosca.nodes.Root",
-//       "definitionType": "node_type",
-//       "definition": {
-//         "description": "This is Deprecated Artifact Node Type.",
-//         "version": "1.0.0",
-//         "derived_from": "tosca.nodes.Root"
-//       },
-//       "description": "This is Deprecated Artifact Node Type.",
-//       "version": "1.0.0",
-//       "tags": "tosca.nodes.Artifact,tosca.nodes.Root,node_type",
-//       "creationDate": "2019-09-16T07:35:24.000Z",
-//       "updatedBy": "System"
-//     }];
    }
 
    editInfo(item: ICatalog, option: string) {
 
-	   if(option == 'Delete'){
-//           this.catalogCreateService.deleteCatalog(item.modelName)
-//           .subscribe(response=>{
-//              this.alertService.success("Delete Success"+ response)
-//             },
-//      	    error=>{
-//      	    console.log(error);
-//      	       this.alertService.error('Error while deleting catalog'+ error);
-//
-//      	     })
-       }
+    if(option == 'Delete'){
+      this.searchCatalogService.deleteCatalog(item.modelName)
+        .subscribe(response=>{
+          this.alertService.success("Delete Success"+ response)
+          },
+          error=>{
+            console.log(error);
+            this.alertService.error('Error while deleting catalog'+ error);
+        })
+      }
        else{
        this.dialogRef = this.dialog.open(CatalogDataDialogComponent, {
             height: '500px',

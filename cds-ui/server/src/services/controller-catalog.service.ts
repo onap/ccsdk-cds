@@ -6,7 +6,7 @@ export interface ControllerCatalogService {
   getByTags(tags: string): Promise<JSON>;
   save(controllerCatalog: JSON): Promise<JSON>;
   getDefinitionTypes(definitionType: string): Promise<JSON>;
-  deleteCatalog(name: string): Promise<JSON>;
+  delete(name: string): Promise<JSON>;
 }
 
 export class ControllerCatalogServiceProvider implements Provider<ControllerCatalogService> {
