@@ -65,6 +65,9 @@ open class ComponentNetconfExecutor(private var componentFunctionScriptingServic
 
         // Handles both script processing and error handling
         scriptComponent.executeScript(executionServiceInput)
+
+        componentFunctionScriptingService.cleanupInstance(bluePrintRuntimeService.bluePrintContext(),
+                scriptType)
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
