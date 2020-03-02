@@ -19,15 +19,15 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import {Store} from '../../../../common/core/stores/Store';
+import { Store } from '../../../../common/core/stores/Store';
 
-import {CBAPackage, DslDefinition} from './mapping-models/CBAPacakge.model';
-import {PackageCreationService} from './package-creation.service';
-import {MetaDataTabModel} from './mapping-models/metadata/MetaDataTab.model';
-import {Observable} from 'rxjs';
-import {ResourceDictionary} from './mapping-models/ResourceDictionary.model';
+import { CBAPackage, DslDefinition } from './mapping-models/CBAPacakge.model';
+import { PackageCreationService } from './package-creation.service';
+import { MetaDataTabModel } from './mapping-models/metadata/MetaDataTab.model';
+import { Observable } from 'rxjs';
+import { ResourceDictionary } from './mapping-models/ResourceDictionary.model';
 
 
 @Injectable({
@@ -73,7 +73,6 @@ export class PackageCreationStore extends Store<CBAPackage> {
     }
 
     addScripts(name: string, content: string) {
-
         this.setState({
             ...this.state,
             scripts: this.state.scripts.setScripts(name, content)
@@ -109,5 +108,9 @@ export class PackageCreationStore extends Store<CBAPackage> {
 
     getTemplateAndMapping(variables: string[]): Observable<ResourceDictionary[]> {
         return this.packageCreationService.getTemplateAndMapping(variables);
+    }
+
+    clear() {
+        this.setState(new CBAPackage());
     }
 }
