@@ -132,7 +132,7 @@ export class DesignerStore extends Store<DesignerDashboardState> {
                         ...this.state.template.node_templates[dgGenericNodeName],
                         properties: {
                             'dependency-node-templates': [
-                                ...props['dependency-node-template'],
+                                ...props['dependency-node-templates'],
                                 dependency
                             ]
                         }
