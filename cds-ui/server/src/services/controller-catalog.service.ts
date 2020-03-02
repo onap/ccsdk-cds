@@ -11,7 +11,7 @@ export interface ControllerCatalogService {
 
 export class ControllerCatalogServiceProvider implements Provider<ControllerCatalogService> {
   constructor(
-    // controllerCatalog must match the name property in the datasource json file
+    //controllerCatalog must match the name property in the datasource json file
     @inject('datasources.controllerCatalog')
     protected dataSource: ControllerCatalogDataSource = new ControllerCatalogDataSource(),
   ) {}

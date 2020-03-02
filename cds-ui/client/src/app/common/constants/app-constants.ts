@@ -119,5 +119,5 @@ export const ControllerCatalogURLs = {
 	saveControllerCatalog: '/controllercatalog/save',
 	getDefinition: '/controllercatalog/model-type/by-definition',
 	getDerivedFrom: '/controllercatalog/model-type/by-derivedfrom',
-	deleteCatalog:'/controllercatalog'
+	deleteCatalog: '/controllercatalog'
 }

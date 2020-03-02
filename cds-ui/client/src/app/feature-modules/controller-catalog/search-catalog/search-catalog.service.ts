@@ -20,7 +20,6 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, observable } from 'rxjs';
 import { ControllerCatalogURLs } from 'src/app/common/constants/app-constants';
 import { ApiService } from 'src/app/common/core/services/api.service';
 

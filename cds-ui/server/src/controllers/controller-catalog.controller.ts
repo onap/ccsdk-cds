@@ -70,4 +70,5 @@ export class ControllerCatalogController {
   async delete(@param.path.string('name') name: string) {
     return await this.Ccservice.delete(name);
   }
+  
 }

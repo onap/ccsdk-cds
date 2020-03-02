@@ -67,10 +67,10 @@ export default {
                         "authorization": processorApiConfig.http.authToken
                     },
                     "responsePath": "$.*"
-              },
-              "functions": {
+         },
+          "functions": {
                    "delete": ["name"]
-              }
+         }
         }
     ]
 };

@@ -28,8 +28,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class ApiService {
   
-  constructor(private _http: HttpClient) {
-  }
+  constructor(private _http: HttpClient) {}
 
   get(url: string, params?: any): Observable<any> {
     return this._http.get(url,params);
@@ -38,7 +37,7 @@ export class ApiService {
   post(url: string, body: any | null, options?:any): Observable<any> {
     return this._http.post(url, body,options);
   }
-  
+
   put() {
     // to do
   }

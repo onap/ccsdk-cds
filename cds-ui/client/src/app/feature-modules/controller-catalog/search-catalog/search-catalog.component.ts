@@ -78,7 +78,6 @@ export class SearchCatalogComponent implements OnInit {
           this.options.push(element);
         });
         console.log(this.options);
-      //this.catalogSelect.openPanel();
     }, error=>{
       window.alert('Catalog not matching the search tag' + error);
     })
