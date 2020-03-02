@@ -30,9 +30,9 @@
                 <div [attr.aria-labelledby]="'head-script-'+mapIndex" [id]="'id-script-'+mapIndex" class="collapse"
                     data-parent="#accordion-script">
                     <div class="card-body">
-                        <ace-editor [(text)]="file.value"  (textChange)="textChanges($event,file.key)"  [mode]="'kotlin'" [autoUpdateContent]="true"
-                            [durationBeforeCallback]="1000" [theme]="'tomorrow_night_bright'" #editor
-                            style="height:300px;">
+                        <ace-editor [(text)]="file.value" (textChange)="textChanges($event,file.key)" [mode]="'kotlin'"
+                            [autoUpdateContent]="true" [durationBeforeCallback]="1000" [theme]="'tomorrow_night_bright'"
+                            #editor style="height:300px;">
                         </ace-editor>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <ngx-file-drop accept=".kt" (onFileDrop)="dropped($event)" (onFileLeave)="fileLeave($event)"
+                <ngx-file-drop accept=".kt,.py" (onFileDrop)="dropped($event)" (onFileLeave)="fileLeave($event)"
                     (onFileOver)="fileOver($event)" dropZoneLabel="Drop files here">
                     <ng-template let-openFileSelector="openFileSelector" ngx-file-drop-content-tmp>
                         <div class="folder-upload">
@@ -68,7 +68,7 @@
                                 Files
                             </button>
                         </div>
-                        <div class="folder-upload-type">Allowed file type: Kotlin(Kt)</div>
+                        <div class="folder-upload-type">Allowed file type: Kotlin(kt), Python(py)</div>
                     </ng-template>
                 </ngx-file-drop>
                 <div *ngFor="let item of uploadedFiles; let i=index" class="upload-table">

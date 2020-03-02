@@ -6,12 +6,13 @@
             <div class="row">
                 <h2 class="col m-0">
                     <ul class="breadcrumb-header">
-                        <li>CBA Packages</li>
+                        <li><a routerLink="/packages">CBA Packages</a></li>
                         <li>Package Name</li>
                     </ul>
                 </h2>
                 <div class="col d-flex justify-content-end header-button-save">
-                    <button class="float btn btn-sm btn-outline-secondary" (click)="goBackToDashBorad()" >Discard Changes</button>
+                    <button class="float btn btn-sm btn-outline-secondary" (click)="goBackToDashBorad()">Discard
+                        Changes</button>
                     <button class="float btn btn-sm btn-primary" (click)="saveBluePrint()">Save</button>
                 </div>
             </div>
@@ -44,22 +45,17 @@
                     <div class="col">
                         <div class="nav nav-tabs " id="nav-tab" role="tablist">
                             <a class="nav-item nav-link active" id="nav-metadata-tab" data-toggle="tab"
-                               href="#nav-metadata"
-                               role="tab" aria-controls="nav-metadata"
-                               aria-selected="false"  autofocus  #nameit (focusout)="test()">METADATA</a>
+                                href="#nav-metadata" role="tab" aria-controls="nav-metadata" aria-selected="false"
+                                autofocus #nameit (focusout)="test()">METADATA</a>
                             <a class="nav-item nav-link" id="nav-template-tab" data-toggle="tab" href="#nav-template"
-                               role="tab" aria-controls="nav-template"
-                               aria-selected="false">TEMPLATE & MAPPING</a>
+                                role="tab" aria-controls="nav-template" aria-selected="false">TEMPLATE & MAPPING</a>
                             <a class="nav-item nav-link" id="nav-scripts-tab" data-toggle="tab" href="#nav-scripts"
-                               role="tab" aria-controls="nav-scripts"
-                               aria-selected="false">SCRIPTS</a>
+                                role="tab" aria-controls="nav-scripts" aria-selected="false">SCRIPTS</a>
                             <a class="nav-item nav-link" id="nav-imports-tab" data-toggle="tab" href="#nav-imports"
-                               role="tab" aria-controls="nav-imports"
-                               aria-selected="false">IMPORTS</a>
+                                role="tab" aria-controls="nav-imports" aria-selected="false">IMPORTS</a>
                             <a class="nav-item nav-link" id="nav-authentication-tab" data-toggle="tab"
-                               href="#nav-authentication"
-                               role="tab" aria-controls="nav-authentication"
-                               aria-selected="false">EXTERNAL SYSTEM AUTHENTICATION PROPERTIES</a>
+                                href="#nav-authentication" role="tab" aria-controls="nav-authentication"
+                                aria-selected="false">EXTERNAL SYSTEM AUTHENTICATION PROPERTIES</a>
                         </div>
                     </div>
 
@@ -68,24 +64,24 @@
                     <div class="col">
                         <div class="tab-content" id="nav-tabContent">
                             <div class="tab-pane fade show active" id="nav-metadata" role="tabpanel"
-                                 aria-labelledby="nav-metadata-tab">
+                                aria-labelledby="nav-metadata-tab">
                                 <app-metadata-tab></app-metadata-tab>
                             </div>
                             <div class="tab-pane fade" id="nav-template" role="tabpanel"
-                                 aria-labelledby="nav-template-tab">
+                                aria-labelledby="nav-template-tab">
                                 <app-template-mapping></app-template-mapping>
                             </div>
                             <div class="tab-pane fade" id="nav-scripts" role="tabpanel"
-                                 aria-labelledby="nav-scripts-tab">
+                                aria-labelledby="nav-scripts-tab">
                                 <app-scripts-tab></app-scripts-tab>
                             </div>
                             <div class="tab-pane fade" id="nav-imports" role="tabpanel"
-                                 aria-labelledby="nav-imports-tab">
+                                aria-labelledby="nav-imports-tab">
                                 <app-imports-tab></app-imports-tab>
 
                             </div>
                             <div class="tab-pane fade" id="nav-authentication" role="tabpanel"
-                                 aria-labelledby="nav-authentication-tab">
+                                aria-labelledby="nav-authentication-tab">
                                 <div class="card creat-card">
                                     <div class="editor-container">
                                         <app-dsl-definitions-tab></app-dsl-definitions-tab>

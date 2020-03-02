@@ -53,10 +53,10 @@
                                 </span>
                             </label>
                         </div>
-                    </div> 
+                    </div>
                     <div class="create-template-import">Use the editor to add parameters or you can also
                         <a href="#" data-toggle="modal" (click)="allowedExt=[getFileExtension()]"
-                            data-target="#exampleModal">Import
+                            data-target="#templateModal">Import
                             File</a></div>
                     <div class="editor-container">
                         <app-source-editor (textChange)="textChanges($event,templateInfo.fileName)"
@@ -83,7 +83,7 @@
                             <br />
                             <span>Use Current Template Instance</span>
                         </a>
-                        <a href="#" (click)="allowedExt=['.csv']" data-toggle="modal" data-target="#exampleModal"
+                        <a href="#" (click)="allowedExt=['.csv']" data-toggle="modal" data-target="#templateModal"
                             class="mapping-source-load">
                             <i class="icon-Upload-attribute"></i>
                             <br />
@@ -125,7 +125,7 @@
                                 <td>{{ dict.name }}</td>
                                 <td>{{ dict.name }}</td>
                                 <td>
-                                    <select class="custom-select" (click)="testOption(dict,$event)">
+                                    <select class="custom-select" (click)="selectSource(dict,$event)">
                                         <option *ngFor="let val of dict.definition.sources | keyvalue">
                                             {{initMap(dict.name,val)}}
                                         </option>
@@ -149,6 +149,45 @@
                     </table>
                 </div>
 
+                <div id="mapping-table" [hidden]="mappingRes?.length == 0" class="mx-4 my-2">
+                    <table datatable [dtOptions]="dtOptions" [dtTrigger]="resTableDtTrigger" class="row-border hover">
+                        <thead>
+                            <tr>
+                                <th>Required</th>
+                                <th>Parameter Name</th>
+                                <th>Dictionary Name</th>
+                                <th>Dictionary Source</th>
+                                <th>Dependancies</th>
+                                <th>Default</th>
+                                <th>Data Type</th>
+                                <th>Entry Schema</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let dict of mappingRes">
+                                <td>
+                                    <i *ngIf="dict.definition?.property?.required" class="fa fa-check-square mx-2"></i>
+                                    <i *ngIf="!dict.definition?.property?.required" class="fa fa-square mx-2"></i>
+                                </td>
+                                <td>{{ dict['name'] }}</td>
+                                <td>{{ dict['name'] }}</td>
+                                <td>
+                                    <input type="text" class="form-control" [value]="dict['dictionary-source']"
+                                        disabled>
+
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" [value]="dict['dependencies']" disabled>
+                                    <!-- {{ dict.definition.sources }} -->
+                                </td>
+                                <td>{{ dict['property']['default'] }}</td>
+                                <td>{{ dict['property']['type'] }}</td>
+                                <td>{{ dict['property']['entry_schema'] }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
 
             </div>
 
@@ -162,12 +201,12 @@
 </div>
 
 
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="templateModal" tabindex="-1" role="dialog" aria-labelledby="templateModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Import File</h5>
+                <h5 class="modal-title" id="templateModalLabel">Import File</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

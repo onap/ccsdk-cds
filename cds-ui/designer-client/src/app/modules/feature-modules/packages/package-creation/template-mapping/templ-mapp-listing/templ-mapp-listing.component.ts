@@ -1,8 +1,10 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {PackageCreationStore} from '../../package-creation.store';
-import {Mapping, Template} from '../../mapping-models/CBAPacakge.model';
-import {TemplateInfo, TemplateStore} from '../../template.store';
-import {TemplateAndMapping} from '../TemplateAndMapping';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { PackageCreationStore } from '../../package-creation.store';
+import { Mapping, Template } from '../../mapping-models/CBAPacakge.model';
+import { TemplateInfo, TemplateStore } from '../../template.store';
+import { TemplateAndMapping } from '../TemplateAndMapping';
+import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
     selector: 'app-templ-mapp-listing',
@@ -14,11 +16,19 @@ export class TemplMappListingComponent implements OnInit {
     private templateAndMappingMap = new Map<string, TemplateAndMapping>();
     private templates: Template;
     private mapping: Mapping;
+    isCreate = true;
 
-    constructor(private packageCreationStore: PackageCreationStore, private templateStore: TemplateStore) {
+    constructor(
+        private packageCreationStore: PackageCreationStore,
+        private templateStore: TemplateStore,
+        private route: ActivatedRoute
+    ) {
     }
 
     ngOnInit() {
+        if (this.route.snapshot.paramMap.has('id')) {
+            this.isCreate = false;
+        }
         this.packageCreationStore.state$.subscribe(cba => {
             if (cba.templates) {
                 this.templates = cba.templates;
@@ -62,16 +72,27 @@ export class TemplMappListingComponent implements OnInit {
     }
 
     setSourceCodeEditor(key: string) {
-        key = 'Templates/' + key + '-template.vtl';
+        const templateKey = 'Templates/' + key + '-template.vtl';
         this.packageCreationStore.state$.subscribe(cba => {
-            if (cba.templates) {
-                console.log(cba.templates);
-                console.log(key);
-                const fileContent = cba.templates.getValue(key.trim());
+            console.log('cba ------');
+            console.log(cba);
+            console.log(key);
+            console.log(this.templateAndMappingMap);
+            if (cba.templates && cba.templates.files.has(templateKey)) {
+                const fileContent = cba.templates.getValue(templateKey.trim());
                 console.log(fileContent);
                 const templateInfo = new TemplateInfo();
                 templateInfo.fileContent = fileContent;
-                templateInfo.fileName = key;
+                templateInfo.fileName = templateKey;
+                this.templateStore.changeTemplateInfo(templateInfo);
+            }
+            const mappingKey = 'Templates/' + key + '-mapping.json';
+            if (cba.mapping && cba.mapping.files.has(mappingKey)) {
+                const obj = JSON.parse(cba.mapping.getValue(mappingKey));
+                const templateInfo = new TemplateInfo();
+                templateInfo.mapping = obj;
+                templateInfo.fileName = mappingKey;
+                templateInfo.type = 'mapping';
                 this.templateStore.changeTemplateInfo(templateInfo);
             }
         });
