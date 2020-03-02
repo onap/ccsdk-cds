@@ -60,14 +60,14 @@ export class ControllerCatalogController {
     return await this.Ccservice.getDefinitionTypes(definitionType);
   }
 
-  @del('/controllercatalog/model-type/{name}', {
-      responses: {
-        '200': {
-          content: { 'application/json': {} }
-        }
-      },
-    })
-    async delete(@param.path.string('name') name: string): Promise<JSON>  {
-      return await this.Ccservice.deleteCatalog(name);
-    }
+  @del('/controllercatalog/{name}', {
+    responses: {
+      '200': {
+        content: { 'application/json': {} }
+      }
+    },
+  })
+  async delete(@param.path.string('name') name: string) {
+    return await this.Ccservice.delete(name);
+  }
 }

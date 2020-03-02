@@ -30,20 +30,21 @@ export class ApiService {
   
   constructor(private _http: HttpClient) {
   }
+
   get(url: string, params?: any): Observable<any> {
     return this._http.get(url,params);
   }
 
   post(url: string, body: any | null, options?:any): Observable<any> {
-
     return this._http.post(url, body,options);
   }
+  
   put() {
     // to do
   }
 
-  delete() {
-    // to do
+  delete(url: string, params?: any): Observable<any> {
+    return this._http.delete(url,params);
   }
 
 }
