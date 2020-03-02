@@ -19,19 +19,22 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import {Store} from '../../../../common/core/stores/Store';
+import { Store } from '../../../../common/core/stores/Store';
 
 
 export class TemplateInfo {
     fileName: string;
     fileContent: string;
+    type: string;
+    mapping = [];
 
 
     constructor() {
         this.fileName = '';
         this.fileContent = '';
+        this.type = '';
     }
 
 

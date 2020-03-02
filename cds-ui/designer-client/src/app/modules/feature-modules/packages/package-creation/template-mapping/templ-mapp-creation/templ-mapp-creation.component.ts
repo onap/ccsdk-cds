@@ -28,6 +28,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     // We use this trigger because fetching the list of persons can be quite long,
     // thus we ensure the data is fetched before rendering
     dtTrigger = new Subject();
+    resTableDtTrigger = new Subject();
     resourceDictionaryRes: ResourceDictionary[] = [];
     allowedExt = ['.vtl'];
     @ViewChild(DataTableDirective, { static: false })
@@ -38,6 +39,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     templateExt = 'Velcoity';
     dependancies = new Map<string, Array<string>>();
     dependanciesSource = new Map<string, string>();
+    mappingRes = [];
 
 
 
@@ -50,17 +52,25 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.templateStore.state$.subscribe(templateInfo => {
+            console.log('----------');
             console.log(templateInfo);
             this.templateInfo = templateInfo;
             this.fileName = templateInfo.fileName.split('/')[1];
-            this.templateFileContent = templateInfo.fileContent;
+            if (templateInfo.type === 'mapping') {
+                this.mappingRes = templateInfo.mapping;
+                this.resourceDictionaryRes = [];
+                this.resTableDtTrigger.next();
+            } else {
+
+                this.templateFileContent = templateInfo.fileContent;
+            }
         });
 
         this.dtOptions = {
             pagingType: 'full_numbers',
             pageLength: 10,
             destroy: true,
-            // retrieve: true,
+            retrieve: true,
         };
     }
 
@@ -122,6 +132,8 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     }
 
     uploadFile() {
+        this.dependancies.clear();
+        this.dependanciesSource.clear();
         if (this.allowedExt.includes('.csv')) {
             this.fetchCSVkeys();
         } else {
@@ -181,7 +193,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     public fileLeave(event) {
         console.log(event);
     }
-
+    //
     resetTheUploadedFiles() {
         this.uploadedFiles = [];
     }
@@ -191,12 +203,14 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     }
 
     getMappingTableFromTemplate(e) {
+        this.resourceDictionaryRes = [];
         if (e) {
             e.preventDefault();
         }
         if (this.variables && this.variables.length > 0) {
             console.log('base');
             this.packageCreationStore.getTemplateAndMapping(this.variables).subscribe(res => {
+                this.mappingRes = [];
                 this.resourceDictionaryRes = res;
                 console.log(this.resourceDictionaryRes);
                 this.rerender();
@@ -232,7 +246,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         }
     }
 
-    testOption(dict, e) {
+    selectSource(dict, e) {
         const source = e.target.value;
         let keyDepend = null;
         try {
@@ -242,12 +256,13 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         console.log(source);
         if (keyDepend) {
             this.dependancies.set(dict.name, keyDepend);
-            this.dependanciesSource.set(dict.name, source);
         } else {
             // this.dependancies.delete(dict.name);
             // this.dependanciesSource.delete(dict.name);
         }
+        this.dependanciesSource.set(dict.name, source);
         console.log(this.dependancies);
+        console.log(this.dependanciesSource);
     }
 
     getKeys(map: Map<string, any>) {
