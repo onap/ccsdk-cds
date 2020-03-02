@@ -117,6 +117,11 @@ class DefaultBlueprintSvcLogicService : BlueprintSvcLogicService {
         return blueprintSvcLogicContext.getResponse()
     }
 
+    override fun execute(module: String?, rpc: String?, version: String?, mode: String?, ctx: SvcLogicContext?): SvcLogicContext {
+        // New method added in sli-core SvcLogicServiceBase interface, probably not needed for CDS implementation ?
+        TODO("not implemented")
+    }
+
     override fun executeNode(node: SvcLogicNode?, ctx: SvcLogicContext): SvcLogicNode? {
         if (node == null) {
             return null

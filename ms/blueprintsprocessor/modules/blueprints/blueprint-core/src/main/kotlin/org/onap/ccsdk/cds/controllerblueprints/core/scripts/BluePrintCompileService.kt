@@ -25,11 +25,9 @@ import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.jvm.K2JVMCompiler
 import org.jetbrains.kotlin.config.Services
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.checkFileExists
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
 import java.io.File
 import java.net.URLClassLoader
 import java.util.ArrayList
@@ -58,13 +56,7 @@ open class BluePrintCompileService {
             compile(bluePrintSourceCode)
         }
 
-        val classLoaderWithDependencies = if (BluePrintConstants.USE_SCRIPT_COMPILE_CACHE) {
-            /** Get the class loader with compiled jar from cache */
-            BluePrintCompileCache.classLoader(bluePrintSourceCode.cacheKey)
-        } else {
-            /** Get the class loader with compiled jar from disk */
-            BluePrintFileUtils.getURLClassLoaderFromDirectory(bluePrintSourceCode.cacheKey)
-        }
+        val classLoaderWithDependencies = BluePrintCompileCache.classLoader(bluePrintSourceCode.cacheKey)
 
         /** Create the instance from the class loader */
         return instance(classLoaderWithDependencies, kClassName, args)
@@ -126,9 +118,6 @@ open class BluePrintCompileService {
                 .single().newInstance(*args.toArray())
         } ?: throw BluePrintException("failed to create class($kClassName) instance for constructor argument($args).")
 
-        if (!BluePrintConstants.USE_SCRIPT_COMPILE_CACHE) {
-            classLoader.close()
-        }
         return instance as T
     }
 }
