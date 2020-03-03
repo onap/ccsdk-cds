@@ -25,22 +25,22 @@
         "get_input" : "resolution-key"
       }
     },
-    "precheck-properties" : {
+    "preCheck-properties" : {
       "resolution-key" : {
         "get_input" : "resolution-key"
       }
     },
-    "downloadNeSw-properties" : {
+    "downloadNESW-properties" : {
       "resolution-key" : {
         "get_input" : "resolution-key"
       }
     },
-    "activateNeSw-properties" : {
+    "activateNESW-properties" : {
       "resolution-key" : {
         "get_input" : "resolution-key"
       }
     },
-    "postcheck-properties" : {
+    "postCheck-properties" : {
       "resolution-key" : {
         "get_input" : "resolution-key"
       }
@@ -96,11 +96,11 @@
           }
         }
       },
-      "precheck" : {
+      "preCheck" : {
         "steps" : {
           "activate-process" : {
             "description" : "Check if pnf ready for sw upgrade",
-            "target" : "precheck",
+            "target" : "preCheck",
             "activities" : [ {
               "call_operation" : ""
             } ]
@@ -111,18 +111,18 @@
             "required" : true,
             "type" : "string"
           },
-          "precheck-properties" : {
-            "description" : "Dynamic PropertyDefinition for precheck workflow(software-upgrade).",
+          "preCheck-properties" : {
+            "description" : "Dynamic PropertyDefinition for preCheck workflow(software-upgrade).",
             "required" : true,
-            "type" : "dt-precheck-properties"
+            "type" : "dt-preCheck-properties"
           }
         }
       },
-      "downloadNeSw" : {
+      "downloadNESW" : {
         "steps" : {
           "activate-process" : {
             "description" : "Trigger download new software for sw upgrade",
-            "target" : "downloadNeSw",
+            "target" : "downloadNESW",
             "activities" : [ {
               "call_operation" : ""
             } ]
@@ -133,18 +133,18 @@
             "required" : true,
             "type" : "string"
           },
-          "downloadNeSw-properties" : {
-            "description" : "Dynamic PropertyDefinition for downloadNeSw workflow(software-upgrade).",
+          "downloadNESW-properties" : {
+            "description" : "Dynamic PropertyDefinition for downloadNESW workflow(software-upgrade).",
             "required" : true,
-            "type" : "dt-downloadNeSw-properties"
+            "type" : "dt-downloadNESW-properties"
           }
         }
       },
-      "activateNeSw" : {
+      "activateNESW" : {
         "steps" : {
           "activate-process" : {
             "description" : "Trigger activation of target software version for pnf upgrade",
-            "target" : "activateNeSw",
+            "target" : "activateNESW",
             "activities" : [ {
               "call_operation" : ""
             } ]
@@ -155,18 +155,18 @@
             "required" : true,
             "type" : "string"
           },
-          "activateNeSw-properties" : {
-            "description" : "Dynamic PropertyDefinition for activateNeSw workflow(software-upgrade).",
+          "activateNESW-properties" : {
+            "description" : "Dynamic PropertyDefinition for activateNESW workflow(software-upgrade).",
             "required" : true,
-            "type" : "dt-activateNeSw-properties"
+            "type" : "dt-activateNESW-properties"
           }
         }
       },
-      "postcheck" : {
+      "postCheck" : {
         "steps" : {
           "activate-process" : {
             "description" : "Check if pnf upgrade is completed",
-            "target" : "postcheck",
+            "target" : "postCheck",
             "activities" : [ {
               "call_operation" : ""
             } ]
@@ -177,10 +177,10 @@
             "required" : true,
             "type" : "string"
           },
-          "postcheck-properties" : {
-            "description" : "Dynamic PropertyDefinition for postcheck workflow(software-upgrade).",
+          "postCheck-properties" : {
+            "description" : "Dynamic PropertyDefinition for postCheck workflow(software-upgrade).",
             "required" : true,
-            "type" : "dt-postcheck-properties"
+            "type" : "dt-postCheck-properties"
           }
         }
       }
@@ -255,7 +255,7 @@
           }
         }
       },
-      "precheck" : {
+      "preCheck" : {
         "type" : "component-script-executor",
         "interfaces" : {
           "ComponentScriptExecutor" : {
@@ -269,7 +269,7 @@
                 "inputs" : {
                   "script-type" : "kotlin",
                   "script-class-reference" : "cba.pnf.swug.RestconfSoftwareUpgrade",
-                  "dynamic-properties" : "*precheck-properties"
+                  "dynamic-properties" : "*preCheck-properties"
                 },
                 "outputs" : {
                   "response-data" : "",
@@ -290,7 +290,7 @@
           }
         }
       },
-      "downloadNeSw" : {
+      "downloadNESW" : {
         "type" : "component-script-executor",
         "interfaces" : {
           "ComponentScriptExecutor" : {
@@ -304,7 +304,7 @@
                 "inputs" : {
                   "script-type" : "kotlin",
                   "script-class-reference" : "cba.pnf.swug.RestconfSoftwareUpgrade",
-                  "dynamic-properties" : "*downloadNeSw-properties"
+                  "dynamic-properties" : "*downloadNESW-properties"
                 },
                 "outputs" : {
                   "response-data" : "",
@@ -341,7 +341,7 @@
           }
         }
       },
-      "activateNeSw" : {
+      "activateNESW" : {
         "type" : "component-script-executor",
         "interfaces" : {
           "ComponentScriptExecutor" : {
@@ -355,7 +355,7 @@
                 "inputs" : {
                   "script-type" : "kotlin",
                   "script-class-reference" : "cba.pnf.swug.RestconfSoftwareUpgrade",
-                  "dynamic-properties" : "*activateNeSw-properties"
+                  "dynamic-properties" : "*activateNESW-properties"
                 },
                 "outputs" : {
                   "response-data" : "",
@@ -384,7 +384,7 @@
           }
         }
       },
-      "postcheck" : {
+      "postCheck" : {
         "type" : "component-script-executor",
         "interfaces" : {
           "ComponentScriptExecutor" : {
@@ -398,7 +398,7 @@
                 "inputs" : {
                   "script-type" : "kotlin",
                   "script-class-reference" : "cba.pnf.swug.RestconfSoftwareUpgrade",
-                  "dynamic-properties" : "*postcheck-properties"
+                  "dynamic-properties" : "*postCheck-properties"
                 },
                 "outputs" : {
                   "response-data" : "",
