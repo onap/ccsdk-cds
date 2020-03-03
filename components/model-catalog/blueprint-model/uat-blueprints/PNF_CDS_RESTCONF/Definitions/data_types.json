@@ -19,8 +19,8 @@
       },
       "derived_from" : "tosca.datatypes.Dynamic"
     },
-    "dt-precheck-properties": {
-      "description": "Dynamic DataType definition for the precheck workflow(upgrade-software).",
+    "dt-preCheck-properties": {
+      "description": "Dynamic DataType definition for the preCheck workflow(upgrade-software).",
       "version": "1.0.0",
       "properties": {
         "pnf-id": {
@@ -32,8 +32,8 @@
       },
       "derived_from": "tosca.datatypes.Dynamic"
     },
-    "dt-downloadNeSw-properties": {
-      "description": "Dynamic DataType definition for the downloadNeSw workflow(upgrade-software).",
+    "dt-downloadNESW-properties": {
+      "description": "Dynamic DataType definition for the downloadNESW workflow(upgrade-software).",
       "version": "1.0.0",
       "properties": {
         "pnf-id": {
@@ -45,8 +45,8 @@
       },
       "derived_from": "tosca.datatypes.Dynamic"
     },
-    "dt-activateNeSw-properties": {
-      "description": "Dynamic DataType definition for the activateNeSw workflow(upgrade-software).",
+    "dt-activateNESW-properties": {
+      "description": "Dynamic DataType definition for the activateNESW workflow(upgrade-software).",
       "version": "1.0.0",
       "properties": {
         "pnf-id": {
@@ -58,8 +58,8 @@
       },
       "derived_from": "tosca.datatypes.Dynamic"
     },
-    "dt-postcheck-properties": {
-      "description": "Dynamic DataType definition for the postcheck workflow(upgrade-software).",
+    "dt-postCheck-properties": {
+      "description": "Dynamic DataType definition for the postCheck workflow(upgrade-software).",
       "version": "1.0.0",
       "properties": {
         "pnf-id": {
