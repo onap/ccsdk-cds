@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4c23ae5d_fd2ecb17",
+        "filename": "components/model-catalog/blueprint-model/uat-blueprints/PNF_CDS_RESTCONF/Scripts/kotlin/RestconfSoftwareUpgrade.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 5447
+      },
+      "writtenOn": "2020-03-03T15:56:39Z",
+      "side": 1,
+      "message": "Should it be \"processPreCheck\" to follow the std camel case?",
+      "revId": "8708ad9a1404597f1ccd7892e546be7c199be460",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
