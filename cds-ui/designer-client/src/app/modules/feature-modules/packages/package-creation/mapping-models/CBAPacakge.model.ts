@@ -1,4 +1,6 @@
-import { MetaDataTabModel } from './metadata/MetaDataTab.model';
+import {MetaDataTabModel} from './metadata/MetaDataTab.model';
+
+
 
 export class Definition {
 
@@ -50,6 +52,7 @@ export class Base {
         return this.files.get(key);
     }
 }
+
 export class Scripts {
     public files: Map<string, string>;
 
@@ -83,6 +86,7 @@ export class Template {
 
 export class Mapping extends Base {
 }
+
 export class CBAPackage {
 
     public metaData: MetaDataTabModel;
