@@ -106,7 +106,7 @@ open class ResourceAssignment {
 }
 
 data class KeyIdentifier(val name: String, val value: JsonNode)
-
+data class DictionaryMetadataEntry(val name: String, val value: String)
 /**
  * Data class for exposing summary of resource resolution
  */
@@ -117,12 +117,16 @@ data class ResolutionSummary(
     val type: String?,
     @JsonProperty("key-identifiers")
     val keyIdentifiers: MutableList<KeyIdentifier>,
+    @JsonProperty("dictionary-description")
+    val dictionaryDescription: String?,
+    @JsonProperty("dictionary-metadata")
+    val dictionaryMetadata: MutableList<DictionaryMetadataEntry>,
     @JsonProperty("dictionary-name")
     val dictionaryName: String?,
-    @JsonProperty("request-payload")
-    val requestPayload: JsonNode?,
     @JsonProperty("dictionary-source")
     val dictionarySource: String?,
+    @JsonProperty("request-payload")
+    val requestPayload: JsonNode?,
     @JsonProperty("status")
     val status: String?,
     @JsonProperty("message")
