@@ -49,6 +49,10 @@ interface BlueprintSvcLogicService : SvcLogicServiceBase {
 
     suspend fun execute(graph: SvcLogicGraph, bluePrintRuntimeService: BluePrintRuntimeService<*>, input: Any): Any
 
+    override fun execute(module: String, rpc: String, version: String, mode: String, ctx: SvcLogicContext): SvcLogicContext {
+        TODO("not implemented")
+    }
+
     @Deprecated("Populate Graph Dynamically from Blueprints, No need to get from Database Store ")
     override fun getStore(): SvcLogicStore {
         TODO("not implemented")
