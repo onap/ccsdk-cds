@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {FileSystemFileEntry, NgxFileDropEntry} from 'ngx-file-drop';
-import {PackageCreationStore} from '../package-creation.store';
+import { Component, OnInit } from '@angular/core';
+import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
+import { PackageCreationStore } from '../package-creation.store';
 import 'ace-builds/src-noconflict/ace';
 import 'ace-builds/webpack-resolver';
 
@@ -18,9 +18,7 @@ export class ScriptsTabComponent implements OnInit {
 
     constructor(
         private packageCreationStore: PackageCreationStore,
-    ) {
-
-    }
+    ) { }
 
 
     ngOnInit() {
@@ -29,13 +27,6 @@ export class ScriptsTabComponent implements OnInit {
                 this.scriptsFiles = cbaPackage.scripts.files;
             }
         });
-
-        /* this.packageStore.state$.subscribe(res => {
-             //  this.scriptsFiles =
-             console.log('from scripts');
-             console.log(res.scripts);
-             this.scriptsFiles = res.scripts.files;
-         });*/
     }
 
     public dropped(files: NgxFileDropEntry[]) {
@@ -52,11 +43,18 @@ export class ScriptsTabComponent implements OnInit {
         }
     }
 
-    removeFile(fileIndex: number) {
-        console.log(this.uploadedFiles[fileIndex]);
-        const filename = 'Scripts/' + this.uploadedFiles[fileIndex].name;
-        this.packageCreationStore.removeFileFromState(filename);
-        this.uploadedFiles.splice(fileIndex, 1);
+    removeFile(filePath: string, FileIndex: number) {
+        const filename = filePath.split('/')[2] || '';
+        //  const filename = 'Scripts/' + this.getFileType(this.uploadedFiles[fileIndex].name) + '/' + this.uploadedFiles[fileIndex].name;
+        this.packageCreationStore.removeFileFromState(filePath);
+        // remove from upload files array
+        // tslint:disable-next-line: prefer-for-of
+        for (let i = 0; i < this.uploadedFiles.length; i++) {
+            if (this.uploadedFiles[i].name === filename) {
+                this.uploadedFiles.splice(i, 1);
+                break;
+            }
+        }
     }
 
     public fileOver(event) {
@@ -73,13 +71,24 @@ export class ScriptsTabComponent implements OnInit {
             droppedFile.file((file: File) => {
                 const fileReader = new FileReader();
                 fileReader.onload = (e) => {
-                    this.packageCreationStore.addScripts('Scripts/' + droppedFile.name,
+                    this.packageCreationStore.addScripts('Scripts/' + this.getFileType(droppedFile.name) + '/' + droppedFile.name,
                         fileReader.result.toString());
                 };
                 fileReader.readAsText(file);
             });
 
         }
+    }
+
+    getFileType(filename: string): string {
+        let fileType = '';
+        const fileExtension = filename.substring(filename.lastIndexOf('.') + 1);
+        if (fileExtension === 'py') {
+            fileType = 'python';
+        } else if (fileExtension === 'kt') {
+            fileType = 'kotlin';
+        }
+        return fileType;
     }
 
     resetTheUploadedFiles() {
