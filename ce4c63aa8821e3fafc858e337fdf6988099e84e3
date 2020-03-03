@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1730b3aa_a77e8657",
+        "filename": "ms/blueprintsprocessor/functions/restful-executor/pom.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 4801
+      },
+      "writtenOn": "2020-03-03T09:24:26Z",
+      "side": 1,
+      "message": "2020",
+      "range": {
+        "startLine": 3,
+        "startChar": 16,
+        "endLine": 3,
+        "endChar": 25
+      },
+      "revId": "ce4c63aa8821e3fafc858e337fdf6988099e84e3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "760d9ab2_a55d4c0c",
+        "filename": "ms/blueprintsprocessor/functions/restful-executor/src/main/kotlin/internal/scripts/TestRestfulConfigure.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 4801
+      },
+      "writtenOn": "2020-03-03T09:24:26Z",
+      "side": 1,
+      "message": "Copyright (C) 2020 Huawei Technologies Co., Ltd.",
+      "range": {
+        "startLine": 2,
+        "startChar": 4,
+        "endLine": 2,
+        "endChar": 25
+      },
+      "revId": "ce4c63aa8821e3fafc858e337fdf6988099e84e3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "005745c1_69d1502a",
+        "filename": "ms/blueprintsprocessor/functions/restful-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/restful/executor/ComponentRestfulExecutor.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 4801
+      },
+      "writtenOn": "2020-03-03T09:24:26Z",
+      "side": 1,
+      "message": "imo, for this new kt file, leaving copyright only will be better. Btw, should be only one organization.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 41
+      },
+      "revId": "ce4c63aa8821e3fafc858e337fdf6988099e84e3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e2f7916_88196d54",
+        "filename": "ms/blueprintsprocessor/functions/restful-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/restful/executor/RestfulCMComponentFunction.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 4801
+      },
+      "writtenOn": "2020-03-03T09:24:26Z",
+      "side": 1,
+      "message": "Copyright (C) 2020 Huawei Technologies Co., Ltd.",
+      "range": {
+        "startLine": 2,
+        "startChar": 4,
+        "endLine": 2,
+        "endChar": 28
+      },
+      "revId": "ce4c63aa8821e3fafc858e337fdf6988099e84e3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ae74bae_0cc9a24d",
+        "filename": "ms/blueprintsprocessor/functions/restful-executor/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/restful/executor/ComponentRestfulExecutorTest.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 4801
+      },
+      "writtenOn": "2020-03-03T09:24:26Z",
+      "side": 1,
+      "message": "Copyright (C) 2020 Huawei Technologies Co., Ltd.",
+      "range": {
+        "startLine": 2,
+        "startChar": 3,
+        "endLine": 3,
+        "endChar": 41
+      },
+      "revId": "ce4c63aa8821e3fafc858e337fdf6988099e84e3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
