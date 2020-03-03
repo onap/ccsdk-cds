@@ -167,23 +167,35 @@ class ResourceAssignmentUtilsTest {
             properties = mutableMapOf("resolved-payload" to JacksonUtils.jsonNode("{\"mock\": true}"))
         }
         resourceDefinition.sources = mutableMapOf("input" to nodeTemplate)
+        resourceDefinition.property = PropertyDefinition().apply {
+            this.description = "pnf-id"
+            this.metadata = mutableMapOf("aai-path" to "//path/in/aai")
+        }
 
         val result = ResourceAssignmentUtils.generateResolutionSummaryData(
                 listOf(resourceAssignment), mapOf("pnf-id" to resourceDefinition))
 
         assertEquals("""
-            [{
-                "name":"pnf-id",
-                "value":null,
-                "required":null,
-                "type":"string",
-                "key-identifiers":[],
-                "dictionary-name":"pnf-id",
-                "request-payload":{"mock":true},
-                "dictionary-source":"input",
-                "status":null,
-                "message":null
-            }]
+            {
+                "resolution-summary":[
+                    {
+                        "name":"pnf-id",
+                        "value":null,
+                        "required":null,
+                        "type":"string",
+                        "key-identifiers":[],
+                        "dictionary-description":"pnf-id",
+                        "dictionary-metadata":[
+                            {"name":"aai-path","value":"//path/in/aai"}
+                        ],
+                        "dictionary-name":"pnf-id",
+                        "dictionary-source":"input",
+                        "request-payload":{"mock":true},
+                        "status":null,
+                        "message":null
+                    }
+                ]
+            }
         """.replace("\n|\\s".toRegex(), ""), result)
     }
 

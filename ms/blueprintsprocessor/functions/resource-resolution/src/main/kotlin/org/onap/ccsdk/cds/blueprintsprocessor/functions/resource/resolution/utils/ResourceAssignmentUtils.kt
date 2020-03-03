@@ -42,6 +42,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeServ
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonReactorUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.PropertyDefinitionUtils.Companion.hasLogProtect
+import org.onap.ccsdk.cds.controllerblueprints.resource.dict.DictionaryMetadataEntry
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.KeyIdentifier
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResolutionSummary
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
@@ -203,15 +204,22 @@ class ResourceAssignmentUtils {
             resourceDefinitions: Map<String, ResourceDefinition>
         ): String {
             val resolutionSummaryList = resourceAssignments.map {
-                val payload = resourceDefinitions[it.name]
-                        ?.sources?.get(it.dictionarySource)?.properties?.get("resolved-payload")
+                val definition = resourceDefinitions[it.name]
+                val payload = definition?.sources?.get(it.dictionarySource)
+                        ?.properties?.get("resolved-payload")
+                val metadata = definition?.property?.metadata
+                        ?.map { e -> DictionaryMetadataEntry(e.key, e.value) }
+                        ?.toMutableList() ?: mutableListOf()
+                val description = definition?.property?.description
                 ResolutionSummary(
-                        it.name, it.property?.value, it.property?.required,
-                        it.property?.type, it.keyIdentifiers, it.dictionaryName,
-                        payload, it.dictionarySource, it.status, it.message
+                        it.name, it.property?.value, it.property?.required, it.property?.type,
+                        it.keyIdentifiers, description, metadata, it.dictionaryName,
+                        it.dictionarySource, payload, it.status, it.message
                 )
             }
-            return JacksonUtils.getJson(resolutionSummaryList, includeNull = true)
+            // Wrapper needed for integration with SDNC
+            val data = mapOf("resolution-summary" to resolutionSummaryList)
+            return JacksonUtils.getJson(data, includeNull = true)
         }
 
         private fun useDefaultValueIfNull(

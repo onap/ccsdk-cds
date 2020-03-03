@@ -256,7 +256,8 @@ class ResourceResolutionServiceTest {
                     props
             )
         }.let {
-            val list = JacksonUtils.getListFromJson(it, ResolutionSummary::class.java)
+            val summaries = JacksonUtils.jsonNode(it)["resolution-summary"]
+            val list = JacksonUtils.getListFromJsonNode(summaries, ResolutionSummary::class.java)
             assertEquals(list.size, 3)
         }
     }
