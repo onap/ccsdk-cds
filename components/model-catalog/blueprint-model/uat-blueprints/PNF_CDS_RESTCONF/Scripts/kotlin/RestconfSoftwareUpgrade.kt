@@ -60,10 +60,10 @@ class RestconfSoftwareUpgrade : AbstractScriptComponentFunction() {
             restconfMountDevice(model.client, model.deviceId, mountPayload, mutableMapOf("Content-Type" to "application/json"))
 
             when (model.action) {
-                Action.PRE_CHECK -> processPrecheck(model)
-                Action.DOWNLOAD_NE_SW -> processDownloadNeSw(model)
-                Action.ACTIVATE_NE_SW -> processActivateNeSw(model)
-                Action.POST_CHECK -> processPostcheck(model)
+                Action.PRE_CHECK -> processPreCheck(model)
+                Action.DOWNLOAD_NE_SW -> processDownloadNESW(model)
+                Action.ACTIVATE_NE_SW -> processActivateNESW(model)
+                Action.POST_CHECK -> processPostCheck(model)
                 Action.CANCEL -> processCancel(model)
             }
 
@@ -74,7 +74,7 @@ class RestconfSoftwareUpgrade : AbstractScriptComponentFunction() {
         }
     }
 
-    private suspend fun processPrecheck(model: SoftwareUpgradeModel) {
+    private suspend fun processPreCheck(model: SoftwareUpgradeModel) {
         log.debug("In PNF SW upgrade : processPreCheck")
         //Log the current configuration for the subtree
         val payloadObject = getCurrentConfig(model)
@@ -82,8 +82,8 @@ class RestconfSoftwareUpgrade : AbstractScriptComponentFunction() {
         log.info("PNF is Healthy!")
     }
 
-    private suspend fun processDownloadNeSw(model: SoftwareUpgradeModel) {
-        log.debug("In PNF SW upgrade : processDownloadNeSw")
+    private suspend fun processDownloadNESW(model: SoftwareUpgradeModel) {
+        log.debug("In PNF SW upgrade : processDownloadNESW")
         //Check if there is existing config for the targeted software version
 
         var downloadConfigPayload: String
@@ -106,8 +106,8 @@ class RestconfSoftwareUpgrade : AbstractScriptComponentFunction() {
         checkExecution(model)
     }
 
-    private suspend fun processActivateNeSw(model: SoftwareUpgradeModel) {
-        log.debug("In PNF SW upgrade : processActivateNeSw")
+    private suspend fun processActivateNESW(model: SoftwareUpgradeModel) {
+        log.debug("In PNF SW upgrade : processActivateNESW")
         //Check if the software is downloaded and ready to be activated
         if (checkIfSwReadyToPerformAction(Action.DOWNLOAD_NE_SW, model)) {
             var activateConfigPayload: String = contentFromResolvedArtifactNB("configure")
@@ -124,8 +124,8 @@ class RestconfSoftwareUpgrade : AbstractScriptComponentFunction() {
         }
     }
 
-    private suspend fun processPostcheck(model: SoftwareUpgradeModel) {
-        log.info("In PNF SW upgrade : processPostcheck")
+    private suspend fun processPostCheck(model: SoftwareUpgradeModel) {
+        log.info("In PNF SW upgrade : processPostCheck")
         //Log the current configuration for the subtree
         if (checkIfSwReadyToPerformAction(Action.POST_CHECK, model)) {
             log.info("PNF is healthy post activation!")
@@ -175,10 +175,10 @@ class RestconfSoftwareUpgrade : AbstractScriptComponentFunction() {
 }
 
 enum class Action(val actionName: String, val completionStatus: String) {
-    PRE_CHECK("precheck", "INITIALIZED"),
-    DOWNLOAD_NE_SW("downloadNeSw", "DOWNLOAD_COMPLETED"),
-    ACTIVATE_NE_SW("activateNeSw", "ACTIVATION_COMPLETED"),
-    POST_CHECK("postcheck", "ACTIVATION_COMPLETED"),
+    PRE_CHECK("preCheck", "INITIALIZED"),
+    DOWNLOAD_NE_SW("downloadNESW", "DOWNLOAD_COMPLETED"),
+    ACTIVATE_NE_SW("activateNESW", "ACTIVATION_COMPLETED"),
+    POST_CHECK("postCheck", "ACTIVATION_COMPLETED"),
     CANCEL("cancel", "CANCELLED")
     ;
     companion object{

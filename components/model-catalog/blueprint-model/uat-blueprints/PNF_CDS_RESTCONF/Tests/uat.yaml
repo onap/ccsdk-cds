@@ -56,21 +56,21 @@ processes:
         errorMessage: null
         eventType: EVENT_COMPONENT_EXECUTED
         message: success
-  - name: precheck
+  - name: preCheck
     request:
       commonHeader: &swugCommonHeader
         originatorId: sdnc
         requestId: "123456-1000"
         subRequestId: sub-123456-1000
-      actionIdentifiers: &precheck-ai
+      actionIdentifiers: &preCheck-ai
         blueprintName: PNF_CDS_RESTCONF
         blueprintVersion: "1.0.0"
-        actionName: precheck
+        actionName: preCheck
         mode: sync
       payload:
-        precheck-request:
+        preCheck-request:
           resolution-key: &resKey "RES-KEY 61"
-          precheck-properties: &actionProps
+          preCheck-properties: &actionProps
             service-instance-id: siid_1234
             pnf-id: &pnfId pnf-id-2019-07-12
             target-software-version: "2.0.2"
@@ -78,26 +78,26 @@ processes:
             pnf-customization-uuid: pnf-customization-uuid
     expectedResponse:
       commonHeader: *swugCommonHeader
-      actionIdentifiers: *precheck-ai
+      actionIdentifiers: *preCheck-ai
       status:
         code: 200
         eventType: EVENT_COMPONENT_EXECUTED
         errorMessage: null
         message: success
       payload:
-        precheck-response: {}
-  - name: downloadNeSw
+        preCheck-response: {}
+  - name: downloadNESW
     request:
       commonHeader: *swugCommonHeader
       actionIdentifiers: &download-ai
         blueprintName: PNF_CDS_RESTCONF
         blueprintVersion: "1.0.0"
-        actionName: downloadNeSw
+        actionName: downloadNESW
         mode: sync
       payload:
-        downloadNeSw-request:
+        downloadNESW-request:
           resolution-key: *resKey
-          downloadNeSw-properties: *actionProps
+          downloadNESW-properties: *actionProps
     expectedResponse:
       commonHeader: *swugCommonHeader
       actionIdentifiers: *download-ai
@@ -107,19 +107,19 @@ processes:
         errorMessage: null
         message: success
       payload:
-        downloadNeSw-response: {}
-  - name: activateNeSw
+        downloadNESW-response: {}
+  - name: activateNESW
     request:
       commonHeader: *swugCommonHeader
       actionIdentifiers: &activate-ai
         blueprintName: PNF_CDS_RESTCONF
         blueprintVersion: "1.0.0"
-        actionName: activateNeSw
+        actionName: activateNESW
         mode: sync
       payload:
-        activateNeSw-request:
+        activateNESW-request:
           resolution-key: *resKey
-          activateNeSw-properties: *actionProps
+          activateNESW-properties: *actionProps
     expectedResponse:
       commonHeader: *swugCommonHeader
       actionIdentifiers: *activate-ai
@@ -129,29 +129,29 @@ processes:
         errorMessage: null
         message: success
       payload:
-        activateNeSw-response: {}
-  - name: postcheck
+        activateNESW-response: {}
+  - name: postCheck
     request:
       commonHeader: *swugCommonHeader
-      actionIdentifiers: &postcheck-ai
+      actionIdentifiers: &postCheck-ai
         blueprintName: PNF_CDS_RESTCONF
         blueprintVersion: "1.0.0"
-        actionName: postcheck
+        actionName: postCheck
         mode: sync
       payload:
-        postcheck-request:
+        postCheck-request:
           resolution-key: *resKey
-          postcheck-properties: *actionProps
+          postCheck-properties: *actionProps
     expectedResponse:
       commonHeader: *swugCommonHeader
-      actionIdentifiers: *postcheck-ai
+      actionIdentifiers: *postCheck-ai
       status:
         code: 200
         eventType: EVENT_COMPONENT_EXECUTED
         errorMessage: null
         message: success
       payload:
-        postcheck-response: {}
+        postCheck-response: {}
 external-services:
   - selector: aai-data
     expectations:
