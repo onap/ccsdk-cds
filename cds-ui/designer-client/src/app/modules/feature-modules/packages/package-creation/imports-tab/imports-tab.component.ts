@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {FileSystemFileEntry, NgxFileDropEntry} from 'ngx-file-drop';
-import {PackageCreationStore} from '../package-creation.store';
-import {PackageCreationUtils} from '../package-creation.utils';
+import { Component, OnInit } from '@angular/core';
+import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
+import { PackageCreationStore } from '../package-creation.store';
+import { PackageCreationUtils } from '../package-creation.utils';
 
 
 @Component({
@@ -18,15 +18,13 @@ export class ImportsTabComponent implements OnInit {
     public files: NgxFileDropEntry[] = [];
 
     constructor(private packageCreationStore: PackageCreationStore, private packageCreationUtils: PackageCreationUtils) {
+    }
+    ngOnInit(): void {
         this.packageCreationStore.state$.subscribe(cbaPackage => {
             if (cbaPackage.definitions && cbaPackage.definitions.imports && cbaPackage.definitions.imports.size > 0) {
                 this.definitionFiles = cbaPackage.definitions.imports;
             }
         });
-    }
-
-    ngOnInit(): void {
-        // TODO
     }
 
     public dropped(files: NgxFileDropEntry[]) {
