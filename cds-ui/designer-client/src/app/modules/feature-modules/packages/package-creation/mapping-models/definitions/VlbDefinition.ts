@@ -1,5 +1,9 @@
 import { Any, JsonObject, JsonProperty } from 'json2typescript';
 
+@JsonObject('topology_template')
+export class TemplateTopology {
+    public content: string;
+}
 
 @JsonObject
 export class VlbDefinition {
@@ -10,7 +14,8 @@ export class VlbDefinition {
     imports: Import[];
     // tslint:disable-next-line: variable-name
     dsl_definitions: DslContent;
-    // topology_template: TopologyTemplate;
+    // tslint:disable-next-line: variable-name
+    topology_template: TemplateTopology;
 }
 
 @JsonObject('dsl_definitions')
