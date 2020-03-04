@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1766b422_ccf90073",
+        "filename": "error-catalog-lib/src/main/kotlin/org/onap/ccsdk/error/catalog/config/ErrorCatalogDatabaseConfiguration.kt",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-03-04T20:59:58Z",
+      "side": 1,
+      "message": "Can we use cds\u0027s db-lib ?",
+      "revId": "50641763eff1a21a5acc8cab057b036e9f9b966c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6194187_b7e39cf3",
+        "filename": "error-catalog-lib/src/main/kotlin/org/onap/ccsdk/error/catalog/service/ErrorCatalogService.kt",
+        "patchSetId": 20
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-03-04T20:59:58Z",
+      "side": 1,
+      "message": "change errorCode to code - and use same at #37",
+      "revId": "50641763eff1a21a5acc8cab057b036e9f9b966c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "046b9dc3_fcf253bb",
+        "filename": "error-catalog-lib/src/main/kotlin/org/onap/ccsdk/error/catalog/service/ErrorCatalogService.kt",
+        "patchSetId": 20
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-03-04T20:59:58Z",
+      "side": 1,
+      "message": "cause shouldn\u0027t be nullable !! and should be handled at calling end (ErrorCatalogManager)",
+      "revId": "50641763eff1a21a5acc8cab057b036e9f9b966c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae11eb83_56506be3",
+        "filename": "error-catalog-lib/src/main/kotlin/org/onap/ccsdk/error/catalog/service/ErrorCatalogService.kt",
+        "patchSetId": 20
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-03-04T20:59:58Z",
+      "side": 1,
+      "message": "should be cause.message as cause shouldn\u0027t be nullable.",
+      "revId": "50641763eff1a21a5acc8cab057b036e9f9b966c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "974b391a_becd800e",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/BluePrintConstants.kt",
+        "patchSetId": 20
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-03-04T20:59:58Z",
+      "side": 1,
+      "message": "wanted these to be configurable, instead hardcoding as contants.. it shouldn\u0027t be mendatory for individual to keep updating this for any new component.",
+      "revId": "50641763eff1a21a5acc8cab057b036e9f9b966c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
