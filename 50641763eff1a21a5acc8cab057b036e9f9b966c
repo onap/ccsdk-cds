@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1e79aafd_eb49b1e2",
+        "filename": "error-catalog-lib/src/main/kotlin/org/onap/ccsdk/error/catalog/config/ErrorCatalogDatabaseConfiguration.kt",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-04T21:28:23Z",
+      "side": 1,
+      "message": "No, Error Catalog will not depend on any CDS service. Error Catalog has it own starter and autoConfig. When CDS start the the catalog is auto run and a secondary datasource for Catalog is created IF THE APPLICATION IS USING DB for ErrorCatalog.",
+      "parentUuid": "1766b422_ccf90073",
+      "revId": "50641763eff1a21a5acc8cab057b036e9f9b966c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e6194187_b7e39cf3",
         "filename": "error-catalog-lib/src/main/kotlin/org/onap/ccsdk/error/catalog/service/ErrorCatalogService.kt",
         "patchSetId": 20
@@ -33,6 +51,24 @@
       "revId": "50641763eff1a21a5acc8cab057b036e9f9b966c",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3a012db_d54ac390",
+        "filename": "error-catalog-lib/src/main/kotlin/org/onap/ccsdk/error/catalog/service/ErrorCatalogService.kt",
+        "patchSetId": 20
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-04T21:28:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6194187_b7e39cf3",
+      "revId": "50641763eff1a21a5acc8cab057b036e9f9b966c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "31bea5d2_39ed76ff",
+        "filename": "error-catalog-lib/src/main/kotlin/org/onap/ccsdk/error/catalog/service/ErrorCatalogService.kt",
+        "patchSetId": 20
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-04T21:28:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "046b9dc3_fcf253bb",
+      "revId": "50641763eff1a21a5acc8cab057b036e9f9b966c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae11eb83_56506be3",
         "filename": "error-catalog-lib/src/main/kotlin/org/onap/ccsdk/error/catalog/service/ErrorCatalogService.kt",
         "patchSetId": 20
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "076983ec_bd648937",
+        "filename": "error-catalog-lib/src/main/kotlin/org/onap/ccsdk/error/catalog/service/ErrorCatalogService.kt",
+        "patchSetId": 20
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-04T21:28:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ae11eb83_56506be3",
+      "revId": "50641763eff1a21a5acc8cab057b036e9f9b966c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "974b391a_becd800e",
         "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/BluePrintConstants.kt",
         "patchSetId": 20
@@ -81,6 +153,24 @@
       "writtenOn": "2020-03-04T20:59:58Z",
       "side": 1,
       "message": "wanted these to be configurable, instead hardcoding as contants.. it shouldn\u0027t be mendatory for individual to keep updating this for any new component.",
+      "revId": "50641763eff1a21a5acc8cab057b036e9f9b966c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6287562_584e22c1",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/BluePrintConstants.kt",
+        "patchSetId": 20
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-04T21:28:23Z",
+      "side": 1,
+      "message": "We will do auto detection of application\u0027s later not now, Let\u0027 move forward and get this work with CDS.",
+      "parentUuid": "974b391a_becd800e",
       "revId": "50641763eff1a21a5acc8cab057b036e9f9b966c",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
