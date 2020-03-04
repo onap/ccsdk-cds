@@ -223,4 +223,16 @@ open class ResourceResolutionDBServiceTest {
             assertEquals(resourceResolution, res)
         }
     }
+
+    @Test
+    fun deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKeyTest() {
+        every {
+            resourceResolutionRepository.deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey(any(), any(), any(), any())
+        } returns Unit
+        runBlocking {
+            val res = resourceResolutionDBService.deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey(
+                    blueprintName, blueprintVersion, artifactPrefix, resolutionKey)
+            assertEquals(Unit, res)
+        }
+    }
 }
