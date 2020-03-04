@@ -153,6 +153,9 @@
         <dependency>
             <groupId>com.nhaarman.mockitokotlin2</groupId>
             <artifactId>mockito-kotlin</artifactId>
+            <!-- It's unusual but 'compile' here is the right scope since mockito is being used at runtime by
+                 the UatServices (/api/v1/uat/spy and /api/v1/uat/verify endpoints) -->
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.schibsted.spt.data</groupId>
