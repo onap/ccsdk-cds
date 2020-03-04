@@ -30,12 +30,12 @@
         "get_input" : "resolution-key"
       }
     },
-    "downloadNESW-properties" : {
+    "downloadNESw-properties" : {
       "resolution-key" : {
         "get_input" : "resolution-key"
       }
     },
-    "activateNESW-properties" : {
+    "activateNESw-properties" : {
       "resolution-key" : {
         "get_input" : "resolution-key"
       }
@@ -118,11 +118,11 @@
           }
         }
       },
-      "downloadNESW" : {
+      "downloadNESw" : {
         "steps" : {
           "activate-process" : {
             "description" : "Trigger download new software for sw upgrade",
-            "target" : "downloadNESW",
+            "target" : "downloadNESw",
             "activities" : [ {
               "call_operation" : ""
             } ]
@@ -133,18 +133,18 @@
             "required" : true,
             "type" : "string"
           },
-          "downloadNESW-properties" : {
-            "description" : "Dynamic PropertyDefinition for downloadNESW workflow(software-upgrade).",
+          "downloadNESw-properties" : {
+            "description" : "Dynamic PropertyDefinition for downloadNESw workflow(software-upgrade).",
             "required" : true,
-            "type" : "dt-downloadNESW-properties"
+            "type" : "dt-downloadNESw-properties"
           }
         }
       },
-      "activateNESW" : {
+      "activateNESw" : {
         "steps" : {
           "activate-process" : {
             "description" : "Trigger activation of target software version for pnf upgrade",
-            "target" : "activateNESW",
+            "target" : "activateNESw",
             "activities" : [ {
               "call_operation" : ""
             } ]
@@ -155,10 +155,10 @@
             "required" : true,
             "type" : "string"
           },
-          "activateNESW-properties" : {
-            "description" : "Dynamic PropertyDefinition for activateNESW workflow(software-upgrade).",
+          "activateNESw-properties" : {
+            "description" : "Dynamic PropertyDefinition for activateNESw workflow(software-upgrade).",
             "required" : true,
-            "type" : "dt-activateNESW-properties"
+            "type" : "dt-activateNESw-properties"
           }
         }
       },
@@ -290,7 +290,7 @@
           }
         }
       },
-      "downloadNESW" : {
+      "downloadNESw" : {
         "type" : "component-script-executor",
         "interfaces" : {
           "ComponentScriptExecutor" : {
@@ -304,7 +304,7 @@
                 "inputs" : {
                   "script-type" : "kotlin",
                   "script-class-reference" : "cba.pnf.swug.RestconfSoftwareUpgrade",
-                  "dynamic-properties" : "*downloadNESW-properties"
+                  "dynamic-properties" : "*downloadNESw-properties"
                 },
                 "outputs" : {
                   "response-data" : "",
@@ -341,7 +341,7 @@
           }
         }
       },
-      "activateNESW" : {
+      "activateNESw" : {
         "type" : "component-script-executor",
         "interfaces" : {
           "ComponentScriptExecutor" : {
@@ -355,7 +355,7 @@
                 "inputs" : {
                   "script-type" : "kotlin",
                   "script-class-reference" : "cba.pnf.swug.RestconfSoftwareUpgrade",
-                  "dynamic-properties" : "*activateNESW-properties"
+                  "dynamic-properties" : "*activateNESw-properties"
                 },
                 "outputs" : {
                   "response-data" : "",

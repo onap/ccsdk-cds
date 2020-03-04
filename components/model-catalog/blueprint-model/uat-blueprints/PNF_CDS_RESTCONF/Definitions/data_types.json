@@ -32,8 +32,8 @@
       },
       "derived_from": "tosca.datatypes.Dynamic"
     },
-    "dt-downloadNESW-properties": {
-      "description": "Dynamic DataType definition for the downloadNESW workflow(upgrade-software).",
+    "dt-downloadNESw-properties": {
+      "description": "Dynamic DataType definition for the downloadNESw workflow(upgrade-software).",
       "version": "1.0.0",
       "properties": {
         "pnf-id": {
@@ -45,8 +45,8 @@
       },
       "derived_from": "tosca.datatypes.Dynamic"
     },
-    "dt-activateNESW-properties": {
-      "description": "Dynamic DataType definition for the activateNESW workflow(upgrade-software).",
+    "dt-activateNESw-properties": {
+      "description": "Dynamic DataType definition for the activateNESw workflow(upgrade-software).",
       "version": "1.0.0",
       "properties": {
         "pnf-id": {

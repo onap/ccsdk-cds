@@ -45,11 +45,7 @@ class RestconfSoftwareUpgrade : AbstractScriptComponentFunction() {
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
 
         // Extract request properties
-        val properties = requestPayloadActionProperty(executionRequest.actionIdentifiers.actionName + "-properties")!!.get(0)
-        val model= SoftwareUpgradeModel(getDynamicProperties("resolution-key").asText(),
-            BluePrintDependencyService.restClientService(RESTCONF_SERVER_IDENTIFIER),
-            properties.get("pnf-id").textValue(), properties.get("target-software-version").textValue(),
-            Action.getEnumFromActionName(executionRequest.actionIdentifiers.actionName))
+        val model= validatedPayload(executionRequest)
 
         log.info("Blueprint invoked for ${model.resolutionKey} for SW Upgrade : " +
             "${model.action} for sw version ${model.targetSwVersion} on pnf: ${model.deviceId}")
@@ -61,8 +57,8 @@ class RestconfSoftwareUpgrade : AbstractScriptComponentFunction() {
 
             when (model.action) {
                 Action.PRE_CHECK -> processPreCheck(model)
-                Action.DOWNLOAD_NE_SW -> processDownloadNESW(model)
-                Action.ACTIVATE_NE_SW -> processActivateNESW(model)
+                Action.DOWNLOAD_NE_SW -> processDownloadNESw(model)
+                Action.ACTIVATE_NE_SW -> processActivateNESw(model)
                 Action.POST_CHECK -> processPostCheck(model)
                 Action.CANCEL -> processCancel(model)
             }
@@ -74,6 +70,19 @@ class RestconfSoftwareUpgrade : AbstractScriptComponentFunction() {
         }
     }
 
+    private fun validatedPayload(executionRequest: ExecutionServiceInput): SoftwareUpgradeModel {
+        val properties = requestPayloadActionProperty(executionRequest.actionIdentifiers.actionName + "-properties")!!.get(0)
+        if(!properties?.get("pnf-id")?.textValue().isNullOrEmpty() &&
+            !properties?.get("target-software-version")?.textValue().isNullOrEmpty()) {
+            return SoftwareUpgradeModel(getDynamicProperties("resolution-key").asText(),
+                BluePrintDependencyService.restClientService(RESTCONF_SERVER_IDENTIFIER),
+                properties.get("pnf-id").textValue(), properties.get("target-software-version").textValue(),
+                Action.getEnumFromActionName(executionRequest.actionIdentifiers.actionName))
+        }else{
+            throw BluePrintException("Invalid parameters sent to CDS. Request parameters pnf-id or target-software-version missing")
+        }
+    }
+
     private suspend fun processPreCheck(model: SoftwareUpgradeModel) {
         log.debug("In PNF SW upgrade : processPreCheck")
         //Log the current configuration for the subtree
@@ -82,8 +91,8 @@ class RestconfSoftwareUpgrade : AbstractScriptComponentFunction() {
         log.info("PNF is Healthy!")
     }
 
-    private suspend fun processDownloadNESW(model: SoftwareUpgradeModel) {
-        log.debug("In PNF SW upgrade : processDownloadNESW")
+    private suspend fun processDownloadNESw(model: SoftwareUpgradeModel) {
+        log.debug("In PNF SW upgrade : processDownloadNESw")
         //Check if there is existing config for the targeted software version
 
         var downloadConfigPayload: String
@@ -106,12 +115,13 @@ class RestconfSoftwareUpgrade : AbstractScriptComponentFunction() {
         checkExecution(model)
     }
 
-    private suspend fun processActivateNESW(model: SoftwareUpgradeModel) {
-        log.debug("In PNF SW upgrade : processActivateNESW")
+    private suspend fun processActivateNESw(model: SoftwareUpgradeModel) {
+        log.debug("In PNF SW upgrade : processActivateNESw")
         //Check if the software is downloaded and ready to be activated
         if (checkIfSwReadyToPerformAction(Action.DOWNLOAD_NE_SW, model)) {
             var activateConfigPayload: String = contentFromResolvedArtifactNB("configure")
             activateConfigPayload = activateConfigPayload.replace("%actionName%", Action.ACTIVATE_NE_SW.name)
+            activateConfigPayload = activateConfigPayload.replace("%id%", model.yangId)
             log.info("Config Payload to start activate : $activateConfigPayload")
             //Apply configlet
             restconfApplyDeviceConfig(model.client, model.deviceId, CONFIGLET_RESOURCE_PATH, activateConfigPayload,
@@ -176,8 +186,8 @@ class RestconfSoftwareUpgrade : AbstractScriptComponentFunction() {
 
 enum class Action(val actionName: String, val completionStatus: String) {
     PRE_CHECK("preCheck", "INITIALIZED"),
-    DOWNLOAD_NE_SW("downloadNESW", "DOWNLOAD_COMPLETED"),
-    ACTIVATE_NE_SW("activateNESW", "ACTIVATION_COMPLETED"),
+    DOWNLOAD_NE_SW("downloadNESw", "DOWNLOAD_COMPLETED"),
+    ACTIVATE_NE_SW("activateNESw", "ACTIVATION_COMPLETED"),
     POST_CHECK("postCheck", "ACTIVATION_COMPLETED"),
     CANCEL("cancel", "CANCELLED")
     ;

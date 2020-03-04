@@ -86,18 +86,18 @@ processes:
         message: success
       payload:
         preCheck-response: {}
-  - name: downloadNESW
+  - name: downloadNESw
     request:
       commonHeader: *swugCommonHeader
       actionIdentifiers: &download-ai
         blueprintName: PNF_CDS_RESTCONF
         blueprintVersion: "1.0.0"
-        actionName: downloadNESW
+        actionName: downloadNESw
         mode: sync
       payload:
-        downloadNESW-request:
+        downloadNESw-request:
           resolution-key: *resKey
-          downloadNESW-properties: *actionProps
+          downloadNESw-properties: *actionProps
     expectedResponse:
       commonHeader: *swugCommonHeader
       actionIdentifiers: *download-ai
@@ -107,19 +107,19 @@ processes:
         errorMessage: null
         message: success
       payload:
-        downloadNESW-response: {}
-  - name: activateNESW
+        downloadNESw-response: {}
+  - name: activateNESw
     request:
       commonHeader: *swugCommonHeader
       actionIdentifiers: &activate-ai
         blueprintName: PNF_CDS_RESTCONF
         blueprintVersion: "1.0.0"
-        actionName: activateNESW
+        actionName: activateNESw
         mode: sync
       payload:
-        activateNESW-request:
+        activateNESw-request:
           resolution-key: *resKey
-          activateNESW-properties: *actionProps
+          activateNESw-properties: *actionProps
     expectedResponse:
       commonHeader: *swugCommonHeader
       actionIdentifiers: *activate-ai
@@ -129,7 +129,7 @@ processes:
         errorMessage: null
         message: success
       payload:
-        activateNESW-response: {}
+        activateNESw-response: {}
   - name: postCheck
     request:
       commonHeader: *swugCommonHeader
