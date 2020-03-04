@@ -174,6 +174,24 @@
       "revId": "50641763eff1a21a5acc8cab057b036e9f9b966c",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b8956e8_fbabf69c",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/BluePrintConstants.kt",
+        "patchSetId": 20
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-04T21:49:20Z",
+      "side": 1,
+      "message": "Application\u0027s modules",
+      "parentUuid": "b6287562_584e22c1",
+      "revId": "50641763eff1a21a5acc8cab057b036e9f9b966c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
