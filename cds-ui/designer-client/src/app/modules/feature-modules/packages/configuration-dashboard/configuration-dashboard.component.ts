@@ -12,6 +12,7 @@ import {PackageCreationUtils} from '../package-creation/package-creation.utils';
 import {PackageCreationModes} from '../package-creation/creationModes/PackageCreationModes';
 import {PackageCreationBuilder} from '../package-creation/creationModes/PackageCreationBuilder';
 import {saveAs} from 'file-saver';
+import {DesignerStore} from '../designer/designer.store';
 
 @Component({
     selector: 'app-configuration-dashboard',
@@ -37,7 +38,8 @@ export class ConfigurationDashboardComponent implements OnInit {
     constructor(private route: ActivatedRoute, private configurationDashboardService: ConfigurationDashboardService,
                 private packageCreationStore: PackageCreationStore,
                 private packageCreationUtils: PackageCreationUtils,
-                private router: Router) {
+                private router: Router,
+                private designerStore: DesignerStore) {
     }
 
     ngOnInit() {
@@ -104,6 +106,10 @@ export class ConfigurationDashboardComponent implements OnInit {
             }
             this.packageCreationStore.changeDslDefinition(dslDefinition);
             this.packageCreationStore.setCustomKeys(mapOfCustomKeys);
+            // console.log(definition.topology_template.content);
+            if (definition.topology_template.content) {
+                this.designerStore.saveSourceContent(definition.topology_template.content);
+            }
         } else {
             this.packageCreationStore.addDefinition(filename, fileData);
 
@@ -200,4 +206,7 @@ export class ConfigurationDashboardComponent implements OnInit {
         this.router.navigate(['/packages']);
     }
 
+    goToDesignerMode() {
+        this.router.navigate(['/packages/designer']);
+    }
 }
