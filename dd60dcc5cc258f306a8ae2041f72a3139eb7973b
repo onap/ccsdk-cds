@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1fc28eb6_1a2f87c3",
+        "filename": "ms/blueprintsprocessor/functions/config-snapshots/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/config/snapshots/ComponentConfigSnapshotsExecutor.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-03-05T16:25:22Z",
+      "side": 0,
+      "message": "intead removing, decrease log level may be keep trace.\nor if possible use masking capability to mask sensitive info.",
+      "revId": "dd60dcc5cc258f306a8ae2041f72a3139eb7973b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
