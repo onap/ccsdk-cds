@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b6a84580_b46ddf03",
+        "filename": "ms/blueprintsprocessor/functions/restful-executor/pom.xml",
+        "patchSetId": 11
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-03-05T13:50:56Z",
+      "side": 1,
+      "message": "wouldn\u0027t need the version, as parent has same.",
+      "revId": "ab2379a9711f966db55408183de9d84806d183cc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
