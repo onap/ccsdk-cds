@@ -35,6 +35,7 @@
         <sli.version>${ccsdk.sli.core.version}</sli.version>
         <!-- Override CDS version from parent to be project.version -->
         <ccsdk.cds.version>${project.version}</ccsdk.cds.version>
+        <error.catalog.version>${project.version}</error.catalog.version>
         <dmaap.client.version>1.1.5</dmaap.client.version>
         <!-- Should be using released artifact as soon as available: -->
         <!-- https://github.com/springfox/springfox/milestone/44 -->
@@ -289,6 +290,30 @@
                 <groupId>org.apache.kafka</groupId>
                 <artifactId>kafka-streams</artifactId>
                 <version>${kafka.version}</version>
+            </dependency>
+
+            <!-- Error Catalog -->
+            <dependency>
+                <groupId>org.onap.ccsdk.error.catalog</groupId>
+                <artifactId>error-catalog-core</artifactId>
+                <version>${error.catalog.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.error.catalog</groupId>
+                <artifactId>error-catalog-services</artifactId>
+                <version>${error.catalog.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!-- SLI Version -->
@@ -688,6 +713,11 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-tcnative-boringssl-static</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.onap.ccsdk.error.catalog</groupId>
+            <artifactId>error-catalog-core</artifactId>
         </dependency>
     </dependencies>
 
