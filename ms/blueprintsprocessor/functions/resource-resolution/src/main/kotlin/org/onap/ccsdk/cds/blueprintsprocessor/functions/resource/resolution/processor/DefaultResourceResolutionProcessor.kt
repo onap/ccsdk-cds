@@ -19,7 +19,9 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.pro
 
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ExecutionServiceDomains
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.updateErrorMessage
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
@@ -49,6 +51,10 @@ open class DefaultResourceResolutionProcessor : ResourceAssignmentProcessor() {
             }
             // Check the value has populated for mandatory case
             ResourceAssignmentUtils.assertTemplateKeyValueNotNull(resourceAssignment)
+        } catch (e: BluePrintProcessorException) {
+            val errorMsg = "Failed to process default resource resolution in template key ($resourceAssignment) assignments."
+            throw e.updateErrorMessage(ExecutionServiceDomains.RESOURCE_RESOLUTION, errorMsg,
+                    Throwable("Wrong default value was set."))
         } catch (e: Exception) {
             ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, e.message)
             throw BluePrintProcessorException("Failed in template key ($resourceAssignment) assignments with: ${e.message}", e)

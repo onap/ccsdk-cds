@@ -22,10 +22,8 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.Rest
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
-import org.onap.ccsdk.cds.controllerblueprints.core.isNotEmpty
-import org.onap.ccsdk.cds.controllerblueprints.core.nullToEmpty
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ExecutionServiceDomains
+import org.onap.ccsdk.cds.controllerblueprints.core.*
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.KeyIdentifier
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
@@ -114,6 +112,10 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
             }
             // Check the value has populated for mandatory case
             ResourceAssignmentUtils.assertTemplateKeyValueNotNull(resourceAssignment)
+        } catch (e: BluePrintProcessorException) {
+            val errorMsg = "Failed to process REST resource resolution in template key ($resourceAssignment) assignments."
+            throw e.updateErrorMessage(ExecutionServiceDomains.RESOURCE_RESOLUTION, errorMsg,
+                    Throwable("Wrong resource definition or resolution failed."))
         } catch (e: Exception) {
             ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, e.message)
             throw BluePrintProcessorException("Failed in template key ($resourceAssignment) assignments with: ${e.message}", e)
