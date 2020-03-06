@@ -211,24 +211,28 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     }
 
     @PostMapping(
-            path = arrayOf("/workflow-spec"), produces = arrayOf(MediaType
-            .APPLICATION_JSON_VALUE),
-            consumes = arrayOf(MediaType.APPLICATION_JSON_VALUE)
+        path = arrayOf("/workflow-spec"), produces = arrayOf(
+            MediaType
+                .APPLICATION_JSON_VALUE
+        ),
+        consumes = arrayOf(MediaType.APPLICATION_JSON_VALUE)
     )
     @ResponseBody
     @Throws(BluePrintException::class)
     @PreAuthorize("hasRole('USER')")
     suspend fun workflowSpec(@RequestBody workFlowSpecReq: WorkFlowSpecRequest):
-            ResponseEntity<String> = mdcWebCoroutineScope {
+        ResponseEntity<String> = mdcWebCoroutineScope {
         var json = bluePrintModelHandler.prepareWorkFlowSpec(workFlowSpecReq)
-                .asJsonString()
+            .asJsonString()
         ResponseEntity(json, HttpStatus.OK)
     }
 
     @GetMapping(
-            path = arrayOf("/workflows/blueprint-name/{name}/version/{version" +
-                    "}"),
-            produces = arrayOf(MediaType.APPLICATION_JSON_VALUE)
+        path = arrayOf(
+            "/workflows/blueprint-name/{name}/version/{version" +
+                "}"
+        ),
+        produces = arrayOf(MediaType.APPLICATION_JSON_VALUE)
     )
     @ResponseBody
     @Throws(BluePrintException::class)
@@ -240,7 +244,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
         @PathVariable(value = "version") version: String
     ): ResponseEntity<String> = mdcWebCoroutineScope {
         var json = bluePrintModelHandler.getWorkflowNames(name, version)
-                .asJsonString()
+            .asJsonString()
         ResponseEntity(json, HttpStatus.OK)
     }
 }
