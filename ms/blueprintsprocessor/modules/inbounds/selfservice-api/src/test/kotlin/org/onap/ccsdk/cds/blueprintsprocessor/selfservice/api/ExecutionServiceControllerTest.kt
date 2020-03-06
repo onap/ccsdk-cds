@@ -29,7 +29,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
-import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
@@ -45,11 +44,7 @@ import kotlin.test.assertTrue
 @WebFluxTest
 @ContextConfiguration(
     classes = [ExecutionServiceHandler::class, BluePrintCoreConfiguration::class,
-        BluePrintCatalogService::class]
-)
-@ComponentScan(
-    basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor",
-        "org.onap.ccsdk.cds.controllerblueprints"]
+        BluePrintCatalogService::class, SelfServiceApiTestConfiguration::class, ErrorCatalogTestConfiguration::class]
 )
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class ExecutionServiceControllerTest {

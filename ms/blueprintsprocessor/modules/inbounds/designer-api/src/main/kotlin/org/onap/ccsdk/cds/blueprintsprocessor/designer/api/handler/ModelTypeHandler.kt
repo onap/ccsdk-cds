@@ -17,10 +17,13 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler
 
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.DesignerApiDomains
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ModelType
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.repository.ModelTypeRepository
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.utils.ModelTypeValidator
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.httpProcessorException
+import org.onap.ccsdk.cds.error.catalog.core.ErrorCatalogCodes
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
@@ -42,7 +45,8 @@ open class ModelTypeHandler(private val modelTypeRepository: ModelTypeRepository
         return if (modelType != null) {
             modelType
         } else {
-            throw BluePrintException("couldn't get modelType($modelTypeName)")
+            throw httpProcessorException(ErrorCatalogCodes.RESOURCE_NOT_FOUND, DesignerApiDomains.DESIGNER_API,
+                    "couldn't get modelType($modelTypeName)")
         }
     }
 
