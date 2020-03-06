@@ -45,6 +45,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalToIgnoringCase
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.logging.LogColor.COLOR_WIREMOCK
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.logging.LogColor.markerOf
+import org.onap.ccsdk.cds.blueprintsprocessor.uat.mockk.MockErrorCatalogConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.utils.MarkedSlf4jNotifier
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.utils.ServiceDefinition
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.utils.TestSecuritySettings
@@ -58,6 +59,7 @@ import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.core.env.ConfigurableEnvironment
 import org.springframework.core.env.MapPropertySource
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.support.TestPropertySourceUtils.INLINED_PROPERTIES_PROPERTY_SOURCE_NAME
 import org.yaml.snakeyaml.Yaml
 import java.nio.file.Paths
@@ -71,6 +73,9 @@ fun String.prefixIfNot(prefix: String) =
 
 @ActiveProfiles("uat")
 @Suppress("MemberVisibilityCanBePrivate")
+@ContextConfiguration(
+        classes = [MockErrorCatalogConfiguration::class]
+)
 class UatServicesTest : BaseUatTest() {
 
     companion object {

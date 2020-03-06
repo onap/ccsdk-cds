@@ -24,11 +24,13 @@ import org.junit.ClassRule
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
+import org.onap.ccsdk.cds.blueprintsprocessor.uat.mockk.MockErrorCatalogConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.utils.ExtendedTemporaryFolder
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.utils.UatExecutor
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.UAT_SPECIFICATION_FILE
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintArchiveUtils.Companion.compressToBytes
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.rules.SpringClassRule
 import org.springframework.test.context.junit4.rules.SpringMethodRule
 import java.io.File
@@ -40,6 +42,9 @@ import kotlin.test.Test
 // Only one runner can be configured with jUnit 4. We had to replace the SpringRunner by equivalent jUnit rules.
 // See more on https://docs.spring.io/autorepo/docs/spring-framework/current/spring-framework-reference/testing.html#testcontext-junit4-rules
 @RunWith(Parameterized::class)
+@ContextConfiguration(
+        classes = [MockErrorCatalogConfiguration::class]
+)
 class BlueprintsAcceptanceTest(
     @Suppress("unused") private val blueprintName: String, // readable test description
     private val rootFs: FileSystem
