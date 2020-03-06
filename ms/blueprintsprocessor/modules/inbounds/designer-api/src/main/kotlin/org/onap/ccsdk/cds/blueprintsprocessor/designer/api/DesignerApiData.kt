@@ -17,10 +17,6 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 
-import com.fasterxml.jackson.annotation.JsonFormat
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.annotation.JsonTypeInfo
-import com.fasterxml.jackson.annotation.JsonTypeName
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictionary
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.DATA_TYPE_JSON
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.DEFAULT_VERSION_NUMBER
@@ -28,8 +24,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.TOSCA_SPE
 import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
-import java.io.Serializable
-import java.util.Date
 
 class BootstrapRequest {
     var loadModelType: Boolean = false
@@ -74,13 +68,4 @@ class AutoMapResponse {
 
     var resourceAssignments: List<ResourceAssignment>? = null
     var dataDictionaries: List<ResourceDictionary>? = null
-}
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonTypeName("errorMessage")
-@JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-class ErrorMessage(var message: String?, var code: Int?, var debugMessage: String?) : Serializable {
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    var timestamp = Date()
 }

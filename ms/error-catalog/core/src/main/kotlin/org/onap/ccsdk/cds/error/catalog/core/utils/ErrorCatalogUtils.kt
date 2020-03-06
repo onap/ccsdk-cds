@@ -13,7 +13,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.onap.ccsdk.cds.error.catalog.services.utils
+package org.onap.ccsdk.cds.error.catalog.core.utils
+
+import org.apache.commons.lang3.exception.ExceptionUtils
 
 object ErrorCatalogUtils {
     private const val REGEX_PATTERN = "^cause=(.*),action=(.*)"
@@ -31,7 +33,7 @@ object ErrorCatalogUtils {
 }
 
 fun Exception.errorCauseOrDefault(): Throwable {
-    return this.cause ?: Throwable()
+    return ExceptionUtils.getRootCause(this)
 }
 
 fun Exception.errorMessageOrDefault(): String {
