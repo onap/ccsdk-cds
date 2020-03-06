@@ -32,6 +32,7 @@
     <description>Micro-services</description>
 
     <modules>
+        <module>error-catalog</module>
         <module>blueprintsprocessor</module>
         <module>py-executor</module>
         <module>command-executor</module>
