@@ -25,6 +25,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BlueprintMessageCo
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsType
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
+import org.onap.ccsdk.cds.controllerblueprints.core.updateErrorMessage
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
@@ -65,6 +66,10 @@ open class BluePrintProcessingKafkaConsumer(
             blueprintMessageConsumerService = try {
                 bluePrintMessageLibPropertyService
                     .blueprintMessageConsumerService(CONSUMER_SELECTOR)
+            } catch (e: BluePrintProcessorException) {
+                val errorMsg = "Failed creating Kafka consumer message service."
+                throw e.updateErrorMessage(SelfServiceApiDomains.SELF_SERVICE_API, errorMsg,
+                        "Wrong Kafka selector provided or internal error in Kafka service.")
             } catch (e: Exception) {
                 throw BluePrintProcessorException("failed to create consumer service ${e.message}")
             }
@@ -73,6 +78,10 @@ open class BluePrintProcessingKafkaConsumer(
             val blueprintMessageProducerService = try {
                 bluePrintMessageLibPropertyService
                     .blueprintMessageProducerService(PRODUCER_SELECTOR)
+            } catch (e: BluePrintProcessorException) {
+                val errorMsg = "Failed creating Kafka producer message service."
+                throw e.updateErrorMessage(SelfServiceApiDomains.SELF_SERVICE_API, errorMsg,
+                        "Wrong Kafka selector provided or internal error in Kafka service.")
             } catch (e: Exception) {
                 throw BluePrintProcessorException("failed to create producer service ${e.message}")
             }

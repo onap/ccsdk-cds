@@ -38,5 +38,9 @@
            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
            <artifactId>blueprint-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.onap.ccsdk.error.catalog</groupId>
+            <artifactId>error-catalog-services</artifactId>
+        </dependency>
     </dependencies>
 </project>
