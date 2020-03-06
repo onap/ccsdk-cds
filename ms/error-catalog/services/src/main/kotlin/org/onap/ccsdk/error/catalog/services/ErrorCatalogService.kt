@@ -1,0 +1,80 @@
+/*
+ *  Copyright © 2020 IBM, Bell Canada.
+ *  Modifications Copyright © 2019-2020 AT&T Intellectual Property.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+package org.onap.ccsdk.error.catalog.services
+
+import org.onap.ccsdk.error.catalog.core.ErrorCatalog
+import org.onap.ccsdk.error.catalog.core.ErrorCatalogException
+import org.onap.ccsdk.error.catalog.core.ErrorMessageLibConstants
+import org.onap.ccsdk.error.catalog.core.ErrorPayload
+import org.onap.ccsdk.error.catalog.core.GrpcErrorCodes
+import org.onap.ccsdk.error.catalog.core.HttpErrorCodes
+import org.onap.ccsdk.error.catalog.services.utils.ErrorCatalogUtils
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
+import org.springframework.stereotype.Service
+
+@Service
+@ConditionalOnBean(ErrorCatalogLoadService::class)
+open class ErrorCatalogService(private var errorCatalogLoadService: ErrorCatalogLoadService) {
+
+    fun errorPayload(errorCatalogException: ErrorCatalogException): ErrorPayload {
+        val errorCatalog = getErrorCatalog(errorCatalogException)
+        // TODO()
+        return ErrorPayload()
+    }
+
+    fun getErrorCatalog(errorCatalogException: ErrorCatalogException): ErrorCatalog {
+        val errorMessage = getMessage(errorCatalogException.domain, errorCatalogException.name)
+        val errorCode =
+            if (errorCatalogException.code == -1) {
+                getProtocolErrorCode(
+                    errorCatalogException.protocol,
+                    errorCatalogException.name
+                )
+            } else {
+                errorCatalogException.code
+            }
+        val action: String
+        val errorCause: String
+        if (errorMessage.isNullOrEmpty()) {
+            action = errorCatalogException.action
+            errorCause = errorCatalogException.message ?: ""
+        } else {
+            action = ErrorCatalogUtils.readErrorActionFromMessage(errorMessage)
+            errorCause = errorCatalogException.message ?: ErrorCatalogUtils.readErrorCauseFromMessage(errorMessage)
+        }
+
+        return ErrorCatalog(
+            errorCatalogException.name,
+            errorCatalogException.domain,
+            errorCode,
+            action,
+            errorCause
+        )
+    }
+
+    private fun getProtocolErrorCode(protocol: String, type: String): Int {
+        return when (protocol) {
+            ErrorMessageLibConstants.ERROR_CATALOG_PROTOCOL_GRPC -> GrpcErrorCodes.code(type)
+            else -> HttpErrorCodes.code(type)
+        }
+    }
+
+    private fun getMessage(domain: String, key: String): String? {
+        return errorCatalogLoadService.getErrorMessage(domain, key)
+    }
+}
