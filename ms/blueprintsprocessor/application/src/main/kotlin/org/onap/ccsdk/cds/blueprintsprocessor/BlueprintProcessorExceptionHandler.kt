@@ -16,10 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor
 
-import org.onap.ccsdk.error.catalog.services.ErrorCatalogExceptionHandler
-import org.onap.ccsdk.error.catalog.services.ErrorCatalogService
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice("org.onap.ccsdk.cds")
-open class BlueprintProcessorExceptionHandler(private val errorCatalogService: ErrorCatalogService) :
-        ErrorCatalogExceptionHandler(errorCatalogService)
+open class BlueprintProcessorExceptionHandler

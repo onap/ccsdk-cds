@@ -41,6 +41,10 @@
            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
            <artifactId>blueprint-validation</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.onap.ccsdk.error.catalog</groupId>
+            <artifactId>error-catalog-services</artifactId>
+        </dependency>
 
         <!-- For Message libraries -->
         <dependency>

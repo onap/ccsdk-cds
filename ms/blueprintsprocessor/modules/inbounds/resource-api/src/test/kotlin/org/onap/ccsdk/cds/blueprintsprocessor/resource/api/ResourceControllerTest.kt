@@ -27,6 +27,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
+import org.onap.ccsdk.error.catalog.core.ErrorPayload
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
@@ -39,7 +40,7 @@ import org.springframework.test.web.reactive.server.WebTestClient
 @RunWith(SpringRunner::class)
 @WebFluxTest
 @ContextConfiguration(
-    classes = [TestDatabaseConfiguration::class,
+    classes = [TestDatabaseConfiguration::class, ErrorCatalogTestConfiguration::class,
         ResourceController::class, ResourceResolutionDBService::class]
 )
 @ComponentScan(
@@ -147,9 +148,11 @@ class ResourceControllerTest {
                 .expectStatus().is4xxClientError
                 .expectBody()
                 .consumeWith {
-                    val r = JacksonUtils.objectMapper.readValue(it.responseBody, ErrorMessage::class.java)
+                    val r = JacksonUtils.objectMapper.readValue(it.responseBody, ErrorPayload::class.java)
                     Assert.assertEquals(
-                        "Missing param. Either retrieve resolved value using artifact name and resolution-key OR using resource-id and resource-type.",
+                            "Cause: Missing param. Either retrieve resolved value using artifact name and " +
+                                    "resolution-key OR using resource-id and resource-type. \n" +
+                                    " Action : Please verify your request.",
                         r.message
                     )
                 }
@@ -166,9 +169,10 @@ class ResourceControllerTest {
                 .expectStatus().is4xxClientError
                 .expectBody()
                 .consumeWith {
-                    val r = JacksonUtils.objectMapper.readValue(it.responseBody, ErrorMessage::class.java)
+                    val r = JacksonUtils.objectMapper.readValue(it.responseBody, ErrorPayload::class.java)
                     Assert.assertEquals(
-                        "Either retrieve resolved value using artifact name and resolution-key OR using resource-id and resource-type.",
+                        "Cause: Either retrieve resolved value using artifact name and resolution-key OR using " +
+                                "resource-id and resource-type. \n Action : Please verify your request.",
                         r.message
                     )
                 }

@@ -54,7 +54,7 @@ import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
-    classes = [DesignerApiTestConfiguration::class]
+    classes = [DesignerApiTestConfiguration::class, ErrorCatalogTestConfiguration::class]
 )
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class BluePrintManagementGRPCHandlerTest {

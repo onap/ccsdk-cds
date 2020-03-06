@@ -63,7 +63,7 @@ import kotlin.test.assertTrue
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(
-    classes = [DesignerApiTestConfiguration::class]
+    classes = [DesignerApiTestConfiguration::class, ErrorCatalogTestConfiguration::class]
 )
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)

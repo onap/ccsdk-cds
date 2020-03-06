@@ -20,13 +20,16 @@ package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler
 import com.google.common.base.Preconditions
 import org.apache.commons.collections.CollectionUtils
 import org.apache.commons.lang3.StringUtils
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.DesignerApiDomains
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictionary
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.repository.ResourceDictionaryRepository
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
+import org.onap.ccsdk.cds.controllerblueprints.core.httpProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceSourceMapping
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.factory.ResourceSourceMappingFactory
+import org.onap.ccsdk.error.catalog.core.ErrorCatalogCodes
 import org.springframework.stereotype.Service
 
 @Service
@@ -46,7 +49,8 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
         return if (resourceDictionaryDb != null) {
             resourceDictionaryDb
         } else {
-            throw BluePrintException(String.format("couldn't get resource dictionary for name (%s)", name))
+            throw httpProcessorException(ErrorCatalogCodes.RESOURCE_NOT_FOUND, DesignerApiDomains.DESIGNER_API,
+                    String.format("couldn't get resource dictionary for name (%s)", name))
         }
     }
 
