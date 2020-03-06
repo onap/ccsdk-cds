@@ -35,7 +35,7 @@ import org.springframework.web.reactive.function.BodyInserters
 @RunWith(SpringRunner::class)
 @WebFluxTest
 @ContextConfiguration(
-    classes = [BluePrintCoreConfiguration::class, BluePrintCatalogService::class]
+    classes = [BluePrintCoreConfiguration::class, BluePrintCatalogService::class, ErrorCatalogTestConfiguration::class]
 )
 @ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
 @TestPropertySource(locations = ["classpath:application-test.properties"])
@@ -112,7 +112,7 @@ class ResourceConfigSnapshotControllerTest {
 
             webTestClient.get().uri("/api/v1/configs?$arguments")
                 .exchange()
-                .expectStatus().isBadRequest
+                .expectStatus().is4xxClientError
         }
     }
 

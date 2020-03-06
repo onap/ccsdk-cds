@@ -23,6 +23,8 @@ interface ErrorCatalogExceptionFluent<T> {
     fun action(action: String): T
     fun http(type: String): T
     fun grpc(type: String): T
+    fun convertToHttp(): T
+    fun convertToGrpc(): T
     fun payloadMessage(message: String): T
     fun addErrorPayloadMessage(message: String): T
     fun addSubError(errorMessage: ErrorMessage): T
@@ -78,12 +80,30 @@ open class ErrorCatalogException : RuntimeException {
 
     fun <T : ErrorCatalogException> updateHttp(type: String): T {
         this.protocol = ErrorMessageLibConstants.ERROR_CATALOG_PROTOCOL_HTTP
+        this.name = type
         this.code = HttpErrorCodes.code(type)
+        return this as T
+    }
+
+    fun <T : ErrorCatalogException> inverseToHttp(): T {
+        if (this.protocol != "" && this.protocol == ErrorMessageLibConstants.ERROR_CATALOG_PROTOCOL_GRPC) {
+            this.protocol = ErrorMessageLibConstants.ERROR_CATALOG_PROTOCOL_HTTP
+            this.code = HttpErrorCodes.code(this.name)
+        }
+        return this as T
+    }
+
+    fun <T : ErrorCatalogException> inverseToGrpc(): T {
+        if (this.protocol != "" && this.protocol == ErrorMessageLibConstants.ERROR_CATALOG_PROTOCOL_HTTP) {
+            this.protocol = ErrorMessageLibConstants.ERROR_CATALOG_PROTOCOL_GRPC
+            this.code = GrpcErrorCodes.code(this.name)
+        }
         return this as T
     }
 
     fun <T : ErrorCatalogException> updateGrpc(type: String): T {
         this.protocol = ErrorMessageLibConstants.ERROR_CATALOG_PROTOCOL_GRPC
+        this.name = type
         this.code = GrpcErrorCodes.code(type)
         return this as T
     }

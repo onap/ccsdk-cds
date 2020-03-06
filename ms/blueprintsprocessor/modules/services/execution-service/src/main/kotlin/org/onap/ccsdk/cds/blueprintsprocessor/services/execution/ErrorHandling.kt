@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018-2019 AT&T Intellectual Property.
+ * Copyright © 2020 IBM, Bell Canada.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,27 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
+package org.onap.ccsdk.cds.blueprintsprocessor.services.execution
 
-object SelfServiceApiDomains {
-    // SelfServiceApi Domains Constants
+object ExecutionServiceDomains {
+    // ExecutionService Domains Constants
     const val BLUEPRINT_PROCESSOR = "org.onap.ccsdk.cds.blueprintsprocessor"
-    const val SELF_SERVICE_API = "org.onap.ccsdk.cds.blueprintsprocessor.resource.api"
-    const val SELF_SERVICE_API_VALIDATOR = "org.onap.ccsdk.cds.blueprintsprocessor.resource.api.validator"
+    const val NETCONF_EXECUTOR = "org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor"
+    const val RESOURCE_RESOLUTION = "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution"
+    const val RESTCONF_EXECUTOR = "org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor"
+    const val CLI_EXECUTOR = "org.onap.ccsdk.cds.blueprintsprocessor.functions.cli.executor"
+    const val PYTHON_EXECUTOR = "org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor"
+    const val SDC_LISTENER = "org.onap.ccsdk.cds.sdclistener"
 }
 
-object SelfServiceApiHttpErrorCodes {
+object ExecutionServiceHttpErrorCodes {
     init {
         // Register HttpErrorCodes
         // HttpErrorCodes.register("", 200)
     }
 }
 
-object SelfServiceGrpcErrorCodes {
+object ExecutionServiceGrpcErrorCodes {
     init {
         // Register GrpcErrorCodes
         // GrpcErrorCodes.register("", 3)

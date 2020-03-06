@@ -23,7 +23,9 @@ import io.swagger.annotations.ApiParam
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolution
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolutionDBService
+import org.onap.ccsdk.cds.controllerblueprints.core.httpProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.onap.ccsdk.error.catalog.core.ErrorCatalogCodes
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -83,7 +85,8 @@ open class ResourceController(private var resourceResolutionDBService: ResourceR
             ResponseEntity<List<ResourceResolution>> = runBlocking {
 
         if ((resolutionKey.isNotEmpty() || artifactName.isNotEmpty()) && (resourceId.isNotEmpty() || resourceType.isNotEmpty())) {
-            throw ResolutionException("Either retrieve resolved value using artifact name and resolution-key OR using resource-id and resource-type.")
+            throw httpProcessorException(ErrorCatalogCodes.REQUEST_NOT_FOUND, ResourceApiDomains.RESOURCE_API,
+                    "Either retrieve resolved value using artifact name and resolution-key OR using resource-id and resource-type.")
         } else if (resolutionKey.isNotEmpty() && artifactName.isNotEmpty()) {
             ResponseEntity.ok()
                 .body(resourceResolutionDBService.readWithResolutionKey(bpName, bpVersion, artifactName, resolutionKey))
@@ -98,7 +101,8 @@ open class ResourceController(private var resourceResolutionDBService: ResourceR
                     )
                 )
         } else {
-            throw ResolutionException("Missing param. Either retrieve resolved value using artifact name and resolution-key OR using resource-id and resource-type.")
+            throw httpProcessorException(ErrorCatalogCodes.REQUEST_NOT_FOUND, ResourceApiDomains.RESOURCE_API,
+                    "Missing param. Either retrieve resolved value using artifact name and resolution-key OR using resource-id and resource-type.")
         }
     }
 

@@ -42,7 +42,8 @@ import kotlin.test.BeforeTest
 @RunWith(SpringRunner::class)
 @DirtiesContext
 @ContextConfiguration(
-    classes = [SelfServiceApiTestConfiguration::class, TestDatabaseConfiguration::class]
+    classes = [SelfServiceApiTestConfiguration::class, TestDatabaseConfiguration::class,
+        ErrorCatalogTestConfiguration::class]
 )
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class BluePrintProcessingGRPCHandlerTest {

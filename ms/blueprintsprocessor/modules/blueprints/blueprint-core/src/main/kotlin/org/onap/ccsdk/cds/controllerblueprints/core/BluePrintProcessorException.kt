@@ -17,6 +17,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core
 
+import org.apache.commons.lang.exception.ExceptionUtils
 import org.onap.ccsdk.error.catalog.core.ErrorCatalogException
 import org.onap.ccsdk.error.catalog.core.ErrorCatalogExceptionFluent
 import org.onap.ccsdk.error.catalog.core.ErrorMessage
@@ -56,6 +57,14 @@ open class BluePrintProcessorException : ErrorCatalogException, ErrorCatalogExce
         return this.updateGrpc(type)
     }
 
+    override fun convertToHttp(): BluePrintProcessorException {
+        return this.inverseToHttp()
+    }
+
+    override fun convertToGrpc(): BluePrintProcessorException {
+        return this.inverseToHttp()
+    }
+
     override fun payloadMessage(message: String): BluePrintProcessorException {
         return this.updatePayloadMessage(message)
     }
@@ -82,8 +91,24 @@ fun processorException(message: String): BluePrintProcessorException {
     return BluePrintProcessorException(message)
 }
 
+fun processorException(message: String, cause: Throwable): BluePrintProcessorException {
+    return BluePrintProcessorException(message, cause)
+}
+
+fun processorException(cause: Throwable, message: String, vararg args: Any?): BluePrintProcessorException {
+    return BluePrintProcessorException(cause, message, args)
+}
+
 fun processorException(code: Int, message: String): BluePrintProcessorException {
     return processorException(message).code(code)
+}
+
+fun processorException(code: Int, message: String, cause: Throwable): BluePrintProcessorException {
+    return processorException(message, cause).code(code)
+}
+
+fun processorException(code: Int, cause: Throwable, message: String, vararg args: Any?): BluePrintProcessorException {
+    return processorException(cause, message, args).code(code)
 }
 
 fun httpProcessorException(type: String, message: String): BluePrintProcessorException {
@@ -106,17 +131,29 @@ fun grpcProcessorException(type: String, domain: String, message: String): BlueP
 
 fun httpProcessorException(type: String, domain: String, message: String, cause: Throwable):
         BluePrintProcessorException {
-    val bluePrintProcessorException = processorException(message).http(type)
-    return bluePrintProcessorException.addDomainAndErrorMessage(domain, message, cause)
+    val bluePrintProcessorException = processorException(message, cause).http(type)
+    return bluePrintProcessorException.addDomainAndErrorMessage(domain, message, ExceptionUtils.getRootCauseMessage(cause))
 }
 
 fun grpcProcessorException(type: String, domain: String, message: String, cause: Throwable):
         BluePrintProcessorException {
-    val bluePrintProcessorException = processorException(message).grpc(type)
-    return bluePrintProcessorException.addDomainAndErrorMessage(domain, message, cause)
+    val bluePrintProcessorException = processorException(message, cause).grpc(type)
+    return bluePrintProcessorException.addDomainAndErrorMessage(domain, message, ExceptionUtils.getRootCauseMessage(cause))
 }
 
-fun BluePrintProcessorException.updateErrorMessage(domain: String, message: String, cause: Throwable):
+fun httpProcessorException(type: String, domain: String, message: String, cause: Throwable, vararg args: Any?):
+        BluePrintProcessorException {
+    val bluePrintProcessorException = processorException(cause, message, args).http(type)
+    return bluePrintProcessorException.addDomainAndErrorMessage(domain, message, ExceptionUtils.getRootCauseMessage(cause))
+}
+
+fun grpcProcessorException(type: String, domain: String, message: String, cause: Throwable, vararg args: Any?):
+        BluePrintProcessorException {
+    val bluePrintProcessorException = processorException(cause, message, args).grpc(type)
+    return bluePrintProcessorException.addDomainAndErrorMessage(domain, message, ExceptionUtils.getRootCauseMessage(cause))
+}
+
+fun BluePrintProcessorException.updateErrorMessage(domain: String, message: String, cause: String):
         BluePrintProcessorException {
     return this.addDomainAndErrorMessage(domain, message, cause).domain(domain)
             .addErrorPayloadMessage(message)
@@ -132,7 +169,7 @@ fun BluePrintProcessorException.updateErrorMessage(domain: String, message: Stri
 private fun BluePrintProcessorException.addDomainAndErrorMessage(
     domain: String,
     message: String,
-    cause: Throwable = Throwable()
+    cause: String = ""
 ): BluePrintProcessorException {
-    return this.addSubError(ErrorMessage(domain, message, cause.message ?: "")).domain(domain)
+    return this.addSubError(ErrorMessage(domain, message, cause)).domain(domain)
 }
