@@ -38,7 +38,7 @@ import kotlin.test.AfterTest
 @WebFluxTest
 @ContextConfiguration(
     classes = [TestDatabaseConfiguration::class, BluePrintCoreConfiguration::class,
-        BluePrintCatalogService::class]
+        BluePrintCatalogService::class, ErrorCatalogTestConfiguration::class]
 )
 @ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
 @TestPropertySource(locations = ["classpath:application-test.properties"])
@@ -120,7 +120,7 @@ class TemplateControllerTest {
 
             webTestClient.get().uri("/api/v1/template?$arguments")
                 .exchange()
-                .expectStatus().isBadRequest
+                .expectStatus().isNotFound
         }
     }
 

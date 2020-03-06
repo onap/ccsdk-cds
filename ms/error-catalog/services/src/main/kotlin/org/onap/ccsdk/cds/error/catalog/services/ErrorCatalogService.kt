@@ -24,7 +24,8 @@ import org.onap.ccsdk.cds.error.catalog.core.ErrorMessageLibConstants
 import org.onap.ccsdk.cds.error.catalog.core.ErrorPayload
 import org.onap.ccsdk.cds.error.catalog.core.GrpcErrorCodes
 import org.onap.ccsdk.cds.error.catalog.core.HttpErrorCodes
-import org.onap.ccsdk.cds.error.catalog.services.utils.ErrorCatalogUtils
+import org.onap.ccsdk.cds.error.catalog.core.utils.ErrorCatalogUtils
+import org.apache.commons.lang3.exception.ExceptionUtils
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.stereotype.Service
 import javax.annotation.PostConstruct
@@ -40,10 +41,17 @@ open class ErrorCatalogService(private var errorCatalogLoadService: ErrorCatalog
 
     fun errorPayload(errorCatalogException: ErrorCatalogException): ErrorPayload {
         val errorCatalog = getErrorCatalog(errorCatalogException)
-        val errorPayload = ErrorPayload(errorCatalog.code, errorCatalog.errorId, errorCatalog.getMessage())
-        errorPayload.subErrors.addAll(errorCatalogException.errorPayload!!.subErrors)
+        val errorPayload: ErrorPayload
+        if (errorCatalogException.errorPayload == null) {
+            errorPayload = ErrorPayload(errorCatalog.code, errorCatalog.errorId, errorCatalog.getMessage())
+        } else {
+            errorPayload = errorCatalogException.errorPayload!!
+            errorPayload.code = errorCatalog.code
+            errorPayload.message = errorCatalog.getMessage()
+            errorPayload.status = errorCatalog.errorId
+        }
         if (errorCatalogException.cause != null) {
-            errorPayload.debugMessage = errorCatalogException.cause!!.printStackTrace().toString()
+            errorPayload.debugMessage = ExceptionUtils.getStackTrace(errorCatalogException.cause)
         }
         return errorPayload
     }

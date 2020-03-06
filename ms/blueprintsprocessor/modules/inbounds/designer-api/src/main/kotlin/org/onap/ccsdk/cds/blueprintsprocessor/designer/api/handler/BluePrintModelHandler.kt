@@ -24,27 +24,33 @@ import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelSe
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.BlueprintModelContentRepository
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.BlueprintModelRepository
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.BlueprintModelSearchRepository
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.DesignerApiDomains
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.BootstrapRequest
-import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.WorkFlowData
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.WorkFlowSpecRequest
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.WorkFlowSpecResponse
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.WorkFlowData
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.WorkFlowsResponse
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.load.BluePrintDatabaseLoadService
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.utils.BluePrintEnhancerUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.logger
+import org.onap.ccsdk.cds.controllerblueprints.core.httpProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.updateErrorMessage
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
+import org.onap.ccsdk.cds.controllerblueprints.core.deleteNBDir
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
-import org.onap.ccsdk.cds.controllerblueprints.core.data.ErrorCode
-import org.onap.ccsdk.cds.controllerblueprints.core.deleteNBDir
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintEnhancerService
-import org.onap.ccsdk.cds.controllerblueprints.core.logger
-import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
-import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintCompileCache
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.cds.error.catalog.core.ErrorCatalogCodes
+import org.onap.ccsdk.cds.error.catalog.core.utils.errorCauseOrDefault
+import org.onap.ccsdk.cds.error.catalog.core.utils.errorMessageOrDefault
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.core.io.Resource
 import org.springframework.data.domain.Page
@@ -188,10 +194,8 @@ open class BluePrintModelHandler(
         try {
             return upload(filePart, false)
         } catch (e: IOException) {
-            throw BluePrintException(
-                ErrorCode.IO_FILE_INTERRUPT.value,
-                "Error in Save CBA: ${e.message}", e
-            )
+            throw httpProcessorException(ErrorCatalogCodes.IO_FILE_INTERRUPT, DesignerApiDomains.DESIGNER_API,
+                    "Error in Save CBA: ${e.message}", e.errorCauseOrDefault())
         }
     }
 
@@ -239,11 +243,11 @@ open class BluePrintModelHandler(
             val archiveByteArray = download(name, version)
             val fileName = "${name}_$version.zip"
             return prepareResourceEntity(fileName, archiveByteArray)
-        } catch (e: BluePrintException) {
-            throw BluePrintException(
-                ErrorCode.RESOURCE_NOT_FOUND.value,
-                String.format("Error while " + "downloading the CBA file: %s", e.message), e
-            )
+        } catch (e: BluePrintProcessorException) {
+            e.http(ErrorCatalogCodes.RESOURCE_NOT_FOUND)
+            val errorMsg = "Error while downloading the CBA file by Blueprint Name ($name) and Version ($version)."
+            throw e.updateErrorMessage(DesignerApiDomains.DESIGNER_API, errorMsg,
+                    "Wrong resource definition or resolution failed.")
         }
     }
 
@@ -259,15 +263,15 @@ open class BluePrintModelHandler(
         try {
             blueprintModel = getBlueprintModel(id)
         } catch (e: BluePrintException) {
-            throw BluePrintException(ErrorCode.RESOURCE_NOT_FOUND.value, String.format("Error while " + "downloading the CBA file: %s", e.message), e)
+            throw httpProcessorException(ErrorCatalogCodes.RESOURCE_NOT_FOUND, DesignerApiDomains.DESIGNER_API,
+                    "Error while downloading the CBA file: couldn't get blueprint modelby ID ($id)",
+                    e.errorCauseOrDefault())
         }
 
         val fileName = "${blueprintModel.artifactName}_${blueprintModel.artifactVersion}.zip"
         val file = blueprintModel.blueprintModelContent?.content
-            ?: throw BluePrintException(
-                ErrorCode.RESOURCE_NOT_FOUND.value,
-                String.format("Error while downloading the CBA file: couldn't get model content")
-            )
+            ?: throw httpProcessorException(ErrorCatalogCodes.RESOURCE_NOT_FOUND, DesignerApiDomains.DESIGNER_API,
+                    "Error while downloading the CBA file: couldn't get model content")
         return prepareResourceEntity(fileName, file)
     }
 
@@ -296,7 +300,7 @@ open class BluePrintModelHandler(
             blueprintModel = dbBlueprintModel.get()
         } else {
             val msg = String.format(BLUEPRINT_MODEL_ID_FAILURE_MSG, id)
-            throw BluePrintException(ErrorCode.RESOURCE_NOT_FOUND.value, msg)
+            throw httpProcessorException(ErrorCatalogCodes.RESOURCE_NOT_FOUND, DesignerApiDomains.DESIGNER_API, msg)
         }
         return blueprintModel
     }
@@ -317,7 +321,7 @@ open class BluePrintModelHandler(
             return blueprintModel
         } else {
             val msg = String.format(BLUEPRINT_MODEL_NAME_VERSION_FAILURE_MSG, name, version)
-            throw BluePrintException(ErrorCode.RESOURCE_NOT_FOUND.value, msg)
+            throw httpProcessorException(ErrorCatalogCodes.RESOURCE_NOT_FOUND, DesignerApiDomains.DESIGNER_API, msg)
         }
     }
 
@@ -331,10 +335,8 @@ open class BluePrintModelHandler(
     @Throws(BluePrintException::class)
     open fun getBlueprintModelSearch(id: String): BlueprintModelSearch {
         return blueprintModelSearchRepository.findById(id)
-            ?: throw BluePrintException(
-                ErrorCode.RESOURCE_NOT_FOUND.value,
-                String.format(BLUEPRINT_MODEL_ID_FAILURE_MSG, id)
-            )
+            ?: throw httpProcessorException(ErrorCatalogCodes.RESOURCE_NOT_FOUND, DesignerApiDomains.DESIGNER_API,
+                    String.format(BLUEPRINT_MODEL_ID_FAILURE_MSG, id))
     }
 
     /**
@@ -385,7 +387,7 @@ open class BluePrintModelHandler(
             blueprintModelRepository.delete(dbBlueprintModel.get())
         } else {
             val msg = String.format(BLUEPRINT_MODEL_ID_FAILURE_MSG, id)
-            throw BluePrintException(ErrorCode.RESOURCE_NOT_FOUND.value, msg)
+            throw httpProcessorException(ErrorCatalogCodes.RESOURCE_NOT_FOUND, DesignerApiDomains.DESIGNER_API, msg)
         }
     }
 
@@ -410,11 +412,14 @@ open class BluePrintModelHandler(
         try {
             val enhancedByteArray = enrichBlueprintFileSource(filePart)
             return BluePrintEnhancerUtils.prepareResourceEntity("enhanced-cba.zip", enhancedByteArray)
-        } catch (e: IOException) {
-            throw BluePrintException(
-                ErrorCode.IO_FILE_INTERRUPT.value,
-                "Error in Enriching CBA: ${e.message}", e
-            )
+        } catch (e: BluePrintProcessorException) {
+            e.http(ErrorCatalogCodes.IO_FILE_INTERRUPT)
+            val errorMsg = "Error while enhancing the CBA package."
+            throw e.updateErrorMessage(DesignerApiDomains.DESIGNER_API, errorMsg,
+                    "Wrong CBA file provided, please verify and enrich Again.")
+        } catch (e: Exception) {
+            throw httpProcessorException(ErrorCatalogCodes.IO_FILE_INTERRUPT, DesignerApiDomains.DESIGNER_API,
+                    "EnrichBlueprint: ${e.message}", e.errorCauseOrDefault())
         }
     }
 
@@ -429,11 +434,14 @@ open class BluePrintModelHandler(
     open suspend fun publishBlueprint(filePart: FilePart): BlueprintModelSearch {
         try {
             return upload(filePart, true)
+        } catch (e: BluePrintProcessorException) {
+            e.http(ErrorCatalogCodes.IO_FILE_INTERRUPT)
+            val errorMsg = "Error in Publishing CBA."
+            throw e.updateErrorMessage(DesignerApiDomains.DESIGNER_API, errorMsg,
+                    "Wrong CBA provided, please verify and enrich your CBA.")
         } catch (e: Exception) {
-            throw BluePrintException(
-                ErrorCode.IO_FILE_INTERRUPT.value,
-                "Error in Publishing CBA: ${e.message}", e
-            )
+            throw httpProcessorException(ErrorCatalogCodes.IO_FILE_INTERRUPT, DesignerApiDomains.DESIGNER_API,
+                    "Error in Publishing CBA: ${e.message}", e.errorCauseOrDefault())
         }
     }
 
@@ -453,15 +461,16 @@ open class BluePrintModelHandler(
             val blueprintId = blueprintsProcessorCatalogService.saveToDatabase(saveId, compressedFile, validate)
 
             return blueprintModelSearchRepository.findById(blueprintId)
-                ?: throw BluePrintException(
-                    ErrorCode.RESOURCE_NOT_FOUND.value,
-                    String.format(BLUEPRINT_MODEL_ID_FAILURE_MSG, blueprintId)
-                )
+                ?: throw httpProcessorException(ErrorCatalogCodes.RESOURCE_NOT_FOUND, DesignerApiDomains.DESIGNER_API,
+                        String.format(BLUEPRINT_MODEL_ID_FAILURE_MSG, blueprintId))
+        } catch (e: BluePrintException) {
+            e.http(ErrorCatalogCodes.IO_FILE_INTERRUPT)
+            val errorMsg = "Error in Upload CBA."
+            throw e.updateErrorMessage(DesignerApiDomains.DESIGNER_API, errorMsg,
+                    "Wrong enriched CBA.")
         } catch (e: IOException) {
-            throw BluePrintException(
-                ErrorCode.IO_FILE_INTERRUPT.value,
-                "Error in Upload CBA: ${e.message}", e
-            )
+            throw httpProcessorException(ErrorCatalogCodes.IO_FILE_INTERRUPT, DesignerApiDomains.DESIGNER_API,
+                    "Error in Upload CBA: ${e.errorMessageOrDefault()}", e.errorCauseOrDefault())
         } finally {
             // Clean blueprint script cache
             val cacheKey = BluePrintFileUtils
@@ -478,15 +487,13 @@ open class BluePrintModelHandler(
         try {
             val blueprintModel = getBlueprintModelByNameAndVersion(name, version)
             return blueprintModel.blueprintModelContent?.content
-                ?: throw BluePrintException(
-                    ErrorCode.RESOURCE_NOT_FOUND.value,
-                    String.format("Error while downloading the CBA file: couldn't get model content")
-                )
+                ?: throw httpProcessorException(ErrorCatalogCodes.RESOURCE_NOT_FOUND, DesignerApiDomains.DESIGNER_API,
+                        "Error while downloading the CBA file: couldn't get model content")
         } catch (e: BluePrintException) {
-            throw BluePrintException(
-                ErrorCode.RESOURCE_NOT_FOUND.value,
-                String.format("Error while " + "downloading the CBA file: %s", e.message), e
-            )
+            e.http(ErrorCatalogCodes.RESOURCE_NOT_FOUND)
+            val errorMsg = "Fail to get Blueprint Model content."
+            throw e.updateErrorMessage(DesignerApiDomains.DESIGNER_API, errorMsg,
+                    "Wrong name and version was provide.")
         }
     }
 
@@ -506,11 +513,13 @@ open class BluePrintModelHandler(
             bluePrintEnhancerService.enhance(blueprintWorkingDir)
 
             return BluePrintEnhancerUtils.compressEnhanceDirAndReturnByteArray(blueprintWorkingDir, blueprintArchive)
+        } catch (e: BluePrintException) {
+            e.http(ErrorCatalogCodes.IO_FILE_INTERRUPT)
+            val errorMsg = "Fail Enriching the CBA."
+            throw e.updateErrorMessage(DesignerApiDomains.DESIGNER_API, errorMsg)
         } catch (e: IOException) {
-            throw BluePrintException(
-                ErrorCode.IO_FILE_INTERRUPT.value,
-                "Error in Enriching CBA: ${e.message}", e
-            )
+            throw httpProcessorException(ErrorCatalogCodes.IO_FILE_INTERRUPT, DesignerApiDomains.DESIGNER_API,
+                    "Error while Enriching the CBA file.", e.errorCauseOrDefault())
         } finally {
             BluePrintEnhancerUtils.cleanEnhancer(blueprintArchive, blueprintWorkingDir)
         }

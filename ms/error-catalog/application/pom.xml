@@ -31,4 +31,11 @@
     <properties>
         <sonar.skip>true</sonar.skip>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.onap.ccsdk.cds.error.catalog</groupId>
+            <artifactId>error-catalog-services</artifactId>
+        </dependency>
+    </dependencies>
 </project>

@@ -28,4 +28,11 @@
 
     <name>Blueprints Processor Designer API</name>
     <description>Blueprints Processor Designer API</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.onap.ccsdk.cds.error.catalog</groupId>
+            <artifactId>error-catalog-services</artifactId>
+        </dependency>
+    </dependencies>
 </project>
