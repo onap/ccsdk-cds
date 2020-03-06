@@ -24,6 +24,9 @@ import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db.ResourceConfigSnapshot
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db.ResourceConfigSnapshotService
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.httpProcessorException
+import org.onap.ccsdk.cds.error.catalog.core.ErrorCatalogCodes
+import org.onap.ccsdk.cds.error.catalog.core.utils.errorCauseOrDefault
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -101,12 +104,17 @@ open class ResourceConfigSnapshotController(private val resourceConfigSnapshotSe
                     resourceType, ResourceConfigSnapshot.Status.valueOf(status.toUpperCase())
                 )
             } catch (ex: NoSuchElementException) {
-                throw ResourceConfigSnapshotException(
-                    "Could not find configuration snapshot entry for type $resourceType and Id $resourceId"
-                )
+                throw httpProcessorException(ErrorCatalogCodes.RESOURCE_NOT_FOUND, ConfigsApiDomains.CONFIGS_API,
+                        "Could not find configuration snapshot entry for type $resourceType and Id $resourceId",
+                        ex.errorCauseOrDefault())
+            } catch (ex: Exception) {
+                throw httpProcessorException(ErrorCatalogCodes.INVALID_REQUEST_FORMAT, ConfigsApiDomains.CONFIGS_API,
+                        "Could not find configuration snapshot entry for type $resourceType and Id $resourceId",
+                        ex.errorCauseOrDefault())
             }
         } else {
-            throw IllegalArgumentException("Missing param. You must specify resource-id and resource-type.")
+            throw httpProcessorException(ErrorCatalogCodes.INVALID_REQUEST_FORMAT, ConfigsApiDomains.CONFIGS_API,
+                    "Missing param. You must specify resource-id and resource-type.")
         }
 
         var expectedContentType = format

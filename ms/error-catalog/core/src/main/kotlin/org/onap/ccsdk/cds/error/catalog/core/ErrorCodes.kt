@@ -54,8 +54,7 @@ object HttpErrorCodes {
     }
 
     fun code(type: String): Int {
-        // FIXME("Return Default Error Code , If missing")
-        return store[type]!!
+        return store[type] ?: store[ErrorCatalogCodes.GENERIC_FAILURE]!!
     }
 }
 
@@ -82,7 +81,6 @@ object GrpcErrorCodes {
     }
 
     fun code(type: String): Int {
-        // FIXME("Return Default Error Code , If missing")
-        return store[type]!!
+        return store[type] ?: store[ErrorCatalogCodes.GENERIC_FAILURE]!!
     }
 }
