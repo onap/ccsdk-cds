@@ -31,7 +31,8 @@ import javax.sql.DataSource
 @Configuration
 @Import(BluePrintDBLibConfiguration::class)
 @EnableJpaRepositories(
-    basePackages = ["org.onap.ccsdk.cds.controllerblueprints", "org.onap.ccsdk.cds.blueprintsprocessor"],
+    basePackages = ["org.onap.ccsdk.cds.controllerblueprints", "org.onap.ccsdk.cds.blueprintsprocessor",
+        "org.onap.ccsdk.error.catalog"],
     entityManagerFactoryRef = "primaryEntityManager",
     transactionManagerRef = "primaryTransactionManager"
 )
@@ -43,7 +44,8 @@ open class BlueprintDatabaseConfiguration(primaryDataSourceProperties: PrimaryDa
     open fun primaryEntityManager(): LocalContainerEntityManagerFactoryBean {
         return primaryEntityManager(
             "org.onap.ccsdk.cds.controllerblueprints",
-            "org.onap.ccsdk.cds.blueprintsprocessor"
+            "org.onap.ccsdk.cds.blueprintsprocessor",
+            "org.onap.ccsdk.error.catalog"
         )
     }
 
