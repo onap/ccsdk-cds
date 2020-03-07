@@ -37,4 +37,23 @@
         <module>command-executor</module>
         <module>sdclistener</module>
     </modules>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>pl.project13.maven</groupId>
+                    <artifactId>git-commit-id-plugin</artifactId>
+                    <version>4.0.0</version>
+                    <configuration>
+                        <includeOnlyProperties>
+                            <includeOnlyProperty>^git.build.(time|version)$</includeOnlyProperty>
+                            <includeOnlyProperty>^git.commit.id.(abbrev|full)$</includeOnlyProperty>
+                        </includeOnlyProperties>
+                        <commitIdGenerationMode>full</commitIdGenerationMode>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>
