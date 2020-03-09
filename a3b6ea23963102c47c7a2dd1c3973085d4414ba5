@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "34d47bd0_29df2670",
+        "filename": "ms/blueprintsprocessor/parent/pom.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-09T18:34:12Z",
+      "side": 1,
+      "message": "I will prefere to keep it hardcoded. I really want less dependency with CDS.",
+      "parentUuid": "14dba0db_89e8ad5e",
+      "revId": "a3b6ea23963102c47c7a2dd1c3973085d4414ba5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "43efc546_2c7006f5",
         "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/domain/Domain.kt",
         "patchSetId": 6
