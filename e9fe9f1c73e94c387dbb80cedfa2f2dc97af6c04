@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "4c6102c1_aa4add2e",
+        "filename": "ms/error-catalog/pom.xml",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-09T19:49:42Z",
+      "side": 1,
+      "message": "Can you give more details please?",
+      "parentUuid": "cc74dc80_af136a48",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 38
+      },
+      "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a024b2ca_60e69a87",
         "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/ErrorCatalogConfiguration.kt",
         "patchSetId": 7
@@ -68,6 +92,30 @@
       "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3574bbed_44f7d33d",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/ErrorCatalogConfiguration.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-09T19:49:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a024b2ca_60e69a87",
+      "range": {
+        "startLine": 30,
+        "startChar": 11,
+        "endLine": 30,
+        "endChar": 34
+      },
+      "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "6eb6a632_8992460b",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/ErrorCatalogExceptionHandler.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-09T19:49:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4d87c722_95773f3e",
+      "range": {
+        "startLine": 26,
+        "startChar": 3,
+        "endLine": 26,
+        "endChar": 14
+      },
+      "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fdc798b9_166505b4",
         "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/ErrorCatalogLoadService.kt",
         "patchSetId": 7
@@ -114,6 +186,30 @@
       "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96b524bb_0af12393",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/ErrorCatalogLoadService.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-09T19:49:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fdc798b9_166505b4",
+      "range": {
+        "startLine": 54,
+        "startChar": 1,
+        "endLine": 57,
+        "endChar": 5
+      },
+      "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -140,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "fa790c63_09d840f4",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/ErrorCatalogLoadService.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-09T19:49:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bb0a1e69_f9e3bae7",
+      "range": {
+        "startLine": 113,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 0
+      },
+      "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7221c38e_a3706f52",
         "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/domain/Domain.kt",
         "patchSetId": 7
@@ -160,6 +280,30 @@
       "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2901ecf5_6f7414f0",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/domain/Domain.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-09T19:49:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7221c38e_a3706f52",
+      "range": {
+        "startLine": 50,
+        "startChar": 2,
+        "endLine": 50,
+        "endChar": 25
+      },
+      "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -186,6 +330,30 @@
     },
     {
       "key": {
+        "uuid": "da29d259_86710ba4",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/domain/Domain.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-09T19:49:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "661f8601_844a5c50",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 34
+      },
+      "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "42b58790_43e5ce68",
         "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/domain/ErrorMessageModel.kt",
         "patchSetId": 7
@@ -209,6 +377,30 @@
     },
     {
       "key": {
+        "uuid": "f29da037_f16c0558",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/domain/ErrorMessageModel.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-09T19:49:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "42b58790_43e5ce68",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 26
+      },
+      "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "55104745_6a53f9b6",
         "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/domain/ErrorMessageModel.kt",
         "patchSetId": 7
@@ -229,6 +421,30 @@
       "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c78eb1f_0b98cec1",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/domain/ErrorMessageModel.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-09T19:49:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "55104745_6a53f9b6",
+      "range": {
+        "startLine": 56,
+        "startChar": 2,
+        "endLine": 56,
+        "endChar": 27
+      },
+      "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -278,6 +494,30 @@
     },
     {
       "key": {
+        "uuid": "afff118d_44d64ff9",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/repository/ErrorMessageModelRepository.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-09T19:49:42Z",
+      "side": 1,
+      "message": "We just provide api in case it is useful.",
+      "parentUuid": "c96373dc_3b164c42",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 66
+      },
+      "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7a806250_001c7a5a",
         "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/utils/ErrorCatalogUtils.kt",
         "patchSetId": 7
@@ -289,6 +529,30 @@
       "writtenOn": "2020-03-09T19:26:54Z",
       "side": 1,
       "message": "I think , It is not needed, we shall use from extensions.",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 5
+      },
+      "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3926745_f389df69",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/utils/ErrorCatalogUtils.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-09T19:49:42Z",
+      "side": 1,
+      "message": "Sure! this was already covered by your extension function.",
+      "parentUuid": "7a806250_001c7a5a",
       "range": {
         "startLine": 37,
         "startChar": 0,
