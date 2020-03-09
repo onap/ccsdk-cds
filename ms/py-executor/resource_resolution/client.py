@@ -14,11 +14,19 @@ limitations under the License.
 """
 from logging import Logger, getLogger
 from types import TracebackType
-from typing import Iterable, List, Optional, Type
+from typing import Iterable, Optional, Type
 
-from grpc import Channel, insecure_channel, secure_channel, ssl_channel_credentials
+from grpc import (
+    Channel,
+    insecure_channel,
+    intercept_channel,
+    secure_channel,
+    ssl_channel_credentials,
+)
 from proto.BluePrintProcessing_pb2 import ExecutionServiceInput, ExecutionServiceOutput
 from proto.BluePrintProcessing_pb2_grpc import BluePrintProcessingServiceStub
+
+from .authorization import AuthTokenInterceptor
 
 
 class Client:
@@ -28,20 +36,29 @@ class Client:
         self,
         server_address: str,
         *,
+        # TLS/SSL configuration
         use_ssl: bool = False,
         root_certificates: bytes = None,
         private_key: bytes = None,
         certificate_chain: bytes = None,
+        # Authentication header configuration
+        use_header_auth: bool = False,
+        header_auth_token: str = None,
     ) -> None:
         """Client class initialization.
 
         :param server_address: Address to server to connect.
         :param use_ssl: Boolean flag to determine if secure channel should be created or not. Keyword argument.
         :param root_certificates: The PEM-encoded root certificates. None if it shouldn't be used. Keyword argument.
-        :param private_key: The PEM-encoded private key as a byte string, or None if no private key should be used. Keyword argument.
-        :param certificate_chain: The PEM-encoded certificate chain as a byte string to use or or None if no certificate chain should be used. Keyword argument.
+        :param private_key: The PEM-encoded private key as a byte string, or None if no private key should be used.
+            Keyword argument.
+        :param certificate_chain: The PEM-encoded certificate chain as a byte string to use or or None if
+            no certificate chain should be used. Keyword argument.
+        :param use_header_auth: Boolean flag to determine if authorization headed shoud be added for every call or not.
+            Keyword argument.
+        :param header_auth_token: Authorization token value. Keyword argument.
         """
-        self.logger = getLogger(__name__)
+        self.logger: Logger = getLogger(__name__)
         if use_ssl:
             self.channel: Channel = secure_channel(
                 server_address, ssl_channel_credentials(root_certificates, private_key, certificate_chain)
@@ -50,6 +67,8 @@ class Client:
         else:
             self.channel: Channel = insecure_channel(server_address)
             self.logger.debug(f"Create insecure channel to connect to {server_address}")
+        if use_header_auth:
+            self.channel: Channel = intercept_channel(self.channel, AuthTokenInterceptor(header_auth_token))
         self.stub: BluePrintProcessingServiceStub = BluePrintProcessingServiceStub(self.channel)
 
     def close(self) -> None:
