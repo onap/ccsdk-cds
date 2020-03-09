@@ -1,0 +1,303 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8cab7c62_8be07dc8",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/BluePrintConstants.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2020-03-09T19:26:54Z",
+      "side": 1,
+      "message": "Remove the Constants from here and include in Module\u0027s error handling file.",
+      "range": {
+        "startLine": 244,
+        "startChar": 0,
+        "endLine": 253,
+        "endChar": 1
+      },
+      "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc74dc80_af136a48",
+        "filename": "ms/error-catalog/pom.xml",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2020-03-09T19:26:54Z",
+      "side": 1,
+      "message": "Simplify the dependencies, Identify tight dependency for core, service and Application.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 38
+      },
+      "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a024b2ca_60e69a87",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/ErrorCatalogConfiguration.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2020-03-09T19:26:54Z",
+      "side": 1,
+      "message": "Include optional error property file location, If type is property. ( Avoid lookin error file in side jar, It will be hard to customize)",
+      "range": {
+        "startLine": 30,
+        "startChar": 11,
+        "endLine": 30,
+        "endChar": 34
+      },
+      "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d87c722_95773f3e",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/ErrorCatalogExceptionHandler.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2020-03-09T19:26:54Z",
+      "side": 1,
+      "message": "Avoid Auto wire, include in constructor",
+      "range": {
+        "startLine": 26,
+        "startChar": 3,
+        "endLine": 26,
+        "endChar": 14
+      },
+      "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdc798b9_166505b4",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/ErrorCatalogLoadService.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2020-03-09T19:26:54Z",
+      "side": 1,
+      "message": "Remove Init method here and include in ErrorCatalogService, So it will easy fro synchronization and resynchronization.",
+      "range": {
+        "startLine": 54,
+        "startChar": 1,
+        "endLine": 57,
+        "endChar": 5
+      },
+      "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb0a1e69_f9e3bae7",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/ErrorCatalogLoadService.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2020-03-09T19:26:54Z",
+      "side": 1,
+      "message": "Remove Init method here and include in ErrorCatalogService, So it will easy fro synchronization and resynchronization.",
+      "range": {
+        "startLine": 113,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 0
+      },
+      "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7221c38e_a3706f52",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/domain/Domain.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2020-03-09T19:26:54Z",
+      "side": 1,
+      "message": "shall be lateinit.",
+      "range": {
+        "startLine": 50,
+        "startChar": 2,
+        "endLine": 50,
+        "endChar": 25
+      },
+      "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "661f8601_844a5c50",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/domain/Domain.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2020-03-09T19:26:54Z",
+      "side": 1,
+      "message": "shall be lateinit.",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 34
+      },
+      "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42b58790_43e5ce68",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/domain/ErrorMessageModel.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2020-03-09T19:26:54Z",
+      "side": 1,
+      "message": "shall be lateinit, if it is not mandatory",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 26
+      },
+      "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55104745_6a53f9b6",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/domain/ErrorMessageModel.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2020-03-09T19:26:54Z",
+      "side": 1,
+      "message": "shall be lateinit, if not mandatory.",
+      "range": {
+        "startLine": 56,
+        "startChar": 2,
+        "endLine": 56,
+        "endChar": 27
+      },
+      "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07d265f7_76fac45e",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/repository/DomainRepository.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2020-03-09T19:26:54Z",
+      "side": 1,
+      "message": "Do we really need this method ?",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 36,
+        "endChar": 55
+      },
+      "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c96373dc_3b164c42",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/repository/ErrorMessageModelRepository.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2020-03-09T19:26:54Z",
+      "side": 1,
+      "message": "Do we really need this, Shouldn\u0027t get default for JPARepositories ?",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 66
+      },
+      "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a806250_001c7a5a",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/utils/ErrorCatalogUtils.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2020-03-09T19:26:54Z",
+      "side": 1,
+      "message": "I think , It is not needed, we shall use from extensions.",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 5
+      },
+      "revId": "e9fe9f1c73e94c387dbb80cedfa2f2dc97af6c04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
