@@ -22,6 +22,30 @@
       "revId": "55ec3c71441abda7c6058f4c2cc569c129f635ba",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbaa052f_c525f23c",
+        "filename": "ms/sdclistener/parent/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 5732
+      },
+      "writtenOn": "2020-03-09T23:04:58Z",
+      "side": 1,
+      "message": "This is the parameter, it\u0027s in the properties section. It used further down the pom file in the dependencies section",
+      "parentUuid": "f54208ae_c18514a3",
+      "range": {
+        "startLine": 45,
+        "startChar": 8,
+        "endLine": 45,
+        "endChar": 44
+      },
+      "revId": "55ec3c71441abda7c6058f4c2cc569c129f635ba",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
