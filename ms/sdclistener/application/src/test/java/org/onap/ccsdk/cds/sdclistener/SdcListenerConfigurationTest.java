@@ -37,7 +37,7 @@ public class SdcListenerConfigurationTest {
     public void testCdsSdcListenerConfiguration() {
         assertEquals(listenerConfiguration.getAsdcAddress(), "localhost:8443");
         assertEquals(listenerConfiguration.getMsgBusAddress().stream().findFirst().get(), "localhost");
-        assertEquals(listenerConfiguration.getUser(), "vid");
+        assertEquals(listenerConfiguration.getUser(), "cds");
         assertEquals(listenerConfiguration.getPassword(), "Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U");
         assertEquals(listenerConfiguration.getPollingInterval(), 15);
         assertEquals(listenerConfiguration.getPollingTimeout(), 60);

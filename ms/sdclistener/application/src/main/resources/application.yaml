@@ -2,7 +2,7 @@ listenerservice:
   config:
     asdcAddress: ${asdcAddress:localhost:8443}
     messageBusAddress: ${messageBusAddress:localhost}
-    user: ${sdcusername:vid}
+    user: ${sdcusername:cds}
     password: ${password:Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U}
     pollingInterval: ${pollingInterval:15}
     pollingTimeout: ${pollingTimeout:60}

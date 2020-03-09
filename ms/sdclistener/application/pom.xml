@@ -63,7 +63,6 @@
         <dependency>
             <groupId>org.onap.sdc.sdc-distribution-client</groupId>
             <artifactId>sdc-distribution-client</artifactId>
-            <version>1.3.0</version>
         </dependency>
 
         <dependency>
@@ -109,6 +108,11 @@
         <dependency>
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
             <artifactId>blueprint-proto</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
         </dependency>
 
         <dependency>
