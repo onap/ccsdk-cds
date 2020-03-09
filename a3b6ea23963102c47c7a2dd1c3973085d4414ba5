@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "14dba0db_89e8ad5e",
+        "filename": "ms/blueprintsprocessor/parent/pom.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-03-09T17:57:27Z",
+      "side": 1,
+      "message": "instead hardcoding, use ${project.version}",
+      "revId": "a3b6ea23963102c47c7a2dd1c3973085d4414ba5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "43efc546_2c7006f5",
         "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/domain/Domain.kt",
         "patchSetId": 6
