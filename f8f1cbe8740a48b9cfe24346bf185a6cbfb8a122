@@ -16,6 +16,24 @@
       "revId": "f8f1cbe8740a48b9cfe24346bf185a6cbfb8a122",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c39df62_1f274477",
+        "filename": "ms/error-catalog/core/src/main/kotlin/org/onap/ccsdk/error/catalog/core/ErrorLibData.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-09T18:34:12Z",
+      "side": 1,
+      "message": "ok. Sure!",
+      "parentUuid": "d0b9942d_398741dd",
+      "revId": "f8f1cbe8740a48b9cfe24346bf185a6cbfb8a122",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
