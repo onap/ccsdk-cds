@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d0b9942d_398741dd",
+        "filename": "ms/error-catalog/core/src/main/kotlin/org/onap/ccsdk/error/catalog/core/ErrorLibData.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-03-09T17:57:27Z",
+      "side": 1,
+      "message": "Can remove this as not being used. \nEven if required, make use of log4j\u0027s logLevel or sprigboot\u0027s LogLevel",
+      "revId": "f8f1cbe8740a48b9cfe24346bf185a6cbfb8a122",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
