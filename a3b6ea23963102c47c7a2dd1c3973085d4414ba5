@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "988ddcfb_a34d0d42",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/domain/Domain.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-09T17:47:57Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "43efc546_2c7006f5",
+      "range": {
+        "startLine": 47,
+        "startChar": 19,
+        "endLine": 47,
+        "endChar": 36
+      },
+      "revId": "a3b6ea23963102c47c7a2dd1c3973085d4414ba5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3e658956_8dad3a56",
         "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/domain/ErrorMessageModel.kt",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "a3b6ea23963102c47c7a2dd1c3973085d4414ba5",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64799b5b_66c9be7a",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/domain/ErrorMessageModel.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-09T17:47:57Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3e658956_8dad3a56",
+      "range": {
+        "startLine": 45,
+        "startChar": 19,
+        "endLine": 45,
+        "endChar": 36
+      },
+      "revId": "a3b6ea23963102c47c7a2dd1c3973085d4414ba5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "adcd6007_314cf2e8",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/repository/DomainRepository.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-09T17:47:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62348397_b74fb67d",
+      "range": {
+        "startLine": 29,
+        "startChar": 51,
+        "endLine": 29,
+        "endChar": 55
+      },
+      "revId": "a3b6ea23963102c47c7a2dd1c3973085d4414ba5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "54bdb5d3_8063869f",
         "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/repository/ErrorMessageModelRepository.kt",
         "patchSetId": 6
@@ -91,6 +163,30 @@
       "revId": "a3b6ea23963102c47c7a2dd1c3973085d4414ba5",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29acce83_d269884e",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/repository/ErrorMessageModelRepository.kt",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-09T17:47:57Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "54bdb5d3_8063869f",
+      "range": {
+        "startLine": 29,
+        "startChar": 73,
+        "endLine": 29,
+        "endChar": 77
+      },
+      "revId": "a3b6ea23963102c47c7a2dd1c3973085d4414ba5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
