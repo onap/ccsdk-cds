@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3732eada_f733060e",
+        "filename": "ms/blueprintsprocessor/application/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/uat/mockk/MockErrorCatalogConfiguration.kt",
+        "patchSetId": 9
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2020-03-10T21:21:13Z",
+      "side": 1,
+      "message": "This is not needed, Use the ErrorCatalogService class injection configuration.",
+      "range": {
+        "startLine": 26,
+        "startChar": 11,
+        "endLine": 26,
+        "endChar": 40
+      },
+      "revId": "4d50a9c49ceccf7e8daddd5fcb865fd971fca36e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7203f7e_db43b6b9",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/domain/Domain.kt",
+        "patchSetId": 9
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2020-03-10T21:21:13Z",
+      "side": 1,
+      "message": "Remove this",
+      "range": {
+        "startLine": 46,
+        "startChar": 1,
+        "endLine": 46,
+        "endChar": 51
+      },
+      "revId": "4d50a9c49ceccf7e8daddd5fcb865fd971fca36e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aeb7265c_f71f908e",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/domain/ErrorMessageModel.kt",
+        "patchSetId": 9
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 4397
+      },
+      "writtenOn": "2020-03-10T21:21:13Z",
+      "side": 1,
+      "message": "Remove this",
+      "range": {
+        "startLine": 44,
+        "startChar": 3,
+        "endLine": 44,
+        "endChar": 51
+      },
+      "revId": "4d50a9c49ceccf7e8daddd5fcb865fd971fca36e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
