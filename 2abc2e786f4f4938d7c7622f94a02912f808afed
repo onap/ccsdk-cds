@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a27048c7_f3b879ae",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/BluePrintException.kt",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-11T17:34:34Z",
+      "side": 1,
+      "message": "We want to avoid refactoring everywhere we have BlueprintException and BlueprintProcessorException.\n\nThere provided in the code and keeping both implementing ErrorCatalogException allow less refactoring.\n\nMaybe we can make BlueprintException heritate BlueprintProcessorException",
+      "parentUuid": "eb78fd31_a3a86b3c",
+      "revId": "2abc2e786f4f4938d7c7622f94a02912f808afed",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d77e4012_10300b5d",
         "filename": "ms/blueprintsprocessor/parent/pom.xml",
         "patchSetId": 14
@@ -33,6 +51,24 @@
       "revId": "2abc2e786f4f4938d7c7622f94a02912f808afed",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2b8240d_010fe205",
+        "filename": "ms/blueprintsprocessor/parent/pom.xml",
+        "patchSetId": 14
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-11T17:34:34Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d77e4012_10300b5d",
+      "revId": "2abc2e786f4f4938d7c7622f94a02912f808afed",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
