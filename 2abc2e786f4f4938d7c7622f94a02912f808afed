@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d77e4012_10300b5d",
+        "filename": "ms/blueprintsprocessor/parent/pom.xml",
+        "patchSetId": 14
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-03-11T16:58:02Z",
+      "side": 1,
+      "message": "Use ${project.version} instead",
+      "revId": "2abc2e786f4f4938d7c7622f94a02912f808afed",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
