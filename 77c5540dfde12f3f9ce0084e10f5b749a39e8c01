@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a429d8da_ac9d89ca",
+        "filename": "ms/blueprintsprocessor/modules/services/execution-service/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/services/execution/ErrorHandling.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-12T15:14:07Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "535490ea_8b0021ae",
+      "range": {
+        "startLine": 22,
+        "startChar": 4,
+        "endLine": 28,
+        "endChar": 1
+      },
+      "revId": "77c5540dfde12f3f9ce0084e10f5b749a39e8c01",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c345f823_54d52a77",
         "filename": "ms/error-catalog/core/src/main/kotlin/org/onap/ccsdk/error/catalog/core/ErrorCatalogException.kt",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2020-03-11T14:13:44Z",
       "side": 1,
       "message": "I think this is not needed, we can use directly from fluent implementation.",
+      "range": {
+        "startLine": 64,
+        "startChar": 3,
+        "endLine": 111,
+        "endChar": 5
+      },
+      "revId": "77c5540dfde12f3f9ce0084e10f5b749a39e8c01",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07e31460_cc64bae8",
+        "filename": "ms/error-catalog/core/src/main/kotlin/org/onap/ccsdk/error/catalog/core/ErrorCatalogException.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-12T15:14:07Z",
+      "side": 1,
+      "message": "Not a good idea to have this in implementation. \nhttp() in implementation class will use updateHttp()\n\nAll the class that inherit this exception will have these basics APIs.",
+      "parentUuid": "c345f823_54d52a77",
       "range": {
         "startLine": 64,
         "startChar": 3,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "c6bad208_81031e88",
+        "filename": "ms/error-catalog/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-12T15:14:07Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "19762513_db27164f",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 38
+      },
+      "revId": "77c5540dfde12f3f9ce0084e10f5b749a39e8c01",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1702edac_31647980",
         "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/ErrorCatalogConfiguration.kt",
         "patchSetId": 1
@@ -91,6 +163,30 @@
       "revId": "77c5540dfde12f3f9ce0084e10f5b749a39e8c01",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f2102b1_c8333aa0",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/ErrorCatalogConfiguration.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-12T15:14:07Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1702edac_31647980",
+      "range": {
+        "startLine": 33,
+        "startChar": 8,
+        "endLine": 33,
+        "endChar": 24
+      },
+      "revId": "77c5540dfde12f3f9ce0084e10f5b749a39e8c01",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
