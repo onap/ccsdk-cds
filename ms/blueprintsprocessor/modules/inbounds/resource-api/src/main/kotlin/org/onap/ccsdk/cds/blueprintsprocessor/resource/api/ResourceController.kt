@@ -103,6 +103,28 @@ open class ResourceController(private var resourceResolutionDBService: ResourceR
     }
 
     @RequestMapping(
+            path = [""],
+            method = [RequestMethod.DELETE], produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    @ApiOperation(value = "Delete resources using resolution key",
+            notes = "Delete all the resources associated to a resolution-key using blueprint metadata, artifact name and the resolution-key.",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('USER')")
+    fun deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey(
+        @ApiParam(value = "Name of the CBA.", required = true)
+        @RequestParam(value = "bpName", required = true) bpName: String,
+        @ApiParam(value = "Version of the CBA.", required = true)
+        @RequestParam(value = "bpVersion", required = true) bpVersion: String,
+        @ApiParam(value = "Artifact name for which to retrieve a resolved resource.", required = true)
+        @RequestParam(value = "artifactName", required = false, defaultValue = "") artifactName: String,
+        @ApiParam(value = "Resolution Key associated with the resolution.", required = true)
+        @RequestParam(value = "resolutionKey", required = true) resolutionKey: String
+    ) = runBlocking {
+        ResponseEntity.ok()
+                .body(resourceResolutionDBService.deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey(bpName, bpVersion, artifactName, resolutionKey))
+    }
+
+    @RequestMapping(
         path = ["/resource"],
         method = [RequestMethod.GET],
         produces = [MediaType.APPLICATION_JSON_VALUE]

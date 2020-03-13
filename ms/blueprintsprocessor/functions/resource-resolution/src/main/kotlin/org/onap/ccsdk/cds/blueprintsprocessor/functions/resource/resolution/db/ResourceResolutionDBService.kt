@@ -198,4 +198,27 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
             throw BluePrintException("Failed to store resource resolution result.", ex)
         }
     }
+
+    /**
+     * This is a deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey method to delete resources
+     * associated to a specific resolution-key
+     *
+     * @param blueprintName name of the CBA
+     * @param blueprintVersion version of the CBA
+     * @param artifactName name of the artifact
+     * @param resolutionKey value of the resolution-key
+     */
+    suspend fun deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey(
+        blueprintName: String,
+        blueprintVersion: String,
+        artifactName: String,
+        resolutionKey: String
+    ) {
+        resourceResolutionRepository.deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey(
+                blueprintName,
+                blueprintVersion,
+                artifactName,
+                resolutionKey
+        )
+    }
 }

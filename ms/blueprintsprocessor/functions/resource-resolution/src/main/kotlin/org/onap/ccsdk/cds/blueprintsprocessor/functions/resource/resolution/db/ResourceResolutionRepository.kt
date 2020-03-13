@@ -17,6 +17,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
+import javax.transaction.Transactional
 
 @Repository
 interface ResourceResolutionRepository : JpaRepository<ResourceResolution, String> {
@@ -59,4 +60,12 @@ interface ResourceResolutionRepository : JpaRepository<ResourceResolution, Strin
         resourceType: String,
         occurrence: Int
     ): List<ResourceResolution>
+
+    @Transactional
+    fun deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey(
+        blueprintName: String?,
+        blueprintVersion: String?,
+        artifactName: String,
+        resolutionKey: String
+    )
 }
