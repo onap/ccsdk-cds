@@ -30,5 +30,5 @@ open class ErrorCatalogConfiguration
 open class ErrorCatalogProperties {
     lateinit var type: String
     lateinit var applicationId: String
-    var defaultDirectory: String = ""
+    var errorDefinitionFileDirectory: String = ""
 }
