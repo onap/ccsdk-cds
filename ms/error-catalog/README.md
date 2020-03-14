@@ -10,6 +10,7 @@
 #    error.catalog.type=properties
 error.catalog.applicationId=cds
 error.catalog.type=properties
+error.catalog.errorDefinitionDir=/opt/app/onap/config
 ```
 
 ##### 2. Generate exception
@@ -34,3 +35,6 @@ e = errorCatalogException.action("message")
 ```
 
 ##### 4. Add a HTTP REST Exception handler
+@RestControllerAdvice("domain.here")
+open class ExceptionHandler(private val errorCatalogService: ErrorCatalogService) :
+        ErrorCatalogExceptionHandler(errorCatalogService)

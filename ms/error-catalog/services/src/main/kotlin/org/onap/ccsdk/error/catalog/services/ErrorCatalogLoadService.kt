@@ -102,7 +102,7 @@ open class ErrorCatalogLoadPropertyService(private var errorCatalogProperties: E
     ErrorCatalogLoadService {
 
     private val propertyFileName = ErrorMessageLibConstants.ERROR_CATALOG_PROPERTIES_FILENAME
-    private var propertyFileBaseDirectory = Paths.get(errorCatalogProperties.defaultDirectory)
+    private var propertyFileBaseDirectory = Paths.get(errorCatalogProperties.errorDefinitionDir)
     private var propertyFilePath = propertyFileBaseDirectory.resolve(propertyFileName)
 
     private var log = logger(ErrorCatalogLoadPropertyService::class)
