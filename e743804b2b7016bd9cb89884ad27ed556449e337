@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8162c965_a6afd32e",
+        "filename": "ms/blueprintsprocessor/application/src/main/resources/application.properties",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2020-03-16T14:43:56Z",
+      "side": 1,
+      "message": "In this case we shall make errorDefinitionDir",
+      "range": {
+        "startLine": 66,
+        "startChar": 14,
+        "endLine": 66,
+        "endChar": 42
+      },
+      "revId": "e743804b2b7016bd9cb89884ad27ed556449e337",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
