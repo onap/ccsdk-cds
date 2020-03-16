@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b1d0d03f_b123e943",
+        "filename": "cds-ui/client/src/app/feature-modules/controller-catalog/search-catalog/search-catalog.component.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 5989
+      },
+      "writtenOn": "2020-03-16T08:18:48Z",
+      "side": 1,
+      "message": "we are using store to listen to any change from another component \nwe mostly inject the store that we want to listen in component not the service \n\nwhat if i want to search by tags and sort by date or search by tags in specific catalogue names",
+      "range": {
+        "startLine": 76,
+        "startChar": 8,
+        "endLine": 96,
+        "endChar": 75
+      },
+      "revId": "e8be13627123dc11c1a9e2f625bc82dbe194aef3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
