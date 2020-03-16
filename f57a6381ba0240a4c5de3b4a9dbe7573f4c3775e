@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "199e2f77_dc80936b",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/ErrorCatalogConfiguration.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2020-03-16T19:59:31Z",
+      "side": 1,
+      "message": "Shall be nullable property",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 33,
+        "endChar": 39
+      },
+      "revId": "f57a6381ba0240a4c5de3b4a9dbe7573f4c3775e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "062a4aeb_e7752ef6",
+        "filename": "ms/error-catalog/services/src/main/kotlin/org/onap/ccsdk/error/catalog/services/ErrorCatalogLoadService.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 4357
+      },
+      "writtenOn": "2020-03-16T19:59:31Z",
+      "side": 1,
+      "message": "Use File extension Utils",
+      "range": {
+        "startLine": 105,
+        "startChar": 44,
+        "endLine": 105,
+        "endChar": 96
+      },
+      "revId": "f57a6381ba0240a4c5de3b4a9dbe7573f4c3775e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
