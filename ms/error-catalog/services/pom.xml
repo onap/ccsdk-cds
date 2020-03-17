@@ -19,7 +19,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.onap.ccsdk.error.catalog</groupId>
+        <groupId>org.onap.ccsdk.cds.error.catalog</groupId>
         <artifactId>error-catalog</artifactId>
         <version>0.7.0-SNAPSHOT</version>
     </parent>
@@ -31,7 +31,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.onap.ccsdk.error.catalog</groupId>
+            <groupId>org.onap.ccsdk.cds.error.catalog</groupId>
             <artifactId>error-catalog-core</artifactId>
         </dependency>
     </dependencies>
