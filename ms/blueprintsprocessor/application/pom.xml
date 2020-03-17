@@ -68,7 +68,7 @@
 
         <!-- Error Catalog Services -->
         <dependency>
-            <groupId>org.onap.ccsdk.error.catalog</groupId>
+            <groupId>org.onap.ccsdk.cds.error.catalog</groupId>
             <artifactId>error-catalog-services</artifactId>
         </dependency>
 

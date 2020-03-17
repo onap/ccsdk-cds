@@ -294,7 +294,7 @@
 
             <!-- Error Catalog -->
             <dependency>
-                <groupId>org.onap.ccsdk.error.catalog</groupId>
+                <groupId>org.onap.ccsdk.cds.error.catalog</groupId>
                 <artifactId>error-catalog-core</artifactId>
                 <version>${error.catalog.version}</version>
                 <exclusions>
@@ -305,7 +305,7 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.error.catalog</groupId>
+                <groupId>org.onap.ccsdk.cds.error.catalog</groupId>
                 <artifactId>error-catalog-services</artifactId>
                 <version>${error.catalog.version}</version>
                 <exclusions>
@@ -716,7 +716,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.onap.ccsdk.error.catalog</groupId>
+            <groupId>org.onap.ccsdk.cds.error.catalog</groupId>
             <artifactId>error-catalog-core</artifactId>
         </dependency>
     </dependencies>

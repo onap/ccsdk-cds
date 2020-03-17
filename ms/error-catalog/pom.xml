@@ -25,7 +25,7 @@
         <relativePath>..</relativePath>
     </parent>
 
-    <groupId>org.onap.ccsdk.error.catalog</groupId>
+    <groupId>org.onap.ccsdk.cds.error.catalog</groupId>
     <artifactId>error-catalog</artifactId>
     <packaging>pom</packaging>
 
@@ -41,12 +41,12 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.onap.ccsdk.error.catalog</groupId>
+                <groupId>org.onap.ccsdk.cds.error.catalog</groupId>
                 <artifactId>error-catalog-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.error.catalog</groupId>
+                <groupId>org.onap.ccsdk.cds.error.catalog</groupId>
                 <artifactId>error-catalog-services</artifactId>
                 <version>${project.version}</version>
             </dependency>
