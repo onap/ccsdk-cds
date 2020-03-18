@@ -22,6 +22,30 @@
       "revId": "e8be13627123dc11c1a9e2f625bc82dbe194aef3",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6f2d8c8_7c5a98c0",
+        "filename": "cds-ui/client/src/app/feature-modules/controller-catalog/search-catalog/search-catalog.component.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 2975
+      },
+      "writtenOn": "2020-03-18T18:33:56Z",
+      "side": 1,
+      "message": "We have rarely used store concept in client UI code. We don\u0027t have sort functionality in this client UI. We are working on all these concepts and functionalities in new designer-client UI.",
+      "parentUuid": "b1d0d03f_b123e943",
+      "range": {
+        "startLine": 76,
+        "startChar": 8,
+        "endLine": 96,
+        "endChar": 75
+      },
+      "revId": "e8be13627123dc11c1a9e2f625bc82dbe194aef3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
