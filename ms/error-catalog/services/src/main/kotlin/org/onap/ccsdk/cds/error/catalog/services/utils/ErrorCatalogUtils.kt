@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.onap.ccsdk.error.catalog.services.utils
+package org.onap.ccsdk.cds.error.catalog.services.utils
 
 object ErrorCatalogUtils {
     private const val REGEX_PATTERN = "^cause=(.*),action=(.*)"

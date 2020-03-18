@@ -29,7 +29,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.utils.determineHtt
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.httpProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
-import org.onap.ccsdk.error.catalog.core.ErrorCatalogCodes
+import org.onap.ccsdk.cds.error.catalog.core.ErrorCatalogCodes
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
