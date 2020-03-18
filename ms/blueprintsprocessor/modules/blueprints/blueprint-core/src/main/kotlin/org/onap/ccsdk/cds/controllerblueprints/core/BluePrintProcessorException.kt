@@ -17,9 +17,9 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core
 
-import org.onap.ccsdk.error.catalog.core.ErrorCatalogException
-import org.onap.ccsdk.error.catalog.core.ErrorCatalogExceptionFluent
-import org.onap.ccsdk.error.catalog.core.ErrorMessage
+import org.onap.ccsdk.cds.error.catalog.core.ErrorCatalogException
+import org.onap.ccsdk.cds.error.catalog.core.ErrorCatalogExceptionFluent
+import org.onap.ccsdk.cds.error.catalog.core.ErrorMessage
 
 /**
  *
@@ -134,5 +134,6 @@ private fun BluePrintProcessorException.addDomainAndErrorMessage(
     message: String,
     cause: Throwable = Throwable()
 ): BluePrintProcessorException {
-    return this.addSubError(ErrorMessage(domain, message, cause.message ?: "")).domain(domain)
+    return this.addSubError(ErrorMessage(domain, message, cause.message
+            ?: "")).domain(domain)
 }
