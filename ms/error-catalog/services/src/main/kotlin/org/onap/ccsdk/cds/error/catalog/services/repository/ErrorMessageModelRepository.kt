@@ -14,9 +14,9 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.error.catalog.services.repository
+package org.onap.ccsdk.cds.error.catalog.services.repository
 
-import org.onap.ccsdk.error.catalog.services.domain.Domain
+import org.onap.ccsdk.cds.error.catalog.services.domain.ErrorMessageModel
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
@@ -24,22 +24,13 @@ import org.springframework.stereotype.Repository
  * @param <T> Model
  */
 @Repository
-interface DomainRepository : JpaRepository<Domain, String> {
+interface ErrorMessageModelRepository : JpaRepository<ErrorMessageModel, String> {
 
     /**
-     * This is a findByNameAndApplicationId method
+     * This is a findByDomains method
      *
-     * @param name name
-     * @param applicationId applicationId
-     * @return Optional<T>
-     */
-    fun findByNameAndApplicationId(name: String, applicationId: String): Domain?
-
-    /**
-     * This is a findAllByApplicationId method
-     *
-     * @param applicationId applicationId
+     * @param domainId domainId
      * @return List<T>
      */
-    fun findAllByApplicationId(applicationId: String): List<Domain>
+    fun findByDomainsId(domainId: String): List<ErrorMessageModel>
 }

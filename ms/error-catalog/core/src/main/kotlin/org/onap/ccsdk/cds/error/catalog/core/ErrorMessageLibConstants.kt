@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.error.catalog.core
+package org.onap.ccsdk.cds.error.catalog.core
 
 object ErrorMessageLibConstants {
     const val ERROR_CATALOG_DOMAIN = "org.onap.ccsdk.error.catalog"
@@ -22,6 +22,7 @@ object ErrorMessageLibConstants {
     const val ERROR_CATALOG_TYPE_PROPERTIES = "properties"
     const val ERROR_CATALOG_TYPE_DB = "DB"
     const val ERROR_CATALOG_PROPERTIES_FILENAME = "error-messages_en.properties"
+    const val ERROR_CATALOG_PROPERTIES_DIRECTORY = "/opt/app/onap/config/"
     const val ERROR_CATALOG_MODELS = "org.onap.ccsdk.error.catalog.domain"
     const val ERROR_CATALOG_REPOSITORY = "org.onap.ccsdk.error.catalog.repository"
     const val ERROR_CATALOG_DEFAULT_ERROR_CODE = 500

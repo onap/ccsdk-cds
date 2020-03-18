@@ -14,11 +14,11 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.error.catalog.core
+package org.onap.ccsdk.cds.error.catalog.core
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import org.slf4j.event.Level
-import org.onap.ccsdk.error.catalog.core.ErrorMessageLibConstants.ERROR_CATALOG_DEFAULT_ERROR_CODE
+import org.onap.ccsdk.cds.error.catalog.core.ErrorMessageLibConstants.ERROR_CATALOG_DEFAULT_ERROR_CODE
 import java.time.LocalDateTime
 
 open class ErrorPayload {

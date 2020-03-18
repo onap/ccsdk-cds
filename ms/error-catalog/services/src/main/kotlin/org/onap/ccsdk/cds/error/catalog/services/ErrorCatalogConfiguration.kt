@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.onap.ccsdk.error.catalog.services
+package org.onap.ccsdk.cds.error.catalog.services
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -30,5 +30,5 @@ open class ErrorCatalogConfiguration
 open class ErrorCatalogProperties {
     lateinit var type: String
     lateinit var applicationId: String
-    var errorDefinitionDir: String = ""
+    var errorDefinitionDir: String? = null
 }
