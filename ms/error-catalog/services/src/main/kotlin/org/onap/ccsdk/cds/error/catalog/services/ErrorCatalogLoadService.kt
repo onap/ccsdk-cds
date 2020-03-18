@@ -15,14 +15,15 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.error.catalog.services
+package org.onap.ccsdk.cds.error.catalog.services
 
-import org.onap.ccsdk.error.catalog.core.ErrorMessageLibConstants
-import org.onap.ccsdk.error.catalog.core.logger
-import org.onap.ccsdk.error.catalog.services.domain.ErrorMessageModel
+import org.onap.ccsdk.cds.error.catalog.core.ErrorMessageLibConstants
+import org.onap.ccsdk.cds.error.catalog.core.logger
+import org.onap.ccsdk.cds.error.catalog.services.domain.ErrorMessageModel
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
+import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream
@@ -99,11 +100,10 @@ open class ErrorCatalogLoadDBService(
     havingValue = ErrorMessageLibConstants.ERROR_CATALOG_TYPE_PROPERTIES
 )
 open class ErrorCatalogLoadPropertyService(private var errorCatalogProperties: ErrorCatalogProperties) :
-    ErrorCatalogLoadService {
+        ErrorCatalogLoadService {
 
     private val propertyFileName = ErrorMessageLibConstants.ERROR_CATALOG_PROPERTIES_FILENAME
-    private var propertyFileBaseDirectory = Paths.get(errorCatalogProperties.errorDefinitionDir)
-    private var propertyFilePath = propertyFileBaseDirectory.resolve(propertyFileName)
+    private lateinit var propertyFile: File
 
     private var log = logger(ErrorCatalogLoadPropertyService::class)
 
@@ -111,6 +111,8 @@ open class ErrorCatalogLoadPropertyService(private var errorCatalogProperties: E
 
     override suspend fun loadErrorCatalog() {
         log.info("Application ID: ${errorCatalogProperties.applicationId} > Initializing error catalog message from properties...")
+        val propertyDir = errorCatalogProperties.errorDefinitionDir ?: ErrorMessageLibConstants.ERROR_CATALOG_PROPERTIES_DIRECTORY
+        propertyFile = Paths.get(propertyDir, propertyFileName).toFile().normalize()
         properties = parseErrorMessagesProps()
     }
 
@@ -129,14 +131,14 @@ open class ErrorCatalogLoadPropertyService(private var errorCatalogProperties: E
         var inputStream: InputStream? = null
         val props = Properties()
         try {
-            inputStream = propertyFilePath.toFile().inputStream()
+            inputStream = propertyFile.inputStream()
             props.load(inputStream)
         } catch (e: FileNotFoundException) {
-            log.error("Application ID: ${errorCatalogProperties.applicationId} > Property File '$propertyFileName}' " +
+            log.error("Application ID: ${errorCatalogProperties.applicationId} > Property File '$propertyFileName' " +
                     "not found in the application directory.")
         } catch (e: IOException) {
             log.error("Application ID: ${errorCatalogProperties.applicationId} > Fail to load property file " +
-                    "'$propertyFileName}' for message errors.")
+                    "'$propertyFileName' for message errors.")
         } finally {
             inputStream!!.close()
         }

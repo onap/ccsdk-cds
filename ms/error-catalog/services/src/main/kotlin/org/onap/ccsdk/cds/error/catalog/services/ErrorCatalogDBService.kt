@@ -15,13 +15,13 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.error.catalog.services
+package org.onap.ccsdk.cds.error.catalog.services
 
-import org.onap.ccsdk.error.catalog.core.ErrorMessageLibConstants
-import org.onap.ccsdk.error.catalog.services.domain.Domain
-import org.onap.ccsdk.error.catalog.services.domain.ErrorMessageModel
-import org.onap.ccsdk.error.catalog.services.repository.DomainRepository
-import org.onap.ccsdk.error.catalog.services.repository.ErrorMessageModelRepository
+import org.onap.ccsdk.cds.error.catalog.core.ErrorMessageLibConstants
+import org.onap.ccsdk.cds.error.catalog.services.domain.Domain
+import org.onap.ccsdk.cds.error.catalog.services.domain.ErrorMessageModel
+import org.onap.ccsdk.cds.error.catalog.services.repository.DomainRepository
+import org.onap.ccsdk.cds.error.catalog.services.repository.ErrorMessageModelRepository
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable

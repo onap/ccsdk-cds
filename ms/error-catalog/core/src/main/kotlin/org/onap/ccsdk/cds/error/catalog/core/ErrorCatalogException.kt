@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.error.catalog.core
+package org.onap.ccsdk.cds.error.catalog.core
 
 interface ErrorCatalogExceptionFluent<T> {
     fun code(code: Int): T

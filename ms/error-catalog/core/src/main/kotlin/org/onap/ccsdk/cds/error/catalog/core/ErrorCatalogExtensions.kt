@@ -14,12 +14,19 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.error.catalog.services
+package org.onap.ccsdk.cds.error.catalog.core
 
-import org.onap.ccsdk.error.catalog.core.ErrorPayload
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
+import org.slf4j.LoggerFactory
+import org.slf4j.helpers.MessageFormatter
+import kotlin.reflect.KClass
 
-fun ErrorPayload.toResponseEntity(): ResponseEntity<ErrorPayload> {
-    return ResponseEntity(this, HttpStatus.resolve(this.code)!!)
+fun <T : Any> logger(clazz: T) = LoggerFactory.getLogger(clazz.javaClass)!!
+
+fun <T : KClass<*>> logger(clazz: T) = LoggerFactory.getLogger(clazz.java)!!
+
+fun format(message: String, vararg args: Any?): String {
+    if (args != null && args.isNotEmpty()) {
+        return MessageFormatter.arrayFormat(message, args).message
+    }
+    return message
 }
