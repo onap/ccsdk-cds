@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "8ab75c9e_9c0785df",
+        "filename": "ms/blueprintsprocessor/modules/services/execution-service/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/services/execution/ErrorHandling.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 4615
+      },
+      "writtenOn": "2020-03-19T19:53:49Z",
+      "side": 1,
+      "message": "From Execution service we can access other modules. That\u0027s is why we need to maintain a list of those domains here. Or having them in Core will be also good.",
+      "parentUuid": "a429d8da_ac9d89ca",
+      "range": {
+        "startLine": 22,
+        "startChar": 4,
+        "endLine": 28,
+        "endChar": 1
+      },
+      "revId": "77c5540dfde12f3f9ce0084e10f5b749a39e8c01",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c345f823_54d52a77",
         "filename": "ms/error-catalog/core/src/main/kotlin/org/onap/ccsdk/error/catalog/core/ErrorCatalogException.kt",
         "patchSetId": 1
