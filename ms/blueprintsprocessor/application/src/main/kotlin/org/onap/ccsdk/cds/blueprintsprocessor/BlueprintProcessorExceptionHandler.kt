@@ -16,8 +16,8 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor
 
-import org.onap.ccsdk.error.catalog.services.ErrorCatalogExceptionHandler
-import org.onap.ccsdk.error.catalog.services.ErrorCatalogService
+import org.onap.ccsdk.cds.error.catalog.services.ErrorCatalogExceptionHandler
+import org.onap.ccsdk.cds.error.catalog.services.ErrorCatalogService
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice("org.onap.ccsdk.cds")

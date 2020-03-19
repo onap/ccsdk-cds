@@ -31,7 +31,7 @@ import org.springframework.context.annotation.ComponentScan
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = [DataSourceAutoConfiguration::class, HazelcastAutoConfiguration::class])
 @ComponentScan(
-    basePackages = ["org.onap.ccsdk.error.catalog",
+    basePackages = ["org.onap.ccsdk.cds.error.catalog",
         "org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"]
 )
 open class BlueprintProcessorApplication

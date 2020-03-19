@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.error.catalog.services.domain
+package org.onap.ccsdk.cds.error.catalog.services.domain
 
 import java.io.Serializable
 import java.util.UUID

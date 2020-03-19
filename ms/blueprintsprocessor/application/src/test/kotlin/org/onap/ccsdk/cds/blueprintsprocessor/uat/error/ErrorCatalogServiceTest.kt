@@ -20,11 +20,11 @@ import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.ErrorCatalogTestConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.grpcProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.httpProcessorException
-import org.onap.ccsdk.error.catalog.core.ErrorCatalog
-import org.onap.ccsdk.error.catalog.core.ErrorCatalogCodes
-import org.onap.ccsdk.error.catalog.core.ErrorMessage
-import org.onap.ccsdk.error.catalog.core.ErrorPayload
-import org.onap.ccsdk.error.catalog.services.ErrorCatalogService
+import org.onap.ccsdk.cds.error.catalog.core.ErrorCatalog
+import org.onap.ccsdk.cds.error.catalog.core.ErrorCatalogCodes
+import org.onap.ccsdk.cds.error.catalog.core.ErrorMessage
+import org.onap.ccsdk.cds.error.catalog.core.ErrorPayload
+import org.onap.ccsdk.cds.error.catalog.services.ErrorCatalogService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource

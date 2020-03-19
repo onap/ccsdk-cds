@@ -14,10 +14,10 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.error.catalog.services
+package org.onap.ccsdk.cds.error.catalog.services
 
-import org.onap.ccsdk.error.catalog.core.ErrorCatalogException
-import org.onap.ccsdk.error.catalog.core.ErrorPayload
+import org.onap.ccsdk.cds.error.catalog.core.ErrorCatalogException
+import org.onap.ccsdk.cds.error.catalog.core.ErrorPayload
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 
