@@ -33,7 +33,8 @@ import java.util.Date
  */
 
 open class ExecutionServiceInput {
-
+    @get:ApiModelProperty(required = false, hidden = true)
+    var correlationUUID: String? = null
     @get:ApiModelProperty(required = true, value = "Headers providing request context.")
     lateinit var commonHeader: CommonHeader
     @get:ApiModelProperty(required = true, value = "Provide information about the action to execute.")
@@ -51,6 +52,8 @@ open class ExecutionServiceInput {
 }
 
 open class ExecutionServiceOutput {
+    @get:ApiModelProperty(required = false, hidden = true)
+    var correlationUUID: String? = null
     @get:ApiModelProperty(required = true, value = "Headers providing request context.")
     lateinit var commonHeader: CommonHeader
     @get:ApiModelProperty(required = true, value = "Provide information about the action to execute.")
