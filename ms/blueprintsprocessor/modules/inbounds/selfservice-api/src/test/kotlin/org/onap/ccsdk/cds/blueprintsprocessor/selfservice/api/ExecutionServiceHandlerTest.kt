@@ -16,6 +16,11 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 
+import io.mockk.verify
+import io.mockk.coVerify
+import io.mockk.Runs
+import io.mockk.coEvery
+import io.mockk.just
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -23,6 +28,7 @@ import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ActionIdentifiers
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.CommonHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractServiceFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
@@ -62,11 +68,50 @@ class ExecutionServiceHandlerTest {
             }
         }
         runBlocking {
-            val executionServiceHandler = ExecutionServiceHandler(mockk(), mockk(), mockk())
+            val executionServiceHandler = ExecutionServiceHandler(mockk(), mockk(), mockk(), mockk())
             val isServiceFunction = executionServiceHandler.checkServiceFunction(executionServiceInput)
             assertTrue(isServiceFunction, "failed to checkServiceFunction")
             val executionServiceOutput = executionServiceHandler.executeServiceFunction(executionServiceInput)
             assertNotNull(executionServiceOutput, "failed to get executionServiceOutput")
+        }
+    }
+
+    @Test
+    fun testPublishAuditFunction() {
+        val executionServiceInput = ExecutionServiceInput().apply {
+            commonHeader = CommonHeader().apply {
+                requestId = "1234"
+                subRequestId = "1234-12"
+                originatorId = "cds-test"
+            }
+            actionIdentifiers = ActionIdentifiers().apply {
+                blueprintName = "default"
+                blueprintVersion = "1.0.0"
+                actionName = "mock-service-action"
+            }
+        }
+
+        val publishAuditService = mockk<KafkaPublishAuditService>(relaxed = true)
+        val executionServiceHandler = ExecutionServiceHandler(
+                mockk(),
+                mockk(),
+                mockk(),
+                publishAuditService
+        )
+
+        coEvery { publishAuditService.publish(ExecutionServiceInput()) } just Runs
+
+        var executionServiceOutput: ExecutionServiceOutput? = null
+        runBlocking {
+            executionServiceOutput = executionServiceHandler.doProcess(executionServiceInput)
+        }
+
+        coVerify {
+            publishAuditService.publish(executionServiceInput)
+        }
+
+        verify {
+            publishAuditService.publish(executionServiceOutput!!)
         }
     }
 }
