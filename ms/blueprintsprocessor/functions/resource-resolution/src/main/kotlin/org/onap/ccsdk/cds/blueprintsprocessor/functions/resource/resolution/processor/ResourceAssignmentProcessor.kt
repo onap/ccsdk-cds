@@ -40,6 +40,7 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
 
     lateinit var raRuntimeService: ResourceAssignmentRuntimeService
     var resourceDictionaries: MutableMap<String, ResourceDefinition> = hashMapOf()
+    var resourceAssignments: MutableList<ResourceAssignment> = arrayListOf()
 
     var scriptPropertyInstances: MutableMap<String, Any> = hashMapOf()
     lateinit var scriptType: String
@@ -104,7 +105,7 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
     }
 
     open suspend fun resolveFromInputKeyMapping(valueToResolve: String, keyMapping: MutableMap<String, JsonNode>):
-            String {
+        String {
         if (valueToResolve.isEmpty() || !valueToResolve.contains("$")) {
             return valueToResolve
         }
