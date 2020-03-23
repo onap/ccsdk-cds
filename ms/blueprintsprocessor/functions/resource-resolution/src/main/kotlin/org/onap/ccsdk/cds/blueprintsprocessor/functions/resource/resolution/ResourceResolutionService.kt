@@ -78,7 +78,7 @@ interface ResourceResolutionService {
         resolveDefinition: String,
         sources: List<String>
     ):
-            MutableMap<String, JsonNode>
+        MutableMap<String, JsonNode>
 
     suspend fun resolveResourceAssignments(
         blueprintRuntimeService: BluePrintRuntimeService<*>,
@@ -159,7 +159,7 @@ open class ResourceResolutionServiceImpl(
 
         val resourceAssignments: MutableList<ResourceAssignment> =
             JacksonUtils.getListFromJson(resourceAssignmentContent, ResourceAssignment::class.java)
-                    as? MutableList<ResourceAssignment>
+                as? MutableList<ResourceAssignment>
                 ?: throw BluePrintProcessorException("couldn't get Dictionary Definitions")
 
         if (isToStore(properties)) {
@@ -185,20 +185,24 @@ open class ResourceResolutionServiceImpl(
             properties
         )
 
-        val resolutionSummary = properties.getOrDefault(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_SUMMARY, false) as Boolean
+        val resolutionSummary = properties.getOrDefault(
+            ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_SUMMARY,
+            false
+        ) as Boolean
         val resolvedParamJsonContent =
             ResourceAssignmentUtils.generateResourceDataForAssignments(resourceAssignments.toList())
-        val artifactTemplateDefinition = bluePrintRuntimeService.bluePrintContext().checkNodeTemplateArtifact(nodeTemplateName, artifactTemplate)
+        val artifactTemplateDefinition =
+            bluePrintRuntimeService.bluePrintContext().checkNodeTemplateArtifact(nodeTemplateName, artifactTemplate)
 
         val resolvedContent = when {
             artifactTemplateDefinition != null -> {
                 blueprintTemplateService.generateContent(
-                        bluePrintRuntimeService, nodeTemplateName,
-                        artifactTemplate, resolvedParamJsonContent, false,
-                        mutableMapOf(
-                                ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE to
-                                        properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE].asJsonPrimitive()
-                        )
+                    bluePrintRuntimeService, nodeTemplateName,
+                    artifactTemplate, resolvedParamJsonContent, false,
+                    mutableMapOf(
+                        ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE to
+                            properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE].asJsonPrimitive()
+                    )
                 )
             }
             resolutionSummary -> {
@@ -277,13 +281,14 @@ open class ResourceResolutionServiceImpl(
                                 applicationContext.getBean(processorName) as? ResourceAssignmentProcessor
                                     ?: throw BluePrintProcessorException(
                                         "failed to get resource processor ($processorName) " +
-                                                "for resource assignment(${resourceAssignment.name})"
+                                            "for resource assignment(${resourceAssignment.name})"
                                     )
                             try {
                                 // Set BluePrint Runtime Service
                                 resourceAssignmentProcessor.raRuntimeService = resourceAssignmentRuntimeService
                                 // Set Resource Dictionaries
                                 resourceAssignmentProcessor.resourceDictionaries = resourceDefinitions
+                                resourceAssignmentProcessor.resourceAssignments = resourceAssignments
                                 // Invoke Apply Method
                                 resourceAssignmentProcessor.applyNB(resourceAssignment)
 
@@ -347,7 +352,7 @@ open class ResourceResolutionServiceImpl(
     // Check whether to store or not the resolution of resource and template
     private fun isToStore(properties: Map<String, Any>): Boolean {
         return properties.containsKey(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT) &&
-                properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] as Boolean
+            properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] as Boolean
     }
 
     // Check whether resolution already exist in the database for the specified resolution-key or resourceId/resourceType
@@ -389,7 +394,7 @@ open class ResourceResolutionServiceImpl(
             if (existingResourceAssignments.isNotEmpty()) {
                 log.info(
                     "Resolution with resourceId=($resourceId) and resourceType=($resourceType) already exist - will resolve " +
-                            "all resources not already resolved."
+                        "all resources not already resolved."
                 )
             }
             return existingResourceAssignments
@@ -426,9 +431,9 @@ open class ResourceResolutionServiceImpl(
     // Comparision between what we have in the database vs what we have to assign.
     private fun compareOne(resourceResolution: ResourceResolution, resourceAssignment: ResourceAssignment): Boolean {
         return (resourceResolution.name == resourceAssignment.name &&
-                resourceResolution.dictionaryName == resourceAssignment.dictionaryName &&
-                resourceResolution.dictionarySource == resourceAssignment.dictionarySource &&
-                resourceResolution.dictionaryVersion == resourceAssignment.version)
+            resourceResolution.dictionaryName == resourceAssignment.dictionaryName &&
+            resourceResolution.dictionarySource == resourceAssignment.dictionarySource &&
+            resourceResolution.dictionaryVersion == resourceAssignment.version)
     }
 
     private fun exposeOccurrencePropertyInResourceAssignments(
