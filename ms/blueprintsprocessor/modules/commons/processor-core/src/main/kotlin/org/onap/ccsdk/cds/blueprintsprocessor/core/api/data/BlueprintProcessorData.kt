@@ -99,6 +99,8 @@ open class CommonHeader {
     lateinit var subRequestId: String
     @get:ApiModelProperty(required = false, hidden = true)
     var flags: Flags? = null
+    @get:ApiModelProperty(required = false, hidden = true)
+    var correlationId: String? = null
 }
 
 open class Flags {

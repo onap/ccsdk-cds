@@ -37,6 +37,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyS
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import java.util.UUID
 import java.util.stream.Collectors
 
 @Service
@@ -44,7 +45,8 @@ class ExecutionServiceHandler(
     private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
     private val blueprintsProcessorCatalogService: BluePrintCatalogService,
     private val bluePrintWorkflowExecutionService:
-    BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput>
+    BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput>,
+    private val publishAuditService: PublishAuditService
 ) {
 
     private val log = LoggerFactory.getLogger(ExecutionServiceHandler::class.toString())
@@ -67,33 +69,46 @@ class ExecutionServiceHandler(
                 responseObserver.onNext(executionServiceOutput.toProto())
                 responseObserver.onCompleted()
             }
-            else -> responseObserver.onNext(
-                response(
-                    executionServiceInput,
-                    "Failed to process request, 'actionIdentifiers.mode' not specified. Valid value are: 'sync' or 'async'.",
-                    true
-                ).toProto()
-            )
+            else -> {
+                val correlationId = UUID.randomUUID().toString()
+                publishAuditService.publish(correlationId, executionServiceInput)
+                val executionServiceOutput = response(
+                        executionServiceInput,
+                        "Failed to process request, 'actionIdentifiers.mode' not specified. Valid value are: 'sync' or 'async'.",
+                        true
+                )
+                publishAuditService.publish(correlationId, executionServiceOutput)
+                responseObserver.onNext(
+                        executionServiceOutput.toProto()
+                )
+            }
         }
     }
 
     suspend fun doProcess(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
         val requestId = executionServiceInput.commonHeader.requestId
-        log.info("processing request id $requestId")
+        val correlationId = UUID.randomUUID().toString()
         val actionIdentifiers = executionServiceInput.actionIdentifiers
         val blueprintName = actionIdentifiers.blueprintName
         val blueprintVersion = actionIdentifiers.blueprintVersion
+
+        var executionServiceOutput: ExecutionServiceOutput
+
+        log.info("processing request id $requestId")
+
         try {
             /** Check Blueprint is needed for this request */
             if (checkServiceFunction(executionServiceInput)) {
-                return executeServiceFunction(executionServiceInput)
+                publishAuditService.publish(correlationId, executionServiceInput)
+                executionServiceOutput = executeServiceFunction(executionServiceInput)
             } else {
                 val basePath = blueprintsProcessorCatalogService.getFromDatabase(blueprintName, blueprintVersion)
                 log.info("blueprint base path $basePath")
 
                 val blueprintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(requestId, basePath.toString())
 
-                val output = bluePrintWorkflowExecutionService.executeBluePrintWorkflow(
+                publishAuditService.publish(correlationId, executionServiceInput, blueprintRuntimeService)
+                executionServiceOutput = bluePrintWorkflowExecutionService.executeBluePrintWorkflow(
                     blueprintRuntimeService,
                     executionServiceInput, hashMapOf()
                 )
@@ -101,14 +116,16 @@ class ExecutionServiceHandler(
                 val errors = blueprintRuntimeService.getBluePrintError().errors
                 if (errors.isNotEmpty()) {
                     val errorMessage = errors.stream().map { it.toString() }.collect(Collectors.joining(", "))
-                    setErrorStatus(errorMessage, output.status)
+                    setErrorStatus(errorMessage, executionServiceOutput.status)
                 }
-                return output
             }
         } catch (e: Exception) {
             log.error("fail processing request id $requestId", e)
-            return response(executionServiceInput, e.localizedMessage ?: e.message ?: e.toString(), true)
+            executionServiceOutput = response(executionServiceInput, e.localizedMessage ?: e.message ?: e.toString(), true)
         }
+
+        publishAuditService.publish(correlationId, executionServiceOutput)
+        return executionServiceOutput
     }
 
     /** If the blueprint name is default, It means no blueprint is needed for the execution */
