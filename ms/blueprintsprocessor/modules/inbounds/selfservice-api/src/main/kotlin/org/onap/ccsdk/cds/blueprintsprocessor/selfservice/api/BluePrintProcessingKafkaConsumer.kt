@@ -51,15 +51,13 @@ open class BluePrintProcessingKafkaConsumer(
 
     companion object {
         const val CONSUMER_SELECTOR = "self-service-api"
-        const val PRODUCER_SELECTOR = "self-service-api"
     }
 
     @EventListener(ApplicationReadyEvent::class)
     fun setupMessageListener() = runBlocking {
         try {
             log.info(
-                "Setting up message consumer($CONSUMER_SELECTOR) and " +
-                        "message producer($PRODUCER_SELECTOR)..."
+                "Setting up message consumer($CONSUMER_SELECTOR)"
             )
 
             /** Get the Message Consumer Service **/
@@ -96,10 +94,7 @@ open class BluePrintProcessingKafkaConsumer(
                             ph.register()
                             log.trace("Consumed Message : $message")
                             val executionServiceInput = message.jsonAsType<ExecutionServiceInput>()
-                            val executionServiceOutput = executionServiceHandler.doProcess(executionServiceInput)
-                            // TODO("In future, Message publisher configuration vary with respect to request")
-                            /** Send the response message */
-                            blueprintMessageProducerService.sendMessage(executionServiceOutput)
+                            executionServiceHandler.doProcess(executionServiceInput)
                         } catch (e: Exception) {
                             log.error("failed in processing the consumed message : $message", e)
                         } finally {
@@ -110,8 +105,7 @@ open class BluePrintProcessingKafkaConsumer(
             }
         } catch (e: Exception) {
             log.error(
-                "failed to start message consumer($CONSUMER_SELECTOR) and " +
-                        "message producer($PRODUCER_SELECTOR) ", e
+                "failed to start message consumer($CONSUMER_SELECTOR) ", e
             )
         }
     }
@@ -120,8 +114,7 @@ open class BluePrintProcessingKafkaConsumer(
     fun shutdownMessageListener() = runBlocking {
         try {
             log.info(
-                "Shutting down message consumer($CONSUMER_SELECTOR) and " +
-                        "message producer($PRODUCER_SELECTOR)..."
+                "Shutting down message consumer($CONSUMER_SELECTOR)"
             )
             blueprintMessageConsumerService.shutDown()
             ph.arriveAndAwaitAdvance()
