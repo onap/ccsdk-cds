@@ -25,6 +25,7 @@ import io.swagger.annotations.ApiModelProperty
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import java.util.Date
+import java.util.UUID
 
 /**
  * BlueprintProcessorData
@@ -33,7 +34,8 @@ import java.util.Date
  */
 
 open class ExecutionServiceInput {
-
+    @get:ApiModelProperty(required = false, hidden = true)
+    var correlationUUID: String = UUID.randomUUID().toString()
     @get:ApiModelProperty(required = true, value = "Headers providing request context.")
     lateinit var commonHeader: CommonHeader
     @get:ApiModelProperty(required = true, value = "Provide information about the action to execute.")
@@ -51,6 +53,8 @@ open class ExecutionServiceInput {
 }
 
 open class ExecutionServiceOutput {
+    @get:ApiModelProperty(required = false, hidden = true)
+    var correlationUUID: String? = null
     @get:ApiModelProperty(required = true, value = "Headers providing request context.")
     lateinit var commonHeader: CommonHeader
     @get:ApiModelProperty(required = true, value = "Provide information about the action to execute.")
