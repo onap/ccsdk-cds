@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "014c2b52_83c467de",
+        "filename": "ms/blueprintsprocessor/application/src/test/resources/application.properties",
+        "patchSetId": 4
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 5732
+      },
+      "writtenOn": "2020-03-24T21:17:35Z",
+      "side": 1,
+      "message": "please add a differentiator for audit and rename input to request and output to response. It needs to be clear it\u0027s related to the audit service.\n\nBy default we should not be using kafka, we should be using the NoPublishAuditService one.",
+      "range": {
+        "startLine": 86,
+        "startChar": 52,
+        "endLine": 86,
+        "endChar": 53
+      },
+      "revId": "a263cdbd520786ae4b6dd80312ca2f6ee407f8c9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22065b36_9af98bce",
+        "filename": "ms/blueprintsprocessor/modules/commons/processor-core/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/core/api/data/BlueprintProcessorData.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 5732
+      },
+      "writtenOn": "2020-03-24T21:17:35Z",
+      "side": 1,
+      "message": "Can we make this not nullable and have the default value to UUID.randomUUID().toString(). This is linked with the comment in ExecutionServiceHandler",
+      "range": {
+        "startLine": 103,
+        "startChar": 29,
+        "endLine": 103,
+        "endChar": 37
+      },
+      "revId": "a263cdbd520786ae4b6dd80312ca2f6ee407f8c9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b486b8d_24d86157",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/selfservice-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/selfservice/api/ExecutionServiceHandler.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 5732
+      },
+      "writtenOn": "2020-03-24T21:17:35Z",
+      "side": 1,
+      "message": "Maybe we should enrich executionServiceInput before we send it to the audit service. Then the audit service just have to read the unique id from the executionServiceInput. Could we even have this field be populated automatically as the default value? This way it gets automatically enriched.",
+      "range": {
+        "startLine": 74,
+        "startChar": 44,
+        "endLine": 74,
+        "endChar": 57
+      },
+      "revId": "a263cdbd520786ae4b6dd80312ca2f6ee407f8c9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3072204_3f2fccf2",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/selfservice-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/selfservice/api/KafkaPublishAuditService.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 5732
+      },
+      "writtenOn": "2020-03-24T21:17:35Z",
+      "side": 1,
+      "message": "We should use a specific configuration for audit, this is the configuration to listen to request coming from kafka which is different, they are not related even if they both use kafka",
+      "range": {
+        "startLine": 41,
+        "startChar": 17,
+        "endLine": 41,
+        "endChar": 81
+      },
+      "revId": "a263cdbd520786ae4b6dd80312ca2f6ee407f8c9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61ab029a_c78d70ce",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/selfservice-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/selfservice/api/PublishAuditService.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 5732
+      },
+      "writtenOn": "2020-03-24T21:17:35Z",
+      "side": 1,
+      "message": "Why allow null? I don\u0027t think this should be allowed otherwise it means you won\u0027t be able to hide sensitive information which is a security issue.",
+      "range": {
+        "startLine": 27,
+        "startChar": 59,
+        "endLine": 27,
+        "endChar": 67
+      },
+      "revId": "a263cdbd520786ae4b6dd80312ca2f6ee407f8c9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
