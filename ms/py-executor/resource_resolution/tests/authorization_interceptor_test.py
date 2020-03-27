@@ -17,7 +17,7 @@ from unittest.mock import MagicMock, _Call
 
 import pytest
 
-from resource_resolution.authorization import AuthTokenInterceptor, NewClientCallDetails
+from resource_resolution.grpc.authorization import AuthTokenInterceptor, NewClientCallDetails
 
 
 def test_resource_resolution_auth_token_interceptor():

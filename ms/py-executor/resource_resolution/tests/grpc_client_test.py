@@ -15,10 +15,10 @@ limitations under the License.
 
 from unittest.mock import MagicMock, patch
 
-from resource_resolution.client import Client
+from resource_resolution.grpc.client import Client
 
 
-@patch("resource_resolution.client.insecure_channel")
+@patch("resource_resolution.grpc.client.insecure_channel")
 def test_resource_resoulution_insecure_channel(insecure_channel_mock: MagicMock):
     """Test if insecure_channel connection is called."""
     with patch.object(Client, "close") as client_close_method_mock:  # Type MagicMock
