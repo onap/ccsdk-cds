@@ -141,7 +141,6 @@ typings/
 **/tokens/*
 
 # Public site
-*/**/package-lock.json
 cds-ui/server/public
 
 # Python generated class
