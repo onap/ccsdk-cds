@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f935bc52_3a86cd5b",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/capabilities/NamingResolutionCapability.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2020-03-27T18:17:33Z",
+      "side": 1,
+      "message": "In order for resolutionSummary to work, please add inputKeymappings to resourceAssignment.keyIdentifiers\n\nexample: https://gerrit.onap.org/r/gitweb?p\u003dccsdk/cds.git;a\u003dblob;f\u003dms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/processor/RestResourceResolutionProcessor.kt;h\u003d5d9226876cb84b02884151f4e92184b8b99bb0d9;hb\u003drefs/heads/master#l79",
+      "revId": "cfbe32536a3b535c29386b25e8dfdf64db29dcf6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e011aec7_28c65593",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/capabilities/NamingResolutionCapability.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2020-03-27T18:17:33Z",
+      "side": 1,
+      "message": "resolutionSummary also requires the generated payload to be added to\n\nresourceSourceProperties[\"resolved-payload\"]\n\nexample: https://gerrit.onap.org/r/gitweb?p\u003dccsdk/cds.git;a\u003dblob;f\u003dms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/processor/RestResourceResolutionProcessor.kt;h\u003d5d9226876cb84b02884151f4e92184b8b99bb0d9;hb\u003drefs/heads/master#l86",
+      "revId": "cfbe32536a3b535c29386b25e8dfdf64db29dcf6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
