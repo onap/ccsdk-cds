@@ -1,4 +1,4 @@
-# Resource resolution client
+# Resource resolution GRPC client
 
 ##  How to use examples
 
@@ -7,7 +7,7 @@
 ```
 from proto.BluePrintCommon_pb2_grpc import ActionIdentifiers, CommonHeader
 from proto.BluePrintProcessing_pb2_grpc import ExecutionServiceInput
-from resource_resolution.client import Client as ResourceResolutionClient
+from resource_resolution.grpc.client import Client as ResourceResolutionClient
 
 
 def generate_messages():
@@ -45,7 +45,7 @@ if __name__ == "__main__":
 ```
 from proto.BluePrintCommon_pb2_grpc import ActionIdentifiers, CommonHeader
 from proto.BluePrintProcessing_pb2_grpc import ExecutionServiceInput
-from resource_resolution.client import Client as ResourceResolutionClient
+from resource_resolution.grpc.client import Client as ResourceResolutionClient
 
 
 def generate_messages():
@@ -84,7 +84,7 @@ if __name__ == "__main__":
 ```
 from proto.BluePrintCommon_pb2 import ActionIdentifiers, CommonHeader
 from proto.BluePrintProcessing_pb2 import ExecutionServiceInput
-from resource_resolution.client import Client as ResourceResolutionClient
+from resource_resolution.grpc.client import Client as ResourceResolutionClient
 
 
 def generate_messages():
@@ -121,7 +121,7 @@ if __name__ == "__main__":
 
 ## How to use examples
 
-### Insecure channel
+### GRPC insecure channel
 
 ```
 from resource_resolution.resource_resolution import ResourceResolution, WorkflowExecution, WorkflowExecutionResult
@@ -140,4 +140,41 @@ if __name__ == "__main__":
                 print(response.error_message)
             else:
                 print(response.payload)
+```
+
+### HTTP retrieve/store template
+
+```
+from resource_resolution.resource_resolution import ResourceResolution
+
+if __name__ == "__main__":
+    # If you want to use only HTTP you don't have to use context manager
+    r = ResourceResolution(
+        http_server_port=8081,
+        http_auth_user="ccsdkapps",
+        http_auth_pass="ccsdkapps",
+        http_use_tls=False
+    )
+    r.store_template(
+        blueprint_name="blueprintName",
+        blueprint_version="1.0.0", 
+        artifact_name="test",
+        resolution_key="test", 
+        result="test")
+    template = r.retrieve_template(
+        blueprint_name="blueprintName",
+        blueprint_version="1.0.0", 
+        artifact_name="test",
+        resolution_key="test",
+    )
+    assert template.result == "test"
+    template.result = "another value"
+    template.store()
+    another_template = r.retrieve_template(
+        blueprint_name="blueprintName",
+        blueprint_version="1.0.0", 
+        artifact_name="test",
+        resolution_key="test",
+    )
+    assert another_template.result == "another_value"
 ```

@@ -1,0 +1,14 @@
+@startuml
+
+class ResourceResolution
+
+class GrpcClient
+
+class HttpClient
+
+GrpcClient -> ResourceResolution
+HttpClient -> ResourceResolution
+' ResourceResolution<-GrpcClient
+' ResourceResolution<-HttpClient
+
+@enduml
