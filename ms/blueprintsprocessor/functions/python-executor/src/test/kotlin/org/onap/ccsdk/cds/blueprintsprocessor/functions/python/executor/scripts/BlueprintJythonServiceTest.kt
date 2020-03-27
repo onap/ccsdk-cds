@@ -34,8 +34,8 @@ import kotlin.test.assertNotNull
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [BlueprintJythonServiceImpl::class, PythonExecutorProperty::class])
 @TestPropertySource(properties =
-["blueprints.processor.functions.python.executor.modulePaths=./../../../../../components/scripts/python/ccsdk_blueprints",
-    "blueprints.processor.functions.python.executor.executionPath=./../../../../../components/scripts/python/ccsdk_blueprints"])
+["blueprints.processor.functions.python.executor.modulePaths=./../../../../components/scripts/python/ccsdk_blueprints",
+    "blueprints.processor.functions.python.executor.executionPath=./../../../../components/scripts/python/ccsdk_blueprints"])
 class BlueprintJythonServiceTest {
 
     lateinit var blueprintContext: BluePrintContext
