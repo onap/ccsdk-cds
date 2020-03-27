@@ -13,6 +13,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import json
+from dataclasses import dataclass, field
 from enum import Enum, unique
 from logging import Logger, getLogger
 from types import TracebackType
@@ -22,7 +24,8 @@ from google.protobuf import json_format
 
 from proto.BluePrintProcessing_pb2 import ExecutionServiceInput, ExecutionServiceOutput
 
-from .client import Client
+from .grpc import Client as GrpcClient
+from .http import Client as HttpClient
 
 
 @unique
@@ -179,6 +182,39 @@ class WorkflowExecutionResult:
         return json_format.MessageToDict(self.execution_output.payload)
 
 
+@dataclass
+class Template:
+    """Template dataclass.
+
+    Store resolved template data.
+    It keeps also ResourceResolution object to call `store_template` method.
+    """
+
+    resource_resolution: "ResourceResolution" = field(repr=False)
+    blueprint_name: str
+    blueprint_version: str
+    artifact_name: str = None
+    result: str = None
+    resolution_key: str = None
+    resource_type: str = None
+    resource_id: str = None
+
+    def store(self) -> None:
+        """Store template using blueprintprocessor HTTP API.
+
+        It uses ResourceResolution `store_template` method.
+        """
+        self.resource_resolution.store_template(
+            blueprint_name=self.blueprint_name,
+            blueprint_version=self.blueprint_version,
+            artifact_name=self.artifact_name,
+            result=self.result,
+            resolution_key=self.resolution_key,
+            resource_type=self.resource_type,
+            resource_id=self.resource_id,
+        )
+
+
 class ResourceResolution:
     """Resource resolution class.
 
@@ -191,7 +227,8 @@ class ResourceResolution:
         self,
         *,
         server_address: str = "127.0.0.1",
-        server_port: int = "9111",
+        # GRPC client configuration
+        grpc_server_port: int = 9111,
         use_ssl: bool = False,
         root_certificates: bytes = None,
         private_key: bytes = None,
@@ -199,12 +236,17 @@ class ResourceResolution:
         # Authentication header configuration
         use_header_auth: bool = False,
         header_auth_token: str = None,
+        # HTTP client configuration
+        http_server_port: int = 8080,
+        http_auth_user: str = None,
+        http_auth_pass: str = None,
+        http_use_ssl: bool = True,
     ) -> None:
         """Resource resolution object initialization.
 
         Args:
             server_address (str, optional): gRPC server address. Defaults to "127.0.0.1".
-            server_port (int, optional): gRPC server address port. Defaults to "9111".
+            grpc_server_port (int, optional): gRPC server address port. Defaults to 9111.
             use_ssl (bool, optional): Boolean flag to determine if secure channel should be created or not.
                 Defaults to False.
             root_certificates (bytes, optional): The PEM-encoded root certificates. None if it shouldn't be used.
@@ -216,33 +258,46 @@ class ResourceResolution:
             use_header_auth (bool, optional): Boolean flag to determine if authorization headed shoud be added for
                 every call or not. Defaults to False.
             header_auth_token (str, optional): Authorization token value. Defaults to None.
+            http_server_port (int, optional): HTTP server address port. Defaults to 8080.
+            http_auth_user (str, optional): Username used for HTTP requests authorization. Defaults to None.
+            http_auth_pass (str, optional): Password used for HTTP requests authorization. Defaults to None.
+            http_use_ssl (bool, optional): Determines if secure connection should be used for HTTP requests.
+                Defaults to False.
         """
         # Logger
         self.logger: Logger = getLogger(__name__)
-        # Client settings
-        self.client_server_address: str = server_address
-        self.client_server_port: str = server_port
-        self.client_use_ssl: bool = use_ssl
-        self.client_root_certificates: bytes = root_certificates
-        self.client_private_key: bytes = private_key
-        self.client_certificate_chain: bytes = certificate_chain
-        self.client_use_header_auth: bool = use_header_auth
-        self.client_header_auth_token: str = header_auth_token
-        self.client: Client = None
+        # GrpcClient settings
+        self.grpc_client_server_address: str = server_address
+        self.grpc_client_server_port: str = grpc_server_port
+        self.grpc_client_use_ssl: bool = use_ssl
+        self.grpc_client_root_certificates: bytes = root_certificates
+        self.grpc_client_private_key: bytes = private_key
+        self.grpc_client_certificate_chain: bytes = certificate_chain
+        self.grpc_client_use_header_auth: bool = use_header_auth
+        self.grpc_client_header_auth_token: str = header_auth_token
+        self.grpc_client: GrpcClient = None
+        # HttpClient settings
+        self.http_client: HttpClient = HttpClient(
+            server_address,
+            server_port=http_server_port,
+            auth_user=http_auth_user,
+            auth_pass=http_auth_pass,
+            use_ssl=http_use_ssl,
+        )
 
     def __enter__(self) -> "ResourceResolution":
         """Enter ResourceResolution instance context.
 
-        Client connection is created.
+        GrpcClient connection is created.
         """
-        self.client = Client(
-            server_address=f"{self.client_server_address}:{self.client_server_port}",
-            use_ssl=self.client_use_ssl,
-            root_certificates=self.client_root_certificates,
-            private_key=self.client_private_key,
-            certificate_chain=self.client_certificate_chain,
-            use_header_auth=self.client_use_header_auth,
-            header_auth_token=self.client_header_auth_token,
+        self.grpc_client = GrpcClient(
+            server_address=f"{self.grpc_client_server_address}:{self.grpc_client_server_port}",
+            use_ssl=self.grpc_client_use_ssl,
+            root_certificates=self.grpc_client_root_certificates,
+            private_key=self.grpc_client_private_key,
+            certificate_chain=self.grpc_client_certificate_chain,
+            use_header_auth=self.grpc_client_use_header_auth,
+            header_auth_token=self.grpc_client_header_auth_token,
         )
         return self
 
@@ -254,9 +309,9 @@ class ResourceResolution:
     ) -> None:
         """Exit ResourceResolution instance context.
 
-        Client connection is closed.
+        GrpcClient connection is closed.
         """
-        self.client.close()
+        self.grpc_client.close()
 
     def execute_workflows(self, *workflows: WorkflowExecution) -> Generator[WorkflowExecutionResult, None, None]:
         """Execute provided workflows.
@@ -270,7 +325,7 @@ class ResourceResolution:
             AttributeError: Raises if client object is not created. It occurs only if you not uses context manager.
                 Then user have to create client instance for ResourceResolution object by himself calling:
                 ```
-                resource_resoulution.client = Client(
+                resource_resoulution.client = GrpcClient(
                     server_address=f"{resource_resoulution.client_server_address}:{resource_resoulution.client_server_port}",
                     use_ssl=resource_resoulution.client_use_ssl,
                     root_certificates=resource_resoulution.client_root_certificates,
@@ -287,8 +342,112 @@ class ResourceResolution:
                 with both WorkflowExection object and server response for it's request.
         """
         self.logger.debug("Execute workflows")
-        if not self.client:
+        if not self.grpc_client:
             raise AttributeError("gRPC client not connected")
 
-        for response, workflow in zip(self.client.process((workflow.message for workflow in workflows)), workflows):
+        for response, workflow in zip(
+            self.grpc_client.process((workflow.message for workflow in workflows)), workflows
+        ):
             yield WorkflowExecutionResult(workflow, response)
+
+    def _check_template_resolve_params(
+        self, resolution_key: str = None, resource_type: str = None, resource_id: str = None
+    ):
+        """Check template API request parameters.
+
+        It's possible to store/retrieve templates using pair of artifact name and resolution key OR
+        resource type and resource id. This method checks if valid combination of parameters were used.
+        
+        Args:
+            resolution_key (str, optional): resolutionKey HTTP request parameter value. Defaults to None.
+            resource_type (str, optional): resourceType HTTP request parameter value. Defaults to None.
+            resource_id (str, optional): resourceId HTTP request parameter value. Defaults to None.
+        
+        Raises:
+            AttributeError: Invalid combination of parametes used
+        """
+        if not any([resolution_key, all([resource_type, resource_id])]):
+            raise AttributeError(
+                "To store/retrieve template resolution_key and artifact_name or both resource_type and resource_id have to be provided"
+            )
+
+    def store_template(
+        self,
+        blueprint_name: str,
+        blueprint_version: str,
+        result: str,
+        artifact_name: str,
+        resolution_key: str = None,
+        resource_type: str = None,
+        resource_id: str = None,
+    ) -> None:
+        """Store template using blueprintprocessor HTTP API.
+
+        Prepare and send a request to store resolved template using blueprint name, blueprint version
+        and pair of artifact name and resolution key OR resource type and resource id.
+
+        Method returns Template dataclass, which stores all template data and can be used to update
+        it's result.
+
+        Args:
+            blueprint_name (str): Blueprint name
+            blueprint_version (str): Blueprint version
+            result (str): Template result
+            artifact_name (str): Artifact name
+            resolution_key (str, optional): Resolution key. Defaults to None.
+            resource_type (str, optional): Resource type. Defaults to None.
+            resource_id (str, optional): Resource ID. Defaults to None.
+        """
+        self.logger.debug("Store template")
+        self._check_template_resolve_params(resolution_key, resource_type, resource_id)
+        base_endpoint: str = f"template/{blueprint_name}/{blueprint_version}"
+        if resolution_key and artifact_name:
+            endpoint: str = f"{base_endpoint}/{artifact_name}/{resolution_key}"
+        else:
+            endpoint: str = f"{base_endpoint}/{resource_type}/{resource_id}"
+        response = self.http_client.send_request(
+            "POST", endpoint, headers={"Content-Type": "application/json"}, data=json.dumps({"result": result})
+        )
+
+    def retrieve_template(
+        self,
+        blueprint_name: str,
+        blueprint_version: str,
+        artifact_name: str,
+        resolution_key: str = None,
+        resource_type: str = None,
+        resource_id: str = None,
+    ) -> Template:
+        """Get stored template using blueprintprocessor's HTTP API.
+
+        Prepare and send a request to retrieve resolved template using blueprint name, blueprint version
+        and pair of artifact name and resolution key OR resource type and resource id.
+
+        Args:
+            blueprint_name (str): Blueprint name
+            blueprint_version (str): Blueprint version
+            artifact_name (str): Artifact name
+            resolution_key (str, optional): Resolution key. Defaults to None.
+            resource_type (str, optional): Resource type. Defaults to None.
+            resource_id (str, optional): Resource ID. Defaults to None.
+        """
+        self.logger.debug("Retrieve template")
+        self._check_template_resolve_params(resolution_key, resource_type, resource_id)
+        params: dict = {"bpName": blueprint_name, "bpVersion": blueprint_version, "artifactName": artifact_name}
+        if resolution_key:
+            params.update({"resolutionKey": resolution_key})
+        else:
+            params.update({"resourceType": resource_type, "resourceId": resource_id})
+        response = self.http_client.send_request(
+            "GET", "template", headers={"Accept": "application/json"}, params=params
+        )
+        return Template(
+            resource_resolution=self,
+            blueprint_name=blueprint_name,
+            blueprint_version=blueprint_version,
+            artifact_name=artifact_name,
+            resolution_key=resolution_key,
+            resource_type=resource_type,
+            resource_id=resource_id,
+            result=response.json()["result"],
+        )
