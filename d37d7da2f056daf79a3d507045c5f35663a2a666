@@ -16,6 +16,24 @@
       "revId": "d37d7da2f056daf79a3d507045c5f35663a2a666",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9efe3759_0130993b",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/selfservice-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/selfservice/api/KafkaPublishAuditService.kt",
+        "patchSetId": 7
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 6331
+      },
+      "writtenOn": "2020-03-30T13:11:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "567b7e03_c2f30252",
+      "revId": "d37d7da2f056daf79a3d507045c5f35663a2a666",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
