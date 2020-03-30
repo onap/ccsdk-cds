@@ -20,11 +20,14 @@
     <parent>
         <groupId>org.onap.ccsdk.cds.error.catalog</groupId>
         <artifactId>error-catalog</artifactId>
-        <version>0.7.0-SNAPSHOT</version>
+        <version>0.7.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>error-catalog-core</artifactId>
 
     <name>Error Catalog Core</name>
     <description>Error Catalog Core</description>
+    <properties>
+        <sonar.skip>true</sonar.skip>
+    </properties>
 </project>
