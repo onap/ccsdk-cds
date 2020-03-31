@@ -112,25 +112,25 @@ data class DictionaryMetadataEntry(val name: String, val value: String)
  */
 data class ResolutionSummary(
     val name: String,
-    val value: JsonNode?,
-    val required: Boolean?,
-    val type: String?,
+    val value: JsonNode,
+    val required: Boolean,
+    val type: String,
     @JsonProperty("key-identifiers")
     val keyIdentifiers: MutableList<KeyIdentifier>,
     @JsonProperty("dictionary-description")
-    val dictionaryDescription: String?,
+    val dictionaryDescription: String,
     @JsonProperty("dictionary-metadata")
     val dictionaryMetadata: MutableList<DictionaryMetadataEntry>,
     @JsonProperty("dictionary-name")
-    val dictionaryName: String?,
+    val dictionaryName: String,
     @JsonProperty("dictionary-source")
-    val dictionarySource: String?,
+    val dictionarySource: String,
     @JsonProperty("request-payload")
-    val requestPayload: JsonNode?,
+    val requestPayload: JsonNode,
     @JsonProperty("status")
-    val status: String?,
+    val status: String,
     @JsonProperty("message")
-    val message: String?
+    val message: String
 )
 /**
  * Interface for Source Definitions (ex Input Source,

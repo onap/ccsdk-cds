@@ -180,8 +180,8 @@ class ResourceAssignmentUtilsTest {
                 "resolution-summary":[
                     {
                         "name":"pnf-id",
-                        "value":null,
-                        "required":null,
+                        "value":"",
+                        "required":false,
                         "type":"string",
                         "key-identifiers":[],
                         "dictionary-description":"pnf-id",
@@ -191,8 +191,8 @@ class ResourceAssignmentUtilsTest {
                         "dictionary-name":"pnf-id",
                         "dictionary-source":"input",
                         "request-payload":{"mock":true},
-                        "status":null,
-                        "message":null
+                        "status":"",
+                        "message":""
                     }
                 ]
             }

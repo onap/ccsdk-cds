@@ -203,18 +203,41 @@ class ResourceAssignmentUtils {
             resourceAssignments: List<ResourceAssignment>,
             resourceDefinitions: Map<String, ResourceDefinition>
         ): String {
+            val emptyTextNode = TextNode.valueOf("")
             val resolutionSummaryList = resourceAssignments.map {
                 val definition = resourceDefinitions[it.name]
-                val payload = definition?.sources?.get(it.dictionarySource)
+                val description = definition?.property?.description ?: ""
+                val value = it.property?.value
+                        ?.let { v -> if (v.isNullOrMissing()) emptyTextNode else v }
+                        ?: emptyTextNode
+
+                var payload: JsonNode = definition?.sources?.get(it.dictionarySource)
                         ?.properties?.get("resolved-payload")
+                        ?.let { p -> if (p.isNullOrMissing()) emptyTextNode else p }
+                        ?: emptyTextNode
+
                 val metadata = definition?.property?.metadata
                         ?.map { e -> DictionaryMetadataEntry(e.key, e.value) }
                         ?.toMutableList() ?: mutableListOf()
-                val description = definition?.property?.description
+
+                val keyIdentifiers: MutableList<KeyIdentifier> =
+                        it.keyIdentifiers.map {
+                            k -> if (k.value.isNullOrMissing()) KeyIdentifier(k.name, emptyTextNode) else k
+                        }.toMutableList()
+
                 ResolutionSummary(
-                        it.name, it.property?.value, it.property?.required, it.property?.type,
-                        it.keyIdentifiers, description, metadata, it.dictionaryName,
-                        it.dictionarySource, payload, it.status, it.message
+                        it.name,
+                        value,
+                        it.property?.required ?: false,
+                        it.property?.type ?: "",
+                        keyIdentifiers,
+                        description,
+                        metadata,
+                        it.dictionaryName ?: "",
+                        it.dictionarySource ?: "",
+                        payload,
+                        it.status ?: "",
+                        it.message ?: ""
                 )
             }
             // Wrapper needed for integration with SDNC
