@@ -108,8 +108,16 @@ class CommandExecutorHandler():
             payload_section = []
             is_payload_section = False
 
+            ### extract the original header request into sys-env variables
+            ### RequestID
+            request_id = request.requestId
+            ### Sub-requestID
+            subrequest_id = request.correlationId
+            request_id_map = {'CDS_REQUEST_ID':request_id, 'CDS_CORRELATION_ID':subrequest_id}
+            updated_env =  { **os.environ, **request_id_map }
+
             with subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                                  shell=True, bufsize=1, universal_newlines=True) as newProcess:
+                                  shell=True, bufsize=1, universal_newlines=True, env=updated_env) as newProcess:
                 while True:
                     output = newProcess.stdout.readline()
                     if output == '' and newProcess.poll() is not None:
@@ -181,9 +189,11 @@ class CommandExecutorHandler():
         try:
             results.append(subprocess.run(command, check=True, stdout=PIPE, stderr=PIPE, env=env).stdout.decode())
             results.append("\n")
+            self.logger.info("install_python_packages {} succeeded".format(package))
             return True
         except CalledProcessError as e:
             results.append(e.stderr.decode())
+            self.logger.error("install_python_packages {} failed".format(package))
             return False
 
     def install_ansible_packages(self, package, results):
@@ -215,6 +225,7 @@ class CommandExecutorHandler():
             # venv doesn't populate the activate_this.py script, hence we use from virtualenv
             venv.create(self.venv_home, with_pip=True, system_site_packages=True)
             virtualenv.writefile(os.path.join(bin_dir, "activate_this.py"), virtualenv.ACTIVATE_THIS)
+            self.logger.info("{} - Creation of Python Virtual Environment finished.".format(self.blueprint_id))
             return utils.build_ret_data(True, "")
         except Exception as err:
             err_msg = "{} - Failed to provision Python Virtual Environment. Error: {}".format(self.blueprint_id, err)
