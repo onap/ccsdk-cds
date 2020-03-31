@@ -49,6 +49,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     lateinit var operationName: String
     lateinit var nodeTemplateName: String
     var timeout: Int = 180
+    val timeoutDeltaInMillis = 100L
     var operationInputs: MutableMap<String, JsonNode> = hashMapOf()
 
     override fun getName(): String {
@@ -124,7 +125,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     override suspend fun applyNB(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
         try {
             prepareRequestNB(executionServiceInput)
-            withTimeout(timeout * 1000L) {
+            withTimeout(timeout * 1000L + timeoutDeltaInMillis) {
                 log.debug("DEBUG::: AbstractComponentFunction.withTimeout section $timeout seconds")
                 processNB(executionServiceInput)
             }

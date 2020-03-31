@@ -88,8 +88,6 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
         val dynamicProperties = getOptionalOperationInput(INPUT_DYNAMIC_PROPERTIES)
         val packages = getOptionalOperationInput(INPUT_PACKAGES)?.returnNullIfMissing()
 
-        val argsNode = getOptionalOperationInput(INPUT_ARGUMENT_PROPERTIES)?.returnNullIfMissing()
-
         // This prevents unescaping values, as well as quoting the each parameter, in order to allow for spaces in values
         val args = getOptionalOperationInput(INPUT_ARGUMENT_PROPERTIES)?.returnNullIfMissing()
             ?.rootFieldsToMap()?.toSortedMap()?.values?.joinToString(" ") { formatNestedJsonNode(it) }
@@ -147,9 +145,10 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
                 setAttribute(ATTRIBUTE_PREPARE_ENV_LOG,"".asJsonPrimitive());
             }
         } catch (grpcEx: io.grpc.StatusRuntimeException) {
-            val grpcErrMsg = "Command failed during env. preparation... timeout($envPrepTimeout) requestId ($processId)."
+            val componentLevelWarningMsg = if (timeout < envPrepTimeout) "Note: component-level timeout ($timeout) is shorter than env-prepare timeout ($envPrepTimeout). " else ""
+            val grpcErrMsg = "Command failed during env. preparation... timeout($envPrepTimeout) requestId ($processId). $componentLevelWarningMsg"
             setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, grpcErrMsg.asJsonPrimitive())
-            setNodeOutputErrors(status = grpcErrMsg, message = "${grpcEx.status}".asJsonPrimitive())
+            setNodeOutputErrors(status = grpcErrMsg, message = "{code=\"${grpcEx.status.code}\", description=\"${grpcEx.status.description}\", cause=\"${grpcEx.status.cause?.message}\"}".asJsonPrimitive())
             log.error(grpcErrMsg, grpcEx)
             addError(grpcErrMsg)
         } catch (e: Exception) {
@@ -194,11 +193,12 @@ open class ComponentRemotePythonExecutor(private val remoteScriptExecutionServic
                         remoteExecutionOutput.payload)
                 }
             } catch (timeoutEx: TimeoutCancellationException) {
-                val timeoutErrMsg = "Command executor timed out executing after $executionTimeout seconds requestId ($processId)"
+                val componentLevelWarningMsg = if (timeout < executionTimeout) "Note: component-level timeout ($timeout) is shorter than execution timeout ($executionTimeout). " else ""
+                val timeoutErrMsg = "Command executor execution timeout. DetailedMessage: (${timeoutEx.message}) requestId ($processId). $componentLevelWarningMsg"
                 setNodeOutputErrors(status = timeoutErrMsg, message = "".asJsonPrimitive())
                 log.error(timeoutErrMsg, timeoutEx)
             } catch (grpcEx: io.grpc.StatusRuntimeException) {
-                val timeoutErrMsg = "Command executor timed out executing after $executionTimeout seconds requestId ($processId)"
+                val timeoutErrMsg = "Command executor failed to execute requestId ($processId) error (${grpcEx.status.cause?.message})"
                 setNodeOutputErrors(status = timeoutErrMsg, message = "".asJsonPrimitive())
                 log.error("Command executor time out during GRPC call", grpcEx)
             } catch (e: Exception) {
