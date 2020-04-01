@@ -21,7 +21,7 @@
     <parent>
        <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
        <artifactId>blueprints</artifactId>
-       <version>0.7.1-SNAPSHOT</version>
+       <version>0.7.1</version>
     </parent>
 
     <artifactId>blueprint-core</artifactId>

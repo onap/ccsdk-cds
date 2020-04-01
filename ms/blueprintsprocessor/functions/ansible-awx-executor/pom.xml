@@ -20,12 +20,12 @@
     <parent>
         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
         <artifactId>functions</artifactId>
-        <version>0.7.1-SNAPSHOT</version>
+        <version>0.7.1</version>
     </parent>
 
     <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
     <artifactId>ansible-awx-executor</artifactId>
-    <version>0.7.1-SNAPSHOT</version>
+    <version>0.7.1</version>
 
     <name>Blueprints Processor Function - Ansible AWX Executor</name>
     <description>Blueprints Processor Function - Ansible Executor</description>

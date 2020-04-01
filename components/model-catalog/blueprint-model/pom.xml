@@ -20,13 +20,13 @@
     <parent>
         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
         <artifactId>cba-parent</artifactId>
-        <version>0.7.1-SNAPSHOT</version>
+        <version>0.7.1</version>
         <relativePath>../../../ms/blueprintsprocessor/cba-parent</relativePath>
     </parent>
 
     <groupId>org.onap.ccsdk.cds.cba</groupId>
     <artifactId>blueprint-model</artifactId>
-    <version>0.7.1-SNAPSHOT</version>
+    <version>0.7.1</version>
     <packaging>pom</packaging>
 
     <name>CBA - Blueprints</name>
