@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "975965a4_4048703a",
+        "filename": "ms/py-executor/resource_resolution/resource_resolution.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 5732
+      },
+      "writtenOn": "2020-04-06T13:59:36Z",
+      "side": 1,
+      "message": "how is this information passed? Is it in the script? Hardcoded somewhere? I can\u0027t see it in the code so i assume the script will have to pass this. \nThe script developer should not have to pass this information otherwise it will be a nightmare to update the basic auth when you have 100s of CBA with the authorization headers hardcoded in the code.",
+      "range": {
+        "startLine": 241,
+        "startChar": 0,
+        "endLine": 242,
+        "endChar": 35
+      },
+      "revId": "b602308e37711bc6072f3207e36297b0292d5b1c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7fa6486_e16cdfad",
+        "filename": "ms/py-executor/resource_resolution/resource_resolution.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 5732
+      },
+      "writtenOn": "2020-04-06T13:59:36Z",
+      "side": 1,
+      "message": "same as below",
+      "range": {
+        "startLine": 376,
+        "startChar": 2,
+        "endLine": 379,
+        "endChar": 27
+      },
+      "revId": "b602308e37711bc6072f3207e36297b0292d5b1c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "154a68bf_c7a119f3",
+        "filename": "ms/py-executor/resource_resolution/resource_resolution.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 5732
+      },
+      "writtenOn": "2020-04-06T13:59:36Z",
+      "side": 1,
+      "message": "Can those be derived from the current execution? Otherwise this means that every time you up the version of the CBA you have to up the version to every calls to ResourceResolution inside the code also. I think the scripts should be agnostic of the CBA name and version otherwise it will get very hard to handle changes.",
+      "range": {
+        "startLine": 414,
+        "startChar": 1,
+        "endLine": 416,
+        "endChar": 27
+      },
+      "revId": "b602308e37711bc6072f3207e36297b0292d5b1c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
