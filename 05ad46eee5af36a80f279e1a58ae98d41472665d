@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "34c8c3d3_3b6a5a3a",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/selfservice-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/selfservice/api/NoPublishAuditService.kt",
+        "patchSetId": 12
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 5732
+      },
+      "writtenOn": "2020-04-06T13:30:49Z",
+      "side": 1,
+      "message": "Change this to debug or even trace otherwise we add two traces at every process request for no added value. We should maybe have a log.info trace when the object is constructed to show once at startup that AuditService is disabled.",
+      "range": {
+        "startLine": 37,
+        "startChar": 8,
+        "endLine": 37,
+        "endChar": 16
+      },
+      "revId": "05ad46eee5af36a80f279e1a58ae98d41472665d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d01d7d83_ada57ea8",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/selfservice-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/selfservice/api/NoPublishAuditService.kt",
+        "patchSetId": 12
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 5732
+      },
+      "writtenOn": "2020-04-06T13:30:49Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 17
+      },
+      "revId": "05ad46eee5af36a80f279e1a58ae98d41472665d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
