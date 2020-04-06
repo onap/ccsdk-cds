@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7e588669_045d0caf",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/selfservice-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/selfservice/api/NoPublishAuditService.kt",
+        "patchSetId": 12
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 6331
+      },
+      "writtenOn": "2020-04-06T17:15:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34c8c3d3_3b6a5a3a",
+      "range": {
+        "startLine": 37,
+        "startChar": 8,
+        "endLine": 37,
+        "endChar": 16
+      },
+      "revId": "05ad46eee5af36a80f279e1a58ae98d41472665d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d01d7d83_ada57ea8",
         "filename": "ms/blueprintsprocessor/modules/inbounds/selfservice-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/selfservice/api/NoPublishAuditService.kt",
         "patchSetId": 12
@@ -45,6 +69,30 @@
       "revId": "05ad46eee5af36a80f279e1a58ae98d41472665d",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfbc29c8_4cc91373",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/selfservice-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/selfservice/api/NoPublishAuditService.kt",
+        "patchSetId": 12
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 6331
+      },
+      "writtenOn": "2020-04-06T17:15:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d01d7d83_ada57ea8",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 17
+      },
+      "revId": "05ad46eee5af36a80f279e1a58ae98d41472665d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
