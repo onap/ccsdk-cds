@@ -1,0 +1,793 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~  Copyright © 2017-2019 AT&T, IBM, Bell Canada.
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.onap.ccsdk.cds</groupId>
+        <artifactId>blueprintsprocessor</artifactId>
+        <version>0.7.2-SNAPSHOT</version>
+    </parent>
+
+    <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+    <artifactId>parent</artifactId>
+    <version>0.7.2-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>Blueprints Processor Parent</name>
+    <description>Blueprints Processor Parent</description>
+
+    <properties>
+        <sli.version>${ccsdk.sli.core.version}</sli.version>
+        <!-- Override CDS version from parent to be project.version -->
+        <ccsdk.cds.version>${project.version}</ccsdk.cds.version>
+        <error.catalog.version>${project.version}</error.catalog.version>
+        <dmaap.client.version>1.1.5</dmaap.client.version>
+        <!-- Should be using released artifact as soon as available: -->
+        <!-- https://github.com/springfox/springfox/milestone/44 -->
+        <springfox.swagger2.version>2.9.2</springfox.swagger2.version>
+        <eelf.version>1.0.0</eelf.version>
+        <onap.logger.slf4j>1.2.2</onap.logger.slf4j>
+        <hazelcast.version>4.0</hazelcast.version>
+
+        <h2database.version>1.4.197</h2database.version>
+        <powermock.version>1.7.4</powermock.version>
+        <mockkserver.version>5.5.1</mockkserver.version>
+        <json.unit.version>2.8.0</json.unit.version>
+        <xmlunit.version>2.6.3</xmlunit.version>
+
+        <netty-ssl>2.0.26.Final</netty-ssl>
+        <sshd.version>2.2.0</sshd.version>
+        <jsch.version>0.1.55</jsch.version>
+        <jslt.version>0.1.8</jslt.version>
+        <jython.version>2.7.1</jython.version>
+        <jinja.version>2.5.1</jinja.version>
+        <guava.version>27.0.1-jre</guava.version>
+        <json-patch.version>1.9</json-patch.version>
+        <json-smart.version>2.3</json-smart.version>
+
+        <commons-io-version>2.6</commons-io-version>
+        <commons-compress-version>1.20</commons-compress-version>
+        <commons-collections-version>3.2.2</commons-collections-version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring Boot -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-parent</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.kafka</groupId>
+                <artifactId>spring-kafka</artifactId>
+                <version>${spring-kafka.version}</version>
+            </dependency>
+
+            <!--Swagger Dependencies -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${springfox.swagger2.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${springfox.swagger2.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!--
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-spring-webflux</artifactId>
+                <version>${springfox.swagger2.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            -->
+
+            <!-- Common Utils Dependencies -->
+            <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>${commons-collections-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-compress</artifactId>
+                <version>${commons-compress-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hubspot.jinjava</groupId>
+                <artifactId>jinjava</artifactId>
+                <version>${jinja.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.schibsted.spt.data</groupId>
+                <artifactId>jslt</artifactId>
+                <version>${jslt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.javacrumbs.json-unit</groupId>
+                <artifactId>json-unit-json-path</artifactId>
+                <version>${json.unit.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.python</groupId>
+                <artifactId>jython-standalone</artifactId>
+                <version>${jython.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.minidev</groupId>
+                <artifactId>json-smart</artifactId>
+                <version>${json-smart.version}</version>
+            </dependency>
+
+            <!-- Kotlin Dependencies -->
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-stdlib</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-stdlib-common</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <!--Use kotlin-compiler-embeddable instead koltin-compiler wrap-->
+            <!--guava dependency inside kotlin-compiler creating classpath issues at runtime-->
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-scripting-jvm-host</artifactId>
+                <version>${kotlin.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-compile</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-compiler-embeddable</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-script-util</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-script-runtime</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlinx</groupId>
+                <artifactId>kotlinx-coroutines-core</artifactId>
+                <version>${kotlin.couroutines.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlinx</groupId>
+                <artifactId>kotlinx-coroutines-reactor</artifactId>
+                <version>${kotlin.couroutines.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-reflect</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-stdlib-jdk8</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-stdlib-jdk7</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.marcoferrer.krotoplus</groupId>
+                <artifactId>kroto-plus-coroutines</artifactId>
+                <version>${kroto-plus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-tcnative-boringssl-static</artifactId>
+                <version>${netty-ssl}</version>
+            </dependency>
+
+            <!-- NATS -->
+            <dependency>
+                <groupId>io.nats</groupId>
+                <artifactId>jnats</artifactId>
+                <version>${nats.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.nats</groupId>
+                <artifactId>java-nats-streaming</artifactId>
+                <version>${nats.streaming.version}</version>
+            </dependency>
+
+            <!-- Hazelcast -->
+            <dependency>
+                <groupId>com.hazelcast</groupId>
+                <artifactId>hazelcast-all</artifactId>
+                <version>${hazelcast.version}</version>
+            </dependency>
+
+            <!-- Adaptors -->
+            <dependency>
+                <groupId>org.apache.sshd</groupId>
+                <artifactId>sshd-core</artifactId>
+                <version>${sshd.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.jcraft</groupId>
+                <artifactId>jsch</artifactId>
+                <version>${jsch.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>kafka-clients</artifactId>
+                <version>${kafka.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>kafka-streams</artifactId>
+                <version>${kafka.version}</version>
+            </dependency>
+
+            <!-- Error Catalog -->
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.error.catalog</groupId>
+                <artifactId>error-catalog-core</artifactId>
+                <version>${error.catalog.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.error.catalog</groupId>
+                <artifactId>error-catalog-services</artifactId>
+                <version>${error.catalog.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- SLI Version -->
+            <dependency>
+                <groupId>org.onap.ccsdk.sli.core</groupId>
+                <artifactId>sli-provider</artifactId>
+                <version>${sli.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-lang</groupId>
+                        <artifactId>commons-lang</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.opendaylight.mdsal.model</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.opendaylight.controller</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.tomcat</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.karaf.shell</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.mariadb.jdbc</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.powermock</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- Blueprint Processor Application Module Dependencies -->
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>processor-core</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>db-lib</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>rest-lib</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>nats-lib</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>ssh-lib</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+
+            <!-- message-lib dependency -->
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>message-lib</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>dmaap-lib</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>grpc-lib</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>execution-service</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>workflow-service</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+
+            <!-- North Bound -->
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>configs-api</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>designer-api</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>resource-api</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>selfservice-api</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>application</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+
+            <!-- Functions -->
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
+                <artifactId>resource-resolution</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
+                <artifactId>restful-executor</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
+                <artifactId>python-executor</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
+                <artifactId>ansible-awx-executor</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
+                <artifactId>netconf-executor</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
+                <artifactId>restconf-executor</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
+                <artifactId>cli-executor</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
+                <artifactId>config-snapshots</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
+                <artifactId>message-prioritizaion</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>health-api</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>health-api-common</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+
+            <!-- Diff capability providers for config-snapshots -->
+            <dependency>
+                <groupId>com.github.fge</groupId>
+                <artifactId>json-patch</artifactId>
+                <version>${json-patch.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.xmlunit</groupId>
+                <artifactId>xmlunit-core</artifactId>
+                <version>${xmlunit.version}</version>
+            </dependency>
+
+            <!-- Controller Blueprints Application Dependency -->
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>resource-dict</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>blueprint-core</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>blueprint-proto</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <artifactId>blueprint-validation</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+
+            <!-- Database -->
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>${h2database.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- Test Dependency -->
+            <dependency>
+                <groupId>io.mockk</groupId>
+                <artifactId>mockk</artifactId>
+                <version>${mockk.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mock-server</groupId>
+                <artifactId>mockserver-netty</artifactId>
+                <version>${mockkserver.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.powermock</groupId>
+                <artifactId>powermock-api-mockito2</artifactId>
+                <version>${powermock.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.nhaarman.mockitokotlin2</groupId>
+                <artifactId>mockito-kotlin</artifactId>
+                <version>2.2.0</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-test-junit</artifactId>
+                <version>${kotlin.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlinx</groupId>
+                <artifactId>kotlinx-coroutines-test</artifactId>
+                <version>${kotlin.couroutines.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- Spring Kafka -->
+            <dependency>
+                <groupId>org.springframework.kafka</groupId>
+                <artifactId>spring-kafka-test</artifactId>
+                <version>${spring-kafka.version}</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>net.minidev</groupId>
+            <artifactId>json-smart</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.javacrumbs.json-unit</groupId>
+            <artifactId>json-unit-json-path</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>io.springfox</groupId>-->
+        <!--            <artifactId>springfox-spring-webflux</artifactId>-->
+        <!--        </dependency>-->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-script-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-coroutines-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-coroutines-reactor</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-kotlin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-compiler-embeddable</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-scripting-jvm-host</artifactId>
+            <!--Use kotlin-compiler-embeddable as koltin-compiler wrap-->
+            <!--guava dependency creating classpath issues at runtime-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.jetbrains.kotlin</groupId>
+                    <artifactId>kotlin-compiler</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- GRPC Dependencies -->
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-netty</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-protobuf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-stub</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-netty-shaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-grpclb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-tcnative-boringssl-static</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.onap.ccsdk.cds.error.catalog</groupId>
+            <artifactId>error-catalog-core</artifactId>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>spring-libs-milestone</id>
+            <name>Spring Milestone Maven Repository</name>
+            <url>http://oss.jfrog.org/artifactory/oss-release-local/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-libs-milestone-snapshot</id>
+            <name>Spring Milestone Maven Repository - snapshots</name>
+            <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.maven.version}</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
+                                <sourceDir>${project.basedir}/src/main/java</sourceDir>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>
+                                <sourceDir>${project.basedir}/src/test/java</sourceDir>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
