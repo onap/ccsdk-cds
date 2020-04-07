@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2cf80df5_05e46130",
+        "filename": "ms/py-executor/resource_resolution/resource_resolution.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 6079
+      },
+      "writtenOn": "2020-04-07T06:19:18Z",
+      "side": 1,
+      "message": "I aggree it shouldn\u0027t be hardcoded in script, but I think it also shouldn\u0027t be hardcoded in library. If anybody change an API authentication credentials should also remember to update them here. This kind of data, in my opinion, should be provided as script arguments. You can store them in one place, but not in public repository (some config file, database etc.) and get them only for script call.",
+      "parentUuid": "975965a4_4048703a",
+      "range": {
+        "startLine": 241,
+        "startChar": 0,
+        "endLine": 242,
+        "endChar": 35
+      },
+      "revId": "b602308e37711bc6072f3207e36297b0292d5b1c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f7fa6486_e16cdfad",
         "filename": "ms/py-executor/resource_resolution/resource_resolution.py",
         "patchSetId": 3
@@ -59,6 +83,30 @@
       "writtenOn": "2020-04-06T13:59:36Z",
       "side": 1,
       "message": "Can those be derived from the current execution? Otherwise this means that every time you up the version of the CBA you have to up the version to every calls to ResourceResolution inside the code also. I think the scripts should be agnostic of the CBA name and version otherwise it will get very hard to handle changes.",
+      "range": {
+        "startLine": 414,
+        "startChar": 1,
+        "endLine": 416,
+        "endChar": 27
+      },
+      "revId": "b602308e37711bc6072f3207e36297b0292d5b1c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e46e5fcd_22100c57",
+        "filename": "ms/py-executor/resource_resolution/resource_resolution.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 6079
+      },
+      "writtenOn": "2020-04-07T06:19:18Z",
+      "side": 1,
+      "message": "Is it possible to get these data from current execution? Are them stored as e.g. env variable? I aggree script should be agnostic of the CBA name and version, it should be even possible to have one script for every CBA, that\u0027s why these values should be provided, like above, as script arguments.",
+      "parentUuid": "154a68bf_c7a119f3",
       "range": {
         "startLine": 414,
         "startChar": 1,
