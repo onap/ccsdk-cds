@@ -15,7 +15,9 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor.scripts
 
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ExecutionServiceDomains
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.updateErrorMessage
 import org.python.core.PyObject
 import org.python.util.PythonInterpreter
 
@@ -42,6 +44,10 @@ open class BlueprintPythonHost(private val bluePrintPython: BluePrintPython) {
         bluePrintPython.moduleName = "Blueprint Python Script [Class Name = $interfaceName]"
         try {
             return blueprintPythonInterpreterProxy.getPythonInstance(properties)
+        } catch (e: BluePrintProcessorException) {
+            val errorMsg = "Failed to get python instance."
+            throw e.updateErrorMessage(ExecutionServiceDomains.PYTHON_EXECUTOR, errorMsg,
+                    "Error in environment properties")
         } catch (e: Exception) {
             throw BluePrintProcessorException("Failed to execute Jython component $e", e)
         }

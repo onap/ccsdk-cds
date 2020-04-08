@@ -30,7 +30,11 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.BluePrintProcessingServiceGrpc
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceInput
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceOutput
+import org.springframework.test.context.ContextConfiguration
 
+@ContextConfiguration(
+        classes = [SelfServiceApiTestConfiguration::class, ErrorCatalogTestConfiguration::class]
+)
 class BluePrintProcessingIntegrationTest {
 
     private val log = logger(BluePrintProcessingIntegrationTest::class)

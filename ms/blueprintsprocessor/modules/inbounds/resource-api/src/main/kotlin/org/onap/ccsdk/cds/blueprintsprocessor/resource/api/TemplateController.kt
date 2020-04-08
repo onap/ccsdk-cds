@@ -23,7 +23,9 @@ import io.swagger.annotations.ApiParam
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.TemplateResolution
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.TemplateResolutionService
+import org.onap.ccsdk.cds.controllerblueprints.core.httpProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.onap.ccsdk.cds.error.catalog.core.ErrorCatalogCodes
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -99,7 +101,8 @@ open class TemplateController(private val templateResolutionService: TemplateRes
         var result = ""
 
         if ((resolutionKey.isNotEmpty() || artifactName.isNotEmpty()) && (resourceId.isNotEmpty() || resourceType.isNotEmpty())) {
-            throw ResolutionException("Either retrieve resolved template using artifact name and resolution-key OR using resource-id and resource-type.")
+            throw httpProcessorException(ErrorCatalogCodes.REQUEST_NOT_FOUND, ResourceApiDomains.RESOURCE_API,
+                    "Either retrieve resolved template using artifact name and resolution-key OR using resource-id and resource-type.")
         } else if (resolutionKey.isNotEmpty() && artifactName.isNotEmpty()) {
             result = templateResolutionService.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
                 bpName,
@@ -117,7 +120,8 @@ open class TemplateController(private val templateResolutionService: TemplateRes
                     resourceType
                 )
         } else {
-            throw ResolutionException("Missing param. Either retrieve resolved template using artifact name and resolution-key OR using resource-id and resource-type.")
+            throw httpProcessorException(ErrorCatalogCodes.REQUEST_NOT_FOUND, ResourceApiDomains.RESOURCE_API,
+                    "Missing param. Either retrieve resolved template using artifact name and resolution-key OR using resource-id and resource-type.")
         }
 
         var expectedContentType = format
