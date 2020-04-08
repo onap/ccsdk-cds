@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
-import { PackageCreationStore } from '../package-creation.store';
-import { PackageCreationUtils } from '../package-creation.utils';
+import {Component, OnInit} from '@angular/core';
+import {FileSystemFileEntry, NgxFileDropEntry} from 'ngx-file-drop';
+import {PackageCreationStore} from '../package-creation.store';
+import {PackageCreationUtils} from '../package-creation.utils';
 
 
 @Component({
@@ -19,6 +19,7 @@ export class ImportsTabComponent implements OnInit {
 
     constructor(private packageCreationStore: PackageCreationStore, private packageCreationUtils: PackageCreationUtils) {
     }
+
     ngOnInit(): void {
         this.packageCreationStore.state$.subscribe(cbaPackage => {
             if (cbaPackage.definitions && cbaPackage.definitions.imports && cbaPackage.definitions.imports.size > 0) {
@@ -75,5 +76,15 @@ export class ImportsTabComponent implements OnInit {
 
     textChanges(code: any, key: string) {
         this.packageCreationStore.addDefinition(key, code);
+    }
+
+    changeDivShow(mapIndex: number) {
+        const divElement = document.getElementById('id-' + mapIndex) as HTMLElement;
+        if (divElement.getAttribute('class').includes('show')) {
+            divElement.setAttribute('class', 'collapse');
+        } else {
+            divElement.setAttribute('class', 'collapse show');
+        }
+        console.log(divElement.getAttribute('class'));
     }
 }
