@@ -212,7 +212,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <ngx-file-drop [accept]="allowedExt" dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)"
+                <ngx-file-drop [multiple]="false" [accept]="allowedExt" dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)"
                     (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)">
                     <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
                         <div class="folder-upload">
