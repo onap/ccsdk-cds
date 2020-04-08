@@ -57,20 +57,20 @@ export default {
 
            }
         },
-           {
-             "template": {
-                   "method": "DEL",
-                   "url": processorApiConfig.http.url + "/model-type/{name}",
-                   "headers": {
-                       "accepts": "application/json",
-                       "content-type": "application/json",
-                       "authorization": processorApiConfig.http.authToken
-                   },
-                   "responsePath": "$.*"
-             },
-             "functions": {
-                  "delete": ["name"]
-             }
-           }
+        {
+         "template": {
+                    "method": "DELETE",
+                    "url": processorApiConfig.http.url + "/model-type/{name}",
+                    "headers": {
+                        "accepts": "application/json",
+                        "content-type": "application/json",
+                        "authorization": processorApiConfig.http.authToken
+                    },
+                    "responsePath": "$.*"
+              },
+              "functions": {
+                   "delete": ["name"]
+              }
+        }
     ]
 };
