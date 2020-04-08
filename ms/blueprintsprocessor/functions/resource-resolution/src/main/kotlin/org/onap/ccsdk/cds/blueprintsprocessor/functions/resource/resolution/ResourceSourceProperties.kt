@@ -51,6 +51,8 @@ open class RestResourceSource : ResourceSourceProperties() {
     lateinit var verb: String
     @get:JsonProperty("payload")
     var payload: String? = null
+    @get:JsonProperty("resolved-payload")
+    var resolvedPayload: String? = null
     lateinit var type: String
     @get:JsonProperty("endpoint-selector")
     var endpointSelector: String? = null
