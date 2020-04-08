@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {BlueprintModel} from '../../model/BluePrint.model';
-import {PackagesStore} from '../../packages.store';
+import { Component, OnInit } from '@angular/core';
+import { BlueprintModel } from '../../model/BluePrint.model';
+import { PackagesStore } from '../../packages.store';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-packages-list',
@@ -12,7 +13,7 @@ export class PackageListComponent implements OnInit {
     viewedPackages: BlueprintModel[] = [];
 
 
-    constructor(private packagesStore: PackagesStore) {
+    constructor(private packagesStore: PackagesStore, private router: Router) {
         console.log('PackageListComponent');
         this.packagesStore.state$.subscribe(state => {
             console.log(state);
@@ -26,6 +27,9 @@ export class PackageListComponent implements OnInit {
         this.packagesStore.getAll();
     }
 
+    view(id) {
+        this.router.navigate(['/packages/package', id]);
+    }
     testDispatch(bluePrint: BlueprintModel) {
         console.log(bluePrint.id);
     }
