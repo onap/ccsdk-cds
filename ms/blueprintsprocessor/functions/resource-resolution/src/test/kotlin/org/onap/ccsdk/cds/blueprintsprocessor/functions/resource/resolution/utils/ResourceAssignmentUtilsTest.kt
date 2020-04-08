@@ -29,6 +29,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.METADATA_TRANSFORM_TEMPLATE
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
@@ -331,6 +332,26 @@ class ResourceAssignmentUtilsTest {
                 expectedValueToTestComplexTypeWithAllOutputKeyMapping["ipAddress"],
                 resourceAssignment.keyIdentifiers[1].value
         )
+    }
+
+    @Test
+    fun `transform resolved value with inline template`() {
+        resourceAssignmentRuntimeService.putResolutionStore("vnf_name", "abc-vnf".asJsonType())
+        resourceAssignment = ResourceAssignment()
+        resourceAssignment.name = "int_pktgen_private_net_id"
+        resourceAssignment.property = PropertyDefinition()
+        resourceAssignment.property!!.type = "string"
+        val value = "".asJsonType()
+
+        // Enable transform template
+        resourceAssignment.property!!.metadata =
+                mutableMapOf(METADATA_TRANSFORM_TEMPLATE to "\${vnf_name}_private2")
+
+        ResourceAssignmentUtils
+                .setResourceDataValue(resourceAssignment, resourceAssignmentRuntimeService, value)
+
+        assertEquals("abc-vnf_private2",
+                resourceAssignment.property!!.value!!.asText())
     }
 
     private fun initInputMapAndExpectedValuesForPrimitiveType() {
