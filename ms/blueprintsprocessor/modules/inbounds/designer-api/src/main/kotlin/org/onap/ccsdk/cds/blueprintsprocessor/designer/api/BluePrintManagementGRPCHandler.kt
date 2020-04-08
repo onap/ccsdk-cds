@@ -40,13 +40,20 @@ import org.onap.ccsdk.cds.controllerblueprints.management.api.DownloadAction
 import org.onap.ccsdk.cds.controllerblueprints.management.api.FileChunk
 import org.onap.ccsdk.cds.controllerblueprints.management.api.RemoveAction
 import org.onap.ccsdk.cds.controllerblueprints.management.api.UploadAction
+import org.onap.ccsdk.cds.error.catalog.core.ErrorCatalogCodes
+import org.onap.ccsdk.cds.error.catalog.core.GrpcErrorCodes
+import org.onap.ccsdk.cds.error.catalog.core.utils.errorMessageOrDefault
+import org.onap.ccsdk.cds.error.catalog.services.ErrorCatalogService
 import org.slf4j.LoggerFactory
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Service
 
 // TODO("Convert to coroutines handler")
 @Service
-open class BluePrintManagementGRPCHandler(private val bluePrintModelHandler: BluePrintModelHandler) :
+open class BluePrintManagementGRPCHandler(
+    private val bluePrintModelHandler: BluePrintModelHandler,
+    private val errorCatalogService: ErrorCatalogService
+) :
     BluePrintManagementServiceGrpc.BluePrintManagementServiceImplBase() {
 
     private val log = LoggerFactory.getLogger(BluePrintManagementGRPCHandler::class.java)
@@ -266,20 +273,42 @@ open class BluePrintManagementGRPCHandler(private val bluePrintModelHandler: Blu
 
     private fun failStatus(header: CommonHeader, message: String, e: Exception): BluePrintManagementOutput {
         log.error(message, e)
+        return if (e is BluePrintProcessorException) onErrorCatalog(header, message, e) else onError(header, message, e)
+    }
+
+    private fun onError(header: CommonHeader, message: String, error: Exception): BluePrintManagementOutput {
+        val code = GrpcErrorCodes.code(ErrorCatalogCodes.GENERIC_FAILURE)
         return BluePrintManagementOutput.newBuilder()
-            .setCommonHeader(header)
-            .setStatus(
-                Status.newBuilder()
-                    .setTimestamp(currentTimestamp())
-                    .setMessage(BluePrintConstants.STATUS_FAILURE)
-                    .setErrorMessage(message)
-                    .setCode(500)
-                    .build()
-            )
-            .build()
-        //        return io.grpc.Status.INTERNAL
-        //                .withDescription(message)
-        //                .withCause(e)
-        //                .asException()
+                .setCommonHeader(header)
+                .setStatus(
+                        Status.newBuilder()
+                                .setTimestamp(currentTimestamp())
+                                .setMessage(BluePrintConstants.STATUS_FAILURE)
+                                .setErrorMessage("Error : $message \n Details: ${error.errorMessageOrDefault()}")
+                                .setCode(code)
+                                .build()
+                )
+                .build()
+    }
+
+    private fun onErrorCatalog(header: CommonHeader, message: String, error: BluePrintProcessorException):
+            BluePrintManagementOutput {
+        val err = if (error.protocol == "") {
+            error.grpc(ErrorCatalogCodes.GENERIC_FAILURE)
+        } else {
+            error.convertToGrpc()
+        }
+        val errorPayload = errorCatalogService.errorPayload(err.addErrorPayloadMessage(message))
+        return BluePrintManagementOutput.newBuilder()
+                .setCommonHeader(header)
+                .setStatus(
+                        Status.newBuilder()
+                                .setTimestamp(currentTimestamp())
+                                .setMessage(BluePrintConstants.STATUS_FAILURE)
+                                .setErrorMessage("Error : ${errorPayload.message}")
+                                .setCode(errorPayload.code)
+                                .build()
+                )
+                .build()
     }
 }

@@ -20,12 +20,15 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import org.slf4j.event.Level
 import org.onap.ccsdk.cds.error.catalog.core.ErrorMessageLibConstants.ERROR_CATALOG_DEFAULT_ERROR_CODE
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.Date
+import kotlin.collections.ArrayList
 
 open class ErrorPayload {
     var code: Int = ERROR_CATALOG_DEFAULT_ERROR_CODE
     var status: String = ""
     @get:JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    var timestamp: LocalDateTime = LocalDateTime.now()
+    var timestamp: Date = controllerDate()
     var message: String = ""
     var debugMessage: String = ""
     var logLevel: String = Level.ERROR.name
@@ -67,6 +70,11 @@ open class ErrorPayload {
         return (this.code == errorPayload.code && this.status == errorPayload.status && this.message == errorPayload.message &&
             this.logLevel == errorPayload.logLevel && this.debugMessage == errorPayload.debugMessage &&
             this.subErrors == errorPayload.subErrors)
+    }
+
+    private fun controllerDate(): Date {
+        val localDateTime = LocalDateTime.now(ZoneId.systemDefault())
+        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant())
     }
 }
 
