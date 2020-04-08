@@ -23,6 +23,10 @@ class ResourceAssignmentRuntimeService(private var id: String, private var blueP
         resourceStore[key] = value
     }
 
+    fun getResolutionStore(): MutableMap<String, JsonNode> {
+        return resourceStore.mapValues { e -> e.value.deepCopy() as JsonNode }.toMutableMap()
+    }
+
     fun getResolutionStore(key: String): JsonNode {
         return resourceStore[key]
             ?: throw BluePrintProcessorException("failed to get execution property ($key)")
