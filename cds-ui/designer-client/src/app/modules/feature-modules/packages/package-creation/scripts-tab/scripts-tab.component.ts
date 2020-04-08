@@ -98,4 +98,13 @@ export class ScriptsTabComponent implements OnInit {
     textChanges(code: any, key: string) {
         this.packageCreationStore.addScripts(key, code);
     }
+
+    changeDivShow(mapIndex: number) {
+        const divElement = document.getElementById('id-script-' + mapIndex) as HTMLElement;
+        if (divElement.getAttribute('class').includes('show')) {
+            divElement.setAttribute('class', 'collapse');
+        } else {
+            divElement.setAttribute('class', 'collapse show');
+        }
+    }
 }

@@ -20,7 +20,7 @@
             <div class="card">
                 <div [id]="'head-script-'+mapIndex" class="card-header">
                     <h5 class="mb-0 d-flex justify-content-between">
-                        <button [attr.aria-controls]="'id-script-'+mapIndex" [attr.data-target]="'#id-script-'+mapIndex"
+                        <button (click)="changeDivShow(mapIndex)"
                             aria-expanded="false" class="btn btn-link collapsed" data-toggle="collapse">
                             <i class="icon-file-code"></i> {{file.key}}
                         </button>

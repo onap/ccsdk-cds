@@ -36,9 +36,9 @@
             <div class="card">
                 <div class="card-header" [id]="'head-'+mapIndex">
                     <h5 class="mb-0 d-flex justify-content-between">
-                        <button class="btn btn-link collapsed" data-toggle="collapse"
-                            [attr.data-target]="'#id-'+mapIndex" aria-expanded="false"
-                            [attr.aria-controls]="'id-'+mapIndex">
+                        <button class="btn btn-link " data-toggle="collapse"
+                                aria-expanded="false"
+                            (click)="changeDivShow(mapIndex)" >
                             <i class="icon-file-code"></i> {{file.key}}
                         </button>
                         <a class="accordion-delete" (click)="removeFile(mapIndex)"><i class="icon-delete"></i></a>
@@ -54,6 +54,7 @@
                     </div>
                 </div>
             </div>
+
             <!--
                <div class="card">
                    <div class="card-header" id="headingThree">
@@ -77,6 +78,7 @@
                    </div>
                </div>
            -->
+
         </div>
     </div>
 
