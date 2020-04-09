@@ -149,7 +149,7 @@ export class MetadataComponent implements OnInit {
     this.metadata = Object.assign({}, this.CBAMetadataForm.value);
     this.blueprint.metadata = this.metadata;
     this.filesData.forEach((fileNode) => {
-      if (fileNode.name.includes(this.blueprintName) && fileNode.name == this.entryDefinition) {
+      if (fileNode.name.includes(this.blueprintName.trim()) && fileNode.name == this.entryDefinition) {
         let tempNodeData = JSON.parse(fileNode.data);
         tempNodeData.metadata = this.blueprint.metadata;
         fileNode.data = JSON.stringify(tempNodeData, null, "\t");
