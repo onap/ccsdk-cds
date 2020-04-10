@@ -4,12 +4,21 @@ body{
   background-size: 6px 6px !important;  
 }
 
+/*Icons*/
+.icon-info{
+  margin-left: 3px;
+}
+.icon-info::before{
+  color: #fff;
+}
 
 /*Header*/
 header{
+  position: relative;
   height: 60px;
   background-color: #1B3E6F;
   box-shadow: 0 4px 10px rgba(238, 240, 245, 1.0);
+  z-index: 200000000 !important;
 }
 .logo{
   float: left;
@@ -43,8 +52,12 @@ header{
   padding: 4px 10px;
   background: #F4F9FE;
   border-radius: 10px;
-  color: #C3CDDB;
+  color: #1B3E6F;
   font-size: 10px;
+}
+.designer-breadcrumb .fa-angle-right::before {
+  color: #fff;
+  line-height: 38px;
 }
 .sidebar-container{
   height: calc(100vh - 60px) !important;
@@ -68,7 +81,7 @@ header{
 .btn-topology-action,
 .btn-topology-action:hover{
   margin: 0 6px;
-  padding: 6px 10px;
+  padding: 4px 8px;
   color: #fff;
   border-radius: 50%;
   border: solid .5px #fff;
@@ -97,13 +110,15 @@ header{
 .topology-actions .dropdown-text::after{
   right: 15px;
   top: 13px;
-  border-width: 6px 6px 0 6px;
+  border-style: solid !important;
+  border-width: 5px 5px 0 5px !important;
   border-color: #fff transparent transparent transparent;
 }
 .topology-actions .dropdown-toggle:focus ~ .dropdown-text::after{
   top: 13px;
-  border-width: 0 6px 6px 6px;
-  border-color: transparent transparent #fff transparent
+  border-style: solid !important;
+  border-width: 0 5px 5px 5px !important;
+  border-color: transparent transparent #fff transparent;
 }
 .topology-actions .dropdown-content:hover, 
 .topology-actions .dropdown-toggle:focus ~ .dropdown-content{
@@ -123,9 +138,35 @@ header{
   background: #F4F9FE;
   text-decoration: none;
 }
-
-
-
+.package-info-btn{
+  padding: 0 !important;
+}
+.package-info h3{
+  font-size: 15px;
+  font-weight: bold;
+}
+.package-info h3 span{
+  font-size: 11px;
+}
+.package-info .badge{
+  margin-right: 6px;
+  padding: 4px 10px;
+  background: #E0E8F2;
+  border-radius: 12px;
+  color: #1B3E6F;
+  font-size: 11px;
+  font-weight: normal;
+}
+.creator-pic{
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+}
+.package-info p{
+  margin-bottom: 0;
+  font-size: 11px;
+  line-height: 20px;
+}
 
 
 
@@ -179,7 +220,24 @@ button.rotate{
 .rotate a:hover{
   text-decoration: none;
 }
-
+#board-paper svg{
+  top: 40px;
+  left: 30px;
+}
+.componentsList tspan{
+  width:60px !important; 
+  font: normal 13px sans-serif; 
+  fill: #1B3E6F !important; 
+  overflow-wrap: break-word;
+}
+#board-paper #name tspan{
+  /* fill: green; */
+  text-align: center;
+  
+}
+tspan#type{
+  text-align: center;
+}
 /*ACTIONS & COMPONENTS MENU*/
 .input-search-controller{
   height: 50px;
@@ -252,6 +310,8 @@ p.compType-4{
   color: #C3CDDB;
 }
 .controllerSidebar b{
+  margin-left: 12px;
+  margin-bottom: 9px;
   font-size: 12px;
   color: #C3CDDB;
 }
@@ -261,17 +321,17 @@ p.compType-4{
   border-radius: 2px !important;
   font-size: 12px;
   font-weight: bold;
+  outline: 0 !important;
 }
-.actionBtns .btn:first-child{
+.actionBtns .btn.insert-custom{
   background: #1B3E6F;
   border: solid 1px #1B3E6F;
   color: #fff;
 }
-.actionBtns .btn:last-child{
-  padding-left: 34px !important;
-  background: url(src/assets/img/icon-import-blue.svg) 12px center #fff no-repeat;
+.actionBtns .btn.import-action{
   border: solid 1px #D0DFF1;
   color: #1B3E6F;
+  
 }
 .actionsList,
 .componentsList{
@@ -281,6 +341,7 @@ p.compType-4{
   padding-bottom: 0;
   height: calc( 100vh - 218px)!important;
   overflow: scroll;
+  background: #F4F9FE !important;
 }
 .custom-control.custom-checkbox:hover,
 .custom-control-label:hover{
@@ -553,7 +614,7 @@ p.compType-4{
 .source-button{
   position: absolute;
     z-index: 9999999;
-    top: 69px;
+    top: 60px;
     left: 50%;
 }
 /*jointjs paper*/

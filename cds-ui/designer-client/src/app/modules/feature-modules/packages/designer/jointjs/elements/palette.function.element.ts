@@ -34,7 +34,7 @@ const FunctionElement = joint.shapes.standard.Rectangle.define('palette.Function
 }, {
     markup:
     `<defs>
-        <rect id="pallete-function-rect" x="0" y="0" width="280" height="40" rx="2"></rect>
+        <rect id="pallete-function-rect" x="0" y="0" width="290" height="40" rx="2"></rect>
         <filter x="-3.6%" y="-20.0%" width="107.1%" height="150.0%" filterUnits="objectBoundingBox" id="filter-2">
             <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
             <feGaussianBlur stdDeviation="3" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
@@ -53,7 +53,7 @@ const FunctionElement = joint.shapes.standard.Rectangle.define('palette.Function
                                 <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#pallete-function-rect"></use>
                                 <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#pallete-function-rect"></use>
                             </g>
-                            <g id="drag-menu" transform="translate(20.000000, 15.000000)" fill="#C3CDDB" fill-rule="nonzero">
+                            <g id="drag-menu" transform="translate(15.000000, 15.000000)" fill="#C3CDDB" fill-rule="nonzero">
                                 <g id="left">
                                     <circle id="1" cx="0.8" cy="0.8" r="1"></circle>
                                     <circle id="2" cx="0.8" cy="3.8" r="1"></circle>
@@ -67,7 +67,7 @@ const FunctionElement = joint.shapes.standard.Rectangle.define('palette.Function
                                     <circle id="4" cx="0.8" cy="9.8" r="1"></circle>
                                 </g>
                             </g>
-                            <g id="txt" transform="translate(35.000000, 10.000000)" fill="#1B3E6F">
+                            <g id="txt" transform="translate(30.000000, 10.000000)" fill="#1B3E6F">
                                 <g id="browser" fill-rule="nonzero">
                                     <path d="M21.0000051,0.39034364 C20.9994786,
                                     0.29701568 20.9615913,0.207858845 20.8946802,
@@ -254,7 +254,7 @@ const FunctionElement = joint.shapes.standard.Rectangle.define('palette.Function
                                     id="Shape"></path>
                                 </g>
                                 <text id="function-type" font-family="ArialMT, Arial" font-size="14" font-weight="normal" line-spacing="20">
-                                    <tspan id="label" x="32" y="13"></tspan>
+                                    <tspan id="label" x="30" y="13"></tspan>
                                 </text>
                             </g>
                         </g>

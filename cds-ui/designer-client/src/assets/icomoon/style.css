@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?3iboyv');
-  src:  url('fonts/icomoon.eot?3iboyv#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?3iboyv') format('truetype'),
-    url('fonts/icomoon.woff?3iboyv') format('woff'),
-    url('fonts/icomoon.svg?3iboyv#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?njx1om');
+  src:  url('fonts/icomoon.eot?njx1om#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?njx1om') format('truetype'),
+    url('fonts/icomoon.woff?njx1om') format('woff'),
+    url('fonts/icomoon.svg?njx1om#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -19,63 +19,136 @@
   font-variant: normal;
   text-transform: none;
   line-height: 1;
+  
+  /* Enable Ligatures ================ */
+  letter-spacing: 0;
+  -webkit-font-feature-settings: "liga";
+  -moz-font-feature-settings: "liga=1";
+  -moz-font-feature-settings: "liga";
+  -ms-font-feature-settings: "liga" 1;
+  font-feature-settings: "liga";
+  -webkit-font-variant-ligatures: discretionary-ligatures;
+  font-variant-ligatures: discretionary-ligatures;
 
   /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-package:before {
-  content: "\e90f";
-}
-.icon-dictionary:before {
-  content: "\e910";
-}
-.icon-deploy:before {
-  content: "\e911";
-}
-.icon-Upload-attribute:before {
-  content: "\e90c";
-}
-.icon-import-cds:before {
-  content: "\e90d";
-}
-.icon-current-template:before {
-  content: "\e90e";
-}
-.icon-generic-script-mode:before {
-  content: "\e900";
-}
-.icon-clone:before {
-  content: "\e901";
-}
-.icon-delete:before {
+.icon-enter-link:before {
   content: "\e902";
 }
-.icon-designer-mode:before {
-  content: "\e903";
+.icon-use-attributes:before {
+  content: "\e900";
 }
-.icon-scripting-mode:before {
-  content: "\e904";
+.icon-upload-attributes:before {
+  content: "\e901";
 }
-.icon-archive:before {
-  content: "\e905";
+.icon-add:before {
+  content: "\e915";
 }
-.icon-enter:before {
-  content: "\e906";
+.icon-archive-sm:before {
+  content: "\e952";
+}
+.icon-btn-card-config:before {
+  content: "\e953";
+}
+.icon-btn-card-topology:before {
+  content: "\e954";
+}
+.icon-clone-sm:before {
+  content: "\e955";
+}
+.icon-close:before {
+  content: "\e956";
+}
+.icon-comType1:before {
+  content: "\e957";
+}
+.icon-comType1-sm:before {
+  content: "\e958";
+}
+.icon-comType2:before {
+  content: "\e959";
+}
+.icon-comType2-sm:before {
+  content: "\e95a";
+}
+.icon-comType3:before {
+  content: "\e95b";
+}
+.icon-comType3-sm:before {
+  content: "\e95c";
+}
+.icon-comType4-sm:before {
+  content: "\e95d";
+}
+.icon-create-white:before {
+  content: "\e95e";
+}
+.icon-delete-sm:before {
+  content: "\e95f";
+}
+.icon-deploy-inactive:before {
+  content: "\e965";
+}
+.icon-discard-sm:before {
+  content: "\e966";
+}
+.icon-download:before {
+  content: "\e967";
+}
+.icon-drag:before {
+  content: "\e968";
+}
+.icon-edit:before {
+  content: "\e969";
 }
 .icon-file-code:before {
-  content: "\e907";
+  content: "\e96a";
 }
-.icon-drag-menu:before {
-  content: "\e908";
+.icon-import-blue:before {
+  content: "\e96b";
 }
-.icon-mapping:before {
-  content: "\e909";
+.icon-info:before {
+  content: "\e96c";
 }
-.icon-template-mapping:before {
-  content: "\e90a";
+.icon-menuDots:before {
+  content: "\e96d";
 }
-.icon-template:before {
-  content: "\e90b";
+.icon-nav-dictionary:before {
+  content: "\e96e";
+}
+.icon-nav-packages:before {
+  content: "\e96f";
+}
+.icon-redo:before {
+  content: "\e970";
+}
+.icon-remove-file:before {
+  content: "\e971";
+}
+.icon-save-sm:before {
+  content: "\e972";
+}
+.icon-search:before {
+  content: "\e973";
+}
+.icon-search-light:before {
+  content: "\e974";
+}
+.icon-topologySource:before {
+  content: "\e975";
+}
+.icon-topologyView-active:before {
+  content: "\e976";
+}
+.icon-undoActive:before {
+  content: "\e977";
+}
+.icon-zoomIn:before {
+  content: "\e978";
+}
+.icon-zoomOut:before {
+  content: "\e979";
 }

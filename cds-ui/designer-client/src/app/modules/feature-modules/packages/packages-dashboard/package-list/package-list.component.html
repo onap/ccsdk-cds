@@ -1,35 +1,33 @@
 <div class="row packages-card">
-    <div class="col-lg-3 col-md-6">
+    <div class="col-lg-3 col-md-6 d-flex">
         <!--Add Package Card-->
         <div class="card addPaackage-card">
             <div class="card-body text-center">
-                <img src="/assets/img/icon-addPackage.svg">
+                <img src="/assets/img/icon-addPackage.svg" width="40%">
             </div>
             <div class="card-footer row">
-                <div class="col">
+                <div class="col text-center">
                     <a routerLink="/packages/createPackage" role="button" aria-pressed="true"
-                        class="btn-create-package float">Create
+                        class="btn-create-package float"><i class="icon-create-white" aria-hidden="true"></i>Create Package
                     </a>
-                </div>
-                <div class="col">
-                    <a href="#" role="button" aria-pressed="true" class="btn-import-package float">Import
+                    <br/>
+                    <a href="#" role="button" aria-pressed="true" class="btn-import-package float mb-3"><i class="icon-import-blue" aria-hidden="true"></i>Import Package
                     </a>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-lg-3 col-md-6" *ngFor="let bluePrint of viewedPackages">
-
+    <div class="col-lg-3 col-md-6 d-flex" *ngFor="let bluePrint of viewedPackages">
         <!--Card 1-->
-        <div>
             <div class="card">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-9 pr-0">
                             <a class="card-title" [routerLink]="['/packages/package', bluePrint.id]"
                                 (click)="testDispatch(bluePrint)">
-                                <img class="icon-deployed" src="/assets/img/icon-deploy.svg">
-                                {{bluePrint.artifactName}}
+                                <!-- <img class="icon-deployed" src="/assets/img/icon-deploy.svg"> -->
+                                {{bluePrint.artifactName}}<span>.vLB.CDS</span>
+                                <span class="package-version">Version 1.0.2</span>
                             </a>
 
                         </div>
@@ -38,17 +36,33 @@
                             <div class="dropdown">
                                 <input class="dropdown-toggle" type="text">
                                 <div class="dropdown-text">
-                                    <img src="/assets/img/icon-menuDots.svg" title="Actions">
+                                    <!-- <img src="/assets/img/icon-menuDots.svg" title="Actions"> -->
+                                    <i class="icon-menuDots" aria-hidden="true"></i>
                                 </div>
                                 <ul class="dropdown-content">
                                     <li class="action-clone">
-                                        <a href="#">Clone</a>
+                                        <a href="#">
+                                            <i class="icon-clone-sm" aria-hidden="true"></i>
+                                            Clone
+                                        </a>
                                     </li>
                                     <li class="action-archive">
-                                        <a href="#">Archive</a>
+                                        <a href="#">
+                                            <i class="icon-archive-sm" aria-hidden="true"></i>
+                                            Archive
+                                        </a>
+                                    </li>
+                                    <li class="action-archive">
+                                        <a href="#">
+                                            <i class="icon-download" aria-hidden="true"></i>
+                                            Download
+                                        </a>
                                     </li>
                                     <li class="action-delete">
-                                        <a href="#">Delete</a>
+                                        <a href="#">
+                                            <i class="icon-delete-sm" aria-hidden="true"></i>
+                                            Delete
+                                        </a>
                                     </li>
                                 </ul>
                             </div>
@@ -57,9 +71,12 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <p class="mb-0">Last modified {{ bluePrint.createdDate | date:'short' }}
+                            <p class="mb-0 mt-1">Last modified {{ bluePrint.createdDate | date:'short' }}
                             </p>
-                            <p>By {{bluePrint.updatedBy}}</p>
+                            <p class="mb-2">By {{bluePrint.updatedBy}}</p>
+                            <p class="package-desc tooltip-bottom" data-tooltip="DESCRIPTION:
+                            The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from de Finibus Bonorum et Malorum by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.">Description text quisquam est dolorem, velit...</p>
+                            
                             <ul class="package-contributers">
                                 <li>
                                     <button type="button" class="border-fade" data-toggle="tooltip"
@@ -88,19 +105,16 @@
                     <div class="card-footer">
                         <div class="row">
                             <div class="col">
-                                <button type="button" class="btn btn-card-topology">Topology View
+                                <button type="button" class="btn btn-card-topology"><i class="icon-btn-card-topology" aria-hidden="true"></i>Designer Mode
                                 </button>
                             </div>
                             <div class="col">
-                                <button type="button" (click)="view(bluePrint.id)"
-                                    class="btn btn-card-config">Configuration</button>
+                                <button type="button" (click)="view(bluePrint.id)" class="btn btn-card-config"><i class="icon-btn-card-config" aria-hidden="true"></i>Configuration</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
             </div>
-
-        </div>
     </div>
 </div>

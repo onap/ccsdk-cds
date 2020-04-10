@@ -16,9 +16,9 @@ export class MetadataTabComponent implements OnInit {
     tags = new Set<string>();
     customKeysMap = new Map();
     modes: any[] = [
-        { name: 'Designer Mode', style: 'mode-icon icon-designer-mode' }];
-    /*  {name: 'Scripting Mode', style: 'mode-icon icon-scripting-mode'},
-      {name: 'Generic Script Mode', style: 'mode-icon icon-generic-script-mode'}];*/
+        { name: 'Designer Mode', style: 'mode-icon icon-topologyView-active' }];
+    /*  {name: 'Scripting Mode', style: 'mode-icon icon-topologySource'},
+      {name: 'Generic Script Mode', style: 'mode-icon icon-topologySource'}];*/
     modeType = this.modes[0].name;
     private metaDataTab: MetaDataTabModel = new MetaDataTabModel();
     private errorMessage: string;
@@ -101,7 +101,7 @@ export class MetadataTabComponent implements OnInit {
         if (this.metaDataTab.name && this.metaDataTab.version) {
             this.packageCreationService.checkBluePrintNameAndVersion(this.metaDataTab.name, this.metaDataTab.version).then(element => {
                 if (element) {
-                    this.errorMessage = 'the package with name and version is exists';
+                    this.errorMessage = 'Package name already exists with this version. Use different name or different version number.';
                 } else {
                     this.errorMessage = ' ';
                 }

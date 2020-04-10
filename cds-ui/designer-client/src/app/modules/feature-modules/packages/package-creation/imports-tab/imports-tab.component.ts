@@ -19,7 +19,6 @@ export class ImportsTabComponent implements OnInit {
 
     constructor(private packageCreationStore: PackageCreationStore, private packageCreationUtils: PackageCreationUtils) {
     }
-
     ngOnInit(): void {
         this.packageCreationStore.state$.subscribe(cbaPackage => {
             if (cbaPackage.definitions && cbaPackage.definitions.imports && cbaPackage.definitions.imports.size > 0) {
