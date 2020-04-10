@@ -39,6 +39,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.nullToEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.rootFieldsToMap
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintVelocityTemplateService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonReactorUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.PropertyDefinitionUtils.Companion.hasLogProtect
@@ -127,6 +128,32 @@ class ResourceAssignmentUtils {
             raRuntimeService.putResolutionStore(resourceAssignment.name, value)
             raRuntimeService.putDictionaryStore(resourceAssignment.dictionaryName!!, value)
             resourceAssignment.property!!.value = value
+
+            val metadata = resourceAssignment.property?.metadata
+            metadata?.get(ResourceResolutionConstants.METADATA_TRANSFORM_TEMPLATE)
+                    ?.let { if (it.contains("$")) it else null }
+                    ?.let { template ->
+                        val resolutionStore = raRuntimeService.getResolutionStore()
+                                .mapValues { e -> e.value.asText() } as MutableMap<String, Any>
+                        val newValue: JsonNode
+                        try {
+                            newValue = BluePrintVelocityTemplateService
+                                    .generateContent(template, null, true, resolutionStore)
+                                    .also { if (hasLogProtect(metadata))
+                                        logger.info("Transformed value: $resourceAssignment.name")
+                                    else
+                                        logger.info("Transformed value: $value -> $it") }
+                                    .let { v -> v.asJsonType() }
+                        } catch (e: Exception) {
+                            throw BluePrintProcessorException(
+                                    "transform-template failed: $template", e)
+                        }
+                        with(resourceAssignment) {
+                            raRuntimeService.putResolutionStore(this.name, newValue)
+                            raRuntimeService.putDictionaryStore(this.dictionaryName!!, newValue)
+                            this.property!!.value = newValue
+                        }
+                    }
         }
 
         fun setFailedResourceDataValue(resourceAssignment: ResourceAssignment, message: String?) {
