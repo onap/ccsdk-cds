@@ -4,17 +4,61 @@
         <div class="col pl-0">
             <p class="logo mb-0"></p>
             <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-0">
+                <ol class="breadcrumb designer-breadcrumb mb-0">
                     <li class="breadcrumb-item">
                         <a href="#">CBA Packages</a>
                     </li>
+                    <i class="fa fa-angle-right ml-2 mr-2"></i>
                     <li class="breadcrumb-item">
                         <a href="#">Package Name</a>
+                        <button type="button" class="btn package-info-btn" data-toggle="modal"
+                            data-target="#exampleModalLong">
+                            <i class="icon-info" aria-hidden="true"></i>
+                        </button>
                     </li>
+                    <i class="fa fa-angle-right ml-2 mr-2"></i>
                     <li class="breadcrumb-item active" aria-current="page">
-                        <p class="mb-0">Topology View</p>
+                        <p class="mb-0">Designer Mode</p>
                     </li>
                 </ol>
+                <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Package Details</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <img src="assets/img/icon-close.svg" />
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row package-info">
+                                    <div class="col-12">
+                                        <h3>Test Package<span>.vLB.CDS</span>
+                                            <span class="package-version">Version 1.0.2</span></h3>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <span class="badge badge-primary">test</span>
+                                        <span class="badge badge-primary">vDNS-CDS</span>
+                                        <span class="badge badge-primary">SCALE-OUT</span>
+                                        <span class="badge badge-primary">MARCO</span>
+                                    </div>
+                                    <div class="col-2">
+                                        <img src="/assets/img/img-user3.jpg" class="creator-pic">
+                                    </div>
+                                    <div class="col-10 pl-0">
+                                        <p><b>Author information:</b></p>
+                                        <p>Abdelmuhaimen Seaudi</p>
+                                        <p>abdelmuhaimen.seaudi@orange.com</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </nav>
         </div>
         <div class="col pr-0 text-right">
@@ -22,15 +66,15 @@
                 <li>
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <a href="#" role="button" aria-pressed="true" class="btn-topology-action float tooltip-bottom"
-                           data-tooltip="Preview">
+                            data-tooltip="Preview">
                             <i class="fa fa-eye"></i>
                         </a>
                         <a href="#" role="button" aria-pressed="true" class="btn-topology-action float tooltip-bottom"
-                           data-tooltip="Download">
+                            data-tooltip="Download">
                             <i class="fa fa-download"></i>
                         </a>
                         <a href="#" role="button" aria-pressed="true" class="btn-topology-action float tooltip-bottom"
-                           data-tooltip="Share">
+                            data-tooltip="Share">
                             <i class="fa fa-share-square"></i>
                         </a>
                     </div>
@@ -58,24 +102,24 @@
 <div class="source-button editBar">
     <div class="btn-group viewBtns" role="group">
         <button type="button" class="btn btn-secondary topologySource active">Designer</button>
-        <button [routerLink]="['/designer/source']" type="button" class="btn btn-secondary topologyView">Scripting</button>
+        <button [routerLink]="['/designer/source']" type="button"
+            class="btn btn-secondary topologyView">Scripting</button>
     </div>
 </div>
 <ng-sidebar-container class="sidebar-container">
     <!-- Controller SideBar -->
     <ng-sidebar [(opened)]="controllerSideBar" [sidebarClass]="'demo-sidebar controllerSidebar container-fluid'"
-                [mode]="'push'"
-                #sidebarLeft>
+        [mode]="'push'" #sidebarLeft>
         <div class="row">
-            
             <h1 class="col-12">Actions</h1>
             <div class="col-12 text-center p-0">
                 <div class="btn-group actionBtns" role="group">
-                    <button (click)="insertCustomActionIntoBoard()" type="button" class="btn">Insert Custom</button>
-                    <!-- <button type="button" class="btn">Import Action</button> -->
+                    <button (click)="insertCustomActionIntoBoard()" type="button" class="btn insert-custom">Insert
+                        Custom</button>
+                    <!-- <button type="button" class="btn import-action"><i class="icon-import-blue" aria-hidden="true"></i>Import Action</button> -->
                 </div>
             </div>
-      <!-- <div class="col-12 actionsList">
+            <!-- <div class="col-12 actionsList">
         <b>Select from other packages:</b>
         <div class="actions-scroll">
           <div class="custom-control custom-checkbox">
@@ -109,22 +153,22 @@
         </div>
       </div> -->
 
-        <h1 class="col-12">Functions</h1>
-        <b>Drag and drop function to Action’s box</b>
-        <div id="palette-paper" class="col-12 componentsList">
-        </div>
+            <h1 class="col-12">Functions</h1>
+            <b>Drag and drop function to Action’s box</b>
+            <div id="palette-paper" class="col-12 componentsList">
+            </div>
         </div>
     </ng-sidebar>
     <!-- Page content -->
-    
+
     <div ng-sidebar-content id="board-paper">
         <button class="rotate" (click)="_toggleSidebar1()">
-      <span>
-        Controller
-        <i class="fa fa-angle-double-left"></i>
-      </span>
+            <span>
+                Controller
+                <i class="fa fa-angle-double-left"></i>
+            </span>
         </button>
-        
+
         <!-- Canvas -->
         <div class="editBar text-center">
             <div class="btn-group mr-2" role="group" aria-label="First group">
@@ -180,8 +224,7 @@
     </div>
     <!-- Attribute SideBar -->
     <ng-sidebar [(opened)]="attributesSideBar" [sidebarClass]="'demo-sidebar attributesSideBar '" [mode]="'push'"
-                [position]="'right'"
-                #sidebarRight>
+        [position]="'right'" #sidebarRight>
         <div class="container-fluid0">
             <div class="row m-0">
                 <div class="col-2 pr-0">
@@ -203,8 +246,7 @@
                                 <div class="card-header row" id="headingOne">
                                     <h2 class="col-10 mb-0">
                                         <button class="btn btn-link" type="button" data-toggle="collapse"
-                                                data-target="#collapseOne" aria-expanded="true"
-                                                aria-controls="collapseOne">
+                                            data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                             Steps
                                         </button>
                                     </h2>
@@ -214,7 +256,7 @@
                                 </div>
 
                                 <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                     data-parent="#accordionExample">
+                                    data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-9">
@@ -234,7 +276,7 @@
                                         <div class="form-group">
                                             <label for="exampleFormControlTextarea1">Description</label>
                                             <textarea class="form-control" id="exampleFormControlTextarea1"
-                                                      rows="3"></textarea>
+                                                rows="3"></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Target</label>
@@ -248,8 +290,7 @@
                                 <div class="card-header row" id="headingTwo">
                                     <h2 class="col-10 mb-0">
                                         <button class="btn btn-link" type="button" data-toggle="collapse"
-                                                data-target="#collapseTwo" aria-expanded="true"
-                                                aria-controls="collapseTwo">
+                                            data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                                             Inputs
                                         </button>
                                     </h2>
@@ -258,7 +299,7 @@
                                     </div>
                                 </div>
                                 <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
-                                     data-parent="#accordionExample">
+                                    data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-9">
@@ -278,7 +319,7 @@
                                         <div class="form-group">
                                             <label for="exampleFormControlTextarea1">Description</label>
                                             <textarea class="form-control" id="exampleFormControlTextarea1"
-                                                      rows="3"></textarea>
+                                                rows="3"></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Target</label>
@@ -292,8 +333,8 @@
                                 <div class="card-header row" id="headingThree">
                                     <h2 class="col-10 mb-0">
                                         <button class="btn btn-link" type="button" data-toggle="collapse"
-                                                data-target="#collapseThree" aria-expanded="true"
-                                                aria-controls="collapseThree">
+                                            data-target="#collapseThree" aria-expanded="true"
+                                            aria-controls="collapseThree">
                                             Outputs
                                         </button>
                                     </h2>
@@ -302,7 +343,7 @@
                                     </div>
                                 </div>
                                 <div id="collapseThree" class="collapse show" aria-labelledby="headingThree"
-                                     data-parent="#accordionExample">
+                                    data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-9">
@@ -322,7 +363,7 @@
                                         <div class="form-group">
                                             <label for="exampleFormControlTextarea1">Description</label>
                                             <textarea class="form-control" id="exampleFormControlTextarea1"
-                                                      rows="3"></textarea>
+                                                rows="3"></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Target</label>

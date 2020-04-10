@@ -7,13 +7,11 @@
                 <h2 class="col m-0">
                     <ul class="breadcrumb-header">
                         <li><a routerLink="/packages">CBA Packages</a></li>
+                        <i class="fa fa-angle-right ml-2 mr-2"></i>
                         <li>Package Name</li>
                     </ul>
                 </h2>
-                <div class="col d-flex justify-content-end header-button-save">
-                    <button class="float btn btn-sm btn-outline-secondary" (click)="goBacktoDashboard()">Discard
-                        Changes</button>
-                    <button class="float btn btn-sm btn-primary" (click)="editBluePrint()">Apply Changes</button>
+                <div class="col">
                 </div>
             </div>
         </header>
@@ -23,54 +21,97 @@
         <div class="container-fluid body-container">
 
             <div class="container">
-                <!-- <div class="creat-action-container">
+                <div class="creat-action-container">
+
+                    <a href="#" class="action-button" (click)="editBluePrint()">
+                        <i class="icon-save-sm" aria-hidden="true"></i>
+                        <span>Save</span>
+                    </a>
+                    <a href="#" class="action-button" (click)="goBacktoDashboard()">
+                        <i class="icon-discard-sm" aria-hidden="true"></i>
+                        <span>Discard Changes</span>
+                    </a>
+
+                    <hr>
                     <a href="#" class="action-button">
-                        <i class="icon-clone" aria-hidden="true"></i>
+                        <i class="icon-clone-sm" aria-hidden="true"></i>
                         <span>Clone</span>
                     </a>
 
                     <a href="#" class="action-button">
-                        <i class="icon-archive" aria-hidden="true"></i>
+                        <i class="icon-archive-sm" aria-hidden="true"></i>
                         <span>Archive</span>
                     </a>
 
-                    <a href="#" class="action-button delete">
-                        <i class="icon-delete" aria-hidden="true"></i>
+                    <a href="#" class="action-button">
+                        <i class="icon-download" aria-hidden="true"></i>
+                        <span>Download</span>
+                    </a>
+
+                    <a href="#" class="action-button delete"
+                        (click)="downloadPackage(viewedPackage.artifactName,viewedPackage.artifactVersion)">
+                        <i class="icon-delete-sm" aria-hidden="true"></i>
                         <span>Delete</span>
                     </a>
-                </div>-->
+                </div>
 
                 <div class="card creat-card view-package-container">
                     <div class="row">
-                        <div class="col-8">
-                            <div class="row">
-                                <div class="col d-flex">
-                                    <i class="package-type-icon icon-designer-mode"></i>
-                                    <div class="package-name-container">
-                                        <div class="row">
-                                            <div class="col-12 package-name deployed">
-                                                {{viewedPackage.artifactName}}
-                                                <span>.vLB.CDS</span>
-                                                <i class="icon-deploy"></i>
-                                            </div>
-                                            <div class="col-12 package-description">
-                                                Last modified {{ viewedPackage.createdDate | date:'short' }} By
-                                                {{viewedPackage.updatedBy}}
-                                            </div>
-                                        </div>
-
-                                    </div>
+                        <div class="col-1 text-center"><i class="package-type-icon icon-topologyView-active"></i></div>
+                        <div class="col-9">
+                            <div class="row mb-4">
+                                <div class="col-12 package-name deployed">
+                                    {{viewedPackage.artifactName}}<span>.vLB.CDS</span>
+                                    <img src="/assets/img/icon-deploy-inactive.svg" class="deply-status-icon">
+                                    <span class="package-version">Version 1.0.2</span>
+                                </div>
+                                <div class="col-12 package-description">
+                                    Last modified {{ viewedPackage.createdDate | date:'short' }} By
+                                    {{viewedPackage.updatedBy}}
+                                </div>
+                            </div>
+                            <div class="row package-auth-info">
+                                <div class="col-3">
+                                    <p><b>Author Name</b></p>
+                                    <span>Shaaban Ebrahim</span>
+                                </div>
+                                <div class="col-4">
+                                    <p><b>Author Email</b></p>
+                                    <span>shaaban.eltanany.ext@orange.com</span>
+                                </div>
+                                <div class="col-5">
+                                    <p><b>Contributions</b></p>
+                                    <ul class="package-contributers">
+                                        <li>
+                                            <button type="button" class="border-fade" data-toggle="tooltip"
+                                                data-placement="bottom" title="User name">
+                                                <img src="/assets/img/img-user1.jpeg">
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button type="button" data-toggle="tooltip" data-placement="bottom"
+                                                title="User name">
+                                                <img src="/assets/img/img-user2.jpg">
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button type="button" data-toggle="tooltip" data-placement="bottom"
+                                                title="User name">
+                                                <img src="/assets/img/img-user3.jpg">
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <a href="">5 contributors</a>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-4 package-view-button">
+                        <div class="col-2 package-view-button pt-3">
+                            <button class="btn btn-sm btn-primary mb-2" (click)="goToDesignerMode()">Designer
+                                Mode</button>
                             <button class="btn btn-sm btn-outline-secondary" (click)="deployCurrentPackage()"><i
                                     class="fa fa-play-circle"></i> Deploy</button>
-                            <button class="btn btn-sm btn-outline-secondary"
-                                (click)="downloadPackage(viewedPackage.artifactName,viewedPackage.artifactVersion)"><i
-                                    class="fa"></i> Download</button>
-
-                            <button class="btn btn-sm btn-primary" (click)="goToDesignerMode()">Designer Mode</button>
                         </div>
                     </div>
 
@@ -80,7 +121,7 @@
                     <!--Nav Tabs-->
                     <div class="col">
                         <div class="nav nav-tabs " id="nav-tab" role="tablist">
-                            <a class="nav-item nav-link active" id="nav-metadata-tab" data-toggle="tab"
+                            <a class="nav-item nav-link active complete" id="nav-metadata-tab" data-toggle="tab"
                                 href="#nav-metadata" role="tab" aria-controls="nav-metadata" aria-selected="true"
                                 autofocus #nameit (focusout)="saveMetaData()">METADATA</a>
                             <a class="nav-item nav-link" id="nav-template-tab" data-toggle="tab" href="#nav-template"

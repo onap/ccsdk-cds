@@ -29,4 +29,5 @@ export class SortPackagesComponent implements OnInit {
 enum SortByToServerValue {
     Recent = 'DATE',
     Name = 'NAME',
+    Version = 'VERSION',
 }
