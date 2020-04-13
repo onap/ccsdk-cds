@@ -1247,11 +1247,14 @@ ul.package-contributers{
   background: transparent !important;
   border-top-color: #F7F6F6 !important;
 }
+.packages-card .card-footer .col{
+  text-align: center;
+}
 .packages-card .card-footer .col:first-child{
   border-right: solid 1px #F7F6F6;
 }
 .packages-card .card-footer .btn{
-  padding: 10px 5px 10px 0 !important;
+  padding: 10px 0 10px 0 !important;
   background-color: transparent !important;
   color: #1B3E6F !important;
   border: 0;
@@ -2421,6 +2424,14 @@ margin-right: 5px;
   line-height: 48px;
   font-size: 20px;
   /* margin-right: 20px; */
+}
+.defintionsNote{
+  padding-left: 0;
+}
+.defintionsNote li{
+  line-height: 24px;
+  list-style: none;
+  font-size: 13px;
 }
 .package-name-container{
   width: calc(100% - 60px);
