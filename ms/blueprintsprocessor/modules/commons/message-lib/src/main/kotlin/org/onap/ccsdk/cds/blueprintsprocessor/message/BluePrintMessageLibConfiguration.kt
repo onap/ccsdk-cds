@@ -61,6 +61,10 @@ class MessageLibConstants {
         const val PROPERTY_MESSAGE_CONSUMER_PREFIX = "blueprintsprocessor.messageconsumer."
         const val PROPERTY_MESSAGE_PRODUCER_PREFIX = "blueprintsprocessor.messageproducer."
         const val TYPE_KAFKA_BASIC_AUTH = "kafka-basic-auth"
+        const val TYPE_KAFKA_SCRAM_SSL_AUTH = "kafka-scram-ssl-auth"
+        const val TYPE_KAFKA_SSL_AUTH = "kafka-ssl-auth"
         const val TYPE_KAFKA_STREAMS_BASIC_AUTH = "kafka-streams-basic-auth"
+        const val TYPE_KAFKA_STREAMS_SSL_AUTH = "kafka-streams-ssl-auth"
+        const val TYPE_KAFKA_STREAMS_SCRAM_SSL_AUTH = "kafka-streams-scram-ssl-auth"
     }
 }

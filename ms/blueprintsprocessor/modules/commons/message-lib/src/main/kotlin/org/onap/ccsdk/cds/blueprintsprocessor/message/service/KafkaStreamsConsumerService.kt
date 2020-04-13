@@ -17,27 +17,22 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.message.service
 
 import kotlinx.coroutines.channels.Channel
-import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.streams.KafkaStreams
-import org.apache.kafka.streams.StreamsConfig
-import org.onap.ccsdk.cds.blueprintsprocessor.message.KafkaStreamsBasicAuthConsumerProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.message.MessageConsumerProperties
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import java.util.Properties
 
-open class KafkaStreamsBasicAuthConsumerService(private val messageConsumerProperties: KafkaStreamsBasicAuthConsumerProperties) :
+open class KafkaStreamsConsumerService(private val messageConsumerProperties: MessageConsumerProperties) :
     BlueprintMessageConsumerService {
 
-    val log = logger(KafkaStreamsBasicAuthConsumerService::class)
+    val log = logger(KafkaStreamsConsumerService::class)
     lateinit var kafkaStreams: KafkaStreams
 
     private fun streamsConfig(additionalConfig: Map<String, Any>? = null): Properties {
         val configProperties = Properties()
-        configProperties[StreamsConfig.APPLICATION_ID_CONFIG] = messageConsumerProperties.applicationId
-        configProperties[StreamsConfig.BOOTSTRAP_SERVERS_CONFIG] = messageConsumerProperties.bootstrapServers
-        configProperties[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = messageConsumerProperties.autoOffsetReset
-        configProperties[StreamsConfig.PROCESSING_GUARANTEE_CONFIG] = messageConsumerProperties.processingGuarantee
-        // TODO("Security Implementation based on type")
+        /** set consumer properties */
+        messageConsumerProperties.getConfig().let { configProperties.putAll(it) }
         /** add or override already set properties */
         additionalConfig?.let { configProperties.putAll(it) }
         /** Create Kafka consumer */
