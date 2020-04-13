@@ -28,9 +28,9 @@ const FunctionElement = joint.shapes.standard.Rectangle.define('board.FunctionEl
                 <g id="func-board-element-conponent" transform="translate(30.000000, 70.000000)">
                     <g id="execute" transform="translate(304.000000, 0.000000)">
                         <g id="Group" transform="translate(7.000000, 0.000000)">
-                            <rect id="func-board-element-rectangle" fill="#1B3E6F" x="0" y="0" width="230" height="130" rx="2"></rect>
-                            <g id="Group-4" transform="translate(36.000000, 25.000000)" fill="#FFFFFF">
-                                <g id="database0-copy" transform="translate(61.000000, 0.000000)" fill-rule="nonzero">
+                            <rect id="func-board-element-rectangle" fill="#1B3E6F" x="15" y="0" width="330" height="84" rx="2"></rect>
+                            <g id="Group-4" transform="translate(20.000000, 20.000000)" fill="#FFFFFF">
+                                <g id="database0-copy" transform="translate(15.000000, 0.000000)" fill-rule="nonzero">
                                     <path d="M35.544,6.00705882 C34.7265882,
                                     2.97882353 28.6425882,0 18,0 C7.35741176,
                                     0 1.27270588,2.97882353 0.456,6.00705882 C0.396705882,
@@ -302,11 +302,10 @@ const FunctionElement = joint.shapes.standard.Rectangle.define('board.FunctionEl
                                 </g>
                                 <text id="func-board-element-text"
                                     font-family="HelveticaNeue-Bold, Helvetica Neue"
-                                    font-size="14"
+                                    font-size="13"
                                 font-weight="bold" line-spacing="18">
-                                    <tspan id="label" x="52.554" y="59">execute</tspan>
-                                    <tspan x="105.446" y="59" font-family="HelveticaNeue, Helvetica Neue" font-weight="normal"></tspan>
-                                    <tspan id="type" x="0.094" y="77"
+                                    <tspan id="label" x="64" y="18">execute</tspan>
+                                    <tspan id="type" x="64" y="40"
                                     font-family="HelveticaNeue, Helvetica Neue" font-size="12"
                                     font-weight="normal"></tspan>
                                 </text>

@@ -1,20 +1,23 @@
 <div class="card creat-card">
-    <div class="single-line">
+    <div class="single-line-model">
         <label class="label-name">Mode</label>
-        <label name="trst" *ngFor="let mode of modes; let i = index">
-            <input class="form-check-input" [(ngModel)]="modeType" type="radio" name="radioMode" id="radioMode"
-                [value]="mode.name">
+        <div class="label-input">
+            <label name="trst" *ngFor="let mode of modes; let i = index" class="pl-0">
+                <input class="form-check-input" [(ngModel)]="modeType" type="radio" name="radioMode" id="radioMode"
+                    [value]="mode.name">
 
-            <span>
-                <i [className]="mode.style" aria-hidden="true" [id]="mode.name"></i>
-                {{mode.name}}
-            </span>
-        </label>
+                <span>
+                    <i [className]="mode.style" aria-hidden="true" [id]="mode.name"></i>
+                    {{mode.name}}
+                </span>
+            </label>
+        </div>
     </div>
     <div class="single-line">
         <label class="label-name">Dictionary Library Instance</label>
         <div class="label-input">
             <select class="form-control" id="exampleFormControlSelect1">
+                <option>Select Library Instance</option>
                 <option>Library Instance 1</option>
                 <option>Library Instance 2</option>
                 <option>Library Instance 3</option>
@@ -30,7 +33,7 @@
         <label class="label-name">Name <span>*</span></label>
         <div class="label-input">
             <input type="input" [readOnly]="!packageNameAndVersionEnables" [(ngModel)]="metaDataTab.name"
-                placeholder="Topology name.vLB.CDS">
+                placeholder="Package name">
         </div>
         <!--<div class="model-note-container error-message">
             Package name already exists with this version. Please enter a different name or enter different version
@@ -54,31 +57,32 @@
     </div>
 
     <div class="single-line-model">
-        <label class="label-name">tags</label>
+        <label class="label-name">Tags</label>
         <div class="label-input">
             <input type="input" (keyup.enter)="addTag($event)" [(ngModel)]="metaDataTab.tags"
                 placeholder="Ex., vDNS-CDS">
-
         </div>
         <div class="model-note-container tag-notes">Seprate tags with comma or space</div>
         <div class="model-note-container tages-container">
-            <span *ngFor="let tag of tags" class="single-tage">{{tag}} <i (click)="removeTag(tag)"
-                    class="fa fa-times-circle"></i></span>
+            <span *ngFor="let tag of tags" class="single-tage">{{tag}}
+                <i (click)="removeTag(tag)" class="fa fa-times-circle"></i>
+            </span>
         </div>
     </div>
 </div>
 <div id="container">
     <div id="target">
         <div class="card creat-card">
-            <div class="single-line">
-                <h5 class="label-name">
-                    Custom key
+            <div class="single-line customKeyTitle">
+                <h5 class="label-name w-100 ">
+                    Custom key 
                 </h5>
+                <span>To add New Custom Key, fill the first key then <b>Press ENTER</b></span>
 
             </div>
             <div *ngFor="let map of customKeysMap | keyvalue; let i=index" class="single-custom-key">
                 <div class="single-line-custom-key">
-                    <label class="label-name"><span>{{i + 1}}-</span> Name</label>
+                    <label class="label-name"><span>{{i + 1}}.</span> Name</label>
                     <div class="label-input">
                         <input value="{{map.key}}" name="key" type="input" placeholder="Enter name">
                     </div>
@@ -91,7 +95,7 @@
                 </div>
                 <div class="single-line-custom-key-delete">
                     <button (click)="removeKey($event,map.key)" class="custom-key-delete"><i aria-hidden="true"
-                            class="icon-delete"></i></button>
+                            class="icon-delete-sm"></i></button>
                 </div>
             </div>
 
@@ -111,7 +115,7 @@
                     </div>
                 </div>
                 <!-- <div class="single-line-custom-key-delete"><button (click)="removeKey($event)"
-                        class="custom-key-delete"><i aria-hidden="true" class="icon-delete"></i></button></div> -->
+                        class="custom-key-delete"><i aria-hidden="true" class="icon-delete-sm"></i></button></div> -->
             </div>
 
         </div>

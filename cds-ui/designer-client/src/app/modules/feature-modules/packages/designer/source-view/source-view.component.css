@@ -49,6 +49,9 @@ header{
   color: #C3CDDB;
   font-size: 10px;
 }
+.designer-breadcrumb .fa-angle-right::before{
+  color: #fff;
+}
 .sidebar-container{
   height: calc(100vh - 60px) !important;
 }
@@ -255,6 +258,7 @@ p.compType-4{
   color: #C3CDDB;
 }
 .controllerSidebar b{
+  margin-left: 12px;
   font-size: 12px;
   color: #C3CDDB;
 }
@@ -272,9 +276,9 @@ p.compType-4{
 }
 .actionBtns .btn:last-child{
   padding-left: 34px !important;
-  background: url(src/assets/img/icon-import-blue.svg) 12px center #fff no-repeat;
   border: solid 1px #D0DFF1;
   color: #1B3E6F;
+  outline: 0 !important;
 }
 .actionsList,
 .componentsList{

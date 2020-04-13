@@ -20,7 +20,7 @@
                 <div class="card-body max-height-list">
                     <div class="row">
                         <!-- <div class="col-4" style="color:white" *ngFor="let file of templates.files | keyvalue; let mapIndex = index">-->
-                        <div class="col-4" style="color:white" *ngFor="let file of  getKeys(templateAndMappingMap)">
+                        <div class="col-4" *ngFor="let file of  getKeys(templateAndMappingMap)">
                             <a (click)="setSourceCodeEditor(file)" class="template-mapping-list active">{{file}}
                                 <span *ngIf="getValue(file).isMapping">Mapping</span>
                                 <span *ngIf="getValue(file).isTemplate">Template</span>

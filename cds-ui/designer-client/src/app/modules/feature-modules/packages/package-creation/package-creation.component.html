@@ -4,37 +4,49 @@
     <div class="container-fluid main-container">
         <header class="page-title">
             <div class="row">
-                <h2 class="col m-0">
+                <h2 class="col m-0 pb-0">
                     <ul class="breadcrumb-header">
                         <li><a routerLink="/packages">CBA Packages</a></li>
+                        <i class="fa fa-angle-right ml-2 mr-2"></i>
                         <li>Package Name</li>
                     </ul>
                 </h2>
-                <div class="col d-flex justify-content-end header-button-save">
-                    <button class="float btn btn-sm btn-outline-secondary" (click)="goBackToDashBorad()">Discard
-                        Changes</button>
-                    <button class="float btn btn-sm btn-primary" (click)="saveBluePrint()">Save</button>
+                <div class="col">
+
                 </div>
             </div>
         </header>
 
-
         <div class="container-fluid body-container">
-
             <div class="container">
                 <div class="creat-action-container">
+                    <a href="#" class="action-button" (click)="saveBluePrint()">
+                        <i class="icon-save-sm" aria-hidden="true"></i>
+                        <span>Save</span>
+                    </a>
+                    <a href="#" class="action-button" (click)="goBackToDashBorad()">
+                        <i class="icon-discard-sm" aria-hidden="true"></i>
+                        <span>Discard Changes</span>
+                    </a>
+
+                    <hr>
                     <a href="#" class="action-button">
-                        <i class="icon-clone" aria-hidden="true"></i>
+                        <i class="icon-clone-sm" aria-hidden="true"></i>
                         <span>Clone</span>
                     </a>
 
                     <a href="#" class="action-button">
-                        <i class="icon-archive" aria-hidden="true"></i>
+                        <i class="icon-archive-sm" aria-hidden="true"></i>
                         <span>Archive</span>
                     </a>
 
+                    <a href="#" class="action-button">
+                        <i class="icon-download" aria-hidden="true"></i>
+                        <span>Download</span>
+                    </a>
+
                     <a href="#" class="action-button delete">
-                        <i class="icon-delete" aria-hidden="true"></i>
+                        <i class="icon-delete-sm" aria-hidden="true"></i>
                         <span>Delete</span>
                     </a>
                 </div>

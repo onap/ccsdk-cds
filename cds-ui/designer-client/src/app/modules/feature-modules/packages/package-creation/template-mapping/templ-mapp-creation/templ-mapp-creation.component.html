@@ -6,7 +6,7 @@
         </label>
 
         <div class="label-input">
-            <input type="input" [(ngModel)]="fileName" placeholder="Topology name.vLB.CDS">
+            <input type="input" [(ngModel)]="fileName" placeholder="Template name">
         </div>
     </div>
 </div>
@@ -56,8 +56,8 @@
                     </div>
                     <div class="create-template-import">Use the editor to add parameters or you can also
                         <a href="#" data-toggle="modal" (click)="allowedExt=[getFileExtension()]"
-                            data-target="#templateModal">Import
-                            File</a></div>
+                            data-target="#templateModal"><b>Import
+                                File</b></a></div>
                     <div class="editor-container">
                         <app-source-editor (textChange)="textChanges($event,templateInfo.fileName)"
                             [(text)]="templateFileContent"></app-source-editor>
@@ -76,16 +76,16 @@
             </div>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                 <div class="card-body">
-                    <h6 class="text-center">Select a source to load config parameters</h6>
+                    <p class="text-center"><b>Select a source to load config parameters</b></p>
                     <div class="text-center">
                         <a href="#" (click)="getMappingTableFromTemplate($event)" class="mapping-source-load">
-                            <i class="icon-current-template"></i>
+                            <i class="icon-use-attributes"></i>
                             <br />
                             <span>Use Current Template Instance</span>
                         </a>
                         <a href="#" (click)="allowedExt=['.csv']" data-toggle="modal" data-target="#templateModal"
                             class="mapping-source-load">
-                            <i class="icon-Upload-attribute"></i>
+                            <i class="icon-upload-attributes"></i>
                             <br />
                             <div>Upload attribute list</div>
                             <div class="source-load-note">(Should be comma delimited file)</div>
@@ -119,8 +119,8 @@
                         <tbody>
                             <tr *ngFor="let dict of resourceDictionaryRes">
                                 <td>
-                                    <i *ngIf="dict.definition?.property?.required" class="fa fa-check-square mx-2"></i>
-                                    <i *ngIf="!dict.definition?.property?.required" class="fa fa-square mx-2"></i>
+                                    <img *ngIf="dict.definition?.property?.required" src="/assets/img/icon-required-no.svg">
+                                    <img *ngIf="!dict.definition?.property?.required" src="/assets/img/icon-required-yes.svg">
                                 </td>
                                 <td>{{ dict.name }}</td>
                                 <td>{{ dict.name }}</td>
@@ -195,7 +195,7 @@
         </div>
         <div class="template-mapping-action">
             <button class="btn btn-sm btn-outline-secondary">Cancel</button>
-            <button (click)="saveToStore()" class="btn btn-sm btn-primary">Finish</button>
+            <button (click)="saveToStore()" class="btn btn-sm btn-primary">Submit</button>
         </div>
     </div>
 </div>
@@ -208,7 +208,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="templateModalLabel">Import File</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <img src="assets/img/icon-close.svg" />
                 </button>
             </div>
             <div class="modal-body">
@@ -231,11 +231,13 @@
                         </div>
                     </ng-template>
                 </ngx-file-drop>
-                <div class="upload-table" *ngFor="let item of uploadedFiles; let i=index">
+                <div class="upload-table">
                     <table class="table">
                         <thead>
-                            <tr>
-                                <th>Name : {{ item.name }}</th>
+                            <tr *ngFor="let item of uploadedFiles; let i=index">
+                                <th width="40"><img src="assets/img/icon-file-code.svg" /></th>
+                                <th>{{ item.name }}</th>
+                                <th width="40" class="text-right"><img src="assets/img/icon-remove-file.svg" /></th>
                             </tr>
                         </thead>
                     </table>

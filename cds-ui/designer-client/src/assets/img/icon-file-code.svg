@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="16px" viewBox="0 0 12 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 61.2 (89653) - https://sketch.com -->
+    <title>file-code</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="3.3.1-Template-&amp;-Mapping---Upload" transform="translate(-430.000000, -630.000000)" fill="#1273EB" fill-rule="nonzero">
+            <g id="modal-new" transform="translate(380.000000, 254.000000)">
+                <g id="file" transform="translate(30.000000, 354.000000)">
+                    <g id="content" transform="translate(20.000000, 22.000000)">
+                        <g id="file-code">
+                            <path d="M8,0 L0,0 L0,16 L12,16 L12,4 L8,0 Z M7,5 L11,5 L11,15 L1,15 L1,1 L7,1 L7,5 Z M8,4 L8,1 L11,4 L8,4 Z" id="Shape"></path>
+                            <polygon id="Path" points="4.2 13 3.5 13 1.5 10.5 3.5 8 4.2 8 2.2 10.5"></polygon>
+                            <polygon id="Path" points="7.8 13 8.5 13 10.5 10.5 8.5 8 7.8 8 9.8 10.5"></polygon>
+                            <polygon id="Path" points="4.7 14 5.3 14 7.4 7 6.6 7"></polygon>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
